@@ -66,6 +66,7 @@
   import { WriterSession, type KeyValueStorage } from "./lib/writer-session.js";
   import { voteAttribution } from "./lib/live-vote.js";
   import { liveOverlayObjectiveCopy } from "./lib/live-overlay.js";
+  import { LIVE_WORKFLOWS, liveBoardControlOptions, liveRunIneligibility, liveWorkflow, liveWorkflowOption, type LiveWorkflow } from "./lib/live-creation.js";
   import { markAttribution, relayedMarkShapes } from "./lib/live-marks.js";
   import { clearAccountLocalData, clearRunLocalData } from "./lib/account-local-data.js";
   import { graduationEntries, requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
@@ -903,14 +904,25 @@
   }
 
   function liveRotationMembers():readonly string[]{return [...new Set(liveRotationHandles.split(",").map((handle)=>handle.trim()).filter(Boolean))];}
-  function liveCreationReady():boolean{return liveTitle.trim().length>0&&(liveBoardControl!=="rotation"||liveRotationMembers().length>0)&&(liveBoardControl!=="match"||liveMatchWhite.trim().length>0||liveMatchBlack.trim().length>0);}
-  async function createLive(runId:string):Promise<void>{
-    if(!liveCreationReady()||liveCreateBusy)return;
+  function selectedLiveWorkflow():LiveWorkflow{return liveWorkflow(liveKind,liveBoardControl);}
+  function chooseLiveWorkflow(workflow:LiveWorkflow):void{const option=liveWorkflowOption(workflow);liveKind=option.kind;liveBoardControl=option.boardControl;liveCreateError=undefined;}
+  function liveSourceIneligibility(run:RunSummary):string|undefined{return liveRunIneligibility(run,selectedLiveWorkflow());}
+  function liveCreateDisabledReason(run:RunSummary):string|undefined{
+    if(run.viewerRole!=="host")return "Only the run host can start a session.";
+    const sourceReason=liveSourceIneligibility(run);if(sourceReason)return sourceReason;
+    if(!liveTitle.trim())return "Give the session a title viewers will recognize.";
+    if(liveBoardControl==="rotation"&&liveRotationMembers().length===0)return "Add at least one handle to the rotation.";
+    if(liveBoardControl==="match"&&!liveMatchWhite.trim()&&!liveMatchBlack.trim())return "Name at least one player; the other seat may stay open for a friend link.";
+    if(liveCreateBusy)return "Another session is being created.";
+    return undefined;
+  }
+  async function createLive(run:RunSummary):Promise<void>{
+    if(liveCreateDisabledReason(run)!==undefined)return;
     liveCreateBusy=true;
     liveCreateError=undefined;
     try{
       if(api.createLiveSession===undefined)throw new Error("Live session creation is unavailable.");
-      const created=await api.createLiveSession({runId,kind:liveKind,title:liveTitle.trim(),boardControl:liveBoardControl,...(liveClassroomId?{classroomId:liveClassroomId}:{}),...(liveScheduledFor?{scheduledFor:new Date(liveScheduledFor).toISOString()}:{}),...(liveBoardControl==="rotation"?{rotationHandles:liveRotationMembers()}:{}),...(liveBoardControl==="match"?{matchPlayers:{...(liveMatchWhite?{white:liveMatchWhite}:{}),...(liveMatchBlack?{black:liveMatchBlack}:{})}}:{})});
+      const created=await api.createLiveSession({runId:run.id,kind:liveKind,title:liveTitle.trim(),boardControl:liveBoardControl,...(liveClassroomId?{classroomId:liveClassroomId}:{}),...(liveScheduledFor?{scheduledFor:new Date(liveScheduledFor).toISOString()}:{}),...(liveBoardControl==="rotation"?{rotationHandles:liveRotationMembers()}:{}),...(liveBoardControl==="match"?{matchPlayers:{...(liveMatchWhite?{white:liveMatchWhite}:{}),...(liveMatchBlack?{black:liveMatchBlack}:{})}}:{})});
       navigate(routePath({name:"live-session",sessionId:created.id}));
     }catch(error){liveCreateError=error instanceof Error?error.message:String(error);}
     finally{liveCreateBusy=false;}
@@ -1550,8 +1562,9 @@
       </section>
       <div class="row-actions">
         <label>Session title <input maxlength="120" bind:value={liveTitle}/></label>
-        <label>Kind <select bind:value={liveKind}><option value="stream">Stream</option><option value="academy">Academy</option><option value="match">Match / Arena</option></select></label>
-        <label>Board <select value={liveBoardControl} onchange={(event)=>liveBoardControl=event.currentTarget.value as BoardControl}><option value="host_directed">Host directed</option><option value="free_claim">Free claim</option><option value="rotation">Rotation</option><option value="match">Native two-player match</option></select></label>
+        <label>What do you want to do? <select value={selectedLiveWorkflow()} onchange={(event)=>chooseLiveWorkflow(event.currentTarget.value as LiveWorkflow)}>{#each LIVE_WORKFLOWS as workflow}<option value={workflow.id}>{workflow.label}</option>{/each}</select></label>
+        <p class="session-purpose">{liveWorkflowOption(selectedLiveWorkflow()).summary}</p>
+        <details><summary>Advanced board handoff</summary><label>Board <select value={liveBoardControl} onchange={(event)=>liveBoardControl=event.currentTarget.value as BoardControl}>{#each liveBoardControlOptions(liveKind) as option}<option value={option.id}>{option.label}</option>{/each}</select></label><p class="honest">The workflow above chooses a useful default. Change handoff only when the group needs free claim or a named rotation.</p></details>
         <label>Classroom (optional) <select bind:value={liveClassroomId}><option value="">None</option>{#each classrooms.filter((item)=>item.memberRole==="teacher"&&item.memberState==="active") as classroom}<option value={classroom.id}>{classroom.name}</option>{/each}</select></label>
         <label>Schedule (optional) <input type="datetime-local" bind:value={liveScheduledFor}/></label>
         {#if liveBoardControl==="rotation"}
@@ -1566,7 +1579,7 @@
         {#if !liveTitle.trim()}<p id="live-title-required" class="honest">Give the session a title viewers will recognize.</p>{/if}
       </div>
       <section><h2>Your sessions</h2><p class="honest">Wall cards show rules facts and the pack's recorded objective state; they are never ordered or labelled by engine evaluation.</p><div class="item-list live-wall">{#each liveSessions as item}<article><div class="mini-board"><Chessboard fen={item.board.activeFen} startSide="white" disabled={true} onMove={()=>{}}/></div><div><h3>{item.title}</h3><p>{liveKindLabel(item.kind)} · {liveBoardControlLabel(item.boardControl)}</p>{#if item.classroom}<p>Classroom: <strong>{item.classroom.name}</strong></p>{/if}<p><strong>{liveTurnLabel(item)}</strong>{item.board.pausedAt ? ` · paused since ${readableDate(item.board.pausedAt)}` : ""}</p>{#if item.board.players}<p>{item.board.players.white?`@${item.board.players.white.handle}`:"open"} vs {item.board.players.black?`@${item.board.players.black.handle}`:"open"}</p>{/if}<p>Objective state: {item.board.objectiveState.replaceAll("_", " ")}</p><p>{item.board.lastMoveAt ? `Last move ${readableDate(item.board.lastMoveAt)}` : "No move committed yet"}</p><p>@{item.board.leaseHeldBy.handle} holds the board · {item.board.plyCount} plies</p></div><button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:item.id}))}>Open</button></article>{:else}<p>No live sessions yet.</p>{/each}</div></section>
-      <section><h2>Start from a run</h2><div class="item-list">{#each runs as item}<article><div><h3>{item.title}</h3><p>{item.viewerRole === "host" ? "Ready to host" : "Only a host can create a session"}</p></div><button type="button" disabled={item.viewerRole!=="host"||!liveCreationReady()||liveCreateBusy} aria-describedby={item.viewerRole!=="host"?`live-disabled-${item.id}`:!liveTitle.trim()?"live-title-required":liveBoardControl==="rotation"&&liveRotationMembers().length===0?"live-rotation-required":liveBoardControl==="match"&&!liveMatchWhite.trim()&&!liveMatchBlack.trim()?"live-match-required":liveCreateBusy?"live-create-busy":undefined} onclick={()=>void createLive(item.id)}>{liveCreateBusy?"Creating…":`Create ${liveKind}`}</button>{#if item.viewerRole!=="host"}<span id={`live-disabled-${item.id}`} class="honest">Host role required.</span>{/if}</article>{/each}</div>{#if liveCreateBusy}<p id="live-create-busy" role="status">Creating the session…</p>{/if}{#if liveCreateError}<p role="alert">{liveCreateError}</p>{/if}</section>
+      <section><h2>Choose the source run</h2><div class="item-list">{#each runs as item}{@const disabledReason=liveCreateDisabledReason(item)}<article><div><h3>{item.title}</h3><p>{liveSourceIneligibility(item)??(item.viewerRole === "host" ? "Ready for this workflow" : "Only the run host can start a session")}</p><p class="honest">{item.sessionKind} run · {item.recordedMoveCount} recorded {item.recordedMoveCount===1?"move":"moves"}</p></div><button type="button" disabled={disabledReason!==undefined} aria-describedby={disabledReason===undefined?undefined:`live-disabled-${item.id}`} onclick={()=>void createLive(item)}>{liveCreateBusy?"Creating…":`Create ${liveKind}`}</button>{#if disabledReason}<span id={`live-disabled-${item.id}`} class="honest">{disabledReason}</span>{/if}</article>{/each}</div>{#if liveCreateBusy}<p id="live-create-busy" role="status">Creating the session…</p>{/if}{#if liveCreateError}<p role="alert">{liveCreateError}</p>{/if}</section>
       <p class="honest">Vote tallies are advisory. Chat identity is only as trustworthy as the configured adapter.</p>
     </main>
   {:else if route.name === "live-session"}

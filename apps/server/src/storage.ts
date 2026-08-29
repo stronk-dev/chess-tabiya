@@ -138,6 +138,7 @@ export interface RunSummary {
   readonly updatedAt: string;
   readonly objectiveState: ObjectiveState;
   readonly branchCount: number;
+  readonly recordedMoveCount: number;
   readonly viewerRole: RunRole;
   readonly leaseHeldBy: LeaseIdentity;
 }
@@ -595,6 +596,7 @@ interface SummaryRow {
   readonly viewer_role: string;
   readonly lease_learner_id: string;
   readonly lease_handle: string;
+  readonly recorded_move_count: number;
 }
 
 interface LearnerRow {
@@ -756,7 +758,10 @@ function isSummaryRow(value: unknown): value is SummaryRow {
     typeof row.summary_json === "string" &&
     typeof row.viewer_role === "string" &&
     typeof row.lease_learner_id === "string" &&
-    typeof row.lease_handle === "string"
+    typeof row.lease_handle === "string" &&
+    typeof row.recorded_move_count === "number" &&
+    Number.isSafeInteger(row.recorded_move_count) &&
+    row.recorded_move_count >= 0
   );
 }
 
@@ -1802,7 +1807,9 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     try {
       values = this.#database
         .prepare(
-          `SELECT r.id, r.summary_json, g.role AS viewer_role,
+          `SELECT r.id, r.summary_json,
+                  json_array_length(r.snapshot_json, '$.nodes') - 1 AS recorded_move_count,
+                  g.role AS viewer_role,
                   holder.id AS lease_learner_id, holder.handle AS lease_handle
            FROM drill_runs r
            JOIN run_grants g ON g.run_id = r.id AND g.learner_id = ?
@@ -1826,6 +1833,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
           return Object.freeze({
             id: value.id,
             ...parseSummary(value.summary_json),
+            recordedMoveCount: value.recorded_move_count,
             viewerRole: value.viewer_role,
             leaseHeldBy: Object.freeze({
               learnerId: value.lease_learner_id,

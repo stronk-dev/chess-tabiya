@@ -218,6 +218,7 @@ describe("branch-runtime REST binding", () => {
           packId: null,
           objectiveState: "active",
           branchCount: 1,
+          recordedMoveCount: 0,
           viewerRole: "host",
           leaseHeldBy: { learnerId: "__legacy", handle: "__legacy" },
         }),

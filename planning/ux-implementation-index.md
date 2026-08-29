@@ -205,8 +205,8 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 
 | id | § | what it is | queued? | note | 🏆 |
 |---|---|---|---|---|---|
-| LIV-a1 | §1.1a | `kind: "match"` plus the default `host_directed` board silently produces a two-leg PGN-paste Arena. **Two selects jointly decide which product you get and neither names it** | ledger | [[D1470]] | 🏆 |
-| LIV-a2 | §1.1b | The eligible-run rule (untouched position run, named handle) is invisible until the server throws | none | | |
+| LIV-a1 | §1.1a | ✅ **Closed 2026-08-29:** one guided workflow selector names Teach/Coach, Stream rehearsal, native friend match and Position Arena; each sets a valid default while advanced handoff keeps the primitive controls | closed | [[D1470]]/[[D2024]]; exhaustive mapping unit contract plus browser match journeys | 🏆 |
+| LIV-a2 | §1.1b | ✅ **Closed 2026-08-29:** run summaries expose snapshot-derived recorded-move count, and native-match cards refuse non-position or already-played runs with a visible pre-submit reason | closed | [[D2024]]; no migration or copied summary authority | |
 | LIV-a3 | §1.1c | ✅ **Closed 2026-08-29:** creation has pending and visible failure states; incomplete rotation, match and title inputs are disabled with reasons | closed | [[D1470]]; component contract exercises a rejected rotation learner | |
 | LIV-a4 | §1.1d | ✅ **Closed 2026-08-29:** the host names the session before choosing a source run; the submitted title is trimmed and becomes the session heading | closed | component contract proves the title reaches creation | 🏆 |
 | LIV-a5 | §1.4a | ✅ **Closed 2026-08-29:** the overlay translates all six objective states into fixed product language; no runtime enum is rendered | closed | [[D2022]]; unit table and desktop/mobile browser matrix | |

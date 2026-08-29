@@ -369,7 +369,8 @@ describe("SQLite run-storage migrations and summaries", () => {
     storage.create(runA, "writer-a", "Historical A");
     storage.create(run("run-b", "pack-b"), "writer-b", "Historical B");
 
-    const branched = fork(runA, runA.activeCursor.nodeId, {
+    const moved = commitMove(runA, "e2e4", { actor: "user", at: "2026-08-11T10:00:30.000Z" }).run;
+    const branched = fork(moved, moved.activeCursor.nodeId, {
       at: "2026-08-11T10:01:00.000Z",
     }).run;
     storage.save(branched, "writer-a");
@@ -379,6 +380,7 @@ describe("SQLite run-storage migrations and summaries", () => {
         id: "run-a",
         title: "Historical A",
         branchCount: 2,
+        recordedMoveCount: 1,
         viewerRole: "host",
         leaseHeldBy: { learnerId: "__legacy", handle: "__legacy" },
       }),

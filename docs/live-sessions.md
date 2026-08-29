@@ -7,6 +7,20 @@ source of chess truth and deterministic replay; the session records people, poss
 proposals, votes, invitations, and imported match legs. Closing session state cannot
 change how the run replays.
 
+## Guided creation
+
+The ordinary creation surface asks one question—**What do you want to do?**—and names four
+workflows: Teach or coach, Stream a rehearsal, Play a friend here, and Run a Position Arena. Each
+workflow supplies a valid `kind` and board-control default. The raw handoff primitives remain in
+**Advanced board handoff** for groups that need free claim or a named rotation; the `match` control
+is absent from Academy and Stream because the server rejects that combination.
+
+Native matches require an untouched position run. Run listings expose `recordedMoveCount`, derived
+at query time from `snapshot_json.nodes` rather than copied into the denormalized summary, so this
+adds no storage migration and no second count authority. The client disables a non-position or
+already-played source card and renders the reason before submission. The service repeats the same
+rule authoritatively in case the run changes after the list was loaded.
+
 ## Roles and board possession
 
 The existing per-run roles remain `host`, `participant`, and `spectator`. Hosts and

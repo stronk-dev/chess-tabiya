@@ -1335,3 +1335,21 @@ journey also sees the pause-by-consent invitation promise before play `[V]`
 (`tests/browser/match.spec.ts`). This closes `LIV-a7`, `LIV-a8`, `LIV-a9`, `LIV-a10` and `LIV-a15`;
 anonymous viewership, chat-provider integration, editorial vote delay and the three-state streamer
 chrome preference remain separate open obligations.
+
+## 18. Living correction — guided session creation (2026-08-29)
+
+The two-select product inversion in §1.1 is closed at HEAD. The ordinary surface now asks **What do
+you want to do?** and names four outcomes: Teach or coach, Stream a rehearsal, Play a friend here,
+and Run a Position Arena. Each choice maps to one valid `kind × boardControl` default; the complete
+mapping and the invalid Academy/Stream `match` exclusion are unit tested `[V]`
+(`apps/web/src/lib/live-creation.ts`, `.test.ts`). The primitive board-control values remain
+available under **Advanced board handoff**, so the guided default does not delete configurability.
+
+The invisible eligibility failure is also closed. `RunSummary.recordedMoveCount` is calculated by
+the list query from the authoritative snapshot's node array instead of being copied into denormalized
+summary JSON `[V]` (`apps/server/src/storage.ts`). A native-match card now disables any non-position
+source or any position with recorded moves and renders a workflow-specific reason before the API
+call; a real browser journey plays a position, switches workflows and observes that refusal `[V]`
+(`tests/browser/match.spec.ts`). Server-side validation remains the final authority. This closes
+`LIV-a1` and `LIV-a2`; it does not claim the invitation state machine, clocks, ratings or public
+matchmaking that remain in their own lanes.

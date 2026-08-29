@@ -5892,18 +5892,22 @@
     {
       "id": "LIV-a1",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§1.1a",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
-      "summary": "`kind: \"match\"` plus the default `host_directed` board silently produces a two-leg PGN-paste Arena. **Two selects jointly decide which product you get and neither names it**",
-      "legacyRoute": "ledger",
-      "note": "[[D1470]]",
+      "summary": "✅ **Closed 2026-08-29:** one guided workflow selector names Teach/Coach, Stream rehearsal, native friend match and Position Arena; each sets a valid default while advanced handoff keeps the primitive controls",
+      "legacyRoute": "closed",
+      "note": "[[D1470]]/[[D2024]]; exhaustive mapping unit contract plus browser match journeys",
       "tournamentReady": true,
-      "sourceDigest": "sha256:306f451eb34e4dbc3284928386f0464948d8b1f7e729ccb5b61172a39a22f4b0"
+      "sourceDigest": "sha256:2a1ebb9eb6e2d5bf99245940da06fafeb3b3f8d5d6fe4bb3e9747020c105084a",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "exhaustive workflow mapping supplies four named outcomes and valid defaults while advanced handoff preserves the primitive controls"
+      }
     },
     {
       "id": "LIV-a10",
@@ -6079,16 +6083,21 @@
     {
       "id": "LIV-a2",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "social_play",
       "owner": "live-and-social",
-      "assignment": "capability:social_play",
+      "assignment": "closed",
       "sourceDocument": "ux-live-and-social.md",
       "sourceSection": "§1.1b",
       "sourceHeading": "Live, casting and social — `ux-live-and-social.md`",
-      "summary": "The eligible-run rule (untouched position run, named handle) is invisible until the server throws",
-      "legacyRoute": "none",
-      "sourceDigest": "sha256:799edfbdb1e0c98cd147fcb9c7e1ced9bdd2ac0a330e9cc9be939398fd1d49a1"
+      "summary": "✅ **Closed 2026-08-29:** run summaries expose snapshot-derived recorded-move count, and native-match cards refuse non-position or already-played runs with a visible pre-submit reason",
+      "legacyRoute": "closed",
+      "note": "[[D2024]]; no migration or copied summary authority",
+      "sourceDigest": "sha256:f0f5af1dfeed526f3c3f8e6cd59d1bb1e1cdc14c8b29e967cc28540bc3616eba",
+      "completion": {
+        "completedOn": "2026-08-29",
+        "evidence": "snapshot-derived recorded move count drives pre-submit native-match refusal; server storage and real played-run browser fixtures bind the rule"
+      }
     },
     {
       "id": "LIV-a20",

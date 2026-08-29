@@ -68,6 +68,7 @@ const runSummary: RunSummary = {
   updatedAt: "2026-08-11T21:00:00.000Z",
   objectiveState: "active",
   branchCount: 1,
+  recordedMoveCount: 0,
   viewerRole: "host",
   leaseHeldBy: { learnerId: "learner-test", handle: "test" },
 };
@@ -581,7 +582,9 @@ describe("application shell", () => {
       props: { api: liveApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
     });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain("Start from a run"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Choose the source run"));
+    expect(document.body.textContent).toContain("Teach or coach");
+    expect(document.body.textContent).toContain("Share one rehearsal, hand over the board, and compare attempts together.");
     const labelled = (text: string): HTMLInputElement | HTMLSelectElement => {
       const label = [...document.querySelectorAll("label")].find((candidate) => candidate.textContent?.trim().startsWith(text));
       expect(label).toBeDefined();
@@ -597,7 +600,8 @@ describe("application shell", () => {
       expect(candidate).toBeDefined();
     });
     await vi.waitFor(() => expect(createButton()?.disabled).toBe(true));
-    expect(createButton()?.getAttribute("aria-describedby")).toBe("live-rotation-required");
+    expect(createButton()?.getAttribute("aria-describedby")).toBe(`live-disabled-${run.id}`);
+    expect(document.getElementById(`live-disabled-${run.id}`)?.textContent).toContain("Add at least one handle to the rotation");
     const title = labelled("Session title") as HTMLInputElement;
     title.value = "Tuesday relay";
     title.dispatchEvent(new Event("input", { bubbles: true }));

@@ -10995,3 +10995,16 @@ CI actually run.
   invitation copy names pause-by-consent plus mainline preservation.
 - Software verification passed at 1,068 tests before closeout. Browser, content, governance and the
   complete repository gate remain the landing checkpoint.
+
+## 2026-08-29 — Live creation becomes a guided workflow
+
+- Closed `LIV-a1` and `LIV-a2` under [[D2024]]. The ordinary surface now names Teach/Coach, Stream
+  rehearsal, native friend match and Position Arena as four outcomes instead of requiring the user
+  to infer a product from `kind × boardControl`.
+- Each workflow applies a valid default. Advanced board handoff preserves the lower-level
+  host-directed, free-claim, rotation and match primitives only where the combination is valid.
+- Added snapshot-derived `RunSummary.recordedMoveCount` without changing persisted summary JSON.
+  Native-match cards now refuse non-position and already-played runs with a visible reason before
+  submission; the server's existing authority remains the race-safe final check.
+- Focused verification passed at 1,071 software tests. Browser and the complete repository gate
+  remain the landing checkpoint.

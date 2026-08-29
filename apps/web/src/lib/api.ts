@@ -110,6 +110,7 @@ export interface RunSummary {
   readonly updatedAt: string;
   readonly objectiveState: ObjectiveState;
   readonly branchCount: number;
+  readonly recordedMoveCount: number;
   readonly viewerRole: RunRole;
   readonly leaseHeldBy: LeaseIdentity;
 }

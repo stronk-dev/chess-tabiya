@@ -64,8 +64,7 @@ test("two learners alternate a native match, pause to branch, and return to the 
   try {
     const runId = await startPosition(coach.page);
     await coach.page.goto("/live");
-    await coach.page.getByLabel("Kind").selectOption("match");
-    await coach.page.getByLabel("Board").selectOption("match");
+    await coach.page.getByLabel("What do you want to do?").selectOption("native_match");
     await coach.page.getByLabel("Session title").fill("match session");
     await coach.page.getByLabel("White handle").fill(white.handle);
     await coach.page.getByLabel("Black handle").fill(black.handle);
@@ -161,8 +160,7 @@ test("a single-use friend link registers a learner without exposing the board", 
   try {
     const runId = await startPosition(coach.page);
     await coach.page.goto("/live");
-    await coach.page.getByLabel("Kind").selectOption("match");
-    await coach.page.getByLabel("Board").selectOption("match");
+    await coach.page.getByLabel("What do you want to do?").selectOption("native_match");
     await coach.page.getByLabel("Session title").fill("match session");
     await coach.page.getByLabel("White handle").fill(coach.handle);
     await coach.page.getByRole("button", { name: "Create match" }).click();
@@ -189,6 +187,23 @@ test("a single-use friend link registers a learner without exposing the board", 
     await exhausted.goto(new URL(path, coach.page.url()).href);
     await expect(exhausted.getByText("Route not found")).toBeVisible();
     await Promise.all([guest.close(), second.close()]);
+  } finally {
+    await coach.context.close();
+  }
+});
+
+test("native-match creation explains an ineligible played position before submission", async ({ browser }) => {
+  const coach = await learner(browser, "eligibilitycoach");
+  try {
+    await startPosition(coach.page);
+    await play(coach.page, "e2", "e4", "white");
+    await expect(coach.page.getByText(/Active line [1-9]\d* plies/u)).toBeVisible();
+    await coach.page.goto("/live");
+    await coach.page.getByLabel("What do you want to do?").selectOption("native_match");
+    const source = coach.page.getByRole("article").filter({ hasText: "Position session" }).first();
+    await expect(source).toContainText(/[1-9]\d* recorded moves?/u);
+    await expect(source).toContainText("This position already has recorded moves");
+    await expect(source.getByRole("button", { name: "Create match" })).toBeDisabled();
   } finally {
     await coach.context.close();
   }
