@@ -12158,3 +12158,20 @@ bounded Node reader and stream-preserving writer survive. `make safe-deployment-
 passes 5/5. No production, Compose, Caddy, workflow, schema, content, archive or protected-design
 byte changed. Exact review:
 `planning/safe-deployment-profiles/fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Bot-policy second fresh independent return
+
+Returned the D2087–D2096-amended `bot-policy.md` on [[D2219]]–[[D2226]] after applying its green
+author model to the actual profile, provider, capability, persistence and client boundaries. The
+model accepts three incompatible sampler parameter sets and never runs the captured control;
+implements pawn classification as an `a2` prefix; strips the admitted provider delivery into copied
+digests; reads live provider state without depending on provider health; leaves the public route
+result untyped; calls a cross-package catalog local; leaves three decision-vocabulary holes; and
+cannot compare provider bytes on the no-provider-call replay path.
+
+The twelve family×band roster, optional all-legal guard, bounded Maia population, compiler-owned
+seeded draw, event-embedded decision and Stage-B packet join survive. `make
+bot-policy-second-fresh-review` passes 8/8; the earlier author target remains green 11/11, now
+correctly classified as insufficient evidence. No production, schema, migration, provider, route,
+roster, UI, content, archive or protected-design byte changed. Exact review:
+`planning/platform-alignment/bot-policy/second-fresh-independent-buildability-review-2026-08-30.md`.

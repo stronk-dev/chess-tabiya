@@ -1,12 +1,11 @@
 # RFC: Bot policy
 
-- **Status:** **draft — [[D2087]]–[[D2096]] author-amended 2026-08-30; fresh
-  independent review required.** One event-embedded non-circular operation envelope, twelve exact
-  family×band identities, the shared delivery/score contracts, independent baseline legality,
-  compiler-owned transforms/sampling, complete idempotency operands, bounded-Maia feature
-  intersection and all-legal guard reference are closed as one operation. The executable author
-  contract passes 11/11 and the unchanged historical review inverts 10/10. No implementation
-  is authorized. Claims 0.18/migration remain held. *(Prior checkpoints:
+- **Status:** **draft — RETURNED by second fresh independent review 2026-08-30 on
+  [[D2219]]–[[D2226]].** The earlier structural repairs survive, but the executable sampler and
+  pawn classifier do not implement their stated authorities; provider delivery/health, public route
+  result, shared catalog, decision-union and idempotency seams remain open. `make
+  bot-policy-second-fresh-review` passes 8/8. No implementation is authorized. Claims
+  0.18/migration remain held and the catalog claim must be repaired. *(Prior checkpoints:
   implementing; accepted 2026-08-22; draft; D1601–D1609 author-amended; D1970–D1976
   author-amended.)*
 - **Author:** claude (drafted on the D717 program routing, `planning/evidence-foundation-ux/plan.md`
@@ -1020,6 +1019,35 @@ Before another acceptance review, the author must:
 6. invert all ten fresh-review arms, preserve the author checkpoint, and pass full repository
    verification before requesting a new independent review.
 
+## Second fresh independent return (2026-08-30)
+
+The first return's ten structural repairs remain visible, but the author proof and downstream
+operation still do not compose. Before another acceptance review, the author must:
+
+1. make the compiled profile declaration—not hard-coded constants—the authority for model,
+   temperature, top-p, width and mass floor; compare it to the exact Maia request/result and run
+   the captured 0.8/0.92 positive control ([[D2219]]);
+2. replace the `a2` prefix heuristic in the executable proof with the registered exact legal-board
+   `pawn_move@1` view, including both colours, every file, captures and promotions ([[D2220]]);
+3. retain the admitted shared provider delivery/registered serializable receipt through decision,
+   persistence and replay instead of copying selected fields into a bot-private digest object
+   ([[D2221]]);
+4. depend on provider-health's exact runtime snapshot/result authority for roster/card capability,
+   and reconcile its durable receipt with this RFC's run-schema event envelope ([[D2222]]);
+5. publish one closed public result/status/error union for `opponent-ply`, including committed,
+   replayed, stale, reused, unavailable and failed UI actions ([[D2223]]);
+6. register or single-source the cross-package profile/layer/reason catalog and close the literal
+   decision grammar, including `ExactStockfishSourceIdentity`, `CandidateFeatureId` and
+   `guard_dependency_abstained` ([[D2224]], [[D2225]]); and
+7. separate pre-provider replay identity from post-provider commit/concurrency identity. A later
+   no-call replay cannot simultaneously compare provider bytes it intentionally never fetches
+   ([[D2226]]).
+
+Exact evidence:
+`planning/platform-alignment/bot-policy/second-fresh-independent-buildability-review-2026-08-30.md`.
+The twelve-profile product, optional all-legal guard, bounded Maia population, compiler-owned draw,
+event-embedded decision and Stage-B candidate join remain the intended shape.
+
 ## Acceptance criteria
 
 Each criterion names its failure mode; none can pass while measuring nothing ([[D444]]/
@@ -1197,3 +1225,6 @@ as a named future measured layer (Open question 4).
   all-legal guard reference and below-floor behavior. Exact return:
   `planning/platform-alignment/bot-policy/fresh-independent-buildability-review-2026-08-30.md`;
   reproduction: `make bot-policy-fresh-review`. No production/schema/content byte changed.
+- 2026-08-30: second fresh independent review returned the amended draft on [[D2219]]–[[D2226]].
+  `make bot-policy-second-fresh-review` records the eight live blockers; no implementation byte
+  changed.

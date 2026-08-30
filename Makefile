@@ -316,6 +316,10 @@ bot-policy-author-contract:
 bot-policy-fresh-review:
 	node --test tools/d2087-bot-policy-fresh-review/contract.test.mjs
 
+.PHONY: bot-policy-second-fresh-review
+bot-policy-second-fresh-review:
+	node --test tools/d2219-bot-policy-second-fresh-review/contract.test.mjs
+
 pack-capability-closure:
 	./node_modules/.bin/vitest run --config tools/d1620-pack-capability-closure/vitest.config.ts
 
