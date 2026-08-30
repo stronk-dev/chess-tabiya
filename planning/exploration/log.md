@@ -12306,3 +12306,22 @@ remain unreachable or falsely promise verbatim stored bytes. `make live-sources-
 passes 9/9. No production, schema, migration, API, client, content, archive or protected-intent
 byte changed. Exact return:
 `planning/live-sources/live-sources-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Recorded-clocks fresh independent return
+
+Returned `recorded-clocks.md` on [[D2286]]–[[D2295]]. The depicted-clock direction remains
+grounded: a retained `[%clk]` reading is a recorded fact. The proposed delivery is not buildable.
+It drops the extractor's ply identity before persistence, names no operation that carries stored
+readings into imported nodes/API/client modules, defines no time-control parser, and promises
+retroactive parsing without an actor, transaction or retry state. Its “measured” learner-spend arm
+promotes arbitrary non-monotonic client timestamps to thinking time, and its legacy quarantine
+retains values outside the type readers are told to trust.
+
+The fresh corpus pass changed the evidence: the cited finished-round fixture contains **902 clock
+annotations across 10 games, but only 9 games contain any clock annotation**. The RFC's whole-round
+aggregate therefore masks a finished selected board with no readings; its coverage headline and
+single-game criterion are false at their required grain. The paste sample reproduces 108/108 games,
+6,991 annotations and 108 simple time-control headers. `make recorded-clocks-fresh-review` passes
+11/11. No production, schema, migration, API, client, content, archive or protected-intent byte
+changed. Exact review:
+`planning/time-controls/recorded-clocks-fresh-independent-buildability-review-2026-08-30.md`.

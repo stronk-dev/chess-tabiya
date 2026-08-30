@@ -402,6 +402,10 @@ live-following-fresh-review:
 live-sources-fresh-review:
 	node --test tools/d2277-live-sources-fresh-review/contract.test.mjs
 
+.PHONY: recorded-clocks-fresh-review
+recorded-clocks-fresh-review:
+	node --test tools/d2286-recorded-clocks-fresh-review/contract.test.mjs
+
 build:
 	pnpm build
 

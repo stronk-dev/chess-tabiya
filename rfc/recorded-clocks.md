@@ -1,6 +1,11 @@
 # RFC: Recorded clocks — the depicted arm of the time-control lane
 
-- **Status:** draft — 2026-08-23
+- **Status:** draft — **RETURNED by fresh independent review 2026-08-30 on [[D2286]]–[[D2295]].**
+  The depicted-clock direction survives, but the type drops ply identity; storage has no route to
+  nodes, API or UI; time-control parsing and retroactive transition are unspecified; arbitrary
+  client timestamps are mislabeled as thinking time; legacy quarantine is type-unsound; and the
+  broadcast evidence is aggregated at the wrong grain. No implementation before author repair and
+  another review. **Prior status:** draft — 2026-08-23.
 - **Author:** claude
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md` §invariants (*"Absence is stated, never simulated"*, *"The run is the sole source of chess truth"*); `design/03-product-breadth.md` §Library (imported games)
@@ -311,6 +316,26 @@ because it introduces no new *kind* of surface — it is a recorded fact rendere
 belongs to, in the seat family `postcommit_nudge` already occupies. **If a reviewer judges that a
 persistent readout is a region-level change, this is the clause to return.** The successor's
 *ticking* clock is unambiguously a design-tier question and is not claimed here.
+
+## Fresh independent buildability return — 2026-08-30
+
+The author repair must close every routed finding below before another review:
+
+- [[D2286]] — refresh the returned predecessor and migration/run-lane dependency chain.
+- [[D2287]] — retain exact per-game ply identity through extraction, persistence and projection.
+- [[D2288]] — specify the complete stored-PGN → node → API → client-module operation path.
+- [[D2289]] — define one parsed time-control domain with absent/invalid/unsupported results.
+- [[D2290]] — remove or rebuild the false client-timestamp-as-thinking-time arm.
+- [[D2291]] — specify an idempotent transactional retroactive parse transition and failure state.
+- [[D2292]] — replace mutable production-table acceptance with committed hermetic fixtures.
+- [[D2293]] — separate raw legacy bytes from validated `ClockReading` projections.
+- [[D2294]] — re-measure at selected-game grain; the finished fixture is 9/10, not 10/10.
+- [[D2295]] — declare the complete durable SQL image, including `timeControl` if persisted.
+
+Exact review and executable checks:
+`planning/time-controls/recorded-clocks-fresh-independent-buildability-review-2026-08-30.md` and
+`make recorded-clocks-fresh-review` (11/11 green). The original criteria below remain historical
+author input; they are not an implementation authorization while this return stands.
 
 ## Acceptance criteria
 
