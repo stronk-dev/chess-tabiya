@@ -1642,10 +1642,9 @@
       "targetProfiles": [
         {
           "projection": "recorded.engine.eval@1",
-          "factoryShape": "source_receipt",
+          "factoryShape": "derived",
           "authorityInputs": [
-            "sealed_source_receipt",
-            "typed_response_bytes"
+            "createSourcingLedgerEngineEvalV1Evidence output"
           ],
           "dependency": "provider-exchange-and-execution",
           "factorySymbol": "createRecordedEngineEvalV1Evidence"
@@ -1667,10 +1666,9 @@
       "targetProfiles": [
         {
           "projection": "recorded.tablebase.result@1",
-          "factoryShape": "source_receipt",
+          "factoryShape": "derived",
           "authorityInputs": [
-            "sealed_source_receipt",
-            "typed_response_bytes"
+            "createSourcingLedgerTablebaseResultV1Evidence output"
           ],
           "dependency": "provider-exchange-and-execution",
           "factorySymbol": "createRecordedTablebaseResultV1Evidence"
@@ -4830,6 +4828,6 @@
       "rules.tactic.reading.defender_duty_set@1"
     ],
     "boundProjectionsWithoutProductionUses": [],
-    "receiptDigest": "sha256:f4cb3460073490d4b0ad7f981ffb9ba83eb0a9278330827dd4cbde2e67ece8a4"
+    "receiptDigest": "sha256:bfd97830399a9cd9c7639abb8fc57a0580a571d592f4701146e45be697885448"
   }
 }

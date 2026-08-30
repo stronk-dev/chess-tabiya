@@ -84,7 +84,10 @@ test("the draft closes all four authority families without a generic payload esc
 });
 
 test("dependencies and closure gates are explicit rather than hand-waved", () => {
-  assert.match(rfc, /dependency-blocked on the returned semantic[\s\S]*?provider exchange contracts/u);
+  assert.match(rfc, /\*\*Status:\*\* draft/u);
+  assert.match(rfc, /author-amended 2026-08-30 through \[\[D2327\]\]/u);
+  assert.match(rfc, /dependency-blocked on the[\s\S]*?semantic convention register\/provenance/u);
+  assert.match(rfc, /provider exchange contracts/u);
   assert.match(rfc, /semantic-convention-provenance\.md/u);
   assert.match(rfc, /provider-exchange-and-execution\.md/u);
   assert.match(rfc, /semantic-validation-authority\.md/u);
@@ -116,5 +119,40 @@ test("claims and implementation boundary stay honest", () => {
   assert.match(rfc, /No ordinary module binding, preset, relevance rule, wording or content file changes/u);
   assert.match(rfc, /fresh independent buildability review/u);
   const criteria = rfc.match(/## Acceptance criteria\n([\s\S]*?)\n## Discharges/u)?.[1] ?? "";
-  assert.equal([...criteria.matchAll(/^\d+\./gmu)].length, 24);
+  assert.equal([...criteria.matchAll(/^\d+\./gmu)].length, 25);
+});
+
+test("recorded runtime readings derive from their exact sourcing-ledger evidence", () => {
+  const expected = new Map([
+    [
+      "recorded.engine.eval@1",
+      {
+        factory: "createRecordedEngineEvalV1Evidence",
+        input: "createSourcingLedgerEngineEvalV1Evidence output",
+      },
+    ],
+    [
+      "recorded.tablebase.result@1",
+      {
+        factory: "createRecordedTablebaseResultV1Evidence",
+        input: "createSourcingLedgerTablebaseResultV1Evidence output",
+      },
+    ],
+  ]);
+
+  for (const [projection, authority] of expected) {
+    const route = routeReceipt.routes.find((candidate) => candidate.currentProjection === projection);
+    assert.ok(route, projection);
+    assert.equal(route.targetProfiles.length, 1, projection);
+    const [profile] = route.targetProfiles;
+    assert.equal(profile.projection, projection);
+    assert.equal(profile.factoryShape, "derived");
+    assert.equal(profile.factorySymbol, authority.factory);
+    assert.deepEqual(profile.authorityInputs, [authority.input]);
+    assert.equal(profile.dependency, "provider-exchange-and-execution");
+  }
+
+  assert.match(rfc, /\[\[D2327\]\][\s\S]*?createRecordedEngineEvalV1Evidence[\s\S]*?createSourcingLedgerEngineEvalV1Evidence/u);
+  assert.match(rfc, /\[\[D2327\]\][\s\S]*?createRecordedTablebaseResultV1Evidence[\s\S]*?createSourcingLedgerTablebaseResultV1Evidence/u);
+  assert.match(rfc, /37 computed \/ 25 derived \/ 9 direct source \/ 4 authored/u);
 });

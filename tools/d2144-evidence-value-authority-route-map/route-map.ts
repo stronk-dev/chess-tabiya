@@ -53,6 +53,18 @@ const SPECIALIZED = Object.freeze([
 ] as const);
 
 const CORRECTED_TARGETS: Readonly<Record<string, readonly TargetProfile[]>> = Object.freeze({
+  "recorded.engine.eval": [{
+    projection: "recorded.engine.eval@1",
+    factoryShape: "derived",
+    authorityInputs: ["createSourcingLedgerEngineEvalV1Evidence output"],
+    dependency: "provider-exchange-and-execution",
+  }],
+  "recorded.tablebase.result": [{
+    projection: "recorded.tablebase.result@1",
+    factoryShape: "derived",
+    authorityInputs: ["createSourcingLedgerTablebaseResultV1Evidence output"],
+    dependency: "provider-exchange-and-execution",
+  }],
   "rules.phase.reading": [{ projection: "rules.phase.reading@2", factoryShape: "computed", authorityInputs: ["fen"], dependency: "semantic-convention-provenance:phase-band" }],
   "rules.structural.reading.named_structure": [{ projection: "rules.structural.reading.named_structure@2", factoryShape: "computed", authorityInputs: ["fen", "registered_structure_catalogue"], dependency: "semantic-convention-provenance:named-structure" }],
   "rules.endgame.reading": [

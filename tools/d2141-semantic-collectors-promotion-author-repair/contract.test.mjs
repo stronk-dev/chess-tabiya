@@ -11,20 +11,21 @@ const promotion = rfc.slice(
 );
 
 test("D2141: geometry requires and retains the exact sealed pawn authority", () => {
-  assert.match(promotion, /declarePromotionRaceGeometry\(contacts\)/u);
-  assert.match(promotion, /assertDeclaredEvidence\(contacts\)/u);
-  assert.match(promotion, /\{id:"rules\.pawn",version:1\}/u);
-  assert.match(promotion, /\{id:"rules\.pawn\.reading\.contacts",version:1\}/u);
-  assert.match(promotion, /input: DeclaredEvidence<PawnContactsReading>/u);
-  assert.match(promotion, /output: DeclaredEvidence<PromotionRaceGeometry>/u);
-  for (const negative of ["Unsealed lookalikes", "another producer/id/version", "`passed`, blocker, pawn identity or FEN"]) {
+  assert.match(promotion, /derivePromotionRaceGeometry\(contacts\)/u);
+  assert.match(promotion, /assertPawnContactsEvidence\(value\)/u);
+  assert.match(promotion, /type PawnContactsEvidence = DeclaredEvidence<PawnContactsReading>/u);
+  assert.match(promotion, /type PromotionRaceGeometryEvidence = DeclaredEvidence<PromotionRaceGeometry>/u);
+  assert.match(promotion, /input: PawnContactsEvidence/u);
+  assert.match(promotion, /output: PromotionRaceGeometryEvidence/u);
+  for (const negative of ["unsealed lookalike", "wrong producer/id/version", "mutations of `passed`, blocker"]) {
     assert.match(promotion, new RegExp(negative.replaceAll("/", "\\/"), "u"));
   }
 });
 
 test("D2142: recorded and live normalization retain whole original evidence items", () => {
   assert.match(promotion, /type PromotionRaceTablebaseSource =/u);
-  assert.match(promotion, /kind: "recorded";[\s\S]*evidence: DeclaredEvidence<RecordedTablebaseReading>/u);
+  assert.match(promotion, /type RecordedTablebaseEvidence = DeclaredEvidence<RecordedTablebaseReading>/u);
+  assert.match(promotion, /kind: "recorded";[\s\S]*evidence: RecordedTablebaseEvidence/u);
   assert.match(promotion, /kind: "live";[\s\S]*ProviderEvidenceDelivery<LiveSyzygyPosition, "syzygy\.position@1">/u);
   assert.match(promotion, /evidence\.payload\.values/u);
   assert.match(promotion, /evidence\.payload\.payload\.position/u);

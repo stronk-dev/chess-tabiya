@@ -12449,3 +12449,19 @@ Maintained bounded-target contracts pass 18+5+13+7 arms and the new four-arm aut
 contract passes. The RFC remains draft pending fresh independent review; no production, schema,
 content, archive, consumer eligibility or protected-intent byte changed. Receipt:
 `planning/bounded-policy-targets/third-author-repair-2026-08-30.md`.
+
+## 2026-08-30 — Promotion collectors D2179–D2183 and recorded-reading route class repair
+
+Author-repaired the held promotion pair without changing its twelve implemented siblings. Exact
+factory receipts now gate contacts, legal moves and recorded tablebase values; a sealed success
+receipt retains every derivation input; no-race is distinct from input failure; and check remains
+one separately composed exact authority rather than a duplicate tablebase operand.
+
+The trace generalized [[D2180]] into [[D2327]]: runtime recorded engine and tablebase readings were
+both misclassified as direct source receipts. The value-authority route map now makes both exact
+derivatives of their validated sourcing-ledger evidence, changing the 75-row partition from 23/11
+to 25/9 derived/direct-source without changing the 191-route total. Maintained promotion contracts
+pass 3+6 arms, the new 5-arm/typecheck contract passes, and the value-authority 6-arm/route-map
+contracts pass, including an exact-route assertion for both recorded readings. Both RFCs remain
+draft/held pending their named dependencies and fresh review.
+Receipt: `planning/evidence-foundation-ux/semantic-collectors-promotion-second-author-repair-2026-08-30.md`.

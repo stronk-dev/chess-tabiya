@@ -1,8 +1,8 @@
 # RFC: Evidence value authority — compute, derive or project before sealing
 
-- **Status:** draft — first author round 2026-08-30; dependency-blocked on the returned semantic
-  convention register/provenance and provider exchange contracts, then fresh independent
-  buildability review
+- **Status:** draft — author-amended 2026-08-30 through [[D2327]]; dependency-blocked on the
+  returned semantic convention register/provenance and provider exchange contracts, then fresh
+  independent buildability review
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-08-30
 - **Design refs:** `design/03-product-breadth.md` evidence architecture;
@@ -267,8 +267,8 @@ The set is partitioned at baseline as follows:
 | Factory family after grounding repair | Current rows | Source of authority |
 |---|---:|---|
 | computed rules/product operations | 37 | FEN, validated edge or bounded rule inputs |
-| derived operations | 23 | exact sealed derivation member |
-| recorded/provider/model/corpus/run projection | 11 | sealed source/exchange/run receipt |
+| derived operations | 25 | exact sealed derivation member, including the two runtime recorded-reading projections |
+| recorded/provider/model/corpus/run projection | 9 | sealed source/exchange/run receipt |
 | authored/theory projection | 4 | registered document/provenance authority |
 | **Total generic adapters** | **75** | — |
 
@@ -285,6 +285,25 @@ migration. Where an upstream authority is unavailable, the factory returns a typ
 unavailable result; absence of a factory is not the representation of honest emptiness. A binding
 cannot land first, and a future binding cannot bypass value-authority review merely because the
 projection was previously unbound.
+
+[[D2327]] corrects the two runtime recorded-reading routes as a class. Both
+`createRecordedEngineEvalV1Evidence` and `createRecordedTablebaseResultV1Evidence` accept the exact
+same-record evidence minted respectively by `createSourcingLedgerEngineEvalV1Evidence` and
+`createSourcingLedgerTablebaseResultV1Evidence`; neither accepts caller reading bytes or an
+unrelated generic source receipt. Their upstream ledger factories remain source-receipt routes.
+This changes the 75-row factory partition from 23 derived / 11 direct source to 25 / 9 without
+changing the total or any projection identity.
+
+The held promotion pair in `semantic-collectors.md` pins route symbols rather than inventing
+aliases during its later implementation. The existing route-table rows are
+`createRulesPawnReadingContactsV1Evidence`,
+`createRulesMobilityReadingLegalMovesV1Evidence` and
+`createRecordedTablebaseResultV1Evidence`. When the two held projections
+are admitted, their additive routes are exactly
+`createDerivedPawnPromotionRaceGeometryV1Evidence` and
+`createDerivedPawnPromotionRaceTablebaseV1Evidence`, with the input/receipt algebras owned by that
+RFC. The route/profile set-equality gate must absorb those rows in the same implementation commit;
+neither document may introduce a compatibility alias.
 
 At the 2026-08-30 baseline the catalogue has 193 declarations. Section 3 retires five old v1 rows
 and adds nine successors, yielding 202 declarations: six retired and 196 non-retired factory
@@ -374,8 +393,8 @@ software-contracts CI job. It is not a pre-push hook and requires no custom envi
 2. Add the private mint/value-receipt boundary without changing call sites.
 3. Implement §3's corrected/split projection identities and update the catalogue.
 4. Migrate the 37 computed rows, starting with the twelve already-bound current rows.
-5. Migrate the 23 derived rows and invert semantic-event compilation.
-6. Migrate the 11 source-receipt and 4 authored rows.
+5. Migrate the 25 derived rows and invert semantic-event compilation.
+6. Migrate the 9 direct source-receipt and 4 authored rows.
 7. Delete all generic adapters/root exports and enable the permanent closure gate.
 8. Run complete software, browser, content, packaging and CI-parity gates before status changes.
 
@@ -442,13 +461,17 @@ planes, optional LLM renderer and assistance ceilings.
     exploration-log entry and RFC closeout.
 24. A fresh independent buildability review finds no caller-payload bypass, false authority join,
     missing production call site, undeclared shared-resource claim or green-by-construction test.
+25. The 75-row partition is exactly 37 computed / 25 derived / 9 direct source / 4 authored.
+    `recorded.engine.eval@1` and `recorded.tablebase.result@1` consume their exact same-record
+    `sourcing.ledger.*` evidence outputs; caller bytes, another record and same-FEN value mutations
+    fail before either runtime reading is minted ([[D2327]]).
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | D1 | Semantic convention register/provenance accepted and exact six-row closure consumable | semantic-convention-provenance | accepted dependency plus exact convention-closure contract fixture | |
-| D2 | Provider/source receipt contract accepted and exact eleven-row source shape consumable | provider-exchange-and-execution | accepted dependency plus exact source-receipt contract fixture | |
+| D2 | Provider/source receipt contract accepted and exact nine direct plus two chained recorded-reading source shapes consumable | provider-exchange-and-execution | accepted dependency plus exact source/derived receipt contract fixture | |
 | D3 | Semantic event authority profiles accepted for reuse without duplicating cases | semantic-validation-authority | accepted dependency plus set-equal authority-profile receipt | |
 | D4 | Fresh independent buildability review after D1–D3 and the literal 191-route author table | codex | fresh review record with every blocking finding closed or routed | |
 
@@ -459,6 +482,10 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-08-30: [[D2327]] corrects the recorded-reading route class: runtime engine and tablebase
+  readings are derived from their exact validated sourcing-ledger evidence, changing the reviewed
+  75-row partition from 23/11 to 25/9 derived/direct-source without changing its total. Pinned the
+  held promotion pair's five exact future/existing route symbols to the same authority.
 - 2026-08-30: created from D2144/D2145; separates primary grounding, convention closure and value
   construction; refuses caller-payload compatibility adapters and generic mint APIs.
 - 2026-08-30: D2146 self-review correction — 75 generic adapters, 191 routes, 187 mintable ids,
