@@ -12175,3 +12175,19 @@ bot-policy-second-fresh-review` passes 8/8; the earlier author target remains gr
 correctly classified as insufficient evidence. No production, schema, migration, provider, route,
 roster, UI, content, archive or protected-design byte changed. Exact review:
 `planning/platform-alignment/bot-policy/second-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Longitudinal-store second fresh independent return
+
+Returned the D2063–D2069-amended `longitudinal-store.md` on [[D2227]]–[[D2232]] after applying its
+folded store/worker contract to the current phase classifier, eligible-run population, measured
+projection duration, upgrade path and SQL ownership boundary. The store rejects the legitimate
+`unclear` phase; the live fold omits decision/root derivation; its 30-second lease is shorter than
+the measured 47.29-second 80-ply p95; `all_complete` can hide jobless runs; untouched pre-upgrade
+runs receive no required job; and valid learner/run foreign keys are not bound to each other.
+
+The repaired sign identity, complete-population algebra, immutable claim cut, deletion suppression,
+literal DDL, typed reader and provider-free worker survive. `make
+longitudinal-store-second-fresh-review` passes 6/6; the earlier author target remains green 19/19,
+now correctly classified as incomplete evidence. No production, migration, worker, consumer,
+schema, content, archive or protected-design byte changed. Exact review:
+`planning/longitudinal-store/second-fresh-independent-buildability-review-2026-08-30.md`.

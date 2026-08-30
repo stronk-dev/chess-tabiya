@@ -1,12 +1,12 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **[[D2063]]–[[D2069]] author repair complete 2026-08-30; fresh
-  independent review required.** Semantic/source sign identity, complete-population algebra,
-  requested/high-water CAS, deletion-safe rebuild suppression, literal SQLite DDL/index authority,
-  the typed snapshot reader and a bounded production worker lifecycle now compose as one operation.
-  `make longitudinal-store-author-contract` passes 19/19; the unchanged historical
-  `make longitudinal-store-fresh-review` fails all seven old blocker assertions, the intended
-  inversion. Implementation remains forbidden. The 2026-08-22 acceptance remains history, not implementation authority.
+- **Status:** draft — **RETURNED by second fresh independent review 2026-08-30 on
+  [[D2227]]–[[D2232]].** The prior seven repairs survive, but the phase schema rejects the runtime's
+  `unclear` result; the normative fold omits decision/root derivation; the default lease expires
+  before measured valid work; complete-history reads omit jobless runs; upgrades do not reconcile
+  existing runs; and SQL does not bind learner rows to run ownership. `make
+  longitudinal-store-second-fresh-review` passes 6/6. Implementation remains forbidden. The
+  2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
   returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
 - **Author:** claude
@@ -469,6 +469,33 @@ The author pass has inverted `make longitudinal-store-fresh-review` while expand
 10-arm author contract to 18 arms. Cost arms and full verification still run before checkpoint;
 another independent review remains mandatory. This commit does not implement the migration,
 worker, consumers or content.
+
+## Second fresh independent return (2026-08-30)
+
+The D2063–D2069 repair is materially sound and remains the base. Fresh application to current
+runtime/storage semantics returns six additional seams; the exact review is
+`planning/longitudinal-store/second-fresh-independent-buildability-review-2026-08-30.md`.
+
+1. **[[D2227]] — preserve the phase authority's fourth result.** `classifyPhase` returns
+   `unclear`; carry it through DDL, rows, filters, denominators and fixtures instead of dropping or
+   manufacturing a named phase.
+2. **[[D2228]] — restore the complete projector to the normative fold.** Decision identity,
+   played/game/predicted precedence, attribution, phase/ref ordering, root mapping and all structure
+   counters may not live only in the explicitly non-normative history.
+3. **[[D2229]] — make lease ownership outlive valid work.** The 30-second default is below the
+   measured 47.29-second 80-ply p95. Publish a renewal/claim scheduling/bound protocol and exercise
+   real slow derivation plus batch expiry races.
+4. **[[D2230]] — define complete history from eligible runs.** `all_complete` left-joins jobs from
+   a transaction-fixed eligible-run census; a missing job is `not_requested`, never invisible.
+5. **[[D2231]] — own upgrade reconciliation.** One idempotent startup/upgrade operation creates
+   requested cuts/jobs for all existing eligible runs and joins the appliance upgrade receipt;
+   semantic derivation stays background-only.
+6. **[[D2232]] — bind learner/run provenance.** Job creation and publication must prove the row's
+   learner is the durable run owner across shared writers, reassignment, deletion and stale claims.
+
+The next author contract must mutate a passing real positive for each seam. The existing 19 arms
+remain useful but cannot establish these six properties. No migration, worker, reader, consumer or
+content implementation is authorized by this return.
 
 ### F. Acceptance criteria
 
@@ -1246,6 +1273,10 @@ head after that renumbering and **not yet written**:
 ## Changelog
 
 - 2026-08-22: created.
+- 2026-08-30: second fresh independent review returned the repaired fold on [[D2227]]–[[D2232]]:
+  four-way phase closure, normative projector completeness, lease liveness, eligible-run history
+  census, upgrade reconciliation and learner/run provenance. Exact review and 6-arm executable
+  reproduction landed; no production implementation was authorized.
 - 2026-08-22: adversarial cross-review (claude, independent of the author). Blockers
   fixed in place: (1) `decision_class ∈ {played, game, predicted}` added to the
   observation key with owner-only attribution derived from the durable session
