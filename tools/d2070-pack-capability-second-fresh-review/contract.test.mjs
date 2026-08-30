@@ -25,6 +25,9 @@ function applyPatch(source, operations) {
     if (operation.op === "replace") {
       assert.ok(Object.hasOwn(parent, final));
       parent[final] = operation.value;
+    } else if (operation.op === "remove") {
+      assert.ok(Object.hasOwn(parent, final));
+      delete parent[final];
     } else if (operation.op === "add" && final === "-") {
       assert.ok(Array.isArray(parent));
       parent.push(operation.value);
@@ -68,13 +71,25 @@ test("D2071: plan validity stays green while readiness alone refuses judgement",
   assert.match(rfc, /ordinary `make verify` stays green while honest judgement debt exists/u);
 });
 
-test("D2072: the author patch produces the exact required 0.30 schema post-image", () => {
+test("D2072: the cumulative author stages produce every predecessor and the exact 0.30 post-image", () => {
   assert.equal(sha256(legacySchemaBytes), transition.legacy.schemaSha256);
-  const target = applyPatch(JSON.parse(legacySchemaBytes), transition.patch);
+  let target = JSON.parse(legacySchemaBytes);
+  let priorSha = transition.legacy.schemaSha256;
+  for (const stage of transition.stages) {
+    assert.equal(stage.source.schemaSha256, priorSha);
+    target = applyPatch(target, stage.patch);
+    const stageBytes = `${JSON.stringify(target, null, 2)}\n`;
+    assert.equal(Buffer.byteLength(stageBytes), stage.target.canonicalBytes);
+    assert.equal(sha256(stageBytes), stage.target.schemaSha256);
+    priorSha = stage.target.schemaSha256;
+  }
   const bytes = `${JSON.stringify(target, null, 2)}\n`;
   assert.equal(Buffer.byteLength(bytes), transition.target.canonicalBytes);
   assert.equal(sha256(bytes), transition.target.schemaSha256);
   assert.equal(target.$id, transition.target.schemaId);
+  assert.ok(target.$defs.graduationEntry.properties.clearance);
+  assert.ok(target.$defs.provenance.properties.corpusEvidence);
+  assert.ok(target.$defs.feedbackClaim.properties.evidenceTypes.items.enum.includes("provenance_note"));
   assert.ok(target.required.includes("requires"));
   assert.equal(target.properties.requires.items.$ref, "#/$defs/capabilityRequirement");
 });
@@ -107,7 +122,7 @@ test("D2075: histories retain old versions and resolve one acyclic current chain
   assert.match(rfc, /interface CapabilityHistory/u);
   assert.match(rfc, /identity is `\(subjectId, version\)`/u);
   assert.match(rfc, /Exactly one declaration equals `current`; it must be `active`/u);
-  assert.match(rfc, /1→2, 1→2→3, withdrawal without successor/u);
+  assert.match(rfc, /1→2, 1→2→3, withdrawal with successor, lawful withdrawal without/u);
   assert.match(rfc, /duplicate current, cross-subject successor and cycle fixtures/u);
 });
 

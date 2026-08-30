@@ -4,42 +4,1756 @@
   "schema": {
     "path": "schemas/drill_pack.schema.json",
     "sha256": "7da4d49506eb028872bd909d7ab34a3107b44ba2374f4a686ac625d112d653b0",
-    "targetTransition": "rfc/contracts/pack-capability-schema-transition-v1.json"
+    "targetTransition": "rfc/contracts/pack-capability-schema-transition-v1.json",
+    "targetSha256": "f7818f5ea08dd6c63efb422508174baa07868e3e11cd91a60891f151df0f25db"
   },
   "closedVocabulary": {
     "inventoryAlgorithm": "closed-schema-members-v1",
-    "inventorySha256": "dda24bb80b91eadccdffecaf4577395b4a40c5810f3c0fce4371cd1b26483f21",
-    "enumNodes": 103,
-    "enumMembers": 300,
-    "discriminatedOneOfNodes": 15,
-    "discriminatedOneOfMembers": 73,
-    "mappedMembers": 373,
+    "inventorySha256": "f645ee0e677a9fa3aa340b0ba4f76d7a4d66eb997255c711116bcae6fbf14257",
+    "enumNodes": 106,
+    "enumMembers": 321,
+    "discriminatedOneOfNodes": 16,
+    "discriminatedOneOfMembers": 76,
+    "mappedMembers": 397,
     "excludedMembers": 0,
     "mappingAlgorithm": "stable-schema-member-v2",
-    "expandedMappingSha256": "e5c6a915c6a01e6c7fd3651a9d679ac3b434c19b404a6f2c268b0b5b623c999b"
+    "expandedMappingSha256": "a4b424ee765f4ae556f399895f90de5a5d469722214d753c2ac53fc4d8fd86a7",
+    "generator": "tools/d2152-pack-capability-author-repair/contract.mjs",
+    "sourceInventory": [
+      {
+        "schemaPointer": "/$defs/provenance/properties/corpusEvidence",
+        "member": "abstained"
+      },
+      {
+        "schemaPointer": "/$defs/deviation/properties/class",
+        "member": "accepted_alternative"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry",
+        "member": "accepted"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/state",
+        "member": "accepted"
+      },
+      {
+        "schemaPointer": "/$defs/conditionBase/properties/to",
+        "member": "achieved"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/4/properties/direction",
+        "member": "acquired"
+      },
+      {
+        "schemaPointer": "/$defs/conditionBase/properties/from/items",
+        "member": "active"
+      },
+      {
+        "schemaPointer": "/$defs/transitionExpression/oneOf/3/properties/at",
+        "member": "after"
+      },
+      {
+        "schemaPointer": "/$defs/structuralExpression/oneOf/0/properties/kind",
+        "member": "all"
+      },
+      {
+        "schemaPointer": "/$defs/timingWindow/properties/readiness/properties/mode",
+        "member": "all"
+      },
+      {
+        "schemaPointer": "/$defs/transitionExpression/oneOf/0/properties/kind",
+        "member": "all"
+      },
+      {
+        "schemaPointer": "/properties/retryVariants/items/properties/kind",
+        "member": "alternate_plan_class"
+      },
+      {
+        "schemaPointer": "/$defs/structuralExpression/oneOf/0/properties/kind",
+        "member": "any"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/10/properties/scope",
+        "member": "any"
+      },
+      {
+        "schemaPointer": "/$defs/timingWindow/properties/readiness/properties/mode",
+        "member": "any"
+      },
+      {
+        "schemaPointer": "/$defs/transitionExpression/oneOf/0/properties/kind",
+        "member": "any"
+      },
+      {
+        "schemaPointer": "/$defs/windowClosing",
+        "member": "arrival"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
+        "member": "assessment_grounded"
+      },
+      {
+        "schemaPointer": "/$defs/materialBalance/properties/comparison",
+        "member": "atLeast"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature/oneOf/3/properties/comparison",
+        "member": "atLeast"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/10/properties/comparison",
+        "member": "atLeast"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/13/properties/comparison",
+        "member": "atLeast"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/15/properties/comparison",
+        "member": "atLeast"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/17/properties/comparison",
+        "member": "atLeast"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/8/properties/comparison",
+        "member": "atLeast"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/9/properties/comparison",
+        "member": "atLeast"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition/oneOf/2/properties/comparison",
+        "member": "atLeast"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/0/properties/comparison",
+        "member": "atLeast"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/1/properties/comparison",
+        "member": "atLeast"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/2/properties/comparison",
+        "member": "atLeast"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/3/properties/comparison",
+        "member": "atLeast"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/4/properties/comparison",
+        "member": "atLeast"
+      },
+      {
+        "schemaPointer": "/$defs/materialBalance/properties/comparison",
+        "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature/oneOf/3/properties/comparison",
+        "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/10/properties/comparison",
+        "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/13/properties/comparison",
+        "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/15/properties/comparison",
+        "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/17/properties/comparison",
+        "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/8/properties/comparison",
+        "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/9/properties/comparison",
+        "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition/oneOf/2/properties/comparison",
+        "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/0/properties/comparison",
+        "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/1/properties/comparison",
+        "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/2/properties/comparison",
+        "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/3/properties/comparison",
+        "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/4/properties/comparison",
+        "member": "atMost"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature",
+        "member": "attacked_squares_changed"
+      },
+      {
+        "schemaPointer": "/$defs/feedbackClaim/properties/evidenceTypes/items",
+        "member": "author_principle"
+      },
+      {
+        "schemaPointer": "/$defs/fileTemplateFeature",
+        "member": "backward_pawn"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "backward_pawn"
+      },
+      {
+        "schemaPointer": "/$defs/transitionExpression/oneOf/3/properties/at",
+        "member": "before"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "bishop_on_shade"
+      },
+      {
+        "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/role",
+        "member": "bishop"
+      },
+      {
+        "schemaPointer": "/$defs/piece/properties/role",
+        "member": "bishop"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/10/properties/role",
+        "member": "bishop"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/15/properties/role",
+        "member": "bishop"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/17/properties/role",
+        "member": "bishop"
+      },
+      {
+        "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/fileTemplateFeature/oneOf/0/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/fileTemplateFeature/oneOf/1/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/fileTemplateFeature/oneOf/2/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/fileTemplateFeature/oneOf/3/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/materialBalance/properties/perspective",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/piece/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature/oneOf/0/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature/oneOf/1/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature/oneOf/2/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature/oneOf/3/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/start/properties/side",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/0/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/1/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/10/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/12/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/13/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/14/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/15/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/16/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/17/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/2/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/3/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/4/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/5/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/7/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/9/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition/oneOf/2/properties/perspective",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition/oneOf/3/properties/winner",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/0/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/1/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/2/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/3/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/4/properties/color",
+        "member": "black"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/oneOf/1/properties/to",
+        "member": "blessed-loss"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/oneOf/2/properties/to",
+        "member": "blessed-loss"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/oneOf/3/properties/to",
+        "member": "blessed-loss"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/properties/from",
+        "member": "blessed-loss"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/properties/to",
+        "member": "blessed-loss"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveGrading/properties/assessedBy/oneOf/1/properties/category",
+        "member": "blessed-loss"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry",
+        "member": "blocking"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/state",
+        "member": "blocking"
+      },
+      {
+        "schemaPointer": "/$defs/structuralExpression/oneOf/3/properties/axis",
+        "member": "both"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/11/properties/id",
+        "member": "carlsbad"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/5/properties/subkind",
+        "member": "castled"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition/oneOf/3/properties/fact",
+        "member": "checkmate"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveGrading/properties/resolveAt",
+        "member": "checkpoint"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
+        "member": "citable_text"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
+        "member": "claim_bound"
+      },
+      {
+        "schemaPointer": "/$defs/reasoningKeyPoint/properties/ground",
+        "member": "claim"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/5/properties/subkind",
+        "member": "clock_zeroed"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/2/properties/direction",
+        "member": "closed"
+      },
+      {
+        "schemaPointer": "/$defs/structuralExpression/oneOf/3/properties/axis",
+        "member": "colors"
+      },
+      {
+        "schemaPointer": "/$defs/deviation/properties/class",
+        "member": "concept_violation"
+      },
+      {
+        "schemaPointer": "/$defs/fenPredicate/oneOf/2/properties/mode",
+        "member": "contains"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/16/properties/zone",
+        "member": "corner"
+      },
+      {
+        "schemaPointer": "/$defs/feedbackClaim/properties/evidenceTypes/items",
+        "member": "corpus_observed"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/13/properties/basis",
+        "member": "count"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/15/properties/basis",
+        "member": "count"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveGrading/properties/assessedBy/oneOf/2/properties/score",
+        "member": "cp"
+      },
+      {
+        "schemaPointer": "/properties/phase",
+        "member": "cross_phase"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/oneOf/3/properties/to",
+        "member": "cursed-win"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/properties/from",
+        "member": "cursed-win"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/properties/to",
+        "member": "cursed-win"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveGrading/properties/assessedBy/oneOf/1/properties/category",
+        "member": "cursed-win"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/12/properties/shade",
+        "member": "dark"
+      },
+      {
+        "schemaPointer": "/$defs/windowClosing",
+        "member": "deadline"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature",
+        "member": "defended_duties_changed"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature",
+        "member": "defended_squares_changed"
+      },
+      {
+        "schemaPointer": "/$defs/conditionBase/properties/from/items",
+        "member": "degraded"
+      },
+      {
+        "schemaPointer": "/$defs/conditionBase/properties/to",
+        "member": "degraded"
+      },
+      {
+        "schemaPointer": "/properties/feedbackPolicy",
+        "member": "delayed_checkpoint"
+      },
+      {
+        "schemaPointer": "/$defs/feedbackClaim/properties/evidenceTypes/items",
+        "member": "derived_feature"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/13/properties/basis",
+        "member": "difference"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/15/properties/basis",
+        "member": "difference"
+      },
+      {
+        "schemaPointer": "/properties/retryVariants/items/properties/kind",
+        "member": "different_material_details"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature",
+        "member": "direct_attack_count"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "direct_attack_count"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/14/properties/form",
+        "member": "direct"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/14/properties/form",
+        "member": "distant"
+      },
+      {
+        "schemaPointer": "/$defs/fileTemplateFeature",
+        "member": "doubled_pawn"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "doubled_pawn"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/reviewStatus",
+        "member": "draft"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/oneOf/2/properties/to",
+        "member": "draw"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/oneOf/3/properties/to",
+        "member": "draw"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/properties/from",
+        "member": "draw"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/properties/to",
+        "member": "draw"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveGrading/properties/assessedBy/oneOf/1/properties/category",
+        "member": "draw"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition/oneOf/1/properties/result",
+        "member": "draw"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition/oneOf/3/properties/fact",
+        "member": "draw"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/16/properties/zone",
+        "member": "edge"
+      },
+      {
+        "schemaPointer": "/properties/phase",
+        "member": "endgame"
+      },
+      {
+        "schemaPointer": "/$defs/engineCondition",
+        "member": "engine_eval_swing"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
+        "member": "engine_eval"
+      },
+      {
+        "schemaPointer": "/$defs/engineCondition",
+        "member": "engine_mate_appears"
+      },
+      {
+        "schemaPointer": "/$defs/feedbackClaim/properties/evidenceTypes/items",
+        "member": "engine_validated"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/0/properties/basis",
+        "member": "engine"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/1/properties/basis",
+        "member": "engine"
+      },
+      {
+        "schemaPointer": "/$defs/materialBalance/properties/comparison",
+        "member": "equal"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature/oneOf/3/properties/comparison",
+        "member": "equal"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/10/properties/comparison",
+        "member": "equal"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/13/properties/comparison",
+        "member": "equal"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/15/properties/comparison",
+        "member": "equal"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/17/properties/comparison",
+        "member": "equal"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/8/properties/comparison",
+        "member": "equal"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/9/properties/comparison",
+        "member": "equal"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition/oneOf/2/properties/comparison",
+        "member": "equal"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/0/properties/comparison",
+        "member": "equal"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/1/properties/comparison",
+        "member": "equal"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/2/properties/comparison",
+        "member": "equal"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/3/properties/comparison",
+        "member": "equal"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/4/properties/comparison",
+        "member": "equal"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature",
+        "member": "escape_squares_changed"
+      },
+      {
+        "schemaPointer": "/$defs/structuralExpression/oneOf/4/properties/quantifier",
+        "member": "every"
+      },
+      {
+        "schemaPointer": "/$defs/structuralExpression/oneOf/5/properties/quantifier",
+        "member": "every"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/10/properties/scope",
+        "member": "every"
+      },
+      {
+        "schemaPointer": "/$defs/fenPredicate/oneOf/2/properties/mode",
+        "member": "exact"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveType",
+        "member": "execute_break"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
+        "member": "explorer_frequency"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
+        "member": "explorer_position_census"
+      },
+      {
+        "schemaPointer": "/$defs/conditionBase/properties/to",
+        "member": "failed"
+      },
+      {
+        "schemaPointer": "/$defs/structuralExpression/oneOf/3/properties/axis",
+        "member": "files"
+      },
+      {
+        "schemaPointer": "/$defs/opponentPolicy/properties/seedMode",
+        "member": "fixed"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveType",
+        "member": "follow_theory"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/0/properties/direction",
+        "member": "gained"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/1/properties/direction",
+        "member": "gained"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/3/properties/direction",
+        "member": "gained"
+      },
+      {
+        "schemaPointer": "/$defs/fileTemplateFeature",
+        "member": "half_open_file"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "half_open_file"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveType",
+        "member": "hold"
+      },
+      {
+        "schemaPointer": "/$defs/legOpponentPolicy/properties/mode",
+        "member": "human_common"
+      },
+      {
+        "schemaPointer": "/$defs/opponentPolicy/properties/mode",
+        "member": "human_common"
+      },
+      {
+        "schemaPointer": "/$defs/opponentPolicy/properties/mode",
+        "member": "human_external"
+      },
+      {
+        "schemaPointer": "/$defs/feedbackClaim/properties/evidenceTypes/items",
+        "member": "human_model_predicted"
+      },
+      {
+        "schemaPointer": "/$defs/feedbackClaim/properties/evidenceTypes/items",
+        "member": "hypothesis"
+      },
+      {
+        "schemaPointer": "/properties/feedbackPolicy",
+        "member": "immediate_guard"
+      },
+      {
+        "schemaPointer": "/$defs/tempoVerdict",
+        "member": "in_time"
+      },
+      {
+        "schemaPointer": "/$defs/checkpointInteraction",
+        "member": "intent_capture"
+      },
+      {
+        "schemaPointer": "/$defs/deviation/properties/class",
+        "member": "interesting_deviation"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/11/properties/id",
+        "member": "iqp-black"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/11/properties/id",
+        "member": "iqp-white"
+      },
+      {
+        "schemaPointer": "/$defs/fileTemplateFeature",
+        "member": "isolated_pawn"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "isolated_pawn"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "king_opposition"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "king_zone"
+      },
+      {
+        "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/role",
+        "member": "king"
+      },
+      {
+        "schemaPointer": "/$defs/piece/properties/role",
+        "member": "king"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/15/properties/role",
+        "member": "king"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/17/properties/role",
+        "member": "king"
+      },
+      {
+        "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/role",
+        "member": "knight"
+      },
+      {
+        "schemaPointer": "/$defs/piece/properties/role",
+        "member": "knight"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/10/properties/role",
+        "member": "knight"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/15/properties/role",
+        "member": "knight"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/17/properties/role",
+        "member": "knight"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/5/properties/subkind",
+        "member": "last_of_role"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/1/properties/against",
+        "member": "learner"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
+        "member": "ledger_record"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/corpusEvidence",
+        "member": "ledger"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/corpusEvidence/oneOf/1/properties/reason",
+        "member": "licence_withheld"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/12/properties/shade",
+        "member": "light"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "line_blockers"
+      },
+      {
+        "schemaPointer": "/properties/mode",
+        "member": "line"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/oneOf/1/properties/to",
+        "member": "loss"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/oneOf/2/properties/to",
+        "member": "loss"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/oneOf/3/properties/to",
+        "member": "loss"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/properties/from",
+        "member": "loss"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/properties/to",
+        "member": "loss"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveGrading/properties/assessedBy/oneOf/1/properties/category",
+        "member": "loss"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition/oneOf/1/properties/result",
+        "member": "loss"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/0/properties/direction",
+        "member": "lost"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/1/properties/direction",
+        "member": "lost"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/3/properties/direction",
+        "member": "lost"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/11/properties/id",
+        "member": "maroczy-bind"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveGrading/properties/assessedBy/oneOf/2/properties/score",
+        "member": "mate"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition",
+        "member": "material_balance"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/0/properties/basis",
+        "member": "material"
+      },
+      {
+        "schemaPointer": "/properties/phase",
+        "member": "middlegame"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature",
+        "member": "move_irreversibility"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "named_structure"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/corpusEvidence/oneOf/1/properties/reason",
+        "member": "no_data_at_band"
+      },
+      {
+        "schemaPointer": "/$defs/fileTemplateFeature",
+        "member": "open_file"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "open_file"
+      },
+      {
+        "schemaPointer": "/$defs/tempoVerdict",
+        "member": "open"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/2/properties/direction",
+        "member": "opened"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
+        "member": "opening_identity"
+      },
+      {
+        "schemaPointer": "/properties/phase",
+        "member": "opening"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/1/properties/against",
+        "member": "opponent"
+      },
+      {
+        "schemaPointer": "/properties/retryVariants/items/properties/kind",
+        "member": "opposite_side"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/corpusEvidence/oneOf/1/properties/reason",
+        "member": "out_of_range"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/accepted/properties/kind",
+        "member": "out_of_scope"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition",
+        "member": "outcome"
+      },
+      {
+        "schemaPointer": "/properties/mode",
+        "member": "outcome"
+      },
+      {
+        "schemaPointer": "/$defs/tempoVerdict",
+        "member": "outpaced"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature",
+        "member": "outpost"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "outpost"
+      },
+      {
+        "schemaPointer": "/$defs/tempoVerdict",
+        "member": "over_budget"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/accepted/properties/kind",
+        "member": "owner_ruling"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature",
+        "member": "passed_pawn"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "passed_pawn"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/5/properties/subkind",
+        "member": "pawn_break"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "pawn_count"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature",
+        "member": "pawn_safe_square"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "pawn_safe_square"
+      },
+      {
+        "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/role",
+        "member": "pawn"
+      },
+      {
+        "schemaPointer": "/$defs/piece/properties/role",
+        "member": "pawn"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/15/properties/role",
+        "member": "pawn"
+      },
+      {
+        "schemaPointer": "/$defs/fenPredicate",
+        "member": "pawnStructure"
+      },
+      {
+        "schemaPointer": "/$defs/opponentPolicy/properties/seedMode",
+        "member": "per_branch"
+      },
+      {
+        "schemaPointer": "/$defs/opponentPolicy/properties/seedMode",
+        "member": "per_run"
+      },
+      {
+        "schemaPointer": "/$defs/opponentPolicy/properties/mode",
+        "member": "perfect_tablebase"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/accepted/properties/kind",
+        "member": "permanent_property"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "piece_count"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "piece_distance"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature",
+        "member": "piece_reach_count"
+      },
+      {
+        "schemaPointer": "/$defs/distanceTarget",
+        "member": "piece"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature",
+        "member": "piece"
+      },
+      {
+        "schemaPointer": "/$defs/fenPredicate",
+        "member": "pieceOnSquare"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition",
+        "member": "plan_consequence"
+      },
+      {
+        "schemaPointer": "/$defs/opponentPolicy/properties/mode",
+        "member": "plan_defense"
+      },
+      {
+        "schemaPointer": "/$defs/deviation/properties/mistake/items",
+        "member": "plan"
+      },
+      {
+        "schemaPointer": "/properties/mode",
+        "member": "plan"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveType",
+        "member": "play_until_checkpoint"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
+        "member": "pointer_authored"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
+        "member": "position_legality"
+      },
+      {
+        "schemaPointer": "/$defs/windowClosing",
+        "member": "position"
+      },
+      {
+        "schemaPointer": "/$defs/opponentPolicy/properties/mode",
+        "member": "practical_resistance"
+      },
+      {
+        "schemaPointer": "/$defs/checkpointInteraction",
+        "member": "prediction"
+      },
+      {
+        "schemaPointer": "/$defs/tempoVerdict",
+        "member": "premature"
+      },
+      {
+        "schemaPointer": "/$defs/shapeReference/oneOf/1/properties/relation",
+        "member": "present"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveType",
+        "member": "preserve_plan_window"
+      },
+      {
+        "schemaPointer": "/$defs/conditionBase/properties/from/items",
+        "member": "preserved"
+      },
+      {
+        "schemaPointer": "/$defs/conditionBase/properties/to",
+        "member": "preserved"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveType",
+        "member": "prevent_opponent_plan"
+      },
+      {
+        "schemaPointer": "/$defs/shapeReference/oneOf/1/properties/relation",
+        "member": "prospective"
+      },
+      {
+        "schemaPointer": "/$defs/feedbackClaim/properties/evidenceTypes/items",
+        "member": "provenance_note"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/reviewStatus",
+        "member": "published"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
+        "member": "puzzle_provenance"
+      },
+      {
+        "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/role",
+        "member": "queen"
+      },
+      {
+        "schemaPointer": "/$defs/piece/properties/role",
+        "member": "queen"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/10/properties/role",
+        "member": "queen"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/15/properties/role",
+        "member": "queen"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/17/properties/role",
+        "member": "queen"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition",
+        "member": "reach_checkpoint"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveType",
+        "member": "reach_structure"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
+        "member": "referent_removed"
+      },
+      {
+        "schemaPointer": "/properties/retryVariants/items/properties/kind",
+        "member": "related_position_same_idea"
+      },
+      {
+        "schemaPointer": "/$defs/windowClosing",
+        "member": "release"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/4/properties/direction",
+        "member": "released"
+      },
+      {
+        "schemaPointer": "/$defs/deviation/properties/class",
+        "member": "required_theory"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveType",
+        "member": "resist"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry",
+        "member": "resolved"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/state",
+        "member": "resolved"
+      },
+      {
+        "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/role",
+        "member": "rook"
+      },
+      {
+        "schemaPointer": "/$defs/piece/properties/role",
+        "member": "rook"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/10/properties/role",
+        "member": "rook"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/15/properties/role",
+        "member": "rook"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/17/properties/role",
+        "member": "rook"
+      },
+      {
+        "schemaPointer": "/$defs/variantOf/properties/relation",
+        "member": "root_after_move"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition",
+        "member": "rules_fact"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveType",
+        "member": "run_trajectory"
+      },
+      {
+        "schemaPointer": "/properties/retryVariants/items/properties/kind",
+        "member": "same_root_new_defense"
+      },
+      {
+        "schemaPointer": "/$defs/variantOf/properties/relation",
+        "member": "same_root_other_objective"
+      },
+      {
+        "schemaPointer": "/$defs/variantOf/properties/relation",
+        "member": "same_root_other_side"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveType",
+        "member": "save"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/reviewStatus",
+        "member": "schema_example"
+      },
+      {
+        "schemaPointer": "/properties/feedbackPolicy",
+        "member": "segment_end"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
+        "member": "shape_firing"
+      },
+      {
+        "schemaPointer": "/$defs/reasoningKeyPoint/properties/ground",
+        "member": "shape_plan"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature",
+        "member": "slider_lines_changed"
+      },
+      {
+        "schemaPointer": "/$defs/structuralExpression/oneOf/4/properties/quantifier",
+        "member": "some"
+      },
+      {
+        "schemaPointer": "/$defs/structuralExpression/oneOf/5/properties/quantifier",
+        "member": "some"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/corpusEvidence/oneOf/1/properties/reason",
+        "member": "source_unavailable"
+      },
+      {
+        "schemaPointer": "/$defs/reasoningKeyPoint/properties/ground",
+        "member": "spine_move"
+      },
+      {
+        "schemaPointer": "/$defs/distanceTarget",
+        "member": "square"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition/oneOf/3/properties/fact",
+        "member": "stalemate"
+      },
+      {
+        "schemaPointer": "/$defs/checkpointInteraction",
+        "member": "stated_reasoning"
+      },
+      {
+        "schemaPointer": "/$defs/legOpponentPolicy/properties/mode",
+        "member": "strong_engine"
+      },
+      {
+        "schemaPointer": "/$defs/opponentPolicy/properties/mode",
+        "member": "strong_engine"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition",
+        "member": "structural_feature"
+      },
+      {
+        "schemaPointer": "/$defs/reasoningKeyPoint/properties/ground",
+        "member": "structural"
+      },
+      {
+        "schemaPointer": "/$defs/fenPredicate",
+        "member": "structuralFeature"
+      },
+      {
+        "schemaPointer": "/$defs/engineCondition",
+        "member": "tablebase_category_regression"
+      },
+      {
+        "schemaPointer": "/$defs/engineCondition",
+        "member": "tablebase_dtz_regression"
+      },
+      {
+        "schemaPointer": "/$defs/feedbackClaim/properties/evidenceTypes/items",
+        "member": "tablebase_exact"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/recordKind",
+        "member": "tablebase_result"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/1/properties/basis",
+        "member": "tablebase"
+      },
+      {
+        "schemaPointer": "/$defs/deviation/properties/class",
+        "member": "tactical_error"
+      },
+      {
+        "schemaPointer": "/$defs/deviation/properties/mistake/items",
+        "member": "tactical"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveGrading/properties/resolveAt",
+        "member": "terminal"
+      },
+      {
+        "schemaPointer": "/$defs/opponentPolicy/properties/mode",
+        "member": "theory_strict"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition",
+        "member": "timing_window"
+      },
+      {
+        "schemaPointer": "/$defs/deviation/properties/mistake/items",
+        "member": "timing"
+      },
+      {
+        "schemaPointer": "/$defs/tempoVerdict",
+        "member": "too_slow"
+      },
+      {
+        "schemaPointer": "/properties/mode",
+        "member": "trajectory"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition",
+        "member": "transition_feature"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveType",
+        "member": "transition_to_endgame"
+      },
+      {
+        "schemaPointer": "/$defs/conditionBase/properties/to",
+        "member": "transitioned"
+      },
+      {
+        "schemaPointer": "/$defs/fenPredicate",
+        "member": "transposeKey"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
+        "member": "unbuilt"
+      },
+      {
+        "schemaPointer": "/$defs/graduationEntry/properties/clearance/properties/kind",
+        "member": "unreachable"
+      },
+      {
+        "schemaPointer": "/$defs/provenance/properties/corpusEvidence",
+        "member": "unsourced"
+      },
+      {
+        "schemaPointer": "/$defs/distanceTarget/oneOf/1/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/fileTemplateFeature/oneOf/0/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/fileTemplateFeature/oneOf/1/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/fileTemplateFeature/oneOf/2/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/fileTemplateFeature/oneOf/3/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/materialBalance/properties/perspective",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/piece/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature/oneOf/0/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature/oneOf/1/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature/oneOf/2/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/squareTemplateFeature/oneOf/3/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/start/properties/side",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/0/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/1/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/10/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/12/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/13/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/14/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/15/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/16/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/17/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/2/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/3/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/4/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/5/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/7/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/structuralFeature/oneOf/9/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition/oneOf/2/properties/perspective",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition/oneOf/3/properties/winner",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/0/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/1/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/2/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/3/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/transitionFeature/oneOf/4/properties/color",
+        "member": "white"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/properties/from",
+        "member": "win"
+      },
+      {
+        "schemaPointer": "/$defs/deviationCost/oneOf/3/properties/to",
+        "member": "win"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveGrading/properties/assessedBy/oneOf/1/properties/category",
+        "member": "win"
+      },
+      {
+        "schemaPointer": "/$defs/objectiveType",
+        "member": "win"
+      },
+      {
+        "schemaPointer": "/$defs/successCondition/oneOf/1/properties/result",
+        "member": "win"
+      }
+    ]
   },
   "always": [
-    { "capability": "grade.move_quality", "sites": ["moveQualityGrade", "classFromThresholds"] },
-    { "capability": "objective.state_machine", "sites": ["evaluateObjective", "transitionObjective"] },
-    { "capability": "objective.transition_legality", "sites": ["assertObjectiveTransition", "OBJECTIVE_TRANSITION_TABLE"] },
-    { "capability": "outcome.terminal", "sites": ["terminalOutcome"] },
-    { "capability": "tempo.window", "sites": ["evaluateWindow"] },
-    { "capability": "tempo.unauthored_default", "sites": ["UNAUTHORED_TEMPO_DEFAULTS", "unauthoredTempoTransition"] },
-    { "capability": "line.membership", "sites": ["lineMembership"] },
-    { "capability": "trajectory.verdict", "sites": ["trajectoryVerdict"] },
-    { "capability": "branch.decidedness", "sites": ["branchDecidedness"] },
-    { "capability": "guard.immediate", "sites": ["applyRulesGuard", "applyRecordedEngineGuard"] },
-    { "capability": "reasoning.key_point_match", "sites": ["matchKeyPoints"] },
-    { "capability": "claim.earning", "sites": ["projectAuthoredFeedback", "MACHINE_LABEL_EVIDENCE_KINDS"] },
-    { "capability": "opponent.selection", "sites": ["OpponentSelector", "neutralTiebreakKey"] },
-    { "capability": "guard.defaults", "sites": ["GUARD_DEFAULTS"] }
+    {
+      "capability": "grade.move_quality",
+      "sites": [
+        "packages/runtime/src/grade.ts#moveQualityGrade",
+        "packages/runtime/src/grade.ts#classFromThresholds"
+      ],
+      "dependencies": [
+        "packages/runtime/src/grade.ts#GRADE_CONVENTION"
+      ]
+    },
+    {
+      "capability": "objective.state_machine",
+      "sites": [
+        "packages/runtime/src/objective.ts#evaluateObjective",
+        "packages/runtime/src/objective.ts#transitionObjective"
+      ],
+      "dependencies": [
+        "packages/runtime/src/objective-state.ts#assertObjectiveTransition"
+      ]
+    },
+    {
+      "capability": "objective.transition_legality",
+      "sites": [
+        "packages/runtime/src/objective-state.ts#assertObjectiveTransition",
+        "packages/runtime/src/objective-state.ts#ALLOWED_TRANSITIONS"
+      ],
+      "dependencies": []
+    },
+    {
+      "capability": "outcome.terminal",
+      "sites": [
+        "packages/runtime/src/outcome.ts#terminalOutcome"
+      ],
+      "dependencies": []
+    },
+    {
+      "capability": "tempo.window",
+      "sites": [
+        "packages/runtime/src/tempo.ts#evaluateWindow"
+      ],
+      "dependencies": [
+        "packages/runtime/src/tempo.ts#UNAUTHORED_TEMPO_DEFAULTS"
+      ]
+    },
+    {
+      "capability": "tempo.unauthored_default",
+      "sites": [
+        "packages/runtime/src/tempo.ts#UNAUTHORED_TEMPO_DEFAULTS",
+        "packages/runtime/src/tempo.ts#unauthoredTempoTransition"
+      ],
+      "dependencies": []
+    },
+    {
+      "capability": "line.membership",
+      "sites": [
+        "packages/runtime/src/line.ts#lineMembership"
+      ],
+      "dependencies": []
+    },
+    {
+      "capability": "trajectory.verdict",
+      "sites": [
+        "packages/runtime/src/trajectory.ts#trajectoryVerdict"
+      ],
+      "dependencies": []
+    },
+    {
+      "capability": "branch.decidedness",
+      "sites": [
+        "packages/runtime/src/branch-scale.ts#branchDecidedness"
+      ],
+      "dependencies": [
+        "packages/runtime/src/branch-scale.ts#RANK"
+      ]
+    },
+    {
+      "capability": "guard.immediate",
+      "sites": [
+        "apps/server/src/guard.ts#applyRulesGuard",
+        "apps/server/src/guard.ts#applyRecordedEngineGuard"
+      ],
+      "dependencies": [
+        "packages/runtime/src/objective.ts#MATERIAL_VALUES",
+        "apps/server/src/sourcing/tablebase-category.ts#CATEGORY_RANK"
+      ]
+    },
+    {
+      "capability": "reasoning.key_point_match",
+      "sites": [
+        "packages/runtime/src/reasoning.ts#matchKeyPoints"
+      ],
+      "dependencies": []
+    },
+    {
+      "capability": "claim.earning",
+      "sites": [
+        "apps/server/src/authored-feedback.ts#projectAuthoredFeedback",
+        "apps/server/src/sourcing/claim-binding.ts#MACHINE_LABEL_EVIDENCE_KINDS"
+      ],
+      "dependencies": []
+    },
+    {
+      "capability": "opponent.selection",
+      "sites": [
+        "apps/server/src/opponent-selector.ts#OpponentSelector",
+        "apps/server/src/opponent-selector.ts#neutralTiebreakKey"
+      ],
+      "dependencies": []
+    },
+    {
+      "capability": "guard.defaults",
+      "sites": [
+        "apps/server/src/guard-conditions.ts#baseGuardConditionSettings"
+      ],
+      "dependencies": []
+    }
   ],
   "resolvedReferences": [
-    { "pointer": "/shapes/*", "registry": "shape", "value": "shape-reference" },
-    { "pointer": "/legs/*/shapes/*", "registry": "shape", "value": "shape-reference" },
-    { "pointer": "/planClasses/*/shapePlan/shape", "registry": "shape", "value": "id" },
-    { "pointer": "/checkpoints/*/interaction/keyPoints/*/ground/shape", "registry": "shape", "value": "id-when-ground-kind-shape_plan" },
-    { "pointer": "/feedbackClaims/*/principles/*", "registry": "principle", "value": "id" }
+    {
+      "pointer": "/shapes/*",
+      "registry": "shape",
+      "value": "shape-reference"
+    },
+    {
+      "pointer": "/legs/*/shapes/*",
+      "registry": "shape",
+      "value": "shape-reference"
+    },
+    {
+      "pointer": "/planClasses/*/shapePlan/shape",
+      "registry": "shape",
+      "value": "id"
+    },
+    {
+      "pointer": "/checkpoints/*/interaction/keyPoints/*/ground/shape",
+      "registry": "shape",
+      "value": "id-when-ground-kind-shape_plan"
+    },
+    {
+      "pointer": "/feedbackClaims/*/principles/*",
+      "registry": "principle",
+      "value": "id"
+    }
   ],
   "metadataExclusions": [
     "/properties/requires",
@@ -98,6 +1812,126 @@
           "apps/server/src/guard-conditions.ts#ENGINE_CONDITION_DEFAULTS"
         ]
       }
+    ],
+    "constantRoots": [
+      {
+        "capability": "grade.thresholds",
+        "sites": [
+          "packages/runtime/src/grade.ts#GRADE_CONVENTION"
+        ]
+      },
+      {
+        "capability": "material.objective_values",
+        "sites": [
+          "packages/runtime/src/objective.ts#MATERIAL_VALUES"
+        ]
+      },
+      {
+        "capability": "exchange.piece_values",
+        "sites": [
+          "packages/runtime/src/exchange.ts#EXCHANGE_PIECE_VALUES"
+        ]
+      },
+      {
+        "capability": "pressure_line.role_scale",
+        "sites": [
+          "packages/runtime/src/evidence-catalog.ts#BREADTH_CONVENTION_TEXT",
+          "packages/runtime/src/pawn-dynamics.ts#pressureLines",
+          "packages/runtime/src/pawn-dynamics.ts#harassmentPressureSequence"
+        ]
+      },
+      {
+        "capability": "guard.material_trigger",
+        "sites": [
+          "apps/server/src/guard.ts#applyRulesGuard"
+        ]
+      },
+      {
+        "capability": "guard.defaults",
+        "sites": [
+          "apps/server/src/guard-conditions.ts#baseGuardConditionSettings"
+        ]
+      },
+      {
+        "capability": "tablebase.category_rank",
+        "sites": [
+          "apps/server/src/sourcing/tablebase-category.ts#CATEGORY_RANK"
+        ]
+      },
+      {
+        "capability": "branch.category_rank",
+        "sites": [
+          "packages/runtime/src/branch-scale.ts#RANK"
+        ]
+      },
+      {
+        "capability": "deviation.cost_tolerance",
+        "sites": [
+          "apps/server/src/sourcing/deviation-cost.ts#comparable"
+        ]
+      },
+      {
+        "capability": "phase.bands",
+        "sites": [
+          "packages/runtime/src/phase.ts#classifyPhase",
+          "packages/runtime/src/phase.ts#ENDGAME_MATERIAL_MAX",
+          "packages/runtime/src/phase.ts#DEVELOPED_MATERIAL_MIN",
+          "packages/runtime/src/phase.ts#OPENING_UNDEVELOPED_MIN",
+          "packages/runtime/src/phase.ts#MIDDLEGAME_UNDEVELOPED_MAX"
+        ]
+      },
+      {
+        "capability": "mate_proof.node_cap",
+        "sites": [
+          "packages/runtime/src/mate-proof.ts#MATE_PROOF_NODE_CAP"
+        ]
+      },
+      {
+        "capability": "rating.glicko2",
+        "sites": [
+          "packages/runtime/src/rating.ts#GLICKO2_CONSTANTS"
+        ]
+      },
+      {
+        "capability": "rating.opponent_calibration",
+        "sites": [
+          "packages/runtime/src/rating.ts#RATED_OPPONENT_CALIBRATION"
+        ]
+      },
+      {
+        "capability": "opponent.neutral_tiebreak",
+        "sites": [
+          "apps/server/src/opponent-selector.ts#neutralTiebreakKey"
+        ]
+      },
+      {
+        "capability": "opponent.practical_slice",
+        "sites": [
+          "apps/server/src/opponent-selector.ts#OpponentSelector"
+        ]
+      },
+      {
+        "capability": "selection.semantic_policy",
+        "sites": [
+          "packages/runtime/src/evidence-contract.ts#compileEvidenceManifest"
+        ]
+      }
+    ],
+    "externalSources": [
+      {
+        "package": "chessops",
+        "version": "0.15.1",
+        "integrity": "sha512-hQDwv90AFkrPEsRJBebh3ZE+xDga25TCCv4lavNT2plZmd33UKNFYaZsE+7rafMbnBRrDEWUVsSYFqY3qCIGZw==",
+        "lockfile": "pnpm-lock.yaml",
+        "lockfileKey": "chessops@0.15.1",
+        "manifestSites": [
+          "apps/server/package.json#dependencies.chessops",
+          "apps/web/package.json#dependencies.chessops",
+          "packages/runtime/package.json#dependencies.chessops",
+          "packages/schema/package.json#dependencies.chessops"
+        ],
+        "attachment": "transitive-import-closure"
+      }
     ]
   },
   "stableIdentity": {
@@ -111,5 +1945,5 @@
       "source file location"
     ]
   },
-  "expandedAuthoritySha256": "41b448ca5566bfe77912decc741fc54168662e3a385b6c8457be450bfcd8db94"
+  "expandedAuthoritySha256": "88f34288f4098ed8a28cf5d3f4c0562fba45a48d52fdf7994879c004ca078c65"
 }

@@ -5,6 +5,9 @@ import { test } from "node:test";
 
 const read = (path: string): string => readFileSync(path, "utf8");
 const rfc = read("rfc/pack-capability-contract.md");
+const applicability = JSON.parse(read("rfc/contracts/pack-capability-applicability-v1.json")) as {
+  readonly meaningAuthority: { readonly constantRoots: readonly { readonly capability: string; readonly sites: readonly string[] }[] };
+};
 
 test("D1982: one exact compatibility id grammar accepts the inventory and rejects suffixes", () => {
   const patternText = rfc.match(/`CAPABILITY_ID_PATTERN` is\s+`([^`]+)`/u)?.[1];
@@ -67,14 +70,14 @@ test("D1988: F3 has a one-way compile-time handoff and imports no draft consumer
   assert.match(rfc, /zero occurrence of\s+`CLAIM_BINDING_VERSION_UNSUPPORTED`/u);
 });
 
-test("D1989: every normative constant root is an exact exported symbol with a live-reader check", () => {
-  for (const symbol of [
-    "GRADE_CONVENTION_CONSTANTS", "PRESSURE_LINE_ROLE_SCALE", "RULES_GUARD_MATERIAL_THRESHOLD",
-    "GUARD_DEFAULTS", "BRANCH_CATEGORY_RANK", "DEVIATION_COST_TOLERANCE", "PHASE_BANDS",
-    "NEUTRAL_TIEBREAK_INPUTS", "PRACTICAL_RESISTANCE_CANDIDATE_LIMIT", "SEMANTIC_SELECTION_POLICY_CONSTANTS",
-  ]) assert.ok(rfc.includes("`" + symbol + "`"));
-  assert.match(rfc, /requires one declaration and at least one production\s+reader/u);
-  assert.match(rfc, /No property path, numeric prose or\s+inline `\.slice\(\.\.\.\)` expression is a normative site/u);
+test("D1989: every normative constant root is an exact module-qualified site with a live-reader check", () => {
+  assert.equal(applicability.meaningAuthority.constantRoots.length, 16);
+  for (const row of applicability.meaningAuthority.constantRoots) {
+    assert.ok(row.sites.length > 0, row.capability);
+    for (const site of row.sites) assert.match(site, /^(apps|packages)\/.+\.ts#[A-Za-z_$][A-Za-z0-9_$]*$/u);
+  }
+  assert.match(rfc, /requires one declaration and a production reader/u);
+  assert.match(rfc, /creating an unused alias\s+does not satisfy the site/u);
 });
 
 test("D1990: declaration and all semantic invariants use one disposition union", () => {

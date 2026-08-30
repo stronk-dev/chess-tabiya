@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "artifact": "tabiya.pack-capability.schema-transition.v1",
+  "artifact": "tabiya.pack-capability.schema-transition.v2",
   "legacy": {
     "schemaId": "urn:chess-tabiya:schema:drill-pack:0.27",
     "schemaSha256": "7da4d49506eb028872bd909d7ab34a3107b44ba2374f4a686ac625d112d653b0",
@@ -9,103 +9,456 @@
     "populationSha256": "933eeecd0aee6e50b2a595b62bfc22485ba8a4d2dc945a5b4efdd9cf35fca849",
     "admission": "repository_catalogue_allowlist_only"
   },
-  "target": {
-    "schemaId": "urn:chess-tabiya:schema:drill-pack:0.30",
-    "schemaSha256": "450d54dd2c77b8fe83173221640628a4da7c0c0d66cce1c2fc6edc6a5c44cb0c",
-    "canonicalBytes": 83841,
-    "patchAlgorithm": "ordered-json-pointer-operations-v1"
-  },
-  "patch": [
+  "stages": [
     {
-      "op": "replace",
-      "path": "/$id",
-      "value": "urn:chess-tabiya:schema:drill-pack:0.30"
-    },
-    {
-      "op": "replace",
-      "path": "/description",
-      "value": "Living v0.30 format with required semantic capability declarations."
-    },
-    {
-      "op": "add",
-      "path": "/required/-",
-      "value": "requires"
-    },
-    {
-      "op": "add",
-      "path": "/properties/requires",
-      "value": {
-        "type": "array",
-        "items": {
-          "$ref": "#/$defs/capabilityRequirement"
+      "lane": "0.28",
+      "owner": "rfc/graduation-clearance.md",
+      "source": {
+        "schemaId": "urn:chess-tabiya:schema:drill-pack:0.27",
+        "schemaSha256": "7da4d49506eb028872bd909d7ab34a3107b44ba2374f4a686ac625d112d653b0"
+      },
+      "target": {
+        "schemaId": "urn:chess-tabiya:schema:drill-pack:0.28",
+        "schemaSha256": "c4132e4c9268a964d229323e0b6ec8dfc8723b976bd272f0b56dbe5003fcfafe",
+        "canonicalBytes": 84113
+      },
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/$id",
+          "value": "urn:chess-tabiya:schema:drill-pack:0.28"
         },
-        "uniqueItems": true
-      }
-    },
-    {
-      "op": "add",
-      "path": "/$defs/capabilityVersion",
-      "value": {
-        "oneOf": [
-          {
+        {
+          "op": "replace",
+          "path": "/description",
+          "value": "Living v0.28 format with typed graduation clearance."
+        },
+        {
+          "op": "remove",
+          "path": "/$defs/graduationEntry/properties/clearedBy"
+        },
+        {
+          "op": "add",
+          "path": "/$defs/graduationEntry/properties/clearance",
+          "value": {
             "type": "object",
             "required": [
               "kind",
-              "value"
+              "subject"
             ],
             "properties": {
               "kind": {
-                "const": "integer"
+                "enum": [
+                  "assessment_grounded",
+                  "ledger_record",
+                  "claim_bound",
+                  "shape_firing",
+                  "pointer_authored",
+                  "unbuilt",
+                  "unreachable",
+                  "referent_removed"
+                ]
               },
-              "value": {
-                "type": "integer",
-                "minimum": 1
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "required": [
-              "kind",
-              "value"
-            ],
-            "properties": {
-              "kind": {
-                "const": "semver"
-              },
-              "value": {
+              "subject": {
                 "type": "string",
-                "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+                "pattern": "^/[^/]"
+              },
+              "recordKind": {
+                "enum": [
+                  "opening_identity",
+                  "position_legality",
+                  "explorer_frequency",
+                  "explorer_position_census",
+                  "tablebase_result",
+                  "engine_eval",
+                  "puzzle_provenance"
+                ]
+              },
+              "instrument": {
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "blockedBy": {
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "placeholder": {
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "absentIds": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/id"
+                }
               }
             },
             "additionalProperties": false
           }
-        ]
-      }
-    },
-    {
-      "op": "add",
-      "path": "/$defs/capabilityRequirement",
-      "value": {
-        "type": "object",
-        "required": [
-          "id",
-          "version"
-        ],
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[A-Za-z][A-Za-z0-9_-]*(?:[.:][A-Za-z0-9][A-Za-z0-9_-]*)*$"
-          },
-          "version": {
-            "$ref": "#/$defs/capabilityVersion"
+        },
+        {
+          "op": "replace",
+          "path": "/$defs/graduationEntry/properties/resolved",
+          "value": {
+            "type": "object",
+            "required": [
+              "at",
+              "by",
+              "clearance"
+            ],
+            "properties": {
+              "at": {
+                "type": "string",
+                "format": "date"
+              },
+              "by": {
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "clearance": {
+                "$ref": "#/$defs/graduationEntry/properties/clearance"
+              }
+            },
+            "additionalProperties": false
           }
         },
-        "additionalProperties": false
-      }
+        {
+          "op": "replace",
+          "path": "/$defs/graduationEntry/properties/accepted",
+          "value": {
+            "type": "object",
+            "required": [
+              "kind",
+              "ruling",
+              "rulingRef",
+              "unreachableBecause"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "owner_ruling",
+                  "permanent_property",
+                  "out_of_scope"
+                ]
+              },
+              "ruling": {
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "rulingRef": {
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "unreachableBecause": {
+                "$ref": "#/$defs/nonEmptyString"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        {
+          "op": "replace",
+          "path": "/$defs/graduationEntry/oneOf",
+          "value": [
+            {
+              "properties": {
+                "state": {
+                  "const": "blocking"
+                }
+              },
+              "required": [
+                "clearance"
+              ],
+              "not": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "resolved": {}
+                    },
+                    "required": [
+                      "resolved"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "accepted": {}
+                    },
+                    "required": [
+                      "accepted"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "properties": {
+                "state": {
+                  "const": "resolved"
+                },
+                "resolved": {}
+              },
+              "required": [
+                "resolved"
+              ],
+              "not": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "clearance": {}
+                    },
+                    "required": [
+                      "clearance"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "accepted": {}
+                    },
+                    "required": [
+                      "accepted"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "properties": {
+                "state": {
+                  "const": "accepted"
+                },
+                "accepted": {}
+              },
+              "required": [
+                "accepted"
+              ],
+              "not": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "clearance": {}
+                    },
+                    "required": [
+                      "clearance"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "resolved": {}
+                    },
+                    "required": [
+                      "resolved"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lane": "0.29",
+      "owner": "rfc/pack-population-provenance.md",
+      "source": {
+        "schemaId": "urn:chess-tabiya:schema:drill-pack:0.28",
+        "schemaSha256": "c4132e4c9268a964d229323e0b6ec8dfc8723b976bd272f0b56dbe5003fcfafe"
+      },
+      "target": {
+        "schemaId": "urn:chess-tabiya:schema:drill-pack:0.29",
+        "schemaSha256": "55c0095dfe381cfd5750cd4c6bdb71d2f80337f6c22616419cba798a3368a605",
+        "canonicalBytes": 85581
+      },
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/$id",
+          "value": "urn:chess-tabiya:schema:drill-pack:0.29"
+        },
+        {
+          "op": "replace",
+          "path": "/description",
+          "value": "Living v0.29 format with typed corpus provenance and citable evidence."
+        },
+        {
+          "op": "replace",
+          "path": "/$defs/timingWindow/properties/note/maxLength",
+          "value": 2000
+        },
+        {
+          "op": "add",
+          "path": "/$defs/feedbackClaim/properties/evidenceTypes/items/enum/-",
+          "value": "provenance_note"
+        },
+        {
+          "op": "add",
+          "path": "/$defs/graduationEntry/properties/clearance/properties/recordKind/enum/-",
+          "value": "citable_text"
+        },
+        {
+          "op": "add",
+          "path": "/$defs/provenance/properties/corpusEvidence",
+          "value": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": [
+                  "state"
+                ],
+                "properties": {
+                  "state": {
+                    "const": "ledger"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "required": [
+                  "state",
+                  "reason",
+                  "detail"
+                ],
+                "properties": {
+                  "state": {
+                    "const": "abstained"
+                  },
+                  "reason": {
+                    "enum": [
+                      "out_of_range",
+                      "source_unavailable",
+                      "no_data_at_band",
+                      "licence_withheld"
+                    ]
+                  },
+                  "detail": {
+                    "$ref": "#/$defs/nonEmptyString"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "required": [
+                  "state"
+                ],
+                "properties": {
+                  "state": {
+                    "const": "unsourced"
+                  }
+                },
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "lane": "0.30",
+      "owner": "rfc/pack-capability-contract.md",
+      "source": {
+        "schemaId": "urn:chess-tabiya:schema:drill-pack:0.29",
+        "schemaSha256": "55c0095dfe381cfd5750cd4c6bdb71d2f80337f6c22616419cba798a3368a605"
+      },
+      "target": {
+        "schemaId": "urn:chess-tabiya:schema:drill-pack:0.30",
+        "schemaSha256": "f7818f5ea08dd6c63efb422508174baa07868e3e11cd91a60891f151df0f25db",
+        "canonicalBytes": 87000
+      },
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/$id",
+          "value": "urn:chess-tabiya:schema:drill-pack:0.30"
+        },
+        {
+          "op": "replace",
+          "path": "/description",
+          "value": "Living v0.30 format with required semantic capability declarations."
+        },
+        {
+          "op": "add",
+          "path": "/required/-",
+          "value": "requires"
+        },
+        {
+          "op": "add",
+          "path": "/properties/requires",
+          "value": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/capabilityRequirement"
+            },
+            "uniqueItems": true
+          }
+        },
+        {
+          "op": "add",
+          "path": "/$defs/capabilityVersion",
+          "value": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": [
+                  "kind",
+                  "value"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "integer"
+                  },
+                  "value": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "required": [
+                  "kind",
+                  "value"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "semver"
+                  },
+                  "value": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+                  }
+                },
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        {
+          "op": "add",
+          "path": "/$defs/capabilityRequirement",
+          "value": {
+            "type": "object",
+            "required": [
+              "id",
+              "version"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]*(?:[.:][A-Za-z0-9][A-Za-z0-9_-]*)*$"
+              },
+              "version": {
+                "$ref": "#/$defs/capabilityVersion"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      ]
     }
   ],
+  "target": {
+    "schemaId": "urn:chess-tabiya:schema:drill-pack:0.30",
+    "schemaSha256": "f7818f5ea08dd6c63efb422508174baa07868e3e11cd91a60891f151df0f25db",
+    "canonicalBytes": 87000,
+    "patchAlgorithm": "ordered-cumulative-json-pointer-stages-v2"
+  },
   "applicabilityExclusions": [
     {
       "schemaPointer": "/properties/requires",

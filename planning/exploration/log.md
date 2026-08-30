@@ -12379,3 +12379,19 @@ equally active disconnected component retained the full 200-point ambiguity. Add
 [[D2326]]: graph-level calibration reach, precise terminology, and the remaining owner/RFC decision
 between local-pool and cross-pool publication claims. No exploration gate changed state and no
 production, schema, migration, API, client, content, archive or protected-intent byte changed.
+
+## 2026-08-30 — Pack-capability fourth author repair
+
+Repaired [[D2152]]–[[D2156]] at the author-contract boundary. The schema authority now serializes
+exact 0.27→0.28→0.29→0.30 post-images rather than leapfrogging the two accepted predecessor lanes.
+The cumulative target has 397 semantic vocabulary members—24 more than the legacy 373—and the
+applicability artifact publishes every source identity literally with deterministic checked
+expansion. Fourteen unconditional roots, their dependencies and sixteen constant/convention roots
+are module-qualified and resolution-checked. `chessops@0.15.1` plus exact integrity/manifest/lock
+identity is now a semantic source. Withdrawal is a typed successor versus explicit no-successor
+union, with planner traversal, wrong-subject and cycle controls.
+
+`make pack-capability-author-contract` passes the maintained 7 + 11 + 6 + 7 arms and the new
+five-seam contract. No production schema, runtime, API, pack, content, archive or protected-intent
+byte changed; [[D560]] remains whole. The RFC stays draft pending fresh independent review. Receipt:
+`planning/pack-capability-contract/fourth-author-repair-2026-08-30.md`.

@@ -9,13 +9,33 @@ const sha256 = (value: string | Buffer): string => createHash("sha256").update(v
 const rfc = read("rfc/pack-capability-contract.md");
 const artifactPath = "rfc/contracts/pack-capability-applicability-v1.json";
 const artifactBytes = read(artifactPath);
+const transition = JSON.parse(read("rfc/contracts/pack-capability-schema-transition-v1.json")) as {
+  readonly stages: readonly { readonly patch: readonly { readonly op: "add" | "remove" | "replace"; readonly path: string; readonly value?: unknown }[] }[];
+};
 const artifact = JSON.parse(artifactBytes) as {
   schema: { path: string; sha256: string };
-  closedVocabulary: Record<string, string | number>;
+  closedVocabulary: Record<string, unknown> & { readonly sourceInventory: readonly SourceIdentity[]; readonly mappedMembers: number };
   always: readonly unknown[];
   resolvedReferences: readonly unknown[];
   expandedAuthoritySha256: string;
 };
+
+function pointerTokens(pointer: string): string[] {
+  return pointer.split("/").slice(1).map((token) => token.replaceAll("~1", "/").replaceAll("~0", "~"));
+}
+
+function applyPatch(source: unknown, operations: readonly { readonly op: "add" | "remove" | "replace"; readonly path: string; readonly value?: unknown }[]): any {
+  const target = structuredClone(source) as any;
+  for (const operation of operations) {
+    const tokens = pointerTokens(operation.path);
+    const final = tokens.pop()!;
+    const parent = tokens.reduce((value: any, token) => value[token], target);
+    if (operation.op === "remove") delete parent[final];
+    else if (operation.op === "add" && final === "-") parent.push(structuredClone(operation.value));
+    else parent[final] = structuredClone(operation.value);
+  }
+  return target;
+}
 
 function canonical(value: unknown): string {
   if (value === null || typeof value !== "object") return JSON.stringify(value);
@@ -26,7 +46,7 @@ function canonical(value: unknown): string {
 
 interface SourceIdentity { readonly schemaPointer: string; readonly member: unknown }
 
-function closedVocabulary(schema: unknown): {
+function closedVocabulary(schema: unknown, exclusions: readonly string[] = []): {
   readonly rows: readonly SourceIdentity[];
   readonly enumNodes: number;
   readonly enumMembers: number;
@@ -40,6 +60,7 @@ function closedVocabulary(schema: unknown): {
   let unionMembers = 0;
   const escape = (token: string): string => token.replaceAll("~", "~0").replaceAll("/", "~1");
   const walk = (value: unknown, pointer = ""): void => {
+    if (exclusions.some((root) => pointer === root || pointer.startsWith(`${root}/`))) return;
     if (Array.isArray(value)) {
       value.forEach((item, index) => walk(item, `${pointer}/${index}`));
       return;
@@ -135,10 +156,12 @@ test("D2050: one public grammar crosses every shipped family with structured leg
 test("D2051: the author artifact seals the full source inventory and expanded applicability image", () => {
   assert.equal(sha256(read(artifact.schema.path)), artifact.schema.sha256);
   assert.match(rfc, new RegExp(sha256(artifactBytes), "u"));
-  const schema = JSON.parse(read(artifact.schema.path)) as unknown;
-  const inventory = closedVocabulary(schema);
-  assert.deepEqual([inventory.enumNodes, inventory.enumMembers, inventory.unionNodes, inventory.unionMembers], [103, 300, 15, 73]);
-  assert.equal(inventory.rows.length, 373);
+  let schema = JSON.parse(read(artifact.schema.path)) as unknown;
+  for (const stage of transition.stages) schema = applyPatch(schema, stage.patch);
+  const inventory = closedVocabulary(schema, (artifact as any).metadataExclusions);
+  assert.deepEqual([inventory.enumNodes, inventory.enumMembers, inventory.unionNodes, inventory.unionMembers], [106, 321, 16, 76]);
+  assert.equal(inventory.rows.length, 397);
+  assert.deepEqual(artifact.closedVocabulary.sourceInventory, inventory.rows);
   assert.equal(sha256(canonical(inventory.rows)), artifact.closedVocabulary.inventorySha256);
 
   const ids = inventory.rows.map((source) => publicId(source, schema));
@@ -158,7 +181,7 @@ test("D2051: the author artifact seals the full source inventory and expanded ap
 });
 
 test("D2052: the independent sidecar grammar is total and keeps schema validation strict", () => {
-  assert.equal((artifact as any).closedVocabulary.mappedMembers, 373);
+  assert.equal((artifact as any).closedVocabulary.mappedMembers, 397);
   assert.deepEqual((artifact as any).metadataExclusions, [
     "/properties/requires", "/$defs/capabilityRequirement", "/$defs/capabilityVersion",
   ]);
@@ -167,9 +190,16 @@ test("D2052: the independent sidecar grammar is total and keeps schema validatio
 });
 
 test("D2053: every formerly prose evaluator constituent is an exact live symbol", () => {
-  assert.match(rfc, /`objective\.transition_legality` \| `assertObjectiveTransition`, `OBJECTIVE_TRANSITION_TABLE`/u);
-  assert.match(rfc, /`opponent\.selection` \| `OpponentSelector`, `neutralTiebreakKey`/u);
-  assert.match(rfc, /Each of the four symbols\s+must have exactly one declaration and a production reader/u);
+  const always = (artifact as any).always as readonly { readonly capability: string; readonly sites: readonly string[] }[];
+  assert.deepEqual(always.find((row) => row.capability === "objective.transition_legality")?.sites, [
+    "packages/runtime/src/objective-state.ts#assertObjectiveTransition",
+    "packages/runtime/src/objective-state.ts#ALLOWED_TRANSITIONS",
+  ]);
+  assert.deepEqual(always.find((row) => row.capability === "opponent.selection")?.sites, [
+    "apps/server/src/opponent-selector.ts#OpponentSelector",
+    "apps/server/src/opponent-selector.ts#neutralTiebreakKey",
+  ]);
+  assert.match(rfc, /Every site\s+must resolve to exactly one declaration/u);
 });
 
 test("D2054: weakened Stockfish refusal resolves through protected design", () => {
