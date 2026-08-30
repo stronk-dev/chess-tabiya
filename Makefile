@@ -398,6 +398,10 @@ professional-closure-audit:
 live-following-fresh-review:
 	node --test tools/d2266-live-following-fresh-review/contract.test.mjs
 
+.PHONY: live-sources-fresh-review
+live-sources-fresh-review:
+	node --test tools/d2277-live-sources-fresh-review/contract.test.mjs
+
 build:
 	pnpm build
 

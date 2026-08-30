@@ -12289,3 +12289,20 @@ measurement remains unrun.
 `make live-following-fresh-review` passes 11/11. No production, schema, migration, API, client,
 content, archive or protected-intent byte changed. Exact return:
 `planning/live-sources/live-following-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Live-sources Phase-A acceptance withdrawn
+
+Fresh review returned the accepted `live-sources.md` on [[D2277]]–[[D2285]]. Its real-PGN harness
+and strip-before-storage direction remain valid. Its supposedly finished-only boundary does not:
+the RFC explicitly admits an ongoing `Result "*"` board to ordinary `importGame`, which then
+unconditionally enqueues Story engine evidence, while Phase A has no round-status check or
+`sourceGameLive` guard. That is the exact live-assistance bypass Phase B was created to prevent.
+
+The same pass found duplicated/unregistered request and source-kind unions, an untyped unstable
+board picker, a splitter proved only on friendly `[Event]`-first fixtures, a whole-round clock
+criterion where production sanitizes one game, no upstream resource budget, stale returned
+dependencies/migration predecessor, no safe non-Standard admission, and a browser form that would
+remain unreachable or falsely promise verbatim stored bytes. `make live-sources-fresh-review`
+passes 9/9. No production, schema, migration, API, client, content, archive or protected-intent
+byte changed. Exact return:
+`planning/live-sources/live-sources-fresh-independent-buildability-review-2026-08-30.md`.

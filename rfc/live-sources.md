@@ -1,6 +1,11 @@
 # RFC: live-sources — Phase A, finished-round broadcast ingestion
 
-- **Status:** accepted — 2026-08-22, by claude as register owner on the buildability test, after a cross-review that re-derived ~49 claims (6 failed, all corrected in place): the record was unwritable at HEAD (`imported_games.source_kind` STRICT CHECK — now a claimed migration behind `campaign-core`, criterion 11), the sanitizer missed 61 out-of-comment SAN verdict glyphs in the fixture itself (strip now structural), the residue vocabulary shown open by two further verdict classes, criterion 6's fixture claim corrected to the synthesized case, and rows renumbered D957–D959 (codex took D956 mid-review). *(Prior line for history: draft — 2026-08-22)*
+- **Status:** draft — **ACCEPTANCE WITHDRAWN by fresh independent review 2026-08-30 on
+  [[D2277]]–[[D2285]].** The real-PGN feasibility and strip-before-storage direction survive,
+  but “finished-only” admits ongoing boards into automatic engine evaluation; source/choice
+  contracts are duplicated or unspecified; splitter/clock/resource/rules proofs are incomplete;
+  dependencies are returned; and the web journey would be unreachable or false. No implementation
+  before author repair and another review. **Prior status:** accepted — 2026-08-22.
 - **Author:** claude (coordinator), from `planning/live-sources/rfc-derivation.md`
 - **Created:** 2026-08-22
 - **Design refs:** `design/03-product-breadth.md` Live surfaces (:81-83, :291) and the
@@ -287,6 +292,25 @@ One, proposed not landed (law 5 — design tier is the owner's): [[D412]]'s clau
 ambiguity from scratch; one sentence closes it. The edit rides this RFC's acceptance
 as an owner ruling or is severed to its own ruling — Open question 3.
 
+## Fresh independent buildability return — 2026-08-30
+
+These criteria are not implementation authority. The fresh review at
+`planning/live-sources/live-sources-fresh-independent-buildability-review-2026-08-30.md`
+reproduces nine individually routed obligations with `make live-sources-fresh-review`:
+
+- [[D2277]] — verify finished-round safety or compose with the live lock;
+- [[D2278]] — register the shared import request and durable source-kind authorities;
+- [[D2279]] — type stable board choice, snapshot binding and stale retry;
+- [[D2280]] — replace friendly-fixture splitting proof with adversarial framing coverage;
+- [[D2281]] — assert clock extraction at per-game production grain;
+- [[D2282]] — bound external round bytes, game count and header/game sizes;
+- [[D2283]] — reconcile returned dependencies and the blocked migration predecessor;
+- [[D2284]] — consume shared rules/setup identity or safely refuse non-Standard games; and
+- [[D2285]] — ship the complete honest URL-paste browser journey.
+
+The prior criteria remain historical input for the author repair. They cannot be re-accepted until
+all nine obligations are incorporated and independently reviewed.
+
 ## Acceptance criteria
 
 Unit: criteria; total: 11. Each is failable — the wrong implementation it catches is
@@ -412,6 +436,11 @@ at landing** — these are current, not promised.
 
 ## Changelog
 
+- 2026-08-30: acceptance withdrawn on [[D2277]]–[[D2285]]. The accepted path could import an
+  ongoing board and immediately enqueue engine evidence with no liveness check. Fresh review also
+  returned the duplicated request/source vocabulary, board-choice protocol, framing and clock
+  grains, upstream resource bounds, stale dependencies, chess-subject admission and browser
+  journey. Exact review and reproduction are linked in Status.
 - 2026-08-22: created from `planning/live-sources/rfc-derivation.md` (D947 lane;
   harness-measured evidence base; Phase-A cut per the derivation's recommendation).
 - 2026-08-22 (cross-review, adversarial, re-derived at source): **(1) the record
