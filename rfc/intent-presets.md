@@ -1,12 +1,15 @@
 # RFC: Intent presets — the workflow/preset layer over the module foundation
 
-- **Status:** draft — **returned by second fresh independent buildability review 2026-08-30 on
-  [[D2171]]–[[D2178]].** The repaired direction survives, but its source graph is a returned false
-  dependency; two compiler APIs remain; v2 erases unset/migrated intent; named selection retains
-  Custom deltas; browser availability has two readings; Custom can exclude `rules_floor`; malformed
-  recovery has no typed record; and the shared wires/vocabulary are unregistered. Exact return:
-  `planning/intent-presets/second-fresh-independent-buildability-review-2026-08-30.md`.
-  `make intent-presets-second-fresh-review` reproduces 8/8. No implementation is authorised.
+- **Status:** draft — **third author repair complete 2026-08-30 on [[D2171]]–[[D2178]];
+  dependency-blocked before another fresh review.** One four-stage typed pipeline replaces the
+  monolith; v2 persists its intent arm losslessly; named preset selection clears Custom module
+  deltas; browser readiness has one post-server receipt; `rules_floor` is unconfigurable; and
+  recovery has a safe typed notice. The repaired module artifacts are correctly treated as
+  requirements-only, so effect compilation remains blocked until module-registration is freshly
+  accepted and its sealed sources land. The three new shared resources are explicitly routed to a
+  register extension, which is also a hard predecessor. `make intent-presets-second-author-repair`
+  passes 9/9. Exact repair: `planning/intent-presets/third-author-repair-2026-08-30.md`. No
+  implementation is authorised.
 - **Author:** claude (drafted from `planning/evidence-foundation-ux/presets-head-derivation.md`, the HEAD derivation of every surface this document composes)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §3-forms O4 amendment (the algebra), §3a (silence default), §5 Q4; `design/03-product-breadth.md` §Play, §Review and explore, §Live and community, shell table
@@ -54,6 +57,76 @@ are in the linked review dossier. The candidate tables and staged-authority dire
 implementation remains forbidden until author repair and another fresh review.
 The prior **client request/server authority/client channel narrowing** direction is retained; the
 return requires its four stages to replace the still-live monolithic API with exact types.
+
+## Third author repair — one lossless, staged authority (2026-08-30)
+
+This section is controlling and supersedes the earlier monolithic `compileAssistance` signature,
+the five-key `WorkflowPreferenceV2` interface and every later example that places
+`browserChannels` inside the server request.
+
+### One pipeline, four non-interchangeable stages
+
+The only compiler path is:
+
+1. `RequestedAssistanceV1` — `{stage:"requested", schemaVersion:1, contextHint, preference,
+   requestDigest}`. It contains no effective values, provider state or browser readiness.
+2. `AuthoritativeAssistanceV1` — server-derived context/access/ceilings plus
+   `{requestedDigest,effectiveDigest}`. Only this stage may decide modules and chess-evidence
+   permissions.
+3. `FinalizedAssistanceV1` — joins the authoritative result to sealed source receipts and carries
+   `{authoritativeDigest,sourceDigest,finalDigest}`.
+4. `BrowserNarrowedAssistanceV1` — binds exactly one current
+   `BrowserChannelReceiptV1 {generation,browserSpeech,receiptDigest}` to `finalDigest` and may only
+   reduce the browser speech channel. It cannot change modules, chess evidence or other config.
+
+Every stage carries a literal discriminator and the prior stage's digest. A parser for one stage
+rejects bytes from any other stage. `compileAssistance` is deleted; the four named functions in
+§5.1 are the sole API.
+
+### Lossless preference storage
+
+`WorkflowPreferenceV2` has exactly three envelope fields:
+`{version:2, assistanceHead:4, intent}`. `intent` is a closed union:
+
+- `{kind:"unset"}`;
+- `{kind:"explicit", preset, overrides, moduleOverrides}`;
+- `{kind:"migrated_snapshot", preset, config, sourceVersion, moduleOverrides}`; or
+- `{kind:"invalid_fallback", reason:"malformed"}`.
+
+The serializer preserves the arm and its provenance across any number of reloads. A future context
+default therefore still applies to `unset`; it never silently becomes explicit. A migrated
+snapshot remains Custom even if its bytes happen to equal a named preset. Storage-unavailable is a
+runtime recovery receipt and is not falsely persisted as a successful write.
+
+`CustomModuleOverrides` uses `ConfigurableModuleId = Exclude<ModuleId,"rules_floor">` for both
+include and exclude. The strict storage and wire parsers independently refuse `rules_floor`, and
+the authoritative compiler reinserts the floor before every ceiling as a defence against forged
+untyped bytes. Legal board interaction is a platform invariant, not configurable assistance.
+
+Selecting a named preset is literal: it clears both Custom module-delta arrays and retains only
+explicit field overrides that are no higher than the chosen preset. Keeping module customization
+is an explicit Advanced action, not an invisible side effect of clicking Quiet, Guided or Support.
+
+Malformed/storage-unavailable recovery uses a fourth `SuppressionRecord` arm,
+`{kind:"preference_recovery", reason:"malformed"|"storage_unavailable"}`. Its registered renderer
+uses fixed copy only; attacker-controlled stored bytes are never reflected.
+
+### Dependency and shared-resource refusal
+
+The repaired module execution/binding artifacts say `completionClaim: requirements_only` and
+carry an explicit D1639 Guided Hint blocker. `effectSourceDependencies` must refuse them with
+`MODULE_AUTHORITY_NOT_ACCEPTED`; it may compile only after the 117 rows emit sealed projections,
+the 205 exact module presentation pairs are registered and Guided Hint is non-vacuous. This makes
+module-registration acceptance and implementation a hard predecessor rather than inheriting a
+plausible-looking JSON file.
+
+Three shared resources are now named in order: `workflow-preference`, `assistance-exchange`, and
+`assistance-permission`. Their register implementation is a hard predecessor to this RFC's next
+fresh review and any production landing. The first owns the durable v2 grammar, the second owns all
+four exchange-stage grammars and digests, and the third owns the closed permission vocabulary.
+Until the shared-resource checker and README register can express those names, this document keeps
+`tabiya-claims none` and claims no implementation; it may not smuggle unregistered resource names
+into a block the checker cannot read.
 
 ## Summary
 
@@ -527,24 +600,25 @@ independently, which is the permanent [[D493]] fixture.
 
 ### §5. The compiler
 
-One pure function, no I/O, no clock (new, `presets.ts`):
+The earlier monolithic function is deleted by the third author repair. Compilation is pure within
+each of the four typed stages named above; I/O occurs only at the server/provider boundary between
+authoritative compilation and finalization:
 
 ```ts
-export function compileAssistance(input: {
-  readonly context: WorkflowContextId;
-  readonly access: AssistanceContext;        // includes workflowContext after §3.1
-  readonly preference: WorkflowPreferenceReceipt;
-  readonly serverAvailability: ServerEvidenceAvailabilityReceipt;
-  readonly moduleAuthority: CompiledModuleDeliveryAuthority;
-}): CompiledAssistance;
+export function compileAssistanceRequest(input: LocalPreferenceInput): RequestedAssistanceV1;
+export function compileAuthoritativeAssistance(
+  request: RequestedAssistanceV1,
+  authority: ServerAssistanceAuthority,
+): AuthoritativeAssistanceV1;
+export function finalizeAssistanceEffects(
+  result: AuthoritativeAssistanceV1,
+  sources: SealedModuleSourceReceipts,
+): FinalizedAssistanceV1;
+export function narrowBrowserChannels(
+  result: FinalizedAssistanceV1,
+  browser: BrowserChannelReceiptV1,
+): BrowserNarrowedAssistanceV1;
 
-export interface CompiledAssistance {
-  readonly modules: readonly ModuleId[];              // ⊆ preset.modules ∩ context.moduleCeiling
-  readonly config: AssistanceConfig;                  // v4 — no new version, no migration
-  readonly displayMode: PresetId | "custom";
-  readonly effects: readonly CompiledAssistanceEffect[];
-  readonly suppressed: readonly SuppressionRecord[];  // every removal, with its removing term
-}
 export type SuppressionRecord =
   | { readonly kind: "module"; readonly moduleId: ModuleId;
       readonly requested: true; readonly effective: false;
@@ -558,7 +632,9 @@ export type SuppressionRecord =
   | { readonly kind: "effect"; readonly effectId: CompiledAssistanceEffectId;
       readonly moduleId: ModuleId; readonly requested: "enabled"; readonly effective: "disabled";
       readonly by: "source_availability"; readonly reason: SuppressionReason;
-      readonly failedAlternatives: readonly EffectSourceAlternative[] };
+      readonly failedAlternatives: readonly EffectSourceAlternative[] }
+  | { readonly kind: "preference_recovery";
+      readonly reason: "malformed" | "storage_unavailable" };
 
 export type SuppressionReason =
   | "context_forbids_module" | "role_forbids_module" | "delivery_closed"
@@ -567,7 +643,7 @@ export type SuppressionReason =
   | "browser_channel_unavailable" | "invalid_preference_recovered";
 ```
 
-`SUPPRESSION_RENDERERS` is set-equal to the three `kind` arms and the closed reason union. It
+`SUPPRESSION_RENDERERS` is set-equal to the four `kind` arms and the closed reason union. It
 produces footer copy only from the typed requested/effective/module/effect/reason operands; callers
 cannot supply prose. Multiple suppressions retain stable compiler order—module registry order,
 then field registry order, then effect id—and are never collapsed merely because they share a
@@ -660,9 +736,10 @@ export type AssistancePreferenceFields = Readonly<Pick<
 >>;
 
 export interface CustomModuleOverrides {
-  readonly include: readonly ModuleId[];
-  readonly exclude: readonly ModuleId[];
+  readonly include: readonly ConfigurableModuleId[];
+  readonly exclude: readonly ConfigurableModuleId[];
 }
+export type ConfigurableModuleId = Exclude<ModuleId, "rules_floor">;
 
 export type WorkflowPreferenceReceipt =
   | { readonly kind: "unset" }
@@ -677,15 +754,22 @@ export type WorkflowPreferenceReceipt =
 export interface WorkflowPreferenceV2 {
   readonly version: 2;
   readonly assistanceHead: 4;
-  readonly preset: PresetId;
-  readonly overrides: Readonly<Partial<AssistancePreferenceFields>>;
-  readonly moduleOverrides: CustomModuleOverrides;
+  readonly intent:
+    | { readonly kind: "unset" }
+    | { readonly kind: "explicit"; readonly preset: PresetId;
+        readonly overrides: Readonly<Partial<AssistancePreferenceFields>>;
+        readonly moduleOverrides: CustomModuleOverrides }
+    | { readonly kind: "migrated_snapshot"; readonly preset: PresetId;
+        readonly config: AssistanceConfig; readonly sourceVersion: 1 | 2 | 3 | 4;
+        readonly moduleOverrides: CustomModuleOverrides }
+    | { readonly kind: "invalid_fallback"; readonly reason: "malformed" };
 }
 ```
 
 New writes use `tabiya.workflow.v2.${context}` and
 `WorkflowPreferenceV2`. `parseWorkflowPreferenceV2` accepts only a non-null, non-array plain
-object with the exact five top-level keys; exact preset/module ids; `include` and `exclude`
+object with the exact three top-level keys and an exact discriminated intent arm; exact
+preset/module ids; `include` and `exclude`
 disjoint and duplicate-free; and override keys set-equal to a subset of
 `ASSISTANCE_PREFERENCE_FIELDS`, with each value parsed by the registered assistance-head codec.
 Unknown keys, invalid values, `null`, arrays, wrong `version`/`assistanceHead`, duplicate module
@@ -704,8 +788,9 @@ not “missing compiler output”. Migration is total and one-way:
 - malformed data → `invalid_fallback`, the context default plus a visible suppression/recovery
   reason; it never masquerades as an explicit choice.
 
-On the first successful load, migration writes a canonical v2 value (including `unset` as the
-context default with empty overrides) before returning it. A valid v2 value always wins; an invalid
+On the first successful load, migration writes the canonical v2 value **with the same intent arm**
+before returning it. `unset` remains `{kind:"unset"}` and a migrated snapshot retains its source
+version and full config. A valid v2 value always wins; an invalid
 v2 value yields visible `invalid_fallback` and never resurrects legacy bytes. After that seal,
 legacy keys are ignored. `loadAssistance`, `saveAssistance`, `loadWorkflowPreset` and
 `saveWorkflowPreset` lose every production caller; the two old `setItem` paths are deleted, and a
@@ -737,8 +822,10 @@ The mapping is total: `voice: persona` falls back to authored when LLM is unavai
 selected preference and never upgrades disclosure. Evidence-bearing modules remain admitted and
 render their registered family-specific honest-empty state.
 
-`effectSourceDependencies` is derived from the compiled 205 binding rows plus the 117-row
-execution/derivation DAG: each effect carries OR alternatives of AND projection inputs, reduced to
+`effectSourceDependencies` is derived only after module-registration's 205 bindings are registered
+and all 117 evidence requirements resolve through sealed upstream operations. The current
+requirements-only artifacts fail with `MODULE_AUTHORITY_NOT_ACCEPTED`; they are not a graph the
+preset compiler may execute. Once accepted, each effect carries OR alternatives of AND projection inputs, reduced to
 their producer/source-family identities. There is no hand-written module→provider table. Module
 assembly returns `available | no_witness | pending | unavailable | failed` per demanded family;
 `no_witness` completes the effect as honest empty, while pending/unavailable/failed disables only
@@ -775,12 +862,12 @@ a file, an export surface or a caller. Named now, so a future citation resolves:
 | `contextClamp` | `packages/runtime/src/presets.ts` — beside `WORKFLOW_CONTEXT_POLICIES`, whose `configClamp` field it reads | runtime barrel | `permittedAssistance`; `compileAuthoritativeAssistance` rule 2 |
 | `accessPermission` | `packages/runtime/src/assistance.ts` — the HEAD `permittedAssistance` body, renamed | runtime barrel | `permittedAssistance`; `compileAuthoritativeAssistance` rule 2 |
 | `permittedAssistance` | `packages/runtime/src/assistance.ts` — becomes the pointwise minimum (§3.2) | runtime barrel (unchanged) | every shipped call site, unedited |
-| `PRESET_DECLARATIONS[].config` | `packages/runtime/src/presets.ts:31-38` — the new §4a field on the shipped rows | already exported | `compileAssistance` rule 4 |
+| `PRESET_DECLARATIONS[].config` | `packages/runtime/src/presets.ts:31-38` — the new §4a field on the shipped rows | already exported | `compileAuthoritativeAssistance` rule 4 |
 
-**One algebra, three authority stages.** The browser strict-parses v2/local migration state and
-builds `RequestedAssistanceV1 {schemaVersion, contextHint, preference, browserChannels,
+**One algebra, four authority stages.** The browser strict-parses v2/local migration state and
+builds `RequestedAssistanceV1 {stage, schemaVersion, contextHint, preference,
 requestDigest}`. It sends that receipt as untrusted intent; it never sends effective modules,
-permissions or provider availability. The server strict-parses it, derives authoritative context
+permissions, provider availability or browser readiness. The server strict-parses it, derives authoritative context
 from the run/campaign origin, derives access from the authenticated role and run boundary, reads
 server provider state, and compiles requested modules/config/effects. It returns
 `requestedDigest`, `effectiveDigest`, typed suppressions and source demands. After assembly,
@@ -810,8 +897,10 @@ The context is therefore already in hand at the seat; the preset is not. It beco
 const origin = { kind: "run", sessionKind, feedbackPolicy, liveKind } as const;
 const context = deriveWorkflowContext(origin);
 const preference = loadWorkflowPreference(context, storage());
-const requested = compileAssistanceRequest({ contextHint: context, preference, browserChannels });
-const compiled = narrowBrowserChannels(serverModuleQuery(requested), browserChannels);
+const requested = compileAssistanceRequest({ contextHint: context, preference });
+const authoritative = serverModuleQuery(requested);
+const finalized = finalizeAssistanceEffects(authoritative, sealedSourceReceipts);
+const compiled = narrowBrowserChannels(finalized, currentBrowserChannelReceipt());
 ```
 
 The later Campaign branch is added only by the accepted `campaign-core` implementation, importing
@@ -821,8 +910,10 @@ returns `CONTEXT_DECLARED_AWAITING` at the server boundary.
 
 `compiled.config` replaces the `assistance` object the nine switches read; `compiled.modules`
 and `compiled.suppressed` are what §7's pill and footer render. Choosing a preset calls
-`saveWorkflowPreference(context, {version: 2, preset: next, overrides:
-retainedLowerOverrides, moduleOverrides})` and re-derives. Advanced edits write sparse v2 field
+`saveWorkflowPreference(context, {version: 2, assistanceHead: 4, intent: {kind:"explicit",
+preset: next, overrides: retainedLowerOverrides, moduleOverrides:{include:[],exclude:[]}}})` and
+re-derives. Selecting a named preset clears both module-delta arrays; preserving them requires the
+separate Advanced action. Advanced edits write sparse v2 field
 overrides plus explicit module includes/excludes; either a higher field or any module delta changes
 the visible mode to Custom. The v1 workflow and assistance keys are migration inputs, not
 parallel writers. The old loaders become private migration helpers or are deleted; neither remains
@@ -1078,7 +1169,7 @@ are **drift tripwires only** — a fixture may not restate them as its own arith
     projection's `guided` field and nothing else, i.e. a strict subset that is now derived.
     `PROFILE_DEFAULTS` is therefore **deleted at Checkpoint A** and
     `loadWorkflowPreference` returns `{kind:"unset"}` rather than a complete fallback config,
-    with the per-context default arriving through `compileAssistance`. The criterion passes by
+    with the per-context default arriving through `compileAuthoritativeAssistance`. The criterion passes by
     there being one source and by an unset receipt remaining distinguishable from an explicit
     Quiet request.
 11. **Academy stops falling through.** `deriveWorkflowContext({liveKind: "academy", ...})`
@@ -1175,14 +1266,14 @@ ledger/log closeout in the same commit.
 
 | row | required repair before another fresh review |
 |---|---|
-| [[D2171]] | depend on the repaired/accepted typed module execution and source graph |
-| [[D2172]] | delete the superseded compiler and type every stage/result/refusal/digest |
-| [[D2173]] | preserve unset/migrated/invalid intent across repeated v2 reloads |
-| [[D2174]] | settle and test named-preset selection from Custom module deltas |
-| [[D2175]] | give browser readiness one current browser-only authority |
-| [[D2176]] | make `rules_floor` impossible to exclude in storage, wire and compiler |
-| [[D2177]] | add a truthful typed recovery notice/suppression arm |
-| [[D2178]] | register and claim the shared preference/request/result/permission resources |
+| [[D2171]] | author-routed: requirements-only module artifacts are refused; freshly accepted/implemented sealed source graph remains a hard dependency |
+| [[D2172]] | author-repaired: monolith deleted; requested/authoritative/finalized/browser-narrowed stages carry correlated discriminators and digests |
+| [[D2173]] | author-repaired: v2 persists the closed intent union and preserves unset/migrated/invalid identity across repeated reloads |
+| [[D2174]] | author-repaired: named selection clears all module deltas and retains safe field narrowings; Advanced is the explicit preserve-customization action |
+| [[D2175]] | author-repaired: request carries no browser state; one current digest-bound receipt narrows only after server finalization |
+| [[D2176]] | author-repaired: `ConfigurableModuleId` excludes `rules_floor`; storage/wire refuse it and server reinserts the floor |
+| [[D2177]] | author-repaired: closed `preference_recovery` arm with fixed non-reflective renderer |
+| [[D2178]] | author-routed: three resources named; register/check implementation remains a hard predecessor and no false claim is emitted |
 
 ### Prior author-repair routing
 
@@ -1261,6 +1352,14 @@ named in its own text, never this list.
 
 ## Changelog
 
+- 2026-08-30 (**third author repair [[D2171]]–[[D2178]]**): replaced the conflicting compiler
+  APIs with one four-stage discriminated/digest-correlated pipeline; made v2 intent lossless;
+  made named preset selection literal; removed browser readiness from the server request; excluded
+  `rules_floor` from configurable module ids; and added a safe recovery notice. Module effect
+  compilation now refuses the requirements-only module artifacts. The three shared resources are
+  explicitly named and route to a required register extension rather than being smuggled under a
+  `none` claim. `make intent-presets-second-author-repair` passes 9/9. Another fresh review waits
+  on module authority and register prerequisites; no implementation is authorised.
 - 2026-08-30 (**second fresh independent return [[D2171]]–[[D2178]]**): returned the second
   author repair after tracing it through the returned module artifacts, repeated storage reload,
   named-from-Custom selection and the shared-resource rules. The source authority is incomplete;

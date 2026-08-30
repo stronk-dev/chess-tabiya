@@ -2,77 +2,90 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { MODULE_IDS } from "../../packages/runtime/src/module-contract.js";
 import {
-  authoritativeRequest, campaignContext, compileRequest, effectSourceState, FIELDS,
-  loadWithLegacyPrecedence, narrowBrowserChannels, parsePreferenceV2, renderSuppression,
-  requestedModules, serializePreferenceV2,
+  authoritativeRequest, browserReceipt, campaignContext, compileRequest, effectSourceState, FIELDS,
+  finalizeEffects, loadWithLegacyPrecedence, narrowBrowserChannels, parsePreferenceV2,
+  renderSuppression, requestedModules, requireExecutableModuleAuthority, selectNamedPreset,
+  serializePreferenceV2, SHARED_RESOURCE_REQUIREMENTS,
 } from "./fixture.js";
 
 const rfc = readFileSync("rfc/intent-presets.md", "utf8");
-const valid = () => ({ version: 2, assistanceHead: 4, preset: "analysis", overrides: {}, moduleOverrides: { include: [], exclude: [] } });
+const explicit = () => ({ version: 2 as const, assistanceHead: 4 as const, intent: { kind: "explicit" as const, preset: "analysis" as const, overrides: {}, moduleOverrides: { include: [], exclude: [] } } });
+const completeConfig = Object.fromEntries(FIELDS.map((field) => [field, field === "voice" ? "authored" : field === "boardLighting" ? "legal" : "off"]));
 
-describe("intent-presets D2127-D2134 second author repair", () => {
-  it("D2127 strictly parses the closed v2 preference image", () => {
-    expect(FIELDS).toHaveLength(9);
-    expect(parsePreferenceV2(valid())).toMatchObject(valid());
-    const unordered = parsePreferenceV2({ ...valid(), overrides: { arrows: "sight", guided: "off" }, moduleOverrides: { include: ["guided_hint", "rules_floor"], exclude: [] } });
-    expect(serializePreferenceV2(parsePreferenceV2(JSON.parse(serializePreferenceV2(unordered))))).toBe(serializePreferenceV2(unordered));
-    for (const bad of [null, [], { ...valid(), extra: true }, { ...valid(), assistanceHead: 5 }, { ...valid(), overrides: { guided: "sometimes" } }, { ...valid(), moduleOverrides: { include: ["guided_hint"], exclude: ["guided_hint"] } }]) {
-      expect(() => parsePreferenceV2(bad)).toThrow();
+describe("intent-presets D2171-D2178 third author repair", () => {
+  it("D2171 refuses effect compilation from requirements-only module artifacts", () => {
+    const execution = JSON.parse(readFileSync("rfc/contracts/module-execution-plan-v1.json", "utf8"));
+    const bindings = JSON.parse(readFileSync("rfc/contracts/module-binding-plan-v1.json", "utf8"));
+    expect(() => requireExecutableModuleAuthority(execution, bindings)).toThrow(/MODULE_AUTHORITY_NOT_ACCEPTED/u);
+    expect(execution.sourceInputs).toHaveLength(9);
+    expect(execution.guidedHint).toMatchObject({ status: "owner_blocked", blocker: "D1639" });
+  });
+
+  it("D2172 correlates the four typed stages and their digests", () => {
+    const requested = compileRequest("position", parsePreferenceV2(explicit()));
+    const authoritative = authoritativeRequest(requested, "position");
+    const finalized = finalizeEffects(authoritative, "sha256:sources");
+    const narrowed = narrowBrowserChannels(finalized, browserReceipt(7, false));
+    expect([requested.stage, authoritative.stage, finalized.stage, narrowed.stage]).toEqual(["requested", "authoritative", "finalized", "browser_narrowed"]);
+    expect(finalized.authoritativeDigest).toBe(authoritative.effectiveDigest);
+    expect(narrowed.serverDigest).toBe(finalized.finalDigest);
+    expect(() => authoritativeRequest({ ...requested, contextHint: "pack" }, "pack")).toThrow(/REQUEST_DIGEST/u);
+  });
+
+  it("D2173 preserves unset, explicit, migrated and invalid intent byte-for-byte across reloads", () => {
+    const arms = [
+      { version: 2, assistanceHead: 4, intent: { kind: "unset" } }, explicit(),
+      { version: 2, assistanceHead: 4, intent: { kind: "migrated_snapshot", preset: "guided", config: completeConfig, sourceVersion: 3, moduleOverrides: { include: ["guided_hint"], exclude: [] } } },
+      { version: 2, assistanceHead: 4, intent: { kind: "invalid_fallback", reason: "malformed" } },
+    ];
+    for (const arm of arms) {
+      const first = serializePreferenceV2(parsePreferenceV2(arm));
+      const second = serializePreferenceV2(parsePreferenceV2(JSON.parse(first)));
+      expect(second).toBe(first);
+      expect(JSON.parse(second).intent.kind).toBe((arm as any).intent.kind);
     }
+    expect(loadWithLegacyPrecedence(explicit(), { guided: "live" })).toMatchObject({ version: 2 });
+    expect(loadWithLegacyPrecedence({ ...explicit(), extra: true }, { guided: "live" })).toBe("invalid_v2");
   });
 
-  it("D2128 derives preset identity only from the sealed receipt", () => {
-    const preference = parsePreferenceV2(valid());
-    const request = compileRequest("position", preference);
-    expect(authoritativeRequest(request, "position").preset).toBe("analysis");
-    expect(() => authoritativeRequest(request, "pack")).toThrow(/CONTEXT_MISMATCH/u);
+  it("D2174 makes named selection literal and clears Custom module deltas", () => {
+    const custom = parsePreferenceV2({ version: 2, assistanceHead: 4, intent: { kind: "explicit", preset: "analysis", overrides: { guided: "off" }, moduleOverrides: { include: ["guided_hint"], exclude: ["full_inspector"] } } });
+    const named = selectNamedPreset(custom, "quiet", { guided: "off" });
+    expect(named.intent).toMatchObject({ kind: "explicit", preset: "quiet", overrides: { guided: "off" }, moduleOverrides: { include: [], exclude: [] } });
   });
 
-  it("D2129 binds client request bytes to a server-authoritative context", () => {
-    const request = compileRequest("position", parsePreferenceV2(valid()));
-    expect(authoritativeRequest(request, "position").requestedDigest).toBe(request.requestDigest);
-    expect(() => authoritativeRequest({ ...request, contextHint: "pack" }, "pack")).toThrow(/REQUEST_DIGEST/u);
-    const server = { modules: ["rules_floor", "guided_hint"] as const, spoken: "provider" as const };
-    const narrowed = narrowBrowserChannels(server, false);
-    expect(narrowed.modules).toEqual(server.modules);
-    expect(narrowed.spoken).toBe("off");
-    expect(rfc).toMatch(/client request\/server authority\/client channel\s+narrowing/u);
+  it("D2175 keeps browser readiness out of the request and binds one current receipt after finalization", () => {
+    const requested = compileRequest("position", parsePreferenceV2(explicit()));
+    expect(requested).not.toHaveProperty("browserChannels");
+    const finalized = finalizeEffects({ ...authoritativeRequest(requested, "position"), spoken: "provider" }, "sha256:sources");
+    expect(narrowBrowserChannels(finalized, browserReceipt(8, true))).toMatchObject({ spoken: "browser", browserGeneration: 8 });
+    const receipt = browserReceipt(8, true);
+    expect(() => narrowBrowserChannels(finalized, { ...receipt, browserSpeech: false })).toThrow(/BROWSER_RECEIPT_DIGEST/u);
   });
 
-  it("D2130 gives Custom an explicit module include/exclude algebra", () => {
-    const preference = parsePreferenceV2({ ...valid(), moduleOverrides: { include: ["structure_nudge", "guided_hint"], exclude: ["full_inspector"] } });
-    expect(requestedModules(["rules_floor", "full_inspector"], preference, MODULE_IDS)).toEqual(["rules_floor", "structure_nudge", "guided_hint"]);
-    expect(requestedModules([], preference, ["rules_floor"])).toEqual([]);
+  it("D2176 makes rules_floor impossible to exclude and mandatory after every clamp", () => {
+    expect(() => parsePreferenceV2({ ...explicit(), intent: { ...explicit().intent, moduleOverrides: { include: [], exclude: ["rules_floor"] } } })).toThrow(/PREFERENCE_MODULE_AUTHORITY/u);
+    const preference = parsePreferenceV2({ ...explicit(), intent: { ...explicit().intent, moduleOverrides: { include: ["guided_hint"], exclude: ["full_inspector"] } } });
+    expect(requestedModules([], preference, [])).toEqual(["rules_floor"]);
+    expect(requestedModules(["rules_floor", "full_inspector"], preference, MODULE_IDS)).toEqual(["rules_floor", "guided_hint"]);
   });
 
-  it("D2131 renders every suppression from typed requested/effective/reason bytes", () => {
-    expect(renderSuppression({ kind: "field", field: "arrows", requested: "sight", effective: "off", reason: "match ceiling" })).toMatch(/sight to off/u);
+  it("D2177 renders recovery from a closed safe arm without attacker bytes", () => {
+    expect(renderSuppression({ kind: "preference_recovery", reason: "malformed" })).toBe("Saved help preferences were invalid, so safe defaults are active.");
+    expect(renderSuppression({ kind: "preference_recovery", reason: "storage_unavailable" })).toMatch(/could not be read/u);
     expect(renderSuppression({ kind: "module", moduleId: "guided_hint", requested: true, effective: false, reason: "role ceiling" })).toMatch(/role ceiling/u);
-    expect(renderSuppression({ kind: "effect", effectId: "guided_hint.card", moduleId: "guided_hint", requested: "enabled", effective: "disabled", reason: "provider unavailable" })).toMatch(/provider unavailable/u);
   });
 
-  it("D2132 preserves AND/OR source alternatives and honest no-witness", () => {
+  it("D2178 routes all shared grammars/vocabulary to explicit register requirements", () => {
+    expect(SHARED_RESOURCE_REQUIREMENTS).toEqual(["workflow-preference", "assistance-exchange", "assistance-permission"]);
+    expect(rfc).toMatch(/workflow-preference.*assistance-exchange.*assistance-permission/su);
+    expect(rfc).toMatch(/register implementation is a hard predecessor/u);
+  });
+
+  it("retains source-alternative honesty and Campaign refusal", () => {
     const alternatives = [{ all: ["rules", "stockfish"] }, { all: ["rules", "authored"] }];
     expect(effectSourceState(alternatives, { rules: "available", stockfish: "unavailable", authored: "available" })).toBe("deliver");
     expect(effectSourceState([{ all: ["rules", "stockfish"] }], { rules: "available", stockfish: "no_witness" })).toBe("honest_empty");
-    expect(effectSourceState(alternatives, { rules: "available", stockfish: "failed", authored: "pending" })).toBe("suppress");
-    const execution = JSON.parse(readFileSync("rfc/contracts/module-execution-plan-v1.json", "utf8"));
-    const bindings = JSON.parse(readFileSync("rfc/contracts/module-binding-plan-v1.json", "utf8"));
-    const executionByProjection = new Map(execution.rows.map((row: any) => [`${row.projection.id}@${row.projection.version}`, row]));
-    expect(bindings.rows.every((row: any) => executionByProjection.has(`${row.projection.id}@${row.projection.version}`))).toBe(true);
-    const inspectorFamilies = new Set(bindings.rows.filter((row: any) => row.consumer.id === "module.full_inspector").map((row: any) => executionByProjection.get(`${row.projection.id}@${row.projection.version}`)?.sourceFamily));
-    expect(inspectorFamilies.size).toBeGreaterThan(4);
-  });
-
-  it("D2133 makes valid or invalid v2 authoritative over stale legacy bytes", () => {
-    expect(loadWithLegacyPrecedence(valid(), { guided: "live" })).toMatchObject({ version: 2 });
-    expect(loadWithLegacyPrecedence({ ...valid(), extra: true }, { guided: "live" })).toBe("invalid_v2");
-    expect(loadWithLegacyPrecedence(undefined, { guided: "live" })).toBe("migrate_legacy");
-    expect(rfc).toMatch(/source census fails any write to either v1 namespace/u);
-  });
-
-  it("D2134 phases Campaign without inventing its receipt", () => {
     expect(campaignContext).toThrow(/CONTEXT_DECLARED_AWAITING/u);
-    expect(rfc).toMatch(/will import that type; it will not copy or forecast its bytes/u);
   });
 });

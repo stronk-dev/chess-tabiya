@@ -12512,3 +12512,19 @@ requirements. `make module-registration-author-contract-update` regenerated both
 and `make module-registration-author-contract` passes 11/11. The RFC remains draft pending fresh
 independent review; no production, schema, content or archive byte changed. Receipt:
 `planning/learner-modules/third-author-repair-2026-08-30.md`.
+
+## 2026-08-30 — Intent presets D2171–D2178 third author repair
+
+Collapsed the conflicting preset compilers into one requested → authoritative → finalized →
+browser-narrowed pipeline with discriminated, digest-correlated stages. V2 now preserves the
+unset/explicit/migrated/invalid intent arm across reloads; named selection clears Custom module
+deltas; browser readiness appears once after server finalization; `rules_floor` is excluded from
+configuration and reinserted defensively; and malformed/storage-unavailable recovery has fixed,
+non-reflective copy.
+
+The repair refuses to compile effects from module-registration's requirements-only artifacts.
+It also names the durable preference, staged exchange and permission vocabulary as shared-resource
+register dependencies rather than emitting claims the current checker cannot read.
+`make intent-presets-second-author-repair` passes 9/9. The RFC remains draft and dependency-blocked;
+no production, schema, content or archive byte changed. Receipt:
+`planning/intent-presets/third-author-repair-2026-08-30.md`.
