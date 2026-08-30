@@ -70,3 +70,24 @@ test("D2193: production discovery comes from the workspace and classifies the re
   assert.match(rfc, /new workspace package is inside discovery/u);
   assert.doesNotMatch(rfc, /scans every non-test production[^\n]*under\s+`apps\/web\/src` and `packages\/runtime\/src`/u);
 });
+
+test("D2178: config, preference, exchange and permission remain four registered identities", () => {
+  const extension = section("### 1a. Three adjacent resources", "### 2. Tree derivation");
+  for (const resource of ["assistance-config", "workflow-preference", "assistance-exchange", "assistance-permission"]) {
+    assert.ok(extension.includes(resource), resource);
+  }
+  assert.match(extension, /workflow-preference \| lane 2/u);
+  assert.match(extension, /assistance-exchange \| first lane 1/u);
+  assert.match(extension, /assistance-permission \| members legal/u);
+  assert.match(rfc, /Removing, merging or renaming one fails/u);
+});
+
+test("D2328: a new wire has a derived absent state and one first-lane transition", () => {
+  const extension = section("### 1a. Three adjacent resources", "### 2. Tree derivation");
+  assert.match(extension, /kind: "absent"; readonly contractDigest: "absent"/u);
+  assert.match(extension, /kind: "landed"; readonly head: number/u);
+  assert.match(extension, /Exactly one active first\s+claim is allowed/u);
+  assert.match(extension, /never `head 0`/u);
+  assert.match(rfc, /two claimants, numeric\/member claims, fictional head 0/u);
+  assert.match(rfc, /landed head 1 with a lingering first\s+claim fail/u);
+});

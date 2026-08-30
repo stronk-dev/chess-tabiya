@@ -12528,3 +12528,31 @@ register dependencies rather than emitting claims the current checker cannot rea
 `make intent-presets-second-author-repair` passes 9/9. The RFC remains draft and dependency-blocked;
 no production, schema, content or archive byte changed. Receipt:
 `planning/intent-presets/third-author-repair-2026-08-30.md`.
+
+## 2026-08-30 — Assistance shared-resource boundary research
+
+Separated four resources that prior planning was about to collapse: effective AssistanceConfig,
+durable workflow preference, the staged web/server assistance exchange, and the closed permission
+vocabulary. The current tree has config head 4, a web-local workflow v1 used only by tests, an
+exported four-member permission union, and no assistance-exchange production symbol at all.
+
+That absence exposed [[D2328]]: the register model cannot reserve a first cross-package wire before
+it lands without inventing a false head 0. The dossier specifies an explicit derived `absent` state
+with a unique first-lane-1 claim, plus member claims for permission. It opens the research gate for
+an assistance register/process amendment and keeps intent-presets implementation blocked until the
+register can express truthful claims. No production or protected-design byte changed. Dossier:
+`design/research/assistance-shared-resource-boundaries.md`.
+
+## 2026-08-30 — Assistance register D2178/D2328 author amendment
+
+Amended the existing AssistanceConfig register RFC instead of creating a second register system.
+It now specifies four distinct resources: config head 4, workflow-preference head 1 with future
+lane 2, an absent assistance exchange with one first-lane-1 claimant, and the four-member
+permission vocabulary with a future `legal` member claim.
+
+The extension derives absence from the missing production root, uses an `absent` digest sentinel
+and refuses fictional head 0, duplicate first claimants, implementation without a claim and a
+lingering claim after head 1 lands. Criteria 18–21 and the extended author contract own the exact
+intent-presets handoff. No checker or product byte changed; fifth fresh independent review is
+required. Receipt:
+`planning/assistance-config-register/protocol-extension-author-amendment-2026-08-30.md`.

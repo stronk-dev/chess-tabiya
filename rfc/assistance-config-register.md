@@ -1,19 +1,23 @@
-# RFC: AssistanceConfig shared-resource register
+# RFC: Assistance shared-resource registers
 
-- **Status:** draft — author-repaired 2026-08-30 on [[D2190]]–[[D2193]]; fourth fresh independent
-  review required. The v4 bootstrap now admits only type-proved closed computed writes; the v5
+- **Status:** draft — author-amended 2026-08-30 on [[D2178]]/[[D2328]] after the
+  [[D2190]]–[[D2193]] repair; fifth fresh independent review required. The v4 bootstrap now admits only type-proved closed computed writes; the v5
   claim contains the real hint seat/store path and both exhaustive preset/clamp columns; traversal
   nodes make imports, aliases, helpers, components and cycles representable; and workspace-derived
   discovery classifies every production reach as authority, product consumer or declaration-only
   observer. `make assistance-register-third-author-repair` is the positive author contract.
-  C9/register/v5 implementation remains forbidden pending fresh acceptance.
+  The extension registers durable workflow preference, the staged assistance exchange and the
+  permission vocabulary without collapsing them into AssistanceConfig, including an explicit
+  absent→first-lane-1 state for a protocol that has not landed. C9/register/v5 implementation
+  remains forbidden pending fresh acceptance.
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it
   chooses no preset, permission, disclosure or UX behavior.
-- **Exploration gate:** passed by `design/research/assistance-config-shared-resource.md` and
-  [[D1581]]. The live type, four historical heads, browser persistence/migration boundary,
-  current claimant and exact checker delta are all verified at HEAD.
+- **Exploration gate:** passed by `design/research/assistance-config-shared-resource.md`,
+  `design/research/assistance-shared-resource-boundaries.md`, [[D1581]] and [[D2328]]. The live
+  types, historical heads, browser persistence/migration boundary, absent exchange, current
+  claimants and exact checker delta are verified at HEAD.
 - **Depends on:** implemented `rfc/archive/shared-resource-registers.md`; RFC-0000 rule 7
 - **Parent / amends:** follows up immutable `rfc/archive/shared-resource-registers.md`; amends
   `rfc/README.md` with its register and `tools/register-check.mjs` with the derived reader/check.
@@ -27,11 +31,14 @@ none
 
 ## Summary
 
-Register `AssistanceConfig` as the shared persisted contract it already is. The tree half is the
+Register the four assistance resources at their actual boundaries. `AssistanceConfig` remains the
+shared effective configuration it already is. The tree half is the
 numeric version plus a normalized digest of its closed field domains **and every operation that
 constructs, permits, persists or configures that shape**. The future half is one live head+1 claim
 over the exact authority-graph delta. Guided Hint owns v5; `intent-presets` depends on and
-exhaustively projects that shape without claiming it independently.
+exhaustively projects that shape without claiming it independently. Durable workflow intent,
+web/server exchange stages and the permission vocabulary receive separate identities because they
+have different readers, change triggers and transition rules.
 
 This RFC changes no assistance value and authorizes no v5 runtime implementation. It makes the
 existing v5 intent visible to the same collision/drift machinery that already guards schemas,
@@ -238,6 +245,79 @@ register remain its own returned [[D2178]] work and are not laundered here.
 The dependent phase remains: awaiting the [[D1639]] owner ceiling ruling, then repeat independent review.
 This sentence is deliberately literal so cross-RFC status checks do not infer acceptance from the
 process repair.
+
+### 1a. Three adjacent resources and the absent-head transition ([[D2178]], [[D2328]])
+
+The original scope registered only effective `AssistanceConfig`. The intent-presets return proved
+that three adjacent contracts independently satisfy RFC-0000 rule 7. They are registered here,
+using the same executable resource↔README bijection, without changing their product bytes:
+
+| resource | landed tree state | transition grammar |
+|---|---|---|
+| `assistance-config` | head 4, derived from the exported versioned nine-axis interface and its complete authority graph | numeric single-writer lane; hint-distance reserves lane 5 |
+| `workflow-preference` | head 1, derived from the strict `{version:1,preset}` storage grammar in `assistance-preference.ts` | numeric single-writer lane; intent-presets reserves lane 2 |
+| `assistance-exchange` | **absent**, derived from no registered production contract root | exactly one `first lane 1` claimant; no other lane/member claim is legal while absent |
+| `assistance-permission` | members `evidence, free, locked_off, sight`, derived from the exported union | closed member claims; intent-presets claims `legal` |
+
+`RESOURCE_NAMES` gains all three literal names. `workflow-preference` uses the existing numeric lane
+rules. `assistance-permission` uses `evidence-kinds`-style member set equality, but its tree reader
+resolves the exported TypeScript union and the authority graph of functions returning it.
+
+`assistance-exchange` adds one new claim form:
+
+```text
+assistance-exchange | first lane 1 | <derived changed symbols>
+```
+
+The landed state is a discriminated union, never a magic integer:
+
+```ts
+type NumericResourceTreeState =
+  | { readonly kind: "absent"; readonly contractDigest: "absent" }
+  | { readonly kind: "landed"; readonly head: number; readonly contractDigest: string };
+```
+
+For an absent resource, the registered production root must not resolve. Exactly one active first
+claim is allowed. Two claimants, `lane 1`, `lane 2`, a member claim, or a claim with no derived
+changed-symbol closure fail. The implementation commit atomically creates the version-1 root,
+changes the derived state to `{kind:"landed",head:1}`, appends the history row and removes the live
+claim. A landed head 1 with a lingering `first lane 1` claim fails. The CLI prints `head absent;
+next <owner> (first lane 1)`, never `head 0`.
+
+README gains three register sections (they may share one heading but each keeps its own machine
+marker):
+
+```text
+<!-- register: workflow-preference head=1 -->
+<!-- contract-digest: workflow-preference <derived-12-hex> -->
+<!-- register: assistance-exchange head=absent -->
+<!-- contract-digest: assistance-exchange absent -->
+<!-- register: assistance-permission members=evidence,free,locked_off,sight -->
+<!-- contract-digest: assistance-permission <derived-12-hex> -->
+```
+
+The workflow-preference v1 history row names the existing web-local storage grammar and explicitly
+says it has no production caller. The exchange history is empty while absent. Permission history
+records the bootstrap member set rather than inventing a numeric version.
+
+After this process RFC lands, `intent-presets.md` replaces `none` with three claims in one atomic
+author amendment:
+
+```text
+workflow-preference | lane 2 | <checker-derived v1→v2 storage/type/parser symbols>
+assistance-exchange | first lane 1 | <checker-derived four-stage type/parser/compiler symbols>
+assistance-permission | members legal | packages/runtime/src/assistance.ts#AssistancePermission
+```
+
+The angle-bracket fields above are intentionally not plausible filenames masquerading as a closed
+transition. The register implementation derives their exact source-graph populations first; the
+intent-presets claim is installed only when set equality succeeds. This RFC specifies the grammar
+and ownership transition, not product implementation bytes.
+
+The four resource identities are independent. Moving workflow preference does not implicitly move
+effective config; changing a wire stage does not silently widen permission; adding `legal` does
+not claim AssistanceConfig v5. Cross-resource implementation may land atomically, but every moved
+resource still needs its own exact claim and digest transition.
 
 ### 2. Tree derivation is semantic and formatting-insensitive
 
@@ -552,6 +632,22 @@ None. No design intent changes.
     if either the five-preset value column or eight-context clamp column is absent/incomplete. This
     is structural reach only; the owner-ratified [[D1639]] values and the hint RFC's complete
     server/provider journey remain separate product acceptance gates.
+18. **Four-resource identity ([[D2178]]).** The executable inventory and README markers are
+    set-equal over `assistance-config`, `workflow-preference`, `assistance-exchange` and
+    `assistance-permission`. Removing, merging or renaming one fails. Mutating one resource without
+    its own claim fails even when another assistance resource has a live claim.
+19. **Absent first-head transition ([[D2328]]).** An absent exchange plus one exact
+    `first lane 1` claim passes; two claimants, numeric/member claims, fictional head 0, missing
+    `absent` digest, implementation bytes with no claim, or landed head 1 with a lingering first
+    claim fail independently. CLI output contains `head absent` and never `head 0`.
+20. **Preference and permission bootstrap.** The reader derives workflow-preference head 1 from
+    the live strict storage grammar and derives exactly four sorted permission members from the
+    exported union. Equivalent formatting/alias refactors preserve digests; parser/serializer,
+    member, return-site or package-export changes move them and require their own claim.
+21. **Intent handoff.** After the register lands, intent-presets carries exactly three claims:
+    workflow-preference lane 2, assistance-exchange first lane 1 and permission member `legal`.
+    Their changed-symbol sets are derived from the complete resource graphs; a placeholder,
+    duplicate, omitted reader or hand-written plausible path fails.
 
 ## Discharges
 
@@ -560,6 +656,7 @@ None. No design intent changes.
 | D1 | Independent process/buildability review re-derives the rule-7 predicate, phase-aware graph grammar, read/write closure, fixed-head policy, exact v5 delta and file boundary | claude | `planning/assistance-config-register/log.md` + corrections/acceptance | |
 | D2 | Implement C9, register/history, claim transfer, docs and able-to-fail fixtures without product bytes | codex | implementing SHA + green governance output | |
 | D3 | Guided Hint v5 product implementation later moves the landed head/digest, removes its live claim and preserves v1-v4 migrations | codex | `hint-distance` implementing SHA/receipt | |
+| D4 | Implement the workflow-preference, absent exchange and permission register readers/markers plus first-lane transition fixtures | codex | process implementation SHA + green criteria 18–21 | |
 
 ## Independent-review routing
 
@@ -581,6 +678,8 @@ None. No design intent changes.
 | [[D2191]] | repaired in §1/classes 48-49/criterion 17: one fifteen-token claim includes run seat/store and both exhaustive preset/clamp columns | fourth fresh independent review after [[D1639]] owner ruling |
 | [[D2192]] | repaired in §1/classes 44-47: explicit callable/import/re-export/component/template/write nodes, converging aliases and SCC cycle rule | fourth fresh independent review |
 | [[D2193]] | repaired in §§1-2/classes 50-51: workspace-derived roots and explicit authority/product/observer influence | fourth fresh independent review |
+| [[D2178]] | amended in §1a/criteria 18/20/21: three distinct shared resources, truthful claims only after their register lands | fifth fresh independent review |
+| [[D2328]] | specified in §1a/criterion 19: derived absent state and unique first-lane-1 transition; fictional head 0 refused | fifth fresh independent review |
 
 ## Open questions
 
@@ -589,6 +688,13 @@ contract.
 
 ## Changelog
 
+- 2026-08-30: amended for [[D2178]]/[[D2328]] from
+  `design/research/assistance-shared-resource-boundaries.md`. Registered workflow preference,
+  assistance exchange and permission as resources distinct from effective AssistanceConfig. Added
+  a derived `absent` state and unique `first lane 1` transition so a new cross-package wire can be
+  reserved before it lands without inventing head 0. Criteria 18–21 and the positive author
+  contract cover identity, bootstrap, collision and intent handoff. Fifth fresh independent review
+  is required; no register or product implementation is authorised.
 - 2026-08-30: author-repaired [[D2190]]–[[D2193]]. Proved the two current generic writes against
   the exact non-version key set and literal call sites; expanded the v5 claim from ten to fifteen
   symbols so gameplay and both preset/clamp columns cannot be absent; represented aliases,
