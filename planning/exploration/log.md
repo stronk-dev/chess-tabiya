@@ -12022,3 +12022,17 @@ The eleven-module product model, staged-move protocol, atomic budgets, bounded R
 seat architecture survive. `make module-registration-second-fresh-review` passes 7/7. No product,
 schema or protected-design byte changed. Exact review:
 `planning/learner-modules/second-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Intent-presets second fresh independent return
+
+Returned `intent-presets.md` on [[D2171]]–[[D2178]] after following the repaired types through the
+module authority, storage reload and actual named-preset gesture. The preset source graph depends
+on returned/incomplete artifacts; two compiler APIs remain; v2 erases unset/migrated identity;
+named selection preserves Custom deltas; browser readiness is read twice; Custom can exclude the
+mandatory rules floor; invalid recovery has no typed record; and the shared preference/wire/
+permission resources claim no register.
+
+The five preset candidates, context ceilings, server-authority direction and explicit Campaign
+refusal survive. `make intent-presets-second-fresh-review` passes 8/8. No product, schema, content,
+archive or protected-design byte changed. Exact review:
+`planning/intent-presets/second-fresh-independent-buildability-review-2026-08-30.md`.

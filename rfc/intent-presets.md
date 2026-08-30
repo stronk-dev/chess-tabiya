@@ -1,12 +1,12 @@
 # RFC: Intent presets — the workflow/preset layer over the module foundation
 
-- **Status:** draft — [[D2127]]–[[D2134]] second author-repaired 2026-08-30; fresh independent
-  buildability review required. The repair closes one strict v2 preference authority,
-  removes duplicate preset identity, splits client request/server authority/client channel
-  narrowing, gives Custom explicit module semantics, types every suppression, derives source
-  dependencies from the module binding/DAG authority, retires every v1 writer and phases Campaign
-  as declared-awaiting its returned owner. `make intent-presets-author-contract` passes 7/7 and
-  `make intent-presets-second-author-repair` passes 8/8. No implementation is authorised.
+- **Status:** draft — **returned by second fresh independent buildability review 2026-08-30 on
+  [[D2171]]–[[D2178]].** The repaired direction survives, but its source graph is a returned false
+  dependency; two compiler APIs remain; v2 erases unset/migrated intent; named selection retains
+  Custom deltas; browser availability has two readings; Custom can exclude `rules_floor`; malformed
+  recovery has no typed record; and the shared wires/vocabulary are unregistered. Exact return:
+  `planning/intent-presets/second-fresh-independent-buildability-review-2026-08-30.md`.
+  `make intent-presets-second-fresh-review` reproduces 8/8. No implementation is authorised.
 - **Author:** claude (drafted from `planning/evidence-foundation-ux/presets-head-derivation.md`, the HEAD derivation of every surface this document composes)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §3-forms O4 amendment (the algebra), §3a (silence default), §5 Q4; `design/03-product-breadth.md` §Play, §Review and explore, §Live and community, shell table
@@ -25,6 +25,35 @@
 ```tabiya-claims
 none
 ```
+
+## Second fresh independent return (2026-08-30)
+
+The second author repair was executable enough to expose eight further buildability blockers:
+[[D2171]]–[[D2178]].
+
+1. Effect/source alternatives derive from module artifacts independently returned as incomplete
+   and false: Guided Hint is absent and the DAG has nine unowned inputs.
+2. The original monolithic `compileAssistance` signature remains normative beside a prose-only
+   four-stage compiler, leaving two authorities and no exact stage types.
+3. The v2 storage image carries neither receipt kind nor migration identity, so first reload turns
+   unset into explicit and can turn migrated Custom into a named preset.
+4. Choosing a named preset preserves `moduleOverrides`, while any delta forces Custom; the learner
+   can select Quiet or Guided and remain in a different effective mode.
+5. Browser-channel readiness rides inside the pre-server request/digest and is read again after the
+   response, with no freshness or precedence rule.
+6. `moduleOverrides.exclude` accepts `rules_floor`, although the legal-interaction floor is
+   universally mandatory and criterion 3 requires it in every output.
+7. Whole-preference recovery promises a visible suppression, but the union has only
+   module/field/effect arms that require valid requested/effective operands.
+8. `WorkflowPreferenceV2`, `RequestedAssistanceV1` and the extended closed
+   `AssistancePermission` vocabulary are shared versioned resources while the claims block says
+   `none` and no register owns them.
+
+`make intent-presets-second-fresh-review` reproduces all eight. The exact evidence and repair order
+are in the linked review dossier. The candidate tables and staged-authority direction survive;
+implementation remains forbidden until author repair and another fresh review.
+The prior **client request/server authority/client channel narrowing** direction is retained; the
+return requires its four stages to replace the still-live monolithic API with exact types.
 
 ## Summary
 
@@ -1142,7 +1171,20 @@ rows. Only Checkpoint B's non-vacuous real delivery commit writes those SHAs and
 That commit also closes [[D532]]/[[D715]] if their server ceiling remains green and performs the
 ledger/log closeout in the same commit.
 
-## Fresh-review routing
+## Second fresh-review return routing
+
+| row | required repair before another fresh review |
+|---|---|
+| [[D2171]] | depend on the repaired/accepted typed module execution and source graph |
+| [[D2172]] | delete the superseded compiler and type every stage/result/refusal/digest |
+| [[D2173]] | preserve unset/migrated/invalid intent across repeated v2 reloads |
+| [[D2174]] | settle and test named-preset selection from Custom module deltas |
+| [[D2175]] | give browser readiness one current browser-only authority |
+| [[D2176]] | make `rules_floor` impossible to exclude in storage, wire and compiler |
+| [[D2177]] | add a truthful typed recovery notice/suppression arm |
+| [[D2178]] | register and claim the shared preference/request/result/permission resources |
+
+### Prior author-repair routing
 
 | row | author repair; fresh review still required |
 |---|---|
@@ -1219,6 +1261,13 @@ named in its own text, never this list.
 
 ## Changelog
 
+- 2026-08-30 (**second fresh independent return [[D2171]]–[[D2178]]**): returned the second
+  author repair after tracing it through the returned module artifacts, repeated storage reload,
+  named-from-Custom selection and the shared-resource rules. The source authority is incomplete;
+  compiler APIs conflict; v2 loses intent; module deltas survive named selection; browser readiness
+  is duplicated; the mandatory rules floor is excludable; invalid recovery is unrepresentable; and
+  the new wires/vocabulary claim no register. `make intent-presets-second-fresh-review` passes 8/8.
+  No implementation is authorised.
 - 2026-08-30 (**second author repair [[D2127]]–[[D2134]]**): defined and exercised the strict
   v2 field/head/parser/serializer authority; removed duplicate preset input; split client request,
   server authority/finalization and browser-only narrowing; gave Custom an explicit module delta;
