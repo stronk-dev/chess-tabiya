@@ -1,7 +1,7 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** draft — **third author repair complete 2026-08-30 on [[D2164]]–[[D2170]];
-  another fresh independent review is required.** The repair rejects the returned generator's
+- **Status:** **draft — RETURNED by third fresh independent review 2026-08-30 on
+  [[D2343]]–[[D2347]].** The repair rejects the returned generator's
   central premise: learner modules do not invoke 117 detector/provider functions. They consume
   projection-keyed sealed pools produced by the candidate packet, recorded semantic path, Review,
   catalogue and provider authorities. The generated artifacts are therefore digest-sealed
@@ -10,7 +10,12 @@
   are explicit; Guided Hint is an explicit D1639 owner blocker; and presentation bindings require
   real pair-specific adapters instead of fabricated ids. `make module-registration-author-contract`
   passes 11/11. Exact repair:
-  `planning/learner-modules/third-author-repair-2026-08-30.md`. No implementation is authorised. The
+  `planning/learner-modules/third-author-repair-2026-08-30.md`. The repaired artifact now makes its
+  own named assembly gate red, infers false per-projection grains, assigns one run-prefix source
+  input to edge and branch-pair joins, copies whole-module timing without an upstream-operation
+  applicability term, and drops the `list` half of every declared `card` form. Exact return:
+  `planning/learner-modules/third-fresh-independent-buildability-review-2026-08-30.md`;
+  `make module-registration-third-fresh-review` reproduces 5/5. No implementation is authorised. The
   [[D1870]]/[[D2030]] dependency image remains the owner-ruled measured 207-pair target,
   including requested-Sight `pawn_safe_square`. Prior
   amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt
@@ -1611,6 +1616,11 @@ deleting one disclosure id from the family×rung product fails;
 
 | row | author repair; fresh review still required |
 |---|---|
+| [[D2343]] | reconcile the explicit blocked Guided Hint key with the D1865 assembly authority; both maintained targets must pass |
+| [[D2344]] | derive exact projection/operation subject grain instead of inferring it from producer family |
+| [[D2345]] | make every external DAG input's grain compatible with each edge, branch-pair or run-prefix consumer |
+| [[D2346]] | add upstream sealed-operation timing/subject applicability and derive each pair's exact timing intersection |
+| [[D2347]] | derive complete forms through `MODULE_FORM_IMAGE` and the exact pair adapter; `card` must not silently lose `list` |
 | [[D2164]] | module policy bytes derive from one author table and sessions derive from live workflow policies |
 | [[D2165]] | direct detector call plan withdrawn; five complete sealed-pool operation requirements are explicit dependencies |
 | [[D2166]] | position/edge/branch-pair/run-prefix grains and their distinct join rules replace universal edge/same-subject |
@@ -1680,6 +1690,14 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-08-30 (third fresh independent return): returned on [[D2343]]–[[D2347]]. The repaired
+  author authority disagrees with the still-named D1865 assembly gate on Guided Hint; subject
+  grains are inferred from producer family rather than projection semantics; the single
+  `run.record.move` source node cannot satisfy its edge and branch-pair consumers; binding timing
+  has no upstream-operation applicability term; and the generated requirements drop the `list`
+  half of every `card` form. `make module-registration-third-fresh-review` reproduces 5/5. Exact
+  return: `planning/learner-modules/third-fresh-independent-buildability-review-2026-08-30.md`.
+  No implementation is authorised.
 - 2026-08-30 (third author repair): repaired [[D2164]]–[[D2170]] by withdrawing the false
   117-direct-call architecture. Modules now consume five upstream sealed evidence pools; the
   generated 117-row and 205-row artifacts explicitly claim requirements only and keep every final

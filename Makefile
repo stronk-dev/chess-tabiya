@@ -402,6 +402,10 @@ evidence-presentation-third-author-repair:
 module-registration-second-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2164-module-registration-second-fresh-review/vitest.config.ts
 
+.PHONY: module-registration-third-fresh-review
+module-registration-third-fresh-review:
+	node --test tools/d2343-module-registration-third-fresh-review/*.test.mjs
+
 pack-capability-author-contract: pack-capability-closure pack-capability-repeat-review pack-capability-fresh-review pack-capability-second-fresh-review pack-capability-author-repair
 
 theory-drill-author-contract:

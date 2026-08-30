@@ -12610,3 +12610,15 @@ declarations and author test forbid.
 `make bounded-target-third-fresh-review` reproduces all three blockers. No production, manifest,
 schema, pack, content, API, client, archive or protected-design byte changed. Receipt:
 `planning/bounded-policy-targets/third-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Module-registration third fresh independent return
+
+Re-ran the third author contract and then its separately named D1865 assembly authority. The
+requirements-only boundary survives, but [[D2343]] records the now-red assembly join, [[D2344]]
+records producer-family subject inference, [[D2345]] records one run-prefix source node feeding
+edge and branch-pair joins, [[D2346]] records missing upstream timing/subject applicability, and
+[[D2347]] records the silent loss of `list` from every `card` form.
+
+`make module-registration-third-fresh-review` reproduces all five blockers. No production,
+manifest, schema, content, API, client, archive or protected-design byte changed. Receipt:
+`planning/learner-modules/third-fresh-independent-buildability-review-2026-08-30.md`.
