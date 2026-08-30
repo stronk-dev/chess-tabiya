@@ -3,20 +3,22 @@ import type { PresentationAbstentionLifecycle, PresentationDecisionStamp } from 
 
 declare const decision: PresentationDecisionStamp;
 
-const pending: PresentationAbstentionLifecycle = { kind: "pending", requestId: "r1", decision };
+const identity = { question: "question.explorer_population", projection: "human.explorer.population@1", producer: "human.explorer@1" } as const;
+const pending: PresentationAbstentionLifecycle = { kind: "pending", ...identity, requestId: "r1", decision };
 const settled: PresentationAbstentionLifecycle = {
   kind: "settled_abstention",
+  ...identity,
   requestId: "r1",
   decision,
   absence: "empty",
-  reasonRef: "no_candidates@1",
+  reason: { sourceReason: "empty_population", learnerReason: "empty_population" },
   sourceReceipt: { producer: "human.explorer@1", projection: "human.explorer.population@1", receiptDigest: "abc" },
 };
 
 // @ts-expect-error A pending request has no terminal absence.
-const impossiblePending: PresentationAbstentionLifecycle = { kind: "pending", requestId: "r1", decision, absence: "failed" };
+const impossiblePending: PresentationAbstentionLifecycle = { kind: "pending", ...identity, requestId: "r1", decision, absence: "failed" };
 // @ts-expect-error A terminal absence is not source-free.
-const sourceFreeSettlement: PresentationAbstentionLifecycle = { kind: "settled_abstention", requestId: "r1", decision, absence: "empty", reasonRef: "no_candidates@1" };
+const sourceFreeSettlement: PresentationAbstentionLifecycle = { kind: "settled_abstention", ...identity, requestId: "r1", decision, absence: "empty", reason: { sourceReason: "empty_population", learnerReason: "empty_population" } };
 // @ts-expect-error Never-requested is represented by a closed module door, not a presentation receipt.
 const unopened: PresentationAbstentionLifecycle = { kind: "never_requested" };
 

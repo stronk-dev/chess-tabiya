@@ -1,10 +1,11 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft — **returned by third fresh independent buildability review 2026-08-30 on
-  [[D2157]]–[[D2163]].** The typed component/seal architecture survives, but named structures and
-  citations remain unconstructible from their admitted operands; fact templates interpolate raw
-  ids; consequence variants are incomplete; abstention loses identity/source reasons and conflicts
-  with silent claims; and one required component has zero real consumers. Exact return:
+- **Status:** draft — **third author repair complete 2026-08-30 for
+  [[D2157]]–[[D2163]]; fresh independent review and [[D1672]] remain required.** Named structures
+  now retain typed identity plus witness geometry; citations are a sealed multi-input derivation;
+  fact renderers declare total operand formatters; consequence variants are total; abstention
+  preserves source authority while silent claims stay silent; and the denominator component has a
+  real Explorer path. Exact return repaired:
   `planning/platform-alignment/evidence-presentation/third-fresh-independent-buildability-review-2026-08-30.md`.
   [[D1672]]'s owner-only design amendment also remains required. No implementation is authorised.
   Landing remains three checkpoints (§2.1): manifest truth, sealed current consumers, then
@@ -103,6 +104,42 @@ The repaired exact rows exposed seven further buildability blockers: [[D2157]], 
 repairs are in the third fresh review dossier. This is an author return; production and protected
 design remain untouched, and a later fresh review is mandatory.
 
+## Third author repair (2026-08-30)
+
+The seven returned seams are now executable author authority rather than prose promises:
+
+1. `rules.structural.reading.named_structure@1` atomically gains typed `id`, registered `name`,
+   `provenanceNote` and exact witness `squares` across the source payload, projection operands and
+   all five adapters. `named_structure_id@1` resolves `StructureId` through `STRUCTURE_METADATA`;
+   a payload name that disagrees with that registry fails rather than becoming learner text.
+2. Citation no longer reads a sibling item. Checkpoint P adds
+   `derived.citation.attribution@1`, whose operation accepts the sealed evidence-reference
+   resolution plus exactly one sealed source item, joins reference/source/content digests, and
+   resolves complete attribution through the sealed source-attribution registry governed by the
+   derived projection's version. Missing or
+   unresolved licence/revision metadata abstains; it is never invented.
+3. Every `fact_statement` variant carries a formatter map set-equal to its operands. Objective
+   states, outcomes and PGN results use total vocabularies; integers and SAN use notation
+   formatters; opaque checkpoint ids remain retained metadata and do not enter prose.
+4. All three consequence consumers partition the complete discriminated union into
+   `terminal=true` and `terminal=false` variants.
+5. Pending and settled abstention receipts now carry question, projection and producer identity.
+   Each adapter joins its projection's literal abstention reasons to a total source-reason label
+   and learner category while preserving the source reason itself; a receipt is constructible
+   only after its owning workflow asked the question.
+6. `claim.emptyBehavior = silent` generates no abstention row. Only `stated_absence` and
+   `unavailable_source` components do; source failure is visible only after an owning request.
+7. The live `inspector.corpus@1 → human.explorer.population@1` composition now includes
+   `count_with_denominator`, deriving each displayed share from `playedCount / total` beside the
+   same distribution and outcome split.
+
+`make evidence-presentation-author-contract`,
+`make evidence-presentation-second-author-repair`, and
+`make evidence-presentation-third-author-repair` are the maintained author boundary. This is not
+acceptance: fresh review must attack the source-attribution join, exact post-P population,
+formatter totality, consequence partition, source-reason closure, silent-row exclusion and the
+real Explorer denominator path. Protected design remains untouched pending [[D1672]].
+
 ## Summary
 
 The product has an evidence contract with **37 producers, 193 projections, 25 consumers and 210
@@ -134,8 +171,8 @@ inventory, and the theme tokens it consumes.
 Three rules bind all fourteen. Each component is built only by a projection-keyed adapter over a
 validated retained payload, process-sealed to its admitted evidence owner, serialized as a closed
 digest receipt, and parsed into a new client-local seal before Svelte can receive it (§2.1).
-**Honest empty is a shipped state, not a blank** (§4): every
-component renders absence as itself, and abstention is visually and structurally distinct from
+**Honest empty is a shipped state, not a blank** (§4): silent components remain absent by
+declaration, while stated/source-aware components render absence as itself; abstention is visually and structurally distinct from
 zero — a distribution with no candidates and a distribution where every candidate scored 0% are
 different pictures. **The number and its convention travel together** (§5): a component that
 renders a number cannot be constructed without what the number was measured against, which is
@@ -293,7 +330,7 @@ Deviation 1, and the design-tier amendment is owed to the owner (Discharge D1).
 `COMPONENT_DECLARATIONS` and the operand types land as
 `packages/runtime/src/presentation-contract.ts` — shared, frozen, testable without a DOM, and
 importable by the server-side renderers that already build sentences. The fourteen Svelte
-implementations land under `apps/web/src/lib/evidence/`. Checkpoint P owns only the six exact
+implementations land under `apps/web/src/lib/evidence/`. Checkpoint P owns only the seven exact
 manifest/payload repairs enumerated below; `module-registration` continues to own module
 declarations and module bindings. After P, the component join is one-way and by type only: a
 component declares which `EvidenceForm` members it may serve and `evidence-catalog.ts` does not
@@ -304,13 +341,15 @@ import the component implementation. The corrected pin is recorded in `rfc/READM
 This RFC lands in three checkpoints without treating manifest cleanup or a registry as product
 completion:
 
-1. **Checkpoint P — manifest presentation repair predecessor.** Atomically land the six operations in
+1. **Checkpoint P — manifest presentation repair predecessor.** Atomically land the seven operations in
    `MANIFEST_PRESENTATION_REPAIRS`: reclassify `opponent.selection@1` and
    `runtime.repertoire_scan@1` as machine-only operations; reclassify `derived.story.rank@1` as
-   selection-only; retain named-structure witness squares; replace the scalar pack-phase payload
+   selection-only; retain registered named-structure identity and witness squares; replace the scalar pack-phase payload
    with `{phase}`; and replace consequence's partial payload with the discriminated
-   `terminal:true+outcome | terminal:false+plies+objectiveState` union. The matching source
-   adapters change in the same commit. Recompile F1 and require exactly 111 post-P presentation pairs,
+   `terminal:true+outcome | terminal:false+plies+objectiveState` union; and add the sealed
+   `derived.citation.attribution@1` derivation plus exact `runtime.evidence_ref@1` binding over the
+   versioned source-attribution registry. The matching source adapters change in the same commit.
+   Recompile F1 and require exactly 112 post-P presentation pairs,
    all with buildable operands. P changes no component, module, seat, content or schema.
 2. **A — sealed component foundation and current consumers.** Land the component schemas,
    projection-keyed adapter registry, process seal, closed wire/parser, coverage classes and the
@@ -406,10 +445,10 @@ The authoring authority for the current population is
 `make evidence-presentation-second-author-repair`. The compact family table still re-derives the
 117 pre-repair non-machine pairs. The controlling exact row image classifies all 20 consumers,
 removes the five internal-operation pairs from the presentation population, and therefore covers
-**112 pre-P presentation pairs: 104 immediately adaptable, seven operand repairs and one
-selection-only binding removal**. Checkpoint P removes that selection binding and repairs the seven
-pair occurrences through six atomic source operations, yielding **exactly 111 post-P presentation
-pairs**, all adaptable. Adding, removing or changing a live form or reachability class fails set
+**112 pre-P presentation pairs: 100 immediately adaptable, eleven operand repairs and one
+selection-only binding removal**. Checkpoint P removes that selection binding, repairs the eleven
+pair occurrences and adds one source-bound citation pair through seven atomic source operations,
+yielding **exactly 112 post-P presentation pairs**, all adaptable. Adding, removing or changing a live form or reachability class fails set
 equality until this RFC is amended.
 
 The exact bounded families are below. `forms = binding` means every live non-machine form on that
@@ -421,8 +460,8 @@ the plan and are mandatory fields, so this table is an index rather than a secon
 | authoring evidence records | 4 | `structured_document` | binding |
 | pivotal marker | 7 | `enum_state` | binding |
 | structural square sets | 32 | `square_set + enum_state` | binding |
-| named structure, non-board | 4 | `enum_state` | binding |
-| named structure, board | 1 | **P: retain exact matched-witness squares** ([[D2047]]) | binding after repair |
+| named structure, non-board | 4 | **P: typed id/name plus `named_structure_id@1` label** | binding after repair |
+| named structure, board | 1 | **P: the same identity plus exact matched-witness squares** ([[D2047]]) | binding after repair |
 | engine trajectory | 1 | `magnitude_trail` | binding |
 | piece route | 1 | `move_path` | binding |
 | structural delta | 2 | `enum_state + square_set` | binding |
@@ -435,11 +474,12 @@ the plan and are mandatory fields, so this table is an index rather than a secon
 | recorded consequence / fork / move | 5 | consequence's 3 pairs wait on P's discriminated operands; fork/move use `fact_statement` | binding after repair |
 | story evaluation / last-level / title / import | 8 | `magnitude` and/or `fact_statement` | binding |
 | shape firing | 3 | `enum_state` | binding |
-| Explorer population | 1 | `distribution + outcome_split` | binding |
+| Explorer population | 1 | `distribution + outcome_split + count_with_denominator` | binding |
 | Maia policy | 1 | `distribution` | binding |
 | transition counts / states | 14 | `magnitude + enum_state` / `enum_state` | binding |
 | opponent-selection family | 4 | **P: non-presentational machine operation; no component** | remove visual forms |
-| runtime evidence / reference resolution | 6 | `structured_document` / `fact_statement + citation` | binding |
+| runtime evidence / reference resolution | 6 | source records as `structured_document`; resolution as `fact_statement` | binding |
+| source-bound citation | +1 at P | `citation` from sealed resolution + exact source item + registered attribution | binding after repair |
 | repertoire population | 1 | **P: non-presentational machine operation; no component** | remove visual forms |
 | story rank | 1 | **P: selection-only machine condition** ([[D2048]]) | remove visual forms |
 
@@ -732,9 +772,13 @@ budget, and draws it. A component that queries anything is the defect the dossie
   proportion**; a `numerator === 0` against a real denominator renders *"0 of 25"*, which is
   information. §4's distinction again.
 - **Forms:** `list`, `sentence`, `card` (→ `panel`).
-- **Replaces:** the truncation and coverage numbers in `App.svelte`'s repertoire surfaces,
-  `CompareView.svelte:92`'s `{node.checkpointRefs.length}`, and the seat-cap statements §3.1
-  requires.
+- **First production binding:**
+  `inspector.corpus@1 → human.explorer.population@1` constructs one component per displayed move
+  from its retained `playedCount` numerator and the same response's `total` denominator. It sits in
+  the named `population_distribution` composition beside `distribution` and `outcome_split`; all
+  three share the same sealed population receipt. This is a real current Inspector operation, not
+  a synthetic component fixture. Later uses may replace the truncation/coverage numbers in
+  `App.svelte` and `CompareView.svelte`, but those are not counted as consumers until bound.
 
 #### 3.8 `citation` — an attributed reference to a source
 
@@ -772,6 +816,16 @@ budget, and draws it. A component that queries anything is the defect the dossie
   it produces the registered `citation_content_absent` abstention. Inspector provenance chrome may
   still show its metadata. Wrong-source swaps and metadata-only prose manufacture are permanent
   negatives ([[D1666]]).
+- **Constructible source path:** Checkpoint P registers `derived.citation.attribution@1`. Its only
+  operation consumes the sealed `run.record.evidence_ref_resolution@1` plus exactly one sealed
+  source item already admitted to the same `runtime.evidence_ref@1` view. The sealed
+  `SOURCE_ATTRIBUTION_REGISTRY` maps that exact source projection to either a deployment-artifact
+  receipt (Stockfish or the exact Maia model) or a remote-endpoint receipt (Lichess tablebase).
+  The derivation requires equal evidence-reference, source-receipt and content digests and emits
+  the complete `CitationOperand`. Missing licence or revision metadata yields
+  `source_attribution_absent`; it cannot be filled from `sourceLabel`, a URL guess or model
+  knowledge. The Maia weight-licence residual recorded by the release-platform audit therefore
+  produces honest absence until that deployment metadata is resolved.
 
 #### 3.9 `enum_state` — a categorical value from a closed vocabulary
 
@@ -839,8 +893,12 @@ budget, and draws it. A component that queries anything is the defect the dossie
 - **Renderer authority:** `FACT_STATEMENT_RENDERERS` is derived set-equal to the exact adapter rows
   whose component or named composition contains `fact_statement`. Every row keys one
   `consumer@version × projection@version` adapter to one `FactStatementRendererId`, literal output
-  forms and one or more `{when, operands, template}` variants. Templates have no operand outside
-  the adapter's retained image. Checkpoint, objective, fork, move, imported-result, title,
+  forms and one or more `{when, operands, formatters, template}` variants. `formatters` is
+  set-equal to `operands` and every value is one closed formatter id: total objective/outcome/PGN
+  vocabularies, integer, SAN, registered story-title or bound-evidence text. Templates have no
+  operand outside the adapter's retained image and never interpolate an unformatted value.
+  Opaque checkpoint ids remain retained metadata; checkpoint prose uses the recorded ply offset
+  unless the pack supplies a separately registered display label. Checkpoint, objective, fork, move, imported-result, title,
   evidence-reference and both consequence arms are enumerated in the author plan; changing any
   template operand changes bytes. A renderer swap between two admitted pairs, an undeclared
   operand or a caller-provided sentence fails before sealing.
@@ -891,15 +949,18 @@ budget, and draws it. A component that queries anything is the defect the dossie
         readonly sourceReceipt: SourceOrProviderReceipt;
       };
   ```
-  `PRESENTATION_ABSTENTION_ROWS` has one exact row for every presented adapter except the
-  selection-only removal. Each row carries its adapter key, registered question id and literal
-  terminal-reason subset. `PRESENTATION_QUESTIONS` is derived set-equal to those question ids and
-  supplies the learner label. `PRESENTATION_ABSENCE_REASONS` is the closed six-member registry
-  (`no_witness`, `not_recorded`, `below_floor`, `provider_unavailable`, `provider_failed`,
-  `content_absent`); provider and authored families receive explicit subsets in the author plan.
-  Pending is deliberately absent because it is lifecycle state, not a terminal reason. The
-  compiler joins projection/provider result and module empty behavior to one admitted reason;
-  callers cannot add a string. `never_requested` is represented by the unopened on-request module door and constructs
+  `PRESENTATION_ABSTENTION_ROWS` is derived from exact adapters **and their component
+  `emptyBehavior`**. `silent` produces no row. `stated_absence` and `unavailable_source` produce
+  one row carrying adapter key, question, projection, producer, empty behavior and a total
+  source-reason map. `PRESENTATION_QUESTIONS` is derived set-equal to those question ids and
+  supplies the learner label. `PRESENTATION_SOURCE_REASON_LABELS` is set-equal to the union of
+  literal projection abstention reasons plus shared source-result reasons; the receipt retains the
+  exact source reason and maps it to a learner absence category without erasing it. In particular,
+  `outside_tablebase_domain`, `empty_population`, `model_failure`, `input_abstained` and
+  `no_recorded_trail` remain distinguishable. Pending is deliberately absent because it is
+  lifecycle state, not a terminal reason. The compiler joins projection/provider result and module
+  empty behavior to one admitted mapping; callers cannot add a string. `never_requested` is
+  represented by the unopened on-request module door and constructs
   no abstention component. A `pending` receipt has **no terminal absence or source receipt**; a
   settled abstention has both. Pending, withheld, unavailable, failed and genuine empty are
   therefore distinct by type rather than copy.
@@ -982,10 +1043,12 @@ are stated here because they are the ones an implementer would get wrong:
 `design/05:41` — *"Absence is stated, never simulated"* — is an invariant with no rendering.
 This section gives it one.
 
-**Rule 4a — every component declares `emptyBehavior` and every component renders it.** The three
-classes are `learner-modules` §1.10's, unchanged: `silent`, `stated_absence`,
-`unavailable_source`. A component whose operand is absent renders `abstention` (§3.11) **in its
-own seat**, at its own form. It does not disappear, and it does not render a zero.
+**Rule 4a — every component declares `emptyBehavior`, and the three values are intentionally
+different.** The classes are `learner-modules` §1.10's, unchanged: `silent`, `stated_absence`,
+`unavailable_source`. `silent` produces no component and no abstention row—an absent authored
+claim is not an event. `stated_absence` and `unavailable_source` render `abstention` (§3.11) **in
+their own seat**, at their own form, but only after the owning workflow actually asked the
+registered question. Neither renders a zero. An unsolicited question never creates absence UI.
 
 **Rule 4b — abstention is structurally distinct from zero, not merely worded differently.** The
 three cases must be told apart by a blind test:
@@ -1013,7 +1076,8 @@ whitespace. It never fills the gap with a locally-distinctive-but-useless fact �
 one component to fill the seat, which reads as more evidence than exists.
 
 **Rule 4e — a component never renders a placeholder, skeleton or spinner as though it were
-content.** A sealed `pending` receipt renders the registered pending abstention, and only a settled
+content.** A sealed `pending` receipt renders the registered pending state only for a requested
+question, and only a settled
 receipt with the same request id/generation may replace it. A newer generation makes the old
 response unrenderable. Simulated content, including a greyed-out fake bar, is the *simulated
 absence* `design/05:41` prohibits.
@@ -1316,9 +1380,10 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
    whose member-form union equals the binding forms; every adapter maps back to one such pair.
    *RED:* add one learner binding without an adapter; retire/unbind a projection while
    leaving its adapter. Both fail set equality. Adding a machine-only projection creates no fake
-   widget. The author checkpoint starts at **112 real pre-P presentation pairs: 104 adaptable,
-   seven explicit operand-repair occurrences and one visual-binding removal**. Checkpoint P must
-   yield **111/111 adaptable**. *Wrong impl:* treating role or `list/panel` as route reachability,
+   widget. The author checkpoint starts at **112 real pre-P presentation pairs: 100 adaptable,
+   eleven explicit operand-repair occurrences and one visual-binding removal**. Checkpoint P must
+   yield **112/112 adaptable** after removing the rank binding and adding the source-bound citation
+   binding. *Wrong impl:* treating role or `list/panel` as route reachability,
    walking every catalogue projection, or counting a repair placeholder as executable.
 3. **The label registry is set-equal to the derived set of learner-reachable closed unions, and
    every vocabulary is total over its union type.** *RED:* add a member to `ObjectiveState`
@@ -1355,8 +1420,11 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
    `presentation-contract.ts`, plus a positive test that
    `count_with_denominator({numerator: 2, denominator: 25, …})` renders both terms. *RED:* add
    `sharePct` as a component operand field — the shape `api.ts:497` hands us — and observe the
-   assertion fail. *Wrong impl:* accepting the API's pre-computed `sharePct`, which loses the
-   denominator at the exact seam this criterion guards.
+   assertion fail. The positive production reach is set-equal to the
+   `inspector.corpus@1 → human.explorer.population@1` adapter member; deleting that member makes
+   component coverage fail, so a synthetic state matrix cannot complete the component alone.
+   *Wrong impl:* accepting the API's pre-computed `sharePct`, which loses the denominator at the
+   exact seam this criterion guards.
 9. **`replaceAll("_", " ")` appears in zero files outside `apps/web/src/lib/labels/`.** *RED:*
    restore `DrillScreen.svelte:385`. *Wrong impl:* a lint rule scoped to `.svelte`, which misses
    `screen-model.ts:88` and `transition-sentences.ts:28`.
@@ -1416,11 +1484,13 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     ids covered by the state matrix. *RED:* add a component without its five states. *Wrong
     impl:* a shared parameterised test that skips inapplicable states silently — the matrix
     asserts an explicit `not_applicable` declaration instead.
-18. **Scope fence and explicit predecessor.** Checkpoint P is set-equal to the six literal
+18. **Scope fence and explicit predecessor.** Checkpoint P is set-equal to the seven literal
     `MANIFEST_PRESENTATION_REPAIRS` operations and edits only their named catalogue/source/payload
     seams. Checkpoints A/B add no `EvidenceForm` member, no `ModuleDeclaration` field, no seat id,
-    no `AnswerDistance` member and no further `evidence-catalog.ts` edit. *RED:* add a seventh
-    catalogue edit or omit one named preimage/postimage. *Wrong impl:* one that "helpfully" adds a
+    no `AnswerDistance` member and no further `evidence-catalog.ts` edit. *RED:* add an eighth or
+    otherwise unlisted catalogue edit, or omit one named preimage/postimage. The seventh is the
+    versioned source-attribution registry plus `derived.citation.attribution@1`; it is not a generic
+    sibling lookup. *Wrong impl:* one that "helpfully" adds a
     `chart` form or module field, which would fork the design tier or collide with
     `module-registration`.
 19. **`register-check` is green with this RFC active**, and its `tabiya-claims` block reads
@@ -1438,7 +1508,7 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     sentinel all fail before Svelte. *Wrong impl:* a TypeScript interface around caller-built JSON.
 21a. **`fact_statement` cannot become a generic prose path.**
     `FACT_STATEMENT_RENDERERS` is set-equal to every exact adapter target containing
-    `fact_statement`; each id, output-form set, variant, operand list and template is literal.
+    `fact_statement`; each id, output-form set, variant, operand list, formatter map and template is literal.
     Every changed template operand changes output bytes. Literal caller text, a renderer id not
     declared for the pair, a source-digest swap, dropped operand and rendered-text mutation all
     fail before Svelte. A deterministic recorded-run fixture succeeds and remains distinct from
@@ -1448,12 +1518,13 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     `never_requested` as a receipt. Runtime negatives change event head, branch, node, disclosure
     boundary and digest independently and reject every stale response. *Wrong impl:* a component
     generation or node-revision counter parallel to the module/provider decision stamp. In
-    addition, `PRESENTATION_ABSTENTION_ROWS` is set-equal to every non-removal presentation adapter
-    and each row resolves one registered question plus a non-empty terminal-reason subset; pending
-    is absent from the reason registry. Missing, extra, wrong-provider and pending-as-terminal
-    mappings fail.
-22. **Checkpoint closeout is honest.** Checkpoint P records exactly six manifest/source repairs
-    and a 111-pair recensus. Checkpoint A records exactly which current presentation binding pairs
+    addition, `PRESENTATION_ABSTENTION_ROWS` is set-equal to exactly the non-removal adapters whose
+    target components declare `stated_absence | unavailable_source`; `silent` adapters are
+    set-disjoint. Each row resolves one registered question, exact projection/producer identity
+    and a non-empty source-reason map set-equal to that projection's declared reasons plus shared
+    result states. Missing, extra, collapsed, wrong-provider and pending-as-terminal mappings fail.
+22. **Checkpoint closeout is honest.** Checkpoint P records exactly seven manifest/source repairs
+    and a 112-pair recensus. Checkpoint A records exactly which current presentation binding pairs
     migrated and leaves the RFC `implementing`; checkpoint B alone may close the module/hint/arrow
     rows and archive after its real module operation and seats pass. None counts an empty coverage
     population as success.
@@ -1464,10 +1535,17 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 |---|---|
 | [[D2135]] | exact pair/form targets; named compositions carry explicit member/form rows and union to the binding |
 | [[D2136]] | all 20 consumers have source+operation reachability anchors; two backend operations are not presentation |
-| [[D2137]] | six-operation Checkpoint P and amended shared-resource pin; post-P census is 111 real pairs |
-| [[D2138]] | exact-pair renderer ids, variants, operands, templates and output forms are set-equal to fact targets |
-| [[D2139]] | every non-removal adapter has a registered question and non-empty terminal-reason subset |
+| [[D2137]] | superseded repair shape: seven-operation Checkpoint P; post-P census is 112 real pairs |
+| [[D2138]] | exact-pair renderer ids, variants, operands, formatter maps, templates and output forms are set-equal to fact targets |
+| [[D2139]] | abstention population derives from component empty behavior and exact source reasons |
 | [[D2140]] | consequence is a discriminated terminal/outcome or nonterminal/plies/objectiveState payload |
+| [[D2157]] | all five named-structure pairs retain typed identity/name/provenance/squares and share one total label authority |
+| [[D2158]] | sealed citation derivation joins exact resolution/source/content identities to complete registered attribution |
+| [[D2159]] | formatter keys are set-equal to every fact renderer's operands; opaque ids never become prose |
+| [[D2160]] | all three consequence renderers partition terminal and nonterminal arms |
+| [[D2161]] | abstention lifecycle and plan rows retain question/projection/producer plus exact source reasons |
+| [[D2162]] | silent targets are set-disjoint from abstention rows; requested source failures stay visible |
+| [[D2163]] | Explorer population's real Inspector adapter owns the denominator component |
 
 ## Discharges
 
@@ -1542,6 +1620,12 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-08-30 — third author repair for [[D2157]]–[[D2163]]. Named-structure identity and witness
+  geometry now move together; citation becomes a sealed source-bound derivation; fact templates
+  carry total formatter maps; all consequence consumers cover both union arms; abstention retains
+  exact source authority while silent claims stay silent; and the Explorer Inspector supplies the
+  first real denominator component path. The maintained author contracts pass 5 + 6 + 7 arms plus
+  lifecycle typecheck. Fresh review and [[D1672]] still block acceptance and implementation.
 - 2026-08-30 — returned by third fresh independent buildability review on [[D2157]]–[[D2163]].
   Named-structure and citation targets are not constructible from their admitted operands; fact
   templates bypass labels; two consequence renderers omit the nonterminal arm; abstention loses

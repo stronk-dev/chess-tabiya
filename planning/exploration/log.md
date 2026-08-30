@@ -12479,3 +12479,20 @@ stored Advanced field cannot pass while gameplay or opinionated workflows remain
 Maintained contracts pass 7+7+6+8 arms and the new author contract passes 4 arms plus TypeScript.
 The RFC remains draft pending a fourth fresh review, and D1639 remains an explicit owner ruling.
 Receipt: `planning/assistance-config-register/third-author-repair-2026-08-30.md`.
+
+## 2026-08-30 — Evidence presentation D2157–D2163 third author repair
+
+Repaired the seven presentation-authority returns without implementing learner UI or writing
+protected design. Named structures now retain typed identity, registered labels and exact witness
+geometry across source/catalogue/adapters; citation is a sealed multi-input derivation over one
+resolution plus one exact source item; and fact renderers have operand-set-equal typed formatters
+with complete consequence variants.
+
+Abstention now preserves question/projection/producer and exact source reason, derives its
+population from declared empty behavior, and leaves silent claims truly silent. The existing
+Explorer Inspector composition gives `count_with_denominator` its first real production path.
+Checkpoint P is seven atomic operations and produces 112/112 adaptable presentation pairs after
+removing story-rank display and adding the citation binding. Maintained author contracts pass
+5+6+7 arms plus lifecycle typecheck. The RFC remains draft pending fresh review and owner/Claude
+design amendment [[D1672]]; no production, schema, content or archive byte changed. Receipt:
+`planning/platform-alignment/evidence-presentation/third-author-repair-2026-08-30.md`.

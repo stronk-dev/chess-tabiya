@@ -10,6 +10,7 @@ import {
   PRESENTATION_ADAPTER_ROWS,
   PRESENTATION_CONSUMER_CLASSES,
   PRESENTATION_QUESTIONS,
+  POST_P_PRESENTATION_ADAPTER_ROWS,
   type ExactPresentationAdapterRow,
 } from "../d1862-presentation-adapter-plan/plan.js";
 
@@ -36,8 +37,8 @@ describe("evidence-presentation D2135-D2140 second author repair", () => {
     expect(liveVisual).toHaveLength(112);
     expect(PRESENTATION_ADAPTER_ROWS).toHaveLength(112);
     expect(new Set(PRESENTATION_ADAPTER_ROWS.map((row) => row.key))).toEqual(new Set(liveVisual.map((row) => row.key)));
-    expect(Object.groupBy(PRESENTATION_ADAPTER_ROWS, (row) => row.disposition).adapt).toHaveLength(104);
-    expect(Object.groupBy(PRESENTATION_ADAPTER_ROWS, (row) => row.disposition).repair_projection_operands).toHaveLength(7);
+    expect(Object.groupBy(PRESENTATION_ADAPTER_ROWS, (row) => row.disposition).adapt).toHaveLength(100);
+    expect(Object.groupBy(PRESENTATION_ADAPTER_ROWS, (row) => row.disposition).repair_projection_operands).toHaveLength(11);
     expect(Object.groupBy(PRESENTATION_ADAPTER_ROWS, (row) => row.disposition).remove_visual_binding).toHaveLength(1);
     for (const current of liveVisual) expect(rowByKey.get(current.key)?.forms).toEqual(current.forms);
     for (const row of PRESENTATION_ADAPTER_ROWS.filter((item) => item.disposition !== "remove_visual_binding")) {
@@ -67,14 +68,15 @@ describe("evidence-presentation D2135-D2140 second author repair", () => {
   });
 
   it("D2137 publishes one predecessor for every catalogue/payload mutation", () => {
-    expect(MANIFEST_PRESENTATION_REPAIRS).toHaveLength(6);
-    expect(new Set(MANIFEST_PRESENTATION_REPAIRS.map((row) => row.id))).toHaveLength(6);
+    expect(MANIFEST_PRESENTATION_REPAIRS).toHaveLength(7);
+    expect(new Set(MANIFEST_PRESENTATION_REPAIRS.map((row) => row.id))).toHaveLength(7);
     expect(MANIFEST_PRESENTATION_REPAIRS.map((row) => row.id).sort()).toEqual([
       "consequence-payload", "internal-opponent", "internal-repertoire", "internal-story-rank",
-      "named-structure-geometry", "pack-phase-payload",
+      "named-structure-geometry", "pack-phase-payload", "source-bound-citation",
     ]);
     expect(rfc).toMatch(/Checkpoint P — manifest presentation repair predecessor/u);
-    expect(rfc).toMatch(/exactly 111 post-P presentation pairs/u);
+    expect(rfc).toMatch(/exactly 112 post-P presentation pairs/u);
+    expect(POST_P_PRESENTATION_ADAPTER_ROWS).toHaveLength(1);
     expect(rfc).not.toMatch(/no edit to\s+`packages\/runtime\/src\/evidence-catalog\.ts`/u);
   });
 
@@ -94,14 +96,14 @@ describe("evidence-presentation D2135-D2140 second author repair", () => {
   });
 
   it("D2139 gives every abstaining adapter an exact question and terminal-reason image", () => {
-    const abstaining = PRESENTATION_ADAPTER_ROWS.filter((row) => row.disposition !== "remove_visual_binding");
-    expect(PRESENTATION_ABSTENTION_ROWS).toHaveLength(abstaining.length);
-    expect(new Set(PRESENTATION_ABSTENTION_ROWS.map((row) => row.adapterKey))).toEqual(new Set(abstaining.map((row) => row.key)));
+    const silent = new Set(PRESENTATION_ADAPTER_ROWS.filter((row) => row.familyId === "authored_claim" || row.familyId === "authored_claim_delivery").map((row) => row.key));
+    expect(PRESENTATION_ABSTENTION_ROWS.some((row) => silent.has(row.adapterKey))).toBe(false);
     for (const row of PRESENTATION_ABSTENTION_ROWS) {
       expect(PRESENTATION_QUESTIONS[row.questionId]).toBe(row.questionLabel);
       expect(row.questionLabel).not.toMatch(/[a-z]+[._][a-z]+@\d/u);
-      expect(row.reasons.length).toBeGreaterThan(0);
-      for (const reason of row.reasons) expect(PRESENTATION_ABSENCE_REASONS[reason]).toBeTruthy();
+      expect(row.sourceReasonMap.length).toBeGreaterThan(0);
+      for (const reason of row.sourceReasonMap) expect(PRESENTATION_ABSENCE_REASONS[reason.learnerReason]).toBeTruthy();
+      expect(row.requestPolicy).toBe("only_after_owning_workflow_requested_question");
     }
     expect(Object.keys(PRESENTATION_ABSENCE_REASONS)).not.toContain("pending");
   });
@@ -110,9 +112,12 @@ describe("evidence-presentation D2135-D2140 second author repair", () => {
     const rows = PRESENTATION_ADAPTER_ROWS.filter((row) => row.familyId === "recorded_consequence");
     expect(rows).toHaveLength(3);
     for (const row of rows) expect(row.retained).toEqual(["context", "terminal", "outcome", "plies", "objectiveState"]);
-    const renderer = FACT_STATEMENT_RENDERERS.find((row) => row.rendererId === "consequence.guidance.voice_compare@1")!;
-    expect(renderer.variants.map((row) => row.when)).toEqual(["terminal=true", "terminal=false"]);
-    expect(renderer.variants.flatMap((row) => row.operands)).toEqual(["outcome", "plies", "objectiveState"]);
+    const renderers = FACT_STATEMENT_RENDERERS.filter((row) => row.rendererId.startsWith("consequence."));
+    expect(renderers).toHaveLength(3);
+    for (const renderer of renderers) {
+      expect(renderer.variants.map((row) => row.when)).toEqual(["terminal=true", "terminal=false"]);
+      expect(renderer.variants.flatMap((row) => row.operands)).toEqual(["outcome", "plies", "objectiveState"]);
+    }
     expect(MANIFEST_PRESENTATION_REPAIRS.find((row) => row.id === "consequence-payload")?.after).toMatch(/outcome.*plies.*objectiveState/u);
   });
 });

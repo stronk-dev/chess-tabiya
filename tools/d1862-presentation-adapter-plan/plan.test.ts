@@ -38,8 +38,8 @@ describe("D1862 exact presentation-adapter plan", () => {
 
   it("makes every served form literal and partitions repair rather than hiding it", () => {
     const dispositions = Object.groupBy(plannedRows, (row) => row.family.disposition);
-    expect(dispositions.adapt).toHaveLength(110);
-    expect(dispositions.repair_projection_operands).toHaveLength(6);
+    expect(dispositions.adapt).toHaveLength(106);
+    expect(dispositions.repair_projection_operands).toHaveLength(10);
     expect(dispositions.remove_visual_binding).toHaveLength(1);
 
     for (const row of plannedRows) {
