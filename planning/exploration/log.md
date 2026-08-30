@@ -12465,3 +12465,17 @@ pass 3+6 arms, the new 5-arm/typecheck contract passes, and the value-authority 
 contracts pass, including an exact-route assertion for both recorded readings. Both RFCs remain
 draft/held pending their named dependencies and fresh review.
 Receipt: `planning/evidence-foundation-ux/semantic-collectors-promotion-second-author-repair-2026-08-30.md`.
+
+## 2026-08-30 — AssistanceConfig register D2190–D2193 author repair
+
+Repaired the third fresh return without implementing C9, a register or v5. The graph now admits
+only the two type-proved generic field writes and their literal calls; represents imports,
+re-exports, helpers, components, templates and cycles explicitly; and derives production discovery
+from the whole pnpm workspace while separating product influence from declaration-only observation.
+
+The v5 claim expands from ten to fifteen exact symbols. Its added population is the real
+DrillScreen→GuidedHintSeat→RunState request path plus both exhaustive preset/context columns, so a
+stored Advanced field cannot pass while gameplay or opinionated workflows remain nine-field.
+Maintained contracts pass 7+7+6+8 arms and the new author contract passes 4 arms plus TypeScript.
+The RFC remains draft pending a fourth fresh review, and D1639 remains an explicit owner ruling.
+Receipt: `planning/assistance-config-register/third-author-repair-2026-08-30.md`.

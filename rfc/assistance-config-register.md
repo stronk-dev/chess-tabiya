@@ -1,11 +1,12 @@
 # RFC: AssistanceConfig shared-resource register
 
-- **Status:** draft — RETURNED by third fresh independent review 2026-08-30 on
-  [[D2190]]–[[D2193]]. The D2113–D2117 repair survives, but bootstrap forbids two computed writes
-  already present at v4; the claimed v5 delta omits the in-run hint and preset/clamp consumers; the
-  closed node vocabulary cannot represent its own import/call/alias closure; and discovery omits
-  production packages outside web/runtime. `make assistance-register-third-fresh-review` passes
-  4/4. C9/register/v5 implementation remains forbidden.
+- **Status:** draft — author-repaired 2026-08-30 on [[D2190]]–[[D2193]]; fourth fresh independent
+  review required. The v4 bootstrap now admits only type-proved closed computed writes; the v5
+  claim contains the real hint seat/store path and both exhaustive preset/clamp columns; traversal
+  nodes make imports, aliases, helpers, components and cycles representable; and workspace-derived
+  discovery classifies every production reach as authority, product consumer or declaration-only
+  observer. `make assistance-register-third-author-repair` is the positive author contract.
+  C9/register/v5 implementation remains forbidden pending fresh acceptance.
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it
@@ -89,16 +90,25 @@ The closed authority census is one executable graph, not a list of trusted roots
 kinds are closed and exhaustive:
 
 ```ts
-type AssistanceAuthorityKind =
+type AssistanceSemanticKind =
   | "shape_field" | "constructor" | "permission_projection"
   | "storage_key" | "storage_read" | "codec" | "migration"
   | "storage_write" | "serializer" | "advanced_projection" | "run_projection";
+
+type AssistanceTraversalKind =
+  | "callable" | "import_alias" | "reexport_alias"
+  | "component" | "template_operation" | "typed_field_write";
+
+type AssistanceObservationKind = "declaration_observer";
+type AssistanceAuthorityKind =
+  | AssistanceSemanticKind | AssistanceTraversalKind | AssistanceObservationKind;
 
 interface AssistanceAuthorityNode {
   readonly kind: AssistanceAuthorityKind;
   readonly module: string;       // workspace-relative production path
   readonly symbol: string;       // declaration or generated Svelte operation identity
   readonly bodyDigest: string;   // canonical semantic subtree, 24 lowercase hex
+  readonly influence: "authority" | "product_consumer" | "observer";
 }
 
 type AssistanceAuthorityEdgeKind =
@@ -112,13 +122,53 @@ interface AssistanceAuthorityEdge {
 }
 ```
 
-The graph builder scans every non-test production `.ts` and `.svelte` module under
-`apps/web/src` and `packages/runtime/src`. TypeScript nodes come from the pinned compiler's
-`Program` and `TypeChecker`. For Svelte, the pinned `svelte/compiler` parser extracts the instance
-script into a virtual TypeScript source and walks every template expression separately; a
-component-level generated symbol is the component filename plus the accessed assistance property.
-An unsupported script language, dynamic computed assistance key, unresolved import/call target or
-template expression the walker cannot classify is a named hard failure, never an omitted node.
+The graph builder derives the production workspace from `pnpm-workspace.yaml`, resolves every
+matched package's `package.json` plus TypeScript project, and scans every non-test production
+`.ts` and `.svelte` module reachable from that package's build/export roots. It does not hard-code
+web, runtime, server or a current package count. Test/config/generated-output roots are classified
+and excluded by one literal policy; a new workspace package is inside discovery on its first
+committed production source file. TypeScript nodes come from one pinned compiler `Program` and
+`TypeChecker` spanning those projects. For Svelte, the pinned `svelte/compiler` parser extracts the
+instance script into a virtual TypeScript source and walks every template expression separately;
+a component and each assistance-relevant template operation receive stable generated symbols.
+Thus every non-test production `.ts` and `.svelte` module in the derived workspace is either
+reachable/classified or explicitly outside the build/export roots; no package-local scan list is
+an authority.
+
+Every resolved assistance reach receives exactly one `influence`. `authority` constructs,
+permits, persists, parses, migrates or serializes values. `product_consumer` reads a value to alter
+runtime/UI behavior or forwards it into another product operation. `observer` may inspect the
+declaration/type to emit a census or developer report but cannot read a runtime value or influence
+permissions, persistence or rendering. The current server
+`declaration-census.ts#assistanceEntries` is an explicit observer positive: it remains in the
+closure receipt but its body does not move the contract digest. Turning that same module into a
+runtime `config.guided` reader reclassifies it as a product consumer and moves identity.
+Unknown/mixed influence is a named refusal; “server” or “tooling” is never itself an exemption.
+
+Imports, re-exports, ordinary callables, wrapper helpers, components and template operations are
+literal traversal nodes, not edges whose endpoints cannot be represented. The current
+`packages/runtime/src/index.ts#AssistanceConfig` re-export therefore remains visible between the
+runtime declaration and both web imports. Two aliases may converge on the one storage writer
+without becoming two writers. Traversal uses resolved symbol identity plus a visited set; a cycle
+is retained as a sorted strongly connected component and terminates, while an unresolved dynamic
+call or ambiguous symbol is a named failure. Every source-to-semantic-target path is retained in
+the receipt; no transparent-edge contraction or hand-built shortcut exists.
+
+An unsupported script language, unresolved import/call target or template expression the walker
+cannot classify is a named hard failure, never an omitted node. A computed assistance field is
+admitted only as a `typed_field_write` when the TypeChecker proves all of the following:
+
+1. its key type is set-equal to `keyof Omit<AssistanceConfig,"version">`, not merely assignable;
+2. its value type is exactly `AssistanceConfig[Key]` under that same type parameter;
+3. the object update spreads exactly one resolved `AssistanceConfig` value and writes no other
+   computed property; and
+4. every production call site supplies one literal member of that closed key set and is represented
+   by its own call/template-operation edge.
+
+This admits the current `AssistanceSettings.set` and `DrillScreen.setAssistance` definitions and
+their literal UI calls. A `string`-widened key, `version`, an unknown literal, `any`, a cast used to
+erase the constraint or an unregistered indirect call fails. No generic “dynamic key” exception is
+introduced ([[D2190]]).
 
 Canonical subtree bytes are a recursive tuple of TypeScript/Svelte syntax kind, resolved symbol
 identity, operator and literal value. They exclude trivia, source offsets, local binding names and
@@ -129,17 +179,20 @@ truncated to 24 lowercase hex. Renaming a local variable or reformatting is stab
 storage namespace, version branch, migration default, unknown-field rule, serializer, constructor,
 permission field or Advanced/run projection changes the graph.
 
-Discovery begins at every resolved `AssistanceConfig` field reference and every literal or
+Discovery begins at every resolved `AssistanceConfig` declaration, import, field reference and every literal or
 computed access to the `tabiya.assistance.` namespace, then follows imports, calls and property
 reads/writes in both directions until closed. It must contain exactly one storage-key constructor,
 one production reader and one writer; every namespace access must be dominated by those operations.
 The reader and writer call the same key constructor. The writer serializes the current-head object;
 the reader parses/migrates to that same head. `SILENT_ASSISTANCE`, `PROFILE_DEFAULTS`,
 `permittedAssistance`, the Advanced settings projection and the run-screen projection are mandatory
-nodes. A second namespace reader/writer, validator, migrator, serializer, indirect alias around one,
-or assistance-property consumer outside the graph fails closure before transition comparison. An
-unimported file with no assistance field or namespace reach is outside the graph; tests/docs are
-ignored.
+semantic nodes. `AssistanceSettings.set`, `DrillScreen.setAssistance`, their literal calls, the
+runtime barrel re-export and every classified workspace reach are mandatory traversal/observation
+nodes. A second namespace reader/writer, validator, migrator, serializer or unresolved alias fails
+closure before transition comparison, as does any unclassified assistance-property consumer. An
+unimported file with no assistance field or namespace reach is outside the graph; a resolved type
+import is a reach and must be classified. Tests/docs are ignored by the explicit root policy, not
+by substring accident.
 
 The graph is explicitly phase-aware ([[D2113]]). Bootstrap v4 admits and seals the current
 `validV4` plus `migrate` operations in `assistance-preference.ts`; it does **not** pretend the future
@@ -158,22 +211,33 @@ This process RFC itself claims `none`: it changes the register system, not `Assi
 On this RFC's implementation, `hint-distance.md` changes its block atomically to:
 
 ```text
-assistance-config | lane 5 | apps/web/src/lib/AssistanceSettings.svelte#AssistanceSettings.hintDistance; apps/web/src/lib/assistance-preference.ts#loadAssistance; apps/web/src/lib/assistance-preference.ts#migrate; apps/web/src/lib/assistance-preference.ts#saveAssistance; apps/web/src/lib/assistance-preference.ts#validV4; packages/runtime/src/assistance-codec.ts#parseAssistanceConfig; packages/runtime/src/assistance.ts#AssistanceConfig.hintDistance; packages/runtime/src/assistance.ts#AssistanceConfig.version; packages/runtime/src/assistance.ts#SILENT_ASSISTANCE; packages/runtime/src/assistance.ts#permittedAssistance
+assistance-config | lane 5 | apps/web/src/lib/AssistanceSettings.svelte#AssistanceSettings.hintDistance; apps/web/src/lib/DrillScreen.svelte#DrillScreen.hintDistance; apps/web/src/lib/GuidedHintSeat.svelte#GuidedHintSeat.requestHint; apps/web/src/lib/assistance-preference.ts#loadAssistance; apps/web/src/lib/assistance-preference.ts#migrate; apps/web/src/lib/assistance-preference.ts#saveAssistance; apps/web/src/lib/assistance-preference.ts#validV4; apps/web/src/lib/run-state.ts#RunStateStore.requestHint; packages/runtime/src/assistance-codec.ts#parseAssistanceConfig; packages/runtime/src/assistance.ts#AssistanceConfig.hintDistance; packages/runtime/src/assistance.ts#AssistanceConfig.version; packages/runtime/src/assistance.ts#SILENT_ASSISTANCE; packages/runtime/src/assistance.ts#permittedAssistance; packages/runtime/src/presets.ts#PRESET_DECLARATIONS.config.hintDistance; packages/runtime/src/presets.ts#WORKFLOW_CONTEXT_POLICIES.configClamp.hintDistance
 ```
 
 Deleted legacy operations are valid tokens because the transition reader resolves the union of
 parent and current graphs. This list is not guessed from filenames: the author repair derives it
 from the exact v5 obligations and current graph. C9 implementation must reproduce it from source
 snapshots before installing the claim. If it finds another changed constructor, permission,
-persistence or projection node, the claim and this RFC are amended before implementation rather
-than weakening set equality. `intent-presets` owns its exhaustive v5 preset/clamp columns as a
-named consumer discharge in the same product landing; that compiler is the checked consumer
-boundary, not a persistence-authority node mislabeled here.
+persistence, traversal or product-consumer node, the claim and this RFC are amended before
+implementation rather than weakening set equality. The last five added consumer tokens close one
+non-vacuous path: `DrillScreen.hintDistance` passes the effective rung ceiling into
+`GuidedHintSeat.requestHint`, which invokes `RunStateStore.requestHint`;
+`PRESET_DECLARATIONS.config.hintDistance` supplies every preset value and
+`WORKFLOW_CONTEXT_POLICIES.configClamp.hintDistance` supplies every context ceiling. Removing the
+seat/store edge or either exhaustive column fails C9.6. This process contract does not choose their
+values: [[D1639]] must be owner-ruled and mirrored in both product RFCs before this exact claim may
+land.
 
-`intent-presets.md` retains `none`, names `hint-distance` as the v5 owner/dependency, and updates
-its stale “returned to research” prose to “awaiting the [[D1639]] owner ceiling ruling, then repeat
-independent review.” Its product implementation still adds the exhaustive preset/clamp columns in
-the v5 landing; dependency is not a second claim.
+`intent-presets.md` retains its current claim disposition, names `hint-distance` as the v5
+AssistanceConfig owner/dependency, and updates its stale “returned to research” prose to “awaiting
+the [[D1639]] owner ceiling ruling, then repeat independent review.” Its product implementation
+adds the exhaustive preset/clamp columns in the same v5 landing; dependency is not a second
+AssistanceConfig claim. Any separate shared wires or vocabularies that `intent-presets` must
+register remain its own returned [[D2178]] work and are not laundered here.
+
+The dependent phase remains: awaiting the [[D1639]] owner ceiling ruling, then repeat independent review.
+This sentence is deliberately literal so cross-RFC status checks do not infer acceptance from the
+process repair.
 
 ### 2. Tree derivation is semantic and formatting-insensitive
 
@@ -188,6 +252,7 @@ interface AssistanceConfigTree {
   readonly authorityNodes: readonly AssistanceAuthorityNode[];
   readonly authorityEdges: readonly AssistanceAuthorityEdge[];
   readonly authorityDigest: string;
+  readonly closureDigest: string;
   readonly digest: string;
 }
 ```
@@ -211,14 +276,21 @@ The normalized digest contains the resolved values, not alias names or source sp
 an inline union with an equivalent alias is formatting-equivalent; changing the tuple behind that
 alias is semantic drift.
 
+The closure receipt retains every node/edge and hashes them as `closureDigest`. The authority graph
+and `authorityDigest` filter out only nodes with `influence:"observer"` and their observation-only
+edges; authority, traversal and product-consumer nodes all remain. This makes declaration-census
+refactoring visible to closure without spuriously versioning AssistanceConfig, while a consumer
+reclassification or new product path necessarily changes authority identity.
+
 For the contract digest, field names and each member domain are sorted and encoded as canonical
-JSON together with `head` and the full authority graph/digest, then hashed with SHA-256 and
+JSON together with `head` and the filtered authority graph/digest, then hashed with SHA-256 and
 truncated to the existing register convention's 12 lowercase hex characters. Comments, whitespace,
 local binding names and source ordering therefore do not move the digest; adding/removing/renaming a
 field, changing a literal, changing the numeric head, or changing any authority node/edge does.
 
 There is no legal fixed-head semantic drift ([[D2115]]). Any authority-graph change—key, codec,
-migration, unknown-field policy, serializer, constructor, permission or UI/run projection—changes
+migration, unknown-field policy, serializer, constructor, permission, typed field write, preset
+column or UI/run product projection—changes
 the registered digest and is rejected unless the same atomic commit advances the head through the
 prior exact claim. A refactor that is genuinely semantic-equivalent leaves canonical graph bytes
 unchanged. A refactor the grammar cannot prove equivalent takes a new lane; the checker does not
@@ -299,7 +371,7 @@ the staged/first-parent transition. A head advance is legal only when all of the
 3. the current state removes that claim, appends exactly one Landed row and names the same RFC as
    owner; and
 4. the complete graph-derived assistance source changes are set-equal to the prior claim's exact
-   ten path/symbol tokens in §1. Additions, removals, body changes and incident-edge changes all
+   fifteen path/symbol tokens in §1. Additions, removals, body changes and incident-edge changes all
    participate; an unrelated assistance symbol, undeclared path or omitted deletion fails.
 
 At v4, C9.1 requires the exact legacy shape: `validV4` and `migrate` are the parser/migration
@@ -332,7 +404,7 @@ or parses a lane claim as an evidence member.
 ### 5. Able-to-fail fixtures
 
 `tools/register-check.test.mjs` supplies source strings/temporary trees for every branch. The
-fixture table's unit is **mutation class**; total thirty-eight:
+fixture table's unit is **mutation class**; total fifty-one:
 
 | # | mutation | required result |
 |---|---|---|
@@ -370,14 +442,28 @@ fixture table's unit is **mutation class**; total thirty-eight:
 | 32 | formatting, comments or local-binding rename inside an authority node | canonical graph and contract digest unchanged |
 | 33 | v5 leaves `validV4` or `migrate` beside the runtime codec | fail phase rule even when both accept the same values |
 | 34 | v5 has one runtime codec, no local parser/migrator and load/save share key plus codec | pass C9.1 before transition comparison |
-| 35 | v5 changes all ten declared graph nodes | exact symmetric-difference set and C9.6 pass |
+| 35 | v5 changes all fifteen declared graph nodes | exact symmetric-difference set and C9.6 pass |
 | 36 | v5 claim omits `saveAssistance`, `SILENT_ASSISTANCE`, `permittedAssistance`, Advanced projection or either deleted legacy operation | fail C9.6 |
-| 37 | add an AssistanceConfig consumer in TS or a Svelte template, or use a dynamic computed assistance field the graph cannot resolve | discovered node or named hard failure; never silently absent |
-| 38 | Svelte Advanced projection adds `hintDistance`, while an unsupported script/template construct is crossed separately | exact generated operation node; unsupported arm fails closed |
+| 37 | add an AssistanceConfig consumer in TS/Svelte, or use an unproved/broad computed field | discovered node or named hard failure; never silently absent |
+| 38 | Svelte Advanced and run projections add `hintDistance`, while an unsupported script/template construct is crossed separately | exact generated operation nodes; unsupported arm fails closed |
+| 39 | both current generic writers have `Key extends keyof Omit<AssistanceConfig,"version">`, `AssistanceConfig[Key]`, one config spread and literal registered calls | both `typed_field_write` nodes and all call edges pass v4 closure |
+| 40 | widen either generic key to `string`, `PropertyKey`, `any` or a strict superset | named computed-write refusal |
+| 41 | call either writer with `version` | named excluded-key refusal |
+| 42 | call either writer with an unknown literal | named unknown-key refusal |
+| 43 | add an indirect/unregistered call to either writer | closure changes or fails unresolved; never omitted |
+| 44 | traverse the current runtime package-root re-export | exact `reexport_alias` path retained |
+| 45 | insert one wrapper helper and two aliases converging on `saveAssistance` | one semantic writer, all traversal nodes/edges retained |
+| 46 | add a resolvable call/import cycle | traversal terminates, retains one sorted SCC and preserves source-to-target paths |
+| 47 | replace a resolved helper call with an unresolved dynamic dispatch | named closure failure |
+| 48 | omit `DrillScreen.hintDistance`, `GuidedHintSeat.requestHint`, `RunStateStore.requestHint` or either connecting edge at v5 | C9.6 fails; configured hint cannot pass without gameplay use |
+| 49 | omit either `PRESET_DECLARATIONS.config.hintDistance` or `WORKFLOW_CONTEXT_POLICIES.configClamp.hintDistance`, or leave an old nine-field row | C9.6/shape equality fails |
+| 50 | classify the real server declaration census as observer, then mutate it into a runtime field reader | observer-only refactor leaves contract digest stable; runtime read reclassifies and moves it |
+| 51 | add a workspace package with one production AssistanceConfig consumer | package is discovered and changes closure/authority; hard-coded-root implementations fail |
 
 The implementation also runs the real repository and asserts derived head 4, nine axes, 22 values,
-the v4 legacy parser/migrator, one shared-key reader/writer pair, mandatory constructor/permission/
-Advanced/run nodes, the current shape/graph digest, exact contiguous pinned history and exactly one
+the v4 legacy parser/migrator, one shared-key reader/writer pair, both proved generic field writes,
+the runtime barrel path, the server observer and mandatory constructor/permission/Advanced/run
+nodes, the current shape/graph/closure digests, exact contiguous pinned history and exactly one
 lane-5 claimant. The explicit counts and operation identities are drift tripwires; a future
 intentional version changes them through the checked claim-to-landing transition.
 
@@ -409,7 +495,8 @@ None. No design intent changes.
 2. **Semantic derivation.** The real tree derives head 4, nine axes and 22 string members; the
    normalized digest is stable under mutation-classes 1 and 13, resolves class 14, and changes
    under classes 2-5 and the changed-tuple arm of 14. It also derives the complete v4 authority
-   graph; class 32 is graph-stable and classes 30-31/37-38 either change identity or fail closed.
+   graph; class 32 is graph-stable and classes 30-31/37-51 either change identity, retain the
+   declared traversal/observer result, or fail closed exactly as specified.
 3. **Fail closed.** Mutation classes 6-7 and 15 throw a named extractor error; no property or
    non-literal union residue disappears from the normalized shape.
 4. **Register binding.** C9.2/C9.3 fail on wrong head and wrong/missing digest. C9.5 requires one
@@ -419,8 +506,8 @@ None. No design intent changes.
    bytes. Same-head or head-only drift still fails. A complete head-5 snapshot is accepted only
    when C9.6 proves the prior exact lane-5 claimant, owner-bound appended row and declared symbol
    transition; the symbol set is derived from the closed authority graph rather than supplied by
-   the caller. Mutation classes 22/25/30-31/33/36-38 fail where specified and classes 24/28-29/32/
-   34-35 pass.
+   the caller. Mutation classes 22/25/30-31/33/36-43/47-49/51 fail where specified and classes
+   24/28-29/32/34-35/39/44-46/50 pass.
 6. **Bijection.** Deleting either the Guided Hint declaration or README live row fails C3.
 7. **Historical truth.** The four landed rows cite the four commits recovered by `git log -S`; no
    archived RFC is invented as their owner. Bootstrap requires those exact four rows, and later
@@ -448,16 +535,23 @@ None. No design intent changes.
    `assistance-config: head 4; next hint-distance.md (lane 5)`; without one it prints
    `assistance-config: head 4; next lane 5`. Neither path accesses `.members` or uses the
    evidence-kind claim parser.
-15. **Literal claim and source-closure truth ([[D2010]], [[D2038]], [[D2113]]–[[D2117]]).** The
-    sole row contains the exact ten-node v5 graph delta, including the writer, constructor,
-    permission projection, Advanced projection and deletion of both legacy local codec operations.
-    Bootstrap derives the actual v4 graph without requiring future files. At v5, load/save share
-    one key and runtime codec; a local/indirect validator, second reader/writer/serializer/migrator,
-    fixed-head semantic change, undeclared assistance consumer or unclassifiable Svelte expression
-    fails even when a caller reports only the expected tokens.
+15. **Literal claim and source-closure truth ([[D2010]], [[D2038]], [[D2113]]–[[D2117]],
+    [[D2190]]–[[D2193]]).** The sole row contains the exact fifteen-node v5 graph delta, including
+    the writer, constructor, permission projection, Advanced projection, complete in-run hint path,
+    exhaustive preset/context columns and deletion of both legacy local codec operations. Bootstrap
+    derives the actual v4 graph without requiring future files. At v5, load/save share one key and
+    runtime codec; a local/indirect validator, second reader/writer/serializer/migrator, fixed-head
+    semantic change, undeclared workspace consumer or unclassifiable TS/Svelte operation fails even
+    when a caller reports only the expected tokens. The current two constrained generic writes,
+    barrel re-export and server declaration observer are crossed rather than omitted.
 16. **Dependent phase truth ([[D2011]]).** Every implementation-owned stale Hint status says
     “awaiting the D1639 owner ruling, then repeat independent review”; nothing claims that review is
     already open or changes the owner table.
+17. **Non-vacuous v5 handoff ([[D2191]]).** C9 refuses the transition if the effective
+    `hintDistance` does not reach `DrillScreen` → `GuidedHintSeat` → `RunStateStore.requestHint`, or
+    if either the five-preset value column or eight-context clamp column is absent/incomplete. This
+    is structural reach only; the owner-ratified [[D1639]] values and the hint RFC's complete
+    server/provider journey remain separate product acceptance gates.
 
 ## Discharges
 
@@ -481,12 +575,12 @@ None. No design intent changes.
 | [[D2113]] | repaired in §§1/4/classes 28/33-34: v4 seals its real local migrator; v5 must replace it with the runtime codec | fresh independent review |
 | [[D2114]] | repaired in §1/classes 30/34: one graph contains reader, writer, shared key, codec and serializer | fresh independent review |
 | [[D2115]] | repaired in §2/class 31: graph bytes enter contract identity and any fixed-head semantic drift fails | fresh independent review |
-| [[D2116]] | repaired in §1/classes 35-36/criterion 15: exact ten-node delta plus named preset compiler discharge | fresh independent review |
-| [[D2117]] | repaired in §1/classes 32/37-38: closed TS/Svelte nodes, edges, canonical bytes and discovery/failure grammar | fresh independent review |
-| [[D2190]] | current generic `[key]` writes contradict the v4 hard-failure grammar | author repair with constrained computed-write proof |
-| [[D2191]] | exact v5 transition omits its run and preset/clamp consumers | author repair with one consistent boundary and non-vacuous handoff |
-| [[D2192]] | node kinds cannot represent intermediate imports/calls/aliases | author repair of graph vocabulary/contraction semantics |
-| [[D2193]] | two-root discovery is not workspace production closure | author repair deriving and classifying all production roots |
+| [[D2116]] | repaired in §1/classes 35-36/criterion 15: exact fifteen-node delta includes the preset compiler and live run path | fresh independent review |
+| [[D2117]] | repaired in §1/classes 32/37-47: closed TS/Svelte semantic and traversal nodes, edges, canonical bytes and failure grammar | fresh independent review |
+| [[D2190]] | repaired in §1/classes 39-43: exact generic-key/value/spread proof plus every literal call edge; broad/version/unknown/indirect fail | fourth fresh independent review |
+| [[D2191]] | repaired in §1/classes 48-49/criterion 17: one fifteen-token claim includes run seat/store and both exhaustive preset/clamp columns | fourth fresh independent review after [[D1639]] owner ruling |
+| [[D2192]] | repaired in §1/classes 44-47: explicit callable/import/re-export/component/template/write nodes, converging aliases and SCC cycle rule | fourth fresh independent review |
+| [[D2193]] | repaired in §§1-2/classes 50-51: workspace-derived roots and explicit authority/product/observer influence | fourth fresh independent review |
 
 ## Open questions
 
@@ -495,6 +589,13 @@ contract.
 
 ## Changelog
 
+- 2026-08-30: author-repaired [[D2190]]–[[D2193]]. Proved the two current generic writes against
+  the exact non-version key set and literal call sites; expanded the v5 claim from ten to fifteen
+  symbols so gameplay and both preset/clamp columns cannot be absent; represented aliases,
+  components, helpers and cycles as literal graph nodes; and replaced two hard-coded roots with a
+  workspace-derived closure plus observer/product classification. Fifty-one mutation classes and
+  the positive author contract cover the repair. Fresh independent review remains required; no C9
+  or product implementation is authorized.
 - 2026-08-30: third fresh independent review returned the fourth repair on
   [[D2190]]–[[D2193]]. The four-arm reproduction covers current computed writes rejected by the
   bootstrap grammar, omitted v5 run/preset consumers, an unrepresentable intermediate graph and

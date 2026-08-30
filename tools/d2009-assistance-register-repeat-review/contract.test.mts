@@ -15,15 +15,20 @@ const pinned = Object.freeze([
 ]);
 const v5Changes = Object.freeze([
   "apps/web/src/lib/AssistanceSettings.svelte#AssistanceSettings.hintDistance",
+  "apps/web/src/lib/DrillScreen.svelte#DrillScreen.hintDistance",
+  "apps/web/src/lib/GuidedHintSeat.svelte#GuidedHintSeat.requestHint",
   "apps/web/src/lib/assistance-preference.ts#loadAssistance",
   "apps/web/src/lib/assistance-preference.ts#migrate",
   "apps/web/src/lib/assistance-preference.ts#saveAssistance",
   "apps/web/src/lib/assistance-preference.ts#validV4",
+  "apps/web/src/lib/run-state.ts#RunStateStore.requestHint",
   "packages/runtime/src/assistance-codec.ts#parseAssistanceConfig",
   "packages/runtime/src/assistance.ts#AssistanceConfig.hintDistance",
   "packages/runtime/src/assistance.ts#AssistanceConfig.version",
   "packages/runtime/src/assistance.ts#SILENT_ASSISTANCE",
   "packages/runtime/src/assistance.ts#permittedAssistance",
+  "packages/runtime/src/presets.ts#PRESET_DECLARATIONS.config.hintDistance",
+  "packages/runtime/src/presets.ts#WORKFLOW_CONTEXT_POLICIES.configClamp.hintDistance",
 ]);
 
 interface Claim { readonly lane: number; readonly rfc: string; readonly changes: readonly string[]; }

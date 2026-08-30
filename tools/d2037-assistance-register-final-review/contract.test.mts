@@ -8,15 +8,20 @@ const rfc = read("rfc/assistance-config-register.md");
 
 const v5Authority = Object.freeze([
   "apps/web/src/lib/AssistanceSettings.svelte#AssistanceSettings.hintDistance",
+  "apps/web/src/lib/DrillScreen.svelte#DrillScreen.hintDistance",
+  "apps/web/src/lib/GuidedHintSeat.svelte#GuidedHintSeat.requestHint",
   "apps/web/src/lib/assistance-preference.ts#loadAssistance",
   "apps/web/src/lib/assistance-preference.ts#migrate",
   "apps/web/src/lib/assistance-preference.ts#saveAssistance",
   "apps/web/src/lib/assistance-preference.ts#validV4",
+  "apps/web/src/lib/run-state.ts#RunStateStore.requestHint",
   "packages/runtime/src/assistance-codec.ts#parseAssistanceConfig",
   "packages/runtime/src/assistance.ts#AssistanceConfig.hintDistance",
   "packages/runtime/src/assistance.ts#AssistanceConfig.version",
   "packages/runtime/src/assistance.ts#SILENT_ASSISTANCE",
   "packages/runtime/src/assistance.ts#permittedAssistance",
+  "packages/runtime/src/presets.ts#PRESET_DECLARATIONS.config.hintDistance",
+  "packages/runtime/src/presets.ts#WORKFLOW_CONTEXT_POLICIES.configClamp.hintDistance",
 ]);
 
 function transitionMatches(
@@ -41,7 +46,7 @@ test("D2037: the exact workflow repair is inside the implementation boundary", (
   assert.match(boundary, /fetch-depth: 2/u);
 });
 
-test("D2038/D2116: the v5 claim names all ten sorted authority changes", () => {
+test("D2038/D2116/D2191: the v5 claim names all fifteen sorted authority changes", () => {
   for (const token of v5Authority) {
     const escaped = token.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
     assert.match(rfc, new RegExp(escaped, "u"));

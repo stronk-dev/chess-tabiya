@@ -182,10 +182,10 @@ test("D2113/D2117: v5 central codec replaces both legacy operations", () => {
   assert(future.edges.some((item) => item.from.endsWith("#saveAssistance") && item.to.endsWith("#parseAssistanceConfig")));
 });
 
-test("the RFC binds canonical graph identity, phase rules and all 38 able-to-fail classes", () => {
+test("the RFC binds canonical graph identity, phase rules and all 51 able-to-fail classes", () => {
   assert.match(rfc, /interface AssistanceAuthorityNode/u);
   assert.match(rfc, /type AssistanceAuthorityEdgeKind/u);
   assert.match(rfc, /svelte\/compiler/u);
   assert.match(rfc, /There is no legal fixed-head semantic drift/u);
-  assert.match(rfc, /total thirty-eight/u);
+  assert.match(rfc, /total fifty-one/u);
 });
