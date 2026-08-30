@@ -1,11 +1,12 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft author-amended 2026-08-30; fresh independent buildability review required. The
-  returned [[D1862]] population now has an executable 117/117 plan (110 adapters, six exact
-  producer-operand repairs, one false visual binding removal), and [[D1668]] now shares the real
-  event-head/cursor/disclosure decision stamp through a valid discriminated lifecycle. [[D1672]]'s
-  owner-only design amendment remains blank, so this draft does **not** claim acceptance. Exact return:
-  `planning/platform-alignment/evidence-presentation/repeat-buildability-review-2026-08-27.md`.
+- **Status:** draft — returned by fresh independent buildability review 2026-08-30 on
+  [[D2135]]–[[D2140]]. The [[D1862]] plan is pair-set-equal and [[D1668]]'s lifecycle is now valid,
+  but forms are not assigned to compatible components, the visual-consumer population has no
+  authority, required catalogue repairs contradict the scope fence, fact and abstention renderer
+  registries are absent, and the six-repair count omits live consequence operands. [[D1672]]'s
+  owner-only design amendment also remains blank. Exact return:
+  `planning/platform-alignment/evidence-presentation/fresh-independent-buildability-review-2026-08-30.md`.
   Landing is explicitly two checkpoints (§2.1): the sealed component foundation plus current
   consumer migrations first, then module/hint seats only after their own accepted contracts.
   Prior amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
@@ -56,6 +57,26 @@
 ```tabiya-claims
 none
 ```
+
+## Fresh independent review return (2026-08-30)
+
+`make evidence-presentation-fresh-review` reproduces six blockers over the amended author plan and
+live source boundaries:
+
+1. [[D2135]] — pair forms are copied but never assigned to a compatible component;
+2. [[D2136]] — the claimed visual/audio consumer classification is absent, so internal operations
+   enter the presentation population by form alone;
+3. [[D2137]] — six operand repairs plus one binding removal require the catalogue edit criterion 18
+   forbids;
+4. [[D2138]] — `FactStatementRendererId` has no declared registry or executable plan rows;
+5. [[D2139]] — abstention questions/reasons have no set-equal learner-visible population; and
+6. [[D2140]] — consequence prose reads `outcome`, `plies` and `objectiveState`, while both manifest
+   and plan retain only `context` and `terminal`.
+
+The exact required repairs and executable witnesses live in the fresh-review dossier. The previous
+five author arms remain green; they establish pair membership and lifecycle shape, not adapter
+buildability. Implementation remains unauthorized pending author repair, another fresh review and
+the existing [[D1672]] owner-tier amendment.
 
 ## Summary
 
@@ -1442,6 +1463,12 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
   the gap is ledgered even if the amendment waits.
 
 ## Changelog
+
+- 2026-08-30 — returned by fresh independent buildability review on [[D2135]]–[[D2140]]. The
+  D1862 pair census and D1668 lifecycle repair survive, but the plan has no component-form mapping
+  or visual-consumer authority, contradicts its own catalogue scope, omits fact/abstention renderer
+  populations and undercounts dropped consequence operands. `make evidence-presentation-fresh-review`
+  reproduces 6/6; no production or protected-design byte is authorized.
 
 - 2026-08-30 — author repair for repeat-review [[D1862]]/[[D1668]]. Added a set-equal executable
   plan over all 117 live visual pairs: 110 exact adapters, six producer-operand repairs that may
