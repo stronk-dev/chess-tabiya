@@ -11806,3 +11806,23 @@ implementation; no provider, consumer, schema, content, archive or protected-des
 The maintained pass found [[D2150]]: D1963/D1997/D1998 pinned superseded prose and the unsafe old
 options type. Their current-state assertions now require the stronger source, identity and fixed-
 scheduler limits contract; historical review evidence remains unchanged.
+
+## 2026-08-30 — Bot policy D2087–D2096 second author repair
+
+Repaired the returned bot operation as one boundary rather than ten local patches. One event now
+owns a non-circular decision+operation envelope; the catalog has twelve exact family×band
+identities; the disposable bot contract imports the provider author's exact shared delivery and
+cp/mate authority; a sealed run-root legal map keeps baseline available without optional Stockfish;
+the guard references the best all-legal row and abstains honestly on mate/mixed domains; one sealed
+compiler owns all transforms and sampling; pre-provider and commit identities cover every write
+operand; Stage B retains the bounded Maia intersection; and below-floor pages use the declared
+seeded sampler.
+
+`make bot-policy-author-contract` passes 11/11 and `make provider-exchange-author-repair` passes
+8/8. The unchanged historical `make bot-policy-fresh-review` fails all ten blocker assertions, the
+intended inversion. The first author run found and fixed a canonicalization defect: hashing an input
+object rather than an explicit image made the mere presence of a previous envelope alter the
+pre-provider digest. Exact receipt:
+`planning/platform-alignment/bot-policy/second-author-repair-2026-08-30.md`. Fresh review still
+gates implementation; no production, schema, migration, endpoint, storage, roster, content,
+archive or protected-design byte changed.

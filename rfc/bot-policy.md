@@ -1,15 +1,12 @@
 # RFC: Bot policy
 
-- **Status:** **draft — returned by fresh independent buildability review 2026-08-30 on
-  [[D2087]]–[[D2096]].** The D1970–D1976 repair preserves its useful direction, but its author model
-  forks the actual provider-delivery and score types; the operation receipt has no non-circular
-  durable home; three identities cannot encode the ruled 4×3 roster; sealed decisions still accept
-  caller-authored policy outcomes; idempotency omits writer/derivation operands; mandatory
-  Stockfish contradicts baseline availability; Stage B's all-legal rows cannot compose with bounded
-  Maia; the guard uses the best returned rather than best legal move; and the below-floor fallback
-  relies on a selected move the provider never returns. `make bot-policy-fresh-review` reproduces
-  10/10 blockers while `make bot-policy-author-contract` preserves the prior checkpoint. No
-  implementation is authorized. Claims 0.18/migration remain held. *(Prior checkpoints:
+- **Status:** **draft — [[D2087]]–[[D2096]] author-amended 2026-08-30; fresh
+  independent review required.** One event-embedded non-circular operation envelope, twelve exact
+  family×band identities, the shared delivery/score contracts, independent baseline legality,
+  compiler-owned transforms/sampling, complete idempotency operands, bounded-Maia feature
+  intersection and all-legal guard reference are closed as one operation. The executable author
+  contract passes 11/11 and the unchanged historical review inverts 10/10. No implementation
+  is authorized. Claims 0.18/migration remain held. *(Prior checkpoints:
   implementing; accepted 2026-08-22; draft; D1601–D1609 author-amended; D1970–D1976
   author-amended.)*
 - **Author:** claude (drafted on the D717 program routing, `planning/evidence-foundation-ux/plan.md`
@@ -35,8 +32,8 @@
   `opponent.selection@1` consumer boundary and the three admitted provider projections) and
   `archive/opponent-contracts.md` (the mode-scope disposition precedent). **All production stages
   now depend on accepted and implemented `provider-exchange-and-execution.md`** for
-  `ProviderEvidenceDelivery<MaiaPolicyPage>` and
-  `ProviderEvidenceDelivery<StockfishLegalRootTable>`; no bot-private provider operation, queue,
+  `ProviderEvidenceDelivery<MaiaPolicyPage, "maia.policy_page@1">` and
+  `ProviderEvidenceDelivery<StockfishLegalRootTable, "stockfish.legal_root_table@1">`; no bot-private provider operation, queue,
   cache or receipt exists. **Stage B additionally depends on accepted and implemented
   `shared-candidate-evidence-packet.md`**, plus landed tactical/breadth collectors, and consumes one
   sealed `CandidatePopulationReceipt`; it never re-enumerates or re-runs them. The migration claim is
@@ -60,7 +57,7 @@
 - **Planning:** `planning/bot-policy/` (once implementing)
 
 ```tabiya-claims
-run-schema | lane 0.18 | OpponentSelection.policy (packages/runtime/src/types.ts:102 OpponentSelection gains an optional typed policy-decision record; opponent.move_selected payload widens)
+run-schema | lane 0.18 | OpponentSelection.policy event envelope + RunOpponentPolicy exact profile reference (packages/runtime/src/types.ts:69,102; run.started and opponent.move_selected payloads widen together)
 migration | position behind longitudinal-store | stamp-only frozen-literal run-schema stamp "0.17"->"0.18" in apps/server/src/storage.ts; no table, no data rewrite
 ```
 
@@ -75,16 +72,15 @@ learner-rating`), evidence-kinds 7 members. This RFC widens the **persisted**
 (migration 20, `SelectionCandidate.offWindow`) and 0.16→0.17 (migration 23,
 `orderingBasis`), both stamp-only. The same 0.18 lane also covers §4.1's run seam: the
 persisted `run.started` `opponentPolicy` payload (`RunOpponentPolicy`,
-`packages/runtime/src/types.ts:69`) widens by the same optional `profile` triple — one
-version bump, two payloads; the register row's parenthetical gains that clause in the next
-register-touching commit (acceptance), stated here rather than edited now so the C3
-byte-join between this block and `rfc/README.md` stays intact. So: one run-schema lane,
+`packages/runtime/src/types.ts:69`) widens by the same optional exact six-field profile reference — one
+version bump, two payloads; the register row names both and remains byte-joined to the claims block.
+So: one run-schema lane,
 one stamp-only migration position, frozen literals per the migration-4/9 freeze lesson.
 The downstream seam is now explicit rather than empty: `bot-roster.md` declares the instances and
 `opponent-experience.md` consumes the capability/card/identity projections, while neither claims a
 second copy of the persisted policy record. `longitudinal-store` still ingests learner-actor
-evidence only. The atomic operation's request/root/receipt fields are part of the same
-`OpponentSelection.policy` record and 0.18 lane; no additional shared-resource claim is introduced
+evidence only. The atomic operation's decision and non-circular operation record form the same
+`OpponentSelection.policy` event envelope and 0.18 lane; no additional shared-resource claim is introduced
 by the amendment. **Everything else is
 deliberately claim-free**: the policy/layer/profile definitions are **catalog-local
 versioned declarations, not a storage table** (§1 argues this — the [[D473]] decision the
@@ -100,9 +96,9 @@ register instruction that the row and the draft ride together.
 
 This RFC specifies the **F8 opponent-policy stack**: one composable, versioned policy
 compiler over the shipped human-policy base model, replacing nothing. It ships (Stage A)
-the O8-ruled three-profile roster — **Human baseline / Guarded human / Pawn-heavy** — as
-named compositions of separately versioned layers, executed by a **server-side seeded
-sampler over the reconstructed full-vector Maia distribution** (the [[D823]] decision,
+the O8-ruled three behavior families — **Human baseline / Guarded human / Pawn-heavy** — crossed
+with four immutable model-band identities, as named compositions of separately versioned layers,
+executed by a **server-side seeded sampler over the honestly bounded Maia policy page** (the [[D823]] decision,
 mechanism 1 of the dependency map §4); a **typed, persisted policy-decision record** on
 every composed selection (the [[D818]]/[[D822]] explainable pick — the differentiator the
 research pass verified has *no prior art anywhere in the field*); and **calibration as the
@@ -126,7 +122,7 @@ completion obligations. The detailed clauses below are normative over the earlie
 scheduler, candidate enumeration/collection belongs to the shared candidate packet, and this RFC
 owns only bot-specific derivation, policy projection and the run-bound append. Returned probability
 mass, legal-set equality and feature coverage are three separate facts. A retry replays its durable
-operation receipt; it never recreates equality by recomputation. If Maia supplies no distribution,
+event envelope; it never recreates equality by recomputation. If Maia supplies no distribution,
 there is no base distribution and therefore no move.
 
 ## Motivation
@@ -216,7 +212,8 @@ verified at the symbol where repo-mechanical):
   rule forcing top-1 predicts 19.84 cp expected depth-12 loss and 0.39% severe mass
   against a captured production sample of 19.57 cp / 0.36% — agreement **0.27 cp /
   0.03 pp**. The raw vector predicts 59.13 cp / 1.20%. Production must *"transform inside
-  the full-vector model adapter, not reinterpret a truncated display payload."*
+  the admitted policy-page adapter, retaining its bounded coverage, not reinterpret a display
+  projection or relabel requested width as completeness."*
 - *A bounded Stockfish error guard is an explicit information advantage* and must be
   declared as such; a hidden guard is refused (R11 refusal list).
 - *Pawn-heavy behavior is measured* (pawn ×4 after guard: +11.97 pp pawn rate, −1.01 cp
@@ -264,7 +261,8 @@ table is created; no migration exists for definitions.**
 
 The argument, since the drafting order asked for one:
 
-1. **Nothing authors them at runtime.** The O8 roster is closed at three profiles; layers
+1. **Nothing authors them at runtime.** The O8 roster is closed at three behavior families crossed
+   with four bands; layers
    are measured artifacts (a trait multiplier is inseparable from the dossier that
    measured it). Every stored-definition precedent in this repo (packs, shapes,
    repertoires) exists because *users author instances*; v1 bot profiles are shipped
@@ -291,11 +289,23 @@ transform/mask parameters; abstention conditions and fallback behavior; whether 
 strength; and its measured output metric with dossier source ids. It carries no caller-authored
 behavior sentence. A closed card renderer maps registered layer/measurement/absence identities to
 source-bearing statements; decorative identity is a separate closed owner-authored registry (§2.8,
-§7). Each **profile declaration** is a named composition: base
-model reference (engine id, modelId, band), sampler (`id@version`, temperature, top-p,
-completeness threshold), ordered layer references, presentation reference, and a compiled
-**profile digest**: RFC-8785 SHA-256 over the canonical composition, same `sha256:` grammar
-as `DIGEST_PATTERN` (`opponent-selector.ts:81`).
+§7). Each **profile declaration** is one immutable member of the closed family×band product:
+
+```ts
+type BotProfileFamily = "human-baseline" | "guarded-human" | "pawn-forward";
+type BotModelBand = 1000 | 1400 | 1800 | 2200;
+type BotProfileId = `${BotProfileFamily}.${BotModelBand}@1`;
+```
+
+The compiled catalog enumerates exactly the twelve literals. Every declaration carries its literal
+`id`, `family`, `band`, `version: 1`, base model reference (engine id, model id and band), sampler
+(`id@version`, temperature, top-p and returned-mass floor), ordered layer references, presentation
+reference, and a compiled **profile digest**: RFC-8785 SHA-256 over the whole canonical declaration,
+using the `sha256:` grammar of `DIGEST_PATTERN` (`opponent-selector.ts:81`). The run stores all six
+identity fields `{ id, family, band, version, digest, model }`; none is inferred from another.
+Creation, resume, rematch and cache identity compare the whole reference. Thus two bands in one
+family cannot share an id, digest or cache entry, and no profile can be combined with raw target-Elo,
+temperature or top-p overrides.
 
 ### §2 — The layer stack: seven kinds, separately versioned
 
@@ -305,10 +315,12 @@ The stack is O8.1's, verbatim in order. Per-kind contracts:
 from `SelectionEngineIdentity`), supported band range (validated via `appliedTargetElo`,
 `apps/server/src/engine-band.ts`), history capability (full-history; the shipped Maia is
 history-conditioned — a recorded fact on the model declaration, not an option), and the
-**complete-vector requirement**: the model adapter must return the raw policy vector at
-full legal width (`legalMoveCount`, `opponent-selector.ts:251`; the request already asks
-for `max(8, legalMoveCount)` at `:575`), with the returned raw-mass sum recorded as the
-**completeness statistic**. Measured floor on the pinned image at MultiPV-20: median
+**bounded-page contract**: the shared operation returns only `coverage: "bounded_top_k"`; requested
+width is never treated as observed completeness. Baseline legality is established independently by
+one sealed `ExactLegalMoveMap` compiled from the run-owned root. The page's unique moves must be a
+non-empty subset of that map, and every transformed or selected move must remain in it. Returned raw
+mass is recorded as the **returned-mass statistic**, not a legal-set claim. Measured floor on the
+pinned image at MultiPV-20: median
 0.999625, minimum 0.979540. The band is a policy parameter, **never** presented as
 achieved Elo (O8.4, [[D344]]).
 
@@ -337,19 +349,36 @@ repertoire; a root-conditioned book through ply 24 is an opening layer with expl
 fallthrough, not a general continuation policy."* Opening-book work remains sacrificial
 research under D560/Gate F (O8.3).
 
-**§2.4 `ErrorGuard`** — `guard.severe_error@1` consumes exactly one sealed
-`stockfish-guard@1` candidate-set receipt. The request binds root FEN, full-history digest, side to
-move, canonical exact candidate set, Stockfish 18, Threads 1, Hash 16, cleared game state,
-`MultiPV = candidateCount`, exact `searchmoves`, depth 8, root-side score perspective, final-only
-typed rows and elapsed time. Candidate loss is derived inside the receipt only; no production input
-admits `guardLossCp` or an equivalent caller number.
+**§2.4 `ErrorGuard`** — `guard.severe_error@1` consumes an optional exact shared
+`TypedProviderResult<"stockfish.legal_root_table@1">`; it owns no provider request or private
+receipt. The successful arm contains the sealed
+`ProviderEvidenceDelivery<StockfishLegalRootTable, "stockfish.legal_root_table@1">`, whose request
+binds the root FEN, all-legal move identity, Stockfish identity, depth, timeout and score frame.
+The bot joins it to the run-owned root authority and exact legal map, then derives one sealed
+`BotGuardView`:
 
-The receipt compiler and consumer abstain the **whole guard** on provider unavailability, the
-500-ms guard opportunity deadline, candidate-set mismatch, illegal/extra/duplicate/missing rows,
-bounded rows, mixed cp/mate domains, an all-mate/non-cp domain, a forged seal, or root/history
-mismatch. `empty_after_mask` is also a whole-guard abstention. Every abstention passes the unchanged
-normalized Maia distribution onward and is recorded. On one exact cp domain, the guard masks every
-candidate whose `bestCp - candidateCp` is at least 250 cp. The depth-8 population measured 100%
+```ts
+type BotGuardView =
+  | { readonly kind: "applied"; readonly source: ExactStockfishSourceIdentity;
+      readonly referenceMoveUci: string; readonly referenceCp: number;
+      readonly rows: readonly { readonly moveUci: string;
+        readonly sourceScore: { readonly kind: "centipawns"; readonly value: number };
+        readonly lossCp: number; readonly admitted: boolean }[] }
+  | { readonly kind: "abstained"; readonly reason: BotGuardAbstentionReason;
+      readonly source?: ExactStockfishSourceIdentity;
+      readonly rows: readonly { readonly moveUci: string;
+        readonly sourceScore: StockfishLegalRootTable["rows"][number]["score"] }[] };
+```
+
+The reference is selected from **all legal Stockfish rows before** retaining the bounded Maia
+subset. A guard applies only when every all-legal row is in the centipawn domain; `referenceCp` is
+the maximum root-side score and each Maia row's loss is `referenceCp - candidateCp`. Any mate row,
+mixed cp/mate domain, all-mate domain, provider local/source failure, provider unavailability,
+500-ms opportunity deadline, legal-set mismatch, duplicate/missing/extra/short-depth row, forged
+seal or root mismatch abstains the **whole guard**. There is no cp conversion for mate scores and no
+numeric loss on an abstained row. `empty_after_mask` also abstains the whole guard. Every abstention
+passes the reconstructed Maia distribution byte-identically onward and is recorded. On an applied
+view, the guard masks every Maia candidate whose loss is at least 250 cp. The depth-8 population measured 100%
 severe-mass removal, 1.36 cp expected-loss strengthening and 100.21% explorer-match retention.
 
 The guard is an explicit information advantage, but disclosure is compiled rather than authored:
@@ -397,28 +426,55 @@ be smuggled into this display registry.
 
 ### §3 — The compiler
 
-One compilation path, from the dependency map §3 verbatim:
+There is one compiler-owned execution path. Its inputs are authorities, never claimed outputs:
 
 ```text
-sealed ProviderEvidenceDelivery<MaiaPolicyPage, "maia.policy_page@1">
-  + sealed ProviderEvidenceDelivery<StockfishLegalRootTable, "stockfish.legal_root_table@1">
-  → exact bot source join (root identity + returned mass + legal-set equality)
-  → derived guard view over the exact Maia-admitted rows                               [guarded families]
-  → sealed registered legal-board trait view                                           [trait families]
-  + sealed CandidatePopulationReceipt<"events_and_readings">                           [Stage B]
-  → derived candidate feature vector over retained packet rows; zero collector/provider calls
-  → optional declared repertoire prior                                                 [interface only]
-  → optional declared error guard
-  → zero-or-more measured trait transforms whose declared dependencies applied
-  → seeded sampler over the resulting admitted distribution
-  → sealed BotPolicyDerivation + operation envelope + persisted opponent.move_selected
+sealed BotOperationRootAuthority
+  + sealed ExactLegalMoveMap
+  + shared TypedProviderResult<"maia.policy_page@1">
+  + optional shared TypedProviderResult<"stockfish.legal_root_table@1">
+  + exact compiled BotProfileDeclaration
+  + optional sealed CandidateFeatureSubset                                      [Stage B]
+  → admit exact Maia source or return typed no-move
+  → prove non-empty Maia moves ⊆ exact legal map and exact root/request identity
+  → reconstruct p^(1/T), deterministic top-p membership and normalized base distribution
+  → derive applied/abstained guard from the optional all-legal Stockfish result
+  → derive registered legal-board trait view                                    [trait families]
+  → retain Stage-B features for exactly the admitted bounded Maia population     [Stage B]
+  → apply guard mask, then only dependency-satisfied measured trait transforms
+  → renormalize and seeded-sample using neutral tie ordering
+  → sealed BotPolicyExecution
+  → sealed BotPolicyDecisionRecord + non-circular operation envelope
+  → one persisted opponent.move_selected event
 ```
+
+`BotOperationRootAuthority` is constructed only by the run service and sealed at runtime. It
+contains the public `BotRootIdentity` plus canonical `beforeFen`, `startFen`, `historyUci` and
+branch seed. Those position bytes are required to validate the provider payload's real request;
+they are not invented fields on `ProviderDelivery`. `ExactLegalMoveMap` is derived once from that
+canonical root by the shared legal-board boundary and is the baseline legality authority even when
+Stockfish is absent.
+
+The bot imports the dependency's exact `ProviderDelivery`, `ProviderEvidenceDelivery`,
+`TypedProviderResult`, `MaiaPolicyPage` and `StockfishLegalRootTable` types and assertions. It never
+redeclares a delivery. A bot-local `ExactProviderSourceIdentity` retains the literal shared
+operation, provider, endpoint, requested/actual identities, generation, normalized request digest,
+response digest, cache identity and payload digest from a successfully asserted delivery. This is
+a derived identity record, not a second receipt or seal authority.
+
+Only `compileBotPolicyExecution` may transform weights, choose a move or state layer results. It
+accepts the sealed roots/sources/views above, reconstructs the base distribution, executes every
+declared mask and multiplier in catalog order, derives classifiers from registered views, and runs
+the declared sampler. It returns a runtime-sealed `BotPolicyExecution`. Callers cannot supply
+`chosenMoveUci`, `finalMass`, layer actions, classifiers or guard losses. The record projector
+accepts only that sealed execution and adds the deterministic digest; independently mutating any
+claimed output therefore fails before persistence rather than creating a valid-looking record.
 
 Compile-time failures (each a fixture): two layers claiming the same authority (two
 guards; two samplers; a trait and a guard both declaring the mask effect on the same
-basis); a transform requiring a complete vector composed with a provider window that can
-cap (the profile must then declare the degraded path); a guard without the registered
-`stockfish-guard@1` request identity; a trait without a registered classifier, a cited passing
+basis); a transform requiring legal-set completeness composed with bounded Maia input (only the
+all-legal authority may satisfy that requirement); a guard without the registered
+`stockfish.legal_root_table@1` source identity; a trait without a registered classifier, a cited passing
 measurement or its required guard dependency (§2.5); any layer with a delay effect (§2.7);
 a `MemoryPolicy` instance (§2.6); **any layer declaring a learner-derived input** (§8's
 wall — the input vocabulary is closed to provider projections and registered
@@ -433,9 +489,10 @@ citations, not only input ids.
 A layer may abstain without erasing a **delivered** base distribution (O8.1); every abstention is
 recorded in §6's closed reason vocabulary. Maia source unavailability is different: it produces no
 distribution, no selection derivation and no opponent event (§4.3). The production composer accepts
-only admitted shared provider deliveries, compiler-owned derived views and — for Stage B — one
-admitted candidate-population receipt. A structurally similar plain object, bare loss number, trait
-string or feature row fails at the runtime seal boundary, not merely in TypeScript.
+only asserted shared provider results, compiler-owned sealed roots/views and — for Stage B — one
+admitted candidate-population receipt projected into a sealed subset. A structurally similar plain
+object, bare loss number, trait string, caller-chosen move or feature row fails at a runtime seal
+boundary, not merely in TypeScript.
 
 **Identity discipline** (dependency map §3): the request's existing `policyConfigDigest`
 is the run session digest and **is not relabeled** as the stack identity. The run carries
@@ -448,14 +505,24 @@ decision.
 `RunOpponentPolicy` gains one optional exact profile reference:
 
 ```ts
-readonly profile?: { readonly id: string; readonly version: number; readonly digest: string };
+interface BotProfileReference {
+  readonly id: BotProfileId;
+  readonly family: BotProfileFamily;
+  readonly band: BotModelBand;
+  readonly version: 1;
+  readonly digest: `sha256:${string}`;
+  readonly model: Readonly<{ id: string; version: string }>;
+}
+readonly profile?: BotProfileReference;
 ```
 
 It is valid only with `human_common`, mutually exclusive with `targetElo`, `temperature` and
-`topP`, digest-validated against the compiled catalog at run creation, persisted in `run.started`,
-read exactly on resume and never upgraded to “latest.” Historical runs carry none and infer none.
-The existing `SelectorPolicy.profile` parser and profile-aware cache key remain useful internal
-validation seams, but public `/select-move` is **not** the production authority for profile play.
+`topP`, and must match one exact catalog entry at run creation. It is persisted in `run.started`,
+read byte-for-byte on resume and never upgraded to “latest.” Rematch copies that exact reference
+unless the learner explicitly chooses another catalog entry; a same-family/different-band choice is
+a different immutable identity. Historical runs carry none and infer none. The existing
+`SelectorPolicy.profile` parser and profile-aware cache key remain useful internal validation seams,
+but public `/select-move` is **not** the production authority for profile play.
 
 Production uses one server-owned atomic operation:
 
@@ -466,22 +533,34 @@ POST /runs/:runId/opponent-ply
 ```
 
 The browser supplies no FEN, history, seed, policy/profile, candidate evidence or selected move.
-The request id matches `^botreq_[A-Za-z0-9_-]{16,128}$`. Before provider work, the server derives a
-closed `BotRootIdentity { runId, branchId, nodeId, eventHeadDigest, beforeFenDigest,
-historyDigest }`, seed, exact profile digest and writer-lease digest. It obtains the two shared
-provider deliveries without holding a database transaction. **After** those awaits, it re-reads the
-run and either performs one event-head compare-and-swap/per-run serialized commit against the whole
-root identity or returns `stale_root`; checking only a node id is forbidden because a node may be
-visited on another branch or after later events.
+The exported `parseBotOpponentPlyRequest`/constructor is the sole request-id authority and enforces
+`^botreq_[A-Za-z0-9_-]{16,128}$`; routes and services cannot accept a cast string. Before provider
+work, the server derives and seals `BotOperationRootAuthority`, seed, exact profile reference and
+writer-lease digest. It then computes `preProviderOperandDigest` over the request id, public root,
+writer lease, profile reference and seed. The event log is checked for the request id **before any
+provider call**: an exact pre-provider match returns the stored event envelope; a mismatch returns
+`request_reused_with_different_operands`. On a miss, the service obtains the shared Maia result and,
+where the profile declares a guard, the optional shared Stockfish result without holding a database
+transaction. **After** those awaits, it re-reads the run and either performs one event-head
+compare-and-swap/per-run serialized commit against the whole root identity or returns `stale_root`;
+checking only a node id is forbidden because a node may be visited on another branch or after later
+events.
 
 The operation has the closed outcomes `committed | replayed_idempotent | stale_root |
 request_reused_with_different_operands | base_provider_unavailable | provider_failed`. A successful
-commit writes one durable `BotOperationReceipt` binding request id, root identity, writer lease,
-profile and derivation digests, provider receipt digests and the committed event sequence/digest.
-A retry with the same request and operands returns that receipt byte-for-byte; it does not rerun the
-providers. Reuse with any different root/writer/profile operands fails. Move and policy decision
-still enter one run snapshot; no transaction spans provider work, and a failed compare-and-swap
-writes neither.
+compiler execution adds `commitOperandDigest`, covering the pre-provider operand digest,
+derivation digest and every exact provider source identity. It writes one
+`BotPolicyEventEnvelope { decision, operation }` **inside the same `opponent.move_selected` event**.
+The operation record names the pre-commit head and resulting event sequence, but deliberately does
+not contain the resulting committed head digest: the normal event-log hash protects the envelope,
+so the digest image is non-circular. The operation digest covers request, root, writer lease,
+profile, seed, derivation, exact provider identities, chosen move and event sequence; it excludes
+timings and its own digest field. Save → reload → retry locates that event by request id and returns
+the stored envelope byte-for-byte without provider calls. Reuse with a different root, writer,
+profile, seed, derivation or provider source identity refuses. Event replay, run export and account
+deletion automatically include or remove the envelope through the existing run-event lifecycle;
+there is no orphan side table. Move, decision and operation enter one run snapshot; no transaction
+spans provider work, and a failed compare-and-swap writes neither.
 
 This operation replaces the shipped two-step
 `POST /select-move → browser selection bytes → POST /runs/:id/moves` path for opponent play; that
@@ -495,8 +574,9 @@ the shared `maia.policy_page@1` operation and receives `coverage: "bounded_top_k
 is never relabelled completeness. It separately records (a) `returnedProbabilityMass`, used only by
 the sampler's measured reconstruction floor, and (b) `maiaCoverage: bounded_subset |
 legal_set_equal`, derived only by set equality between Maia move identities and the admitted
-`stockfish.legal_root_table@1` all-legal authority. It derives the guard view over the exact
-Maia-admitted rows, runs §3's compiled pipeline and draws with the **branch seed** via the existing
+run-owned `ExactLegalMoveMap`. It derives the optional guard view from the all-legal Stockfish
+result, retaining the exact Maia-admitted rows while allowing the best legal reference to sit
+outside them. It then runs §3's compiled pipeline and draws with the **branch seed** via the existing
 deterministic primitives (`unitInterval`/`sampleWeighted`, `opponent-selector.ts:347-365`,
 keyed on the request's history hash). The recorded engine identity keeps Maia's identity
 fields and sets **`seedHonored: true`** — the seed is honored by the server sampler; the
@@ -505,7 +585,7 @@ model's internal sample is discarded. Basis-equal candidates order by the positi
 finding — byte-identical reproducibility is the property the whole instrument chain rests
 on): exact root, profile, seed and **delivered Maia/Stockfish payload identities** reproduce the
 same `BotPolicyDerivation` digest and selected move. Request id, acquisition/delivery receipts,
-cache state and timings live in the surrounding `BotOperationReceipt` and are deliberately absent
+cache state and timings live in the surrounding operation envelope and are deliberately absent
 from that deterministic digest. Retry equality comes from returning the committed receipt, not
 from recomputation (criterion A6).
 Scope, stated so A3 cannot be misread: the seeded draw exists **only on the composed
@@ -520,9 +600,11 @@ and the event log remain the repeatability instrument there, exactly as today.
 **§4.3 Degradation and availability are recorded, never silent.** The result algebra distinguishes
 three cases that cannot share a fallback label:
 
-1. A **delivered** bounded Maia page below a profile's returned-mass floor may take the profile's
-   exact recorded base-mode path if it still contains a legal selected move. The derivation records
-   `returned_mass_below_profile_floor`; it never claims legal completeness.
+1. A **delivered**, non-empty bounded Maia page below a profile's returned-mass floor still runs the
+   **same declared reconstruction/top-p/seeded-sampler algorithm** over the legal delivered rows.
+   The sampler is not changed and no provider-selected move is assumed. The base layer records
+   action `degraded` with `returned_mass_below_profile_floor`; the derivation retains returned width,
+   mass and bounded coverage and never claims legal completeness.
 2. Optional guard unavailable/deadline/incomplete/mixed-domain evidence leaves the delivered Maia
    distribution byte-identical, records the exact closed guard abstention and forces every
    guard-dependent trait to abstain.
@@ -532,15 +614,16 @@ three cases that cannot share a fallback label:
    measured and registered policy, not an implicit branch.
 
 Release availability is stricter than one-move fallback: if the exact release-concurrency benchmark
-crosses §4.5's intervention boundary or cannot produce complete guard receipts, guarded and
+crosses §4.5's intervention boundary or cannot produce complete guard source results, guarded and
 pawn-forward profiles are unavailable in the roster capability until a matching provider receipt
 clears. Baseline Play remains available. A card and in-run identity surface render the live
 availability/degraded state from the same record rather than rewriting it as persona behavior.
 
 **§4.4 Candidate generation.** The [[D810]] evidence basis is the union the owner named —
 Maia policy mass ∪ book/explorer frequency ∪ engine multipv — realized in v1 as: the
-bounded Maia page is the sampling population, while the shared Stockfish root table is the separate
-all-legal authority and score source. A high returned mass never closes the legal set. The guard's
+bounded Maia page is the sampling population, the run-owned exact legal map is the legality
+authority, and the optional shared Stockfish root table is the all-legal score source. A high
+returned mass never closes the legal set. The guard's
 derived view prices only exact Maia-admitted rows; the repertoire prior (when an instance ever
 registers) reweights within it; explorer frequency enters only through layers that
 declare it (none in v1 — the statistical book measured itself out, §2.3). The set is
@@ -571,11 +654,16 @@ registered collectors' values** under the literal ids shipped by `tactical-colle
 `rules.exchange.predicate.legal_exchange@1`, `rules.tactic.event.fork_allowed@1`,
 `rules.tactic.consequence.threat@1`, `rules.tactic.consequence.reply_breadth@1`) and
 `breadth-collectors` (18, e.g. `rules.mobility.reading.piece_destinations@1`,
-`rules.pawn.event.dynamics@1`, `rules.king.reading.zone_state@1`) — plus one admitted
-`StockfishLegalRootTable`. The bot-local derivation checks root/FEN/legal-set equality, retains the
-packet's exact per-value source ids and emits only
-`derived.opponent.candidate_feature_vector@1`. It enumerates no moves, calls no collector, performs
-zero child position-evaluation requests and owns no cache. This is the D10 hand-off the shared
+`rules.pawn.event.dynamics@1`, `rules.king.reading.zone_state@1`) — plus the same run-owned exact
+legal map and the admitted bounded Maia population. The bot-local derivation first proves packet
+root/FEN/legal-set equality against that all-legal authority, then produces a sealed
+`CandidateFeatureSubset` whose rows are set-equal to **the admitted bounded Maia moves**, selected
+from the all-legal packet rows. It retains packet/root/Maia population identities, all-legal and
+retained counts, omitted move identities, coverage `bounded_subset | legal_set_equal`, and every
+retained value's exact source id. It emits only `derived.opponent.candidate_feature_vector@1`. It
+enumerates no moves, calls no collector, performs zero child position-evaluation requests and owns
+no cache. An absent feature row for any admitted Maia move, a retained row outside that population,
+or a wrong packet/root/population identity refuses. This is the D10 hand-off the shared
 packet reserves for the first bot consumer, not a second candidate pipeline ([[D1976]]).
 
 **Stage A (this RFC's shippable core) does not wait for it.** The v1 roster needs exactly
@@ -583,7 +671,7 @@ three per-candidate facts, none of which is a collector: raw/reconstructed Maia 
 (provider), fixed-bound Stockfish loss (provider — the guard), and the pawn-move
 predicate (pure board arithmetic on the UCI move). The roster, the record, the seam, and
 the calibration gate all land Stage A. **What v1 ships if D813 lags is therefore stated,
-not implied: the three O8.2 profiles with position-level and provider-level features
+not implied: the three O8.2 behavior families at all four ruled bands, with position-level and provider-level features
 only — no feature-weighted persona beyond `trait.pawn_preference@1`, no blind-spot
 persona, no salience anything.**
 
@@ -600,7 +688,7 @@ zero engine calls (`human-like-opponents.md` §9.1).
 | id | role | binding | content |
 |---|---|---|---|
 | `derived.opponent.choice_breadth@1` | reading | `→ opponent.selection` **only** | the [[D816]] admission: candidate-loss distribution or named sufficient statistics + shared root-table identity/depth/budget + legal-set equality + score frame + raw threshold/window parameters (never a prose label); abstains when the required set relation is absent |
-| `derived.opponent.candidate_feature_vector@1` | reading | `→ opponent.selection` only (Stage B) | exact retained rows from one admitted candidate-population receipt, each naming its literal source id; derived against one matching all-legal root delivery with zero collector/provider calls |
+| `derived.opponent.candidate_feature_vector@1` | reading | `→ opponent.selection` only (Stage B) | exact retained rows for the admitted bounded Maia intersection from one candidate-population receipt, each naming its literal source id; retains matching all-legal packet/root and bounded-population identities with zero collector/provider calls |
 | `derived.opponent.policy_decision@1` | source_record | `opponent.selection` + the Review successor | §6's persisted record, re-projected for rendering |
 
 The refusal at `capabilities.ts:124` — *"Move verdicts are not condition measurements"* —
@@ -615,53 +703,78 @@ evidence ([[D817]]).
 historical selection and **never inferred** — the migration-5 precedent):
 
 ```ts
-type BotProfileId =
-  | "human-baseline@1" | "guarded-human@1" | "pawn-forward@1";
+type BotProfileFamily = "human-baseline" | "guarded-human" | "pawn-forward";
+type BotModelBand = 1000 | 1400 | 1800 | 2200;
+type BotProfileId = `${BotProfileFamily}.${BotModelBand}@1`;
 type BotLayerId =
   | "sampler.maia_reconstruction@1"
   | "guard.severe_error@1" | "trait.pawn_preference@1";
 type BotClassifierId = "pawn_move@1";
 type BotDegradationReason =
   | "returned_mass_below_profile_floor"
-  | "guard_unavailable" | "guard_deadline" | "guard_mixed_domain"
-  | "guard_candidate_mismatch" | "candidate_features_unavailable";
+  | "guard_unavailable" | "guard_deadline" | "guard_source_failure"
+  | "guard_mate_domain" | "guard_mixed_domain" | "guard_candidate_mismatch"
+  | "empty_after_mask" | "candidate_features_unavailable";
 
 interface BotRootIdentity {
   readonly runId: string;
   readonly branchId: string;
   readonly nodeId: string;
-  readonly eventHeadDigest: `sha256:${string}`;
+  readonly preCommitEventHeadDigest: `sha256:${string}`;
   readonly beforeFenDigest: `sha256:${string}`;
   readonly historyDigest: `sha256:${string}`;
 }
 
+interface ExactBotProviderSourceIdentity {
+  readonly operation: "maia.policy_page@1" | "stockfish.legal_root_table@1";
+  readonly provider: string;
+  readonly endpointIdentityDigest: `sha256:${string}`;
+  readonly requestedIdentityDigest: `sha256:${string}`;
+  readonly actualIdentityDigest: `sha256:${string}`;
+  readonly generation: number | null;
+  readonly normalizedRequestDigest: `sha256:${string}`;
+  readonly responseDigest: `sha256:${string}`;
+  readonly cacheIdentity: string | null;
+  readonly payloadDigest: `sha256:${string}`;
+}
+
+type BotConsideredGuard =
+  | { readonly kind: "not_requested" }
+  | { readonly kind: "applied"; readonly sourceScore:
+        { readonly kind: "centipawns"; readonly value: number };
+      readonly lossCp: number; readonly admitted: boolean }
+  | { readonly kind: "abstained"; readonly reason: BotDegradationReason;
+      readonly sourceScore?: StockfishLegalRootTable["rows"][number]["score"] };
+
 interface BotPolicyDerivation {
   readonly root: BotRootIdentity;
-  readonly profileId: BotProfileId;
-  readonly profileVersion: 1;
-  readonly profileDigest: `sha256:${string}`;
+  readonly profile: BotProfileReference;
   readonly seed: number;
-  readonly sourceDigests: {
-    readonly maia: `sha256:${string}`;
-    readonly stockfish: `sha256:${string}`;
-    readonly candidatePacket?: `sha256:${string}`;
-  };
+  readonly sources: Readonly<{
+    readonly maia: ExactBotProviderSourceIdentity;
+    readonly stockfish?: ExactBotProviderSourceIdentity;
+    readonly candidatePacketDigest?: `sha256:${string}`;
+    readonly candidateSubsetDigest?: `sha256:${string}`;
+  }>;
+  readonly returnedWidth: number;
   readonly returnedProbabilityMass: number;
   readonly maiaCoverage: "bounded_subset" | "legal_set_equal";
   readonly layers: readonly Readonly<{
     readonly id: BotLayerId;
-    readonly action: "applied" | "abstained" | "fallthrough";
+    readonly action: "applied" | "abstained" | "degraded" | "fallthrough";
     readonly reason?: BotDegradationReason;
   }>[];
   readonly considered: readonly Readonly<{
     readonly moveUci: string;
     readonly rawMass: number;
+    readonly reconstructedMass: number;
     readonly finalMass: number;
-    readonly guardLossCp: number;
+    readonly guard: BotConsideredGuard;
     readonly classifiers: readonly BotClassifierId[];
     readonly features: readonly Readonly<{
       readonly id: CandidateFeatureId;      // generated closed catalogue union
       readonly value: string | number | boolean;
+      readonly sourceId: string;
     }>[];
   }>[];
   readonly chosenMoveUci: string;
@@ -671,40 +784,49 @@ interface BotPolicyDecisionRecord extends BotPolicyDerivation {
   readonly derivationDigest: `sha256:${string}`;
 }
 
-readonly policy?: BotPolicyDecisionRecord;
-```
-
-There is one constructor, `projectBotPolicyDecisionRecord`, and it accepts the admitted
-`BotSourceView`, compiled profile, sealed guard/trait views and (in Stage B) the admitted candidate
-packet projection — never a caller-authored record. It asserts exact root equality and set-equality
-between `considered`, the admitted Maia population and every supplied feature/classifier view.
-The ID and reason unions are generated from their registries; an unregistered identifier, free-form
-reason, open parameter map or structurally matching plain object is rejected. A runtime seal makes
-an `as unknown as BotPolicyDecisionRecord` forge fail at the persistence boundary as well as in the
-type fixtures ([[D1972]]).
-
-The deterministic object above deliberately contains no request id, writer lease, elapsed time or
-delivery timing. Those call-specific facts live in a separate durable operation envelope:
-
-```ts
-interface BotOperationReceipt {
+interface BotOperationRecord {
   readonly requestId: `botreq_${string}`;
   readonly root: BotRootIdentity;
   readonly writerLeaseDigest: `sha256:${string}`;
   readonly profileDigest: `sha256:${string}`;
+  readonly seed: number;
+  readonly preProviderOperandDigest: `sha256:${string}`;
+  readonly commitOperandDigest: `sha256:${string}`;
   readonly derivationDigest: `sha256:${string}`;
-  readonly providerReceiptDigests: readonly `sha256:${string}`[];
+  readonly providerSourceDigests: readonly `sha256:${string}`[];
+  readonly chosenMoveUci: string;
+  readonly committedEventSequence: number;
+  readonly operationDigest: `sha256:${string}`;
   readonly timingMs: Readonly<{
     total: number; maia: number; guard: number; composition: number;
   }>;
-  readonly committedEventHeadDigest: `sha256:${string}`;
 }
+
+interface BotPolicyEventEnvelope {
+  readonly decision: BotPolicyDecisionRecord;
+  readonly operation: BotOperationRecord;
+}
+
+readonly policy?: BotPolicyEventEnvelope;
 ```
 
-The derivation digest covers the exact root, profile, seed and source payload identities. The
-operation receipt binds those bytes to the request, lease and committed event head. An idempotent
-retry returns the already-committed receipt; it does not rerun the policy and compare timing-bearing
-objects ([[D1973]]/[[D1974]]). The REST/storage surfaces accept neither object from the browser.
+`compileBotPolicyExecution` is the sole transform/sampler constructor and returns a runtime-sealed
+execution. `projectBotPolicyDecisionRecord` accepts only that execution and adds the canonical
+derivation digest. It cannot accept chosen moves, final weights, layer actions, classifier ids or
+guard losses from callers. It asserts exact root equality and set equality between `considered`,
+the admitted Maia population and every supplied feature/classifier view. The ID and reason unions
+are generated from their registries; an unregistered identifier, free-form reason, open parameter
+map, forged execution or structurally matching plain object is rejected, including an `as unknown
+as` double cast ([[D1972]]).
+
+The deterministic decision deliberately contains no request id, writer lease, elapsed time or
+delivery timestamps. Its digest covers exact root, profile, seed, exact provider source/payload
+identities, transformations and sampled move. `compileBotPolicyEventEnvelope` accepts the sealed
+decision plus parsed request, writer lease and allocated event sequence. `operationDigest` uses the
+canonical operation image described in §4.1 and excludes timing, the resulting event-head digest
+and itself. The surrounding event hash authenticates the entire envelope. An idempotent retry
+returns that already-committed envelope; it does not rerun providers or compare timing-bearing
+objects ([[D1973]]/[[D1974]]). REST and storage accept neither object from the browser.
 
 **What this buys, and the law-8 line.** *"It missed your fork because the knight had just
 moved"* — or in v1's honest vocabulary, *"the fork candidate carried 0.03 of the policy's
@@ -721,8 +843,8 @@ the selection already retains; `considered` rows join the existing `candidates` 
 `moveUci` rather than duplicating rank/cp/wdl.)
 
 This is also [[D708]]'s prerequisite paid forward: a future tournament envelope records
-*"exact entrant policy IDs+versions"* by reading `profileId`/`profileVersion`/
-`profileDigest` off every game's selections — no new selector work.
+*"exact entrant policy IDs+versions"* by reading `decision.profile` off every game's selections —
+no new selector work.
 
 ### §7 — Calibration is the acceptance gate for every strength label ([[D819]])
 
@@ -849,14 +971,14 @@ declaration does not count as consumption:
 | 1 | run create stores exact profile reference | run/session validation + run schema 0.18 |
 | 2 | resume resolves the same digest, never latest | run service/storage projection |
 | 3 | client invokes only run/writer + expected node/branch/event-head + `botreq_` id | web API + session controller |
-| 4 | server derives exact root/FEN/history/seed/profile and records writer lease | `RunService` opponent operation |
+| 4 | server derives sealed root/FEN/history/seed/profile, exact legal map and writer lease | `RunService` opponent operation |
 | 5 | shared provider exchange admits `maia.policy_page@1` as `bounded_top_k` | provider scheduler/exchange; no bot-private acquisition |
-| 6 | shared provider exchange admits `stockfish.legal_root_table@1` as `all_legal` | provider scheduler/exchange; no bot-private guard request |
-| 7 | bot source join derives mass, set relation and guard view from those two seals | bot-policy source adapter |
+| 6 | optional shared provider result admits or abstains `stockfish.legal_root_table@1` | provider scheduler/exchange; no bot-private guard request |
+| 7 | bot source join derives mass/subset and guard view from exact shared types + legal map | bot-policy source adapter |
 | 8 | registered legal-board classifier compiles the sealed trait view | bot-trait registry/adapter |
-| 9 | non-test composer consumes source/guard/trait seals and projects one sealed decision | selector/service composition path |
-| 10 | post-provider CAS appends move + decision and durable request receipt atomically | service/storage event append |
-| 11 | `OpponentSelection.policy` and operation receipt survive persistence/replay | runtime types/schema/migration |
+| 9 | non-test compiler executes transforms/sampler and projects one sealed decision | selector/service composition path |
+| 10 | post-provider CAS appends move + decision/operation envelope atomically | service/storage event append |
+| 11 | `OpponentSelection.policy` envelope survives persistence/replay/retry/export | runtime types/schema/migration |
 | 12 | roster capability reads compiled profile + provider state | server capability projection |
 | 13 | card projection reads the same profile/receipts | registered bot-card compiler |
 
@@ -903,40 +1025,48 @@ Before another acceptance review, the author must:
 Each criterion names its failure mode; none can pass while measuring nothing ([[D444]]/
 [[D451]] — the able-to-fail fixtures are part of the criterion).
 
-- **A1 — exact run identity.** Create rejects a bad digest or a profile combined with request
-  overrides; valid create/resume preserves the exact triple; historical runs infer none. *Fails if*
-  resume resolves latest or the browser can replace the profile per move.
-- **A2 — one atomic production route.** A non-test fixture executes create → shared admitted Maia
-  page + all-legal Stockfish table → derived guard/trait → compose → post-provider compare-and-swap
+- **A1 — exact twelve-member run identity.** The catalog enumerates exactly three families × four
+  bands. Create rejects a bad family/band/id/digest/model tuple or a profile combined with request
+  overrides; create/resume/rematch/cache preserve the exact reference; same-family/different-band
+  identities differ; historical runs infer none. *Fails if* resume resolves latest or the browser
+  can replace the profile per move.
+- **A2 — one atomic production route.** A non-test fixture executes create → sealed root/legal map
+  → shared admitted Maia page + optional all-legal Stockfish result → derived guard/trait → compiler
+  execution → post-provider compare-and-swap
   under one writer lease. The browser request contains only run/writer identity, expected node,
   branch and event-head digest, plus a `botreq_` id. Stale-node, stale-branch, stale-event-head,
   wrong-writer and reused-request/different-operands arms refuse; an identical retry returns the
-  durable committed receipt. *Fails if* `/select-move` selection bytes cross the browser, provider
+  durable committed event envelope without provider calls. *Fails if* `/select-move` selection bytes cross the browser, provider
   work is held inside a transaction, or the append does not re-read the root after the awaits.
-- **A3 — shared sealed source and guard authority.** Positive, provider-off, deadline, missing,
+- **A3 — exact shared source and optional guard authority.** Positive, provider-off, deadline, missing,
   duplicate, mixed-domain, all-mate, bounded, wrong-history, wrong-root, candidate-set mismatch and
-  forged-delivery fixtures prove whole-source/guard behavior. The selector consumes the exact
-  `maia.policy_page@1` and `stockfish.legal_root_table@1` deliveries; it creates no provider request,
-  private receipt, cache or bare loss. *Fails if* a structurally matching plain object or one
-  candidate annotation can apply the guard.
+  forged-delivery fixtures prove whole-source/guard behavior. The selector imports the exact shared
+  delivery/result/payload/score types; baseline legality comes from the sealed root legal map and
+  survives every optional Stockfish failure. It creates no provider request, private receipt, cache
+  or bare loss. *Fails if* a structurally matching plain object or one candidate annotation can
+  apply the guard, or if baseline requires Stockfish.
 - **A4 — registered trait authority and dependency.** `pawn_move@1` proves ordinary/capture/
   promotion positives and castling/non-pawn negatives at the legal-board boundary. Caller strings,
   illegal/duplicate candidates and unregistered classifiers fail. Guard success applies pawn ×4;
   every guard abstention records trait abstention and returns mass byte-equal to base Maia. *Fails
   if* an unguarded pawn-forward distribution can execute.
-- **A5 — compiler refusals.** Duplicate authority, incomplete vector without a degraded path,
+- **A5 — compiler refusals.** Duplicate authority, a completeness-dependent transform over bounded
+  input without an all-legal authority,
   unknown guard profile, unmeasured/unregistered/unguarded trait, delay, memory and learner-derived
   inputs all fail compilation. Forcing ×3 and quiet ×3 remain measured negative registrations.
 - **A6 — derivation determinism, operation idempotency.** Same exact root/seed/profile and delivered
   Maia/Stockfish payload identities produce a byte-identical `BotPolicyDerivation` digest across
   restarts; equal-mass ties use `neutralTiebreak` and the composed path records `seedHonored: true`.
-  Request id, writer lease and timing occur only in `BotOperationReceipt`. *Fails if* elapsed time
-  changes the decision digest or a retry recomputes instead of replaying the committed receipt.
+  Request id, writer lease and timing occur only in the event-embedded operation record. The parsed
+  request and pre-provider digest distinguish writer/root/profile/seed before provider calls; the
+  commit digest additionally binds derivation and exact provider identities. *Fails if* elapsed
+  time changes the decision digest, a resulting event-head digest creates a circular image, or a
+  retry recomputes instead of replaying the committed envelope.
 - **A7 — sampler positive control.** The committed R11 captured production sample remains within
   0.5 cp and 0.1 pp of reconstruction; T=1.0 breaks the bound. The fixture reads the artifact, not
   restated expected numbers.
 - **A8 — atomic persistence and migration.** Move, sealed policy projection, exact root/source/
-  candidate digests, layer actions, abstentions and durable request receipt survive event-log replay
+  candidate digests, layer actions, abstentions and durable operation envelope survive event-log replay
   byte-identically under run 0.18. The append rechecks writer lease, node, branch and event head; a
   failed/stale append saves neither move nor decision, two in-flight requests cannot overwrite each
   other, and historical rows gain nothing.
@@ -944,11 +1074,12 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
   measurements, abstentions, absence/scope and optional exact-digest calibration only. Wrong-digest
   calibration, absent sources, malformed family composition and caller sentences fail. Decorative
   identity reaches only the display slot. *Fails if* a word filter is the grounding mechanism.
-- **A10 — availability and degradation.** Optional guard off/deadline/incomplete receipts keep the
-  delivered Maia distribution byte-identical, make guarded/pawn profiles unavailable when the
+- **A10 — availability and degradation.** Optional guard off/deadline/incomplete results keep the
+  delivered Maia distribution byte-identical and baseline selectable, make guarded/pawn profiles unavailable when the
   release receipt is red, and never present an abstained guard as applied. Maia unavailable/failed
   returns the typed retryable no-move result and commits no selection event; it never falls through
-  to an invented “base” move. Prediction/human-split paths remain raw Maia consumers.
+  to an invented “base” move. A below-floor delivered page runs the same declared seeded sampler and
+  records degradation. Prediction/human-split paths remain raw Maia consumers.
 - **A11 — exact shared-route production budget.** The release operation benchmarks expected
   concurrency and records total/shared-Maia/shared-root-table/guard-derivation/composition durations
   and coverage. Combined p95 ≤400 ms is healthy; p95 >500 ms or any incomplete/late receipt is
@@ -957,18 +1088,23 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
   shared-route guarantee.
 - **A12 — operation census.** Every one of §10's thirteen operations has a non-test symbol and the
   positive route traverses all thirteen; Stage B additionally consumes exactly one admitted
-  candidate packet and the same root table with zero child provider/collector calls. A parser, type
+  candidate packet, retains the bounded Maia intersection and same all-legal root authority, with
+  zero child provider/collector calls. A parser, type
   or anchor without runtime consumption does not pass.
 - **A13 — wall/dispositions/docs.** Learner-derived inputs and multi-band persona queries remain
   compile-refused; every advertised provider/profile state has a disposition; docs describe the
   atomic route, seals, record, card, budget and degradation; the release journey exercises
   choose → play → resume → rematch through normal Make/CI targets.
-- **A14 — seven-return falsifier.** The executable author contract covers: shared provider operation
-  IDs; a 0.99-mass Maia page that remains `bounded_subset` while an omitted legal move exists; a
-  forged decision object rejected at runtime; considered/feature set mismatch; stale branch and
-  event head; Maia unavailable/failed producing no move; and Stage B consuming one admitted packet
-  plus one root table. Each negative arm is mutated from a passing positive control. Reproduction:
-  `make bot-policy-author-contract`.
+- **A14 — ten-return falsifier.** The executable author contract imports the shared provider
+  authority and proves: (1) save→reload→retry of the non-circular envelope; (2) twelve exact
+  family×band identities across create/resume/rematch/cache; (3) the exact delivery shape and source
+  identities; (4) cp/mate/mixed guard algebra without fabricated loss; (5) compiler-owned transform,
+  layer and sampled-move outputs; (6) request parsing plus writer/seed/derivation/provider operand
+  distinctions; (7) baseline under Stockfish off/deadline/failure; (8) end-to-end bounded-Maia Stage
+  B intersection; (9) best legal guard reference outside Maia's window; and (10) below-floor use of
+  the declared sampler. Each negative arm mutates a passing positive control. The historical fresh
+  review must invert all ten blocker arms while this contract stays green. Reproduction:
+  `make bot-policy-author-contract && make bot-policy-fresh-review`.
 
 ## Discharges
 
@@ -1037,6 +1173,16 @@ as a named future measured layer (Open question 4).
   deterministic policy bytes from request/timing bytes, and refuse rather than invent a move when
   the base provider supplies no distribution. Reproduction:
   `make bot-policy-independent-review`. No product/schema byte changed in the review.
+- 2026-08-30: author-repaired [[D2087]]–[[D2096]] as one executable operation contract. The run
+  event embeds a non-circular decision+operation envelope; the catalog has twelve exact family×band
+  identities; the bot consumes the provider author's exact shared delivery/score authority;
+  baseline legality is independent of optional Stockfish; cp/mate guard state is correlated and
+  references the best all-legal row; one sealed compiler owns transformations and sampling;
+  request/pre-provider/commit identities cover every write operand; Stage B retains the bounded
+  Maia intersection; and below-floor pages use the declared seeded sampler. `make
+  bot-policy-author-contract` passes 11/11; the unchanged historical `make
+  bot-policy-fresh-review` fails 10/10, the intended inversion. No production, schema, migration,
+  route, roster, content, archive or protected-design byte changed.
 - 2026-08-30: author-amended all seven returns. The private provider/guard path is replaced by the
   two admitted shared deliveries; returned probability mass and legal-set equality are separate;
   the decision is a sealed, closed, set-equal derivation whose digest excludes operation bytes; a

@@ -5,6 +5,10 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 const rfc = readFileSync("rfc/provider-exchange-and-execution.md", "utf8");
+const sharedConsumerContract = readFileSync(
+  "tools/d2056-provider-exchange-author-repair/shared-provider-contract.ts",
+  "utf8",
+);
 
 function section(start: string, end: string): string {
   const from = rfc.indexOf(start);
@@ -99,4 +103,16 @@ test("D2062: Maia validates and proves every requested/applied field", () => {
   }
   assert.match(maia, /timeoutMs` is `1\.\.60_000`/u);
   assert.match(maia, /never clamps/u);
+});
+
+test("shared consumer authoring authority mirrors the exact delivery seam", () => {
+  for (const field of ["kind: \"live\"", "servedAt", "cacheIdentity", "acquisition", "payload"] as const) {
+    assert.match(sharedConsumerContract, new RegExp(field, "u"));
+  }
+  for (const field of ["operation", "provider", "endpoint", "requestedIdentity", "actualIdentity", "generation",
+    "normalizedRequestDigest", "responseDigest"] as const) assert.match(sharedConsumerContract, new RegExp(field, "u"));
+  assert.match(sharedConsumerContract, /type ProviderRequestedIdentity<K/u);
+  assert.match(sharedConsumerContract, /type ProviderActualIdentity<K/u);
+  assert.doesNotMatch(sharedConsumerContract, /Readonly<Record<string, unknown>>/u);
+  assert.match(sharedConsumerContract, /assertProviderDelivery/u);
 });
