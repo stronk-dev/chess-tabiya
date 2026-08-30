@@ -1,5 +1,6 @@
 // DISPOSABLE research harness — D1612–D1617. Not production code.
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -17,6 +18,10 @@ import {
 
 describe("D1612 exact constructor registry", () => {
   it("publishes all 67 literal rows with the exact 46/13/8 disposition", () => {
+    const registryBytes = readFileSync(new URL("../../rfc/contracts/longitudinal-ingest-registry-v1.json", import.meta.url));
+    const published = JSON.parse(registryBytes.toString("utf8")) as readonly LongitudinalConstructor[];
+    expect(published).toEqual(LONGITUDINAL_INGEST_REGISTRY);
+    expect(createHash("sha256").update(registryBytes).digest("hex")).toBe("e12147750b512c83872f61dd7dc333e94e20c151876a3c2d3ef5f91c7e7fc21a");
     validateIngestRegistry(LONGITUDINAL_INGEST_REGISTRY);
     expect(LONGITUDINAL_INGEST_REGISTRY).toHaveLength(67);
     expect(LONGITUDINAL_INGEST_REGISTRY.filter((row) => row.kind === "edge")).toHaveLength(46);

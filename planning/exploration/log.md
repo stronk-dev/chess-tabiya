@@ -11344,3 +11344,13 @@ envelope, rechecks node/branch/event head after provider work, commits no move w
 consumes one shared candidate packet in Stage B. `make bot-policy-author-contract` is the able-to-
 fail checkpoint; fresh independent review and both shared dependencies still gate implementation.
 No product/schema/migration/content or protected-design byte changed.
+
+## 2026-08-30 — longitudinal-store six-return author fold
+
+Folded [[D1612]]–[[D1617]] into one normative `rfc/longitudinal-store.md` contract and published
+the exact 67-row constructor artifact. The repaired boundary now includes safe durable claims,
+exact event-prefix/CAS publication, independent phase/class denominators, all seven transactional
+run-write sites, and observed-only imported mainlines pending subject provenance. The prior
+two-table synchronous shape is explicitly non-normative history. `make longitudinal-store-author-
+contract` is the able-to-fail checkpoint; fresh independent review still gates implementation.
+No production schema/migration/worker/API/client/content or protected-design byte changed.

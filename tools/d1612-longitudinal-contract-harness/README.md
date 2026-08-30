@@ -10,9 +10,8 @@ It supplies executable author input, not production persistence:
 - the seven-operation run-write closure;
 - an import-subject gate that distinguishes asserted personal play from observed games.
 
-Run with Node 24:
+Run through the repository target:
 
 ```sh
-/opt/homebrew/opt/node@24/bin/node node_modules/vitest/vitest.mjs run \
-  --config tools/d1612-longitudinal-contract-harness/vitest.config.ts
+make longitudinal-store-author-contract
 ```
