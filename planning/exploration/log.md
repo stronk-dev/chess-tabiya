@@ -11614,3 +11614,21 @@ blockers, a forged pawn identity and an absent FEN. The promotion-amendment revi
 updated so it continues to fail only on the still-live constructor bypass. The amendment remains
 returned on that constructor identity plus [[D2142]] and [[D2143]]; no promotion projection, schema,
 content, archive or protected-design byte changed.
+
+## 2026-08-30 — Declared-evidence value-authority audit
+
+Opened and completed [[D2144]]'s research arm after D2141 exposed a class boundary. The executable
+population contains 74 public generic object adapters across four different trust models; 50 have
+compiled consumer bindings. Twenty rules/position-exact adapters accept caller payloads after only
+operand-name checks, twelve of those are bound, and three bound derived/position-exact rows make
+the immediate exact position population fifteen. Four same-key false readings receive seals but
+have no consumer today; an impossible `e2e4`/unchanged-FEN/`rook_captured` castling-loss event is
+sealed and admitted to `research.semantic_selection@1`. The repaired pawn-contact recomputation is
+the working negative control.
+
+The result narrows rather than sensationalizes the risk: current missing bindings protect several
+readings, but Phase 3 exists to remove that protection. The successor contract must distinguish
+computed, derived, recorded/provider and authored value authorities before ordinary modules,
+Review, bots, packs or longitudinal state consume the facts. D1934's extra-key repair remains
+necessary and insufficient. `make evidence-seal-audit` passes 4/4. No producer, projection,
+binding, schema, content, archive or protected-design byte changed.
