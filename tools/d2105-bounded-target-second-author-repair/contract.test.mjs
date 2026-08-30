@@ -15,7 +15,7 @@ function section(start, end) {
 
 test("D2105: one FEN-owning threat constructor retains a private source anchor", () => {
   assert.match(rfc, /declareThreatEvidence\(sourceFen: string\): SourceBoundThreatEvidence/u);
-  assert.match(rfc, /WeakMap<DeclaredEvidence<ThreatResult>, ThreatPassAnchor>/u);
+  assert.match(rfc, /WeakMap<DeclaredEvidence<ThreatResult>, ThreatPassAnchorResult>/u);
   assert.match(rfc, /accepts no caller payload/u);
   assert.match(rfc, /byte-identical threats[\s\S]{0,120}refuses/u);
 });
@@ -42,7 +42,7 @@ test("D2108: one deterministic whole-job bound closes the multiplied envelope", 
 });
 
 test("D2109: every positive non-universal witness has a required refutation", () => {
-  const outcomes = section("type BoundedReturnOutcome", "interface BoundedTargetReturn");
+  const outcomes = section("export type BoundedReturnOutcome", "export interface BoundedTargetReturn");
   assert.match(outcomes, /kind: "reintroduced";[\s\S]*?firstRefutation: RefutationLine;/u);
   assert.doesNotMatch(outcomes, /kind: "reintroduced";[\s\S]*?firstRefutation: RefutationLine \| null/u);
   assert.match(rfc, /terminal\/zero-reply preparation is not a vacuous[\s\S]{0,30}universal/u);
@@ -50,7 +50,7 @@ test("D2109: every positive non-universal witness has a required refutation", ()
 
 test("D2110: product scheduling is fixed and lifecycle is idempotently closeable", () => {
   const execution = section("### 4.1 Execution class", "### 4.2 Producer-operation authority");
-  assert.match(execution, /accept only the compiled manifest plus numeric/u);
+  assert.match(execution, /accept only numeric `Partial<BoundedTargetServiceLimits>`/u);
   assert.match(execution, /createBoundedTargetBackgroundServiceForTest/u);
   assert.match(execution, /absent from the runtime barrel and production import/u);
   assert.match(execution, /`close\(\)` is idempotent/u);

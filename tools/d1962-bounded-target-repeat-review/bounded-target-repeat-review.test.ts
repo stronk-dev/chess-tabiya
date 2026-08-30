@@ -14,7 +14,7 @@ const census = readFileSync(new URL("../d1023-bounded-policy-harness/exact-targe
 
 describe("bounded-target second repeat repair", () => {
   it("D1962 assigns the threat pass to one production authority", () => {
-    expect(rfc).toMatch(/export `ThreatPassAnchor`\/`threatPassAnchor\(\)` and make `threats\(\)` consume the same transform/u);
+    expect(rfc).toMatch(/export the exact sealed `ThreatPassAnchor`\/result\/assertion contract and make `threats\(\)` consume the same transform/u);
     expect(rfc).toMatch(/no other implementation may reproduce the flip-side\/clear-en-passant mutation/u);
     expect(rfc).toMatch(/`packages\/runtime\/src\/tactics\.ts` \|/u);
     expect(authorHarness).toMatch(/prospectiveThreatPassAnchor/u);

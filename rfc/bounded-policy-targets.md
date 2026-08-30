@@ -1,15 +1,15 @@
 # RFC: Convention-grounded bounded material targets
 
-- **Status:** **draft — RETURNED by second fresh independent review 2026-08-30 on
-  [[D2202]]–[[D2205]].** The source anchor, concrete service, whole-job bound and total quantifiers
-  survive, but manifest authority is unused, `ThreatPassAnchor` is undefined, the three derived
-  projections have no exact value-authority constructors, and the public operation uses private
-  request/result types. `make bounded-target-second-fresh-review` passes 4/4. Implementation
-  remains unauthorised.
+- **Status:** **draft — author-repaired 2026-08-30 on [[D2202]]–[[D2205]]; fresh independent
+  review required.** One fixed primary manifest enters request/result identity; `ThreatPassAnchor`
+  has one sealed canonical constructor; three exact compute/derive factories are registered with
+  the sole value authority; and the complete service request/result family is exported.
+  `make bounded-target-third-author-repair` is the positive author contract. Implementation remains
+  unauthorised.
 - **Author:** codex, preserving the D1023 research contract and applying `planning/bounded-policy-targets/author-repair-2026-08-26.md`
 - **Created:** 2026-08-23; narrowed 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; executable contract closure in `design/research/bounded-policy-target-contract-closure.md`
-- **Depends on:** implemented F1; accepted/implemented `rfc/exact-legal-mobility.md`; accepted and implemented `rfc/tactical-collectors.md`
+- **Depends on:** implemented F1; accepted/implemented `rfc/exact-legal-mobility.md`; accepted and implemented `rfc/tactical-collectors.md`; draft `rfc/evidence-value-authority.md` for the sole factory/receipt boundary and draft `rfc/semantic-validation-authority.md` for the three route profiles — both must be accepted and implemented before this RFC can be implemented
 - **Followed by:** `rfc/provider-exchange-and-execution.md`, then `rfc/bounded-target-policy-composition.md`
 - **Planning:** `planning/bounded-policy-targets/`
 
@@ -65,7 +65,8 @@ retains the exact source items from which it was computed.
 
 `declareThreatEvidence(sourceFen)` is the sole threat constructor. It canonicalizes the FEN, calls
 `threats(sourceFen)` itself, declares the unchanged `threat@1` payload, and records the exact
-`ThreatPassAnchor` in a module-private `WeakMap<DeclaredEvidence<ThreatResult>, ThreatPassAnchor>`.
+`ThreatPassAnchorResult` in a module-private
+`WeakMap<DeclaredEvidence<ThreatResult>, ThreatPassAnchorResult>`.
 It accepts no caller payload. `threatEvidencePassAnchor(item)` succeeds only for the exact object
 minted by that constructor; spread, JSON, cast and a separately sealed equal payload fail. This is
 source authority attached to the existing process-local evidence seal, not a new projection or a
@@ -119,10 +120,30 @@ board refuses before any bounded enumeration begins.
 ### 2.1 `NamedMaterialTarget`
 
 ```ts
-type ProjectionEvidence<Id extends string, Payload> =
+export type ProjectionEvidence<Id extends string, Payload> =
   DeclaredEvidence<Payload> & {
     readonly projection: { readonly id: Id; readonly version: 1 };
   };
+
+export interface ThreatPassAnchor {
+  readonly conventionId: typeof THREAT_CONVENTION; // exactly "threat@1"
+  readonly sourceFen: string;                       // canonical six-field FEN
+  readonly passedFen: string;                       // canonical derived pass position
+}
+
+export type ThreatPassAnchorResult =
+  | { readonly kind: "available"; readonly anchor: ThreatPassAnchor }
+  | {
+      readonly kind: "unavailable";
+      readonly reason: "pass_while_in_check";
+      readonly sourceFen: string;
+    };
+
+declare const THREAT_PASS_ANCHORS: WeakSet<ThreatPassAnchor>; // module-private
+export function threatPassAnchor(sourceFen: string): ThreatPassAnchorResult;
+export function assertThreatPassAnchor(
+  value: unknown,
+): asserts value is ThreatPassAnchor;
 
 declare const THREAT_SOURCE_BOUND: unique symbol; // module-private
 export type SourceBoundThreatEvidence = ProjectionEvidence<
@@ -134,14 +155,14 @@ export type SourceBoundThreatEvidence = ProjectionEvidence<
 export function declareThreatEvidence(sourceFen: string): SourceBoundThreatEvidence;
 export function threatEvidencePassAnchor(
   evidence: SourceBoundThreatEvidence,
-): ThreatPassAnchor;
+): ThreatPassAnchorResult;
 
-type ThreatEvidence = SourceBoundThreatEvidence;
-type LegalExchangeEvidence = ProjectionEvidence<
+export type ThreatEvidence = SourceBoundThreatEvidence;
+export type LegalExchangeEvidence = ProjectionEvidence<
   "rules.exchange.predicate.legal_exchange",
   LegalExchangeResult
 >;
-type SourceLegalMovesEvidence = ProjectionEvidence<
+export type SourceLegalMovesEvidence = ProjectionEvidence<
   "rules.mobility.reading.legal_moves",
   ExactLegalMoveMap
 >;
@@ -179,8 +200,19 @@ export interface NamedMaterialTarget {
 }
 ```
 
-`ThreatPassAnchor` is the frozen `{ conventionId: "threat@1", sourceFen, passedFen }` returned by
-the one exported transform and recovered only from the threat evidence's private source authority.
+`ThreatPassAnchor` is the frozen `{ conventionId: "threat@1", sourceFen, passedFen }` in the
+`available` result of the one exported transform and recovered only from the threat evidence's
+private source authority. `threatPassAnchor(sourceFen)` canonicalizes the source; a checked source
+returns the exact `unavailable/pass_while_in_check` arm with no passed FEN. Otherwise it clones the
+position, flips side to move, clears en-passant, canonicalizes the passed position and adds the exact
+frozen anchor to the private `THREAT_PASS_ANCHORS` set. `threats(sourceFen)` consumes that same
+result and never reimplements the transform. `assertThreatPassAnchor` requires set membership and re-derives both canonical FENs under
+the literal convention; a plain/spread/JSON/double-cast value and a separately constructed equal
+object fail. `declareThreatEvidence(sourceFen)` stores the same result/anchor reference; a batch
+receiving the unavailable arm returns `input_abstained`, while target admission requires an
+available result and reference identity with `threatEvidencePassAnchor(threat).anchor` before inspecting
+payload rows. Wrong convention, noncanonical source, mismatched passed FEN and equal rebuilds are
+therefore distinct able-to-fail arms.
 `TrackedPieceIdentity` contains exactly colour, current role and square; excess `promoted`, source
 history or arbitrary labels refuse. `TrackedPieceState` is traversal-only and never enters a
 projection payload: it retains the immutable source identity, nullable current identity and every
@@ -194,14 +226,14 @@ update is an `identity_lost` abstention, not a chess-state result ([[D2107]]).
 ### 2.2 `BoundedTargetImmediate`
 
 ```ts
-interface PostCandidateExchangeEvaluation {
+export interface PostCandidateExchangeEvaluation {
   readonly convention: "legal-exchange-for-move@1";
   readonly captureUci: string;
   readonly resultUnits: number;
   readonly result: "positive" | "non_positive";
 }
 
-type ImmediateTargetOutcome =
+export type ImmediateTargetOutcome =
   | {
       readonly result: "preserved";
       readonly cause: "preserved";
@@ -225,7 +257,7 @@ type ImmediateTargetOutcome =
       };
     };
 
-interface BoundedTargetImmediate {
+export interface BoundedTargetImmediate {
   readonly target: NamedMaterialTarget;
   readonly candidateUci: string;
   readonly afterFen: string;
@@ -255,20 +287,20 @@ legal map. It does not say the candidate was good, best, intentional or prophyla
 ### 2.3 `BoundedTargetReturn`
 
 ```ts
-type CandidateLine = readonly [candidateUci: string];
-type RefutationLine = readonly [
+export type CandidateLine = readonly [candidateUci: string];
+export type RefutationLine = readonly [
   candidateUci: string,
   preparationUci: string,
   replyUci: string,
 ];
-type ReintroductionLine = readonly [
+export type ReintroductionLine = readonly [
   candidateUci: string,
   preparationUci: string,
   replyUci: string,
   captureUci: string,
 ];
 
-type BoundedReturnOutcome =
+export type BoundedReturnOutcome =
   | {
       readonly kind: "not_reintroduced";
       readonly firstRefutation: RefutationLine | null;
@@ -283,7 +315,7 @@ type BoundedReturnOutcome =
       readonly witness: ReintroductionLine;
     };
 
-interface BoundedTargetReturn {
+export interface BoundedTargetReturn {
   readonly immediate: BoundedTargetImmediate & {
     readonly outcome: Extract<ImmediateTargetOutcome, { readonly result: "removed" }>;
   };
@@ -409,29 +441,94 @@ The public boundary has one set-owning request and a result whose discriminants 
 success and abstention. There is no generic request union beside a generic result union.
 
 ```ts
-type NamedMaterialTargetEvidence = ProjectionEvidence<
+export type NamedMaterialTargetEvidence = ProjectionEvidence<
   "derived.bounded_target.named_material_target",
   NamedMaterialTarget
 >;
-type BoundedTargetImmediateEvidence<
+export type BoundedTargetImmediateEvidence<
   Outcome extends ImmediateTargetOutcome = ImmediateTargetOutcome,
 > = ProjectionEvidence<
   "derived.bounded_target.immediate",
   BoundedTargetImmediate & { readonly outcome: Outcome }
 >;
-type BoundedTargetReturnEvidence = ProjectionEvidence<
+export type BoundedTargetReturnEvidence = ProjectionEvidence<
   "derived.bounded_target.bounded_return",
   BoundedTargetReturn
 >;
 
-interface BoundedTargetBatchRequest {
+export type NamedMaterialTargetFactoryResult =
+  | { readonly kind: "evidence"; readonly item: NamedMaterialTargetEvidence }
+  | {
+      readonly kind: "abstained";
+      readonly projection: {
+        readonly id: "derived.bounded_target.named_material_target";
+        readonly version: 1;
+      };
+      readonly reason: "input_abstained" | "position_mismatch" | "target_mismatch";
+    };
+
+export type BoundedTargetImmediateFactoryResult =
+  | { readonly kind: "evidence"; readonly item: BoundedTargetImmediateEvidence }
+  | {
+      readonly kind: "abstained";
+      readonly projection: {
+        readonly id: "derived.bounded_target.immediate";
+        readonly version: 1;
+      };
+      readonly reason: "position_mismatch" | "target_mismatch" | "identity_lost";
+      readonly candidateUci: string;
+    };
+
+declare const BOUNDED_TARGET_BATCH_COUNTER: unique symbol; // module-private
+interface BoundedTargetBatchCounterAuthority {
+  readonly [BOUNDED_TARGET_BATCH_COUNTER]: true;
+  readonly maxVisitedPositions: number;
+  current(): number;
+  claimPosition(): "claimed" | "batch_budget_exhausted";
+}
+declare const BOUNDED_TARGET_BATCH_COUNTERS: WeakSet<BoundedTargetBatchCounterAuthority>;
+
+interface BoundedTargetTraversalAuthority {
+  readonly request: BoundedTargetRequestIdentity;
+  readonly signal: AbortSignal;
+  readonly candidateLimit: number;
+  readonly batchCounter: BoundedTargetBatchCounterAuthority;
+}
+
+declare function makeNamedMaterialTargetEvidence(input: Readonly<{
+  threat: ThreatEvidence;
+  exchange: LegalExchangeEvidence;
+  sourcePosition: SourceLegalMovesEvidence;
+}>): NamedMaterialTargetFactoryResult;
+declare function makeBoundedTargetImmediateEvidence(input: Readonly<{
+  target: NamedMaterialTargetEvidence;
+  candidate: ExactLegalMove;
+}>): BoundedTargetImmediateFactoryResult;
+declare function makeBoundedTargetReturnEvidence(input: Readonly<{
+  immediate: BoundedTargetImmediateEvidence<
+    Extract<ImmediateTargetOutcome, { readonly result: "removed" }>
+  >;
+  traversal: BoundedTargetTraversalAuthority;
+}>): Promise<ReturnDerivation>;
+
+declare function assertNamedMaterialTargetEvidence(
+  value: unknown,
+): asserts value is NamedMaterialTargetEvidence;
+declare function assertBoundedTargetImmediateEvidence(
+  value: unknown,
+): asserts value is BoundedTargetImmediateEvidence;
+declare function assertBoundedTargetReturnEvidence(
+  value: unknown,
+): asserts value is BoundedTargetReturnEvidence;
+
+export interface BoundedTargetBatchRequest {
   readonly kind: "source_position_batch";
   readonly threat: ThreatEvidence;
   readonly exchanges: readonly LegalExchangeEvidence[];
   readonly sourcePosition: SourceLegalMovesEvidence;
 }
 
-type ReturnDerivation =
+export type ReturnDerivation =
   | { readonly kind: "evidence"; readonly item: BoundedTargetReturnEvidence }
   | {
       readonly kind: "abstained";
@@ -444,7 +541,7 @@ type ReturnDerivation =
       readonly visitedPositions: number;
     };
 
-type CandidateDerivation =
+export type CandidateDerivation =
   | {
       readonly kind: "preserved";
       readonly immediate: BoundedTargetImmediateEvidence<
@@ -468,64 +565,79 @@ type CandidateDerivation =
       readonly candidateUci: string;
     };
 
-interface TargetDerivation {
+export interface TargetDerivation {
   readonly target: NamedMaterialTargetEvidence;
   readonly candidates: readonly CandidateDerivation[];
 }
 
-interface BoundedTargetInputDigests {
+export interface BoundedTargetInputDigests {
   readonly threat: string;
   readonly exchanges: readonly string[];
   readonly sourcePosition: string;
 }
 
-interface BoundedTargetRequestIdentity {
+export interface BoundedTargetRequestIdentity {
   readonly domain: "tabiya:bounded-target-request@1";
   readonly requestDigest: string;
+  readonly manifestDigest: typeof PRIMARY_EVIDENCE_MANIFEST.digest;
   readonly inputs: BoundedTargetInputDigests;
 }
 
-interface BoundedTargetResultIdentity extends BoundedTargetRequestIdentity {
+export interface BoundedTargetResultIdentity extends BoundedTargetRequestIdentity {
   readonly resultDomain: "tabiya:bounded-target-result@1";
   readonly resultDigest: string;
 }
 
-type BoundedTargetBatchResult =
-  | {
-      readonly kind: "completed";
-      readonly identity: BoundedTargetResultIdentity;
-      readonly targets: readonly TargetDerivation[];
-      readonly visitedPositions: number;
-    }
-  | {
-      readonly kind: "abstained";
-      readonly identity: BoundedTargetResultIdentity;
-      readonly reason:
-        | "input_abstained"
-        | "position_mismatch"
-        | "target_mismatch"
-        | "exchange_set_mismatch"
-        | "multiplication_limit"
-        | "batch_budget_exhausted"
-        | "queue_full";
-      readonly visitedPositions: number;
-    }
-  | {
-      readonly kind: "cancelled";
-      readonly identity: BoundedTargetResultIdentity;
-      readonly reason: "caller_aborted" | "service_closed";
-      readonly visitedPositions: number;
-    }
-  | {
-      readonly kind: "failed";
-      readonly identity: BoundedTargetResultIdentity;
-      readonly reason:
-        | "yield_failed"
-        | "traversal_failed"
-        | "seal_failed"
-        | "invariant_failed";
-      readonly visitedPositions: number;
-    };
+export interface BoundedTargetBatchCompleted {
+  readonly kind: "completed";
+  readonly identity: BoundedTargetResultIdentity;
+  readonly targets: readonly TargetDerivation[];
+  readonly visitedPositions: number;
+}
+
+export type BoundedTargetBatchAbstentionReason =
+  | "input_abstained"
+  | "position_mismatch"
+  | "target_mismatch"
+  | "exchange_set_mismatch"
+  | "multiplication_limit"
+  | "batch_budget_exhausted"
+  | "queue_full";
+
+export interface BoundedTargetBatchAbstained {
+  readonly kind: "abstained";
+  readonly identity: BoundedTargetResultIdentity;
+  readonly reason: BoundedTargetBatchAbstentionReason;
+  readonly visitedPositions: number;
+}
+
+export type BoundedTargetBatchCancellationReason = "caller_aborted" | "service_closed";
+
+export interface BoundedTargetBatchCancelled {
+  readonly kind: "cancelled";
+  readonly identity: BoundedTargetResultIdentity;
+  readonly reason: BoundedTargetBatchCancellationReason;
+  readonly visitedPositions: number;
+}
+
+export type BoundedTargetBatchFailureReason =
+  | "yield_failed"
+  | "traversal_failed"
+  | "seal_failed"
+  | "invariant_failed";
+
+export interface BoundedTargetBatchFailed {
+  readonly kind: "failed";
+  readonly identity: BoundedTargetResultIdentity;
+  readonly reason: BoundedTargetBatchFailureReason;
+  readonly visitedPositions: number;
+}
+
+export type BoundedTargetBatchResult =
+  | BoundedTargetBatchCompleted
+  | BoundedTargetBatchAbstained
+  | BoundedTargetBatchCancelled
+  | BoundedTargetBatchFailed;
 
 export interface BoundedTargetServiceLimits {
   readonly maxActive: number;                // exactly 1 in v1
@@ -536,12 +648,13 @@ export interface BoundedTargetServiceLimits {
   readonly yieldEveryVisited: number;        // safe integer 1..64; default 64
 }
 
+export interface BoundedTargetServiceOptions {
+  readonly limits?: Partial<BoundedTargetServiceLimits>;
+}
+
 export declare class BoundedTargetBackgroundService {
   private constructor(/* fixed authorities + validated limits */);
-  static create(input: {
-    readonly manifest: CompiledEvidenceManifest;
-    readonly limits?: Partial<BoundedTargetServiceLimits>;
-  }): BoundedTargetBackgroundService;
+  static create(options?: BoundedTargetServiceOptions): BoundedTargetBackgroundService;
   submit(
     request: BoundedTargetBatchRequest,
     signal: AbortSignal,
@@ -549,18 +662,44 @@ export declare class BoundedTargetBackgroundService {
   close(): Promise<void>;
 }
 
-export declare function createBoundedTargetBackgroundService(input: {
-  readonly manifest: CompiledEvidenceManifest;
-  readonly limits?: Partial<BoundedTargetServiceLimits>;
-}): BoundedTargetBackgroundService;
+export declare function createBoundedTargetBackgroundService(
+  options?: BoundedTargetServiceOptions,
+): BoundedTargetBackgroundService;
 ```
+
+`evidence-value-authority` registers exactly three bounded-target routes, keyed by the three
+projection refs and the literal factory symbols `makeNamedMaterialTargetEvidence`,
+`makeBoundedTargetImmediateEvidence` and `makeBoundedTargetReturnEvidence`. They are exported only
+from the package-internal factory module for registry composition and tests; the runtime barrel
+exports their result types and specialized assertions, not callable mint functions.
+
+Each factory accepts authority inputs, never an output payload, result/cause boolean, after-FEN,
+witness, refutation or visited count. The named factory computes the target from the exact threat,
+one member of the set-equal exchange authority and source legal map. The immediate factory derives
+the child and outcome from one exact legal move. The async return factory owns enumeration and
+accepts only the service-created traversal authority; its batch counter is private-WeakSet sealed,
+so a caller cannot supply a larger budget or an outcome. `budget_exhausted` and other unavailable
+arms create no evidence wrapper.
+
+The sole package-private mint boundary atomically stores the central `EvidenceValueReceipt` with
+each successful wrapper. Its `factory`, exact input references/digests and payload digest identify
+the corresponding route. The three specialized assertions call `assertDeclaredEvidence` and then
+require that exact factory receipt and ancestry: named retains threat/exchange/source-position,
+immediate retains named target plus legal move, and return retains removed-immediate plus the exact
+service traversal result. A generic `declareEvidence` call with the same id, a wrapper minted by
+another factory, an equal rebuilt input, altered traversal counter or payload-shaped cast fails.
+Semantic-validation profiles are set-equal to these three routes and validate the factory positives
+and falsifiers, not merely the projection ids. No local second receipt or generic compatibility
+adapter is introduced.
 
 `boundedTargetInputDigest(item)` calls the shipped browser-safe `evidenceDigest()` over exactly
 `{ domain: "tabiya:bounded-target-input@1", producer, projection, payload }`. The non-serializable
-process seal is separately verified for admission and is not digest material. `boundedTargetRequestIdentity()` sorts
-the exchange item digests lexicographically, retains threat and source-position digests in their
-named slots, and hashes exactly `{ domain, kind, threat, exchanges, sourcePosition }` with
-`evidenceDigest()`. Therefore exchange-array reordering preserves request identity; changing a
+process seal is separately verified for admission and is not digest material.
+`boundedTargetRequestIdentity()` sorts the exchange item digests lexicographically, retains threat
+and source-position digests in their named slots, takes no manifest argument, reads the imported
+`PRIMARY_EVIDENCE_MANIFEST.digest`, and hashes exactly
+`{ domain, manifestDigest, kind, threat, exchanges, sourcePosition }` with `evidenceDigest()`.
+Therefore exchange-array reordering preserves request identity; changing the primary manifest, a
 producer, projection or payload byte changes it. The request's public order never controls target
 enumeration, which remains canonical by target capture UCI.
 
@@ -589,7 +728,15 @@ positions and carries no `targets`. Pure helpers may be exported for tests, but 
 callers use the service and no second adapter may declare a payload-shaped object later.
 
 The concrete class, fixed product factory and public limit type are exported from
-`packages/runtime/src/index.ts`; its implementation, declaration and
+`packages/runtime/src/index.ts`. The barrel also exports the complete closed operation family:
+`BoundedTargetBatchRequest`, `BoundedTargetBatchResult`, its four named result arms and three reason
+unions, `TargetDerivation`,
+`CandidateDerivation`, `ReturnDerivation`, all three evidence/result aliases, request/result
+identities, payload/outcome tuples, source evidence aliases, limits and options. It does not export
+the traversal authority, batch counter, value factory callables, central mint or private test
+factory. A compile fixture imports only the package subpath and exhaustively switches every top-
+level, candidate, return and immediate arm; omitting an arm, crossing target/candidate/identity
+members or importing a private symbol fails. Its implementation, declaration and
 only allowed callers are included in the producer-operation census in §4.2. Removing it, adding
 a per-item public derivation path, accepting an incomplete set or constructing crossed result arms
 fails before any consumer binding exists.
@@ -608,9 +755,12 @@ The production service is therefore background-only. A Support gesture, board ho
 or HTTP request may consume a completed item but may not call the traversal helpers inline. One
 service instance admits **one active and eight queued** source-position jobs; the ninth queued job
 returns `queue_full`. `BoundedTargetBackgroundService.create()` and the named exported factory
-accept only the compiled manifest plus numeric `Partial<BoundedTargetServiceLimits>`. They fix
-`messageChannelMacrotaskYield`, the exact legal/tracking functions, adapters, result constructors
-and producer registry by import. Deployment limits may narrow but never raise the annotated v1
+accept only numeric `Partial<BoundedTargetServiceLimits>`. They fix `PRIMARY_EVIDENCE_MANIFEST`,
+`messageChannelMacrotaskYield`, the exact legal/tracking functions, value-authority factories,
+result constructors and producer registry by import. Options are strictly validated: an unknown
+manifest, digest, scheduler, adapter or hook fails before identity/job/queue construction, including
+after a runtime double cast. The private test factory may inject sealed execution faults but cannot
+replace the manifest or any evidence factory. Deployment limits may narrow but never raise the annotated v1
 ceilings; `maxActive` remains exactly one. Non-safe-integer, non-positive or out-of-range values
 throw synchronously. A module-private `createBoundedTargetBackgroundServiceForTest()` accepts
 sealed yield/traversal/seal fault hooks and is absent from the runtime barrel and production import
@@ -800,13 +950,13 @@ temporary binding state, not the 1.0 user experience.
 
 | file | required change |
 |---|---|
-| `packages/runtime/src/tactics.ts` | export `ThreatPassAnchor`/`threatPassAnchor()` and make `threats()` consume the same transform |
+| `packages/runtime/src/tactics.ts` | export the exact sealed `ThreatPassAnchor`/result/assertion contract and make `threats()` consume the same transform |
 | `packages/runtime/src/bounded-target.ts` | literal source/traversal identity types, closed payloads, exact joins, child-FEN derivation, local+whole-job bounded enumeration and the concrete closeable queue/service |
 | `packages/runtime/src/cooperative-yield.ts` | shared dependency-free `messageChannelMacrotaskYield` authority used by this RFC and `shared-candidate-evidence-packet` ([[D2029]]) |
 | `packages/runtime/src/evidence-contract.ts`, `packages/runtime/src/evidence-producer-operations.ts` | explicit availability/latency validation plus producer-operation type, constructor, set-equality assertion and exact bounded service binding |
 | `packages/runtime/src/evidence-catalog.ts` | explicit latency argument on every existing producer with byte preservation; one new producer and three literal projection declarations/dispositions |
-| `packages/runtime/src/evidence-source-adapters.ts` | replace caller-payload threat declaration with `declareThreatEvidence(sourceFen)`, retain its pass anchor in a private WeakMap, and expose the checked anchor reader; exact bounded-target sealing adapters |
-| `packages/runtime/src/index.ts` | public operation/types export |
+| `packages/runtime/src/evidence-factories.ts` | add the three exact computed/derived factory routes through the sole value-receipt mint; replace caller-payload threat construction with the accepted FEN-owned source factory and retain its pass-anchor result |
+| `packages/runtime/src/index.ts` | export the complete request/result/payload/outcome/options/assertion family; keep mint factories and traversal authorities private |
 | `tools/d1023-bounded-policy-harness/exact-target.test.ts` | permanent control/census instrument, rewritten at implementation to import production symbols |
 | `Makefile` | stable `bounded-target-contract` and `bounded-target-census` targets |
 | `docs/evidence-contract.md`, `docs/semantic-evidence.md` | exact local semantics and refusal boundary |
@@ -818,21 +968,19 @@ pack or Svelte file changes in this RFC; the portable yield and bounded queue li
 
 Exact return:
 `planning/bounded-policy-targets/second-fresh-independent-buildability-review-2026-08-30.md`.
-Four seams remain after the D2105–D2111 repair:
+Four seams found after the D2105–D2111 repair are now closed at the author-contract boundary:
 
-1. both public construction paths accept `CompiledEvidenceManifest`, but the current source
-   adapters use the global catalogue and the request/result identities retain no manifest identity
-   ([[D2202]]);
-2. `ThreatPassAnchor` appears in exported signatures and payloads but has no TypeScript declaration
-   ([[D2203]]);
-3. the three new projection aliases have no named exact constructor, assertion or value-authority
-   receipt, so the generic declared-evidence route remains able to mint their ids ([[D2204]]); and
-4. the exported service's request, result and nested discriminated arms are non-exported despite the
-   promised public types barrel ([[D2205]]).
+1. [[D2202]] — both factories now close over `PRIMARY_EVIDENCE_MANIFEST`; request/result identity
+   carries its digest and strict options reject manifest/digest injection;
+2. [[D2203]] — `ThreatPassAnchor` plus its available/unavailable result, sole canonical constructor,
+   private seal and assertion relation are literal;
+3. [[D2204]] — the three exact compute/derive symbols are registered as sole value-authority routes,
+   accept no output payload and inherit the central input/payload receipt; and
+4. [[D2205]] — the full request/result, nested derivation, evidence, identity, outcome, limits and
+   options family is exported while traversal/mint/test authorities remain private.
 
-The next author repair must coordinate the constructor work with `evidence-value-authority`, invert
-all four executable arms, preserve the prior contracts, and undergo another fresh independent
-review before implementation.
+The third author contract must invert all four executable arms, preserve the prior contracts, and
+undergo another fresh independent review before implementation.
 
 ## 8. Acceptance criteria
 
@@ -922,6 +1070,25 @@ review before implementation.
     every waiter exactly once, await active cleanup, retain the specified aggregate snapshots and
     leave no listener/job-map/queue state. Submission after close returns only
     `cancelled/service_closed`; no product or test hook can reopen the instance.
+22. **One manifest owns service identity and value admission ([[D2202]]).** Neither product nor test
+    factory accepts a manifest/digest. The exact imported primary digest enters the request and
+    therefore every result identity. Two valid manifests, an equal rebuilt manifest, a forged
+    primary digest and an unknown runtime manifest option fail before job admission; changing the
+    primary authority changes identities and cannot relabel an old evidence wrapper.
+23. **Threat pass identity is a sealed exact protocol ([[D2203]]).** Available anchors carry exactly
+    the literal convention and canonical source/passed FENs; checked sources carry only the closed
+    unavailable arm. Wrong convention, noncanonical source, changed passed FEN, plain/spread/JSON/
+    double-cast and separately rebuilt equal anchors fail assertion and target admission.
+24. **The three values have sole construction routes ([[D2204]]).** Factory profiles are set-equal
+    to the three projection ids and exact symbols. Each valid case retains its exact input ancestry;
+    generic same-id declarations, wrong-factory wrappers, caller payload/result/cause/after-FEN/
+    witness/visited-count injection, crossed ancestry and forged/larger traversal counters fail.
+    Unavailable/exhausted arms mint no evidence. Semantic validation executes these route profiles.
+25. **The public service protocol is exhaustively importable ([[D2205]]).** A runtime-subpath-only
+    TypeScript fixture imports and switches every top-level result, candidate, immediate and return
+    discriminant. Omitting an arm, crossing request/result/identity/evidence members or naming a
+    private factory, counter, traversal or test symbol fails. The barrel census is set-equal to the
+    explicitly exported family in §4.
 
 ## Discharges
 
@@ -989,6 +1156,12 @@ learner preset exposes them are consumer decisions and do not change the exact p
 
 ## Changelog
 
+- 2026-08-30 — author-repaired [[D2202]]–[[D2205]]. Product and test construction now share one
+  imported primary manifest authority; threat-pass chronology is an exact sealed protocol; the
+  three new values have sole factory/receipt routes; and consumers can import and exhaust the full
+  named service algebra without gaining access to mint or traversal authorities. Maintained
+  contracts and `make bounded-target-third-author-repair` pass. Fresh independent review still
+  gates implementation.
 - 2026-08-30 — second fresh independent review returned the D2105–D2111 author repair on
   [[D2202]]–[[D2205]]. Exact return:
   `planning/bounded-policy-targets/second-fresh-independent-buildability-review-2026-08-30.md`;

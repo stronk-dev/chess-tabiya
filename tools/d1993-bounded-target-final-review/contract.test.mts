@@ -63,7 +63,8 @@ test("D1998: service limits, failures, no-throw submission and cleanup are close
     assert.match(rfc, new RegExp(`"${reason}"`));
   }
   assert.match(rfc, /Once constructed, `submit\(\)` never throws/);
-  assert.match(rfc, /accept only the compiled manifest plus numeric `Partial<BoundedTargetServiceLimits>`/);
+  assert.match(rfc, /accept only numeric `Partial<BoundedTargetServiceLimits>`/);
+  assert.match(rfc, /fix `PRIMARY_EVIDENCE_MANIFEST`/);
   assert.doesNotMatch(rfc, /readonly yieldControl: \(\) => Promise<void>/);
   assert.match(rfc, /terminal job leaves the active\/queue\/dedup maps/u);
   assert.match(rfc, /state as if it had never been admitted/u);

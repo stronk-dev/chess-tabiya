@@ -12435,3 +12435,17 @@ remains draft pending fresh independent review, and Support, Review and bots rem
 uncredited until their real consumer operations land. No production, schema, content, archive or
 protected-intent byte changed. Receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-third-author-repair-2026-08-30.md`.
+
+## 2026-08-30 — Bounded-target D2202–D2205 third author repair
+
+Repaired the second fresh return without implementing the bounded-target collector. Product and
+test construction now close over one primary manifest and carry its digest through request/result
+identity; threat-pass chronology has one sealed canonical available/unavailable authority; all
+three projection values have sole registered factories and central ancestry receipts; and the full
+named service algebra is publicly exhaustible while mint, traversal, counter and test authorities
+remain private.
+
+Maintained bounded-target contracts pass 18+5+13+7 arms and the new four-arm author/typecheck
+contract passes. The RFC remains draft pending fresh independent review; no production, schema,
+content, archive, consumer eligibility or protected-intent byte changed. Receipt:
+`planning/bounded-policy-targets/third-author-repair-2026-08-30.md`.
