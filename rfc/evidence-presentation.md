@@ -1,13 +1,14 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft — [[D2135]]–[[D2140]] second author-repaired 2026-08-30; fresh independent
-  buildability review and [[D1672]]'s owner-only design amendment remain required. The repair
-  publishes exact component/form or composition rows, a literal route-backed consumer population,
-  a manifest-repair predecessor, set-equal fact renderer and abstention registries, and the full
-  discriminated consequence operands. `make evidence-presentation-author-contract` passes 5/5
-  plus lifecycle typecheck; `make evidence-presentation-second-author-repair` passes 6/6. No
-  implementation is authorised. Landing is explicitly three checkpoints (§2.1): manifest truth,
-  sealed current consumers, then module/hint seats.
+- **Status:** draft — **returned by third fresh independent buildability review 2026-08-30 on
+  [[D2157]]–[[D2163]].** The typed component/seal architecture survives, but named structures and
+  citations remain unconstructible from their admitted operands; fact templates interpolate raw
+  ids; consequence variants are incomplete; abstention loses identity/source reasons and conflicts
+  with silent claims; and one required component has zero real consumers. Exact return:
+  `planning/platform-alignment/evidence-presentation/third-fresh-independent-buildability-review-2026-08-30.md`.
+  [[D1672]]'s owner-only design amendment also remains required. No implementation is authorised.
+  Landing remains three checkpoints (§2.1): manifest truth, sealed current consumers, then
+  module/hint seats.
   Prior amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
   arrow activation is a 1.0 obligation. The transition-event hand-off is measured: five geometry
   event families already retain their relations; the live work is forms, adapters, module admission,
@@ -77,6 +78,30 @@ exact rows in `tools/d1862-presentation-adapter-plan/plan.ts` and the independen
 contract. The old 117-pair family census remains a historical pre-repair input, not the executable
 presentation population. Implementation remains unauthorized pending another fresh review and the
 existing [[D1672]] owner-tier amendment.
+
+## Third fresh independent return (2026-08-30)
+
+The repaired exact rows exposed seven further buildability blockers: [[D2157]], [[D2158]],
+[[D2159]], [[D2160]], [[D2161]], [[D2162]] and [[D2163]].
+
+1. Named-structure Checkpoint P edits the source type but leaves the manifest and exact adapter at
+   `provenanceNote`, so neither a labelled enum nor squares are admitted operands.
+2. The citation target requires source/title/locator/licence/revision while its pair-local adapter
+   retains only reference/text/sourceLabel.
+3. Fact templates interpolate checkpoint ids, objective states and outcomes without a typed label
+   formatter.
+4. Voice-story and Review consequence renderers have no nonterminal variant despite retaining the
+   union and having no payload eligibility predicate.
+5. Executable abstention receipts omit question/projection/producer identity and generic family
+   reason lists do not map the real source reason vocabularies.
+6. All claim adapters are forced into the abstention population while `claim.emptyBehavior` is
+   deliberately `silent`.
+7. `count_with_denominator` has no real adapter and no named future owner, so registry-only tests
+   can call it complete.
+
+`make evidence-presentation-third-fresh-review` reproduces 7/7. The exact evidence and required
+repairs are in the third fresh review dossier. This is an author return; production and protected
+design remain untouched, and a later fresh review is mandatory.
 
 ## Summary
 
@@ -1517,6 +1542,13 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-08-30 — returned by third fresh independent buildability review on [[D2157]]–[[D2163]].
+  Named-structure and citation targets are not constructible from their admitted operands; fact
+  templates bypass labels; two consequence renderers omit the nonterminal arm; abstention loses
+  authority/source reasons and contradicts silent claims; and `count_with_denominator` has no real
+  consumer. `make evidence-presentation-third-fresh-review` passes 7/7. Exact return:
+  `planning/platform-alignment/evidence-presentation/third-fresh-independent-buildability-review-2026-08-30.md`.
+  No implementation is authorised.
 - 2026-08-30 — second author repair for [[D2135]]–[[D2140]]. Replaced the form-copy census as
   executable authority with exact component/form and named-composition rows; classified all 20
   consumers through real operation anchors; excluded two backend operations; and introduced a

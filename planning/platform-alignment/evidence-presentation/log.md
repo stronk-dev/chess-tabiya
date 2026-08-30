@@ -18,3 +18,13 @@ Append-only. This log records author/review/implementation transitions for
 - `make presentation-binding-census` and `make evidence-presentation-author-contract` are green.
   The RFC remains draft pending fresh independent review and the owner-only D1 amendment; no
   product, manifest, schema, archive, content or protected-design byte changed.
+
+## 2026-08-30 — third fresh independent return
+
+- Returned the second author repair on [[D2157]]–[[D2163]].
+- Exact adapters still cannot construct named structures or citations from admitted operands.
+- Fact templates bypass typed labels; consequence variants are incomplete for two consumers.
+- Abstention loses source/identity distinctions and conflicts with `claim`'s silent empty state.
+- `count_with_denominator` has zero real adapters and no future owner.
+- `make evidence-presentation-third-fresh-review` passes 7/7. No implementation is authorised;
+  exact review: `third-fresh-independent-buildability-review-2026-08-30.md`.

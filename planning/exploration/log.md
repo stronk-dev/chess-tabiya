@@ -11996,3 +11996,16 @@ availability model survive. `make pack-capability-third-fresh-review` passes 5/5
 return. No schema, registry, pack or product bytes changed, and the [[D560]] corpus hold remains
 whole. Exact review:
 `planning/pack-capability-contract/third-fresh-independent-review-2026-08-30.md`.
+
+## 2026-08-30 — Evidence-presentation third fresh independent return
+
+Returned `evidence-presentation.md` on [[D2157]]–[[D2163]] after tracing exact adapter operands,
+renderer variants and empty-state rows rather than accepting registry counts. Named structures and
+citations remain unconstructible; fact templates can print raw ids; two consequence consumers lack
+the nonterminal arm; abstention drops authority and source distinctions while contradicting silent
+claims; and `count_with_denominator` has no real consumer.
+
+The component vocabulary, sealed wire, exact form assignment and three-checkpoint landing survive.
+`make evidence-presentation-third-fresh-review` passes 7/7. No production or protected-design byte
+changed; [[D1672]] remains owner-only. Exact review:
+`planning/platform-alignment/evidence-presentation/third-fresh-independent-buildability-review-2026-08-30.md`.
