@@ -1,6 +1,7 @@
 # R8 theory↔drill workflow — research plan
 
-**Status:** work units 1–4 mechanically complete 2026-08-21; owner use and O5/O6 handoff remain
+**Status:** research complete; returned RFC technically author-repaired 2026-08-30; [[D1887]]
+owner progression ruling and fresh independent review remain
 
 ## Question
 
@@ -17,8 +18,11 @@ inventing applicability?
    opening/transposition key where recorded, principle/claim ID and pack reference.
 4. **DONE mechanically.** Exercise lookup→rehearse and Review→rehearse, including transposition
    identity, source preservation and honest no-pack/candidate-only cases. Owner use remains.
-5. **NEXT.** Publish the O5/O6/F7 choice set. Do not draft F7 before the owner rules the theory source,
-   applicability contract and stable primitive/re-authoring budget.
+5. **DONE.** O5/O6/F7 choice set published and the theory↔drill RFC drafted.
+6. **DONE technically.** Repair [[D1879]]–[[D1886]] after independent buildability review; executable
+   positive author contract at `make theory-drill-author-contract`.
+7. **NEXT.** Record the owner's [[D1887]] progression ruling, then request fresh independent review.
+   No implementation before acceptance.
 
 ## Automatic failures
 

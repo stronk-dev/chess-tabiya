@@ -1,7 +1,8 @@
 # RFC: Theory↔drill current joins
 
-- **Status:** draft — returned 2026-08-27 by independent buildability review. The typed applicability edge
-  remains the right direction, but [[D1879]]–[[D1887]] must be amended before implementation.
+- **Status:** draft — author repair in progress 2026-08-30 after the independent buildability return.
+  [[D1879]]–[[D1886]] are repaired below; [[D1887]] remains an explicit owner decision. Fresh
+  independent review is required after that decision is recorded; no implementation is authorised.
 - **Author:** claude (on the [[D1310]] mandate read; [[D1330]] live-debt rank 5)
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md:231` (the narrowing-only `∩` algebra) and `:236`
@@ -18,8 +19,8 @@
   principle-entry registry (`archive/claim-backing.md`), the implemented run-derivation table
   (`archive/adoption-wave-1.md`, migration 13), and the implemented repertoire-gap launch
   (`archive/repertoire-gap-finding.md`, migration 15) whose server-side atomic create this RFC
-  copies. **Consumes** `rfc/runtime-opening-identity.md` (accepted 2026-08-23, not yet
-  implemented) for the opening arm of §1.2
+  copies. **Consumes** the implemented `rfc/runtime-opening-identity.md` (`44637013`) for the
+  opening arm of §1.2
 - **Parent / amends:** amends nothing. **Sibling of `rfc/review-map.md`** — that RFC owns the
   review surface and its per-row `Retry from here`; this RFC owns the applicability edge that
   surface consumes and must not compute for itself
@@ -27,7 +28,7 @@
 - **Planning:** `planning/platform-alignment/theory-drill/` (`plan.md`, `o5-o6-handoff.md`)
 
 ```tabiya-claims
-migration | position behind social-play | run_derivations.kind CHECK gains 'theory_launch' (storage.ts:3853; STRICT table — a SQLite CHECK edit requires a rebuild migration) plus identity_kind, identity_id and identity_version columns added in the same rebuild
+migration | position behind social-play | run_derivations.kind CHECK gains 'theory_launch' (storage.ts:3853; STRICT table — a SQLite CHECK edit requires a rebuild migration) plus applicability_identity_json and applicability_target_json columns with a kind/presence CHECK in the same rebuild
 ```
 
 **Why exactly one claim, and why that one.** The applicability *result* is computed, never stored:
@@ -60,8 +61,9 @@ displayed and discarded in one expression.
 
 This RFC specifies the missing object: a **typed, abstaining applicability edge** from an admitted
 evidence identity plus the current position to zero or more versioned theory entries and zero or
-more playable pack targets, launched so that the source run and node survive the launch and the
-completed attempt links back.
+more playable pack targets. A source-bound launch is recomputed and admitted by the server so the
+source run and exact firing node survive the launch; a Library start is an ordinary pack start and
+does not manufacture a derivation.
 
 Four findings shaped the specification rather than decorating it.
 
@@ -157,43 +159,72 @@ sentence.
 
 ### §1 The applicability result
 
-#### §1.1 The type
+#### §1.1 Shared identities, closed actions and two contexts
 
-One exported type, in `packages/runtime/src/applicability.ts`, produced by the server and consumed
-by every surface in §4.
+The opening payloads currently live in `apps/server/src/opening-catalogue.ts`, even though F1 names
+them as public evidence payload types. Implementation moves the literal `OpeningCatalogueRef`,
+`CurrentOpeningEndpoint` and `OpeningCatalogueMembership` declarations to
+`packages/runtime/src/opening-identity.ts`; the server imports and re-exports those declarations.
+There is no fourth applicability-only opening summary. The exact opening identity admitted here is
+`Extract<CurrentOpeningEndpoint, {kind: "matched"}>`, including its factual ply, ECO, name and
+catalogue operands.
+
+`packages/runtime/src/applicability.ts` exports the remaining closed algebra:
 
 ```ts
-export type ApplicabilityBasis = "exact_shape_trigger" | "exact_transposition_key" | "anchored_claim";
+export type ApplicabilityBasis =
+  | "exact_shape_trigger" | "exact_opening_endpoint" | "anchored_claim" | "registered_principle";
 
 export type ApplicabilityIdentity =
   | { readonly kind: "shape"; readonly entryId: string; readonly entryVersion: string }
-  | { readonly kind: "opening"; readonly transposeKey: string; readonly records: readonly OpeningIdentityRef[] }
-  | { readonly kind: "principle"; readonly entryId: string; readonly entryVersion: string;
-      readonly anchoredBy: { readonly packId: string; readonly claimId: string } };
+  | { readonly kind: "opening";
+      readonly endpoint: Extract<CurrentOpeningEndpoint, { readonly kind: "matched" }> }
+  | { readonly kind: "principle"; readonly entryId: string; readonly entryVersion: string }
+  | { readonly kind: "anchored_claim"; readonly packId: string; readonly packVersion: string;
+      readonly claimId: string; readonly principles: readonly {
+        readonly entryId: string; readonly entryVersion: string }[] };
+
+export type TheoryAction =
+  | { readonly kind: "open_shape_entry"; readonly entryId: string; readonly entryVersion: string }
+  | { readonly kind: "open_principle_entry"; readonly entryId: string; readonly entryVersion: string }
+  | { readonly kind: "open_opening_entry"; readonly positionKey: string;
+      readonly catalogueDigest: string };
+
+export type PackTargetVia =
+  | { readonly kind: "shape_present"; readonly entryId: string; readonly entryVersion: string }
+  | { readonly kind: "authored_claim"; readonly sourcePackId: string;
+      readonly sourcePackVersion: string; readonly claimId: string };
 
 export type ApplicabilityTarget =
-  | { readonly kind: "theory"; readonly identity: ApplicabilityIdentity; readonly route: string }
-  | { readonly kind: "pack"; readonly packId: string; readonly packVersion: string;
-      readonly via: { readonly shape: string; readonly relation: "present" } };
+  | { readonly kind: "theory"; readonly identity: ApplicabilityIdentity; readonly action: TheoryAction }
+  | { readonly kind: "pack"; readonly targetId: string; readonly packId: string;
+      readonly packVersion: string; readonly via: PackTargetVia };
 
 export type ApplicabilityAbstention =
   | "no_identity" | "no_present_pack" | "candidate_only" | "source_unreadable";
 
-export interface ApplicabilityResult {
+export interface ApplicabilityView {
   readonly basis: ApplicabilityBasis;
-  readonly source: { readonly runId: string; readonly branchId: string; readonly nodeId: string } | null;
   readonly identities: readonly ApplicabilityIdentity[];
   readonly targets: readonly ApplicabilityTarget[];
   readonly abstained: readonly ApplicabilityAbstention[];
 }
+
+export type ApplicabilityResult =
+  | (ApplicabilityView & { readonly context: "run_node"; readonly source: {
+      readonly runId: string; readonly branchId: string; readonly nodeId: string } })
+  | (ApplicabilityView & { readonly context: "library" });
 ```
 
 `identities` and `targets` are independently possibly-empty. Theory-only, drill-only, both and
-neither are all valid results, which is `design/05-in-run-experience.md:236`'s first-class-states
-invariant expressed as a type rather than as a convention.
+neither are all valid results, which is `design/05-in-run-experience.md:236` expressed as a type.
+The context union removes the old nullable-source contradiction: Library results cannot be passed
+to the source-bound launch operation because they have no `source` member. Their pack actions use
+the ordinary direct-start path in §4.3 and create no `run_derivations` row.
 
-`source` is `null` only when the query has no run context — a Library browse. Every result
-produced *inside* a run carries it, which is what makes §3's return link possible.
+`targetId` is `sha256(canonicalizeJson({packId, packVersion, via}))`. It is a selector over a result
+the server recomputes, not an authority token: a guessed or stale id has no effect unless the same
+target is present in the recomputed result for the authorised node.
 
 #### §1.2 Four join kinds, four different truth conditions
 
@@ -204,7 +235,7 @@ content", because each row is true for a different reason:
 |---|---|---|
 | detected shape → shape entry | exact structural trigger plus the entry version that fired | ships (`shapeFirings`); §1.1 records `entryVersion` so a re-registered shape does not silently retarget |
 | shape entry → pack | a **validated `present`** pack reference | §1.3 — the reverse index exists and is semantically loose |
-| opening position → opening entry / pack | recorded position or transposition identity plus a cited catalogue row | §1.4 — consumes `runtime-opening-identity.md`; **no pack targets exist for it today** |
+| opening position → opening entry / pack | exact `CurrentOpeningEndpoint.kind === "matched"` plus its sealed catalogue reference | §1.4 — consumes implemented `runtime-opening-identity.md`; **no pack targets exist for it today** |
 | authored claim / principle → theory / pack | exact registered ids plus a declared anchor | §1.6 — stored, never reversed |
 
 The opening row deserves a correction to this RFC's own source. `theory-drill-current-joins.md:56-60`
@@ -212,12 +243,10 @@ records opening identity as *"a working sourcing primitive but not current learn
 that was true when it was written: `evidence-catalog.ts:781` (at HEAD) declares
 `theory.opening_identity` at `sourcing: "build_time"` with `role: "source_record"` and the
 limitation *"Authoring provenance only at F1; not a runtime guidance sentence."* Two days later
-`rfc/runtime-opening-identity.md` was **accepted** and specifies exactly the runtime adapter that
-was missing. It is accepted and not implemented — `theory.opening.current_endpoint` appears
-nowhere in `packages/` or `apps/server/src/` at HEAD — so this RFC **consumes** it and does not
-re-specify it. The opening arm of §1.1 compiles when that RFC's projections do, and until then it
-abstains with `candidate_only`, which is exactly what the R8 prototype's fifth check already
-demonstrates.
+`rfc/runtime-opening-identity.md` was accepted and its implementation landed at `44637013`.
+`theory.opening.current_endpoint@1` now resolves exact matches, exact absences and typed provider
+abstentions from one compiled catalogue. This RFC consumes that literal payload and moves only its
+declarations down to the shared runtime tier; it does not change the producer.
 
 #### §1.3 `present` is required, and it costs nothing
 
@@ -230,8 +259,8 @@ never sees `opposite-castling-race` recommended again, on the strength of a refe
 contract says it *"never fire[s], grade[s], or open[s] authored feedback"*
 (`docs/shape-library.md:48-50`).
 
-`ApplicabilityTarget`'s pack arm types `relation: "present"` as a literal, so a prospective
-reference is not merely filtered — it is unrepresentable as a target.
+`ApplicabilityTarget`'s pack arm types `via.kind: "shape_present"`, so a prospective reference is
+not merely filtered — it is unrepresentable as a target.
 
 The cost is measured, not assumed. Both prospectively-referenced shapes
 (`opposite-castling-race`, from two opening packs; `rook-4v3-same-side`, from one cross-phase
@@ -239,24 +268,26 @@ pack) are **also** `present`-referenced by a different pack, so shapes with at l
 pack target stay at **21/25** after the filter. The three references leave three recommendation
 sets slightly smaller and leave coverage untouched.
 
-#### §1.4 An exact key yields an identity SET
+#### §1.4 Candidate transposition sets are not the runtime opening payload
 
-[[D696]] measured 52 candidate opening records collapsing to **49** transposition keys, with three
-keys carrying two records each — in every case a parent (`French Defense: Advance Variation`) and
-its `Main Line` descendant. `ApplicabilityIdentity`'s opening arm therefore carries
-`records: readonly OpeningIdentityRef[]`, plural, and **never** a single label.
+[[D696]] measured 52 pre-runtime candidate records collapsing to 49 transposition keys. That
+instrument answered a sourcing question; it is not the implemented producer. The runtime compiler
+now refuses duplicate named endpoint keys and emits 3,810 unique endpoints plus 7,854 unnamed path
+members. Applicability therefore carries the literal matched `CurrentOpeningEndpoint` arm, not the
+obsolete `OpeningIdentityRef[]` invented by the first draft. A path-membership result never gains a
+name and yields `candidate_only`; an exact absent result yields `no_identity`; a provider
+abstention yields `source_unreadable`.
 
-Display selects with a **declared** rule, recorded on the result rather than applied invisibly:
-the most specific record (longest cited line) wins, ties broken by catalogue row order, and the
-full set is preserved in provenance. Array order is not identity resolution and neither is
-phrasing; no LLM participates, which §1.5 enforces structurally.
+No display-specificity rule remains. The cited endpoint name is already a factual operand of the
+exact producer, while descendant count is a separate membership fact and cannot select a label.
 
 #### §1.5 What the result cannot hold
 
-`ApplicabilityResult` has no score, no rank, no confidence, no sentence and no free text. Its
-`basis` is a closed three-member union naming an *exact* mechanism. There is consequently no field
-in which a similarity ranking, a strategic claim or a generated explanation could be smuggled, and
-adding one is a type change that shows up in review rather than a value that shows up at runtime.
+`ApplicabilityResult` has no score, similarity rank, confidence, generated explanation or raw
+route. Its `basis`, actions and target provenance are closed unions. Factual payload operands remain
+legal: opening ply/count fields and cited names describe what the registered producer found; they
+do not grade a move. Web routes are derived from `TheoryAction` in the web tier and cannot be
+smuggled into the shared result as a free-form URL.
 
 This is the law-8 seal for this surface. Search may later rank passages *inside* an already
 eligible identity set; it may not turn vocabulary resemblance into applicability, and it has no
@@ -265,34 +296,34 @@ representation here in which to try.
 #### §1.6 The principle reverse index
 
 82 pack→principle references across 12 identities are stored and never reversed: no surface finds
-packs by principle, and no surface lists principles at all. The reverse index is the same shape as
-the shape index — a read over the registered pack documents' `feedbackClaims[].principles` — with
-one difference that matters: **a bare principle is not position applicability.** The prototype's
-fourth check already draws this line, and §1.1 encodes it as the `anchoredBy` requirement: a
-principle identity is admissible only when it is reached through an exact `{packId, claimId}`
-anchor. A principle a learner merely browsed produces theory targets and no pack targets.
+packs by principle, and no surface lists principles at all. A bare registered principle is a
+`kind:"principle"` identity and can open its theory entry, but is **not** evidence that it applies
+to the current position and produces no pack target. An exact authored `{packId, packVersion,
+claimId}` occurrence is instead `kind:"anchored_claim"`; it may produce its source pack through
+`via.kind:"authored_claim"` and retains the registered principle identities the claim names. This
+split makes both criterion-5 fixtures constructible without pretending a browsed principle fired.
 
 ### §2 The route grammar
 
-#### §2.1 Three new parameterized routes
+#### §2.1 Four new parameterized routes
 
-`AppRoute` (`router.ts:12-18`) gains three members and `STATIC_ROUTES` (`:22-32`) is unchanged:
+`AppRoute` (`router.ts:12-18`) gains four members and `STATIC_ROUTES` (`:22-32`) is unchanged:
 
 | route | path | meaning |
 |---|---|---|
 | `pack` | `/play/pack/{packId}` | open exactly this pack |
 | `shape-entry` | `/library/shape/{shapeId}` | this theory entry, with its pack targets |
 | `principle-entry` | `/library/principle/{principleId}` | this principle, with its anchored packs |
+| `opening-entry` | `/library/opening/{positionKey}` | the exact named endpoint and catalogue source |
 
 Each is parsed by the same shape as the existing `run` route (`:42-50`): a bounded regex, a
 `decodeURIComponent` inside `try`, a non-empty check, and `not-found` on failure — never a throw.
 Each gains a `routePath` arm (`:68-73`) so the target is expressible in the type that renders
 links, which is the thing that did not exist.
 
-The opening route is deliberately absent: an opening identity has no launchable pack target
-anywhere in the corpus (0 authored-draft opening records against 52 candidate-only ones), so a
-route to it would be a route to a guaranteed empty page. It arrives with
-`runtime-opening-identity.md`'s implementation, and §7 names that.
+The opening entry honestly renders zero pack targets today. That is not a reason to erase a live,
+cited identity: `runtime-opening-identity` now ships, and `open_opening_entry` derives this route.
+Path membership without an exact endpoint still has no route because it has no name to display.
 
 #### §2.2 Query strings are refused, and the reason is a trap
 
@@ -314,18 +345,37 @@ paths (`:2082`, `:2137`), and the account-data inventory that classifies it as
 `derived_run_id` is the PRIMARY KEY, so a launched run has exactly one origin, which is correct
 for a launch and is the reason a join table is not needed.
 
-It gains one `kind` value and three columns:
+It gains one `kind` value and two canonical-JSON columns:
 
 ```sql
 kind TEXT NOT NULL CHECK (kind IN ('flip_sides','theory_launch')),
-identity_kind TEXT CHECK (identity_kind IN ('shape','opening','principle')),
-identity_id TEXT,
-identity_version TEXT
+applicability_identity_json TEXT,
+applicability_target_json TEXT,
+CHECK (
+  (kind = 'flip_sides' AND applicability_identity_json IS NULL AND applicability_target_json IS NULL)
+  OR
+  (kind = 'theory_launch' AND applicability_identity_json IS NOT NULL AND applicability_target_json IS NOT NULL)
+)
 ```
 
-The identity columns are nullable because `flip_sides` rows have no identity, and a
-`theory_launch` row is required to carry all three — enforced in the writer, not by a table-level
-`CHECK`, so that the constraint has one home and reads in one language.
+The JSON values are canonical serializations of the literal `ApplicabilityIdentity` and pack
+`ApplicabilityTarget` unions. The table enforces presence by kind; the fail-closed reader parses
+the exact unions, requires the target to be a pack target, recomputes `targetId`, and verifies that
+its `via` arm is licensed by the stored identity. This deliberately duplicates one invariant at
+two boundaries: SQL prevents impossible null combinations, while the typed parser prevents
+well-shaped columns from laundering malformed or crossed semantic identities.
+
+`RunDerivation` becomes a discriminated union rather than an interface with nullable members:
+
+```ts
+export type RunDerivation =
+  | { readonly kind: "flip_sides"; readonly derivedRunId: string; readonly sourceRunId: string;
+      readonly sourceBranchId: string; readonly sourceNodeId: string; readonly createdAt: string }
+  | { readonly kind: "theory_launch"; readonly derivedRunId: string; readonly sourceRunId: string;
+      readonly sourceBranchId: string; readonly sourceNodeId: string; readonly createdAt: string;
+      readonly identity: ApplicabilityIdentity;
+      readonly target: Extract<ApplicabilityTarget, {readonly kind: "pack"}> };
+```
 
 #### §3.2 Two shipped assumptions that a wider `kind` would break silently
 
@@ -351,8 +401,8 @@ sites rather than leaving them to review.
 
 One rebuild migration, claimed as **a position behind `social-play`** and numbered
 `STORAGE_VERSION + 1` at landing per the register's assign-at-landing rule. It rebuilds
-`run_derivations` with the widened `CHECK` and the three new columns, copies every existing row
-with `identity_*` null, and restores `run_derivations_source`. It uses **literal** `CHECK` strings
+`run_derivations` with the widened checks and two new columns, copies every existing row
+with both applicability columns null, and restores `run_derivations_source`. It uses **literal** `CHECK` strings
 and literal kind values, never the moving TypeScript union, per the migration-9 freeze lesson
 recorded in the register.
 
@@ -368,22 +418,65 @@ nested projection. Criterion 8 therefore asserts export completeness against a `
 table_info(run_derivations)`-derived set rather than against a hand-written list, so a fourth
 column added later fails the build instead of quietly leaving the learner's export.
 
-#### §3.5 The launch is one server call, and it is atomic
+#### §3.5 The source-bound launch is one authoritative server call
 
 `startPack` (`apps/web/src/lib/session-controller.ts:241-262`) creates a run from the client and
 has nowhere to record an origin. A client-side create followed by a link write can half-fail and
 leave an origin-less run, which is precisely the identity loss this RFC exists to end.
 
-The repo has solved this twice already, both times server-side and both times in one transaction:
+The repo has solved atomic creation twice already, both times server-side and in one transaction:
 `flip` (`service.ts:917`) and `createRepertoireGapRun` (`:928`), which write run, grant
 and link inside a single `BEGIN IMMEDIATE` (`storage.ts:1933-1941`, `:1964`). This RFC adds the
-third instance — `launchFromApplicability`, taking `{target, source, identity}`, validating the
-target against the pack registry, building the run exactly as `startPack` does (pack document,
-capabilities, `selectorMode`, `policyConfig`), and persisting run plus derivation in one
-transaction. The client navigates to `/play/run/{runId}` with the run already linked.
+third instance. The client supplies no identity bytes:
+
+```http
+POST /runs/{runId}/branches/{branchId}/nodes/{nodeId}/applicability-targets/{targetId}/launch
+Content-Type: application/json
+
+{}
+```
+
+The authenticated service re-reads the source run under `requireRead`, requires a role for which
+`mayWrite(role)` is true, verifies the branch owns the node, rejects a live match, recomputes the
+complete `context:"run_node"` applicability result from the stored FEN and current registered
+producer versions, and selects the one pack target whose recomputed `targetId` equals the path
+value. It then builds the run exactly as `startPack` does and persists run, grant and the exact
+recomputed identity/target derivation in one transaction. The response is:
+
+```ts
+type LaunchApplicabilityResult = Readonly<{
+  runId: string; writerId: string; run: DrillRun;
+  derivation: Extract<RunDerivation, {kind:"theory_launch"}>;
+}>;
+```
+
+The closed error image is `INVALID_REQUEST` (malformed ids/body or branch/node mismatch),
+`RUN_NOT_FOUND`, `FORBIDDEN`, `MATCH_IN_PROGRESS`, `APPLICABILITY_STALE` (the requested target is
+not in the recomputed view) and `STORAGE_FAILURE`. REST maps the existing codes as today and adds
+`APPLICABILITY_STALE` as HTTP 409. The web client exposes the literal method and path and navigates
+to `/play/run/{runId}` only from the 201 response. Crossed source, identity and target requests all
+fail because no caller-supplied identity is accepted.
+
+Library pack actions do **not** call this endpoint. They use the ordinary pack-start operation and
+create no derivation; a browse has no source event to preserve.
 
 `derivations(runId, principal)` (`service.ts:936`) already returns `{source, derived}` and needs
 no signature change; it starts returning honest kinds once §3.2 lands.
+
+#### §3.6 Progression policy — owner decision required
+
+**Recommended ruling:** a completed countable attempt in a theory-launched pack counts exactly
+like a completed countable attempt in the same directly-started pack. `derivation.kind` is durable
+provenance and navigation context, not an exclusion from the attempt denominator. Following a
+recommendation does not satisfy it by itself; only the existing countable-attempt write does.
+
+This makes the user-visible loop literal: encounter a shape → choose practice → complete practice
+→ the recommendation is satisfied. The alternative would show a completed rehearsal as still
+unaddressed solely because of the door used to enter it. The implementation criterion must fixture
+identical completed direct and theory-launched runs producing identical recommendation suppression,
+and an abandoned/unpreserved theory launch producing none. This paragraph is a recommendation,
+not an owner ruling; [[D1887]] keeps the RFC in draft until the owner accepts it or chooses an
+origin-partitioned denominator.
 
 ### §4 The four surfaces
 
@@ -391,6 +484,15 @@ no signature change; it starts returning honest kinds once §3.2 lands.
 
 `App.svelte:882` renders `Find {item.packIds[0]}` and offers exactly one of N targets, then
 discards it. It renders **every** target as its own launch action, each calling §3.5.
+
+`shapeRecommendations()` must retain the evidence occurrence it currently throws away. Each
+recommendation gains `anchors: readonly {runId, branchId, nodeId, ply}[]`. The producer collects
+the exact `shapeFirings()` node for every branch, de-duplicates by the four fields, then orders by
+`run.updatedAt DESC`, `runId`, `branchId`, `ply`, `nodeId`. The rendered recommendation uses the
+first anchor only as the default action, while the complete ordered anchors remain in the payload.
+The launch path includes that exact tuple and the server recomputes it; array order is therefore a
+deterministic UX default, never provenance authority. A run with two branches and two firings must
+retain all four distinguishable anchors.
 
 Two silent bounds in the producer are declared rather than removed, because removing them is a
 performance decision this RFC has no measurement for:
@@ -428,6 +530,8 @@ The Library gains the theory catalogue `design/03-product-breadth.md:293` names:
 - **Principles** — `PrincipleRegistry.list()` ships (`principle-registry.ts:63`) and is reachable
   only from inside authored feedback. It needs one REST route, `GET /principles`, mirroring
   `/shapes`, plus its client method.
+- **Openings** — exact matched endpoints from the implemented runtime catalogue open through
+  `opening-entry`; path membership without a named endpoint remains an honest empty action.
 
 Each catalogue row carries its own applicability result, so a shape with no `present` pack renders
 an honest *"no pack rehearses this yet"* — a first-class state, not a missing button. Four shapes
@@ -489,11 +593,10 @@ owner — sequencing, not a scope cut.
    F7."* This RFC's identities are the ones the repo already registers — shapes, principles,
    anchored claims, and the pinned CC0 opening catalogue — none of which need O5.
 
-2. **The runtime opening projections.** Specified and accepted in
-   `rfc/runtime-opening-identity.md`, unimplemented at HEAD. Owner: that RFC's implementer.
-   §1.2's opening arm compiles against it and abstains `candidate_only` until then, so this RFC
-   lands and works on three of its four join kinds with the fourth honestly empty rather than
-   absent.
+2. **Opening theory prose and opening-linked packs.** The exact runtime opening projections now
+   ship. What still lives elsewhere is prose over those identities (`theory-knowledge-pipeline`)
+   and authored pack applicability (`pack-capability-contract` plus content). This RFC renders the
+   exact endpoint and an honest empty pack set; it does not invent either missing consumer.
 
 Nothing else in the dossier's ask is deferred. The four join kinds, the four surfaces, the durable
 return link, the route grammar and every abstention are specified above.
@@ -534,12 +637,12 @@ return link, the route grammar and every abstention are specified above.
    shape's recommendation. *Negatives: the HEAD code fails both arms — `service.ts:1135` fails the
    first and `service.ts:1124` the second; and a `ApplicabilityTarget` literal carrying
    `relation: "prospective"` does not typecheck.*
-3. **The pack id survives the action.** From the Learn recommendation list, activating a target
-   opens a run whose `packId` equals the target's, for **every** entry in `packIds` and not only
-   `packIds[0]`. *Negative: `navigate("/play")` — the HEAD call at `App.svelte:882` — fails,
-   because the resulting route carries no pack.*
-4. **The route grammar can express every target.** `routePath` accepts `pack`, `shape-entry` and
-   `principle-entry` and round-trips through `parseRoute` for ids containing `/`, `%`, spaces and
+3. **The pack id and exact firing survive the action.** From the Learn recommendation list,
+   activating every pack target opens a run whose `packId` equals the target's; a fixture with two
+   branches and two firings retains four anchors and the chosen source tuple reaches the derivation.
+   *Negative: `navigate("/play")` and a recommendation containing only `runIds` both fail.*
+4. **The route grammar can express every target.** `routePath` accepts `pack`, `shape-entry`,
+   `principle-entry` and `opening-entry` and round-trips through `parseRoute` for ids containing `/`, `%`, spaces and
    non-ASCII. A malformed id yields `not-found` and never throws. *Negative: a target expressed as
    `/play?pack=x` round-trips to `{name:"play"}` with the pack lost — asserted as a red fixture so
    the `search` trap at `router.ts:39` cannot be reintroduced.*
@@ -547,13 +650,15 @@ return link, the route grammar and every abstention are specified above.
    `shape:carlsbad` yields its versioned entry and two `present` pack targets;
    `shape:hanging-pawns` yields its entry and **zero** targets with `no_present_pack`; an exact
    `{packId, claimId}` yields registered principles and its source pack; a bare principle yields
-   theory targets and **no** pack targets; an opening position yields cited records with zero
-   launchable packs and `candidate_only`. *Negative: any fixture in which an empty target list is
+   theory targets and **no** pack targets; a claim-anchored principle yields its exact source pack;
+   an exact named opening endpoint yields its literal implemented payload and zero launchable packs;
+   unnamed path membership yields `candidate_only`. *Negative: any fixture in which an empty target list is
    replaced by a nearest-match pack fails.*
-6. **The identity set survives.** For each of the three multi-record transposition keys, the
-   opening identity carries **both** records, the declared specificity rule selects the display
-   record, and the discarded record is present in the result. *Negative: a result carrying a single
-   `openingName` string does not typecheck.*
+6. **Opening identity has one shared authority.** The server producer imports the runtime
+   `CurrentOpeningEndpoint` declaration and applicability carries its matched arm without a local
+   summary type. Exact absence, unnamed membership and typed abstention remain distinct. *Negative:
+   declaring `OpeningIdentityRef` in applicability or selecting a descendant name from membership
+   fails the type/contract fixture.*
 7. **A widened `kind` cannot lie about what the learner did.** After the migration:
    `derivationFor()` on a `theory_launch` row returns `kind: "theory_launch"` (fails at HEAD —
    `storage.ts:1980` returns a literal), and a learner whose only derivation is a `theory_launch`
@@ -561,38 +666,49 @@ return link, the route grammar and every abstention are specified above.
    *Negative: both arms are asserted as red fixtures against the pre-repair code, because a green
    suite that never had a second kind proves nothing.*
 8. **Every derivation column reaches account export.** The owned-run export's derivation columns
-   are **set-equal** to `PRAGMA table_info(run_derivations)`. *Negative: adding a fifth column
+   are **set-equal** to `PRAGMA table_info(run_derivations)`. *Negative: adding another column
    without editing `storage.ts:1019-1022` fails the build rather than silently dropping out of the
    learner's export.*
-9. **The launch is atomic and origin-less runs are impossible.** With the derivation insert forced
-   to fail, no `drill_runs` row is committed. A run created by `launchFromApplicability` always has
-   a derivation row with all three `identity_*` columns non-null. *Negative: a client-side
-   `startPack` followed by a separate link write fails this criterion by construction, which is
-   why §3.5 is server-side.*
+9. **The launch is authoritative, atomic and source-bound.** The authenticated real REST/client
+   path recomputes applicability from the stored source node and accepts only a recomputed
+   `targetId`; crossed source, branch, node and target fixtures fail with the closed error image.
+   With the derivation insert forced to fail, no `drill_runs` row commits. *Negative: accepting an
+   identity or target object from the client fails this criterion even if the transaction is atomic.*
 10. **The migration is literal and reversible in reading.** The rebuild's `CHECK` string and kind
     values are string literals in the migration body, not references to the TypeScript union, and
-    every pre-existing row survives with `identity_*` null and its original
+    every pre-existing row survives with both applicability columns null and its original
     `kind`/`source_*`/`created_at` bytes. *Negative: a migration body interpolating
     `RunDerivation["kind"]` fails review under the migration-9 freeze rule the register records.*
-11. **No evidence form is added.** `EvidenceForm` still has nine members and `MODULE_FORM_IMAGE`
+11. **Durable derivations are a checked union at both boundaries.** SQL refuses the two impossible
+    null combinations; the reader refuses unknown kinds, malformed/non-canonical JSON, a non-pack
+    target, a target-id mismatch and a `via` arm not licensed by the identity. Account restore and
+    export exercise the same parser. *Negative: a double-cast malformed row still fails at runtime.*
+12. **No evidence form is added.** `EvidenceForm` still has nine members and `MODULE_FORM_IMAGE`
     still has seven arms after this RFC lands. *Negative: a `link` member fails, and it fails in
     `module-contract.ts` as well, because it maps to no module form.*
-12. **Review reaches the identities it could not reach.** `review.story`'s projection list contains
+13. **Review reaches the identities it could not reach.** `review.story`'s projection list contains
     the semantic transition-event projections and the runtime opening projections, and every
-    projection it names resolves in the compiled manifest. *This criterion is honestly red until
-    `runtime-opening-identity.md` implements*; the semantic-event arm is satisfiable at landing and
-    is asserted separately so the two do not mask each other.
-13. **The declared bounds are declared.** `SHAPE_ENCOUNTER_RUN_WINDOW` and
+    projection it names resolves in the compiled manifest. Runtime opening identity is implemented,
+    so this criterion runs at landing rather than carrying an honestly-red discharge.
+14. **The declared bounds are declared.** `SHAPE_ENCOUNTER_RUN_WINDOW` and
     `RECOMMENDATION_LIMIT` are exported constants, the recommendation sentence names the window,
     and a fixture with 51 preserved runs renders a sentence whose count matches the window rather
     than the corpus. *Negative: the HEAD sentence — *"in N of your preserved runs"* over a silent
     50-run scan — fails.*
-14. **The result type cannot carry a ranking or a sentence.** `ApplicabilityResult` and every type
-    it transitively contains have no `number` field other than none, no free-text field, and
-    `basis` is the closed three-member union. Asserted by a type-level test. *Negative: adding
-    `score: number` or `explanation: string` fails the test — the law-8 seal is structural, not a
-    review convention.*
-15. **The principle catalogue is reachable.** `GET /principles` returns the registry's list
+15. **The result cannot carry ranking/editorial authority.** A type/AST test refuses `score`,
+    `rank`, `confidence`, `explanation`, `sentence` and raw route/URL fields on applicability's own
+    types while permitting the factual numeric/string operands of registered payloads. *Negative:
+    `score:number` and `route:string` fail; `observedPly:number` inside `CurrentOpeningEndpoint`
+    passes.*
+16. **Library and source-bound starts cannot be confused.** A `context:"library"` result has no
+    source and starts a pack without a derivation; only `context:"run_node"` can call the launch
+    endpoint. *Negative: passing a Library result to the source launch does not typecheck.*
+17. **Progression follows the owner ruling.** If §3.6's recommendation is approved, identical
+    completed countable direct and theory-launched attempts suppress the same recommendation while
+    an abandoned/unpreserved launch suppresses nothing. If the owner chooses partitioning, this
+    criterion is replaced with the exact ruled denominator before acceptance; it may not remain
+    conditional at implementation.
+18. **The principle catalogue is reachable.** `GET /principles` returns the registry's list
     (`principle-registry.ts:63`) and the Library renders it. *Negative: a catalogue built by
     re-reading `content/principles/` from the client fails; the registry is the single reader.*
 
@@ -600,9 +716,9 @@ return link, the route grammar and every abstention are specified above.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | `packages/runtime/src/applicability.ts`, the server index, the three routes, the launch endpoint, the migration and the four surfaces | codex | this RFC's implementing commit | |
+| D1 | shared opening declarations, `packages/runtime/src/applicability.ts`, the server index, the four routes, the launch endpoint, the migration and the four surfaces | codex | this RFC's implementing commit | |
 | D2 | The two single-kind repairs at `storage.ts:1980` and `service.ts:940`, landing in the same commit as the migration | codex | this RFC's implementing commit | |
-| D3 | The opening arm of §1.2 and criterion 12's opening half, which wait on `runtime-opening-identity.md`'s implementation | runtime-opening-identity | `rfc/runtime-opening-identity.md` changelog | |
+| D3 | The opening arm of §1.2 and shared payload types from implemented `runtime-opening-identity.md` | codex | this RFC's implementing commit moves declarations without changing producer bytes | prerequisite landed at `44637013`; declaration move pending |
 | D4 | The O5 source/index posture ruling that opens the external theory corpus lane | OWNER | `planning/platform-alignment/theory-drill/o5-o6-handoff.md` | |
 | D5 | The O6 stable-primitive and re-authoring-budget ruling that R8 named as a prerequisite for authoring against this contract at scale | OWNER | `planning/platform-alignment/theory-drill/o5-o6-handoff.md` | |
 | D6 | The line-number and prop-list errata on `design/research/theory-drill-current-joins.md` (§Deviations, items 2 and 3) | claude | that dossier's erratum lines | |
@@ -612,25 +728,16 @@ return link, the route grammar and every abstention are specified above.
 
 ## Open questions
 
-1. **Does a theory launch count toward progression?** A `theory_launch` run is an ordinary pack run
-   and will produce a countable attempt, which means launching from a shape panel can complete the
-   very recommendation that produced it — arguably correct, and arguably a loop that inflates the
-   catalogue-denominated progression [[D1151]] rules on. This RFC makes the origin *visible* in the
-   derivation row and takes no position on whether progression reads it. Not acceptance-blocking:
-   the row is written either way and the question is settled by whoever specifies progression's
-   denominator.
-2. **Is the declared specificity rule in §1.4 the right one?** Longest-cited-line-wins is a
-   convention, not a measurement; on the three measured collisions it always selects the `Main
-   Line` descendant over the `Advance Variation` parent, which may be exactly backwards for a
-   learner meeting the opening for the first time. The full set is preserved either way, so
-   reversing the rule is a one-line change with no data consequence. Recorded because it is the one
-   place this RFC makes a display choice with no evidence behind it.
-3. **Should the Learn surface offer every pack target, or the nearest one?** §4.1 offers all,
+1. **OWNER — does a completed theory launch count toward progression?** §3.6 recommends yes:
+   only the completed countable attempt satisfies the recommendation, exactly as a direct start;
+   derivation origin remains provenance and does not alter the denominator. This is
+   acceptance-blocking after [[D1887]] and must be answered before fresh review.
+2. **Should the Learn surface offer every pack target, or the nearest one?** §4.1 offers all,
    because `packIds` is already computed and hiding N−1 of them is the defect this RFC exists to
    fix in miniature. The alternative — one target chosen by a declared rule — needs a rule, and no
    measurement supports one. Not acceptance-blocking; criterion 3 asserts that no target is
    *unreachable*, not that all are rendered at once.
-4. **Does the 50-run encounter window want to be larger?** §4.1 declares it rather than changing
+3. **Does the 50-run encounter window want to be larger?** §4.1 declares it rather than changing
    it, because the scan reads and parses every run snapshot in the window and nothing has measured
    that cost. If the honest sentence *"in N of your last 50 preserved runs"* reads badly to the
    owner, the alternative is a projection over `attempts` rather than a snapshot scan — a
@@ -682,6 +789,12 @@ Proposed — ids assigned at landing; head was **D1354** at drafting.
 
 ## Changelog
 
+- 2026-08-30: author repair for [[D1879]]–[[D1887]]. The draft now reuses the literal implemented
+  opening payload, splits bare principles from claim occurrences, replaces raw routes with closed
+  actions, separates Library starts from source-bound launches, accepts only a recomputed target id
+  through a literal REST/client operation, retains exact firing anchors, and validates durable
+  derivations as a SQL-and-runtime discriminated union. [[D1887]] remains owner-pending on the
+  explicit §3.6 recommendation; fresh review and implementation remain blocked.
 - 2026-08-27: returned by independent buildability review on [[D1879]]–[[D1887]]. The proposed
   opening type has no definition at the runtime/server boundary; criterion 14 contradicts both the
   raw route field and the implemented opening payload; the principle union cannot represent its

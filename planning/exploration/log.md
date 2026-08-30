@@ -11902,3 +11902,23 @@ second-fresh contract 7/7. Exact receipt:
 no schema, production registry, pack, sidecar, digest, content, archive or protected-design byte
 changed. Fresh independent review still gates acceptance and implementation; D560 still gates the
 corpus apply.
+
+## 2026-08-30 — Theory↔drill current-join author repair
+
+Repaired [[D1879]]–[[D1886]] after the independent buildability return. Applicability now consumes
+the literal implemented opening payload instead of inventing a runtime/server type; bare principles
+and anchored claim occurrences are distinct; raw routes are replaced by closed theory actions;
+Library direct starts and source-bound launches are disjoint contexts; and Learn retains exact
+run/branch/node/ply firing anchors rather than reducing provenance to run ids.
+
+The launch wire is now literal and server-authoritative: the client supplies only a target id in an
+authenticated source path, the server re-reads and authorizes the source, recomputes the complete
+applicability result, and atomically persists the exact selected identity/target. Durable
+derivations are a discriminated union guarded by both a SQL kind/presence check and a fail-closed
+canonical-union parser. Cross-source and malformed persisted rows are named negative fixtures.
+
+[[D1887]] remains deliberately owner-pending. The recommendation is that only a completed
+countable attempt satisfies a theory/shape recommendation, exactly like direct pack start; merely
+opening or abandoning the run changes no progression. `make theory-drill-author-contract` is the
+positive author gate. Fresh independent review and all implementation remain blocked until the
+owner ruling is recorded.
