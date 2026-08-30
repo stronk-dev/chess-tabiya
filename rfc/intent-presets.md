@@ -1,13 +1,13 @@
 # RFC: Intent presets — the workflow/preset layer over the module foundation
 
-- **Status:** implementing foundation checkpoint only — **author-amended 2026-08-30** on the
-  independent return [[D1659]]–[[D1663]] plus [[D1437]]/[[D1500]]; fresh independent
-  buildability review is required before further implementation. The shipped closed vocabularies,
-  module/context tables, derivation and workflow namespace remain. The repair distinguishes unset,
-  explicit and migrated preferences; records the owner's named-preset/Custom ruling; binds every
-  legacy field to an exact module/form/output effect; closes availability; gives Campaign an
-  authoritative origin; and splits config UI from real module activation. Exact return:
-  `planning/intent-presets/independent-amendment-rereview-2026-08-26.md`.
+- **Status:** draft returned by fresh independent buildability review 2026-08-30 on
+  [[D2127]]–[[D2134]]. The D1659–D1663 preference-intent repair survives, but the v2 field type,
+  preset identity, client/server authority split, effective Custom semantics, suppression bytes,
+  effect/source join, legacy-writer closeout and Campaign dependency remain open. Exact return:
+  `planning/intent-presets/fresh-independent-buildability-review-2026-08-30.md`; `make
+  intent-presets-fresh-review` reproduces 8/8 and the prior seven author arms remain green. The
+  shipped closed vocabularies, module/context tables, derivation and workflow namespace remain;
+  no further implementation is authorised.
 - **Author:** claude (drafted from `planning/evidence-foundation-ux/presets-head-derivation.md`, the HEAD derivation of every surface this document composes)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §3-forms O4 amendment (the algebra), §3a (silence default), §5 Q4; `design/03-product-breadth.md` §Play, §Review and explore, §Live and community, shell table
@@ -1033,6 +1033,19 @@ rows. Only Checkpoint B's non-vacuous real delivery commit writes those SHAs and
 That commit also closes [[D532]]/[[D715]] if their server ceiling remains green and performs the
 ledger/log closeout in the same commit.
 
+## Fresh-review routing
+
+| row | remaining author work |
+|---|---|
+| [[D2127]] | define the closed v2 assistance-preference field map and strict parser/serializer |
+| [[D2128]] | remove duplicate preset identity or enforce exact receipt/input correlation |
+| [[D2129]] | publish the shared client-request/server-authority compilation split and digests |
+| [[D2130]] | make every higher Custom primitive reach its governed effects without widening ceilings |
+| [[D2131]] | type requested/effective/reason suppression bytes and deterministic footer rendering |
+| [[D2132]] | derive exact effect/source dependencies from module bindings and assembler inputs |
+| [[D2133]] | retire/redirect every v1 writer and define coexistence precedence atomically |
+| [[D2134]] | phase Campaign or consume an accepted exact encounter receipt/issuer contract |
+
 ## Open questions
 
 None blocking acceptance. The genuinely owner-shaped choices — names, promises, defaults,
@@ -1097,6 +1110,13 @@ named in its own text, never this list.
 
 ## Changelog
 
+- 2026-08-30 (**fresh independent return [[D2127]]–[[D2134]]**): returned the author amendment.
+  The repaired unset/explicit/migrated distinction remains, but the compiler cannot yet construct
+  one authoritative end-to-end request: its persisted field type is undefined; preset arrives
+  twice; client-only and server-authoritative contracts conflict; higher Custom values may be
+  inert; suppression and availability effects lack required identity; legacy writers remain; and
+  Campaign depends on an undefined receipt from a returned RFC. Exact return and 8/8 reproduction
+  are linked in Status; no implementation is authorised.
 - 2026-08-30 (**author repair after independent return [[D1659]]–[[D1663]], [[D1437]] and
   [[D1500]]**): replaced ambiguous complete-config input with a four-arm preference receipt and
   total legacy migration; recorded the owner rule for literal named presets versus visibly Custom

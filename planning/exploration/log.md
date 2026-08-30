@@ -11553,3 +11553,20 @@ The exact return is
 module-registration-fresh-review` passes 7/7 as a blocker reproduction. No module declaration,
 consumer, binding, assembler, route, presenter, seat, runtime behavior, schema, content, archive or
 protected-design byte changed.
+
+## 2026-08-30 — Intent-presets fresh independent return
+
+Fresh-reviewed the D1659–D1663/D1437/D1500 author amendment through the real localStorage writers,
+the returned module-delivery contract and the returned Campaign owner. The repair correctly
+distinguishes unset, explicit, migrated and invalid preference states, but the resulting compiler
+still cannot represent one end-to-end authoritative request. [[D2127]]–[[D2134]] record eight
+blockers: an undefined v2 field type; duplicated uncorrelated preset identity; client-only versus
+server-authoritative compilation; higher Custom values whose modules remain absent; suppression
+records missing requested/effective/reason; effects with no source-dependency join; live legacy
+writers outside the migration census; and an undefined Campaign receipt owned by a returned RFC.
+
+The exact return is
+`planning/intent-presets/fresh-independent-buildability-review-2026-08-30.md`; `make
+intent-presets-fresh-review` passes 8/8 and the prior seven author arms remain green. No v2 key,
+compiler, permission clamp, campaign receipt, pill/footer, module activation, production, schema,
+content, archive or protected-design byte changed.
