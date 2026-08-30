@@ -11455,3 +11455,20 @@ campaign.
 The exact return is `planning/campaign/fresh-independent-buildability-review-2026-08-30.md`;
 `make campaign-two-horizon-fresh-review` passes 10/10. No schema, migration, campaign content,
 storage, endpoint, award, UI or protected-design byte changed.
+
+## 2026-08-30 — bot-policy fresh independent return
+
+Re-reviewed the D1970–D1976 bot-policy repair against the actual shared provider contracts and the
+ruled 4×3 roster, and returned it on [[D2087]]–[[D2096]]. The author checkpoint remains green; the
+new ten-arm reproduction proves the durable receipt has no non-circular storage home, three profile
+ids cannot encode twelve band/family identities, the author fixture forks the shared delivery and
+cp/mate score types, the sealed record accepts caller-authored policy outcomes, idempotency omits
+writer/derivation operands, mandatory Stockfish contradicts baseline availability, Stage B's
+all-legal feature rows cannot compose with bounded Maia, the guard compares against the best
+returned rather than best legal move, and below-floor fallback relies on a selected move absent from
+the Maia payload.
+
+The exact return is
+`planning/platform-alignment/bot-policy/fresh-independent-buildability-review-2026-08-30.md`;
+`make bot-policy-fresh-review` passes 10/10. No run schema, migration, provider, selector, roster,
+storage, UI, content or protected-design byte changed.

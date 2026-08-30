@@ -1,16 +1,17 @@
 # RFC: Bot policy
 
-- **Status:** **draft author-amended 2026-08-30 on [[D1970]]–[[D1976]]; fresh independent
-  buildability review required.** The production path now consumes the shared sealed Maia policy
-  page and all-legal Stockfish table, separates returned mass from legal-set equality, projects one
-  closed persisted derivation from admitted values, rechecks branch/node/event-head after provider
-  work with durable idempotency, separates deterministic policy bytes from request/timing receipts,
-  refuses without committing when Maia is unavailable, and derives Stage B only from one admitted
-  candidate-population receipt plus the shared root table. `make bot-policy-author-contract` passes
-  all seven return families. Implementation remains unauthorised until the two shared dependencies
-  are accepted/implemented and this amendment passes fresh review. Claims 0.18/migration remain
-  held; no production/schema byte changed in this repair. *(Prior checkpoints: implementing;
-  accepted 2026-08-22; draft; D1601–D1609 author-amended.)*
+- **Status:** **draft — returned by fresh independent buildability review 2026-08-30 on
+  [[D2087]]–[[D2096]].** The D1970–D1976 repair preserves its useful direction, but its author model
+  forks the actual provider-delivery and score types; the operation receipt has no non-circular
+  durable home; three identities cannot encode the ruled 4×3 roster; sealed decisions still accept
+  caller-authored policy outcomes; idempotency omits writer/derivation operands; mandatory
+  Stockfish contradicts baseline availability; Stage B's all-legal rows cannot compose with bounded
+  Maia; the guard uses the best returned rather than best legal move; and the below-floor fallback
+  relies on a selected move the provider never returns. `make bot-policy-fresh-review` reproduces
+  10/10 blockers while `make bot-policy-author-contract` preserves the prior checkpoint. No
+  implementation is authorized. Claims 0.18/migration remain held. *(Prior checkpoints:
+  implementing; accepted 2026-08-22; draft; D1601–D1609 author-amended; D1970–D1976
+  author-amended.)*
 - **Author:** claude (drafted on the D717 program routing, `planning/evidence-foundation-ux/plan.md`
   Phase 6; executes the completed dependency map
   `planning/platform-alignment/bot-policy/f8-dependency-map.md`)
@@ -875,6 +876,28 @@ extended, not altered; the "human-policy band, not Elo" presentation is the O8.4
 not a divergence. The absence of a design-tier bot section is recorded in the header;
 this RFC proposes no design-doc text (law 5).
 
+## Fresh-return author obligations (2026-08-30)
+
+The exact return is
+`planning/platform-alignment/bot-policy/fresh-independent-buildability-review-2026-08-30.md`.
+Before another acceptance review, the author must:
+
+1. consume the accepted shared provider delivery and cp/mate score types directly, with a typed
+   baseline path that survives optional-guard failure without weakening legal-move admission
+   ([[D2089]], [[D2090]], [[D2093]]);
+2. publish twelve immutable family+band identities and one durable, non-circular operation receipt
+   home whose canonical bytes support replay, export and idempotency ([[D2087]], [[D2088]]);
+3. replace the caller-fed decision projector with one compiler-owned transform/sampler result, and
+   bind idempotency to the exact writer, derivation and provider operands through the published
+   request parser ([[D2091]], [[D2092]]);
+4. derive Stage-B features for the admitted bounded Maia intersection while retaining packet and
+   all-legal authority, and calculate guard reference loss against the best legal Stockfish move
+   under explicit mixed-domain semantics ([[D2094]], [[D2095]]);
+5. define the below-returned-mass-floor selection from an actual declared source/algorithm, not a
+   nonexistent Maia-selected move ([[D2096]]); and
+6. invert all ten fresh-review arms, preserve the author checkpoint, and pass full repository
+   verification before requesting a new independent review.
+
 ## Acceptance criteria
 
 Each criterion names its failure mode; none can pass while measuring nothing ([[D444]]/
@@ -1022,3 +1045,9 @@ as a named future measured layer (Open question 4).
   shared root table with no child work. `make bot-policy-author-contract` is the executable author
   checkpoint. Fresh independent review and the two shared dependencies still gate implementation;
   no product, schema, migration or content byte changed.
+- 2026-08-30: fresh independent review returned the author amendment on [[D2087]]–[[D2096]]. The
+  ten-arm reproduction crosses the actual shared delivery/score contracts, roster identity,
+  persistence/idempotency, compiler-owned derivation, baseline degradation, Stage-B composition,
+  all-legal guard reference and below-floor behavior. Exact return:
+  `planning/platform-alignment/bot-policy/fresh-independent-buildability-review-2026-08-30.md`;
+  reproduction: `make bot-policy-fresh-review`. No production/schema/content byte changed.
