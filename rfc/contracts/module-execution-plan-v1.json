@@ -1,10 +1,164 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "kind": "module_evidence_requirements",
+  "completionClaim": "requirements_only",
   "population": 117,
   "awaiting": [
     "derived.explorer.population_summary",
     "pack.authored.classifier"
   ],
+  "sourceContracts": [
+    {
+      "id": "candidate_population@1",
+      "authority": "candidate-packet",
+      "input": "CandidatePopulationRequest",
+      "invoke": "collectCandidatePopulation",
+      "extract": "projection-keyed admitted items",
+      "parse": "parseEvidencePayloadByProjection",
+      "abstain": "CandidateEvidenceAbsence",
+      "seal": "SealedCandidatePopulation",
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "id": "recorded_semantic_path@1",
+      "authority": "semantic-collectors",
+      "input": "RecordedSemanticPathRequest",
+      "invoke": "compileRecordedSemanticPath",
+      "extract": "ordered projection-keyed path events",
+      "parse": "parseEvidencePayloadByProjection",
+      "abstain": "RecordedPathAbsence",
+      "seal": "SealedRecordedSemanticPath",
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "id": "review_evidence_packet@1",
+      "authority": "review-evidence-compiler",
+      "input": "ReviewEvidenceRequest",
+      "invoke": "compileReviewEvidencePacket",
+      "extract": "projection-keyed frozen-prefix items",
+      "parse": "parseEvidencePayloadByProjection",
+      "abstain": "ReviewEvidenceAbsence",
+      "seal": "SealedReviewEvidencePacket",
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "id": "catalogue_evidence_packet@1",
+      "authority": "pack-population-provenance",
+      "input": "CatalogueEvidenceRequest",
+      "invoke": "resolveCatalogueEvidence",
+      "extract": "projection-keyed cited catalogue items",
+      "parse": "parseEvidencePayloadByProjection",
+      "abstain": "CatalogueEvidenceAbsence",
+      "seal": "SealedCatalogueEvidencePacket",
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "id": "provider_evidence_packet@1",
+      "authority": "provider-evidence-exchange",
+      "input": "ProviderEvidenceRequest",
+      "invoke": "requestProviderEvidence",
+      "extract": "projection-keyed provider receipts",
+      "parse": "parseEvidencePayloadByProjection",
+      "abstain": "ProviderEvidenceAbsence",
+      "seal": "SealedProviderEvidencePacket",
+      "status": "awaiting_upstream_sealed_operation"
+    }
+  ],
+  "sourceInputs": [
+    {
+      "projection": {
+        "id": "derived.story.eval_shift",
+        "version": 1
+      },
+      "subjectKind": "run_prefix",
+      "acquisition": "review_evidence_packet@1",
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "projection": {
+        "id": "derived.story.last_level",
+        "version": 1
+      },
+      "subjectKind": "run_prefix",
+      "acquisition": "review_evidence_packet@1",
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "projection": {
+        "id": "rules.exchange.predicate.legal_exchange",
+        "version": 1
+      },
+      "subjectKind": "edge",
+      "acquisition": "candidate_population@1",
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "projection": {
+        "id": "rules.square.event.control",
+        "version": 1
+      },
+      "subjectKind": "edge",
+      "acquisition": "candidate_population@1",
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "projection": {
+        "id": "rules.structural.predicate.direct_attack_count",
+        "version": 1
+      },
+      "subjectKind": "position",
+      "acquisition": "candidate_population@1",
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "projection": {
+        "id": "rules.structural.predicate.line_blockers",
+        "version": 1
+      },
+      "subjectKind": "position",
+      "acquisition": "candidate_population@1",
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "projection": {
+        "id": "rules.structural.predicate.passed_pawn",
+        "version": 1
+      },
+      "subjectKind": "position",
+      "acquisition": "candidate_population@1",
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.reading.defender_duty_set",
+        "version": 1
+      },
+      "subjectKind": "position",
+      "acquisition": "candidate_population@1",
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "projection": {
+        "id": "run.record.move",
+        "version": 1
+      },
+      "subjectKind": "run_prefix",
+      "acquisition": "recorded_semantic_path@1",
+      "status": "awaiting_upstream_sealed_operation"
+    }
+  ],
+  "guidedHint": {
+    "status": "owner_blocked",
+    "blocker": "D1639",
+    "projectionRegistry": "HINT_DISCLOSURE_PROJECTION_IDS",
+    "familyRegistry": "HINT_HORIZON_FAMILIES",
+    "rungRegistry": "HINT_RUNGS",
+    "requires": {
+      "minFamilies": 1,
+      "minRungs": 1,
+      "cartesianSetEquality": true
+    }
+  },
   "rows": [
     {
       "projection": {
@@ -17,11 +171,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "openFileOccupancyOperands"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "any",
         "alternatives": [
@@ -38,8 +188,19 @@
             }
           ]
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.activity.event.open_file_occupancy",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -51,12 +212,8 @@
         "version": 1
       },
       "stage": "derived_after_inputs",
-      "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/compare-strips.ts",
-        "symbol": "comparisonEngineTrajectory"
-      },
+      "subjectKind": "branch_pair",
+      "acquisition": "review_evidence_packet@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -65,8 +222,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "branch_pair",
+          "rule": "declared_branch_pair"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.compare.engine_trajectory",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -78,12 +246,8 @@
         "version": 1
       },
       "stage": "derived_after_inputs",
-      "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/compare-strips.ts",
-        "symbol": "comparisonNarrative"
-      },
+      "subjectKind": "branch_pair",
+      "acquisition": "review_evidence_packet@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -92,8 +256,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "branch_pair",
+          "rule": "declared_branch_pair"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.compare.eval_delta",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -105,12 +280,8 @@
         "version": 1
       },
       "stage": "derived_after_inputs",
-      "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/compare-strips.ts",
-        "symbol": "comparisonNarrative"
-      },
+      "subjectKind": "branch_pair",
+      "acquisition": "review_evidence_packet@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -119,8 +290,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "branch_pair",
+          "rule": "declared_branch_pair"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.compare.piece_route",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -132,12 +314,8 @@
         "version": 1
       },
       "stage": "derived_after_inputs",
-      "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/compare-strips.ts",
-        "symbol": "comparisonNarrative"
-      },
+      "subjectKind": "branch_pair",
+      "acquisition": "review_evidence_packet@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -210,8 +388,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "branch_pair",
+          "rule": "declared_branch_pair"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.compare.structure_delta",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -224,11 +413,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "derivedExchangeSemanticEvents"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -241,8 +426,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.exchange.capture_class",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -255,11 +451,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "tradeCompletedSemanticEvent"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -272,8 +464,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.exchange.trade_completed",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -285,12 +488,8 @@
         "version": 1
       },
       "stage": "derived_after_inputs",
-      "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/grade.ts",
-        "symbol": "moveQualityGrade"
-      },
+      "subjectKind": "run_prefix",
+      "acquisition": "review_evidence_packet@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -303,8 +502,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "run_prefix",
+          "rule": "same_frozen_prefix"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.grade.move_quality",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -317,11 +527,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "capturedZoneDefenderOperands"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -334,8 +540,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.king.captured_zone_defender",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -348,11 +565,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/material-state.ts",
-        "symbol": "materialRoleSignatureReading"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -361,8 +574,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.material.reading.role_signature",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -375,11 +599,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/pawn-dynamics.ts",
-        "symbol": "pawnTransitionEvents"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -388,8 +608,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.pawn.event.transitions",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -402,11 +633,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "selectLocalSemanticEvidence"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -415,8 +642,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.semantic_avoidance.backward_pawn",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -429,11 +667,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "selectLocalSemanticEvidence"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -442,8 +676,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.semantic_avoidance.doubled_pawn",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -456,11 +701,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "selectLocalSemanticEvidence"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -469,8 +710,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.semantic_avoidance.half_open_file",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -483,11 +735,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "selectLocalSemanticEvidence"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -496,8 +744,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.semantic_avoidance.isolated_pawn",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -510,11 +769,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "selectLocalSemanticEvidence"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -523,8 +778,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.semantic_avoidance.king_opposition",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -537,11 +803,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "selectLocalSemanticEvidence"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -550,8 +812,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.semantic_avoidance.king_zone",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -564,11 +837,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "selectLocalSemanticEvidence"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -577,8 +846,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.semantic_avoidance.loose_piece",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -591,11 +871,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "selectLocalSemanticEvidence"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -604,8 +880,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.semantic_avoidance.open_file",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -618,11 +905,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "selectLocalSemanticEvidence"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -631,8 +914,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.semantic_avoidance.passed_pawn",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -645,11 +939,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "selectLocalSemanticEvidence"
-      },
+      "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -658,8 +948,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.semantic_avoidance.pawn_islands",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -671,12 +972,8 @@
         "version": 1
       },
       "stage": "derived_after_inputs",
-      "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/story.ts",
-        "symbol": "storyMoments"
-      },
+      "subjectKind": "run_prefix",
+      "acquisition": "review_evidence_packet@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -709,8 +1006,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "run_prefix",
+          "rule": "same_frozen_prefix"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.story.rank",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -723,11 +1031,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "attractionObservedOperands"
-      },
+      "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "any",
         "alternatives": [
@@ -756,8 +1060,19 @@
             }
           ]
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.tactic.attraction_observed",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -770,11 +1085,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "checkZwischenzugObservedOperands"
-      },
+      "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -795,8 +1106,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.tactic.check_zwischenzug_observed",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -809,11 +1131,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "defenderExposureOperands"
-      },
+      "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -826,8 +1144,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.tactic.defender_exposure",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -840,11 +1169,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "deflectionObservedOperands"
-      },
+      "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -865,8 +1190,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.tactic.deflection_observed",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -879,11 +1215,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "discoveredExecutedSemanticEvents"
-      },
+      "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -896,8 +1228,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.tactic.discovered_executed",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -910,11 +1253,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "interferenceObservedOperands"
-      },
+      "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -931,8 +1270,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.tactic.interference_observed",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -945,11 +1295,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "lineBlockerClearanceObservedOperands"
-      },
+      "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -962,8 +1308,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.tactic.line_blocker_clearance_observed",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -976,11 +1333,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "overloadExploitationObservedOperands"
-      },
+      "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -1001,8 +1354,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.tactic.overload_exploitation_observed",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1015,11 +1379,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/tactics.ts",
-        "symbol": "promotionPressureReading"
-      },
+      "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -1036,8 +1396,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.tactic.promotion_pressure",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1050,11 +1421,7 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
-      "sourceFamily": "derived",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "squareClearanceObservedOperands"
-      },
+      "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
         "inputs": [
@@ -1063,8 +1430,19 @@
             "version": 1
           }
         ],
-        "sameSubject": true
-      }
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        }
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.tactic.square_clearance_observed",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1077,12 +1455,16 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
-      "sourceFamily": "explorer",
-      "operation": {
-        "source": "apps/server/src/corpus.ts",
-        "symbol": "LichessCorpusSource.prototype.stats"
+      "acquisition": "provider_evidence_packet@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "human.explorer.population",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1095,12 +1477,16 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
-      "sourceFamily": "maia",
-      "operation": {
-        "source": "apps/server/src/opponent-selector.ts",
-        "symbol": "OpponentSelector.prototype.select"
+      "acquisition": "provider_evidence_packet@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "human.maia.candidate_wdl",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1113,12 +1499,16 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
-      "sourceFamily": "maia",
-      "operation": {
-        "source": "apps/server/src/opponent-selector.ts",
-        "symbol": "OpponentSelector.prototype.select"
+      "acquisition": "provider_evidence_packet@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "human.maia.policy",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1131,12 +1521,16 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
-      "sourceFamily": "stockfish",
-      "operation": {
-        "source": "apps/server/src/evidence-queue.ts",
-        "symbol": "StockfishEvidenceExecutor.prototype.execute"
+      "acquisition": "provider_evidence_packet@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "live.stockfish.eval",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1149,12 +1543,16 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
-      "sourceFamily": "stockfish",
-      "operation": {
-        "source": "apps/server/src/evidence-queue.ts",
-        "symbol": "StockfishEvidenceExecutor.prototype.execute"
+      "acquisition": "provider_evidence_packet@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "live.stockfish.pv",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1167,12 +1565,16 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
-      "sourceFamily": "stockfish",
-      "operation": {
-        "source": "apps/server/src/evidence-queue.ts",
-        "symbol": "StockfishEvidenceExecutor.prototype.execute"
+      "acquisition": "provider_evidence_packet@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "live.stockfish.wdl",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1185,12 +1587,16 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
-      "sourceFamily": "syzygy",
-      "operation": {
-        "source": "apps/server/src/tablebase.ts",
-        "symbol": "LichessTablebaseSource.prototype.probe"
+      "acquisition": "provider_evidence_packet@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "live.syzygy.category",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1203,12 +1609,16 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
-      "sourceFamily": "syzygy",
-      "operation": {
-        "source": "apps/server/src/tablebase.ts",
-        "symbol": "LichessTablebaseSource.prototype.probe"
+      "acquisition": "provider_evidence_packet@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "live.syzygy.distance",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1221,12 +1631,16 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
-      "sourceFamily": "syzygy",
-      "operation": {
-        "source": "apps/server/src/tablebase.ts",
-        "symbol": "LichessTablebaseSource.prototype.probe"
+      "acquisition": "provider_evidence_packet@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "live.syzygy.result",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1238,13 +1652,17 @@
         "version": 1
       },
       "stage": "pack_local",
-      "subjectKind": "pack",
-      "sourceFamily": "authored_theory",
-      "operation": {
-        "source": "apps/server/src/authored-feedback.ts",
-        "symbol": "projectAuthoredFeedback"
+      "subjectKind": "position",
+      "acquisition": "catalogue_evidence_packet@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "pack.authored.claim",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1256,13 +1674,17 @@
         "version": 1
       },
       "stage": "recorded_local",
-      "subjectKind": "position",
-      "sourceFamily": "recorded_run",
-      "operation": {
-        "source": "apps/server/src/position-evidence.ts",
-        "symbol": "recordedReadingsAt"
+      "subjectKind": "edge",
+      "acquisition": "recorded_semantic_path@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "recorded.engine.eval",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1274,13 +1696,17 @@
         "version": 1
       },
       "stage": "recorded_local",
-      "subjectKind": "position",
-      "sourceFamily": "recorded_run",
-      "operation": {
-        "source": "apps/server/src/position-evidence.ts",
-        "symbol": "recordedReadingsAt"
+      "subjectKind": "edge",
+      "acquisition": "recorded_semantic_path@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "recorded.tablebase.result",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1293,12 +1719,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/castling.ts",
-        "symbol": "castlingRightsLost"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.castling.event.rights_lost",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1311,12 +1741,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/castling.ts",
-        "symbol": "castlingLegality"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.castling.reading.legality",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1329,12 +1763,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/castling.ts",
-        "symbol": "castlingRights"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.castling.reading.rights",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1347,12 +1785,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/endgame.ts",
-        "symbol": "endgameReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.endgame.reading",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1365,12 +1807,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/king-state.ts",
-        "symbol": "kingZoneEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.king.event.zone_state",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1383,12 +1829,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/king-state.ts",
-        "symbol": "kingZoneReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.king.reading.zone_state",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1401,12 +1851,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/mobility.ts",
-        "symbol": "pieceDestinationsReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.mobility.reading.piece_destinations",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1419,12 +1873,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/pawn-dynamics.ts",
-        "symbol": "pawnDynamicsEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.pawn.event.dynamics",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1437,12 +1895,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/pawn-dynamics.ts",
-        "symbol": "candidateMajorityReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.pawn.reading.candidate_majority",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1455,12 +1917,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/pawn-dynamics.ts",
-        "symbol": "pawnContactsReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.pawn.reading.contacts",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1473,12 +1939,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/phase.ts",
-        "symbol": "developmentReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.phase.development",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1491,12 +1961,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/phase.ts",
-        "symbol": "classifyPhase"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.phase.reading",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1509,12 +1983,16 @@
       },
       "stage": "run_local",
       "subjectKind": "run_prefix",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/pivotal.ts",
-        "symbol": "pivotalMarkers"
+      "acquisition": "recorded_semantic_path@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.pivotal.marker",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1527,12 +2005,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/square-control.ts",
-        "symbol": "squareControlReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.square.reading.control",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1545,12 +2027,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "structuralSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.event.backward_pawn",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1563,12 +2049,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "structuralSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.event.doubled_pawn",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1581,12 +2071,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "structuralSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.event.half_open_file",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1599,12 +2093,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "structuralSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.event.isolated_pawn",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1617,12 +2115,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "structuralSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.event.king_opposition",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1635,12 +2137,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "structuralSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.event.king_zone",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1653,12 +2159,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "structuralSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.event.open_file",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1671,12 +2181,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "structuralSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.event.passed_pawn",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1689,12 +2203,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "structuralSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.event.pawn_islands",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1707,12 +2225,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.backward_pawn",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1725,12 +2247,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.bishop_on_shade",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1743,12 +2269,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.direct_attack_count",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1761,12 +2291,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.doubled_pawn",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1779,12 +2313,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.half_open_file",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1797,12 +2335,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.isolated_pawn",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1815,12 +2357,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.king_opposition",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1833,12 +2379,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.king_zone",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1851,12 +2401,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.line_blockers",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1869,12 +2423,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.named_structure",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1887,12 +2445,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.open_file",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1905,12 +2467,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.outpost",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1923,12 +2489,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.passed_pawn",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1941,12 +2511,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.pawn_connectivity",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1959,12 +2533,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.pawn_safe_square",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1977,12 +2555,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.piece_count",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -1995,12 +2577,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.piece_distance",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2013,12 +2599,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.piece_reach_count",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2031,12 +2621,16 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/structure.ts",
-        "symbol": "structuralReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.structural.reading.space",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2049,12 +2643,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/tactics.ts",
-        "symbol": "mateInOne"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.consequence.mate_in_one",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2067,12 +2665,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/tactics.ts",
-        "symbol": "replyBreadth"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.consequence.reply_breadth",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2085,12 +2687,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/tactics.ts",
-        "symbol": "threats"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.consequence.threat",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2103,12 +2709,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/tactics.ts",
-        "symbol": "checkEvent"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.event.check",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2121,12 +2731,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/tactics.ts",
-        "symbol": "doubleAttackEvent"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.event.double_attack",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2139,12 +2753,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/tactics.ts",
-        "symbol": "loosePieceEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.event.loose_piece",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2157,12 +2775,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/tactics.ts",
-        "symbol": "backRankReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.reading.back_rank",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2175,12 +2797,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/tactics.ts",
-        "symbol": "discoveredLatencyReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.reading.discovered_latency",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2193,12 +2819,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/tactics.ts",
-        "symbol": "loosePieceReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.reading.loose_piece",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2211,12 +2841,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/tactics.ts",
-        "symbol": "rayClassificationReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.reading.ray_classification",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2229,12 +2863,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/tactics.ts",
-        "symbol": "rookOnSeventhReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.reading.rook_on_seventh",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2247,12 +2885,16 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/tactics.ts",
-        "symbol": "trappedPieceReading"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.reading.trapped_piece",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2265,12 +2907,16 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "transitionSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.transition.event.capture",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2283,12 +2929,16 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "transitionSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.transition.event.castled",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2301,12 +2951,16 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "transitionSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.transition.event.checkmate",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2319,12 +2973,16 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "transitionSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.transition.event.defended_duty",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2337,12 +2995,16 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "transitionSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.transition.event.developed",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2355,12 +3017,16 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "transitionSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.transition.event.last_of_role",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2373,12 +3039,16 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "transitionSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.transition.event.occupied_attack",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2391,12 +3061,16 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "transitionSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.transition.event.occupied_defence",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2409,12 +3083,16 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "transitionSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.transition.event.pawn_contact",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2427,12 +3105,16 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "transitionSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.transition.event.piece_escape",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2445,12 +3127,16 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "transitionSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.transition.event.promotion",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2463,12 +3149,16 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
-      "sourceFamily": "local_rules",
-      "operation": {
-        "source": "packages/runtime/src/semantic-evidence.ts",
-        "symbol": "transitionSemanticEvents"
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.transition.event.slider_ray",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2481,12 +3171,16 @@
       },
       "stage": "run_local",
       "subjectKind": "run_prefix",
-      "sourceFamily": "recorded_run",
-      "operation": {
-        "source": "packages/runtime/src/compare-strips.ts",
-        "symbol": "comparisonNarrative"
+      "acquisition": "recorded_semantic_path@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "run.record.checkpoint_hit",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2499,12 +3193,16 @@
       },
       "stage": "run_local",
       "subjectKind": "run_prefix",
-      "sourceFamily": "recorded_run",
-      "operation": {
-        "source": "packages/runtime/src/story.ts",
-        "symbol": "storyMoments"
+      "acquisition": "recorded_semantic_path@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "run.record.consequence",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2517,12 +3215,16 @@
       },
       "stage": "run_local",
       "subjectKind": "run_prefix",
-      "sourceFamily": "recorded_run",
-      "operation": {
-        "source": "packages/runtime/src/compare-strips.ts",
-        "symbol": "comparisonNarrative"
+      "acquisition": "recorded_semantic_path@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "run.record.fork",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2535,12 +3237,16 @@
       },
       "stage": "run_local",
       "subjectKind": "run_prefix",
-      "sourceFamily": "recorded_run",
-      "operation": {
-        "source": "packages/runtime/src/story.ts",
-        "symbol": "storyMoments"
+      "acquisition": "recorded_semantic_path@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "run.record.imported_result",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2553,12 +3259,16 @@
       },
       "stage": "run_local",
       "subjectKind": "run_prefix",
-      "sourceFamily": "recorded_run",
-      "operation": {
-        "source": "packages/runtime/src/compare-strips.ts",
-        "symbol": "comparisonNarrative"
+      "acquisition": "recorded_semantic_path@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "run.record.objective_transition",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2570,13 +3280,17 @@
         "version": 1
       },
       "stage": "catalogue_local",
-      "subjectKind": "catalogue",
-      "sourceFamily": "authored_theory",
-      "operation": {
-        "source": "apps/server/src/opening-catalogue.ts",
-        "symbol": "openingIdentityAt"
+      "subjectKind": "position",
+      "acquisition": "catalogue_evidence_packet@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "theory.opening.current_endpoint",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     },
     {
       "projection": {
@@ -2588,14 +3302,18 @@
         "version": 1
       },
       "stage": "catalogue_local",
-      "subjectKind": "catalogue",
-      "sourceFamily": "authored_theory",
-      "operation": {
-        "source": "packages/runtime/src/shape-firing.ts",
-        "symbol": "shapeFirings"
+      "subjectKind": "position",
+      "acquisition": "catalogue_evidence_packet@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "theory.shapes.firing",
+          "version": 1
+        }
       },
-      "derivation": null
+      "status": "awaiting_upstream_sealed_operation"
     }
   ],
-  "digest": "sha256:d484bafb116d831f5dc86c3323daf4fbe891c2565f6a67221e2f0c0becedf2fe"
+  "digest": "sha256:d5b12ef3608d41264b1a29d1926210914b9b029517ab9c22b212b8a9f159a532"
 }

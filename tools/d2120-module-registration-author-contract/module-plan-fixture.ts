@@ -63,6 +63,10 @@ export const AUTHOR_MODULE_ACCEPTS = Object.freeze({
     "pack.authored.claim", "theory.shapes.firing", "derived.explorer.population_summary",
     "theory.opening.current_endpoint",
   ]),
+  // Deliberately present and empty until hint-distance publishes the literal
+  // family x rung disclosure registry. Omitting this key made the old author
+  // contract pass at R=0 (D2168).
+  guided_hint: Object.freeze([]),
   compare_coach: Object.freeze([
     "derived.compare.structure_delta", "derived.compare.eval_delta",
     "derived.compare.engine_trajectory", "derived.compare.piece_route", "run.record.fork",
@@ -95,6 +99,34 @@ export const AUTHOR_MODULE_ACCEPTS = Object.freeze({
   ]),
 } as const);
 
+export const GUIDED_HINT_AUTHORITY = Object.freeze({
+  status: "owner_blocked",
+  blocker: "D1639",
+  projectionRegistry: "HINT_DISCLOSURE_PROJECTION_IDS",
+  familyRegistry: "HINT_HORIZON_FAMILIES",
+  rungRegistry: "HINT_RUNGS",
+  requires: Object.freeze({ minFamilies: 1, minRungs: 1, cartesianSetEquality: true }),
+} as const);
+
+/**
+ * Literal author input for the future MODULE_DECLARATIONS registry. The
+ * generator may consume this authority; it may not recreate any of these
+ * policy bytes in a neighbouring table. Session ceilings are intentionally
+ * absent because they are derived from WORKFLOW_CONTEXT_POLICIES.
+ */
+export const AUTHOR_MODULE_POLICIES = Object.freeze({
+  sight_on_request: Object.freeze({ timings: ["precommit", "postcommit"], roles: ["learner", "host"], forms: ["sentence", "panel", "lit_squares", "piece_halo", "arrows"], maxFacts: 1 }),
+  blunder_prevention: Object.freeze({ timings: ["at_commit"], roles: ["learner", "host"], forms: ["sentence", "panel", "lit_squares", "piece_halo", "arrows"], maxFacts: 1 }),
+  threat_radar: Object.freeze({ timings: ["precommit", "postcommit"], roles: ["learner", "host"], forms: ["sentence", "panel", "lit_squares", "piece_halo", "arrows"], maxFacts: 3 }),
+  postcommit_nudge: Object.freeze({ timings: ["postcommit"], roles: ["learner", "host"], forms: ["sentence", "panel", "lit_squares", "piece_halo", "arrows"], maxFacts: 2 }),
+  structure_nudge: Object.freeze({ timings: ["postcommit"], roles: ["learner", "host"], forms: ["panel", "timeline_marker"], maxFacts: 1 }),
+  theory_breadcrumb: Object.freeze({ timings: ["postcommit"], roles: ["learner", "host"], forms: ["sentence", "panel"], maxFacts: 1 }),
+  guided_hint: Object.freeze({ timings: ["checkpoint"], roles: ["learner", "host"], forms: ["sentence", "panel", "lit_squares", "piece_halo", "arrows"], maxFacts: 1 }),
+  compare_coach: Object.freeze({ timings: ["checkpoint", "attempt_end", "review", "analysis"], roles: ["learner", "host"], forms: ["sentence", "panel", "arrows"], maxFacts: 2 }),
+  review_map: Object.freeze({ timings: ["review", "analysis"], roles: ["learner", "host", "participant", "spectator"], forms: ["timeline_marker", "panel", "sentence", "lit_squares", "piece_halo", "arrows"], maxFacts: 3 }),
+  full_inspector: Object.freeze({ timings: ["review", "analysis"], roles: ["learner", "host"], forms: ["panel", "sentence", "lit_squares", "piece_halo", "arrows"], maxFacts: 20 }),
+} as const);
+
 export const STAGE_BY_PRODUCER = Object.freeze({
   "rules.structural": "position_local", "rules.transition": "edge_local",
   "rules.castling": "position_or_edge_local", "rules.exchange": "edge_local",
@@ -113,100 +145,3 @@ export const STAGE_BY_PRODUCER = Object.freeze({
   "derived.material": "derived_after_inputs", "derived.king": "derived_after_inputs",
   "derived.activity": "derived_after_inputs", "derived.semantic_avoidance": "derived_after_inputs",
 } as const);
-
-const FALLBACK_OPERATION_BY_PRODUCER = Object.freeze({
-  "rules.structural": ["packages/runtime/src/structure.ts", "structuralReading"],
-  "rules.transition": ["packages/runtime/src/transition.ts", "transitionSemanticFacts"],
-  "rules.castling": ["packages/runtime/src/castling.ts", "castlingRights"],
-  "rules.exchange": ["packages/runtime/src/exchange.ts", "legalExchange"],
-  "rules.tactic": ["packages/runtime/src/tactics.ts", "loosePieceReading"],
-  "rules.square": ["packages/runtime/src/square-control.ts", "squareControlReading"],
-  "rules.mobility": ["packages/runtime/src/mobility.ts", "pieceDestinationsReading"],
-  "rules.pawn": ["packages/runtime/src/pawn-dynamics.ts", "pawnContactsReading"],
-  "rules.king": ["packages/runtime/src/king-state.ts", "kingZoneReading"],
-  "rules.phase": ["packages/runtime/src/phase.ts", "classifyPhase"],
-  "rules.pivotal": ["packages/runtime/src/pivotal.ts", "pivotalMarkers"],
-  "rules.endgame": ["packages/runtime/src/endgame.ts", "endgameReading"],
-  "theory.shapes": ["packages/runtime/src/shape-firing.ts", "shapeFirings"],
-  "pack.authored": ["apps/server/src/authored-feedback.ts", "projectAuthoredFeedback"],
-  "recorded.engine": ["apps/server/src/position-evidence.ts", "recordedReadingsAt"],
-  "recorded.tablebase": ["apps/server/src/position-evidence.ts", "recordedReadingsAt"],
-  "live.stockfish": ["apps/server/src/evidence-queue.ts", "StockfishEvidenceExecutor.prototype.execute"],
-  "live.syzygy": ["apps/server/src/tablebase.ts", "LichessTablebaseSource.prototype.probe"],
-  "human.maia": ["apps/server/src/opponent-selector.ts", "OpponentSelector.prototype.select"],
-  "human.explorer": ["apps/server/src/corpus.ts", "LichessCorpusSource.prototype.stats"],
-  "theory.opening.runtime": ["apps/server/src/opening-catalogue.ts", "openingIdentityAt"],
-  "run.record": ["packages/runtime/src/story.ts", "storyMoments"],
-  "derived.compare_narrative": ["packages/runtime/src/compare-strips.ts", "comparisonNarrative"],
-  "derived.story": ["packages/runtime/src/story.ts", "storyMoments"],
-  "derived.grade": ["packages/runtime/src/grade.ts", "moveQualityGrade"],
-  "derived.exchange": ["packages/runtime/src/semantic-evidence.ts", "derivedExchangeSemanticEvents"],
-  "derived.tactic": ["packages/runtime/src/semantic-evidence.ts", "localSemanticEvents"],
-  "derived.pawn": ["packages/runtime/src/pawn-dynamics.ts", "pawnTransitionEvents"],
-  "derived.material": ["packages/runtime/src/material-state.ts", "materialRoleSignatureReading"],
-  "derived.king": ["packages/runtime/src/semantic-evidence.ts", "localSemanticEvents"],
-  "derived.activity": ["packages/runtime/src/semantic-evidence.ts", "localSemanticEvents"],
-  "derived.semantic_avoidance": ["packages/runtime/src/semantic-evidence.ts", "selectLocalSemanticEvidence"],
-} as const);
-
-const op = (source: string, symbol: string) => Object.freeze([source, symbol] as const);
-
-export function operationForProjection(id: string, producer: string): readonly [string, string] {
-  if (id.startsWith("rules.structural.reading.")) return op("packages/runtime/src/structure.ts", "structuralReading");
-  if (id.startsWith("rules.structural.event.")) return op("packages/runtime/src/semantic-evidence.ts", "structuralSemanticEvents");
-  if (id.startsWith("rules.transition.event.")) return op("packages/runtime/src/semantic-evidence.ts", "transitionSemanticEvents");
-  const exact: Readonly<Record<string, readonly [string, string]>> = Object.freeze({
-    "rules.castling.reading.rights": op("packages/runtime/src/castling.ts", "castlingRights"),
-    "rules.castling.reading.legality": op("packages/runtime/src/castling.ts", "castlingLegality"),
-    "rules.castling.event.rights_lost": op("packages/runtime/src/castling.ts", "castlingRightsLost"),
-    "rules.king.reading.zone_state": op("packages/runtime/src/king-state.ts", "kingZoneReading"),
-    "rules.king.event.zone_state": op("packages/runtime/src/king-state.ts", "kingZoneEvents"),
-    "rules.pawn.reading.contacts": op("packages/runtime/src/pawn-dynamics.ts", "pawnContactsReading"),
-    "rules.pawn.reading.candidate_majority": op("packages/runtime/src/pawn-dynamics.ts", "candidateMajorityReading"),
-    "rules.pawn.event.dynamics": op("packages/runtime/src/pawn-dynamics.ts", "pawnDynamicsEvents"),
-    "rules.phase.reading": op("packages/runtime/src/phase.ts", "classifyPhase"),
-    "rules.phase.development": op("packages/runtime/src/phase.ts", "developmentReading"),
-    "rules.tactic.reading.loose_piece": op("packages/runtime/src/tactics.ts", "loosePieceReading"),
-    "rules.tactic.reading.back_rank": op("packages/runtime/src/tactics.ts", "backRankReading"),
-    "rules.tactic.reading.discovered_latency": op("packages/runtime/src/tactics.ts", "discoveredLatencyReading"),
-    "rules.tactic.reading.ray_classification": op("packages/runtime/src/tactics.ts", "rayClassificationReading"),
-    "rules.tactic.reading.rook_on_seventh": op("packages/runtime/src/tactics.ts", "rookOnSeventhReading"),
-    "rules.tactic.reading.trapped_piece": op("packages/runtime/src/tactics.ts", "trappedPieceReading"),
-    "rules.tactic.consequence.mate_in_one": op("packages/runtime/src/tactics.ts", "mateInOne"),
-    "rules.tactic.consequence.reply_breadth": op("packages/runtime/src/tactics.ts", "replyBreadth"),
-    "rules.tactic.consequence.threat": op("packages/runtime/src/tactics.ts", "threats"),
-    "rules.tactic.event.check": op("packages/runtime/src/tactics.ts", "checkEvent"),
-    "rules.tactic.event.double_attack": op("packages/runtime/src/tactics.ts", "doubleAttackEvent"),
-    "rules.tactic.event.loose_piece": op("packages/runtime/src/tactics.ts", "loosePieceEvents"),
-    "derived.activity.event.open_file_occupancy": op("packages/runtime/src/semantic-evidence.ts", "openFileOccupancyOperands"),
-    "derived.compare.engine_trajectory": op("packages/runtime/src/compare-strips.ts", "comparisonEngineTrajectory"),
-    "derived.compare.eval_delta": op("packages/runtime/src/compare-strips.ts", "comparisonNarrative"),
-    "derived.compare.piece_route": op("packages/runtime/src/compare-strips.ts", "comparisonNarrative"),
-    "derived.compare.structure_delta": op("packages/runtime/src/compare-strips.ts", "comparisonNarrative"),
-    "derived.exchange.capture_class": op("packages/runtime/src/semantic-evidence.ts", "derivedExchangeSemanticEvents"),
-    "derived.exchange.trade_completed": op("packages/runtime/src/semantic-evidence.ts", "tradeCompletedSemanticEvent"),
-    "derived.grade.move_quality": op("packages/runtime/src/grade.ts", "moveQualityGrade"),
-    "derived.king.captured_zone_defender": op("packages/runtime/src/semantic-evidence.ts", "capturedZoneDefenderOperands"),
-    "derived.material.reading.role_signature": op("packages/runtime/src/material-state.ts", "materialRoleSignatureReading"),
-    "derived.pawn.event.transitions": op("packages/runtime/src/pawn-dynamics.ts", "pawnTransitionEvents"),
-    "derived.story.rank": op("packages/runtime/src/story.ts", "storyMoments"),
-    "derived.tactic.attraction_observed": op("packages/runtime/src/semantic-evidence.ts", "attractionObservedOperands"),
-    "derived.tactic.check_zwischenzug_observed": op("packages/runtime/src/semantic-evidence.ts", "checkZwischenzugObservedOperands"),
-    "derived.tactic.defender_exposure": op("packages/runtime/src/semantic-evidence.ts", "defenderExposureOperands"),
-    "derived.tactic.deflection_observed": op("packages/runtime/src/semantic-evidence.ts", "deflectionObservedOperands"),
-    "derived.tactic.discovered_executed": op("packages/runtime/src/semantic-evidence.ts", "discoveredExecutedSemanticEvents"),
-    "derived.tactic.interference_observed": op("packages/runtime/src/semantic-evidence.ts", "interferenceObservedOperands"),
-    "derived.tactic.line_blocker_clearance_observed": op("packages/runtime/src/semantic-evidence.ts", "lineBlockerClearanceObservedOperands"),
-    "derived.tactic.overload_exploitation_observed": op("packages/runtime/src/semantic-evidence.ts", "overloadExploitationObservedOperands"),
-    "derived.tactic.promotion_pressure": op("packages/runtime/src/tactics.ts", "promotionPressureReading"),
-    "derived.tactic.square_clearance_observed": op("packages/runtime/src/semantic-evidence.ts", "squareClearanceObservedOperands"),
-    "run.record.fork": op("packages/runtime/src/compare-strips.ts", "comparisonNarrative"),
-    "run.record.checkpoint_hit": op("packages/runtime/src/compare-strips.ts", "comparisonNarrative"),
-    "run.record.objective_transition": op("packages/runtime/src/compare-strips.ts", "comparisonNarrative"),
-    "run.record.consequence": op("packages/runtime/src/story.ts", "storyMoments"),
-    "run.record.imported_result": op("packages/runtime/src/story.ts", "storyMoments"),
-  });
-  const selected = exact[id] ?? FALLBACK_OPERATION_BY_PRODUCER[producer as keyof typeof FALLBACK_OPERATION_BY_PRODUCER];
-  if (selected === undefined) throw new TypeError(`missing operation for ${id} from ${producer}`);
-  return selected;
-}

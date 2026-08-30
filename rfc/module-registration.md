@@ -1,12 +1,16 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** draft — **returned by second fresh independent buildability review 2026-08-30 on
-  [[D2164]]–[[D2170]].** The module product model survives, but the binding generator hand-copies
-  authority fields; execution rows lack invocation/extraction contracts; derived subject grain is
-  false; nine DAG inputs are ownerless; Guided Hint passes by omission; presentation adapter ids
-  are fabricated; and two broad smoke tests do not prove 117 projection outcomes. Exact return:
-  `planning/learner-modules/second-fresh-independent-buildability-review-2026-08-30.md`.
-  No implementation is authorised. The
+- **Status:** draft — **third author repair complete 2026-08-30 on [[D2164]]–[[D2170]];
+  another fresh independent review is required.** The repair rejects the returned generator's
+  central premise: learner modules do not invoke 117 detector/provider functions. They consume
+  projection-keyed sealed pools produced by the candidate packet, recorded semantic path, Review,
+  catalogue and provider authorities. The generated artifacts are therefore digest-sealed
+  **requirements** with every row dependency-blocked, not counterfeit executable plans. Policy is
+  derived from real workflow/module authorities; subject grain and the nine external DAG inputs
+  are explicit; Guided Hint is an explicit D1639 owner blocker; and presentation bindings require
+  real pair-specific adapters instead of fabricated ids. `make module-registration-author-contract`
+  passes 11/11. Exact repair:
+  `planning/learner-modules/third-author-repair-2026-08-30.md`. No implementation is authorised. The
   [[D1870]]/[[D2030]] dependency image remains the owner-ruled measured 207-pair target,
   including requested-Sight `pawn_safe_square`. Prior
   amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt
@@ -112,6 +116,53 @@ The generated author artifacts exposed seven further buildability blockers: [[D2
 `make module-registration-second-fresh-review` reproduces 7/7. Exact evidence and repair
 obligations are in the second fresh review dossier. This is an author return; another fresh review
 is mandatory before implementation.
+
+## Third author repair — modules consume evidence; they do not collect it (2026-08-30)
+
+The second return exposed a more important error than any missing callable signature: §2.5's
+117-function execution plan made the learner-module layer a second evidence engine. It would have
+re-run structural rules, semantic tactics, providers and Review derivations after those systems had
+already established their own subjects, seals, absence semantics and scheduling. That violates the
+producer→evidence→module boundary this RFC exists to build and creates two authorities for every
+fact.
+
+The direct-call execution plan is withdrawn. Any later wording in §2.5 that implies a module
+collector may invoke a raw detector or provider is superseded by this section. The only legal
+module input is a projection-keyed admitted item from one of five upstream contracts:
+
+| sealed pool | authority | subject/use |
+|---|---|---|
+| `candidate_population@1` | `shared-candidate-evidence-packet` | one position/edge decision population |
+| `recorded_semantic_path@1` | `semantic-collectors` | ordered facts over the committed path |
+| `review_evidence_packet@1` | `review-evidence-compiler` | one immutable run prefix or branch comparison |
+| `catalogue_evidence_packet@1` | `pack-population-provenance` | cited pack, shape and theory facts |
+| `provider_evidence_packet@1` | `provider-exchange-and-execution` | sealed Stockfish, Syzygy, Maia and Explorer receipts |
+
+Each contract must eventually name its input, invocation, projection extraction, payload parser,
+typed abstention and output seal. **Those operations remain upstream dependencies:** strings in an
+author requirement do not pretend the operations ship. Until they exist, all 117 projection rows
+have `status: awaiting_upstream_sealed_operation` and the artifact has
+`completionClaim: requirements_only`. Acceptance criterion A20 cannot turn green merely because a
+function with a plausible name is importable.
+
+The derived graph now has four meaningful subject grains rather than one universal edge:
+position/edge products use the candidate decision context; compare products use a declared branch
+pair; story/grade products use one frozen run prefix. Nine inputs outside the 117 accepted-output
+population are declared exactly as source-input nodes, with acquisition authority and subject
+grain. A derivation join says `same_edge_context`, `declared_branch_pair` or
+`same_frozen_prefix`; `sameSubject: true` is deleted because it hid the very distinction the graph
+had to enforce.
+
+The 205 non-hint binding rows are also requirements, not registered bindings. Timing, roles,
+forms and budgets come from `AUTHOR_MODULE_POLICIES`; sessions are derived from
+`WORKFLOW_CONTEXT_POLICIES`. The presentation planner is imported only to identify reusable base
+component capability. It does **not** authorize inventing `presentation.module.*` ids: every row
+names the exact future `module.* × projection` pair and stays
+`awaiting_exact_module_pair_adapter` until Checkpoint B registers it.
+
+Guided Hint is present as an empty acceptance key and explicit D1639 owner blocker. Its final rows
+must be set-equal to a non-empty measured-family × non-empty rung product. Zero rows is therefore a
+visible refusal, never a green Cartesian-product test.
 
 ## Summary
 
@@ -1517,10 +1568,12 @@ deleting one disclosure id from the family×rung product fails;
     collector or provider call**.
     **RED at HEAD:** the route, service operation and client parser/store do not exist, so no
     module id can reach a seat.
-20. **A20 — Execution, derivation, paging and role closure.** The 117-row execution plan is
-    set-equal to compiled accepted projections and resolves an actual callable for every row; one
-    positive per operation family reaches its declared projection. The derivation DAG is
-    set-equal to every derived row, acyclic, same-subject and single-execution; missing,
+20. **A20 — Sealed-pool acquisition, derivation, paging and role closure.** The 117-row
+    requirement population is set-equal to compiled accepted projections. Acceptance remains red
+    until every row resolves through one of the five upstream sealed-pool operations and a positive
+    fixture emits its declared sealed projection; the module layer itself calls no detector or
+    provider. The derivation DAG is set-equal to every derived row and nine declared source inputs,
+    acyclic, grain-correct and single-execution; missing,
     wrong-subject, cyclic, recomputed and unavailable-input fixtures fail independently. Review
     crosses a >32-subject frozen prefix through multiple pages, equals the single-pass oracle and
     refuses mutation, duplicate/omitted boundary cursors and cancelled provider continuation. The
@@ -1558,13 +1611,20 @@ deleting one disclosure id from the family×rung product fails;
 
 | row | author repair; fresh review still required |
 |---|---|
-| [[D2120]] | generated 117-row operation plan with source/symbol identity and exact projection population |
-| [[D2121]] | generated 205-row full binding plan, set-equal to the shared acceptance image |
+| [[D2164]] | module policy bytes derive from one author table and sessions derive from live workflow policies |
+| [[D2165]] | direct detector call plan withdrawn; five complete sealed-pool operation requirements are explicit dependencies |
+| [[D2166]] | position/edge/branch-pair/run-prefix grains and their distinct join rules replace universal edge/same-subject |
+| [[D2167]] | the nine external derivation inputs are set-equal source nodes with grain and acquisition authority |
+| [[D2168]] | Guided Hint is explicitly present and D1639-blocked until non-empty family×rung authority lands |
+| [[D2169]] | invented adapters deleted; each binding waits on its exact module/projection presentation pair |
+| [[D2170]] | both artifacts refuse completion; per-row sealed-output fixtures remain an acceptance dependency |
+| [[D2120]] | exact 117-projection population retained; its source/symbol direct-call interpretation is superseded by [[D2165]] |
+| [[D2121]] | exact 205-row requirement population retained; final bindings remain blocked on exact presentation pairs |
 | [[D2122]] | atomic fact-bundle fit over exact facts/words/marks/arrows units and loud receipts |
 | [[D2123]] | immutable prefix, 1..32 paging, total/source budgets, cancellation and single-pass equivalence |
 | [[D2124]] | one total runtime-role → evidence-role projection consumed by module and F1 checks |
 | [[D2125]] | closed eight-family Inspector state algebra with mixed availability preserved |
-| [[D2126]] | exact AND/OR same-subject DAG, topological closure and total propagation rules |
+| [[D2126]] | exact AND/OR DAG retained; its universal same-subject rule is superseded by [[D2166]]'s grain-specific joins |
 3. **Answered 2026-08-25 — `structure_nudge` is proactive as a passive marker, with content on
    request.** [[D1564]] confirms §1.1's declarable reading; no modal or unsolicited prose follows.
 4. **Which preset names survive owner use?** All five carry `validation: "candidate"`
@@ -1620,6 +1680,13 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-08-30 (third author repair): repaired [[D2164]]–[[D2170]] by withdrawing the false
+  117-direct-call architecture. Modules now consume five upstream sealed evidence pools; the
+  generated 117-row and 205-row artifacts explicitly claim requirements only and keep every final
+  output/binding dependency-blocked. Policy derives from the live workflow/module authorities,
+  subject grains and nine external inputs are explicit, Guided Hint is a visible D1639 blocker,
+  and no presentation adapter id is fabricated. `make module-registration-author-contract`
+  passes 11/11. Fresh independent review still gates acceptance and implementation.
 - 2026-08-30 (second fresh independent return): returned on [[D2164]]–[[D2170]]. The generated
   bindings hand-copy authority fields; execution rows are callable names without typed
   invocation/extraction; derived subject grain and DAG closure are false; Guided Hint passes by

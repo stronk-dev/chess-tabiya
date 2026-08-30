@@ -12496,3 +12496,19 @@ removing story-rank display and adding the citation binding. Maintained author c
 5+6+7 arms plus lifecycle typecheck. The RFC remains draft pending fresh review and owner/Claude
 design amendment [[D1672]]; no production, schema, content or archive byte changed. Receipt:
 `planning/platform-alignment/evidence-presentation/third-author-repair-2026-08-30.md`.
+
+## 2026-08-30 — Module registration D2164–D2170 third author repair
+
+Withdrew the false 117-direct-call module assembler exposed by the second fresh review. Learner
+modules now consume five projection-keyed sealed evidence pools owned by the candidate packet,
+recorded semantic path, Review compiler, catalogue and provider exchange; they never recollect or
+reinterpret chess facts. The generated artifacts enumerate 117 evidence requirements and 205
+binding requirements while explicitly refusing a completion claim.
+
+Module policy derives from one author input and live workflow contexts; the DAG carries edge,
+branch-pair and run-prefix joins plus nine exact external source nodes; Guided Hint is an explicit
+D1639 owner blocker; and fabricated presentation adapter ids are replaced by exact awaiting pair
+requirements. `make module-registration-author-contract-update` regenerated both sealed artifacts
+and `make module-registration-author-contract` passes 11/11. The RFC remains draft pending fresh
+independent review; no production, schema, content or archive byte changed. Receipt:
+`planning/learner-modules/third-author-repair-2026-08-30.md`.
