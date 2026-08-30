@@ -12091,3 +12091,16 @@ The authenticated population, completed/unavailable split, typed mirror leaf rul
 retention and live-root cardinality repairs survive. `make semantic-validation-fresh-review`
 passes 4/4. No production, schema, content, archive or protected-design byte changed. Exact review:
 `planning/semantic-validation-authority/fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Shared candidate packet second fresh independent return
+
+Returned `shared-candidate-evidence-packet.md` on [[D2198]]–[[D2201]] after following its repaired
+factory and callable registry into the current runtime. The public factory accepts a manifest that
+the collectors do not use; available-empty outcomes have no projection identity; the thirteen-row
+registry supplies `operation` where its own declaration requires `collect(context)`; and memo,
+stats and receipt-reference protocol types are undefined.
+
+The complete-population purpose, provider-free split, bounded admission, single-flight, explicit
+standard ruleset and exact-reference retention survive. `make candidate-packet-second-fresh-review`
+passes 4/4. No production, schema, content, archive or protected-design byte changed. Exact review:
+`planning/evidence-foundation-ux/shared-candidate-packet-second-fresh-independent-review-2026-08-30.md`.

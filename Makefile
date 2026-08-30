@@ -300,6 +300,10 @@ candidate-packet-fresh-review:
 candidate-packet-second-author-repair:
 	node --test tools/d2097-candidate-packet-second-author-repair/contract.test.mjs
 
+.PHONY: candidate-packet-second-fresh-review
+candidate-packet-second-fresh-review:
+	node --test tools/d2198-candidate-packet-second-fresh-review/contract.test.mjs
+
 review-evidence-author-contract:
 	node --test tools/d1969-review-evidence-author-harness/*.test.mts
 

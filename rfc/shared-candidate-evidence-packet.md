@@ -1,12 +1,11 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — D2097–D2104 author-repaired 2026-08-30; fresh independent review
-  required.** Scope is correlated end-to-end through one generic request/result/projector map; the
-  premature provider handoff is removed; one exported product factory owns fixed legal/collector/
-  scheduler authorities; a literal callable registry owns topology and failure identities; unique
-  work has bounded FIFO admission and idempotent shutdown; ruleset `standard` is explicit; and
-  sealed collector outcomes authorize every abstention. `make candidate-packet-second-author-repair`
-  passes 8/8 and the historical eight-arm return inverts. Implementation remains unauthorized.
+- **Status:** **draft — RETURNED by second fresh independent review 2026-08-30 on
+  [[D2198]]–[[D2201]].** The repaired scope, provider separation, bounded admission and explicit
+  ruleset survive, but manifest authority splits, available-empty has no projection identity, the
+  advertised registry does not satisfy its own declaration, and three public contract types are
+  undefined. `make candidate-packet-second-fresh-review` passes 4/4. Implementation remains
+  unauthorized.
   [[D1580]] remains separate numeric appliance-tier debt. *(Prior state: D1977–D1981
   author-repaired after D1958–D1961, D1900–D1903 and D1945–D1947.)*
 - **Author:** claude (initial draft); codex (2026-08-29 operation-boundary author repair). Drafted
@@ -1309,6 +1308,26 @@ The author repair now:
 6. adds an eight-arm author contract. Fresh independent review and full repository verification
    still gate acceptance and implementation.
 
+## Second fresh independent return (2026-08-30)
+
+Exact return:
+`planning/evidence-foundation-ux/shared-candidate-packet-second-fresh-independent-review-2026-08-30.md`.
+The author repair is not buildable yet:
+
+1. the exported factory accepts an arbitrary `CompiledEvidenceManifest`, while every current
+   collector mints and asserts values against `PRIMARY_EVIDENCE_MANIFEST`; packet identity can
+   therefore name one declaration digest while its values were produced under another ([[D2198]]);
+2. the `available` collector-result arm carries no projection, so a multi-output collector's empty
+   result cannot prove which projection was actually evaluated ([[D2199]]);
+3. `CandidateCollectorDeclaration` requires `collect(context)`, while every advertised registry row
+   supplies `operation` and names a positional-argument function returning a flat array
+   ([[D2200]]); and
+4. `CandidateCollectorMemo`, `CandidatePopulationServiceStats` and
+   `CandidatePopulationReceiptReferences` are referenced but never defined ([[D2201]]).
+
+The next author repair must close those four seams, invert the executable review, preserve the
+existing 28 author/review arms, and undergo another fresh independent review before acceptance.
+
 1. **The population is never an argument.** A fixture attempting to supply `candidates`,
    `legalMoves`, `afterFen`, or any event or reading to the packet compiler **fails to type-check**
    (`.typecheck.ts`), and no runtime predicate is the enforcement. *Wrong implementation that would
@@ -1703,6 +1722,11 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-08-30 — second fresh independent review returned the D2097–D2104 author repair on
+  [[D2198]]–[[D2201]]. Exact return:
+  `planning/evidence-foundation-ux/shared-candidate-packet-second-fresh-independent-review-2026-08-30.md`;
+  reproduction: `make candidate-packet-second-fresh-review`. No production/schema/content byte
+  changed.
 - 2026-08-30 — D2097–D2104 author repair. Request/result/projector scope is one generic map; the
   provider handoff is removed whole; an exported product factory fixes legal/registry/scheduler
   authorities; thirteen callable declarations own topology; unique jobs have active/FIFO/deadline/
