@@ -1,6 +1,11 @@
 # RFC: Verifiable runtime distribution and resource tiers
 
-- **Status:** draft
+- **Status:** **draft — RETURNED by fresh independent buildability review 2026-08-30 on
+  [[D2206]]–[[D2209]].** The signed multi-architecture release goal survives, but the manifest is
+  an unregistered multi-reader protocol, its image-digest embedding graph is self-referential,
+  FOSS eligibility has no closed licence policy, and the CPU resource journey has no production bot
+  operation. `make runtime-distribution-fresh-review` passes 4/4. Implementation remains
+  unauthorized and also awaits F12-A/C/D plus D1.
 - **Author:** Codex on the owner's O13 Choice-C resource-tier ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` self-hostable appliance floor; `design/03-product-breadth.md` B8
@@ -432,6 +437,24 @@ self-hosted/release runner supplies that blocking receipt; emulation is not sile
 
 ## Acceptance criteria
 
+### Fresh independent return (2026-08-30)
+
+Exact return:
+`planning/verifiable-runtime-distribution/fresh-independent-buildability-review-2026-08-30.md`.
+Before the criteria below are buildable, the author must:
+
+1. register and define the versioned release-manifest protocol consumed by generation,
+   verification, Compose, About/API, upload and clean-host install ([[D2206]]);
+2. break the digest cycle in which the server image embeds the exact release manifest that records
+   the server image digest ([[D2207]]);
+3. publish one closed, versioned SPDX-expression/override policy for “FOSS-eligible” rather than
+   leaving licence classification to scanner or implementer judgement ([[D2208]]); and
+4. bind the CPU resource journey to one accepted production bot profile/route and exact candidate
+   window instead of a test-created profile while `BOT_POLICY_PROFILES` is empty ([[D2209]]).
+
+After repair, another fresh independent review and the unresolved dependency/weight-licence gates
+still precede implementation or acceptance.
+
 1. `server` and `maia-cpu` publish amd64/arm64 indexes whose platform manifests are all digest-pinned
    in one canonical release manifest; Compose contains no tag-only image reference.
 2. Every external workflow action is a reviewed full 40-character SHA with a human version comment;
@@ -509,3 +532,10 @@ supported-host target before implementation—do not let the build choose the pr
 The accelerated implementation/hardware matrix remains optional. Publishing one requires an
 implementation amendment with exact platform and resource numbers, but omitting it does not weaken
 the owner-ruled `core` and `cpu` 1.0 floor.
+
+## Changelog
+
+- 2026-08-30 — fresh independent review returned the draft on [[D2206]]–[[D2209]]. Exact return:
+  `planning/verifiable-runtime-distribution/fresh-independent-buildability-review-2026-08-30.md`;
+  reproduction: `make runtime-distribution-fresh-review`. No workflow, production, image, schema,
+  content or protected-design byte changed.

@@ -378,6 +378,10 @@ verify-content: test-content
 verify: verify-software verify-governance verify-content
 verify: export ENGINES_REQUIRED := 1
 
+.PHONY: runtime-distribution-fresh-review
+runtime-distribution-fresh-review:
+	node --test tools/d2206-runtime-distribution-fresh-review/contract.test.mjs
+
 pack-check:
 	@test -n "$(FILE)" || (echo "Usage: make pack-check FILE=<path-to-pack.json>" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/pack-check.ts --bundle --platform=node --format=esm --outfile=dist/pack-check.js

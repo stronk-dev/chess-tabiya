@@ -12116,3 +12116,17 @@ The measured local value, source-bound intent, complete-set batch, bounded backg
 total quantifiers and shutdown semantics survive. `make bounded-target-second-fresh-review` passes
 4/4. No production, schema, content, archive or protected-design byte changed. Exact review:
 `planning/bounded-policy-targets/second-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Verifiable runtime distribution fresh independent return
+
+Returned `verifiable-runtime-distribution.md` on [[D2206]]–[[D2209]] after tracing its release
+manifest through generation, image construction, About/API and the native CPU journey. The manifest
+is an unregistered multi-reader protocol; embedding it creates an image-digest cycle; FOSS
+eligibility has no closed licence policy; and the CPU resource gate can measure a synthetic bot
+while the production roster is empty.
+
+The multi-architecture signed appliance, CPU-only Maia split, numerical resource tiers, native
+proof, SBOM/filesystem reconciliation and authoring-file exclusion survive. `make
+runtime-distribution-fresh-review` passes 4/4. No workflow, production, image, schema, content,
+archive or protected-design byte changed. Exact review:
+`planning/verifiable-runtime-distribution/fresh-independent-buildability-review-2026-08-30.md`.
