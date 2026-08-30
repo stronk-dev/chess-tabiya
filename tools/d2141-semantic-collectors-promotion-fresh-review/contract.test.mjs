@@ -8,10 +8,11 @@ const rfc = read("rfc/semantic-collectors.md");
 const provider = read("rfc/provider-exchange-and-execution.md");
 const harness = read("tools/d1699-promotion-race-contract-harness/promotion-contract.test.ts");
 
-test("D2141: the named pawn-contact adapter is shape-only, not an exact chess authority", () => {
-  assert.match(adapters, /declarePawnContactsEvidence\s*=\s*<T extends object>\(payload: T\)\s*=>\s*exactObject/u);
-  const adapterLine = adapters.split("\n").find((line) => line.includes("declarePawnContactsEvidence")) ?? "";
-  assert.doesNotMatch(adapterLine, /pawnContactsReading|canonicalPayload/u);
+test("D2141: the shared pawn-contact adapter is exact, while the promotion constructor remains unsealed", () => {
+  const adapter = adapters.slice(adapters.indexOf("export function declarePawnContactsEvidence"), adapters.indexOf("export const declareCandidateMajorityEvidence"));
+  assert.match(adapter, /pawnContactsReading\(payload\.fen\)/u);
+  assert.match(adapter, /canonicalPayload\(payload\)\s*!==\s*canonicalPayload\(expected\)/u);
+  assert.match(adapter, /must contain only/u);
   const repairedHelper = harness.slice(harness.indexOf("function repairedGeometry"), harness.indexOf("function repairedTablebaseJoin"));
   assert.doesNotMatch(repairedHelper, /assertDeclaredEvidence/u);
 });

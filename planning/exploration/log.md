@@ -11603,3 +11603,14 @@ The exact return is
 `make semantic-collectors-promotion-fresh-review` passes 3/3. The original twelve implemented
 Wave-C projections remain accepted and untouched. Neither promotion id landed; no provider,
 schema, content, archive or protected-design byte changed.
+
+## 2026-08-30 — Exact pawn-contact source sealing
+
+Closed the shipped half of [[D2141]] at the shared evidence boundary. `rules.pawn.reading.contacts@1`
+no longer earns an exact seal from five matching property names: its adapter now requires the exact
+field set, recomputes `pawnContactsReading(fen)`, and compares the complete canonical payload before
+declaration. Negative fixtures cross extra fields, a mismatched FEN, false passed status, false
+blockers, a forged pawn identity and an absent FEN. The promotion-amendment review instrument was
+updated so it continues to fail only on the still-live constructor bypass. The amendment remains
+returned on that constructor identity plus [[D2142]] and [[D2143]]; no promotion projection, schema,
+content, archive or protected-design byte changed.

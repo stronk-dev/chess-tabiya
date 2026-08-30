@@ -3,6 +3,7 @@ import { STRUCTURAL_FEATURE_KINDS } from "@chess-tabiya/schema/drill-pack";
 import { EVIDENCE_PRODUCERS } from "./evidence-catalog.js";
 import { declareEvidence, type DeclaredEvidence } from "./evidence-contract.js";
 import { exactLegalMoveMap, type ExactLegalMoveMap } from "./legal-moves.js";
+import { pawnContactsReading, type PawnContactsReading } from "./pawn-dynamics.js";
 
 const ref = (id: string) => ({ id, version: 1 } as const);
 
@@ -134,7 +135,21 @@ export function declareExactLegalMovesEvidence(payload: ExactLegalMoveMap): Decl
   return exactObject("rules.mobility", projection, payload, required);
 }
 export const declareMobilityEventEvidence = <T extends object>(payload: T) => exactObject("rules.mobility", "rules.mobility.event.piece_destinations", payload, ["beforeFen", "moveUci", "afterFen", "color", "piece", "legalBefore", "legalAfter", "legalGained", "legalLost", "safeBefore", "safeAfter", "safeGained", "safeLost", "moved", "zeroSafe"]);
-export const declarePawnContactsEvidence = <T extends object>(payload: T) => exactObject("rules.pawn", "rules.pawn.reading.contacts", payload, ["fen", "contacts", "locks", "passed", "connectedPassedPairs"]);
+export function declarePawnContactsEvidence(payload: PawnContactsReading): DeclaredEvidence<PawnContactsReading> {
+  const projection = "rules.pawn.reading.contacts";
+  if (typeof payload !== "object" || payload === null || Array.isArray(payload)) throw new TypeError(`${projection} evidence payload must be an object`);
+  const required = ["fen", "contacts", "locks", "passed", "connectedPassedPairs"] as const;
+  const keys = Object.keys(payload).sort();
+  if (keys.length !== required.length || required.some((key) => !keys.includes(key))) {
+    throw new TypeError(`${projection} evidence payload must contain only ${required.join(", ")}`);
+  }
+  if (typeof payload.fen !== "string") throw new TypeError(`${projection} evidence payload has an invalid fen`);
+  const expected = pawnContactsReading(payload.fen);
+  if (canonicalPayload(payload) !== canonicalPayload(expected)) {
+    throw new TypeError(`${projection} evidence payload does not equal the exact pawn-contact authority`);
+  }
+  return exactObject("rules.pawn", projection, payload, required);
+}
 export const declareCandidateMajorityEvidence = <T extends object>(payload: T) => exactObject("rules.pawn", "rules.pawn.reading.candidate_majority", payload, ["fen", "conventionId", "candidates"]);
 export const declarePawnDynamicsEvidence = <T extends object>(payload: T) => exactObject("rules.pawn", "rules.pawn.event.dynamics", payload, ["beforeFen", "moveUci", "afterFen", "kind", "subjects"]);
 export const declarePawnTransitionEvidence = <T extends object>(payload: T) => exactObject("derived.pawn", "derived.pawn.event.transitions", payload, ["beforeFen", "moveUci", "afterFen", "kind", "pawn"]);

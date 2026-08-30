@@ -746,15 +746,15 @@ typed availability; `invalid_turn_clone` is unavailable, never false. This bindi
 It is not the authority for the two-runner race population, which is why the D1699/D1700 amendment
 derives that population from complete `rules.pawn.reading.contacts@1` instead.
 
-**Held promotion-amendment return, owned here:** [[D2141]] requires exact pawn-contact source
-sealing and constructor identity; [[D2142]] requires the discriminated recorded/live retained-source
+**Held promotion-amendment return, owned here:** [[D2141]] has landed exact pawn-contact source
+sealing in the shared adapter but still requires constructor producer/id/version identity; [[D2142]] requires the discriminated recorded/live retained-source
 payload and total mapping; [[D2143]] requires a literal authority for the outside-domain abstention.
 All three remain author-repair obligations of this RFC and block only projections 13–14.
 
 ## Promotion amendment return
 
-The held pair remains owned here: [[D2141]] requires exact pawn-contact source sealing and
-constructor identity; [[D2142]] requires the discriminated recorded/live retained-source payload
+The held pair remains owned here: [[D2141]] now has an exact shared pawn-contact adapter and
+still requires constructor producer/id/version identity; [[D2142]] requires the discriminated recorded/live retained-source payload
 and total mapping; [[D2143]] requires a literal authority for the outside-domain abstention. These
 are re-entry requirements for projections 13–14, not obligations transferred to the provider RFC.
 
