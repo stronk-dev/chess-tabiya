@@ -1,15 +1,13 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
 - **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The held
-  promotion pair was returned by fresh independent buildability review 2026-08-30 on
-  [[D2141]], [[D2142]] and [[D2143]]; its 2026-08-29 author repair is not accepted.** Geometry now
-  consumes the declared complete pawn-contact reading instead of recomputing a population from raw
-  FEN. Outcome consumes exact legal moves and one same-FEN recorded-or-live Syzygy delivery; the
-  live arm depends on the draft `provider-exchange-and-execution` contract and cannot implement
-  before that predecessor is independently accepted and landed. The review found that the pawn
-  adapter can seal fabricated passed rows, the outcome has no exact retained-source type or total
-  recorded/live normalization, and its derivation omits the local outside-domain authority needed
-  for one promised abstention. The original 12 projections remain
+  promotion pair was author-repaired 2026-08-30 on [[D2141]], [[D2142]] and [[D2143]] after fresh
+  independent return; another independent review is required.** Geometry now asserts the exact
+  sealed producer/projection/version and retains that input. Outcome publishes one total
+  recorded/live source union that retains the original declared item, plus a third literal
+  outside-domain path grounded by the sealed local Syzygy fact. The live and local-domain arms
+  depend on the draft `provider-exchange-and-execution` contract and cannot implement before that
+  predecessor is independently accepted and landed. The original 12 projections remain
   accepted/implemented; the amendment does not reopen or relabel their bytes. Accepted 2026-08-22
   by claude as register owner on the buildability test, after cross-review with corrections applied
   in place (seven blockers; all eight observed ids verified **checkable, not
@@ -480,20 +478,33 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
   `4k3/1p6/8/8/8/8/P7/4K3 w - - 0 1` is not a race because both contact rows are `passed: false`;
   and a recorded geometric-ordering inversion against Syzygy keeps all outcome words structurally
   absent. The established a2/h7 positive retains arrival plies 9/10.
-- `derived.pawn.promotion_race_tablebase@1` — *derived event* with exactly two literal
+- `declarePromotionRaceGeometry(contacts)` begins with `assertDeclaredEvidence(contacts)` and then
+  requires producer `{id:"rules.pawn",version:1}`, projection
+  `{id:"rules.pawn.reading.contacts",version:1}` and the exact adapter-sealed payload. It never
+  accepts `undefined`; the orchestration layer maps absent contacts to typed `input_abstained`
+  before calling it. Its closed return is
+  `{input: DeclaredEvidence<PawnContactsReading>, output: DeclaredEvidence<PromotionRaceGeometry>}`;
+  `input` is the same sealed object by identity and `output.payload` contains only the projection's
+  declared geometry operands. The derivation executor retains this pair as its input/output receipt,
+  so authority cannot be reconstructed from copied FEN/rows or smuggled into a new payload operand.
+  Unsealed lookalikes, a declared item from another producer/id/version, and a contacts
+  item whose `passed`, blocker, pawn identity or FEN differs from `pawnContactsReading(fen)` fail.
+- `derived.pawn.promotion_race_tablebase@1` — *derived event* with exactly three literal
   `derivation.anyOf` members, in this order:
 
   1. geometry + `rules.mobility.reading.legal_moves@1` +
      `recorded.tablebase.result@1`;
   2. geometry + `rules.mobility.reading.legal_moves@1` +
-     `live.syzygy.position_result@1`.
+     `live.syzygy.position_result@1`;
+  3. geometry + `rules.endgame.tablebase_domain@1`.
 
   Geometry, the legal map and the tablebase delivery must carry byte-equal canonical full FEN;
   another position with the same piece count is an invalid join, not absence. Exact legal moves
   are a required input because `immediatePromotion` and `promotionWithCheck` cannot be sourced from
   geometry or tablebase category. The live projection is the receipt-bearing in-domain result from
-  `provider-exchange-and-execution` §7; its separate local
-  `rules.endgame.tablebase_domain@1` outside-domain fact is not an outcome substitute. The event
+  `provider-exchange-and-execution` §7. Its separate local
+  `rules.endgame.tablebase_domain@1` fact is accepted only by member 3 and grounds an unavailable
+  result; it is never an outcome substitute. The event
   retains `geometry`, `category`, `dtz`, `preciseDtz`, `source`, `immediatePromotion`,
   `promotionFirst` and `promotionWithCheck`. Grounding/exactness/confidence are
   `declared_convention` / `convention` / `not_applicable`; answer content is `fact + evaluation`;
@@ -501,6 +512,84 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
   Only the tablebase input supplies outcome. Source absence never becomes refuted, empty or draw;
   geometry remains independently usable. The recorded population remains 288 unique FENs / 157
   pawn-bearing, with 23 side-to-move seventh-rank positions split 11 win / 1 draw / 11 loss.
+
+The exact retained types and total operation result are:
+
+```ts
+type RecordedTablebaseReading = Extract<RecordedReading, { readonly kind: "tablebase_result" }>;
+
+type PromotionRaceTablebaseSource =
+  | Readonly<{
+      kind: "recorded";
+      evidence: DeclaredEvidence<RecordedTablebaseReading>;
+    }>
+  | Readonly<{
+      kind: "live";
+      evidence: DeclaredEvidence<
+        ProviderEvidenceDelivery<LiveSyzygyPosition, "syzygy.position@1">
+      >;
+    }>;
+
+type PromotionRaceTablebaseResult =
+  | Readonly<{
+      kind: "available";
+      value: Readonly<{
+        geometry: DeclaredEvidence<PromotionRaceGeometry>;
+        category: TablebaseCategory;
+        dtz: number | null;
+        preciseDtz: number | null;
+        source: PromotionRaceTablebaseSource;
+        immediatePromotion: readonly CanonicalUci[];
+        promotionFirst: "white" | "black" | "same_ply";
+        promotionWithCheck: readonly CanonicalUci[];
+      }>;
+    }>
+  | Readonly<{
+      kind: "unavailable";
+      reason: "outside_tablebase_domain";
+      geometry: DeclaredEvidence<PromotionRaceGeometry>;
+      source: DeclaredEvidence<ProviderLocalDomainResult<"syzygy.position@1">>;
+    }>
+  | Readonly<{
+      kind: "unavailable";
+      reason: "provider_unavailable";
+      geometry: DeclaredEvidence<PromotionRaceGeometry>;
+      operation: "syzygy.position@1";
+      requestDigest: ProviderRequestDigest;
+      providerReason: ProviderSourceFailure<"syzygy.position@1">["reason"];
+    }>
+  | Readonly<{
+      kind: "unavailable";
+      reason: "input_abstained";
+      missing: readonly ("geometry" | "legal_moves")[];
+    }>;
+```
+
+Recorded normalization asserts the declared-evidence seal, exact
+`recorded.tablebase@1/recorded.tablebase.result@1` identity and `kind:"tablebase_result"`, then
+projects category/DTZ only from `evidence.payload.values` while retaining that exact evidence item
+in `source`. Live normalization asserts the declared-evidence seal and exact
+`live.syzygy@1/live.syzygy.position_result@1` identity, calls
+`assertProviderDelivery("syzygy.position@1", evidence.payload)`, then projects category/DTZ only
+from `evidence.payload.payload.position` while retaining the exact delivery-bearing item. Neither
+arm synthesizes `sourceId`, retrieval time, occurrence or acquisition fields; those remain in the
+original sealed item. Crossed source kind, producer, occurrence, retrieval, acquisition,
+category or DTZ substitutions fail.
+
+`collectPromotionRaceTablebase` owns the invocation algebra. Missing/unavailable geometry or an
+absent exact legal map returns `input_abstained` before any provider request. A recorded item takes
+member 1. Otherwise the operation calls the provider scheduler itself for the exact geometry FEN:
+a sealed success delivery takes member 2, the scheduler-sealed local-domain result is first wrapped
+by `declareSyzygyTablebaseDomainEvidence` and takes member 3, and a scheduler failure returns
+`provider_unavailable` with operation/request digest and the exact provider failure reason but
+emits no declared chess evidence. For member 3 the operation recomputes the normalized Syzygy
+request from the geometry FEN and requires its branded digest to equal the local-domain envelope;
+the domain item therefore cannot be crossed from another FEN even though its inner fact contains
+only piece count. Callers
+cannot pass a structural `ProviderSourceFailure` into the collector. All arms require byte-equal
+canonical full FEN; precedence is `input_abstained` before source resolution, then local domain,
+then provider failure. Substituting provider failure for domain evidence, a bare domain payload for
+its sealed item, or a live success for a recorded member fails.
 
 The geometry declaration may land after this amendment passes fresh review. The outcome declaration
 also requires the provider RFC's occurrence-preserving compiled execution paths and shared Syzygy
@@ -597,7 +686,8 @@ shipped around — no criterion here carries a pre-authorized fallback.
    anchor/node counts and byte-equal boundaries, and swapping any anchor, FEN, defender,
    slider, target or square makes the positive fixture fail (breadth B8 extended). For the
    promotion pair specifically, geometry has exactly one declared contacts input; outcome has the
-   two ordered three-input alternatives in §3.7. A missing legal map, unsealed contacts item,
+   two ordered three-input success alternatives plus the ordered geometry/domain-fact alternative
+   in §3.7. A missing legal map, unsealed contacts item,
    cross-FEN source, crossed recorded/live source kind or piece-count-only match fails before an
    event is emitted.
 3. **C3 — Convention pinning.** The §2 convention texts (values included: the four
@@ -643,8 +733,9 @@ shipped around — no criterion here carries a pre-authorized fallback.
    passed-pawn/blocker, tablebase and recorded-move facts are consumed by id, never
    recomputed under a second meaning; §3.1's events name their derivation/dependsOn
    inputs; breadth's `defender_exposure@1` remains untouched and unreimplemented. Promotion
-   geometry receives a sealed `rules.pawn.reading.contacts@1` item and does not call
-   `pawnContactsReading`; the outcome receives sealed exact-legal and tablebase items and does not
+   geometry receives a sealed exact `rules.pawn@1/rules.pawn.reading.contacts@1` item, retains it
+   by identity in its derivation receipt and does not call `pawnContactsReading`; the outcome
+   receives sealed exact-legal and tablebase/domain items and does not
    call a private Syzygy client or recompute legal moves.
 9. **C9 — F1 mechanics clean.** Every derived projection declares literal
    `derivation.inputs`; rules-plane events (§3.1, §3.6) use `dependsOn`, never
@@ -653,7 +744,7 @@ shipped around — no criterion here carries a pre-authorized fallback.
    with `input_abstained` present wherever an input abstains — and the same check *forbids*
    `declared_convention` on a single-grounding derived row, which is why
    `square_clearance_observed@1` declares `recorded_run`); the promotion outcome's compiled source
-   graph is set-equal to §3.7's two alternatives and preserves recorded/live source identity,
+   graph is set-equal to §3.7's three alternatives and preserves recorded/live/domain source identity,
    effective latency and occurrence; no registered clause clones a
    turn (§1.4), so no `invalid_turn_clone` reason is declared anywhere in this wave and a
    declaration carrying one is a C9 failure.
@@ -686,8 +777,11 @@ shipped around — no criterion here carries a pre-authorized fallback.
     current piece-count-only false-positive reproduction followed by repaired cross-FEN refusal;
     recorded and live same-position positives; provider absence distinct from outside-domain and
     geometry absence; and compiled execution paths `[sync, interactive]` without changing the
-    `derived.pawn` producer's own `sync` operation. The production suite adds a declared-item forge,
-    missing legal-map and crossed-source negative, and reproduces D909's geometric inversion.
+    `derived.pawn` producer's own `sync` operation. The production suite adds an unsealed
+    declared-item forge, sealed-false contacts mutations for passed/blocker/pawn/FEN, wrong
+    producer/id/version, missing legal-map, crossed recorded/live source/occurrence/acquisition,
+    bare and crossed domain facts, provider-failure-for-domain substitution, and reproduces D909's
+    geometric inversion.
 
 ## Discharges
 
@@ -746,17 +840,18 @@ typed availability; `invalid_turn_clone` is unavailable, never false. This bindi
 It is not the authority for the two-runner race population, which is why the D1699/D1700 amendment
 derives that population from complete `rules.pawn.reading.contacts@1` instead.
 
-**Held promotion-amendment return, owned here:** [[D2141]] has landed exact pawn-contact source
-sealing in the shared adapter but still requires constructor producer/id/version identity; [[D2142]] requires the discriminated recorded/live retained-source
-payload and total mapping; [[D2143]] requires a literal authority for the outside-domain abstention.
-All three remain author-repair obligations of this RFC and block only projections 13–14.
+**Held promotion-amendment return, author-repaired here:** [[D2141]] now requires the constructor's
+seal plus exact producer/id/version and input/output receipt; [[D2142]] has the discriminated
+recorded/live whole-item source union and total normalization; [[D2143]] has a third literal
+geometry/domain-fact member and total invocation algebra. All three await fresh review and still
+block only projections 13–14.
 
 ## Promotion amendment return
 
-The held pair remains owned here: [[D2141]] now has an exact shared pawn-contact adapter and
-still requires constructor producer/id/version identity; [[D2142]] requires the discriminated recorded/live retained-source payload
-and total mapping; [[D2143]] requires a literal authority for the outside-domain abstention. These
-are re-entry requirements for projections 13–14, not obligations transferred to the provider RFC.
+The held pair remains owned here and is author-repaired on [[D2141]], [[D2142]] and [[D2143]].
+These are still fresh-review requirements for projections 13–14, not obligations transferred to
+the provider RFC; provider acceptance/implementation remains a separate landing dependency for
+the live/domain arms.
 
 ## Appendix A — registered projection ids
 
@@ -782,6 +877,12 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-08-30: author-repaired the held promotion pair on [[D2141]]–[[D2143]]. The geometry
+  constructor asserts the exact declared pawn-contact item and retains one input/output derivation
+  receipt. The outcome retains whole recorded/live declared items through one discriminated source
+  union and total normalization. A third literal geometry/domain-fact member plus a closed
+  invocation/result algebra grounds outside-domain, provider and input absence without turning any
+  into a chess outcome. Fresh independent review is still required; projections 13–14 remain held.
 - 2026-08-30: fresh independent review returned only the held promotion amendment on
   [[D2141]], [[D2142]] and [[D2143]]. The D1699/D1700 counterexamples and source split remain valid, but the proposed
   boundary is not executable yet: shape-only pawn-contact sealing does not establish the chess

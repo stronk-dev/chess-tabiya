@@ -11724,3 +11724,21 @@ repair and verification are recorded in
 `planning/provider-exchange-and-execution/author-repair-2026-08-30.md`. The RFC remains draft,
 implementation remains forbidden, and a new independent buildability review is next. No provider,
 schema, pack, content, archive or protected-design byte changed.
+
+## 2026-08-30 — Semantic-collectors promotion D2141–D2143 author repair
+
+Repaired the held promotion pair at RFC tier. Geometry now asserts and retains the exact sealed
+pawn-contact producer/projection/version through one input/output derivation receipt. Outcome now
+has a whole-item recorded/live source union with total mappings, plus a third literal
+geometry/tablebase-domain path and a closed available/outside-domain/provider/input result algebra.
+The local-domain request digest must reproduce from the geometry FEN; provider failure never
+becomes declared chess evidence.
+
+`make semantic-collectors-promotion-author-repair` passes 3/3 and the original
+`make promotion-race-contract` research controls pass 6/6. The historical fresh-return harness now
+inverts D2142/D2143; its D2141 arm still inspects the deliberately unimplemented disposable helper,
+which is recorded rather than weakened. Exact handoff:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-author-repair-2026-08-30.md`.
+Projections 13–14 remain held for fresh review, and the outcome additionally waits on accepted and
+implemented provider exchange. No production collector, projection, adapter, binding, schema,
+pack, content, archive or protected-design byte changed.
