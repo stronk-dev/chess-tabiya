@@ -1,11 +1,11 @@
 # RFC: AssistanceConfig shared-resource register
 
-- **Status:** draft — author-repaired 2026-08-30 after the second fresh review returned
-  [[D2113]], [[D2114]], [[D2115]], [[D2116]] and [[D2117]]. Resource identity is now a
-  phase-aware shape plus executable persistence/configuration authority graph: bootstrap seals the
-  real v4 local migrator, v5 must replace it with the central codec, read and write share one key
-  and codec, fixed-head authority drift is forbidden, and the v5 claim is the exact graph delta.
-  `make assistance-register-second-author-repair` passes 8/8; fresh review remains required.
+- **Status:** draft — RETURNED by third fresh independent review 2026-08-30 on
+  [[D2190]]–[[D2193]]. The D2113–D2117 repair survives, but bootstrap forbids two computed writes
+  already present at v4; the claimed v5 delta omits the in-run hint and preset/clamp consumers; the
+  closed node vocabulary cannot represent its own import/call/alias closure; and discovery omits
+  production packages outside web/runtime. `make assistance-register-third-fresh-review` passes
+  4/4. C9/register/v5 implementation remains forbidden.
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it
@@ -483,6 +483,10 @@ None. No design intent changes.
 | [[D2115]] | repaired in §2/class 31: graph bytes enter contract identity and any fixed-head semantic drift fails | fresh independent review |
 | [[D2116]] | repaired in §1/classes 35-36/criterion 15: exact ten-node delta plus named preset compiler discharge | fresh independent review |
 | [[D2117]] | repaired in §1/classes 32/37-38: closed TS/Svelte nodes, edges, canonical bytes and discovery/failure grammar | fresh independent review |
+| [[D2190]] | current generic `[key]` writes contradict the v4 hard-failure grammar | author repair with constrained computed-write proof |
+| [[D2191]] | exact v5 transition omits its run and preset/clamp consumers | author repair with one consistent boundary and non-vacuous handoff |
+| [[D2192]] | node kinds cannot represent intermediate imports/calls/aliases | author repair of graph vocabulary/contraction semantics |
+| [[D2193]] | two-root discovery is not workspace production closure | author repair deriving and classifying all production roots |
 
 ## Open questions
 
@@ -491,6 +495,11 @@ contract.
 
 ## Changelog
 
+- 2026-08-30: third fresh independent review returned the fourth repair on
+  [[D2190]]–[[D2193]]. The four-arm reproduction covers current computed writes rejected by the
+  bootstrap grammar, omitted v5 run/preset consumers, an unrepresentable intermediate graph and
+  production packages outside the scan roots. Earlier repairs survive; no implementation is
+  authorized.
 - 2026-08-30: fourth-return author repair. Replaced the three-root list with one phase-aware
   TypeScript/Svelte authority graph. Bootstrap now validates the actual v4 `validV4`/`migrate`
   state; v5 deletes it for the central codec. Read, write, key, serializer, constructors,

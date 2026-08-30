@@ -12064,3 +12064,17 @@ The D2056–D2062 seals, prefix digests, absolute TTL, endpoint/cache identities
 Maia application rules survive. `make provider-exchange-second-fresh-review` passes 6/6. No
 production, schema, content, archive or protected-design byte changed. Exact review:
 `planning/provider-exchange-and-execution/second-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — AssistanceConfig register third fresh independent return
+
+Returned `assistance-config-register.md` on [[D2190]]–[[D2193]] after applying its proposed graph
+grammar to the actual Svelte script operations and the full v5 consumer handoff. Both current
+configuration writers use a generic computed key the grammar forbids; the exact v5 claim omits the
+in-run hint consumer and preset/clamp columns; the node vocabulary cannot represent the
+intermediate import/call/alias closure it promises; and its two scan roots exclude the rest of the
+production workspace.
+
+The phase-aware v4/v5 split, shared read/write key, fixed-head identity and central-codec intent
+survive. `make assistance-register-third-fresh-review` passes 4/4. No production, workflow,
+register, schema, content, archive or protected-design byte changed. Exact review:
+`planning/assistance-config-register/third-fresh-independent-buildability-review-2026-08-30.md`.
