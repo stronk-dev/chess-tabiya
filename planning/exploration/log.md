@@ -11472,3 +11472,19 @@ The exact return is
 `planning/platform-alignment/bot-policy/fresh-independent-buildability-review-2026-08-30.md`;
 `make bot-policy-fresh-review` passes 10/10. No run schema, migration, provider, selector, roster,
 storage, UI, content or protected-design byte changed.
+
+## 2026-08-30 — shared-candidate packet fresh independent return
+
+Re-reviewed the D1977–D1981 packet repair as the common evidence-population foundation and returned
+it on [[D2097]]–[[D2104]]. The prior 11 + 4 + 5 checks remain green; the new eight-arm reproduction
+proves request/result and wide-projection scopes are uncorrelated, the provider-free landing
+requires a wrong-arity provider type absent from production, the public service has no exported
+construction boundary, projection ids do not define callable collector groups, unique in-flight
+jobs bypass both cache bounds, injected scheduler rejection escapes the result algebra, FEN-only
+requests cannot enforce the standard/variant refusal, and receipt identity omits the unavailable
+collector results that created abstentions.
+
+The exact return is
+`planning/evidence-foundation-ux/shared-candidate-packet-fresh-independent-review-2026-08-30.md`;
+`make candidate-packet-fresh-review` passes 8/8. No runtime packet/cache, provider handoff, selector,
+schema, content, learner surface or protected-design byte changed.

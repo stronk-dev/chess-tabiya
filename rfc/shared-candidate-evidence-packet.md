@@ -1,15 +1,16 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — author repair complete 2026-08-29 for [[D1977]]–[[D1981]]; fresh
-  independent buildability review remains required and implementation remains unauthorised.** The
-  operation now has one closed ready/cancelled/failed algebra and literal options; the production
-  scheduler is the shared `messageChannelMacrotaskYield` from dependency-free
-  `cooperative-yield.ts`; projection is a typed and runtime-checked
-  scope partial order; collector groups distinguish available-empty from unavailable; and the held
-  Stockfish join is only a compile-time handoff here, with all behavior moved to D10. Exact return:
-  `planning/evidence-foundation-ux/shared-candidate-packet-final-independent-review-2026-08-28.md`.
-  Prior author state: repaired [[D1958]]–[[D1961]] after the repeat [[D1900]]–[[D1903]] and
-  [[D1945]]–[[D1947]] returns. [[D1580]] remains separate numeric appliance-tier debt.
+- **Status:** **draft — returned by fresh independent buildability review 2026-08-30 on
+  [[D2097]]–[[D2104]].** The D1977–D1981 repair preserves its intended closed operation, scheduling
+  and abstention split, but request/results and wide projection are not scope-correlated; the
+  provider-free landing requires a wrong-arity provider type that does not exist; the service is
+  neither exported nor constructible; projection ids do not define the callable collector
+  topology; unique in-flight work is unbounded; injected scheduler rejection escapes the result
+  algebra; FEN-only requests cannot enforce the variant refusal; and receipt authority omits the
+  unavailable results that created abstentions. `make candidate-packet-fresh-review` reproduces
+  8/8 while the prior 11 + 4 + 5 checks remain green. Implementation remains unauthorized.
+  [[D1580]] remains separate numeric appliance-tier debt. *(Prior state: D1977–D1981
+  author-repaired after D1958–D1961, D1900–D1903 and D1945–D1947.)*
 - **Author:** claude (initial draft); codex (2026-08-29 operation-boundary author repair). Drafted
   from `design/research/shared-candidate-evidence-packet.md` and
   `tools/d1071-candidate-packet-harness/`; every carried claim re-verified at HEAD, with seven
@@ -1210,6 +1211,26 @@ contradicted.
 
 > **Cross-review 2026-08-23.** [[D1385]] — `evaluatedAlternatives` cannot differ from `legalAlternatives` on the main path, and the unevaluated case selects two families the complete population rejects. [[D1386]] — the selector's inline event closure composes eight families where `localSemanticEvents` composes ten. [[D1387]] — alternative events are never checked against the edge they were supplied for. [[D1388]] — the reported `selectionCacheKey` positional defect does not exist.
 
+## Fresh-return author obligations (2026-08-30)
+
+The exact return is
+`planning/evidence-foundation-ux/shared-candidate-packet-fresh-independent-review-2026-08-30.md`.
+Before another acceptance review, the author must:
+
+1. publish one exported, constructible service whose request, ready receipt and wide/narrow
+   projection results are correlated by literal scope ([[D2097]], [[D2099]]);
+2. remove the premature provider handoff from the provider-free landing or serialize behind the
+   accepted shared provider types and use their exact two-argument delivery ([[D2098]]);
+3. publish one complete executable collector registry from which output closure, grouping,
+   invocation cardinality, failures and exact unavailable results are derived ([[D2100]],
+   [[D2104]]);
+4. bound unique in-flight work with queue/admission/shutdown semantics and close scheduler failure
+   plus collector failure identity inside the public result algebra ([[D2101]], [[D2102]]);
+5. make the standard-only ruleset an explicit admitted identity/refusal, or carry a typed ruleset
+   through legal moves, packet key and collectors ([[D2103]]); and
+6. invert all eight fresh-review arms, preserve the prior 20 checks, and pass full repository
+   verification before requesting another independent review.
+
 1. **The population is never an argument.** A fixture attempting to supply `candidates`,
    `legalMoves`, `afterFen`, or any event or reading to the packet compiler **fails to type-check**
    (`.typecheck.ts`), and no runtime predicate is the enforcement. *Wrong implementation that would
@@ -1578,6 +1599,13 @@ D1354; corrected here per §0.7.)*
   it names the seven checks that cannot catch the thing being asserted.
 
 ## Changelog
+
+- 2026-08-30 — fresh independent review returned the author repair on [[D2097]]–[[D2104]]. The
+  eight-arm reproduction crosses scope correlation, provider type availability/arity, the exported
+  construction seam, executable collector topology, bounded in-flight work, scheduler/failure
+  closure, ruleset identity and abstention source retention. Exact return:
+  `planning/evidence-foundation-ux/shared-candidate-packet-fresh-independent-review-2026-08-30.md`;
+  reproduction: `make candidate-packet-fresh-review`. No production/schema/content byte changed.
 
 - 2026-08-29 — author repair for final independent return [[D1977]]–[[D1981]]. The service now has
   a closed result/failure/options boundary; `messageChannelMacrotaskYield` and a literal bounded
