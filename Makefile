@@ -362,6 +362,10 @@ bounded-target-fresh-review:
 bounded-target-second-author-repair:
 	node --test tools/d2105-bounded-target-second-author-repair/*.test.mjs
 
+.PHONY: bounded-target-second-fresh-review
+bounded-target-second-fresh-review:
+	node --test tools/d2202-bounded-target-second-fresh-review/contract.test.mjs
+
 build:
 	pnpm build
 

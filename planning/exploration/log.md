@@ -12104,3 +12104,15 @@ The complete-population purpose, provider-free split, bounded admission, single-
 standard ruleset and exact-reference retention survive. `make candidate-packet-second-fresh-review`
 passes 4/4. No production, schema, content, archive or protected-design byte changed. Exact review:
 `planning/evidence-foundation-ux/shared-candidate-packet-second-fresh-independent-review-2026-08-30.md`.
+
+## 2026-08-30 — Bounded-policy targets second fresh independent return
+
+Returned `bounded-policy-targets.md` on [[D2202]]–[[D2205]] after tracing its repaired source anchor
+and service through current evidence construction. The public manifest is unused by adapters and
+identities; `ThreatPassAnchor` has no declaration; the three new projection values have no exact
+constructors/receipts; and the exported service's request/result protocol remains private.
+
+The measured local value, source-bound intent, complete-set batch, bounded background execution,
+total quantifiers and shutdown semantics survive. `make bounded-target-second-fresh-review` passes
+4/4. No production, schema, content, archive or protected-design byte changed. Exact review:
+`planning/bounded-policy-targets/second-fresh-independent-buildability-review-2026-08-30.md`.

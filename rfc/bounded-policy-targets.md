@@ -1,13 +1,11 @@
 # RFC: Convention-grounded bounded material targets
 
-- **Status:** **draft — [[D2105]]–[[D2111]] author-repaired 2026-08-30; fresh independent
-  review required.** Threat evidence now has one source-owning constructor and private pass-anchor
-  authority; every tracked identity type is literal; one exported concrete service owns fixed
-  production scheduling, whole-job bounds, total counting and idempotent shutdown; and the return
-  quantifiers require their exact witness/refutation operands. `make bounded-target-second-author-repair`
-  passes 7/7. Historical RFC-shape arms D2106–D2111 invert; D2105 remains green against the
-  deliberately unimplemented production constructor and must invert on implementation.
-  Implementation remains unauthorised.
+- **Status:** **draft — RETURNED by second fresh independent review 2026-08-30 on
+  [[D2202]]–[[D2205]].** The source anchor, concrete service, whole-job bound and total quantifiers
+  survive, but manifest authority is unused, `ThreatPassAnchor` is undefined, the three derived
+  projections have no exact value-authority constructors, and the public operation uses private
+  request/result types. `make bounded-target-second-fresh-review` passes 4/4. Implementation
+  remains unauthorised.
 - **Author:** codex, preserving the D1023 research contract and applying `planning/bounded-policy-targets/author-repair-2026-08-26.md`
 - **Created:** 2026-08-23; narrowed 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; executable contract closure in `design/research/bounded-policy-target-contract-closure.md`
@@ -816,6 +814,26 @@ temporary binding state, not the 1.0 user experience.
 Tests belong beside the runtime service and manifest. No server, worker, route, schema, migration,
 pack or Svelte file changes in this RFC; the portable yield and bounded queue live in runtime.
 
+## 7.1 Second fresh independent return (2026-08-30)
+
+Exact return:
+`planning/bounded-policy-targets/second-fresh-independent-buildability-review-2026-08-30.md`.
+Four seams remain after the D2105–D2111 repair:
+
+1. both public construction paths accept `CompiledEvidenceManifest`, but the current source
+   adapters use the global catalogue and the request/result identities retain no manifest identity
+   ([[D2202]]);
+2. `ThreatPassAnchor` appears in exported signatures and payloads but has no TypeScript declaration
+   ([[D2203]]);
+3. the three new projection aliases have no named exact constructor, assertion or value-authority
+   receipt, so the generic declared-evidence route remains able to mint their ids ([[D2204]]); and
+4. the exported service's request, result and nested discriminated arms are non-exported despite the
+   promised public types barrel ([[D2205]]).
+
+The next author repair must coordinate the constructor work with `evidence-value-authority`, invert
+all four executable arms, preserve the prior contracts, and undergo another fresh independent
+review before implementation.
+
 ## 8. Acceptance criteria
 
 1. The ten D1023 focused controls and exhaustive authored/imported census run through production
@@ -971,6 +989,11 @@ learner preset exposes them are consumer decisions and do not change the exact p
 
 ## Changelog
 
+- 2026-08-30 — second fresh independent review returned the D2105–D2111 author repair on
+  [[D2202]]–[[D2205]]. Exact return:
+  `planning/bounded-policy-targets/second-fresh-independent-buildability-review-2026-08-30.md`;
+  reproduction: `make bounded-target-second-fresh-review`. No production/schema/content byte
+  changed.
 - 2026-08-30 — author-repaired [[D2105]]–[[D2111]]. Threat evidence now owns its source
   anchor without changing `threat@1` payload bytes; every normative identity type compiles; one
   concrete product-fixed service caps both candidate and whole-job work, counts the batch exactly,
