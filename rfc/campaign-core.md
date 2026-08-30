@@ -1,15 +1,11 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
-- **Status:** draft — **returned by fresh independent buildability review 2026-08-30 on
-  [[D2077]]–[[D2086]]**. The two-horizon direction survives, but it is not yet one landable
-  contract: terminal sealing contradicts its trailing events; equipment is unwritable; historical
-  definitions are unpinned; resource grants have no fold effect; producer dependencies and
-  family-specific reward algebra are absent; the declined run-origin seam is already required;
-  route/idempotency and award issuance are incomplete; and the test seed has no official content
-  authority. `make campaign-two-horizon-author-contract` remains 19/19 green;
-  `make campaign-two-horizon-fresh-review` reproduces 10/10 blockers. No campaign schema,
-  migration, production route, seed campaign or surface may resume before author repair and
-  another independent review. *(Prior line:
+- **Status:** draft — **[[D2077]]–[[D2086]] author repair complete 2026-08-30; fresh
+  independent review required.** The terminal bundle, writable module loadout, exact document
+  snapshot, source-identified charge ledger, typed reward-family projections, run origin, closed
+  command family, atomic award issuance and official-content authority are being repaired as one
+  replayable campaign operation. No campaign schema, migration, production route, official
+  campaign or surface may resume before another independent review. *(Prior line:
   implementing — 2026-08-23 authored-contract + registry + module-algebra checkpoints. Before
   that: accepted — 2026-08-22, by claude as register owner after independent cross-review and 15
   in-place corrections; draft — 2026-08-22.)*
@@ -31,7 +27,12 @@
   rebuild discipline and the preceding migration position), `rfc/theory-knowledge-pipeline.md`
   (exact bundle/passage authority for `theory_unlock`; implementation dependency), the shared
   server-readable appearance catalog required by [[D1696]], and the portable-account-data
-  inventory/checker (award export, deletion and restore)
+  inventory/checker (award export, deletion and restore). **Consumer closure additionally serializes
+  behind accepted and implemented `rfc/pack-capability-contract.md`**, exporting
+  `derivePackCapabilityRequirements`, and **accepted and implemented
+  `rfc/theory-drill-current-joins.md`**, exporting `compileApplicabilityResult`; both are returned at
+  this author checkpoint, so Campaign implementation cannot begin by substituting miniature local
+  graphs.
 - **Parent / amends:** — (first campaign RFC; `design/06-campaign.md` is the intent authority)
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/campaign/`
@@ -39,6 +40,7 @@
 ```tabiya-claims
 migration | position behind bot-policy | campaign_runs; campaign_events; campaign_reward_awards
 campaign-schema | lane 2 | reward becomes a closed three-member run-reward union; nodes declare exact reward consumers; durable cosmetic awards reference the shared appearance catalog
+run-schema | lane 0.25 | RunSession.origin gains optional exact campaign encounter identity (campaignRunId, nodeId, campaignDocumentDigest); run.started persists it for Review/export/restore
 ```
 
 ## Summary
@@ -84,7 +86,8 @@ contract without inventing unregistered titles, modifiers, skip starts or varian
 Out of scope: everything deferred above (each with a Discharge row); opponent-policy internals
 (bot-policy's seam ends at `run.opponentPolicy`); module eligibility (the D660 bar);
 campaign-screen visual composition beyond the boundary rule in §7 (composition last, per D717);
-any change to authored pack bytes; content authoring of real campaigns beyond the seed fixture;
+any change to authored pack bytes; authorship of the official campaign's chess curriculum (an
+owner/human content obligation in Discharge D8, not Codex implementation);
 and [[D1600]]'s no-exhaustible-tool failure stage. The campaign inventory exposes `resting` as an
 input but this RFC neither chooses nor persists a new failure policy.
 
@@ -174,6 +177,19 @@ linear teaching document is a legitimate artifact and this RFC does not know it 
 error would refuse a shape the design never prohibited. **Criterion 15** makes the warning
 failable in both directions.
 
+**Contract fixture and product content are different artifacts.** The deterministic nine-node
+mechanical fixture lives under
+`tools/campaign-two-horizon-author-contract/fixtures/campaign-contract.json`; it exists only to
+falsify schema/fold/API invariants and is never registered or rendered. The 1.0 product requires at
+least one separate official document under `content/campaigns/`, authored and reviewed by the
+OWNER/human chess-content authority after the producer/module/theory contracts stabilize. Its
+curriculum must include grounded opening, middlegame and endgame consequence encounters, varied
+path choices, later and boss consumption for every reward, source/provenance for every theory
+passage, and a checked dependency/provider availability matrix. Codex may validate, attach existing
+registered identities and implement the machinery; law 8 forbids it from choosing the campaign's
+chess lessons, pack sequence, strategic rationale or boss curriculum. The fixture passing cannot
+satisfy the official-content criterion, and official content cannot weaken the mechanical fixture.
+
 **Map progression** is strictly forward: layer N+1 opens when a node in layer N seals (§4). No
 node re-entry after seal — retrying a node means retrying it before declaring done (§2 prices
 the *navigation*, §4's submitted-branch rule prices the *commitment*; declaring done is what
@@ -194,9 +210,16 @@ CampaignEconomy {
 }
 ```
 
-**2.1 Earn.** One grant of `actGrants[act]` charges is appended (`charge_earned` event, §6) when
-a node seals, whatever its verdict — income prices *finishing*, not winning, so a failed seal
-still funds the next attempt at the next node. Lint `CAMPAIGN_ECONOMY_MONOTONE` (error) refuses
+**2.1 Earn.** The canonical charge ledger has three source-discriminated entry kinds:
+`starting { campaignRunId }`, `act_seal { nodeId, act, amount }`, and
+`reward_grant { nodeId, rewardIdentity, amount }`; spends are
+`mutation_spend { playRunId, mutationCommandId, amount: 1 }`. Starting income is derived once from
+the pinned document at campaign creation. The atomic `node_committed` event (§4.1) carries exactly
+one act-seal amount and, when the node reward is `resource_grant`, a distinct reward-grant amount and
+identity. Both enter the fold exactly once with that event sequence; two rewards for the same
+resource but different node/reward identities both count, while replay of either event does not.
+Income prices *finishing*, not winning, so a failed seal still funds the next attempt at the next
+node. Lint `CAMPAIGN_ECONOMY_MONOTONE` (error) refuses
 a document where `actGrants` increases with act index: the ruling scales counts *"(on lower
 floors/acts/whatever)"* so that — in the design/06 amendment's words — *"lower floors are more
 forgiving"* (`06:219-221`), which means act1 ≥ act2 ≥ act3, and the constraint is
@@ -214,7 +237,8 @@ comparison stays free; only *entering* a line it produced is priced. Reviewing w
 a branch or rewinding spends nothing. Enforcement is **server-internal with no run
 field**: a new private guard `RunService.#campaignCharge(runId, at)` looks up whether `runId` is
 the active encounter run of a `campaign_runs` row (§6), and if so re-derives the balance from
-that row's events and appends `charge_spent` in the same transaction as the mutation (the §4.2
+that row's events and appends `charge_spent` with the play-run mutation command id in the same
+transaction as the mutation (the §4.2
 projection is the balance's only home — no balance column exists to drift) — or refuses
 with the new typed error **`CAMPAIGN_REWIND_EXHAUSTED`** (HTTP 409, typed body like
 `INVALID_REQUEST`'s) when the balance is zero. A non-campaign run passes the guard untouched.
@@ -264,31 +288,50 @@ Law 8 remains structural: a module opens a registered evidence consumer, a theor
 attributed text, and a resource opens an existing mutation affordance. Acquisition asserts
 availability only; it never asserts that a reward is useful, caused a win or taught the learner.
 
-**3.2 Owned, equipped and effective are different facts.** The campaign fold carries run-owned
-module/theory identities and resource balances. Module/theory equipment is an explicit campaign
-loadout projection. Acquisition auto-equips an item when it is within the campaign ceiling and no
-explicit future loadout limit rejects it; otherwise it appears in the shelf with one `Equip`
-action. This RFC introduces no slot count. Preset changes mutate neither `owned` nor `equipped`.
+**3.2 Owned, equipped and effective are different facts, and reward families are never
+intersected.** The fold carries three typed domains: module ownership/loadout, exact theory-passage
+ownership, and the charge ledger. Only modules are equipable. Acquisition auto-equips a module when
+it is inside the campaign module ceiling; otherwise append refuses. Later learner changes use one
+event-owned `loadout_changed { equippedModuleIds }` command (§4.5/§6), whose canonical set must be a
+subset of owned modules and the current campaign module ceiling. It supports both equip and
+unequip, is expected-revision/idempotency guarded, and has no slot count. A theory passage and a
+resource sent to this command are typed `CAMPAIGN_LOADOUT_FAMILY_INVALID`; there is no decorative
+Equip action with no durable mutation. Preset changes append no campaign event and mutate neither
+module ownership nor loadout.
 
-For each owned module or theory item, the runtime compiles these named facts:
+The three compiled projections are separate:
 
 ```text
-owned       = acquired in this CampaignRun
-equipped    = explicitly selected in the campaign loadout
-ready       = equipped and not resting under the separately ruled failure policy
-suppressed  = denied for this encounter with a registered reason
-available   = its declared evidence/provider/theory source is reachable
-effective   = honesty ceiling ∩ owned ∩ equipped ∩ ready − suppressed ∩ available
+ModuleInventoryProjection
+  owned       = module acquired in this CampaignRun
+  equipped    = module present in the latest event-owned module loadout
+  ready       = equipped and not resting under the separately ruled failure policy
+  suppressed  = module denied for this encounter with a registered reason
+  available   = module's declared evidence/provider source is reachable
+  effective   = moduleCeiling ∩ owned ∩ equipped ∩ ready − suppressed ∩ available
+
+TheoryInventoryProjection
+  owned       = exact bundle/passage acquired in this CampaignRun
+  applicable  = compileApplicabilityResult reaches this exact passage from the encounter pack
+  authorized  = the passage's registered theory consumer module is effective
+  disclosable = passage directness is within the context disclosure ceiling
+  available   = exact attributed source bytes are reachable
+  effective   = owned ∩ applicable ∩ authorized ∩ disclosable ∩ available
+
+ResourceLedgerProjection
+  balance     = starting + act-seal income + source-identified reward income − spent
 ```
 
-`presetRequest` is presentation preference only. It can narrow which effective modules render by
-default, but it cannot remove an earned item from the campaign loadout or from the visible shelf.
-The assistance compiler therefore receives the effective campaign set and then applies the preset
-as display policy; it does not recompute ownership. Every owned but ineffective item renders
-exactly one precedence-ordered reason: `honesty_ceiling`, `resting_until_act`,
-`boss_suppressed`, `source_unavailable`, or `not_equipped`. The first matching reason wins and
-the compiled projection rejects zero or multiple reasons. `resting_until_act` is only an input
-seam for [[D1600]]; this RFC does not decide when an item enters that state.
+`presetRequest` is presentation preference only. It can narrow which effective modules/theory
+render by default, but cannot remove an earned item from the shelf or mutate canonical state. Every
+owned but ineffective **module** renders exactly one precedence-ordered reason:
+`honesty_ceiling`, `resting_until_act`, `boss_suppressed`, `source_unavailable`, or
+`not_equipped`. Every ineffective **theory passage** renders exactly one of
+`not_applicable`, `authorizing_module_inactive`, `disclosure_ceiling`, or `source_unavailable`.
+Resources render their balance and mutation availability, never module-style reasons. The first
+matching reason in each family's own closed precedence wins; zero/multiple reasons refuse.
+`resting_until_act` remains only an input seam for [[D1600]]; this RFC does not decide when a module
+enters that state.
 
 A CampaignRun starts with `rules_floor` plus the document's `startingModules`. An unlock outside
 the campaign context ceiling is refused at append time with
@@ -310,6 +353,15 @@ from the same runtime registries used during play:
 - a theory ref must resolve to an exact published bundle/passage reachable from that node's pack;
 - the rewind resource resolves only when the campaign mutation controller exposes at least one of
   the four charge-consuming gestures for that encounter.
+
+The compiler imports, rather than restates, two predecessor views. Module reach starts from
+`derivePackCapabilityRequirements(pack)` in accepted/implemented `pack-capability-contract` and
+joins only through the compiled learner-module registry. Theory reach starts from
+`compileApplicabilityResult({ pack, passage })` in accepted/implemented
+`theory-drill-current-joins` and additionally retains the exact registered theory-consumer module
+and disclosure/directness ceiling. Until either returned predecessor is accepted and implemented,
+Campaign validation returns typed `CAMPAIGN_CONSUMER_AUTHORITY_UNAVAILABLE`; it never substitutes a
+campaign-local graph.
 
 The authored `consumes` set must equal the compiled set after canonical identity normalization;
 missing and extra declarations both fail. For every reward, the validator enumerates **every
@@ -368,35 +420,62 @@ declaring done is what counts."* The verb is the shipped `reveal`
 (`RunService.reveal`, `service.ts:1547`), extended by one new server route:
 
 ```
-POST /campaigns/:campaignRunId/nodes/:nodeId/submit   { runId, branchId }
+POST /campaign-runs/:campaignRunId/nodes/:nodeId/submit
+{ runId, branchId, expectedRevision, commandId }
 ```
 
-which (in one transaction) validates the branch belongs to the run and the run to the node's
-active encounter, reads the submitted branch tip's objective state (`Node.objectiveState`,
+which validates authenticated ownership, the expected event revision, command-id reuse, that the
+branch belongs to the run and that the run belongs to the node's active encounter, then reads the
+submitted branch tip's objective state (`Node.objectiveState`,
 `packages/runtime/src/types.ts:121` — the same source `projectAttempts` reads,
 `apps/server/src/progress.ts:127`; in a trajectory pack the tip carries the final leg's state,
-earlier legs having sealed as `TrajectoryLegSpan.sealedState`, `trajectory.ts:15`), appends
-`node_sealed { nodeId, runId, branchId, verdict }`, appends the §2.1 `charge_earned` grant,
-appends `run_reward_acquired { nodeId, reward }` for the node's typed reward if it carries one
-(**whatever the verdict** — the same finishing-not-winning principle as §2.1 and ADR-0007's
-unlocked-by-playing; refused if its exact registry/source/ceiling authority is absent), and
-advances the map cursor. The node verdict vocabulary **is** `ObjectiveState`'s absorbing subset
+earlier legs having sealed as `TrajectoryLegSpan.sealedState`, `trajectory.ts:15`). It compiles one
+indivisible `node_committed` payload:
+
+```ts
+interface NodeCommittedEvent {
+  readonly kind: "node_committed";
+  readonly commandId: CampaignCommandId;
+  readonly expectedRevision: number;
+  readonly nodeId: string;
+  readonly runId: string;
+  readonly branchId: string;
+  readonly verdict: "achieved" | "failed" | "transitioned" | "open";
+  readonly actIncome: { readonly source: "act_seal"; readonly act: ActId; readonly amount: PositiveInteger };
+  readonly reward: CampaignRunReward | null;
+  readonly terminal: "continue" | "completed";
+}
+```
+
+The payload includes the node's typed reward **whatever the verdict**—the same
+finishing-not-winning principle as §2.1 and ADR-0007's unlocked-by-playing—and its resource amount
+is a second source-identified ledger entry. The compiler refuses absent registry/source/ceiling
+authority before opening the transaction. The fold applies the seal, act income, optional reward,
+loadout auto-equip and cursor/terminal transition as one semantic unit; there are no trailing events
+for a final node to forbid. On the final selected layer it computes the next completed/prestige
+state and inserts every eligible durable award in `campaign_reward_awards` **in the same database
+transaction** as this single event and materialized status update. Injected failure in event append,
+fold validation, status update or any award insert rolls back all effects. A concurrent or
+response-loss retry with the same command and operands returns the stored event/result/award bytes;
+same command with different operands refuses `CAMPAIGN_COMMAND_REUSED`. The node verdict vocabulary
+**is** `ObjectiveState`'s absorbing subset
 plus the non-absorbing fallback: `verdict = "achieved" | "failed" | "transitioned" | "open"`,
 mapped 1:1 from the submitted tip (an `active`/`preserved`/`degraded` tip seals as `"open"` —
 submitting an unfinished line is legal and priced only by its own verdict). No new judgement
 enters: the seal is a copy of the pack's own objective machinery. The verdict is a **new object
-whose only home is the `node_sealed` payload** — it is not the shipped `AttemptVerdict`
+whose only home is `node_committed.verdict`** — it is not the shipped `AttemptVerdict`
 (`"open" | "unstable" | "stable"`, `progress.ts:62`), which stays untouched; the two share the
 `"open"` token but not a type.
 
 **RULED 2026-08-23 ([[D1040]]) — the any-verdict grant above is the settled core behaviour, not
 an unexamined default.** The owner ruled *progression is unlocked by PLAYING; WINNING gates the
-PRESTIGE layer only*. This paragraph's `run_reward_acquired`-on-any-verdict append **is** that
+PRESTIGE layer only*. The `node_committed.reward`-on-any-verdict field **is** that
 ruling, and it is recorded here so no future reader re-opens it as an oversight: a `failed` seal
 grants the node's reward exactly as an `achieved` seal does. The ruling is consistent with
 [[D945]]'s earned-rewind economy, whose stated point is that a weaker player can still finish a
 campaign — a core path gated on winning would have made both mechanisms decorative. Where winning
-*does* gate is §3.6.
+*does* gate is §3.6. The prior three-event spelling (`node_sealed` → `charge_earned` →
+`run_reward_acquired`) is superseded; those effects now exist only inside `node_committed`.
 
 **4.2 The run-level roll-up** — `06:452-454`'s *"computed nowhere"*, the smallest new part,
 built here as a **projection, not a table** (the `attempts`/rating-as-projection precedent):
@@ -408,19 +487,26 @@ campaignRunState(campaignRunId): {
     | { kind: "completed" }
     | { kind: "abandoned" };
   nodes: Record<nodeId, { verdict, runId, branchId }>;
-  charges: { earned, spent, balance };          // balance = starting + earned − spent, never negative
+  charges: {
+    entries: ChargeLedgerEntry[];
+    startingIncome, actIncome, rewardIncome, spent, balance;
+  }; // balance = starting + actIncome + rewardIncome − spent, never negative
   inventory: {
-    owned: CampaignRunRewardRef[];
-    equipped: CampaignRunRewardRef[];
+    modules: { owned: UnlockableModuleId[]; equipped: UnlockableModuleId[] };
+    theory: { owned: ExactTheoryPassageRef[] };
   };
   status: "active" | "completed" | "abandoned";
 }
 ```
 
-computed by folding `campaign_events` in `seq` order. **Determinism discipline inherited from
+computed by folding `campaign_events` in `seq` order. `node_committed` is reduced atomically: its
+seal, both possible income sources, reward, auto-equip and terminal marker either all affect the
+next state or none do. `loadout_changed` replaces only the canonical equipped-module set;
+`charge_spent` appends one source-identified spend. **Determinism discipline inherited from
 `rfc/longitudinal-store.md`:** rebuild from the event log byte-equals the incrementally
 maintained state (criterion 9); the fold is pure; no wall-clock reads inside it. `completed`
-means exactly one seal for every selected layer. `campaign_abandoned` is the sole abandonment
+means exactly one committed node for every selected layer and requires the final event's own
+`terminal: "completed"`. `campaign_abandoned` is the sole abandonment
 authority and is terminal; `campaign_runs.status` is a materialized projection checked against the
 fold, never a second input. No event may follow completion or abandonment. The cursor's terminal
 members close [[D1233]]/[[D1234]] without an unexplained `null`. Prestige is §3.6's read over the
@@ -430,13 +516,21 @@ same seals and denominator; the fold still invents no aggregate score.
 node's seal — seals are append-only events; *"rewinding to a clean line erases it — that is the
 thesis working"* applies **within** an unsubmitted encounter, never to sealed history.
 
-**4.4 Abandoning the campaign.** `POST /campaigns/:campaignRunId/abandon` compares the expected
-event head, appends exactly one `campaign_abandoned`, clears the materialized active encounter
+**4.4 Abandoning the campaign.** `POST /campaign-runs/:campaignRunId/abandon` compares the expected
+revision and command id, appends exactly one `campaign_abandoned`, clears the materialized active encounter
 pointer and projects the abandoned terminal cursor in one transaction. Repeating the same command
 against the same idempotency key returns the existing terminal projection; a different command
 after either terminal state returns `CAMPAIGN_RUN_TERMINAL`. Leaving one encounter without
 abandoning the campaign remains the free reading recorded in Open question 3 and creates no new
 event kind.
+
+**4.5 Loadout mutation.** `PUT /campaign-runs/:campaignRunId/loadout` accepts
+`{ equippedModuleIds, expectedRevision, commandId }`. The service canonicalizes unique module ids,
+requires each to be owned and inside the compiled campaign module ceiling, refuses theory/resource
+identities, and appends one `loadout_changed` event. The fold replaces only the equipped module set;
+ownership, theory passages and charge entries are byte-identical before/after. Same command/same
+operands returns the stored projection; changed operands, stale revision, terminal run or wrong
+learner refuse through §7.1's closed error algebra.
 
 ### §5. The eighth context — registration with intent-presets
 
@@ -455,19 +549,23 @@ Per `rfc/intent-presets.md` Discharge D3 (quoted whole in derivation §3.1), reg
    contract is the narrower authority, exactly §3.2's algebra. `configClamp.boardLighting` is
    drawn from the registry-invariant token set `"legal" | "sight" | "evidence"` — the campaign
    can never darken the rules floor, by the same compile-time test that guards the other seven.
-3. **The derivation signal — decided here** (derivation gap 10): `deriveWorkflowContext`'s
-   inputs cannot distinguish a campaign run, and this RFC adds **no run field**. A campaign
-   encounter run is created only through `POST /campaigns/:campaignRunId/nodes/:nodeId/start`,
-   which records the linkage campaign-side (`node_entered` event + the `campaign_runs` active
-   pointer, §6) and returns the context; on resume, the client learns it from
-   `GET /campaigns/active` (current node + its `runId`), and the server end enforces from the
-   same tables (§2.2's guard). Consequence stated honestly: **the run record alone does not know
-   it was a campaign encounter** — the campaign event log does, and anything replaying runs
-   without joining `campaign_events` sees a plain `pack` run. Run-schema lane 0.19 is therefore
-   **named and declined again** (the intent-presets pattern), with this reopen condition: if any
-   consumer outside the campaign tables needs per-run campaign identity (a Review surface, an
-   export, the longitudinal store), the marker becomes a run-schema claim at that RFC's turn
-   rather than a silent join. (Proposed row 2.)
+3. **The run origin — claimed because this RFC already has Review/export consumers** (repair of
+   [[D2083]]). `RunSession` gains one optional persisted origin in run-schema lane **0.25**:
+
+   ```ts
+   type RunOrigin = { readonly kind: "campaign_encounter";
+     readonly campaignRunId: string; readonly nodeId: string;
+     readonly campaignDocumentDigest: `sha256:${string}` };
+   ```
+
+   `POST /campaign-runs/:campaignRunId/nodes/:nodeId/start` constructs it server-side from the
+   authenticated campaign state and pinned document snapshot; callers cannot supply it. It is
+   written in `run.started`, returned on resume, preserved by direct Review URL/refresh and account
+   export/import, and read by Review, longitudinal selectors and `deriveWorkflowContext`. Plain runs
+   carry no origin and infer none. Deleting campaign history does not rewrite the play run: Review
+   retains the origin and renders `campaign_history_unavailable`; restoring matching campaign rows
+   reconnects only when run id/node/document digest all match. The campaign-side active pointer is
+   still the mutation guard, but is no longer the sole identity source.
 4. The per-encounter ceiling (D3's *"encounter-authored ceilings"*) is §3.2's composition —
    narrowing inside the contract, exactly the algebra's shape.
 
@@ -484,6 +582,8 @@ CREATE TABLE campaign_runs (
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
   campaign_id TEXT NOT NULL,          -- CampaignDocument.id
   campaign_version INTEGER NOT NULL,  -- pinned at creation; a CampaignRun never migrates documents
+  campaign_document_digest TEXT NOT NULL, -- RFC-8785 SHA-256 of canonical snapshot
+  campaign_document TEXT NOT NULL,    -- canonical immutable bytes used for all replay/restore
   status TEXT NOT NULL CHECK (status IN ('active','completed','abandoned')),
   active_encounter_run_id TEXT,       -- NULL between encounters; no FK by choice (drill_runs is snapshot storage with its own deletion path; the §2.2 guard validates at lookup)
   created_at TEXT NOT NULL
@@ -496,12 +596,16 @@ CREATE TABLE campaign_events (
   campaign_run_id TEXT NOT NULL REFERENCES campaign_runs(id) ON DELETE CASCADE,
   seq INTEGER NOT NULL,
   kind TEXT NOT NULL CHECK (kind IN
-    ('node_entered','node_sealed','charge_earned','charge_spent','run_reward_acquired',
+    ('campaign_created','node_entered','node_committed','loadout_changed','charge_spent',
      'campaign_abandoned')),
+  command_id TEXT NOT NULL,
+  expected_revision INTEGER NOT NULL,
   payload TEXT NOT NULL,              -- canonical JSON per event kind (§4.1, §2)
   at TEXT NOT NULL,
   PRIMARY KEY (campaign_run_id, seq)
 ) STRICT;
+CREATE UNIQUE INDEX idx_campaign_events_command
+  ON campaign_events(campaign_run_id, command_id);
 
 CREATE TABLE campaign_reward_awards (
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
@@ -526,14 +630,33 @@ CampaignRun per `campaign_id` (partial unique index in the migration; a second s
 typed `CAMPAIGN_RUN_ACTIVE_EXISTS`). Earned state is server-held by ruling (`06:237-239`,
 [[D945]]): none of this ever lives in `AssistanceConfig` or any localStorage key.
 
-**6.1 Durable award command.** The server-owned command consumes an exact completed CampaignRun,
-its pinned campaign document digest, the expected event head and one compiled
-`DurableRewardGrant`. Its idempotency identity is `(learnerId, campaignId, campaignVersion,
-campaignRunId, durableRewardId)`. It re-folds completion/prestige inside the transaction, validates
-the reward against the same campaign document and shared appearance catalog, inserts the award, and
-returns the row. A duplicate command returns the existing row byte-for-byte. Active or abandoned
-runs cannot receive completion/prestige awards; a forged campaign version/digest, wrong learner,
-wrong gate, unknown appearance id or reward absent from the pinned document fails without a row.
+**6.0 Definition pin and command identity.** Campaign creation validates a registry document, writes
+its RFC-8785 canonical bytes and digest into `campaign_runs`, and appends `campaign_created` in the
+same transaction. `CampaignRegistry` keys by `{id,version,digest}` and refuses a second byte image at
+the same id/version (`CAMPAIGN_DOCUMENT_VERSION_MUTATED`). Every later fold, command, Review join,
+award check and restore parses the row snapshot and re-hashes it before use; the installed registry
+is needed for new creation and source availability, not historical replay. Removing a document from
+a newer release therefore makes it unavailable for **new** runs but does not make an existing run
+unreplayable. Export/backup carries the canonical snapshot; restore refuses a digest mismatch and
+can replay it even when the current release no longer offers that version.
+
+Every mutation has a validated `CampaignCommandId` and expected integer event revision. The unique
+event index is the durable idempotency authority. Same command plus byte-identical normalized
+operands returns the stored result; same command with different operands returns
+`CAMPAIGN_COMMAND_REUSED`; an unmatched revision returns `CAMPAIGN_REVISION_STALE`. No mutation
+depends on a process-local idempotency map.
+
+**6.1 Durable award issuance is part of the terminal transition.** Before appending a final
+`node_committed`, the service folds the proposed next state against the pinned document snapshot,
+compiles completion/prestige eligibility and exact `DurableRewardGrant` rows, and validates every
+cosmetic against the shared appearance catalog. The one database transaction appends the event,
+updates materialized status/pointer, and inserts all eligible award rows. Its award idempotency
+identity remains `(learnerId, campaignId, campaignVersion, campaignRunId, durableRewardId)`.
+Duplicate submit delivery returns the existing event/result/award bytes. Active, abandoned, wrong
+learner, campaign snapshot/digest mismatch, wrong gate, unknown appearance id or reward absent from
+the snapshot inserts neither event nor award. There is no uncalled award command, volatile hook or
+eventual promise: if the campaign is completed, its required award rows committed in that same
+transaction. Crash/fault injection before commit leaves neither; after commit, retry observes both.
 The learner's durable inventory is the distinct projection of award rows, never a second writable
 authority.
 
@@ -548,6 +671,36 @@ missing table from export, deletion, restore, merge or backup inventory fails th
 “private solo history” is a data classification, not permission to omit it.
 
 ### §7. Surfaces — where campaign chrome lives
+
+**7.1 Closed authenticated API/command family.** These are the complete 1.0 campaign operations;
+an endpoint mention without the request/result/error contract does not count:
+
+| operation | request authority | result |
+|---|---|---|
+| `GET /campaigns` | authenticated learner + installed registry | catalogue, availability, active/completion/prestige projections |
+| `POST /campaigns/:campaignId/runs` | `{ campaignVersion, commandId }`; unique active-run guard | created CampaignRun with pinned snapshot/digest or idempotent replay |
+| `GET /campaign-runs/:campaignRunId` | owner | canonical map, revision, inventory-family projections, charge ledger, active encounter |
+| `POST /campaign-runs/:campaignRunId/nodes/:nodeId/start` | `{ expectedRevision, commandId }` | one play run with server-authored `RunOrigin`, or stored replay |
+| `PUT /campaign-runs/:campaignRunId/loadout` | `{ equippedModuleIds, expectedRevision, commandId }` | canonical module loadout/revision |
+| `POST /campaign-runs/:campaignRunId/nodes/:nodeId/submit` | `{ runId, branchId, expectedRevision, commandId }` | atomic node result, rewards, state and terminal awards |
+| `POST /campaign-runs/:campaignRunId/abandon` | `{ expectedRevision, commandId }` | abandoned terminal projection or stored replay |
+| `GET /campaign-runs/:campaignRunId/result` | owner + terminal state | path, verdicts, prestige and exact award rows |
+| `GET /campaign-rewards` | authenticated learner | durable campaign award/appearance projection |
+| `GET /campaign-runs/:campaignRunId/nodes/:nodeId/review` | owner + matching run origin | exact Review route/result; history-unavailable is explicit |
+| `GET /campaigns/active` | authenticated learner | active campaign/node/run summary for shell resume |
+
+Every route resolves learner identity from authentication; no request accepts `learnerId`. Reads of
+another learner return the same not-found envelope as absent ids. Every mutation uses §6.0's durable
+command identity; every post-create mutation also carries the exact current revision. Response-loss
+retry returns stored bytes, stale tabs return `CAMPAIGN_REVISION_STALE`, and concurrent
+start/submit/loadout operations serialize on `(campaignRunId, expectedRevision)`. The closed error
+union is `CAMPAIGN_NOT_FOUND | CAMPAIGN_FORBIDDEN | CAMPAIGN_RUN_ACTIVE_EXISTS |
+CAMPAIGN_REVISION_STALE | CAMPAIGN_COMMAND_REUSED | CAMPAIGN_RUN_TERMINAL |
+CAMPAIGN_NODE_UNAVAILABLE | CAMPAIGN_ACTIVE_ENCOUNTER_MISMATCH | CAMPAIGN_LOADOUT_INVALID |
+CAMPAIGN_LOADOUT_FAMILY_INVALID | CAMPAIGN_SUBMIT_INVALID |
+CAMPAIGN_CONSUMER_AUTHORITY_UNAVAILABLE | CAMPAIGN_SOURCE_UNAVAILABLE |
+CAMPAIGN_REWIND_EXHAUSTED`. Each has one HTTP mapping and typed body; no handler returns a generic
+500 for a member of this algebra.
 
 `rfc/play-composition.md:104-107` excludes campaign screens from the closed play-composition
 state list, and `06:308-311` orders visual composition last (D717). That does not permit a hidden
@@ -679,19 +832,23 @@ migration, storage, content, endpoints or UI while these landing authorities rem
 
 ## Acceptance criteria
 
-Unit note: criteria 1–3 count over the seed fixture campaign (9 nodes, 3 acts, 3 suppressed
-bosses — one per act, each layer 3's only choice per §1's lint); criterion counts state their
-own units.
+Unit note: mechanical criteria count over the disposable contract fixture (9 nodes, 3 acts, 3
+suppressed bosses—one per act, each layer 3's only choice). The official campaign is a separate
+owner/human-authored product artifact and must pass the same contracts plus criterion 24's content
+authority; neither artifact can stand in for the other.
 
-1. **Schema + validator**: the seed `content/campaigns/seed-endgames.json` (9 nodes over
-   registered packs) validates; each of `CAMPAIGN_ENCOUNTER_PACK_UNKNOWN`,
+1. **Schema + validator**: the disposable
+   `tools/campaign-two-horizon-author-contract/fixtures/campaign-contract.json` (9 nodes over
+   fixture pack identities) validates; it is absent from the product registry. Each of `CAMPAIGN_ENCOUNTER_PACK_UNKNOWN`,
    `CAMPAIGN_BOSS_PLACEMENT`, `CAMPAIGN_ECONOMY_MONOTONE` has a fixture that **fails** it
    (flip-a-constant: break the fixture, assert the exact error id).
-2. **Economy round-trip**: a scripted CampaignRun earns `startingCharges`, seals a node, gains
-   `actGrants.act1`, spends to zero via rewinds, and the next rewind returns
+2. **Economy round-trip**: a scripted CampaignRun derives `startingCharges`, commits a node and
+   receives distinct source-identified act and resource-reward income in one event, spends to zero
+   via rewinds, and the next rewind returns
    `CAMPAIGN_REWIND_EXHAUSTED` (HTTP 409, typed). Flip-test: with one charge remaining the same
-   rewind succeeds and `charge_spent` is appended in the same transaction (assert both, and
-   assert rollback leaves neither on injected failure).
+   rewind succeeds and `charge_spent` is appended with the mutation command in the same transaction
+   (assert both, duplicate reward/event replay is exactly-once, two same-resource/different-amount
+   grants both count, boss spend works, and rollback leaves neither mutation nor spend).
 3. **Non-campaign runs untouched**: the same rewind sequence on a plain pack run appends no
    campaign event and never sees the guard's refusal — measured by running the full existing
    run-service test suite green with the guard live, plus one explicit fixture.
@@ -704,7 +861,7 @@ own units.
    `CampaignRunReward` has exactly `module_unlock | theory_unlock | resource_grant`.
    `moduleId: "rules_floor"`, a free-form `tool_unlock`, an unpinned theory passage and any
    resource other than `campaign_rewind_charge` each fail at the earliest typed/schema boundary.
-6. **Inventory never exceeds honesty**: an appended `run_reward_acquired` for a module outside the
+6. **Inventory never exceeds honesty**: a `node_committed.reward` module outside the
    campaign context ceiling refuses with `CAMPAIGN_UNLOCK_OUTSIDE_CEILING`; the fixture derives
    the ceiling from the registered `ContextContract`, not from a copied list (the D444 trap —
    a copied list would pass while the contract drifts).
@@ -715,8 +872,10 @@ own units.
    different run, or a node not the active encounter, refuses typed (2 negative fixtures).
 9. **Rebuild determinism**: `campaignRunState` folded from `campaign_events` byte-equals the
    incrementally maintained state after the criterion-2 script (the longitudinal-store
-   discipline, same assertion shape), including owned/equipped reward identities and terminal
-   cursor.
+   discipline, same assertion shape), including module ownership/loadout, theory ownership,
+   source-identified charge entries and terminal cursor. Same-id/version changed document bytes,
+   row snapshot/digest mismatch and restore corruption refuse; removal from the installed registry
+   leaves the historical snapshot replayable.
 10. **Context registration**: `"campaign"` passes intent-presets' registry-invariant compile
     test (boardLighting token set, rules_floor in no complement) and
     `deriveWorkflowContext`-adjacent resolution returns `campaign` for a run started through
@@ -732,8 +891,8 @@ own units.
     packet — vacuously green at landing, red the day someone wires it (the D302 guard).
 14. **Migration hygiene**: the migration is create-table/index only, `STRICT`, literal CHECKs,
    lands as `STORAGE_VERSION + 1` at its queue turn behind `bot-policy`, and the register row
-   flips in the landing commit (C1–C8, P1–P7 green). It creates all three tables and the award
-   idempotency/index shape in §6.
+   flips in the landing commit (C1–C8, P1–P7 green). It creates all three tables, pins canonical
+   document bytes/digest, provides the event command-id unique index and award identity in §6.
 15. **`CAMPAIGN_PATH_WIDTH` is a discriminating warning** (§1, amendment 2026-08-23): a fixture
     document whose act-1 layers 1 and 2 each carry **one** choice emits the warning naming both
     layers and **does not** emit an error; the seed fixture (layers of width 3, layer 3 the
@@ -742,12 +901,15 @@ own units.
     `CAMPAIGN_BOSS_PLACEMENT`, so warning there fires on every valid document and measures
     nothing — the [[D444]] class); and one that raises an error, which would refuse the linear
     teaching document §1 declines to prohibit.
-16. **Inventory survives presentation changes**: applying every preset transition to a state with
-    at least two acquired items leaves canonical `owned` and `equipped` bytes unchanged. The
-    projection fixtures cover each of the five unavailable reasons and reject a missing row,
-    zero reasons, two reasons and reason-precedence drift.
-17. **Consumer declarations are not authority**: the authoring check derives consumers from the
-    live pack/module/theory/resource registries and requires set equality with node declarations.
+16. **Family-specific inventory survives presentation changes**: applying every preset transition
+   leaves canonical module owned/equipped, theory owned and charge-ledger bytes unchanged. Module
+   fixtures cover its five ineffective reasons; theory covers its four different reasons;
+   resources expose only balance/mutation availability. Equip/unequip survives rebuild, while a
+   theory/resource loadout member refuses. Missing row, zero reasons, two reasons and family
+   precedence drift fail.
+17. **Consumer declarations are not authority**: the authoring check calls the accepted exported
+   `derivePackCapabilityRequirements` and `compileApplicabilityResult` views plus the live
+   module/resource registries, retaining their source identities, and requires set equality with node declarations.
     A copied extra consumer, missing consumer, unavailable theory bundle and module whose pack
     lacks the required capability each fail.
 18. **Every run reward has later and boss opportunity**: fixtures reject a reward on the final
@@ -757,14 +919,18 @@ own units.
 19. **Prestige is non-vacuous**: zero-seal, partial-perfect and completed-mixed states are false;
     completed with exactly one achieved seal per selected layer is true; duplicate or missing
     layer seals are invalid before eligibility.
-20. **One terminal authority**: `campaign_abandoned` yields `{kind:"abandoned"}`; the exact seal
-    denominator yields `{kind:"completed"}`; no event follows either. Mutating only the
-    materialized `campaign_runs.status` is detected as projection drift and never changes the fold.
-21. **Durable awards are exact and idempotent**: issuing one completion, prestige or cosmetic
-    award twice inserts one row and returns the same bytes. Active/abandoned runs, wrong learner,
-    campaign digest/version mismatch, wrong gate, unknown appearance id and absent document grant
-    each insert zero rows.
-22. **Account lifecycle is exhaustive**: the account-data guard fails if any campaign table is
+20. **One atomic terminal authority**: non-final and final `node_committed` events with/without a
+    resource reward fold as one semantic unit; final commit yields `{kind:"completed"}` with every
+    seal/income/reward/auto-equip/award effect, while injected failure at each step yields none.
+    Concurrent duplicate submit commits once. `campaign_abandoned` yields `{kind:"abandoned"}`;
+    no later event follows either. Materialized-status-only mutation is projection drift.
+21. **Durable awards are exact, atomic and idempotent**: final submit inserts each eligible
+    completion/prestige/cosmetic row in the same transaction and retry returns the same event/result/
+    award bytes. Crash before commit leaves neither event nor award; crash after commit/retry sees
+    both. Active/abandoned runs, wrong learner, snapshot/digest mismatch, wrong gate, unknown
+    appearance id and absent document grant insert zero rows.
+22. **Account lifecycle is exhaustive**: the account-data guard fails if any campaign table or the
+    run-origin/document-snapshot fields are
     absent from export, hard delete, restore or merge. An export→delete→restore round trip preserves
     canonical run/events/award bytes and derived ownership; the appliance backup/restore journey
     proves the same rows survive an upgrade.
@@ -772,10 +938,17 @@ own units.
     consumer and durable-grant shapes; the register digest changes in the landing commit. Editing
     schema v1, omitting the live claim, or landing `training-mode-variants` against v1 fails the
     register/first-parent checks.
-24. **Complete campaign UX journey**: browser tests start from Campaign home, choose a path,
+24. **Official content + complete campaign UX journey**: at least one registered, OWNER/human-
+    authored official campaign spans grounded opening, middlegame and endgame consequence packs,
+    has reviewed theory/provenance and a dependency availability matrix, and is not byte-equal to
+    the disposable fixture. Browser tests exercise the full closed endpoint family: start from
+    Campaign home, choose a path,
     inspect/equip a reward, start and play an encounter, submit it, see the acquired reward, use it
     at a later boss, complete the run, receive idempotent durable awards, open Review and start a
-    new run. A parallel abandonment journey reaches no completion/prestige award.
+   new run. Response-loss retries for create/start/submit/loadout return stored bytes; stale tab,
+   forbidden learner and terminal mutations render typed errors. Direct Review URL/refresh and
+   export/delete/restore preserve `RunOrigin`; a plain run remains originless. A parallel
+   abandonment journey reaches no completion/prestige award.
 25. **Board and access stability**: the campaign journey passes desktop, narrow mobile, 200% zoom,
     reduced-motion, keyboard and semantic-grid projections with no horizontal page overflow, no
     post-hint/reward square-size change, no covered tappable square and no primitive settings wall.
@@ -789,8 +962,9 @@ own units.
 | D6 | **The [[D1151]] catalogue-progression surface** (amendment 2026-08-23, claude on that ruling). The owner ruled campaign progression denominated in *the catalogue* — shapes met, structures played, the what's-missing mark **on the pack card** rather than a progress screen (`06:368-397`) — and this RFC has no seam for it: no collection surface, and §7's node-card vocabulary is a **closed list** (`:415-419`) that cannot express a what's-missing mark. The successor owes (a) the surface, (b) the mark's home on the pack card, and (c) the [[D300]] vocabulary prerequisite, which is **already counted and need not be re-derived**: the supply-side census is **15 of 49 lenses and 9 of 25 shapes unnamed** (`roguelike-run-design.md:294-311`), so the prerequisite is a bounded naming job against a measured denominator rather than an open-ended vocabulary design. Carries the standing guard from [[D1171]]: the catalogue is lawful **precisely because it claims nothing about the learner**, and one careless sentence collapses it into the skill-credit shape R20 disqualifies | `planning/campaign/` | that amendment's registration | |
 | D3 | Army-building / prestige — was blocked on the OWNER fork: D893(3)'s *"unlocks harder bosses"* versus D334's *"winning may unlock convenience and variety, never content"* | OWNER | the ruling's log entry; the amendment citing it | **DISCHARGED 2026-08-23 by [[D1040]] and folded 2026-08-30.** Playing unlocks the core path; winning gates only §3.6's exact prestige mark/cosmetic layer. Neither prestige nor durable ownership enters the educational availability algebra |
 | D4 | Evidence-dark fun nodes and time controls (nothing exists to build on — `clockState` is an untyped passthrough). Generic cosmetic rewards are no longer in this discharge: §3.6 admits only shared-catalog appearance ids after [[D1696]] lands | `planning/campaign/` | that amendment's registration | |
-| D5 | v1 implementation per this specification, criteria 1–25 | codex | the implementing commits; ledger flips per §9 | |
+| D5 | v1 mechanics implementation per this specification, excluding chess-curriculum authorship | codex | the implementing commits; ledger flips per §9 | |
 | D7 | Richer cross-run variety rewards (titles, modifiers, skip starts, variant runs) require a typed meta-reward registry and one real consumer per member; [[D1698]] refuses generic ids. This does not block the 1.0 marks + shared-catalog cosmetic horizon | `planning/campaign/` | the successor meta-reward RFC's accepted registration | |
+| D8 | At least one official 1.0 campaign authored/reviewed as chess curriculum over opening, middlegame and endgame consequences, with grounded theory/provenance, varied paths, later/boss reward opportunities and a dependency availability matrix; the disposable fixture cannot discharge this | OWNER / human chess-content authority | official content commit + criterion-24 journey receipt after foundations stabilize | |
 
 **Discharged BY this RFC's registration:** `rfc/intent-presets.md` Discharge D3 (campaign as an
 eighth context) — its cell names *"the campaign RFC's registration"* as the recording site; the
@@ -817,10 +991,10 @@ set).
 - **D960 (landed)** — the campaign/play "run" naming collision is pinned: `CampaignRun` in
   every symbol and table, bare "run" reserved for play runs; the container D303 wanted arrives
   campaign-shaped (`CampaignDocument`), with the Track generalization left open.
-- **D961 (landed)** — 🐞-class honesty note: the play-run record does not know it served a
-  campaign encounter; the linkage lives in `campaign_events`, run-schema lane 0.19 is
-  named-and-declined with the §5.3 reopen condition (any non-campaign consumer needing per-run
-  campaign identity converts the join into a lane claim at its RFC's turn).
+- **D961 (landed; repaired by [[D2083]])** — the reopen condition fired: Review, export and
+  longitudinal readers all need campaign identity outside the campaign tables. This RFC now claims
+  run-schema lane 0.25 for exact `RunOrigin`; the campaign-side join remains mutation authority but
+  is no longer the only identity source.
 - **D962 (landed)** — the persona'd-rated-boss disjointness (derivation gap 11) is recorded
   and routed to Discharge D1: `RunOpponentPolicy.profile` forbids `targetElo`; the rated
   predicate requires a rung — a rated persona boss needs a rung-calibrated profile or no
@@ -828,6 +1002,20 @@ set).
 
 ## Changelog
 
+- 2026-08-30 (**second author repair**): repaired the ten returned blockers as one replayable
+  operation boundary. The final seal, act/reward income, unlock, auto-equip, terminal marker and
+  durable awards now commit as one `node_committed` transaction; completion is derived from the
+  exact nine-layer cursor rather than accepted from a caller. Campaign runs pin canonical document
+  bytes and digest; module, theory and resource projections are family-specific; loadout changes are
+  durable; resource grants enter a source-identified ledger; Review/export/restore consume exact
+  run-schema lane 0.25 origin; and the authenticated API is an eleven-operation closed family with
+  revision/idempotency semantics. Consumer compilation serializes behind the named pack-capability
+  and theory-applicability authorities. The disposable contract fixture is separated from the
+  official owner/human-authored 1.0 campaign obligation. `make campaign-two-horizon-author-contract`
+  passes 25/25; the unchanged historical fresh-review harness fails all ten old assertions, the
+  intended inversion. Exact receipt:
+  `planning/campaign/second-author-repair-2026-08-30.md`. Fresh independent review still gates
+  acceptance and all implementation.
 - 2026-08-30 (**fresh independent return**): returned on [[D2077]]–[[D2086]]. Final-node
   terminality conflicts with required reward events; equipment has no mutation; campaign document
   digests are not durable; resource rewards do not enter the balance; consumer closure depends on

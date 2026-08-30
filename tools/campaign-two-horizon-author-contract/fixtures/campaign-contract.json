@@ -1,0 +1,29 @@
+{
+  "id": "fixture-only",
+  "version": 1,
+  "economy": { "startingCharges": 2 },
+  "startingModules": ["rules_floor"],
+  "acts": [
+    {
+      "layers": [
+        [{ "id": "n1", "act": 0, "layer": 0, "consumes": ["module:guided_hint"], "reward": { "id": "module:guided_hint" } }],
+        [{ "id": "n2", "act": 0, "layer": 1, "consumes": ["module:guided_hint"] }],
+        [{ "id": "n3", "act": 0, "layer": 2, "boss": true, "consumes": ["module:guided_hint"] }]
+      ]
+    },
+    {
+      "layers": [
+        [{ "id": "n4", "act": 1, "layer": 0, "consumes": ["module:guided_hint"] }],
+        [{ "id": "n5", "act": 1, "layer": 1, "consumes": ["module:guided_hint"] }],
+        [{ "id": "n6", "act": 1, "layer": 2, "boss": true, "consumes": ["module:guided_hint"] }]
+      ]
+    },
+    {
+      "layers": [
+        [{ "id": "n7", "act": 2, "layer": 0, "consumes": ["module:guided_hint"] }],
+        [{ "id": "n8", "act": 2, "layer": 1, "consumes": ["module:guided_hint"] }],
+        [{ "id": "n9", "act": 2, "layer": 2, "boss": true, "consumes": ["module:guided_hint"] }]
+      ]
+    }
+  ]
+}

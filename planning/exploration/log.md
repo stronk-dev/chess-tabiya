@@ -11826,3 +11826,20 @@ pre-provider digest. Exact receipt:
 `planning/platform-alignment/bot-policy/second-author-repair-2026-08-30.md`. Fresh review still
 gates implementation; no production, schema, migration, endpoint, storage, roster, content,
 archive or protected-design byte changed.
+
+## 2026-08-30 — Campaign core D2077–D2086 second author repair
+
+Repaired the returned campaign contract as one atomic operation boundary rather than ten local
+patches. Final-node terminality is derived from the exact nine-layer route; one event and database
+transaction own the seal, both income sources, unlock, auto-equip, terminal state and durable
+awards. Campaign definition bytes/digest survive catalogue removal, module/theory/resource
+families have separate projections, loadout is writable, consumer compilation names its pack and
+theory authorities, Review/export/restore use exact run origin, and the authenticated journey is an
+eleven-operation revision/idempotency family. The physical disposable fixture is distinct from the
+human/owner-authored official 1.0 campaign obligation.
+
+`make campaign-two-horizon-author-contract` passes 25/25. The unchanged historical
+`make campaign-two-horizon-fresh-review` fails all ten old blocker assertions, the intended
+inversion. Exact receipt: `planning/campaign/second-author-repair-2026-08-30.md`. Fresh review still
+gates acceptance and implementation; no production, schema, migration, official content, archive
+or protected-design byte changed.

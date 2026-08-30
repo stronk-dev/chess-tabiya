@@ -5,108 +5,92 @@ import test from "node:test";
 const rfc = readFileSync("rfc/campaign-core.md", "utf8");
 const register = readFileSync("rfc/README.md", "utf8");
 const normative = rfc.split("\n## Changelog\n", 1)[0];
+const includesAll = (text, fragments) => fragments.forEach((fragment) => assert.match(text, fragment));
 
-function includesAll(text, fragments) {
-  for (const fragment of fragments) assert.match(text, fragment);
-}
-
-test("author repair remains recorded beneath the fresh-review return boundary", () => {
-  includesAll(rfc, [
-    /Status:\*\* draft — \*\*returned by fresh independent buildability review 2026-08-30/,
-    /\[\[D2077\]\]–\[\[D2086\]\]/,
-    /No campaign schema,\s+migration, production route, seed campaign or surface may resume before author repair/,
-    /two-horizon author repair on \[\[D1592\]\]–\[\[D1597\]\]/,
-  ]);
+test("D2077-D2086 repair remains draft and implementation-refused", () => {
+  includesAll(rfc, [/D2077.*D2086.*author repair/su, /fresh\s+independent review required/u,
+    /No campaign schema, migration, production route, official\s+campaign or surface may resume/u]);
 });
 
-test("campaign schema lane 2 and migration ownership are declared once", () => {
-  assert.equal((rfc.match(/campaign-schema \| lane 2 \|/g) ?? []).length, 1);
-  assert.match(rfc, /migration \| position behind bot-policy \| campaign_runs; campaign_events; campaign_reward_awards/);
-  assert.match(register, /\| lane 2 \| `campaign-core\.md` \|/);
+test("all three versioned claims are registered once", () => {
+  assert.equal((rfc.match(/campaign-schema \| lane 2 \|/gu) ?? []).length, 1);
+  assert.equal((rfc.match(/run-schema \| lane 0\.25 \|/gu) ?? []).length, 1);
+  assert.match(rfc, /migration \| position behind bot-policy \| campaign_runs; campaign_events; campaign_reward_awards/u);
+  assert.match(register, /\| lane 2 \| `campaign-core\.md` \|/u);
 });
 
-test("run rewards are a closed semantic union rather than generic tool ids", () => {
-  includesAll(normative, [
-    /kind: "module_unlock"; moduleId: UnlockableModuleId/,
-    /kind: "theory_unlock"; bundleId: TheoryBundleId; passageId: TheoryPassageId/,
-    /kind: "resource_grant"; resourceId: "campaign_rewind_charge"; amount: PositiveInteger/,
-    /generic `tool_unlock`, free-form reward id/,
-    /acquisition asserts\s+availability only/i,
-  ]);
+test("D2077 terminal submit is one indivisible event and transaction", () => {
+  includesAll(normative, [/interface NodeCommittedEvent/u, /kind: "node_committed"/u,
+    /there are no trailing events/u, /same database\s+transaction.*single event.*materialized status/su,
+    /Injected failure.*rolls back all effects/su, /concurrent or\s+response-loss retry/u]);
+  assert.doesNotMatch(normative, /appends\s+`node_sealed[\s\S]{0,300}appends.*`charge_earned/u);
 });
 
-test("presets cannot erase owned or equipped campaign state", () => {
-  includesAll(normative, [
-    /owned\s+= acquired in this CampaignRun/,
-    /equipped\s+= explicitly selected in the campaign loadout/,
-    /Preset changes mutate neither `owned` nor `equipped`/,
-    /honesty_ceiling.*resting_until_act.*boss_suppressed.*source_unavailable.*not_equipped/s,
-    /zero or multiple reasons/,
-  ]);
-  assert.doesNotMatch(normative, /^effective[^\n]*presetRequest/m);
+test("D2078 module loadout has a durable typed mutation", () => {
+  includesAll(normative, [/`loadout_changed \{ equippedModuleIds \}`/u,
+    /PUT \/campaign-runs\/:campaignRunId\/loadout/u, /supports both equip and\s+unequip/u,
+    /CAMPAIGN_LOADOUT_FAMILY_INVALID/u, /Preset changes append no campaign event/u]);
 });
 
-test("authored consumers are checked against runtime and every continuation", () => {
-  includesAll(normative, [
-    /declarations are not authority/,
-    /authored `consumes` set must equal the compiled set/,
-    /every\s+reachable continuation after acquisition/,
-    /later consumer and \(b\) a later boss\s+consumer on every continuation/,
-    /proves opportunity only, never usefulness or learning effect/,
-  ]);
+test("D2079 exact campaign bytes survive replay and restore", () => {
+  includesAll(normative, [/campaign_document_digest TEXT NOT NULL/u, /campaign_document TEXT NOT NULL/u,
+    /keys by `\{id,version,digest\}`/u, /CAMPAIGN_DOCUMENT_VERSION_MUTATED/u,
+    /Removing a document.*does not make an existing run\s+unreplayable/su,
+    /restore refuses a digest mismatch/u]);
 });
 
-test("prestige and durable rewards are exact and non-gating", () => {
-  includesAll(normative, [
-    /status === "completed"/,
-    /seals\.length === selectedLayerCount/,
-    /kind: "completion_mark"/,
-    /kind: "prestige_mark"/,
-    /kind: "cosmetic_unlock"/,
-    /shared server-readable appearance\s+catalog/,
-    /never\s+gate ordinary packs, theory, the standard campaign path or default starting tools/,
-  ]);
+test("D2080 resource rewards enter a source-identified charge ledger", () => {
+  includesAll(normative, [/`reward_grant \{ nodeId, rewardIdentity, amount \}`/u,
+    /starting \+ act-seal income \+ source-identified reward income − spent/u,
+    /two rewards for the same\s+resource but different node\/reward identities both count/u,
+    /rewardIncome/u]);
 });
 
-test("abandonment is event-owned with discriminated terminal cursors", () => {
-  includesAll(normative, [
-    /\{ kind: "completed" \}/,
-    /\{ kind: "abandoned" \}/,
-    /`campaign_abandoned` is the sole abandonment\s+authority/,
-    /No event may follow completion or abandonment/,
-    /materialized `campaign_runs\.status` is detected as projection drift/,
-  ]);
+test("D2081 consumer closure serializes behind exact producers", () => {
+  includesAll(normative, [/pack-capability-contract\.md/u, /theory-drill-current-joins\.md/u,
+    /derivePackCapabilityRequirements/u, /compileApplicabilityResult/u,
+    /CAMPAIGN_CONSUMER_AUTHORITY_UNAVAILABLE/u, /never substitutes a\s+campaign-local graph/u]);
 });
 
-test("durable award storage has one idempotency identity and full lifecycle", () => {
-  includesAll(normative, [
-    /CREATE TABLE campaign_reward_awards/,
-    /learnerId, campaignId, campaignVersion,\s+campaignRunId, durableRewardId/,
-    /duplicate command returns the existing row byte-for-byte/,
-    /Export includes campaign run\/event history, award history and the\s+derived owned reward set/,
-    /Hard deletion cascades all three/,
-    /Restore imports canonical rows/,
-    /Account merge\s+cannot silently choose/,
-    /Backup\/restore and\s+upgrade verification/,
-  ]);
+test("D2082 reward families have different projections", () => {
+  includesAll(normative, [/ModuleInventoryProjection/u, /TheoryInventoryProjection/u,
+    /ResourceLedgerProjection/u, /Only modules are equipable/u,
+    /authorizing_module_inactive/u, /disclosure_ceiling/u]);
+  assert.doesNotMatch(normative, /For each owned module or theory item/u);
 });
 
-test("the 1.0 surface is a complete journey and cannot destabilize the board", () => {
-  includesAll(normative, [
-    /Campaign home and resume/,
-    /Map.*\/campaign\/:campaignRunId/s,
-    /Encounter preparation/,
-    /In-run context/,
-    /Node result/,
-    /Run result/,
-    /without inserting content\s+between the board and controls or reducing the board/,
-    /no horizontal page overflow, no\s+post-hint\/reward square-size change, no covered tappable square and no primitive settings wall/,
-  ]);
+test("D2083 campaign origin is a real run-schema claim", () => {
+  includesAll(normative, [/run-schema \| lane 0\.25/u, /type RunOrigin/u,
+    /campaignDocumentDigest/u, /written in `run\.started`/u,
+    /campaign_history_unavailable/u, /Plain runs\s+carry no origin and infer none/u]);
 });
 
-test("the still-open failure policy remains outside the amendment", () => {
-  includesAll(normative, [
-    /\[\[D1600\]\]'s no-exhaustible-tool failure stage/,
-    /does not decide when an item enters that state/,
-  ]);
+test("D2084 complete API has ownership, revisions, idempotency and typed errors", () => {
+  const operations = [...normative.matchAll(/`(?:GET|POST|PUT) \/(?:campaigns|campaign-runs|campaign-rewards)[^`]*`/gu)];
+  assert.ok(operations.length >= 11);
+  includesAll(normative, [/Every route resolves learner identity from authentication/u,
+    /Every mutation uses §6\.0's durable\s+command identity/u, /CAMPAIGN_REVISION_STALE/u,
+    /CAMPAIGN_COMMAND_REUSED/u, /no handler returns a generic\s+500/u]);
+});
+
+test("D2085 terminal transition is the award issuer", () => {
+  includesAll(normative, [/Durable award issuance is part of the terminal transition/u,
+    /same transaction/u, /if the campaign is completed, its required award rows committed/u,
+    /Crash\/fault injection before commit leaves neither/u]);
+});
+
+test("D2086 fixture and official campaign have different authorities", () => {
+  includesAll(normative, [/tools\/campaign-two-horizon-author-contract\/fixtures\/campaign-contract\.json/u,
+    /never registered or rendered/u, /owner\/human chess-content authority/iu,
+    /opening, middlegame and endgame consequence encounters/u,
+    /law 8 forbids.*choosing the campaign's\s+chess lessons/su,
+    /D8 \| At least one official 1\.0 campaign/u]);
+  assert.doesNotMatch(normative, /seed `content\/campaigns\/seed-endgames\.json`/u);
+});
+
+test("the core refusals and complete UX boundary survive", () => {
+  includesAll(normative, [/kind: "module_unlock"; moduleId: UnlockableModuleId/u,
+    /generic `tool_unlock`, free-form reward id/u, /proves opportunity only, never usefulness or learning effect/u,
+    /Campaign home and resume/u, /Encounter preparation/u, /In-run context/u, /Node result/u,
+    /Run result/u, /no primitive settings wall/u, /\[\[D1600\]\]'s no-exhaustible-tool failure stage/u]);
 });

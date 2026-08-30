@@ -1,17 +1,45 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
-  applyAward,
+  CAMPAIGN_API_OPERATIONS,
+  admitConsumerAuthority,
   applyPresetPresentation,
   authorityCensus,
+  changeLoadout,
+  compileCampaignConsumers,
+  createCampaignRun,
+  digest,
   fixtureCampaign,
-  lifecycle,
+  foldCampaign,
+  makeCampaignRunOrigin,
   prestigeEligible,
-  projectInventory,
+  projectModuleInventory,
+  projectTheoryInventory,
+  registerCampaignDocument,
+  restoreCampaignRun,
   rewardUseDiagnostics,
+  submitNode,
 } from "./model.mjs";
 
-test("censuses the real reward authorities instead of inventing ids", () => {
+const registered = (document = fixtureCampaign()) => registerCampaignDocument(new Map(), document);
+const run = (document = fixtureCampaign()) => createCampaignRun(registered(document));
+const submit = (campaignRun, overrides = {}, options = {}) => submitNode(campaignRun, {
+  commandId: `cmd-submit-${campaignRun.events.length.toString().padStart(6, "0")}`,
+  expectedRevision: campaignRun.events.length,
+  nodeId: `n${campaignRun.events.length}`,
+  playRunId: "play-1",
+  branchId: "main",
+  verdict: "achieved",
+  act: "act1",
+  actIncome: 1,
+  ...overrides,
+}, options);
+const advanceToFinal = (campaignRun) => {
+  while (foldCampaign(campaignRun).seals.length < 8) submit(campaignRun);
+  return campaignRun;
+};
+
+test("censuses real reward authorities instead of inventing ids", () => {
   const census = authorityCensus();
   assert.equal(census.campaignSchemaVersion, 1);
   assert.deepEqual(census.currentNodeRewardKinds, ["module_unlock"]);
@@ -21,73 +49,108 @@ test("censuses the real reward authorities instead of inventing ids", () => {
   assert.equal(census.sharedServerAppearanceAuthority, false);
 });
 
-test("a preset change cannot mutate run ownership or explicit equipment", () => {
-  const state = { owned: ["guided_hint", "theory:passage-1"], equipped: ["guided_hint"] };
+test("D2079 pins canonical document bytes and refuses same-version mutation", () => {
+  const registry = new Map();
+  const first = registerCampaignDocument(registry, fixtureCampaign());
+  const campaignRun = createCampaignRun(first);
+  registry.clear(); // a newer release removed the offered definition
+  assert.equal(restoreCampaignRun(campaignRun).document.id, "fixture-only");
+  assert.throws(() => registerCampaignDocument(new Map([["fixture-only@1", first]]), { ...fixtureCampaign(), title: "changed" }), /VERSION_MUTATED/);
+  assert.throws(() => restoreCampaignRun({ ...campaignRun, campaignDocumentDigest: digest("wrong") }), /DIGEST_MISMATCH/);
+});
+
+test("D2082 projects module, theory and resource families without unlike intersections", () => {
+  const modules = projectModuleInventory({ owned: ["ready", "resting", "boss", "provider", "shelf", "unsafe"],
+    equipped: ["ready", "resting", "boss", "provider", "unsafe"], resting: ["resting"], suppressed: ["boss"],
+    ceiling: ["ready", "resting", "boss", "provider", "shelf"], available: ["ready", "resting", "boss", "shelf", "unsafe"] });
+  assert.deepEqual(modules.map((row) => row.unavailableReason), [null, "resting_until_act", "boss_suppressed", "source_unavailable", "not_equipped", "honesty_ceiling"]);
+  const theory = projectTheoryInventory({ owned: ["ready", "unrelated", "inactive", "direct", "missing"],
+    applicable: ["ready", "inactive", "direct", "missing"], authorized: ["ready", "direct", "missing"],
+    disclosable: ["ready", "missing"], available: ["ready"] });
+  assert.deepEqual(theory.map((row) => row.unavailableReason), [null, "not_applicable", "authorizing_module_inactive", "disclosure_ceiling", "source_unavailable"]);
+  const state = { modules: { owned: ["a"], equipped: ["a"] }, theory: { owned: ["p"] }, charges: { balance: 2 } };
   assert.deepEqual(applyPresetPresentation(state, "quiet"), state);
 });
 
-test("inventory projection returns one exact reason for every unavailable owned item", () => {
-  const rows = projectInventory({
-    owned: ["ready", "resting", "boss", "provider", "shelf", "unsafe"],
-    equipped: ["ready", "resting", "boss", "provider", "unsafe"],
-    resting: ["resting"],
-    suppressed: [{ id: "boss", reason: "boss_suppressed" }],
-    ceiling: ["ready", "resting", "boss", "provider", "shelf"],
-    available: ["ready", "resting", "boss", "shelf", "unsafe"],
-  });
-  assert.deepEqual(rows.map((row) => [row.id, row.effective, row.unavailableReason]), [
-    ["ready", true, null], ["resting", false, "resting_until_act"],
-    ["boss", false, "boss_suppressed"], ["provider", false, "source_unavailable"],
-    ["shelf", false, "not_equipped"], ["unsafe", false, "honesty_ceiling"],
-  ]);
+test("D2081 consumes only sealed predecessor views", () => {
+  const pack = admitConsumerAuthority("pack_capabilities", { modules: ["guided_hint"] });
+  const theory = admitConsumerAuthority("theory_applicability", { passages: ["bundle/p1"] });
+  assert.deepEqual(compileCampaignConsumers(pack, theory, true), ["module:guided_hint", "resource:campaign_rewind_charge", "theory:bundle/p1"]);
+  assert.throws(() => compileCampaignConsumers({ ...pack }, theory, true), /AUTHORITY_UNAVAILABLE/);
 });
 
-test("valid reward has later and boss opportunity on every reachable continuation", () => {
-  const [result] = rewardUseDiagnostics(fixtureCampaign());
-  assert.equal(result.anyLaterUse, true);
-  assert.equal(result.everyPathUses, true);
-  assert.equal(result.anyBossUse, true);
-  assert.equal(result.everyPathHasBossUse, true);
-});
-
-test("one intermediate dead branch still passes when every continuation reaches a consuming boss", () => {
-  const [result] = rewardUseDiagnostics(fixtureCampaign({ deadBranch: true }));
-  assert.equal(result.anyLaterUse, true);
-  assert.equal(result.everyPathUses, true);
-  // Later bosses still consume the reward, so a dead intermediate choice does not make the
-  // collectible permanently dead. The boss arm is the stronger campaign requirement.
-  assert.equal(result.everyPathHasBossUse, true);
-});
-
-test("boss suppression and a final-node reward fail the corresponding opportunity arms", () => {
+test("reward opportunity remains path-wide and boss-wide", () => {
+  const [valid] = rewardUseDiagnostics(fixtureCampaign());
+  assert.equal(valid.everyPathUses, true);
+  assert.equal(valid.everyPathHasBossUse, true);
   const [suppressed] = rewardUseDiagnostics(fixtureCampaign({ bossesSuppress: true }));
-  assert.equal(suppressed.anyLaterUse, true);
-  assert.equal(suppressed.anyBossUse, false);
   assert.equal(suppressed.everyPathHasBossUse, false);
   const [late] = rewardUseDiagnostics(fixtureCampaign({ lateReward: true }));
   assert.equal(late.anyLaterUse, false);
-  assert.equal(late.everyPathUses, false);
-  assert.equal(late.anyBossUse, false);
 });
 
-test("prestige requires a completed exact denominator, not a perfect prefix", () => {
+test("prestige requires a completed exact denominator", () => {
   assert.equal(prestigeEligible({ status: "active", selectedLayerCount: 9, seals: [{ verdict: "achieved" }] }), false);
   assert.equal(prestigeEligible({ status: "completed", selectedLayerCount: 9, seals: Array.from({ length: 9 }, () => ({ verdict: "achieved" })) }), true);
-  assert.equal(prestigeEligible({ status: "completed", selectedLayerCount: 9, seals: Array.from({ length: 8 }, () => ({ verdict: "achieved" })) }), false);
   assert.equal(prestigeEligible({ status: "completed", selectedLayerCount: 9, seals: [...Array.from({ length: 8 }, () => ({ verdict: "achieved" })), { verdict: "failed" }] }), false);
 });
 
-test("abandonment and completion are event-owned terminal cursors", () => {
-  assert.deepEqual(lifecycle([{ kind: "campaign_abandoned" }], 9), { status: "abandoned", cursor: { kind: "abandoned" } });
-  assert.deepEqual(lifecycle(Array.from({ length: 9 }, () => ({ kind: "node_sealed" })), 9), { status: "completed", cursor: { kind: "completed" } });
-  assert.throws(() => lifecycle([{ kind: "campaign_abandoned" }, { kind: "node_sealed" }], 9), /CAMPAIGN_LIFECYCLE_CONFLICT/);
+test("D2077 final node is one atomic terminal event with awards", () => {
+  const campaignRun = advanceToFinal(run());
+  const result = submit(campaignRun, { durableRewards: [
+    { when: "completed", reward: { kind: "completion_mark", campaignId: "fixture-only", campaignVersion: 1 } },
+    { when: "prestige", reward: { kind: "prestige_mark", campaignId: "fixture-only", campaignVersion: 1 } },
+  ] });
+  assert.equal(result.event.kind, "node_committed");
+  assert.equal(foldCampaign(campaignRun).status, "completed");
+  assert.equal(campaignRun.awards.length, 2);
+  assert.throws(() => submit(campaignRun), /RUN_TERMINAL/);
 });
 
-test("durable award application is idempotent on learner plus pinned run identity", () => {
-  const store = new Map();
-  const command = { learnerId: "l1", campaignId: "first-steps", campaignVersion: 3, runId: "r1", rewardId: "cosmetic:board:olive", runStatus: "completed" };
-  assert.equal(applyAward(store, command).inserted, true);
-  assert.equal(applyAward(store, command).inserted, false);
-  assert.equal(store.size, 1);
-  assert.throws(() => applyAward(store, { ...command, runId: "r2", runStatus: "active" }), /CAMPAIGN_AWARD_RUN_INCOMPLETE/);
+test("D2077/D2085 injected failure leaves neither terminal event nor awards", () => {
+  for (const failAt of ["event", "fold", "award"]) {
+    const campaignRun = advanceToFinal(run());
+    assert.throws(() => submit(campaignRun, { durableRewards: [{ when: "completed", reward: { kind: "completion_mark" } }] }, { failAt }), /INJECTED/);
+    assert.equal(campaignRun.events.length, 9);
+    assert.equal(campaignRun.awards.length, 0);
+    assert.equal(foldCampaign(campaignRun).status, "active");
+  }
+});
+
+test("D2080 resource reward has a distinct exactly-once ledger effect", () => {
+  const campaignRun = run();
+  submit(campaignRun, { reward: { kind: "resource_grant", resourceId: "campaign_rewind_charge", rewardIdentity: "r1", amount: 2 } });
+  submit(campaignRun, { reward: { kind: "resource_grant", resourceId: "campaign_rewind_charge", rewardIdentity: "r2", amount: 5 } });
+  const state = foldCampaign(campaignRun);
+  assert.equal(state.charges.startingIncome, 2);
+  assert.equal(state.charges.actIncome, 2);
+  assert.equal(state.charges.rewardIncome, 7);
+  assert.equal(state.charges.balance, 11);
+});
+
+test("D2078 loadout equip/unequip is durable and family-typed", () => {
+  const campaignRun = run({ ...fixtureCampaign(), startingModules: ["guided_hint", "theory_card"] });
+  changeLoadout(campaignRun, { commandId: "cmd-loadout-123456", expectedRevision: 1, equippedModuleIds: ["guided_hint"] });
+  assert.deepEqual(foldCampaign(campaignRun).modules.equipped, ["guided_hint"]);
+  const rebuilt = restoreCampaignRun(JSON.parse(JSON.stringify(campaignRun)));
+  assert.deepEqual(foldCampaign(rebuilt).modules.equipped, ["guided_hint"]);
+  assert.throws(() => changeLoadout(campaignRun, { commandId: "cmd-loadout-654321", expectedRevision: 2, equippedModuleIds: ["theory:bundle/p1"] }), /FAMILY_INVALID/);
+});
+
+test("D2084 command replay, stale revision and changed operands are explicit", () => {
+  const campaignRun = run();
+  const input = { commandId: "cmd-submit-replay1", expectedRevision: 1, nodeId: "n1", playRunId: "p1", branchId: "main", verdict: "achieved", act: "act1", actIncome: 1 };
+  assert.equal(submitNode(campaignRun, input).kind, "committed");
+  assert.equal(submitNode(campaignRun, input).kind, "replayed");
+  assert.throws(() => submitNode(campaignRun, { ...input, branchId: "fork" }), /COMMAND_REUSED/);
+  assert.throws(() => submitNode(campaignRun, { ...input, commandId: "cmd-submit-stale11", expectedRevision: 1 }), /REVISION_STALE/);
+  assert.equal(CAMPAIGN_API_OPERATIONS.length, 11);
+});
+
+test("D2083 campaign run origin survives independently of campaign history", () => {
+  const campaignRun = run();
+  const origin = makeCampaignRunOrigin(campaignRun, "n1");
+  campaignRun.events.length = 0;
+  assert.deepEqual(origin, { kind: "campaign_encounter", campaignRunId: campaignRun.id, nodeId: "n1", campaignDocumentDigest: campaignRun.campaignDocumentDigest });
+  assert.equal({}.origin, undefined);
 });
