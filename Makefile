@@ -120,6 +120,10 @@ semantic-validation-matrix:
 semantic-validation-author-contract:
 	node --test tools/d2039-semantic-validation-author-contract/contract.test.mjs
 
+.PHONY: semantic-validation-fresh-review
+semantic-validation-fresh-review:
+	node --test tools/d2194-semantic-validation-fresh-review/*.test.mjs
+
 module-evidence-assembly:
 	./node_modules/.bin/vitest run --config tools/d1865-evidence-assembly-harness/vitest.config.ts --reporter=verbose
 

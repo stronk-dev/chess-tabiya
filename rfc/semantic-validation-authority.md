@@ -1,8 +1,11 @@
 # RFC: Executable semantic-validation authority
 
-- **Status:** draft — author-repaired 2026-08-30 on [[D2039]], [[D2040]], [[D2041]], [[D2042]]
-  and [[D2043]]; requires fresh
-  independent buildability review before implementation
+- **Status:** draft — RETURNED by fresh independent review 2026-08-30 on
+  [[D2194]]–[[D2197]]. The D2039–D2043 repair survives, but the case/operation protocol references
+  undefined input/ref maps; projection-wide verdicts can launder unverified mint routes; missing
+  chess expectations are assigned to codex without an admissible authority; and mirror cases can
+  pass at zero events with no event-level pairing. `make semantic-validation-fresh-review` passes
+  4/4. Implementation and learner eligibility remain forbidden.
 - **Author:** codex, executing [[D1711]] / [[D1713]] / [[D1714]] after refreshing both research
   instruments at HEAD
 - **Created:** 2026-08-29
@@ -648,3 +651,24 @@ None require an owner ruling before independent review. The strict choices are m
 The buildability reviewer may return operation boundaries, digest closure or profile classifications
 that do not resolve to current symbols. That return is the intended gate, not permission to soften
 the criteria.
+
+## Fresh-return obligations (2026-08-30)
+
+- [[D2194]] — define closed case refs and a distributive operation input/result map for every
+  execution grain;
+- [[D2195]] — bind learner eligibility to value-authority factories/routes before a projection
+  verdict can admit an instance;
+- [[D2196]] — give every new expected chess semantic an exact oracle/witness, cited proposition or
+  human-authored authority rather than assigning truth authoring to codex; and
+- [[D2197]] — require non-empty canonical target-event pairing before mirror leaf comparison.
+
+The author repair must invert `make semantic-validation-fresh-review`, preserve D1711/D1713 and
+the D2039–D2043 author contract, then request another independent review. No implementation is
+authorized by an author-side green check.
+
+## Changelog
+
+- 2026-08-30: fresh independent review returned the D2039–D2043 repair on
+  [[D2194]]–[[D2197]]. Four executable arms cover undefined operation/case types, projection-wide
+  laundering of unverified mint routes, ungrounded LLM-authored chess expectations and vacuous
+  zero-event mirrors. Earlier repairs survive; no implementation is authorized.

@@ -12078,3 +12078,16 @@ The phase-aware v4/v5 split, shared read/write key, fixed-head identity and cent
 survive. `make assistance-register-third-fresh-review` passes 4/4. No production, workflow,
 register, schema, content, archive or protected-design byte changed. Exact review:
 `planning/assistance-config-register/third-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Semantic-validation authority fresh independent return
+
+Returned `semantic-validation-authority.md` on [[D2194]]–[[D2197]] after tracing case inputs,
+current evidence mint routes, fixture authorship and mirror non-vacuity. Three referenced protocol
+types are undefined; one passing projection can admit values from unverified alternate mint routes;
+missing chess expectations are assigned to codex without an oracle/citation/owner receipt; and a
+mirror pair can pass with zero target events and no event-level pairing.
+
+The authenticated population, completed/unavailable split, typed mirror leaf rules, application
+retention and live-root cardinality repairs survive. `make semantic-validation-fresh-review`
+passes 4/4. No production, schema, content, archive or protected-design byte changed. Exact review:
+`planning/semantic-validation-authority/fresh-independent-buildability-review-2026-08-30.md`.
