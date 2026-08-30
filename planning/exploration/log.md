@@ -11393,3 +11393,20 @@ refusal anchor replace prose/agent-guide authorities.
 `make pack-capability-fresh-review` 6/6. This is author repair only: fresh independent review still
 gates acceptance, lane-0.30 schema/migration/product/corpus work remains forbidden, and [[D560]]
 stays whole.
+
+## 2026-08-30 — provider-exchange fresh independent return
+
+Freshly reviewed the D2032–D2036 provider-exchange author repair and returned the RFC on
+[[D2056]]–[[D2062]]. The prior occurrence, authorization, local-domain and clock repairs survive,
+and all earlier 9 + 7 + 9 + 5 contract arms remain green. The new seven-arm reproduction shows that
+structural provider deliveries cannot meet the runtime-forgery criterion; run-head/recorded-item
+digests have no byte authority; retention TTL admits absolute and sliding implementations; engine
+endpoint/cache identity contains arbitrary strings; the five promised traversals have no named
+production door; the Syzygy local projection names both its inner fact and envelope as payload;
+and Maia request/application bounds are unspecified.
+
+The exact return is
+`planning/provider-exchange-and-execution/fresh-independent-buildability-review-2026-08-30.md` and
+`make provider-exchange-fresh-review` passes 7/7 as a blocker reproduction. No provider, schema,
+migration, content or learner-surface implementation changed; downstream RFCs remain forbidden
+from creating private provider authorities.

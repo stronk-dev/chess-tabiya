@@ -1,9 +1,13 @@
 # RFC: Provider exchange and projection execution
 
-- **Status:** draft — fourth-return author repair complete 2026-08-29 for [[D2032]]–[[D2036]].
-  Source leaves are occurrence/request-addressed; subject availability composes the shipped run
-  authority and has no public cache-digest probe; Syzygy local domain preflight is a typed
-  no-acquisition arm. The author fixtures pass; fresh independent review still gates implementation.
+- **Status:** draft — independently returned 2026-08-30 on [[D2056]]–[[D2062]] after the
+  D2032–D2036 author repair. Occurrence/addressing, authorization, local Syzygy preflight and split
+  clocks survive, but provider deliveries have no runtime seal; run/evidence subject digests and
+  cache TTL identity are undefined; engine/cache identity retains arbitrary strings; the five
+  promised traversals have no named production door; the Syzygy local projection has two payload
+  types; and Maia request/application bounds are absent. `make provider-exchange-fresh-review`
+  reproduces all seven. Implementation remains forbidden pending author repair and another fresh
+  review.
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
 - **Design refs:** `design/03-product-breadth.md` evidence architecture and provider-backed
@@ -1259,6 +1263,30 @@ None. This RFC supplies the shared evidence source and execution foundation requ
 breadth design. It does not choose a Support preset, a Review ranking, a bot personality or a
 learner-facing explanation.
 
+## Fresh-return author obligations (2026-08-30)
+
+This live RFC owns the seven returned seams; downstream consumers may not build private source
+substitutes while it is returned:
+
+- [[D2056]] — make acquisition/delivery scheduler-sealed runtime values and require every source
+  adapter to assert that seal.
+- [[D2057]] — publish one exact run-event-head / recorded-evidence-item / subject digest authority
+  and historical-prefix resolution rule.
+- [[D2058]] — define retained-entry monotonic state, absolute-versus-sliding TTL behavior and exact
+  expiry boundary.
+- [[D2059]] — replace arbitrary endpoint/cache/digest strings with exact per-operation projections,
+  closed images and branded types tied to live engine/network identity.
+- [[D2060]] — name the five callable production traversals and their composed application/auth
+  boundary.
+- [[D2061]] — choose one exact F1 payload for the Syzygy local-domain projection and its adapter
+  operands.
+- [[D2062]] — specify Maia admission ranges, clamp/refusal policy, literal option image and
+  requested-to-applied same-exchange proof.
+
+The author pass must invert `make provider-exchange-fresh-review`, preserve the prior 9 + 7 + 9 +
+5 arms, run full verification and request another independent review. It may not implement
+providers or learner bindings in the authoring commit.
+
 ## Acceptance criteria
 
 1. The D1700 harness's 96 direct members remain distinguishable and expand to 99 paths at the
@@ -1416,6 +1444,11 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-08-30: fresh independent review returned the fourth author repair on [[D2056]]–[[D2062]].
+  The seven-arm reproduction covers runtime receipt forgery, missing run/evidence digest bytes,
+  undefined TTL refresh/expiry, arbitrary engine/cache identities, unnamed production traversals,
+  the two-shape Syzygy local payload and unbounded/unproved Maia request application. The prior
+  9 + 7 + 9 + 5 contracts remain green; no implementation is authorized.
 - 2026-08-29: repaired [[D2032]]–[[D2036]] at authoring tier. Source requirements now preserve every
   occurrence and server-resolved subject, the public availability operation is bounded and
   ownership/role checked, and Syzygy outside-domain is a local preflight result structurally unable
