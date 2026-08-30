@@ -11707,3 +11707,20 @@ are redundant Maia/Syzygy paths whose projections are live through `declareLiveP
 the other five are unbound inspector-only foundations. Zero bound projections lack a production
 mint use, and the receipt now fails if that set becomes non-empty. No production evidence,
 projection, binding, schema, content, archive or protected-design byte changed.
+
+## 2026-08-30 — Provider-exchange D2056–D2062 author repair
+
+Repaired the seven seams from the fresh independent provider-exchange return without changing
+production code. The RFC now requires scheduler-owned runtime seals for acquisition, delivery and
+local-domain values; one branded run-prefix/evidence-item/subject digest authority resolved only
+inside an authorized run; absolute non-refreshing retained TTL; closed endpoint, engine and cache
+identity images; five named process-local operator CLI traversals; one whole sealed Syzygy local
+payload; and refuse-only Maia request/application semantics tied to live engine authorities.
+
+The new `make provider-exchange-author-repair` contract passes 7/7. The earlier 9 + 7 + 9 + 5
+provider contracts remain green. The historical `make provider-exchange-fresh-review` reproduction
+now fails all seven arms, which is the intended inversion; it was not weakened or rewritten. Exact
+repair and verification are recorded in
+`planning/provider-exchange-and-execution/author-repair-2026-08-30.md`. The RFC remains draft,
+implementation remains forbidden, and a new independent buildability review is next. No provider,
+schema, pack, content, archive or protected-design byte changed.
