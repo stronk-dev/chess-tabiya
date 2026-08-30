@@ -1,13 +1,14 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — independently returned 2026-08-30 on [[D2050]]–[[D2054]] after the
-  D1982–D1992 author repair. The new bridge/dependency/canonicalization direction survives, but the
-  public ID regex rejects shipped one-segment identities and criterion 1 returns the old scalar
-  version shape; the applicability mapping still has no authored authority and its one-object
-  annotation grammar cannot map enum members; two evaluator roots remain prose rather than sites;
-  and one refusal misfiles `AGENTS.md` as protected intent. `make pack-capability-fresh-review`
-  reproduces all five blockers. Acceptance, lane-0.30 implementation and corpus application remain
-  unauthorised; the D560 hold stays whole.
+- **Status:** draft — author-repaired 2026-08-30 on [[D2050]]–[[D2055]], awaiting fresh
+  independent review. The public grammar now crosses every shipped family with one structured
+  version result; the reviewed author artifact seals 373 member mappings, 14 unconditional roots
+  and five resolved-reference sites by input/output digest; member-array annotations are total;
+  recursive vocabularies use schema-aware instance traversal; evaluator roots are exact live
+  symbols; and refusal authority resolves through protected design. `make pack-capability-closure`
+  (7/7), `make pack-capability-repeat-review` (11/11) and `make pack-capability-fresh-review` (6/6)
+  pass. Acceptance, lane-0.30 implementation and corpus application remain unauthorised pending
+  independent review; the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -123,7 +124,9 @@ export type CapabilityVersion =
 ```
 
 `CAPABILITY_ID_PATTERN` is
-`^[A-Za-z][A-Za-z0-9_-]*(?:[.:][A-Za-z0-9][A-Za-z0-9_-]*)+$`. It deliberately preserves the
+`^[A-Za-z][A-Za-z0-9_-]*(?:[.:][A-Za-z0-9][A-Za-z0-9_-]*)*$`. The final repetition is optional:
+one-segment ids are part of the shipped compatibility inventory (`mate-proof`, `pressure-line`,
+`candidate-majority`). The same grammar preserves the
 mixed-case and colon-separated legacy families already shipped (`structuralFeature.outpost`,
 `error.SIMULATE_BUDGET_EXCEEDED`, `assistance:arrows`) while excluding whitespace, slash and every
 `@` suffix. Case is significant; migration never lowercases an existing identity. New ids use
@@ -343,6 +346,7 @@ loader may reproduce it.
 ```ts
 type PackSelector =
   | { readonly kind: "always" }
+  | { readonly kind: "schema_member"; readonly sourceIdentity: SchemaMemberIdentity }
   | { readonly kind: "literal"; readonly pointer: string; readonly equals: string | number | boolean }
   | { readonly kind: "absent"; readonly pointer: string }
   | { readonly kind: "resolved"; readonly pointer: string; readonly registry: "shape" | "principle" };
@@ -353,19 +357,55 @@ interface CapabilityApplicability {
 }
 ```
 
-The complete authority is the checked generated file
-`packages/schema/src/capability/applicability.generated.ts`, never a four-row hand table. Its source
-is exactly three independently enumerable sets:
+`SchemaMemberIdentity` is the canonical `{schemaPointer, member}` object from §3.1. A
+`schema_member` selector is evaluated by walking the finite parsed pack and the resolved drill-pack
+schema together: resolve local `$ref`; descend into the instance through the matching object,
+array and selected `oneOf` branch; and emit the mapped capability whenever the visited schema node
+has the exact `schemaPointer` and the instance scalar equals `member`. A repeated `$ref` therefore
+matches at every instance site, and recursive `structuralExpression` / `transitionExpression`
+values match at any authored depth without an unbounded pointer grammar. The walker tracks the
+finite **instance path**, not visited schema identities, so revisiting a recursive `$ref` at a new
+instance child is required. `literal` is retained only for star-free, non-vocabulary defaults;
+closed schema vocabulary rows may not use it. This closes [[D2055]].
 
-1. every `x-tabiya-capability` annotation in the drill-pack schema emits the literal selector and
-   structured capability carried by that annotation;
+The complete **author authority** is
+`rfc/contracts/pack-capability-applicability-v1.json` (SHA-256
+`c1d7f7f30301f794a9ea64cd9c3dae5c35eed71ef34f4eb729b9534e1665ef1c`). It freezes the input schema
+digest, traversal and public-id algorithms, exact coverage counts, the expanded mapping digest,
+all unconditional sites and every resolved-reference selector. The implementation-generated image
+is `packages/schema/src/capability/applicability.generated.ts`; it must expand to the authority's
+digests rather than becoming its own authority. The author artifact defines **exactly three independently enumerable sets**:
+
+1. every member in `x-tabiya-capability-members` emits a `schema_member` selector and the structured
+   capability carried by that member row;
 2. `PACK_ALWAYS_CAPABILITIES` is a literal table of the unconditional evaluators/defaults from the
    13 named evaluator roots plus `guard.defaults`; every member names its AST source; and
-3. every annotated shape/principle reference site emits one `resolved` selector.
+3. the five literal shape/principle reference sites in the artifact emit one `resolved` selector.
+
+At author HEAD the sealed schema has **103 enum nodes / 300 enum members** plus **15 discriminated
+`oneOf` nodes / 73 branch members**: 373 mapped closed-vocabulary members and 0 exclusions. The
+canonical source inventory digest is
+`dda24bb80b91eadccdffecaf4577395b4a40c5810f3c0fce4371cd1b26483f21`; applying
+`readable-schema-member-v1` yields 373 collision-free public mappings with digest
+`3389cd762ecaca1ba8eaf9cc92cfaf824782f5a96f2b55c5cf0e70f259c319ae`; joining those rows to the 14
+always rows and five resolved-reference rows yields expanded-authority digest
+`e6d304029d79301e490bcedb24a2921838622df6c3cd1676c39e5b96ec3875e2`.
+
+`closed-schema-members-v1` walks object keys in lexical order and records every scalar member of an
+`enum`. It also records a discriminated `oneOf` when every branch has exactly one direct property
+whose schema carries `const` and that property name is common to all branches; its source pointer is
+the `oneOf` owner and each `const` is a member. Rows sort by JCS of `{schemaPointer,member}`.
+`readable-schema-member-v1` removes `$defs`, `properties` and `items` pointer segments; converts an
+`oneOf/N` pair to `branchN` and any other numeric segment to `itemN`; preserves an
+`[A-Za-z0-9_-]+` token and otherwise writes `x` followed by its lowercase UTF-8 hex; appends the
+encoded member; and joins the tokens with dots at integer version 1. Collision is a hard
+`CAPABILITY_IDENTITY_COLLISION`, never a suffix chosen by the implementer. These exact algorithms,
+counts and digests make the compact artifact the full 373-row mapping, not a recipe with an author
+choice left open.
 
 `make capability-applicability` regenerates bytes; `make capability-applicability-check` compares
 without writing. The generator also emits `CAPABILITY_APPLICABILITY_EXCLUSIONS`, set-equal to every
-`x-tabiya-capability-excluded` annotation. Every closed schema member, default-bearing absent field
+member in `x-tabiya-capability-excluded-members`. Every closed schema member, default-bearing absent field
 and resolved reference is therefore mapped or explicitly excluded. An annotation, always-root or
 reference added without changing the generated artifact fails; a generated row with no independent
 source fails `CAPABILITY_APPLICABILITY_ORPHAN`. The ordered generated image participates in the
@@ -404,13 +444,16 @@ The census has four independently checked authorities. A declaration is not one 
 set-equal their union.
 
 1. **Pack schema vocabularies.** Every `enum` and every discriminated `oneOf` beneath the pack
-   schema must carry exactly one of `x-tabiya-capability` or
-   `x-tabiya-capability-excluded`. The former is the closed object
-   `{sourceIdentity, selector, capability}` where `selector` is §2.7's JSON value and `capability`
-   is a structured `CapabilityId`; the latter is
-   `{sourceIdentity, reason, authority}` where authority is an existing ledger or protected-intent
-   reference. An
-   unannotated closed vocabulary fails before declarations are compared.
+   schema carries member arrays. `x-tabiya-capability-members` is a closed array of closed objects
+   `{member, sourceIdentity, capability}`; `x-tabiya-capability-excluded-members` is a closed array
+   of `{member, sourceIdentity, reason, authority}`, where authority is an existing ledger or
+   protected-intent reference. `member` is the exact JSON scalar from the owning `enum` or the
+   exact discriminator `const`; `sourceIdentity` must byte-equal JCS of the owning schema pointer
+   plus that member. The two arrays are disjoint and their member union must set-equal the owning
+   vocabulary. A missing member, duplicate member in or across arrays, wrong source identity,
+   non-member scalar or unknown object field is a schema/compiler error before declarations are
+   compared. Empty arrays are legal only when the other array covers the complete non-empty
+   vocabulary. At the sealed author artifact all 373 members are mapped and none excluded.
 2. **Interpreter sites.** The implementation owns a literal `PACK_INTERPRETER_ROOTS` list of the
    pack-evaluation modules named by §3a-bis of `planning/platform-alignment/f3-derivation.md`.
    Every exhaustive arm in those roots carries `@tabiya-capability-interpreter <sourceIdentity>`.
@@ -432,10 +475,11 @@ cardinality is unchanged. The census separately diagnoses `SCHEMA_CAPABILITY_UNA
 `CAPABILITY_INTERPRETER_ORPHAN`, `CAPABILITY_NAMED_ROOT_MISSING`,
 `CAPABILITY_DECLARATION_EXTRA`, and `CAPABILITY_IDENTITY_MISMATCH`.
 
-Both annotations are registered strict-schema keywords through one compiler authority:
+Both member-array annotations are registered strict-schema keywords through one compiler authority:
 `packages/schema/src/ajv.ts` exports `createStrictAjv2020(options?)`. It constructs AJV 2020 with
-`strict:true`, registers `x-tabiya-capability` and `x-tabiya-capability-excluded` with closed
-meta-schemas for the exact objects above, and then returns the instance. The schema package tests,
+`strict:true`, registers `x-tabiya-capability-members` and
+`x-tabiya-capability-excluded-members` with closed meta-schemas for the exact objects above and
+their containing arrays, and then returns the instance. The schema package tests,
 server `pack-validation.ts`, CLI/build tools and migration planner must import this factory; direct
 `new Ajv2020` for pack schemas is a set-equal census failure. A valid annotation compiles, an invalid
 annotation fails its keyword meta-schema, and a misspelled keyword remains an `unknown keyword`
@@ -447,7 +491,7 @@ error—strictness is not disabled and annotations are never silently ignored.
 |---|---|
 | `grade.move_quality` | `moveQualityGrade`, `classFromThresholds` |
 | `objective.state_machine` | `evaluateObjective`, `transitionObjective` |
-| `objective.transition_legality` | `assertObjectiveTransition` and its transition table |
+| `objective.transition_legality` | `assertObjectiveTransition`, `OBJECTIVE_TRANSITION_TABLE` |
 | `outcome.terminal` | `terminalOutcome` |
 | `tempo.window` | `evaluateWindow` |
 | `tempo.unauthored_default` | `UNAUTHORED_TEMPO_DEFAULTS` and its consumer |
@@ -457,7 +501,14 @@ error—strictness is not disabled and annotations are never silently ignored.
 | `guard.immediate` | `applyRulesGuard`, `applyRecordedEngineGuard` |
 | `reasoning.key_point_match` | `matchKeyPoints` |
 | `claim.earning` | `projectAuthoredFeedback` and `MACHINE_LABEL_EVIDENCE_KINDS` |
-| `opponent.selection` | the opponent-selection dispatch and ordering basis |
+| `opponent.selection` | `OpponentSelector`, `neutralTiebreakKey` |
+
+`OBJECTIVE_TRANSITION_TABLE` is the exact exported replacement for the current private
+`ALLOWED_TRANSITIONS`; `isObjectiveTransitionAllowed` must read it. `OpponentSelector` and
+`neutralTiebreakKey` are existing exported symbols; the class declaration is the dispatch source
+site and the key function is its position-pure final ordering constituent. Each of the four symbols
+must have exactly one declaration and a production reader under `make capability-site-check`.
+Exporting an unused alias or naming a comment/prose range does not satisfy the row.
 
 **Literal constant-table roots (16):**
 
@@ -831,7 +882,7 @@ when one old label covered two meanings; no implementer chooses a state while tr
 | Stockfish `bestmove / MultiPV rank / bestline` | `unimplemented` | [[D1061]] approved the hint-distance move/PV axis; [[D318]] records the stale blanket refusal |
 | Stockfish `MultiPV > 1 outside enumerate` | `pending_decision` | [[D1037]] refusal audit; no owner ruling exists |
 | Stockfish `SyzygyPath / SyzygyProbeLimit / SyzygyProbeDepth / Syzygy50MoveRule` | `pending_decision` | [[D1037]]; hosted-vs-local deployment is not product intent |
-| Stockfish `UCI_LimitStrength / UCI_Elo / Skill Level` | `refused` | protected intent `AGENTS.md` §Rejected, “Weakened Stockfish as the default opponent” |
+| Stockfish `UCI_LimitStrength / UCI_Elo / Skill Level` | `refused` | protected intent `design/06-campaign.md` §2b, “weakened Stockfish is rejected doctrine” |
 | Stockfish `nodestime / Ponder / go mate` | `pending_decision` | [[D1037]]; absence of a current question is not refusal authority |
 | Stockfish `Debug Log File / NumaPolicy` | `pending_decision` | [[D1037]]; operator diagnostics are a deployment choice |
 | Stockfish `Move Overhead` | `unmeasured` | [[D1049]] separates depicted/measured time from unsupported prediction |
@@ -1003,7 +1054,7 @@ derivation only to *check* it (criterion 3: the declared set must equal the deri
 derivation function an unversioned root — a derivation bug is silent, where a mismatch between
 declared and derived is loud. The derivation is retained as the check, not as the record.
 
-## Fresh-return author obligations (2026-08-30)
+## Fresh-return author obligations (2026-08-30) — discharged by this amendment
 
 This live RFC owns the next author pass; the review rows are not free-floating defects:
 
@@ -1016,6 +1067,8 @@ This live RFC owns the next author pass; the review rows are not free-floating d
 - [[D2053]] — replace both prose evaluator roots with exact exported symbols and live-reader checks.
 - [[D2054]] — point weakened-Stockfish refusal at its protected-design anchor rather than treating
   `AGENTS.md` as protected intent.
+- [[D2055]] — replace finite literal pointers for recursive/reused vocabularies with schema-aware
+  member selectors evaluated over the finite pack instance.
 
 The author pass inverts `make pack-capability-fresh-review`, preserves the prior 7 + 11 arms and
 requests another independent review. It does not implement lane 0.30 or touch corpus bytes.
@@ -1026,7 +1079,11 @@ Each criterion names what a wrong implementation would do to pass it, because a 
 can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class.
 
 1. **`CapabilityId` is structured.** `packages/schema/src/capability/types.ts` exports `{id, version}`;
-   `parseCapability("x@1")` and `parseCapability("x@v1")` both yield `{id: "x", version: 1}`.
+   `parseLegacyCapability("x@1")` and `parseLegacyCapability("x@v1")` both yield
+   `{id: "x", version: {kind: "integer", value: 1}}`. The same parser crosses the real
+   one-segment (`mate-proof@1`), dotted (`tablebase.probe@v1`), colon
+   (`assistance:arrows@1`) and mixed-case (`error.SIMULATE_BUDGET_EXCEEDED@1`) families; it rejects
+   whitespace, slash, empty segments, semver suffixes and a second `@`.
    *Wrong implementation that passes:* one storing `"x@1"` and splitting on demand — refused by
    criterion 5.
 2. **The registry is closed and total.** `CAPABILITY_DECLARATIONS` compiles; the four §4.3
@@ -1038,11 +1095,17 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
    exactly `guard.defaults`, `objective.state_machine`, `structuralFeature.outpost` and
    `structuralFeature.pawn_safe_square`; omitting the helper and adding unrelated
    `structuralFeature.isolated_pawn` fail with distinct under/over-declaration diagnostics.
+   A three-level nested structural expression and the same `$defs` member reached through two root
+   references both derive their exact schema-member capability; an equal scalar attached to a
+   different schema identity does not. Marking recursive schema identities visited globally (and
+   thereby skipping the nested instance) fails the positive control.
 4. **The census has independent roots (§3.1).** `make capability-census` rejects an unannotated
    schema union, orphan interpreter, missing named evaluator, extra declaration and
    count-preserving swapped public ids with the five named error codes. It set-equals identities,
    not cardinality. The 13 evaluator and 16 table rows in §3.1 are executable inputs, not prose
    counts. A separately generated baseline reddens on movement.
+   The strict-AJV fixture includes a three-member enum and rejects one missing member, a duplicate,
+   a wrong `{schemaPointer,member}`, a non-member scalar and an unknown annotation field.
 5. **Version literals have a typed boundary (§2.1a).** A current authority initialized from
    `"x@1"` fails; `legacyCapabilityFixture("x@1")` parses and passes; an unrelated exact schema
    string such as `tabiya.sourcing.evidence.v1` passes. The check uses TypeScript contextual types
@@ -1178,6 +1241,13 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-08-30 (**D2050–D2055 author repair**): widened the compatibility grammar to shipped
+  one-segment ids and made the legacy criterion return `CapabilityVersion`; published the complete
+  digest-sealed applicability authority; replaced object annotations with total member arrays;
+  named exact transition/opponent sites; moved weakened-Stockfish authority to protected design;
+  and replaced finite vocabulary pointers with schema-aware traversal after the repair found the
+  recursive-expression under-stamp class. The prior 7 + 11 arms and the repaired 6-arm contract
+  pass. Fresh independent review still gates acceptance and implementation.
 - 2026-08-30 (**fresh independent return**): returned on [[D2050]]–[[D2054]]. The compatibility
   regex rejects real one-segment shipped ids and criterion 1 contradicts the structured version
   union; the generated applicability authority still has no independent mapping bytes and its

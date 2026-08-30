@@ -1,55 +1,162 @@
+// DISPOSABLE author-repair harness — D2050-D2055. Not production code.
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
 const read = (path: string): string => readFileSync(path, "utf8");
+const sha256 = (value: string | Buffer): string => createHash("sha256").update(value).digest("hex");
 const rfc = read("rfc/pack-capability-contract.md");
+const artifactPath = "rfc/contracts/pack-capability-applicability-v1.json";
+const artifactBytes = read(artifactPath);
+const artifact = JSON.parse(artifactBytes) as {
+  schema: { path: string; sha256: string };
+  closedVocabulary: Record<string, string | number>;
+  always: readonly unknown[];
+  resolvedReferences: readonly unknown[];
+  expandedAuthoritySha256: string;
+};
 
-test("D2050: public id/version grammar rejects shipped positives and contradicts criterion 1", () => {
+function canonical(value: unknown): string {
+  if (value === null || typeof value !== "object") return JSON.stringify(value);
+  if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
+  const object = value as Record<string, unknown>;
+  return `{${Object.keys(object).sort().map((key) => `${JSON.stringify(key)}:${canonical(object[key])}`).join(",")}}`;
+}
+
+interface SourceIdentity { readonly schemaPointer: string; readonly member: unknown }
+
+function closedVocabulary(schema: unknown): {
+  readonly rows: readonly SourceIdentity[];
+  readonly enumNodes: number;
+  readonly enumMembers: number;
+  readonly unionNodes: number;
+  readonly unionMembers: number;
+} {
+  const rows: SourceIdentity[] = [];
+  let enumNodes = 0;
+  let enumMembers = 0;
+  let unionNodes = 0;
+  let unionMembers = 0;
+  const escape = (token: string): string => token.replaceAll("~", "~0").replaceAll("/", "~1");
+  const walk = (value: unknown, pointer = ""): void => {
+    if (Array.isArray(value)) {
+      value.forEach((item, index) => walk(item, `${pointer}/${index}`));
+      return;
+    }
+    if (value === null || typeof value !== "object") return;
+    const object = value as Record<string, unknown>;
+    if (Array.isArray(object.enum)) {
+      enumNodes += 1;
+      enumMembers += object.enum.length;
+      for (const member of object.enum) rows.push({ schemaPointer: pointer, member });
+    }
+    if (Array.isArray(object.oneOf)) {
+      const branches = object.oneOf.map((branch) => {
+        if (branch === null || typeof branch !== "object" || Array.isArray(branch)) return [];
+        const properties = (branch as Record<string, unknown>).properties;
+        if (properties === null || typeof properties !== "object" || Array.isArray(properties)) return [];
+        return Object.entries(properties as Record<string, unknown>).flatMap(([name, memberSchema]) =>
+          memberSchema !== null && typeof memberSchema === "object" && !Array.isArray(memberSchema)
+            && Object.hasOwn(memberSchema, "const")
+            ? [[name, (memberSchema as Record<string, unknown>).const] as const]
+            : []);
+      });
+      const discriminated = branches.length > 0
+        && branches.every((branch) => branch.length === 1)
+        && new Set(branches.map((branch) => branch[0]![0])).size === 1;
+      if (discriminated) {
+        unionNodes += 1;
+        unionMembers += branches.length;
+        for (const branch of branches) rows.push({ schemaPointer: pointer, member: branch[0]![1] });
+      }
+    }
+    for (const [key, child] of Object.entries(object)) walk(child, `${pointer}/${escape(key)}`);
+  };
+  walk(schema);
+  rows.sort((left, right) => canonical(left).localeCompare(canonical(right)));
+  return { rows, enumNodes, enumMembers, unionNodes, unionMembers };
+}
+
+function encodeToken(value: unknown): string {
+  const text = String(value);
+  return /^[A-Za-z0-9_-]+$/u.test(text) ? text : `x${Buffer.from(text).toString("hex")}`;
+}
+
+function publicId(source: SourceIdentity): string {
+  const raw = source.schemaPointer.split("/").filter(Boolean)
+    .map((token) => token.replaceAll("~1", "/").replaceAll("~0", "~"));
+  const tokens: string[] = [];
+  for (let index = 0; index < raw.length; index += 1) {
+    const token = raw[index]!;
+    if (["$defs", "properties", "items"].includes(token)) continue;
+    if (token === "oneOf" && /^\d+$/u.test(raw[index + 1] ?? "")) {
+      tokens.push(`branch${raw[index + 1]}`);
+      index += 1;
+      continue;
+    }
+    tokens.push(/^\d+$/u.test(token) ? `item${token}` : encodeToken(token));
+  }
+  return [...tokens, encodeToken(source.member)].join(".");
+}
+
+test("D2050: one public grammar crosses every shipped family with structured legacy results", () => {
   const patternText = rfc.match(/`CAPABILITY_ID_PATTERN` is\s+`([^`]+)`/u)?.[1];
   assert.ok(patternText);
   const pattern = new RegExp(patternText, "u");
-  for (const shipped of ["mate-proof", "pressure-line", "candidate-majority"]) {
-    assert.equal(pattern.test(shipped), false);
-  }
-  assert.equal(pattern.test("x"), false);
-  assert.match(rfc, /version: CapabilityVersion/u);
-  assert.match(rfc, /parseCapability\("x@1"\).*\{id: "x", version: 1\}/u);
-  assert.match(rfc, /parseLegacyCapability/u);
+  for (const id of ["x", "mate-proof", "pressure-line", "candidate-majority", "tablebase.probe", "assistance:arrows", "error.SIMULATE_BUDGET_EXCEEDED"]) assert.match(id, pattern);
+  for (const invalid of ["", "two words", "path/value", ".x", "x.", "x@1"]) assert.doesNotMatch(invalid, pattern);
+  assert.match(rfc, /parseLegacyCapability\("x@1"\).*parseLegacyCapability\("x@v1"\).*\{id: "x", version: \{kind: "integer", value: 1\}\}/su);
+  assert.doesNotMatch(rfc, /parseCapability\("x@1"\)/u);
 });
 
-test("D2051: complete applicability source is neither published nor independently present", () => {
-  const schema = read("schemas/drill_pack.schema.json");
-  assert.equal(schema.includes("x-tabiya-capability"), false);
-  assert.equal(existsSync("packages/schema/src/capability/applicability.generated.ts"), false);
-  assert.match(rfc, /complete authority is the checked generated file/u);
+test("D2051: the author artifact seals the full source inventory and expanded applicability image", () => {
+  assert.equal(sha256(read(artifact.schema.path)), artifact.schema.sha256);
+  assert.match(rfc, new RegExp(sha256(artifactBytes), "u"));
+  const inventory = closedVocabulary(JSON.parse(read(artifact.schema.path)) as unknown);
+  assert.deepEqual([inventory.enumNodes, inventory.enumMembers, inventory.unionNodes, inventory.unionMembers], [103, 300, 15, 73]);
+  assert.equal(inventory.rows.length, 373);
+  assert.equal(sha256(canonical(inventory.rows)), artifact.closedVocabulary.inventorySha256);
+
+  const ids = inventory.rows.map(publicId);
+  assert.equal(new Set(ids).size, ids.length);
+  assert.ok(ids.includes("structuralFeature.outpost"));
+  const mappings = inventory.rows.map((sourceIdentity) => ({
+    sourceIdentity,
+    capability: { id: publicId(sourceIdentity), version: { kind: "integer", value: 1 } },
+  }));
+  assert.equal(sha256(canonical(mappings)), artifact.closedVocabulary.expandedMappingSha256);
+  const closedRows = mappings.map(({ sourceIdentity, capability }) => ({
+    selector: { kind: "schema_member", sourceIdentity }, capability,
+  }));
+  assert.equal(sha256(canonical({ closedVocabulary: closedRows, always: artifact.always, resolvedReferences: artifact.resolvedReferences })), artifact.expandedAuthoritySha256);
+  assert.equal(artifact.always.length, 14);
+  assert.equal(artifact.resolvedReferences.length, 5);
 });
 
-test("D2052: one object-valued keyword cannot carry per-member mappings for current enums", () => {
-  const schema = JSON.parse(read("schemas/drill_pack.schema.json")) as unknown;
-  let multiMemberEnums = 0;
-  const walk = (value: unknown): void => {
-    if (Array.isArray(value)) { for (const item of value) walk(item); return; }
-    if (value === null || typeof value !== "object") return;
-    const object = value as Record<string, unknown>;
-    if (Array.isArray(object.enum) && object.enum.length > 1) multiMemberEnums += 1;
-    for (const item of Object.values(object)) walk(item);
-  };
-  walk(schema);
-  assert.ok(multiMemberEnums > 0);
-  assert.match(rfc, /The former is the closed object\s+`\{sourceIdentity, selector, capability\}`/u);
-  assert.match(rfc, /Schema `sourceIdentity` is canonical JCS over `\{schemaPointer, member\}`/u);
+test("D2052: member-array grammar is total and specifies strict negative controls", () => {
+  assert.match(rfc, /`x-tabiya-capability-members` is a closed array/u);
+  assert.match(rfc, /`x-tabiya-capability-excluded-members` is a closed array/u);
+  for (const failure of ["missing member", "duplicate member", "wrong source identity", "non-member scalar", "unknown object field"]) assert.ok(rfc.includes(failure));
+  assert.match(rfc, /three-member enum/u);
 });
 
-test("D2053: named evaluator inventory still contains prose rather than exact symbols", () => {
-  assert.match(rfc, /`objective\.transition_legality` \| `assertObjectiveTransition` and its transition table/u);
-  assert.match(rfc, /`opponent\.selection` \| the opponent-selection dispatch and ordering basis/u);
-  assert.match(rfc, /every §3\.1 named root is exported as the literal\s+symbol listed there/u);
+test("D2053: every formerly prose evaluator constituent is an exact live symbol", () => {
+  assert.match(rfc, /`objective\.transition_legality` \| `assertObjectiveTransition`, `OBJECTIVE_TRANSITION_TABLE`/u);
+  assert.match(rfc, /`opponent\.selection` \| `OpponentSelector`, `neutralTiebreakKey`/u);
+  assert.match(rfc, /Each of the four symbols\s+must have exactly one declaration and a production reader/u);
 });
 
-test("D2054: refusal migration misfiles AGENTS.md as protected intent", () => {
-  const agents = read("AGENTS.md");
-  assert.match(agents, /Design tier is intent tier/u);
-  assert.match(rfc, /protected intent `AGENTS\.md` §Rejected/u);
+test("D2054: weakened Stockfish refusal resolves through protected design", () => {
+  assert.match(rfc, /protected intent `design\/06-campaign\.md` §2b/u);
+  assert.doesNotMatch(rfc, /protected intent `AGENTS\.md`/u);
   assert.match(read("design/06-campaign.md"), /weakened Stockfish is rejected doctrine/u);
+});
+
+test("D2055: schema-member selection covers recursive and reused vocabularies", () => {
+  assert.match(rfc, /kind: "schema_member"; readonly sourceIdentity: SchemaMemberIdentity/u);
+  assert.match(rfc, /recursive `structuralExpression` \/ `transitionExpression`\s+values match at any authored depth/u);
+  assert.match(rfc, /tracks the\s+finite \*\*instance path\*\*, not visited schema identities/u);
+  assert.match(rfc, /three-level nested structural expression/u);
+  assert.match(rfc, /equal scalar attached to a\s+different schema identity does not/u);
 });

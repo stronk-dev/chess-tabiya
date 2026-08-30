@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "artifact": "tabiya.pack-capability-applicability.authority.v1",
+  "schema": {
+    "path": "schemas/drill_pack.schema.json",
+    "sha256": "7da4d49506eb028872bd909d7ab34a3107b44ba2374f4a686ac625d112d653b0"
+  },
+  "closedVocabulary": {
+    "inventoryAlgorithm": "closed-schema-members-v1",
+    "inventorySha256": "dda24bb80b91eadccdffecaf4577395b4a40c5810f3c0fce4371cd1b26483f21",
+    "enumNodes": 103,
+    "enumMembers": 300,
+    "discriminatedOneOfNodes": 15,
+    "discriminatedOneOfMembers": 73,
+    "mappedMembers": 373,
+    "excludedMembers": 0,
+    "mappingAlgorithm": "readable-schema-member-v1",
+    "expandedMappingSha256": "3389cd762ecaca1ba8eaf9cc92cfaf824782f5a96f2b55c5cf0e70f259c319ae"
+  },
+  "always": [
+    { "capability": "grade.move_quality", "sites": ["moveQualityGrade", "classFromThresholds"] },
+    { "capability": "objective.state_machine", "sites": ["evaluateObjective", "transitionObjective"] },
+    { "capability": "objective.transition_legality", "sites": ["assertObjectiveTransition", "OBJECTIVE_TRANSITION_TABLE"] },
+    { "capability": "outcome.terminal", "sites": ["terminalOutcome"] },
+    { "capability": "tempo.window", "sites": ["evaluateWindow"] },
+    { "capability": "tempo.unauthored_default", "sites": ["UNAUTHORED_TEMPO_DEFAULTS", "unauthoredTempoTransition"] },
+    { "capability": "line.membership", "sites": ["lineMembership"] },
+    { "capability": "trajectory.verdict", "sites": ["trajectoryVerdict"] },
+    { "capability": "branch.decidedness", "sites": ["branchDecidedness"] },
+    { "capability": "guard.immediate", "sites": ["applyRulesGuard", "applyRecordedEngineGuard"] },
+    { "capability": "reasoning.key_point_match", "sites": ["matchKeyPoints"] },
+    { "capability": "claim.earning", "sites": ["projectAuthoredFeedback", "MACHINE_LABEL_EVIDENCE_KINDS"] },
+    { "capability": "opponent.selection", "sites": ["OpponentSelector", "neutralTiebreakKey"] },
+    { "capability": "guard.defaults", "sites": ["GUARD_DEFAULTS"] }
+  ],
+  "resolvedReferences": [
+    { "pointer": "/shapes/*", "registry": "shape", "value": "shape-reference" },
+    { "pointer": "/legs/*/shapes/*", "registry": "shape", "value": "shape-reference" },
+    { "pointer": "/planClasses/*/shapePlan/shape", "registry": "shape", "value": "id" },
+    { "pointer": "/checkpoints/*/interaction/keyPoints/*/ground/shape", "registry": "shape", "value": "id-when-ground-kind-shape_plan" },
+    { "pointer": "/feedbackClaims/*/principles/*", "registry": "principle", "value": "id" }
+  ],
+  "expandedAuthoritySha256": "e6d304029d79301e490bcedb24a2921838622df6c3cd1676c39e5b96ec3875e2"
+}

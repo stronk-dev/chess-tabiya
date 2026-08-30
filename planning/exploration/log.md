@@ -11376,3 +11376,20 @@ the complete 1.0 Campaign journey and stable-board/access criteria rather than a
 plus hidden route. `make campaign-two-horizon-author-contract` passes 19/19. Fresh independent
 review and named dependencies still gate schema, migration, content, API and UI implementation;
 [[D1600]] remains the explicit failure-policy hold.
+
+## 2026-08-30 — pack-capability D2050–D2055 author repair
+
+Repaired the five fresh-review blockers and recorded [[D2055]], found while making applicability
+executable: finite literal pointers cannot cover recursive structural/transition expressions or a
+reused `$ref`. The RFC now uses one shipped-compatible structured ID/version grammar, total
+member-array annotations and schema-aware finite-instance traversal. The independent author
+artifact seals the current 103 enums / 300 enum members, 15 discriminated unions / 73 members,
+14 unconditional roots and five resolved-reference sites by schema, inventory, mapping and
+expanded-authority digests; its public-ID transform is collision-checked and leaves no mapping
+choice to implementation. Exact transition/opponent symbols and the protected-design Stockfish
+refusal anchor replace prose/agent-guide authorities.
+
+`make pack-capability-closure` passes 7/7, `make pack-capability-repeat-review` 11/11 and
+`make pack-capability-fresh-review` 6/6. This is author repair only: fresh independent review still
+gates acceptance, lane-0.30 schema/migration/product/corpus work remains forbidden, and [[D560]]
+stays whole.
