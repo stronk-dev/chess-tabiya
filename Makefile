@@ -345,6 +345,11 @@ candidate-packet-third-author-repair:
 	node --test tools/d2198-candidate-packet-third-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2198-candidate-packet-third-author-repair/tsconfig.contract.json --noEmit
 
+.PHONY: candidate-packet-third-fresh-review
+candidate-packet-third-fresh-review:
+	node --test tools/d2329-candidate-packet-third-fresh-review/contract.test.mjs
+	./node_modules/.bin/tsc -p tools/d2329-candidate-packet-third-fresh-review/tsconfig.contract.json --noEmit
+
 review-evidence-author-contract:
 	node --test tools/d1969-review-evidence-author-harness/*.test.mts
 

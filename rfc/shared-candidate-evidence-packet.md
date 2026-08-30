@@ -1,10 +1,12 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — author-repaired 2026-08-30 on [[D2198]]–[[D2201]]; fresh independent
-  review required.** The product factory now fixes the primary manifest authority; every collector
+- **Status:** **draft — returned by third fresh independent review 2026-08-30 on [[D2329]]–[[D2330]].**
+  The D2198–D2201 author repair remains present: the product factory fixes the primary manifest authority; every collector
   result is projection-addressed; thirteen exact context adapters satisfy the executable registry;
   and memo, service-stat and receipt-reference protocols are closed. The historical return remains
-  reproducible; `make candidate-packet-third-author-repair` is the positive author contract.
+  reproducible; `make candidate-packet-third-author-repair` is the positive author contract. The
+  new `make candidate-packet-third-fresh-review` proves that the projection identity widens to
+  `string`/mixes bare and `@1` dialects, and that readings-only removes required event dependencies.
   Implementation remains unauthorized.
   [[D1580]] remains separate numeric appliance-tier debt. *(Prior state: D1977–D1981
   author-repaired after D1958–D1961, D1900–D1903 and D1945–D1947.)*
@@ -1398,6 +1400,8 @@ rather than aspirational — criterion 14.
 | [[D2102]] | scheduler rejection escaped and collector failure reopened projection as string | §3.1/§6.0 | criterion 28: closed registry union and scheduler failure arm |
 | [[D2103]] | FEN-only requests could not refuse variant semantics | §3.1/§4.0/§6.1 | criterion 27: literal standard identity before FEN/job/cache |
 | [[D2104]] | receipt omitted unavailable collector-result authority | §3.1/§5.3 | criteria 25/29: exact sealed outcomes retained and bijective to abstentions |
+| [[D2329]] | the proposed projection union widens to arbitrary `string` and mixes bare ids, `@1` keys and `{id, version}` values | §5.3 | returned: publish one literal versioned-key authority and use it for outputs/results/abstentions/value joins; current-symbol negative must reject an unregistered key |
+| [[D2330]] | readings-only filters out the event collectors required by its reading dependencies | §3.4/§5.3 | returned: derive a dependency-closed execution plan distinct from retained output, or remove the impossible scope; fixture all three scopes |
 
 ## Deviations from design
 

@@ -12556,3 +12556,16 @@ lingering claim after head 1 lands. Criteria 18–21 and the extended author con
 intent-presets handoff. No checker or product byte changed; fifth fresh independent review is
 required. Receipt:
 `planning/assistance-config-register/protocol-extension-author-amendment-2026-08-30.md`.
+
+## 2026-08-30 — Shared candidate packet third fresh independent return
+
+Re-ran the packet's maintained author boundary, then reviewed its proposed types against current
+production symbols. D2198–D2201 remain repaired, but two new buildability blockers returned the
+RFC. [[D2329]] records that mapped production projection arrays widen the promised literal union to
+`string` and that the registry mixes bare ids, `@1` keys and `{id, version}` values. [[D2330]]
+records that readings-only filters out `event.transition` and `event.tactical` even though its own
+reading collectors depend on them.
+
+The disposable review target proves both contradictions and imports the real production projection
+constant for its widening arm. No product implementation was started. Receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-third-fresh-independent-review-2026-08-30.md`.
