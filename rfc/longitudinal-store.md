@@ -63,7 +63,8 @@ survives the run that produced it**, and this RFC removes exactly that blocker.
 This is the one implementation contract. The 2026-08-22 specification retained later in this file
 is historical reasoning only and is explicitly non-normative. This folded contract exists because
 the first implementation attempt followed the earlier synchronous shape literally and reproduced
-the D1405 failure: complete prefixes took 11.44 / 23.43 / 42.56 seconds p95 at 20 / 40 / 80 plies.
+the D1405 failure. The final 67-member registry rerun measured complete-prefix p95 at **13.08 /
+26.45 / 47.29 seconds** for 20 / 40 / 80 plies and a 25-game rebuild at **828.04 seconds**.
 No request path may run a legal-move census, semantic adapter or whole-run projection.
 
 ### A. Closed constructor registry, not one broad event list
@@ -403,12 +404,14 @@ application provider-free, create/save/import through the shared seven-operation
 boundary, wait for completion, cross expired-lease reclaim and oldest-first fairness, then prove
 clean shutdown leaves no process/timer and no permanent pending job.
 
-Native projection is **background-only at revision 1**. D1405b's preregistered Node-24 arm over all
-59 admitted edge/population families plus SQLite publish measured 959.9 ms combined p95 overall,
-786.7 ms opening and 1,027.0 ms middlegame against 500 ms; SQLite itself was 0.242 ms p95. The
-request path therefore persists only the job watermark and may not call a legal enumerator or
-semantic adapter. Final production adapters rerun the arm for worker sizing, never to move the work
-back into the request. D1405's fixed 20/40/80 and bulk arms are rerun after the final registry lands.
+Native projection is **background-only at revision 1**. The final preregistered D1405b rerun covers
+all **46 edge + 13 population + 8 path-deferred = 67** registry members. Across 144 measured
+decisions it recorded **872.2 ms combined p95 overall**, **728.2 ms opening**, **902.7 ms
+middlegame** and **453.4 ms endgame** against the 500 ms gate. SQLite publish was only **0.128 ms
+p95**; collection and legal-alternative expansion own essentially all latency. The request path
+therefore persists only the job watermark and may not call a legal enumerator or semantic adapter.
+These final-registry measurements size the worker; they cannot move work back into the request
+without a later RFC and a new preregistered gate.
 
 ### D. Revision identity and attribution
 
@@ -525,10 +528,10 @@ These are the only live acceptance criteria; the historical AC list below is non
     deletion and join export/deletion inventories. Delete → retained shared run → rebuild leaves
     zero private rows/jobs under both learner and `__legacy`; ordinary legacy and active shared
     positives remain profileable.
-15. **Performance.** D1405b fixes revision 1 as background-only (959.9 ms combined p95 overall,
-    1,027.0 ms middlegame). The production registry reruns D1405b plus the prefix/bulk arms for
-    worker sizing; no result moves projection into a request without a later RFC and preregistered
-    gate.
+15. **Performance.** The final-registry D1405b rerun fixes revision 1 as background-only (872.2 ms
+    combined p95 overall, 902.7 ms middlegame; SQLite 0.128 ms). D1405's complete-prefix arms fail
+    the 500 ms gate at every length and its 25-game rebuild takes 828.04 seconds. No result moves
+    projection into a request without a later RFC and preregistered gate.
 16. **Worker reach ([[D2069]]).** The real provider-free application starts/stops one
     `LongitudinalProjectionWorker`; all seven writers wake it after commit; polling recovers missed
     wakes/startup backlog; batches are bounded and oldest-first; crash/reclaim and clean shutdown
@@ -1213,9 +1216,11 @@ negative fixture where it could otherwise pass vacuously.
 1. **Does `theory.shapes` join revision 1? No.** Its high measured lift makes it the first
    candidate for a later revision, but shape opportunities are not the exact-legal edge
    population. It enters only with its own adapter, denominator and revision bump.
-2. **How is bulk-import scale bounded? Off the request path.** D1405 measured 25 games at
-   738.8 seconds before the missing adapters and database work. Imports enqueue durable bounded
-   background work with visible state; no product request waits for complete projection.
+2. **How is bulk-import scale bounded? Off the request path.** The final-registry D1405 rerun
+   measured 25 games / 1,750 plies / 50,586 evaluated edges at **828.04 seconds**. D1405b then
+   isolated database publication at **0.128 ms p95**, locating the cost in collection rather than
+   storage. Imports enqueue durable bounded background work with visible state; no product request
+   waits for complete projection.
 3. **Who bumps `derived_rev`? The changing RFC.** Any accepted RFC that changes an admitted
    adapter, registry member/version or decision semantics names the bump and rebuild in its own
    criteria. A bump outside an RFC is a lifecycle defect.

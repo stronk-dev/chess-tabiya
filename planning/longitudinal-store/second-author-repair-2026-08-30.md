@@ -32,6 +32,27 @@ The [[D2063]]–[[D2069]] return is repaired as one durable projection operation
 - The complete-population arms cross gained/lost identity, duplicate operands, all/none/mixed,
   forced and unavailable populations, including avoidance direction.
 
+## Final-registry cost discharge
+
+`make longitudinal-store-cost` reran both preregistered instruments against committed production
+inputs and the final 67-member registry:
+
+- D1405 complete-prefix p95 was **13.08 / 26.45 / 47.29 seconds** at 20 / 40 / 80 plies; every arm
+  fails the 500 ms request budget. The 20→80 p95 ratio is **3.62×**, so growth remains below the
+  preregistered 4× shape ceiling while absolute latency still refuses request-path projection.
+- The 25-game bulk arm evaluated **50,586 edges** across **1,750 plies**, emitted **5,215,076
+  events**, and took **828.04 seconds** (**0.030 games/s**).
+- D1405b measured 144 individual decisions over 46 edge, 13 population and 8 path-deferred
+  registry members. Combined latency was **531.5 ms p50 / 872.2 ms p95 / 921.2 ms max**. The
+  middlegame p95 was **902.7 ms**; endgame p95 was **453.4 ms**.
+- SQLite publication was **0.128 ms p95**. The collector and legal-alternative expansion, not the
+  durable store, own the budget failure.
+
+Verdict: `REFUSE_NATIVE_INCREMENTAL`. Reads use stored transaction-fixed snapshots; writes enqueue
+the bounded background worker. A later synchronous path would require its own RFC and a new
+preregistered gate. The measurement target now removes its four intermediate fragments after a
+successful aggregate, so ordinary use leaves only the two canonical result artifacts.
+
 ## Boundary
 
 This is authoring, not implementation. No production migration, storage method, application

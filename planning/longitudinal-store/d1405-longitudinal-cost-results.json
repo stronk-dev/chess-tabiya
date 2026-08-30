@@ -1,13 +1,17 @@
 {
   "experiment": "D1405",
-  "measuredAt": "2026-08-23T22:43:40.747Z",
-  "commit": "0d4e27f",
+  "measuredAt": "2026-08-30T07:41:50.765Z",
+  "commit": "721a10f81506b226b8a4afe49ca49d853ef56a80",
   "pgnSha256": "sha256:a10a233e8e51f6a0877f65cee417339080d2fd32cd22886f755f576c84fa58ec",
-  "sourceDigest": "sha256:9d575c4e61d4e328a91d441bd6b191ae9f51c9fff426d6d86a4a278c7991e5cf",
+  "sourceDigest": "sha256:a8e9082aa7d9fb86b8398e624dec6926659bf42d3ac8fb91c46af7e0529bb76f",
   "sourcePaths": [
     "packages/runtime/src/semantic-evidence.ts",
     "packages/runtime/src/phase.ts",
-    "tools/research-chess/populations.ts"
+    "packages/runtime/src/legal-moves.ts",
+    "tools/research-chess/populations.ts",
+    "rfc/contracts/longitudinal-ingest-registry-v1.json",
+    "rfc/contracts/longitudinal-sign-subsets-v1.json",
+    "tools/d1612-longitudinal-contract-harness/longitudinal-contract.ts"
   ],
   "contract": {
     "lengths": [
@@ -22,14 +26,18 @@
   "native": {
     "20": {
       "experiment": "D1405",
-      "measuredAt": "2026-08-23T21:40:13.721Z",
-      "commit": "0d4e27f",
+      "measuredAt": "2026-08-30T07:19:30.896Z",
+      "commit": "721a10f81506b226b8a4afe49ca49d853ef56a80",
       "pgnSha256": "sha256:a10a233e8e51f6a0877f65cee417339080d2fd32cd22886f755f576c84fa58ec",
-      "sourceDigest": "sha256:9d575c4e61d4e328a91d441bd6b191ae9f51c9fff426d6d86a4a278c7991e5cf",
+      "sourceDigest": "sha256:a8e9082aa7d9fb86b8398e624dec6926659bf42d3ac8fb91c46af7e0529bb76f",
       "sourcePaths": [
         "packages/runtime/src/semantic-evidence.ts",
         "packages/runtime/src/phase.ts",
-        "tools/research-chess/populations.ts"
+        "packages/runtime/src/legal-moves.ts",
+        "tools/research-chess/populations.ts",
+        "rfc/contracts/longitudinal-ingest-registry-v1.json",
+        "rfc/contracts/longitudinal-sign-subsets-v1.json",
+        "tools/d1612-longitudinal-contract-harness/longitudinal-contract.ts"
       ],
       "arm": "20",
       "contract": {
@@ -73,10 +81,10 @@
       ],
       "timingMs": {
         "n": 8,
-        "meanMs": 10237.216354375,
-        "p50Ms": 10395.248749999999,
-        "p95Ms": 11439.968459000003,
-        "maxMs": 11439.968459000003
+        "meanMs": 11777.213057374998,
+        "p50Ms": 11961.484167000002,
+        "p95Ms": 13075.4395,
+        "maxMs": 13075.4395
       },
       "totals": {
         "paths": 8,
@@ -95,13 +103,13 @@
         {
           "pathId": "https://lichess.org/0QcVliUS#1",
           "plies": 20,
-          "elapsedMs": 10413.768875,
+          "elapsedMs": 12090.890833,
           "decisions": 20,
           "legalAlternatives": 622,
           "evaluatedEdges": 642,
           "emittedEvents": 66694,
           "referenceBytes": 32384,
-          "eventPopulationDigest": "sha256:9ddd6cbd4cc59e21e31f736a522c27eca6deaf524a2a4490d7395d745f0ff1bd",
+          "eventPopulationDigest": "sha256:62f758d002bd62e719fd76eb0719561dcd6ce7ea20d8a34953802c7818c2bd73",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 11,
             "derived.exchange.capture_class@1:state": 28,
@@ -170,18 +178,18 @@
           },
           "storeRowCount": 101,
           "storeRowsDigest": "sha256:7715afebc1197e8b4f6e637e3dffacf1d5780c26777c09016a62c23eba20d71f",
-          "decisionMeasuresDigest": "sha256:fa96438299cafbe1b50a77ab9cd5148f3f494d0489e874c1c175610dcb815b6c"
+          "decisionMeasuresDigest": "sha256:d981d6c8d4216c3e01f25154dd007f9f0e2ee5d99328faace5edf159ecf26dc9"
         },
         {
           "pathId": "https://lichess.org/1M8qLeZU#1",
           "plies": 20,
-          "elapsedMs": 9881.322167,
+          "elapsedMs": 11634.3755,
           "decisions": 20,
           "legalAlternatives": 613,
           "evaluatedEdges": 633,
           "emittedEvents": 64619,
           "referenceBytes": 30247,
-          "eventPopulationDigest": "sha256:37d9adcc1dc92464f006654c0b08961eca2d5cbfa06ebbf9bd01f643c8955d3c",
+          "eventPopulationDigest": "sha256:1eebce4a5cc3b279bb4b87ca59d21db0bc21afce09dd101aaf0d372074bd7cc6",
           "familyCounts": {
             "derived.exchange.capture_class@1:state": 23,
             "derived.king.captured_zone_defender@1:state": 9,
@@ -242,18 +250,18 @@
           },
           "storeRowCount": 94,
           "storeRowsDigest": "sha256:976ffe90396c0c5788b6456cd9439b37030b74f83a636025241bfd8d2b05af6b",
-          "decisionMeasuresDigest": "sha256:ee3ed1edaaeb11d4aa00af79ef694d8c6a57d6863b0d09697cf3644c48a60781"
+          "decisionMeasuresDigest": "sha256:1944679794d858110ae51ae345094bb100a98410a3ecc5579e8dbe3557a10153"
         },
         {
           "pathId": "https://lichess.org/2c6ywL9u#1",
           "plies": 20,
-          "elapsedMs": 10649.951291999998,
+          "elapsedMs": 12147.192042000002,
           "decisions": 20,
           "legalAlternatives": 649,
           "evaluatedEdges": 669,
           "emittedEvents": 69513,
           "referenceBytes": 31436,
-          "eventPopulationDigest": "sha256:0ef22867e44a50dba84cbb2a47c690929d39ed8df59e78678a268ebd87a81c85",
+          "eventPopulationDigest": "sha256:33ccfe6ae581b65266b3a73ccea846d0234d1078946f1e5df39c571bb392dcce",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 8,
             "derived.exchange.capture_class@1:state": 23,
@@ -321,18 +329,18 @@
           },
           "storeRowCount": 101,
           "storeRowsDigest": "sha256:e3b798f8549b7ae130ed168423e919866687f48cab430ba18551666e26f951e0",
-          "decisionMeasuresDigest": "sha256:ffef8da40e769e551281c5e7c7d408a738c433106487789eed07ad2e7126c308"
+          "decisionMeasuresDigest": "sha256:1762c14daec5b108c8ac59ec6e11ad953dd0452b7c1ece0725d6d64b82e53cc0"
         },
         {
           "pathId": "https://lichess.org/4bUIVXck#1",
           "plies": 20,
-          "elapsedMs": 9357.191208,
+          "elapsedMs": 10782.024999999994,
           "decisions": 20,
           "legalAlternatives": 581,
           "evaluatedEdges": 601,
           "emittedEvents": 56611,
           "referenceBytes": 27881,
-          "eventPopulationDigest": "sha256:8bcf815a8f1268298bce71bf4b0ae8cf52a2d12324cf98610000633f6a18e8ac",
+          "eventPopulationDigest": "sha256:84385fe950b805c2fd37603b7290ec09866630419c2ebe50c8a3c67260212a24",
           "familyCounts": {
             "derived.exchange.capture_class@1:state": 19,
             "derived.king.captured_zone_defender@1:state": 4,
@@ -387,18 +395,18 @@
           },
           "storeRowCount": 85,
           "storeRowsDigest": "sha256:d02c112c32c7f060dc8f2d7813260990ce45e06730e6449d3ca42fa29844fbad",
-          "decisionMeasuresDigest": "sha256:6f8a86c405ba3752802bbd7e20c032a59c13d2c79c3bc92f1134c65c98dae526"
+          "decisionMeasuresDigest": "sha256:c6d61d104338c96611faa4c594043fe02f3c7982ffb450c7f9973ca169a89ce5"
         },
         {
           "pathId": "https://lichess.org/50gVKdhE#1",
           "plies": 20,
-          "elapsedMs": 11439.968459000003,
+          "elapsedMs": 13075.4395,
           "decisions": 20,
           "legalAlternatives": 669,
           "evaluatedEdges": 689,
           "emittedEvents": 71759,
           "referenceBytes": 30571,
-          "eventPopulationDigest": "sha256:b9cf7ccf0913ca3aaa581c2a84041f91d336bc6736738b3cbdc537e33227f3d8",
+          "eventPopulationDigest": "sha256:0cd3a8dc120beb0b245432ba96b9842143e533ebfc20940bf2639c2a0c3f87d8",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 14,
             "derived.exchange.capture_class@1:state": 28,
@@ -464,18 +472,18 @@
           },
           "storeRowCount": 97,
           "storeRowsDigest": "sha256:c21a36826dcb8c9b5d8ce2272ad56b87879c757a4edfd4f184c39619d8e56762",
-          "decisionMeasuresDigest": "sha256:a23ef13527f0cded93e383c030a11f5c73cc9ade8b9aa1096694e93a072c4efb"
+          "decisionMeasuresDigest": "sha256:d65fe6e91406214734c0ecd69a657805feef1e70dfc9db8aa8e222f05db37b1b"
         },
         {
           "pathId": "https://lichess.org/6a0z3iBG#1",
           "plies": 20,
-          "elapsedMs": 10639.827958999995,
+          "elapsedMs": 12053.487833,
           "decisions": 20,
           "legalAlternatives": 605,
           "evaluatedEdges": 625,
           "emittedEvents": 67007,
           "referenceBytes": 30565,
-          "eventPopulationDigest": "sha256:b98aa6a0b74039ed5d6c5e1c415664ec4301769d5e0417faca63fe3414f77697",
+          "eventPopulationDigest": "sha256:075562a659f2f7954ed04e7e6708c940766bd19156aa7fcb355bc3d9b15e3d3e",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 3,
             "derived.exchange.capture_class@1:state": 33,
@@ -546,18 +554,18 @@
           },
           "storeRowCount": 74,
           "storeRowsDigest": "sha256:daff62153dce71a8e050794c8735fa122b24ea869074ed7b4d9bca7685be2c66",
-          "decisionMeasuresDigest": "sha256:05673920d3407f2f67d7be9f2c49d24933de27c221ba269b46f71d16f02737c7"
+          "decisionMeasuresDigest": "sha256:035a025cb15fe553f824ed552e2727252ceeb12e5d4deaf33cd4285367026862"
         },
         {
           "pathId": "https://lichess.org/6V4B2WOT#1",
           "plies": 20,
-          "elapsedMs": 9120.452125000003,
+          "elapsedMs": 10472.809583999988,
           "decisions": 20,
           "legalAlternatives": 563,
           "evaluatedEdges": 583,
           "emittedEvents": 57132,
           "referenceBytes": 30153,
-          "eventPopulationDigest": "sha256:be966cdbde01f9980d1ae39ee7f36d49a68aa8175589cf848d79599df5f0cf4d",
+          "eventPopulationDigest": "sha256:9821916389f9bd2437f36ad583fb1b367933437b680dc91b52674afc6d8463c2",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 6,
             "derived.exchange.capture_class@1:state": 22,
@@ -621,18 +629,18 @@
           },
           "storeRowCount": 67,
           "storeRowsDigest": "sha256:f08e4d2db7124c1ff1634ffbb39751c6ac079baf5a598192366cd70d24d30c47",
-          "decisionMeasuresDigest": "sha256:2561d9648976cc0f6d9429c60389fdffc2c5aa3715a6f97d95c9d063326e3191"
+          "decisionMeasuresDigest": "sha256:10f118b8a0797df906922ea469461ea0122ce26983cbd08b958b36af2ee94ea0"
         },
         {
           "pathId": "https://lichess.org/7FsL3clM#1",
           "plies": 20,
-          "elapsedMs": 10395.248749999999,
+          "elapsedMs": 11961.484167000002,
           "decisions": 20,
           "legalAlternatives": 633,
           "evaluatedEdges": 653,
           "emittedEvents": 66471,
           "referenceBytes": 29103,
-          "eventPopulationDigest": "sha256:ddcfd8e2df857ae09b6b320651be66c5478c3f8da5e406b49942a9cd6c58cfe4",
+          "eventPopulationDigest": "sha256:46bc93c1f7adc422b0526897135dfbd01196a775e2be88105ea741c4008ae0b0",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 7,
             "derived.exchange.capture_class@1:state": 16,
@@ -695,20 +703,24 @@
           },
           "storeRowCount": 65,
           "storeRowsDigest": "sha256:0034a0e086710bf00af218ee6ceafba3f8bfa50a0c98d605e76bb9b4194e46e5",
-          "decisionMeasuresDigest": "sha256:f98a44e863abdb576569be1b1e22b0bbdb0e71ea22582c316167f415f92d3e72"
+          "decisionMeasuresDigest": "sha256:eecc215a9b76decc537394252682600bbc0e8a001b1bcf71b89836e076333897"
         }
       ]
     },
     "40": {
       "experiment": "D1405",
-      "measuredAt": "2026-08-23T21:43:28.599Z",
-      "commit": "0d4e27f",
+      "measuredAt": "2026-08-30T07:22:53.094Z",
+      "commit": "721a10f81506b226b8a4afe49ca49d853ef56a80",
       "pgnSha256": "sha256:a10a233e8e51f6a0877f65cee417339080d2fd32cd22886f755f576c84fa58ec",
-      "sourceDigest": "sha256:9d575c4e61d4e328a91d441bd6b191ae9f51c9fff426d6d86a4a278c7991e5cf",
+      "sourceDigest": "sha256:a8e9082aa7d9fb86b8398e624dec6926659bf42d3ac8fb91c46af7e0529bb76f",
       "sourcePaths": [
         "packages/runtime/src/semantic-evidence.ts",
         "packages/runtime/src/phase.ts",
-        "tools/research-chess/populations.ts"
+        "packages/runtime/src/legal-moves.ts",
+        "tools/research-chess/populations.ts",
+        "rfc/contracts/longitudinal-ingest-registry-v1.json",
+        "rfc/contracts/longitudinal-sign-subsets-v1.json",
+        "tools/d1612-longitudinal-contract-harness/longitudinal-contract.ts"
       ],
       "arm": "40",
       "contract": {
@@ -752,10 +764,10 @@
       ],
       "timingMs": {
         "n": 8,
-        "meanMs": 22132.740192625,
-        "p50Ms": 22253.011958,
-        "p95Ms": 23433.235833,
-        "maxMs": 23433.235833
+        "meanMs": 25149.03625525,
+        "p50Ms": 25332.341167,
+        "p95Ms": 26452.800917000008,
+        "maxMs": 26452.800917000008
       },
       "totals": {
         "paths": 8,
@@ -774,13 +786,13 @@
         {
           "pathId": "https://lichess.org/0QcVliUS#1",
           "plies": 40,
-          "elapsedMs": 21130.764667000003,
+          "elapsedMs": 24275.295291000002,
           "decisions": 40,
           "legalAlternatives": 1313,
           "evaluatedEdges": 1353,
           "emittedEvents": 147433,
           "referenceBytes": 62909,
-          "eventPopulationDigest": "sha256:77a5c3c6e66911659d03de80b49c5bf06e0e0e8ae468398fc87af5b566fe2e0a",
+          "eventPopulationDigest": "sha256:c7eb9480bd711a711ae23d27f1ea7dcef8ef432b7d5af2981a19268c7a63200d",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 82,
             "derived.exchange.capture_class@1:state": 60,
@@ -852,18 +864,18 @@
           },
           "storeRowCount": 108,
           "storeRowsDigest": "sha256:0986d55f1f0a84cc192930d67b6d802c5c261d932331804219821d2027bd7e1d",
-          "decisionMeasuresDigest": "sha256:baab55665a97d7494919bef39d521029877d5338585d5f656b38944df320e86c"
+          "decisionMeasuresDigest": "sha256:3e24af50d03b9704b67251efa0c5e70f0a9eb01c3b2637b8365576fb3c96498d"
         },
         {
           "pathId": "https://lichess.org/1M8qLeZU#1",
           "plies": 40,
-          "elapsedMs": 22253.011958,
+          "elapsedMs": 25332.341167,
           "decisions": 40,
           "legalAlternatives": 1362,
           "evaluatedEdges": 1402,
           "emittedEvents": 156012,
           "referenceBytes": 61278,
-          "eventPopulationDigest": "sha256:7760c6c1f8a429517776af1c9aa9afe8bf54a22b701d96e3a46fc9f9204247a3",
+          "eventPopulationDigest": "sha256:6fdf829080593aa7a972d491b48b4c5f37b4a9868487078349e6378767541681",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 31,
             "derived.exchange.capture_class@1:state": 68,
@@ -940,18 +952,18 @@
           },
           "storeRowCount": 101,
           "storeRowsDigest": "sha256:10e3781de53e5c5b259ba01e9e6bee4d32c73bfa3ff1d756a6ce87a1815d7cd8",
-          "decisionMeasuresDigest": "sha256:62b2222111da07b8e498d566d9d456fed85a4210a28800e21dd36ffd22d19ab7"
+          "decisionMeasuresDigest": "sha256:68c46b7bf533b07ea9263d48273344b25df4242e9d001f39974a6565e7a8c445"
         },
         {
           "pathId": "https://lichess.org/2c6ywL9u#1",
           "plies": 40,
-          "elapsedMs": 23251.946458,
+          "elapsedMs": 26452.800917000008,
           "decisions": 40,
           "legalAlternatives": 1404,
           "evaluatedEdges": 1444,
           "emittedEvents": 156868,
           "referenceBytes": 64429,
-          "eventPopulationDigest": "sha256:6713bf23f9ae567f83e61b806e14ed881b1297ba10a8a3f48bcd7a654e0df371",
+          "eventPopulationDigest": "sha256:7baf50352d672af94d5d4a433a6df09ca6ca22eb6ce0e5cd13628eeae9a34b4f",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 66,
             "derived.exchange.capture_class@1:state": 77,
@@ -1024,18 +1036,18 @@
           },
           "storeRowCount": 106,
           "storeRowsDigest": "sha256:a2a123f1278c348d62b6857bfe67a0e00b18affa530aaee64bd62b0509829fd6",
-          "decisionMeasuresDigest": "sha256:9d66e8c2e5e1a7d72498ed79db1b5767b83ce6c4130035a9a380dc7e9a24fd49"
+          "decisionMeasuresDigest": "sha256:417bf85b100a96816fa85e75b02aed19cdfdc812fe85dfa50b2b6cd8dd4ebb98"
         },
         {
           "pathId": "https://lichess.org/4bUIVXck#1",
           "plies": 40,
-          "elapsedMs": 23433.235833,
+          "elapsedMs": 25474.581791999997,
           "decisions": 40,
           "legalAlternatives": 1350,
           "evaluatedEdges": 1390,
           "emittedEvents": 145617,
           "referenceBytes": 59155,
-          "eventPopulationDigest": "sha256:7e3802a204d9b923493dbd72a76d907ba9af49fe740a7e1aacea6ce4a2a6189d",
+          "eventPopulationDigest": "sha256:b5e9221bac4a12534d89e948ff0cb77072f5686a45bf18b7f68176acdcc1236e",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 48,
             "derived.exchange.capture_class@1:state": 74,
@@ -1106,18 +1118,18 @@
           },
           "storeRowCount": 93,
           "storeRowsDigest": "sha256:ffa80f1fcf7a39bb11a153ff9533231941bf8c4b023506b641fb1740c790aa15",
-          "decisionMeasuresDigest": "sha256:06768797923eeea3568a94a1a7860adac11efebce36dfeaf14b879ef6016ebff"
+          "decisionMeasuresDigest": "sha256:f0a3ad5f68c5202d1f76084045b343df6cdd4d6b9e79dfc8870f621cb0fe5055"
         },
         {
           "pathId": "https://lichess.org/50gVKdhE#1",
           "plies": 40,
-          "elapsedMs": 22582.121207999997,
+          "elapsedMs": 25901.192125,
           "decisions": 40,
           "legalAlternatives": 1391,
           "evaluatedEdges": 1431,
           "emittedEvents": 152538,
           "referenceBytes": 61734,
-          "eventPopulationDigest": "sha256:77b7f883dc8a6d958b8bb9dd131734927e119e3fba9141d0562609f842dabc83",
+          "eventPopulationDigest": "sha256:18f67bec6d82cfb092470c8810265e5fda11304add837fe6631d2f8eaa602258",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 91,
             "derived.exchange.capture_class@1:state": 61,
@@ -1189,18 +1201,18 @@
           },
           "storeRowCount": 102,
           "storeRowsDigest": "sha256:8d9c0d770bd7feb8f567a01484718d40796e458540683206c410f23dff556b52",
-          "decisionMeasuresDigest": "sha256:2f21d59115bb8d9803ea3a116ba76686c8bf942ac37b3eaa6ac7fba530997d71"
+          "decisionMeasuresDigest": "sha256:b9a292d725c4246a858bc987d7739294fb334fabcc9048f5296c53beb1cbf695"
         },
         {
           "pathId": "https://lichess.org/6a0z3iBG#1",
           "plies": 40,
-          "elapsedMs": 22525.31975000001,
+          "elapsedMs": 25689.23174999999,
           "decisions": 40,
           "legalAlternatives": 1329,
           "evaluatedEdges": 1369,
           "emittedEvents": 151724,
           "referenceBytes": 65918,
-          "eventPopulationDigest": "sha256:12ca54e8d6ae316deda8eb63054f0ad6cd376ec2af04b72c2bc62e94b930dbc3",
+          "eventPopulationDigest": "sha256:cb67250a1d65fac9373f8f95aacb8a082da7266a09c049631a39d0e39335ef2e",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 21,
             "derived.exchange.capture_class@1:state": 99,
@@ -1273,18 +1285,18 @@
           },
           "storeRowCount": 115,
           "storeRowsDigest": "sha256:792a8d24314cc6138cd8ea2dc2cfd8f6cf1d47d7f563876c5905292c62295324",
-          "decisionMeasuresDigest": "sha256:d5a52f91fc84b961798a701916025556de54e836eb5805628acd8bb2d69f29b4"
+          "decisionMeasuresDigest": "sha256:92d8743d0613f83432618e45039d9453f495e88d68608064c3894e2b7da3b513"
         },
         {
           "pathId": "https://lichess.org/6V4B2WOT#1",
           "plies": 40,
-          "elapsedMs": 20602.243709000002,
+          "elapsedMs": 23687.41312500002,
           "decisions": 40,
           "legalAlternatives": 1263,
           "evaluatedEdges": 1303,
           "emittedEvents": 146087,
           "referenceBytes": 67111,
-          "eventPopulationDigest": "sha256:61bff12a1c2a250ee06d18c3a360a54fbd7ac7e81a461a9ceb519d63f7826c19",
+          "eventPopulationDigest": "sha256:eb66ba973ecd31cea76ed771a64772ba60ef01a4bf6edc81e1dc013936cba48c",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 40,
             "derived.exchange.capture_class@1:state": 59,
@@ -1358,18 +1370,18 @@
           },
           "storeRowCount": 109,
           "storeRowsDigest": "sha256:ede3442a28732edc34d85667d2d639aea2f7c3fadd98888532dc15de5934d1d2",
-          "decisionMeasuresDigest": "sha256:b4c8c45007de6b4d47b1229ebd2a9e446072013501866cf6239bed32cf087a42"
+          "decisionMeasuresDigest": "sha256:8d66a5c88b978ee74a55d076c91abe5292f41ae0f41221d95fff6f144b454013"
         },
         {
           "pathId": "https://lichess.org/7FsL3clM#1",
           "plies": 40,
-          "elapsedMs": 21283.27795799999,
+          "elapsedMs": 24379.433874999988,
           "decisions": 40,
           "legalAlternatives": 1239,
           "evaluatedEdges": 1279,
           "emittedEvents": 139305,
           "referenceBytes": 61399,
-          "eventPopulationDigest": "sha256:d53193bc0a4952c3d62d009a757cb5986de5567f0c893d4be003d38cd012821c",
+          "eventPopulationDigest": "sha256:e8263beff1f1ecb815faa5fa2ced33ae74fcf582c642b3c8569a536176145d0f",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 28,
             "derived.exchange.capture_class@1:state": 66,
@@ -1442,20 +1454,24 @@
           },
           "storeRowCount": 106,
           "storeRowsDigest": "sha256:9c6b055417512df7acc940385829940411f0fb747f9c333b8c960b839fc095ef",
-          "decisionMeasuresDigest": "sha256:058af27b7c319f864fb651ef46ecebfaedc0e14a56111a056e7f98a2ad146564"
+          "decisionMeasuresDigest": "sha256:90cb35554aecceea3797772fe65c02d73553bfca8b1f2a408ffa7db1dbfb4610"
         }
       ]
     },
     "80": {
       "experiment": "D1405",
-      "measuredAt": "2026-08-23T21:48:13.997Z",
-      "commit": "0d4e27f",
+      "measuredAt": "2026-08-30T07:28:01.259Z",
+      "commit": "721a10f81506b226b8a4afe49ca49d853ef56a80",
       "pgnSha256": "sha256:a10a233e8e51f6a0877f65cee417339080d2fd32cd22886f755f576c84fa58ec",
-      "sourceDigest": "sha256:9d575c4e61d4e328a91d441bd6b191ae9f51c9fff426d6d86a4a278c7991e5cf",
+      "sourceDigest": "sha256:a8e9082aa7d9fb86b8398e624dec6926659bf42d3ac8fb91c46af7e0529bb76f",
       "sourcePaths": [
         "packages/runtime/src/semantic-evidence.ts",
         "packages/runtime/src/phase.ts",
-        "tools/research-chess/populations.ts"
+        "packages/runtime/src/legal-moves.ts",
+        "tools/research-chess/populations.ts",
+        "rfc/contracts/longitudinal-ingest-registry-v1.json",
+        "rfc/contracts/longitudinal-sign-subsets-v1.json",
+        "tools/d1612-longitudinal-contract-harness/longitudinal-contract.ts"
       ],
       "arm": "80",
       "contract": {
@@ -1499,10 +1515,10 @@
       ],
       "timingMs": {
         "n": 8,
-        "meanMs": 34022.306067749996,
-        "p50Ms": 33181.695125,
-        "p95Ms": 42557.43674999999,
-        "maxMs": 42557.43674999999
+        "meanMs": 38378.562208250005,
+        "p50Ms": 37355.25041700003,
+        "p95Ms": 47290.78695899999,
+        "maxMs": 47290.78695899999
       },
       "totals": {
         "paths": 8,
@@ -1521,13 +1537,13 @@
         {
           "pathId": "https://lichess.org/4bUIVXck#1",
           "plies": 80,
-          "elapsedMs": 39243.75875,
+          "elapsedMs": 44851.692625,
           "decisions": 80,
           "legalAlternatives": 2545,
           "evaluatedEdges": 2625,
           "emittedEvents": 279439,
           "referenceBytes": 124126,
-          "eventPopulationDigest": "sha256:5d00406d3eb79d82b7046391f234cb42927778989f34fd6d8972e80199861864",
+          "eventPopulationDigest": "sha256:e3a9cda0739da5e7d88a16c63fbb0ff07a5266805bac95edd608c2ac4ff6a37f",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 89,
             "derived.exchange.capture_class@1:state": 159,
@@ -1603,18 +1619,18 @@
           },
           "storeRowCount": 142,
           "storeRowsDigest": "sha256:6ff6139ec6328156eecb1451bd69e9558cdbbb3a82c6c326cbb372c56da0cd6e",
-          "decisionMeasuresDigest": "sha256:463277955616e9f836ba90f34b655da82ec8c4cc785b18f5fc90f38560713e40"
+          "decisionMeasuresDigest": "sha256:10b1bf3d1eaf436524448d315602b46748fd5845b93be3ae4a897812f70d0f47"
         },
         {
           "pathId": "https://lichess.org/6V4B2WOT#1",
           "plies": 80,
-          "elapsedMs": 29363.229457999994,
+          "elapsedMs": 33193.08016600001,
           "decisions": 80,
           "legalAlternatives": 2139,
           "evaluatedEdges": 2219,
           "emittedEvents": 216045,
           "referenceBytes": 132146,
-          "eventPopulationDigest": "sha256:ae6d6482dbbd035ed98f5db57a1bb351212f136f14ff78d6cc395f2dc37494dc",
+          "eventPopulationDigest": "sha256:fb18a1b8532a5931c57016f3720f06ff2f2ca11297f1425b411d85c0ea39eea2",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 62,
             "derived.exchange.capture_class@1:state": 121,
@@ -1693,18 +1709,18 @@
           },
           "storeRowCount": 149,
           "storeRowsDigest": "sha256:7c5de88e9cd77666bce3c9470243e66bb77e6e5547fabcf852f7bf0f3c64db43",
-          "decisionMeasuresDigest": "sha256:f32e83156a26d26e04c166b112bcd4e17e03f0d13fa67c44b7df948a1cc17890"
+          "decisionMeasuresDigest": "sha256:6f80da93f71f4bbd3e895ae3ffa2b612c81f60c49008b96c2667575b2ee4512f"
         },
         {
           "pathId": "https://lichess.org/7FsL3clM#1",
           "plies": 80,
-          "elapsedMs": 33671.763209,
+          "elapsedMs": 38195.179416,
           "decisions": 80,
           "legalAlternatives": 2218,
           "evaluatedEdges": 2298,
           "emittedEvents": 231586,
           "referenceBytes": 126365,
-          "eventPopulationDigest": "sha256:a558754f8f3d443b827faf564dcb525ec81eef33c4d202a1dd31d09f5c179868",
+          "eventPopulationDigest": "sha256:f0877f2fb6ad93034890df502a410334f78344d0c579849c3245f91ec01a0c13",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 69,
             "derived.exchange.capture_class@1:state": 153,
@@ -1779,18 +1795,18 @@
           },
           "storeRowCount": 146,
           "storeRowsDigest": "sha256:2dbed9a28d9a1133ac0905abcc2267531b5f6401459cfea9df4b955c7bb4db96",
-          "decisionMeasuresDigest": "sha256:33db90d0536a6aa1ef22f5c9e2ec399dbe9f05a0be18a95063d69882febce6f0"
+          "decisionMeasuresDigest": "sha256:9077348c4245c8afa17673bd6925261b7c0c14b41e2d4a11f3bbfe3ee269ea8c"
         },
         {
           "pathId": "https://lichess.org/a0Xo4b5J#1",
           "plies": 80,
-          "elapsedMs": 26837.633625000002,
+          "elapsedMs": 30308.742167000004,
           "decisions": 80,
           "legalAlternatives": 1982,
           "evaluatedEdges": 2062,
           "emittedEvents": 193255,
           "referenceBytes": 129508,
-          "eventPopulationDigest": "sha256:04ea1983726bc3e8ac6a628ff46c095a1dbe8830e1c71097ec86781248f24656",
+          "eventPopulationDigest": "sha256:5e06fa45fb9a8e5d76e3e4914f136bae5ca531e24706a64a458ecca86dc57c1b",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 84,
             "derived.exchange.capture_class@1:state": 98,
@@ -1867,18 +1883,18 @@
           },
           "storeRowCount": 127,
           "storeRowsDigest": "sha256:e2b0776a0e115a036dd120a63e7b646564e1ff1a66ea2d4e58afdb2b0f2dd235",
-          "decisionMeasuresDigest": "sha256:fdb3fe488cc1a3b4a45b0ea149019319b24696ad8423f7bb036ac4be0c1c8c69"
+          "decisionMeasuresDigest": "sha256:a59a2e1ee6c5eec529480274017f75789b35225bc76d34b76a0043e3d88f5889"
         },
         {
           "pathId": "https://lichess.org/B5ZRk6Hk#1",
           "plies": 80,
-          "elapsedMs": 42557.43674999999,
+          "elapsedMs": 47290.78695899999,
           "decisions": 80,
           "legalAlternatives": 2566,
           "evaluatedEdges": 2646,
           "emittedEvents": 304754,
           "referenceBytes": 134145,
-          "eventPopulationDigest": "sha256:c552c5481290b9a44c56ccd65a2dce6e905f292f68a432eb6febbfa29046f20e",
+          "eventPopulationDigest": "sha256:ddc26cf96c02600cbb5d1d96dce2958990956bcf81378ecc606ade1cd068f5ad",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 239,
             "derived.exchange.capture_class@1:state": 149,
@@ -1957,18 +1973,18 @@
           },
           "storeRowCount": 117,
           "storeRowsDigest": "sha256:cff16226ed9ad401f49fcc52f40e8e151c93dd43541b256a08bcd1d6c1beef53",
-          "decisionMeasuresDigest": "sha256:472aba80d1c4191f940a64e4b8cfc8788cc20a53edeb1e4f6b1aa26941417b3c"
+          "decisionMeasuresDigest": "sha256:be4fc3a7cb7b0d243f97fcc9027b88fb9f2898c1cf4ce697505bc8feda8d843a"
         },
         {
           "pathId": "https://lichess.org/c0E9K95v#1",
           "plies": 80,
-          "elapsedMs": 34640.847458000004,
+          "elapsedMs": 39001.749541,
           "decisions": 80,
           "legalAlternatives": 2312,
           "evaluatedEdges": 2392,
           "emittedEvents": 260777,
           "referenceBytes": 126722,
-          "eventPopulationDigest": "sha256:283864e414d21d5ccab2c3fa561a366c7336e7e7f6fd771d347ed2486fd5f189",
+          "eventPopulationDigest": "sha256:4b681cff97c012277fabb03e48d9424fcdd8de421865d24c8d1d27c0af43fb9e",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 150,
             "derived.exchange.capture_class@1:state": 120,
@@ -2046,18 +2062,18 @@
           },
           "storeRowCount": 115,
           "storeRowsDigest": "sha256:76a311090223621cad5babab69a4691baa3da6211de5170c9242e241e38629e9",
-          "decisionMeasuresDigest": "sha256:591c46376b94c2b93f674f19210115731353a44a4bc226318b89933db4bdae98"
+          "decisionMeasuresDigest": "sha256:e5c1a183694ee0766e488371ff1637258806acd86d37710ae005f41450cae550"
         },
         {
           "pathId": "https://lichess.org/CmcgG2om#1",
           "plies": 80,
-          "elapsedMs": 33181.695125,
+          "elapsedMs": 37355.25041700003,
           "decisions": 80,
           "legalAlternatives": 2317,
           "evaluatedEdges": 2397,
           "emittedEvents": 238542,
           "referenceBytes": 130832,
-          "eventPopulationDigest": "sha256:ee4fa33055da2c27ecd68d89bf805862e955285472986eb09dd85f9fde441808",
+          "eventPopulationDigest": "sha256:c6b01a0dec15ca5ee9bec4b95ba6847e817d4b65be2537ce03244d0b55d14e43",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 89,
             "derived.exchange.capture_class@1:state": 107,
@@ -2136,18 +2152,18 @@
           },
           "storeRowCount": 149,
           "storeRowsDigest": "sha256:a21ec533eb3c387fba088b967408adb7737d387665ddc4457d5d5f51fac35c22",
-          "decisionMeasuresDigest": "sha256:5d60e78bd2ab0e3d4256dbd142f01b18f3dfcf994f225bf93d251236e8526be1"
+          "decisionMeasuresDigest": "sha256:7277fcebc000d1bac4fa5197db9780cfa77c9a9012ed809caa3e3757a1f910c3"
         },
         {
           "pathId": "https://lichess.org/CTpsOdRL#1",
           "plies": 80,
-          "elapsedMs": 32682.084166999994,
+          "elapsedMs": 36832.01637500001,
           "decisions": 80,
           "legalAlternatives": 2242,
           "evaluatedEdges": 2322,
           "emittedEvents": 233397,
           "referenceBytes": 123772,
-          "eventPopulationDigest": "sha256:b31d5d08ce963847450524d9001d370e1ae860b2ea43d348029c1762943f619a",
+          "eventPopulationDigest": "sha256:89e421a8a38a8c6c2ea76d8d35cc1cdb67f6dadd66be0b85e1319daf232bd84d",
           "familyCounts": {
             "derived.activity.event.open_file_occupancy@1:gained": 142,
             "derived.exchange.capture_class@1:state": 121,
@@ -2220,25 +2236,29 @@
           },
           "storeRowCount": 107,
           "storeRowsDigest": "sha256:6081ac55aad9d09dfca088ee09598cdc2350d3635d4eb354ceb6e244f3067152",
-          "decisionMeasuresDigest": "sha256:a8f4371570af6ee13bfa27da498e998e3ad911700ef31c8e5e68307e846398f1"
+          "decisionMeasuresDigest": "sha256:1aa102dcc8dc454b382597072a6a3fcb12a16d32eeed823146c4887ab6e66228"
         }
       ]
     }
   },
   "growth": {
-    "p95Ratio80To20": 3.720065916485931,
+    "p95Ratio80To20": 3.616764618810709,
     "gate": "PASS"
   },
   "bulk": {
     "experiment": "D1405",
-    "measuredAt": "2026-08-23T22:00:50.269Z",
-    "commit": "0d4e27f",
+    "measuredAt": "2026-08-30T07:41:50.014Z",
+    "commit": "721a10f81506b226b8a4afe49ca49d853ef56a80",
     "pgnSha256": "sha256:a10a233e8e51f6a0877f65cee417339080d2fd32cd22886f755f576c84fa58ec",
-    "sourceDigest": "sha256:9d575c4e61d4e328a91d441bd6b191ae9f51c9fff426d6d86a4a278c7991e5cf",
+    "sourceDigest": "sha256:a8e9082aa7d9fb86b8398e624dec6926659bf42d3ac8fb91c46af7e0529bb76f",
     "sourcePaths": [
       "packages/runtime/src/semantic-evidence.ts",
       "packages/runtime/src/phase.ts",
-      "tools/research-chess/populations.ts"
+      "packages/runtime/src/legal-moves.ts",
+      "tools/research-chess/populations.ts",
+      "rfc/contracts/longitudinal-ingest-registry-v1.json",
+      "rfc/contracts/longitudinal-sign-subsets-v1.json",
+      "tools/d1612-longitudinal-contract-harness/longitudinal-contract.ts"
     ],
     "arm": "bulk",
     "contract": {
@@ -2348,10 +2368,10 @@
     ],
     "timingMs": {
       "n": 25,
-      "meanMs": 29528.314169960002,
-      "p50Ms": 30128.79112499999,
-      "p95Ms": 45812.382041000004,
-      "maxMs": 49105.178125000035
+      "meanMs": 33075.06330000001,
+      "p50Ms": 32703.686667,
+      "p95Ms": 52357.732333999986,
+      "maxMs": 55618.7965
     },
     "totals": {
       "paths": 25,
@@ -2361,19 +2381,19 @@
       "emittedEvents": 5215076,
       "referenceBytes": 2727252
     },
-    "totalWallMs": 738791.791875,
-    "gamesPerSecond": 0.033839033236349056,
+    "totalWallMs": 828044.468417,
+    "gamesPerSecond": 0.030191615249593205,
     "rows": [
       {
         "pathId": "https://lichess.org/0QcVliUS#1",
         "plies": 53,
-        "elapsedMs": 26157.08825,
+        "elapsedMs": 30134.1585,
         "decisions": 53,
         "legalAlternatives": 1691,
         "evaluatedEdges": 1744,
         "emittedEvents": 189288,
         "referenceBytes": 84610,
-        "eventPopulationDigest": "sha256:efc44fd0076f426d39137da744290e8a32015a0b5bd0d957b6c6ac922bfa8f09",
+        "eventPopulationDigest": "sha256:d96f6eef6286337250ddc94b55d093b913eef50e21ffc26855c3e0260a0caab3",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 122,
           "derived.exchange.capture_class@1:state": 94,
@@ -2447,18 +2467,18 @@
         },
         "storeRowCount": 110,
         "storeRowsDigest": "sha256:d154afc3b5b38eb0f99b806689d1c3cc75bf9def55ab2c44a3c5caef4990d770",
-        "decisionMeasuresDigest": "sha256:0bdadf93403ca789bc951f7d420da76fe853a1a5b8e09512deccf462b7fc50ef"
+        "decisionMeasuresDigest": "sha256:9c9b8311627d3b0a0d91a5bbd98e0d142701a88a6d972b0efc6681b5893eb637"
       },
       {
         "pathId": "https://lichess.org/1M8qLeZU#1",
         "plies": 55,
-        "elapsedMs": 28176.951624999998,
+        "elapsedMs": 32404.994875,
         "decisions": 55,
         "legalAlternatives": 1810,
         "evaluatedEdges": 1865,
         "emittedEvents": 209844,
         "referenceBytes": 83765,
-        "eventPopulationDigest": "sha256:492d31336d337057e0a73511186c11170900d858d4353e921274d6ae10c24a57",
+        "eventPopulationDigest": "sha256:0446f36cb173ada8b6418ae54cb52517ad8127c4b43206fd0c8342e4f556e128",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 106,
           "derived.exchange.capture_class@1:state": 110,
@@ -2536,18 +2556,18 @@
         },
         "storeRowCount": 106,
         "storeRowsDigest": "sha256:fef40b1b384269f7bdc5d072ee67bc76868fcddced865685c8d42e2cb20e854a",
-        "decisionMeasuresDigest": "sha256:9abf12d446bd4b43ee96bc9e01fbce2189210db0a6236dda27a7bb01fdef4f4f"
+        "decisionMeasuresDigest": "sha256:2aee2604f43786ccbffbba64b0e785990c29ff42e13d5125cdad9c153610bae1"
       },
       {
         "pathId": "https://lichess.org/2c6ywL9u#1",
         "plies": 41,
-        "elapsedMs": 24408.66154100001,
+        "elapsedMs": 27037.737917000006,
         "decisions": 41,
         "legalAlternatives": 1441,
         "evaluatedEdges": 1482,
         "emittedEvents": 161157,
         "referenceBytes": 66506,
-        "eventPopulationDigest": "sha256:61f2b344d511f166737fdc16378146484df3f9d5cd29d7a027d0c14f3d6220b5",
+        "eventPopulationDigest": "sha256:0a3d19bfc014add77dd24466caa76faabcba4ea01907f6121ae0f7ba0dbb5c4e",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 66,
           "derived.exchange.capture_class@1:state": 82,
@@ -2621,18 +2641,18 @@
         },
         "storeRowCount": 107,
         "storeRowsDigest": "sha256:45a9a32a843afc87878e97ddb9fccfc4ec2d39b81fb25ab54c2a79a6dbb496a9",
-        "decisionMeasuresDigest": "sha256:eb3de9b534bcde12225e37086e440d469f9df61d2bff85f7385ab0c09c32c689"
+        "decisionMeasuresDigest": "sha256:920a3566c5eee6604d2c6483f5da0f3c9d66666087ff53d147947b80656f1f6f"
       },
       {
         "pathId": "https://lichess.org/4bUIVXck#1",
         "plies": 176,
-        "elapsedMs": 45812.382041000004,
+        "elapsedMs": 52357.732333999986,
         "decisions": 176,
         "legalAlternatives": 3419,
         "evaluatedEdges": 3595,
         "emittedEvents": 353030,
         "referenceBytes": 231895,
-        "eventPopulationDigest": "sha256:4bc6fd3929d422bd80c149e290de1f5702872822a8920e0e3de1ac4eea3f737b",
+        "eventPopulationDigest": "sha256:b99d972bba98f7fbc48c4e85c5781d943729af1166f5c92d6398ae777eda4f03",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 113,
           "derived.exchange.capture_class@1:state": 195,
@@ -2713,18 +2733,18 @@
         },
         "storeRowCount": 145,
         "storeRowsDigest": "sha256:04fb0a59a26a93a85dc7be7721f372567dc9e3d7333c06a402276e03fc6fbce4",
-        "decisionMeasuresDigest": "sha256:0d4029bc79eed8116492f6bf956338064c453e073cddf583d32aee9cdf7c9809"
+        "decisionMeasuresDigest": "sha256:6ead5749e89288fbec97acaf019eadd96cb96959657a71e3bbdf9bbc2b8de394"
       },
       {
         "pathId": "https://lichess.org/50gVKdhE#1",
         "plies": 55,
-        "elapsedMs": 30930.915917000006,
+        "elapsedMs": 35081.618917000014,
         "decisions": 55,
         "legalAlternatives": 1916,
         "evaluatedEdges": 1971,
         "emittedEvents": 213655,
         "referenceBytes": 86044,
-        "eventPopulationDigest": "sha256:e52110f23bc74a7bdad70f49831674e68942047182fd48d88671949f6629e4ec",
+        "eventPopulationDigest": "sha256:1c13d50d2a127484f389cb6d04bc6372d8e6d2016170fc0bd996a9f48909f92c",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 158,
           "derived.exchange.capture_class@1:state": 88,
@@ -2796,18 +2816,18 @@
         },
         "storeRowCount": 102,
         "storeRowsDigest": "sha256:5dd80ea568dc6f9698a7e6f7eca91addd38cf487c55d7778457801693ff29a69",
-        "decisionMeasuresDigest": "sha256:7f414fec7f8183308a0d22a356cfa05d2159698098b2df32e1d95440b406e632"
+        "decisionMeasuresDigest": "sha256:6a31640accacfbc2335913ffa7b42f0d3848c513b1da6bddd2b48c0c627dfc48"
       },
       {
         "pathId": "https://lichess.org/6a0z3iBG#1",
         "plies": 71,
-        "elapsedMs": 34102.99512499999,
+        "elapsedMs": 38248.05025,
         "decisions": 71,
         "legalAlternatives": 2159,
         "evaluatedEdges": 2230,
         "emittedEvents": 245510,
         "referenceBytes": 114020,
-        "eventPopulationDigest": "sha256:560e3c5c6a11d7a25210217ee223b6a31ef88e656a97b7e99c4aafe197577c69",
+        "eventPopulationDigest": "sha256:0b6bc96da82d0cf4198f3b9781b3e15679da5d902e7b539dad5c8f4823c8c9b3",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 79,
           "derived.exchange.capture_class@1:state": 167,
@@ -2882,18 +2902,18 @@
         },
         "storeRowCount": 115,
         "storeRowsDigest": "sha256:e47692bb99d0920ab6abcbd97a50f504efdb9551a7bf7041dd9f13f97a9493df",
-        "decisionMeasuresDigest": "sha256:bc1336924f35a13a9c31458090c93ef0a45a10fd768e1d3dc8eababe38d6d53a"
+        "decisionMeasuresDigest": "sha256:00946f716d2e689fe936a73618a69753322c48d48a1840f2e52f658dfcea2156"
       },
       {
         "pathId": "https://lichess.org/6V4B2WOT#1",
         "plies": 85,
-        "elapsedMs": 30297.192792000016,
+        "elapsedMs": 33884.82920800001,
         "decisions": 85,
         "legalAlternatives": 2214,
         "evaluatedEdges": 2299,
         "emittedEvents": 221412,
         "referenceBytes": 139358,
-        "eventPopulationDigest": "sha256:5a173462587681e6b8d81c123cdb3da9355b6441d778f7a395c11e5a33fbd51f",
+        "eventPopulationDigest": "sha256:2c95079200a866ce23a960d5889f809266799b5ed558a01b7b152ecebdb347eb",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 72,
           "derived.exchange.capture_class@1:state": 124,
@@ -2973,18 +2993,18 @@
         },
         "storeRowCount": 150,
         "storeRowsDigest": "sha256:753886805c15d6230ba555cfe38deb95a9d4d2898c71a65071ad8103ba811dc2",
-        "decisionMeasuresDigest": "sha256:b4dfa991ad691d621df6f924f935972eea9d964de3d8be5615ab76cb2ea7c0ac"
+        "decisionMeasuresDigest": "sha256:f8afbdbb623a8219923d12bc72048a1cc10f5042a2ec136ce32775247a80aabc"
       },
       {
         "pathId": "https://lichess.org/7FsL3clM#1",
         "plies": 92,
-        "elapsedMs": 36878.030625000014,
+        "elapsedMs": 41514.41375000001,
         "decisions": 92,
         "legalAlternatives": 2472,
         "evaluatedEdges": 2564,
         "emittedEvents": 257626,
         "referenceBytes": 144380,
-        "eventPopulationDigest": "sha256:b05168061df211e2b57cab87ebe0878b303002993cb45f7ef895bc231a89e48e",
+        "eventPopulationDigest": "sha256:9b3e81c5a4cc64f9096d23f1cf9b49c7c2d6a002073c1cc142dd0a768a2911bc",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 94,
           "derived.exchange.capture_class@1:state": 167,
@@ -3061,18 +3081,18 @@
         },
         "storeRowCount": 146,
         "storeRowsDigest": "sha256:81e20442784dcf93178f0a6ab7eaa40900b695d1efe4f1aeb66650d8d55faa91",
-        "decisionMeasuresDigest": "sha256:95fd00aec5bb61b2a96b120aa55285a3935f5619a18c744a88a7da3d8aa33c22"
+        "decisionMeasuresDigest": "sha256:cf25003b145ce93b4e35e0bbd2d86854d0d5849d11fa4ddb1160680e30a9db58"
       },
       {
         "pathId": "https://lichess.org/82AjXY9N#1",
         "plies": 65,
-        "elapsedMs": 35787.52116699997,
+        "elapsedMs": 39752.97054199997,
         "decisions": 65,
         "legalAlternatives": 2068,
         "evaluatedEdges": 2133,
         "emittedEvents": 231718,
         "referenceBytes": 101040,
-        "eventPopulationDigest": "sha256:02638b45e6953755129879447dedb2ba40bc13d951b6543c01b32e853eb74b63",
+        "eventPopulationDigest": "sha256:a982b0109d80acbcbbe175b9cc3ebd8ff791bf2dfd29c854f073a2ceb4c5003c",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 94,
           "derived.exchange.capture_class@1:state": 157,
@@ -3149,18 +3169,18 @@
         },
         "storeRowCount": 101,
         "storeRowsDigest": "sha256:0c3bd2d19de7ea2aeaad9614e8fd52f7381c75854269a1d3375fed8f0d8004f7",
-        "decisionMeasuresDigest": "sha256:a0aead638ea0cf3648f883106dcbcbf7eb5122674dc1dfeed875ddfb6793bf8c"
+        "decisionMeasuresDigest": "sha256:291a4713f90026976f0bbbcffbb0a5eb39e14bdc1483f464d74e4b9e3ef5bc63"
       },
       {
         "pathId": "https://lichess.org/8SqP0zNd#1",
         "plies": 72,
-        "elapsedMs": 30128.79112499999,
+        "elapsedMs": 32290.59141599998,
         "decisions": 72,
         "legalAlternatives": 2076,
         "evaluatedEdges": 2148,
         "emittedEvents": 191227,
         "referenceBytes": 112112,
-        "eventPopulationDigest": "sha256:cae3f648f5ef5334ede9d848ea955fb84db18ae85f2a32d8ee93838c020d3b1a",
+        "eventPopulationDigest": "sha256:a41154db7164ebb2822537183f09b1a511e83741e9f06cfe6cd3562f66897c3e",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 54,
           "derived.exchange.capture_class@1:state": 84,
@@ -3236,18 +3256,18 @@
         },
         "storeRowCount": 134,
         "storeRowsDigest": "sha256:861293e313be21ffae55484343918af426064945d34b98673ba2049c574c7b5c",
-        "decisionMeasuresDigest": "sha256:0c6eac3322c1beceebfdfe968497bfb8b6a9338077a9380a0f628a8c79ba7921"
+        "decisionMeasuresDigest": "sha256:25f4aebc93bd84eaaf7a32d31c7b40a2c80f6523004106cbfdbc385bf9a8d22d"
       },
       {
         "pathId": "https://lichess.org/8wEHH2r7#1",
         "plies": 49,
-        "elapsedMs": 24345.364,
+        "elapsedMs": 25951.183499999985,
         "decisions": 49,
         "legalAlternatives": 1481,
         "evaluatedEdges": 1530,
         "emittedEvents": 164937,
         "referenceBytes": 82293,
-        "eventPopulationDigest": "sha256:aa3ee773f19e3afe778d3f556af91b57054a062ce702a83bb3e12445d7bcdcc6",
+        "eventPopulationDigest": "sha256:89adf9f7dfc2d5ab440f7004ba3f0cd7a8d3faf655e506fc7f7d8cb2a4bafacb",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 85,
           "derived.exchange.capture_class@1:state": 92,
@@ -3325,18 +3345,18 @@
         },
         "storeRowCount": 115,
         "storeRowsDigest": "sha256:e37fac8e723c8a27d28c867d60980edc3b8be42f173c77d1e0879e25e3a4f951",
-        "decisionMeasuresDigest": "sha256:6bf334b209e3b6ebffce48e14c5be6da11be9a317e818e56ea5ddb95b9a4064d"
+        "decisionMeasuresDigest": "sha256:d481996fead638047a6c9206f8794916cb9343517623cd7399934b1b39d8f893"
       },
       {
         "pathId": "https://lichess.org/9FTgKq10#1",
         "plies": 52,
-        "elapsedMs": 22343.123499999987,
+        "elapsedMs": 23906.881166999985,
         "decisions": 52,
         "legalAlternatives": 1366,
         "evaluatedEdges": 1418,
         "emittedEvents": 149405,
         "referenceBytes": 80809,
-        "eventPopulationDigest": "sha256:332cc57340608bc43648bc636e45dce29c283f79d6d9f87bbe074d2de02a9321",
+        "eventPopulationDigest": "sha256:4e0ebfc7cb3abcba89b1a3343e4fd256de328d37308139bb081566cf5abddbf7",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 89,
           "derived.exchange.capture_class@1:state": 70,
@@ -3412,18 +3432,18 @@
         },
         "storeRowCount": 113,
         "storeRowsDigest": "sha256:f149b9951db507ac4dbd3306e50ddcaa9017ed8d238b56614e33a77bf111c02d",
-        "decisionMeasuresDigest": "sha256:3afcb430016298753b0bfdc73a26ce72941412ee753eae8feb1368f8096864b5"
+        "decisionMeasuresDigest": "sha256:8c5018170cab05bfe93ee552b5d7a20c8708ee28835920598b57b32e2da4ad1d"
       },
       {
         "pathId": "https://lichess.org/9l0YS4kF#1",
         "plies": 39,
-        "elapsedMs": 19415.354334000032,
+        "elapsedMs": 21401.007374999986,
         "decisions": 39,
         "legalAlternatives": 1186,
         "evaluatedEdges": 1225,
         "emittedEvents": 126263,
         "referenceBytes": 64221,
-        "eventPopulationDigest": "sha256:453eea3fad33bcc21ab01fd828b88bef737f0763d0a9fe82cfc5f4bab2fa1b94",
+        "eventPopulationDigest": "sha256:9746ffc440447cf7a281f74d5f32a4b484224013473ca57da64a015c188cdd23",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 36,
           "derived.exchange.capture_class@1:state": 70,
@@ -3498,18 +3518,18 @@
         },
         "storeRowCount": 110,
         "storeRowsDigest": "sha256:4ca8e9508a3d826a68dc7d09d42a4ae8cd911bbdb7637ddde74fdb961649ec4b",
-        "decisionMeasuresDigest": "sha256:0a38a2b2bd737351db3122886f6506eec02cf56edff425e8ca658fa3d0ae1a4a"
+        "decisionMeasuresDigest": "sha256:f570fa51287af6c8e6384fa2cea7180cc8e537d931efd287035797ba4336f23b"
       },
       {
         "pathId": "https://lichess.org/a0Xo4b5J#1",
         "plies": 98,
-        "elapsedMs": 29087.85054199997,
+        "elapsedMs": 32703.686667,
         "decisions": 98,
         "legalAlternatives": 2203,
         "evaluatedEdges": 2301,
         "emittedEvents": 212275,
         "referenceBytes": 158034,
-        "eventPopulationDigest": "sha256:ea71c4f990d13295b734c334eb07de75a2a2eb91d2d365fa6fc902901a8ebfe5",
+        "eventPopulationDigest": "sha256:1346d730abca9442296ef31db4e01f351ee123a0e05a0ae383e0f8899afc4bde",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 101,
           "derived.exchange.capture_class@1:state": 116,
@@ -3586,18 +3606,18 @@
         },
         "storeRowCount": 127,
         "storeRowsDigest": "sha256:cc040e6dc4bd2e05f96e0e8185608466f80962c1eae6e381da68f5b48768fbb0",
-        "decisionMeasuresDigest": "sha256:4567f9623dec8563a1fba56ca5764cf2372c469cccfaa5b59f28f631117355e0"
+        "decisionMeasuresDigest": "sha256:cabb4ced58c8f0a7bd461973bd0c525ca3d2e826ac49478968a6f18e646b6ac0"
       },
       {
         "pathId": "https://lichess.org/B5ZRk6Hk#1",
         "plies": 102,
-        "elapsedMs": 49105.178125000035,
+        "elapsedMs": 55618.7965,
         "decisions": 102,
         "legalAlternatives": 3106,
         "evaluatedEdges": 3208,
         "emittedEvents": 373265,
         "referenceBytes": 168109,
-        "eventPopulationDigest": "sha256:57e999279c3ad3aa64eedac10adc316d191dc269142226c159f1dea5faa4c663",
+        "eventPopulationDigest": "sha256:a340be7467f5f725313e83ff9c82dd5c4f5429e3798d8e41831263e450f7a5ee",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 300,
           "derived.exchange.capture_class@1:state": 172,
@@ -3678,18 +3698,18 @@
         },
         "storeRowCount": 118,
         "storeRowsDigest": "sha256:4173f1fbd8884e7cccf01a8f2426a40e58a413177a2475b9254a039d12714ba2",
-        "decisionMeasuresDigest": "sha256:ee3862d7affdf45102284bd31c6a2b999903961ab079e972dacb2e9f06ba2f45"
+        "decisionMeasuresDigest": "sha256:efa039d571361abf223f42cfda637fb145e3eed6935dea94e7b97d37a5d4ba77"
       },
       {
         "pathId": "https://lichess.org/bcyI760n#1",
         "plies": 76,
-        "elapsedMs": 30927.09137499996,
+        "elapsedMs": 34681.08370799996,
         "decisions": 76,
         "legalAlternatives": 2069,
         "evaluatedEdges": 2145,
         "emittedEvents": 225586,
         "referenceBytes": 120425,
-        "eventPopulationDigest": "sha256:b201d30cff9f0911e72f1feb81eb7917d3758e9e6305211098b50128f9222c7a",
+        "eventPopulationDigest": "sha256:1173f75399dacd4119d1899874e7e947e73c5ffa9c0835976cc2fa499f7c2a32",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 79,
           "derived.exchange.capture_class@1:state": 131,
@@ -3765,18 +3785,18 @@
         },
         "storeRowCount": 134,
         "storeRowsDigest": "sha256:b2370d8139e012a77e230fb594f8334975875bc4d84bfa68b4472a127a0f06ad",
-        "decisionMeasuresDigest": "sha256:3fdbea2f1e2a979d807f837f4a3ac501eb4ab36741b60089ae36e1c0db6e1988"
+        "decisionMeasuresDigest": "sha256:ce29e3d912b86b24af13d90007cd1fda89c02da44ae67174b75778c5dc902c35"
       },
       {
         "pathId": "https://lichess.org/Bq21teR2#1",
         "plies": 64,
-        "elapsedMs": 27918.303082999948,
+        "elapsedMs": 31388.879125000094,
         "decisions": 64,
         "legalAlternatives": 1920,
         "evaluatedEdges": 1984,
         "emittedEvents": 199518,
         "referenceBytes": 100879,
-        "eventPopulationDigest": "sha256:cf1fa503f22130e31cd435de17f7a7c584234a8217bfae87ec5beac1a48f48ad",
+        "eventPopulationDigest": "sha256:7db303579436b61d82ce1c202ac8f939e3ef64984a11f78e9fef97ad789932e3",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 80,
           "derived.exchange.capture_class@1:state": 85,
@@ -3854,18 +3874,18 @@
         },
         "storeRowCount": 139,
         "storeRowsDigest": "sha256:41ff9a2b8a0a01dc91bc3cb5f8570f54453df4a720258264aae073cd50dadc58",
-        "decisionMeasuresDigest": "sha256:bfcb2b292c9c99fe7ea04346565a4eb28737e59f8ad76b08160230a2df444882"
+        "decisionMeasuresDigest": "sha256:172cc7f9ebe70f0a1c0db2ae40c2e6510a5d7a80f1428944228adf4236d1bc79"
       },
       {
         "pathId": "https://lichess.org/c0E9K95v#1",
         "plies": 82,
-        "elapsedMs": 34727.85950000002,
+        "elapsedMs": 39607.69775000005,
         "decisions": 82,
         "legalAlternatives": 2343,
         "evaluatedEdges": 2425,
         "emittedEvents": 264758,
         "referenceBytes": 129786,
-        "eventPopulationDigest": "sha256:6091730c3b5bf25f810b3a763d29ae3b8ea5c47e192b937f16cc6d92f7a3912a",
+        "eventPopulationDigest": "sha256:3d616af168b790f01c00f4eecbc6905d31a992d3c50f4573f1acba577bc9be6c",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 152,
           "derived.exchange.capture_class@1:state": 121,
@@ -3944,18 +3964,18 @@
         },
         "storeRowCount": 116,
         "storeRowsDigest": "sha256:0419c6790dbcad0d709f5086769fee23a329e0d3f06127bd703d7c33a44ba380",
-        "decisionMeasuresDigest": "sha256:28f7d116e40b95315dd1c3d2865178e33195460b0bfd85655483e1215b882801"
+        "decisionMeasuresDigest": "sha256:0a3ebab016fe821739247cf19ac0d65d13de1516d6d4c725aca39a051af67f23"
       },
       {
         "pathId": "https://lichess.org/CmcgG2om#1",
         "plies": 94,
-        "elapsedMs": 33721.96533300006,
+        "elapsedMs": 38497.28024999995,
         "decisions": 94,
         "legalAlternatives": 2441,
         "evaluatedEdges": 2535,
         "emittedEvents": 249374,
         "referenceBytes": 150760,
-        "eventPopulationDigest": "sha256:5d19c852a6a0ce1bbd77210d7d453beb5bbe530c3e37369ce4ba08c7b24d4500",
+        "eventPopulationDigest": "sha256:dcc039cfbb13cf6793f0295911ea38c386c1e4c5300b3c7e0583e62686dff5db",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 89,
           "derived.exchange.capture_class@1:state": 112,
@@ -4036,18 +4056,18 @@
         },
         "storeRowCount": 150,
         "storeRowsDigest": "sha256:321b587d2fbb8aa3b6bd9d6fef504e871ca6f5148160dfbea9155b5b5bcc7302",
-        "decisionMeasuresDigest": "sha256:00d25146e05eb6938ee24dd9e9e9216776ab98df71687363c24e10678a8b630a"
+        "decisionMeasuresDigest": "sha256:25ed02a17684690e1d2927a45c28f1093a9f56d6b9bcf25ea2d0569c72c4672d"
       },
       {
         "pathId": "https://lichess.org/CTpsOdRL#1",
         "plies": 80,
-        "elapsedMs": 32220.595165999955,
+        "elapsedMs": 36728.853917,
         "decisions": 80,
         "legalAlternatives": 2242,
         "evaluatedEdges": 2322,
         "emittedEvents": 233397,
         "referenceBytes": 123772,
-        "eventPopulationDigest": "sha256:b31d5d08ce963847450524d9001d370e1ae860b2ea43d348029c1762943f619a",
+        "eventPopulationDigest": "sha256:89e421a8a38a8c6c2ea76d8d35cc1cdb67f6dadd66be0b85e1319daf232bd84d",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 142,
           "derived.exchange.capture_class@1:state": 121,
@@ -4120,18 +4140,18 @@
         },
         "storeRowCount": 107,
         "storeRowsDigest": "sha256:6081ac55aad9d09dfca088ee09598cdc2350d3635d4eb354ceb6e244f3067152",
-        "decisionMeasuresDigest": "sha256:a8f4371570af6ee13bfa27da498e998e3ad911700ef31c8e5e68307e846398f1"
+        "decisionMeasuresDigest": "sha256:1aa102dcc8dc454b382597072a6a3fcb12a16d32eeed823146c4887ab6e66228"
       },
       {
         "pathId": "https://lichess.org/cXj7tMkk#1",
         "plies": 53,
-        "elapsedMs": 20880.15620800003,
+        "elapsedMs": 24035.461916,
         "decisions": 53,
         "legalAlternatives": 1486,
         "evaluatedEdges": 1539,
         "emittedEvents": 149794,
         "referenceBytes": 83927,
-        "eventPopulationDigest": "sha256:8d6d4abde2d81920280c113b7de0baea1650234f922ac5e12bfb0c38d4f86cb3",
+        "eventPopulationDigest": "sha256:28fc30a6f09a1a14529fdfefd928bcb3725579889916f59b81a01d0191af2c48",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 65,
           "derived.exchange.capture_class@1:state": 85,
@@ -4207,18 +4227,18 @@
         },
         "storeRowCount": 113,
         "storeRowsDigest": "sha256:62b5c74bca1426c24623f66c274e876232ab74d96d331f5a3e0d56e3da9c3db3",
-        "decisionMeasuresDigest": "sha256:273c3989d76cc339a7053ded3701c25cf3aed2487df3a01dce5197ce822f3481"
+        "decisionMeasuresDigest": "sha256:b872fff859ce72915a313e884df0855820ffb3b1ea9e07b066827e0325c9f070"
       },
       {
         "pathId": "https://lichess.org/DcmKJjfk#1",
         "plies": 91,
-        "elapsedMs": 30664.370790999965,
+        "elapsedMs": 34772.5863330001,
         "decisions": 91,
         "legalAlternatives": 2294,
         "evaluatedEdges": 2385,
         "emittedEvents": 227445,
         "referenceBytes": 142202,
-        "eventPopulationDigest": "sha256:10ec67b248488128581cca1ec8dabf6ce4faabc6f4871e37b10013bbacace3f4",
+        "eventPopulationDigest": "sha256:c266c38076d7bbca13aa1f2800a80632ed40270ff30e136a869f22a524494d31",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 159,
           "derived.exchange.capture_class@1:state": 124,
@@ -4298,18 +4318,18 @@
         },
         "storeRowCount": 143,
         "storeRowsDigest": "sha256:cbce12a04e1acea8819e86c6cddbd80941e88bda70419956c5483393ac335ea5",
-        "decisionMeasuresDigest": "sha256:6edb4b2b9fe98b8d464fd85f0f86269ab98d941e74878c46a776bf259c611b16"
+        "decisionMeasuresDigest": "sha256:65fbd922911086390b50ecc1658539924cb4ada2020ad591e0c28cca9b412640"
       },
       {
         "pathId": "https://lichess.org/dctdq8yx#1",
         "plies": 34,
-        "elapsedMs": 18848.515542000066,
+        "elapsedMs": 20454.873957999982,
         "decisions": 34,
         "legalAlternatives": 1091,
         "evaluatedEdges": 1125,
         "emittedEvents": 114123,
         "referenceBytes": 49512,
-        "eventPopulationDigest": "sha256:2b5688c71d4a59a6b027124b982d5ea9d4dafd8ed131d6a12e849abedac0075a",
+        "eventPopulationDigest": "sha256:8f6188571774cec78365eb11d9b58b514147f5e768c033566661a321ce9ea99a",
         "familyCounts": {
           "derived.exchange.capture_class@1:state": 72,
           "derived.king.captured_zone_defender@1:state": 10,
@@ -4377,18 +4397,18 @@
         },
         "storeRowCount": 100,
         "storeRowsDigest": "sha256:e5e15e18f66b9ff2f710a19df1f35150cbe94d4ae09099089be545378cb4e97d",
-        "decisionMeasuresDigest": "sha256:ad4c87e06a1eab7dfe6fd28994b0b42a56eceff836a0bf4d1e0432889f4271bc"
+        "decisionMeasuresDigest": "sha256:65db305404cd9c1e125af1ac6bbada23adb6e27014d2f309c46ddfcba7d8e226"
       },
       {
         "pathId": "https://lichess.org/dME7K65t#1",
         "plies": 29,
-        "elapsedMs": 18497.739625000046,
+        "elapsedMs": 19622.045125000062,
         "decisions": 29,
         "legalAlternatives": 1016,
         "evaluatedEdges": 1045,
         "emittedEvents": 112023,
         "referenceBytes": 44850,
-        "eventPopulationDigest": "sha256:a4924f15818dbf7cbc65df482fc3f126adfe17e895869bde6af8a5eb7cc88103",
+        "eventPopulationDigest": "sha256:63b08ab950495d9b53794363287c82a363bb4375dde7f0e47eaed8407d29b43c",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 26,
           "derived.exchange.capture_class@1:state": 61,
@@ -4455,18 +4475,18 @@
         },
         "storeRowCount": 98,
         "storeRowsDigest": "sha256:4481f95be43fd8d85fe0fbb3e88213c0fe9b01f662c9c84d6c88e1925037748b",
-        "decisionMeasuresDigest": "sha256:23d2cbdc80267a6cf2f58ad903341eeed572a65826fdb4279874884064bddbb0"
+        "decisionMeasuresDigest": "sha256:df0246c72f8df042fcf8a88b5ad68bced1d20c26537f3f60e48213c342278e8c"
       },
       {
         "pathId": "https://lichess.org/eAHSlmeJ#1",
         "plies": 42,
-        "elapsedMs": 22823.856917000026,
+        "elapsedMs": 24799.16749999998,
         "decisions": 42,
         "legalAlternatives": 1326,
         "evaluatedEdges": 1368,
         "emittedEvents": 138446,
         "referenceBytes": 63943,
-        "eventPopulationDigest": "sha256:21bed80d74b2189df041761509be1506ebfbda9e24fa1e04e862e08ab8797081",
+        "eventPopulationDigest": "sha256:19fb16eae15fc2f694f4668d24fda90676b9249107e22008f8a86ccee410ddc6",
         "familyCounts": {
           "derived.activity.event.open_file_occupancy@1:gained": 7,
           "derived.exchange.capture_class@1:state": 100,
@@ -4537,7 +4557,7 @@
         },
         "storeRowCount": 94,
         "storeRowsDigest": "sha256:0c05623161b5933c96cb81f8c2988058f368783aa6943617d34e908c6ada6fad",
-        "decisionMeasuresDigest": "sha256:36e12b48fc219758afca40487f90fbe5b323ca8c35c48c131e8b781175352ea4"
+        "decisionMeasuresDigest": "sha256:5bc4fa415a63e46643f3819bbac3685a35f432f92b59c3f674541b7256577765"
       }
     ]
   }

@@ -1,6 +1,6 @@
 // DISPOSABLE research harness — D1405. Not production code.
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 
@@ -243,7 +243,7 @@ function report(result: Record<string, unknown>): string {
     `20→80 p95 ratio: **${growth.p95Ratio80To20.toFixed(2)}×** — shape gate **${growth.gate}**.`, "",
     "## Bulk import", "",
     `${bulk.totals.paths} complete games / ${bulk.totals.plies} plies / ${bulk.totals.evaluatedEdges} evaluated edges in ${bulk.totalWallMs.toFixed(1)} ms (${bulk.gamesPerSecond.toFixed(3)} games/s). Per-game p50/p95/max: ${bulk.timingMs.p50Ms.toFixed(1)} / ${bulk.timingMs.p95Ms.toFixed(1)} / ${bulk.timingMs.maxMs.toFixed(1)} ms. Canonical refs: ${bulk.totals.referenceBytes} bytes.`, "",
-    "This is a lower bound over the committed one-edge compiler. It excludes database work and the population/path constructors required by B2.", "",
+    "This is the complete final-registry collection cost over committed inputs. D1405b separately measures SQLite publication and the bounded single-decision path.", "",
   ].join("\n");
 }
 
@@ -366,8 +366,11 @@ describe("D1405 longitudinal projection cost", () => {
       return;
     }
 
-    const fragments = Object.fromEntries(["20", "40", "80", "bulk"].map((name) => {
-      const path = resolve(outputDir, `d1405-${name}-fragment.json`);
+    const fragmentPaths = ["20", "40", "80", "bulk"].map((name) =>
+      resolve(outputDir, `d1405-${name}-fragment.json`));
+    const fragments = Object.fromEntries(fragmentPaths.map((path) => {
+      const name = path.match(/d1405-(20|40|80|bulk)-fragment\.json$/u)?.[1];
+      if (name === undefined) throw new TypeError(`unexpected D1405 fragment path: ${path}`);
       return [name, JSON.parse(readFileSync(path, "utf8")) as Record<string, unknown>];
     }));
     const receipts = Object.values(fragments);
@@ -401,5 +404,6 @@ describe("D1405 longitudinal projection cost", () => {
 
     expect(result.sourcePaths as readonly string[]).toContain("packages/runtime/src/semantic-evidence.ts");
     expect((result.bulk as { readonly totals: { readonly paths: number } }).totals.paths).toBe(BULK_PATHS);
+    for (const path of fragmentPaths) unlinkSync(path);
   });
 });

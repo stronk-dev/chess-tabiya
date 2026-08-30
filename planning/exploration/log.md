@@ -11862,3 +11862,20 @@ reach.
 inversion. Exact receipt: `planning/longitudinal-store/second-author-repair-2026-08-30.md`. Fresh
 review still gates acceptance and implementation; no production migration, worker, API, consumer,
 content, archive or protected-design byte changed.
+
+## 2026-08-30 — Longitudinal final-registry cost discharge
+
+Ran the preregistered D1405 and D1405b instruments through `make longitudinal-store-cost` against
+committed final-registry inputs. Complete-prefix p95 was 13.08 / 26.45 / 47.29 seconds at 20 / 40 /
+80 plies. The 25-game arm evaluated 50,586 edges across 1,750 plies and took 828.04 seconds. The
+single-decision arm measured 531.5 ms p50 / 872.2 ms p95 overall and 902.7 ms p95 in middlegames;
+SQLite publication was 0.128 ms p95. The preregistered verdict is
+`REFUSE_NATIVE_INCREMENTAL`: collection/legal-alternative expansion owns the failure, not storage.
+
+Revision 1 therefore keeps reads on stored transaction-fixed snapshots and all projection work in
+the bounded background worker. Moving it into a request requires a later RFC and new
+preregistration. Canonical receipts are
+`planning/longitudinal-store/d1405-longitudinal-cost-results.{json,md}` and
+`planning/longitudinal-store/d1405b-single-decision-results.json`. The measurement aggregator now
+removes successful intermediate arm fragments so its ordinary Make target leaves no scratch-file
+residue.
