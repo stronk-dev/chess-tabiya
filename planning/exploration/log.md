@@ -12009,3 +12009,16 @@ The component vocabulary, sealed wire, exact form assignment and three-checkpoin
 `make evidence-presentation-third-fresh-review` passes 7/7. No production or protected-design byte
 changed; [[D1672]] remains owner-only. Exact review:
 `planning/platform-alignment/evidence-presentation/third-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Module-registration second fresh independent return
+
+Returned `module-registration.md` on [[D2164]]–[[D2170]] after executing its generated artifacts
+against the authorities they claim to derive from. Binding fields are local copies; callable names
+have no typed invocation/extraction; all derived subjects are stamped as edges; nine DAG inputs are
+unowned; Guided Hint passes at zero; presentation adapter ids are invented; and two broad smokes do
+not prove 117 row outputs.
+
+The eleven-module product model, staged-move protocol, atomic budgets, bounded Review paging and
+seat architecture survive. `make module-registration-second-fresh-review` passes 7/7. No product,
+schema or protected-design byte changed. Exact review:
+`planning/learner-modules/second-fresh-independent-buildability-review-2026-08-30.md`.

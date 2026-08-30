@@ -36,3 +36,14 @@ passes 12/12 with permanent checks for the exact transfer set, per-module answer
 as exactly one requested-Sight pair, making the final image 207 declared / 205 compiled / 2
 awaiting. Fresh independent buildability review remains mandatory; no
 product, schema, content, archive or protected intent byte changed.
+
+## 2026-08-30 — module-registration second fresh independent return
+
+- Returned the generated author artifacts on [[D2164]]–[[D2170]].
+- Timing/role/session/form/budget values are copied beside their actual authorities.
+- Execution rows name callables but no typed invocation, extractor or sealed projection output.
+- Derived subject grain is forced to edge; nine DAG inputs are absent and undeclared.
+- Guided Hint passes vacuously with zero rows; presentation adapters are synthesized strings.
+- Two family smoke tests do not prove any of the 117 row-to-projection mappings.
+- `make module-registration-second-fresh-review` passes 7/7. Exact review:
+  `second-fresh-independent-buildability-review-2026-08-30.md`. No implementation is authorised.

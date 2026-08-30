@@ -1,13 +1,12 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** draft — [[D2120]]–[[D2126]] author-repaired 2026-08-30; fresh independent
-  buildability review required. The repair publishes generated, digest-sealed 117-row execution
-  and 205-binding plans; closes post-adapter budgets, bounded immutable Review paging, the total
-  role projection, Inspector's family-partitioned empty algebra and the same-subject derivation
-  DAG; and locks the plan to the existing assembly image. `make
-  module-registration-author-contract` passes 9/9 and `make module-evidence-assembly` passes
-  13/13. Exact repair receipt:
-  `planning/learner-modules/second-author-repair-2026-08-30.md`. The
+- **Status:** draft — **returned by second fresh independent buildability review 2026-08-30 on
+  [[D2164]]–[[D2170]].** The module product model survives, but the binding generator hand-copies
+  authority fields; execution rows lack invocation/extraction contracts; derived subject grain is
+  false; nine DAG inputs are ownerless; Guided Hint passes by omission; presentation adapter ids
+  are fabricated; and two broad smoke tests do not prove 117 projection outcomes. Exact return:
+  `planning/learner-modules/second-fresh-independent-buildability-review-2026-08-30.md`.
+  No implementation is authorised. The
   [[D1870]]/[[D2030]] dependency image remains the owner-ruled measured 207-pair target,
   including requested-Sight `pawn_safe_square`. Prior
   amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt
@@ -91,6 +90,28 @@ durable per-learner delivery authority must claim its storage/schema work before
 Criterion A16 exercises both durable and ephemeral arms; a rules-floor-only fixture cannot pass.
 `node tools/register-check.mjs` passes with this block declaring `none` (C1–C8, including C8's
 digest refusal of an undeclared schema edit).
+
+## Second fresh independent return (2026-08-30)
+
+The generated author artifacts exposed seven further buildability blockers: [[D2164]], [[D2165]],
+[[D2166]], [[D2167]], [[D2168]], [[D2169]] and [[D2170]].
+
+1. Timing, roles, sessions, forms and budgets are copied from local tables rather than derived
+   from workflow/module/adapter authorities.
+2. An execution row names only a source and callable; it has no typed invocation, input builder,
+   projection extractor, result parser, abstention mapping or sealed result.
+3. Every derived projection is labelled edge-local and same-subject by construction, including
+   run-wide story rank.
+4. Nine derivation inputs are absent from both executable rows and any declared source-input set.
+5. Guided Hint has no acceptance key or binding row, so the mandatory family×rung product passes
+   vacuously at zero.
+6. Binding adapter ids are synthesized without a presentation registry and the forms join omits
+   the registered-adapter term.
+7. Two broad source-family smokes never prove that any of 117 rows emits its declared projection.
+
+`make module-registration-second-fresh-review` reproduces 7/7. Exact evidence and repair
+obligations are in the second fresh review dossier. This is an author return; another fresh review
+is mandatory before implementation.
 
 ## Summary
 
@@ -1599,6 +1620,13 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-08-30 (second fresh independent return): returned on [[D2164]]–[[D2170]]. The generated
+  bindings hand-copy authority fields; execution rows are callable names without typed
+  invocation/extraction; derived subject grain and DAG closure are false; Guided Hint passes by
+  omission; adapter ids are synthesized without the presentation registry; and broad family
+  smokes do not prove row outputs. `make module-registration-second-fresh-review` passes 7/7.
+  Exact return: `planning/learner-modules/second-fresh-independent-buildability-review-2026-08-30.md`.
+  No implementation is authorised.
 - 2026-08-30 (second author repair): repaired [[D2120]]–[[D2126]] without touching production.
   Generated and digest-sealed the exact 117-row execution and 205-row binding artifacts; locked
   their acceptance image to the established D1865 harness; specified atomic post-adapter budgets,
