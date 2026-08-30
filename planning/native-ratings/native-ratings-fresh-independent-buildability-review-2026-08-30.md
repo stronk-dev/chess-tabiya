@@ -121,14 +121,21 @@ This draft consumes their seat, result, terminal and bot identities as though ac
 dependency image, retain resource claims only provisionally, and do not implement against prose
 whose exact types are under repair.
 
-## B16 — the closed-human-pool publication rule is unmeasured ([[D2323]])
+## B16 — research refutes the direct-anchor publication rule ([[D2323]]–[[D2326]])
 
-The RFC asserts that a human-only pool can drift together indefinitely and then chooses to suppress
-the point estimate at zero calibrated-bot fraction. The official Glicko-2 description defines
-pre-period ratings/RDs and update arithmetic, but it does not establish this product threshold or
-publication policy. [V: Mark Glickman, *Example of the Glicko-2 system*](https://www.glicko.net/glicko/glicko2.pdf).
-Run a committed closed/mixed-pool simulation across arrival/order/connectivity arms, then either pin
-a measured disclosure/suppression rule or state the limitation without inventing a threshold.
+The requested committed research now runs via `make rating-pool-research`; exact method, receipt and
+limits are in `design/research/glicko-pool-identifiability.md`. A +200 initial translation survives
+500 closed-pool periods exactly, establishing additive location non-identifiability. The separate
+32-seed arm moved the centroid from -18.426 to +15.342 after 500 periods and therefore does not
+support the draft's less precise claim that a pool drifts together indefinitely. `[V]`
+
+The zero/non-zero direct calibrated-bot fraction is neither necessary nor sufficient. Direct shares
+of 0.99%, 4.76% and 16.67% left 98.428, 46.897 and 3.188 points of mean translation respectively;
+zero-direct-anchor learners inherited calibration through a connected opponent component while a
+disconnected component retained the full 200. `[V]` Author repair must distinguish a locally
+meaningful pool rating from a point claimed on the bot-calibrated scale and propose a component-level
+calibration receipt. The owner/RFC still owes the publication threshold and wording; this review does
+not invent them.
 
 ## Repair order
 
@@ -136,7 +143,7 @@ a measured disclosure/suppression rule or state the limitation without inventing
 2. Separate game truth, terminal state and rating disposition; define the complete subject identity.
 3. Specify one transactional participant/start/result authority and lifecycle-safe SQL.
 4. Rework migration, account lifecycle and every attempt/game consumer with set-equal censuses.
-5. Measure the closed/mixed human rating pool and settle publication semantics.
+5. Consume the D2323-D2325 measurement and settle D2326's local-pool/cross-pool publication semantics.
 6. Specify and fixture the complete typed native-match/rating journey, then repeat independent review.
 
 No implementation is authorized by this return.

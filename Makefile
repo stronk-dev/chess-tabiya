@@ -414,6 +414,12 @@ enforced-clocks-fresh-review:
 native-ratings-fresh-review:
 	node --test tools/d2308-native-ratings-fresh-review/contract.test.mjs
 
+.PHONY: rating-pool-research
+rating-pool-research:
+	./node_modules/.bin/vitest run --config tools/d2323-rating-pool-research/vitest.config.ts
+	./node_modules/.bin/esbuild tools/d2323-rating-pool-research/report.ts --bundle --platform=node --format=esm --outfile=/tmp/tabiya-rating-pool-report.mjs
+	node /tmp/tabiya-rating-pool-report.mjs
+
 build:
 	pnpm build
 

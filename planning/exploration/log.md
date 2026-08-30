@@ -12363,3 +12363,19 @@ result/standing semantics. The closed-human-pool publication policy remains unme
 `make native-ratings-fresh-review` passes 16/16. No production, schema, migration, API, client,
 content, archive or protected-intent byte changed. Exact review:
 `planning/native-ratings/native-ratings-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Rating-pool identifiability research
+
+Discharged [[D2323]] with a committed five-arm instrument over the shipped `glicko2Update`, recorded
+in `design/research/glicko-pool-identifiability.md` and reproduced by
+`make rating-pool-research`. Identical closed-pool results preserve a +200 initial translation
+exactly; 32 finite stochastic runs moved the centroid only -18.426 to +15.342, so the established
+limitation is additive location non-identifiability, not the draft's unbounded-drift wording.
+
+The proposed zero/non-zero direct calibrated-bot fraction is also refuted as the publication grain.
+Direct shares of 0.99%, 4.76% and 16.67% left 98.428, 46.897 and 3.188 points of mean translation.
+Zero-direct-anchor learners connected to an anchored learner inherited calibration, while an
+equally active disconnected component retained the full 200-point ambiguity. Added [[D2324]]–
+[[D2326]]: graph-level calibration reach, precise terminology, and the remaining owner/RFC decision
+between local-pool and cross-pool publication claims. No exploration gate changed state and no
+production, schema, migration, API, client, content, archive or protected-intent byte changed.

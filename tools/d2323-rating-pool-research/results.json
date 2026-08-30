@@ -1,0 +1,64 @@
+{
+  "schema": "tabiya.rating-pool-research.v1",
+  "shippedImplementation": "packages/runtime/src/rating.ts#glicko2Update",
+  "closedTranslation": {
+    "min": 200,
+    "median": 200,
+    "max": 200,
+    "mean": 200
+  },
+  "closedCentroidMovement": {
+    "min": -18.426407,
+    "median": -1.40892,
+    "max": 15.342008,
+    "mean": -1.733124
+  },
+  "anchorDose": {
+    "every_100": {
+      "directAnchorShare": 0.009901,
+      "remainingOffset": {
+        "min": 98.402963,
+        "median": 98.422045,
+        "max": 98.479767,
+        "mean": 98.428029
+      }
+    },
+    "every_20": {
+      "directAnchorShare": 0.047619,
+      "remainingOffset": {
+        "min": 46.729437,
+        "median": 46.947724,
+        "max": 47.133141,
+        "mean": 46.897364
+      }
+    },
+    "every_5": {
+      "directAnchorShare": 0.166667,
+      "remainingOffset": {
+        "min": 3.145073,
+        "median": 3.185824,
+        "max": 3.256308,
+        "mean": 3.188045
+      }
+    }
+  },
+  "graphPropagation": {
+    "directAnchorPlayer": {
+      "id": "p0",
+      "games": 200,
+      "remainingOffset": 42.462375
+    },
+    "connectedZeroDirectAnchor": {
+      "min": 48.089115,
+      "median": 48.175552,
+      "max": 48.25619,
+      "mean": 48.173619
+    },
+    "disconnectedZeroDirectAnchor": {
+      "min": 200,
+      "median": 200,
+      "max": 200,
+      "mean": 200
+    }
+  }
+}

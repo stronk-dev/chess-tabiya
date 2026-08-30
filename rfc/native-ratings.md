@@ -6,9 +6,10 @@
   admits contradictory lifecycle, rating and participant records; seat/game identities can
   disagree; deletion destroys shared history; the attempt migration misses live consumers; rating
   subject, migration and typed learner journey are incomplete; tournament readiness is vacuous;
-  dependencies and owner questions remain unresolved; and the human-pool publication rule is
-  unmeasured. `make native-ratings-fresh-review` passes 16/16. No implementation before predecessor,
-  author and research repair plus another review
+  dependencies and owner questions remain unresolved; and the measured human-pool research refutes
+  its direct-anchor publication rule. `make native-ratings-fresh-review` passes 16/16 and
+  `make rating-pool-research` passes 5/5. No implementation before predecessor, owner and author
+  repair plus another review
 - **Author:** claude (native-ratings lane), from the measured DDL at HEAD, `rfc/social-play.md` §§1,
   3, 7, `rfc/learner-rating.md` §§2, 3, 5, 6, 8, 9, 10a, 11.3, `planning/ux-implementation-index.md`
   §Tournament readiness (T1–T22), and `design/research/league-as-return-loop.md` §§C5, C6
@@ -772,13 +773,16 @@ exact review is
 13. [[D2320]] — tournament readiness proves arbitrary inserts, not entrants/pairings/results/standings.
 14. [[D2321]] — the core-loop question is routed to an unrelated discharge; rematch remains open.
 15. [[D2322]] — every terminal/social input the draft consumes is currently returned.
-16. [[D2323]] — closed-human-pool drift and point-suppression policy have no measured falsifier.
+16. [[D2323]], [[D2324]], [[D2325]] and [[D2326]] — committed research establishes additive
+    pool-location ambiguity, refutes the direct-anchor-fraction boundary and leaves local-pool versus
+    cross-pool publication policy for owner/author repair.
 
 The migration reservation remains provisional, not buildable. Repair must first accept exact seat,
 result and terminal authorities; separate game truth from rating disposition; define one
 transactional participant/lifecycle authority and complete rating subject; migrate all attempt,
-privacy and account-lifecycle consumers; measure human-pool behavior; and prove the complete learner
-journey before another independent review.
+privacy and account-lifecycle consumers; consume the measured component-level calibration findings
+and settle publication semantics; and prove the complete learner journey before another independent
+review.
 
 ## Acceptance criteria
 
