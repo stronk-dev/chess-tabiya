@@ -1,14 +1,13 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — author-repaired 2026-08-30 on [[D2050]]–[[D2055]], awaiting fresh
-  independent review. The public grammar now crosses every shipped family with one structured
-  version result; the reviewed author artifact seals 373 member mappings, 14 unconditional roots
-  and five resolved-reference sites by input/output digest; member-array annotations are total;
-  recursive vocabularies use schema-aware instance traversal; evaluator roots are exact live
-  symbols; and refusal authority resolves through protected design. `make pack-capability-closure`
-  (7/7), `make pack-capability-repeat-review` (11/11) and `make pack-capability-fresh-review` (6/6)
-  pass. Acceptance, lane-0.30 implementation and corpus application remain unauthorised pending
-  independent review; the D560 hold stays whole.
+- **Status:** draft — returned by second fresh independent review 2026-08-30 on
+  [[D2070]]–[[D2076]]. The D2050–D2055 repairs survive, but lane 0.30 still cannot land: required
+  stamps conflict with the held corpus; plan readiness contradicts verify; implementation changes
+  the schema that the author artifact seals; source/dependency closure remains unauthored; the
+  stamp is inside its own applicability population; version history is unrepresentable; and
+  schema-order-derived ids are not stable. Prior 7 + 11 + 6 contracts remain green; `make
+  pack-capability-second-fresh-review` reproduces 7/7 blockers. No schema, registry, pack or digest
+  implementation is authorised; the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -1073,6 +1072,26 @@ This live RFC owns the next author pass; the review rows are not free-floating d
 The author pass inverts `make pack-capability-fresh-review`, preserves the prior 7 + 11 arms and
 requests another independent review. It does not implement lane 0.30 or touch corpus bytes.
 
+## Second-fresh-return author obligations (2026-08-30)
+
+This live RFC owns the seven new return seams:
+
+- [[D2070]] — make schema/stamp/corpus landing atomic or specify a real versioned compatibility
+  transition that can keep both implementation and content gates green.
+- [[D2071]] — separate plan-shape verification from apply-readiness refusal.
+- [[D2072]] — publish author-owned post-migration schema bytes or an exact patch/post-image digest.
+- [[D2073]] — publish complete member→source/dependency authority, including helpers, tables and
+  multiple interpretation sites.
+- [[D2074]] — exclude capability metadata from semantic applicability by an exact independent
+  authority so the stamp never derives from itself.
+- [[D2075]] — define retained per-version declarations, one current version and acyclic successor
+  history.
+- [[D2076]] — replace schema-ordinal public ids with stable authored/discriminator identities.
+
+The next author pass must invert `make pack-capability-second-fresh-review`, preserve the previous
+7 + 11 + 6 arms, run full verification and request another independent review. It may not implement
+lane 0.30 or mutate corpus bytes while the landing authority remains contradictory.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -1241,6 +1260,13 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-08-30 (**second fresh independent return**): returned on [[D2070]]–[[D2076]]. Required
+  stamps cannot land apart from the held 92-pack rewrite; judgement-bearing plan output is both
+  required red and verify-green; the old raw schema digest cannot survive required annotations and
+  `requires`; no author source/dependency closure exists for 373 AST-backed members; capability
+  metadata derives capabilities from itself; one declaration per subject cannot retain old+new
+  versions; and `oneOf` ordinals make public ids move under semantic no-op reorder. Exact return:
+  `planning/pack-capability-contract/second-fresh-independent-review-2026-08-30.md`.
 - 2026-08-30 (**D2050–D2055 author repair**): widened the compatibility grammar to shipped
   one-segment ids and made the legacy criterion return `CapabilityVersion`; published the complete
   digest-sealed applicability authority; replaced object annotations with total member arrays;

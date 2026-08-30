@@ -11425,3 +11425,18 @@ The exact return is
 `planning/longitudinal-store/fresh-independent-buildability-review-2026-08-30.md`; `make
 longitudinal-store-fresh-review` passes 7/7 as a blocker reproduction. No migration, worker,
 storage implementation, consumer, content or protected-design byte changed.
+
+## 2026-08-30 — pack-capability second fresh independent return
+
+Re-reviewed the D2050–D2055 pack-capability repair at its landing boundaries and returned it on
+[[D2070]]–[[D2076]]. The prior 7 + 11 + 6 arms remain green. The new seven-arm reproduction proves
+the required stamp cannot land without the held 92-pack rewrite; judgement-bearing migration plans
+are both required to fail and wired into green verify; implementation changes the raw schema the
+author artifact seals; the 373-member source/helper dependency closure is unauthored; the new
+requirement grammar enters its own applicability walk; one declaration per subject cannot retain
+deprecated+active versions; and public ids change under a semantic no-op `oneOf` reorder.
+
+The exact return is
+`planning/pack-capability-contract/second-fresh-independent-review-2026-08-30.md`; `make
+pack-capability-second-fresh-review` passes 7/7. No schema, capability registry, pack, digest,
+migration application, content or protected-design byte changed.
