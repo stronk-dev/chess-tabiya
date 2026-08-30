@@ -50,3 +50,19 @@ comprehension. D649 leaves owner use and descopes recruited participant work.
 R15/R16's mechanical/code arms complete when the matrix and ownership reconciliation are
 reproducible, every unsafe/absent edge has a ledger owner, and O11 receives a bounded workflow
 choice rather than an invitation to redesign live sessions.
+
+## 2026-08-30 closure refresh
+
+The August 29 Live finishing pass invalidated several original absences, so the 1.0 journeys were
+re-joined at current HEAD in `design/research/professional-workflow-1.0-closure.md` rather than
+reusing the 2026-08-21 matrix as current product truth.
+
+The refreshed result returns `casting.md` without discarding its liveness work. Five joins remain:
+[[D2261]] live-followed casting versus ordinary Stream rehearsal; [[D2262]] streamer privacy;
+[[D2263]] Review Submission context; [[D2264]] bounded co-teacher session authority; and [[D2265]]
+scheduled-session admission. Existing rows retain Academy compiler/defaults, live-vote delay,
+source liveness and provider bridge. O11 is now the only author decision needed before drafting the
+successor composition contract; institution-managed minors and academy CRM remain separately
+scoped roadmap decisions [[D1844]]/[[D1845]].
+
+Reproduce with `make professional-closure-audit`.

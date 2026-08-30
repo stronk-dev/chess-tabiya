@@ -12253,3 +12253,19 @@ public-pool decision and now explicitly retains the no-chat cost question withou
 means no abuse boundary. `make social-play-fresh-review` passes 8/8. No schema, migration, route,
 client, CSS, archive or protected-design byte changed. Exact review:
 `planning/platform-alignment/social-play/fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Professional workflow 1.0 closure audit
+
+Re-ran the coach/classroom/streamer/casting join after the August 29 Live finishing pass. The old
+“almost no UX” verdict is stale: the roster grid, named consent, proposal actions, wall timing,
+classroom identity, OBS instructions, audience preview, voting and watch links now render. The
+remaining failure is composition, not absence of primitives.
+
+Returned `casting.md` on [[D2261]] because it owns only a live-followed-game projection while the
+roadmap assigns it ordinary Stream rehearsal and the whole professional capability. Ledgered the
+missing streamer privacy state ([[D2262]]), consent-bounded Review Submission context ([[D2263]]),
+bounded co-teacher live authority ([[D2264]]) and scheduled-session admission join ([[D2265]]).
+Existing rows retain the Academy compiler/default gap, owner-configurable delayed votes, source
+liveness and provider bridge. `make professional-closure-audit` passes 7/7. No production, schema,
+migration, archive or protected-intent byte changed. Exact dossier:
+`design/research/professional-workflow-1.0-closure.md`.

@@ -390,6 +390,10 @@ bounded-target-second-author-repair:
 bounded-target-second-fresh-review:
 	node --test tools/d2202-bounded-target-second-fresh-review/contract.test.mjs
 
+.PHONY: professional-closure-audit
+professional-closure-audit:
+	node --test tools/d2261-professional-closure-audit/contract.test.mjs
+
 build:
 	pnpm build
 

@@ -1,6 +1,12 @@
 # RFC: casting — the streamer/caster surface over a live-followed game
 
-- **Status:** draft — 2026-08-23
+- **Status:** draft — **RETURNED by 1.0 closure audit 2026-08-30 on [[D2261]], with
+  [[D1472]] still unabsorbed.** This document specifies the liveness-safe projection of a
+  followed game, not the complete Stream/Coach professional capability assigned to it by the
+  roadmap. Its source guard remains valid; author repair must absorb the ruled delayed-vote
+  cursor, stop calling [[D705]] a ruling, and hand ordinary Stream rehearsal/privacy plus Teach
+  Live/Review Submission to an explicit successor owner. No implementation is authorized.
+  **Prior status:** draft — 2026-08-23
 - **Author:** claude (coordinator), from `planning/live-sources/phase-b-derivation.md` §4
   and `design/research/live-relay-as-drill-source.md`
 - **Created:** 2026-08-23
@@ -280,6 +286,34 @@ than a build. [[D1212]]'s question is answered by the same ruling.
 **One.** `docs/live-sessions.md`'s accepted host-tier limitation is narrowed for live
 sources only (§3.3). The document's reasoning holds for rehearsal and this RFC does not
 touch it there; the narrowing is scoped by `sourceGameLive` and releases with it.
+
+## Fresh 1.0 closure return — 2026-08-30
+
+`design/research/professional-workflow-1.0-closure.md` joined this document to the current
+roadmap, routes and August 29 Live finishing pass. The liveness analysis survives. The product
+boundary does not.
+
+1. **This RFC owns a followed-game cast, not ordinary Stream rehearsal.** §1 requires a followed
+   source and §8 explicitly puts non-followed runs out of scope. The shipped workflow named
+   *Stream a rehearsal* accepts any hosted run, and the professional 1.0 exit also requires a
+   streamer privacy state. Calling this RFC the primary owner silently drops that whole flow
+   ([[D2261]]/[[D2262]]).
+2. **The Academy half has no successor contract.** The archive owns storage/consent primitives,
+   not a complete Teach Live or Review Submission composition. Current Review Submission opens a
+   generic run and loses learner/assignment/expiry context; co-teachers acquire no bounded live
+   authority; scheduled classroom sessions render without admission state or action
+   ([[D2263]]–[[D2265]]). Those are not casting implementation details, but this RFC may not be
+   accepted while the roadmap names it as their only owner.
+3. **The delay question is already answered.** [[D1291]] requires owner-configurable delayed live
+   votes and discharges D3. §6, criterion 5 and the blank discharge still specify only refusal
+   while live. Absorb [[D1472]] with a literal delayed cursor/identity and able-to-fail fixtures.
+4. **The authority premise is still circular.** [[D705]] is a useful researched recommendation,
+   not a ruling. O11 must ratify compositions over the shared evidence rail before this RFC or its
+   successor cites that premise normatively.
+
+`make professional-closure-audit` retains seven falsifiers. Author repair may keep this document
+narrow—indeed that is recommended—but must rename its roadmap role and establish the successor
+professional-compositions owner in the same round so no 1.0 journey disappears between RFCs.
 
 ## Acceptance criteria
 
