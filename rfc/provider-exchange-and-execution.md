@@ -1,11 +1,11 @@
 # RFC: Provider exchange and projection execution
 
-- **Status:** draft — author-repaired 2026-08-30 on [[D2056]]–[[D2062]] after the fresh
-  independent return. The repair adds scheduler-owned runtime seals; one run-prefix/evidence-item
-  digest authority; absolute non-refreshing retention; closed endpoint, engine and cache identity
-  images; five operator-capability CLI traversals; one sealed Syzygy local payload; and exact Maia
-  admission/application rules. The prior return harness must now invert; a new independent
-  buildability review still gates acceptance and implementation remains forbidden.
+- **Status:** draft — RETURNED by second fresh independent review 2026-08-30 on [[D2184]]–[[D2189]].
+  The D2056–D2062 repair survives, but run-head subjects cannot select a runtime node/edge; three
+  engine digest brands have no byte authority; typed payloads are not bound to captured response
+  bytes; Explorer status/ETag sit outside acquisition identity; the five CLI traversals stop before
+  evidence adapters; and the closed cross-package provider protocol claims no shared register.
+  `make provider-exchange-second-fresh-review` passes 6/6. Implementation remains forbidden.
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
 - **Design refs:** `design/03-product-breadth.md` evidence architecture and provider-backed
@@ -1534,6 +1534,27 @@ The author pass must invert `make provider-exchange-fresh-review`, preserve the 
 5 arms, run full verification and request another independent review. It may not implement
 providers or learner bindings in the authoring commit.
 
+## Second-fresh-return obligations (returned 2026-08-30)
+
+The seven preceding repairs remain required. A new author pass must additionally close:
+
+- [[D2184]] — add exact runtime subject grains below an authorized run prefix, so static source
+  occurrence cannot stand in for a node/edge occurrence;
+- [[D2185]] — give engine binary, option-image and container digests sole byte constructors and
+  live capture authority;
+- [[D2186]] — bind each typed provider payload to the exact captured response through a registered
+  parser/value receipt before source evidence is minted;
+- [[D2187]] — include admitted HTTP status/ETag in the capture/response identity or remove them
+  from Explorer evidence;
+- [[D2188]] — make every promised evidence traversal reach its exact adapter/factory, or narrow the
+  claim and retain the source projections as untraversed;
+- [[D2189]] — register and claim the shared provider protocol resource, deriving rather than
+  copying its operation/digest populations.
+
+The author repair must invert `make provider-exchange-second-fresh-review`, preserve all earlier
+contracts, run full verification and request another independent review. It may not implement the
+provider scheduler, source projections or learner bindings in the authoring commit.
+
 ## Acceptance criteria
 
 1. The D1700 harness's 96 direct members remain distinguishable and expand to 99 paths at the
@@ -1703,6 +1724,11 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-08-30: second fresh independent review returned the D2056–D2062 repair on
+  [[D2184]]–[[D2189]]. The six-arm reproduction covers under-grained runtime subjects, unowned
+  engine digest bytes, unbound payload/response pairs, omitted HTTP metadata, scheduler-only
+  traversal positives and the missing shared provider register. Earlier repairs survive; no
+  implementation is authorized.
 - 2026-08-30: author-repaired [[D2056]]–[[D2062]]. Scheduler-owned runtime seals now bind
   acquisition, delivery and local-domain values; branded run-prefix/item/subject digests resolve
   only inside an authorized run; retention is absolute and non-refreshing; endpoint, engine,
