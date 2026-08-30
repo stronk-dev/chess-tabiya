@@ -332,6 +332,11 @@ candidate-packet-second-author-repair:
 candidate-packet-second-fresh-review:
 	node --test tools/d2198-candidate-packet-second-fresh-review/contract.test.mjs
 
+.PHONY: candidate-packet-third-author-repair
+candidate-packet-third-author-repair:
+	node --test tools/d2198-candidate-packet-third-author-repair/contract.test.mjs
+	./node_modules/.bin/tsc -p tools/d2198-candidate-packet-third-author-repair/tsconfig.contract.json --noEmit
+
 review-evidence-author-contract:
 	node --test tools/d1969-review-evidence-author-harness/*.test.mts
 

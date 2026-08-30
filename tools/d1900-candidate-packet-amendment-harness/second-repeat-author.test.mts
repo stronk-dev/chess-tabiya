@@ -84,7 +84,7 @@ test("D1958 and D1961 are literal in the amended RFC", () => {
   assert.match(rfc, /function assertCandidatePopulationReceipt/u);
   assert.match(rfc, /function projectCandidatePopulationReceipt/u);
   assert.doesNotMatch(rfc, /readonly yieldControl: \(\) => Promise<void>/u);
-  assert.match(rfc, /product factory fixes `exactLegalMoves`, `CANDIDATE_COLLECTOR_EXECUTION`/u);
+  assert.match(rfc, /product factory fixes `PRIMARY_EVIDENCE_MANIFEST`, `exactLegalMoves`,[\s\S]*`CANDIDATE_COLLECTOR_EXECUTION`/u);
   assert.match(rfc, /module-private\s+`createCandidatePopulationServiceForTest`/u);
   assert.match(rfc, /messageChannelMacrotaskYield/u);
 });

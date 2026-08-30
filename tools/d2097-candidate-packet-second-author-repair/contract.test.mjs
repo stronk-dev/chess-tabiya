@@ -80,14 +80,14 @@ test("D2098: provider handoff is absent whole from the foundation surface", () =
 
 test("D2099: one exported factory fixes production authorities and isolates test hooks", () => {
   assert.match(rfc, /export interface CandidatePopulationService\s*\{/u);
-  assert.match(rfc, /export function createCandidatePopulationService\(input:/u);
-  assert.match(rfc, /product factory fixes `exactLegalMoves`, `CANDIDATE_COLLECTOR_EXECUTION`/u);
+  assert.match(rfc, /export function createCandidatePopulationService\([\s\S]*CandidatePopulationServiceOptions/u);
+  assert.match(rfc, /product factory fixes `PRIMARY_EVIDENCE_MANIFEST`, `exactLegalMoves`,[\s\S]*`CANDIDATE_COLLECTOR_EXECUTION`/u);
   assert.match(rfc, /module-private\s+`createCandidatePopulationServiceForTest`/u);
 });
 
 test("D2100: collector registry is a complete callable DAG, not a projection-id list", () => {
-  const registry = section("export const CANDIDATE_COLLECTOR_EXECUTION", "] as const satisfies");
-  const rows = [...registry.matchAll(/id: "([^"]+)"[\s\S]*?operation: ([A-Za-z]+)[\s\S]*?dependencies: \[([^\]]*)\]/gu)]
+  const registry = section("export const CANDIDATE_COLLECTOR_EXECUTION", "export type CandidateCollectorId");
+  const rows = [...registry.matchAll(/^\s*"([^"]+)": \(\{[^\n]*?collect: ([A-Za-z]+)[^\n]*?dependencies: \[([^\]]*)\]/gmu)]
     .map((match) => ({ id: match[1], operation: match[2], dependencies: [...match[3].matchAll(/"([^"]+)"/gu)].map((item) => item[1]) }));
   assert.equal(rows.length, 13);
   assert.equal(new Set(rows.map((row) => row.id)).size, rows.length);

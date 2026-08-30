@@ -1,11 +1,11 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — RETURNED by second fresh independent review 2026-08-30 on
-  [[D2198]]–[[D2201]].** The repaired scope, provider separation, bounded admission and explicit
-  ruleset survive, but manifest authority splits, available-empty has no projection identity, the
-  advertised registry does not satisfy its own declaration, and three public contract types are
-  undefined. `make candidate-packet-second-fresh-review` passes 4/4. Implementation remains
-  unauthorized.
+- **Status:** **draft — author-repaired 2026-08-30 on [[D2198]]–[[D2201]]; fresh independent
+  review required.** The product factory now fixes the primary manifest authority; every collector
+  result is projection-addressed; thirteen exact context adapters satisfy the executable registry;
+  and memo, service-stat and receipt-reference protocols are closed. The historical return remains
+  reproducible; `make candidate-packet-third-author-repair` is the positive author contract.
+  Implementation remains unauthorized.
   [[D1580]] remains separate numeric appliance-tier debt. *(Prior state: D1977–D1981
   author-repaired after D1958–D1961, D1900–D1903 and D1945–D1947.)*
 - **Author:** claude (initial draft); codex (2026-08-29 operation-boundary author repair). Drafted
@@ -399,6 +399,7 @@ export interface CandidatePopulationRequest<S extends CandidatePacketScope> {
 export interface CandidatePopulationReceipt<S extends CandidatePacketScope = CandidatePacketScope> {
   readonly packet: CandidateEventPopulation<S>;
   readonly selectedMember: "events" | "readings" | "events_and_readings";
+  readonly manifest: typeof PRIMARY_EVIDENCE_MANIFEST;
   readonly legalMovesInput: DeclaredEvidence<ExactLegalMoveMap>;
   readonly candidateInputs: readonly {
     readonly moveUci: string;
@@ -424,8 +425,15 @@ export type CandidateCollectorProjection =
   | (typeof LOCAL_CANDIDATE_READING_PROJECTION_IDS)[number];
 
 export type CandidateCollectorResult<P extends CandidateCollectorProjection, T> =
-  | { readonly kind: "available"; readonly values: readonly T[] }
-  | { readonly kind: "unavailable"; readonly abstention: Extract<CandidatePacketAbstention, { readonly projection: P }> }
+  | { readonly kind: "available"; readonly projection: P; readonly values: readonly T[] }
+  | {
+      readonly kind: "unavailable";
+      readonly projection: P;
+      readonly reason: Extract<
+        CandidatePacketAbstention,
+        { readonly projection: P }
+      >["reason"];
+    }
   | { readonly kind: "failed"; readonly projection: P; readonly reason: "threw" | "invalid_result" };
 
 export interface SealedCandidateCollectorOutcome<P extends CandidateCollectorProjection = CandidateCollectorProjection> {
@@ -456,6 +464,18 @@ export type CandidatePopulationProjectionResult<S extends CandidatePacketScope> 
   | { readonly kind: "ready"; readonly receipt: CandidatePopulationReceipt<S> }
   | { readonly kind: "failed"; readonly error: Extract<CandidatePopulationFailure, { readonly code: "invalid_scope_projection" }> };
 
+interface CandidatePopulationReceiptReferences {
+  readonly manifest: typeof PRIMARY_EVIDENCE_MANIFEST;
+  readonly packet: CandidateEventPopulation;
+  readonly legalMovesInput: DeclaredEvidence<ExactLegalMoveMap>;
+  readonly candidateInputs: readonly {
+    readonly row: CandidateEventRow;
+    readonly events: CandidateEventRow["events"];
+    readonly readings: CandidateEventRow["readings"];
+    readonly collectorOutcomes: CandidatePopulationReceipt["candidateInputs"][number]["collectorOutcomes"];
+  }[];
+}
+
 const CANDIDATE_POPULATION_RECEIPTS = new WeakMap<
   CandidatePopulationReceipt,
   CandidatePopulationReceiptReferences
@@ -478,16 +498,23 @@ export function projectCandidatePopulationReceipt<
 >(receipt: CandidatePopulationReceipt<S>, scope: T): CandidatePopulationProjectionResult<T>;
 ```
 
-`compileCandidatePopulationReceipt` is module-private and the only constructor. It freezes the
-receipt, stores the exact packet/legal/event/reading/**collector-outcome** references in the
-module-private `WeakMap`, and
+`compileCandidatePopulationReceipt` is module-private and the only constructor. It closes over the
+exact imported `PRIMARY_EVIDENCE_MANIFEST`, requires `packet.manifestDigest` and every retained
+event/reading assertion to agree with that object, then freezes the receipt. It stores the exact
+manifest/packet/legal/event/reading/**collector-outcome** references in the module-private `WeakMap`, and
 returns the opaque execution value. `assertCandidatePopulationReceipt` requires a map entry and
-then checks the receipt still points to the exact packet, legal input, candidate rows and retained
-event/reading/outcome arrays recorded at construction. Every collector invocation is wrapped by the
+then checks the receipt still points to the exact primary manifest, packet, legal input, candidate
+rows and retained event/reading/outcome arrays recorded at construction. A caller-compiled manifest,
+forged digest or event asserted against a different valid manifest therefore cannot enter a packet.
+Every collector invocation is wrapped by the
 private registry executor, which seals one outcome carrying the exact collector id, move, projection
 and result in `CANDIDATE_COLLECTOR_OUTCOMES`. A row abstention is admitted only when the exact sealed
 unavailable outcome for that row's move/projection carries the same generated reason. Available-empty
-has a sealed available outcome and no abstention. A forged object, equal rebuild, copy-spread, removed
+has a sealed available outcome carrying that exact projection and no abstention. For each candidate,
+each declaration returns exactly one result for every declared output: result projections are
+set-equal to `outputs`, with no duplicate/omitted/extra projection. Every non-empty value's own
+`projection.id@version` equals its result projection. Empty results cannot be copied between two
+outputs because the sealed result itself retains the literal projection. A forged object, equal rebuild, copy-spread, removed
 row or substituted equal-valued input fails at runtime even after a double type assertion.
 
 `projectCandidatePopulationReceipt` first asserts the source receipt and then checks the literal
@@ -649,45 +676,97 @@ is the only fixture that distinguishes the two mechanisms.
 registry and invokes each admitted declaration exactly once per candidate:
 
 ```ts
-export type CandidateCollectorId =
-  (typeof CANDIDATE_COLLECTOR_EXECUTION)[number]["id"];
+export interface CandidateCollectorMemoEntry<K extends string = string> {
+  readonly collectorId: K;
+  readonly outcomes: readonly SealedCandidateCollectorOutcome[];
+}
 
-export interface CandidateCollectorContext {
+export type CandidateCollectorMemo<D extends readonly string[]> = Readonly<{
+  [K in D[number]]: CandidateCollectorMemoEntry<K>;
+}>;
+
+export interface CandidateCollectorContext<D extends readonly string[]> {
   readonly beforeFen: string;
   readonly moveUci: string;
   readonly afterFen: string;
   readonly scope: CandidatePacketScope;
-  readonly memo: CandidateCollectorMemo; // dependency outputs, written only by registry executor
+  /** Exactly the dependencies declared by this collector; no index signature. */
+  readonly memo: CandidateCollectorMemo<D>;
 }
 
 export interface CandidateCollectorDeclaration<
-  Id extends string,
   P extends readonly CandidateCollectorProjection[],
+  D extends readonly string[],
 > {
-  readonly id: Id;
   readonly scope: "events" | "readings";
   readonly outputs: P;
-  readonly dependencies: readonly CandidateCollectorId[];
+  readonly dependencies: D;
   readonly maxInvocationsPerCandidate: 1;
-  readonly collect: (context: CandidateCollectorContext) =>
+  readonly collect: (context: CandidateCollectorContext<D>) =>
     readonly CandidateCollectorResult<P[number], SemanticEvidenceEvent | DeclaredEvidence<unknown>>[];
 }
 
-export const CANDIDATE_COLLECTOR_EXECUTION = Object.freeze([
-  { id: "event.structural",       operation: structuralSemanticEvents,          outputs: STRUCTURAL_EVENT_PROJECTION_IDS, dependencies: [] },
-  { id: "event.pawn_island",      operation: pawnIslandSemanticEvents,          outputs: PAWN_ISLAND_EVENT_PROJECTION_IDS, dependencies: [] },
-  { id: "event.transition",       operation: transitionSemanticEvents,          outputs: TRANSITION_EVENT_PROJECTION_IDS, dependencies: [] },
-  { id: "event.tactical",         operation: tacticalSemanticEvents,            outputs: TACTICAL_EVENT_PROJECTION_IDS, dependencies: [] },
-  { id: "event.loose_piece",      operation: loosePieceSemanticEvents,          outputs: LOOSE_PIECE_EVENT_PROJECTION_IDS, dependencies: [] },
-  { id: "event.castling",         operation: castlingSemanticEvents,            outputs: CASTLING_EVENT_PROJECTION_IDS, dependencies: [] },
-  { id: "event.exchange",         operation: derivedExchangeSemanticEvents,     outputs: EXCHANGE_EVENT_PROJECTION_IDS, dependencies: ["event.transition"] },
-  { id: "event.discovered",       operation: discoveredExecutedSemanticEvents,  outputs: DISCOVERED_EVENT_PROJECTION_IDS, dependencies: ["event.transition"] },
-  { id: "event.breadth",          operation: breadthSemanticEvents,             outputs: BREADTH_EVENT_PROJECTION_IDS, dependencies: ["event.transition"] },
-  { id: "event.duty",             operation: semanticDutyEvents,                outputs: DUTY_EVENT_PROJECTION_IDS, dependencies: ["event.transition"] },
-  { id: "reading.child",          operation: candidateChildReadings,            outputs: CANDIDATE_CHILD_READING_PROJECTION_IDS, dependencies: [] },
-  { id: "reading.legal_exchange", operation: candidateLegalExchangeReading,     outputs: ["rules.exchange.predicate.legal_exchange@1"], dependencies: ["event.transition"] },
-  { id: "reading.fork_survival",  operation: candidateForkSurvivalReading,      outputs: ["derived.tactic.fork_survives_reply@1"], dependencies: ["event.tactical", "reading.legal_exchange"] },
-] as const satisfies readonly CandidateCollectorDeclaration<string, readonly CandidateCollectorProjection[]>[]);
+type NoCandidateDependencies = readonly [];
+type TransitionDependency = readonly ["event.transition"];
+type ForkDependencies = readonly ["event.tactical", "reading.legal_exchange"];
+
+declare function collectCandidateStructural(
+  context: CandidateCollectorContext<NoCandidateDependencies>,
+): readonly CandidateCollectorResult<(typeof STRUCTURAL_EVENT_PROJECTION_IDS)[number], SemanticEvidenceEvent>[];
+declare function collectCandidatePawnIsland(
+  context: CandidateCollectorContext<NoCandidateDependencies>,
+): readonly CandidateCollectorResult<(typeof PAWN_ISLAND_EVENT_PROJECTION_IDS)[number], SemanticEvidenceEvent>[];
+declare function collectCandidateTransition(
+  context: CandidateCollectorContext<NoCandidateDependencies>,
+): readonly CandidateCollectorResult<(typeof TRANSITION_EVENT_PROJECTION_IDS)[number], SemanticEvidenceEvent>[];
+declare function collectCandidateTactical(
+  context: CandidateCollectorContext<NoCandidateDependencies>,
+): readonly CandidateCollectorResult<(typeof TACTICAL_EVENT_PROJECTION_IDS)[number], SemanticEvidenceEvent>[];
+declare function collectCandidateLoosePiece(
+  context: CandidateCollectorContext<NoCandidateDependencies>,
+): readonly CandidateCollectorResult<(typeof LOOSE_PIECE_EVENT_PROJECTION_IDS)[number], SemanticEvidenceEvent>[];
+declare function collectCandidateCastling(
+  context: CandidateCollectorContext<NoCandidateDependencies>,
+): readonly CandidateCollectorResult<(typeof CASTLING_EVENT_PROJECTION_IDS)[number], SemanticEvidenceEvent>[];
+declare function collectCandidateExchange(
+  context: CandidateCollectorContext<TransitionDependency>,
+): readonly CandidateCollectorResult<(typeof EXCHANGE_EVENT_PROJECTION_IDS)[number], SemanticEvidenceEvent>[];
+declare function collectCandidateDiscovered(
+  context: CandidateCollectorContext<TransitionDependency>,
+): readonly CandidateCollectorResult<(typeof DISCOVERED_EVENT_PROJECTION_IDS)[number], SemanticEvidenceEvent>[];
+declare function collectCandidateBreadth(
+  context: CandidateCollectorContext<TransitionDependency>,
+): readonly CandidateCollectorResult<(typeof BREADTH_EVENT_PROJECTION_IDS)[number], SemanticEvidenceEvent>[];
+declare function collectCandidateDuty(
+  context: CandidateCollectorContext<TransitionDependency>,
+): readonly CandidateCollectorResult<(typeof DUTY_EVENT_PROJECTION_IDS)[number], SemanticEvidenceEvent>[];
+declare function collectCandidateChildReadings(
+  context: CandidateCollectorContext<NoCandidateDependencies>,
+): readonly CandidateCollectorResult<(typeof CANDIDATE_CHILD_READING_PROJECTION_IDS)[number], DeclaredEvidence<unknown>>[];
+declare function collectCandidateLegalExchange(
+  context: CandidateCollectorContext<TransitionDependency>,
+): readonly CandidateCollectorResult<"rules.exchange.predicate.legal_exchange@1", DeclaredEvidence<unknown>>[];
+declare function collectCandidateForkSurvival(
+  context: CandidateCollectorContext<ForkDependencies>,
+): readonly CandidateCollectorResult<"derived.tactic.fork_survives_reply@1", DeclaredEvidence<unknown>>[];
+
+export const CANDIDATE_COLLECTOR_EXECUTION = Object.freeze({
+  "event.structural": ({ scope: "events", collect: collectCandidateStructural, outputs: STRUCTURAL_EVENT_PROJECTION_IDS, dependencies: [], maxInvocationsPerCandidate: 1 } as const satisfies CandidateCollectorDeclaration<typeof STRUCTURAL_EVENT_PROJECTION_IDS, NoCandidateDependencies>),
+  "event.pawn_island": ({ scope: "events", collect: collectCandidatePawnIsland, outputs: PAWN_ISLAND_EVENT_PROJECTION_IDS, dependencies: [], maxInvocationsPerCandidate: 1 } as const satisfies CandidateCollectorDeclaration<typeof PAWN_ISLAND_EVENT_PROJECTION_IDS, NoCandidateDependencies>),
+  "event.transition": ({ scope: "events", collect: collectCandidateTransition, outputs: TRANSITION_EVENT_PROJECTION_IDS, dependencies: [], maxInvocationsPerCandidate: 1 } as const satisfies CandidateCollectorDeclaration<typeof TRANSITION_EVENT_PROJECTION_IDS, NoCandidateDependencies>),
+  "event.tactical": ({ scope: "events", collect: collectCandidateTactical, outputs: TACTICAL_EVENT_PROJECTION_IDS, dependencies: [], maxInvocationsPerCandidate: 1 } as const satisfies CandidateCollectorDeclaration<typeof TACTICAL_EVENT_PROJECTION_IDS, NoCandidateDependencies>),
+  "event.loose_piece": ({ scope: "events", collect: collectCandidateLoosePiece, outputs: LOOSE_PIECE_EVENT_PROJECTION_IDS, dependencies: [], maxInvocationsPerCandidate: 1 } as const satisfies CandidateCollectorDeclaration<typeof LOOSE_PIECE_EVENT_PROJECTION_IDS, NoCandidateDependencies>),
+  "event.castling": ({ scope: "events", collect: collectCandidateCastling, outputs: CASTLING_EVENT_PROJECTION_IDS, dependencies: [], maxInvocationsPerCandidate: 1 } as const satisfies CandidateCollectorDeclaration<typeof CASTLING_EVENT_PROJECTION_IDS, NoCandidateDependencies>),
+  "event.exchange": ({ scope: "events", collect: collectCandidateExchange, outputs: EXCHANGE_EVENT_PROJECTION_IDS, dependencies: ["event.transition"], maxInvocationsPerCandidate: 1 } as const satisfies CandidateCollectorDeclaration<typeof EXCHANGE_EVENT_PROJECTION_IDS, TransitionDependency>),
+  "event.discovered": ({ scope: "events", collect: collectCandidateDiscovered, outputs: DISCOVERED_EVENT_PROJECTION_IDS, dependencies: ["event.transition"], maxInvocationsPerCandidate: 1 } as const satisfies CandidateCollectorDeclaration<typeof DISCOVERED_EVENT_PROJECTION_IDS, TransitionDependency>),
+  "event.breadth": ({ scope: "events", collect: collectCandidateBreadth, outputs: BREADTH_EVENT_PROJECTION_IDS, dependencies: ["event.transition"], maxInvocationsPerCandidate: 1 } as const satisfies CandidateCollectorDeclaration<typeof BREADTH_EVENT_PROJECTION_IDS, TransitionDependency>),
+  "event.duty": ({ scope: "events", collect: collectCandidateDuty, outputs: DUTY_EVENT_PROJECTION_IDS, dependencies: ["event.transition"], maxInvocationsPerCandidate: 1 } as const satisfies CandidateCollectorDeclaration<typeof DUTY_EVENT_PROJECTION_IDS, TransitionDependency>),
+  "reading.child": ({ scope: "readings", collect: collectCandidateChildReadings, outputs: CANDIDATE_CHILD_READING_PROJECTION_IDS, dependencies: [], maxInvocationsPerCandidate: 1 } as const satisfies CandidateCollectorDeclaration<typeof CANDIDATE_CHILD_READING_PROJECTION_IDS, NoCandidateDependencies>),
+  "reading.legal_exchange": ({ scope: "readings", collect: collectCandidateLegalExchange, outputs: ["rules.exchange.predicate.legal_exchange@1"], dependencies: ["event.transition"], maxInvocationsPerCandidate: 1 } as const satisfies CandidateCollectorDeclaration<readonly ["rules.exchange.predicate.legal_exchange@1"], TransitionDependency>),
+  "reading.fork_survival": ({ scope: "readings", collect: collectCandidateForkSurvival, outputs: ["derived.tactic.fork_survives_reply@1"], dependencies: ["event.tactical", "reading.legal_exchange"], maxInvocationsPerCandidate: 1 } as const satisfies CandidateCollectorDeclaration<readonly ["derived.tactic.fork_survives_reply@1"], ForkDependencies>),
+} as const);
+
+export type CandidateCollectorId = keyof typeof CANDIDATE_COLLECTOR_EXECUTION;
 ```
 
 The production constant uses imported callable symbols, not an `operation` string. Its validator
@@ -697,6 +776,18 @@ candidate. Shared transition/tactical/reading outputs live in the private memo s
 collector consumes the exact sealed predecessor outcomes rather than recomputing them. Scope
 filters whole declarations before grouping; it never changes the candidate set.
 
+The thirteen `collectCandidate*` symbols are real runtime adapters, not aliases or prose names.
+Each accepts only one immutable context, calls its existing positional chess function at most once,
+partitions returned values by their literal `projection.id@version`, and emits exactly one closed
+result per declared output—including projection-addressed available-empty results. Exchange,
+discovered, breadth and duty adapters pass the exact `event.transition` memo values into refactored
+underlying functions; fork-survival reads only the tactical and legal-exchange entries. A zero-
+dependency adapter's `context.memo` has no readable key. The implementation fixture compiles this
+literal registry against all thirteen adapter signatures; replacing `collect` with `operation`,
+using a positional function directly, or reading a dependency absent from the declaration is a
+TypeScript error. The runtime validator independently rejects an unknown/late dependency, crossed
+memo entry, output-set mismatch or more than one underlying invocation.
+
 Groups are stable topological slices of **collector declarations**, not projection ids: at most
 `maxCollectorsPerGroup`, never crossing a candidate boundary, dependencies already complete. This
 defines invocation cardinality, cancellation boundaries and which multi-output function runs once.
@@ -704,11 +795,12 @@ defines invocation cardinality, cancellation boundaries and which multi-output f
 flat output views of this registry and set-equal to manifest declarations; they are not parallel
 execution authorities.
 
-Every registry call returns one or more sealed `CandidateCollectorResult`: an
-`available` result may carry zero values and means the collector ran and found no match;
-`unavailable` carries exactly one generated projection/reason pair into
+Every registry call returns one sealed `CandidateCollectorResult` for every declared output: an
+`available` result may carry zero values and means that exact projection ran and found no match;
+`unavailable` carries its own literal projection and one generated reason into
 `row.abstentions`; `failed` becomes the service's typed `collector_failed` result and never a
-factual absence. Sequence
+factual absence. Result projections are set-equal to declaration outputs, and each non-empty value
+must carry the same projection as its result. Sequence
 events requiring `run.record.move@1` and selection-derived avoidance events are excluded by their
 declared source/shape, not by their absence from a corpus. The compiler rejects any retained event
 whose id is outside that set.
@@ -716,7 +808,8 @@ whose id is outside that set.
 The existing `loose_piece` path is the permanent boundary control. Its
 `invalid_turn_clone` result remains `unavailable` through the semantic collector group and produces
 `{ projection: "rules.tactic.event.loose_piece", reason: "invalid_turn_clone" }`; the available
-hard-negative fixture returns `{ kind: "available", values: [] }` and produces no abstention. The
+hard-negative fixture returns `{ kind: "available", projection:
+"rules.tactic.event.loose_piece@1", values: [] }` and produces no abstention. The
 packet never calls the flattening `localSemanticEvents` wrapper. Any convenience wrapper that still
 returns a plain event array is downstream of the closed group results and is not a packet authority.
 
@@ -798,6 +891,28 @@ export interface CandidatePopulationServiceLimits {
   readonly maxCompileMs: number;            // default 5_000; positive safe integer
 }
 
+export interface CandidatePopulationServiceStats {
+  readonly activeUniqueJobs: number;
+  readonly queuedUniqueJobs: number;
+  readonly cacheEntries: number;
+  readonly retainedWeight: number;
+  readonly hits: number;
+  readonly projectionHits: number;
+  readonly misses: number;
+  readonly evictions: number;
+  readonly oversizeNotCached: number;
+  readonly started: number;
+  readonly completed: number;
+  readonly failed: number;
+  readonly cancelledWaiters: number;
+  readonly lastWaiterCancellations: number;
+  readonly yields: number;
+}
+
+export interface CandidatePopulationServiceOptions {
+  readonly limits?: Partial<CandidatePopulationServiceLimits>;
+}
+
 export interface CandidatePopulationService {
   get<S extends CandidatePacketScope>(
     request: CandidatePopulationRequest<S>,
@@ -807,19 +922,30 @@ export interface CandidatePopulationService {
   stats(): CandidatePopulationServiceStats;
 }
 
-export function createCandidatePopulationService(input: {
-  readonly manifest: CompiledEvidenceManifest;
-  readonly limits?: Partial<CandidatePopulationServiceLimits>;
-}): CandidatePopulationService;
+export function createCandidatePopulationService(
+  options?: CandidatePopulationServiceOptions,
+): CandidatePopulationService;
 ```
 
-The product factory fixes `exactLegalMoves`, `CANDIDATE_COLLECTOR_EXECUTION`, receipt constructors
-and `messageChannelMacrotaskYield` by import; callers cannot replace any of them. Only the compiled
-manifest and bounded numeric deployment limits enter. A module-private
+The product factory fixes `PRIMARY_EVIDENCE_MANIFEST`, `exactLegalMoves`,
+`CANDIDATE_COLLECTOR_EXECUTION`, receipt constructors and `messageChannelMacrotaskYield` by import;
+callers cannot replace any of them. Only bounded numeric deployment limits enter. Options are
+strictly validated: an unknown `manifest`, digest or collector field is rejected before key/job/
+cache construction even after a runtime double cast. A different otherwise-valid compiled manifest
+therefore cannot label values minted by the primary collectors, and a forged primary digest has no
+constructor path. A module-private
 `createCandidatePopulationServiceForTest` accepts sealed fault hooks for legal/collector/yield
-failures and is absent from the runtime barrel and production import graph. It catches every hook
+failures but not a manifest or manifest digest, and is absent from the runtime barrel and production import graph. It catches every hook
 throw/rejection into the same public algebra, so test injection cannot create a production escape
 or a second evidence authority ([[D2099]], [[D2102]]).
+
+`stats()` returns one frozen `CandidatePopulationServiceStats` snapshot. Every member is a
+non-negative safe integer; the four current-gauge fields are additionally bounded by the configured
+active, pending, entry and retained-weight limits. Counter increments are saturating-refused before
+`Number.MAX_SAFE_INTEGER` rather than wrapping, and no FEN, move, learner, run, manifest object or
+receipt reference enters the snapshot. `hits + projectionHits + misses` counts settled lookup
+classifications; job and waiter counters deliberately remain separate so same-key coalescing cannot
+masquerade as another compilation.
 
 `invalid_fen`, `unsupported_ruleset`, non-terminal truncation, collector exception/invalid return,
 scheduler rejection, bounded-admission overload/deadline, closed service, and internal
@@ -1308,25 +1434,25 @@ The author repair now:
 6. adds an eight-arm author contract. Fresh independent review and full repository verification
    still gate acceptance and implementation.
 
-## Second fresh independent return (2026-08-30)
+## Second fresh independent return and author repair (2026-08-30)
 
 Exact return:
 `planning/evidence-foundation-ux/shared-candidate-packet-second-fresh-independent-review-2026-08-30.md`.
-The author repair is not buildable yet:
+The return found four seams, now repaired at the author-contract boundary:
 
-1. the exported factory accepts an arbitrary `CompiledEvidenceManifest`, while every current
-   collector mints and asserts values against `PRIMARY_EVIDENCE_MANIFEST`; packet identity can
-   therefore name one declaration digest while its values were produced under another ([[D2198]]);
-2. the `available` collector-result arm carries no projection, so a multi-output collector's empty
-   result cannot prove which projection was actually evaluated ([[D2199]]);
-3. `CandidateCollectorDeclaration` requires `collect(context)`, while every advertised registry row
-   supplies `operation` and names a positional-argument function returning a flat array
-   ([[D2200]]); and
-4. `CandidateCollectorMemo`, `CandidatePopulationServiceStats` and
-   `CandidatePopulationReceiptReferences` are referenced but never defined ([[D2201]]).
+1. [[D2198]] — the product and test factories now import one exact
+   `PRIMARY_EVIDENCE_MANIFEST`; neither accepts a manifest/digest option, and the receipt map retains
+   the exact manifest reference beside every value;
+2. [[D2199]] — all available/unavailable/failed arms carry `projection`, result projections are
+   set-equal to declaration outputs, and every non-empty value must agree with its result;
+3. [[D2200]] — thirteen named `collectCandidate*` adapters accept one immutable typed context and
+   populate an object-keyed executable registry whose rows individually `satisfies` their exact
+   output/dependency declaration; and
+4. [[D2201]] — the memo, service-stat and receipt-reference types now have closed shapes, typed
+   dependency lookup, safe bounded counters and exact runtime-reference authority.
 
-The next author repair must close those four seams, invert the executable review, preserve the
-existing 28 author/review arms, and undergo another fresh independent review before acceptance.
+The third author contract must invert those four seams, preserve the existing 28 author/review
+arms, and undergo another fresh independent review before acceptance.
 
 1. **The population is never an argument.** A fixture attempting to supply `candidates`,
    `legalMoves`, `afterFen`, or any event or reading to the packet compiler **fails to type-check**
@@ -1565,9 +1691,10 @@ existing 28 author/review arms, and undergo another fresh independent review bef
 
 26. **The public construction seam is exact ([[D2099]]).** The runtime barrel exports
     `CandidatePopulationService`, `CandidatePopulationServiceLimits` and
-    `createCandidatePopulationService({manifest,limits})`. The product factory imports legal
-    authority, executable registry, scheduler and receipt constructors itself. Product injection of
-    any of them, or export/production import of the test-only fault factory, fails a source graph.
+    `createCandidatePopulationService({limits})`. The product factory imports the primary manifest,
+    legal authority, executable registry, scheduler and receipt constructors itself. Product
+    injection of any of them, an unknown `manifest`/digest option, or export/production import of
+    the test-only fault factory fails a source graph and runtime validation.
 27. **Ruleset identity is admitted, not inferred ([[D2103]]).** All three typed requests require
     `ruleset:"standard"`; missing/Chess960/unknown runtime values return `unsupported_ruleset`
     before FEN, job or cache construction. The literal survives packet/receipt/key/collector context.
@@ -1579,6 +1706,29 @@ existing 28 author/review arms, and undergo another fresh independent review bef
     result and receipt construction retains exact references. Every row abstention has exactly one
     sealed unavailable outcome with equal move/projection/reason and conversely; available-empty has
     an available outcome and no abstention. Wrong-row copying and equal rebuilds fail assertion.
+30. **One manifest owns packet identity and retained values ([[D2198]]).** Product and test factory
+    signatures contain no manifest/digest input; `PRIMARY_EVIDENCE_MANIFEST` is imported once and
+    its exact object reference is retained by every receipt. A second valid compiled manifest, an
+    equal rebuild, a forged primary digest and an unknown runtime `manifest` option all fail before
+    key/job/cache construction. Changing the primary manifest through its own authority changes the
+    packet id and requires recompilation; it cannot relabel already-retained values.
+31. **Every result is projection-addressed ([[D2199]]).** For each candidate and declaration, sealed
+    result projections are set-equal to declared outputs. Available-empty, unavailable and failed
+    results all retain the literal projection; every non-empty event/reading agrees with it.
+    Duplicate/omitted/extra results, a value under the wrong projection and an empty result copied
+    between two outputs fail before row or receipt construction.
+32. **The thirteen-row registry compiles and executes its declared topology ([[D2200]]).** A
+    TypeScript fixture imports the literal registry and all thirteen adapters; every row's `collect`,
+    output tuple, dependency memo and scope type-check. Replacing `collect` with `operation`, wiring
+    a positional function directly, reading an undeclared memo key, calling an underlying function
+    twice, crossing a memo entry or deleting one adapter fails. Runtime invocation counts remain
+    exactly one per admitted declaration/candidate.
+33. **Public support types are closed ([[D2201]]).** Compile-time fixtures exercise exact declared-
+    dependency memo access and reject undeclared reads. Runtime fixtures omit/cross the primary
+    manifest, packet, legal input, row, event, reading and collector-outcome references one at a
+    time and fail receipt assertion. Service stats are frozen, contain only the fifteen declared
+    non-negative safe-integer fields, keep gauges within configured bounds and reject overflow or
+    hidden learner/FEN/receipt data.
 
 ## Discharges
 
@@ -1722,6 +1872,11 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-08-30 — D2198–D2201 third author repair. The product/test factories fix one primary
+  manifest; every result is projection-addressed; thirteen one-context adapters compile into the
+  executable registry; and memo, bounded-stat and exact receipt-reference protocols are closed.
+  Maintained contracts plus the new author/typecheck contract pass. Fresh independent review remains
+  required; no implementation is authorized.
 - 2026-08-30 — second fresh independent review returned the D2097–D2104 author repair on
   [[D2198]]–[[D2201]]. Exact return:
   `planning/evidence-foundation-ux/shared-candidate-packet-second-fresh-independent-review-2026-08-30.md`;
