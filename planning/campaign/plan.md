@@ -33,19 +33,19 @@ Owner ruling [[D1565]] postdates the accepted contract. The code-grounded return
 `planning/campaign/two-horizon-return.md`; it preserves the completed schema/registry/fold work but
 blocks the unchecked items above at the persistence boundary.
 
-- [ ] Amend the run inventory so a preset may request presentation without silently removing an
+- [x] Amend the run inventory so a preset may request presentation without silently removing an
   earned capability; define owned, equipped/requested, suppressed and effective states separately
   ([[D1593]]).
-- [ ] Expand the closed reward vocabulary beyond `module_unlock` so theory and other collectible
+- [x] Expand the closed reward vocabulary beyond `module_unlock` so theory and other collectible
   tools named by [[D1565]] have typed identity, provenance and a later-use contract ([[D1594]]).
-- [ ] Add an authoring invariant proving each promised reward can matter after acquisition,
+- [x] Add an authoring invariant proving each promised reward can matter after acquisition,
   including at least one later boss path; disclosure alone is not consumption ([[D1595]]).
-- [ ] Specify durable cross-run reward classes, award/idempotency authority, projection/storage,
+- [x] Specify durable cross-run reward classes, award/idempotency authority, projection/storage,
   export/deletion and migration ownership instead of calling prestige a persistence-free read
   ([[D1592]], [[D1596]]).
-- [ ] Require campaign completion in `prestigeEligible`; a single achieved seal currently returns
+- [x] Require campaign completion in `prestigeEligible`; a single achieved seal currently returns
   true ([[D1597]]).
-- [ ] Resolve the pre-existing abandonment authority and terminal cursor returns ([[D1233]],
+- [x] Resolve the pre-existing abandonment authority and terminal cursor returns ([[D1233]],
   [[D1234]]) before an HTTP/storage contract exposes them.
 - [ ] Incorporate failure-resource semantics only after [[D1515]] research passes its exploration
   gate; one failed node does not end the run and failure never locks the educational path.
@@ -71,11 +71,13 @@ Two-horizon contract research has now landed in
   terminal event authority and idempotent completed-run awards.
 - [x] Hand the author the campaign-schema lane-2 claim and collision with `training-mode-variants`
   ([[D1697]]).
-- [ ] Decide whether 1.0 durable rewards stop at completion/prestige marks plus shared-catalog
+- [x] Decide whether 1.0 durable rewards stop at completion/prestige marks plus shared-catalog
   cosmetics, or fund a typed meta-reward registry for skip starts/modifiers/variant runs
-  ([[D1698]]).
-- [ ] Run the author repair from
-  `planning/campaign/two-horizon-author-repair-2026-08-26.md`, then independent review.
+  ([[D1698]]). The author repair takes the only currently grounded 1.0 set — marks plus shared-
+  catalog cosmetics — and leaves richer variety rewards behind an explicit D7 successor rather
+  than a generic string escape hatch.
+- [x] Run the author repair from
+  `planning/campaign/two-horizon-author-repair-2026-08-26.md`; fresh independent review remains.
 
 After the author amendment, repeat independent buildability review against the source symbols,
 then resume the migration chain. Do not treat the already-green pure checkpoints as acceptance of

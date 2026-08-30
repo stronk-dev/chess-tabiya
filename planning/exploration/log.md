@@ -11363,3 +11363,16 @@ the public union; the applicability graph still lacks independent authored bytes
 cannot map enum members; two evaluator roots remain prose; and `AGENTS.md` is misclassified as
 protected intent. `make pack-capability-fresh-review` reproduces all five. No lane-0.30 schema,
 pack, digest, product, content or protected-design byte changed; the D560 hold remains whole.
+
+## 2026-08-30 — campaign-core two-horizon author repair
+
+Folded [[D1592]]–[[D1597]], [[D1233]]/[[D1234]] and the measured [[D1695]]–[[D1698]] boundary
+into the returned `campaign-core` contract. Run rewards are now typed module/theory/rewind-resource
+acquisitions; presets cannot mutate ownership/equipment; authored consumers are checked mirrors of
+runtime registries; every reward needs later and boss opportunity on every continuation; prestige
+uses the exact completed denominator; abandonment is event-owned; and durable marks/shared-catalog
+cosmetics use one idempotent award log with the full account/appliance lifecycle. The RFC now owns
+the complete 1.0 Campaign journey and stable-board/access criteria rather than a backend reducer
+plus hidden route. `make campaign-two-horizon-author-contract` passes 19/19. Fresh independent
+review and named dependencies still gate schema, migration, content, API and UI implementation;
+[[D1600]] remains the explicit failure-policy hold.
