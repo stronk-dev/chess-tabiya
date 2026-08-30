@@ -1,6 +1,6 @@
 # RFC: Enforced clocks — the real-clock arm of the time-control lane
 
-- **Status:** draft — 2026-08-23; **amended 2026-08-23 on [[D1290]] and [[D1292]]**. D1290 closes the acceptance-blocking open question 1: the clock/hint collision is a **ceiling term per context** (§4a, criterion 13), not a global clamp. D1292 **overrides §4's unrated verdict** — timed games rate, and the anchor's calibration state moves onto the label (`learner-rating` §7.4 obligation 7 / AC-18); criterion 6 is rewritten from a refusal into a disclosure. Ready for review
+- **Status:** draft — **RETURNED by fresh independent buildability review 2026-08-30 on [[D2296]]–[[D2307]].** The real-clock direction and per-context hint ceiling survive. The document still contains opposite timed-rating rules; next-read expiry cannot close a game that is never read again; flag/move races have no atomic boundary; `clock.flagged` is absent from the terminal consumer set; its learner-relative result cannot represent both native-match seats; pause/resume discards the clock basis; the two-sided reducer, bot timing and complete learner journey are unspecified; and state-changing owner questions remain open. `make enforced-clocks-fresh-review` passes 12/12. No implementation before predecessor/intent repair, author repair and another review
 - **Author:** claude
 - **Created:** 2026-08-23
 - **Design refs:** `design/05-in-run-experience.md` §invariants (*"Rewind is an experiment, not an undo"*, *"The run is the sole source of chess truth"*); `design/03-product-breadth.md` §Play
@@ -421,6 +421,35 @@ This is stated rather than smoothed over: **if a reviewer judges that a self-cha
 element is a design-tier addition to `design/05`'s regions, this is the clause to return the RFC
 on**, and the amendment is the owner's under law 5. The specification is written so that ruling
 changes the seat and nothing else.
+
+## Fresh independent buildability return (2026-08-30)
+
+The direction survives; the contract does not. The exact review is
+`planning/time-controls/enforced-clocks-fresh-independent-buildability-review-2026-08-30.md`, and
+`make enforced-clocks-fresh-review` reproduces all twelve findings:
+
+1. [[D2296]] — the [[D1292]] amendment left timed games simultaneously rated and unrated.
+2. [[D2297]] — “next authoritative read” cannot expire an abandoned game that is never read again.
+3. [[D2298]] — expiry has no durable deadline/command identity or atomic ordering against a move.
+4. [[D2299]] — current terminal consumers recognize `outcome.reached`, not `clock.flagged`.
+5. [[D2300]] — learner-relative `RunOutcome` cannot encode one shared two-learner game result.
+6. [[D2301]] — FIDE 6.9's possible-legal-series rule is reduced to a nonexistent helper and two
+   non-discriminating fixtures.
+7. [[D2302]] — native resume clears `paused_at` without preserving a clock basis; solo pause is not
+   specified.
+8. [[D2303]] — root state, two-side projection, increment order, deadline arithmetic and recovery
+   are absent.
+9. [[D2304]] — the RFC calls itself the full ruled arm while deferring [[D1041]]'s bot move-time
+   consequence.
+10. [[D2305]] — returned clock, social, bot, campaign and intent dependencies are not reflected.
+11. [[D2306]] — timed-drill, solo-pause and campaign flag/reward semantics still change the state
+    machine and remain unruled.
+12. [[D2307]] — paint containment is not a typed create/play/pause/reconnect/finish/Review journey.
+
+The provisional schema/migration claims remain reserved, not buildable. Repair must start from the
+returned recorded-clock/time-control and social color/result authorities, resolve the owner
+semantics, define one durable two-sided clock plus autonomous expiry transaction, migrate a
+set-equal terminal consumer census, and only then specify bot timing and the complete client journey.
 
 ## Acceptance criteria
 

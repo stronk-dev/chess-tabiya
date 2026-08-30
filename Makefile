@@ -406,6 +406,10 @@ live-sources-fresh-review:
 recorded-clocks-fresh-review:
 	node --test tools/d2286-recorded-clocks-fresh-review/contract.test.mjs
 
+.PHONY: enforced-clocks-fresh-review
+enforced-clocks-fresh-review:
+	node --test tools/d2296-enforced-clocks-fresh-review/contract.test.mjs
+
 build:
 	pnpm build
 

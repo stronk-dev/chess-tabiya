@@ -12325,3 +12325,22 @@ single-game criterion are false at their required grain. The paste sample reprod
 11/11. No production, schema, migration, API, client, content, archive or protected-intent byte
 changed. Exact review:
 `planning/time-controls/recorded-clocks-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Enforced-clocks fresh independent return
+
+Returned `enforced-clocks.md` on [[D2296]]–[[D2307]]. The required real-clock direction and the
+per-context assistance ceiling survive, but the amended RFC still says timed games both rate and do
+not rate. Its abandonment mechanism flags only on a future read, so a game that is genuinely
+abandoned may never end; expiry and move commit have no atomic deadline contract.
+
+The deeper join fails too. Existing terminal consumers recognize `outcome.reached`, not the proposed
+`clock.flagged`; that event stores a learner-relative result even though a native match has two
+learner perspectives; native pause clears its only timestamp without preserving clock basis; and no
+root/two-side/increment/recovery reducer is specified. The FIDE 6.9 arm names a helper chessops does
+not export and uses two fixtures that cannot distinguish exact possible-legal-series semantics from
+a naive material shortcut. The RFC also defers the owner-ruled bot move-time consequence and leaves
+timed-drill, solo-pause and campaign reward semantics open while claiming review readiness.
+
+`make enforced-clocks-fresh-review` passes 12/12. No production, schema, migration, API, client,
+content, archive or protected-intent byte changed. Exact review:
+`planning/time-controls/enforced-clocks-fresh-independent-buildability-review-2026-08-30.md`.
