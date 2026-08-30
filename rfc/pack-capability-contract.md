@@ -1,11 +1,13 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — second-return author repair complete 2026-08-30 for [[D1982]]–[[D1992]].
-  The id/version algebra, generated applicability authority, F1 bridge, refusal-state migration,
-  strict-AJV annotation vocabulary, claim-anchor dependency direction, named semantic roots,
-  resolved-content dependency closure and canonical `requires` bytes are now specified. The eleven
-  author fixtures pass; fresh independent buildability review still gates acceptance and lane-0.30
-  implementation. The D560 corpus hold remains whole.
+- **Status:** draft — independently returned 2026-08-30 on [[D2050]]–[[D2054]] after the
+  D1982–D1992 author repair. The new bridge/dependency/canonicalization direction survives, but the
+  public ID regex rejects shipped one-segment identities and criterion 1 returns the old scalar
+  version shape; the applicability mapping still has no authored authority and its one-object
+  annotation grammar cannot map enum members; two evaluator roots remain prose rather than sites;
+  and one refusal misfiles `AGENTS.md` as protected intent. `make pack-capability-fresh-review`
+  reproduces all five blockers. Acceptance, lane-0.30 implementation and corpus application remain
+  unauthorised; the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -1001,6 +1003,23 @@ derivation only to *check* it (criterion 3: the declared set must equal the deri
 derivation function an unversioned root — a derivation bug is silent, where a mismatch between
 declared and derived is loud. The derivation is retained as the check, not as the record.
 
+## Fresh-return author obligations (2026-08-30)
+
+This live RFC owns the next author pass; the review rows are not free-floating defects:
+
+- [[D2050]] — replace the public ID regex and every parser/criterion positive with one inventory-
+  complete base-id grammar and the structured integer/semver result.
+- [[D2051]] — publish the complete applicability mapping as reviewed author bytes plus digest,
+  rather than asking implementation to create its own authority.
+- [[D2052]] — make the strict schema keyword represent every member of a multi-value enum (or
+  normalize to annotated const branches), with missing/duplicate/wrong-member negatives.
+- [[D2053]] — replace both prose evaluator roots with exact exported symbols and live-reader checks.
+- [[D2054]] — point weakened-Stockfish refusal at its protected-design anchor rather than treating
+  `AGENTS.md` as protected intent.
+
+The author pass inverts `make pack-capability-fresh-review`, preserves the prior 7 + 11 arms and
+requests another independent review. It does not implement lane 0.30 or touch corpus bytes.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -1159,6 +1178,12 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-08-30 (**fresh independent return**): returned on [[D2050]]–[[D2054]]. The compatibility
+  regex rejects real one-segment shipped ids and criterion 1 contradicts the structured version
+  union; the generated applicability authority still has no independent mapping bytes and its
+  single-object keyword cannot express per-enum-member mappings; two named evaluator roots remain
+  non-symbol prose; and `AGENTS.md` is not a protected-intent authority. Reproduction:
+  `make pack-capability-fresh-review`. No schema, pack, registry or product byte changed.
 - 2026-08-30 (**second-return author repair**): repaired [[D1982]]–[[D1992]] without implementing
   lane 0.30. Published the exact compatibility id regex and integer/semver version algebra; replaced
   the partial applicability examples with one generated schema/always/reference authority and
