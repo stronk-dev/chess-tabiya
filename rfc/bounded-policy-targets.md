@@ -1,11 +1,11 @@
 # RFC: Convention-grounded bounded material targets
 
-- **Status:** **draft — author-repaired 2026-08-30 on [[D2202]]–[[D2205]]; fresh independent
-  review required.** One fixed primary manifest enters request/result identity; `ThreatPassAnchor`
-  has one sealed canonical constructor; three exact compute/derive factories are registered with
-  the sole value authority; and the complete service request/result family is exported.
-  `make bounded-target-third-author-repair` is the positive author contract. Implementation remains
-  unauthorised.
+- **Status:** **draft — RETURNED by third fresh independent review 2026-08-30 on
+  [[D2340]]–[[D2342]].** The D2202–D2205 repair survives, but semantic validation cannot profile
+  the two reading projections, the public-protocol type fixture is a non-importing lookalike with
+  different discriminants, and the value factories are simultaneously required and forbidden to
+  export across internal modules. `make bounded-target-third-fresh-review` reproduces 3/3 blockers.
+  Implementation remains unauthorised.
 - **Author:** codex, preserving the D1023 research contract and applying `planning/bounded-policy-targets/author-repair-2026-08-26.md`
 - **Created:** 2026-08-23; narrowed 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; executable contract closure in `design/research/bounded-policy-target-contract-closure.md`
@@ -1154,8 +1154,27 @@ learner preset exposes them are consumer decisions and do not change the exact p
 | [[D2111]] | batch result counts have no aggregation/cancellation convention | author-repaired: exact sum counter plus waiter/failure/close snapshot rules |
 | [[D2112]] | repeat-review Make target asserted repaired defects | closed in review: target now asserts the current repaired contract |
 
+## Third fresh independent return (2026-08-30)
+
+- [[D2340]] — reconcile the validation dependency with projection roles. The current semantic
+  authority admits event roots only, so it can validate `immediate` but not the two reading values;
+- [[D2341]] — replace the local lookalike protocol fixture with exact proposed declarations imported
+  from one generated test module or the eventual runtime subpath, preserving every literal
+  discriminant and correlated field; and
+- [[D2342]] — export the three value factories from one internal non-barrel module so the central
+  route registry can import them, then prove that registry is their sole non-test consumer.
+
+The author repair must invert `make bounded-target-third-fresh-review`, preserve every prior
+contract, and request a fourth fresh independent review. No production implementation is authorized
+by an author-side green check.
+
 ## Changelog
 
+- 2026-08-30 — third fresh independent review returned the D2202–D2205 repair on
+  [[D2340]]–[[D2342]]. The semantic authority cannot profile two reading projections; the public
+  protocol typecheck is a divergent local lookalike; and internal factory registration conflicts
+  with the normative no-export declaration/check. Reproduction:
+  `make bounded-target-third-fresh-review`. No production/schema/content byte changed.
 - 2026-08-30 — author-repaired [[D2202]]–[[D2205]]. Product and test construction now share one
   imported primary manifest authority; threat-pass chronology is an exact sealed protocol; the
   three new values have sole factory/receipt routes; and consumers can import and exhaust the full

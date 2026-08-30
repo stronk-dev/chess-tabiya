@@ -12597,3 +12597,16 @@ uses a different type algebra; [[D2338]]'s public response is not closed across 
 `make pack-capability-fourth-fresh-review` reproduces all six blockers. Lane 0.30 and the D560
 corpus hold remain untouched. Receipt:
 `planning/pack-capability-contract/fourth-fresh-independent-review-2026-08-30.md`.
+
+## 2026-08-30 — Bounded-target third fresh independent return
+
+Re-ran the maintained bounded-target author contracts and checked the D2202–D2205 repair against
+its actual semantic-validation dependency and TypeScript fixture. [[D2340]] records that the
+event-only semantic authority can validate only one of three required routes; [[D2341]] records
+that the claimed runtime-subpath fixture imports nothing and models different discriminants; and
+[[D2342]] records that the central registry needs internal factory exports which the normative
+declarations and author test forbid.
+
+`make bounded-target-third-fresh-review` reproduces all three blockers. No production, manifest,
+schema, pack, content, API, client, archive or protected-design byte changed. Receipt:
+`planning/bounded-policy-targets/third-fresh-independent-buildability-review-2026-08-30.md`.
