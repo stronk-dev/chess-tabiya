@@ -1,14 +1,15 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
-- **Status:** draft — **two-horizon author repair complete 2026-08-30; fresh independent
-  buildability review required**. The repair folds [[D1592]]–[[D1597]], [[D1233]]/[[D1234]] and
-  the measured [[D1695]]–[[D1698]] boundary into one contract: typed run rewards; owned/equipped/
-  effective inventory; universal later-and-boss opportunity; an exact prestige denominator;
-  event-owned abandonment; and an idempotent, account-portable durable award log. Existing
-  schema/registry/validator/workflow-context/fold checkpoints remain historical implementation
-  evidence, not acceptance of the amended bytes. `make campaign-two-horizon-author-contract`
-  exercises the repair. No campaign migration, production route, seed campaign or surface may
-  resume before fresh review and the named dependencies land. *(Prior line:
+- **Status:** draft — **returned by fresh independent buildability review 2026-08-30 on
+  [[D2077]]–[[D2086]]**. The two-horizon direction survives, but it is not yet one landable
+  contract: terminal sealing contradicts its trailing events; equipment is unwritable; historical
+  definitions are unpinned; resource grants have no fold effect; producer dependencies and
+  family-specific reward algebra are absent; the declined run-origin seam is already required;
+  route/idempotency and award issuance are incomplete; and the test seed has no official content
+  authority. `make campaign-two-horizon-author-contract` remains 19/19 green;
+  `make campaign-two-horizon-fresh-review` reproduces 10/10 blockers. No campaign schema,
+  migration, production route, seed campaign or surface may resume before author repair and
+  another independent review. *(Prior line:
   implementing — 2026-08-23 authored-contract + registry + module-algebra checkpoints. Before
   that: accepted — 2026-08-22, by claude as register owner after independent cross-review and 15
   in-place corrections; draft — 2026-08-22.)*
@@ -657,6 +658,25 @@ weighs them as a set rather than one at a time.
 None other: the economy, the two-gate law, the suppressor, the submitted-branch seal, and the
 server-held inventory are transcriptions of ruled text.
 
+## Fresh-return author obligations (2026-08-30)
+
+This live RFC owns the complete return:
+
+- [[D2077]] — define one atomic final-seal/terminal event envelope.
+- [[D2078]] — make equipment/loadout event-owned and writable, or remove it.
+- [[D2079]] — persist exact campaign-definition identity and historical resolution.
+- [[D2080]] — give resource rewards an exact source-identified charge-fold effect.
+- [[D2081]] — bind consumer closure to accepted pack-capability and theory-join producers.
+- [[D2082]] — split module, theory and resource inventory/effectiveness algebra by type.
+- [[D2083]] — satisfy the already-triggered Review/export run-origin seam.
+- [[D2084]] — publish the closed authenticated route/command/error/idempotency family.
+- [[D2085]] — production-bind durable award issuance with crash recovery.
+- [[D2086]] — separate the contract fixture from an owner/human-authored official 1.0 campaign.
+
+The next author pass must invert `make campaign-two-horizon-fresh-review`, preserve the 19 author
+checks, run full verification and request another independent review. It may not implement schema,
+migration, storage, content, endpoints or UI while these landing authorities remain contradictory.
+
 ## Acceptance criteria
 
 Unit note: criteria 1–3 count over the seed fixture campaign (9 nodes, 3 acts, 3 suppressed
@@ -808,6 +828,13 @@ set).
 
 ## Changelog
 
+- 2026-08-30 (**fresh independent return**): returned on [[D2077]]–[[D2086]]. Final-node
+  terminality conflicts with required reward events; equipment has no mutation; campaign document
+  digests are not durable; resource rewards do not enter the balance; consumer closure depends on
+  unnamed returned producers; module ceilings are applied across unlike reward families; Review
+  and export trigger the declined origin seam; the endpoint family and command idempotency are
+  incomplete; awards have no issuer; and the seed fixture is not an authored 1.0 campaign. Exact
+  return: `planning/campaign/fresh-independent-buildability-review-2026-08-30.md`.
 - 2026-08-22: created — drafted from `planning/campaign/rfc-derivation.md` under the [[D953]]
   gate waiver, with [[D945]]'s earned-rewind economy promoted to v1 core.
 - 2026-08-22: **cross-review corrections in place** (independent adversarial re-derivation at

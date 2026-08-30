@@ -11440,3 +11440,18 @@ The exact return is
 `planning/pack-capability-contract/second-fresh-independent-review-2026-08-30.md`; `make
 pack-capability-second-fresh-review` passes 7/7. No schema, capability registry, pack, digest,
 migration application, content or protected-design byte changed.
+
+## 2026-08-30 — campaign-core fresh independent return
+
+Re-reviewed the two-horizon campaign repair as one production landing and returned it on
+[[D2077]]–[[D2086]]. The prior 19 author/model arms remain green; the new ten-arm reproduction
+proves the final seal forbids its own mandatory trailing events, equipment has no durable mutation,
+campaign document bytes are not pinned, resource rewards have no charge-fold effect, consumer
+closure depends on unnamed returned pack/theory foundations, a module ceiling is applied to unlike
+reward families, Review/export trigger the declined origin seam, the route/command family is
+incomplete, durable awards have no production issuer, and the test seed is not an authored 1.0
+campaign.
+
+The exact return is `planning/campaign/fresh-independent-buildability-review-2026-08-30.md`;
+`make campaign-two-horizon-fresh-review` passes 10/10. No schema, migration, campaign content,
+storage, endpoint, award, UI or protected-design byte changed.

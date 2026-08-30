@@ -10,11 +10,12 @@ function includesAll(text, fragments) {
   for (const fragment of fragments) assert.match(text, fragment);
 }
 
-test("author status preserves the return boundary", () => {
+test("author repair remains recorded beneath the fresh-review return boundary", () => {
   includesAll(rfc, [
-    /Status:\*\* draft — \*\*two-horizon author repair complete 2026-08-30/,
-    /fresh independent\s+buildability review required/,
-    /No campaign migration, production route, seed campaign or surface may\s+resume before fresh review/,
+    /Status:\*\* draft — \*\*returned by fresh independent buildability review 2026-08-30/,
+    /\[\[D2077\]\]–\[\[D2086\]\]/,
+    /No campaign schema,\s+migration, production route, seed campaign or surface may resume before author repair/,
+    /two-horizon author repair on \[\[D1592\]\]–\[\[D1597\]\]/,
   ]);
 });
 
