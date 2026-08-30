@@ -12622,3 +12622,16 @@ edge and branch-pair joins, [[D2346]] records missing upstream timing/subject ap
 `make module-registration-third-fresh-review` reproduces all five blockers. No production,
 manifest, schema, content, API, client, archive or protected-design byte changed. Receipt:
 `planning/learner-modules/third-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Evidence-presentation fourth fresh independent return
+
+Re-ran the three maintained author controls and reviewed the third repair against the exact post-P
+adapter image plus current structure/source boundaries. [[D2348]] records the nonexistent
+transformed population; [[D2349]] the flat-vs-nested citation mismatch; [[D2350]] the unversioned,
+unresolved attribution registry; [[D2351]] the failure-to-empty reason collapse; [[D2352]] the
+free-string question bypass; [[D2353]] the absent Explorer denominator constructor; and [[D2354]]
+the absent named-structure witness operation.
+
+`make evidence-presentation-fourth-fresh-review` reproduces all seven blockers. No production,
+manifest, schema, content, API, client, archive or protected-design byte changed. Receipt:
+`planning/platform-alignment/evidence-presentation/fourth-fresh-independent-buildability-review-2026-08-30.md`.

@@ -28,3 +28,14 @@ Append-only. This log records author/review/implementation transitions for
 - `count_with_denominator` has zero real adapters and no future owner.
 - `make evidence-presentation-third-fresh-review` passes 7/7. No implementation is authorised;
   exact review: `third-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — fourth fresh independent return
+
+- Re-ran all three maintained author controls, then attacked the exact post-P population and the
+  newly claimed citation, abstention, denominator and structure-witness seams.
+- Returned the third author repair on [[D2348]]–[[D2354]]: no transformed post-P adapter set;
+  flat-vs-nested citation mismatch; unversioned/unresolved source metadata; source failures
+  collapsed to empty; free-string questions; and two named-but-unconstructed component operands.
+- `make evidence-presentation-fourth-fresh-review` passes 7/7. No production, manifest, schema,
+  content, API, client, archive or protected-design byte changed; exact review:
+  `fourth-fresh-independent-buildability-review-2026-08-30.md`.

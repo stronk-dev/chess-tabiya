@@ -1,12 +1,13 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft — **third author repair complete 2026-08-30 for
-  [[D2157]]–[[D2163]]; fresh independent review and [[D1672]] remain required.** Named structures
-  now retain typed identity plus witness geometry; citations are a sealed multi-input derivation;
-  fact renderers declare total operand formatters; consequence variants are total; abstention
-  preserves source authority while silent claims stay silent; and the denominator component has a
-  real Explorer path. Exact return repaired:
-  `planning/platform-alignment/evidence-presentation/third-fresh-independent-buildability-review-2026-08-30.md`.
+- **Status:** draft — **RETURNED by fourth fresh independent buildability review 2026-08-30 on
+  [[D2348]]–[[D2354]].** The third repair's direction survives, but its post-P population still
+  contains every pre-P repair/removal plus one appended row; citation output is flat against the
+  nested operand and its attribution register has neither version nor resolver; generic source
+  errors collapse to empty; lifecycle questions are arbitrary strings; and the denominator and
+  named-structure witness paths name components/fields without constructing their operands.
+  `make evidence-presentation-fourth-fresh-review` passes 7/7. Exact return:
+  `planning/platform-alignment/evidence-presentation/fourth-fresh-independent-buildability-review-2026-08-30.md`.
   [[D1672]]'s owner-only design amendment also remains required. No implementation is authorised.
   Landing remains three checkpoints (§2.1): manifest truth, sealed current consumers, then
   module/hint seats.
@@ -139,6 +140,22 @@ The seven returned seams are now executable author authority rather than prose p
 acceptance: fresh review must attack the source-attribution join, exact post-P population,
 formatter totality, consequence partition, source-reason closure, silent-row exclusion and the
 real Explorer denominator path. Protected design remains untouched pending [[D1672]].
+
+## Fourth fresh independent return (2026-08-30)
+
+The requested attacks exposed seven further buildability blockers:
+
+1. [[D2348]] — no exact transformed 112-row post-P adapter population;
+2. [[D2349]] — a flat citation output that cannot inhabit nested `CitationOperand`;
+3. [[D2350]] — an attribution registry with no version, digest, literal metadata or resolver;
+4. [[D2351]] — a source-reason default that misreports unhandled errors as empty/no-witness;
+5. [[D2352]] — lifecycle receipts accepting arbitrary question strings instead of registered ids;
+6. [[D2353]] — an Explorer denominator component with no exact operand constructor; and
+7. [[D2354]] — a named-structure witness field with no exact geometry operation.
+
+`make evidence-presentation-fourth-fresh-review` reproduces 7/7. Exact evidence and required
+repairs are in the fourth fresh review dossier. Production and protected design remain untouched;
+author repair plus another fresh review are mandatory.
 
 ## Summary
 
@@ -1620,6 +1637,13 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-08-30 — returned by fourth fresh independent buildability review on [[D2348]]–[[D2354]].
+  The post-P adapter image is not transformed; citation and source-attribution authorities are
+  unbuildable as written; failure reasons and question identity are not closed; and the Explorer
+  denominator and named-structure witness still lack operand constructors. `make
+  evidence-presentation-fourth-fresh-review` passes 7/7. Exact return:
+  `planning/platform-alignment/evidence-presentation/fourth-fresh-independent-buildability-review-2026-08-30.md`.
+  No implementation is authorised.
 - 2026-08-30 — third author repair for [[D2157]]–[[D2163]]. Named-structure identity and witness
   geometry now move together; citation becomes a sealed source-bound derivation; fact templates
   carry total formatter maps; all consequence consumers cover both union arms; abstention retains
