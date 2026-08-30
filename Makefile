@@ -190,7 +190,7 @@ longitudinal-store-fresh-review:
 	node --test tools/d2063-longitudinal-fresh-review/*.test.mjs
 
 longitudinal-store-cost:
-	@test -z "$$(git status --porcelain)" || (echo "longitudinal-store-cost requires a clean committed tree" >&2; exit 2)
+	@test -z "$$(git status --porcelain -- Makefile packages/runtime/src/evidence-catalog.ts packages/runtime/src/semantic-evidence.ts packages/runtime/src/legal-moves.ts packages/runtime/src/phase.ts tools/research-chess/populations.ts tools/d1405-longitudinal-cost-harness tools/d1405b-single-decision-harness tools/d1612-longitudinal-contract-harness rfc/contracts/longitudinal-ingest-registry-v1.json rfc/contracts/longitudinal-sign-subsets-v1.json)" || (echo "longitudinal-store-cost requires committed measurement inputs" >&2; exit 2)
 	@for arm in 20 40 80 bulk; do \
 		D1405_ARM="$$arm" D1405_COMMIT="$$(git rev-parse HEAD)" D1405_RESULT_DIR="$(CURDIR)/planning/longitudinal-store" \
 		./node_modules/.bin/vitest run --config tools/d1405-longitudinal-cost-harness/vitest.config.ts || exit $$?; \
