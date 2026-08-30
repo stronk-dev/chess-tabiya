@@ -1,12 +1,13 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** draft returned on repeat independent buildability review 2026-08-27 — the original
-  [[D1585]]–[[D1591]]/[[D1689]]–[[D1694]] repairs pass their 25 executable harness arms, but the
-  production join was returned on [[D1863]]–[[D1869]]; all seven are author-amended 2026-08-30
-  and require fresh independent buildability review before acceptance. The [[D1870]]/[[D2030]]
-  dependency reconciliation is amended to the owner-ruled measured 207-pair target, including
-  requested-Sight `pawn_safe_square`. Exact return:
-  `planning/learner-modules/repeat-buildability-review-2026-08-27.md`. Prior
+- **Status:** draft returned by fresh independent buildability review 2026-08-30 on
+  [[D2120]]–[[D2126]]. The D1863–D1869 intent repairs survive, but the callable execution
+  population, complete F1 binding compiler, non-fact budgets, bounded Review traversal, role
+  translation, Inspector empty algebra and derivation DAG remain unspecified. Exact return:
+  `planning/learner-modules/fresh-independent-buildability-review-2026-08-30.md`; `make
+  module-registration-fresh-review` reproduces 7/7 and the prior 12-arm assembly harness remains
+  green. The [[D1870]]/[[D2030]] dependency image remains the owner-ruled measured 207-pair target,
+  including requested-Sight `pawn_safe_square`. Prior
   amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt
   `hint-distance` contract. The [[D1430]] document: the learner-module layer exists as a
   contract, a compiler, a reducer pipeline and a preset algebra, and **has never been
@@ -1336,6 +1337,18 @@ deleting one disclosure id from the family×rung product fails;
    and requires the producer→typed relation→module→board path. [[D1867]] distinguishes that ruling
    from the redundant experimental F1 consumer identity, which §6 retires while retaining the
    Advanced config axis as the narrowing clamp.
+
+## Fresh-review routing
+
+| row | remaining author work |
+|---|---|
+| [[D2120]] | publish and positively execute the literal 117-projection callable plan |
+| [[D2121]] | compile every required F1 binding field, including exact forms, from one authority |
+| [[D2122]] | enforce facts, words, marks and arrows after adapter fan-out without truncating evidence |
+| [[D2123]] | page/bound whole-run Review over one immutable prefix with cancellation and merge identity |
+| [[D2124]] | define one total runtime-role → evidence-role projection and use it at both checks |
+| [[D2125]] | make Inspector's per-family absence algebra representable or withdraw that promise |
+| [[D2126]] | publish the exact derived-input DAG and total abstention/failure propagation |
 3. **Answered 2026-08-25 — `structure_nudge` is proactive as a passive marker, with content on
    request.** [[D1564]] confirms §1.1's declarable reading; no modal or unsolicited prose follows.
 4. **Which preset names survive owner use?** All five carry `validation: "candidate"`
@@ -1391,6 +1404,11 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-08-30 (fresh independent return): returned the author amendment on [[D2120]]–[[D2126]].
+  The 207-pair acceptance image is intact, but it does not yet determine callable producer reach,
+  complete binding bytes, three output budgets, bounded Review work, authorization-role joining,
+  Inspector's empty state or derived-input authority. Exact return and 7/7 reproduction are linked
+  in Status; no implementation is authorised.
 - 2026-08-30 (author return repair): closed [[D1863]]–[[D1869]] in the draft: typed untrusted
   requested-assistance receipts with server re-clamping; exact pair/form presentation adapters;
   a total 117-projection producer execution plan with typed source receipts; ephemeral disclosure

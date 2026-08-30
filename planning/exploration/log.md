@@ -11536,3 +11536,20 @@ product/content byte changed.
 The bounded rerun passes 16 files / 172 tests in 173.84 seconds. [[D2119]] records the remaining
 efficiency debt separately: repeated immutable corpus setup/import dominates the stable tier and
 needs one read-only shared authority without weakening isolation or test-tier truth.
+
+## 2026-08-30 — Module-registration fresh independent return
+
+Fresh-reviewed the D1863–D1869 author amendment from four real production boundaries: module
+request, collector execution, F1 binding and rendered seat. The owner-confirmed 207-pair acceptance
+image remains internally consistent and the prior 12-arm assembly harness stays green, but the
+image is not yet an executable join. [[D2120]]–[[D2126]] record seven independent blockers: no
+literal callable population behind the claimed 117-projection plan; no compiler for all mandatory
+F1 binding fields/forms; no enforcement for words or marks after presentation fan-out; unbounded,
+unpaged whole-run Review; no `solo`/`learner` role projection; an unrepresentable per-family
+Inspector empty state; and no exact input DAG for 64 derived pair occurrences.
+
+The exact return is
+`planning/learner-modules/fresh-independent-buildability-review-2026-08-30.md`; `make
+module-registration-fresh-review` passes 7/7 as a blocker reproduction. No module declaration,
+consumer, binding, assembler, route, presenter, seat, runtime behavior, schema, content, archive or
+protected-design byte changed.
