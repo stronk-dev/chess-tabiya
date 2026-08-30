@@ -1,14 +1,13 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — [[D2070]]–[[D2076]] author-repaired 2026-08-30; fresh independent review
-  required. Lane 0.30 now lands through an exact two-schema transition: only the byte-sealed 92-file
-  legacy catalogue may use 0.27 without a stamp, while every new/external 0.30 document requires
-  one. Plan shape and apply readiness are separate commands; an author-owned ordered patch seals
-  the 0.30 post-image; schema-member plus transitive interpreter authority closes meaning sources;
-  `/requires` and its grammar are excluded from applicability; declaration history is keyed by
-  subject+version; and stable ids use semantic owner/discriminator identity, never array ordinals.
-  `make pack-capability-second-fresh-review` passes 7/7; prior contracts remain maintained. No
-  schema, registry, pack or digest implementation is authorised; the D560 hold stays whole.
+- **Status:** draft — **returned by third fresh independent buildability review 2026-08-30 on
+  [[D2152]]–[[D2156]].** The staged admission model survives, but the sealed 0.30 image drops the
+  already-owned 0.28/0.29 changes; the claimed 373-row applicability authority publishes no rows or
+  checked generator; unconditional meaning sites are not module-qualified; external chess
+  dependencies cannot enter the digest; and withdrawn declarations cannot retain their promised
+  successor. Exact return:
+  `planning/pack-capability-contract/third-fresh-independent-review-2026-08-30.md`.
+  No schema, registry, pack or digest implementation is authorised; the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -1174,6 +1173,29 @@ This author pass inverts `make pack-capability-second-fresh-review`, preserves t
 implement lane 0.30 or mutate corpus bytes; the staged authority exists solely so a later accepted
 implementation can land without violating D560.
 
+## Third fresh independent return (2026-08-30)
+
+The third fresh buildability review returned this RFC on [[D2152]], [[D2153]], [[D2154]],
+[[D2155]] and [[D2156]]. The exact evidence and
+repair obligations are in
+`planning/pack-capability-contract/third-fresh-independent-review-2026-08-30.md`; the executable
+reproducer is `make pack-capability-third-fresh-review` (5/5).
+
+1. The sealed 0.27→0.30 patch must become a legal cumulative transition containing the already-owned
+   0.28 and 0.29 post-images, or serialize behind their exact accepted patches. It may not discard
+   predecessor claims or invalidate its own source digest by landing after them.
+2. The 373 applicability decisions must exist as literal checked rows, or as the output of a
+   deterministic generator with a complete independently recomputable source inventory and digest.
+3. All unconditional meaning roots and convention tables need exact module-qualified symbol sites
+   and transitive dependencies, with zero/multiple matches failing.
+4. External packages that contribute chess semantics—including `chessops`—must be exact
+   lockfile-resolved meaning sources inside the semantics digest.
+5. A withdrawn declaration must retain a typed successor when one exists, and the planner must
+   follow that edge; lawful no-successor withdrawal remains explicit and cycle-safe.
+
+This is an author return, not an implementation checkpoint. The D560 corpus hold remains whole and
+fresh independent review is required after repair.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -1357,6 +1379,13 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-08-30 (**third fresh independent return**): returned on [[D2152]]–[[D2156]]. The sealed
+  0.30 target omits the already-owned 0.28/0.29 schema changes; the 373-row applicability authority
+  contains no rows or checked generator; fourteen unconditional meaning entries are bare symbols;
+  external chess dependencies cannot participate in semantic digests; and withdrawn declarations
+  cannot encode their promised successor. Exact return:
+  `planning/pack-capability-contract/third-fresh-independent-review-2026-08-30.md`.
+  `make pack-capability-third-fresh-review` passes 5/5. No implementation is authorised.
 - 2026-08-30 (**D2070–D2076 author repair**): replaced the impossible atomic corpus landing with a
   byte-sealed two-schema transition. Only the exact 92 committed 0.27 catalogue documents may use
   the internal legacy reader; every new/external 0.30 document requires a stamp, and the legacy arm

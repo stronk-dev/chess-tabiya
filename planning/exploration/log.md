@@ -11981,3 +11981,18 @@ terminal/outcome and nonterminal/plies/objective-state arms.
 `make evidence-presentation-second-author-repair` passes 6/6. This is author repair only; fresh
 review and owner-only [[D1672]] still gate acceptance. Receipt:
 `planning/platform-alignment/evidence-presentation/second-author-repair-2026-08-30.md`.
+
+## 2026-08-30 — Pack-capability third fresh independent return
+
+Returned `pack-capability-contract.md` on [[D2152]]–[[D2156]] after applying its sealed transition
+and tracing every claimed authority to literal bytes. The proposed 0.30 post-image drops the
+already-owned 0.28 graduation and 0.29 provenance additions; its 373-row applicability authority
+contains only counts and opaque digests; fourteen unconditional meaning roots lack module-qualified
+sites; external `chessops` behavior cannot participate in the semantic digest; and the withdrawn
+lifecycle arm cannot retain the successor its own prose promises.
+
+The staged legacy-catalogue admission, structured identity, plan/readiness split and two-state
+availability model survive. `make pack-capability-third-fresh-review` passes 5/5 as the executable
+return. No schema, registry, pack or product bytes changed, and the [[D560]] corpus hold remains
+whole. Exact review:
+`planning/pack-capability-contract/third-fresh-independent-review-2026-08-30.md`.
