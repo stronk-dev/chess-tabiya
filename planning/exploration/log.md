@@ -11488,3 +11488,20 @@ The exact return is
 `planning/evidence-foundation-ux/shared-candidate-packet-fresh-independent-review-2026-08-30.md`;
 `make candidate-packet-fresh-review` passes 8/8. No runtime packet/cache, provider handoff, selector,
 schema, content, learner surface or protected-design byte changed.
+
+## 2026-08-30 — bounded-policy targets fresh independent return
+
+Re-reviewed the D1993–D1999 bounded-target repair as the exact local counterfactual foundation and
+returned it on [[D2105]]–[[D2111]]. The prior semantic, type, cancellation and digest repairs
+survive. The new seven-arm reproduction proves the retained threat cannot be joined to its source
+position, the registered background service is an erased interface with no runtime callable, the
+tracked identity payload type is undeclared, per-candidate limits permit 12.8 million positions in
+one admitted batch, the non-universal positive return admits no refutation, product construction
+can replace the scheduler and has no shutdown, and batch result counts have no aggregation rule.
+
+The exact return is
+`planning/bounded-policy-targets/fresh-independent-buildability-review-2026-08-30.md`; `make
+bounded-target-fresh-review` passes 7/7 as a blocker reproduction. The stale
+`bounded-target-repeat-review` target was repaired under [[D2112]] to assert the current repaired
+contract rather than require old defects. No runtime collector, evidence declaration, scheduler,
+consumer, schema, content, learner surface or protected-design byte changed.

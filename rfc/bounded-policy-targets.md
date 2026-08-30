@@ -1,12 +1,12 @@
 # RFC: Convention-grounded bounded material targets
 
-- **Status:** **draft — author-repaired 2026-08-29 for [[D1993]]–[[D1999]]; fresh independent
-  buildability review required.** The repair defines waiter-local cancellation over shared jobs,
-  canonical request/result identity, explicit manifest latency, a producer-operation authority,
-  versioned post-candidate exchange semantics, closed service options/failures, and one exact
-  visited-position convention. Exact prior return:
-  `planning/bounded-policy-targets/final-independent-buildability-review-2026-08-28.md`.
-  Implementation remains unauthorised until the fresh review accepts it.
+- **Status:** **draft — returned by fresh independent buildability review 2026-08-30 on
+  [[D2105]]–[[D2111]].** The D1993–D1999 repair survives, but source-less threat evidence cannot
+  prove its join, the registered service is an erased interface, one payload type is undeclared,
+  per-candidate limits do not bound a batch, one return arm is contradictory, and product
+  construction/batch accounting are not closed. Exact return:
+  `planning/bounded-policy-targets/fresh-independent-buildability-review-2026-08-30.md`.
+  Implementation remains unauthorised.
 - **Author:** codex, preserving the D1023 research contract and applying `planning/bounded-policy-targets/author-repair-2026-08-26.md`
 - **Created:** 2026-08-23; narrowed 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; executable contract closure in `design/research/bounded-policy-target-contract-closure.md`
@@ -825,8 +825,25 @@ learner preset exposes them are consumer decisions and do not change the exact p
 | [[D1998]] | service failures/options and production yield are open | author-repaired: literal defaults, four failed arms, no-throw submission, cleanup/no-publication and shared MessageChannel adapter |
 | [[D1999]] | visited-position count is not reproducible | author-repaired: root/edge/terminal/identity/transposition/cap/yield/replay convention `bounded-target-visited-positions@1` |
 
+## Fresh-review routing
+
+| finding | blocker | repair owner |
+|---|---|---|
+| [[D2105]] | sealed threat evidence has no source-position identity to join | author: bind the source/pass anchor in one sealed authority and cross same-shaped foreign evidence |
+| [[D2106]] | the producer registry names `.prototype.submit` on an erased interface | author: publish one exported concrete service/factory operation and construction seam |
+| [[D2107]] | `TrackedPieceIdentity` is used but never declared | author: publish the exact source/traversal identity types and promotion boundary |
+| [[D2108]] | 25,000 positions per candidate permits 12.8 million per admitted batch | author: add a reproducible whole-job bound and closed exhaustion |
+| [[D2109]] | `reintroduced` permits null refutation despite not being universal | author: make the quantified outcome/refutation algebra total |
+| [[D2110]] | product callers may override yielding and the service has no shutdown | author: fixed product factory, isolated test injection and idempotent lifecycle |
+| [[D2111]] | batch result counts have no aggregation/cancellation convention | author: define the batch count with the whole-job budget |
+| [[D2112]] | repeat-review Make target asserted repaired defects | closed in review: target now asserts the current repaired contract |
+
 ## Changelog
 
+- 2026-08-30 — fresh independent review returned the author repair on [[D2105]]–[[D2111]]. The
+  source join, concrete service, tracked identity type, whole-job bound, return algebra, product
+  lifecycle and batch counter remain unbuildable as one operation. The stale repeat-review target
+  was repaired under [[D2112]] without changing the verdict or production code.
 - 2026-08-29 — repaired the final [[D1993]]–[[D1999]] buildability return without authorising
   implementation. Closed request/result identity, waiter/job lifecycle, explicit manifest latency,
   producer-operation reach, post-candidate exchange semantics, service exits/defaults and exact
