@@ -12036,3 +12036,17 @@ The five preset candidates, context ceilings, server-authority direction and exp
 refusal survive. `make intent-presets-second-fresh-review` passes 8/8. No product, schema, content,
 archive or protected-design byte changed. Exact review:
 `planning/intent-presets/second-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Promotion collectors second fresh independent return
+
+Returned only `semantic-collectors.md` projections 13–14 on [[D2179]]–[[D2183]]. The repaired
+producer/id/version check still cannot prove the exact adapter ran; the recorded tablebase adapter
+seals keys rather than chess values; the available outcome drops the legal-map item grounding its
+promotion arrays; a valid no-race state becomes `input_abstained`; and `promotionWithCheck` has no
+declared check authority.
+
+The descriptive/outcome split, same-FEN join, local-domain arm and provider-failure separation
+survive. The original twelve Wave-C projections remain implemented and unopened.
+`make semantic-collectors-promotion-second-fresh-review` passes 5/5 while the preserved 3/3 author
+and 6/6 research contracts remain green. Exact review:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-second-fresh-review-2026-08-30.md`.

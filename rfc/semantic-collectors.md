@@ -1,13 +1,12 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
 - **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The held
-  promotion pair was author-repaired 2026-08-30 on [[D2141]], [[D2142]] and [[D2143]] after fresh
-  independent return; another independent review is required.** Geometry now asserts the exact
-  sealed producer/projection/version and retains that input. Outcome publishes one total
-  recorded/live source union that retains the original declared item, plus a third literal
-  outside-domain path grounded by the sealed local Syzygy fact. The live and local-domain arms
-  depend on the draft `provider-exchange-and-execution` contract and cannot implement before that
-  predecessor is independently accepted and landed. The original 12 projections remain
+  promotion pair was returned by second fresh independent review 2026-08-30 on [[D2179]]–
+  [[D2183]].** The generic seal does not identify the exact adapter; recorded tablebase values have
+  no exact value authority; the outcome drops its legal-map input; no-race becomes input failure;
+  and `promotionWithCheck` has no declared check source. Exact return:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-second-fresh-review-2026-08-30.md`.
+  `make semantic-collectors-promotion-second-fresh-review` passes 5/5. The original 12 projections remain
   accepted/implemented; the amendment does not reopen or relabel their bytes. Accepted 2026-08-22
   by claude as register owner on the buildability test, after cross-review with corrections applied
   in place (seven blockers; all eight observed ids verified **checkable, not
@@ -843,15 +842,26 @@ derives that population from complete `rules.pawn.reading.contacts@1` instead.
 **Held promotion-amendment return, author-repaired here:** [[D2141]] now requires the constructor's
 seal plus exact producer/id/version and input/output receipt; [[D2142]] has the discriminated
 recorded/live whole-item source union and total normalization; [[D2143]] has a third literal
-geometry/domain-fact member and total invocation algebra. All three await fresh review and still
-block only projections 13–14.
+geometry/domain-fact member and total invocation algebra. The second fresh review returned that
+repair on [[D2179]]–[[D2183]]; only projections 13–14 remain blocked.
 
 ## Promotion amendment return
 
-The held pair remains owned here and is author-repaired on [[D2141]], [[D2142]] and [[D2143]].
-These are still fresh-review requirements for projections 13–14, not obligations transferred to
-the provider RFC; provider acceptance/implementation remains a separate landing dependency for
-the live/domain arms.
+The held pair remains owned here and is returned on [[D2179]]–[[D2183]]. The D2141–D2143 repair
+direction survives, but exact value authority, complete retained inputs and honest absence/check
+semantics remain missing. These are author obligations for projections 13–14, not obligations
+silently transferred to the provider RFC. Provider acceptance/implementation remains a separate
+landing dependency for the live/domain arms. Exact repair order and executable evidence are in the
+second fresh review dossier.
+
+| row | live repair owner in this RFC |
+|---|---|
+| [[D2142]] | preserve the prior recorded/live whole-item normalization while repairing its recorded value authority |
+| [[D2179]] | consume a route-specific exact pawn-contact authority, not the generic seal |
+| [[D2180]] | replace the key-only recorded tablebase adapter with validated source truth |
+| [[D2181]] | retain the exact legal-map item in the outcome derivation receipt |
+| [[D2182]] | keep no-race/no-witness distinct from input abstention |
+| [[D2183]] | add a declared check source or remove `promotionWithCheck` |
 
 ## Appendix A — registered projection ids
 
@@ -877,6 +887,12 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-08-30: second fresh independent review returned the held promotion pair on [[D2179]]–
+  [[D2183]]. The global declared-evidence seal cannot prove the exact pawn adapter ran; the recorded
+  tablebase adapter validates keys rather than outcome values; the available result omits the legal
+  map grounding its promotion arrays; valid no-race geometry is relabelled input failure; and
+  `promotionWithCheck` has no declared check source. The 12 implemented projections remain
+  untouched. `make semantic-collectors-promotion-second-fresh-review` passes 5/5.
 - 2026-08-30: author-repaired the held promotion pair on [[D2141]]–[[D2143]]. The geometry
   constructor asserts the exact declared pawn-contact item and retains one input/output derivation
   receipt. The outcome retains whole recorded/live declared items through one discriminated source
