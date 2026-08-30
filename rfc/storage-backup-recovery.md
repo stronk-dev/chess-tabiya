@@ -1,6 +1,10 @@
 # RFC: Storage backup, restore, upgrade, and recovery
 
-- **Status:** draft
+- **Status:** **draft — RETURNED by fresh independent buildability review 2026-08-30 on
+  [[D2210]]–[[D2213]].** The verified-bundle/staged-recovery model survives, but startup lock
+  ownership is contradictory, staged upgrade omits WAL/SHM quarantine, backup-id derivation is
+  undefined, and the closed CLI receipt has no type. `make storage-backup-fresh-review` passes 4/4.
+  Implementation remains unauthorized.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
@@ -393,6 +397,23 @@ not weaken the appliance floor or claim downgrade reads.
 
 ## Acceptance criteria
 
+### Fresh independent return (2026-08-30)
+
+Exact return:
+`planning/storage-backup-recovery/fresh-independent-buildability-review-2026-08-30.md`.
+Before criteria 1–17 are buildable, the author must:
+
+1. assign the advisory lock to one parent process/open-file description and specify exact FD
+   inheritance so `prepare-start` neither self-conflicts nor releases authority before HTTP
+   ([[D2210]]);
+2. quarantine/remove old live `-wal`/`-shm` files during staged upgrade exactly as restore does,
+   before the replacement is first opened ([[D2211]]);
+3. define the backup-id digest image, atomic reservation and collision/retry rule ([[D2212]]); and
+4. publish one versioned discriminated stdout receipt and exit-code/stderr mapping for every
+   operation/result arm ([[D2213]]).
+
+Another fresh independent review is required after those repairs.
+
 1. A unit fixture keeps committed transactions in WAL, stops the writer, creates a backup through
    `node:sqlite.backup`, removes the source database/WAL/SHM, and restores all sentinel rows from the
    standalone snapshot.
@@ -455,6 +476,10 @@ not weaken the appliance floor or claim downgrade reads.
 
 ## Changelog
 
+- 2026-08-30: fresh independent review returned the draft on [[D2210]]–[[D2213]]. Exact return:
+  `planning/storage-backup-recovery/fresh-independent-buildability-review-2026-08-30.md`;
+  reproduction: `make storage-backup-fresh-review`. No production, storage, workflow, schema,
+  content or protected-design byte changed.
 - 2026-08-27: drafted from O13/F12-C and D608; chose verified SQLite online backup, staged
   migrations/restores, destructive confirmation, explicit compatibility, and production-boundary
   recovery drills.

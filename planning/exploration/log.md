@@ -12130,3 +12130,16 @@ proof, SBOM/filesystem reconciliation and authoring-file exclusion survive. `mak
 runtime-distribution-fresh-review` passes 4/4. No workflow, production, image, schema, content,
 archive or protected-design byte changed. Exact review:
 `planning/verifiable-runtime-distribution/fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Storage backup/recovery fresh independent return
+
+Returned `storage-backup-recovery.md` on [[D2210]]–[[D2213]] after tracing the lock lifetime,
+staged replacement, bundle reservation and operator stdout contract. Startup both double-acquires
+and shows a preflight→HTTP gap; upgrade omits the WAL/SHM quarantine restore already requires;
+backup-id digest input/collision behavior is undefined; and the closed CLI receipt has no type.
+
+The verified online backup, staged migration/restore, historical inventory, destructive
+confirmation and production-image recovery drills survive. `make storage-backup-fresh-review`
+passes 4/4. No production, storage, workflow, schema, content, archive or protected-design byte
+changed. Exact review:
+`planning/storage-backup-recovery/fresh-independent-buildability-review-2026-08-30.md`.
