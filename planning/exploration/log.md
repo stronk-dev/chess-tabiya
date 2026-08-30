@@ -11922,3 +11922,23 @@ countable attempt satisfies a theory/shape recommendation, exactly like direct p
 opening or abandoning the run changes no progression. `make theory-drill-author-contract` is the
 positive author gate. Fresh independent review and all implementation remain blocked until the
 owner ruling is recorded.
+
+## 2026-08-30 — Module-registration D2120–D2126 second author repair
+
+Converted the returned module-delivery boundary from prose populations into generated,
+digest-sealed 117-row execution and 205-row binding artifacts. Locked the new author fixture to the
+existing D1865 acceptance image, and specified the missing post-adapter budget, immutable Review
+paging, total role join, family-partitioned Inspector empty state and derived-input DAG contracts.
+`make module-registration-author-contract` passes 7/7 and `make module-evidence-assembly` passes
+13/13. No production code changed and no implementation is authorized; fresh independent review
+is next. Receipt: `planning/learner-modules/second-author-repair-2026-08-30.md`.
+
+## 2026-08-30 — Module-registration callable-plan correction
+
+The first author artifact used one coarse operation per producer, which named real symbols but
+could not emit several assigned projections (for example castling legality through
+`castlingRights`, and all tactic rows through `loosePieceReading`). Replaced it with
+projection-specific operation selection, runtime-imported all 117 callables, and added positive
+witnesses for all eight source families through deterministic local, Stockfish, Syzygy, Maia and
+Explorer seams. The strengthened author target is 9/9 green; the earlier 7/7 log line records the
+pre-correction checkpoint and is intentionally not edited under the append-only rule.

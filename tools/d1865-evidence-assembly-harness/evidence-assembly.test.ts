@@ -12,6 +12,7 @@ import {
   TRANSITION_EVENT_PROJECTION_IDS,
   TRANSITION_GEOMETRY_EVENT_FAMILIES,
 } from "../../packages/runtime/src/evidence-catalog.js";
+import { AUTHOR_MODULE_ACCEPTS } from "../d2120-module-registration-author-contract/module-plan-fixture.js";
 
 const structuralEvents = STRUCTURAL_EVENT_PROJECTION_IDS.filter((id) => ![
   "rules.structural.event.piece_count",
@@ -211,6 +212,10 @@ const semanticConsumerContract = Object.freeze({
 });
 
 describe("D1865 complete non-hint module assembly closure", () => {
+  it("shares one exact module acceptance image with the D2120 author plan", () => {
+    expect(MODULE_ACCEPTS).toEqual(AUTHOR_MODULE_ACCEPTS);
+  });
+
   it("reconciles the owner-ruled dependency image to exactly 207 consumer/projection pairs", () => {
     expect(Object.fromEntries(Object.entries(MODULE_ACCEPTS).map(([module, projections]) => [module, projections.length]))).toEqual({
       sight_on_request: 22,

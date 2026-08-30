@@ -1,12 +1,14 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** draft returned by fresh independent buildability review 2026-08-30 on
-  [[D2120]]–[[D2126]]. The D1863–D1869 intent repairs survive, but the callable execution
-  population, complete F1 binding compiler, non-fact budgets, bounded Review traversal, role
-  translation, Inspector empty algebra and derivation DAG remain unspecified. Exact return:
-  `planning/learner-modules/fresh-independent-buildability-review-2026-08-30.md`; `make
-  module-registration-fresh-review` reproduces 7/7 and the prior 12-arm assembly harness remains
-  green. The [[D1870]]/[[D2030]] dependency image remains the owner-ruled measured 207-pair target,
+- **Status:** draft — [[D2120]]–[[D2126]] author-repaired 2026-08-30; fresh independent
+  buildability review required. The repair publishes generated, digest-sealed 117-row execution
+  and 205-binding plans; closes post-adapter budgets, bounded immutable Review paging, the total
+  role projection, Inspector's family-partitioned empty algebra and the same-subject derivation
+  DAG; and locks the plan to the existing assembly image. `make
+  module-registration-author-contract` passes 9/9 and `make module-evidence-assembly` passes
+  13/13. Exact repair receipt:
+  `planning/learner-modules/second-author-repair-2026-08-30.md`. The
+  [[D1870]]/[[D2030]] dependency image remains the owner-ruled measured 207-pair target,
   including requested-Sight `pawn_safe_square`. Prior
   amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt
   `hint-distance` contract. The [[D1430]] document: the learner-module layer exists as a
@@ -345,6 +347,24 @@ fails on any drift, so the two tables can never disagree.
 `learner | host | participant | spectator | author | operator`. Three rules, each grounded in
 shipped code rather than chosen:
 
+The runtime role reaches that union through one total projection in `module-registry.ts`, reused
+by both module-ceiling and F1-binding checks:
+
+```ts
+export function moduleEvidenceRole(role: AssistanceContext["role"]): EvidenceRole {
+  switch (role) {
+    case "solo": return "learner";
+    case "host": return "host";
+    case "participant": return "participant";
+    case "spectator": return "spectator";
+  }
+}
+```
+
+The REST parser never accepts `author` or `operator` as a run role; an unknown value fails request
+parsing rather than reaching this function. No call site compares the two role vocabularies as raw
+strings. The full four-source-role image and the two refused evidence-only roles are fixtures.
+
 1. **`author` and `operator` never appear on a learner module.** They are the declared roles of
    `authoring.claim_binding` and `runtime.repertoire_scan` (`evidence-catalog.ts:888-889`); a
    module carrying them would widen a learner surface into an authoring one. Registry invariant,
@@ -435,8 +455,8 @@ The compiler requires both non-empty (`module-contract.ts:143`); §1.3 of `learn
 | `full_inspector` | Show me everything, attributed. | open a fact's provenance |
 
 `forms` per module, each a subset of the closed inventory and each mapped by `MODULE_FORM_IMAGE`
-(`module-contract.ts:119-127`): `rules_floor` `["square"]`; `sight_on_request`
-`["sentence","square","arrow"]`; `blunder_prevention` `["sentence","square","arrow"]`; `threat_radar` `["sentence","square","arrow"]`;
+(`module-contract.ts:119-127`; [[D2151]]): `rules_floor` `["square"]`; `sight_on_request`
+`["sentence","card","square","arrow"]`; `blunder_prevention` `["sentence","card","square","arrow"]`; `threat_radar` `["sentence","card","square","arrow"]`;
 `postcommit_nudge` `["sentence","card","square","arrow"]`; `structure_nudge` `["card","timeline_mark"]`;
 `theory_breadcrumb` `["sentence","card"]`; `guided_hint` `["sentence","square","arrow"]`; `compare_coach`
 `["sentence","card","arrow"]`; `review_map` `["timeline_mark","card","sentence","square","arrow"]`; `full_inspector`
@@ -682,6 +702,83 @@ operationSymbol, operation, subjectKind, sourceFamily }`; `operation` must be ca
 symbol-to-function identity is checked at import. Shared position/edge snapshots execute once per
 canonical subject even when several modules consume their projections.
 
+The complete authoring population is not left to the implementer. The generated
+`rfc/contracts/module-execution-plan-v1.json` contains one row for every compiled projection in
+§1.3, sorted by `projection@version`, with these required fields:
+
+```ts
+interface ModuleExecutionPlanRow {
+  projection: VersionedEvidenceId;
+  producer: VersionedEvidenceId;
+  stage: "position_local" | "edge_local" | "position_or_edge_local" | "catalogue_local" |
+    "pack_local" | "recorded_local" | "run_local" | "provider_optional" | "derived_after_inputs";
+  subjectKind: "position" | "edge" | "run_prefix" | "pack" | "catalogue";
+  sourceFamily: string;
+  operation: { source: string; symbol: string };
+  derivation: null | DerivationPlan;
+}
+```
+
+`tools/d2120-module-registration-author-contract/contract.test.ts` imports each declared source,
+resolves the named function or prototype method and asserts callable identity; it does not accept a
+stub. `family-witness.test.ts` executes all eight source families: fixed legal-position/edge/run
+fixtures cover local, authored, recorded and derived work, while provider families execute through
+deterministic Stockfish, Syzygy, Maia and Explorer seams. A projection
+missing from the plan, an extra row, a symbol rename, stage mismatch and a callable that emits zero
+declared projection ids each fail separately. The two awaiting projections are published in a
+separate exact list and may not enter the plan.
+
+##### 2.5.1 The derived-input DAG is part of the same plan
+
+For a non-derived row `derivation` is `null`. Every row at `derived_after_inputs` carries exactly
+one of:
+
+```ts
+type DerivationPlan =
+  | { kind: "all"; inputs: readonly VersionedEvidenceId[]; sameSubject: true }
+  | { kind: "any"; alternatives: readonly (readonly VersionedEvidenceId[])[]; sameSubject: true };
+```
+
+The generator copies this from the projection declaration's literal `derivation`, never from its
+name or stage. A derived projection without that declaration is an author-contract failure, not an
+empty input list. Compilation set-equals the DAG to all derived plan rows, rejects cycles, verifies
+every input is itself in the plan or an explicitly recorded source input, and emits one stable
+topological order. Each `{projection, canonicalSubject}` executes at most once and its result is
+shared by every dependent module.
+
+Propagation is total. `available(result)` continues; `available(no_witness)` yields
+`available(no_witness)`; `not_requested` stays `not_requested`; `unavailable`, `cancelled`, `stale`
+and `failed_typed` propagate with the input projection id and never invoke the derivation. `any`
+executes the first fully available alternative in declared order, records that alternative, and
+propagates only after every alternative is unavailable. Inputs from different canonical subjects
+fail `MODULE_DERIVATION_SUBJECT_MISMATCH`; an operation may consume only the supplied sealed inputs
+and cannot recollect them.
+
+##### 2.5.2 One total compiler emits complete F1 bindings
+
+`compileModuleEvidenceBindings(registry, manifest, adapters)` is the only authority for the F1
+rows. For every compiled module acceptance pair it derives all fields, with no caller choices:
+
+- `producer` and `projection` are the manifest projection's literal ids;
+- `consumer` is `module.${module.id}@1`;
+- `adapter` is the exact pair/form presentation adapter registry entry; no generic adapter id;
+- `timing` is the non-empty intersection of the acceptance override (or all module timings), the
+  module's `MODULE_TIMING_IMAGE`, and the projection/operation timing image;
+- `roles` is the module ceiling after `moduleEvidenceRole`, never raw runtime strings;
+- `sessions` is the module's derived session ceiling;
+- `forms` is the complete non-empty intersection of projection forms, the module form image and
+  registered adapter forms—choosing a smaller convenient subset is a compilation error;
+- `answerContent` is the complete projection answer-content set after the module's literal answer
+  capability; widening or dropping a member fails;
+- `latency` comes from the execution-plan stage's closed latency image; and
+- `budget` is `{maxFacts: module.budgets.maxFacts, maxForms: forms.length}`. Post-adapter words,
+  marks and arrows are enforced separately by §5.1.
+
+`rfc/contracts/module-binding-plan-v1.json` is generated from that compiler and set-equalled over
+the complete binding object, not only consumer/projection keys. Empty intersections refuse the
+module declaration; arbitrary form selection, role/session widening and timing/latency/budget drift
+are independent negative fixtures.
+
 The timing frames and legal collection are exactly the D1865 research contract:
 
 | timing | authoritative subject | collection boundary |
@@ -745,9 +842,30 @@ type ModuleQueryRequest = RequestedAssistanceReceiptV1 & (
   | { timing: "at_commit"; nodeId: string; candidateUci: string; generation: number }
   | { timing: "post_commit"; subjectNodeId: string }
   | { timing: "checkpoint"; nodeId: string; checkpointId: string; hintRung?: string }
-  | { timing: "review"; nodeId?: string }
+  | { timing: "review"; nodeId?: string; page: {
+      readonly prefixDigest?: string;
+      readonly cursor?: ReviewCursor;
+      readonly limit: number;
+    } }
 );
 ```
+
+`ReviewCursor` is the closed `{afterEventSeq, afterBranchId, afterNodeId}` tuple of the final
+subject in the preceding page. `limit` is an integer `1..32`. The first page omits both digest and
+cursor; the server freezes `{runId,eventHeadSeq,orderedSubjectIds}` into a canonical prefix digest.
+Every continuation must return that digest and exact cursor. Rewind/prune, source-node mutation,
+cursor omission/duplication or a digest mismatch returns `MODULE_REVIEW_PREFIX_STALE` and no
+provider work. Pages are half-open `(cursor, nextCursor]`, so boundary subjects cannot duplicate.
+
+One Review job has a 5,000-ms total collection budget, 500-ms per optional source, 32 subjects per
+page and the module declaration's output budgets after merge. `AbortSignal` is threaded to every
+optional provider and cancellation returns a typed cancelled source receipt plus no continuation
+work. Interim pages carry source receipts and sealed per-subject candidates but never apply the
+top-eight prominence rule. The final page deterministically merges by canonical subject id,
+deduplicates shared evidence identity, then runs the ordinary reducers and Review top-eight once.
+The fixture oracle runs the single frozen prefix in one in-memory pass and must equal the paged final
+bytes; a long run, mutation between pages, duplicated/omitted boundary node and provider
+cancellation are permanent negatives.
 
 Before an assembler or provider runs, the boundary parser applies four closed validations
 ([[D1869]]): `selectedSquare` passes chessops `parseSquare` and is scoped to the authoritative node;
@@ -768,7 +886,10 @@ event therefore produces a different stamp.
 
 The route returns a closed `ModuleQueryPage` carrying `{ runId, decision, subjectNodeId, timing,
 generation?, requestedConfigDigest, effectiveConfigDigest, suppressions, sourceReceipts, packets,
-disclosureReceipt }`; `decision` contains the stamp fields and digest.
+disclosureReceipt, review? }`; `decision` contains the stamp fields and digest. `review` is absent
+outside Review and otherwise carries `{prefixDigest, pageSubjectIds, nextCursor, complete,
+elapsedMs, remainingBudgetMs}`. `packets` is final module output only when `complete`; interim
+review candidates remain in the sealed review-page arm and cannot occupy a learner seat.
 Each packet carries module id, timing, budget receipt,
 `noveltyAbstained`, typed empty state and the sealed-component wire items owned by
 `evidence-presentation`. F1 brands are process-local and do not cross JSON; the server serializes
@@ -1046,10 +1167,66 @@ overflow emits exactly one `reduction_quality@1` observation before truncating. 
 failure is swallowed after being counted: it never widens assistance, never changes packet bytes
 and never fails a chess move.
 
+Facts are only the pre-adapter budget. After registered adapters fan one fact into presentation
+components, `fitModulePresentation` performs a second deterministic pass over **fact bundles** in
+the reducer's retained order. A bundle is the admitted fact, its equivalent sentence and every
+component constructed from it. It is atomic: the fit pass keeps or drops the whole bundle, never
+truncates a sentence, removes a caption while retaining its marks, or retains an arrow without its
+owning fact.
+
+The four counting units are closed:
+
+- `facts`: distinct admitted `factIdentity@1` values retained after reducers;
+- `words`: matches of
+  `/[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/gu` over each rendered accessible-text string after
+  NFKC normalization, counted once per literal string in the bundle;
+- `marks`: `square_set` squares, `timeline_mark` anchors and deduplicated `relation_overlay` nodes,
+  keyed by `{factIdentity, componentId, square, brush/emphasis}`; and
+- `arrows`: deduplicated `move_path`/`relation_overlay` edges keyed by
+  `{factIdentity, componentId, from, to, relation, sign}`. Every relation endpoint also counts as a
+  mark, so an arrow can never evade `maxMarks`; it counts once in each applicable dimension.
+
+`null maxMarks` means no mark ceiling; every other maximum is inclusive. The pass walks bundles in
+the already-declared reducer order and admits a bundle only when the cumulative tuple stays within
+all four maxima. A bundle exceeding any remaining dimension is dropped whole and the scan
+continues—unused word space cannot buy an extra arrow, and no lower-priority fact displaces an
+earlier one. Empty budgets are never back-filled by facts the reducers removed.
+
+Every packet carries a `ModuleBudgetReceipt` with before/after tuples, kept and dropped fact ids,
+and a non-empty set of exceeded dimensions per dropped bundle. Any drop emits one operator
+`reduction_quality@1` occurrence after the existing fact-backstop occurrence; recorder failure is
+swallowed under the same rule. Fixtures cross one fact producing sentence+card+marks+arrows and
+overflow each maximum independently, including a relation whose endpoints exhaust marks before
+its arrow would otherwise fit.
+
 #### 5.2 Honest empty is a rendered state, not a blank
 
 Each module's `emptyBehavior` is contract (`module-contract.ts:56-59`), and composition renders it
 under `play-composition.md` §4.3:
+
+The contract gains one non-generic arm used only by `full_inspector`:
+
+```ts
+type InspectorFamilyId =
+  | "local_rules" | "authored_theory" | "recorded_run" | "stockfish"
+  | "syzygy" | "maia" | "explorer" | "derived";
+type InspectorFamilyState =
+  | { readonly kind: "available"; readonly factCount: number }
+  | { readonly kind: "no_witness" }
+  | { readonly kind: "unavailable"; readonly reason: string }
+  | { readonly kind: "not_requested" }
+  | { readonly kind: "failed"; readonly reason: string };
+type ModuleEmptyBehavior = /* existing three arms */ |
+  { readonly kind: "family_partitioned";
+    readonly families: readonly InspectorFamilyId[] };
+```
+
+`full_inspector.families` is set-equal to the eight-member union above and every execution-plan row
+maps to exactly one family. The response carries one state per **demanded** family in registry order.
+`cancelled` and `stale` source receipts render as `failed` with their typed reason for this request;
+they are never flattened into `no_witness`. A family with facts is `available` even when another is
+unavailable, so mixed availability cannot collapse to one aggregate all-clear or all-empty sentence.
+No other module may declare `family_partitioned`.
 
 - **`silent`** (`rules_floor`, `blunder_prevention`, `postcommit_nudge`) — **no seat row at all.**
   Absence of the card *is* the rendering. `blunder_prevention` is additionally forbidden from ever
@@ -1068,7 +1245,9 @@ recognizes this structure."* — which doubles as the content-coverage signal, s
 starving is visible rather than silent; `theory_breadcrumb` *"Nothing is written about this
 position."*; `compare_coach` *"These attempts do not differ in anything recorded."*; `review_map`
 *"No grounded moments were detected in this game."* — the shipped sentence, kept;
-`full_inspector` a per-family absence line.
+  `full_inspector` uses `family_partitioned`: each of the eight families renders its exact state,
+  for example *"Stockfish unavailable"* beside *"Local rules: 3 facts"*. The sentence vocabulary
+  is fixed product copy over typed state and never summarizes the chess content.
 
 This is `design/05` invariant 5 (*"absence is stated, never simulated"*) applied to the presentation
 layer, and it is the direct answer to [[D1432]]'s complaint shape: a positive affordance that
@@ -1176,7 +1355,9 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
 2. **A2 — The acceptance/binding set, asserted by derivation, not by count** ([[D1240]],
    [[D1854]], [[D1855]]). `make module-registry-census` emits acceptance pairs from
    `MODULE_DECLARATIONS`, consumer pairs from `EVIDENCE_CONSUMERS`, and bound pairs from
-   `EVIDENCE_MANIFEST.bindings`; the test asserts exact set-equality across all three, with
+   `EVIDENCE_MANIFEST.bindings`; the test asserts exact set-equality across all three **and exact
+   object equality to `module-binding-plan-v1.json` for producer, adapter, timing, roles, sessions,
+   forms, answer content, latency and budget**, with
    **declared `207 + R` / compiled `205 + R` / awaiting `2`** baked only as derived drift
    tripwires. The 67 research eligibility rows and sole research selection policy are
    byte-identical. **RED at HEAD:** no module consumer or binding exists. **Negatives:**
@@ -1230,10 +1411,15 @@ deleting one disclosure id from the family×rung product fails;
    `blunder_prevention` emits **zero bytes** on empty and no string resembling an all-clear exists
    anywhere in its renderer table; `theory_breadcrumb` renders the typed runtime opening-catalogue
    abstention while the authoring-only record remains refused. **RED at HEAD:** no module has an empty state
-   because no module renders.
-9. **A9 — Budgets are backstops and overflow is loud.** A module whose post-reducer set exceeds
+   because no module renders. Full Inspector additionally crosses all eight family states in one
+   mixed response and set-equals demanded execution families; one aggregate sentence, a missing
+   family, or `unavailable` flattened to `no_witness` fails.
+9. **A9 — All four budgets are backstops and overflow is loud.** A module whose post-reducer set exceeds
    `maxFacts` emits exactly one `reduction_quality@1` observation whose `dropped` equals
-   `afterReducers - backstop` before truncating; silent truncation fails. Unused budget is never
+   `afterReducers - backstop` before truncating; the post-adapter atomic fit pass separately crosses
+   `maxWords`, `maxMarks` and `maxArrows`, including one fact that fans out to multiple components.
+   Sentences and fact-owned captions/marks/arrows are never split. Every drop names its exceeded
+   dimensions in `ModuleBudgetReceipt`; silent truncation fails. Unused budget is never
    back-filled. A throwing recorder changes neither packet bytes nor move outcome. **RED at HEAD:**
    `reduceModulePacket` has no production caller, so no observation can ever be emitted.
 10. **A10 — Seats render, one expanded at a time, and stage geometry never moves.** A browser
@@ -1310,7 +1496,16 @@ deleting one disclosure id from the family×rung product fails;
     collector or provider call**.
     **RED at HEAD:** the route, service operation and client parser/store do not exist, so no
     module id can reach a seat.
-20. **A20 — Closeout.** The landing commit flips this RFC's ledger rows, appends the
+20. **A20 — Execution, derivation, paging and role closure.** The 117-row execution plan is
+    set-equal to compiled accepted projections and resolves an actual callable for every row; one
+    positive per operation family reaches its declared projection. The derivation DAG is
+    set-equal to every derived row, acyclic, same-subject and single-execution; missing,
+    wrong-subject, cyclic, recomputed and unavailable-input fixtures fail independently. Review
+    crosses a >32-subject frozen prefix through multiple pages, equals the single-pass oracle and
+    refuses mutation, duplicate/omitted boundary cursors and cancelled provider continuation. The
+    sole role projection maps `solo→learner` plus the three identity arms and refuses unknown,
+    author and operator route values; both module and F1 checks consume its output.
+21. **A21 — Closeout.** The landing commit flips this RFC's ledger rows, appends the
     `planning/exploration/log.md` entry in the same commit, and writes its SHA into
     `move-quality-grades.md`'s D1 (which its Status line says blocks archival),
     `learner-modules.md`'s D1, and `play-composition.md`'s D2 where those are discharged.
@@ -1340,15 +1535,15 @@ deleting one disclosure id from the family×rung product fails;
 
 ## Fresh-review routing
 
-| row | remaining author work |
+| row | author repair; fresh review still required |
 |---|---|
-| [[D2120]] | publish and positively execute the literal 117-projection callable plan |
-| [[D2121]] | compile every required F1 binding field, including exact forms, from one authority |
-| [[D2122]] | enforce facts, words, marks and arrows after adapter fan-out without truncating evidence |
-| [[D2123]] | page/bound whole-run Review over one immutable prefix with cancellation and merge identity |
-| [[D2124]] | define one total runtime-role → evidence-role projection and use it at both checks |
-| [[D2125]] | make Inspector's per-family absence algebra representable or withdraw that promise |
-| [[D2126]] | publish the exact derived-input DAG and total abstention/failure propagation |
+| [[D2120]] | generated 117-row operation plan with source/symbol identity and exact projection population |
+| [[D2121]] | generated 205-row full binding plan, set-equal to the shared acceptance image |
+| [[D2122]] | atomic fact-bundle fit over exact facts/words/marks/arrows units and loud receipts |
+| [[D2123]] | immutable prefix, 1..32 paging, total/source budgets, cancellation and single-pass equivalence |
+| [[D2124]] | one total runtime-role → evidence-role projection consumed by module and F1 checks |
+| [[D2125]] | closed eight-family Inspector state algebra with mixed availability preserved |
+| [[D2126]] | exact AND/OR same-subject DAG, topological closure and total propagation rules |
 3. **Answered 2026-08-25 — `structure_nudge` is proactive as a passive marker, with content on
    request.** [[D1564]] confirms §1.1's declarable reading; no modal or unsolicited prose follows.
 4. **Which preset names survive owner use?** All five carry `validation: "candidate"`
@@ -1404,6 +1599,12 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-08-30 (second author repair): repaired [[D2120]]–[[D2126]] without touching production.
+  Generated and digest-sealed the exact 117-row execution and 205-row binding artifacts; locked
+  their acceptance image to the established D1865 harness; specified atomic post-adapter budgets,
+  immutable bounded Review paging, one total role projection, family-partitioned Inspector empty
+  states and the derived-input DAG. The positive author contract passes 9/9 and the shared assembly
+  contract passes 13/13. Fresh independent review still gates acceptance and implementation.
 - 2026-08-30 (fresh independent return): returned the author amendment on [[D2120]]–[[D2126]].
   The 207-pair acceptance image is intact, but it does not yet determine callable producer reach,
   complete binding bytes, three output budgets, bounded Review work, authorization-role joining,

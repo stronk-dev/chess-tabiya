@@ -1,0 +1,2601 @@
+{
+  "schemaVersion": 1,
+  "population": 117,
+  "awaiting": [
+    "derived.explorer.population_summary",
+    "pack.authored.classifier"
+  ],
+  "rows": [
+    {
+      "projection": {
+        "id": "derived.activity.event.open_file_occupancy",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.activity",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "openFileOccupancyOperands"
+      },
+      "derivation": {
+        "kind": "any",
+        "alternatives": [
+          [
+            {
+              "id": "rules.structural.reading.open_file",
+              "version": 1
+            }
+          ],
+          [
+            {
+              "id": "rules.structural.reading.half_open_file",
+              "version": 1
+            }
+          ]
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.compare.engine_trajectory",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.compare_narrative",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/compare-strips.ts",
+        "symbol": "comparisonEngineTrajectory"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "live.stockfish.eval",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.compare.eval_delta",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.compare_narrative",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/compare-strips.ts",
+        "symbol": "comparisonNarrative"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "live.stockfish.eval",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.compare.piece_route",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.compare_narrative",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/compare-strips.ts",
+        "symbol": "comparisonNarrative"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "run.record.move",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.compare.structure_delta",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.compare_narrative",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/compare-strips.ts",
+        "symbol": "comparisonNarrative"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.structural.reading.pawn_safe_square",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.outpost",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.backward_pawn",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.isolated_pawn",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.doubled_pawn",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.passed_pawn",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.open_file",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.half_open_file",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.line_blockers",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.direct_attack_count",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.piece_reach_count",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.named_structure",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.bishop_on_shade",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.king_opposition",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.piece_count",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.king_zone",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.reading.piece_distance",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.exchange.capture_class",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.exchange",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "derivedExchangeSemanticEvents"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.transition.event.capture",
+            "version": 1
+          },
+          {
+            "id": "rules.exchange.predicate.legal_exchange",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.exchange.trade_completed",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.exchange",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "tradeCompletedSemanticEvent"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.transition.event.capture",
+            "version": 1
+          },
+          {
+            "id": "run.record.move",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.grade.move_quality",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.grade",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/grade.ts",
+        "symbol": "moveQualityGrade"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "recorded.engine.eval",
+            "version": 1
+          },
+          {
+            "id": "live.stockfish.eval",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.king.captured_zone_defender",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.king",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "capturedZoneDefenderOperands"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.transition.event.capture",
+            "version": 1
+          },
+          {
+            "id": "rules.king.reading.zone_state",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.material.reading.role_signature",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.material",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/material-state.ts",
+        "symbol": "materialRoleSignatureReading"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.structural.reading.piece_count",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.pawn.event.transitions",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.pawn",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/pawn-dynamics.ts",
+        "symbol": "pawnTransitionEvents"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.pawn.reading.contacts",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.semantic_avoidance.backward_pawn",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.semantic_avoidance",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "selectLocalSemanticEvidence"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.structural.event.backward_pawn",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.semantic_avoidance.doubled_pawn",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.semantic_avoidance",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "selectLocalSemanticEvidence"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.structural.event.doubled_pawn",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.semantic_avoidance.half_open_file",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.semantic_avoidance",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "selectLocalSemanticEvidence"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.structural.event.half_open_file",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.semantic_avoidance.isolated_pawn",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.semantic_avoidance",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "selectLocalSemanticEvidence"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.structural.event.isolated_pawn",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.semantic_avoidance.king_opposition",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.semantic_avoidance",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "selectLocalSemanticEvidence"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.structural.event.king_opposition",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.semantic_avoidance.king_zone",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.semantic_avoidance",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "selectLocalSemanticEvidence"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.structural.event.king_zone",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.semantic_avoidance.loose_piece",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.semantic_avoidance",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "selectLocalSemanticEvidence"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.tactic.event.loose_piece",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.semantic_avoidance.open_file",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.semantic_avoidance",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "selectLocalSemanticEvidence"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.structural.event.open_file",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.semantic_avoidance.passed_pawn",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.semantic_avoidance",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "selectLocalSemanticEvidence"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.structural.event.passed_pawn",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.semantic_avoidance.pawn_islands",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.semantic_avoidance",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "selectLocalSemanticEvidence"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.structural.event.pawn_islands",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.story.rank",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.story",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/story.ts",
+        "symbol": "storyMoments"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "derived.story.eval_shift",
+            "version": 1
+          },
+          {
+            "id": "derived.story.last_level",
+            "version": 1
+          },
+          {
+            "id": "run.record.consequence",
+            "version": 1
+          },
+          {
+            "id": "run.record.imported_result",
+            "version": 1
+          },
+          {
+            "id": "rules.pivotal.marker",
+            "version": 1
+          },
+          {
+            "id": "rules.endgame.reading",
+            "version": 1
+          },
+          {
+            "id": "theory.shapes.firing",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.tactic.attraction_observed",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "attractionObservedOperands"
+      },
+      "derivation": {
+        "kind": "any",
+        "alternatives": [
+          [
+            {
+              "id": "run.record.move",
+              "version": 1
+            },
+            {
+              "id": "rules.transition.event.capture",
+              "version": 1
+            },
+            {
+              "id": "rules.tactic.event.check",
+              "version": 1
+            }
+          ],
+          [
+            {
+              "id": "run.record.move",
+              "version": 1
+            },
+            {
+              "id": "rules.transition.event.capture",
+              "version": 1
+            }
+          ]
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.tactic.check_zwischenzug_observed",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "checkZwischenzugObservedOperands"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "run.record.move",
+            "version": 1
+          },
+          {
+            "id": "rules.transition.event.capture",
+            "version": 1
+          },
+          {
+            "id": "rules.tactic.event.check",
+            "version": 1
+          },
+          {
+            "id": "rules.exchange.predicate.legal_exchange",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.tactic.defender_exposure",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "defenderExposureOperands"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.square.event.control",
+            "version": 1
+          },
+          {
+            "id": "rules.exchange.predicate.legal_exchange",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.tactic.deflection_observed",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "deflectionObservedOperands"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "run.record.move",
+            "version": 1
+          },
+          {
+            "id": "rules.tactic.reading.defender_duty_set",
+            "version": 1
+          },
+          {
+            "id": "rules.transition.event.capture",
+            "version": 1
+          },
+          {
+            "id": "rules.exchange.predicate.legal_exchange",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.tactic.discovered_executed",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "discoveredExecutedSemanticEvents"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.tactic.reading.discovered_latency",
+            "version": 1
+          },
+          {
+            "id": "rules.transition.event.slider_ray",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.tactic.interference_observed",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "interferenceObservedOperands"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "run.record.move",
+            "version": 1
+          },
+          {
+            "id": "rules.tactic.reading.defender_duty_set",
+            "version": 1
+          },
+          {
+            "id": "rules.exchange.predicate.legal_exchange",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.tactic.line_blocker_clearance_observed",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "lineBlockerClearanceObservedOperands"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "run.record.move",
+            "version": 1
+          },
+          {
+            "id": "rules.exchange.predicate.legal_exchange",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.tactic.overload_exploitation_observed",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "overloadExploitationObservedOperands"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "run.record.move",
+            "version": 1
+          },
+          {
+            "id": "rules.tactic.reading.defender_duty_set",
+            "version": 1
+          },
+          {
+            "id": "rules.transition.event.capture",
+            "version": 1
+          },
+          {
+            "id": "rules.exchange.predicate.legal_exchange",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.tactic.promotion_pressure",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/tactics.ts",
+        "symbol": "promotionPressureReading"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.structural.predicate.passed_pawn",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.predicate.direct_attack_count",
+            "version": 1
+          },
+          {
+            "id": "rules.structural.predicate.line_blockers",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "derived.tactic.square_clearance_observed",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "sourceFamily": "derived",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "squareClearanceObservedOperands"
+      },
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "run.record.move",
+            "version": 1
+          }
+        ],
+        "sameSubject": true
+      }
+    },
+    {
+      "projection": {
+        "id": "human.explorer.population",
+        "version": 1
+      },
+      "producer": {
+        "id": "human.explorer",
+        "version": 1
+      },
+      "stage": "provider_optional",
+      "subjectKind": "position",
+      "sourceFamily": "explorer",
+      "operation": {
+        "source": "apps/server/src/corpus.ts",
+        "symbol": "LichessCorpusSource.prototype.stats"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "human.maia.candidate_wdl",
+        "version": 1
+      },
+      "producer": {
+        "id": "human.maia",
+        "version": 1
+      },
+      "stage": "provider_optional",
+      "subjectKind": "position",
+      "sourceFamily": "maia",
+      "operation": {
+        "source": "apps/server/src/opponent-selector.ts",
+        "symbol": "OpponentSelector.prototype.select"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "human.maia.policy",
+        "version": 1
+      },
+      "producer": {
+        "id": "human.maia",
+        "version": 1
+      },
+      "stage": "provider_optional",
+      "subjectKind": "position",
+      "sourceFamily": "maia",
+      "operation": {
+        "source": "apps/server/src/opponent-selector.ts",
+        "symbol": "OpponentSelector.prototype.select"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "live.stockfish.eval",
+        "version": 1
+      },
+      "producer": {
+        "id": "live.stockfish",
+        "version": 1
+      },
+      "stage": "provider_optional",
+      "subjectKind": "position",
+      "sourceFamily": "stockfish",
+      "operation": {
+        "source": "apps/server/src/evidence-queue.ts",
+        "symbol": "StockfishEvidenceExecutor.prototype.execute"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "live.stockfish.pv",
+        "version": 1
+      },
+      "producer": {
+        "id": "live.stockfish",
+        "version": 1
+      },
+      "stage": "provider_optional",
+      "subjectKind": "position",
+      "sourceFamily": "stockfish",
+      "operation": {
+        "source": "apps/server/src/evidence-queue.ts",
+        "symbol": "StockfishEvidenceExecutor.prototype.execute"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "live.stockfish.wdl",
+        "version": 1
+      },
+      "producer": {
+        "id": "live.stockfish",
+        "version": 1
+      },
+      "stage": "provider_optional",
+      "subjectKind": "position",
+      "sourceFamily": "stockfish",
+      "operation": {
+        "source": "apps/server/src/evidence-queue.ts",
+        "symbol": "StockfishEvidenceExecutor.prototype.execute"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "live.syzygy.category",
+        "version": 1
+      },
+      "producer": {
+        "id": "live.syzygy",
+        "version": 1
+      },
+      "stage": "provider_optional",
+      "subjectKind": "position",
+      "sourceFamily": "syzygy",
+      "operation": {
+        "source": "apps/server/src/tablebase.ts",
+        "symbol": "LichessTablebaseSource.prototype.probe"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "live.syzygy.distance",
+        "version": 1
+      },
+      "producer": {
+        "id": "live.syzygy",
+        "version": 1
+      },
+      "stage": "provider_optional",
+      "subjectKind": "position",
+      "sourceFamily": "syzygy",
+      "operation": {
+        "source": "apps/server/src/tablebase.ts",
+        "symbol": "LichessTablebaseSource.prototype.probe"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "live.syzygy.result",
+        "version": 1
+      },
+      "producer": {
+        "id": "live.syzygy",
+        "version": 1
+      },
+      "stage": "provider_optional",
+      "subjectKind": "position",
+      "sourceFamily": "syzygy",
+      "operation": {
+        "source": "apps/server/src/tablebase.ts",
+        "symbol": "LichessTablebaseSource.prototype.probe"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "pack.authored.claim",
+        "version": 1
+      },
+      "producer": {
+        "id": "pack.authored",
+        "version": 1
+      },
+      "stage": "pack_local",
+      "subjectKind": "pack",
+      "sourceFamily": "authored_theory",
+      "operation": {
+        "source": "apps/server/src/authored-feedback.ts",
+        "symbol": "projectAuthoredFeedback"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "recorded.engine.eval",
+        "version": 1
+      },
+      "producer": {
+        "id": "recorded.engine",
+        "version": 1
+      },
+      "stage": "recorded_local",
+      "subjectKind": "position",
+      "sourceFamily": "recorded_run",
+      "operation": {
+        "source": "apps/server/src/position-evidence.ts",
+        "symbol": "recordedReadingsAt"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "recorded.tablebase.result",
+        "version": 1
+      },
+      "producer": {
+        "id": "recorded.tablebase",
+        "version": 1
+      },
+      "stage": "recorded_local",
+      "subjectKind": "position",
+      "sourceFamily": "recorded_run",
+      "operation": {
+        "source": "apps/server/src/position-evidence.ts",
+        "symbol": "recordedReadingsAt"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.castling.event.rights_lost",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.castling",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/castling.ts",
+        "symbol": "castlingRightsLost"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.castling.reading.legality",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.castling",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/castling.ts",
+        "symbol": "castlingLegality"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.castling.reading.rights",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.castling",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/castling.ts",
+        "symbol": "castlingRights"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.endgame.reading",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.endgame",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/endgame.ts",
+        "symbol": "endgameReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.king.event.zone_state",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.king",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/king-state.ts",
+        "symbol": "kingZoneEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.king.reading.zone_state",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.king",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/king-state.ts",
+        "symbol": "kingZoneReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.mobility.reading.piece_destinations",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.mobility",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/mobility.ts",
+        "symbol": "pieceDestinationsReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.pawn.event.dynamics",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.pawn",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/pawn-dynamics.ts",
+        "symbol": "pawnDynamicsEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.pawn.reading.candidate_majority",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.pawn",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/pawn-dynamics.ts",
+        "symbol": "candidateMajorityReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.pawn.reading.contacts",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.pawn",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/pawn-dynamics.ts",
+        "symbol": "pawnContactsReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.phase.development",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.phase",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/phase.ts",
+        "symbol": "developmentReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.phase.reading",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.phase",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/phase.ts",
+        "symbol": "classifyPhase"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.pivotal.marker",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.pivotal",
+        "version": 1
+      },
+      "stage": "run_local",
+      "subjectKind": "run_prefix",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/pivotal.ts",
+        "symbol": "pivotalMarkers"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.square.reading.control",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.square",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/square-control.ts",
+        "symbol": "squareControlReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.event.backward_pawn",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "structuralSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.event.doubled_pawn",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "structuralSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.event.half_open_file",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "structuralSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.event.isolated_pawn",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "structuralSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.event.king_opposition",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "structuralSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.event.king_zone",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "structuralSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.event.open_file",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "structuralSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.event.passed_pawn",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "structuralSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.event.pawn_islands",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "structuralSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.backward_pawn",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.bishop_on_shade",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.direct_attack_count",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.doubled_pawn",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.half_open_file",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.isolated_pawn",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.king_opposition",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.king_zone",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.line_blockers",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.named_structure",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.open_file",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.outpost",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.passed_pawn",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.pawn_connectivity",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.pawn_safe_square",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.piece_count",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.piece_distance",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.piece_reach_count",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.structural.reading.space",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.structural",
+        "version": 1
+      },
+      "stage": "position_local",
+      "subjectKind": "position",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/structure.ts",
+        "symbol": "structuralReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.consequence.mate_in_one",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/tactics.ts",
+        "symbol": "mateInOne"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.consequence.reply_breadth",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/tactics.ts",
+        "symbol": "replyBreadth"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.consequence.threat",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/tactics.ts",
+        "symbol": "threats"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.event.check",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/tactics.ts",
+        "symbol": "checkEvent"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.event.double_attack",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/tactics.ts",
+        "symbol": "doubleAttackEvent"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.event.loose_piece",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/tactics.ts",
+        "symbol": "loosePieceEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.reading.back_rank",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/tactics.ts",
+        "symbol": "backRankReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.reading.discovered_latency",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/tactics.ts",
+        "symbol": "discoveredLatencyReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.reading.loose_piece",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/tactics.ts",
+        "symbol": "loosePieceReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.reading.ray_classification",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/tactics.ts",
+        "symbol": "rayClassificationReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.reading.rook_on_seventh",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/tactics.ts",
+        "symbol": "rookOnSeventhReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.reading.trapped_piece",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/tactics.ts",
+        "symbol": "trappedPieceReading"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.transition.event.capture",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.transition",
+        "version": 1
+      },
+      "stage": "edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "transitionSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.transition.event.castled",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.transition",
+        "version": 1
+      },
+      "stage": "edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "transitionSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.transition.event.checkmate",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.transition",
+        "version": 1
+      },
+      "stage": "edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "transitionSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.transition.event.defended_duty",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.transition",
+        "version": 1
+      },
+      "stage": "edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "transitionSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.transition.event.developed",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.transition",
+        "version": 1
+      },
+      "stage": "edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "transitionSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.transition.event.last_of_role",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.transition",
+        "version": 1
+      },
+      "stage": "edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "transitionSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.transition.event.occupied_attack",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.transition",
+        "version": 1
+      },
+      "stage": "edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "transitionSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.transition.event.occupied_defence",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.transition",
+        "version": 1
+      },
+      "stage": "edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "transitionSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.transition.event.pawn_contact",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.transition",
+        "version": 1
+      },
+      "stage": "edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "transitionSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.transition.event.piece_escape",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.transition",
+        "version": 1
+      },
+      "stage": "edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "transitionSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.transition.event.promotion",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.transition",
+        "version": 1
+      },
+      "stage": "edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "transitionSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "rules.transition.event.slider_ray",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.transition",
+        "version": 1
+      },
+      "stage": "edge_local",
+      "subjectKind": "edge",
+      "sourceFamily": "local_rules",
+      "operation": {
+        "source": "packages/runtime/src/semantic-evidence.ts",
+        "symbol": "transitionSemanticEvents"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "run.record.checkpoint_hit",
+        "version": 1
+      },
+      "producer": {
+        "id": "run.record",
+        "version": 1
+      },
+      "stage": "run_local",
+      "subjectKind": "run_prefix",
+      "sourceFamily": "recorded_run",
+      "operation": {
+        "source": "packages/runtime/src/compare-strips.ts",
+        "symbol": "comparisonNarrative"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "run.record.consequence",
+        "version": 1
+      },
+      "producer": {
+        "id": "run.record",
+        "version": 1
+      },
+      "stage": "run_local",
+      "subjectKind": "run_prefix",
+      "sourceFamily": "recorded_run",
+      "operation": {
+        "source": "packages/runtime/src/story.ts",
+        "symbol": "storyMoments"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "run.record.fork",
+        "version": 1
+      },
+      "producer": {
+        "id": "run.record",
+        "version": 1
+      },
+      "stage": "run_local",
+      "subjectKind": "run_prefix",
+      "sourceFamily": "recorded_run",
+      "operation": {
+        "source": "packages/runtime/src/compare-strips.ts",
+        "symbol": "comparisonNarrative"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "run.record.imported_result",
+        "version": 1
+      },
+      "producer": {
+        "id": "run.record",
+        "version": 1
+      },
+      "stage": "run_local",
+      "subjectKind": "run_prefix",
+      "sourceFamily": "recorded_run",
+      "operation": {
+        "source": "packages/runtime/src/story.ts",
+        "symbol": "storyMoments"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "run.record.objective_transition",
+        "version": 1
+      },
+      "producer": {
+        "id": "run.record",
+        "version": 1
+      },
+      "stage": "run_local",
+      "subjectKind": "run_prefix",
+      "sourceFamily": "recorded_run",
+      "operation": {
+        "source": "packages/runtime/src/compare-strips.ts",
+        "symbol": "comparisonNarrative"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "theory.opening.current_endpoint",
+        "version": 1
+      },
+      "producer": {
+        "id": "theory.opening.runtime",
+        "version": 1
+      },
+      "stage": "catalogue_local",
+      "subjectKind": "catalogue",
+      "sourceFamily": "authored_theory",
+      "operation": {
+        "source": "apps/server/src/opening-catalogue.ts",
+        "symbol": "openingIdentityAt"
+      },
+      "derivation": null
+    },
+    {
+      "projection": {
+        "id": "theory.shapes.firing",
+        "version": 1
+      },
+      "producer": {
+        "id": "theory.shapes",
+        "version": 1
+      },
+      "stage": "catalogue_local",
+      "subjectKind": "catalogue",
+      "sourceFamily": "authored_theory",
+      "operation": {
+        "source": "packages/runtime/src/shape-firing.ts",
+        "symbol": "shapeFirings"
+      },
+      "derivation": null
+    }
+  ],
+  "digest": "sha256:d484bafb116d831f5dc86c3323daf4fbe891c2565f6a67221e2f0c0becedf2fe"
+}
