@@ -253,6 +253,15 @@ have two routes. The implementation records one reviewed migration row per curre
 `oldOperation`, exact projection ref, target projection ref, factory shape, production operation,
 authority inputs, convention/source dependency and call-site count.
 
+The checked-in author receipt at
+`planning/evidence-foundation-ux/evidence-value-authority-route-map.json` is the literal starting
+table, not a prose census. Its syntax-aware use pass records 184 used routes, seven export-only
+routes and zero bound projections without a production use. The earlier direct-call-only probe that
+reported 25 export-only / 19 bound rows is rejected by [[D2147]] because it missed callback use.
+Before acceptance, author review replaces each manifest implementation path with the exact producer
+operation symbol where the current catalogue names only a file; no `producerImplementation` path is
+accepted as a factory's callable authority.
+
 The set is partitioned at baseline as follows:
 
 | Factory family after grounding repair | Current rows | Source of authority |
@@ -388,9 +397,10 @@ planes, optional LLM renderer and assistance ceilings.
    reviewed against producer symbols.
 3. The semantic-convention and provider-exchange dependencies are accepted with the exact closure
    and receipt types consumed here; this RFC does not restate them.
-4. A literal 191-row migration table names every old route, target, shape, operation, authority
-   input and call-site count; the four duplicates must collapse and duplicate/missing/wildcard rows
-   fail.
+4. The checked-in literal 191-row migration receipt names every old route, target factory symbol,
+   shape, authority input, dependency and production use; author review resolves every remaining
+   file-only producer implementation to an exact callable operation. The four duplicates must
+   collapse and duplicate/missing/wildcard rows fail.
 5. Only the package-private mint boundary calls `declareEvidence`; mint internals and old adapters
    are absent from runtime exports.
 6. No production computed or derived factory accepts a result payload, boolean, count, event

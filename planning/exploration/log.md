@@ -11686,3 +11686,24 @@ impossible cross-module capability claim with one runtime-owned mint module and 
 receipt to what it can prove: verified input/source digests at construction plus payload-digest
 coherence at consumption. No production projection, adapter, binding, schema, content, archive or
 protected-design byte changed.
+
+## 2026-08-30 — Literal evidence mint-route receipt and execution-reach correction
+
+Landed D2146's checked-in 191-row author receipt at
+`planning/evidence-foundation-ux/evidence-value-authority-route-map.json`. Every current route now
+names its old operation, exact projection, target projection-specific factory symbol, factory
+shape, authority inputs, dependency, manifest producer implementation, disposition, bindings and
+production use sites. The joined population remains 191 routes / 187 current projections / four
+duplicate projections / six no-route declarations, and the author contract refuses unresolved
+authority-input placeholders. `make evidence-value-authority-route-map` and `make
+evidence-value-authority-author-contract` pass.
+
+The first execution pass was wrong and is retained as [[D2147]] rather than silently overwritten.
+It counted only `adapter(...)` calls, missed callback use such as
+`.map(declareNamedStructureEvidence)`, and falsely reported 25 export-only routes including 19 bound
+rows. The replacement parses imports, aliases, namespaces and identifier/callback use once per
+production source file. It finds 184 used routes and seven export-only routes. Two unused routes
+are redundant Maia/Syzygy paths whose projections are live through `declareLivePacketEvidence`;
+the other five are unbound inspector-only foundations. Zero bound projections lack a production
+mint use, and the receipt now fails if that set becomes non-empty. No production evidence,
+projection, binding, schema, content, archive or protected-design byte changed.

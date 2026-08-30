@@ -1,0 +1,4835 @@
+{
+  "schemaVersion": 1,
+  "authority": "D2146",
+  "routes": [
+    {
+      "oldOperation": "declareAuthoredStructuralConditionEvidence",
+      "currentProjection": "authored.structural_condition.input@1",
+      "targetProfiles": [
+        {
+          "projection": "authored.structural_condition.input@1",
+          "factoryShape": "authored_authority",
+          "authorityInputs": [
+            "registered_authority",
+            "document_digest_pointer"
+          ],
+          "dependency": "registered-authored-provenance",
+          "factorySymbol": "createAuthoredStructuralConditionInputV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structural-evidence.ts; apps/server/src/pack-orchestrator.ts; apps/server/src/shape-registry.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:117"
+      ]
+    },
+    {
+      "oldOperation": "declareOpenFileOccupancyEvidence",
+      "currentProjection": "derived.activity.event.open_file_occupancy@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.activity.event.open_file_occupancy@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedActivityEventOpenFileOccupancyV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:834"
+      ]
+    },
+    {
+      "oldOperation": "declareCompareDerivedEvidence",
+      "currentProjection": "derived.compare.engine_trajectory@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.compare.engine_trajectory@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedCompareEngineTrajectoryV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/compare-strips.ts:comparisonNarrative",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "compare.engine_trajectory@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "packages/runtime/src/compare-strips.ts:107",
+        "packages/runtime/src/compare-strips.ts:145",
+        "packages/runtime/src/compare-strips.ts:29"
+      ]
+    },
+    {
+      "oldOperation": "declareCompareDerivedEvidence",
+      "currentProjection": "derived.compare.eval_delta@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.compare.eval_delta@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedCompareEvalDeltaV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/compare-strips.ts:comparisonNarrative",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.voice_compare@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "packages/runtime/src/compare-strips.ts:107",
+        "packages/runtime/src/compare-strips.ts:145",
+        "packages/runtime/src/compare-strips.ts:29"
+      ]
+    },
+    {
+      "oldOperation": "declareCompareDerivedEvidence",
+      "currentProjection": "derived.compare.piece_route@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.compare.piece_route@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedComparePieceRouteV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/compare-strips.ts:comparisonNarrative",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "compare.structure_strip@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "packages/runtime/src/compare-strips.ts:107",
+        "packages/runtime/src/compare-strips.ts:145",
+        "packages/runtime/src/compare-strips.ts:29"
+      ]
+    },
+    {
+      "oldOperation": "declareCompareDerivedEvidence",
+      "currentProjection": "derived.compare.structure_delta@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.compare.structure_delta@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedCompareStructureDeltaV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/compare-strips.ts:comparisonNarrative",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "compare.structure_strip@1",
+        "guidance.voice_compare@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "packages/runtime/src/compare-strips.ts:107",
+        "packages/runtime/src/compare-strips.ts:145",
+        "packages/runtime/src/compare-strips.ts:29"
+      ]
+    },
+    {
+      "oldOperation": "declareCaptureClassEvidence",
+      "currentProjection": "derived.exchange.capture_class@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.exchange.capture_class@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedExchangeCaptureClassV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/exchange.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:438"
+      ]
+    },
+    {
+      "oldOperation": "declareTradeCompletedEvidence",
+      "currentProjection": "derived.exchange.trade_completed@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.exchange.trade_completed@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedExchangeTradeCompletedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/exchange.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:471"
+      ]
+    },
+    {
+      "oldOperation": "declareCapturedZoneDefenderEvidence",
+      "currentProjection": "derived.king.captured_zone_defender@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.king.captured_zone_defender@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedKingCapturedZoneDefenderV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:830"
+      ]
+    },
+    {
+      "oldOperation": "declareMaterialRoleEventEvidence",
+      "currentProjection": "derived.material.event.role_asymmetry@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.material.event.role_asymmetry@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedMaterialEventRoleAsymmetryV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/material-state.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:825"
+      ]
+    },
+    {
+      "oldOperation": "declareMaterialRoleReadingEvidence",
+      "currentProjection": "derived.material.reading.role_signature@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.material.reading.role_signature@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedMaterialReadingRoleSignatureV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/material-state.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:145",
+        "packages/runtime/src/semantic-evidence.ts:822",
+        "packages/runtime/src/semantic-evidence.ts:822"
+      ]
+    },
+    {
+      "oldOperation": "declareCandidateFeatureVectorEvidence",
+      "currentProjection": "derived.opponent.candidate_feature_vector@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.opponent.candidate_feature_vector@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedOpponentCandidateFeatureVectorV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/candidate-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "opponent.selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:218"
+      ]
+    },
+    {
+      "oldOperation": "declarePawnTransitionEvidence",
+      "currentProjection": "derived.pawn.event.transitions@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.pawn.event.transitions@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedPawnEventTransitionsV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/pawn-dynamics.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:814"
+      ]
+    },
+    {
+      "oldOperation": "declarePawnContactTimingEvidence",
+      "currentProjection": "derived.pawn.sequence.contact_timing@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.pawn.sequence.contact_timing@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedPawnSequenceContactTimingV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/pawn-dynamics.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:846"
+      ]
+    },
+    {
+      "oldOperation": "declareHarassmentPressureEvidence",
+      "currentProjection": "derived.pawn.sequence.harassment_pressure@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.pawn.sequence.harassment_pressure@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedPawnSequenceHarassmentPressureV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/pawn-dynamics.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:851"
+      ]
+    },
+    {
+      "oldOperation": "declareAvoidanceEvidence",
+      "currentProjection": "derived.semantic_avoidance.backward_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.semantic_avoidance.backward_pawn@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedSemanticAvoidanceBackwardPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:1035"
+      ]
+    },
+    {
+      "oldOperation": "declareAvoidanceEvidence",
+      "currentProjection": "derived.semantic_avoidance.direct_attack_count@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.semantic_avoidance.direct_attack_count@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedSemanticAvoidanceDirectAttackCountV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:1035"
+      ]
+    },
+    {
+      "oldOperation": "declareAvoidanceEvidence",
+      "currentProjection": "derived.semantic_avoidance.doubled_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.semantic_avoidance.doubled_pawn@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedSemanticAvoidanceDoubledPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:1035"
+      ]
+    },
+    {
+      "oldOperation": "declareAvoidanceEvidence",
+      "currentProjection": "derived.semantic_avoidance.half_open_file@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.semantic_avoidance.half_open_file@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedSemanticAvoidanceHalfOpenFileV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:1035"
+      ]
+    },
+    {
+      "oldOperation": "declareAvoidanceEvidence",
+      "currentProjection": "derived.semantic_avoidance.isolated_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.semantic_avoidance.isolated_pawn@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedSemanticAvoidanceIsolatedPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:1035"
+      ]
+    },
+    {
+      "oldOperation": "declareAvoidanceEvidence",
+      "currentProjection": "derived.semantic_avoidance.king_opposition@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.semantic_avoidance.king_opposition@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedSemanticAvoidanceKingOppositionV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:1035"
+      ]
+    },
+    {
+      "oldOperation": "declareAvoidanceEvidence",
+      "currentProjection": "derived.semantic_avoidance.king_zone@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.semantic_avoidance.king_zone@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedSemanticAvoidanceKingZoneV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:1035"
+      ]
+    },
+    {
+      "oldOperation": "declareAvoidanceEvidence",
+      "currentProjection": "derived.semantic_avoidance.line_blockers@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.semantic_avoidance.line_blockers@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedSemanticAvoidanceLineBlockersV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:1035"
+      ]
+    },
+    {
+      "oldOperation": "declareAvoidanceEvidence",
+      "currentProjection": "derived.semantic_avoidance.loose_piece@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.semantic_avoidance.loose_piece@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedSemanticAvoidanceLoosePieceV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:1035"
+      ]
+    },
+    {
+      "oldOperation": "declareAvoidanceEvidence",
+      "currentProjection": "derived.semantic_avoidance.open_file@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.semantic_avoidance.open_file@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedSemanticAvoidanceOpenFileV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:1035"
+      ]
+    },
+    {
+      "oldOperation": "declareAvoidanceEvidence",
+      "currentProjection": "derived.semantic_avoidance.passed_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.semantic_avoidance.passed_pawn@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedSemanticAvoidancePassedPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:1035"
+      ]
+    },
+    {
+      "oldOperation": "declareAvoidanceEvidence",
+      "currentProjection": "derived.semantic_avoidance.pawn_islands@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.semantic_avoidance.pawn_islands@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedSemanticAvoidancePawnIslandsV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:1035"
+      ]
+    },
+    {
+      "oldOperation": "declareAvoidanceEvidence",
+      "currentProjection": "derived.semantic_avoidance.piece_count@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.semantic_avoidance.piece_count@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedSemanticAvoidancePieceCountV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:1035"
+      ]
+    },
+    {
+      "oldOperation": "declareStoryDerivedEvidence",
+      "currentProjection": "derived.story.eval_shift@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.story.eval_shift@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedStoryEvalShiftV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/story.ts:storyMoments; suggestTitle",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.voice_story@1",
+        "review.story@1"
+      ],
+      "currentProductionUseCount": 2,
+      "currentProductionUseSites": [
+        "packages/runtime/src/story.ts:232",
+        "packages/runtime/src/story.ts:36"
+      ]
+    },
+    {
+      "oldOperation": "declareStoryDerivedEvidence",
+      "currentProjection": "derived.story.last_level@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.story.last_level@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedStoryLastLevelV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/story.ts:storyMoments; suggestTitle",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.voice_story@1",
+        "review.story@1"
+      ],
+      "currentProductionUseCount": 2,
+      "currentProductionUseSites": [
+        "packages/runtime/src/story.ts:232",
+        "packages/runtime/src/story.ts:36"
+      ]
+    },
+    {
+      "oldOperation": "declareStoryDerivedEvidence",
+      "currentProjection": "derived.story.rank@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.story.rank@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedStoryRankV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/story.ts:storyMoments; suggestTitle",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "review.story@1"
+      ],
+      "currentProductionUseCount": 2,
+      "currentProductionUseSites": [
+        "packages/runtime/src/story.ts:232",
+        "packages/runtime/src/story.ts:36"
+      ]
+    },
+    {
+      "oldOperation": "declareStoryDerivedEvidence",
+      "currentProjection": "derived.story.title@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.story.title@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedStoryTitleV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/story.ts:storyMoments; suggestTitle",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.voice_story@1",
+        "review.story@1"
+      ],
+      "currentProductionUseCount": 2,
+      "currentProductionUseSites": [
+        "packages/runtime/src/story.ts:232",
+        "packages/runtime/src/story.ts:36"
+      ]
+    },
+    {
+      "oldOperation": "declareAttractionObservedEvidence",
+      "currentProjection": "derived.tactic.attraction_observed@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.tactic.attraction_observed@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedTacticAttractionObservedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:882"
+      ]
+    },
+    {
+      "oldOperation": "declareCheckZwischenzugEvidence",
+      "currentProjection": "derived.tactic.check_zwischenzug_observed@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.tactic.check_zwischenzug_observed@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedTacticCheckZwischenzugObservedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:897"
+      ]
+    },
+    {
+      "oldOperation": "declareDefenderExposureEvidence",
+      "currentProjection": "derived.tactic.defender_exposure@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.tactic.defender_exposure@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedTacticDefenderExposureV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:818"
+      ]
+    },
+    {
+      "oldOperation": "declareDeflectionObservedEvidence",
+      "currentProjection": "derived.tactic.deflection_observed@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.tactic.deflection_observed@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedTacticDeflectionObservedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:874"
+      ]
+    },
+    {
+      "oldOperation": "declareDiscoveredExecutedEvidence",
+      "currentProjection": "derived.tactic.discovered_executed@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.tactic.discovered_executed@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedTacticDiscoveredExecutedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:415"
+      ]
+    },
+    {
+      "oldOperation": "declareForkSurvivalEvidence",
+      "currentProjection": "derived.tactic.fork_survives_reply@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.tactic.fork_survives_reply@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedTacticForkSurvivesReplyV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:161"
+      ]
+    },
+    {
+      "oldOperation": "declareInterferenceEvidence",
+      "currentProjection": "derived.tactic.interference_observed@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.tactic.interference_observed@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedTacticInterferenceObservedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:892"
+      ]
+    },
+    {
+      "oldOperation": "declareLineBlockerClearanceEvidence",
+      "currentProjection": "derived.tactic.line_blocker_clearance_observed@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.tactic.line_blocker_clearance_observed@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedTacticLineBlockerClearanceObservedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:868"
+      ]
+    },
+    {
+      "oldOperation": "declareOverloadExploitationEvidence",
+      "currentProjection": "derived.tactic.overload_exploitation_observed@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.tactic.overload_exploitation_observed@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedTacticOverloadExploitationObservedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:903"
+      ]
+    },
+    {
+      "oldOperation": "declareOverloadedDefenderConflictEvidence",
+      "currentProjection": "derived.tactic.overloaded_defender_response_conflict@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.tactic.overloaded_defender_response_conflict@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createDerivedTacticOverloadedDefenderResponseConflictV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 0,
+      "currentProductionUseSites": []
+    },
+    {
+      "oldOperation": "declarePromotionPressureEvidence",
+      "currentProjection": "derived.tactic.promotion_pressure@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.tactic.promotion_pressure@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedTacticPromotionPressureV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:140"
+      ]
+    },
+    {
+      "oldOperation": "declareDefenderConsequenceEvidence",
+      "currentProjection": "derived.tactic.sequence.defender_consequence@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.tactic.sequence.defender_consequence@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedTacticSequenceDefenderConsequenceV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:856"
+      ]
+    },
+    {
+      "oldOperation": "declareSquareClearanceEvidence",
+      "currentProjection": "derived.tactic.square_clearance_observed@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.tactic.square_clearance_observed@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_declared_inputs",
+            "declared_orientation_parameters"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedTacticSquareClearanceObservedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts; packages/runtime/src/semantic-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:887"
+      ]
+    },
+    {
+      "oldOperation": "declareExplorerPopulationEvidence",
+      "currentProjection": "human.explorer.population@1",
+      "targetProfiles": [
+        {
+          "projection": "human.explorer.population@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createHumanExplorerPopulationV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/corpus.ts; apps/server/src/rest.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.corpus@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/web/src/lib/inspector-evidence.ts:42"
+      ]
+    },
+    {
+      "oldOperation": "declareExplorerPositionEvidence",
+      "currentProjection": "human.explorer.position_stats@1",
+      "targetProfiles": [
+        {
+          "projection": "human.explorer.position_stats@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createHumanExplorerPositionStatsV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/corpus.ts; apps/server/src/rest.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "runtime.repertoire_scan@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/repertoire.ts:46"
+      ]
+    },
+    {
+      "oldOperation": "declareMaiaCandidateWdlEvidence",
+      "currentProjection": "human.maia.candidate_wdl@1",
+      "targetProfiles": [
+        {
+          "projection": "human.maia.candidate_wdl@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createHumanMaiaCandidateWdlV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/opponent-selector.ts; apps/server/src/rest.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 0,
+      "currentProductionUseSites": []
+    },
+    {
+      "oldOperation": "declareLivePacketEvidence",
+      "currentProjection": "human.maia.event@1",
+      "targetProfiles": [
+        {
+          "projection": "human.maia.event@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createHumanMaiaEventV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/opponent-selector.ts; apps/server/src/rest.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "runtime.evidence_ref@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/web/src/lib/evidence-sentences.ts:225"
+      ]
+    },
+    {
+      "oldOperation": "declareMaiaEventEvidence",
+      "currentProjection": "human.maia.event@1",
+      "targetProfiles": [
+        {
+          "projection": "human.maia.event@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createHumanMaiaEventV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/opponent-selector.ts; apps/server/src/rest.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "runtime.evidence_ref@1"
+      ],
+      "currentProductionUseCount": 0,
+      "currentProductionUseSites": []
+    },
+    {
+      "oldOperation": "declareMaiaPolicyEvidence",
+      "currentProjection": "human.maia.policy@1",
+      "targetProfiles": [
+        {
+          "projection": "human.maia.policy@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createHumanMaiaPolicyV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/opponent-selector.ts; apps/server/src/rest.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.human_split@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/web/src/lib/inspector-evidence.ts:33"
+      ]
+    },
+    {
+      "oldOperation": "declareOpponentProviderEvidence",
+      "currentProjection": "human.maia.uci_response@1",
+      "targetProfiles": [
+        {
+          "projection": "human.maia.uci_response@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createHumanMaiaUciResponseV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/opponent-selector.ts; apps/server/src/rest.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "opponent.selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/opponent-selector.ts:107"
+      ]
+    },
+    {
+      "oldOperation": "declareLivePacketEvidence",
+      "currentProjection": "live.stockfish.eval@1",
+      "targetProfiles": [
+        {
+          "projection": "live.stockfish.eval@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createLiveStockfishEvalV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/evidence-queue.ts; apps/server/src/rest.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "runtime.evidence_ref@1",
+        "runtime.guard_condition@1",
+        "runtime.objective_condition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/web/src/lib/evidence-sentences.ts:225"
+      ]
+    },
+    {
+      "oldOperation": "declareStockfishEvalEvidence",
+      "currentProjection": "live.stockfish.eval@1",
+      "targetProfiles": [
+        {
+          "projection": "live.stockfish.eval@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createLiveStockfishEvalV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/evidence-queue.ts; apps/server/src/rest.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "runtime.evidence_ref@1",
+        "runtime.guard_condition@1",
+        "runtime.objective_condition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/guard.ts:270"
+      ]
+    },
+    {
+      "oldOperation": "declareLivePacketEvidence",
+      "currentProjection": "live.stockfish.pv@1",
+      "targetProfiles": [
+        {
+          "projection": "live.stockfish.pv@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createLiveStockfishPvV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/evidence-queue.ts; apps/server/src/rest.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "runtime.evidence_ref@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/web/src/lib/evidence-sentences.ts:225"
+      ]
+    },
+    {
+      "oldOperation": "declareOpponentProviderEvidence",
+      "currentProjection": "live.stockfish.uci_response@1",
+      "targetProfiles": [
+        {
+          "projection": "live.stockfish.uci_response@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createLiveStockfishUciResponseV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/evidence-queue.ts; apps/server/src/rest.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "opponent.selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/opponent-selector.ts:107"
+      ]
+    },
+    {
+      "oldOperation": "declareLivePacketEvidence",
+      "currentProjection": "live.stockfish.wdl@1",
+      "targetProfiles": [
+        {
+          "projection": "live.stockfish.wdl@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createLiveStockfishWdlV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/evidence-queue.ts; apps/server/src/rest.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "runtime.evidence_ref@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/web/src/lib/evidence-sentences.ts:225"
+      ]
+    },
+    {
+      "oldOperation": "declareSyzygyCategoryEvidence",
+      "currentProjection": "live.syzygy.category@1",
+      "targetProfiles": [
+        {
+          "projection": "live.syzygy.category@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createLiveSyzygyCategoryV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/tablebase.ts; apps/server/src/evidence-queue.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "runtime.guard_condition@1",
+        "runtime.objective_condition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/guard.ts:272"
+      ]
+    },
+    {
+      "oldOperation": "declareSyzygyDistanceEvidence",
+      "currentProjection": "live.syzygy.distance@1",
+      "targetProfiles": [
+        {
+          "projection": "live.syzygy.distance@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createLiveSyzygyDistanceV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/tablebase.ts; apps/server/src/evidence-queue.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "runtime.guard_condition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/guard.ts:272"
+      ]
+    },
+    {
+      "oldOperation": "declareOpponentProviderEvidence",
+      "currentProjection": "live.syzygy.probe_result@1",
+      "targetProfiles": [
+        {
+          "projection": "live.syzygy.probe_result@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createLiveSyzygyProbeResultV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/tablebase.ts; apps/server/src/evidence-queue.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "opponent.selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/opponent-selector.ts:107"
+      ]
+    },
+    {
+      "oldOperation": "declareLivePacketEvidence",
+      "currentProjection": "live.syzygy.result@1",
+      "targetProfiles": [
+        {
+          "projection": "live.syzygy.result@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createLiveSyzygyResultV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/tablebase.ts; apps/server/src/evidence-queue.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "runtime.evidence_ref@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/web/src/lib/evidence-sentences.ts:225"
+      ]
+    },
+    {
+      "oldOperation": "declareSyzygyResultEvidence",
+      "currentProjection": "live.syzygy.result@1",
+      "targetProfiles": [
+        {
+          "projection": "live.syzygy.result@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createLiveSyzygyResultV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/tablebase.ts; apps/server/src/evidence-queue.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "runtime.evidence_ref@1"
+      ],
+      "currentProductionUseCount": 0,
+      "currentProductionUseSites": []
+    },
+    {
+      "oldOperation": "declareAuthoredClaimEvidence",
+      "currentProjection": "pack.authored.claim@1",
+      "targetProfiles": [
+        {
+          "projection": "pack.authored.claim@1",
+          "factoryShape": "authored_authority",
+          "authorityInputs": [
+            "registered_authority",
+            "document_digest_pointer"
+          ],
+          "dependency": "registered-authored-provenance",
+          "factorySymbol": "createPackAuthoredClaimV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/authored-feedback.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.deterministic@1",
+        "guidance.voice@1",
+        "guidance.voice_story@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:139"
+      ]
+    },
+    {
+      "oldOperation": "declareAuthoredClaimDeliveryEvidence",
+      "currentProjection": "pack.authored.claim_delivery@1",
+      "targetProfiles": [
+        {
+          "projection": "pack.authored.claim_delivery@1",
+          "factoryShape": "authored_authority",
+          "authorityInputs": [
+            "registered_authority",
+            "document_digest_pointer"
+          ],
+          "dependency": "registered-authored-provenance",
+          "factorySymbol": "createPackAuthoredClaimDeliveryV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/authored-feedback.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.authored_claim@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/web/src/lib/claim-presentation.ts:32"
+      ]
+    },
+    {
+      "oldOperation": "declarePackPhaseEvidence",
+      "currentProjection": "pack.authored.phase@1",
+      "targetProfiles": [
+        {
+          "projection": "pack.authored.phase@1",
+          "factoryShape": "authored_authority",
+          "authorityInputs": [
+            "registered_authority",
+            "document_digest_pointer"
+          ],
+          "dependency": "registered-authored-provenance",
+          "factorySymbol": "createPackAuthoredPhaseV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/authored-feedback.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.deterministic@1",
+        "guidance.voice@1",
+        "guidance.voice_story@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:133"
+      ]
+    },
+    {
+      "oldOperation": "declareRecordedEngineEvidence",
+      "currentProjection": "recorded.engine.eval@1",
+      "targetProfiles": [
+        {
+          "projection": "recorded.engine.eval@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createRecordedEngineEvalV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/position-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.recorded_reading@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:140"
+      ]
+    },
+    {
+      "oldOperation": "declareRecordedTablebaseEvidence",
+      "currentProjection": "recorded.tablebase.result@1",
+      "targetProfiles": [
+        {
+          "projection": "recorded.tablebase.result@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createRecordedTablebaseResultV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/position-evidence.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.recorded_reading@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:140"
+      ]
+    },
+    {
+      "oldOperation": "declareCastlingRightsLostEvidence",
+      "currentProjection": "rules.castling.event.rights_lost@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.castling.event.rights_lost@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesCastlingEventRightsLostV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/castling.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:423"
+      ]
+    },
+    {
+      "oldOperation": "declareCastlingLegalityEvidence",
+      "currentProjection": "rules.castling.reading.legality@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.castling.reading.legality@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen",
+            "color",
+            "wing"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesCastlingReadingLegalityV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/castling.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:128"
+      ]
+    },
+    {
+      "oldOperation": "declareCastlingRightsEvidence",
+      "currentProjection": "rules.castling.reading.rights@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.castling.reading.rights@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesCastlingReadingRightsV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/castling.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:127"
+      ]
+    },
+    {
+      "oldOperation": "declareEndgameReadingEvidence",
+      "currentProjection": "rules.endgame.reading@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.endgame.classification@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "semantic-convention-provenance:endgame-classification",
+          "factorySymbol": "createRulesEndgameClassificationV1Evidence"
+        },
+        {
+          "projection": "theory.endgame.technique_candidate@1",
+          "factoryShape": "authored_authority",
+          "authorityInputs": [
+            "cited_theory_record",
+            "applicability_predicate"
+          ],
+          "dependency": "theory-knowledge-pipeline",
+          "factorySymbol": "createTheoryEndgameTechniqueCandidateV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/endgame.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.deterministic@1",
+        "guidance.voice@1",
+        "guidance.voice_story@1",
+        "review.story@1"
+      ],
+      "currentProductionUseCount": 2,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:137",
+        "packages/runtime/src/story.ts:200"
+      ]
+    },
+    {
+      "oldOperation": "declareLegalExchangeEvidence",
+      "currentProjection": "rules.exchange.predicate.legal_exchange@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.exchange.predicate.legal_exchange@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesExchangePredicateLegalExchangeV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/exchange.ts",
+      "currentDisposition": "experimental",
+      "currentBindings": [],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:157",
+        "packages/runtime/src/semantic-evidence.ts:439",
+        "packages/runtime/src/semantic-evidence.ts:816"
+      ]
+    },
+    {
+      "oldOperation": "declareKingZoneEventEvidence",
+      "currentProjection": "rules.king.event.zone_state@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.king.event.zone_state@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesKingEventZoneStateV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/king-state.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:827"
+      ]
+    },
+    {
+      "oldOperation": "declareKingZoneReadingEvidence",
+      "currentProjection": "rules.king.reading.zone_state@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.king.reading.zone_state@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesKingReadingZoneStateV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/king-state.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 2,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:146",
+        "packages/runtime/src/semantic-evidence.ts:828"
+      ]
+    },
+    {
+      "oldOperation": "declareMobilityEventEvidence",
+      "currentProjection": "rules.mobility.event.piece_destinations@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.mobility.event.piece_destinations@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesMobilityEventPieceDestinationsV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/mobility.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:811"
+      ]
+    },
+    {
+      "oldOperation": "declareExactLegalMovesEvidence",
+      "currentProjection": "rules.mobility.reading.legal_moves@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.mobility.reading.legal_moves@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesMobilityReadingLegalMovesV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/mobility.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 0,
+      "currentProductionUseSites": []
+    },
+    {
+      "oldOperation": "declareMobilityReadingEvidence",
+      "currentProjection": "rules.mobility.reading.piece_destinations@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.mobility.reading.piece_destinations@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesMobilityReadingPieceDestinationsV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/mobility.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:142"
+      ]
+    },
+    {
+      "oldOperation": "declarePawnDynamicsEvidence",
+      "currentProjection": "rules.pawn.event.dynamics@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.pawn.event.dynamics@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesPawnEventDynamicsV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/pawn-dynamics.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:812"
+      ]
+    },
+    {
+      "oldOperation": "declareCandidateMajorityEvidence",
+      "currentProjection": "rules.pawn.reading.candidate_majority@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.pawn.reading.candidate_majority@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesPawnReadingCandidateMajorityV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/pawn-dynamics.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:144"
+      ]
+    },
+    {
+      "oldOperation": "declarePawnContactsEvidence",
+      "currentProjection": "rules.pawn.reading.contacts@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.pawn.reading.contacts@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesPawnReadingContactsV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/pawn-dynamics.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 2,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:143",
+        "packages/runtime/src/semantic-evidence.ts:813"
+      ]
+    },
+    {
+      "oldOperation": "declareDevelopmentReadingEvidence",
+      "currentProjection": "rules.phase.development@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.phase.development@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesPhaseDevelopmentV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/phase.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:133"
+      ]
+    },
+    {
+      "oldOperation": "declarePhaseReadingEvidence",
+      "currentProjection": "rules.phase.reading@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.phase.reading@2",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "semantic-convention-provenance:phase-band",
+          "factorySymbol": "createRulesPhaseReadingV2Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/phase.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.deterministic@1",
+        "guidance.voice@1",
+        "guidance.voice_story@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:132"
+      ]
+    },
+    {
+      "oldOperation": "declarePivotalMarkerEvidence",
+      "currentProjection": "rules.pivotal.marker@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.pivotal.irreversibility@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_transition_event",
+            "run_node_identity"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedPivotalIrreversibilityV1Evidence"
+        },
+        {
+          "projection": "derived.pivotal.phase_change@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_phase_before",
+            "sealed_phase_after",
+            "run_node_identity"
+          ],
+          "dependency": "semantic-convention-provenance:phase-band",
+          "factorySymbol": "createDerivedPivotalPhaseChangeV1Evidence"
+        },
+        {
+          "projection": "derived.pivotal.human_divergence@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_maia_distribution",
+            "run_node_identity"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createDerivedPivotalHumanDivergenceV1Evidence"
+        },
+        {
+          "projection": "derived.pivotal.option_collapse@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "three_sealed_legal_move_readings",
+            "run_node_identity"
+          ],
+          "dependency": "semantic-convention-provenance:sustained-collapse",
+          "factorySymbol": "createDerivedPivotalOptionCollapseV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/pivotal.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.pivotal_marker@1",
+        "compare.structure_strip@1",
+        "guidance.deterministic@1",
+        "guidance.voice@1",
+        "guidance.voice_compare@1",
+        "guidance.voice_story@1",
+        "review.story@1"
+      ],
+      "currentProductionUseCount": 4,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:136",
+        "packages/runtime/src/compare-strips.ts:142",
+        "packages/runtime/src/pivotal.ts:109",
+        "packages/runtime/src/story.ts:181"
+      ]
+    },
+    {
+      "oldOperation": "declareSquareControlEventEvidence",
+      "currentProjection": "rules.square.event.control@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.square.event.control@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesSquareEventControlV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/square-control.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 2,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:809",
+        "packages/runtime/src/semantic-evidence.ts:816"
+      ]
+    },
+    {
+      "oldOperation": "declareSquareControlReadingEvidence",
+      "currentProjection": "rules.square.reading.control@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.square.reading.control@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesSquareReadingControlV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/square-control.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:141"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralSemanticSourceEvidence",
+      "currentProjection": "rules.structural.event.backward_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.event.backward_pawn@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesStructuralEventBackwardPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:322"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralSemanticSourceEvidence",
+      "currentProjection": "rules.structural.event.direct_attack_count@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.event.direct_attack_count@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralEventDirectAttackCountV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:322"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralSemanticSourceEvidence",
+      "currentProjection": "rules.structural.event.doubled_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.event.doubled_pawn@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralEventDoubledPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:322"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralSemanticSourceEvidence",
+      "currentProjection": "rules.structural.event.half_open_file@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.event.half_open_file@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralEventHalfOpenFileV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:322"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralSemanticSourceEvidence",
+      "currentProjection": "rules.structural.event.isolated_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.event.isolated_pawn@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralEventIsolatedPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:322"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralSemanticSourceEvidence",
+      "currentProjection": "rules.structural.event.king_opposition@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.event.king_opposition@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesStructuralEventKingOppositionV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:322"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralSemanticSourceEvidence",
+      "currentProjection": "rules.structural.event.king_zone@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.event.king_zone@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralEventKingZoneV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:322"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralSemanticSourceEvidence",
+      "currentProjection": "rules.structural.event.line_blockers@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.event.line_blockers@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralEventLineBlockersV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:322"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralSemanticSourceEvidence",
+      "currentProjection": "rules.structural.event.open_file@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.event.open_file@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralEventOpenFileV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:322"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralSemanticSourceEvidence",
+      "currentProjection": "rules.structural.event.passed_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.event.passed_pawn@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralEventPassedPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:322"
+      ]
+    },
+    {
+      "oldOperation": "declarePawnIslandEventEvidence",
+      "currentProjection": "rules.structural.event.pawn_islands@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.event.pawn_islands@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralEventPawnIslandsV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:391"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralSemanticSourceEvidence",
+      "currentProjection": "rules.structural.event.piece_count@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.event.piece_count@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralEventPieceCountV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:322"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.backward_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.backward_pawn@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicateBackwardPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.bishop_on_shade@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.bishop_on_shade@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicateBishopOnShadeV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.direct_attack_count@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.direct_attack_count@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicateDirectAttackCountV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.doubled_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.doubled_pawn@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicateDoubledPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.half_open_file@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.half_open_file@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicateHalfOpenFileV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.isolated_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.isolated_pawn@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicateIsolatedPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.king_opposition@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.king_opposition@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicateKingOppositionV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.king_zone@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.king_zone@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicateKingZoneV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.line_blockers@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.line_blockers@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicateLineBlockersV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.named_structure@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.named_structure@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicateNamedStructureV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.open_file@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.open_file@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicateOpenFileV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.outpost@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.outpost@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicateOutpostV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.passed_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.passed_pawn@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicatePassedPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.pawn_count@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.pawn_count@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicatePawnCountV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.pawn_safe_square@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.pawn_safe_square@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicatePawnSafeSquareV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.piece_count@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.piece_count@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicatePieceCountV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.piece_distance@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.piece_distance@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicatePieceDistanceV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateFeatureEvidence",
+      "currentProjection": "rules.structural.predicate.piece_reach_count@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.predicate.piece_reach_count@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralPredicatePieceReachCountV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:114"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralPredicateResultEvidence",
+      "currentProjection": "rules.structural.predicate.result@1",
+      "targetProfiles": [
+        {
+          "projection": "derived.structural.predicate_result@1",
+          "factoryShape": "derived",
+          "authorityInputs": [
+            "sealed_authored_condition",
+            "retained_fen"
+          ],
+          "dependency": "semantic-validation-authority",
+          "factorySymbol": "createDerivedStructuralPredicateResultV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.predicate@1",
+        "runtime.objective_condition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/structural-evidence.ts:118"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.backward_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.backward_pawn@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingBackwardPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.bishop_on_shade@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.bishop_on_shade@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingBishopOnShadeV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.direct_attack_count@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.direct_attack_count@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingDirectAttackCountV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.doubled_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.doubled_pawn@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingDoubledPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.half_open_file@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.half_open_file@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingHalfOpenFileV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.isolated_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.isolated_pawn@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingIsolatedPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.king_opposition@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.king_opposition@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingKingOppositionV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.king_zone@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.king_zone@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingKingZoneV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.line_blockers@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.line_blockers@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingLineBlockersV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareNamedStructureEvidence",
+      "currentProjection": "rules.structural.reading.named_structure@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.named_structure@2",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen",
+            "registered_structure_catalogue"
+          ],
+          "dependency": "semantic-convention-provenance:named-structure",
+          "factorySymbol": "createRulesStructuralReadingNamedStructureV2Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "guidance.deterministic@1",
+        "guidance.voice@1",
+        "guidance.voice_story@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:134"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.named_structure@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.named_structure@2",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen",
+            "registered_structure_catalogue"
+          ],
+          "dependency": "semantic-convention-provenance:named-structure",
+          "factorySymbol": "createRulesStructuralReadingNamedStructureV2Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "guidance.deterministic@1",
+        "guidance.voice@1",
+        "guidance.voice_story@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.open_file@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.open_file@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingOpenFileV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.outpost@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.outpost@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingOutpostV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.passed_pawn@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.passed_pawn@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingPassedPawnV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declarePawnConnectivityEvidence",
+      "currentProjection": "rules.structural.reading.pawn_connectivity@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.pawn_connectivity@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingPawnConnectivityV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:132"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.pawn_safe_square@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.pawn_safe_square@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingPawnSafeSquareV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.piece_count@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.piece_count@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingPieceCountV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.piece_distance@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.piece_distance@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingPieceDistanceV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareStructuralReadingSourceEvidence",
+      "currentProjection": "rules.structural.reading.piece_reach_count@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.piece_reach_count@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesStructuralReadingPieceReachCountV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "board.selected_square_sight@1",
+        "inspector.position_structure@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:135",
+        "packages/runtime/src/reading-evidence.ts:19",
+        "packages/runtime/src/semantic-evidence.ts:833"
+      ]
+    },
+    {
+      "oldOperation": "declareSpaceEvidence",
+      "currentProjection": "rules.structural.reading.space@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.structural.reading.space@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesStructuralReadingSpaceV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/structure.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:135"
+      ]
+    },
+    {
+      "oldOperation": "declareForcedMateAfterMoveEvidence",
+      "currentProjection": "rules.tactic.consequence.forced_mate_after_move@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.consequence.forced_mate_after_move@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen",
+            "candidate_move",
+            "bounded_mate_parameters"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTacticConsequenceForcedMateAfterMoveV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 0,
+      "currentProductionUseSites": []
+    },
+    {
+      "oldOperation": "declareMateInOneEvidence",
+      "currentProjection": "rules.tactic.consequence.mate_in_one@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.consequence.mate_in_one@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTacticConsequenceMateInOneV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:139"
+      ]
+    },
+    {
+      "oldOperation": "declareReplyBreadthEvidence",
+      "currentProjection": "rules.tactic.consequence.reply_breadth@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.consequence.reply_breadth@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTacticConsequenceReplyBreadthV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:374"
+      ]
+    },
+    {
+      "oldOperation": "declareThreatEvidence",
+      "currentProjection": "rules.tactic.consequence.threat@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.consequence.threat@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesTacticConsequenceThreatV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:131"
+      ]
+    },
+    {
+      "oldOperation": "declareCheckEventEvidence",
+      "currentProjection": "rules.tactic.event.check@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.event.check@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTacticEventCheckV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:376"
+      ]
+    },
+    {
+      "oldOperation": "declareDefenderDutyRelocatedEvidence",
+      "currentProjection": "rules.tactic.event.defender_duty_relocated@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.event.defender_duty_relocated@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge",
+            "sealed_defender_duty_readings"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTacticEventDefenderDutyRelocatedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:911"
+      ]
+    },
+    {
+      "oldOperation": "declareDefenderRemovedEvidence",
+      "currentProjection": "rules.tactic.event.defender_removed@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.event.defender_removed@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge",
+            "sealed_defender_duty_readings"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTacticEventDefenderRemovedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:910"
+      ]
+    },
+    {
+      "oldOperation": "declareDoubleAttackEvidence",
+      "currentProjection": "rules.tactic.event.double_attack@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.event.double_attack@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesTacticEventDoubleAttackV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:378"
+      ]
+    },
+    {
+      "oldOperation": "declareLoosePieceEventEvidence",
+      "currentProjection": "rules.tactic.event.loose_piece@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.event.loose_piece@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesTacticEventLoosePieceV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:401"
+      ]
+    },
+    {
+      "oldOperation": "declareBackRankEvidence",
+      "currentProjection": "rules.tactic.reading.back_rank@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.reading.back_rank@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesTacticReadingBackRankV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:138"
+      ]
+    },
+    {
+      "oldOperation": "declareDefenderDutyEvidence",
+      "currentProjection": "rules.tactic.reading.defender_duty_set@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.reading.defender_duty_set@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTacticReadingDefenderDutySetV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 0,
+      "currentProductionUseSites": []
+    },
+    {
+      "oldOperation": "declareDiscoveredLatencyEvidence",
+      "currentProjection": "rules.tactic.reading.discovered_latency@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.reading.discovered_latency@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesTacticReadingDiscoveredLatencyV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 2,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:136",
+        "packages/runtime/src/semantic-evidence.ts:410"
+      ]
+    },
+    {
+      "oldOperation": "declareLoosePieceEvidence",
+      "currentProjection": "rules.tactic.reading.loose_piece@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.reading.loose_piece@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesTacticReadingLoosePieceV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:129"
+      ]
+    },
+    {
+      "oldOperation": "declareRayClassificationEvidence",
+      "currentProjection": "rules.tactic.reading.ray_classification@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.reading.ray_classification@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesTacticReadingRayClassificationV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:130"
+      ]
+    },
+    {
+      "oldOperation": "declareRookOnSeventhEvidence",
+      "currentProjection": "rules.tactic.reading.rook_on_seventh@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.reading.rook_on_seventh@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTacticReadingRookOnSeventhV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:134"
+      ]
+    },
+    {
+      "oldOperation": "declareTrappedPieceEvidence",
+      "currentProjection": "rules.tactic.reading.trapped_piece@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.tactic.reading.trapped_piece@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "fen"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesTacticReadingTrappedPieceV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/tactics.ts",
+      "currentDisposition": "inspector_only",
+      "currentBindings": [],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/candidate-evidence.ts:137"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionSemanticSourceEvidence",
+      "currentProjection": "rules.transition.event.capture@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.event.capture@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionEventCaptureV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:356"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionSemanticSourceEvidence",
+      "currentProjection": "rules.transition.event.castled@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.event.castled@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionEventCastledV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:356"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionSemanticSourceEvidence",
+      "currentProjection": "rules.transition.event.checkmate@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.event.checkmate@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionEventCheckmateV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:356"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionSemanticSourceEvidence",
+      "currentProjection": "rules.transition.event.clock_reset@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.event.clock_reset@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionEventClockResetV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:356"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionSemanticSourceEvidence",
+      "currentProjection": "rules.transition.event.defended_duty@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.event.defended_duty@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionEventDefendedDutyV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:356"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionSemanticSourceEvidence",
+      "currentProjection": "rules.transition.event.developed@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.event.developed@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "semantic-convention-provenance",
+          "factorySymbol": "createRulesTransitionEventDevelopedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:356"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionSemanticSourceEvidence",
+      "currentProjection": "rules.transition.event.last_of_role@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.event.last_of_role@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionEventLastOfRoleV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:356"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionSemanticSourceEvidence",
+      "currentProjection": "rules.transition.event.occupied_attack@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.event.occupied_attack@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionEventOccupiedAttackV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:356"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionSemanticSourceEvidence",
+      "currentProjection": "rules.transition.event.occupied_defence@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.event.occupied_defence@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionEventOccupiedDefenceV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:356"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionSemanticSourceEvidence",
+      "currentProjection": "rules.transition.event.pawn_contact@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.event.pawn_contact@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionEventPawnContactV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:356"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionSemanticSourceEvidence",
+      "currentProjection": "rules.transition.event.piece_escape@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.event.piece_escape@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionEventPieceEscapeV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:356"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionSemanticSourceEvidence",
+      "currentProjection": "rules.transition.event.promotion@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.event.promotion@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionEventPromotionV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:356"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionSemanticSourceEvidence",
+      "currentProjection": "rules.transition.event.slider_ray@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.event.slider_ray@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionEventSliderRayV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "research.semantic_selection@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/semantic-evidence.ts:356"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionReadingSourceEvidence",
+      "currentProjection": "rules.transition.reading.attacked_squares_changed.gained@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.reading.attacked_squares_changed.gained@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionReadingAttackedSquaresChangedGainedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.move_transition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/reading-evidence.ts:25"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionReadingSourceEvidence",
+      "currentProjection": "rules.transition.reading.attacked_squares_changed.lost@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.reading.attacked_squares_changed.lost@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionReadingAttackedSquaresChangedLostV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.move_transition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/reading-evidence.ts:25"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionReadingSourceEvidence",
+      "currentProjection": "rules.transition.reading.defended_duties_changed.acquired@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.reading.defended_duties_changed.acquired@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionReadingDefendedDutiesChangedAcquiredV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.move_transition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/reading-evidence.ts:25"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionReadingSourceEvidence",
+      "currentProjection": "rules.transition.reading.defended_duties_changed.released@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.reading.defended_duties_changed.released@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionReadingDefendedDutiesChangedReleasedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.move_transition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/reading-evidence.ts:25"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionReadingSourceEvidence",
+      "currentProjection": "rules.transition.reading.defended_squares_changed.gained@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.reading.defended_squares_changed.gained@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionReadingDefendedSquaresChangedGainedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.move_transition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/reading-evidence.ts:25"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionReadingSourceEvidence",
+      "currentProjection": "rules.transition.reading.defended_squares_changed.lost@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.reading.defended_squares_changed.lost@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionReadingDefendedSquaresChangedLostV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.move_transition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/reading-evidence.ts:25"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionReadingSourceEvidence",
+      "currentProjection": "rules.transition.reading.escape_squares_changed.gained@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.reading.escape_squares_changed.gained@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionReadingEscapeSquaresChangedGainedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.move_transition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/reading-evidence.ts:25"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionReadingSourceEvidence",
+      "currentProjection": "rules.transition.reading.escape_squares_changed.lost@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.reading.escape_squares_changed.lost@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionReadingEscapeSquaresChangedLostV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.move_transition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/reading-evidence.ts:25"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionReadingSourceEvidence",
+      "currentProjection": "rules.transition.reading.move_irreversibility.castled@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.reading.move_irreversibility.castled@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionReadingMoveIrreversibilityCastledV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.move_transition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/reading-evidence.ts:25"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionReadingSourceEvidence",
+      "currentProjection": "rules.transition.reading.move_irreversibility.clock_zeroed@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.reading.move_irreversibility.clock_zeroed@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionReadingMoveIrreversibilityClockZeroedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.move_transition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/reading-evidence.ts:25"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionReadingSourceEvidence",
+      "currentProjection": "rules.transition.reading.move_irreversibility.last_of_role@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.reading.move_irreversibility.last_of_role@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionReadingMoveIrreversibilityLastOfRoleV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.move_transition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/reading-evidence.ts:25"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionReadingSourceEvidence",
+      "currentProjection": "rules.transition.reading.move_irreversibility.pawn_break@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.reading.move_irreversibility.pawn_break@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionReadingMoveIrreversibilityPawnBreakV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.move_transition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/reading-evidence.ts:25"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionReadingSourceEvidence",
+      "currentProjection": "rules.transition.reading.slider_lines_changed.closed@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.reading.slider_lines_changed.closed@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionReadingSliderLinesChangedClosedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.move_transition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/reading-evidence.ts:25"
+      ]
+    },
+    {
+      "oldOperation": "declareTransitionReadingSourceEvidence",
+      "currentProjection": "rules.transition.reading.slider_lines_changed.opened@1",
+      "targetProfiles": [
+        {
+          "projection": "rules.transition.reading.slider_lines_changed.opened@1",
+          "factoryShape": "computed",
+          "authorityInputs": [
+            "validated_edge"
+          ],
+          "dependency": "none",
+          "factorySymbol": "createRulesTransitionReadingSliderLinesChangedOpenedV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/transition.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "inspector.move_transition@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "packages/runtime/src/reading-evidence.ts:25"
+      ]
+    },
+    {
+      "oldOperation": "declareRunRecordEvidence",
+      "currentProjection": "run.record.checkpoint_hit@1",
+      "targetProfiles": [
+        {
+          "projection": "run.record.checkpoint_hit@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createRunRecordCheckpointHitV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/compare-strips.ts; packages/runtime/src/story.ts; packages/runtime/src/branch-path.ts; apps/web/src/lib/evidence-sentences.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "compare.structure_strip@1",
+        "guidance.voice_compare@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "packages/runtime/src/compare-strips.ts:29",
+        "packages/runtime/src/story.ts:207",
+        "packages/runtime/src/story.ts:209"
+      ]
+    },
+    {
+      "oldOperation": "declareRunRecordEvidence",
+      "currentProjection": "run.record.consequence@1",
+      "targetProfiles": [
+        {
+          "projection": "run.record.consequence@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createRunRecordConsequenceV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/compare-strips.ts; packages/runtime/src/story.ts; packages/runtime/src/branch-path.ts; apps/web/src/lib/evidence-sentences.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.voice_compare@1",
+        "guidance.voice_story@1",
+        "review.story@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "packages/runtime/src/compare-strips.ts:29",
+        "packages/runtime/src/story.ts:207",
+        "packages/runtime/src/story.ts:209"
+      ]
+    },
+    {
+      "oldOperation": "declareEvidenceReferenceResolution",
+      "currentProjection": "run.record.evidence_ref_resolution@1",
+      "targetProfiles": [
+        {
+          "projection": "run.record.evidence_ref_resolution@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createRunRecordEvidenceRefResolutionV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/compare-strips.ts; packages/runtime/src/story.ts; packages/runtime/src/branch-path.ts; apps/web/src/lib/evidence-sentences.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "runtime.evidence_ref@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/web/src/lib/evidence-sentences.ts:254"
+      ]
+    },
+    {
+      "oldOperation": "declareRunRecordEvidence",
+      "currentProjection": "run.record.fork@1",
+      "targetProfiles": [
+        {
+          "projection": "run.record.fork@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createRunRecordForkV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/compare-strips.ts; packages/runtime/src/story.ts; packages/runtime/src/branch-path.ts; apps/web/src/lib/evidence-sentences.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.voice_compare@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "packages/runtime/src/compare-strips.ts:29",
+        "packages/runtime/src/story.ts:207",
+        "packages/runtime/src/story.ts:209"
+      ]
+    },
+    {
+      "oldOperation": "declareRunRecordEvidence",
+      "currentProjection": "run.record.imported_result@1",
+      "targetProfiles": [
+        {
+          "projection": "run.record.imported_result@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createRunRecordImportedResultV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/compare-strips.ts; packages/runtime/src/story.ts; packages/runtime/src/branch-path.ts; apps/web/src/lib/evidence-sentences.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.voice_story@1",
+        "review.story@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "packages/runtime/src/compare-strips.ts:29",
+        "packages/runtime/src/story.ts:207",
+        "packages/runtime/src/story.ts:209"
+      ]
+    },
+    {
+      "oldOperation": "declareRunRecordEvidence",
+      "currentProjection": "run.record.move@1",
+      "targetProfiles": [
+        {
+          "projection": "run.record.move@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createRunRecordMoveV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/compare-strips.ts; packages/runtime/src/story.ts; packages/runtime/src/branch-path.ts; apps/web/src/lib/evidence-sentences.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.voice_compare@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "packages/runtime/src/compare-strips.ts:29",
+        "packages/runtime/src/story.ts:207",
+        "packages/runtime/src/story.ts:209"
+      ]
+    },
+    {
+      "oldOperation": "declareRunRecordEvidence",
+      "currentProjection": "run.record.objective_transition@1",
+      "targetProfiles": [
+        {
+          "projection": "run.record.objective_transition@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createRunRecordObjectiveTransitionV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/compare-strips.ts; packages/runtime/src/story.ts; packages/runtime/src/branch-path.ts; apps/web/src/lib/evidence-sentences.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "compare.structure_strip@1",
+        "guidance.voice_compare@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "packages/runtime/src/compare-strips.ts:29",
+        "packages/runtime/src/story.ts:207",
+        "packages/runtime/src/story.ts:209"
+      ]
+    },
+    {
+      "oldOperation": "declareSourcingRecordEvidence",
+      "currentProjection": "sourcing.ledger.engine_eval@1",
+      "targetProfiles": [
+        {
+          "projection": "sourcing.ledger.engine_eval@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createSourcingLedgerEngineEvalV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/sourcing/types.ts; apps/server/src/sourcing/claim-binding.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.claim_binding@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/sourcing/claim-binding.ts:183"
+      ]
+    },
+    {
+      "oldOperation": "declareSourcingRecordEvidence",
+      "currentProjection": "sourcing.ledger.explorer_position_census@1",
+      "targetProfiles": [
+        {
+          "projection": "sourcing.ledger.explorer_position_census@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createSourcingLedgerExplorerPositionCensusV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/sourcing/types.ts; apps/server/src/sourcing/claim-binding.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.claim_binding@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/sourcing/claim-binding.ts:183"
+      ]
+    },
+    {
+      "oldOperation": "declareSourcingRecordEvidence",
+      "currentProjection": "sourcing.ledger.tablebase_result@1",
+      "targetProfiles": [
+        {
+          "projection": "sourcing.ledger.tablebase_result@1",
+          "factoryShape": "source_receipt",
+          "authorityInputs": [
+            "sealed_source_receipt",
+            "typed_response_bytes"
+          ],
+          "dependency": "provider-exchange-and-execution",
+          "factorySymbol": "createSourcingLedgerTablebaseResultV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/sourcing/types.ts; apps/server/src/sourcing/claim-binding.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.claim_binding@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/sourcing/claim-binding.ts:183"
+      ]
+    },
+    {
+      "oldOperation": "declareSourcingRecordEvidence",
+      "currentProjection": "theory.opening_identity.record@1",
+      "targetProfiles": [
+        {
+          "projection": "theory.opening_identity.record@1",
+          "factoryShape": "authored_authority",
+          "authorityInputs": [
+            "registered_authority",
+            "document_digest_pointer"
+          ],
+          "dependency": "registered-authored-provenance",
+          "factorySymbol": "createTheoryOpeningIdentityRecordV1Evidence"
+        }
+      ],
+      "producerImplementation": "apps/server/src/sourcing/openings.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "authoring.claim_binding@1"
+      ],
+      "currentProductionUseCount": 1,
+      "currentProductionUseSites": [
+        "apps/server/src/sourcing/claim-binding.ts:183"
+      ]
+    },
+    {
+      "oldOperation": "declareShapeFiringSourceEvidence",
+      "currentProjection": "theory.shapes.firing@1",
+      "targetProfiles": [
+        {
+          "projection": "theory.shapes.firing@1",
+          "factoryShape": "authored_authority",
+          "authorityInputs": [
+            "registered_authority",
+            "document_digest_pointer"
+          ],
+          "dependency": "registered-authored-provenance",
+          "factorySymbol": "createTheoryShapesFiringV1Evidence"
+        }
+      ],
+      "producerImplementation": "packages/runtime/src/shape-firing.ts; apps/server/src/shape-registry.ts",
+      "currentDisposition": "ordinary",
+      "currentBindings": [
+        "guidance.voice_story@1",
+        "review.story@1",
+        "theory.shape_firing@1"
+      ],
+      "currentProductionUseCount": 3,
+      "currentProductionUseSites": [
+        "apps/server/src/guidance.ts:138",
+        "packages/runtime/src/shape-firing.ts:41",
+        "packages/runtime/src/story.ts:203"
+      ]
+    }
+  ],
+  "noRoute": [
+    {
+      "projection": "derived.grade.move_quality@1",
+      "disposition": "experimental",
+      "requiredAction": "add_factory_and_profile_before_binding"
+    },
+    {
+      "projection": "derived.opening.deepest_reached@1",
+      "disposition": "inspector_only",
+      "requiredAction": "add_factory_and_profile_before_binding"
+    },
+    {
+      "projection": "rules.structural.reading.pawn_count@1",
+      "disposition": "retired",
+      "requiredAction": "remain_factoryless"
+    },
+    {
+      "projection": "run.record.position@1",
+      "disposition": "inspector_only",
+      "requiredAction": "add_factory_and_profile_before_binding"
+    },
+    {
+      "projection": "theory.opening.catalogue_membership@1",
+      "disposition": "inspector_only",
+      "requiredAction": "add_factory_and_profile_before_binding"
+    },
+    {
+      "projection": "theory.opening.current_endpoint@1",
+      "disposition": "inspector_only",
+      "requiredAction": "add_factory_and_profile_before_binding"
+    }
+  ],
+  "summary": {
+    "routeCount": 191,
+    "distinctCurrentProjections": 187,
+    "duplicateProjections": [
+      "human.maia.event@1",
+      "live.stockfish.eval@1",
+      "live.syzygy.result@1",
+      "rules.structural.reading.named_structure@1"
+    ],
+    "noRouteCount": 6,
+    "rowsWithProductionUses": 184,
+    "rowsWithoutProductionUses": 7,
+    "boundRowsWithoutProductionUses": 2,
+    "projectionsWithoutProductionUses": [
+      "derived.tactic.overloaded_defender_response_conflict@1",
+      "human.maia.candidate_wdl@1",
+      "rules.mobility.reading.legal_moves@1",
+      "rules.tactic.consequence.forced_mate_after_move@1",
+      "rules.tactic.reading.defender_duty_set@1"
+    ],
+    "boundProjectionsWithoutProductionUses": [],
+    "receiptDigest": "sha256:f4cb3460073490d4b0ad7f981ffb9ba83eb0a9278330827dd4cbde2e67ece8a4"
+  }
+}

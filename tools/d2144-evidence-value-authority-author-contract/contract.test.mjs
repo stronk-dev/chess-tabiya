@@ -9,6 +9,7 @@ const adapters = read("packages/runtime/src/evidence-source-adapters.ts");
 const barrel = read("packages/runtime/src/index.ts");
 const catalog = read("packages/runtime/src/evidence-catalog.ts");
 const audit = read("tools/d2144-evidence-seal-audit/value-authority.test.ts");
+const routeReceipt = JSON.parse(read("planning/evidence-foundation-ux/evidence-value-authority-route-map.json"));
 
 const genericRows = [...adapters.matchAll(/export const (declare[A-Za-z]+) = <T extends object>\(payload: T\) => exactObject\("[^"]+", "([^"]+)"/gu)]
   .map((match) => ({ adapter: match[1], projection: match[2] }));
@@ -93,6 +94,19 @@ test("dependencies and closure gates are explicit rather than hand-waved", () =>
   assert.match(audit, /"generic": 75/u);
   assert.match(audit, /"specialized": 116/u);
   assert.match(audit, /"total": 191/u);
+  assert.equal(routeReceipt.routes.length, 191);
+  assert.equal(new Set(routeReceipt.routes.map((route) => route.currentProjection)).size, 187);
+  assert.equal(routeReceipt.summary.rowsWithProductionUses, 184);
+  assert.equal(routeReceipt.summary.rowsWithoutProductionUses, 7);
+  assert.deepEqual(routeReceipt.summary.boundProjectionsWithoutProductionUses, []);
+  for (const route of routeReceipt.routes) {
+    assert.ok(route.targetProfiles.length > 0, route.currentProjection);
+    for (const profile of route.targetProfiles) {
+      assert.match(profile.factorySymbol, /^create[A-Za-z0-9]+V\d+Evidence$/u);
+      assert.ok(profile.authorityInputs.length > 0, profile.projection);
+      assert.doesNotMatch(profile.authorityInputs.join(" "), /producer_authority_parameters|TODO|TBD/u);
+    }
+  }
   assert.match(rfc, /joins `SOFTWARE_CONTRACT_TARGETS`/u);
   assert.match(rfc, /not a pre-push hook and requires no custom environment variables/u);
 });

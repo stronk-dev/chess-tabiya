@@ -100,3 +100,21 @@ non-retired targets. Concurrent catalogue additions must re-derive, not copy, th
 `DESIGN-GAP:` F1 catalogue presence is not production reach. A projection can be declared with no
 mint route, while a projection with two routes has two opportunities to bypass value authority.
 Gate B4 needs route/factory closure in addition to producer/projection/consumer closure.
+
+## Execution reach qualification
+
+The first literal receipt used direct-call syntax and reported 25 routes with no production call.
+That probe was false: it missed callback invocation such as
+`reading.structures.map(declareNamedStructureEvidence)`. The corrected instrument parses imports,
+aliases, namespace references, direct calls and value/callback uses with the TypeScript syntax tree.
+It finds **184/191 used routes and seven export-only routes**. `[V]`
+(`tools/d2144-evidence-value-authority-route-map/route-map.ts`;
+`planning/evidence-foundation-ux/evidence-value-authority-route-map.json`)
+
+Two of the seven are redundant routes for `human.maia.event@1` and `live.syzygy.result@1`; each
+projection is used through `declareLivePacketEvidence`. The other five are unbound inspector-only
+foundations: overload-response conflict, Maia candidate WDL, exact legal moves, forced mate and
+defender duty. Therefore **zero bound projections lack a production mint use**. `[V]` The receipt
+joins exact bindings/dispositions and fails if that population becomes non-empty. The five dormant
+foundations still need a factory/profile whose available arm is backed by a real production
+operation before any consumer binding; catalogue presence remains insufficient. `[M]`
