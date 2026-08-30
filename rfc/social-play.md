@@ -1,6 +1,15 @@
 # RFC: social-play — native human play, the games that arrive from elsewhere, and the boundary between them
 
-- **Status:** draft — 2026-08-24, **rebuilt on owner ruling [[D1414]]**. Replaces the 2026-08-23 draft
+- **Status:** draft — **RETURNED by fresh independent review 2026-08-30 on
+  [[D2253]]–[[D2260]].** The native-first rebuild retains useful invitation/import machinery, but
+  one run-side/actor projection cannot represent both learners; named opponents are seated without
+  acceptance; the join preview cannot show the terms being accepted; agreed draw has no proposal
+  protocol; terminal events do not atomically close the session/clock/rating/Review lifecycle;
+  rematch remains open despite the 1.0 exit; timed coaching pauses have no clock semantics; and
+  `variant: string` loses the ruled rules/setup identity. `make social-play-fresh-review` passes
+  8/8. [[D1567]]'s public-pool owner decision remains open. No social schema, migration, route or UI
+  implementation is authorized. **Prior status:** 2026-08-24, rebuilt on owner ruling [[D1414]].
+  Replaces the 2026-08-23 draft
   that was **returned, not amended**: that document specified a hybrid in which rated and clocked play
   was delegated to a chess-network adapter, and [[D1414]] ruled 1.0 human play **native-first**. Its
   verified machinery is carried forward whole — the external envelope, the additive rebuild-free
@@ -899,6 +908,44 @@ Discharge D2.
    `design/05:41`'s honest-absence invariant is §3.2 and §3.5's whole basis, and `design/05:42`'s rule
    that session machinery may never alter what the run says happened is why §3.4 puts resignation and
    the agreed draw in the **run's** event log rather than the session journal.
+
+## Fresh independent return (2026-08-30)
+
+The native-first direction, requested/accepted distinction, external import identity and
+non-manufactured result posture survive. Exact review:
+`planning/platform-alignment/social-play/fresh-independent-buildability-review-2026-08-30.md`.
+
+1. **[[D2253]] — project both learners, not one run-side twice.** Define a participant-perspective
+   projection for actor, result, progress, longitudinal observations, Review/Story and ratings. The
+   shared board record stays one; learner interpretation is keyed by seated side.
+2. **[[D2254]] — acceptance must be an act by the invited learner.** Supplying a handle at creation
+   may reserve/invite a seat but may not grant it, write accepted terms or expose the run before that
+   learner accepts.
+3. **[[D2255]] — show the agreement before redemption.** The join-preview operation must return safe
+   host identity, exact requested terms, start-position/rules identity and expiry without exposing
+   the board; acceptance records exactly those normalized bytes.
+4. **[[D2256]] — specify the draw proposal.** Add the closed offer/withdraw/decline/accept state,
+   actor/turn rules, route/result/errors and one transaction from accepted proposal to
+   `draw.agreed`. A sentence saying the proposal lives in the journal is not a producer.
+5. **[[D2257]] — make game termination one lifecycle operation.** Checkmate/stalemate/rules draw,
+   resignation, agreed draw and flag must atomically settle the run, stop the clock, close or finish
+   the match, revoke live mutation/invitation paths, project both results/ratings and open Review.
+   Manual host close needs an explicit abort/adjudication outcome instead of a second terminal fact.
+6. **[[D2258]] — close rematch before claiming the 1.0 journey.** The roadmap requires rematch while
+   Open question 3 leaves its identity unresolved. Choose the recommended new-session chain or rule
+   another exact shape, then preserve prior terms with an explicit change step.
+7. **[[D2259]] — define timed coaching-pause semantics.** Pin the authoritative clock reading and
+   atomic stop/resume rules when both players accept a rehearsal pause; stale clients and a flag
+   racing the pause must have one result.
+8. **[[D2260]] — replace free-form variant terms with the shared subject identity.** Accepted terms
+   consume `rules + setupFamily` plus exact start position; native creation and provider import may
+   not normalize different games to the same string.
+
+Returned clock, rating, bot and variants dependencies remain hard gates. Open question 1 remains
+[[D1567]] rather than being silently answered: a no-chat public pool still needs measured
+abort/stall, avoid/block, rate-limit, cheating-response and operator-evidence boundaries, though it
+does not automatically require a social-network moderation stack. No schema, migration, storage,
+route, client, CSS, content, archive or protected-design byte is authorized by this return.
 
 ## Acceptance criteria
 

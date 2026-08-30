@@ -245,6 +245,10 @@ campaign-two-horizon-fresh-review:
 campaign-second-fresh-review:
 	node --test tools/d2244-campaign-second-fresh-review/contract.test.mjs
 
+.PHONY: social-play-fresh-review
+social-play-fresh-review:
+	node --test tools/d2253-social-play-fresh-review/contract.test.mjs
+
 tactical-collector-measurement:
 	./node_modules/.bin/vitest run --config tools/tactical-collector-measurement-harness/vitest.config.ts
 

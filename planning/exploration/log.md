@@ -12237,3 +12237,19 @@ inside the 1.0 program rather than disappearing behind “v2.” `make campaign-
 passes 9/9. The D2077–D2086 repairs survive; no schema, migration, route, client, CSS, content,
 archive or protected-design byte changed. Exact review:
 `planning/campaign/second-fresh-independent-buildability-review-2026-08-30.md`.
+## 2026-08-30 — Social-play fresh independent return
+
+Returned `social-play.md` on [[D2253]]–[[D2260]]. The native-first direction survives, but the
+shared run has one `start.side` and records only that side as `actor: "user"`; re-projecting those
+bytes for the second learner cannot produce correct progress, Review, Story, longitudinal or rating
+perspectives. The two-rating-row problem was known; the same identity defect existed across the
+rest of the learning loop and was not priced.
+
+The pass also found host-side pre-seating without learner acceptance, a join preview that omits the
+terms being accepted, an agreed-draw event with no proposal protocol, uncoordinated run/session/clock
+terminal authorities, required-but-unruled rematch, missing timed-pause clock semantics and a
+free-form variant string where `rules + setupFamily + start` is required. [[D1567]] remains the
+public-pool decision and now explicitly retains the no-chat cost question without pretending no chat
+means no abuse boundary. `make social-play-fresh-review` passes 8/8. No schema, migration, route,
+client, CSS, archive or protected-design byte changed. Exact review:
+`planning/platform-alignment/social-play/fresh-independent-buildability-review-2026-08-30.md`.
