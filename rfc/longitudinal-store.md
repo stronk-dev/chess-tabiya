@@ -1,11 +1,12 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — author-repaired 2026-08-30 on [[D1612]]–[[D1617]]; fresh independent
-  buildability review required before implementation. One folded normative contract now owns the
-  literal 67-row constructor registry, lease/generation/token claims, exact event-prefix cuts and
-  publication CAS, family-independent denominators, all seven run-write operations, and the
-  observed-only revision-1 import boundary. `make longitudinal-store-author-contract` passes ten
-  able-to-fail arms. The 2026-08-22 acceptance remains history, not implementation authority.
+- **Status:** draft — returned by fresh independent buildability review 2026-08-30 on
+  [[D2063]]–[[D2069]]. The D1612–D1617 fold survives, but implementation remains forbidden until
+  semantic sign enters durable identity; edge opportunity/share algebra is exact; requested versus
+  claimed sequence is representable; deletion cannot be resurrected by rebuild; the DDL/read
+  contract is complete; and a bounded worker has a production lifecycle. `make
+  longitudinal-store-author-contract` remains 10/10 green; `make longitudinal-store-fresh-review`
+  reproduces the seven blockers. The 2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
   returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
 - **Author:** claude
@@ -282,6 +283,30 @@ not identity verification ([[D1617]]; Discharge D2).
    exposes progress/failure; operator batch size is measured, not embedded as a product truth.
 3. Any RFC changing an admitted adapter, registry membership/version or decision semantics owns
    the revision bump and rebuild discharge. A bump outside an accepted RFC is a lifecycle defect.
+
+## Fresh-return author obligations (2026-08-30)
+
+This live RFC owns the seven returned seams; downstream style, skills, Review, campaign and bot
+work may not create private longitudinal identities or readers while it is returned:
+
+- [[D2063]] — add closed semantic sign to registry/admission identity, durable keys, reads,
+  revision/equality and collision fixtures.
+- [[D2064]] — separate immutable claimed cut from mutable requested high-water and publish the
+  exact SQLite ownership/publication CAS.
+- [[D2065]] — make account-deletion suppression durable and rebuild-visible so retained shared
+  runs cannot recreate deleted behavioral rows under `__legacy`.
+- [[D2066]] — define projection+sign-aware edge/population opportunity, occurrence, share,
+  deduplication, forced and unavailable algebra over real legal populations.
+- [[D2067]] — publish one exact learner/revision/cut-scoped read interface and closed freshness
+  result covering denominators, observations and structure stats.
+- [[D2068]] — publish complete current-head four-table/index DDL and structural fact/provenance
+  constraints with direct-SQL negatives.
+- [[D2069]] — name and production-compose the bounded background worker, lifecycle, operator door
+  and completion/crash/fairness tests.
+
+The author pass must invert `make longitudinal-store-fresh-review`, preserve the prior 10-arm
+author contract, rerun the cost arms and full verification, then request another independent
+review. It may not implement the migration, worker, consumers or content in the authoring commit.
 
 ### F. Acceptance criteria
 
@@ -1079,3 +1104,10 @@ head after that renumbering and **not yet written**:
   observed-only pending a durable subject discharge. The contradictory 2026-08-22 shape is retained
   only as explicitly non-normative history. `make longitudinal-store-author-contract` is the
   executable author checkpoint; fresh independent review still gates implementation.
+- 2026-08-30: fresh independent review returned the fold on [[D2063]]–[[D2069]]. Projection-only
+  rows pool opposite semantic signs; requested-sequence mutation contradicts the advertised full
+  claim CAS; rebuild can recreate hard-deleted observations under `__legacy`; edge-family
+  opportunity/share semantics exist only in non-normative history; the typed read contract has no
+  type; the normative DDL has unnamed indexes and weak fact constraints at a stale storage receipt;
+  and no production-composed worker drains the queue. Exact return:
+  `planning/longitudinal-store/fresh-independent-buildability-review-2026-08-30.md`.

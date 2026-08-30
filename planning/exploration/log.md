@@ -11410,3 +11410,18 @@ The exact return is
 `make provider-exchange-fresh-review` passes 7/7 as a blocker reproduction. No provider, schema,
 migration, content or learner-surface implementation changed; downstream RFCs remain forbidden
 from creating private provider authorities.
+
+## 2026-08-30 — longitudinal-store fresh independent return
+
+Freshly reviewed the D1612–D1617 folded longitudinal-store repair and returned it on
+[[D2063]]–[[D2069]]. The earlier six repairs survive, and the author contract remains 10/10 green.
+The new seven-arm reproduction proves that the durable key drops semantic sign; the claimed cut
+cannot both equal and trail the requested high-water; rebuild can resurrect deleted behavior under
+`__legacy`; edge opportunity/share semantics are non-normative; the reader has no exact type; the
+four-table DDL promises unnamed indexes and permits corrupt fact ranges at a stale version receipt;
+and no production worker lifecycle drains the queue.
+
+The exact return is
+`planning/longitudinal-store/fresh-independent-buildability-review-2026-08-30.md`; `make
+longitudinal-store-fresh-review` passes 7/7 as a blocker reproduction. No migration, worker,
+storage implementation, consumer, content or protected-design byte changed.
