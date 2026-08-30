@@ -10,21 +10,21 @@ const catalogue = read("packages/runtime/src/evidence-catalog.ts");
 
 test("D1977: service success, cancellation, failure, and options are one closed contract", () => {
   assert.match(packet, /type CandidatePopulationResult[\s\S]{0,1400}kind: "ready"[\s\S]{0,500}kind: "cancelled"[\s\S]{0,500}kind: "failed"/u);
-  assert.match(packet, /interface CandidatePopulationServiceOptions/u);
-  assert.match(packet, /Promise<CandidatePopulationResult>/u);
-  for (const code of ["invalid_fen", "non_terminal_empty", "collector_failed", "invariant_failed", "invalid_scope_projection"]) {
+  assert.match(packet, /interface CandidatePopulationServiceLimits/u);
+  assert.match(packet, /Promise<CandidatePopulationResult<S>>/u);
+  for (const code of ["invalid_fen", "unsupported_ruleset", "non_terminal_empty", "collector_failed", "scheduler_failed", "overloaded", "deadline_exceeded", "service_closed", "invariant_failed", "invalid_scope_projection"]) {
     assert.ok(packet.includes(`"${code}"`), `missing closed failure ${code}`);
   }
   assert.match(packet, /Exactly\s+`ready` values may publish to the cache/u);
 });
 
-test("D1978: provider behavior is held while the compile-time handoff remains exact", () => {
-  assert.match(packet, /does \*\*not\*\* land the vector refactor/u);
+test("D1978/D2098: provider behavior and types are held whole", () => {
+  assert.match(packet, /creates no `candidate-score-handoff\.ts`/u);
   assert.match(packet, /Bot score-join behavior, production admission and final-policy caching/u);
-  assert.match(packet, /15\. \*\*The held score join has one compile-time seam and zero behavior here/u);
+  assert.match(packet, /15\. \*\*The held score join has zero foundation API or behavior here/u);
   assert.match(packet, /17\. \*\*Future provider behavior cannot become a foundation false-green/u);
   const implementationSurface = packet.slice(packet.indexOf("### §12 — Implementation surface"), packet.indexOf("## Acceptance criteria"));
-  assert.match(implementationSurface, /candidate-score-handoff\.ts[\s\S]{0,300}types only/u);
+  assert.doesNotMatch(implementationSurface, /candidate-score-handoff\.ts|CandidateScoreJoinInput/u);
   assert.match(packet, /Test-created profiles and foundation type fixtures do not discharge this row/u);
 });
 

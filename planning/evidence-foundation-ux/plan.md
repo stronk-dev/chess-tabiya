@@ -34,6 +34,14 @@ before touching content; no corpus expansion until Gate F.
 | 6 | F8 bots on the same foundation (D810–D823 lane; policy generation distinct from guidance) | dependency map complete; blocked on 2c+2d + O8; D815/D816/D817 experiments may run while collectors land | `planning/platform-alignment/bot-policy/f8-dependency-map.md`; then RFC |
 | 7 | Interaction-state acceptance across 7 viewports × 14 states; screenshots; CI path | rides 4 | criteria in the Phase-4 RFC |
 
+**2026-08-30 Phase-2h packet checkpoint.** `shared-candidate-evidence-packet` has been
+author-repaired for [[D2097]]–[[D2104]]: scope is correlated through request/result/projection,
+the premature provider handoff is removed, and one fixed-authority bounded service owns the
+callable collector graph, deadlines, cancellation, shutdown, rules identity and sealed abstention
+outcomes. `planning/evidence-foundation-ux/shared-candidate-packet-second-author-repair-2026-08-30.md`
+is the exact receipt. The RFC remains draft and implementation remains forbidden until a fresh
+independent buildability review accepts this repaired boundary.
+
 The shared Explorer source repair explicitly owns [[D1703]], [[D1704]], [[D1705]], [[D1706]],
 [[D1707]], [[D1708]] and [[D1709]]. Its author input is
 `explorer-source-author-repair-2026-08-26.md`; it joins the existing F1/provider dependency rather

@@ -11766,3 +11766,24 @@ four-token claim and therefore rejected the stronger contract. Their current-sta
 assert the ten-node TS/Svelte delta; 7 + 6 + 8 maintained arms pass. The separate D2113 historical
 return harness remains unchanged and red 5/5, preserving the able-to-fail evidence rather than
 turning it into a permanent normal-gate failure.
+
+## 2026-08-30 — Shared candidate packet D2097–D2104 author repair
+
+Rebuilt the returned packet boundary as one scope-safe, constructible and bounded service. Request,
+result and projection now share one literal generic scope; the unavailable provider handoff is
+removed whole; the product factory fixes legal/collector/scheduler authorities; thirteen callable
+registry declarations own outputs/dependencies/cardinality; unique jobs have bounded FIFO admission,
+absolute deadlines and idempotent shutdown; scheduler/collector failures are closed; standard rules
+identity is explicit; and exact sealed collector outcomes authorize each abstention.
+
+`make candidate-packet-second-author-repair` passes 8/8 and the unchanged historical
+`make candidate-packet-fresh-review` now fails all eight arms, the intended inversion. Exact receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-second-author-repair-2026-08-30.md`.
+Implementation, Support/Review/bot consumption and provider behavior remain unauthorized pending
+fresh review and downstream RFCs. No production, schema, content, archive or protected-design byte
+changed.
+
+The maintained final-review target initially rejected the stronger scope-correlated signature
+because it still required a non-generic `CandidatePopulationResult`. [[D2149]] records the test
+contract defect: the current-state assertion now requires `CandidatePopulationResult<S>`, while
+the separate historical eight-arm return remains unchanged and red by design.
