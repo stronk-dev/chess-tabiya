@@ -19,8 +19,16 @@ function packFiles(): string[] {
 }
 
 const witnesses = JSON.parse(readFileSync("content/witnesses/expression-witnesses.json", "utf8"));
+const trackedRoots = ["content", "schemas", "packages"];
+const walkTracked = (path: string): string[] => readdirSync(path, { withFileTypes: true }).flatMap((entry) => {
+  const child = resolve(path, entry.name);
+  return entry.isDirectory() && entry.name !== "node_modules" && entry.name !== "dist" ? walkTracked(child) : entry.isFile() ? [child] : [];
+});
+const trackedDigest = () => trackedRoots.flatMap(walkTracked).sort().map((file) => [file, createHash("sha256").update(readFileSync(file)).digest("hex")]);
+const trackedBeforeFullCensus = trackedDigest();
 const fullReport = runExpressionCensus({ witnesses });
 const fullDeclarationReport = runExpressionCensus({ witnesses, declarations: true });
+const trackedAfterFullCensus = trackedDigest();
 
 describe("expression census", () => {
   it("walks every pack including root-only fixtures and reports the fixture split", () => {
@@ -238,18 +246,15 @@ describe("expression census", () => {
   });
 
   it("keeps declaration discovery opt-in, deterministic, and content-read-only", () => {
-    expect(runExpressionCensus({ witnesses })).toEqual(runExpressionCensus({ witnesses, declarations: false }));
+    const empty = mkdtempSync(resolve(tmpdir(), "tabiya-expression-opt-in-"));
+    const omitted = runExpressionCensus({ roots: [empty], shapeRoot: empty, witnesses: {} });
+    const explicitFalse = runExpressionCensus({ roots: [empty], shapeRoot: empty, witnesses: {}, declarations: false });
+    expect(explicitFalse).toEqual(omitted);
+    expect(omitted).not.toHaveProperty("declarations");
     expect(fullReport).not.toHaveProperty("declarations");
-    const trackedRoots = ["content", "schemas", "packages"];
-    const walk = (path: string): string[] => readdirSync(path, { withFileTypes: true }).flatMap((entry) => {
-      const child = resolve(path, entry.name);
-      return entry.isDirectory() && entry.name !== "node_modules" && entry.name !== "dist" ? walk(child) : entry.isFile() ? [child] : [];
-    });
-    const digest = () => trackedRoots.flatMap(walk).sort().map((file) => [file, createHash("sha256").update(readFileSync(file)).digest("hex")]);
-    const before = digest();
-    expect(canonicalizeJson(runExpressionCensus({ witnesses, declarations: true }))).toBe(canonicalizeJson(fullDeclarationReport));
-    expect(digest()).toEqual(before);
-  }, 30_000);
+    expect(fullDeclarationReport).toHaveProperty("declarations");
+    expect(trackedAfterFullCensus).toEqual(trackedBeforeFullCensus);
+  });
 
   it("refuses a proven impossibility without dropping probeMatches", () => {
     const entry = JSON.parse(readFileSync("content/shapes/carlsbad.json", "utf8"));

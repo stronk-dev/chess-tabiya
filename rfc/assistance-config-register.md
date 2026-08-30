@@ -1,9 +1,10 @@
 # RFC: AssistanceConfig shared-resource register
 
-- **Status:** draft — author-repaired 2026-08-30 after the fresh [[D2037]]/[[D2038]] return.
-  Governance now has an exact two-commit checkout/fail-closed parent contract; one closed
-  persistence/import census derives the assistance authority delta and the v5 claim includes the
-  web persistence root. Six author arms pass; fresh independent review still gates implementation.
+- **Status:** draft — returned by second fresh independent buildability review 2026-08-30 on
+  [[D2113]]–[[D2117]]. The two-commit repair survives, but the census requires a post-v5 codec at
+  the process-only v4 landing, omits the writer and same-head semantic drift, undercounts the v5
+  transition, and has no executable source-graph grammar. Exact return:
+  `planning/assistance-config-register/second-fresh-independent-buildability-review-2026-08-30.md`.
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it
@@ -392,6 +393,11 @@ None. No design intent changes.
 | [[D2012]] | repaired in §4 by previous-claimant→owner-bound-landing transition semantics | transition-capable repeat review |
 | [[D2037]] | repaired in §§3–6/criteria 8/10: governance checks out exactly two commits and required-parent resolution fails closed | fresh independent review |
 | [[D2038]] | repaired in §§1/4/criteria 5/15: transition tokens derive from the closed runtime-codec/browser-persistence census | fresh independent review |
+| [[D2113]] | bootstrap v4 cannot satisfy post-v5 codec rules without forbidden product edits | author: phase the actual v4 authority and the claimed v5 centralization |
+| [[D2114]] | `saveAssistance` is absent from the persistence closure | author: register and correlate every namespace read/write operation |
+| [[D2115]] | fixed-head persistence semantics can drift outside the field-domain digest | author: version or digest every authority-closure semantic change |
+| [[D2116]] | four claimed tokens omit required defaults, permissions and consumer discharge | author: derive the real v5 transition/consumer closure |
+| [[D2117]] | transitive TS/Svelte source closure has no executable graph grammar | author: publish and exercise exact node/edge/change identity |
 
 ## Open questions
 
@@ -400,6 +406,10 @@ contract.
 
 ## Changelog
 
+- 2026-08-30: second fresh independent review returned the third repair on [[D2113]]–[[D2117]].
+  Current-v4 versus post-v5 authority, the writer, fixed-head semantic drift, the complete v5
+  transition and the source-graph algorithm remain open. Prior 7 + 7 + 6 contracts survive; no
+  implementation is authorised.
 - 2026-08-30: third-return author repair. The governance job now owns an exact two-commit checkout,
   production resolves `HEAD^1` explicitly and missing required history is fatal. Transition tokens
   derive from the closed `AssistanceConfig` fields/runtime-codec/web-persistence source closure;

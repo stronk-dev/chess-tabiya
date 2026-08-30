@@ -11505,3 +11505,34 @@ bounded-target-fresh-review` passes 7/7 as a blocker reproduction. The stale
 `bounded-target-repeat-review` target was repaired under [[D2112]] to assert the current repaired
 contract rather than require old defects. No runtime collector, evidence declaration, scheduler,
 consumer, schema, content, learner surface or protected-design byte changed.
+
+## 2026-08-30 — AssistanceConfig register second fresh independent return
+
+Re-reviewed the D2037/D2038 assistance-register repair against the actual v4 browser persistence
+code and the already-specified v5 product transition, and returned it on [[D2113]]–[[D2117]]. The
+two-commit/fail-closed parent repair survives. The new five-arm reproduction proves the process-only
+landing requires a runtime codec that does not exist while forbidding product changes, the
+persistence closure omits `saveAssistance`, fixed-head key/migration/parser drift does not move the
+resource digest, the four-token v5 claim omits required defaults/permissions and its consumer
+discharge, and the promised transitive TS/Svelte closure has no executable graph grammar.
+
+The exact return is
+`planning/assistance-config-register/second-fresh-independent-buildability-review-2026-08-30.md`;
+`make assistance-register-second-fresh-review` passes 5/5. The prior 7 + 7 + 6 targets remain
+green. No C9 checker, workflow, register, claim, runtime, web, schema, content, archive or protected
+design byte changed.
+
+## 2026-08-30 — expression-census content-gate stabilization
+
+Full verification exposed [[D2118]]: the declaration opt-in/read-only test performed three fresh
+whole-corpus censuses inside a 30-second test and timed out at 36.4 seconds. A clean tier rerun then
+timed out nine unrelated corpus files and drained for 295 seconds, proving unbounded file workers
+were multiplying the same synchronous corpus work. The content tier now has a fixed two-worker
+pool; the test snapshots tracked content/schema/package bytes around the two existing module
+reports and crosses omitted versus explicit `declarations:false` on an isolated empty corpus. The
+separate 60-second whole-corpus determinism contract remains intact; no timeout was raised and no
+product/content byte changed.
+
+The bounded rerun passes 16 files / 172 tests in 173.84 seconds. [[D2119]] records the remaining
+efficiency debt separately: repeated immutable corpus setup/import dominates the stable tier and
+needs one read-only shared authority without weakening isolation or test-tier truth.
