@@ -12269,3 +12269,23 @@ Existing rows retain the Academy compiler/default gap, owner-configurable delaye
 liveness and provider bridge. `make professional-closure-audit` passes 7/7. No production, schema,
 migration, archive or protected-intent byte changed. Exact dossier:
 `design/research/professional-workflow-1.0-closure.md`.
+
+## 2026-08-30 — Live-following fresh independent return
+
+Returned `live-following.md` on [[D2266]]–[[D2276]] after joining its August 23 model to current
+dependency states, production evidence routes, account lifecycle and the landed Live UX research.
+The central direction survives: a source grows, rehearsal copies do not, unknown liveness fails
+closed and the product computes no engine evaluation while the real game is live.
+
+The proposed records cannot implement that direction. Pushes retain no divergence or snapshot
+identity, cuts retain no source/push receipt, and ordinary imported runs therefore cannot derive
+`sourceGameLive` or supersession. The only-off-while-connected predicate re-locks a positively
+finished game when its terminal stream closes. The four historical refusal doors omit today's
+evidence/analysis/corpus/voice/reasoning operations, and there is no typed follower API or complete
+discover→follow→copy→rehearse→release browser journey. Clock storage, rules identity, ownership,
+export/delete/retention and atomic push admission are also absent; the required prefix-revision
+measurement remains unrun.
+
+`make live-following-fresh-review` passes 11/11. No production, schema, migration, API, client,
+content, archive or protected-intent byte changed. Exact return:
+`planning/live-sources/live-following-fresh-independent-buildability-review-2026-08-30.md`.

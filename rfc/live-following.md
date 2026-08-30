@@ -1,6 +1,13 @@
 # RFC: live-following — Phase B, following a broadcast round in progress
 
-- **Status:** draft — 2026-08-23
+- **Status:** draft — **RETURNED by fresh independent buildability review 2026-08-30 on
+  [[D2266]]–[[D2276]].** The growing-source/immutable-cut direction and fail-closed no-live-eval
+  rule survive, but the proposed records cannot derive cut supersession or run liveness, the
+  release predicate re-locks after terminal disconnect, current evidence consumers exceed the
+  four-door census, and no production operation or learner journey is specified. The prefix-
+  revision instrument remains unrun. No implementation is authorized before author repair,
+  measurement, dependency reconciliation and another independent review. **Prior status:** draft
+  — 2026-08-23
 - **Author:** claude (coordinator), from `planning/live-sources/phase-b-derivation.md`
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` Live surfaces (:81-83, :291);
@@ -512,6 +519,40 @@ the [[D412]] clause. Phase A recorded it as an owner-owned discharge and it rema
 undischarged; this RFC inherits it and **does not write the design doc** (law 5). Proposed
 through the ledger, not amended here.
 
+## Fresh independent buildability return — 2026-08-30
+
+`planning/live-sources/live-following-fresh-independent-buildability-review-2026-08-30.md`
+rejoined this draft to current dependency states, production routes, account lifecycle and the
+landed Live UX research. Eleven executable falsifiers reproduce the return:
+
+1. [[D1272]]/[[D1211]] already settle questions the RFC still calls acceptance-blocking, while
+   `intent-presets` and `longitudinal-store` are returned rather than accepted ([[D2266]]).
+2. The persisted Boolean cannot re-derive contamination, revision, round finish, connection or
+   reconciliation after restart ([[D2267]]).
+3. Pushes retain no divergence/digests and cuts retain no source/push receipt, so supersession is
+   uncomputable ([[D2268]]).
+4. `terminal ∧ finished ∧ connected` re-locks a positively finished game as soon as its stream
+   closes ([[D2269]]).
+5. An unchanged ordinary import has no path from run id back to `sourceGameLive` ([[D2270]]).
+6. The four historical doors are not an exhaustive image of today's evidence-bearing operations
+   ([[D2271]]).
+7. There is no typed follower API, authorization/idempotency contract, update transport or complete
+   learner journey ([[D2272]]).
+8. Push admission has no canonical snapshot identity or atomic compare/admit transaction
+   ([[D2273]]).
+9. Shared source cache, learner subscription, export/delete/retention and backup/restore have no
+   lifecycle contract ([[D2274]]).
+10. §7.4 promises followed-source clocks that neither claimed table can store ([[D2275]]).
+11. Prefix revision remains unmeasured and non-Standard broadcast admission has no shared rules
+    identity or refusal ([[D2276]]).
+
+The author repair should retain the document's central product decisions, not restart them: one
+growing source, immutable rehearsal copies, fail-closed unknown liveness and zero live evaluation.
+It must make those decisions executable with round/source/push/subscription/cut identities, a
+monotone terminal receipt, exhaustive consumer binding and the researched discover→follow→copy→
+rehearse→release browser journey. `make live-following-fresh-review` is the reproduction command;
+it is evidence of the current return, not the acceptance suite for the repair.
+
 ## Acceptance criteria
 
 1. **The followed source grows and no run changes.** A fixture drives three pushes at 20, 24 and 28 plies; the source's `ply_count` advances; a cut taken after push 1 has a byte-identical `sessionDigest`, `movetextDigest` and node count after pushes 2 and 3. *Fails if any run field moves.*
@@ -556,4 +597,8 @@ Proposed; id assigned at landing (head was **D1213** at drafting).
 
 ## Changelog
 
+- 2026-08-30: returned by fresh independent buildability review on [[D2266]]–[[D2276]].
+  Immutable cuts and no-live-eval survive; identities, lifecycle, current consumer closure,
+  production operations, complete UX, clocks/rules/account seams and prefix-revision evidence do
+  not. Exact return linked in the status and fresh-return section.
 - 2026-08-23: created, from `planning/live-sources/phase-b-derivation.md`. Growth model specified as the followed-source object on five measured constraints; the D411 lock pinned as a dynamic ceiling bit with two arms and an AND-release; casting specified as a seam and left to the B5 ruling; §5 verified against `0f04a2d` rather than re-specifying two defects codex had already fixed.

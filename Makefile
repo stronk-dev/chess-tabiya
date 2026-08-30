@@ -394,6 +394,10 @@ bounded-target-second-fresh-review:
 professional-closure-audit:
 	node --test tools/d2261-professional-closure-audit/contract.test.mjs
 
+.PHONY: live-following-fresh-review
+live-following-fresh-review:
+	node --test tools/d2266-live-following-fresh-review/contract.test.mjs
+
 build:
 	pnpm build
 
