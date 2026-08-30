@@ -1,11 +1,16 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
-- **Status:** draft — **[[D2077]]–[[D2086]] author repair complete 2026-08-30; fresh
-  independent review required.** The terminal bundle, writable module loadout, exact document
-  snapshot, source-identified charge ledger, typed reward-family projections, run origin, closed
-  command family, atomic award issuance and official-content authority are being repaired as one
-  replayable campaign operation. No campaign schema, migration, production route, official
-  campaign or surface may resume before another independent review. *(Prior line:
+- **Status:** draft — **RETURNED by second fresh independent review 2026-08-30 on
+  [[D2244]]–[[D2252]].** The D2077–D2086 repair survives, but the contract still permits a
+  zero-move reward/completion click-through; cannot durably replay run creation; does not make
+  encounter start atomic; leaves active-encounter run deletion undefined; and never binds earned
+  modules/theory to the production assistance-delivery operation. Its claimed complete 1.0 boundary
+  also omits the ruled boss-game, catalogue-progression and consequential durable-reward horizons,
+  while the official-content metadata it requires has no typed home. `make
+  campaign-second-fresh-review` passes 9/9. No campaign schema, migration, production route,
+  official campaign or surface may resume before author repair and another independent review.
+  *(Prior line: [[D2077]]–[[D2086]] author repair complete 2026-08-30; fresh independent review
+  required. Before that:
   implementing — 2026-08-23 authored-contract + registry + module-algebra checkpoints. Before
   that: accepted — 2026-08-22, by claude as register owner after independent cross-review and 15
   in-place corrections; draft — 2026-08-22.)*
@@ -829,6 +834,48 @@ This live RFC owns the complete return:
 The next author pass must invert `make campaign-two-horizon-fresh-review`, preserve the 19 author
 checks, run full verification and request another independent review. It may not implement schema,
 migration, storage, content, endpoints or UI while these landing authorities remain contradictory.
+
+## Second fresh independent return (2026-08-30)
+
+The D2077–D2086 repairs remain useful and are not reverted. The second fresh review joined the
+repaired document to the actual play-run lifecycle and to the complete 1.0 campaign intent. Exact
+review: `planning/campaign/second-fresh-independent-buildability-review-2026-08-30.md`.
+
+1. **[[D2244]] — require actual play before a seal can pay progression.** An untouched root branch
+   may not seal as `open` and receive the same reward as a played consequence. Define a grounded,
+   mechanically checked participation floor without grading move quality.
+2. **[[D2245]] — give create replay a pre-run idempotency authority.** A command index scoped by an
+   as-yet-unknown `campaignRunId` cannot find the first result after response loss. Define the
+   learner/campaign/create-command identity and stored result before claiming replay.
+3. **[[D2246]] — make encounter start one transaction.** Play-run creation, `RunOrigin`,
+   `node_entered`, revision advance and active pointer must commit together or not at all, including
+   injected failure and response-loss replay.
+4. **[[D2247]] — close play-run deletion.** Refuse deletion of an active campaign encounter or
+   define an atomic campaign transition; also specify the historical Review behavior when a sealed
+   encounter run is deleted.
+5. **[[D2248]] — bind rewards to the assistance delivery operation.** Name the exact production
+   module/theory query that consumes campaign ownership, equipment, suppression, availability and
+   encounter identity. `RunOrigin` is an identity join, not a consumer.
+6. **[[D2249]] — stop calling the pack-only suppressor the complete boss contract.** The ruled Act
+   II full-game boss, phase-specific opponent instruments and boss-result boundary need a successor
+   accepted contract in the 1.0 campaign unit, or this RFC must explicitly call itself foundation
+   rather than complete Campaign.
+7. **[[D2250]] — include the ruled catalogue progression.** Shapes met, structures played and the
+   what's-missing pack-card mark are the campaign's persistent progress denomination; a discharge
+   with no 1.0 successor cannot satisfy the complete journey.
+8. **[[D2251]] — make the durable horizon consequential.** Marks and cosmetics are valid receipts,
+   but current durable ownership is forbidden from changing every future run. The owner has required
+   proper long-term rewards; exact typed effects need research and an owner ruling rather than a
+   generic reward id.
+9. **[[D2252]] — type the official-campaign authoring contract.** Target learner, expected envelope,
+   phase/form coverage, source/provenance and dependency availability cannot remain criterion prose
+   with no schema, sidecar or validator authority.
+
+Returned dependencies (`intent-presets`, `bot-policy`, `longitudinal-store`, pack capability and
+theory authority) remain hard gates in addition to these nine findings. The author repair must keep
+the core RFC and its named successor campaign work in one 1.0 closure map so later features cannot
+disappear behind “v2.” No schema, migration, storage, route, client, CSS, content, archive or
+protected-design byte is authorized by this return.
 
 ## Acceptance criteria
 

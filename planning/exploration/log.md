@@ -12221,3 +12221,19 @@ tournaments, relationship/history and observed traits visible in the 1.0 program
 opponent-experience-fresh-review` passes 5/5. No production, server, schema, route, client, CSS,
 asset, telemetry, content, archive or protected-design byte changed. Exact review:
 `planning/opponent-experience/fresh-independent-buildability-review-2026-08-30.md`.
+## 2026-08-30 — Campaign-core second fresh independent return
+
+Returned `campaign-core.md` on [[D2244]]–[[D2252]] after joining its repaired atomic terminal
+operation to the actual play-run lifecycle and the complete 1.0 intent. The most consequential
+finding is executable from the prose: an untouched non-absorbing root may submit as `open`, and the
+contract awards the same progression whatever the verdict, so nine start→submit gestures with zero
+chess moves can complete the campaign.
+
+The same pass found that create idempotency is scoped behind the unknown run id, encounter start is
+not one cross-aggregate transaction, ordinary run deletion can orphan campaign state, and no named
+assistance operation consumes the earned loadout. Four scope findings keep the owner-ruled boss
+game, catalogue progression, consequential durable rewards and typed official-curriculum contract
+inside the 1.0 program rather than disappearing behind “v2.” `make campaign-second-fresh-review`
+passes 9/9. The D2077–D2086 repairs survive; no schema, migration, route, client, CSS, content,
+archive or protected-design byte changed. Exact review:
+`planning/campaign/second-fresh-independent-buildability-review-2026-08-30.md`.

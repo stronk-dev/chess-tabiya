@@ -241,6 +241,10 @@ campaign-two-horizon-author-contract:
 campaign-two-horizon-fresh-review:
 	node --test tools/d2077-campaign-fresh-review/contract.test.mjs
 
+.PHONY: campaign-second-fresh-review
+campaign-second-fresh-review:
+	node --test tools/d2244-campaign-second-fresh-review/contract.test.mjs
+
 tactical-collector-measurement:
 	./node_modules/.bin/vitest run --config tools/tactical-collector-measurement-harness/vitest.config.ts
 
