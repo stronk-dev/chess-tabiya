@@ -11333,3 +11333,14 @@ decision stamp and rejects each stale dimension independently; it invents no nod
 acceptance. The six producer contracts named by [[D2046]]/[[D2047]] must gain exact operands before
 their adapters can land; [[D2048]] removes its false visual forms. No implementation, content,
 archive or protected-design byte changed in this author pass.
+
+## 2026-08-30 — bot-policy seven-return author repair
+
+Repaired [[D1970]]–[[D1976]] in `rfc/bot-policy.md` and recorded the author checkpoint at
+`planning/platform-alignment/bot-policy/author-repair-2026-08-30.md`. The bot contract now consumes
+the shared Maia/Stockfish deliveries, separates returned mass from legal-set equality, seals a
+closed set-equal decision derivation, separates deterministic bytes from its request/timing
+envelope, rechecks node/branch/event head after provider work, commits no move without Maia, and
+consumes one shared candidate packet in Stage B. `make bot-policy-author-contract` is the able-to-
+fail checkpoint; fresh independent review and both shared dependencies still gate implementation.
+No product/schema/migration/content or protected-design byte changed.
