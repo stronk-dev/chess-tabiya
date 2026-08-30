@@ -55,14 +55,17 @@ test("D2032: Syzygy local domain preflight is structurally outside receipt-beari
 
 test("D2033: public subject availability is bounded and composes canonical run authorization", () => {
   const publicSubject = section(
-    "interface EvidenceAvailabilitySubject",
-    "interface SubjectEvidenceAvailabilityRequest",
+    "type EvidenceAvailabilitySubjectRef",
+    "type EvidenceAvailabilitySubject =",
   );
   const availability = section(
     "Request-specific satisfaction is a separate authenticated and ownership-checked operation:",
     "### 3. One typed exchange receipt",
   );
-  assert.match(publicSubject, /kind: "run_event"/u);
+  assert.match(publicSubject, /kind: "run_prefix"/u);
+  assert.match(publicSubject, /kind: "run_node"/u);
+  assert.match(publicSubject, /kind: "run_edge"/u);
+  assert.doesNotMatch(publicSubject, /beforeFen|afterFen|moveUci/u);
   assert.doesNotMatch(publicSubject, /kind: "module"|ModuleId/u);
   assert.doesNotMatch(publicSubject, /provider_request/u);
   assert.match(availability, /POST \/evidence\/availability/u);
@@ -147,7 +150,7 @@ test("D2035: monotonic deadlines and civil receipt time have separate authoritie
 
 test("D2036: provider availability does not reverse-depend on modules or presets", () => {
   const publicSubject = section(
-    "interface EvidenceAvailabilitySubject",
+    "type EvidenceAvailabilitySubjectRef",
     "type ResolvedSourceSubject",
   );
   assert.doesNotMatch(publicSubject, /ModuleId|moduleId|presetId/u);

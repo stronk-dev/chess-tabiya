@@ -1,11 +1,11 @@
 # RFC: Provider exchange and projection execution
 
-- **Status:** draft — RETURNED by second fresh independent review 2026-08-30 on [[D2184]]–[[D2189]].
-  The D2056–D2062 repair survives, but run-head subjects cannot select a runtime node/edge; three
-  engine digest brands have no byte authority; typed payloads are not bound to captured response
-  bytes; Explorer status/ETag sit outside acquisition identity; the five CLI traversals stop before
-  evidence adapters; and the closed cross-package provider protocol claims no shared register.
-  `make provider-exchange-second-fresh-review` passes 6/6. Implementation remains forbidden.
+- **Status:** draft — author-repaired 2026-08-30 on [[D2184]]–[[D2188]]; [[D2189]] is routed to
+  draft prerequisite `provider-protocol-register.md`. Runtime subjects now close node/edge/prefix
+  grains; engine digests have launched-byte/handshake authorities; operation-keyed parsers bind
+  payloads and HTTP metadata to captured bytes; and all five traversals end at sole evidence
+  factories. Fresh independent review and implementation remain forbidden until the register
+  prerequisite lands and this RFC declares its lane-1 claim.
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
 - **Design refs:** `design/03-product-breadth.md` evidence architecture and provider-backed
@@ -16,7 +16,10 @@
   `design/research/promotion-race-contract-closure.md`, and
   `design/research/explorer-source-contract-closure.md`
 - **Depends on:** implemented `rfc/archive/evidence-contract-manifest.md`; implemented engine,
-  Maia, Syzygy and Explorer clients; accepted `rfc/exact-legal-mobility.md`
+  Maia, Syzygy and Explorer clients; accepted `rfc/exact-legal-mobility.md`; draft
+  `rfc/evidence-value-authority.md` for the sole source-factory boundary (acquisition/parser
+  infrastructure may precede it, but no provider evidence projection or evidence traversal may);
+  draft `rfc/provider-protocol-register.md` for [[D2189]]
 - **Parent / amends:** amends the implemented F1 compiler contract through a new RFC; supplies the
   shared source dependency for `semantic-collectors`, `bounded-policy-targets`, Review, bots,
   theory and repertoire work
@@ -26,6 +29,11 @@
 ```tabiya-claims
 none
 ```
+
+**Why `none` is temporarily honest.** `provider-protocol` is not yet a checker-recognized resource.
+The process-only prerequisite introduces its pre-landing register; in that implementation commit
+this block atomically changes to the exact lane-1 claim specified there. This RFC cannot be accepted
+or implemented while the claim is absent.
 
 ## Summary
 
@@ -210,14 +218,42 @@ that a retained page or recorded item exists for an unnamed subject.
 Request-specific satisfaction is a separate authenticated and ownership-checked operation:
 
 ```ts
-interface EvidenceAvailabilitySubject {
-  readonly kind: "run_event";
-  readonly runId: string;
-  readonly eventHeadDigest: RunEventHeadDigest;
-}
+type EvidenceAvailabilitySubjectRef =
+  | {
+      readonly kind: "run_prefix";
+      readonly runId: string;
+      readonly eventHeadDigest: RunEventHeadDigest;
+    }
+  | {
+      readonly kind: "run_node";
+      readonly runId: string;
+      readonly eventHeadDigest: RunEventHeadDigest;
+      readonly branchId: string;
+      readonly nodeId: string;
+    }
+  | {
+      readonly kind: "run_edge";
+      readonly runId: string;
+      readonly eventHeadDigest: RunEventHeadDigest;
+      readonly branchId: string;
+      readonly beforeNodeId: string;
+      readonly afterNodeId: string;
+      readonly moveEventSeq: number;
+    };
+
+type EvidenceAvailabilitySubject =
+  | Extract<EvidenceAvailabilitySubjectRef, { readonly kind: "run_prefix" }>
+  | (Extract<EvidenceAvailabilitySubjectRef, { readonly kind: "run_node" }> & {
+      readonly fen: string;
+    })
+  | (Extract<EvidenceAvailabilitySubjectRef, { readonly kind: "run_edge" }> & {
+      readonly beforeFen: string;
+      readonly moveUci: string;
+      readonly afterFen: string;
+    });
 
 interface SubjectEvidenceAvailabilityRequest {
-  readonly subject: EvidenceAvailabilitySubject;
+  readonly subject: EvidenceAvailabilitySubjectRef;
   /** One to 64 unique ids. The server canonicalizes their order. */
   readonly projectionIds: readonly VersionedEvidenceId[];
 }
@@ -284,20 +320,26 @@ function digestRunEvidenceItem(image: Readonly<{
   event: EvidenceAttachedEvent;
 }>): RunEvidenceItemDigest;
 function digestRunSubject(image: Readonly<{
-  kind: "run_event";
-  runId: string;
-  eventHeadDigest: RunEventHeadDigest;
+  subject: EvidenceAvailabilitySubject;
 }>): RunSubjectDigest;
 ```
 
 The exact domains are `run.event_head.v1`, `run.evidence_item.v1` and `run.subject.v1`; each uses
-the same RFC-8785 canonical byte rule as §3.1 with the literal domain prefix. A head at sequence
+the same RFC-8785 canonical byte rule as §3.1 with the literal domain prefix. `run.subject.v1`
+hashes the complete discriminated subject image, so changing the grain, branch/node identity,
+move-event sequence, move or any FEN changes the digest. A head at sequence
 `N` hashes `{runId, headSeq:N, events:run.events.slice(0,N)}` where event sequences are contiguous,
 one-based, and `1 <= N <= run.events.length`. There is no empty or future head. An evidence item
 hashes the complete canonical `evidence.attached` event at its unique sequence together with the
-already-resolved head digest; its sequence must be at or before that head. A subject hashes only
-the resolved run id and branded head digest shown above. The constructors validate the complete
-closed images and reject caller-authored branded strings at the server boundary.
+already-resolved head digest; its sequence must be at or before that head. The constructors validate
+the complete closed images and reject caller-authored branded strings at the server boundary.
+
+The public request supplies only `EvidenceAvailabilitySubjectRef`. After `requireRead`, the server
+projects the selected historical run prefix and resolves it to exactly one internal subject. A node
+ref must resolve the named branch/node and copies that node's canonical FEN. An edge ref must resolve
+one committed move event at `moveEventSeq`, prove its branch and before/after node ids, then copy the
+canonical before FEN, UCI and after FEN. A prefix subject contains the exact selected head and is
+legal only for a history/path operation. No request supplies FEN or move bytes.
 
 After `requireRead`, the availability service recomputes the digest for every historical prefix of
 that authorized run and selects exactly one matching head. Zero matches, more than one match,
@@ -323,7 +365,9 @@ presets rather than introducing a reverse dependency on their not-yet-landed reg
 
 There is deliberately no public arbitrary `provider_request` subject. Exact provider subjects are
 constructed server-side by a closed source-subject resolver registry keyed by
-`{consumer projection, pathId, source occurrence}`. A provider resolver returns the mapped literal
+`{consumer projection, pathId, source occurrence, subject kind}`. Every resolver receives the
+sealed internal `EvidenceAvailabilitySubject`, declares its exact admitted subject kinds and may
+read no ambient cursor. A provider resolver returns the mapped literal
 operation plus normalized request digest; recorded and build-time resolvers return their exact
 sealed item/artifact digests. The registry is set-equal to every bound non-local occurrence and
 cannot accept caller-authored cache assertions. An operation that differs from the compiled
@@ -336,6 +380,15 @@ therefore return different satisfaction without making `/capabilities` lie. Stat
 live reach, recorded/retained satisfaction, local domain non-applicability, source absence and chess
 refutation remain different states. Provider absence cannot become `false`, `draw`, zero population
 or an empty recommendation.
+
+Position operations admit `run_node`; move-transition and before/after operations admit `run_edge`;
+history-conditioned Maia and recorded sequence/path operations admit `run_prefix`. For the Story
+evaluation shift, occurrence `[0]` deterministically resolves the edge's `beforeFen` and `[1]` its
+`afterFen`; reversing them fails. Two move events under one unchanged head differ by
+`moveEventSeq`/node ids even when their UCI matches. Transposed equal-FEN nodes differ by branch/node
+identity. A historical node is valid without being the active cursor when it exists in the selected
+head; substituting the current cursor fails the requested identity rather than silently changing the
+subject.
 
 Path-state reduction is total and derives only from the returned leaf rows: zero source leaves is
 `satisfied_local`; all leaves in a `satisfied_*` state is `satisfied_sources`; otherwise, if every
@@ -377,6 +430,18 @@ type ProviderCacheIdentity = string & { readonly __providerCacheIdentity: unique
 type EngineBinaryDigest = string & { readonly __engineBinaryDigest: unique symbol };
 type EngineOptionImageDigest = string & { readonly __engineOptionImageDigest: unique symbol };
 type EngineContainerDigest = string & { readonly __engineContainerDigest: unique symbol };
+
+interface EngineOptionImage {
+  readonly advertisedUciOptionLines: readonly string[];
+  readonly appliedSetoptionCommands: readonly string[];
+}
+
+interface EngineContainerImage {
+  readonly runtime: "oci";
+  readonly imageId: string;
+  readonly manifestDigest: `sha256:${string}`;
+  readonly configDigest: `sha256:${string}`;
+}
 
 type ProviderEndpointMap = {
   readonly "stockfish.legal_root_table@1": Readonly<{
@@ -426,7 +491,7 @@ type MaiaActualIdentity = Readonly<{
   name: string;
   version: string;
   modelId: string;
-  containerDigest: EngineContainerDigest | null;
+  containerDigest: EngineContainerDigest;
   seedHonored: boolean;
   eloHonored: true;
   optionImageDigest: EngineOptionImageDigest;
@@ -461,6 +526,22 @@ type ProviderAcquisitionReceipt<K extends ProviderOperationId = ProviderOperatio
   readonly responseDigest: ProviderResponseDigest;
 }> : never;
 
+type ProviderResponseParserIdMap = {
+  readonly "stockfish.legal_root_table@1": "parse.stockfish_legal_root_table@1";
+  readonly "stockfish.position_evaluation@1": "parse.stockfish_position_evaluation@1";
+  readonly "maia.policy_page@1": "parse.maia_policy_page@1";
+  readonly "syzygy.position@1": "parse.syzygy_position@1";
+  readonly "lichess_explorer.position_page@1": "parse.lichess_explorer_position_page@1";
+};
+
+interface ProviderParsedPayloadReceipt<K extends ProviderOperationId> {
+  readonly operation: K;
+  readonly parser: ProviderResponseParserIdMap[K];
+  readonly parserImplementationDigest: `sha256:${string}`;
+  readonly responseDigest: ProviderResponseDigest;
+  readonly payloadDigest: `sha256:${string}`;
+}
+
 type ProviderDelivery<T, K extends ProviderOperationId> =
   | {
       readonly kind: "live";
@@ -468,6 +549,7 @@ type ProviderDelivery<T, K extends ProviderOperationId> =
       readonly cacheIdentity: null;
       readonly acquisition: ProviderAcquisitionReceipt<K>;
       readonly payload: T;
+      readonly payloadReceipt: ProviderParsedPayloadReceipt<K>;
     }
   | {
       readonly kind: "retained_exact";
@@ -475,6 +557,7 @@ type ProviderDelivery<T, K extends ProviderOperationId> =
       readonly cacheIdentity: ProviderCacheIdentity;
       readonly acquisition: ProviderAcquisitionReceipt<K>;
       readonly payload: T;
+      readonly payloadReceipt: ProviderParsedPayloadReceipt<K>;
     };
 
 /** The exact payload sealed by every live provider source projection. */
@@ -488,17 +571,24 @@ function assertProviderDelivery<T, K extends ProviderOperationId>(
   operation: K,
   value: unknown,
 ): asserts value is ProviderDelivery<T, K>;
+function assertProviderParsedPayloadReceipt<K extends ProviderOperationId>(
+  operation: K,
+  payload: ProviderOperationResultMap[K],
+  value: unknown,
+): asserts value is ProviderParsedPayloadReceipt<K>;
 ```
 
 The operation maps are the identity authority: neither requested nor actual identity contains an
-open `Record`. `provider-exchange.ts` owns module-private `WeakSet<object>` seals for acquisition
-receipts and deliveries. `makeProviderAcquisitionReceipt<K>()` and `makeProviderDelivery<K>()` are
-the only constructors and add the frozen result to their respective seal only after all checks.
+open `Record`. `provider-exchange.ts` owns module-private `WeakSet<object>` seals for acquisition,
+parsed-payload receipts and deliveries. `makeProviderAcquisitionReceipt<K>()`,
+`makeProviderParsedPayloadReceipt<K>()` and `makeProviderDelivery<K>()` are the only constructors and
+add the frozen result to their respective seal only after all checks.
 The exported assertion functions test seal membership, literal operation/provider, acquisition
-seal, delivery kind/cache pairing and immutable payload identity. A plain object, spread clone,
+seal, parsed-payload receipt seal, delivery kind/cache pairing and immutable payload identity. A plain object, spread clone,
 JSON round-trip, wrong-operation receipt or delivery, and `as unknown as` double-cast all fail at
-runtime. Every raw provider source adapter calls `assertProviderDelivery` before
-`declareEvidence`; TypeScript shape compatibility alone is never admission.
+runtime. Every operation-keyed value-authority source factory calls `assertProviderDelivery` and
+`assertProviderParsedPayloadReceipt` before `declareEvidence`; TypeScript shape compatibility alone
+is never admission.
 
 `makeProviderAcquisitionReceipt<K>()` is a module-private constructor owned by
 `provider-exchange.ts`. It receives an admitted descriptor, its normalized request, the identity
@@ -560,17 +650,31 @@ digest from the acquisition receipt and compares generation to current superviso
 providers use `generation: null` while still binding retained admission to actual endpoint/source
 identity. Actual identity is never part of request coalescing. Maia actual identity is projected
 from the live `EngineIdentity` returned inside the serialized exchange: `id`, `kind`, `name`,
-`version`, required `modelId`, nullable `containerDigest`, `seedHonored`, required
-`eloHonored:true`, plus the digest of the exact advertised option image used to validate the
-request. There is no caller-authored `runtimeDigest`.
+`version`, required `modelId`, required `containerDigest`, `seedHonored`, required
+`eloHonored:true`, plus the digest of the exact advertised/applied option image used to validate the
+request. Stockfish requires the corresponding non-null `binaryDigest` and option-image digest.
+There is no caller-authored `runtimeDigest`.
+
+The implemented `EngineIdentity` becomes a closed artifact capture rather than a copy of
+`EngineSpec`: it adds required `binaryDigest: EngineBinaryDigest | null`,
+`containerDigest: EngineContainerDigest | null` and
+`optionImageDigest: EngineOptionImageDigest`. Stockfish must carry binary/non-container; Maia must
+carry container/non-binary. The supervisor hashes the exact staged executable bytes it launches,
+or obtains the immutable image id plus manifest/config content digests from the runtime for the
+container it actually started. It constructs the option image from the ordered UCI handshake
+`option` lines and ordered applied `setoption` commands inside that same generation. Spec labels,
+paths, command strings and caller-supplied digest fields are not constructors.
 
 ### 3.1 One canonical provider-digest registry
 
 `packages/runtime/src/provider-digest.ts` is the single byte authority for every digest and key in
-this RFC. It exports no generic caller-selected tag. Instead it exposes seven closed operations:
+this RFC. It exports no generic caller-selected tag. Instead it exposes ten closed digest domains:
 
 ```ts
 type ProviderDigestDomain =
+  | "engine.binary.v1"
+  | "engine.option_image.v1"
+  | "engine.container.v1"
   | "provider.commands.v1"
   | "provider.request.v1"
   | "provider.pending.v1"
@@ -579,6 +683,9 @@ type ProviderDigestDomain =
   | "provider.retained.v1"
   | "provider.path.v1";
 
+function digestEngineBinary(bytes: Uint8Array): EngineBinaryDigest;
+function digestEngineOptionImage(image: EngineOptionImage): EngineOptionImageDigest;
+function digestEngineContainer(image: EngineContainerImage): EngineContainerDigest;
 function digestProviderCommands(commands: readonly string[]): ProviderCommandsDigest;
 function digestProviderRequest(image: ProviderRequestDigestImage): ProviderRequestDigest;
 function digestProviderPending(image: ProviderPendingIdentity): ProviderPendingDigest;
@@ -605,17 +712,40 @@ objects. The digest is SHA-256 rendered as `sha256:` plus 64 lower-case hexadeci
 
 The exact images are closed:
 
+- engine binary: the exact launched executable byte sequence, with no caller label or path in the
+  image;
+- engine option image: `{ advertisedUciOptionLines, appliedSetoptionCommands }`, preserving both
+  orders and rejecting CR/LF/NUL inside each already-split line;
+- engine container: the exact `{ runtime, imageId, manifestDigest, configDigest }` returned for the
+  launched container, never a requested tag;
 - commands: `{ commands }`, preserving line order and rejecting CR/LF/NUL inside a command;
 - request: `{ operation, provider, requestedIdentity }`, where Stockfish requested identity
   includes the descriptor-produced command array and `digestProviderCommands(commands)`;
 - pending: `{ operation, normalizedRequestDigest }`;
 - actual: `{ operation, provider, actualIdentity }`;
-- response: `{ operation, provider, contentEncoding, bodyBase64 }`, where `bodyBase64` represents
-  the exact acquired bytes—the complete UCI task transcript for Stockfish and the HTTP response
-  body for network providers—without parse/re-serialization;
+- response: `{ operation, provider, contentEncoding, transport, bodyBase64 }`, where `bodyBase64`
+  represents the exact acquired bytes—the complete UCI task transcript for Stockfish and the HTTP
+  response body for network providers—without parse/re-serialization. `transport` is `null` for
+  UCI and the exact `ProviderHttpResponseMetadata` for HTTP;
 - retained: `{ pending, actualIdentityDigest, generation }`; the returned branded bytes are also
   the one `ProviderCacheIdentity` value on a retained delivery;
 - path: the exact compiler image specified in §1.
+
+The three engine digest functions are exported for type-safe verification, but a production import
+graph permits calls only from the supervisor's artifact/handshake capture module. Descriptors and
+callers receive the sealed live `EngineIdentity`; they cannot submit bytes, option arrays, image ids
+or branded strings. Reordered/changed option lines, same label with different executable bytes,
+another container config, a stale generation identity and plain/spread/JSON/double-cast digests all
+fail before acquisition sealing. The supervisor rechecks that artifact and option image belong to
+the generation executing the request; a digest from a prior generation is `identity_mismatch`.
+
+HTTP capture admits only successful status 200 and the allow-listed ETag. Header names are compared
+ASCII case-insensitively, exactly one ETag is allowed, optional whitespace is trimmed once, and the
+result is `string | null`; duplicate/conflicting ETags and every non-200 response become a typed
+source failure rather than a successful capture. Unlisted headers never enter evidence. The parser
+derives `ExplorerPositionPage.source` from the sealed capture metadata, never from response JSON or
+a caller. Same body/different status or ETag, an ETag copied from another response and a response
+digest that omits `transport` all fail.
 
 Key reordering is stable; changing an operation, provider, command, request member, actual identity,
 raw response byte or path member changes the appropriate digest. The two older canonicalizers may
@@ -728,13 +858,40 @@ interface ProviderExecutionContext {
   readonly requestedAt: string;
 }
 
+interface ProviderHttpResponseMetadata {
+  readonly statusCode: 200;
+  readonly headers: {
+    readonly etag: string | null;
+  };
+}
+
+type ProviderTransportMetadataMap = {
+  readonly "stockfish.legal_root_table@1": null;
+  readonly "stockfish.position_evaluation@1": null;
+  readonly "maia.policy_page@1": null;
+  readonly "syzygy.position@1": ProviderHttpResponseMetadata;
+  readonly "lichess_explorer.position_page@1": ProviderHttpResponseMetadata;
+};
+
 interface ProviderExecutionCapture<K extends ProviderOperationId> {
   readonly endpoint: ProviderEndpointMap[K];
   readonly actualIdentity: ProviderActualIdentityMap[K];
   readonly generation: number | null;
   readonly contentEncoding: "uci-utf8" | "http-body";
+  readonly transport: ProviderTransportMetadataMap[K];
   readonly responseBytes: Uint8Array;
 }
+
+interface ProviderResponseParser<K extends ProviderOperationId> {
+  readonly operation: K;
+  readonly id: ProviderResponseParserIdMap[K];
+  readonly implementationFiles: readonly string[];
+  parse(capture: ProviderExecutionCapture<K>): ProviderOperationResultMap[K];
+}
+
+type ProviderResponseParsers = {
+  readonly [K in ProviderOperationId]: ProviderResponseParser<K>;
+};
 
 interface ProviderOperationDescriptor<K extends ProviderOperationId> {
   readonly operation: K;
@@ -748,10 +905,7 @@ interface ProviderOperationDescriptor<K extends ProviderOperationId> {
   execute(
     requestedIdentity: ProviderRequestedIdentityMap[K],
     context: ProviderExecutionContext,
-  ): Promise<Readonly<{
-    payload: ProviderOperationResultMap[K];
-    capture: ProviderExecutionCapture<K>;
-  }>>;
+  ): Promise<ProviderExecutionCapture<K>>;
   retainedWeight(payload: ProviderOperationResultMap[K]): number;
   admitRetained(acquisition: ProviderAcquisitionReceipt<K>): boolean;
 }
@@ -774,17 +928,30 @@ function assertProviderLocalDomainResult<K extends ProviderOperationId>(
 ): asserts value is ProviderLocalDomainResult<K>;
 ```
 
-The scheduler constructor accepts one `ProviderOperationDescriptors` exact mapped set—one
-for every `ProviderOperationId`, with no extras. Callers provide only the discriminated request,
+The scheduler constructor accepts one `ProviderOperationDescriptors` and one
+`ProviderResponseParsers` exact mapped set—one of each for every `ProviderOperationId`, with no
+extras. Callers provide only the discriminated request,
 relative waiting budget and cancellation signal. They cannot provide an absolute deadline,
 execution callback, key, weight or receipt.
 The scheduler owns failure normalization and delivery wrapping and is the sole cache/deduplication
 authority. It calls `normalizeRequest` once, computes the request and pending digests through §3.1,
 runs the closed preflight, and only after queue admission passes that sealed identity to `execute`.
-The descriptor returns payload plus same-exchange capture; only the scheduler's private
+The descriptor returns only the same-exchange capture; it cannot supply a typed chess payload. The
+scheduler hashes the capture, invokes the exact operation-keyed registered parser over those bytes
+and transport metadata, canonicalizes the returned payload, then creates the sealed
+`ProviderParsedPayloadReceipt` before constructing a delivery. Only the scheduler's private
 `makeProviderAcquisitionReceipt` validates the capture, samples `wallNow()` for `retrievedAt`,
 hashes the raw response and seals the receipt. Engine descriptors enter the supervisor's serialized task inside `execute` and capture
 actual identity/generation there.
+
+The parser implementation digest covers its complete static local import closure. Its receipt binds
+operation, parser id, parser bytes, response digest and canonical payload digest. The delivery seal
+requires object identity with that parsed payload. Same bytes with a changed payload, same payload
+beside different bytes, an operation/parser substitution, a parser source change under an old
+receipt, or a caller-built payload fails before any source factory or `declareEvidence` call.
+`evidence-value-authority` consumes this receipt as the source-factory input authority; provider
+acquisition/parser infrastructure may land first, but source projections and the five evidence
+traversals cannot land until the value-authority factory boundary is accepted and implemented.
 
 `preflight` is the one no-exchange hook. It is called after normalization/request hashing and before
 retained lookup, pending dedupe or queue admission. Four descriptors can return only `null`; the
@@ -1419,35 +1586,76 @@ does not re-declare evidence semantics. `apps/server/src/provider-traversal.ts` 
 process-local operator/research door; it is built into the server release and has no HTTP route:
 
 ```ts
+type ProviderSourceProjectionMap = {
+  readonly "stockfish.legal_root_table@1": VersionedEvidenceId & { readonly id: "live.stockfish.legal_root_table"; readonly version: 1 };
+  readonly "stockfish.position_evaluation@1": VersionedEvidenceId & { readonly id: "live.stockfish.position_eval"; readonly version: 1 };
+  readonly "maia.policy_page@1": VersionedEvidenceId & { readonly id: "human.maia.policy_page"; readonly version: 1 };
+  readonly "syzygy.position@1": VersionedEvidenceId & { readonly id: "live.syzygy.position_result"; readonly version: 1 };
+  readonly "lichess_explorer.position_page@1": VersionedEvidenceId & { readonly id: "human.explorer.position_page"; readonly version: 1 };
+};
+
+type ProviderSourceFactorySymbolMap = {
+  readonly "stockfish.legal_root_table@1": "makeLiveStockfishLegalRootTableEvidence";
+  readonly "stockfish.position_evaluation@1": "makeLiveStockfishPositionEvaluationEvidence";
+  readonly "maia.policy_page@1": "makeHumanMaiaPolicyPageEvidence";
+  readonly "syzygy.position@1": "makeLiveSyzygyPositionEvidence";
+  readonly "lichess_explorer.position_page@1": "makeHumanExplorerPositionPageEvidence";
+};
+
+interface ProviderSourceFactory<K extends ProviderOperationId> {
+  readonly operation: K;
+  readonly projection: ProviderSourceProjectionMap[K];
+  readonly symbol: ProviderSourceFactorySymbolMap[K];
+  make(delivery: ProviderDelivery<ProviderOperationResultMap[K], K>):
+    DeclaredEvidence<ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>>;
+}
+
+type ProviderSourceFactories = {
+  readonly [K in ProviderOperationId]: ProviderSourceFactory<K>;
+};
+
+type ProviderEvidenceTraversalResult<K extends ProviderOperationId> =
+  | ProviderSourceFailure<K>
+  | ProviderLocalDomainResult<K>
+  | Readonly<{
+      kind: "evidence_success";
+      operation: K;
+      normalizedRequestDigest: ProviderRequestDigest;
+      evidence: DeclaredEvidence<
+        ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>
+      >;
+    }>;
+
 interface ProviderTraversalApplication {
   readonly scheduler: ProviderExchangeScheduler;
+  readonly sourceFactories: ProviderSourceFactories;
 }
 
 function providerTraversalStockfishLegalRoots(
   application: ProviderTraversalApplication,
   capability: ProviderOperatorCapability,
   request: StockfishLegalRootTableRequest,
-): Promise<TypedProviderResult<"stockfish.legal_root_table@1">>;
+): Promise<ProviderEvidenceTraversalResult<"stockfish.legal_root_table@1">>;
 function providerTraversalStockfishPositionEvaluation(
   application: ProviderTraversalApplication,
   capability: ProviderOperatorCapability,
   request: StockfishPositionEvaluationRequest,
-): Promise<TypedProviderResult<"stockfish.position_evaluation@1">>;
+): Promise<ProviderEvidenceTraversalResult<"stockfish.position_evaluation@1">>;
 function providerTraversalMaiaPolicyPage(
   application: ProviderTraversalApplication,
   capability: ProviderOperatorCapability,
   request: MaiaPolicyPageRequest,
-): Promise<TypedProviderResult<"maia.policy_page@1">>;
+): Promise<ProviderEvidenceTraversalResult<"maia.policy_page@1">>;
 function providerTraversalSyzygyPosition(
   application: ProviderTraversalApplication,
   capability: ProviderOperatorCapability,
   request: SyzygyPositionRequest,
-): Promise<TypedProviderResult<"syzygy.position@1">>;
+): Promise<ProviderEvidenceTraversalResult<"syzygy.position@1">>;
 function providerTraversalExplorerPositionPage(
   application: ProviderTraversalApplication,
   capability: ProviderOperatorCapability,
   request: ExplorerPositionPageRequest,
-): Promise<TypedProviderResult<"lichess_explorer.position_page@1">>;
+): Promise<ProviderEvidenceTraversalResult<"lichess_explorer.position_page@1">>;
 ```
 
 `ProviderOperatorCapability` is an opaque frozen object whose constructor and `WeakSet` seal are
@@ -1455,7 +1663,11 @@ module-private. Only `runProviderTraversalCli(application, argv, stdin, stdout)`
 the built CLI has parsed exactly one of the five operation names and one JSON request from stdin.
 Every callable asserts that seal, supplies a fixed operator scope/budget admitted by the
 application's explicit deployment bounds, then calls `application.scheduler.get` with its literal
-operation. Plain/spread/JSON/double-cast capabilities fail at runtime. Learner `Principal`, REST
+operation. A scheduler success must be passed to the exact operation-keyed source factory and the
+callable returns `evidence_success`; a source failure is returned unchanged and the Syzygy local
+domain arm is returned unchanged, with no evidence object. Factories assert the delivery,
+parsed-payload receipt, sole value-authority factory and exact projection before sealing. A callable
+cannot return scheduler success directly. Plain/spread/JSON/double-cast capabilities fail at runtime. Learner `Principal`, REST
 input and provider/cache digests can never mint it. This is an operator capability boundary, not a
 claim that a learner owns arbitrary provider work.
 
@@ -1465,8 +1677,10 @@ entry is `make provider-traversal OP=<operation>` with the closed names
 `explorer-position-page`, reading one request from stdin. Unknown operations, extra arguments,
 malformed/extra request fields and nonzero additional input fail before scheduler admission. A
 composed test invokes the built CLI boundary for all five names with fixture providers and proves
-the matching descriptor/scheduler/adapter path; constructor-only and direct-descriptor tests do
-not satisfy reachability.
+the matching descriptor → scheduler → registered parser → value-authority source factory → exact
+declared projection path. The CLI serializes a diagnostic projection/payload/receipt digest, not the
+symbol-bearing `DeclaredEvidence` object. Constructor-only, scheduler-only and direct-descriptor
+tests do not satisfy reachability.
 
 Each operation therefore has one real operator/research traversal before any learner binding is
 added:
@@ -1475,11 +1689,12 @@ added:
 |---|---:|---|
 | typed provider operations | 5 | Stockfish legal roots, Stockfish fixed-bound position evaluation, Maia policy page, Syzygy position, Explorer page |
 | shared scheduler composition | 1 | application root with explicit bounds and source health inputs |
-| raw source adapters | 5 | exact projection declaration through `declareEvidence` adapter |
+| value-authority source factories | 5 | exact operation-keyed projection through the sole registered factory |
 | migration operations | 3 | Maia run occurrence, Maia exact-FEN occurrence, Explorer summary; Explorer played occurrence follows `run.record.edge@1` under [[D1956]] |
 
 The operation census resolves those five exported `providerTraversal*` callables from the composed
-application and built CLI through `scheduler.get` to each adapter; a filename, manifest row or
+application and built CLI through `scheduler.get`, the registered parser and the exact source
+factory to each declared projection; a filename, manifest row, scheduler-only return or
 constructor-only test is not reachability. Provider source
 health later composes with `provider-health-degradation`; that RFC may add circuits and deployment
 profiles, but may not create a second receipt, cache or request identity authority.
@@ -1534,22 +1749,24 @@ The author pass must invert `make provider-exchange-fresh-review`, preserve the 
 5 arms, run full verification and request another independent review. It may not implement
 providers or learner bindings in the authoring commit.
 
-## Second-fresh-return obligations (returned 2026-08-30)
+## Second-fresh-return obligations (author-repaired/routed 2026-08-30)
 
 The seven preceding repairs remain required. A new author pass must additionally close:
 
-- [[D2184]] — add exact runtime subject grains below an authorized run prefix, so static source
-  occurrence cannot stand in for a node/edge occurrence;
-- [[D2185]] — give engine binary, option-image and container digests sole byte constructors and
-  live capture authority;
-- [[D2186]] — bind each typed provider payload to the exact captured response through a registered
-  parser/value receipt before source evidence is minted;
-- [[D2187]] — include admitted HTTP status/ETag in the capture/response identity or remove them
-  from Explorer evidence;
-- [[D2188]] — make every promised evidence traversal reach its exact adapter/factory, or narrow the
-  claim and retain the source projections as untraversed;
-- [[D2189]] — register and claim the shared provider protocol resource, deriving rather than
-  copying its operation/digest populations.
+- [[D2184]] — **repaired in draft:** sealed run-prefix/node/edge subjects resolve from an authorized
+  historical head; resolvers declare their grain and cannot read an ambient cursor.
+- [[D2185]] — **repaired in draft:** binary, ordered advertised/applied option and immutable OCI
+  image digests have exact domains, sole constructors and same-generation supervisor capture.
+- [[D2186]] — **repaired in draft:** descriptors return raw captures only; one operation-keyed
+  parser creates a sealed payload receipt bound to response/parser/payload digests before a source
+  factory runs.
+- [[D2187]] — **repaired in draft:** status 200 and normalized allow-listed ETag are capture fields,
+  enter the response digest and are the only authority for Explorer source metadata.
+- [[D2188]] — **repaired in draft:** every operator traversal returns exact declared evidence from
+  the sole operation-keyed value factory; failure/local-domain arms create no evidence.
+- [[D2189]] — **routed prerequisite:** `provider-protocol-register.md` owns the pre-landing resource,
+  lane grammar and derived protocol artifact. This RFC remains unacceptably unclaimed until that
+  process RFC lands and its exact lane-1 claim replaces `none` atomically.
 
 The author repair must invert `make provider-exchange-second-fresh-review`, preserve all earlier
 contracts, run full verification and request another independent review. It may not implement the
@@ -1643,10 +1860,11 @@ provider scheduler, source projections or learner bindings in the authoring comm
     domain result and failure carries the same literal operation and request digest as its typed
     request; a generic result cannot pair a Stockfish operation with a Maia, Syzygy or Explorer
     delivery, and only Syzygy can inhabit the local-domain arm.
-19. Requested identity, actual identity, endpoint, provider and receipt are operation-keyed exact
-    maps. Only scheduler-private constructors seal receipts and deliveries from a descriptor's
-    captured bytes; every adapter asserts both seals. Open records, descriptor-built receipts,
-    wrong provider/generation/operation arms, plain/spread/JSON values and runtime double-cast
+19. Requested identity, actual identity, endpoint, provider, parser and source factory are
+    operation-keyed exact maps. Only scheduler-private constructors seal acquisition receipts,
+    parsed-payload receipts and deliveries from a descriptor's captured bytes; every source factory
+    asserts all applicable seals. Open records, descriptor-built receipts, wrong
+    provider/generation/operation/parser arms, plain/spread/JSON values and runtime double-cast
     forgeries fail.
 20. A crossed-waiter scheduler fixture gives one exact pending job a short and a long relative
     budget: the short waiter alone reaches `deadline_exceeded`, the long waiter receives the live
@@ -1670,7 +1888,7 @@ provider scheduler, source projections or learner bindings in the authoring comm
     synchronize in `finally`. Iterative-output fixtures reject cross-task, post-bestmove,
     cross-iteration score/WDL, bounds and wrong-MultiPV lines while selecting the specified last
     depth or greatest-depth/latest completed line.
-25. The provider-digest registry has the seven exact domain tags, canonical JSON and output prefixes
+25. The provider-digest registry has the ten exact domain tags, canonical JSON and output prefixes
     in §3.1. Key reorder preserves digests; operation/provider/command/request/identity/raw-response/
     path mutations change them. Decimal Maia parameters, `-0`, exponent spelling and Unicode keys
     follow RFC 8785 across runtimes. Retained identity is the sole cache-identity image. A census
@@ -1698,6 +1916,25 @@ provider scheduler, source projections or learner bindings in the authoring comm
     registry, preset or workflow-ceiling code. A later module operation can call the authorized
     run-event service after applying its own ceiling, but moving that policy into this RFC fails the
     dependency-direction census.
+31. A subject fixture resolves two move events under one unchanged run head, transposed equal-FEN
+    nodes, before/after occurrences and a historical non-cursor node. Every identity differs where
+    required; reversal, ambient-cursor substitution and wrong-grain resolver calls fail.
+32. Engine artifact fixtures change executable bytes under one label, reorder/change one option
+    line, substitute a container config and reuse an older generation. The exact matching launched
+    artifact/handshake capture passes; caller/spec digests and every stale/crossed arm fail.
+33. Every successful descriptor returns capture bytes only. The registered parser/result receipt
+    rejects same bytes/different payload, same payload/different bytes, parser substitution and an
+    old parser digest; source factories assert that receipt and the value-authority receipt before
+    declaring evidence.
+34. HTTP response identity contains status plus the canonical allow-listed ETag. Same body under a
+    different status/ETag and an ETag copied from another exchange fail; Explorer source metadata is
+    derived from capture rather than accepted from response JSON.
+35. Each built traversal reaches exactly one source factory and projection from the operation map.
+    Scheduler-only success, wrong factory/projection and evidence on source-failure or local-domain
+    arms fail; all five true endpoints pass.
+36. The accepted/implemented provider-protocol register precedes acceptance: the lane-1 claim,
+    tree declaration map, digest domains, server descriptors, parser ids, factory projections and
+    CLI names are one derived set. A copied list, absent claim or count-preserving swap fails.
 
 ## Discharges
 
@@ -1724,6 +1961,13 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-08-30: author-repaired [[D2184]]–[[D2188]] and routed [[D2189]] to the new process-only
+  `provider-protocol-register` prerequisite. Runtime subjects now carry exact prefix/node/edge
+  identity; engine identities come from launched bytes/container and same-generation UCI option
+  capture; registered parsers bind typed payloads and Explorer transport metadata to raw response
+  bytes; and all five operator traversals terminate at exact value-authority source factories.
+  The claim remains deliberately absent until the prerequisite lands, so neither acceptance nor
+  implementation is authorized.
 - 2026-08-30: second fresh independent review returned the D2056–D2062 repair on
   [[D2184]]–[[D2189]]. The six-arm reproduction covers under-grained runtime subjects, unowned
   engine digest bytes, unbound payload/response pairs, omitted HTTP metadata, scheduler-only

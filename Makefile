@@ -308,6 +308,10 @@ provider-exchange-author-repair:
 provider-exchange-second-fresh-review:
 	node --test tools/d2184-provider-exchange-second-fresh-review/*.test.mts
 
+.PHONY: provider-exchange-second-author-repair
+provider-exchange-second-author-repair:
+	node --test tools/d2184-provider-exchange-second-author-repair/*.test.mjs
+
 candidate-packet-contract:
 	node --test tools/d1900-candidate-packet-amendment-harness/*.test.mts
 	./node_modules/.bin/tsc -p tools/d1900-candidate-packet-amendment-harness/tsconfig.contract.json --noEmit

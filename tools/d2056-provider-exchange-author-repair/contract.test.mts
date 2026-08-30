@@ -27,11 +27,11 @@ test("D2056: scheduler seals receipts, deliveries and local-domain values", () =
   for (const forgery of ["plain object", "spread clone", "JSON round-trip", "double-cast"]) {
     assert.match(exchange, new RegExp(forgery.replace("-", "[-‑]"), "u"));
   }
-  assert.match(exchange, /Every raw provider source adapter calls `assertProviderDelivery`/u);
+  assert.match(exchange, /Every operation-keyed value-authority source factory calls `assertProviderDelivery`/u);
 });
 
 test("D2057: one closed authority binds run prefixes, evidence items and subjects", () => {
-  const subject = section("interface EvidenceAvailabilitySubject", "### 3. One typed exchange receipt");
+  const subject = section("type EvidenceAvailabilitySubjectRef", "### 3. One typed exchange receipt");
   for (const symbol of ["RunEventHeadDigest", "RunEvidenceItemDigest", "RunSubjectDigest", "digestRunEventHead", "digestRunEvidenceItem", "digestRunSubject"]) {
     assert.match(subject, new RegExp(symbol, "u"));
   }
@@ -63,7 +63,7 @@ test("D2059: endpoints and every provider/cache digest have closed typed images"
   assert.doesNotMatch(receipt, /readonly cacheIdentity: string/u);
   assert.match(receipt, /There is no caller-authored `runtimeDigest`/u);
   assert.match(receipt, /live `EngineIdentity`/u);
-  assert.match(receipt, /seven closed operations/u);
+  assert.match(receipt, /ten closed digest domains/u);
   assert.match(receipt, /"provider\.retained\.v1"/u);
 });
 

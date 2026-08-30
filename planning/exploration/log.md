@@ -12408,3 +12408,17 @@ order-independent before scalar comparison.
 independent review; production, schema, content, archive, consumer eligibility and protected intent
 are unchanged. Receipt:
 `planning/semantic-validation-authority/author-repair-d2194-d2197-2026-08-30.md`.
+
+## 2026-08-30 — Provider exchange D2184–D2189 author repair and process routing
+
+Repaired [[D2184]]–[[D2188]] without implementing the provider stack. Authorized availability now
+has exact prefix/node/edge subjects; launched engine artifacts and same-generation option images own
+their digests; one registered parser receipt binds response bytes to typed payloads and admitted
+HTTP metadata; and all five operator traversals end at their exact value-authority source factory.
+
+Routed [[D2189]] to draft `provider-protocol-register.md`, which specifies the head-0 pre-landing
+state, sequential lane grammar and C11-derived joins. Provider exchange remains draft and cannot be
+accepted or implemented until that process prerequisite lands and lane 1 is claimed. The maintained
+provider contracts plus the new six-arm author contract pass. No production, schema, content,
+archive or protected-intent byte changed. Receipt:
+`planning/provider-exchange-and-execution/second-author-repair-2026-08-30.md`.
