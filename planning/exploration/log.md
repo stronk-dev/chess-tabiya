@@ -11962,3 +11962,22 @@ phase but cannot claim eight-context completion.
 `make intent-presets-second-author-repair` passes 8/8. This is author repair only; fresh independent
 review still gates acceptance and production. Receipt:
 `planning/intent-presets/second-author-repair-2026-08-30.md`.
+
+## 2026-08-30 — Evidence-presentation D2135–D2140 second author repair
+
+Replaced the old form-copy census as executable authority with exact pair/form targets and named
+composition member mappings. All 20 consumers now resolve through real source+operation anchors;
+two backend operations are classified as non-presentational. The truthful pre-repair population is
+112 pairs (104 adaptable, seven operand-repair occurrences, one selection-only removal), not 117
+learner/operator widgets.
+
+A bounded six-operation Checkpoint P now owns the catalogue/source corrections and must yield
+111/111 adaptable presentation pairs before component migration. Fact-statement renderer ids,
+variants, operands, templates and forms are set-equal to exact fact targets. Abstention questions
+and terminal reasons are set-equal to every non-removal adapter. Consequence now retains both
+terminal/outcome and nonterminal/plies/objective-state arms.
+
+`make evidence-presentation-author-contract` passes 5/5 plus lifecycle typecheck and
+`make evidence-presentation-second-author-repair` passes 6/6. This is author repair only; fresh
+review and owner-only [[D1672]] still gate acceptance. Receipt:
+`planning/platform-alignment/evidence-presentation/second-author-repair-2026-08-30.md`.

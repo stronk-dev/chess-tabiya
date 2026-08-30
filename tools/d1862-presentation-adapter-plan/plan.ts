@@ -1,4 +1,5 @@
-// Disposable authoring contract for D1862. This is a specification input, not production code.
+// Disposable authoring contract for D1862/D2135-D2140. This specifies the RFC, not production code.
+import { PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
 export const COMPONENT_IDS = Object.freeze([
   "distribution", "outcome_split", "magnitude", "magnitude_trail", "square_set",
   "move_path", "relation_overlay", "count_with_denominator", "citation", "enum_state",
@@ -139,3 +140,269 @@ export const PRESENTATION_ADAPTER_FAMILIES: readonly AdapterFamilyPlan[] = Objec
   family({ id: "repertoire_population", consumers: ["runtime.repertoire_scan@1"], projections: ["human.explorer.position_stats@1"], parser: "parseCorpusResult", retained: ["kind", "population"], components: ["distribution", "outcome_split"], assertions: ["population_counts_preserved", "shared_denominator_preserved"], disposition: "adapt" }),
   family({ id: "story_rank_internal", consumers: ["review.story@1"], projections: ["derived.story.rank@1"], parser: "parseStoryRank", retained: ["rank"], components: [], assertions: ["D2048_visual_binding_removed", "rank_retained_by_selector"], disposition: "remove_visual_binding", reason: "selection order is not learner-visible evidence" }),
 ]);
+
+// The family table above is only a compact author input. These exact rows are the controlling
+// presentation authority after the D2135-D2140 return.
+export type PresentationConsumerClass =
+  | "ordinary_presented"
+  | "inspector_presented"
+  | "author_operator_presented"
+  | "non_presentational_operation";
+
+export interface PresentationConsumerClassRow {
+  readonly consumer: string;
+  readonly class: PresentationConsumerClass;
+  readonly reachabilityAnchor: string;
+  readonly operation: string;
+}
+
+const consumerClass = (
+  consumer: string,
+  classification: PresentationConsumerClass,
+  reachabilityAnchor: string,
+  operation: string,
+): PresentationConsumerClassRow => Object.freeze({ consumer, class: classification, reachabilityAnchor, operation });
+
+export const PRESENTATION_CONSUMER_CLASSES: readonly PresentationConsumerClassRow[] = Object.freeze([
+  consumerClass("authoring.claim_binding@1", "author_operator_presented", "apps/server/src/sourcing/claim-binding.ts", "consumeClaimBindingRecords"),
+  consumerClass("board.pivotal_marker@1", "ordinary_presented", "packages/runtime/src/pivotal.ts", "consumePivotalMarkers"),
+  consumerClass("board.selected_square_sight@1", "ordinary_presented", "packages/runtime/src/reading-evidence.ts", "consumeSelectedSquareSight"),
+  consumerClass("compare.engine_trajectory@1", "ordinary_presented", "packages/runtime/src/compare-strips.ts", "consumeComparisonEngineTrajectory"),
+  consumerClass("compare.structure_strip@1", "ordinary_presented", "packages/runtime/src/compare-strips.ts", "consumeComparisonStripEvidence"),
+  consumerClass("guidance.authored_claim@1", "ordinary_presented", "apps/web/src/lib/claim-presentation.ts", "claimProvenanceDeclared"),
+  consumerClass("guidance.deterministic@1", "ordinary_presented", "apps/server/src/guidance.ts", "renderedEvidenceItems"),
+  consumerClass("guidance.recorded_reading@1", "ordinary_presented", "apps/server/src/guidance.ts", "renderRecordedReadingEvidence"),
+  consumerClass("guidance.voice@1", "ordinary_presented", "apps/server/src/guidance.ts", "voiceEvidenceView"),
+  consumerClass("guidance.voice_compare@1", "ordinary_presented", "packages/runtime/src/compare-strips.ts", "comparisonNarrative"),
+  consumerClass("guidance.voice_story@1", "ordinary_presented", "packages/runtime/src/story.ts", "storyDeclaredEvidence"),
+  consumerClass("inspector.corpus@1", "inspector_presented", "apps/web/src/lib/inspector-evidence.ts", "consumeCorpus"),
+  consumerClass("inspector.human_split@1", "inspector_presented", "apps/web/src/lib/inspector-evidence.ts", "consumeHumanSplit"),
+  consumerClass("inspector.move_transition@1", "inspector_presented", "packages/runtime/src/reading-evidence.ts", "consumeMoveTransition"),
+  consumerClass("inspector.position_structure@1", "inspector_presented", "packages/runtime/src/reading-evidence.ts", "consumePositionStructure"),
+  consumerClass("opponent.selection@1", "non_presentational_operation", "apps/server/src/opponent-selector.ts", "consumeOpponentSelectionEvidence"),
+  consumerClass("review.story@1", "ordinary_presented", "packages/runtime/src/story.ts", "renderReviewStoryEvidence"),
+  consumerClass("runtime.evidence_ref@1", "inspector_presented", "apps/web/src/lib/evidence-sentences.ts", "renderDeclaredEvidenceRef"),
+  consumerClass("runtime.repertoire_scan@1", "non_presentational_operation", "apps/server/src/repertoire.ts", "consumeRepertoireCorpus"),
+  consumerClass("theory.shape_firing@1", "ordinary_presented", "packages/runtime/src/shape-firing.ts", "consumeShapeFiring"),
+]);
+
+type NonMachineEvidenceForm = "sentence" | "list" | "timeline_marker" | "lit_squares" | "arrows" | "piece_halo" | "panel" | "audio";
+const formCapabilities = (...forms: readonly NonMachineEvidenceForm[]): readonly NonMachineEvidenceForm[] => Object.freeze([...forms]);
+
+export const COMPONENT_FORM_CAPABILITIES: Readonly<Record<ComponentId, readonly NonMachineEvidenceForm[]>> = Object.freeze({
+  distribution: formCapabilities("list", "panel", "sentence"),
+  outcome_split: formCapabilities("list", "panel", "sentence"),
+  magnitude: formCapabilities("list", "panel", "sentence", "timeline_marker"),
+  magnitude_trail: formCapabilities("list", "panel", "timeline_marker"),
+  square_set: formCapabilities("list", "panel", "lit_squares", "piece_halo"),
+  move_path: formCapabilities("list", "panel", "arrows", "sentence"),
+  relation_overlay: formCapabilities("panel", "arrows", "lit_squares", "piece_halo", "sentence"),
+  count_with_denominator: formCapabilities("list", "panel", "sentence"),
+  citation: formCapabilities("list", "panel", "sentence"),
+  enum_state: formCapabilities("list", "panel", "sentence", "timeline_marker"),
+  claim: formCapabilities("list", "panel", "sentence", "audio"),
+  fact_statement: formCapabilities("list", "panel", "sentence", "timeline_marker", "audio"),
+  abstention: formCapabilities("sentence", "list", "timeline_marker", "lit_squares", "arrows", "piece_halo", "panel", "audio"),
+  structured_document: formCapabilities("list", "panel"),
+});
+
+export type PresentationRenderTarget =
+  | Readonly<{ kind: "component"; component: ComponentId; forms: readonly NonMachineEvidenceForm[] }>
+  | Readonly<{ kind: "composition"; compositionId: string;
+      members: readonly Readonly<{ component: ComponentId; forms: readonly NonMachineEvidenceForm[] }>[];
+      forms: readonly NonMachineEvidenceForm[] }>;
+
+export interface ExactPresentationAdapterRow {
+  readonly key: string;
+  readonly familyId: string;
+  readonly consumer: string;
+  readonly projection: string;
+  readonly parser: string;
+  readonly retained: readonly string[];
+  readonly forms: readonly NonMachineEvidenceForm[];
+  readonly target: PresentationRenderTarget | null;
+  readonly disposition: "adapt" | "repair_projection_operands" | "remove_visual_binding";
+}
+
+const refKey = (value: { readonly id: string; readonly version: number }): string => `${value.id}@${value.version}`;
+const pairKey = (consumer: string, projection: string): string => `${consumer}\0${projection}`;
+const familyByPair = new Map(PRESENTATION_ADAPTER_FAMILIES.flatMap((entry) => entry.consumers.flatMap(
+  (consumer) => entry.projections.map((projection) => [pairKey(consumer, projection), entry] as const),
+)));
+const classByConsumer = new Map(PRESENTATION_CONSUMER_CLASSES.map((row) => [row.consumer, row.class] as const));
+
+const target = (component: ComponentId, forms: readonly NonMachineEvidenceForm[]): PresentationRenderTarget =>
+  Object.freeze({ kind: "component", component, forms: Object.freeze([...forms]) });
+const composition = (
+  compositionId: string,
+  members: readonly Readonly<{ component: ComponentId; forms: readonly NonMachineEvidenceForm[] }>[],
+  forms: readonly NonMachineEvidenceForm[],
+): PresentationRenderTarget => Object.freeze({
+  kind: "composition", compositionId,
+  members: Object.freeze(members.map((member) => Object.freeze({ component: member.component, forms: Object.freeze([...member.forms]) }))),
+  forms: Object.freeze([...forms]),
+});
+
+function renderTargetFor(family: AdapterFamilyPlan, consumer: string, forms: readonly NonMachineEvidenceForm[]): PresentationRenderTarget | null {
+  if (family.disposition === "remove_visual_binding") return null;
+  if (family.id === "named_structure_board_operand_gap") return target("square_set", forms);
+  if (family.id === "pack_phase_operand_gap") return target("enum_state", forms);
+  if (family.id === "structural_square_set") return consumer === "board.selected_square_sight@1"
+    ? target("square_set", forms)
+    : composition("structural_reading", [
+      { component: "enum_state", forms }, { component: "square_set", forms },
+    ], forms);
+  if (family.id === "structure_delta") return composition("structural_delta", [
+    { component: "enum_state", forms },
+    { component: "square_set", forms: forms.filter((form) => form !== "sentence") },
+  ], forms);
+  if (family.id === "story_last_level") return target("magnitude", forms);
+  if (family.id === "explorer_population") return composition("population_distribution", [
+    { component: "distribution", forms }, { component: "outcome_split", forms },
+  ], forms);
+  if (family.id === "transition_count") return composition("counted_transition_state", [
+    { component: "magnitude", forms }, { component: "enum_state", forms },
+  ], forms);
+  if (family.id === "evidence_ref_resolution") return composition("reference_statement", [
+    { component: "fact_statement", forms }, { component: "citation", forms },
+  ], forms);
+  if (family.components.length !== 1) throw new TypeError(`No exact presentation composition for ${family.id}`);
+  return target(family.components[0]!, forms);
+}
+
+export const PRESENTATION_ADAPTER_ROWS: readonly ExactPresentationAdapterRow[] = Object.freeze(
+  PRIMARY_EVIDENCE_MANIFEST.bindings.flatMap((binding) => {
+    const consumer = refKey(binding.consumer);
+    const projection = refKey(binding.projection);
+    const forms = binding.forms.filter((form): form is NonMachineEvidenceForm => form !== "machine_condition");
+    if (forms.length === 0 || classByConsumer.get(consumer) === "non_presentational_operation") return [];
+    const family = familyByPair.get(pairKey(consumer, projection));
+    if (family === undefined) throw new TypeError(`No presentation family for ${consumer} -> ${projection}`);
+    const disposition = family.id === "recorded_consequence" ? "repair_projection_operands" : family.disposition;
+    return [Object.freeze({
+      key: pairKey(consumer, projection), familyId: family.id, consumer, projection,
+      parser: family.parser,
+      retained: Object.freeze(family.id === "recorded_consequence"
+        ? ["context", "terminal", "outcome", "plies", "objectiveState"]
+        : [...family.retained]),
+      forms: Object.freeze(forms), target: renderTargetFor(family, consumer, forms), disposition,
+    })];
+  }).sort((left, right) => left.consumer.localeCompare(right.consumer) || left.projection.localeCompare(right.projection)),
+);
+
+export interface ManifestPresentationRepair {
+  readonly id: string;
+  readonly source: "packages/runtime/src/evidence-catalog.ts" | "packages/runtime/src/evidence-source-adapters.ts" | "packages/runtime/src/structure.ts";
+  readonly operation: string;
+  readonly before: string;
+  readonly after: string;
+}
+
+export const MANIFEST_PRESENTATION_REPAIRS: readonly ManifestPresentationRepair[] = Object.freeze([
+  { id: "internal-opponent", source: "packages/runtime/src/evidence-catalog.ts", operation: "opponent.selection@1 forms", before: "list,panel,machine_condition", after: "machine_condition" },
+  { id: "internal-repertoire", source: "packages/runtime/src/evidence-catalog.ts", operation: "runtime.repertoire_scan@1 forms", before: "list,panel", after: "machine_condition" },
+  { id: "internal-story-rank", source: "packages/runtime/src/evidence-catalog.ts", operation: "derived.story.rank@1 forms", before: "list,panel", after: "machine_condition" },
+  { id: "named-structure-geometry", source: "packages/runtime/src/structure.ts", operation: "StructureMatch retained witness", before: "id,name,provenanceNote", after: "id,name,provenanceNote,squares" },
+  { id: "pack-phase-payload", source: "packages/runtime/src/evidence-source-adapters.ts", operation: "pack.authored.phase@1 payload", before: "PackPhase root with operands []", after: "{phase:PackPhase} with operands [phase]" },
+  { id: "consequence-payload", source: "packages/runtime/src/evidence-source-adapters.ts", operation: "run.record.consequence@1 payload", before: "context,terminal", after: "terminal:true+outcome | terminal:false+plies+objectiveState" },
+]);
+
+export interface FactStatementRendererPlan {
+  readonly adapterKey: string;
+  readonly rendererId: string;
+  readonly variants: readonly Readonly<{ when: string; operands: readonly string[]; template: string }>[];
+  readonly outputForms: readonly NonMachineEvidenceForm[];
+}
+
+const factRendererFor = (row: ExactPresentationAdapterRow): FactStatementRendererPlan | null => {
+  const base = { adapterKey: row.key, outputForms: row.forms };
+  if (row.familyId === "recorded_checkpoint") return Object.freeze({ ...base, rendererId: `checkpoint.${row.consumer}`, variants: [{ when: "always", operands: ["checkpointId"], template: row.consumer === "compare.structure_strip@1" ? "Checkpoint {checkpointId} was reached." : "Checkpoint {checkpointId} was reached. Source: recorded checkpoint event." }] });
+  if (row.familyId === "recorded_objective_transition") return Object.freeze({ ...base, rendererId: `objective-transition.${row.consumer}`, variants: [{ when: "always", operands: ["from", "to"], template: row.consumer === "compare.structure_strip@1" ? "The recorded objective changed from {from} to {to}." : "The recorded objective changed from {from} to {to}. Source: recorded objective event." }] });
+  if (row.familyId === "recorded_consequence") return Object.freeze({ ...base, rendererId: `consequence.${row.consumer}`, variants: row.consumer === "guidance.voice_compare@1" ? [
+    { when: "terminal=true", operands: ["outcome"], template: "The recorded branch ends at a board-terminal position with learner result {outcome}." },
+    { when: "terminal=false", operands: ["plies", "objectiveState"], template: "The recorded branch reaches {plies} plies with objective state {objectiveState}." },
+  ] : [{ when: "terminal=true", operands: ["outcome"], template: "Board-terminal result for the learner: {outcome}." }] });
+  if (row.familyId === "recorded_fork") return Object.freeze({ ...base, rendererId: `fork.${row.consumer}`, variants: [{ when: "always", operands: ["sharedPly"], template: "The recorded branches share {sharedPly} plies through the fork." }] });
+  if (row.familyId === "recorded_move") return Object.freeze({ ...base, rendererId: `move.${row.consumer}`, variants: [
+    { when: "moveSan=null", operands: ["offset"], template: "Branch at offset {offset} has no recorded move past the fork." },
+    { when: "moveSan=present", operands: ["offset", "moveSan"], template: "Branch at offset {offset} begins with recorded move {moveSan}." },
+  ] });
+  if (row.familyId === "story_title") return Object.freeze({ ...base, rendererId: `story-title.${row.consumer}`, variants: [{ when: "always", operands: ["title"], template: "{title}" }] });
+  if (row.familyId === "imported_result") return Object.freeze({ ...base, rendererId: `imported-result.${row.consumer}`, variants: [{ when: "always", operands: ["result"], template: "The PGN records the game result as {result}; the board is not terminal here." }] });
+  if (row.familyId === "evidence_ref_resolution") return Object.freeze({ ...base, rendererId: `evidence-reference.${row.consumer}`, variants: [{ when: "always", operands: ["text"], template: "{text}" }] });
+  return null;
+};
+
+export const FACT_STATEMENT_RENDERERS: readonly FactStatementRendererPlan[] = Object.freeze(
+  PRESENTATION_ADAPTER_ROWS.flatMap((row) => factRendererFor(row) ?? []),
+);
+export type FactStatementRendererId = (typeof FACT_STATEMENT_RENDERERS)[number]["rendererId"];
+
+const QUESTION_LABELS: Readonly<Record<string, string>> = Object.freeze({
+  authoring_evidence_record: "Were source records available for this claim?",
+  pivotal_marker: "Was a pivotal recorded moment available here?",
+  structural_square_set: "Was a matching board structure detected here?",
+  named_structure_nonboard: "Was a named structure detected here?",
+  named_structure_board_operand_gap: "Were the exact squares of the named structure retained?",
+  engine_trajectory: "Was a recorded evaluation trail available?",
+  piece_route: "Was a recorded piece route available?",
+  structure_delta: "Was a structural change recorded on this branch?",
+  recorded_checkpoint: "Was a checkpoint reached on this branch?",
+  recorded_objective_transition: "Did the recorded objective state change?",
+  authored_claim_delivery: "Was an authored explanation earned here?",
+  authored_claim: "Was an authored explanation available here?",
+  pack_phase_operand_gap: "Was the authored drill phase retained?",
+  endgame_state: "Was an endgame family detected here?",
+  phase_state: "Was the game phase classified here?",
+  recorded_engine_magnitude: "Was recorded engine evidence available here?",
+  recorded_tablebase_state: "Was recorded tablebase evidence available here?",
+  compare_eval_delta: "Was a recorded evaluation change available?",
+  recorded_consequence: "Was the played consequence recorded?",
+  recorded_fork: "Was the branch fork recorded?",
+  recorded_move: "Was a move recorded after the fork?",
+  story_eval_shift: "Was an evaluation shift recorded for this moment?",
+  story_last_level: "Was the last near-level moment recorded?",
+  story_title: "Could a deterministic story title be formed?",
+  imported_result: "Did the imported game declare a result?",
+  shape_firing: "Did a registered theory shape fire here?",
+  explorer_population: "Was a human-game population available here?",
+  maia_policy: "Was a human-model move distribution available here?",
+  transition_count: "Was this transition count observed?",
+  transition_state: "Was this transition state observed?",
+  runtime_evidence: "Was the referenced provider evidence available?",
+  evidence_ref_resolution: "Could this evidence reference be resolved?",
+});
+
+export const PRESENTATION_ABSENCE_REASONS = Object.freeze({
+  no_witness: "No matching evidence was observed.",
+  not_recorded: "This fact was not recorded.",
+  below_floor: "The source did not meet the disclosure floor.",
+  provider_unavailable: "The evidence provider is unavailable.",
+  provider_failed: "The evidence provider failed for this request.",
+  content_absent: "No authored content is bound here.",
+} as const);
+export type PresentationAbsenceReasonId = keyof typeof PRESENTATION_ABSENCE_REASONS;
+
+export interface PresentationAbstentionPlan {
+  readonly adapterKey: string;
+  readonly questionId: string;
+  readonly questionLabel: string;
+  readonly reasons: readonly PresentationAbsenceReasonId[];
+}
+
+const providerFamilies = new Set(["explorer_population", "maia_policy", "recorded_engine_magnitude", "recorded_tablebase_state", "runtime_evidence"]);
+const authoredFamilies = new Set(["authoring_evidence_record", "authored_claim_delivery", "authored_claim"]);
+export const PRESENTATION_ABSTENTION_ROWS: readonly PresentationAbstentionPlan[] = Object.freeze(
+  PRESENTATION_ADAPTER_ROWS.filter((row) => row.disposition !== "remove_visual_binding").map((row) => {
+    const label = QUESTION_LABELS[row.familyId];
+    if (label === undefined) throw new TypeError(`No presentation question for ${row.familyId}`);
+    const reasons: readonly PresentationAbsenceReasonId[] = providerFamilies.has(row.familyId)
+      ? ["no_witness", "below_floor", "provider_unavailable", "provider_failed"]
+      : authoredFamilies.has(row.familyId) ? ["content_absent", "not_recorded"] : ["no_witness", "not_recorded"];
+    return Object.freeze({ adapterKey: row.key, questionId: `question.${row.familyId}`, questionLabel: label, reasons: Object.freeze(reasons) });
+  }),
+);
+
+export const PRESENTATION_QUESTIONS: Readonly<Record<string, string>> = Object.freeze(Object.fromEntries(
+  PRESENTATION_ABSTENTION_ROWS.map((row) => [row.questionId, row.questionLabel]),
+));

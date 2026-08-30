@@ -1,14 +1,13 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft — returned by fresh independent buildability review 2026-08-30 on
-  [[D2135]]–[[D2140]]. The [[D1862]] plan is pair-set-equal and [[D1668]]'s lifecycle is now valid,
-  but forms are not assigned to compatible components, the visual-consumer population has no
-  authority, required catalogue repairs contradict the scope fence, fact and abstention renderer
-  registries are absent, and the six-repair count omits live consequence operands. [[D1672]]'s
-  owner-only design amendment also remains blank. Exact return:
-  `planning/platform-alignment/evidence-presentation/fresh-independent-buildability-review-2026-08-30.md`.
-  Landing is explicitly two checkpoints (§2.1): the sealed component foundation plus current
-  consumer migrations first, then module/hint seats only after their own accepted contracts.
+- **Status:** draft — [[D2135]]–[[D2140]] second author-repaired 2026-08-30; fresh independent
+  buildability review and [[D1672]]'s owner-only design amendment remain required. The repair
+  publishes exact component/form or composition rows, a literal route-backed consumer population,
+  a manifest-repair predecessor, set-equal fact renderer and abstention registries, and the full
+  discriminated consequence operands. `make evidence-presentation-author-contract` passes 5/5
+  plus lifecycle typecheck; `make evidence-presentation-second-author-repair` passes 6/6. No
+  implementation is authorised. Landing is explicitly three checkpoints (§2.1): manifest truth,
+  sealed current consumers, then module/hint seats.
   Prior amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
   arrow activation is a 1.0 obligation. The transition-event hand-off is measured: five geometry
   event families already retain their relations; the live work is forms, adapters, module admission,
@@ -39,7 +38,7 @@
   three axes and the 12-token `THEME_TOKENS` contract every component here consumes);
   `rfc/provider-exchange-and-execution.md` for provider/same-exchange convention receipts and
   request lifecycle; `rfc/semantic-convention-provenance.md` for declared convention sources.
-- **Consumes without re-specifying:** `rfc/intent-presets.md` (accepted — which modules are
+- **Consumes without re-specifying:** `rfc/intent-presets.md` (author-repaired draft — which modules are
   active is a preset question, not a component question); `rfc/hint-distance.md` (the rung
   ladder — a component never widens a rung); `rfc/review-evidence-compiler.md` and
   `rfc/review-map.md` (their outputs are operands here, and this RFC adds no selection)
@@ -58,7 +57,7 @@
 none
 ```
 
-## Fresh independent review return (2026-08-30)
+## Fresh independent review return and second author repair (2026-08-30)
 
 `make evidence-presentation-fresh-review` reproduces six blockers over the amended author plan and
 live source boundaries:
@@ -73,10 +72,11 @@ live source boundaries:
 6. [[D2140]] — consequence prose reads `outcome`, `plies` and `objectiveState`, while both manifest
    and plan retain only `context` and `terminal`.
 
-The exact required repairs and executable witnesses live in the fresh-review dossier. The previous
-five author arms remain green; they establish pair membership and lifecycle shape, not adapter
-buildability. Implementation remains unauthorized pending author repair, another fresh review and
-the existing [[D1672]] owner-tier amendment.
+The exact return remains in the fresh-review dossier. Its six arms are inverted by the controlling
+exact rows in `tools/d1862-presentation-adapter-plan/plan.ts` and the independent six-arm author
+contract. The old 117-pair family census remains a historical pre-repair input, not the executable
+presentation population. Implementation remains unauthorized pending another fresh review and the
+existing [[D1672]] owner-tier amendment.
 
 ## Summary
 
@@ -268,26 +268,35 @@ Deviation 1, and the design-tier amendment is owed to the owner (Discharge D1).
 `COMPONENT_DECLARATIONS` and the operand types land as
 `packages/runtime/src/presentation-contract.ts` — shared, frozen, testable without a DOM, and
 importable by the server-side renderers that already build sentences. The fourteen Svelte
-implementations land under `apps/web/src/lib/evidence/`. **Nothing in this RFC edits
-`packages/runtime/src/evidence-catalog.ts`**, which `rfc/module-registration.md` owns; the join
-is one-way and by type only (a component declares which `EvidenceForm` members it may serve;
-`evidence-catalog.ts` does not import this file), so landing order is free in either direction.
-The pin is recorded in `rfc/README.md`.
+implementations land under `apps/web/src/lib/evidence/`. Checkpoint P owns only the six exact
+manifest/payload repairs enumerated below; `module-registration` continues to own module
+declarations and module bindings. After P, the component join is one-way and by type only: a
+component declares which `EvidenceForm` members it may serve and `evidence-catalog.ts` does not
+import the component implementation. The corrected pin is recorded in `rfc/README.md`.
 
-#### 2.1 The two checkpoints, and the one real path both must use
+#### 2.1 The three checkpoints, and the one real path A/B must use
 
-This RFC lands in two checkpoints without treating the first as product completion:
+This RFC lands in three checkpoints without treating manifest cleanup or a registry as product
+completion:
 
-1. **A — sealed component foundation and current consumers.** Land the component schemas,
+1. **Checkpoint P — manifest presentation repair predecessor.** Atomically land the six operations in
+   `MANIFEST_PRESENTATION_REPAIRS`: reclassify `opponent.selection@1` and
+   `runtime.repertoire_scan@1` as machine-only operations; reclassify `derived.story.rank@1` as
+   selection-only; retain named-structure witness squares; replace the scalar pack-phase payload
+   with `{phase}`; and replace consequence's partial payload with the discriminated
+   `terminal:true+outcome | terminal:false+plies+objectiveState` union. The matching source
+   adapters change in the same commit. Recompile F1 and require exactly 111 post-P presentation pairs,
+   all with buildable operands. P changes no component, module, seat, content or schema.
+2. **A — sealed component foundation and current consumers.** Land the component schemas,
    projection-keyed adapter registry, process seal, closed wire/parser, coverage classes and the
    real `pack.authored.claim_delivery@1 → guidance.authored_claim@1 → claim → wire → parser →
    existing claim seat` path from [[D1673]]. Then migrate the currently bound learner/Inspector
    renderers named by the derived coverage census; no zero-consumer registry checkpoint qualifies.
-2. **B — module composition.** `module-registration` binds the same receipts into all occupied
+3. **B — module composition.** `module-registration` binds the same receipts into all occupied
    module seats, including relation overlays and Guided Hint disclosures. Checkpoint B cannot land
    until that RFC, the sealed hint registry and effective arrow clamp are accepted and implemented.
 
-The RFC remains `implementing` between A and B. Neither checkpoint may invent a compatibility
+The RFC remains `implementing` between P, A and B. Neither A nor B may invent a compatibility
 path that hands a Svelte component plain JSON or raw F1 process objects.
 
 The executable path is exactly the [[D1673]] harness shape:
@@ -349,25 +358,34 @@ treated as type evidence.
 
 #### 2.3 Coverage populations are derived from bindings, not the whole catalogue
 
-`PRESENTATION_CONSUMER_CLASSES` assigns every real visual/audio F1 consumer exactly one class:
-`ordinary_learner`, `inspector`, or `author_operator`. It is set-equal to compiled consumers whose
-bindings expose at least one form other than `machine_condition`; consumers with only machine
-conditions and unbound/disposed projections are outside presentation coverage by construction.
+`PRESENTATION_CONSUMER_CLASSES` assigns every one of the 20 current consumers with a non-machine
+binding exactly one class: `ordinary_presented`, `inspector_presented`,
+`author_operator_presented`, or `non_presentational_operation`. Every row names the real source
+file and operation through which it is reached; the author contract reads that anchor and requires
+the operation symbol. `opponent.selection@1` and `runtime.repertoire_scan@1` are the two explicit
+non-presentational operations. Role or a `list/panel` form is not evidence of a UI route.
 
-For each class, `make component-coverage` derives the exact `consumer@version × projection@version`
-binding population and requires exactly one or more registered adapters serving every bound form.
-The three populations and their misses print separately. A retired, experimental, unbound or
+For each presented class, `make component-coverage` derives the exact
+`consumer@version × projection@version × form` population and requires one exact adapter target:
+either one component with a literal served-form subset, or one named composition whose member/form
+rows have union exactly equal to the binding forms. Overlap is legal only inside that named
+composition. The three presented populations and their misses print separately. A retired,
+experimental, unbound, non-presentational or
 machine-only projection creates no fake learner widget; a new learner binding fails immediately
 until its adapter exists. `module.full_inspector@1` joins the Inspector class when checkpoint B
 registers it. This closes [[D1670]] without an ad-hoc exclusion list.
 
 The authoring authority for the current population is
 `tools/d1862-presentation-adapter-plan/plan.ts`, checked by
-`make evidence-presentation-author-contract`. It expands each family against the compiled
-binding's **literal non-machine forms**; it never copies a form list by hand. The result is
-set-equal to all **117 pairs / 20 consumers** and partitions them into **110 immediately
-adaptable**, **six requiring producer-operand repair**, and **one false visual binding to remove**.
-Adding, removing or changing a live form fails the set-equality contract until this RFC is amended.
+`make evidence-presentation-author-contract` and
+`make evidence-presentation-second-author-repair`. The compact family table still re-derives the
+117 pre-repair non-machine pairs. The controlling exact row image classifies all 20 consumers,
+removes the five internal-operation pairs from the presentation population, and therefore covers
+**112 pre-P presentation pairs: 104 immediately adaptable, seven operand repairs and one
+selection-only binding removal**. Checkpoint P removes that selection binding and repairs the seven
+pair occurrences through six atomic source operations, yielding **exactly 111 post-P presentation
+pairs**, all adaptable. Adding, removing or changing a live form or reachability class fails set
+equality until this RFC is amended.
 
 The exact bounded families are below. `forms = binding` means every live non-machine form on that
 exact pair, neither fewer nor more. Parser names, retained paths and executable assertions live in
@@ -379,28 +397,26 @@ the plan and are mandatory fields, so this table is an index rather than a secon
 | pivotal marker | 7 | `enum_state` | binding |
 | structural square sets | 32 | `square_set + enum_state` | binding |
 | named structure, non-board | 4 | `enum_state` | binding |
-| named structure, board | 1 | **repair exact trigger-square operands** ([[D2047]]) | binding after repair |
+| named structure, board | 1 | **P: retain exact matched-witness squares** ([[D2047]]) | binding after repair |
 | engine trajectory | 1 | `magnitude_trail` | binding |
 | piece route | 1 | `move_path` | binding |
 | structural delta | 2 | `enum_state + square_set` | binding |
 | recorded checkpoint / objective transition | 4 | `fact_statement` | binding |
 | authored claim delivery / claim | 4 | `claim` | binding |
-| authored pack phase | 3 | **repair exact phase operand** ([[D2046]]) | binding after repair |
+| authored pack phase | 3 | **P: `{phase}` exact payload/operand** ([[D2046]]) | binding after repair |
 | endgame / phase state | 7 | `enum_state` | binding |
 | recorded engine / tablebase | 2 | `magnitude` / `enum_state` | binding |
 | compare evaluation delta | 1 | `magnitude` | binding |
-| recorded consequence / fork / move | 5 | `fact_statement` | binding |
+| recorded consequence / fork / move | 5 | consequence's 3 pairs wait on P's discriminated operands; fork/move use `fact_statement` | binding after repair |
 | story evaluation / last-level / title / import | 8 | `magnitude` and/or `fact_statement` | binding |
 | shape firing | 3 | `enum_state` | binding |
 | Explorer population | 1 | `distribution + outcome_split` | binding |
 | Maia policy | 1 | `distribution` | binding |
 | transition counts / states | 14 | `magnitude + enum_state` / `enum_state` | binding |
-| opponent candidate vector | 1 | `structured_document` | binding |
-| Maia / Stockfish UCI responses | 2 | **repair exact UCI-line operands** ([[D2046]]) | binding after repair |
-| Syzygy probe | 1 | `structured_document` | binding |
+| opponent-selection family | 4 | **P: non-presentational machine operation; no component** | remove visual forms |
 | runtime evidence / reference resolution | 6 | `structured_document` / `fact_statement + citation` | binding |
-| repertoire population | 1 | `distribution + outcome_split` | binding |
-| story rank | 1 | **remove visual forms; selection-only** ([[D2048]]) | remove |
+| repertoire population | 1 | **P: non-presentational machine operation; no component** | remove visual forms |
+| story rank | 1 | **P: selection-only machine condition** ([[D2048]]) | remove visual forms |
 
 ### §3 — The closed component vocabulary
 
@@ -463,7 +479,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
   candidates for this position."* / *"No games from this population reached this position."* —
   and the abstention reason from `CorpusResult`'s `"abstention"` arm (`api.ts:497`) is carried
   through, not flattened.
-- **Forms:** `card` (→ `panel`), `sentence`. **Not** `arrow` — an arrow per candidate is a ranked
+- **Forms:** `list`, `card` (→ `panel`), `sentence`. **Not** `arrow` — an arrow per candidate is a ranked
   move recommendation on the board, which exceeds every module ceiling below `ranked_moves`.
 - **Equivalent sentence:** today's `humanCandidateSentences` output, with the band sentence
   prepended rather than orphaned in a sibling `<p>`.
@@ -493,7 +509,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
   the {threshold}-game floor. No frequencies are shown"* **with no bar drawn**; a genuine zero
   (`total === 0`) renders *"No games from this population reached this position"*. §4's rule in
   its sharpest form: a withheld split and an empty split must not look alike.
-- **Forms:** `card` (→ `panel`), `sentence`.
+- **Forms:** `list`, `card` (→ `panel`), `sentence`.
 - **Replaces:** `corpus-sentences.ts:16` and its per-move arm at `:18-20`.
 
 #### 3.3 `magnitude` — one scalar with a unit, a perspective and a bound
@@ -528,7 +544,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
   deployment"*) and `stated_absence` when it is on and returned nothing. **These are different
   sentences and the distinction is load-bearing** — `design/05:206-246`'s first-class
   source-unavailable state.
-- **Forms:** `card` (→ `panel`), `sentence`, `timeline_mark`.
+- **Forms:** `list`, `card` (→ `panel`), `sentence`, `timeline_mark`.
 - **Replaces:** every bare number in `CompareView.svelte:149`, `DrillScreen.svelte`'s evaluation
   renders, and the `title=` tooltip at `CompareView.svelte:135`.
 
@@ -550,7 +566,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
   scale policy is unrenderable rather than auto-scaled. This closes [[D1671]].
 - **Empty:** `stated_absence` — *"No recorded evaluation covers this branch."* A trail of length
   1 renders as a `magnitude` (§3.3), not as a one-point chart.
-- **Forms:** `card` (→ `panel`), `timeline_mark`.
+- **Forms:** `list`, `card` (→ `panel`), `timeline_mark`.
 - **Replaces:** `CompareView.svelte:135` in full. The operand already exists
   (`compare-strips.ts`'s `evalTrail`); only the component is missing.
 
@@ -579,7 +595,9 @@ budget, and draws it. A component that queries anything is the defect the dossie
   overlay**, which is how eleven captions became one blue cloud.
 - **Empty:** no marks drawn **and a stated reason** — *"Nothing admitted covers this square"* —
   never a silent no-op, which is indistinguishable from a broken gesture.
-- **Forms:** `square` (→ `lit_squares` / `piece_halo`).
+- **Forms:** `list`, `card` (→ `panel`) and `square` (→ `lit_squares` / `piece_halo`). The
+  list/panel image is the labelled square set inside an Inspector or comparison composition; it
+  never lights a second board or creates another fact.
 - **Replaces:** `DrillScreen.svelte:381-383`'s `flatMap` over every matching observation.
 
 #### 3.6 `move_path` — an ordered sequence of plies
@@ -601,7 +619,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
   `learner-modules` §1.6 already computes — but it fails **at the render boundary**, which is the
   last place a PV can leak.
 - **Empty:** `stated_absence` — *"No line was recorded for this position."*
-- **Forms:** `card` (→ `panel`), `arrow` (→ `arrows`), `sentence`.
+- **Forms:** `list`, `card` (→ `panel`), `arrow` (→ `arrows`), `sentence`.
 - **Replaces:** `CompareView.svelte:137`'s `{route.squares.join(" → ")}`.
 
 #### 3.6a `relation_overlay` — one admitted directed relation on the board
@@ -665,7 +683,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
   Gained/lost styling uses theme tokens and line pattern, never good/bad move colour.
 - **Empty:** `stated_absence` for an explicit request and no overlay for a silent module. A
   missing required producer is a coverage-gate failure, not a fake empty fact.
-- **Forms:** `arrow` (→ `arrows`), `square` (→ `lit_squares` / `piece_halo`), `sentence`.
+- **Forms:** `card` (→ `panel`), `arrow` (→ `arrows`), `square` (→ `lit_squares` / `piece_halo`), `sentence`.
 - **Equivalent sentence:** mechanically names the same endpoints and registered relation label
   from the sealed component; no independent caption field exists;
   for example, *"The bishop on b4 pins the knight on c3 to the queen on d2"* is permitted only
@@ -688,7 +706,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
 - **Empty:** `denominator === 0` renders *"nothing to count against"* explicitly and **draws no
   proportion**; a `numerator === 0` against a real denominator renders *"0 of 25"*, which is
   information. §4's distinction again.
-- **Forms:** `sentence`, `card` (→ `panel`).
+- **Forms:** `list`, `sentence`, `card` (→ `panel`).
 - **Replaces:** the truncation and coverage numbers in `App.svelte`'s repertoire surfaces,
   `CompareView.svelte:92`'s `{node.checkpointRefs.length}`, and the seat-cap statements §3.1
   requires.
@@ -724,7 +742,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
 - **Empty:** `stated_absence` — *"Nothing cited covers this position"* — which is
   `theory-presentation.ts:5`'s existing `UNKNOWN_THEORY_NOTE` discipline: *"Unknown is not a
   judgement."* That constant is lifted into this component's empty state verbatim.
-- **Forms:** `card` (→ `panel`), `sentence`.
+- **Forms:** `list`, `card` (→ `panel`), `sentence`.
 - **Metadata-only refusal:** a source record with no bound `content` does not construct a citation;
   it produces the registered `citation_content_absent` abstention. Inspector provenance chrome may
   still show its metadata. Wrong-source swaps and metadata-only prose manufacture are permanent
@@ -759,7 +777,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
   move (law 8 — a move-quality colour is a grade).
 - **Empty:** a value absent from the operand renders the vocabulary's declared unknown label
   (*"not recorded"*), never an empty pill.
-- **Forms:** `sentence`, `card` (→ `panel`), `timeline_mark`.
+- **Forms:** `list`, `sentence`, `card` (→ `panel`), `timeline_mark`.
 - **Replaces:** all 43 sites in §8.1's sweep and all 11 `replaceAll("_", " ")` sites.
 
 #### 3.10 `claim` — an authored judgement with its ground attached
@@ -777,7 +795,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
   rather than as an optional extra.
 - **Empty:** `silent` — an absent authored claim is not an event, and asserting *"the author said
   nothing"* on every position is the alert-fatigue failure the dossier's §5 measured.
-- **Forms:** `card` (→ `panel`), `sentence`, `spoken_voice` (→ `audio`).
+- **Forms:** `list`, `card` (→ `panel`), `sentence`, `spoken_voice` (→ `audio`).
 - **Law 8:** this component renders authored or validated text. **It never accepts generated
   text without a binding**, and the LLM renderer boundary is `learner-modules` §6.3's, not
   widened here.
@@ -793,6 +811,14 @@ budget, and draws it. A component that queries anything is the defect the dossie
   sourceDigest, renderedText }`, where `binding` is `recorded_run | declared_convention` and
   `renderedText` is recomputed and byte-checked when the receipt is parsed. There is no generic
   renderer and no constructor accepting prose.
+- **Renderer authority:** `FACT_STATEMENT_RENDERERS` is derived set-equal to the exact adapter rows
+  whose component or named composition contains `fact_statement`. Every row keys one
+  `consumer@version × projection@version` adapter to one `FactStatementRendererId`, literal output
+  forms and one or more `{when, operands, template}` variants. Templates have no operand outside
+  the adapter's retained image. Checkpoint, objective, fork, move, imported-result, title,
+  evidence-reference and both consequence arms are enumerated in the author plan; changing any
+  template operand changes bytes. A renderer swap between two admitted pairs, an undeclared
+  operand or a caller-provided sentence fails before sealing.
 - **Convention:** required. `recorded_run` states that the sentence reports exact run bytes;
   `declared_convention` names the registered deterministic product convention. Neither is an
   authored chess judgement.
@@ -800,7 +826,7 @@ budget, and draws it. A component that queries anything is the defect the dossie
   provenance. Visual and equivalent-sentence paths consume the same sealed operand.
 - **Empty:** delegates to `abstention` when the exact source is unavailable; an empty string is
   rejected, not rendered.
-- **Forms:** `sentence`, `card` (→ `panel`), `timeline_mark` (→ `timeline_marker`) and
+- **Forms:** `list`, `sentence`, `card` (→ `panel`), `timeline_mark` (→ `timeline_marker`) and
   `spoken_voice` (→ `audio`) only where the exact compiled binding declares them.
 - **Law 8 boundary:** this closes [[D2049]] without creating a prose escape hatch. It may reorder
   or label recorded operands under a declared convention; it cannot infer a tactic, strategic
@@ -840,10 +866,15 @@ budget, and draws it. A component that queries anything is the defect the dossie
         readonly sourceReceipt: SourceOrProviderReceipt;
       };
   ```
-  `PRESENTATION_QUESTIONS` supplies the learner label and is set-equal to adapters that can
-  abstain. `PRESENTATION_ABSENCE_REASONS` joins each projection's declared reasons, module
-  empty-behavior mapping and provider request result to one closed label; callers cannot add a
-  string. `never_requested` is represented by the unopened on-request module door and constructs
+  `PRESENTATION_ABSTENTION_ROWS` has one exact row for every presented adapter except the
+  selection-only removal. Each row carries its adapter key, registered question id and literal
+  terminal-reason subset. `PRESENTATION_QUESTIONS` is derived set-equal to those question ids and
+  supplies the learner label. `PRESENTATION_ABSENCE_REASONS` is the closed six-member registry
+  (`no_witness`, `not_recorded`, `below_floor`, `provider_unavailable`, `provider_failed`,
+  `content_absent`); provider and authored families receive explicit subsets in the author plan.
+  Pending is deliberately absent because it is lifecycle state, not a terminal reason. The
+  compiler joins projection/provider result and module empty behavior to one admitted reason;
+  callers cannot add a string. `never_requested` is represented by the unopened on-request module door and constructs
   no abstention component. A `pending` receipt has **no terminal absence or source receipt**; a
   settled abstention has both. Pending, withheld, unavailable, failed and genuine empty are
   therefore distinct by type rather than copy.
@@ -896,7 +927,8 @@ budget, and draws it. A component that queries anything is the defect the dossie
   original source bytes. Pack/Shape editing remains owned by their authoring RFCs and cannot be
   declared repaired by this viewer ([[D1669]]).
 - **Empty:** an empty document renders the schema's own required-field skeleton, not `{}`.
-- **Forms:** `panel`.
+- **Forms:** `list`, `panel`; both are the same schema-coupled labelled viewer, with `list` the
+  compact field-list image rather than caller-provided rows.
 - **Does not replace:** `App.svelte:988` and `:1013`; their schema-driven editing journey remains
   open under [[D1434]]/the authoring capability. It does replace raw object dumps on existing
   author/operator inspection surfaces once those surfaces enter the derived coverage set.
@@ -1231,10 +1263,10 @@ All four join `make verify`.
 3. **`design/05:41`'s *"Absence is stated, never simulated"* is stated as an invariant with no
    rendering obligation.** §4 supplies one, which is a strengthening rather than a contradiction;
    flagged so the owner can see that a design invariant acquired a shipped meaning here.
-4. **The implementation is two checkpoints, not one empty foundation and not one dependency
-   knot.** Checkpoint A must migrate real current consumers through the sealed wire; checkpoint B
-   composes those same receipts into modules after the returned module/hint contracts land. The
-   RFC remains open between them ([[D1672]]).
+4. **The implementation is three checkpoints, not one empty foundation and not one dependency
+   knot.** Checkpoint P first makes the manifest and payloads truthful; A then migrates real current
+   consumers through the sealed wire; B composes those same receipts into modules after the
+   module/hint contracts land. The RFC remains open between them ([[D1672]]).
 
 ## Acceptance criteria
 
@@ -1252,16 +1284,17 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
    all eight §3 fields.** *RED:* delete `emptyBehavior` from any member, or add a fifteenth id
    without a changelog line. *Wrong impl:* an optional field, which lets a component ship with no
    empty state — the defect this RFC exists to prevent.
-2. **`make component-coverage` passes over the three derived presentation populations.** Every
-   ordinary learner, Inspector and author/operator `consumer × projection` binding has an exact
-   payload parser/adapter serving every bound non-machine form, and every adapter maps back to one
-   such pair. *RED:* add one learner binding without an adapter; retire/unbind a projection while
+2. **`make component-coverage` passes over the three route-backed presentation populations.**
+   `PRESENTATION_CONSUMER_CLASSES` is set-equal to the 20 current consumers with a non-machine
+   binding and every anchor resolves its named operation. Every presented
+   `consumer × projection × form` triple has one exact component target or one named composition
+   whose member-form union equals the binding forms; every adapter maps back to one such pair.
+   *RED:* add one learner binding without an adapter; retire/unbind a projection while
    leaving its adapter. Both fail set equality. Adding a machine-only projection creates no fake
-   widget. The author checkpoint starts at **117 pairs: 110 adapters, six explicit operand repairs
-   and one visual-binding removal**, all executable under
-   `make evidence-presentation-author-contract`; those populations must sum to the live census.
-   *Wrong impl:* walking every catalogue projection, maintaining exclusions by hand, or treating
-   one of the six impossible adapters as a cast.
+   widget. The author checkpoint starts at **112 real pre-P presentation pairs: 104 adaptable,
+   seven explicit operand-repair occurrences and one visual-binding removal**. Checkpoint P must
+   yield **111/111 adaptable**. *Wrong impl:* treating role or `list/panel` as route reachability,
+   walking every catalogue projection, or counting a repair placeholder as executable.
 3. **The label registry is set-equal to the derived set of learner-reachable closed unions, and
    every vocabulary is total over its union type.** *RED:* add a member to `ObjectiveState`
    without a label and observe a **type** error, not a test failure; separately, delete a
@@ -1358,11 +1391,13 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     ids covered by the state matrix. *RED:* add a component without its five states. *Wrong
     impl:* a shared parameterised test that skips inapplicable states silently — the matrix
     asserts an explicit `not_applicable` declaration instead.
-18. **Scope fence.** A grep-able assertion that this RFC's landing adds no `EvidenceForm` member,
-    no `ModuleDeclaration` field, no seat id, no `AnswerDistance` member and no edit to
-    `packages/runtime/src/evidence-catalog.ts`. *RED:* add a form member. *Wrong impl:* one that
-    "helpfully" adds a `chart` form, which would fork the design tier's inventory and collide
-    with `rfc/module-registration.md`.
+18. **Scope fence and explicit predecessor.** Checkpoint P is set-equal to the six literal
+    `MANIFEST_PRESENTATION_REPAIRS` operations and edits only their named catalogue/source/payload
+    seams. Checkpoints A/B add no `EvidenceForm` member, no `ModuleDeclaration` field, no seat id,
+    no `AnswerDistance` member and no further `evidence-catalog.ts` edit. *RED:* add a seventh
+    catalogue edit or omit one named preimage/postimage. *Wrong impl:* one that "helpfully" adds a
+    `chart` form or module field, which would fork the design tier or collide with
+    `module-registration`.
 19. **`register-check` is green with this RFC active**, and its `tabiya-claims` block reads
     `none` consistently with `rfc/README.md`'s registers — this RFC claims no schema lane, no
     migration position and no evidence kind.
@@ -1376,20 +1411,38 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     process forges, cross-evidence owner swap, wire mutation/extra field/unparsed JSON,
     unregistered projection, invented edge, component swap, post-render append and dropped-field
     sentinel all fail before Svelte. *Wrong impl:* a TypeScript interface around caller-built JSON.
-21a. **`fact_statement` cannot become a generic prose path.** Only a registered exact
-    projection+consumer adapter can invoke its registered renderer; literal caller text, a
-    renderer id not declared for the pair, a source-digest swap and a rendered-text mutation all
+21a. **`fact_statement` cannot become a generic prose path.**
+    `FACT_STATEMENT_RENDERERS` is set-equal to every exact adapter target containing
+    `fact_statement`; each id, output-form set, variant, operand list and template is literal.
+    Every changed template operand changes output bytes. Literal caller text, a renderer id not
+    declared for the pair, a source-digest swap, dropped operand and rendered-text mutation all
     fail before Svelte. A deterministic recorded-run fixture succeeds and remains distinct from
     `claim`. *Wrong impl:* `{text: string, evidenceRef}` — the raw sentence dump with a type name.
 21b. **Abstention has one shared, non-contradictory freshness lifecycle.** Compile-only negatives
     refuse `pending + absence`, a settled terminal absence without a source/provider receipt, and
     `never_requested` as a receipt. Runtime negatives change event head, branch, node, disclosure
     boundary and digest independently and reject every stale response. *Wrong impl:* a component
-    generation or node-revision counter parallel to the module/provider decision stamp.
-22. **Checkpoint closeout is honest.** Checkpoint A records exactly which current presentation
-    binding pairs migrated and leaves the RFC `implementing`; checkpoint B alone may close the
-    module/hint/arrow rows and archive after its real module operation and seats pass. Neither
-    checkpoint counts an empty coverage population as success.
+    generation or node-revision counter parallel to the module/provider decision stamp. In
+    addition, `PRESENTATION_ABSTENTION_ROWS` is set-equal to every non-removal presentation adapter
+    and each row resolves one registered question plus a non-empty terminal-reason subset; pending
+    is absent from the reason registry. Missing, extra, wrong-provider and pending-as-terminal
+    mappings fail.
+22. **Checkpoint closeout is honest.** Checkpoint P records exactly six manifest/source repairs
+    and a 111-pair recensus. Checkpoint A records exactly which current presentation binding pairs
+    migrated and leaves the RFC `implementing`; checkpoint B alone may close the module/hint/arrow
+    rows and archive after its real module operation and seats pass. None counts an empty coverage
+    population as success.
+
+## Fresh-review routing
+
+| row | author repair; fresh review still required |
+|---|---|
+| [[D2135]] | exact pair/form targets; named compositions carry explicit member/form rows and union to the binding |
+| [[D2136]] | all 20 consumers have source+operation reachability anchors; two backend operations are not presentation |
+| [[D2137]] | six-operation Checkpoint P and amended shared-resource pin; post-P census is 111 real pairs |
+| [[D2138]] | exact-pair renderer ids, variants, operands, templates and output forms are set-equal to fact targets |
+| [[D2139]] | every non-removal adapter has a registered question and non-empty terminal-reason subset |
+| [[D2140]] | consequence is a discriminated terminal/outcome or nonterminal/plies/objectiveState payload |
 
 ## Discharges
 
@@ -1463,6 +1516,14 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
   the gap is ledgered even if the amendment waits.
 
 ## Changelog
+
+- 2026-08-30 — second author repair for [[D2135]]–[[D2140]]. Replaced the form-copy census as
+  executable authority with exact component/form and named-composition rows; classified all 20
+  consumers through real operation anchors; excluded two backend operations; and introduced a
+  six-operation manifest predecessor yielding 111 real presentation pairs. Added exact fact
+  renderer templates, per-adapter abstention questions/reasons and the full discriminated
+  consequence payload. `make evidence-presentation-author-contract` remains green and
+  `make evidence-presentation-second-author-repair` passes 6/6. Fresh review and [[D1672]] remain.
 
 - 2026-08-30 — returned by fresh independent buildability review on [[D2135]]–[[D2140]]. The
   D1862 pair census and D1668 lifecycle repair survive, but the plan has no component-form mapping
