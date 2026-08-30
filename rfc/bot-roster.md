@@ -1,11 +1,12 @@
 # RFC: Bot roster
 
-- **Status:** draft — 2026-08-26 author amendment complete; independent cross-review, D1610/D1611
-  and the repaired `bot-policy` dependency remain. The exact 4×3 product stands. The amendment folds
-  D1601–D1609: independent band/family/display axes, sealed guard and registered trait authority,
-  dependent-trait abstention, atomic production route, dedicated guard request/budget, compiled
-  grounded cards, and calibration/observability completion. `BOT_POLICY_PROFILES` remains empty;
-  no placeholder identity may enter a shipping digest.
+- **Status:** draft — **RETURNED by fresh independent review 2026-08-30 on
+  [[D2233]]–[[D2237]].** The measured 4×3 base stands, but its policy dependency is returned; display
+  bytes incorrectly invalidate behavior calibration; the experiment totals are false; distribution
+  gates have no executable bounds; and twelve persona identities still collapse to three behavior
+  policies while proposed/shared-evidence traits have no roster path. `make bot-roster-fresh-review`
+  passes 5/5. `BOT_POLICY_PROFILES` remains correctly empty; no implementation or calibration is
+  authorized.
 - **Author:** claude (drafted from `planning/bot-roster/roster.md`, which assembled the dossier numbers for the first time)
 - **Created:** 2026-08-23
 - **Design refs:** `design/00-thesis.md` (*"a human-like opponent while truly applying an opening/middlegame/endgame"*); `design/03-product-breadth.md` §Just Play (*"choose a side/position/opponent"*). The bot lane has no design-tier section; its intent authority is the owner ideation [[D810]]–[[D812]] and the O8 ruling, quoted in `bot-policy` §0. A `design/` bot section remains owner work under law 5.
@@ -451,6 +452,29 @@ Discharge D5, and only the exact calibrated value—not `targetElo`—may feed r
 | **Absolute human Elo** | Discharge D5. Until ruled, band-relative with citation is the ceiling of what any card may show |
 | **Perceptual human-likeness** | zero human judgements exist; the 42-branch blind packet is an **owner-use** instrument that can reject a profile but cannot clear H5/C5 as a population claim |
 
+## Fresh independent return (2026-08-30)
+
+The D1601–D1609 author amendment survives as useful foundation but not as an implementable full
+roster. Exact review: `planning/bot-roster/fresh-independent-buildability-review-2026-08-30.md`.
+
+1. **[[D2233]] — repair and re-review `bot-policy` first.** Roster declarations, cards and receipts
+   must consume the eventual sampler/source, provider, catalog, decision and retry authorities.
+2. **[[D2234]] — split policy calibration identity from presentation identity.** A cosmetic change
+   may change the full profile digest but cannot void a measurement of byte-identical move policy.
+3. **[[D2235]] — derive the experiment population.** The table lists 17 arms / 13,200 games, not
+   16 / 12,400. One literal manifest owns arms, counts, runner and receipt.
+4. **[[D2236]] — research and preregister the calibration verdict.** Histogram, parameter, tail and
+   move-match tests need exact populations/statistics/bounds/uncertainty/multiplicity before results.
+5. **[[D2237]] — make behavior breadth honest.** The 4×3 Stage-A roster is three mechanisms across
+   four bands. Every additional trait receives a disposition and profile path; evidence-driven
+   traits require a researched registered adapter rather than record-only feature bytes. Until the
+   owner confirms that expansion, the document may not equate twelve identities with twelve
+   behavior personalities or full 1.0 bot depth.
+
+Final identities [[D1610]] and the new-learner default [[D1611]] remain genuine owner decisions,
+but D2234 removes the false reason they must block behavior calibration. No policy, profile,
+provider, schema, route, client, asset or calibration byte is authorized by this return.
+
 ## Deviations from design
 
 One. `design/` has no bot section, so this RFC's intent authority is owner ideation plus the O8
@@ -560,3 +584,7 @@ Proposed — id assigned at landing; head was **D1293** at drafting.
   replaced hand-written behavior claims with the grounded card compiler; made route, availability,
   calibration/observability, final identities/default and the complete opponent UX explicit
   discharges. Independent cross-review still required; catalogue remains empty.
+- 2026-08-30 — fresh independent review returned the amendment on [[D2233]]–[[D2237]]: returned
+  policy dependency, presentation/calibration identity collision, false experiment totals,
+  non-executable distribution gates and persona/behavior breadth mismatch. Exact review and 5-arm
+  reproduction landed; catalogue remains empty and no implementation is authorized.

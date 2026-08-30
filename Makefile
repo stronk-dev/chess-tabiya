@@ -216,6 +216,10 @@ longitudinal-store-fresh-review:
 longitudinal-store-second-fresh-review:
 	node --test tools/d2227-longitudinal-second-fresh-review/contract.test.mjs
 
+.PHONY: bot-roster-fresh-review
+bot-roster-fresh-review:
+	node --test tools/d2233-bot-roster-fresh-review/contract.test.mjs
+
 longitudinal-store-cost:
 	@test -z "$$(git status --porcelain -- Makefile packages/runtime/src/evidence-catalog.ts packages/runtime/src/semantic-evidence.ts packages/runtime/src/legal-moves.ts packages/runtime/src/phase.ts tools/research-chess/populations.ts tools/d1405-longitudinal-cost-harness tools/d1405b-single-decision-harness tools/d1612-longitudinal-contract-harness rfc/contracts/longitudinal-ingest-registry-v1.json rfc/contracts/longitudinal-sign-subsets-v1.json)" || (echo "longitudinal-store-cost requires committed measurement inputs" >&2; exit 2)
 	@for arm in 20 40 80 bulk; do \

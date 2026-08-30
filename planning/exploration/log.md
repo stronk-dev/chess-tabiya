@@ -12191,3 +12191,18 @@ longitudinal-store-second-fresh-review` passes 6/6; the earlier author target re
 now correctly classified as incomplete evidence. No production, migration, worker, consumer,
 schema, content, archive or protected-design byte changed. Exact review:
 `planning/longitudinal-store/second-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Bot-roster fresh independent return
+
+Returned the D1601–D1609-amended `bot-roster.md` on [[D2233]]–[[D2237]] after tracing the roster
+through its now-returned policy dependency, profile/calibration identities, experiment arithmetic,
+distribution verdict and behavior-trait reach. Display-only persona bytes invalidate unchanged
+behavior calibration; the table is 17 arms / 13,200 games rather than 16 / 12,400; the distribution
+tests name no executable bounds; and twelve persistent identities still reduce to three behavior
+policies while eight proposed traits and all Stage-B evidence have no path into a profile.
+
+The measured four bands, guarded-pawn dependency, grounded card direction, atomic-route requirement
+and honest uncalibrated posture survive. `make bot-roster-fresh-review` passes 5/5;
+`BOT_POLICY_PROFILES` remains empty. No policy, profile, provider, schema, route, client, asset,
+calibration, content, archive or protected-design byte changed. Exact review:
+`planning/bot-roster/fresh-independent-buildability-review-2026-08-30.md`.
