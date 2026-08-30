@@ -1,12 +1,12 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — returned by fresh independent buildability review 2026-08-30 on
-  [[D2063]]–[[D2069]]. The D1612–D1617 fold survives, but implementation remains forbidden until
-  semantic sign enters durable identity; edge opportunity/share algebra is exact; requested versus
-  claimed sequence is representable; deletion cannot be resurrected by rebuild; the DDL/read
-  contract is complete; and a bounded worker has a production lifecycle. `make
-  longitudinal-store-author-contract` remains 10/10 green; `make longitudinal-store-fresh-review`
-  reproduces the seven blockers. The 2026-08-22 acceptance remains history, not implementation authority.
+- **Status:** draft — **[[D2063]]–[[D2069]] author repair complete 2026-08-30; fresh
+  independent review required.** Semantic/source sign identity, complete-population algebra,
+  requested/high-water CAS, deletion-safe rebuild suppression, literal SQLite DDL/index authority,
+  the typed snapshot reader and a bounded production worker lifecycle now compose as one operation.
+  `make longitudinal-store-author-contract` passes 19/19; the unchanged historical
+  `make longitudinal-store-fresh-review` fails all seven old blocker assertions, the intended
+  inversion. Implementation remains forbidden. The 2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
   returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
 - **Author:** claude
@@ -41,7 +41,7 @@
 - **Planning:** `planning/longitudinal-store/` (once implementing)
 
 ```tabiya-claims
-migration | position behind learner-rating | learner_observation_denominators; learner_observations; learner_structure_stats; learner_observation_jobs
+migration | position behind learner-rating | drill_runs.longitudinal_profile_disposition; learner_observation_denominators; learner_observations; learner_structure_stats; learner_observation_jobs
 ```
 
 ## Summary
@@ -73,30 +73,43 @@ No request path may run a legal-move census, semantic adapter or whole-run proje
 
 ```ts
 type LongitudinalConstructor =
-  | { projection: VersionedEvidenceId; kind: "edge"; adapter: "local_semantic_event" }
+  | { projection: VersionedEvidenceId; signs: readonly SemanticEventSign[];
+      kind: "edge"; adapter: "local_semantic_event" }
   | { projection: VersionedEvidenceId; kind: "population";
-      adapter: "complete_candidate_relation"; baseProjection: VersionedEvidenceId }
+      signs: readonly ["avoided"]; adapter: "complete_candidate_relation";
+      baseProjection: VersionedEvidenceId; baseSigns: readonly SemanticEventSign[] }
   | { projection: VersionedEvidenceId; kind: "path"; adapter: "recorded_sequence";
-      status: "deferred"; reason: string };
+      signs: readonly SemanticEventSign[]; status: "deferred"; reason: string };
 ```
 
 The literal authority is
 `rfc/contracts/longitudinal-ingest-registry-v1.json`: **67 rows, 46 edge / 13 population /
 8 deferred path**, raw-byte digest
 `sha256:e12147750b512c83872f61dd7dc333e94e20c151876a3c2d3ef5f91c7e7fc21a`. The production
-registry must be generated from or checked byte-equivalent to that artifact. A count-preserving
+registry joins it to the literal sign-subset authority
+`rfc/contracts/longitudinal-sign-subsets-v1.json`, raw-byte digest
+`sha256:4294461656e2da32106c6ba9e0753fe58e49ea74dcb907d41f9ab1e46476b32f`.
+The latter is set-equal and byte-equal per member to `SEMANTIC_EVENT_DECLARATIONS.allowedSigns`;
+every population row additionally carries its base projection's exact subset. A count-preserving
 swap of two legal population base ids fails `LONGITUDINAL_POPULATION_BASE_MISMATCH`; in particular,
 `derived.semantic_avoidance.loose_piece@1` joins `rules.tactic.event.loose_piece@1`, not a
 structural suffix guess ([[D1612]]).
 
 - **Edge** admits the 46 families constructible from one exact legal edge by
-  `localSemanticEvents`.
+  `localSemanticEvents`. Identity is
+  `(projection id, version, semantic_sign, source_sign)`, with `source_sign === semantic_sign`.
+  A projection/sign pair absent from the literal subset fails
+  `LONGITUDINAL_PROJECTION_SIGN_IMPOSSIBLE`; the same projection's `gained`, `lost` and
+  `preserved` rows can never pool.
 - **Population** admits the 13 `derived.semantic_avoidance.*` families through a new
   unbudgeted complete-candidate adapter. It does not call the presentation selector: selection
   thresholds, eligibility and `maxFacts` cannot decide what is persisted. For base family `F`, a
   decision is an opportunity only when the exact legal population contains at least one edge that
-  exhibits `F` and at least one that does not. The avoidance occurrence is the played/predicted
-  edge not exhibiting `F`; its alternative share is the share that does exhibit `F`. This is the
+  exhibits `(F, source_sign)` and at least one that does not. Its durable semantic sign is
+  `avoided`; `source_sign` retains which exact base-family behavior was avoided, so avoiding a
+  gained structure cannot pool with avoiding its loss. The avoidance occurrence is the
+  played/predicted edge not exhibiting `(F, source_sign)`; its alternative share is the share of
+  counterfactual alternatives that does exhibit it. This is the
   declinable-denominator meaning [[D842]] requires and makes the all-ones negative control fail.
 - **Path** declares, but does not admit at revision 1, the eight multi-edge families:
   `derived.exchange.trade_completed` and the seven observed Wave-C sequence families. A recorded
@@ -105,9 +118,26 @@ structural suffix guess ([[D1612]]).
   manufacture a rate. Their registry rows are closed as `deferred`, not silently unreachable.
 
 The registry test is set-equal in both directions, proves every admitted id reaches exactly one
-live adapter, proves every deferred id carries a non-empty reason, and compares the published
-artifact to the executable registry row-for-row. This replaces the false claim that all 67 members
+live adapter, proves every declared sign is exact and reachable, proves every deferred id carries
+a non-empty reason, and compares both published artifacts to the executable registry row-for-row.
+This replaces the false claim that all 67 members
 can be constructed by `localSemanticEvents` ([[D1401]]).
+
+**Complete-population algebra ([[D2066]]).** For an admitted identity, the projector calls
+`legalAlternativeEdges(beforeFen, committedMoveUci)` and prepends the committed edge, producing
+the complete legal population exactly once. It calls `localSemanticEvents` once per edge; an
+undefined edge returns typed `population_incomplete` and writes no opportunity. Multiple operands
+with the same projection/sign on one edge deduplicate to one Boolean membership—piece count cannot
+inflate move count. A decision is declinable only when at least one legal move exhibits the family
+and at least one does not. An all-exhibit population, none-exhibit population, or forced move has
+zero opportunities and writes no family row. For edge rows, `occurred` means the committed edge
+exhibits `(projection, semantic_sign)`; for population rows it means the committed edge does *not*
+exhibit `(baseProjection, source_sign)`. In both cases `alternative_share_sum` adds exactly
+`counterfactual alternatives exhibiting the matched family / counterfactual alternative count`,
+a finite value in `[0,1]` per opportunity. Occurred and opportunity refs are the canonical
+`DecisionRef` once per decision, never once per operand. The disposable author model invokes the
+real `legalAlternativeEdges` / `localSemanticEvents` boundary by default and crosses mixed,
+all-exhibit, none, duplicate-operand, forced and unavailable populations.
 
 ### B. Exact decision references and immutable time
 
@@ -134,6 +164,10 @@ The migration creates four STRICT tables in one additive migration. Family-indep
 are normalized so a late first opportunity cannot lose earlier decisions ([[D1614]]):
 
 ```sql
+ALTER TABLE drill_runs ADD COLUMN longitudinal_profile_disposition TEXT NOT NULL
+  DEFAULT 'profileable'
+  CHECK (longitudinal_profile_disposition IN ('profileable','account_deleted'));
+
 CREATE TABLE learner_observation_denominators (
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
   run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
@@ -141,7 +175,7 @@ CREATE TABLE learner_observation_denominators (
   decision_class TEXT NOT NULL CHECK (decision_class IN ('played','game','predicted')),
   decisions INTEGER NOT NULL CHECK (decisions > 0),
   observed_at TEXT NOT NULL,
-  derived_rev INTEGER NOT NULL,
+  derived_rev INTEGER NOT NULL CHECK (derived_rev > 0),
   PRIMARY KEY (learner_id, run_id, phase, decision_class)
 ) STRICT;
 
@@ -149,19 +183,27 @@ CREATE TABLE learner_observations (
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
   run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
   projection_id TEXT NOT NULL,
-  projection_version INTEGER NOT NULL,
+  projection_version INTEGER NOT NULL CHECK (projection_version > 0),
+  semantic_sign TEXT NOT NULL CHECK (semantic_sign IN
+    ('state','gained','lost','preserved','removed','avoided','enabled','threatened')),
+  source_sign TEXT NOT NULL CHECK (source_sign IN
+    ('state','gained','lost','preserved','removed','avoided','enabled','threatened')),
   phase TEXT NOT NULL CHECK (phase IN ('opening','middlegame','endgame')),
   decision_class TEXT NOT NULL CHECK (decision_class IN ('played','game','predicted')),
   session_kind TEXT NOT NULL CHECK (session_kind IN ('pack','position','imported')),
   pack_id TEXT,
   opportunities INTEGER NOT NULL CHECK (opportunities > 0),
-  occurred INTEGER NOT NULL CHECK (occurred <= opportunities),
-  alternative_share_sum REAL NOT NULL,
-  occurred_refs TEXT NOT NULL,
-  opportunity_refs TEXT NOT NULL,
+  occurred INTEGER NOT NULL CHECK (occurred >= 0 AND occurred <= opportunities),
+  alternative_share_sum REAL NOT NULL
+    CHECK (alternative_share_sum >= 0.0 AND alternative_share_sum <= opportunities),
+  occurred_refs TEXT NOT NULL CHECK (json_valid(occurred_refs)),
+  opportunity_refs TEXT NOT NULL CHECK (json_valid(opportunity_refs)),
   observed_at TEXT NOT NULL,
-  derived_rev INTEGER NOT NULL,
-  PRIMARY KEY (learner_id, run_id, projection_id, projection_version, phase, decision_class),
+  derived_rev INTEGER NOT NULL CHECK (derived_rev > 0),
+  CHECK ((session_kind = 'pack' AND pack_id IS NOT NULL)
+    OR (session_kind <> 'pack' AND pack_id IS NULL)),
+  PRIMARY KEY (learner_id, run_id, projection_id, projection_version,
+    semantic_sign, source_sign, phase, decision_class),
   FOREIGN KEY (learner_id, run_id, phase, decision_class)
     REFERENCES learner_observation_denominators(learner_id, run_id, phase, decision_class)
     ON DELETE CASCADE
@@ -174,41 +216,71 @@ CREATE TABLE learner_structure_stats (
   root_node_id TEXT NOT NULL,
   session_kind TEXT NOT NULL CHECK (session_kind IN ('pack','position','imported')),
   pack_id TEXT,
-  branch_count INTEGER NOT NULL,
-  rewound_count INTEGER NOT NULL,
-  forked_count INTEGER NOT NULL,
-  group_count INTEGER NOT NULL,
-  outcome_count INTEGER NOT NULL,
+  branch_count INTEGER NOT NULL CHECK (branch_count >= 1),
+  rewound_count INTEGER NOT NULL CHECK (rewound_count >= 0),
+  forked_count INTEGER NOT NULL CHECK (forked_count >= 0),
+  group_count INTEGER NOT NULL CHECK (group_count >= 0),
+  outcome_count INTEGER NOT NULL CHECK (outcome_count >= 0),
   observed_at TEXT NOT NULL,
-  derived_rev INTEGER NOT NULL,
+  derived_rev INTEGER NOT NULL CHECK (derived_rev > 0),
+  CHECK ((session_kind = 'pack' AND pack_id IS NOT NULL)
+    OR (session_kind <> 'pack' AND pack_id IS NULL)),
   PRIMARY KEY (learner_id, run_id, root_key)
 ) STRICT;
 
 CREATE TABLE learner_observation_jobs (
   run_id TEXT PRIMARY KEY REFERENCES drill_runs(id) ON DELETE CASCADE,
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
-  requested_seq INTEGER NOT NULL,
-  completed_seq INTEGER NOT NULL DEFAULT 0,
-  derived_rev INTEGER NOT NULL,
+  requested_seq INTEGER NOT NULL CHECK (requested_seq > 0),
+  completed_seq INTEGER NOT NULL DEFAULT 0 CHECK (completed_seq >= 0),
+  derived_rev INTEGER NOT NULL CHECK (derived_rev > 0),
   state TEXT NOT NULL CHECK (state IN ('pending','running','complete','failed')),
   claim_generation INTEGER NOT NULL DEFAULT 0,
+  claimed_requested_seq INTEGER CHECK (claimed_requested_seq > 0),
   claim_token TEXT,
   claimed_by TEXT,
   lease_expires_at TEXT,
   failure_code TEXT,
   updated_at TEXT NOT NULL,
   CHECK (completed_seq <= requested_seq),
+  CHECK (claimed_requested_seq IS NULL OR requested_seq >= claimed_requested_seq),
   CHECK (failure_code IS NULL OR failure_code IN
     ('snapshot_invalid','derivation_failed','publication_conflict')),
   CHECK ((state = 'failed') = (failure_code IS NOT NULL)),
   CHECK ((state = 'running') =
-    (claim_token IS NOT NULL AND claimed_by IS NOT NULL AND lease_expires_at IS NOT NULL))
+    (claimed_requested_seq IS NOT NULL AND claim_token IS NOT NULL
+      AND claimed_by IS NOT NULL AND lease_expires_at IS NOT NULL)),
+  CHECK (state = 'running' OR
+    (claimed_requested_seq IS NULL AND claim_token IS NULL
+      AND claimed_by IS NULL AND lease_expires_at IS NULL)),
+  CHECK (state <> 'complete' OR completed_seq = requested_seq)
 ) STRICT;
+
+CREATE INDEX learner_observation_denominators_by_learner
+  ON learner_observation_denominators(learner_id, observed_at, run_id);
+CREATE INDEX learner_observations_by_family
+  ON learner_observations(learner_id, projection_id, projection_version,
+    semantic_sign, source_sign, phase, decision_class, run_id);
+CREATE INDEX learner_observations_by_run
+  ON learner_observations(run_id, derived_rev);
+CREATE INDEX learner_structure_stats_by_learner
+  ON learner_structure_stats(learner_id, observed_at, run_id);
+CREATE INDEX learner_observation_jobs_work
+  ON learner_observation_jobs(state, lease_expires_at, updated_at, run_id);
 ```
 
 The two JSON ref columns contain schema-validated, canonically sorted `DecisionRef[]` from §B.
 `observed_at` is always the immutable `run.started.at`; `updated_at` exists only on the job and is
-never an observation/window timestamp. All four classes join account export/deletion coverage.
+never an observation/window timestamp. All four private classes join account export/deletion
+coverage. The additive run disposition is not private profile data; it is the durable rebuild
+suppression that makes deletion final ([[D2065]]). In the same account-deletion transaction, every
+retained shared run owned by the departing learner changes to `account_deleted` before owner
+reassignment to `__legacy`, and the four private classes cascade/delete.
+`longitudinal-rebuild` selects only `longitudinal_profile_disposition='profileable'`; it never
+infers eligibility from the current owner. Ordinary legacy-migrated and active shared runs retain
+`profileable`. The required negative is delete learner → shared run remains readable → rebuild →
+zero observations, denominators, structure rows and jobs for both the deleted learner and
+`__legacy`.
 
 Every persisted run mutation upserts only this cheap job watermark in the **same transaction as the
 run bytes**; it does not enumerate legal alternatives. The owned production closure is exactly
@@ -220,9 +292,14 @@ satisfy atomic scheduling. Migration-only snapshot rewrites explicitly enqueue r
 
 A worker claims bounded batches using one atomic transition from `pending`, `failed`, or an expired
 `running` row. Claim increments `claim_generation`, writes a fresh opaque token, worker id and lease
-expiry, and pins `(run_id, requested_seq=N, derived_rev, generation, token, worker)`. A second live
+expiry, copies mutable `requested_seq` into immutable **`claimed_requested_seq=N`**, and pins
+`(run_id, claimed_requested_seq=N, derived_rev, generation, token, worker)`. A second live
 claimer receives no work. Expiry permits a new generation; the old generation can no longer fail or
 publish. The failure vocabulary is the literal three-member CHECK/TypeScript union in the DDL.
+Claims select `(state IN ('pending','failed') OR lease_expires_at <= :now)` in
+`ORDER BY updated_at,run_id LIMIT :workerBatchSize`; the same `BEGIN IMMEDIATE` update increments
+generation and returns the stored tuple. That order plus the finite batch prevents a hot run from
+starving older jobs.
 
 The worker reconstructs the exact contiguous event prefix `seq=1..N` from durable run bytes. A
 missing, duplicate or non-contiguous event fails `snapshot_invalid`; a snapshot already advanced to
@@ -233,17 +310,98 @@ decision still advances that denominator. Retrying an interval is idempotent, ph
 separate, and the accumulated result must equal a complete prefix rebuild ([[D1614]]/[[D1615]]).
 
 Publication replaces all three derived data classes for the exact cut and advances `completed_seq=N` in
-one transaction only if the whole claim tuple still matches. If `requested_seq` advanced to M while
-N was running, N may publish but the job returns to `pending`; M is never lost. Crash before publish
+one transaction only if state is `running`, `claimed_requested_seq=N`, `requested_seq >= N`, and
+`derived_rev`, generation, token and worker all match. `requested_seq` is deliberately a high-water
+inequality, not part of the equality CAS. The literal job transition after the three row-set
+replacements is:
+
+```sql
+UPDATE learner_observation_jobs
+SET completed_seq=:N,
+    state=CASE WHEN requested_seq=:N THEN 'complete' ELSE 'pending' END,
+    claimed_requested_seq=NULL, claim_token=NULL, claimed_by=NULL,
+    lease_expires_at=NULL, failure_code=NULL, updated_at=:now
+WHERE run_id=:runId AND state='running'
+  AND requested_seq>=:N AND claimed_requested_seq=:N
+  AND derived_rev=:rev AND claim_generation=:generation
+  AND claim_token=:token AND claimed_by=:worker;
+```
+
+Exactly one changed row is success; zero rolls back the three row replacements and returns
+`publication_conflict`. If `requested_seq` advanced to M while N was running, N may publish but the
+job returns to `pending`; M is never lost. A revision change fails equality. Crash before publish
 recovers after lease expiry; crash after atomic publish observes the completed/pending state; stale
 publish returns `publication_conflict` without touching rows. Imports, revision changes and run close
 use the same protocol. `make longitudinal-rebuild` remains the operator comparison/repair
 instrument and uses the same registry, prefix projector and publication algebra ([[D1613]]).
 
-The typed read contract returns `{ state, rows }`; `state` includes requested/completed sequence,
-revision and failure code. A future consumer must require `complete` at the requested sequence or
-render honest unavailability. Partial rows are never silently presented as a complete learner
-history. No consumer lands in this RFC.
+**Typed read boundary ([[D2067]]).** `LongitudinalStorage` exposes raw claim/publication operations
+only to a server-held `LongitudinalWorkerCapability`. Every future product consumer uses this sole
+authenticated snapshot operation; no consumer queries tables directly:
+
+```ts
+interface LongitudinalReadQuery {
+  learnerId: string;
+  derivationRev: number;
+  through:
+    | { kind: "all_complete" }
+    | { kind: "runs"; cuts: readonly { runId: string; requestedSeq: number }[] };
+  filter: {
+    projections?: readonly { id: string; version: number;
+      semanticSign?: SemanticEventSign; sourceSign?: SemanticEventSign }[];
+    phases?: readonly ("opening" | "middlegame" | "endgame")[];
+    decisionClasses?: readonly ("played" | "game" | "predicted")[];
+    sessionKinds?: readonly ("pack" | "position" | "imported")[];
+    packIds?: readonly string[];
+  };
+}
+type LongitudinalReadResult =
+  | { kind: "complete"; cuts: readonly LongitudinalCut[];
+      denominators: readonly DenominatorRow[];
+      observations: readonly ObservationRow[];
+      structureStats: readonly StructureStatRow[] }
+  | { kind: "pending"; cuts: readonly LongitudinalCut[] }
+  | { kind: "failed"; cuts: readonly LongitudinalCut[];
+      failureCode: LongitudinalFailureCode }
+  | { kind: "unavailable";
+      reason: "not_requested" | "revision_mismatch" | "profile_suppressed" };
+readLongitudinalSnapshot(
+  actorLearnerId: string, query: LongitudinalReadQuery
+): LongitudinalReadResult;
+```
+
+The storage method requires `actorLearnerId === query.learnerId`; delegated/classroom access needs
+its own later operation and cannot reuse this one. The transaction first fixes a sorted cut vector
+`(runId,requestedSeq,completedSeq,derivedRev)`. Any requested run at another revision returns
+`revision_mismatch`; `account_deleted` returns `profile_suppressed`; missing jobs return
+`not_requested`; any failed cut returns `failed`; any incomplete cut returns `pending` with **no
+data rows**. Only all-complete cuts at the requested revision return rows, sorted denominators by
+`(runId,phase,decisionClass)`, observations by
+`(runId,projectionId,version,semanticSign,sourceSign,phase,decisionClass)`, and structures by
+`(runId,rootKey)`. `all_complete` selects the learner's profileable jobs in the same read
+transaction and returns their exact cut vector, making a cross-game style/skills read repeatable.
+No consumer lands in this RFC.
+
+**Production worker lifecycle ([[D2069]]).** Implementation adds
+`apps/server/src/longitudinal-worker.ts` exporting `LongitudinalProjectionWorker`, composed once by
+`createApplication` beside storage—not by a route and not by a provider. `application.start()`
+calls `startLongitudinalWorker`; `application.stop()` calls `stopLongitudinalWorker`. Defaults are
+product-fixed operational bounds `{ workerBatchSize: 4, workerPollMs: 1000,
+workerLeaseMs: 30000 }`; configuration validates batch `1..32`, poll `100..5000 ms`, and lease
+`>=5000 ms`. A post-commit wake signal reduces latency, while the poll is the authority that
+recovers missed wakes and startup backlog. Each tick claims at most one batch in the stable
+oldest-first order above, projects without Stockfish, Maia, Explorer, network or LLM providers,
+and publishes each claim independently. Shutdown refuses new claims and awaits the finite in-flight
+batch; it never abandons a newly claimed row merely because the HTTP listener closed.
+
+The operator door is `apps/server/src/longitudinal-worker-once.ts`, exposed as
+`make longitudinal-worker-once`. It starts the same production worker dependencies, claims at most
+one bounded batch, waits for those claims, prints claimed/completed/failed counts and exits nonzero
+on a failed projection. It is not `longitudinal-rebuild`: once drains live queued work; rebuild
+compares or repairs all eligible durable projections. Implementation fixtures start the real
+application provider-free, create/save/import through the shared seven-operation persistence
+boundary, wait for completion, cross expired-lease reclaim and oldest-first fairness, then prove
+clean shutdown leaves no process/timer and no permanent pending job.
 
 Native projection is **background-only at revision 1**. D1405b's preregistered Node-24 arm over all
 59 admitted edge/population families plus SQLite publish measured 959.9 ms combined p95 overall,
@@ -284,7 +442,7 @@ not identity verification ([[D1617]]; Discharge D2).
 3. Any RFC changing an admitted adapter, registry membership/version or decision semantics owns
    the revision bump and rebuild discharge. A bump outside an accepted RFC is a lifecycle defect.
 
-## Fresh-return author obligations (2026-08-30)
+## Fresh-return author obligations (2026-08-30; repaired, pending fresh review)
 
 This live RFC owns the seven returned seams; downstream style, skills, Review, campaign and bot
 work may not create private longitudinal identities or readers while it is returned:
@@ -304,23 +462,27 @@ work may not create private longitudinal identities or readers while it is retur
 - [[D2069]] — name and production-compose the bounded background worker, lifecycle, operator door
   and completion/crash/fairness tests.
 
-The author pass must invert `make longitudinal-store-fresh-review`, preserve the prior 10-arm
-author contract, rerun the cost arms and full verification, then request another independent
-review. It may not implement the migration, worker, consumers or content in the authoring commit.
+The author pass has inverted `make longitudinal-store-fresh-review` while expanding the prior
+10-arm author contract to 18 arms. Cost arms and full verification still run before checkpoint;
+another independent review remains mandatory. This commit does not implement the migration,
+worker, consumers or content.
 
 ### F. Acceptance criteria
 
 These are the only live acceptance criteria; the historical AC list below is non-normative.
 
-1. **Additive migration.** Reflection shows exactly the four folded tables and their indexes were
-   added; no pre-existing schema object or row changes. Mutating `drill_runs` makes the fixture red.
-2. **Literal registry closure ([[D1612]]).** The 67-row artifact is set-equal and row-equal to the
-   runtime registry at its pinned digest: 46 edge, 13 population, 8 deferred path. Missing,
-   duplicate, ghost and count-preserving wrong-base mutations fail; the loose-piece exception is a
-   mandatory positive.
-3. **Declinable population.** Played-exhibits, played-avoids, all-exhibit, none-exhibit and forced-
-   move fixtures prove only mixed populations create avoidance opportunities; denominator-free
-   rows remain impossible.
+1. **Additive migration.** Reflection shows exactly the four folded tables, five named indexes and
+   one `drill_runs.longitudinal_profile_disposition` column were added; no pre-existing row changes.
+   Any other pre-existing schema mutation makes the fixture red.
+2. **Literal registry closure ([[D1612]]/[[D2063]]).** The 67-row and sign-subset artifacts are
+   set-equal and row-equal to the runtime registry at their pinned digests: 46 edge, 13 population,
+   8 deferred path. Missing, duplicate, ghost, impossible sign, count-preserving wrong-base and
+   wrong-base-sign mutations fail; the loose-piece exception is a mandatory positive.
+3. **Declinable population ([[D2066]]).** Played-exhibits, played-avoids, all-exhibit,
+   none-exhibit, duplicate-operand, forced-move and unavailable fixtures pass through the real
+   legal-edge/event boundary. Only complete mixed populations create opportunities;
+   `alternative_share_sum` follows the exact source-family direction; denominator-free rows remain
+   impossible.
 4. **Exact references/time.** Two prediction checkpoints on one node persist distinct typed refs;
    invalid/unsorted refs fail. A later-clock rebuild preserves `observed_at` and every data byte;
    no observation window reads job `updated_at`.
@@ -335,10 +497,12 @@ These are the only live acceptance criteria; the historical AC list below is non
    increments generation and permits reclaim; the old token cannot fail/publish; crash-before-
    publish recovers, crash-after-publish observes atomic state, declared failure retries, and an
    unknown failure code fails schema and TypeScript fixtures.
-8. **Exact prefix and CAS ([[D1615]]).** A claim for N projects contiguous events 1..N even when the
+8. **Exact prefix and CAS ([[D1615]]/[[D2064]]).** A claim for N projects contiguous events 1..N even when the
    live snapshot is M>N. Missing/duplicate/non-contiguous bytes fail `snapshot_invalid`; events
    appended between claim/read and derive/publish cannot be lost or overwritten by the stale
-   claimant. Rows and `completed_seq=N` publish atomically only under the full claim tuple.
+   claimant. Actual SQLite crosses N=N, M>N, revision mismatch and stale generation. Rows and
+   `completed_seq=N` publish atomically only under the immutable claimed-cut tuple while mutable
+   `requested_seq >= N`.
 9. **Family-independent denominators ([[D1614]]).** A family first appearing on decision 2 reads
    decisions=2; a later decision with no opportunity advances it to 3; phase and class remain
    independent; retrying one interval is idempotent; incremental output equals full-prefix rebuild.
@@ -351,20 +515,30 @@ These are the only live acceptance criteria; the historical AC list below is non
 12. **Revision pair.** Fixture-output and registry-artifact digests are paired with
     `OBSERVATION_DERIVATION_REV`; a zero-incidence registry addition changes the second digest and
     fails until an accepted RFC owns the bump/rebuild.
-13. **Read honesty.** Reads return job state plus rows and refuse complete-history semantics unless
-    `completed_seq === requested_seq` at the requested revision. A partial/failed job is honest
-    unavailability, never partial history labelled complete.
-14. **Boundaries/privacy.** No learner renderer, rating, classroom, cohort, provider or LLM module
-    reaches the store; no production reader exists beyond worker/rebuild at landing. All four
-    durable classes cascade on learner/run deletion and join export/deletion inventories.
+13. **Read honesty ([[D2067]]).** The exact authenticated `readLongitudinalSnapshot` union returns
+    complete/pending/failed/unavailable over a transaction-fixed cut vector and all three sorted row
+    partitions. It refuses complete-history semantics unless every
+    `completed_seq === requested_seq` at the requested revision. A partial/failed job returns no
+    partial data labelled complete; direct table readers fail the production census.
+14. **Boundaries/privacy ([[D2065]]).** No learner renderer, rating, classroom, cohort, provider or
+    LLM module reaches the store at landing. All four durable classes cascade on learner/run
+    deletion and join export/deletion inventories. Delete → retained shared run → rebuild leaves
+    zero private rows/jobs under both learner and `__legacy`; ordinary legacy and active shared
+    positives remain profileable.
 15. **Performance.** D1405b fixes revision 1 as background-only (959.9 ms combined p95 overall,
     1,027.0 ms middlegame). The production registry reruns D1405b plus the prefix/bulk arms for
     worker sizing; no result moves projection into a request without a later RFC and preregistered
     gate.
-16. **Six-return author falsifier.** `make longitudinal-store-author-contract` crosses the literal
-    registry/wrong join, claim race/expiry/stale publisher, exact prefix/newer request, late-family
-    denominator/retry/phase equality, seven-operation closure and three import-subject arms. Every
-    negative mutates a passing positive control.
+16. **Worker reach ([[D2069]]).** The real provider-free application starts/stops one
+    `LongitudinalProjectionWorker`; all seven writers wake it after commit; polling recovers missed
+    wakes/startup backlog; batches are bounded and oldest-first; crash/reclaim and clean shutdown
+    pass. `make longitudinal-worker-once` reaches the same worker dependencies and is distinct from
+    rebuild.
+17. **Seven-return author falsifier.** `make longitudinal-store-author-contract` crosses both
+    literal registries/signs, complete-population algebra, actual SQLite claim/index/constraint
+    negatives, deletion/rebuild suppression, worker lifecycle, claim race/expiry/stale publisher,
+    exact prefix/newer request, denominator equality, seven-operation closure and import-subject
+    arms. Every negative mutates a passing positive control.
 
 ## Motivation
 
@@ -857,16 +1031,17 @@ future F9 consumer that renders an aggregate registers **itself** on F1 (as
   this RFC's `tabiya-claims` block as `position behind learner-rating`, per the
   position-not-integer rule (a claimed-but-unlanded number is a hole the next landing seals
   shut; the number is taken as `STORAGE_VERSION + 1` at landing, never before).
-- **Verified at HEAD:** `STORAGE_VERSION` is **24** (`apps/server/src/storage.ts:476`),
-  landed by `archive/teacher-surface.md`; the only live claimants are `learner-rating`'s
+- **Historical drafting state:** storage was version 24 after `archive/teacher-surface.md`.
+  At the 2026-08-30 author repair HEAD, `STORAGE_VERSION` is **25**; the live positional
+  ordering is still derived from the register behind `learner-rating` rather than copied here. The
+  only earlier live claimants were `learner-rating`'s
   two `position next` lines (`rfc/README.md` §Migration register). If `learner-rating`
   stalls or splits, the order renegotiates in the register; this RFC can land first only
   by that renegotiation, never by taking a number.
 - **Body:** create-table/index only — the two §2 tables and their indexes. No backfill
   (§4.3's argument), no snapshot rewrite, no run-schema or pack-schema change, no stamp.
-- **Landing edits the literal assertion** `expect(STORAGE_VERSION).toBe(24)` at
-  `apps/server/src/live-session.test.ts:29` (correct at HEAD as of this draft; re-derive at
-  landing).
+- **Landing edits the then-current literal storage-version assertion** after re-deriving it at
+  landing; no stale integer in this historical section is an implementation instruction.
 - **All other registers: nothing claimed.** No pack lane, no run-schema lane, no
   shape-entry lane, no principle-entry lane, no evidence-kinds member. The run schema is
   read, not written: the store consumes existing event types
@@ -1111,3 +1286,14 @@ head after that renumbering and **not yet written**:
   type; the normative DDL has unnamed indexes and weak fact constraints at a stale storage receipt;
   and no production-composed worker drains the queue. Exact return:
   `planning/longitudinal-store/fresh-independent-buildability-review-2026-08-30.md`.
+- 2026-08-30: second author repair completed [[D2063]]–[[D2069]] as one store operation.
+  Semantic and source sign now participate in literal registry and durable identity; the real
+  complete legal population defines declinability, occurrence and alternative share; SQLite stores
+  immutable claimed N separately from mutable requested M; account deletion durably suppresses
+  rebuild on retained shared runs; the four tables, one run disposition and five indexes carry
+  closed invariants; one authenticated snapshot union serves future consumers; and the bounded,
+  provider-free `LongitudinalProjectionWorker` plus once traversal own continuous reach.
+  `make longitudinal-store-author-contract` passes 19/19 and the unchanged historical review fails
+  all seven blocker assertions, the intended inversion. Exact receipt:
+  `planning/longitudinal-store/second-author-repair-2026-08-30.md`. Fresh independent review still
+  gates acceptance and implementation.

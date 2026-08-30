@@ -25,6 +25,9 @@ const SOURCE_PATHS = [
   "packages/runtime/src/legal-moves.ts",
   "packages/runtime/src/phase.ts",
   "tools/research-chess/populations.ts",
+  "rfc/contracts/longitudinal-ingest-registry-v1.json",
+  "rfc/contracts/longitudinal-sign-subsets-v1.json",
+  "tools/d1612-longitudinal-contract-harness/longitudinal-contract.ts",
 ] as const;
 const PER_PHASE = 24;
 const WARM_PER_PHASE = 3;

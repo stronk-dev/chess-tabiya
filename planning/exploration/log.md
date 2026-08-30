@@ -11843,3 +11843,22 @@ human/owner-authored official 1.0 campaign obligation.
 inversion. Exact receipt: `planning/campaign/second-author-repair-2026-08-30.md`. Fresh review still
 gates acceptance and implementation; no production, schema, migration, official content, archive
 or protected-design byte changed.
+
+## 2026-08-30 — Longitudinal store D2063–D2069 second author repair
+
+Repaired the returned personal-observation foundation as one durable projection operation.
+Semantic and base-family source signs now survive registry, admission, keys and reads; a second
+literal artifact pins every runtime sign subset. Opportunity, occurrence and alternative share now
+come from the complete real legal-edge/event population with duplicate, all/none/mixed, forced and
+unavailable arms. SQLite persists immutable claimed N apart from requested M and executes the
+publication CAS. Account deletion durably suppresses rebuild for retained shared runs instead of
+resurrecting behavior under `__legacy`. Literal DDL names four tables, one run disposition, five
+indexes and closed row invariants. One authenticated snapshot union serves future style, skills,
+Review and campaign consumers; one bounded provider-free worker and once traversal own production
+reach.
+
+`make longitudinal-store-author-contract` passes 19/19. The unchanged historical
+`make longitudinal-store-fresh-review` fails all seven old blocker assertions, the intended
+inversion. Exact receipt: `planning/longitudinal-store/second-author-repair-2026-08-30.md`. Fresh
+review still gates acceptance and implementation; no production migration, worker, API, consumer,
+content, archive or protected-design byte changed.

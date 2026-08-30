@@ -24,6 +24,9 @@ const SOURCE_PATHS = [
   "packages/runtime/src/phase.ts",
   "packages/runtime/src/legal-moves.ts",
   "tools/research-chess/populations.ts",
+  "rfc/contracts/longitudinal-ingest-registry-v1.json",
+  "rfc/contracts/longitudinal-sign-subsets-v1.json",
+  "tools/d1612-longitudinal-contract-harness/longitudinal-contract.ts",
 ] as const;
 const LENGTHS = [20, 40, 80] as const;
 const NATIVE_PATHS = 8;
