@@ -33,23 +33,24 @@ test("all nine legacy fields bind to exact effects", () => {
   for (const field of ["markers", "guided", "humanSplit", "corpus", "voice", "spoken", "boardLighting", "arrows", "ambient"]) {
     assert.ok(effectTable.includes(`| \`${field}\` |`), `${field} must have one exact effect row`);
   }
-  assert.match(rfc, /a module absent[\s\S]*produces zero effects/);
+  assert.match(rfc, /A module absent[\s\S]*explicit Custom module include/);
 });
 
-test("availability is closed over server and browser facts", () => {
-  for (const source of ["opponent", "judge", "llm", "corpus", "tts", "tablebase", "stockfish", "maia", "explorer", "browser_speech"]) {
+test("availability is closed and split over server evidence and browser channels", () => {
+  for (const source of ["llm", "tts", "stockfish", "syzygy", "maia", "explorer", "browser_speech"]) {
     assert.match(rfc, new RegExp(`"${source}"`));
   }
-  for (const state of ["pending", "available", "unavailable"]) assert.match(rfc, new RegExp(`state: "${state}"`));
-  assert.match(rfc, /Pending never changes the\s+selected preference/);
+  for (const state of ["pending", "available", "unavailable", "failed"]) assert.match(rfc, new RegExp(`state: "${state}"`));
+  assert.match(rfc, /Pending never changes the\s+selected preference/u);
+  assert.match(rfc, /browser may report only output-channel readiness/u);
 });
 
-test("campaign is unreachable at HEAD and repaired with an authoritative origin", () => {
+test("campaign is unreachable at HEAD and phased behind its authoritative owner", () => {
   assert.doesNotMatch(presets, /campaign_encounter/);
-  assert.match(rfc, /kind: "campaign_encounter"/);
-  assert.match(rfc, /CampaignEncounterReceipt/);
-  assert.match(rfc, /server independently joins the active campaign pointer/);
-  assert.match(rfc, /plain pack run[\s\S]*can never select this arm/i);
+  assert.match(rfc, /Campaign is declared-awaiting/u);
+  assert.match(rfc, /will import that type; it will not copy or forecast its bytes/u);
+  assert.match(rfc, /CONTEXT_DECLARED_AWAITING/u);
+  assert.match(rfc, /ordinary-pack\s+refusal/u);
 });
 
 test("checkpoint A cannot counterfeit checkpoint B", () => {

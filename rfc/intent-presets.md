@@ -1,18 +1,23 @@
 # RFC: Intent presets — the workflow/preset layer over the module foundation
 
-- **Status:** draft returned by fresh independent buildability review 2026-08-30 on
-  [[D2127]]–[[D2134]]. The D1659–D1663 preference-intent repair survives, but the v2 field type,
-  preset identity, client/server authority split, effective Custom semantics, suppression bytes,
-  effect/source join, legacy-writer closeout and Campaign dependency remain open. Exact return:
-  `planning/intent-presets/fresh-independent-buildability-review-2026-08-30.md`; `make
-  intent-presets-fresh-review` reproduces 8/8 and the prior seven author arms remain green. The
-  shipped closed vocabularies, module/context tables, derivation and workflow namespace remain;
-  no further implementation is authorised.
+- **Status:** draft — [[D2127]]–[[D2134]] second author-repaired 2026-08-30; fresh independent
+  buildability review required. The repair closes one strict v2 preference authority,
+  removes duplicate preset identity, splits client request/server authority/client channel
+  narrowing, gives Custom explicit module semantics, types every suppression, derives source
+  dependencies from the module binding/DAG authority, retires every v1 writer and phases Campaign
+  as declared-awaiting its returned owner. `make intent-presets-author-contract` passes 7/7 and
+  `make intent-presets-second-author-repair` passes 8/8. No implementation is authorised.
 - **Author:** claude (drafted from `planning/evidence-foundation-ux/presets-head-derivation.md`, the HEAD derivation of every surface this document composes)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §3-forms O4 amendment (the algebra), §3a (silence default), §5 Q4; `design/03-product-breadth.md` §Play, §Review and explore, §Live and community, shell table
 - **Exploration gate:** Phase 5 of `planning/evidence-foundation-ux/plan.md` (the D717 program), unblocked by `learner-modules` acceptance 2026-08-22
-- **Depends on:** `rfc/learner-modules.md` (accepted — the 11 module ids and their contracts), `rfc/play-composition.md` (accepted — the preset pill slot and disclosure seat), `rfc/assistance-control-wiring.md` (draft, in review — landing-order assumptions in §8.2)
+- **Depends on:** `rfc/learner-modules.md` (accepted — the 11 module ids and their contracts),
+  `rfc/play-composition.md` (implementing — the preset pill slot and disclosure seat),
+  author-repaired `rfc/module-registration.md` (the complete binding and execution/DAG authority),
+  `rfc/assistance-control-wiring.md` (draft, in review — landing-order assumptions in §8.2), and
+  author-repaired `rfc/campaign-core.md` for the Campaign arm only. Campaign remains
+  declared-awaiting until that dependency is freshly accepted and implemented; the other seven
+  contexts may land first but cannot claim eight-context completion.
 - **Parent / amends:** `rfc/assistance-controls.md` (draft, returned on D715) — this RFC discharges its D532 per-context-ceiling obligation whole, per its own return instruction
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/evidence-foundation-ux/`
@@ -24,9 +29,12 @@ none
 ## Summary
 
 This RFC names the two vocabularies production has never had — the **workflow context** a
-learner is in and the **preset** they request — and specifies the pure compiler that turns
-`(preset, context, access, availability)` into the modules that may render and the
-`AssistanceConfig` the shipped screen consumes. It is the activation layer the accepted module
+learner is in and the **preset** they request — and specifies one staged authority that turns a
+strictly parsed client preference into a server-compiled result, then permits only browser-local
+channel narrowing. Preset identity is derived once from the preference receipt; authoritative
+context, access, evidence availability and module effects are re-derived by the server. The result
+contains the modules that may render and the `AssistanceConfig` the shipped screen consumes. It is
+the activation layer the accepted module
 foundation is waiting for: `learner-modules`' Discharge D1 and `play-composition`'s Discharge D1
 both name this RFC's **Checkpoint B** commit as their recording site. The eleven contracted module
 ids and registered renderers now exist; their preset activation edge remains open until a real
@@ -54,10 +62,10 @@ baseline.
 
 Out of scope: opponent policy (bot-policy's seam ends at `run.opponentPolicy`; §8.1), module
 eligibility (the D660 bar; §9), theming/animation (play-composition Discharge D3's lane),
-campaign encounter rules (`design/06` — campaign *consumes* this contract; **its RFC arrived on
-2026-08-22 and registered `campaign` as the eighth context**, so the drafted "not one of the
-contexts here" is superseded: the context is in §3's table and §3.2's clamp, and its encounter
-rules remain `campaign-core`'s), and any change to authored pack bytes. **Also out of scope,
+campaign encounter rules (`design/06` — campaign *consumes* this contract; `campaign` remains a
+declared eighth context, but no Campaign origin or receipt is executable until accepted and
+implemented `campaign-core` exports its authority; §5.2 phases the other seven contexts), and any
+change to authored pack bytes. **Also out of scope,
 added 2026-08-24:** the visual form of the pill and footer (§7.1), and any tenth
 `AssistanceConfig` field (§9a).
 
@@ -235,26 +243,25 @@ done. The other half is **not**: `permittedAssistance` at HEAD (`assistance.ts:3
 where D307(a) reported one. §3.2's clamp table is the value that body has been missing, and
 §3.2's `permittedAssistance` definition is what makes criterion 5 satisfiable.
 
-**Controlling 2026-08-30 repair — Campaign has an authoritative origin, not a Boolean
-hint.** The input is a discriminated union:
+**Controlling 2026-08-30 repair — Campaign is declared-awaiting, not locally invented.** This RFC
+defines only the ordinary seven-context origin arm it can currently build:
 
 ```ts
-export type WorkflowContextOrigin =
-  | { readonly kind: "run"; readonly sessionKind: RunSessionKind;
-      readonly feedbackPolicy: RunFeedbackPolicy; readonly liveKind?: LiveSessionKind }
-  | { readonly kind: "campaign_encounter"; readonly campaignRunId: string;
-      readonly nodeId: string; readonly runId: string; readonly receipt: CampaignEncounterReceipt };
+export type OrdinaryWorkflowContextOrigin = {
+  readonly kind: "run"; readonly sessionKind: RunSessionKind;
+  readonly feedbackPolicy: RunFeedbackPolicy; readonly liveKind?: LiveSessionKind;
+};
 ```
 
-The first arm preserves the shipped precedence and can never return `campaign`. The second returns
-`campaign` only after verifying a server-issued receipt binding exactly those three ids. Campaign
-entry receives it from `POST /campaigns/:campaignRunId/nodes/:nodeId/start`; resume receives it
-from `GET /campaigns/active`. The server independently joins the active campaign pointer and
-`campaign_events` before accepting a campaign-context module request. A plain pack run, a query
-parameter and a client-authored `{campaign: true}` can never select this arm. This consumes
-`campaign-core` §5's already-declared campaign-side authority without adding a run field. It fixes
-[[D1437]]'s real measured harm from [[D1500]]: Campaign now reads its `guided` default and its own
-preference key; its byte-identical Pack ceiling was never the defect.
+The `campaign` vocabulary/table row stays registered because it is part of the 1.0 contract, but
+no origin union member, client request or server compiler branch may select it until accepted and
+implemented `campaign-core` exports the exact encounter receipt, issuer and verifier. This RFC
+will import that type; it will not copy or forecast its bytes. The Campaign arm must then cross
+start, active-resume, issuer, ids, lifecycle/expiry, active-pointer/event join and ordinary-pack
+refusal before eight-context completion. Until then Campaign is an explicit typed
+`CONTEXT_DECLARED_AWAITING` refusal and does not silently compile as Pack. The seven ordinary
+contexts may implement independently; Campaign remains a hard 1.0 dependency and cannot be
+archived away.
 
 #### §3.2 `configClamp` — the literal table for all eight contexts
 
@@ -495,11 +502,11 @@ One pure function, no I/O, no clock (new, `presets.ts`):
 
 ```ts
 export function compileAssistance(input: {
-  readonly preset: PresetId;
   readonly context: WorkflowContextId;
   readonly access: AssistanceContext;        // includes workflowContext after §3.1
   readonly preference: WorkflowPreferenceReceipt;
-  readonly availability: AssistanceAvailabilityReceipt;
+  readonly serverAvailability: ServerEvidenceAvailabilityReceipt;
+  readonly moduleAuthority: CompiledModuleDeliveryAuthority;
 }): CompiledAssistance;
 
 export interface CompiledAssistance {
@@ -509,20 +516,44 @@ export interface CompiledAssistance {
   readonly effects: readonly CompiledAssistanceEffect[];
   readonly suppressed: readonly SuppressionRecord[];  // every removal, with its removing term
 }
-export interface SuppressionRecord {
-  readonly subject: ModuleId | keyof Omit<AssistanceConfig, "version">;   // amended: `version` is not suppressible
-  readonly by: "context_ceiling" | "access" | "availability" | "stored_choice";
-}
+export type SuppressionRecord =
+  | { readonly kind: "module"; readonly moduleId: ModuleId;
+      readonly requested: true; readonly effective: false;
+      readonly by: "context_ceiling" | "access" | "stored_choice";
+      readonly reason: SuppressionReason }
+  | { readonly kind: "field"; readonly field: AssistancePreferenceField;
+      readonly requested: AssistancePreferenceFields[AssistancePreferenceField];
+      readonly effective: AssistancePreferenceFields[AssistancePreferenceField];
+      readonly by: "context_ceiling" | "access" | "stored_choice" | "browser_channel";
+      readonly reason: SuppressionReason }
+  | { readonly kind: "effect"; readonly effectId: CompiledAssistanceEffectId;
+      readonly moduleId: ModuleId; readonly requested: "enabled"; readonly effective: "disabled";
+      readonly by: "source_availability"; readonly reason: SuppressionReason;
+      readonly failedAlternatives: readonly EffectSourceAlternative[] };
+
+export type SuppressionReason =
+  | "context_forbids_module" | "role_forbids_module" | "delivery_closed"
+  | "explicitly_disabled" | "context_clamped_field" | "access_clamped_field"
+  | "source_pending" | "source_unavailable" | "source_failed"
+  | "browser_channel_unavailable" | "invalid_preference_recovered";
 ```
+
+`SUPPRESSION_RENDERERS` is set-equal to the three `kind` arms and the closed reason union. It
+produces footer copy only from the typed requested/effective/module/effect/reason operands; callers
+cannot supply prose. Multiple suppressions retain stable compiler order—module registry order,
+then field registry order, then effect id—and are never collapsed merely because they share a
+subject. An unknown reason, missing requested/effective value or duplicate suppression identity is
+a compiler failure, not a generic “some help unavailable” sentence.
 
 Rules, in application order (rule 0 is an input-integrity refusal; rules 1–4 are each an
 ∩ term — among the ∩ terms, order affects only which `by` a record carries, never
 membership):
 
-0. `input.context` must equal `input.access.workflowContext` — the same value arrives twice
-   only because `AssistanceContext` travels to the server whole (§3.1); a mismatch is the
-   same typed refusal as rule 1, never a silent pick of either (added in cross-review: two
-   sources for one value with no equality check is the [[D523]] class in a signature).
+0. `input.context` must equal `input.access.workflowContext`; the requested preset is derived once
+   by `requestedPreset(input.preference, input.context)` and is not a second function argument.
+   An explicit or migrated receipt's preset must be allowed by that context; unset/invalid derives
+   the context default. A mismatch or forbidden receipt is refused before module, config or effect
+   compilation. Two independently supplied preset identities are structurally unrepresentable.
 1. `preset.modules ∩ context.moduleCeiling` — a preset not in `allowedPresets` is refused
    before compilation with a typed error; the UI never offers it (criterion 2).
 2. `∩ context ∩ access` — **amended 2026-08-24**: the compiler calls `contextClamp(context)`
@@ -545,6 +576,12 @@ membership):
    preserving explicit lower/off overrides. Thus selecting Quiet is actually Quiet, an explicit
    off is never re-enabled, and Advanced can still express every member of all nine domains.
    `migrated_snapshot` always displays Custom because field-level intent cannot be recovered.
+   Advanced additionally stores a sparse, explicit `moduleOverrides: {include, exclude}` pair.
+   Includes enter the requested module set before context/access ceilings; excludes always narrow.
+   This is the complete Custom escape hatch and is the only way to request a module absent from a
+   named preset. Raw field overrides never conjure an undeclared module. Thus “Analyze plus named
+   guidance” is represented as `include:["structure_nudge","guided_hint"]` together with
+   `guided:"live"`, and the ordinary surface says Custom. Context and access still only remove.
    The
    compiled `config` starts from the preset's config projection — **`presetDeclaration(preset).config`,
    the literal nine values in §4a's table** — and is overridden per-field by
@@ -573,8 +610,9 @@ effects, not a second authority. The closed adapter is:
 
 `CompiledAssistanceEffect` is a closed union keyed by
 `{moduleId, timing, form, subSurface?, outputChannel?}`. `guided: "off"` removes both governed
-guidance effects even while unrelated effects from those modules remain eligible; a module absent
-from `modules` produces zero effects regardless of a higher Advanced value. Import-time set
+guidance effects even while unrelated effects from those modules remain eligible. A module absent
+from the named preset can enter only through the explicit Custom module include, never as a side
+effect of a higher legacy field. Import-time set
 equality covers every config field and every module capability. These two negative directions are
 criteria 18–19, closing [[D1661]].
 
@@ -583,17 +621,51 @@ criteria 18–19, closing [[D1661]].
 The loader returns state, not a guessed config:
 
 ```ts
+export const ASSISTANCE_PREFERENCE_FIELDS = Object.freeze([
+  "markers", "guided", "humanSplit", "corpus", "voice", "spoken",
+  "boardLighting", "arrows", "ambient",
+] as const satisfies readonly (keyof Omit<AssistanceConfig, "version">)[]);
+export type AssistancePreferenceField = (typeof ASSISTANCE_PREFERENCE_FIELDS)[number];
+export type AssistancePreferenceFields = Readonly<Pick<
+  Omit<AssistanceConfig, "version">, AssistancePreferenceField
+>>;
+
+export interface CustomModuleOverrides {
+  readonly include: readonly ModuleId[];
+  readonly exclude: readonly ModuleId[];
+}
+
 export type WorkflowPreferenceReceipt =
   | { readonly kind: "unset" }
   | { readonly kind: "explicit"; readonly preset: PresetId;
-      readonly overrides: Readonly<Partial<AssistancePreferenceFields>> }
+      readonly overrides: Readonly<Partial<AssistancePreferenceFields>>;
+      readonly moduleOverrides: CustomModuleOverrides }
   | { readonly kind: "migrated_snapshot"; readonly preset: PresetId;
-      readonly config: AssistanceConfig; readonly sourceVersion: 1 | 2 | 3 | 4 }
+      readonly config: AssistanceConfig; readonly sourceVersion: 1 | 2 | 3 | 4;
+      readonly moduleOverrides: CustomModuleOverrides }
   | { readonly kind: "invalid_fallback"; readonly reason: "malformed" | "storage_unavailable" };
+
+export interface WorkflowPreferenceV2 {
+  readonly version: 2;
+  readonly assistanceHead: 4;
+  readonly preset: PresetId;
+  readonly overrides: Readonly<Partial<AssistancePreferenceFields>>;
+  readonly moduleOverrides: CustomModuleOverrides;
+}
 ```
 
 New writes use `tabiya.workflow.v2.${context}` and
-`{version:2,preset,overrides}`. The `Partial` is legal only here: it means “no explicit choice”,
+`WorkflowPreferenceV2`. `parseWorkflowPreferenceV2` accepts only a non-null, non-array plain
+object with the exact five top-level keys; exact preset/module ids; `include` and `exclude`
+disjoint and duplicate-free; and override keys set-equal to a subset of
+`ASSISTANCE_PREFERENCE_FIELDS`, with each value parsed by the registered assistance-head codec.
+Unknown keys, invalid values, `null`, arrays, wrong `version`/`assistanceHead`, duplicate module
+authority and a head field absent from `ASSISTANCE_PREFERENCE_FIELDS` all fail closed. The field
+registry is set-equal to `keyof Omit<AssistanceConfig,"version">`; adding a v5 field without an
+explicit v2 migration decision makes the import-time assertion and author fixture fail. Serializer
+output is canonical field order and strict-parser round-trips byte-for-byte.
+
+The `Partial` is legal only here: it means “no explicit choice”,
 not “missing compiler output”. Migration is total and one-way:
 
 - no v1 workflow key and no assistance key → `unset`, then the context default;
@@ -603,21 +675,29 @@ not “missing compiler output”. Migration is total and one-way:
 - malformed data → `invalid_fallback`, the context default plus a visible suppression/recovery
   reason; it never masquerades as an explicit choice.
 
-The old keys remain readable for this migration and are never rewritten merely by loading. A
-subsequent named-preset choice writes v2 and applies rule 4. `PROFILE_DEFAULTS` is deleted only at
-that implementation checkpoint; defaults then have one authority. This closes [[D1659]].
+On the first successful load, migration writes a canonical v2 value (including `unset` as the
+context default with empty overrides) before returning it. A valid v2 value always wins; an invalid
+v2 value yields visible `invalid_fallback` and never resurrects legacy bytes. After that seal,
+legacy keys are ignored. `loadAssistance`, `saveAssistance`, `loadWorkflowPreset` and
+`saveWorkflowPreset` lose every production caller; the two old `setItem` paths are deleted, and a
+source census fails any write to either v1 namespace. Settings and DrillScreen both call the v2
+writer. A storage event from a stale tab attempting a legacy write cannot change the in-memory v2
+receipt and triggers no recompile; reload still reads v2 first. `PROFILE_DEFAULTS` is deleted at
+the same checkpoint. This closes [[D1659]] and [[D2133]] with one authority rather than precedence
+prose.
 
-Availability is also a closed state receipt, assembled in the web client from the fetched
-`Capabilities.providers`, evidence-manifest producer availability and browser speech readiness:
+Availability is split by authority. The browser may report only output-channel readiness; the
+server owns chess-evidence source state and never trusts provider facts from the client:
 
 ```ts
 type AvailabilityState =
   | { readonly state: "pending" }
   | { readonly state: "available" }
-  | { readonly state: "unavailable"; readonly reason: string };
-type AssistanceAvailabilityReceipt = Readonly<Record<
-  "opponent" | "judge" | "llm" | "corpus" | "tts" | "tablebase" |
-  "stockfish" | "maia" | "explorer" | "browser_speech",
+  | { readonly state: "unavailable"; readonly reason: string }
+  | { readonly state: "failed"; readonly reason: string };
+type BrowserChannelAvailability = Readonly<Record<"browser_speech", AvailabilityState>>;
+type ServerEvidenceAvailabilityReceipt = Readonly<Record<
+  "llm" | "tts" | "stockfish" | "syzygy" | "maia" | "explorer",
   AvailabilityState
 >>;
 ```
@@ -625,12 +705,18 @@ type AssistanceAvailabilityReceipt = Readonly<Record<
 The mapping is total: `voice: persona` falls back to authored when LLM is unavailable;
 `spoken: provider` falls back to browser only when browser speech is available, otherwise off;
 `spoken: browser` falls to off when browser speech is unavailable. Pending never changes the
-selected preference, never upgrades disclosure, and recompiles from the same preference receipt
-when the capability arrives. Evidence-bearing modules remain admitted and render their registered
-honest-empty state when a source is pending/unavailable; only their source-dependent effects are
-suppressed. `humanSplit` and raw `corpus` sub-surfaces use the same source state. Every suppression
-records `{subject, by:"availability", requested, effective, reason}`. This closes [[D1662]] without
-inventing a second `/capabilities` vocabulary.
+selected preference and never upgrades disclosure. Evidence-bearing modules remain admitted and
+render their registered family-specific honest-empty state.
+
+`effectSourceDependencies` is derived from the compiled 205 binding rows plus the 117-row
+execution/derivation DAG: each effect carries OR alternatives of AND projection inputs, reduced to
+their producer/source-family identities. There is no hand-written module→provider table. Module
+assembly returns `available | no_witness | pending | unavailable | failed` per demanded family;
+`no_witness` completes the effect as honest empty, while pending/unavailable/failed disables only
+the effect whose every alternative failed. A mixed Inspector can therefore retain local-rule facts
+beside `Stockfish unavailable`, and one unavailable alternative never suppresses an effect whose
+other alternative is available. Every removal emits the typed effect suppression above. This
+closes [[D1662]]/[[D2132]] without inventing a second evidence authority.
 
 The compiled `config` stays **version 4**. The module axis does not live in the nine fields
 and does not need to: `modules` drives the Phase-3 module runtime, `config` drives the shipped
@@ -653,22 +739,27 @@ a file, an export surface or a caller. Named now, so a future citation resolves:
 
 | symbol | file | exported by | called by |
 |---|---|---|---|
-| `compileAssistance` | `packages/runtime/src/presets.ts` | `packages/runtime/src/index.ts` (the existing barrel that already exports `PRESET_IDS`, `deriveWorkflowContext`, `workflowContextPolicy`) | the web client only, at the one seat in §5.2 |
-| `contextClamp` | `packages/runtime/src/presets.ts` — beside `WORKFLOW_CONTEXT_POLICIES`, whose `configClamp` field it reads | runtime barrel | `permittedAssistance`; `compileAssistance` rule 2 |
-| `accessPermission` | `packages/runtime/src/assistance.ts` — the HEAD `permittedAssistance` body, renamed | runtime barrel | `permittedAssistance`; `compileAssistance` rule 2 |
+| `compileAssistanceRequest` | `packages/runtime/src/presets.ts` | runtime barrel | web client; parses local preference and browser-channel intent into the canonical untrusted request |
+| `compileAuthoritativeAssistance` | `packages/runtime/src/presets.ts` | runtime barrel | server module-query boundary; re-derives context, access, source and module authority |
+| `finalizeAssistanceEffects` | `packages/runtime/src/presets.ts` | runtime barrel | server after module assembly; joins exact source receipts to derived effect dependencies |
+| `narrowBrowserChannels` | `packages/runtime/src/presets.ts` | runtime barrel | web client; may only remove browser-local speech output from the server result |
+| `contextClamp` | `packages/runtime/src/presets.ts` — beside `WORKFLOW_CONTEXT_POLICIES`, whose `configClamp` field it reads | runtime barrel | `permittedAssistance`; `compileAuthoritativeAssistance` rule 2 |
+| `accessPermission` | `packages/runtime/src/assistance.ts` — the HEAD `permittedAssistance` body, renamed | runtime barrel | `permittedAssistance`; `compileAuthoritativeAssistance` rule 2 |
 | `permittedAssistance` | `packages/runtime/src/assistance.ts` — becomes the pointwise minimum (§3.2) | runtime barrel (unchanged) | every shipped call site, unedited |
 | `PRESET_DECLARATIONS[].config` | `packages/runtime/src/presets.ts:31-38` — the new §4a field on the shipped rows | already exported | `compileAssistance` rule 4 |
 
-**One caller, and it is client-side.** `compileAssistance` is a pure function over
-`(preset, context, access, preference, availability)`; three of those five live in the browser
-(`preference` is loaded from `localStorage`, `preset` is selected from that receipt,
-`availability` is the already-fetched
-`/capabilities` payload), so compiling on the server would mean shipping localStorage to it.
-The compiler therefore lives in `packages/runtime` (so the server *can* call it, and so
-`assertPresetFoundation`'s import-time checks cover it) and is **called from the web client**.
-The server continues to build `AssistanceContext` and to enforce its own refusals server-side —
-the compiler is not a security boundary and this RFC does not claim it as one; `permittedAssistance`
-and the shipped route refusals remain that.
+**One algebra, three authority stages.** The browser strict-parses v2/local migration state and
+builds `RequestedAssistanceV1 {schemaVersion, contextHint, preference, browserChannels,
+requestDigest}`. It sends that receipt as untrusted intent; it never sends effective modules,
+permissions or provider availability. The server strict-parses it, derives authoritative context
+from the run/campaign origin, derives access from the authenticated role and run boundary, reads
+server provider state, and compiles requested modules/config/effects. It returns
+`requestedDigest`, `effectiveDigest`, typed suppressions and source demands. After assembly,
+`finalizeAssistanceEffects` applies the exact dependency alternatives and seals a final digest.
+The browser then calls `narrowBrowserChannels`, which can only remove `spoken` output based on
+browser speech readiness and emits a `browser_channel` suppression; any attempted module/config or
+chess-evidence widening fails. Digest fixtures cross forged widening, stale client availability,
+context disagreement and a server response altered before browser narrowing.
 
 #### §5.2 The one seat, and the two orphaned functions — [[D971]]'s live half
 
@@ -686,22 +777,25 @@ save path) and `:766` (the load path), with `permittedAssistance(assistanceConte
 The context is therefore already in hand at the seat; the preset is not. It becomes:
 
 ```ts
-const origin = campaignReceipt === undefined
-  ? { kind: "run", sessionKind, feedbackPolicy, liveKind }
-  : { kind: "campaign_encounter", ...campaignReceipt };
+// Seven-context phase. Campaign is not admitted through this run-origin branch.
+const origin = { kind: "run", sessionKind, feedbackPolicy, liveKind } as const;
 const context = deriveWorkflowContext(origin);
 const preference = loadWorkflowPreference(context, storage());
-const compiled = compileAssistance({
-  preset: requestedPreset(preference, context), context, access: assistanceContext,
-  preference, availability,
-});
+const requested = compileAssistanceRequest({ contextHint: context, preference, browserChannels });
+const compiled = narrowBrowserChannels(serverModuleQuery(requested), browserChannels);
 ```
+
+The later Campaign branch is added only by the accepted `campaign-core` implementation, importing
+its exact encounter receipt, issuer and verifier. This RFC neither declares nor guesses that type.
+Until then, any attempt to derive `campaign` from a run origin, query parameter or client object
+returns `CONTEXT_DECLARED_AWAITING` at the server boundary.
 
 `compiled.config` replaces the `assistance` object the nine switches read; `compiled.modules`
 and `compiled.suppressed` are what §7's pill and footer render. Choosing a preset calls
 `saveWorkflowPreference(context, {version: 2, preset: next, overrides:
-retainedLowerOverrides})` and re-derives. Advanced edits write sparse v2 overrides; a higher edit
-changes the visible mode to Custom. The v1 workflow and assistance keys are migration inputs, not
+retainedLowerOverrides, moduleOverrides})` and re-derives. Advanced edits write sparse v2 field
+overrides plus explicit module includes/excludes; either a higher field or any module delta changes
+the visible mode to Custom. The v1 workflow and assistance keys are migration inputs, not
 parallel writers. The old loaders become private migration helpers or are deleted; neither remains
 a non-test ordinary-path authority.
 
@@ -717,7 +811,8 @@ write contract while retaining it as a read-only migration source):
 
 - New authoritative key grammar **beside, never inside run state**:
   `` `tabiya.workflow.v2.${contextId}` `` storing
-  `{ version: 2, preset: PresetId, overrides: Partial<AssistancePreferenceFields> }`, through
+  `{ version: 2, assistanceHead: 4, preset: PresetId,
+  overrides: Partial<AssistancePreferenceFields>, moduleOverrides: {include,exclude} }`, through
   the same `PreferenceStorage` seam. The old `tabiya.workflow.v1.*` and
   `tabiya.assistance.v1.*` keys are read-only migration sources under §5.3's total rules.
 - **Client-side only, claims nothing versioned.** Precedent: assistance preferences persist in
@@ -887,7 +982,8 @@ set is its complement in `WORKFLOW_CONTEXTS × PRESET_IDS`. At HEAD that derivat
 are **drift tripwires only** — a fixture may not restate them as its own arithmetic.
 
 1. **Pointwise narrowing, exhaustively.** For every admitted pair:
-   `compiled.modules ⊆ preset.modules` and `compiled.modules ⊆ context.moduleCeiling`, and
+   `compiled.modules ⊆ (preset.modules ∪ explicit include) − explicit exclude` and
+   `compiled.modules ⊆ context.moduleCeiling`, and
    for every `AssistanceConfig` field the compiled value ≤ the clamp under the per-field domain
    order pinned in §3.2's first table. Flip-a-constant check: widening any single ceiling entry
    makes exactly the fixtures naming that entry fail.
@@ -907,8 +1003,8 @@ are **drift tripwires only** — a fixture may not restate them as its own arith
    Fixture B: requested `arrows: "sight"` in a context whose clamp is `locked_off` ⇒ compiled
    off with a `{by:"context_ceiling",requested:"sight",effective:"off"}` suppression. Fixture
    C: any value above a named projection yields `displayMode:"custom"`; selecting a named preset
-   removes higher overrides and writes only `tabiya.workflow.v2.*`. Legacy keys remain unchanged
-   until that explicit v2 write.
+   removes higher overrides and writes only `tabiya.workflow.v2.*`. First load seals a canonical v2
+   value; subsequent legacy writes cannot affect either the in-memory receipt or reload.
 5. **The context reaches the server, non-vacuously.** `deriveWorkflowContext` is the single
    derivation, imported by both client and server (one symbol, two importers — asserted by
    the census test); the fixture matrix over
@@ -978,10 +1074,13 @@ are **drift tripwires only** — a fixture may not restate them as its own arith
     (`sessionKind` removed, §3.2); and a lint asserts that no exported symbol in
     `assistance.ts`/`presets.ts` takes a parameter it never references. Non-vacuity is
     criterion 5's before/after pairs.
-15. **The authoritative receipt has a caller, and the compiler exists.** A census asserts
+15. **The authoritative receipt has callers, and the authority split exists.** A census asserts
     `loadWorkflowPreference` and `saveWorkflowPreference` each have at least one non-test caller,
-    while the old v1 loaders have none outside the migration reader. `compileAssistance` has at
-    least one non-test caller and one definition. The paired negative control fails when the
+    while every old v1 reader is private to migration and every old writer has zero production
+    definitions/callers. `compileAssistanceRequest`, `compileAuthoritativeAssistance`,
+    `finalizeAssistanceEffects` and `narrowBrowserChannels` each have their named client/server
+    caller. Forged widening, context disagreement, stale availability and changed response bytes
+    fail before rendering. The paired negative control fails when the
     `DrillScreen.svelte` seat (§5.2) is reverted.
 16. **The preset UI renders from the compiled values only.** *(New, [[D971]].)* The pill and
     footer read `compiled` and never `PRESET_DECLARATIONS` directly; a fixture in `match`
@@ -992,24 +1091,33 @@ are **drift tripwires only** — a fixture may not restate them as its own arith
     fixtures cover empty storage, missing key, malformed key, valid v1 workflow-only, one v1–v4
     assistance snapshot, explicit lower/off and explicit higher values. Empty Guided equals the
     literal Guided projection; migrated snapshots are Custom; malformed data carries a recovery
-    reason. No complete fallback config is accepted as nine explicit choices.
+    reason. No complete fallback config is accepted as nine explicit choices. The strict v2 parser
+    crosses unknown keys, invalid domain values, null/array, version/head mismatch, overlapping or
+    duplicate module ids and a future assistance-head field with no migration decision.
 18. **Named means literal; Advanced remains complete.** Every named preset plus lower/equal sparse
     override stays named and never exceeds its projection. Every higher override is expressible and
     yields Custom. Analysis→Quiet cannot retain Analysis-only help under a Quiet label, while an
-    explicit off remains off. The Advanced editor reaches every member of all nine field domains.
+    explicit off remains off. The Advanced editor reaches every member of all nine field domains
+    and every module through explicit include/exclude. “Analyze plus named guidance” activates the
+    guided effects only through its explicit module includes and remains subject to context/access.
 19. **One effect authority.** Set equality covers the adapter's nine fields and every registered
     module capability. For each governed field, lowering/off removes exactly its governed effects;
-    unrelated effects survive. For every absent module, all its effects remain absent even if a
-    raw value is higher. A fixture fails if either `compiled.modules` or `compiled.config` is
-    mutated after effect compilation.
+    unrelated effects survive. For every absent module, all its effects remain absent unless the
+    explicit Custom module include requests it; a raw field value alone is never a module grant.
+    A fixture fails if either `compiled.modules` or `compiled.config` is mutated after effect
+    compilation.
 20. **Availability is total and stable.** The cross product of all closed source states with the
     availability-sensitive values has one typed effective result, requested/effective suppression
-    and registered honest-empty behavior. Pending→available recompiles from the same preference,
-    never changes the selected preset and renders no evidence before the source becomes available.
-21. **Campaign entry is authoritative and reachable.** A real start receipt and active-resume
-    receipt derive `campaign`, read the Campaign v2 key and select Guided when unset. A plain pack
-    run, forged receipt and mismatched `{campaignRunId,nodeId,runId}` are refused; the server-side
-    module operation repeats the campaign-table join independently.
+    and registered honest-empty behavior. Dependencies are derived set-equal from the binding/DAG
+    authority, including AND/OR alternatives and same-subject inputs. Pending→available finalizes
+    from the same preference, never changes the selected preset; no-witness renders honest empty;
+    mixed Inspector families and one-live-alternative retain their independent effects.
+21. **Campaign is honestly phased.** Until accepted/implemented `campaign-core` exports its exact
+    encounter receipt/issuer/verifier, every Campaign origin returns
+    `CONTEXT_DECLARED_AWAITING`; no ordinary run, query parameter or client object derives Campaign.
+    The seven-context implementation cannot call itself eight-context complete. Once the dependency
+    lands, the criterion expands to real start/resume, issuer, ids, lifecycle, active-pointer/event
+    join and ordinary-pack refusal before archival.
 22. **Two honest implementation checkpoints.** Checkpoint A may prove compiler, migration,
     Advanced/Custom semantics and compiled pill/footer while this RFC remains implementing.
     Checkpoint B requires at least one real registered module delivery through
@@ -1023,9 +1131,10 @@ are **drift tripwires only** — a fixture may not restate them as its own arith
 |---|---|---|---|---|
 | D1 | Owner-use validation of every `candidate` entry (names, labels, promises, defaults, allowedPresets, the Support-offering set — **and, from 2026-08-24, the 45 projection cells of §4a and the 72 clamp cells of §3.2**, which are derived from shipped module contracts but are still candidates the owner reshapes in play) — confirmed/renamed/re-tabled by logged rulings after real sessions; until then candidates ship as candidates | OWNER | the log entries recording the rulings; the commit dropping each `candidate` marker cites its ruling | |
 | D2 | Server-side per-learner workflow persistence (the personalization era's store) — deferred; localStorage is v1's honest scope. The future RFC claims its own migration position (behind `bot-policy` at HEAD ordering) | `planning/exploration/plan.md` | that RFC's registration | |
-| D3 | Campaign as an eighth context — `design/06`'s encounter rules compose this contract (a campaign encounter is a `ContextContract` with encounter-authored ceilings); nothing here forecloses it and nothing here builds it | `planning/exploration/plan.md` | the campaign RFC's registration | discharged 2026-08-22 — `rfc/campaign-core.md` registered at `5b52698`, accepted same day; its §5 registers `campaign` per this contract's §3 invariant with the seeded contract row |
+| D3 | Register Campaign as an eighth context without inventing encounter behavior here | `planning/exploration/plan.md` | the campaign RFC's registration | discharged 2026-08-22 — `rfc/campaign-core.md` registered the context; this discharge covers vocabulary only, not executable origin authority |
 | D4 | **The tenth field.** `hintDistance` gets one column in §4a's projection table and one in §3.2's clamp table, both derived by the rules already written there, plus the v4→v5 migration arm. **Genuinely blocked, blocker named:** `rfc/hint-distance.md` is *returned to research* (`planning/rfc-drafting-queue.md:1250`, `85a0584`), so the field's domain and its ordering do not exist to project. Nothing here reserves a slot or shims one (§9a) | claude — `rfc/hint-distance.md`'s author | that RFC's landing commit, which adds both columns in the same commit per the completion protocol | |
 | D5 | **Checkpoint B: the real `compiled.modules` consumer.** Module ids and registered renderers now exist, but the edge is not discharged by registration or by a zero-item fixture. It closes only when a production module operation reads the compiled effects, renders at least one item and records its disclosure receipt. Post-commit/checkpoint/review deliveries use durable receipts. The module-registration amendment's tightly bounded pre/at-commit Support receipts are ephemeral and non-persisted by design; they still carry exact run/node/staged-move/module/form identity and are included in criterion 9's trace, without being mislabeled as run events. Checkpoint A may land config/migration/pill while this row stays open | codex — coordinated `module-registration.md` implementation lane | the non-vacuous production delivery/logging commit | |
+| D6 | **Executable Campaign origin.** Import the exact encounter receipt, issuer and verifier from accepted and implemented `campaign-core`; cross start/resume, lifecycle, active-pointer/event join and ordinary-pack refusal. Until then the seven-context phase returns `CONTEXT_DECLARED_AWAITING` and cannot claim eight-context completion | campaign-core.md | the campaign-core implementation commit plus this RFC's expanded criterion 21 | |
 
 **Checkpoint truth.** Checkpoint A closes only the compiler/config/persistence/pill obligations and
 leaves this RFC implementing. It does not flip `learner-modules` or `play-composition` counterpart
@@ -1035,16 +1144,16 @@ ledger/log closeout in the same commit.
 
 ## Fresh-review routing
 
-| row | remaining author work |
+| row | author repair; fresh review still required |
 |---|---|
-| [[D2127]] | define the closed v2 assistance-preference field map and strict parser/serializer |
-| [[D2128]] | remove duplicate preset identity or enforce exact receipt/input correlation |
-| [[D2129]] | publish the shared client-request/server-authority compilation split and digests |
-| [[D2130]] | make every higher Custom primitive reach its governed effects without widening ceilings |
-| [[D2131]] | type requested/effective/reason suppression bytes and deterministic footer rendering |
-| [[D2132]] | derive exact effect/source dependencies from module bindings and assembler inputs |
-| [[D2133]] | retire/redirect every v1 writer and define coexistence precedence atomically |
-| [[D2134]] | phase Campaign or consume an accepted exact encounter receipt/issuer contract |
+| [[D2127]] | closed nine-field/head registry plus strict canonical v2 parser/serializer |
+| [[D2128]] | preset derives once from the sealed receipt; no duplicate compiler input |
+| [[D2129]] | client request → server compile/finalize → client-only narrowing with sealed digests |
+| [[D2130]] | explicit Custom module include/exclude plus sparse field effects under ceilings |
+| [[D2131]] | discriminated requested/effective/reason suppressions and closed renderers |
+| [[D2132]] | effect dependencies derived from the 205-binding/117-operation DAG authority |
+| [[D2133]] | first-load v2 seal, v2 precedence and zero production v1 writers |
+| [[D2134]] | Campaign declared-awaiting imported owner receipt; seven contexts phase independently |
 
 ## Open questions
 
@@ -1110,6 +1219,13 @@ named in its own text, never this list.
 
 ## Changelog
 
+- 2026-08-30 (**second author repair [[D2127]]–[[D2134]]**): defined and exercised the strict
+  v2 field/head/parser/serializer authority; removed duplicate preset input; split client request,
+  server authority/finalization and browser-only narrowing; gave Custom an explicit module delta;
+  typed suppression renderers; derived effect/source alternatives from the module binding/DAG
+  authority; sealed migration against every v1 writer; and phased Campaign behind its returned
+  owner without removing it from 1.0. The maintained author contract passes 7/7 and the new return
+  contract passes 8/8. Fresh independent review still gates implementation.
 - 2026-08-30 (**fresh independent return [[D2127]]–[[D2134]]**): returned the author amendment.
   The repaired unset/explicit/migrated distinction remains, but the compiler cannot yet construct
   one authoritative end-to-end request: its persisted field type is undefined; preset arrives

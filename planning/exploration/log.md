@@ -11942,3 +11942,23 @@ projection-specific operation selection, runtime-imported all 117 callables, and
 witnesses for all eight source families through deterministic local, Stockfish, Syzygy, Maia and
 Explorer seams. The strengthened author target is 9/9 green; the earlier 7/7 log line records the
 pre-correction checkpoint and is intentionally not edited under the append-only rule.
+
+## 2026-08-30 — Intent-presets D2127–D2134 second author repair
+
+Repaired the fresh buildability return around one staged preference authority. The v2 receipt now
+has a closed nine-field image, strict parser, canonical serializer and first-load seal; preset
+identity derives once from it. Browser code constructs untrusted intent, the server re-derives
+context/access/providers/modules/effects and seals the result, and the browser may only narrow its
+local speech channel. Advanced/Custom carries explicit module deltas; every narrowing has typed
+requested/effective/reason bytes.
+
+Effect/source dependencies derive from the exact 205 binding rows and 117-operation DAG, preserving
+AND/OR alternatives, honest no-witness and mixed-family output. All v1 writers retire in the
+implementation checkpoint. Campaign remains a registered but declared-awaiting context until
+accepted and implemented `campaign-core` exports its exact authority; the other seven contexts may
+phase but cannot claim eight-context completion.
+
+`make intent-presets-author-contract` passes 7/7 and
+`make intent-presets-second-author-repair` passes 8/8. This is author repair only; fresh independent
+review still gates acceptance and production. Receipt:
+`planning/intent-presets/second-author-repair-2026-08-30.md`.
