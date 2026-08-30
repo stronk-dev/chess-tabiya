@@ -12143,3 +12143,18 @@ confirmation and production-image recovery drills survive. `make storage-backup-
 passes 4/4. No production, storage, workflow, schema, content, archive or protected-design byte
 changed. Exact review:
 `planning/storage-backup-recovery/fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Safe-deployment profiles fresh independent return
+
+Returned `safe-deployment-profiles.md` on [[D2214]]–[[D2218]] after tracing operator inputs,
+appliance client setup, Caddy's forwarded-header authority, the live REST route population and the
+release proof output. The config file and file-certificate arm have no closed union; appliance TLS
+trust has no hostname-resolution path; proxy-only trust has no enforceable internal/egress network
+graph; 34 explicit unsafe-method branches plus generic actions have no budget manifest; and the
+deployment receipt has no protocol.
+
+The three-profile split, loopback-safe default, exact-origin boundary, secure-cookie posture,
+bounded Node reader and stream-preserving writer survive. `make safe-deployment-fresh-review`
+passes 5/5. No production, Compose, Caddy, workflow, schema, content, archive or protected-design
+byte changed. Exact review:
+`planning/safe-deployment-profiles/fresh-independent-buildability-review-2026-08-30.md`.

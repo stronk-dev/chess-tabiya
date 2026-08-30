@@ -1,6 +1,10 @@
 # RFC: Safe deployment profiles and reverse proxy
 
-- **Status:** draft
+- **Status:** **draft — RETURNED by fresh independent buildability review 2026-08-30 on
+  [[D2214]]–[[D2218]].** The three-profile safety boundary survives, but operator input and receipt
+  protocols are undefined, appliance name resolution is missing, proxy isolation is not specified,
+  and route budgets have no exact manifest. `make safe-deployment-fresh-review` passes 5/5.
+  Implementation remains unauthorized.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
@@ -369,6 +373,33 @@ no core learner journey depending on hosted infrastructure. This RFC keeps loopb
 the zero-configuration default, makes LAN appliance TLS operationally explicit, and refuses the
 current unsafe all-interface HTTP hybrid.
 
+## Fresh independent return (2026-08-30)
+
+The independent buildability pass returned this RFC on five seams:
+
+1. **[[D2214]] — operator input is not a protocol.** `DeploymentProfile` has three values, while
+   §5 calls `hosted-file-cert` a declared variant and §13 accepts an unspecified `CONFIG=<file>`.
+   There is no closed config shape, discriminant, canonicalization or error algebra from which the
+   server environment, Compose and Caddy files can be rendered without invention.
+2. **[[D2215]] — appliance naming stops at TLS.** Trusting Caddy's internal root does not make the
+   configured hostname resolve on another LAN device. The required-input matrix and guided workflow
+   owe one supported DNS/mDNS/hosts mechanism, its setup/removal effect and a literal-name probe.
+3. **[[D2216]] — the proxy trust boundary has no exact network graph.** The app trusts forwarded
+   headers because Caddy is said to be its only peer, but `expose`/no published port alone does not
+   define an internal-only app network. Hosted Caddy also needs public/ACME egress. Specify the
+   exact dual attachment and prove host/sibling/public bypass failure.
+4. **[[D2217]] — body budgets have no route assignment.** The three labels and prose categories do
+   not classify the current unsafe route population by stable operation identity. The author must
+   publish the exhaustive current manifest; implementation may then enforce its set equality.
+5. **[[D2218]] — “the receipt” is not defined.** Release proof consumes image digests and config
+   revisions, while wrappers promise only a printed URL. Define one versioned result union,
+   canonical config/artifact identities and stdout/stderr/exit semantics.
+
+Exact evidence and required repairs are in
+`planning/safe-deployment-profiles/fresh-independent-buildability-review-2026-08-30.md`. The
+loopback default, TLS split, exact-origin boundary, bounded Node ingress and streaming egress remain
+the right scope. No production/deployment implementation is authorized by this return.
+
 ## Acceptance criteria
 
 1. The local profile starts from clean checkout with no config, reports the exact loopback URL,
@@ -435,6 +466,8 @@ implementation detail.
 
 ## Changelog
 
+- 2026-08-30: returned by fresh independent buildability review on D2214–D2218; added executable
+  review guard `make safe-deployment-fresh-review`; no implementation authorized.
 - 2026-08-27: drafted from O13/F12-A, D607, and the current release-platform audit; added the
   source-reproduced unbounded-ingress and defeated-streaming defects D1846/D1847 to the same
   production transport boundary.

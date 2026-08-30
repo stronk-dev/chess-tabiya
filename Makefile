@@ -386,6 +386,10 @@ runtime-distribution-fresh-review:
 storage-backup-fresh-review:
 	node --test tools/d2210-storage-backup-fresh-review/contract.test.mjs
 
+.PHONY: safe-deployment-fresh-review
+safe-deployment-fresh-review:
+	node --test tools/d2214-safe-deployment-fresh-review/contract.test.mjs
+
 pack-check:
 	@test -n "$(FILE)" || (echo "Usage: make pack-check FILE=<path-to-pack.json>" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/pack-check.ts --bundle --platform=node --format=esm --outfile=dist/pack-check.js
