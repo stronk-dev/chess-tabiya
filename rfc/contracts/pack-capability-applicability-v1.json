@@ -3,7 +3,8 @@
   "artifact": "tabiya.pack-capability-applicability.authority.v1",
   "schema": {
     "path": "schemas/drill_pack.schema.json",
-    "sha256": "7da4d49506eb028872bd909d7ab34a3107b44ba2374f4a686ac625d112d653b0"
+    "sha256": "7da4d49506eb028872bd909d7ab34a3107b44ba2374f4a686ac625d112d653b0",
+    "targetTransition": "rfc/contracts/pack-capability-schema-transition-v1.json"
   },
   "closedVocabulary": {
     "inventoryAlgorithm": "closed-schema-members-v1",
@@ -14,8 +15,8 @@
     "discriminatedOneOfMembers": 73,
     "mappedMembers": 373,
     "excludedMembers": 0,
-    "mappingAlgorithm": "readable-schema-member-v1",
-    "expandedMappingSha256": "3389cd762ecaca1ba8eaf9cc92cfaf824782f5a96f2b55c5cf0e70f259c319ae"
+    "mappingAlgorithm": "stable-schema-member-v2",
+    "expandedMappingSha256": "e5c6a915c6a01e6c7fd3651a9d679ac3b434c19b404a6f2c268b0b5b623c999b"
   },
   "always": [
     { "capability": "grade.move_quality", "sites": ["moveQualityGrade", "classFromThresholds"] },
@@ -40,5 +41,75 @@
     { "pointer": "/checkpoints/*/interaction/keyPoints/*/ground/shape", "registry": "shape", "value": "id-when-ground-kind-shape_plan" },
     { "pointer": "/feedbackClaims/*/principles/*", "registry": "principle", "value": "id" }
   ],
-  "expandedAuthoritySha256": "e6d304029d79301e490bcedb24a2921838622df6c3cd1676c39e5b96ec3875e2"
+  "metadataExclusions": [
+    "/properties/requires",
+    "/$defs/capabilityRequirement",
+    "/$defs/capabilityVersion"
+  ],
+  "meaningAuthority": {
+    "baseSource": "exact-schema-member-image-v1",
+    "dependencyAlgorithm": "typescript-symbol-reference-closure-v1",
+    "interpreterRoots": [
+      {
+        "subject": "SuccessCondition",
+        "sites": [
+          "apps/server/src/pack-orchestrator.ts#evaluateSuccessCondition",
+          "apps/server/src/pack-orchestrator.ts#successConditionEvidenceRefs"
+        ]
+      },
+      {
+        "subject": "SimpleTrigger",
+        "sites": [
+          "apps/server/src/pack-orchestrator.ts#evaluateSimpleTrigger",
+          "apps/server/src/pack-orchestrator.ts#compiledOpeningTrigger"
+        ]
+      },
+      {
+        "subject": "StructuralExpression",
+        "sites": [
+          "packages/runtime/src/structure.ts#matchesStructuralExpression",
+          "packages/runtime/src/structure.ts#mirrorExpression"
+        ]
+      },
+      {
+        "subject": "StructuralFeature",
+        "sites": [
+          "packages/runtime/src/structure.ts#matchesStructuralFeature",
+          "packages/runtime/src/structure.ts#structuralFeatureKinds"
+        ]
+      },
+      {
+        "subject": "TransitionExpression",
+        "sites": [
+          "packages/runtime/src/transition.ts#matchesTransitionExpression",
+          "packages/runtime/src/transition.ts#transitionReading"
+        ]
+      },
+      {
+        "subject": "ObjectivePredicate",
+        "sites": [
+          "packages/runtime/src/objective.ts#evaluateObjectivePredicate"
+        ]
+      },
+      {
+        "subject": "EngineCondition",
+        "sites": [
+          "apps/server/src/guard.ts#applyRecordedEngineGuard",
+          "apps/server/src/guard-conditions.ts#ENGINE_CONDITION_DEFAULTS"
+        ]
+      }
+    ]
+  },
+  "stableIdentity": {
+    "algorithm": "stable-schema-member-v2",
+    "owner": "nearest root property or $defs terminal key",
+    "branch": "discriminator property plus discriminator const value",
+    "member": "exact scalar member",
+    "forbiddenInputs": [
+      "oneOf array ordinal",
+      "$defs container depth",
+      "source file location"
+    ]
+  },
+  "expandedAuthoritySha256": "41b448ca5566bfe77912decc741fc54168662e3a385b6c8457be450bfcd8db94"
 }

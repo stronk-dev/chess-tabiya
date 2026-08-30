@@ -2,19 +2,18 @@
 
 - **RFC:** `rfc/pack-capability-contract.md`
 - **Reviewer:** codex
-- **Started:** 2026-08-26; repeat review completed 2026-08-28; author repair completed 2026-08-30
-- **State:** all eleven return blockers repaired at authoring tier; fresh independent review required;
+- **Started:** 2026-08-26; latest author repair completed 2026-08-30
+- **State:** [[D2070]]–[[D2076]] repaired at authoring tier; fresh independent review required;
   no implementation authorised
 
 ## Current objective
 
-**Completed 2026-08-30.** The repeat independent return is repaired without weakening the prior
-[[D1620]]–[[D1626]] gains. The
-exact review is `repeat-independent-buildability-review-2026-08-28.md`; its eleven-arm executable
-reproduction is now an eleven-arm positive author contract under `make
-pack-capability-repeat-review`. The exact repair receipt is
-`second-return-author-repair-2026-08-30.md`. This remains specification work, not a lane-0.30
-implementation or corpus wave.
+**Completed 2026-08-30.** The second fresh return is repaired without weakening the prior
+[[D1620]]–[[D1626]], [[D1982]]–[[D1992]] or [[D2050]]–[[D2055]] gains. The exact review is
+`second-fresh-independent-review-2026-08-30.md`; its seven-arm reproduction is now a positive
+author contract under `make pack-capability-second-fresh-review`. Exact receipt:
+`third-author-repair-2026-08-30.md`. This remains specification work, not lane-0.30 implementation
+or a corpus wave.
 
 ## Author-repair order
 
@@ -32,6 +31,9 @@ implementation or corpus wave.
    `requires` ([[D1992]]).
 8. ✅ Re-run `make pack-capability-closure`, `make pack-capability-repeat-review` and `make verify`, then
    request a fresh independent buildability review. Do not implement lane 0.30.
+9. ✅ Repair [[D2070]]–[[D2076]] with a sealed two-schema transition, split plan/readiness gates,
+   author-owned post-image, complete source closure, metadata exclusions, retained histories and
+   ordinal-free identities; preserve all 24 earlier arms and request fresh review.
 
 ## Exit
 

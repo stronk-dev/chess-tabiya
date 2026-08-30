@@ -1,13 +1,14 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — returned by second fresh independent review 2026-08-30 on
-  [[D2070]]–[[D2076]]. The D2050–D2055 repairs survive, but lane 0.30 still cannot land: required
-  stamps conflict with the held corpus; plan readiness contradicts verify; implementation changes
-  the schema that the author artifact seals; source/dependency closure remains unauthored; the
-  stamp is inside its own applicability population; version history is unrepresentable; and
-  schema-order-derived ids are not stable. Prior 7 + 11 + 6 contracts remain green; `make
-  pack-capability-second-fresh-review` reproduces 7/7 blockers. No schema, registry, pack or digest
-  implementation is authorised; the D560 hold stays whole.
+- **Status:** draft — [[D2070]]–[[D2076]] author-repaired 2026-08-30; fresh independent review
+  required. Lane 0.30 now lands through an exact two-schema transition: only the byte-sealed 92-file
+  legacy catalogue may use 0.27 without a stamp, while every new/external 0.30 document requires
+  one. Plan shape and apply readiness are separate commands; an author-owned ordered patch seals
+  the 0.30 post-image; schema-member plus transitive interpreter authority closes meaning sources;
+  `/requires` and its grammar are excluded from applicability; declaration history is keyed by
+  subject+version; and stable ids use semantic owner/discriminator identity, never array ordinals.
+  `make pack-capability-second-fresh-review` passes 7/7; prior contracts remain maintained. No
+  schema, registry, pack or digest implementation is authorised; the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -85,7 +86,8 @@ so that ordering is expressible.
 
 **Out of scope, explicitly.** Pilot membership (O6.3 / F7's job); UX defaults; new chess
 primitives; applying the corpus plan (the [[D560]] content hold stands whole per [[D949]] — this
-RFC ships a *planner*, and its applier writes nothing until the hold's graduation arm lifts);
+RFC ships a *planner* and a sealed 0.27→0.30 transition, while its applier writes nothing until the
+hold's graduation arm lifts);
 lifting Gate F; detector semantics v1 (clause 4 of the gate, a separate document); and the 14 F1
 declared-vs-consumed mismatch rows.
 
@@ -226,6 +228,7 @@ TypeScript declarations:
 
 ```ts
 export type CapabilityMeaningSource =
+  | { readonly kind: "schema_member"; readonly sourceIdentity: SchemaMemberIdentity }
   | { readonly kind: "ast"; readonly site: CapabilitySite }
   | { readonly kind: "f1_projection"; readonly projection: CapabilityId }
   | { readonly kind: "resolved_content"; readonly registry: "shape" | "principle"; readonly entryId: string };
@@ -246,6 +249,16 @@ dependency. Before the registry is generated, every §3.1 named root is exported
 symbol listed there; inline/property/prose descriptions are not legal sites. The TypeScript package
 and lockfile are part of the repository toolchain; changing the
 extractor format requires a new site-image domain tag rather than silently moving every digest.
+
+Every closed-vocabulary declaration also carries its exact `schema_member` source. That source is
+necessary but not sufficient for an interpreted member: the checked `meaningAuthority` in
+`rfc/contracts/pack-capability-applicability-v1.json` adds every interpreter entry site and closes
+each site through TypeScript symbol references, including imported helpers and constant tables.
+The seven multi-site/root families are author-owned rows in that artifact, not implementation
+choices. The compiler set-equals those roots against the exhaustive-switch census: a new switch,
+missing second site, unresolved symbol or reachable helper omitted from closure fails. An unused
+same-name symbol is unreachable and contributes nothing. A helper-only mutation therefore moves
+the dependent digest; a mutation outside the referenced symbol graph does not.
 
 An `f1_projection` source resolves one exact `ProjectionDeclaration` from
 `PRIMARY_EVIDENCE_MANIFEST`. Its source image is JCS over the domain
@@ -369,14 +382,15 @@ closed schema vocabulary rows may not use it. This closes [[D2055]].
 
 The complete **author authority** is
 `rfc/contracts/pack-capability-applicability-v1.json` (SHA-256
-`c1d7f7f30301f794a9ea64cd9c3dae5c35eed71ef34f4eb729b9534e1665ef1c`). It freezes the input schema
-digest, traversal and public-id algorithms, exact coverage counts, the expanded mapping digest,
-all unconditional sites and every resolved-reference selector. The implementation-generated image
+`94c399748637f43ef08a3093ddc65a10949aca0b5a153892578877a6a7ac3125`). It freezes the input schema
+digest, target-transition artifact, traversal and public-id algorithms, exact coverage counts, the
+expanded mapping digest, all unconditional sites, every resolved-reference selector, the seven
+interpreter-root families and the metadata exclusions. The implementation-generated image
 is `packages/schema/src/capability/applicability.generated.ts`; it must expand to the authority's
 digests rather than becoming its own authority. The author artifact defines **exactly three independently enumerable sets**:
 
-1. every member in `x-tabiya-capability-members` emits a `schema_member` selector and the structured
-   capability carried by that member row;
+1. every closed member in the sidecar's source inventory emits a `schema_member` selector and the
+   structured capability carried by its stable member row;
 2. `PACK_ALWAYS_CAPABILITIES` is a literal table of the unconditional evaluators/defaults from the
    13 named evaluator roots plus `guard.defaults`; every member names its AST source; and
 3. the five literal shape/principle reference sites in the artifact emit one `resolved` selector.
@@ -385,30 +399,43 @@ At author HEAD the sealed schema has **103 enum nodes / 300 enum members** plus 
 `oneOf` nodes / 73 branch members**: 373 mapped closed-vocabulary members and 0 exclusions. The
 canonical source inventory digest is
 `dda24bb80b91eadccdffecaf4577395b4a40c5810f3c0fce4371cd1b26483f21`; applying
-`readable-schema-member-v1` yields 373 collision-free public mappings with digest
-`3389cd762ecaca1ba8eaf9cc92cfaf824782f5a96f2b55c5cf0e70f259c319ae`; joining those rows to the 14
+the stable v2 expansion yields 373 collision-free public mappings with digest
+`e5c6a915c6a01e6c7fd3651a9d679ac3b434c19b404a6f2c268b0b5b623c999b`; joining those rows to the 14
 always rows and five resolved-reference rows yields expanded-authority digest
-`e6d304029d79301e490bcedb24a2921838622df6c3cd1676c39e5b96ec3875e2`.
+`41b448ca5566bfe77912decc741fc54168662e3a385b6c8457be450bfcd8db94`.
 
 `closed-schema-members-v1` walks object keys in lexical order and records every scalar member of an
 `enum`. It also records a discriminated `oneOf` when every branch has exactly one direct property
 whose schema carries `const` and that property name is common to all branches; its source pointer is
 the `oneOf` owner and each `const` is a member. Rows sort by JCS of `{schemaPointer,member}`.
-`readable-schema-member-v1` removes `$defs`, `properties` and `items` pointer segments; converts an
-`oneOf/N` pair to `branchN` and any other numeric segment to `itemN`; preserves an
-`[A-Za-z0-9_-]+` token and otherwise writes `x` followed by its lowercase UTF-8 hex; appends the
-encoded member; and joins the tokens with dots at integer version 1. Collision is a hard
+`stable-schema-member-v2` derives an identity from the semantic owner, discriminator and member,
+never from container position. The owner is the nearest root property or terminal `$defs` key. A
+`oneOf` branch contributes its unique discriminator property plus `const` value; its numeric array
+index contributes nothing. When sibling branches intentionally share that discriminator (the two
+`structuralExpression.kind="quantified"` forms), the branch's closed structural discriminator is
+added—`over.files` versus `over.squares`—and absence or ambiguity fails rather than falling back to
+an ordinal. Remaining property tokens and the exact scalar member are encoded with
+the compatibility grammar and joined at integer version 1. Moving an owner deeper under `$defs`,
+reordering branches or moving the schema file preserves identity; renaming the owner,
+discriminator or member is a semantic rename and must use §5's successor path. Collision is a hard
 `CAPABILITY_IDENTITY_COLLISION`, never a suffix chosen by the implementer. These exact algorithms,
 counts and digests make the compact artifact the full 373-row mapping, not a recipe with an author
 choice left open.
 
 `make capability-applicability` regenerates bytes; `make capability-applicability-check` compares
-without writing. The generator also emits `CAPABILITY_APPLICABILITY_EXCLUSIONS`, set-equal to every
-member in `x-tabiya-capability-excluded-members`. Every closed schema member, default-bearing absent field
-and resolved reference is therefore mapped or explicitly excluded. An annotation, always-root or
-reference added without changing the generated artifact fails; a generated row with no independent
-source fails `CAPABILITY_APPLICABILITY_ORPHAN`. The ordered generated image participates in the
-registry digest, so selector drift cannot hide behind stable declarations.
+without writing. The sidecar authority replaces the earlier proposed schema keywords: the target
+schema contains only validation grammar, while this reviewed artifact owns capability mappings,
+meaning roots and exclusions. Every closed schema member, default-bearing absent field and resolved
+reference is therefore mapped or explicitly excluded. A schema member, interpreter root,
+always-root or reference added without changing the independent author artifact fails; a generated
+row with no independent source fails `CAPABILITY_APPLICABILITY_ORPHAN`. The ordered generated image
+participates in the registry digest, so selector drift cannot hide behind stable declarations.
+
+Capability metadata is outside the stamped population by exact authority. The target-transition
+artifact excludes `/properties/requires`, `/$defs/capabilityRequirement` and
+`/$defs/capabilityVersion`; the instance walker skips `/requires` before selector evaluation. No
+member of a requirement tuple can emit a capability. Removing or widening any exclusion changes
+both author-artifact digests and fails the post-image contract.
 
 Pointers use RFC 6901 with `*` as the only extension, matching exactly one array/object segment per
 star. A literal selector matches the scalar at every expanded pointer; an absent selector is legal
@@ -434,25 +461,26 @@ over-stamps and fails. That pair is the non-vacuous criterion-3 control required
 ### §3. The capability enumeration
 
 `CAPABILITY_DECLARATIONS` (`packages/runtime/src/capability/registry.ts`, new) is a closed array.
-**Unit: one declaration per capability subject. Total at landing: the census below, asserted by
-criterion 4.**
+**Unit: one declaration per `(capability subject, version)`.** `CAPABILITY_HISTORIES` groups those
+declarations by subject, retains obsolete versions, and names exactly one current version. Total at
+landing is the census below, asserted by criterion 4; historical rows are additional checked
+members, never replacements hidden from the census.
 
 #### §3.1 The census is derived from checked roots, never inferred from syntax alone
 
 The census has four independently checked authorities. A declaration is not one of them; it must
 set-equal their union.
 
-1. **Pack schema vocabularies.** Every `enum` and every discriminated `oneOf` beneath the pack
-   schema carries member arrays. `x-tabiya-capability-members` is a closed array of closed objects
-   `{member, sourceIdentity, capability}`; `x-tabiya-capability-excluded-members` is a closed array
-   of `{member, sourceIdentity, reason, authority}`, where authority is an existing ledger or
-   protected-intent reference. `member` is the exact JSON scalar from the owning `enum` or the
-   exact discriminator `const`; `sourceIdentity` must byte-equal JCS of the owning schema pointer
-   plus that member. The two arrays are disjoint and their member union must set-equal the owning
-   vocabulary. A missing member, duplicate member in or across arrays, wrong source identity,
-   non-member scalar or unknown object field is a schema/compiler error before declarations are
-   compared. Empty arrays are legal only when the other array covers the complete non-empty
-   vocabulary. At the sealed author artifact all 373 members are mapped and none excluded.
+1. **Pack schema vocabularies.** The independently reviewed applicability artifact maps every
+   scalar member of every `enum` and discriminated `oneOf` beneath the semantic pack schema. The
+   author sidecar stores the source-inventory and expanded-mapping digests rather than placing
+   capability metadata inside the schema it stamps. `member` is the exact JSON scalar;
+   `sourceIdentity` is the stable semantic-owner/discriminator/member identity from §2.7. Mapping
+   and exclusion sets are disjoint and their union set-equals the source inventory. A missing
+   member, duplicate, wrong identity, non-member scalar or unknown artifact field fails before
+   declarations are compared. At the sealed legacy authority all 373 members are mapped and none
+   excluded; the three target metadata subtrees are excluded before enumeration, not counted as
+   semantic members.
 2. **Interpreter sites.** The implementation owns a literal `PACK_INTERPRETER_ROOTS` list of the
    pack-evaluation modules named by §3a-bis of `planning/platform-alignment/f3-derivation.md`.
    Every exhaustive arm in those roots carries `@tabiya-capability-interpreter <sourceIdentity>`.
@@ -474,15 +502,13 @@ cardinality is unchanged. The census separately diagnoses `SCHEMA_CAPABILITY_UNA
 `CAPABILITY_INTERPRETER_ORPHAN`, `CAPABILITY_NAMED_ROOT_MISSING`,
 `CAPABILITY_DECLARATION_EXTRA`, and `CAPABILITY_IDENTITY_MISMATCH`.
 
-Both member-array annotations are registered strict-schema keywords through one compiler authority:
-`packages/schema/src/ajv.ts` exports `createStrictAjv2020(options?)`. It constructs AJV 2020 with
-`strict:true`, registers `x-tabiya-capability-members` and
-`x-tabiya-capability-excluded-members` with closed meta-schemas for the exact objects above and
-their containing arrays, and then returns the instance. The schema package tests,
-server `pack-validation.ts`, CLI/build tools and migration planner must import this factory; direct
-`new Ajv2020` for pack schemas is a set-equal census failure. A valid annotation compiles, an invalid
-annotation fails its keyword meta-schema, and a misspelled keyword remains an `unknown keyword`
-error—strictness is not disabled and annotations are never silently ignored.
+All pack-schema readers still import `packages/schema/src/ajv.ts`, which exports one
+`createStrictAjv2020(options?)` factory with
+`strict:true`; F3 registers no custom schema keywords. A capability key in the schema is therefore
+an unknown-keyword error. The applicability sidecar has its own JSON schema and closed parser, and
+the compiler joins it to the pack schema by stable source identity. This keeps schema validation
+strict while preventing implementation metadata from changing the post-image or entering its own
+applicability population.
 
 **Literal named evaluator roots (13):**
 
@@ -619,7 +645,7 @@ separation both ways.
 #### §4.1 What a pack declares (lane 0.30)
 
 ```jsonc
-// pack root, new required key
+// 0.30 pack root, required key
 "requires": [
   { "id": "objective.state_machine",   "version": { "kind": "integer", "value": 1 } },
   { "id": "structuralFeature.outpost", "version": { "kind": "integer", "value": 1 } },
@@ -643,10 +669,40 @@ all writers call the same function before `digestDrillPack`. The JSON schema set
 and ordering. A reordered or duplicate equivalent set is invalid rather than allowed to change a
 pack digest. Planner output and authored `requires` compare canonical arrays byte-for-byte.
 
-**The stamp is inside `digestDrillPack`.** `packages/schema/src/drill-pack/digest.ts:69` digests
+#### §4.1a The 0.27→0.30 transition is a closed compatibility reader
+
+The D560 hold makes a same-commit 92-pack rewrite illegal today; making `requires` optional would
+make absence permissive forever. The transition therefore has two real schemas and no heuristic
+legacy mode:
+
+- `urn:chess-tabiya:schema:drill-pack:0.30` requires `requires` and is the only schema accepted for
+  newly authored, uploaded, Studio-written or API-submitted packs;
+- the 0.27 reader accepts an unstamped document **only** when its repository-relative path and raw
+  SHA-256 are members of the author-sealed 92-document legacy catalogue population; and
+- an unstamped document outside that exact allowlist fails `PACK_CAPABILITY_STAMP_REQUIRED`. A
+  changed legacy byte fails `PACK_LEGACY_IMAGE_MISMATCH`; neither condition falls back to generic
+  0.27 validation.
+
+`rfc/contracts/pack-capability-schema-transition-v1.json` (SHA-256
+`fc452622a89ddea734eb2e3168b1662d26819c05a40d85375e710ed245ae9e64`) seals the legacy schema,
+the sorted path+raw-digest population (`92`, digest
+`933eeecd0aee6e50b2a595b62bfc22485ba8a4d2dc945a5b4efdd9cf35fca849`), the ordered JSON-pointer
+patch and the exact 0.30 post-image (`83841` canonical bytes, SHA-256
+`450d54dd2c77b8fe83173221640628a4da7c0c0d66cce1c2fc6edc6a5c44cb0c`). Implementation applies
+that patch and verifies the post-image; it cannot regenerate or amend author authority.
+
+The compatibility arm is repository-catalogue-only. The server never accepts a caller-supplied
+path as proof of legacy membership. `PackRegistry` supplies an internal catalogue identity after
+reading the sealed file, and every other entry point selects 0.30. The migration applier replaces
+all 92 files and dependent digests atomically after the D560 budget decision. The same commit then
+deletes the 0.27 reader and allowlist; adding a 93rd legacy digest is forbidden. This is a bounded
+transition, not a second permanent format.
+
+**The 0.30 stamp is inside `digestDrillPack`.** `packages/schema/src/drill-pack/digest.ts:69` digests
 every byte with no field filter, so a requirement cannot drift from the content it describes. The
-cost, accepted knowingly by [[D1058]]: **all 92 packs churn their digest** on landing and every
-ledger `packDigest` must be re-stamped (§6 plans it).
+cost, accepted knowingly by [[D1058]]: **all 92 packs churn their digest** when the held migration
+is applied and every ledger `packDigest` must be re-stamped (§6 plans it). The software transition
+lands first without changing those legacy bytes.
 
 **The Gate F cost, stated plainly.** Clause 1 requires that *no active RFC holds a drill-pack schema
 lane*. Lane 0.28 is held by accepted `graduation-clearance`, 0.29 by draft
@@ -828,7 +884,22 @@ export interface CapabilityDeploymentBinding {
   readonly configured: boolean;
   readonly providerId?: string;
 }
+
+export interface CapabilityHistory {
+  readonly subjectId: string;
+  readonly declarations: readonly CapabilityDeclaration[]; // one per exact version
+  readonly current: CapabilityId;
+}
 ```
+
+`CapabilityDeclaration` identity is `(subjectId, version)`, not subject alone. Histories retain
+deprecated and withdrawn declarations so an old pack requirement resolves as known-obsolete rather
+than unknown. Exactly one declaration equals `current`; it must be `active`. Every deprecated row
+has one successor in the same history, successor edges are acyclic and strictly advance within the
+same version arm, and following successors terminates at `current`. A withdrawn row may omit a
+successor only when its typed reason says no migration exists. Mixed integer/semver histories are
+forbidden for one subject. The registry crosses 1→2, 1→2→3, withdrawal without successor,
+duplicate current, cross-subject successor and cycle fixtures.
 
 The projection from non-refused shipped vocabulary is total and checked:
 
@@ -851,9 +922,10 @@ a module-load error.
 
 Three things this fixes.
 
-**`successor` becomes typed.** `FormatDisposition.successor` is `string | null` today
-(`dispositions.ts:14`) with nothing saying what it points at. Here it is a `CapabilityId` and
-criterion 9 asserts every `deprecated` successor resolves to an `active` declaration.
+**`successor` becomes typed and historical.** `FormatDisposition.successor` is `string | null`
+today (`dispositions.ts:14`) with nothing saying what it points at. Here it is a `CapabilityId`;
+criterion 9 asserts every `deprecated` successor resolves to the next retained declaration and
+that the chain terminates at the one active current declaration.
 
 **A refusal costs at least as much as an unmeasured row.** The shipped
 `assertAdvertisedCapabilityDispositions` demands an `experiment` for every `unmeasured` disposition
@@ -981,7 +1053,8 @@ costume"*:
 
 ```
 make migration-plan          # no FILE argument — walks the population itself, read-only
-make migration-plan-check    # node --test + the plan >/dev/null, wired into `make verify`
+make migration-plan-check    # validates deterministic shape/content; wired into `make verify`
+make migration-apply-ready   # refuses judgement debt; invoked only at the authorized apply gate
 make migration-apply FILE=…  # the separately-invoked applier
 ```
 
@@ -998,10 +1071,18 @@ The plan is `schema: "tabiya.capability.migration-plan.v1"`, `mode: "read_only"`
 | `digestConsequences[]` | which pack digests move and which ledgers need re-stamping |
 | `assertion` | the baked population tripwire |
 
-**The stop rule, as a mechanism rather than prose:** a plan containing any `judgement[]` entry
-**exits non-zero and the applier writes nothing**. O6.2's own sentence is that such a plan *"never
-becomes an automatic content wave"*; criterion 11 fixtures a plan with one judgement entry and
-asserts both the exit code and the empty applier.
+`migration-plan` and `migration-plan-check` succeed for empty, mechanical-only and
+judgement-bearing plans when the plan is complete, canonical and internally valid. Ordinary CI
+therefore reports judgement debt without treating its honest existence as malformed software.
+`migration-apply-ready` is the stop gate: any `judgement[]` entry exits non-zero. The applier first
+runs that exact readiness predicate and writes nothing on failure. O6.2's own sentence is that such
+a plan *"never becomes an automatic content wave"*; criterion 11 crosses empty, mechanical and
+judgement plans, distinct shape/readiness exit codes, and zero writes.
+
+The first software landing emits all 92 frozen legacy documents as mechanical target rows but does
+not apply them. The later D560-authorized invocation may apply only when `judgement[]` is empty and
+the plan's source population still equals the sealed legacy image. A stale byte or added document
+invalidates the plan before readiness is considered.
 
 **This is what D996's per-release ruling reads.** The owner declined a standing budget in favour of
 deciding per release, so the plan's job is to be *rulable*: mechanical and judgement work separated,
@@ -1072,7 +1153,7 @@ This live RFC owns the next author pass; the review rows are not free-floating d
 The author pass inverts `make pack-capability-fresh-review`, preserves the prior 7 + 11 arms and
 requests another independent review. It does not implement lane 0.30 or touch corpus bytes.
 
-## Second-fresh-return author obligations (2026-08-30)
+## Second-fresh-return author obligations (2026-08-30) — discharged by this amendment
 
 This live RFC owns the seven new return seams:
 
@@ -1088,9 +1169,10 @@ This live RFC owns the seven new return seams:
   history.
 - [[D2076]] — replace schema-ordinal public ids with stable authored/discriminator identities.
 
-The next author pass must invert `make pack-capability-second-fresh-review`, preserve the previous
-7 + 11 + 6 arms, run full verification and request another independent review. It may not implement
-lane 0.30 or mutate corpus bytes while the landing authority remains contradictory.
+This author pass inverts `make pack-capability-second-fresh-review`, preserves the previous
+7 + 11 + 6 arms, runs full verification and requests another independent review. It does not
+implement lane 0.30 or mutate corpus bytes; the staged authority exists solely so a later accepted
+implementation can land without violating D560.
 
 ## Acceptance criteria
 
@@ -1108,7 +1190,10 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
 2. **The registry is closed and total.** `CAPABILITY_DECLARATIONS` compiles; the four §4.3
    invariants throw at module load. Fixture: an `active` AST-backed declaration lacking a source
    fails with `CAPABILITY_SOURCE_MISSING`; an F1-backed declaration with its subject-appropriate
-   projection source passes without inventing an AST site.
+   projection source passes without inventing an AST site. Every schema vocabulary member carries
+   its base schema-member source plus every interpreter root and transitive symbol dependency named
+   by the author authority; helper-only edits in structural, transition and objective families move
+   the intended closed digest, while unused and unreachable same-name symbols do not.
 3. **Declared equals applicable closure.** For all 92 packs, `requires` set-equals §2.7's selector
    result plus transitive dependencies and resolved entries. The outpost/default fixture derives
    exactly `guard.defaults`, `objective.state_machine`, `structuralFeature.outpost` and
@@ -1123,8 +1208,9 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
    count-preserving swapped public ids with the five named error codes. It set-equals identities,
    not cardinality. The 13 evaluator and 16 table rows in §3.1 are executable inputs, not prose
    counts. A separately generated baseline reddens on movement.
-   The strict-AJV fixture includes a three-member enum and rejects one missing member, a duplicate,
-   a wrong `{schemaPointer,member}`, a non-member scalar and an unknown annotation field.
+   The sidecar fixture includes a three-member enum and rejects one missing member, a duplicate,
+   a wrong semantic owner/discriminator/member identity, a non-member scalar and an unknown
+   sidecar field. Strict AJV rejects any capability keyword added to the pack schema.
 5. **Version literals have a typed boundary (§2.1a).** A current authority initialized from
    `"x@1"` fails; `legacyCapabilityFixture("x@1")` parses and passes; an unrelated exact schema
    string such as `tabiya.sourcing.evidence.v1` passes. The check uses TypeScript contextual types
@@ -1142,8 +1228,9 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
    refused capability cannot be made supported by provider health. The format-row fixture also
    proves assistance, error and resolved-reference rows retain their actual subject kinds instead
    of being coerced to `vocabulary_arm`.
-9. **Every `deprecated` successor resolves.** Fixture: a successor pointing at anything other than
-   an `active` capability fails.
+9. **Every history resolves.** Declarations are unique by subject+version; each history retains old
+   rows and has exactly one active current declaration. Fixtures cross 1→2, 1→2→3, withdrawal
+   without successor, duplicate current, cross-subject successor, mixed version arms and a cycle.
 10. **Every legacy refusal migrates, and every semantic refusal has authority.** The exact 20-row
     source population in §5a set-equals `LEGACY_REFUSED_MIGRATION`; deleting, adding or renaming a
     legacy row without a migration entry fails. Fixtures separately prove: missing mapping fails;
@@ -1152,8 +1239,10 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     document is not accepted or whose criterion does not resolve fails; and `pending_decision`,
     `unimplemented`, `unmeasured` and `refuted` cannot be encoded as `refused`. The reversed
     cross-learner row must compile `active`, while `retryVariants` must compile its two destinations.
-11. **The stop rule is a mechanism.** A plan containing one `judgement[]` entry exits non-zero and
-    `make migration-apply` writes zero bytes. Fixture asserts both.
+11. **Plan shape and apply readiness are different mechanisms.** Empty, mechanical-only and
+    judgement-bearing complete plans all pass `migration-plan-check`; only the last fails
+    `migration-apply-ready`, and `make migration-apply` then writes zero bytes. Fixtures assert all
+    exit codes and prove ordinary `make verify` stays green while honest judgement debt exists.
 12. **The population is baked.** `make migration-plan` refuses when any of §7's six counts moves.
     Fixture: a temporary seventh document in `content/shapes/` reddens the plan.
 13. **The D566 regression — the criterion this RFC exists for.** A fixture reproduces the
@@ -1184,8 +1273,16 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     *Wrong implementation that passes criteria 1–15 and fails this:* one resolving both states at
     registration, which makes a pack permanently unavailable for the process lifetime because a
     provider was down for two minutes — the precise flexibility the ruling exists to preserve.
-17. **Instruments stay green.** `make verify` passes with `migration-plan-check`,
+17. **Instruments stay green.** `make verify` passes with shape-only `migration-plan-check`,
     `capability-census` and `capability-check` wired in; CI invokes the same Make targets.
+18. **The staged schema transition is exact and temporary ([[D2070]]–[[D2074]]).** Applying the
+    ordered author patch to the committed 0.27 schema produces the sealed 0.30 bytes/digest and a
+    required `requires` key. Exactly the sealed 92 path+raw-digest catalogue files may enter the
+    internal 0.27 reader; an edited member, a 93rd file, any upload/API document without a stamp,
+    or caller-supplied path fails. `/requires` and its two grammar definitions emit zero
+    applicability rows. Branch reorder and `$defs` relocation preserve stable ids; a real member
+    rename changes identity and requires a successor. After all 92 migrate, one fixture proves the
+    legacy reader/allowlist are deleted together.
 
 ## Discharges
 
@@ -1195,7 +1292,7 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
 | D2 | The sacrificial pilot must exercise every **required** 1.0 capability. Membership and proof are owned by the existing F7 node and Phase-8 Gate-F procedure | `planning/platform-alignment/rfc-graph.md` F7 | `planning/platform-alignment/execution-queue.md` Phase 8 proof commit | |
 | D3 | Re-stamp every affected evidence-ledger `packDigest` after lane-0.30 churn; the planner derives the population. [[D949]] holds application until Gate F | codex | the implementing/apply commit | |
 | D4 | `EVIDENCE_KINDS` remains the checked membership register in `rfc/README.md`; it is provenance vocabulary, not evaluator semantics. An evaluator over a kind gets its own capability | `archive/shared-resource-registers.md` | this amendment | **discharged 2026-08-28** |
-| D5 | Implement the registry, census, checks, handshake and planner without applying the corpus plan | codex | the implementing commit | |
+| D5 | Implement the registry, census, checks, handshake, sealed 0.27 compatibility reader, 0.30 schema and planner without applying the held corpus plan | codex | the implementing commit | |
 | D6 | Close [[D576]] when declared-vs-derived pack requirements ship | codex | the implementing commit | |
 | D7 | Close [[D632]] when D566 dependants appear as judgement debt | codex | the implementing commit | |
 | D8 | Close [[D1003]] when the no-property-filter migration population ships | codex | the implementing commit | |
@@ -1260,6 +1357,16 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-08-30 (**D2070–D2076 author repair**): replaced the impossible atomic corpus landing with a
+  byte-sealed two-schema transition. Only the exact 92 committed 0.27 catalogue documents may use
+  the internal legacy reader; every new/external 0.30 document requires a stamp, and the legacy arm
+  retires with the held apply. Split plan validity from apply readiness; published an ordered
+  author patch and exact 0.30 post-image; added schema-member plus transitive interpreter meaning
+  authority; excluded the complete capability-metadata subtree; made declaration history
+  subject+version keyed with one acyclic current chain; and replaced ordinal ids with semantic
+  owner/discriminator identities, including the two quantified structural forms. The maintained
+  7 + 11 + 6 arms and repaired 7-arm contract pass. Fresh independent review still gates
+  acceptance and implementation.
 - 2026-08-30 (**second fresh independent return**): returned on [[D2070]]–[[D2076]]. Required
   stamps cannot land apart from the held 92-pack rewrite; judgement-bearing plan output is both
   required red and verify-green; the old raw schema digest cannot survive required annotations and

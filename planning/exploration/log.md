@@ -11879,3 +11879,26 @@ preregistration. Canonical receipts are
 `planning/longitudinal-store/d1405b-single-decision-results.json`. The measurement aggregator now
 removes successful intermediate arm fragments so its ordinary Make target leaves no scratch-file
 residue.
+
+## 2026-08-30 — Pack capability D2070–D2076 author repair
+
+Repaired the second fresh return as one staged schema/capability operation. D560 forbids the held
+92-pack apply, while D1058 forbids a permissive missing stamp; the contract now resolves both with
+an internal 0.27 reader limited to the exact author-sealed path+raw-digest catalogue population and
+a required-stamp 0.30 reader for every new/external document. The legacy arm and allowlist retire
+with the later atomic corpus apply; no 93rd member is legal.
+
+Plan shape now remains green with honest judgement debt while a separate readiness gate blocks the
+applier. A six-operation author patch produces the exact 83,841-byte 0.30 schema image. The
+applicability artifact adds base schema-member authority, seven interpreter-root families,
+transitive TypeScript symbol closure and exact metadata exclusions. Declaration identity is
+subject+version with retained acyclic history. Stable public ids use semantic
+owner/discriminator/member and distinguish the two `kind=quantified` forms by `over.files` versus
+`over.squares`, never by branch ordinal.
+
+`make pack-capability-closure` passes 7/7, repeat review 11/11, fresh review 6/6 and the repaired
+second-fresh contract 7/7. Exact receipt:
+`planning/pack-capability-contract/third-author-repair-2026-08-30.md`. This is author repair only:
+no schema, production registry, pack, sidecar, digest, content, archive or protected-design byte
+changed. Fresh independent review still gates acceptance and implementation; D560 still gates the
+corpus apply.

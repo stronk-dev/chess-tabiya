@@ -83,19 +83,41 @@ function encodeToken(value: unknown): string {
   return /^[A-Za-z0-9_-]+$/u.test(text) ? text : `x${Buffer.from(text).toString("hex")}`;
 }
 
-function publicId(source: SourceIdentity): string {
+function valueAt(root: unknown, tokens: readonly string[]): any {
+  return tokens.reduce((value: any, token) => value?.[token], root as any);
+}
+
+function publicId(source: SourceIdentity, schema: any): string {
   const raw = source.schemaPointer.split("/").filter(Boolean)
     .map((token) => token.replaceAll("~1", "/").replaceAll("~0", "~"));
-  const tokens: string[] = [];
-  for (let index = 0; index < raw.length; index += 1) {
+  const ownerAt = raw[0] === "$defs" || raw[0] === "properties" ? 1 : 0;
+  const tokens: string[] = [encodeToken(raw[ownerAt] ?? "root")];
+  for (let index = ownerAt + 1; index < raw.length; index += 1) {
     const token = raw[index]!;
     if (["$defs", "properties", "items"].includes(token)) continue;
     if (token === "oneOf" && /^\d+$/u.test(raw[index + 1] ?? "")) {
-      tokens.push(`branch${raw[index + 1]}`);
+      const branchIndex = Number(raw[index + 1]);
+      const parent = valueAt(schema, raw.slice(0, index));
+      const branch = parent.oneOf[branchIndex];
+      const constants = Object.entries(branch?.properties ?? {}).flatMap(([name, value]: [string, any]) =>
+        value !== null && typeof value === "object" && Object.hasOwn(value, "const")
+          ? [[name, value.const] as const]
+          : []);
+      let identity = constants.length === 1
+        ? `${encodeToken(constants[0]![0])}-${encodeToken(constants[0]![1])}`
+        : `shape-${sha256(canonical(branch)).slice(0, 12)}`;
+      if (constants.length === 1 && parent.oneOf.filter((candidate: any) =>
+        candidate?.properties?.[constants[0]![0]]?.const === constants[0]![1]).length > 1) {
+        const over = Array.isArray(branch?.properties?.over?.required)
+          ? branch.properties.over.required.join("-")
+          : sha256(canonical(branch)).slice(0, 12);
+        identity += `.over-${encodeToken(over)}`;
+      }
+      tokens.push(identity);
       index += 1;
       continue;
     }
-    tokens.push(/^\d+$/u.test(token) ? `item${token}` : encodeToken(token));
+    if (!/^\d+$/u.test(token)) tokens.push(encodeToken(token));
   }
   return [...tokens, encodeToken(source.member)].join(".");
 }
@@ -113,17 +135,18 @@ test("D2050: one public grammar crosses every shipped family with structured leg
 test("D2051: the author artifact seals the full source inventory and expanded applicability image", () => {
   assert.equal(sha256(read(artifact.schema.path)), artifact.schema.sha256);
   assert.match(rfc, new RegExp(sha256(artifactBytes), "u"));
-  const inventory = closedVocabulary(JSON.parse(read(artifact.schema.path)) as unknown);
+  const schema = JSON.parse(read(artifact.schema.path)) as unknown;
+  const inventory = closedVocabulary(schema);
   assert.deepEqual([inventory.enumNodes, inventory.enumMembers, inventory.unionNodes, inventory.unionMembers], [103, 300, 15, 73]);
   assert.equal(inventory.rows.length, 373);
   assert.equal(sha256(canonical(inventory.rows)), artifact.closedVocabulary.inventorySha256);
 
-  const ids = inventory.rows.map(publicId);
+  const ids = inventory.rows.map((source) => publicId(source, schema));
   assert.equal(new Set(ids).size, ids.length);
   assert.ok(ids.includes("structuralFeature.outpost"));
   const mappings = inventory.rows.map((sourceIdentity) => ({
     sourceIdentity,
-    capability: { id: publicId(sourceIdentity), version: { kind: "integer", value: 1 } },
+    capability: { id: publicId(sourceIdentity, schema), version: { kind: "integer", value: 1 } },
   }));
   assert.equal(sha256(canonical(mappings)), artifact.closedVocabulary.expandedMappingSha256);
   const closedRows = mappings.map(({ sourceIdentity, capability }) => ({
@@ -134,11 +157,13 @@ test("D2051: the author artifact seals the full source inventory and expanded ap
   assert.equal(artifact.resolvedReferences.length, 5);
 });
 
-test("D2052: member-array grammar is total and specifies strict negative controls", () => {
-  assert.match(rfc, /`x-tabiya-capability-members` is a closed array/u);
-  assert.match(rfc, /`x-tabiya-capability-excluded-members` is a closed array/u);
-  for (const failure of ["missing member", "duplicate member", "wrong source identity", "non-member scalar", "unknown object field"]) assert.ok(rfc.includes(failure));
-  assert.match(rfc, /three-member enum/u);
+test("D2052: the independent sidecar grammar is total and keeps schema validation strict", () => {
+  assert.equal((artifact as any).closedVocabulary.mappedMembers, 373);
+  assert.deepEqual((artifact as any).metadataExclusions, [
+    "/properties/requires", "/$defs/capabilityRequirement", "/$defs/capabilityVersion",
+  ]);
+  for (const failure of ["missing member", "duplicate", "wrong identity", "non-member scalar", "unknown artifact field"]) assert.ok(rfc.includes(failure));
+  assert.match(rfc, /F3 registers no custom schema keywords/u);
 });
 
 test("D2053: every formerly prose evaluator constituent is an exact live symbol", () => {

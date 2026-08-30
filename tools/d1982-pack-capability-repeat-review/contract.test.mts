@@ -28,7 +28,8 @@ test("D1983: the shared version algebra preserves integer and semver without coe
 test("D1984: applicability has a complete generated authority and checked exclusions", () => {
   assert.match(rfc, /packages\/schema\/src\/capability\/applicability\.generated\.ts/u);
   assert.match(rfc, /exactly three independently enumerable sets/u);
-  assert.match(rfc, /CAPABILITY_APPLICABILITY_EXCLUSIONS/u);
+  assert.match(rfc, /metadata exclusions/u);
+  assert.match(rfc, /\/\$defs\/capabilityRequirement/u);
   assert.match(rfc, /make capability-applicability-check/u);
   assert.match(rfc, /Unknown semantic\s+nodes, a reference cycle or an expression with no applicability row fail generation/u);
 });
@@ -51,11 +52,11 @@ test("D1986: all twenty legacy refusals have typed destinations and lawful autho
   assert.match(rfc, /accepted_rfc/u);
 });
 
-test("D1987: strict annotations have one typed AJV compiler authority", () => {
-  assert.match(rfc, /packages\/schema\/src\/ajv\.ts` exports `createStrictAjv2020/u);
-  assert.match(rfc, /closed\s+meta-schemas for the exact objects above/u);
-  assert.match(rfc, /direct\s+`new Ajv2020` for pack schemas is a set-equal census failure/u);
-  assert.match(rfc, /misspelled keyword remains an `unknown keyword`\s+error/u);
+test("D1987: strict schemas and the typed sidecar have separate closed authorities", () => {
+  assert.match(rfc, /packages\/schema\/src\/ajv\.ts`[^.]{0,80}`createStrictAjv2020/u);
+  assert.match(rfc, /F3 registers no custom schema keywords/u);
+  assert.match(rfc, /capability key in the schema is therefore\s+an unknown-keyword error/u);
+  assert.match(rfc, /sidecar has its own JSON schema and closed parser/u);
 });
 
 test("D1988: F3 has a one-way compile-time handoff and imports no draft consumer behavior", () => {
@@ -80,7 +81,8 @@ test("D1990: declaration and all semantic invariants use one disposition union",
   assert.match(rfc, /readonly disposition: SemanticDisposition/u);
   assert.doesNotMatch(rfc, /readonly disposition: CapabilityDisposition/u);
   assert.match(rfc, /semantic disposition `active` \*\*iff\*\* the capability is executable/u);
-  assert.match(rfc, /successor pointing at anything other than\s+an `active` capability fails/u);
+  assert.match(rfc, /each history retains old\s+rows and has exactly one active current declaration/u);
+  assert.match(rfc, /chain terminates at the one active current declaration/u);
   assert.match(rfc, /Legacy `refused` is deliberately \*\*not\*\* a semantic mapping rule/u);
 });
 

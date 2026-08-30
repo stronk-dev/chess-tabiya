@@ -1,106 +1,123 @@
-// DISPOSABLE second fresh independent review harness — D2070-D2076. Not production code.
+// DISPOSABLE positive author contract — D2070-D2076. Not production code.
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 const read = (path) => readFileSync(path, "utf8");
-const rfc = read("rfc/pack-capability-contract.md");
-const schema = read("schemas/drill_pack.schema.json");
-const artifact = JSON.parse(read("rfc/contracts/pack-capability-applicability-v1.json"));
 const sha256 = (value) => createHash("sha256").update(value).digest("hex");
+const rfc = read("rfc/pack-capability-contract.md");
+const legacySchemaBytes = read("schemas/drill_pack.schema.json");
+const applicability = JSON.parse(read("rfc/contracts/pack-capability-applicability-v1.json"));
+const transition = JSON.parse(read("rfc/contracts/pack-capability-schema-transition-v1.json"));
 
-function section(start, end) {
-  const from = rfc.indexOf(start);
-  const to = rfc.indexOf(end, from + start.length);
-  assert.notEqual(from, -1, `missing section ${start}`);
-  assert.notEqual(to, -1, `missing section ${end}`);
-  return rfc.slice(from, to);
+function pointerTokens(pointer) {
+  return pointer.split("/").slice(1).map((token) => token.replaceAll("~1", "/").replaceAll("~0", "~"));
 }
 
-test("D2070: required pack stamps cannot land separately from the held corpus rewrite", () => {
-  const declaration = section("#### §4.1 What a pack declares", "#### §4.2 What the runtime publishes");
-  assert.match(declaration, /new required key/u);
-  assert.match(declaration, /pack with no `requires` is invalid/u);
-  assert.match(declaration, /all 92 packs churn their digest/u);
-  assert.doesNotMatch(schema, /"requires"\s*:/u);
+function applyPatch(source, operations) {
+  const target = structuredClone(source);
+  for (const operation of operations) {
+    const tokens = pointerTokens(operation.path);
+    const final = tokens.pop();
+    assert.ok(final !== undefined);
+    const parent = tokens.reduce((value, token) => value[token], target);
+    if (operation.op === "replace") {
+      assert.ok(Object.hasOwn(parent, final));
+      parent[final] = operation.value;
+    } else if (operation.op === "add" && final === "-") {
+      assert.ok(Array.isArray(parent));
+      parent.push(operation.value);
+    } else if (operation.op === "add") {
+      assert.equal(Object.hasOwn(parent, final), false);
+      parent[final] = operation.value;
+    } else throw new TypeError(`unsupported author patch operation: ${operation.op}`);
+  }
+  return target;
+}
 
-  const draftDocs = readdirSync("content/drafts").filter((name) => name.endsWith(".json")
-    && !name.endsWith(".sources.json") && !name.endsWith(".evidence.json") && !name.endsWith(".job.json"));
-  const candidatePacks = readdirSync("content/candidates", { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .filter((entry) => {
-      try { return read(`content/candidates/${entry.name}/pack.json`).length > 0; } catch { return false; }
-    });
-  assert.equal(draftDocs.length + candidatePacks.length, 92);
-  for (const name of draftDocs) assert.doesNotMatch(read(`content/drafts/${name}`), /"requires"\s*:/u);
-  for (const entry of candidatePacks) assert.doesNotMatch(read(`content/candidates/${entry.name}/pack.json`), /"requires"\s*:/u);
-  assert.match(rfc, /Implement the registry, census, checks, handshake and planner without applying the corpus plan/u);
+function legacyPopulation() {
+  const rows = [];
+  for (const name of readdirSync("content/drafts")) {
+    if (!name.endsWith(".json") || name.endsWith(".sources.json") || name.endsWith(".evidence.json") || name.endsWith(".job.json")) continue;
+    const path = `content/drafts/${name}`;
+    rows.push({ path, sha256: sha256(readFileSync(path)) });
+  }
+  for (const directory of readdirSync("content/candidates")) {
+    const path = `content/candidates/${directory}/pack.json`;
+    if (existsSync(path)) rows.push({ path, sha256: sha256(readFileSync(path)) });
+  }
+  return rows.sort((left, right) => left.path.localeCompare(right.path));
+}
+
+test("D2070: the two-schema transition admits only the sealed legacy catalogue", () => {
+  const rows = legacyPopulation();
+  assert.equal(rows.length, transition.legacy.catalogueDocuments);
+  assert.equal(sha256(JSON.stringify(rows)), transition.legacy.populationSha256);
+  assert.equal(transition.legacy.admission, "repository_catalogue_allowlist_only");
+  assert.match(rfc, /newly authored, uploaded, Studio-written or API-submitted packs/u);
+  assert.match(rfc, /PACK_CAPABILITY_STAMP_REQUIRED/u);
+  assert.match(rfc, /adding a 93rd legacy digest is forbidden/u);
+  assert.match(rfc, /deletes the 0\.27 reader and allowlist/u);
 });
 
-test("D2071: the mandatory plan is both expected red and required green in verify", () => {
-  const migration = section("### §6. The migration planner", "### §7. The population");
-  assert.match(migration, /migration-plan-check[\s\S]*the plan >\/dev\/null, wired into `make verify`/u);
-  assert.match(migration, /plan containing any `judgement\[\]` entry\s+\*\*exits non-zero/u);
-  const criteria = section("## Acceptance criteria", "## Discharges");
-  assert.match(criteria, /three predicate-bearing documents[\s\S]*in `judgement\[\]`/u);
-  assert.match(criteria, /`make verify` passes with `migration-plan-check`/u);
+test("D2071: plan validity stays green while readiness alone refuses judgement", () => {
+  assert.match(rfc, /judgement-bearing plans when the plan is complete, canonical and internally valid/u);
+  assert.match(rfc, /migration-apply-ready` is the stop gate/u);
+  assert.match(rfc, /only the last fails\s+`migration-apply-ready`/u);
+  assert.match(rfc, /ordinary `make verify` stays green while honest judgement debt exists/u);
 });
 
-test("D2072: implementation necessarily invalidates the sealed schema authority", () => {
-  assert.equal(artifact.schema.sha256, sha256(schema));
-  assert.doesNotMatch(schema, /x-tabiya-capability-members/u);
-  assert.doesNotMatch(schema, /"requires"\s*:/u);
-  assert.match(rfc, /Every `enum` and every discriminated `oneOf` beneath the pack\s+schema carries member arrays/u);
-  assert.match(rfc, /requires \(new, required array/u);
-  assert.match(rfc, /implementation-generated image[\s\S]*must expand to the authority's\s+digests/u);
+test("D2072: the author patch produces the exact required 0.30 schema post-image", () => {
+  assert.equal(sha256(legacySchemaBytes), transition.legacy.schemaSha256);
+  const target = applyPatch(JSON.parse(legacySchemaBytes), transition.patch);
+  const bytes = `${JSON.stringify(target, null, 2)}\n`;
+  assert.equal(Buffer.byteLength(bytes), transition.target.canonicalBytes);
+  assert.equal(sha256(bytes), transition.target.schemaSha256);
+  assert.equal(target.$id, transition.target.schemaId);
+  assert.ok(target.required.includes("requires"));
+  assert.equal(target.properties.requires.items.$ref, "#/$defs/capabilityRequirement");
 });
 
-test("D2073: the author authority has no 373-member source/dependency closure", () => {
-  assert.equal(artifact.closedVocabulary.mappedMembers, 373);
-  assert.equal(Object.hasOwn(artifact.closedVocabulary, "mappings"), false);
-  assert.equal(Object.hasOwn(artifact.closedVocabulary, "interpreterSites"), false);
-  assert.equal(Object.hasOwn(artifact.closedVocabulary, "dependencies"), false);
-  assert.match(rfc, /imports\/helpers\/constants participate only through an explicit site or\s+dependency/u);
-  assert.match(rfc, /Every exhaustive arm in those roots carries `@tabiya-capability-interpreter/u);
-  assert.match(rfc, /sources: readonly CapabilityMeaningSource\[\]/u);
-  assert.match(rfc, /dependsOn: readonly CapabilityId\[\]/u);
+test("D2073: every member has schema authority and all interpreter roots close transitively", () => {
+  assert.equal(applicability.meaningAuthority.baseSource, "exact-schema-member-image-v1");
+  assert.equal(applicability.meaningAuthority.dependencyAlgorithm, "typescript-symbol-reference-closure-v1");
+  assert.deepEqual(applicability.meaningAuthority.interpreterRoots.map((row) => row.subject), [
+    "SuccessCondition", "SimpleTrigger", "StructuralExpression", "StructuralFeature",
+    "TransitionExpression", "ObjectivePredicate", "EngineCondition",
+  ]);
+  for (const row of applicability.meaningAuthority.interpreterRoots) {
+    assert.ok(row.sites.length > 0);
+    for (const site of row.sites) assert.match(site, /^(apps|packages)\/.+#.+$/u);
+  }
+  assert.match(rfc, /new switch,\s+missing second site, unresolved symbol or reachable helper omitted from closure fails/u);
+  assert.match(rfc, /unused\s+same-name symbol is unreachable and contributes nothing/u);
 });
 
-test("D2074: the new requires vocabulary is inside its own unbounded derivation", () => {
-  const applicability = section("#### §2.7 Applicability", "### §3. The capability enumeration");
-  assert.match(rfc, /`version` is a\s+closed discriminated union matching §2\.1/u);
-  assert.match(rfc, /Every `enum` and every discriminated `oneOf` beneath the pack\s+schema carries member arrays/u);
-  assert.match(applicability, /evaluate every selector against the parsed pack/u);
-  assert.doesNotMatch(applicability, /exclude[^.]{0,80}\/requires|metadata subtree|capabilityRequirement[^.]{0,80}excluded/u);
-  assert.equal(artifact.closedVocabulary.enumMembers, 300);
-  assert.equal(artifact.closedVocabulary.discriminatedOneOfMembers, 73);
+test("D2074: capability metadata is exactly excluded from its own applicability", () => {
+  assert.deepEqual(applicability.metadataExclusions, [
+    "/properties/requires", "/$defs/capabilityRequirement", "/$defs/capabilityVersion",
+  ]);
+  assert.deepEqual(transition.applicabilityExclusions.map((row) => row.schemaPointer), applicability.metadataExclusions);
+  assert.match(rfc, /instance walker skips `\/requires` before selector evaluation/u);
+  assert.match(rfc, /No\s+member of a requirement tuple can emit a capability/u);
 });
 
-test("D2075: one declaration per subject cannot retain old and successor versions", () => {
-  assert.match(rfc, /Unit: one declaration per capability subject/u);
-  assert.match(rfc, /increment `version` and record the successor relation/u);
-  assert.match(rfc, /deprecated[\s\S]*successor: CapabilityId/u);
-  assert.match(rfc, /deprecated` successor resolves to an `active` declaration/u);
-  assert.doesNotMatch(rfc, /CapabilityHistory|previousVersions|supersededVersions|one declaration per subject version/u);
+test("D2075: histories retain old versions and resolve one acyclic current chain", () => {
+  assert.match(rfc, /interface CapabilityHistory/u);
+  assert.match(rfc, /identity is `\(subjectId, version\)`/u);
+  assert.match(rfc, /Exactly one declaration equals `current`; it must be `active`/u);
+  assert.match(rfc, /1→2, 1→2→3, withdrawal without successor/u);
+  assert.match(rfc, /duplicate current, cross-subject successor and cycle fixtures/u);
 });
 
-test("D2076: schema-order-derived public ids are not stable semantic identities", () => {
-  const publicId = (pointer, member) => {
-    const raw = pointer.split("/").filter(Boolean);
-    const tokens = [];
-    for (let index = 0; index < raw.length; index += 1) {
-      const token = raw[index];
-      if (["$defs", "properties", "items"].includes(token)) continue;
-      if (token === "oneOf" && /^\d+$/u.test(raw[index + 1] ?? "")) {
-        tokens.push(`branch${raw[index + 1]}`);
-        index += 1;
-      } else tokens.push(/^\d+$/u.test(token) ? `item${token}` : token);
-    }
-    return [...tokens, member].join(".");
-  };
-  assert.notEqual(publicId("/$defs/example/oneOf/0/properties/kind", "x"), publicId("/$defs/example/oneOf/1/properties/kind", "x"));
-  assert.match(rfc, /converts an\s+`oneOf\/N` pair to `branchN`/u);
-  assert.match(rfc, /Capability ids are a\s+separate stable public name/u);
-  assert.match(rfc, /evaluator semantics versioned independently from JSON fields/u);
+test("D2076: public identity excludes ordinals and filesystem placement", () => {
+  assert.equal(applicability.stableIdentity.algorithm, "stable-schema-member-v2");
+  assert.deepEqual(applicability.stableIdentity.forbiddenInputs, [
+    "oneOf array ordinal", "$defs container depth", "source file location",
+  ]);
+  assert.match(rfc, /numeric array\s+index contributes nothing/u);
+  assert.match(rfc, /`over\.files` versus `over\.squares`/u);
+  assert.match(rfc, /Moving an owner deeper under `\$defs`,\s+reordering branches or moving the schema file preserves identity/u);
+  assert.doesNotMatch(rfc, /converts an\s+`oneOf\/N` pair to `branchN`/u);
 });

@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "artifact": "tabiya.pack-capability.schema-transition.v1",
+  "legacy": {
+    "schemaId": "urn:chess-tabiya:schema:drill-pack:0.27",
+    "schemaSha256": "7da4d49506eb028872bd909d7ab34a3107b44ba2374f4a686ac625d112d653b0",
+    "catalogueDocuments": 92,
+    "populationAlgorithm": "sorted-path-and-raw-sha256-v1",
+    "populationSha256": "933eeecd0aee6e50b2a595b62bfc22485ba8a4d2dc945a5b4efdd9cf35fca849",
+    "admission": "repository_catalogue_allowlist_only"
+  },
+  "target": {
+    "schemaId": "urn:chess-tabiya:schema:drill-pack:0.30",
+    "schemaSha256": "450d54dd2c77b8fe83173221640628a4da7c0c0d66cce1c2fc6edc6a5c44cb0c",
+    "canonicalBytes": 83841,
+    "patchAlgorithm": "ordered-json-pointer-operations-v1"
+  },
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/$id",
+      "value": "urn:chess-tabiya:schema:drill-pack:0.30"
+    },
+    {
+      "op": "replace",
+      "path": "/description",
+      "value": "Living v0.30 format with required semantic capability declarations."
+    },
+    {
+      "op": "add",
+      "path": "/required/-",
+      "value": "requires"
+    },
+    {
+      "op": "add",
+      "path": "/properties/requires",
+      "value": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/capabilityRequirement"
+        },
+        "uniqueItems": true
+      }
+    },
+    {
+      "op": "add",
+      "path": "/$defs/capabilityVersion",
+      "value": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "kind",
+              "value"
+            ],
+            "properties": {
+              "kind": {
+                "const": "integer"
+              },
+              "value": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
+              "kind",
+              "value"
+            ],
+            "properties": {
+              "kind": {
+                "const": "semver"
+              },
+              "value": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "path": "/$defs/capabilityRequirement",
+      "value": {
+        "type": "object",
+        "required": [
+          "id",
+          "version"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]*(?:[.:][A-Za-z0-9][A-Za-z0-9_-]*)*$"
+          },
+          "version": {
+            "$ref": "#/$defs/capabilityVersion"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  ],
+  "applicabilityExclusions": [
+    {
+      "schemaPointer": "/properties/requires",
+      "instancePointer": "/requires",
+      "reason": "capability metadata cannot contribute to the semantic requirements it records"
+    },
+    {
+      "schemaPointer": "/$defs/capabilityRequirement",
+      "instancePointer": null,
+      "reason": "metadata grammar is outside the stamped semantic population"
+    },
+    {
+      "schemaPointer": "/$defs/capabilityVersion",
+      "instancePointer": null,
+      "reason": "metadata grammar is outside the stamped semantic population"
+    }
+  ],
+  "retirement": {
+    "condition": "all 92 legacy catalogue documents have canonical 0.30 stamps and their dependent digests are restamped",
+    "effect": "delete the 0.27 schema reader and legacy population allowlist in the same commit",
+    "forbidden": "adding a new digest to the legacy allowlist or accepting an unstamped external document"
+  }
+}
