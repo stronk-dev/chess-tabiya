@@ -12344,3 +12344,22 @@ timed-drill, solo-pause and campaign reward semantics open while claiming review
 `make enforced-clocks-fresh-review` passes 12/12. No production, schema, migration, API, client,
 content, archive or protected-intent byte changed. Exact review:
 `planning/time-controls/enforced-clocks-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Native-ratings fresh independent return
+
+Returned `native-ratings.md` on [[D2308]]–[[D2323]]. Its central correction survives: one shared
+game stores a color-oriented result and each participant score is a projection. The proposed writer
+does not implement that correction—resignation and flag equate the losing side with the winner—and
+the SQL accepts contradictory lifecycle/rating records, a rated bot, one learner in both colors,
+mismatched encounter/game participants and one game in two encounters.
+
+The migration also conflates game truth with rating eligibility, cascades away an opponent's shared
+history, leaves existing attempt updates/joins learner-blind, weakens branch integrity and omits
+rules/setup/time-control/calibration from rating identity. Existing native matches backfill to empty
+contest aggregates because no general game is created. No typed API/client match→result→two-rating
+journey exists, and the tournament fixture proves arbitrary inserts rather than entrant/pairing/
+result/standing semantics. The closed-human-pool publication policy remains unmeasured.
+
+`make native-ratings-fresh-review` passes 16/16. No production, schema, migration, API, client,
+content, archive or protected-intent byte changed. Exact review:
+`planning/native-ratings/native-ratings-fresh-independent-buildability-review-2026-08-30.md`.

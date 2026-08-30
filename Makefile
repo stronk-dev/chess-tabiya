@@ -410,6 +410,10 @@ recorded-clocks-fresh-review:
 enforced-clocks-fresh-review:
 	node --test tools/d2296-enforced-clocks-fresh-review/contract.test.mjs
 
+.PHONY: native-ratings-fresh-review
+native-ratings-fresh-review:
+	node --test tools/d2308-native-ratings-fresh-review/contract.test.mjs
+
 build:
 	pnpm build
 

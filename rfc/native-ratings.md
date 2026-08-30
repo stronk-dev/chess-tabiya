@@ -1,11 +1,14 @@
 # RFC: native-ratings — the rating and result substrate for two-human play, built so a tournament is a feature
 
-- **Status:** draft — 2026-08-26, drafted on owner ruling [[D1414]] (native-first) and the
-  [[D1520]] readiness clarification. This is the [[D1516]] discharge `rfc/social-play.md` handed to
-  `rfc/learner-rating.md` as D2, taken as its own document because [[D1521]] measured what happens
-  when a ruled, repeatedly-requested feature exists only as a pointer: it appears in **zero** queue
-  documents. It does not re-specify the rating system; `learner-rating.md` remains the single writer
-  of every rating object and this RFC specifies the amendment it owes.
+- **Status:** draft — **RETURNED by fresh independent buildability review 2026-08-30 on
+  [[D2308]]–[[D2323]].** The color-oriented game-result direction survives. The result writer
+  reverses resignation/flag winners; game truth and rating eligibility are conflated; proposed SQL
+  admits contradictory lifecycle, rating and participant records; seat/game identities can
+  disagree; deletion destroys shared history; the attempt migration misses live consumers; rating
+  subject, migration and typed learner journey are incomplete; tournament readiness is vacuous;
+  dependencies and owner questions remain unresolved; and the human-pool publication rule is
+  unmeasured. `make native-ratings-fresh-review` passes 16/16. No implementation before predecessor,
+  author and research repair plus another review
 - **Author:** claude (native-ratings lane), from the measured DDL at HEAD, `rfc/social-play.md` §§1,
   3, 7, `rfc/learner-rating.md` §§2, 3, 5, 6, 8, 9, 10a, 11.3, `planning/ux-implementation-index.md`
   §Tournament readiness (T1–T22), and `design/research/league-as-return-loop.md` §§C5, C6
@@ -746,6 +749,36 @@ declared result is a record, not evidence, and law 8 forbids grading it.
 5. **`design/05-in-run-experience.md:42` — applied, not amended.** Session machinery may never alter
    what the run says happened on the board, which is why the declared result reads the run's own
    event log (§3.3 rule 2) and never writes to it.
+
+## Fresh independent buildability return (2026-08-30)
+
+The color-oriented game fact is the right foundation; this contract cannot implement it yet. The
+exact review is
+`planning/native-ratings/native-ratings-fresh-independent-buildability-review-2026-08-30.md`, and
+`make native-ratings-fresh-review` reproduces all sixteen blockers:
+
+1. [[D2308]] — resignation and flag require the losing side to equal the winning color.
+2. [[D2309]] — rating refusal/withholding voids the played game fact instead of a rating disposition.
+3. [[D2310]] — SQL admits open/sealed rows with void reasons and voided rows with results.
+4. [[D2311]] — game/side rating flags can disagree and a bot may be marked rated.
+5. [[D2312]] — eager two-learner seats contradict the accepted invite/accept boundary.
+6. [[D2313]] — neither storage nor token redemption prevents one learner taking both colors.
+7. [[D2314]] — encounter seats and game sides can disagree; one game can occupy two encounters.
+8. [[D2315]] — account deletion cascades away the opponent's shared history; export privacy is absent.
+9. [[D2316]] — attempt numbering/joins remain learner-blind and branch FK integrity is weakened.
+10. [[D2317]] — rules, setup family, time control and calibration are absent from rating identity.
+11. [[D2318]] — native-match backfill creates contests but no general game or deterministic game id.
+12. [[D2319]] — no typed API/client/result/history journey consumes the new substrate.
+13. [[D2320]] — tournament readiness proves arbitrary inserts, not entrants/pairings/results/standings.
+14. [[D2321]] — the core-loop question is routed to an unrelated discharge; rematch remains open.
+15. [[D2322]] — every terminal/social input the draft consumes is currently returned.
+16. [[D2323]] — closed-human-pool drift and point-suppression policy have no measured falsifier.
+
+The migration reservation remains provisional, not buildable. Repair must first accept exact seat,
+result and terminal authorities; separate game truth from rating disposition; define one
+transactional participant/lifecycle authority and complete rating subject; migrate all attempt,
+privacy and account-lifecycle consumers; measure human-pool behavior; and prove the complete learner
+journey before another independent review.
 
 ## Acceptance criteria
 
