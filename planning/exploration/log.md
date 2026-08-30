@@ -12583,3 +12583,17 @@ binding.
 again; no semantic-validation production, eligibility, schema, content, archive or protected-design
 byte was changed. Receipt:
 `planning/semantic-validation-authority/second-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Pack capability fourth fresh independent return
+
+Re-ran the maintained 7 + 11 + 6 + 7 + author-repair contracts and reviewed the repaired RFC against
+both author artifacts and the current server/web capability boundary. The cumulative schema and
+external-source repairs survive, but six implementation authorities remain open: [[D2334]]'s
+legacy catalogue has no rows or recomputation; [[D2335]]'s software-first and all-stamped gates
+conflict; [[D2336]]'s unconditional rows omit structured versions; [[D2337]]'s lifecycle harness
+uses a different type algebra; [[D2338]]'s public response is not closed across server/web; and
+[[D2339]]'s transient check trusts caller-supplied requirements.
+
+`make pack-capability-fourth-fresh-review` reproduces all six blockers. Lane 0.30 and the D560
+corpus hold remain untouched. Receipt:
+`planning/pack-capability-contract/fourth-fresh-independent-review-2026-08-30.md`.

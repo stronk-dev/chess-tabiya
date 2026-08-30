@@ -1,12 +1,12 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **fourth author repair complete 2026-08-30; fresh independent review
-  required.** [[D2152]]–[[D2156]] are repaired by cumulative 0.27→0.28→0.29→0.30 post-images, a
-  literal 397-member target inventory plus checked generator, module-qualified evaluator and
-  constant sites, lockfile-resolved external semantic sources, and typed withdrawal successor /
-  no-successor arms. Receipt:
-  `planning/pack-capability-contract/fourth-author-repair-2026-08-30.md`.
-  No schema, registry, pack or digest implementation is authorised; the D560 hold stays whole.
+- **Status:** draft — **RETURNED by fourth fresh independent review 2026-08-30 on
+  [[D2334]]–[[D2339]].** The prior repairs survive, but the legacy catalogue is an opaque digest,
+  the software-first transition conflicts with the all-stamped criterion, unconditional authority
+  omits versions, lifecycle fixtures do not inhabit the declared types, the public capabilities
+  response is not closed across server/web, and transient checks trust caller-supplied requirement
+  lists. `make pack-capability-fourth-fresh-review` reproduces 6/6 blockers. No schema, registry,
+  pack or digest implementation is authorised; the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -1258,6 +1258,33 @@ The repaired author contract preserves the prior 7 + 11 + 6 + 7 arms and adds fi
 controls. The historical third-review reproducer is not rewritten. Fresh independent review still
 gates acceptance and implementation; [[D560]] still holds the 92-pack apply.
 
+## Fourth fresh independent return (2026-08-30)
+
+The fourth fresh buildability review returned this RFC on [[D2334]]–[[D2339]]. Exact evidence and
+repair requirements are in
+`planning/pack-capability-contract/fourth-fresh-independent-review-2026-08-30.md`; the executable
+reproducer is `make pack-capability-fourth-fresh-review` (6/6).
+
+1. [[D2334]] — publish and check the exact 92 legacy path/raw-digest rows. A count plus opaque digest cannot
+   implement a file allowlist, and the author contract must recompute it from those rows and the
+   current sealed bytes.
+2. [[D2335]] — separate software-transition acceptance from post-apply corpus acceptance. The former must pass
+   with the exact sealed unstamped legacy population; only the latter may require all 92 canonical
+   `requires` arrays and legacy-reader removal.
+3. [[D2336]] — make every unconditional applicability row carry an exact structured `CapabilityId` and selector
+   shape. No generator may silently assume version 1 from a base string.
+4. [[D2337]] — use one declaration/history identity algebra in specification and fixtures. The author fixture's
+   `{subjectId,id:CapabilityId}` rows currently cannot inhabit `CapabilityDeclaration`'s
+   `{id:string,version}` shape.
+5. [[D2338]] — publish one closed, shared `packCapabilities` response row with separate semantic disposition and
+   deployment reachability, and bind the server producer plus web parser/type to it.
+6. [[D2339]] — derive transient checks from a closed operation→capability binding or the internally compiled
+   pack requirement set. A caller-provided `requiredIds` list cannot be the authority that proves
+   itself complete.
+
+This is an author return, not an implementation checkpoint. The D560 corpus hold remains whole and
+fifth fresh independent review is required after repair.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -1451,6 +1478,13 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-08-30 (**fourth fresh independent return**): returned on [[D2334]]–[[D2339]]. The exact
+  legacy allowlist has no rows or recomputation; software-first and all-stamped gates conflict;
+  unconditional rows omit structured versions; history fixtures use a different type from the RFC;
+  `/capabilities` has no closed shared response row; and transient enforcement trusts a
+  caller-supplied requirement set. Exact return:
+  `planning/pack-capability-contract/fourth-fresh-independent-review-2026-08-30.md`.
+  `make pack-capability-fourth-fresh-review` passes 6/6. No implementation is authorised.
 - 2026-08-30 (**D2152–D2156 fourth author repair**): replaced the illegal direct 0.27→0.30 patch
   with exact cumulative 0.28/0.29/0.30 stages; published the literal 397-member target inventory
   and checked generator; module-qualified all unconditional, dependency and constant/convention
