@@ -14,10 +14,16 @@ const pinned = Object.freeze([
   { head: 4, landing: "765efb56" },
 ]);
 const v5Changes = Object.freeze([
+  "apps/web/src/lib/AssistanceSettings.svelte#AssistanceSettings.hintDistance",
   "apps/web/src/lib/assistance-preference.ts#loadAssistance",
+  "apps/web/src/lib/assistance-preference.ts#migrate",
+  "apps/web/src/lib/assistance-preference.ts#saveAssistance",
+  "apps/web/src/lib/assistance-preference.ts#validV4",
   "packages/runtime/src/assistance-codec.ts#parseAssistanceConfig",
   "packages/runtime/src/assistance.ts#AssistanceConfig.hintDistance",
   "packages/runtime/src/assistance.ts#AssistanceConfig.version",
+  "packages/runtime/src/assistance.ts#SILENT_ASSISTANCE",
+  "packages/runtime/src/assistance.ts#permittedAssistance",
 ]);
 
 interface Claim { readonly lane: number; readonly rfc: string; readonly changes: readonly string[]; }
@@ -86,7 +92,7 @@ test("D2009: the bootstrap pins all four historical landing identities", () => {
   }, []), false);
 });
 
-test("D2010/D2038: the sole v5 claim names codec and persistence roots, never validV5", () => {
+test("D2010/D2038/D2116: the sole v5 claim names the exact authority delta, never validV5", () => {
   assert.match(rfc, /packages\/runtime\/src\/assistance-codec\.ts#parseAssistanceConfig/u);
   assert.doesNotMatch(rfc, /validV5\/migrate v1-v4 to v5/u);
   assert.match(hint, /contains no parallel `validV5`\/migration switch/u);
@@ -94,7 +100,7 @@ test("D2010/D2038: the sole v5 claim names codec and persistence roots, never va
   assert.ok(claim);
   const tokens = claim.split("; ");
   assert.deepEqual(tokens, v5Changes);
-  assert.equal(tokens.every((token) => /^[a-z0-9_./-]+\.ts#[A-Za-z_$][A-Za-z0-9_$.]*$/u.test(token)), true);
+  assert.equal(tokens.every((token) => /^[A-Za-z0-9_./-]+\.(?:ts|svelte)#[A-Za-z_$][A-Za-z0-9_$.]*$/u.test(token)), true);
 });
 
 test("D2011: the dependent phase stays owner-blocked before repeat review", () => {

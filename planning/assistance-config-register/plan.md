@@ -2,10 +2,12 @@
 
 ## State
 
-Author-repaired after the 2026-08-30 fresh-review return. The D1916/D2009–D2012 repairs survive;
-[[D2037]] now has an exact two-commit governance checkout plus fail-closed `HEAD^1` acquisition,
-and [[D2038]] now derives transition tokens from the closed runtime-codec/browser-persistence
-authority census. Fresh independent review still gates implementation and claim transfer.
+Author-repaired after the 2026-08-30 second fresh-review return. The earlier repairs survive;
+[[D2113]]–[[D2117]] now have one phase-aware TypeScript/Svelte authority graph that seals the real
+v4 legacy migrator, the sole read/write/key/serializer path, fixed-head semantic identity and the
+exact ten-node v5 transition. `make assistance-register-second-author-repair` passes 8/8 and the
+five historical return arms invert. Fresh independent review still gates implementation and claim
+transfer.
 
 ## Order
 
@@ -20,12 +22,15 @@ authority census. Fresh independent review still gates implementation and claim 
 6. ✅ Author a generated, set-equal assistance codec/persistence authority census; add fail-closed
    first-parent acquisition and the governance workflow/history repair to the RFC boundary. Six
    author arms pass.
-7. NEXT: repeat fresh review of the complete amended C9 contract.
-8. Implement the TypeChecker-normalized semantic reader and mutation classes, including
+7. ✅ Second fresh review returned D2113–D2117: phase contradiction, omitted writer, fixed-head
+   drift, incomplete v5 delta and undefined TS/Svelte graph grammar.
+8. ✅ Author-repair all five with the phase-aware graph and 38 mutation classes.
+9. NEXT: repeat fresh review of the complete amended C9 contract.
+10. Implement the TypeChecker-normalized semantic reader and mutation classes, including
    local/imported/tuple aliases and the dedicated derived-output arm.
-9. Add the README register and atomically transfer Guided Hint from `none` to the sole v5 claim.
-10. Refresh docs, ledger, RFC register, roadmap/work receipts and append-only logs.
-11. Run Node-24 governance and staged/committed process checks on exact committed bytes.
+11. Add the README register and atomically transfer Guided Hint from `none` to the sole v5 claim.
+12. Refresh docs, ledger, RFC register, roadmap/work receipts and append-only logs.
+13. Run Node-24 governance and staged/committed process checks on exact committed bytes.
 
 ## Boundaries
 

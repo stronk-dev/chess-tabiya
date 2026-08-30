@@ -92,3 +92,18 @@ The disposable author contract is now six arms behind `make assistance-register-
 Implementation and claim transfer remain unauthorised until a fresh independent review accepts the
 complete amended C9 contract. Exact repair receipt:
 `third-return-author-repair-2026-08-30.md`.
+
+## 2026-08-30 — Fourth-return author repair
+
+The second fresh review's five blockers were one boundary error: resource identity described the
+interface plus selected reader symbols, not the persisted/configured AssistanceConfig contract.
+The RFC now defines one phase-aware TypeScript/Svelte authority graph. Bootstrap seals the actual
+v4 `validV4`/`migrate`; v5 must remove both for the sole runtime codec. The graph contains the
+shared storage key, reader, writer, serializer, constructors, permission projection and Advanced/
+run consumers, and its canonical bytes join the contract digest so fixed-head semantic drift fails.
+
+The Guided Hint reservation is now the exact ten-node symmetric difference, including deleted
+legacy operations. `make assistance-register-second-author-repair` passes 8/8 against real source
+and mutations; the historical five-arm return harness now fails 5/5, the intended inversion. Exact
+receipt: `fourth-return-author-repair-2026-08-30.md`. Implementation and claim transfer remain
+unauthorised until a fresh independent review accepts the complete contract.

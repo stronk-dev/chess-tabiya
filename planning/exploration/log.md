@@ -11742,3 +11742,27 @@ which is recorded rather than weakened. Exact handoff:
 Projections 13–14 remain held for fresh review, and the outcome additionally waits on accepted and
 implemented provider exchange. No production collector, projection, adapter, binding, schema,
 pack, content, archive or protected-design byte changed.
+
+## 2026-08-30 — AssistanceConfig register D2113–D2117 author repair
+
+Repaired the returned process RFC without changing product bytes. The register now derives one
+phase-aware TS/Svelte authority graph over the AssistanceConfig shape, legacy/runtime codec,
+migrations, shared storage key, reader, writer, serializer, constructors, permissions and Advanced/
+run projections. Bootstrap validates the actual v4 local migrator; v5 must delete it for the sole
+runtime codec. Graph bytes join contract identity, so key/default/parser/serializer/consumer drift
+cannot hide at a fixed head.
+
+The live v5 reservation expands from four guessed symbols to the exact ten-node graph delta,
+including `saveAssistance`, `SILENT_ASSISTANCE`, `permittedAssistance`, the Advanced projection and
+both deleted legacy operations. `make assistance-register-second-author-repair` passes 8/8; the
+historical `make assistance-register-second-fresh-review` now fails all five arms, the intended
+inversion. Exact receipt:
+`planning/assistance-config-register/fourth-return-author-repair-2026-08-30.md`. Fresh independent
+review still gates implementation; no runtime, web, schema, storage, content, archive or protected
+design byte changed.
+
+The first maintained-suite run also found [[D2148]]: D2009 and D2037 still asserted the obsolete
+four-token claim and therefore rejected the stronger contract. Their current-state fixtures now
+assert the ten-node TS/Svelte delta; 7 + 6 + 8 maintained arms pass. The separate D2113 historical
+return harness remains unchanged and red 5/5, preserving the able-to-fail evidence rather than
+turning it into a permanent normal-gate failure.

@@ -1,10 +1,11 @@
 # RFC: AssistanceConfig shared-resource register
 
-- **Status:** draft — returned by second fresh independent buildability review 2026-08-30 on
-  [[D2113]]–[[D2117]]. The two-commit repair survives, but the census requires a post-v5 codec at
-  the process-only v4 landing, omits the writer and same-head semantic drift, undercounts the v5
-  transition, and has no executable source-graph grammar. Exact return:
-  `planning/assistance-config-register/second-fresh-independent-buildability-review-2026-08-30.md`.
+- **Status:** draft — author-repaired 2026-08-30 after the second fresh review returned
+  [[D2113]], [[D2114]], [[D2115]], [[D2116]] and [[D2117]]. Resource identity is now a
+  phase-aware shape plus executable persistence/configuration authority graph: bootstrap seals the
+  real v4 local migrator, v5 must replace it with the central codec, read and write share one key
+  and codec, fixed-head authority drift is forbidden, and the v5 claim is the exact graph delta.
+  `make assistance-register-second-author-repair` passes 8/8; fresh review remains required.
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it
@@ -26,9 +27,10 @@ none
 ## Summary
 
 Register `AssistanceConfig` as the shared persisted contract it already is. The tree half is the
-numeric version plus a normalized digest of its closed field domains. The future half is one live
-head+1 claim. Guided Hint owns v5; `intent-presets` depends on and exhaustively projects that shape
-without claiming it independently.
+numeric version plus a normalized digest of its closed field domains **and every operation that
+constructs, permits, persists or configures that shape**. The future half is one live head+1 claim
+over the exact authority-graph delta. Guided Hint owns v5; `intent-presets` depends on and
+exhaustively projects that shape without claiming it independently.
 
 This RFC changes no assistance value and authorizes no v5 runtime implementation. It makes the
 existing v5 intent visible to the same collision/drift machinery that already guards schemas,
@@ -80,37 +82,93 @@ both own the same discriminator.
 
 For this resource, `changed symbols` is machine-readable rather than descriptive prose: one or
 more ASCII-sorted unique tokens separated by `; `, each matching
-`^[a-z0-9_./-]+\.ts#[A-Za-z_$][A-Za-z0-9_$.]*$`. The transition reader derives these tokens from
+`^[A-Za-z0-9_./-]+\.(?:ts|svelte)#[A-Za-z_$][A-Za-z0-9_$.]*$`. The transition reader derives these tokens from
 the previous and current source trees; no caller supplies a supposedly complete list.
 
-The closed authority census has three roots:
+The closed authority census is one executable graph, not a list of trusted roots. Its node and edge
+kinds are closed and exhaustive:
 
-1. every changed `AssistanceConfig` property in
-   `packages/runtime/src/assistance.ts#AssistanceConfig.<property>`;
-2. the transitive TypeScript declaration closure of the sole runtime codec export
-   `packages/runtime/src/assistance-codec.ts#parseAssistanceConfig`; and
-3. the transitive import/declaration closure of
-   `apps/web/src/lib/assistance-preference.ts#loadAssistance`, the sole production reader of the
-   `tabiya.assistance.` namespace.
+```ts
+type AssistanceAuthorityKind =
+  | "shape_field" | "constructor" | "permission_projection"
+  | "storage_key" | "storage_read" | "codec" | "migration"
+  | "storage_write" | "serializer" | "advanced_projection" | "run_projection";
 
-The census scans every non-test production `.ts`/`.svelte` module under `apps/web/src` and
-`packages/runtime/src`. The assistance namespace literal, `assistanceKey` call and raw
-`PreferenceStorage.getItem` result may reach AssistanceConfig parsing only inside the named web
-root. That root must delegate parsed `unknown` to the one runtime codec export and may contain no
-local `value is AssistanceConfig`, version switch or field-domain validation. A second reader,
-validator, migrator or codec; an indirect alias around one; or an AssistanceConfig parser outside
-the three roots fails source closure before the token comparison. An unimported dead file is not a
-production authority and is outside the census. Tests/docs are ignored. Within a root, the token
-represents its complete reachable declaration/import closure, so a helper change cannot disappear
-behind the unchanged export name. This exact derived set is what C9.6 compares with the prior
-claim; the human-readable README change column remains separate.
+interface AssistanceAuthorityNode {
+  readonly kind: AssistanceAuthorityKind;
+  readonly module: string;       // workspace-relative production path
+  readonly symbol: string;       // declaration or generated Svelte operation identity
+  readonly bodyDigest: string;   // canonical semantic subtree, 24 lowercase hex
+}
+
+type AssistanceAuthorityEdgeKind =
+  | "imports" | "calls" | "reads" | "writes" | "serializes"
+  | "parses" | "migrates" | "constructs" | "permits" | "projects";
+
+interface AssistanceAuthorityEdge {
+  readonly from: string;         // `${module}#${symbol}`
+  readonly kind: AssistanceAuthorityEdgeKind;
+  readonly to: string;
+}
+```
+
+The graph builder scans every non-test production `.ts` and `.svelte` module under
+`apps/web/src` and `packages/runtime/src`. TypeScript nodes come from the pinned compiler's
+`Program` and `TypeChecker`. For Svelte, the pinned `svelte/compiler` parser extracts the instance
+script into a virtual TypeScript source and walks every template expression separately; a
+component-level generated symbol is the component filename plus the accessed assistance property.
+An unsupported script language, dynamic computed assistance key, unresolved import/call target or
+template expression the walker cannot classify is a named hard failure, never an omitted node.
+
+Canonical subtree bytes are a recursive tuple of TypeScript/Svelte syntax kind, resolved symbol
+identity, operator and literal value. They exclude trivia, source offsets, local binding names and
+formatting, but retain called operation identity, property identity, control-flow branches and
+literal defaults. Nodes are sorted by `(module,symbol,kind)`; edges by `(from,kind,to)`; duplicate
+node identities and edges fail. The graph digest is SHA-256 over canonical JSON of both arrays,
+truncated to 24 lowercase hex. Renaming a local variable or reformatting is stable; changing a
+storage namespace, version branch, migration default, unknown-field rule, serializer, constructor,
+permission field or Advanced/run projection changes the graph.
+
+Discovery begins at every resolved `AssistanceConfig` field reference and every literal or
+computed access to the `tabiya.assistance.` namespace, then follows imports, calls and property
+reads/writes in both directions until closed. It must contain exactly one storage-key constructor,
+one production reader and one writer; every namespace access must be dominated by those operations.
+The reader and writer call the same key constructor. The writer serializes the current-head object;
+the reader parses/migrates to that same head. `SILENT_ASSISTANCE`, `PROFILE_DEFAULTS`,
+`permittedAssistance`, the Advanced settings projection and the run-screen projection are mandatory
+nodes. A second namespace reader/writer, validator, migrator, serializer, indirect alias around one,
+or assistance-property consumer outside the graph fails closure before transition comparison. An
+unimported file with no assistance field or namespace reach is outside the graph; tests/docs are
+ignored.
+
+The graph is explicitly phase-aware ([[D2113]]). Bootstrap v4 admits and seals the current
+`validV4` plus `migrate` operations in `assistance-preference.ts`; it does **not** pretend the future
+runtime codec exists. The v5 transition must delete both local operations, add the sole
+`packages/runtime/src/assistance-codec.ts#parseAssistanceConfig` codec/migrator, and make
+`loadAssistance` delegate parsed unknown bytes to it. A v5 landing retaining either local operation
+or adding a second codec fails even if the field matrix is correct.
+
+For claims and transitions, a changed-symbol token is derived from the symmetric difference of
+prior/current node identities, body digests and incident edges. A deletion uses the prior node's
+`module#symbol`; an addition uses the current node; a body/edge change uses that identity once.
+Callers never supply this set. C9.6 compares it set-equal to the prior claim; the human-readable
+README change column remains separate.
 
 This process RFC itself claims `none`: it changes the register system, not `AssistanceConfig`.
 On this RFC's implementation, `hint-distance.md` changes its block atomically to:
 
 ```text
-assistance-config | lane 5 | apps/web/src/lib/assistance-preference.ts#loadAssistance; packages/runtime/src/assistance-codec.ts#parseAssistanceConfig; packages/runtime/src/assistance.ts#AssistanceConfig.hintDistance; packages/runtime/src/assistance.ts#AssistanceConfig.version
+assistance-config | lane 5 | apps/web/src/lib/AssistanceSettings.svelte#AssistanceSettings.hintDistance; apps/web/src/lib/assistance-preference.ts#loadAssistance; apps/web/src/lib/assistance-preference.ts#migrate; apps/web/src/lib/assistance-preference.ts#saveAssistance; apps/web/src/lib/assistance-preference.ts#validV4; packages/runtime/src/assistance-codec.ts#parseAssistanceConfig; packages/runtime/src/assistance.ts#AssistanceConfig.hintDistance; packages/runtime/src/assistance.ts#AssistanceConfig.version; packages/runtime/src/assistance.ts#SILENT_ASSISTANCE; packages/runtime/src/assistance.ts#permittedAssistance
 ```
+
+Deleted legacy operations are valid tokens because the transition reader resolves the union of
+parent and current graphs. This list is not guessed from filenames: the author repair derives it
+from the exact v5 obligations and current graph. C9 implementation must reproduce it from source
+snapshots before installing the claim. If it finds another changed constructor, permission,
+persistence or projection node, the claim and this RFC are amended before implementation rather
+than weakening set equality. `intent-presets` owns its exhaustive v5 preset/clamp columns as a
+named consumer discharge in the same product landing; that compiler is the checked consumer
+boundary, not a persistence-authority node mislabeled here.
 
 `intent-presets.md` retains `none`, names `hint-distance` as the v5 owner/dependency, and updates
 its stale “returned to research” prose to “awaiting the [[D1639]] owner ceiling ruling, then repeat
@@ -127,6 +185,9 @@ The register reader builds a workspace TypeScript `Program` with the pinned comp
 interface AssistanceConfigTree {
   readonly head: number;
   readonly fields: Readonly<Record<string, readonly string[]>>;
+  readonly authorityNodes: readonly AssistanceAuthorityNode[];
+  readonly authorityEdges: readonly AssistanceAuthorityEdge[];
+  readonly authorityDigest: string;
   readonly digest: string;
 }
 ```
@@ -150,10 +211,18 @@ The normalized digest contains the resolved values, not alias names or source sp
 an inline union with an equivalent alias is formatting-equivalent; changing the tuple behind that
 alias is semantic drift.
 
-For the digest, field names and each member domain are sorted, encoded as canonical JSON together
-with `head`, hashed with SHA-256 and truncated to the existing register convention's 12 lowercase
-hex characters. Comments, whitespace and source ordering therefore do not move the digest;
-adding/removing/renaming a field, changing a literal or changing the numeric head does.
+For the contract digest, field names and each member domain are sorted and encoded as canonical
+JSON together with `head` and the full authority graph/digest, then hashed with SHA-256 and
+truncated to the existing register convention's 12 lowercase hex characters. Comments, whitespace,
+local binding names and source ordering therefore do not move the digest; adding/removing/renaming a
+field, changing a literal, changing the numeric head, or changing any authority node/edge does.
+
+There is no legal fixed-head semantic drift ([[D2115]]). Any authority-graph change—key, codec,
+migration, unknown-field policy, serializer, constructor, permission or UI/run projection—changes
+the registered digest and is rejected unless the same atomic commit advances the head through the
+prior exact claim. A refactor that is genuinely semantic-equivalent leaves canonical graph bytes
+unchanged. A refactor the grammar cannot prove equivalent takes a new lane; the checker does not
+guess.
 
 The current derived shape is ten properties total: `version: 4` plus nine axes containing 22
 string values. These integers are drift tripwires, not a second declaration; the AST projection is
@@ -209,7 +278,7 @@ The existing C1-C8 meanings stay byte-for-byte. New check C9 has six arms:
 
 | arm | failure |
 |---|---|
-| C9.1 | no/multiple AssistanceConfig interface, or unsupported/ambiguous member shape |
+| C9.1 | no/multiple AssistanceConfig interface, unsupported member shape, incomplete/ambiguous authority graph, or phase rule violation |
 | C9.2 | README head differs from the AST-derived numeric version |
 | C9.3 | README contract digest is absent or differs from the AST-derived digest |
 | C9.4 | more than one live claim, or the sole claim is not registered head+1 |
@@ -229,12 +298,15 @@ the staged/first-parent transition. A head advance is legal only when all of the
 2. the previous state contains exactly one declaration/register claimant for the current lane;
 3. the current state removes that claim, appends exactly one Landed row and names the same RFC as
    owner; and
-4. the complete census-derived assistance source changes are set-equal to the prior claim's exact
-   path/symbol tokens. The v5 reservation names
-   `assistance-preference.ts#loadAssistance`, `assistance.ts#AssistanceConfig.version`,
-   `assistance.ts#AssistanceConfig.hintDistance` and
-   `assistance-codec.ts#parseAssistanceConfig`; an unrelated assistance symbol or undeclared path
-   fails the transition.
+4. the complete graph-derived assistance source changes are set-equal to the prior claim's exact
+   ten path/symbol tokens in §1. Additions, removals, body changes and incident-edge changes all
+   participate; an unrelated assistance symbol, undeclared path or omitted deletion fails.
+
+At v4, C9.1 requires the exact legacy shape: `validV4` and `migrate` are the parser/migration
+authority and there is no runtime assistance codec. At v5 and later, C9.1 requires exactly one
+runtime `parseAssistanceConfig`, no web-local validator/version switch/migrator, and one reader plus
+one writer sharing `assistanceKey`. Thus bootstrap validates bytes that exist today, while the head
+transition proves the centralization rather than assuming it already landed ([[D2113]], [[D2114]]).
 
 A no-prior-claim, wrong lane, wrong claimant, partial symbol set, rewritten old row or head skip
 fails. Adding or withdrawing an unimplemented claim at an unchanged valid head remains a normal C3
@@ -260,7 +332,7 @@ or parses a lane claim as an evidence member.
 ### 5. Able-to-fail fixtures
 
 `tools/register-check.test.mjs` supplies source strings/temporary trees for every branch. The
-fixture table's unit is **mutation class**; total twenty-nine:
+fixture table's unit is **mutation class**; total thirty-eight:
 
 | # | mutation | required result |
 |---|---|---|
@@ -291,13 +363,23 @@ fixture table's unit is **mutation class**; total twenty-nine:
 | 25 | prior claim omits a changed assistance symbol or names `validV5` | fail C9.6/claim grammar |
 | 26 | governance checkout lacks `HEAD^1`, or production parent resolution throws | fail closed; never skip the committed arm |
 | 27 | exact two-commit governance checkout plus valid prior claim→landing | pass committed C9.5/C9.6 |
-| 28 | `loadAssistance` calls a local/direct/indirect `validV5`, or a second production module reads the assistance namespace | fail authority census even when the reported four tokens match |
+| 28 | v4 bootstrap with current `validV4`/`migrate`, one reader, one writer and no runtime codec | pass; requiring the future codec here fails the fixture |
 | 29 | unrelated production `.ts` change or unimported dead helper | unchanged assistance authority set; no false claim requirement |
+| 30 | add a second writer or make read/write use different key constructors | fail C9.1 |
+| 31 | change `tabiya.assistance.v1`, `JSON.stringify`, a legacy default, unknown-field rule or migration branch at head 4 | graph/contract digest changes; fixed-head C9 failure |
+| 32 | formatting, comments or local-binding rename inside an authority node | canonical graph and contract digest unchanged |
+| 33 | v5 leaves `validV4` or `migrate` beside the runtime codec | fail phase rule even when both accept the same values |
+| 34 | v5 has one runtime codec, no local parser/migrator and load/save share key plus codec | pass C9.1 before transition comparison |
+| 35 | v5 changes all ten declared graph nodes | exact symmetric-difference set and C9.6 pass |
+| 36 | v5 claim omits `saveAssistance`, `SILENT_ASSISTANCE`, `permittedAssistance`, Advanced projection or either deleted legacy operation | fail C9.6 |
+| 37 | add an AssistanceConfig consumer in TS or a Svelte template, or use a dynamic computed assistance field the graph cannot resolve | discovered node or named hard failure; never silently absent |
+| 38 | Svelte Advanced projection adds `hintDistance`, while an unsupported script/template construct is crossed separately | exact generated operation node; unsupported arm fails closed |
 
 The implementation also runs the real repository and asserts derived head 4, nine axes, 22 values,
-the current digest, exact contiguous pinned history and exactly one lane-5 claimant. The explicit
-counts are drift tripwires; a future intentional version changes them through the checked
-claim-to-landing transition.
+the v4 legacy parser/migrator, one shared-key reader/writer pair, mandatory constructor/permission/
+Advanced/run nodes, the current shape/graph digest, exact contiguous pinned history and exactly one
+lane-5 claimant. The explicit counts and operation identities are drift tripwires; a future
+intentional version changes them through the checked claim-to-landing transition.
 
 ### 6. Files and boundaries
 
@@ -326,7 +408,8 @@ None. No design intent changes.
    `assistance-config`; deleting either fails C6/C9.
 2. **Semantic derivation.** The real tree derives head 4, nine axes and 22 string members; the
    normalized digest is stable under mutation-classes 1 and 13, resolves class 14, and changes
-   under classes 2-5 and the changed-tuple arm of 14.
+   under classes 2-5 and the changed-tuple arm of 14. It also derives the complete v4 authority
+   graph; class 32 is graph-stable and classes 30-31/37-38 either change identity or fail closed.
 3. **Fail closed.** Mutation classes 6-7 and 15 throw a named extractor error; no property or
    non-literal union residue disappears from the normalized shape.
 4. **Register binding.** C9.2/C9.3 fail on wrong head and wrong/missing digest. C9.5 requires one
@@ -335,8 +418,9 @@ None. No design intent changes.
    fail. Lane 4 and lane 6 fail at head 4; one lane 5 passes only with unchanged head-4 tree/register
    bytes. Same-head or head-only drift still fails. A complete head-5 snapshot is accepted only
    when C9.6 proves the prior exact lane-5 claimant, owner-bound appended row and declared symbol
-   transition; the symbol set is derived from the closed authority census rather than supplied by
-   the caller. Mutation classes 22/25/28 fail and classes 24/29 pass.
+   transition; the symbol set is derived from the closed authority graph rather than supplied by
+   the caller. Mutation classes 22/25/30-31/33/36-38 fail where specified and classes 24/28-29/32/
+   34-35 pass.
 6. **Bijection.** Deleting either the Guided Hint declaration or README live row fails C3.
 7. **Historical truth.** The four landed rows cite the four commits recovered by `git log -S`; no
    archived RFC is invented as their owner. Bootstrap requires those exact four rows, and later
@@ -364,12 +448,13 @@ None. No design intent changes.
    `assistance-config: head 4; next hint-distance.md (lane 5)`; without one it prints
    `assistance-config: head 4; next lane 5`. Neither path accesses `.members` or uses the
    evidence-kind claim parser.
-15. **Literal claim and source-closure truth ([[D2010]], [[D2038]]).** The sole row names only the
-    web `loadAssistance` root, runtime `AssistanceConfig.version`/`.hintDistance` fields and
-    `parseAssistanceConfig`. The generated production census is set-equal to those roots and proves
-    that `loadAssistance` delegates unknown bytes to the sole runtime codec. A local/direct/indirect
-    `validV5`, another assistance-namespace reader or a parallel migration authority fails even
-    when a caller reports only the four expected tokens.
+15. **Literal claim and source-closure truth ([[D2010]], [[D2038]], [[D2113]]–[[D2117]]).** The
+    sole row contains the exact ten-node v5 graph delta, including the writer, constructor,
+    permission projection, Advanced projection and deletion of both legacy local codec operations.
+    Bootstrap derives the actual v4 graph without requiring future files. At v5, load/save share
+    one key and runtime codec; a local/indirect validator, second reader/writer/serializer/migrator,
+    fixed-head semantic change, undeclared assistance consumer or unclassifiable Svelte expression
+    fails even when a caller reports only the expected tokens.
 16. **Dependent phase truth ([[D2011]]).** Every implementation-owned stale Hint status says
     “awaiting the D1639 owner ruling, then repeat independent review”; nothing claims that review is
     already open or changes the owner table.
@@ -378,7 +463,7 @@ None. No design intent changes.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Independent process/buildability review re-derives the rule-7 predicate, AST grammar, single-writer rule and exact file boundary | claude | `planning/assistance-config-register/log.md` + corrections/acceptance | |
+| D1 | Independent process/buildability review re-derives the rule-7 predicate, phase-aware graph grammar, read/write closure, fixed-head policy, exact v5 delta and file boundary | claude | `planning/assistance-config-register/log.md` + corrections/acceptance | |
 | D2 | Implement C9, register/history, claim transfer, docs and able-to-fail fixtures without product bytes | codex | implementing SHA + green governance output | |
 | D3 | Guided Hint v5 product implementation later moves the landed head/digest, removes its live claim and preserves v1-v4 migrations | codex | `hint-distance` implementing SHA/receipt | |
 
@@ -393,11 +478,11 @@ None. No design intent changes.
 | [[D2012]] | repaired in §4 by previous-claimant→owner-bound-landing transition semantics | transition-capable repeat review |
 | [[D2037]] | repaired in §§3–6/criteria 8/10: governance checks out exactly two commits and required-parent resolution fails closed | fresh independent review |
 | [[D2038]] | repaired in §§1/4/criteria 5/15: transition tokens derive from the closed runtime-codec/browser-persistence census | fresh independent review |
-| [[D2113]] | bootstrap v4 cannot satisfy post-v5 codec rules without forbidden product edits | author: phase the actual v4 authority and the claimed v5 centralization |
-| [[D2114]] | `saveAssistance` is absent from the persistence closure | author: register and correlate every namespace read/write operation |
-| [[D2115]] | fixed-head persistence semantics can drift outside the field-domain digest | author: version or digest every authority-closure semantic change |
-| [[D2116]] | four claimed tokens omit required defaults, permissions and consumer discharge | author: derive the real v5 transition/consumer closure |
-| [[D2117]] | transitive TS/Svelte source closure has no executable graph grammar | author: publish and exercise exact node/edge/change identity |
+| [[D2113]] | repaired in §§1/4/classes 28/33-34: v4 seals its real local migrator; v5 must replace it with the runtime codec | fresh independent review |
+| [[D2114]] | repaired in §1/classes 30/34: one graph contains reader, writer, shared key, codec and serializer | fresh independent review |
+| [[D2115]] | repaired in §2/class 31: graph bytes enter contract identity and any fixed-head semantic drift fails | fresh independent review |
+| [[D2116]] | repaired in §1/classes 35-36/criterion 15: exact ten-node delta plus named preset compiler discharge | fresh independent review |
+| [[D2117]] | repaired in §1/classes 32/37-38: closed TS/Svelte nodes, edges, canonical bytes and discovery/failure grammar | fresh independent review |
 
 ## Open questions
 
@@ -406,6 +491,13 @@ contract.
 
 ## Changelog
 
+- 2026-08-30: fourth-return author repair. Replaced the three-root list with one phase-aware
+  TypeScript/Svelte authority graph. Bootstrap now validates the actual v4 `validV4`/`migrate`
+  state; v5 deletes it for the central codec. Read, write, key, serializer, constructors,
+  permissions and Advanced/run projections share one graph; its digest joins resource identity so
+  fixed-head semantic drift fails. The exact v5 claim expands from four guessed tokens to ten
+  derived additions/changes/deletions. Thirty-eight mutation classes and an eight-arm author
+  contract cover [[D2113]]–[[D2117]]. Fresh independent review remains required.
 - 2026-08-30: second fresh independent review returned the third repair on [[D2113]]–[[D2117]].
   Current-v4 versus post-v5 authority, the writer, fixed-head semantic drift, the complete v5
   transition and the source-graph algorithm remain open. Prior 7 + 7 + 6 contracts survive; no
