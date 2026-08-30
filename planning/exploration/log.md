@@ -11787,3 +11787,22 @@ The maintained final-review target initially rejected the stronger scope-correla
 because it still required a non-generic `CandidatePopulationResult`. [[D2149]] records the test
 contract defect: the current-state assertion now requires `CandidatePopulationResult<S>`, while
 the separate historical eight-arm return remains unchanged and red by design.
+
+## 2026-08-30 — Bounded-policy targets D2105–D2111 author repair
+
+Repaired the returned local target-policy operation without touching production. Threat evidence
+now has one FEN-owning constructor whose private pass-anchor authority distinguishes byte-identical
+foreign positions; tracked source/promotion/traversal types are literal; the registered producer is
+one exported concrete service with fixed scheduling and idempotent shutdown; candidate work is
+joined to a deterministic 100,000-position whole-job cap; and return/refutation plus batch-count
+semantics are total.
+
+`make bounded-target-second-author-repair` passes 7/7. Maintained 18 + 5 + 13 contracts and their
+TypeScript fixtures pass. Historical RFC-shape arms D2106–D2111 invert; D2105 correctly stays green
+against unimplemented production and must invert on implementation. Exact receipt:
+`planning/bounded-policy-targets/second-author-repair-2026-08-30.md`. Fresh review still gates
+implementation; no provider, consumer, schema, content, archive or protected-design byte changed.
+
+The maintained pass found [[D2150]]: D1963/D1997/D1998 pinned superseded prose and the unsafe old
+options type. Their current-state assertions now require the stronger source, identity and fixed-
+scheduler limits contract; historical review evidence remains unchanged.

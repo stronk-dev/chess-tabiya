@@ -26,8 +26,8 @@ describe("bounded-target second repeat repair", () => {
     expect(identity).toContain("role: Role");
     expect(identity).toContain("square: SquareName");
     expect(identity).not.toContain("promoted");
-    expect(rfc).toMatch(/`TrackedPieceIdentity` contains colour, current role and square only/u);
-    expect(rfc).toMatch(/no initial\s+promotion provenance is present or inferred/u);
+    expect(rfc).toMatch(/`TrackedPieceIdentity` contains exactly colour, current role and square/u);
+    expect(rfc).toMatch(/no initial\s+promotion provenance is present or inferred/iu);
 
     const position = Chess.fromSetup(parseFen("4k3/8/8/8/8/8/8/Q3K3 w - - 0 1").unwrap()).unwrap();
     expect(position.board.get(parseSquare("a1")!)).toEqual({ color: "white", role: "queen", promoted: false });

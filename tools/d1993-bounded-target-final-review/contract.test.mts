@@ -50,19 +50,23 @@ test("D1997: post-candidate exchange is a retained versioned semantic dependency
   assert.match(rfc, /readonly resultUnits: number/);
   assert.match(rfc, /Positive units correlate only with `preserved`; zero or\s+negative units correlate only with `exchange_neutralized`/s);
   assert.match(rfc, /does not mint a second source evidence item/i);
-  assert.match(rfc, /No recomputation of the source threat or source-position legal exchange/);
+  assert.match(rfc, /No recomputation of the source threat outside its sole FEN-owning evidence constructor/);
 });
 
-test("D1998: service options, failures, no-throw submission and cleanup are closed", () => {
-  assert.match(rfc, /interface BoundedTargetServiceOptions/);
-  for (const value of ["maxActive: 1", "maxQueued: 8", "maxPairs: 512", "maxVisitedPositions: 25000", "yieldEveryVisited: 64"]) {
+test("D1998: service limits, failures, no-throw submission and cleanup are closed", () => {
+  assert.match(rfc, /interface BoundedTargetServiceLimits/);
+  for (const value of ["maxActive: number", "maxQueued: number", "maxPairs: number", "maxVisitedPositions: number", "maxBatchVisitedPositions: number", "yieldEveryVisited: number"]) {
     assert.match(rfc, new RegExp(value));
   }
+  assert.match(rfc, /Default construction is exactly 1 active, 8 queued, 512 pairs, 25,000 per-candidate positions/);
   for (const reason of ["yield_failed", "traversal_failed", "seal_failed", "invariant_failed"]) {
     assert.match(rfc, new RegExp(`"${reason}"`));
   }
   assert.match(rfc, /Once constructed, `submit\(\)` never throws/);
-  assert.match(rfc, /leaves the active\/queue\/dedup maps in the same state as if it had never\s+been admitted/s);
+  assert.match(rfc, /accept only the compiled manifest plus numeric `Partial<BoundedTargetServiceLimits>`/);
+  assert.doesNotMatch(rfc, /readonly yieldControl: \(\) => Promise<void>/);
+  assert.match(rfc, /terminal job leaves the active\/queue\/dedup maps/u);
+  assert.match(rfc, /state as if it had never been admitted/u);
   assert.match(rfc, /setTimeout\(\(\) => abort\(\), 0\)/);
 });
 

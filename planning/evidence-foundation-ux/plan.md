@@ -42,6 +42,13 @@ outcomes. `planning/evidence-foundation-ux/shared-candidate-packet-second-author
 is the exact receipt. The RFC remains draft and implementation remains forbidden until a fresh
 independent buildability review accepts this repaired boundary.
 
+**2026-08-30 Phase-2g local-target checkpoint.** `bounded-policy-targets` has been author-repaired
+for [[D2105]]–[[D2111]] without adding consumer authority: one source-bound threat constructor,
+literal tracked identities, a concrete fixed-scheduler service, deterministic candidate/job bounds,
+total refutation semantics, aggregate counting and idempotent shutdown. Exact receipt:
+`planning/bounded-policy-targets/second-author-repair-2026-08-30.md`. Fresh independent review still
+precedes implementation; provider policy joins and learner/bot selection remain separate RFCs.
+
 The shared Explorer source repair explicitly owns [[D1703]], [[D1704]], [[D1705]], [[D1706]],
 [[D1707]], [[D1708]] and [[D1709]]. Its author input is
 `explorer-source-author-repair-2026-08-26.md`; it joins the existing F1/provider dependency rather
