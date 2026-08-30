@@ -16,6 +16,11 @@ barrel, and executes false-value controls through live adapters and the compiled
 The working negative control is the repaired pawn-contact adapter from D2141. `[V]`
 (`tools/d2144-evidence-seal-audit/value-authority.test.ts`; `make evidence-seal-audit`)
 
+The D2146 refresh widened the instrument from the initial suffix-specific regex to every generic
+`exactObject` const and every specialized/dynamic mint route. That correction found one omitted
+adapter whose name does not end in `Evidence`, four duplicate mint paths and six declared
+projections with no mint path. `[V]` (`design/research/evidence-mint-route-closure.md`)
+
 This pass measures the current tree. It does not claim that every generic adapter should recompute
 its payload: recorded, authored, human/provider and deterministic rule sources have different
 authorities.
@@ -40,7 +45,7 @@ to every runtime consumer rather than being private to the producer that compute
 
 ### 2. Population
 
-The current source file contains **74** public generic object adapters. Their compiled grounding /
+The current source file contains **75** public generic object adapters. Their compiled grounding /
 exactness classes are: `[V]` (`tools/d2144-evidence-seal-audit/value-authority.test.ts`)
 
 | Plane / grounding / exactness | Adapters | Currently bound |
@@ -56,7 +61,8 @@ exactness classes are: `[V]` (`tools/d2144-evidence-seal-audit/value-authority.t
 | search / bounded search / measured | 2 | 2 |
 | human / corpus or model / measured | 4 | 4 |
 | authored or theory / authored claim / authored | 4 | 4 |
-| **Total** | **74** | **50** |
+| record / declared convention / convention | 1 | 1 |
+| **Total** | **75** | **51** |
 
 The 15 currently bound position-rules/exact rows are not merely future inventory: they include
 castling-rights loss, square-control events, pawn-island events, exact check/reply-breadth events,
@@ -84,7 +90,7 @@ for value forgery without weakening the private seal. `[V]`
 
 ## Interpretation
 
-This does **not** show that 74 adapters need one universal recomputation rule. It shows that one
+This does **not** show that 75 adapters need one universal recomputation rule. It shows that one
 function currently serves four different trust models without declaring which model applies:
 
 1. deterministic board/edge rules that can compute their own complete payload;
@@ -114,7 +120,9 @@ negative: `[M]`
 The repair should be population-driven and staged. D1934's exact-key repair is necessary but not
 sufficient; changing `exactObject` to reject extras still accepts false values. D2141 is the
 positive implementation pattern for a deterministic complete reading, not permission to
-duplicate 74 collectors. `[V]` for the insufficiency; repair shape `[M]`.
+duplicate 75 collectors. The complete boundary is larger still: 191 routes mint 187 distinct
+projections, while six catalogue projections have no route. `[V]` for the insufficiency; repair
+shape `[M]`.
 
 ## Product consequence
 

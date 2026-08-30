@@ -51,7 +51,8 @@
         "shared-candidate-evidence-packet.md",
         "bounded-policy-targets.md",
         "bounded-target-policy-composition.md",
-        "recorded-semantic-path.md"
+        "recorded-semantic-path.md",
+        "evidence-value-authority.md"
       ],
       "completion": {
         "evidence": ["partial", "Typed engine, tablebase, human-model, explorer, theory, structural, tactical, transition, counterfactual, and availability facts preserve operands and provenance."],

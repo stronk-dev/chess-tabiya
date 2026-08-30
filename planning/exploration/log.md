@@ -11632,3 +11632,57 @@ computed, derived, recorded/provider and authored value authorities before ordin
 Review, bots, packs or longitudinal state consume the facts. D1934's extra-key repair remains
 necessary and insufficient. `make evidence-seal-audit` passes 4/4. No producer, projection,
 binding, schema, content, archive or protected-design byte changed.
+
+## 2026-08-30 — Rules/position-exact grounding taxonomy
+
+Completed [[D2145]]'s 20/20 review before drafting the value-authority contract. The initial
+finding narrowed: convention dependence does not by itself make a position computation inexact.
+Nine rows are literal rule totals; six are complete rule computations that retain
+`position_rules/exact` while gaining direct convention closure; phase and named-structure are
+product classifiers; endgame, pivotal markers and structural predicate results combine unlike
+authorities and require split or derived identities. Twelve of the twenty already have consumer
+bindings.
+
+The executable review is set-equal to the live generic-adapter population and pins the 9/6/2/3
+partition plus the bound subset. It also exposes why metadata-only relabelling is insufficient:
+named-structure declares only `provenanceNote` while its real payload carries id/name/provenance;
+endgame attaches uncited technique candidates to a material class; pivotal combines rule, run and
+human-model facts; structural-result can be minted apart from its authored input. The successor
+must compose with semantic-convention provenance rather than invent a second registry. `make
+evidence-seal-audit` passes 4/4. No production projection, adapter, binding, schema, content,
+archive or protected-design byte changed.
+
+## 2026-08-30 — Evidence value-authority RFC drafted
+
+Drafted `rfc/evidence-value-authority.md` from [[D2144]]/[[D2145]] after the exploration gate closed.
+The contract does not patch the impossible castling event alone: it removes all 74 root-exported
+caller-payload adapters through four authority shapes (computed, derived, sealed source receipt and
+registered authored authority), one package-private mint and a set-equal migration. It preserves
+the 9 literal + 6 exact-under-convention distinctions, versions/reclassifies phase and named
+structure, and splits endgame, pivotal and structural-result authorities before factory assignment.
+
+The draft is explicitly dependency-blocked on semantic-convention provenance, provider exchange
+and semantic-validation authority. Its 24 criteria forbid compatibility payload adapters, generic
+mint APIs, uncited endgame-technique rendering, mixed pivotal grounding and caller-supplied derived
+output. A disposable author contract re-derives 74 adapters, the 20-row partition, all nine
+successor ids, all four factory shapes, dependency/CI closure and claims-none reasoning; `make
+evidence-value-authority-author-contract` passes 5/5. No implementation, production projection,
+adapter, binding, schema, content, archive or protected-design byte changed.
+
+## 2026-08-30 — Evidence mint-route census correction
+
+Corrected [[D2144]]'s first population boundary before review and recorded the class as [[D2146]].
+The original adapter-name regex required the `Evidence` suffix and therefore missed the bound
+generic `declareEvidenceReferenceResolution` export: 74/50 corrects to 75 generic adapters / 51
+bound. Expanding all sixteen specialized/dynamic operations produces 116 further branches, so the
+complete production boundary is 191 mint routes over 187 distinct projection ids. Four projections
+have duplicate routes; six of the 193 manifest projections have no route, of which only retired
+pawn-count is intentionally factory-less.
+
+The successor RFC now requires a literal 191-route migration, duplicate collapse and a factory plus
+independent profile for every non-retired final projection. Honest emptiness is represented by an
+explicit typed unavailable result, not absence of a factory. This correction also replaces an
+impossible cross-module capability claim with one runtime-owned mint module and narrows the private
+receipt to what it can prove: verified input/source digests at construction plus payload-digest
+coherence at consumption. No production projection, adapter, binding, schema, content, archive or
+protected-design byte changed.
