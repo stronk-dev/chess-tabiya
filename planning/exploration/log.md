@@ -12395,3 +12395,16 @@ union, with planner traversal, wrong-subject and cycle controls.
 five-seam contract. No production schema, runtime, API, pack, content, archive or protected-intent
 byte changed; [[D560]] remains whole. The RFC stays draft pending fresh independent review. Receipt:
 `planning/pack-capability-contract/fourth-author-repair-2026-08-30.md`.
+
+## 2026-08-30 — Semantic-validation D2194–D2197 author repair
+
+Repaired the fresh independent return without implementing the validator. The RFC now closes all
+eight operation/input grains and exact case refs, makes the value-authority sole-factory receipt a
+conjunct of execution and learner admission, refuses Codex-authored chess expectations without an
+independent oracle/source/owner receipt, and makes mirror pairing non-empty, canonical, unique and
+order-independent before scalar comparison.
+
+`make semantic-validation-author-contract` passes 11/11. The RFC remains draft awaiting another
+independent review; production, schema, content, archive, consumer eligibility and protected intent
+are unchanged. Receipt:
+`planning/semantic-validation-authority/author-repair-d2194-d2197-2026-08-30.md`.

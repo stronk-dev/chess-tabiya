@@ -13,3 +13,17 @@ completed/unavailable result; defines a total typed mirror leaf walk; requires d
 reach or exact projection-multiset retention; and derives root cardinality from the live catalogue.
 Loose-piece erasure stays explicit debt behind [[D1981]]. Product implementation remains blocked on
 fresh independent review.
+
+## 2026-08-30 — D2194–D2197 author repair
+
+The fresh independent return found four deeper bypasses after the first repair: undefined case and
+operation joins, projection-wide validation laundering alternate mint routes, missing chess truth
+assigned to Codex, and zero-event mirrors passing vacuously. The RFC now publishes an eight-operation
+distributive input/result map with exact refs; requires the exact sole-factory `EvidenceValueReceipt`
+at both execution and consumer admission; limits new expectations to a frozen assertion, separate
+rules oracle, immutable cited proposition or owner receipt; and pairs non-empty target events by
+canonical `{projection, sign, operands}` identity before the leaf walk.
+
+`make semantic-validation-author-contract` passes the maintained 6 + 5 arms. This is author-side
+positive evidence, not acceptance. Production, learner eligibility, schema, content, archive and
+protected intent remain untouched pending a new independent review.

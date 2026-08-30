@@ -1,11 +1,11 @@
 # RFC: Executable semantic-validation authority
 
-- **Status:** draft — RETURNED by fresh independent review 2026-08-30 on
-  [[D2194]]–[[D2197]]. The D2039–D2043 repair survives, but the case/operation protocol references
-  undefined input/ref maps; projection-wide verdicts can launder unverified mint routes; missing
-  chess expectations are assigned to codex without an admissible authority; and mirror cases can
-  pass at zero events with no event-level pairing. `make semantic-validation-fresh-review` passes
-  4/4. Implementation and learner eligibility remain forbidden.
+- **Status:** draft — author-repaired 2026-08-30 on [[D2194]]–[[D2197]]; fresh independent review
+  required. The operation/case map is now distributive and closed; consumer admission requires the
+  sole verified value-factory receipt as well as the event verdict; every chess expectation names an
+  admissible witness/source/owner authority; and mirrors require non-empty unambiguous canonical
+  event pairing before leaf comparison. `make semantic-validation-author-repair` is the positive
+  author contract. Implementation and learner eligibility remain forbidden.
 - **Author:** codex, executing [[D1711]] / [[D1713]] / [[D1714]] after refreshing both research
   instruments at HEAD
 - **Created:** 2026-08-29
@@ -23,7 +23,10 @@
   `shared-candidate-evidence-packet` result algebra ([[D1981]]). The held
   `derived.pawn.promotion_race_tablebase@1` event from `semantic-collectors` must add its profile,
   cases and explicit required verdict atomically with that projection; no literal cardinality may
-  prevent or silently bypass that transition.
+  prevent or silently bypass that transition. **Slice E additionally depends on accepted and
+  implemented `evidence-value-authority`: Slice A may record validation debt first, but no learner
+  event instance is admitted until its package-private `EvidenceValueReceipt` proves the sole
+  projection factory and exact payload/input digests.**
 - **Parent / amends:** living successor to the immutable implemented evidence contract; changes
   `SemanticEventDeclaration.validation` from self-generated labels to a compiled profile reference
 - **Planning:** `planning/semantic-validation-authority/`
@@ -209,15 +212,100 @@ an `execute`, `emit`, `expectedEvidence`, `DeclaredEvidence`, `SemanticEvidenceE
 function member.
 
 ```ts
-interface SemanticValidationCase {
+type SemanticValidationOperationId =
+  | "runtime.semantic.local_edge@1"
+  | "runtime.semantic.structural_edge@1"
+  | "runtime.semantic.transition_edge@1"
+  | "runtime.semantic.breadth_edge@1"
+  | "runtime.semantic.duty_edge@1"
+  | "runtime.semantic.recorded_path@1"
+  | "runtime.semantic.recorded_sequence@1"
+  | "runtime.semantic.complete_alternatives@1";
+
+interface SemanticEdgeInput {
+  readonly kind: "edge";
+  readonly beforeFen: string;
+  readonly moveUci: string;
+  readonly afterFen: string;
+}
+
+interface SemanticRecordedPathInput {
+  readonly kind: "recorded_path";
+  readonly pathReceipt: VersionedEvidenceId; // exactly run.record.edge@1
+  readonly edges: readonly SemanticEdgeInput[]; // non-empty, contiguous, canonical
+  readonly pathDigest: string;
+}
+
+type SemanticSequenceFamily =
+  | "trade_completed"
+  | "pawn_contact_timing"
+  | "harassment_pressure"
+  | "defender_consequence"
+  | "deflection"
+  | "attraction"
+  | "line_clearance"
+  | "square_clearance"
+  | "interference"
+  | "checking_zwischenzug"
+  | "overload_exploitation";
+
+interface SemanticRecordedSequenceInput {
+  readonly kind: "recorded_sequence";
+  readonly path: SemanticRecordedPathInput;
+  readonly family: SemanticSequenceFamily;
+  readonly fromPly: number;
+  readonly horizon: 2 | 3 | 4 | 5;
+}
+
+interface SemanticCompleteAlternativesInput {
+  readonly kind: "complete_alternatives";
+  readonly rootFen: string;
+  readonly played: SemanticEdgeInput;
+  readonly alternatives: readonly SemanticEdgeInput[]; // exact legal UCI set, includes played
+  readonly legalSetDigest: string;
+}
+
+type SemanticValidationOperationInputMap = {
+  readonly "runtime.semantic.local_edge@1": SemanticEdgeInput;
+  readonly "runtime.semantic.structural_edge@1": SemanticEdgeInput;
+  readonly "runtime.semantic.transition_edge@1": SemanticEdgeInput;
+  readonly "runtime.semantic.breadth_edge@1": SemanticEdgeInput;
+  readonly "runtime.semantic.duty_edge@1": SemanticEdgeInput;
+  readonly "runtime.semantic.recorded_path@1": SemanticRecordedPathInput;
+  readonly "runtime.semantic.recorded_sequence@1": SemanticRecordedSequenceInput;
+  readonly "runtime.semantic.complete_alternatives@1": SemanticCompleteAlternativesInput;
+};
+
+type SemanticValidationOperationResultMap = {
+  readonly [K in SemanticValidationOperationId]: SemanticValidationOperationResult;
+};
+
+type SemanticValidationOperationRef<K extends SemanticValidationOperationId = SemanticValidationOperationId> =
+  { readonly id: K; readonly version: 1 };
+type SemanticValidationOperationInput<K extends SemanticValidationOperationId> =
+  SemanticValidationOperationInputMap[K];
+
+interface SemanticValidationCaseRef {
   readonly id: string;
   readonly version: 1;
   readonly event: VersionedEvidenceId;
   readonly arm: Exclude<SemanticValidationArm, "imported_population" | "external_label">;
-  readonly operation: SemanticValidationOperationRef;
-  readonly input: SemanticValidationOperationInput;
-  readonly expectation: SemanticValidationExpectation;
 }
+
+type SemanticValidationCaseFor<K extends SemanticValidationOperationId> = {
+  readonly id: string;
+  readonly version: 1;
+  readonly event: VersionedEvidenceId;
+  readonly arm: Exclude<SemanticValidationArm, "imported_population" | "external_label">;
+  readonly operation: SemanticValidationOperationRef<K>;
+  readonly input: SemanticValidationOperationInput<K>;
+  readonly authority: SemanticValidationCaseAuthority;
+  readonly expectation: SemanticValidationExpectation;
+};
+
+type SemanticValidationCase = {
+  readonly [K in SemanticValidationOperationId]: SemanticValidationCaseFor<K>
+}[SemanticValidationOperationId];
 
 type SemanticValidationExpectation =
   | { readonly kind: "emits"; readonly minimum: 1; readonly operandMatch?: Readonly<Record<string, unknown>> }
@@ -227,6 +315,7 @@ type SemanticValidationExpectation =
       readonly kind: "mirrors";
       readonly partnerCase: SemanticValidationCaseRef;
       readonly geometry: "vertical" | "horizontal" | "color_and_vertical";
+      readonly targetEvents: { readonly nonEmpty: true; readonly pairing: "canonical_subject_sign_operands" };
       readonly operandRules: readonly SemanticMirrorOperandRule[];
     };
 
@@ -247,7 +336,69 @@ interface SemanticMirrorOperandRule {
     | "signed_rank_delta";
   readonly collection: "scalar" | "ordered" | "canonical_set";
 }
+
+type SemanticValidationOracleId =
+  | "rules.legal_successor@1"
+  | "rules.attack_map@1"
+  | "rules.material_ledger@1"
+  | "rules.line_occupancy@1"
+  | "rules.complete_legal_set@1"
+  | "rules.tablebase_result@1";
+
+type SemanticValidationCaseAuthority =
+  | {
+      readonly kind: "existing_assertion";
+      readonly matrixRow: string;
+      readonly testSite: `${string}.test.ts#${string}`;
+      readonly sourceSha256: string;
+      readonly frozenExpectationSha256: string;
+    }
+  | {
+      readonly kind: "rules_oracle";
+      readonly oracle: SemanticValidationOracleId;
+      readonly witnessSha256: string;
+      readonly resultSha256: string;
+    }
+  | {
+      readonly kind: "cited_proposition";
+      readonly sourceId: string;
+      readonly sourceRevision: string;
+      readonly licence: string;
+      readonly span: { readonly start: number; readonly end: number; readonly textSha256: string };
+      readonly propositionSha256: string;
+    }
+  | {
+      readonly kind: "owner_authored";
+      readonly receipt: string;
+      readonly caseSha256: string;
+      readonly expectationSha256: string;
+    };
 ```
+
+Authority is not decorative provenance. An `existing_assertion` is legal only for a row already
+classified valid in the D1713 migration matrix; its expectation bytes must remain identical while
+being moved, and the test site plus source digest must resolve. A `rules_oracle` invokes a separate
+closed oracle registry over the case's serialized input and witness. Oracle implementations may
+import chess rules and tablebase receipt validators, but the static import graph must exclude the
+semantic event operation, its predicate helper, the case expectation and every semantic-event
+constructor. The runner derives `resultSha256`; the author cannot submit a boolean answer.
+
+A `cited_proposition` resolves through the immutable source manifest and exact revision/span rules;
+the proposition digest is bound to the case expectation. `owner_authored` resolves to a committed
+owner-authored authority row whose two digests match; Codex cannot create or amend that receipt.
+Unknown authority kinds, an unresolved source/test/receipt, a shared oracle/production dependency,
+or any expectation edit under `existing_assertion` fails `SEMANTIC_VALIDATION_AUTHORITY_INVALID`.
+The missing 28 positives, 44 semantic negatives and orientation cases therefore remain `required`
+until one of these authorities exists. Building a runner is not authority to fill them.
+
+`semanticValidationOperationRef(id)`, `semanticValidationCaseRef(case)` and
+`parseSemanticValidationCase(value)` are the only constructors/parsers. The parser is strict and
+uses `operation.id` to select the corresponding input arm before checking exact keys. An edge
+operation with a path, a path operation with an edge, a sequence with the wrong horizon/family, a
+complete-alternative request whose canonical legal set differs by one move, and a case ref whose
+event/arm/version differs from its target all fail `SEMANTIC_VALIDATION_OPERATION_INPUT_INVALID` or
+`SEMANTIC_VALIDATION_CASE_REF_STALE` before execution. No `as SemanticValidationOperationInput`
+cast exists at a registry boundary.
 
 Case ids are independent author-chosen ids such as `castled.standard-white.positive@1`, never
 `semantic-event:${projection}:positive`. The compiler rejects an id equal to or containing the
@@ -276,6 +427,22 @@ overlap, an unmatched leaf, an unresolved wildcard or an arbitrary transform nam
 `SEMANTIC_VALIDATION_ORIENTATION_SCHEMA`. This closed walk is the one comparator used by cases and
 receipts; event-specific comparison callbacks are forbidden.
 
+The leaf walk begins only after event-level pairing succeeds. The runner selects the exact target
+projection/version from each completed result and requires both target populations to be non-empty.
+For each target event it constructs the pairing key as canonical JSON of exactly
+`{ projection, sign, operands }` after applying `geometry` through the total `operandRules` walk.
+Subject identity is therefore the complete subject-bearing operand data, never an implementer-picked
+subset. Event id, anchor and evidence-receipt metadata are retained in the receipt but are not
+semantic pairing keys. The runner compares the two canonical target-event multisets, pairs equal
+keys independent of emission order, and requires exactly one source and one partner per key.
+
+Zero/zero fails `SEMANTIC_VALIDATION_MIRROR_EMPTY`; zero/non-zero or unequal cardinality fails
+`SEMANTIC_VALIDATION_MIRROR_MISMATCH`; duplicate keys fail
+`SEMANTIC_VALIDATION_MIRROR_AMBIGUOUS`; and an unmatched transformed key fails
+`SEMANTIC_VALIDATION_MIRROR_UNMATCHED`. Only then does the runner apply the exhaustive leaf rules
+inside each unique pair. Reordering equal events passes; deleting, duplicating, changing the subject,
+changing a sign field or changing one operand cannot pass by preserving the aggregate count.
+
 ### 4.2 Closed operation results
 
 Every registry invocation returns one result algebra:
@@ -291,6 +458,37 @@ type SemanticValidationOperationResult =
       readonly reason: SemanticValidationUnavailableReason;
     };
 ```
+
+`SemanticEvidenceEvent.evidence` is not sufficient authority by itself. Once
+`evidence-value-authority` lands, the runner calls the package-private
+`evidenceValueReceipt(event.evidence)` and consumes its exact closed result:
+
+```ts
+interface EvidenceValueReceipt {
+  readonly projection: VersionedEvidenceId;
+  readonly factory: string;
+  readonly inputDigest: string;
+  readonly payloadDigest: string;
+  readonly sourceDigests: readonly string[];
+}
+```
+
+This interface is owned by `evidence-value-authority`; it is repeated here only as the exact
+dependency seam and is not a second declaration. For every target event in a completed result, the
+receipt projection must equal the event projection/version, `payloadDigest` must equal the sealed
+payload's canonical digest, and `factory` must equal the catalogue's sole registered factory for
+that projection. The runner records factory, input, payload and source digests in the case receipt.
+A missing receipt, a caller-minted wrapper, a different factory, a swapped payload, or a second live
+factory route fails `SEMANTIC_VALIDATION_VALUE_AUTHORITY_MISSING`; it can never be interpreted as an
+empty or negative result.
+
+Before that dependency is implemented, profiles and grounded cases may be registered as Slice-A
+debt, but no event verdict can become `passed`. Semantic validation does not validate every historic
+mint route: the value-authority migration first collapses each projection to its one factory, and
+this runner then validates that production factory path. The landing order is: accept this
+profile/case protocol; implement the value-authority factory boundary; execute semantic profiles;
+then release consumers. The last two may share an implementation checkpoint, but consumer release
+is the last step in either order.
 
 An array-returning production export can produce only `completed`, including an honestly empty
 array. A registry adapter may produce `unavailable` only by mapping the production export's native
@@ -316,8 +514,10 @@ versioned operation ids to production exports already used by the application, i
 - `runtime.semantic.breadth_edge@1` → `breadthSemanticEvents`;
 - `runtime.semantic.duty_edge@1` → `semanticDutyEvents`;
 - `runtime.semantic.recorded_path@1` → the accepted total recorded-path operation; and
-- narrowly typed sequence operations only where the production application calls the same
-  constructor over a sealed recorded-path receipt.
+- `runtime.semantic.recorded_sequence@1` → the production sequence dispatcher over a sealed
+  recorded-path receipt and one closed `SemanticSequenceFamily`; and
+- `runtime.semantic.complete_alternatives@1` → the production all-legal-successors dispatcher over
+  the exact canonical legal set.
 
 The case registry selects an operation id and supplies its serializable input; it cannot replace
 the function. Each operation declaration retains the production symbol, result adapter and a
@@ -479,6 +679,22 @@ readonly semanticValidation: "required" | "research_only";
 `required` compiles eligible only when the event's generated verdict is `passed`. Otherwise the
 compiler produces/refuses with `event_unvalidated` and retains the exact missing/failed arm ids.
 
+That projection verdict is necessary but not sufficient. Each supplied event instance must also
+pass `assertDeclaredEvidence`, resolve the package-private `EvidenceValueReceipt`, match the sole
+registered factory for the exact projection/version and reproduce its payload digest. The compiled
+consumer view therefore admits the conjunction:
+
+```ts
+eventProfile(event.projection).verdict === "passed"
+  && evidenceValueReceipt(event.evidence).factory === soleFactory(event.projection)
+  && evidenceValueReceipt(event.evidence).payloadDigest === canonicalDigest(event.evidence.payload)
+```
+
+There is no projection-wide waiver and no legacy caller-payload arm. A profile may pass only after
+its own target observations ran through that same sole factory route; a consumer cannot combine a
+passing profile receipt from one route with an instance from another. A failed first conjunct is
+`event_unvalidated`; a failed value-authority conjunct is `event_value_unverified`.
+
 `research_only` is allowed only when the consumer's roles are a subset of `author | operator`, its
 timing is `analysis`, and its forms exclude learner sentences, board paint, hints, grades and move
 recommendations. The current `research.semantic_selection@1` takes this disposition. A consumer
@@ -505,7 +721,8 @@ a softer threshold.
 
 1. Add the root/profile/case/operation/receipt types and compiler checks.
 2. Publish the literal total profile set-equal to the live event-root inventory.
-3. Migrate the 39 emitter positives and ten emitter negatives without weakening their source tests.
+3. Migrate the 39 emitter positives and ten emitter negatives without weakening their source tests;
+   retain them as registered/unexecuted debt until the sole-factory value receipt exists.
 4. Re-run the current imported population for every live event version and migrate the eight external
    disagreement receipts.
 5. Mark every other required cell as debt, so no event is accidentally learner-valid merely because
@@ -513,20 +730,24 @@ a softer threshold.
 6. Change current operator research eligibility to explicit `research_only`.
 
 Slice A may land with zero fully validated events. That is a successful truth repair, not a reason
-to retain generated labels.
+to retain generated labels. It cannot mint a passing event verdict before value-authority route
+closure.
 
-### Slice B — local one-edge closure
+### Slice B — grounded local one-edge closure
 
-Complete positive, semantic-negative and mirrored cases family by family for structural,
-transition, tactics, breadth, king/material/activity and exact exchange events. Elevate the thirteen
-lower-predicate negatives through the named production operations. Each family commit updates the
-generated receipt and reports event-level verdict changes.
+Migrate already-grounded positive, semantic-negative and mirrored cases family by family for
+structural, transition, tactics, breadth, king/material/activity and exact exchange events. Elevate
+the thirteen lower-predicate negatives through the named production operations only when their
+authority rows remain valid. Missing chess expectations stay `required` until a rules oracle,
+source-bound proposition or owner receipt exists. Each family commit updates the generated receipt
+and reports event-level verdict changes; Codex does not fill a cell merely to complete a family.
 
 ### Slice C — recorded and alternative populations
 
-After the total recorded-path operation lands, complete sequence-event positives/negatives and
-mirrors. Complete the fourteen required counterfactual profiles over complete legal populations;
-do not treat one sampled reply as a counterfactual case.
+After the total recorded-path operation lands, migrate authority-bearing sequence-event
+positives/negatives and mirrors. Execute authority-bearing required counterfactual profiles over
+complete legal populations; do not treat one sampled reply as a counterfactual case. Missing
+authority remains explicit debt.
 
 ### Slice D — repaired avoidance/opposition
 
@@ -553,45 +774,56 @@ no UI or content is added by this RFC.
 4. A plausible generated label with no case fails `SEMANTIC_VALIDATION_CASE_MISSING`.
 5. A case object cannot express a callback, `DeclaredEvidence`, `SemanticEvidenceEvent` or direct
    compiler call; runtime protection additionally rejects a forged extra key.
-6. A positive reaching its operation with zero target events fails
+6. The operation map is distributive over all eight exact operation ids. Edge/path/sequence/
+   complete-alternative cross-pairs, invalid sequence families/horizons, incomplete legal sets and
+   stale case refs fail before an operation runs.
+7. A positive reaching its operation with zero target events fails
    `SEMANTIC_VALIDATION_POSITIVE_EMPTY`.
-7. A negative with an illegal move, non-successor after FEN or malformed operand fails
+8. A negative with an illegal move, non-successor after FEN or malformed operand fails
    `SEMANTIC_VALIDATION_FIXTURE_INVALID`, not passes as a semantic negative.
-8. A valid semantic negative records one operation invocation and zero target events; unrelated
+9. A valid semantic negative records one operation invocation and zero target events; unrelated
    events may remain in its output.
-9. An orientation-required event with one case, incomplete/overlapping operand paths, an illegal
+10. An orientation-required event with one case, incomplete/overlapping operand paths, an illegal
    transformed edge or a partner whose canonically transformed operands do not agree fails
    `SEMANTIC_VALIDATION_ORIENTATION_INCOMPLETE` or
    `SEMANTIC_VALIDATION_ORIENTATION_SCHEMA` before a receipt is emitted.
-10. A later event pointing at the old R2 token fails `SEMANTIC_VALIDATION_POPULATION_STALE`.
-11. Keeping the population input digest while changing predicate or result digest invalidates the
+11. Mirror comparison rejects zero/zero, zero/non-zero, duplicate, unmatched and ambiguous target
+    populations before leaf comparison; reordered uniquely paired events pass.
+12. A later event pointing at the old R2 token fails `SEMANTIC_VALIDATION_POPULATION_STALE`.
+13. Keeping the population input digest while changing predicate or result digest invalidates the
     receipt independently in both fixtures.
-12. Every present case resolves to exactly one registry row and every registry row is referenced;
+14. Every present case resolves to exactly one registry row and every registry row is referenced;
     dead, duplicate, stale-version and cross-event cases fail.
-13. Each operation invokes a production symbol, carries a complete local import-file closure and
+15. Each operation invokes a production symbol, carries a complete local import-file closure and
     proves either a real non-test application caller or exact target-projection multiset retention
     through its declared application operation; `compileSemanticEvidenceEvent` and
     `declareEvidence` are refused targets.
-14. The generated receipt is byte-stable across two runs. `make semantic-validation-check` fails
+16. Every registered case resolves one admissible authority. Existing assertions reproduce frozen
+    expectation bytes, rules oracles are dependency-separated and derive their result, cited
+    propositions resolve an exact immutable span, and owner cases resolve a matching owner-authored
+    receipt. An invented expectation or Codex-authored owner receipt fails.
+17. The generated receipt is byte-stable across two runs. `make semantic-validation-check` fails
     after changing a fixture expectation, operation source byte, profile cell or population result
     without regeneration.
-15. A full-profile event is admitted to a learner-role fixture consumer; an otherwise identical
+18. A full-profile event is admitted to a learner-role fixture consumer only when the exact instance
+    also carries the sole-factory `EvidenceValueReceipt`; missing/swapped receipts, changed payloads
+    and alternate routes fail even when the projection verdict passes. An otherwise identical
     event with one required cell refuses with `event_unvalidated`.
-16. The same incomplete event is visible to an operator `research_only` fixture, while changing that
+19. The same incomplete event is visible to an operator `research_only` fixture, while changing that
     consumer role to learner fails compilation. This is the raw-inspector-versus-meaning boundary.
-17. Derived-event validation does not inherit from inputs, and a new event version begins without a
+20. Derived-event validation does not inherit from inputs, and a new event version begins without a
     passing receipt.
-18. The 39/10 migration baseline is re-derived through `make semantic-validation-matrix`; any
+21. The 39/10 migration baseline is re-derived through `make semantic-validation-matrix`; any
     divergence is named in the implementation log rather than silently adjusting a count.
-19. The first generated population receipt contains one row per live event root, compatible
+22. The first generated population receipt contains one row per live event root, compatible
     non-zero denominators, exact input/result/implementation digests and honest zeroes. The fixture
     reproduces 108 games and 579 sampled edges, while path/alternative denominators are derived and
     retained separately.
-20. Production web/server bundles contain no validation fixture registry, frozen fixture FENs or
+23. Production web/server bundles contain no validation fixture registry, frozen fixture FENs or
     executable research harness.
-21. `make verify` includes `semantic-validation-check`; focused authority tests, manifest tests,
+24. `make verify` includes `semantic-validation-check`; focused authority tests, manifest tests,
     typecheck, software, content and governance tiers all pass without retry or rewritten artefacts.
-22. Docs describe the difference among declared, validated, research-only and learner-eligible
+25. Docs describe the difference among declared, validated, research-only and learner-eligible
     evidence. The implementation log lists passed/required events by family, not one blended
     percentage.
 
@@ -619,7 +851,13 @@ The independent review must run, not merely read, these fixtures:
 18. internal child event filtered out by its declared application operation;
 19. mirror with one unmatched nested scalar and one overlapping wildcard;
 20. one sampled edge and one legal alternative omitted while the PGN digest is retained; and
-21. the held promotion-race event added without an atomic profile and verdict.
+21. the held promotion-race event added without an atomic profile and verdict;
+22. every wrong operation/input pairing plus an incomplete complete-alternative set;
+23. stale case event, arm and version refs;
+24. passing event projection with missing, swapped and alternate-factory value receipts;
+25. missing/unresolved authority, changed frozen assertion, cyclic oracle import and a forged
+    Codex owner receipt; and
+26. mirror zero/zero, zero/non-zero, duplicate, reordered, unmatched and ambiguous populations.
 
 Each negative records the diagnostic it would fail to catch if the implementation were weakened.
 A green fixture whose selected population is zero is itself a failure.
@@ -631,12 +869,13 @@ A green fixture whose selected population is zero is itself a failure.
 | D1 | Repair exact subject/outcome identity for the avoidance family before any successor receives validation | codex, after the [[D1716]] successor is independently accepted | accepted RFC + production operation + permanent crossed-subject fixtures | |
 | D2 | Replace blocker-blind king opposition with the versioned unobstructed successor | codex, after the [[D1717]] successor is independently accepted | accepted RFC + migrated authored refs + permanent blocker/mirror fixtures | |
 | D3 | Land the total recorded-path production operation before source-predicate sequence negatives are elevated | recorded-semantic-path | implemented operation + receipt-bound sequence cases | |
-| D4 | Complete all still-required positive, semantic-negative and orientation cells after Slice A | codex, through this RFC's family slices B–D | generated total profile with zero `required` cells for any learner-admitted event | |
-| D5 | Recompile each learner/module/Review/bot/skill/longitudinal consumer against passing receipts | codex, through each accepted consumer RFC and the [[D1710]] handoff | production operation and consumer fixture, not manifest membership alone | |
+| D4 | Migrate already-grounded cases, build the runner and execute authority-bearing cells after Slice A | codex, through this RFC's family slices B–D | generated profile plus preserved authority rows and execution receipts | |
+| D5 | Accept an independent authority for every new chess expectation still required by a learner consumer; the authority itself must be a rules oracle, cited immutable source or owner-authored receipt, never Codex's unsupported judgement | OWNER | case authority resolves and its expectation digest is independently reproducible | |
+| D6 | Recompile each learner/module/Review/bot/skill/longitudinal consumer against passing receipts | codex, through each accepted consumer RFC and the [[D1710]] handoff | production operation and consumer fixture, not manifest membership alone | |
 
-The RFC remains implementing after Slice A. It may archive only when every D1–D5 row is either
+The RFC remains implementing after Slice A. It may archive only when every D1–D6 row is either
 discharged or explicitly transferred to an accepted successor with a reader that takes a different
-action. A learner feature cannot satisfy D5 by selecting only the events that happened to be easy
+action. A learner feature cannot satisfy D6 by selecting only the events that happened to be easy
 to validate unless its accepted consumer contract names that narrower set.
 
 ## Open questions
@@ -668,6 +907,12 @@ authorized by an author-side green check.
 
 ## Changelog
 
+- 2026-08-30: author-repaired [[D2194]]–[[D2197]]. Published the eight-member distributive
+  operation/input/result map and exact case refs; made the value-authority sole-factory receipt a
+  conjunct of both execution and consumer admission; assigned new chess expectations only to an
+  independent rules oracle, immutable cited proposition or owner receipt; and made mirror pairing
+  non-empty, canonical, unique and order-independent before leaf comparison. The new author
+  contract is positive evidence only; fresh independent review still gates acceptance.
 - 2026-08-30: fresh independent review returned the D2039–D2043 repair on
   [[D2194]]–[[D2197]]. Four executable arms cover undefined operation/case types, projection-wide
   laundering of unverified mint routes, ungrounded LLM-authored chess expectations and vacuous
