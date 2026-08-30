@@ -1,12 +1,15 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
 - **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The held
-  promotion pair was author-repaired 2026-08-29 from the executable D1699/D1700 research; that
-  amendment is not accepted and must receive fresh independent buildability review.** Geometry now
+  promotion pair was returned by fresh independent buildability review 2026-08-30 on
+  [[D2141]], [[D2142]] and [[D2143]]; its 2026-08-29 author repair is not accepted.** Geometry now
   consumes the declared complete pawn-contact reading instead of recomputing a population from raw
   FEN. Outcome consumes exact legal moves and one same-FEN recorded-or-live Syzygy delivery; the
   live arm depends on the draft `provider-exchange-and-execution` contract and cannot implement
-  before that predecessor is independently accepted and landed. The original 12 projections remain
+  before that predecessor is independently accepted and landed. The review found that the pawn
+  adapter can seal fabricated passed rows, the outcome has no exact retained-source type or total
+  recorded/live normalization, and its derivation omits the local outside-domain authority needed
+  for one promised abstention. The original 12 projections remain
   accepted/implemented; the amendment does not reopen or relabel their bytes. Accepted 2026-08-22
   by claude as register owner on the buildability test, after cross-review with corrections applied
   in place (seven blockers; all eight observed ids verified **checkable, not
@@ -743,6 +746,18 @@ typed availability; `invalid_turn_clone` is unavailable, never false. This bindi
 It is not the authority for the two-runner race population, which is why the D1699/D1700 amendment
 derives that population from complete `rules.pawn.reading.contacts@1` instead.
 
+**Held promotion-amendment return, owned here:** [[D2141]] requires exact pawn-contact source
+sealing and constructor identity; [[D2142]] requires the discriminated recorded/live retained-source
+payload and total mapping; [[D2143]] requires a literal authority for the outside-domain abstention.
+All three remain author-repair obligations of this RFC and block only projections 13–14.
+
+## Promotion amendment return
+
+The held pair remains owned here: [[D2141]] requires exact pawn-contact source sealing and
+constructor identity; [[D2142]] requires the discriminated recorded/live retained-source payload
+and total mapping; [[D2143]] requires a literal authority for the outside-domain abstention. These
+are re-entry requirements for projections 13–14, not obligations transferred to the provider RFC.
+
 ## Appendix A — registered projection ids
 
 Unit: **projection id**; total: **14**. The closed list C1 counts; adding or dropping an id
@@ -766,6 +781,13 @@ is a spec change with a changelog line.
 | 14 | `derived.pawn.promotion_race_tablebase@1` | 3.7 | `derived.pawn` (2d) | event |
 
 ## Changelog
+
+- 2026-08-30: fresh independent review returned only the held promotion amendment on
+  [[D2141]], [[D2142]] and [[D2143]]. The D1699/D1700 counterexamples and source split remain valid, but the proposed
+  boundary is not executable yet: shape-only pawn-contact sealing does not establish the chess
+  facts geometry relies on; `source` has no exact output type/mapping across recorded and live
+  inputs; and `rules.endgame.tablebase_domain@1` is absent from the graph that promises a grounded
+  outside-domain abstention. The original twelve implemented projections remain untouched.
 
 - 2026-08-29: author-repaired the held promotion pair from
   `design/research/promotion-race-contract-closure.md` and its six executable D1699/D1700 arms.

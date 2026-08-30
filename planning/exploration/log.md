@@ -11587,3 +11587,19 @@ The exact return is
 typecheck remain green. [[D1672]]'s owner-tier component-layer mirror still blocks acceptance. No
 component, adapter, wire receipt, label, surface, manifest, schema, content, archive or protected
 design byte changed.
+
+## 2026-08-30 — Semantic-collectors promotion amendment fresh independent return
+
+Fresh-reviewed only the held D1699/D1700 promotion pair against the runtime evidence seal, the
+literal F1 graph, and the draft provider source shapes. The measured a2/b7 false-positive and the
+recorded/live same-FEN requirement remain valid, but the repaired boundary cannot yet implement
+them truthfully. [[D2141]], [[D2142]] and [[D2143]] record three blockers: pawn-contact evidence is sealed by a
+shape-only adapter that accepts fabricated passed rows; the outcome's retained `source` has no
+declared discriminated type or total recorded/live mapping; and the graph omits the sole local
+tablebase-domain fact while promising a distinct grounded outside-domain abstention.
+
+The exact return is
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fresh-review-2026-08-30.md`;
+`make semantic-collectors-promotion-fresh-review` passes 3/3. The original twelve implemented
+Wave-C projections remain accepted and untouched. Neither promotion id landed; no provider,
+schema, content, archive or protected-design byte changed.
