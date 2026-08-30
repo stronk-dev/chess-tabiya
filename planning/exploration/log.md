@@ -12206,3 +12206,18 @@ and honest uncalibrated posture survive. `make bot-roster-fresh-review` passes 5
 `BOT_POLICY_PROFILES` remains empty. No policy, profile, provider, schema, route, client, asset,
 calibration, content, archive or protected-design byte changed. Exact review:
 `planning/bot-roster/fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Opponent-experience fresh independent return
+
+Returned `opponent-experience.md` on [[D2238]]–[[D2242]] after joining it to the returned policy/
+roster, accepted play composition, persisted run identity and account-data posture. The draft adds a
+bar exactly where composition says nothing may sit, invents a second incompatible phone sheet,
+cannot render a withdrawn historical persona from id/version/digest, exposes availability as raw
+reason strings and promises analytics without a sink or lifecycle.
+
+The complete picker + grounded card + visible identity outcome, exact-profile create/resume intent,
+strong-wall separation and accessibility direction survive. [[D2243]] keeps excluded bot
+tournaments, relationship/history and observed traits visible in the 1.0 program. `make
+opponent-experience-fresh-review` passes 5/5. No production, server, schema, route, client, CSS,
+asset, telemetry, content, archive or protected-design byte changed. Exact review:
+`planning/opponent-experience/fresh-independent-buildability-review-2026-08-30.md`.

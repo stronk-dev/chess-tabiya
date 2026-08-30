@@ -1,6 +1,11 @@
 # RFC: Opponent experience
 
-- **Status:** draft — D1610/D1611 owner inputs and cross-review remain
+- **Status:** draft — **RETURNED by fresh independent review 2026-08-30 on
+  [[D2238]]–[[D2242]].** Both bot dependencies are returned; the proposed bar/details contradict
+  accepted play composition; historical resume cannot render a missing persona; availability uses
+  raw reason strings instead of a closed UX state; and analytics have no sink/privacy lifecycle.
+  `make opponent-experience-fresh-review` passes 5/5. D1610/D1611 remain owner inputs; no
+  implementation is authorized.
 - **Author:** codex, on the owner's D1566 ruling
 - **Created:** 2026-08-26
 - **Design refs:** `design/03-product-breadth.md` (Play owns normal games and resistance as the
@@ -239,6 +244,27 @@ attempted/succeeded/refused, details opened, resume/rematch and availability rea
 exact profile digest and no inferred preference/personality label. These events are operational
 receipts, not the longitudinal learner-style store.
 
+## Fresh independent return (2026-08-30)
+
+The indivisible picker/card/identity outcome remains correct. Exact review:
+`planning/opponent-experience/fresh-independent-buildability-review-2026-08-30.md`.
+
+1. **[[D2238]] — hold on returned dependencies.** Regenerate catalogue, card and state types only
+   after bot policy and roster survive review.
+2. **[[D2239]] — use the accepted composition.** Opponent identity occupies an existing fixed
+   shell/topbar slot or an explicitly amended composition slot; card/details use the one companion
+   seat/sheet protocol. Nothing new sits above or resizes the board.
+3. **[[D2240]] — preserve renderable historical identity.** Specify immutable catalogue history or
+   a durable presentation receipt/snapshot; id/version/digest alone cannot show a withdrawn persona.
+4. **[[D2241]] — close presentation state.** Provider-health and opponent-operation outcomes map to
+   one typed availability/degradation union with safe copy, retry action and continuation behavior.
+5. **[[D2242]] — decide analytics posture.** Remove the events, make them explicit local ephemeral
+   logs, or depend on a separately accepted lifecycle contract.
+
+The full 1.0 program also routes [[D2243]] rather than losing the explicitly excluded bot
+tournament, relationship/history and observed-trait experiences. No server, schema, route, client,
+CSS, asset, telemetry, content or archive byte is authorized by this return.
+
 ## Failure behavior
 
 | failure | learner outcome |
@@ -325,3 +351,6 @@ as a complete opponent outcome. Criterion 1 makes that condition able to fail.
 - 2026-08-26: drafted from `ux-opponents.md`, [[D1566]], D1608 and the measured route/card repair
   contracts. Kept persona names and the default open; refused a client-authoritative `/select-move`
   profile pass-through; made picker/card/identity one indivisible learner outcome.
+- 2026-08-30: fresh independent review returned the draft on [[D2238]]–[[D2242]] and routed the
+  excluded 1.0 bot experiences as [[D2243]]. Exact 5-arm reproduction landed; no implementation was
+  authorized.
