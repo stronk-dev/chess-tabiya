@@ -1,11 +1,11 @@
 # RFC: Executable semantic-validation authority
 
-- **Status:** draft — author-repaired 2026-08-30 on [[D2194]]–[[D2197]]; fresh independent review
-  required. The operation/case map is now distributive and closed; consumer admission requires the
-  sole verified value-factory receipt as well as the event verdict; every chess expectation names an
-  admissible witness/source/owner authority; and mirrors require non-empty unambiguous canonical
-  event pairing before leaf comparison. `make semantic-validation-author-repair` is the positive
-  author contract. Implementation and learner eligibility remain forbidden.
+- **Status:** draft — RETURNED by second fresh independent review 2026-08-30 on
+  [[D2331]]–[[D2333]]. The D2194–D2197 author repair survives, but versioned operation/case
+  identities have two authorities, population/external `present` cells are not expressible through
+  the case-ref algebra, and rules-oracle authorities retain digests without an executable witness or
+  typed result binding. `make semantic-validation-second-fresh-review` reproduces the three
+  blockers. Implementation and learner eligibility remain forbidden.
 - **Author:** codex, executing [[D1711]] / [[D1713]] / [[D1714]] after refreshing both research
   instruments at HEAD
 - **Created:** 2026-08-29
@@ -905,8 +905,29 @@ The author repair must invert `make semantic-validation-fresh-review`, preserve 
 the D2039–D2043 author contract, then request another independent review. No implementation is
 authorized by an author-side green check.
 
+## Second fresh-return obligations (2026-08-30)
+
+- [[D2331]] — choose one version authority for operation and case identities. Follow the shipped
+  `VersionedEvidenceId` convention (`id` without `@N`, separate numeric `version`) or use a single
+  versioned key, but never store both representations or compare across dialects;
+- [[D2332]] — make profile cells arm-distributive. Ordinary executable cases, population receipts
+  and external-disagreement receipts need distinct exact reference types so every `present` arm is
+  constructible and stale refs fail at compile/runtime boundaries; and
+- [[D2333]] — make a rules-oracle authority executable: retain or resolve the exact witness bytes,
+  publish the oracle request/result algebra, and define the equality that binds a derived result to
+  `SemanticValidationExpectation`. A pair of unactionable digests is provenance, not an oracle.
+
+The author repair must invert `make semantic-validation-second-fresh-review`, preserve the D2039
+and D2194 contracts, and request a third independent review. No implementation is authorized by
+this return.
+
 ## Changelog
 
+- 2026-08-30: second fresh independent review returned the D2194–D2197 author repair on
+  [[D2331]]–[[D2333]]. The new operation map double-versions operation and case identity; the one
+  `present` cell shape cannot represent its population/external arms; and rules-oracle rows have no
+  retrievable witness or typed result-to-expectation binding. Earlier repairs survive; no
+  implementation is authorized.
 - 2026-08-30: author-repaired [[D2194]]–[[D2197]]. Published the eight-member distributive
   operation/input/result map and exact case refs; made the value-authority sole-factory receipt a
   conjunct of both execution and consumer admission; assigned new chess expectations only to an

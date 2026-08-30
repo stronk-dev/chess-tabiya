@@ -121,12 +121,15 @@ semantic-validation-author-contract:
 	node --test tools/d2039-semantic-validation-author-contract/contract.test.mjs
 	node --test tools/d2194-semantic-validation-author-repair/contract.test.mjs
 
-.PHONY: semantic-validation-author-repair semantic-validation-fresh-review
+.PHONY: semantic-validation-author-repair semantic-validation-fresh-review semantic-validation-second-fresh-review
 semantic-validation-author-repair:
 	node --test tools/d2194-semantic-validation-author-repair/contract.test.mjs
 
 semantic-validation-fresh-review:
 	node --test tools/d2194-semantic-validation-fresh-review/*.test.mjs
+
+semantic-validation-second-fresh-review:
+	node --test tools/d2331-semantic-validation-second-fresh-review/*.test.mjs
 
 module-evidence-assembly:
 	./node_modules/.bin/vitest run --config tools/d1865-evidence-assembly-harness/vitest.config.ts --reporter=verbose

@@ -12569,3 +12569,17 @@ reading collectors depend on them.
 The disposable review target proves both contradictions and imports the real production projection
 constant for its widening arm. No product implementation was started. Receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-third-fresh-independent-review-2026-08-30.md`.
+
+## 2026-08-30 — Semantic-validation authority second fresh independent return
+
+Re-ran the maintained closure, matrix and author contracts, then checked the repaired protocol
+against the shipped versioned-evidence convention and each of its six profile arms. The four prior
+repairs remain intact, but [[D2331]] records double-versioned operation/case identities, [[D2332]]
+records that population and external `present` arms cannot inhabit the only declared cell ref, and
+[[D2333]] records that a rules-oracle row has no retrievable witness or typed result-to-expectation
+binding.
+
+`make semantic-validation-second-fresh-review` reproduces all three blockers. The RFC is returned
+again; no semantic-validation production, eligibility, schema, content, archive or protected-design
+byte was changed. Receipt:
+`planning/semantic-validation-authority/second-fresh-independent-buildability-review-2026-08-30.md`.
