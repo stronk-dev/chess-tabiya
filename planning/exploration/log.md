@@ -12635,3 +12635,14 @@ the absent named-structure witness operation.
 `make evidence-presentation-fourth-fresh-review` reproduces all seven blockers. No production,
 manifest, schema, content, API, client, archive or protected-design byte changed. Receipt:
 `planning/platform-alignment/evidence-presentation/fourth-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-30 — Assistance-register fifth fresh independent return
+
+Reviewed the D2178/D2328 extension against the live workflow reader and proposed resource
+lifecycle. [[D2355]] records the false strict-v1 premise; [[D2356]] the absent workflow tree;
+[[D2357]] the unnamed exchange root; [[D2358]] landed→absent regression; [[D2359]] the permission
+claim's omitted semantic operations; and [[D2360]] the prose-only positive instrument.
+
+`make assistance-register-fifth-fresh-review` reproduces all six blockers. No checker, register,
+runtime, web, schema, content, archive or protected-design byte changed. Receipt:
+`planning/assistance-config-register/fifth-fresh-independent-buildability-review-2026-08-30.md`.

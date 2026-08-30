@@ -107,3 +107,14 @@ legacy operations. `make assistance-register-second-author-repair` passes 8/8 ag
 and mutations; the historical five-arm return harness now fails 5/5, the intended inversion. Exact
 receipt: `fourth-return-author-repair-2026-08-30.md`. Implementation and claim transfer remain
 unauthorised until a fresh independent review accepts the complete contract.
+
+## 2026-08-30 — Fifth fresh independent return
+
+Returned the D2178/D2328 extension on [[D2355]]–[[D2360]]. Workflow-v1 is open and
+context-dependent rather than the claimed strict grammar and has no exact resource tree; exchange
+absence has no named root or landed-regression guard; permission's claim omits its semantic
+operation changes; and the positive extension test executes no state semantics.
+
+`make assistance-register-fifth-fresh-review` passes 6/6. No checker, register or product
+implementation is authorised. Exact review:
+`fifth-fresh-independent-buildability-review-2026-08-30.md`.

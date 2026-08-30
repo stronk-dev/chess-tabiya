@@ -1,15 +1,12 @@
 # RFC: Assistance shared-resource registers
 
-- **Status:** draft — author-amended 2026-08-30 on [[D2178]]/[[D2328]] after the
-  [[D2190]]–[[D2193]] repair; fifth fresh independent review required. The v4 bootstrap now admits only type-proved closed computed writes; the v5
-  claim contains the real hint seat/store path and both exhaustive preset/clamp columns; traversal
-  nodes make imports, aliases, helpers, components and cycles representable; and workspace-derived
-  discovery classifies every production reach as authority, product consumer or declaration-only
-  observer. `make assistance-register-third-author-repair` is the positive author contract.
-  The extension registers durable workflow preference, the staged assistance exchange and the
-  permission vocabulary without collapsing them into AssistanceConfig, including an explicit
-  absent→first-lane-1 state for a protocol that has not landed. C9/register/v5 implementation
-  remains forbidden pending fresh acceptance.
+- **Status:** draft — **RETURNED by fifth fresh independent review 2026-08-30 on
+  [[D2355]]–[[D2360]].** Workflow-v1 is not the strict grammar claimed and has no exact tree; the
+  absent exchange has no root or regression guard; the permission claim omits its semantic
+  operations; and the extension's positive test is prose-only. `make
+  assistance-register-fifth-fresh-review` passes 6/6. Exact return:
+  `planning/assistance-config-register/fifth-fresh-independent-buildability-review-2026-08-30.md`.
+  C9/register/v5 implementation remains forbidden pending author repair and another fresh review.
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it
@@ -28,6 +25,14 @@
 ```tabiya-claims
 none
 ```
+
+## Fifth fresh independent return (2026-08-30)
+
+The extension is returned on [[D2355]], [[D2356]], [[D2357]], [[D2358]], [[D2359]] and
+[[D2360]]. The live workflow-v1 grammar is open/context-dependent; workflow and exchange lack
+exact resource roots/trees; landed→absent is unguarded; permission semantics exceed its claim; and
+the positive test proves only prose. `make assistance-register-fifth-fresh-review` reproduces all
+six. No implementation is authorised.
 
 ## Summary
 
@@ -688,6 +693,10 @@ contract.
 
 ## Changelog
 
+- 2026-08-30: returned by fifth fresh independent review on [[D2355]]–[[D2360]]. The new
+  resources lack exact executable roots/trees/transitions, workflow-v1 strictness is false,
+  landed→absent is unguarded, permission semantics exceed the claim and the positive extension
+  test is prose-only. `make assistance-register-fifth-fresh-review` passes 6/6.
 - 2026-08-30: amended for [[D2178]]/[[D2328]] from
   `design/research/assistance-shared-resource-boundaries.md`. Registered workflow preference,
   assistance exchange and permission as resources distinct from effective AssistanceConfig. Added
