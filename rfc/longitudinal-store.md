@@ -1,11 +1,11 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **RETURNED by second fresh independent review 2026-08-30 on
-  [[D2227]]–[[D2232]].** The prior seven repairs survive, but the phase schema rejects the runtime's
-  `unclear` result; the normative fold omits decision/root derivation; the default lease expires
-  before measured valid work; complete-history reads omit jobless runs; upgrades do not reconcile
-  existing runs; and SQL does not bind learner rows to run ownership. `make
-  longitudinal-store-second-fresh-review` passes 6/6. Implementation remains forbidden. The
+- **Status:** draft — **third author repair complete 2026-08-31 on [[D2227]]–[[D2232]],
+  awaiting a third fresh independent review.** The repair carries `unclear` end-to-end, restores
+  the event projector to the normative fold, adds renewable immediately-executable leases,
+  derives complete history from eligible runs, makes upgrade reconciliation mandatory, and binds
+  every learner row to the durable run owner. `make longitudinal-store-author-contract` exercises
+  24 author arms. Implementation remains forbidden pending fresh review. The
   2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
   returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
@@ -159,6 +159,37 @@ right evidence rather than aliasing. Both arrays are schema-validated on write a
 was historically played; imported PGN date normalization remains outside revision 1. Rebuilds at
 later wall clocks therefore produce byte-identical rows and do not make old imports recent.
 
+### B.1 Normative event projector and root algebra ([[D2228]])
+
+`projectObservations` consumes one immutable contiguous `DrillRun.events[0..N)` prefix plus the
+durable run owner, per-commit session/match authorship, and the imported record's immutable
+`importedMainlinePlies`. It sorts events by `seq` and applies this closed decision algebra:
+
+1. A `move.committed` event contributes only when its node has `actor === "user"`, has a parent,
+   and durable authorship identifies the run owner. A run with no collaboration journal is the
+   single-player positive and attributes its commits to its owner. A grant holder or seated
+   opponent contributes nothing.
+2. In an imported run, an owner-authored node is `game` only when it is on `run.branches[0]` and
+   `node.ply <= importedMainlinePlies`; an extension or fork is `played`. Native owner decisions
+   are `played`. Mainline membership is never inferred from timestamps or current branch order.
+3. `prediction.recorded` contributes `predicted` only for the first event per
+   `(nodeId, checkpointId)` and only when owner authorship is provable. It does not replace or
+   suppress a later move decision. Its phase source is `classifyPhase(node.fen)`; a move's phase
+   source is `classifyPhase(parent.fen)`. The exact four-member result
+   `opening | middlegame | endgame | unclear` is persisted unchanged.
+4. The canonical `DecisionRef` order is `(eventSeq, kind, nodeId, checkpointId?)`; population
+   collection and floating-point accumulation follow that same ascending event order.
+
+Structure projection is equally closed. A branch resolves its root through `branch.forkNodeId`;
+the row key is `rootKey(run.sessionKind, run.packId, root.transposeKey)`. `branch_count` is the
+number of distinct run branches resolving to that key. Event counters map through exactly these
+subjects: `run.rewound.branchId`, the new `branch.forked.branch.id`, the node branch of
+`group.created.sourceNodeId`, and the node branch of `outcome.reached.nodeId`. Each increments,
+respectively, `rewound_count`, `forked_count`, `group_count`, or `outcome_count` once. Missing
+nodes/branches are `snapshot_invalid`, never ignored. Rows sort by primary key. The author model
+compiles a real runtime-created run containing imported mainline moves, an owner fork, duplicate
+prediction, rewind, fork and group and checks the exact four decisions and five counters.
+
 ### C. Durable projection schedule
 
 The migration creates four STRICT tables in one additive migration. Family-independent decisions
@@ -168,28 +199,32 @@ are normalized so a late first opportunity cannot lose earlier decisions ([[D161
 ALTER TABLE drill_runs ADD COLUMN longitudinal_profile_disposition TEXT NOT NULL
   DEFAULT 'profileable'
   CHECK (longitudinal_profile_disposition IN ('profileable','account_deleted'));
+CREATE UNIQUE INDEX drill_runs_longitudinal_owner
+  ON drill_runs(id, owner_learner_id);
 
 CREATE TABLE learner_observation_denominators (
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
-  run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
-  phase TEXT NOT NULL CHECK (phase IN ('opening','middlegame','endgame')),
+  run_id TEXT NOT NULL,
+  phase TEXT NOT NULL CHECK (phase IN ('opening','middlegame','endgame','unclear')),
   decision_class TEXT NOT NULL CHECK (decision_class IN ('played','game','predicted')),
   decisions INTEGER NOT NULL CHECK (decisions > 0),
   observed_at TEXT NOT NULL,
   derived_rev INTEGER NOT NULL CHECK (derived_rev > 0),
-  PRIMARY KEY (learner_id, run_id, phase, decision_class)
+  PRIMARY KEY (learner_id, run_id, phase, decision_class),
+  FOREIGN KEY (run_id, learner_id)
+    REFERENCES drill_runs(id, owner_learner_id) ON UPDATE RESTRICT ON DELETE CASCADE
 ) STRICT;
 
 CREATE TABLE learner_observations (
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
-  run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
+  run_id TEXT NOT NULL,
   projection_id TEXT NOT NULL,
   projection_version INTEGER NOT NULL CHECK (projection_version > 0),
   semantic_sign TEXT NOT NULL CHECK (semantic_sign IN
     ('state','gained','lost','preserved','removed','avoided','enabled','threatened')),
   source_sign TEXT NOT NULL CHECK (source_sign IN
     ('state','gained','lost','preserved','removed','avoided','enabled','threatened')),
-  phase TEXT NOT NULL CHECK (phase IN ('opening','middlegame','endgame')),
+  phase TEXT NOT NULL CHECK (phase IN ('opening','middlegame','endgame','unclear')),
   decision_class TEXT NOT NULL CHECK (decision_class IN ('played','game','predicted')),
   session_kind TEXT NOT NULL CHECK (session_kind IN ('pack','position','imported')),
   pack_id TEXT,
@@ -207,12 +242,14 @@ CREATE TABLE learner_observations (
     semantic_sign, source_sign, phase, decision_class),
   FOREIGN KEY (learner_id, run_id, phase, decision_class)
     REFERENCES learner_observation_denominators(learner_id, run_id, phase, decision_class)
-    ON DELETE CASCADE
+    ON DELETE CASCADE,
+  FOREIGN KEY (run_id, learner_id)
+    REFERENCES drill_runs(id, owner_learner_id) ON UPDATE RESTRICT ON DELETE CASCADE
 ) STRICT;
 
 CREATE TABLE learner_structure_stats (
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
-  run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
+  run_id TEXT NOT NULL,
   root_key TEXT NOT NULL,
   root_node_id TEXT NOT NULL,
   session_kind TEXT NOT NULL CHECK (session_kind IN ('pack','position','imported')),
@@ -226,11 +263,13 @@ CREATE TABLE learner_structure_stats (
   derived_rev INTEGER NOT NULL CHECK (derived_rev > 0),
   CHECK ((session_kind = 'pack' AND pack_id IS NOT NULL)
     OR (session_kind <> 'pack' AND pack_id IS NULL)),
-  PRIMARY KEY (learner_id, run_id, root_key)
+  PRIMARY KEY (learner_id, run_id, root_key),
+  FOREIGN KEY (run_id, learner_id)
+    REFERENCES drill_runs(id, owner_learner_id) ON UPDATE RESTRICT ON DELETE CASCADE
 ) STRICT;
 
 CREATE TABLE learner_observation_jobs (
-  run_id TEXT PRIMARY KEY REFERENCES drill_runs(id) ON DELETE CASCADE,
+  run_id TEXT PRIMARY KEY,
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
   requested_seq INTEGER NOT NULL CHECK (requested_seq > 0),
   completed_seq INTEGER NOT NULL DEFAULT 0 CHECK (completed_seq >= 0),
@@ -254,7 +293,9 @@ CREATE TABLE learner_observation_jobs (
   CHECK (state = 'running' OR
     (claimed_requested_seq IS NULL AND claim_token IS NULL
       AND claimed_by IS NULL AND lease_expires_at IS NULL)),
-  CHECK (state <> 'complete' OR completed_seq = requested_seq)
+  CHECK (state <> 'complete' OR completed_seq = requested_seq),
+  FOREIGN KEY (run_id, learner_id)
+    REFERENCES drill_runs(id, owner_learner_id) ON UPDATE RESTRICT ON DELETE CASCADE
 ) STRICT;
 
 CREATE INDEX learner_observation_denominators_by_learner
@@ -269,6 +310,16 @@ CREATE INDEX learner_structure_stats_by_learner
 CREATE INDEX learner_observation_jobs_work
   ON learner_observation_jobs(state, lease_expires_at, updated_at, run_id);
 ```
+
+The sixth index, `drill_runs_longitudinal_owner`, is the parent key for every child's composite
+`(run_id, learner_id) → drill_runs(id, owner_learner_id)` foreign key. Independent valid learner
+and run ids are insufficient: a mismatched pair fails SQLite. Job creation obtains `learner_id`
+from the locked run row, never from the acting writer. Claim renewal and publication include the
+same owner in their CAS and an `EXISTS` check that the run remains profileable and owned by that
+learner. Owner reassignment first deletes/suppresses all old-owner private rows and jobs in one
+transaction, then updates the run; `ON UPDATE RESTRICT` makes the reverse order fail. Startup
+reconciliation may create a new-owner job only after that commit. Thus a shared non-owner writer,
+cross-learner direct insert, owner reassignment and stale old-owner publisher all fail ([[D2232]]).
 
 The two JSON ref columns contain schema-validated, canonically sorted `DecisionRef[]` from §B.
 `observed_at` is always the immutable `run.started.at`; `updated_at` exists only on the job and is
@@ -302,6 +353,16 @@ Claims select `(state IN ('pending','failed') OR lease_expires_at <= :now)` in
 generation and returns the stored tuple. That order plus the finite batch prevents a hot run from
 starving older jobs.
 
+`workerBatchSize` is a scan bound, not a pre-claim count. A row is claimed only when an execution
+slot is immediately available; revision 1 has `workerConcurrency: 1`, so a four-row scan claims one
+row and leaves three unowned. The 47.29-second measured p95 is below the product-fixed
+`workerLeaseMs: 120000`, and the running projector calls `renewLongitudinalClaim` every
+`workerHeartbeatMs: 10000`. Renewal is a CAS over the full claim tuple plus the current durable run
+owner and an unexpired lease; it extends from `now`, and zero changed rows cancels the projector.
+An expired/stale generation cannot renew, fail or publish. This is liveness, not a timeout-only
+hope: the author model crosses work beyond the old 30-second lease, renewal/reclaim races, a
+four-item scan, and shutdown ([[D2229]]).
+
 The worker reconstructs the exact contiguous event prefix `seq=1..N` from durable run bytes. A
 missing, duplicate or non-contiguous event fails `snapshot_invalid`; a snapshot already advanced to
 M is sliced to N and never labelled as N after projecting M. Derivation first computes decision
@@ -322,10 +383,13 @@ SET completed_seq=:N,
     state=CASE WHEN requested_seq=:N THEN 'complete' ELSE 'pending' END,
     claimed_requested_seq=NULL, claim_token=NULL, claimed_by=NULL,
     lease_expires_at=NULL, failure_code=NULL, updated_at=:now
-WHERE run_id=:runId AND state='running'
+WHERE run_id=:runId AND learner_id=:learnerId AND state='running'
   AND requested_seq>=:N AND claimed_requested_seq=:N
   AND derived_rev=:rev AND claim_generation=:generation
-  AND claim_token=:token AND claimed_by=:worker;
+  AND claim_token=:token AND claimed_by=:worker
+  AND EXISTS (SELECT 1 FROM drill_runs r
+    WHERE r.id=:runId AND r.owner_learner_id=:learnerId
+      AND r.longitudinal_profile_disposition='profileable');
 ```
 
 Exactly one changed row is success; zero rolls back the three row replacements and returns
@@ -350,7 +414,7 @@ interface LongitudinalReadQuery {
   filter: {
     projections?: readonly { id: string; version: number;
       semanticSign?: SemanticEventSign; sourceSign?: SemanticEventSign }[];
-    phases?: readonly ("opening" | "middlegame" | "endgame")[];
+    phases?: readonly ("opening" | "middlegame" | "endgame" | "unclear")[];
     decisionClasses?: readonly ("played" | "game" | "predicted")[];
     sessionKinds?: readonly ("pack" | "position" | "imported")[];
     packIds?: readonly string[];
@@ -365,7 +429,8 @@ type LongitudinalReadResult =
   | { kind: "failed"; cuts: readonly LongitudinalCut[];
       failureCode: LongitudinalFailureCode }
   | { kind: "unavailable";
-      reason: "not_requested" | "revision_mismatch" | "profile_suppressed" };
+      reason: "not_requested" | "revision_mismatch" | "profile_suppressed";
+      runIds?: readonly string[] };
 readLongitudinalSnapshot(
   actorLearnerId: string, query: LongitudinalReadQuery
 ): LongitudinalReadResult;
@@ -379,21 +444,38 @@ its own later operation and cannot reuse this one. The transaction first fixes a
 data rows**. Only all-complete cuts at the requested revision return rows, sorted denominators by
 `(runId,phase,decisionClass)`, observations by
 `(runId,projectionId,version,semanticSign,sourceSign,phase,decisionClass)`, and structures by
-`(runId,rootKey)`. `all_complete` selects the learner's profileable jobs in the same read
-transaction and returns their exact cut vector, making a cross-game style/skills read repeatable.
+`(runId,rootKey)`. `all_complete` first fixes the authoritative eligible-run set in the same read
+transaction: every `drill_runs` row owned by the learner with
+`longitudinal_profile_disposition='profileable'` and positive event head. It sorts the run/head
+vector, then `LEFT JOIN`s jobs. Any missing job returns `unavailable/not_requested` with the exact
+missing run ids; a jobless eligible run can never disappear from “complete”. Suppressed/deleted
+runs are outside the set. A run created after the read transaction begins enters the next read,
+not the current cut. This makes a cross-game style/skills read repeatable and complete ([[D2230]]).
 No consumer lands in this RFC.
 
 **Production worker lifecycle ([[D2069]]).** Implementation adds
 `apps/server/src/longitudinal-worker.ts` exporting `LongitudinalProjectionWorker`, composed once by
 `createApplication` beside storage—not by a route and not by a provider. `application.start()`
 calls `startLongitudinalWorker`; `application.stop()` calls `stopLongitudinalWorker`. Defaults are
-product-fixed operational bounds `{ workerBatchSize: 4, workerPollMs: 1000,
-workerLeaseMs: 30000 }`; configuration validates batch `1..32`, poll `100..5000 ms`, and lease
-`>=5000 ms`. A post-commit wake signal reduces latency, while the poll is the authority that
+product-fixed operational bounds `{ workerBatchSize: 4, workerConcurrency: 1,
+workerPollMs: 1000, workerLeaseMs: 120000, workerHeartbeatMs: 10000 }`; configuration validates
+batch `1..32`, concurrency `1..batch`, poll `100..5000 ms`, lease `>=60000 ms`, heartbeat
+`>=1000 ms`, and at least three heartbeats per lease. A post-commit wake signal reduces latency, while the poll is the authority that
 recovers missed wakes and startup backlog. Each tick claims at most one batch in the stable
 oldest-first order above, projects without Stockfish, Maia, Explorer, network or LLM providers,
 and publishes each claim independently. Shutdown refuses new claims and awaits the finite in-flight
 batch; it never abandons a newly claimed row merely because the HTTP listener closed.
+
+Before the worker starts or API readiness is reported, `application.start()` runs
+`reconcileLongitudinalJobs()` in one transaction ([[D2231]]). It enumerates the same eligible-run
+authority as `all_complete`, reads each exact positive event head, creates missing jobs, advances a
+lower requested high-water, and resets a wrong `derived_rev`; it performs no semantic work. It is
+idempotent after rollback/restart and returns
+`LongitudinalReconciliationReceipt { scanned, created, advanced, revisionReset, suppressed,
+digest }`, which is embedded in the self-hosted appliance startup/upgrade receipt. Untouched old
+native, imported and active shared runs are therefore queued on first upgraded start. Rebuild uses
+the same census for comparison/repair but does not replace mandatory reconciliation, and
+`longitudinal-rebuild --write` is never an upgrade prerequisite.
 
 The operator door is `apps/server/src/longitudinal-worker-once.ts`, exposed as
 `make longitudinal-worker-once`. It starts the same production worker dependencies, claims at most
@@ -497,11 +579,31 @@ The next author contract must mutate a passing real positive for each seam. The 
 remain useful but cannot establish these six properties. No migration, worker, reader, consumer or
 content implementation is authorized by this return.
 
+## Third author repair (2026-08-31; pending fresh independent review)
+
+The six second-return rows are author-repaired as one coherent store boundary:
+
+- [[D2227]]: `DetectedPhase`'s exact four members reach DDL, `DecisionContribution`, filters and a
+  four-FEN SQLite/aggregate fixture.
+- [[D2228]]: §B.1 is the complete event-to-decision/root authority and the executable model consumes
+  a runtime-created, forked and rewound `DrillRun` rather than a prose-only surrogate.
+- [[D2229]]: 120-second renewable leases, 10-second heartbeats and immediate one-slot claiming
+  replace the unrenewable 30-second/preclaimed-batch shape.
+- [[D2230]]: `all_complete` begins at eligible runs and left-joins jobs under one transaction cut.
+- [[D2231]]: mandatory pre-readiness reconciliation owns old native/imported/shared runs and emits
+  an appliance receipt; rebuild remains a separate equality instrument.
+- [[D2232]]: composite run-owner foreign keys plus owner-aware renewal/publication CAS close
+  cross-learner writes and stale reassignment.
+
+`make longitudinal-store-author-contract` is the executable author checkpoint. The historical
+second-review harness is expected to invert after this repair and is not a completion gate. A new
+fresh independent review is still mandatory before implementation.
+
 ### F. Acceptance criteria
 
 These are the only live acceptance criteria; the historical AC list below is non-normative.
 
-1. **Additive migration.** Reflection shows exactly the four folded tables, five named indexes and
+1. **Additive migration.** Reflection shows exactly the four folded tables, six named indexes and
    one `drill_runs.longitudinal_profile_disposition` column were added; no pre-existing row changes.
    Any other pre-existing schema mutation makes the fixture red.
 2. **Literal registry closure ([[D1612]]/[[D2063]]).** The 67-row and sign-subset artifacts are
@@ -523,10 +625,11 @@ These are the only live acceptance criteria; the historical AC list below is non
    commits run bytes and the job watermark together and rolls both back together. Omitting any
    operation fails a set-equality census. No semantic constructor or legal enumerator is reachable
    before the response.
-7. **Exclusive/recoverable claim ([[D1613]]).** Two simultaneous claimers yield one claim; expiry
+7. **Exclusive/recoverable claim ([[D1613]]/[[D2229]]).** Two simultaneous claimers yield one claim; expiry
    increments generation and permits reclaim; the old token cannot fail/publish; crash-before-
    publish recovers, crash-after-publish observes atomic state, declared failure retries, and an
-   unknown failure code fails schema and TypeScript fixtures.
+   unknown failure code fails schema and TypeScript fixtures. Work exceeding 30 seconds renews by
+   the full ownership CAS; a four-row scan claims only the one immediately executable slot.
 8. **Exact prefix and CAS ([[D1615]]/[[D2064]]).** A claim for N projects contiguous events 1..N even when the
    live snapshot is M>N. Missing/duplicate/non-contiguous bytes fail `snapshot_invalid`; events
    appended between claim/read and derive/publish cannot be lost or overwritten by the stale
@@ -545,11 +648,13 @@ These are the only live acceptance criteria; the historical AC list below is non
 12. **Revision pair.** Fixture-output and registry-artifact digests are paired with
     `OBSERVATION_DERIVATION_REV`; a zero-incidence registry addition changes the second digest and
     fails until an accepted RFC owns the bump/rebuild.
-13. **Read honesty ([[D2067]]).** The exact authenticated `readLongitudinalSnapshot` union returns
+13. **Read honesty ([[D2067]]/[[D2230]]).** The exact authenticated `readLongitudinalSnapshot` union returns
     complete/pending/failed/unavailable over a transaction-fixed cut vector and all three sorted row
     partitions. It refuses complete-history semantics unless every
     `completed_seq === requested_seq` at the requested revision. A partial/failed job returns no
-    partial data labelled complete; direct table readers fail the production census.
+    partial data labelled complete; direct table readers fail the production census. `all_complete`
+    left-joins from a transaction-fixed eligible-run set, and one eligible jobless run returns its
+    exact id as `not_requested`.
 14. **Boundaries/privacy ([[D2065]]).** No learner renderer, rating, classroom, cohort, provider or
     LLM module reaches the store at landing. All four durable classes cascade on learner/run
     deletion and join export/deletion inventories. Delete → retained shared run → rebuild leaves
@@ -559,16 +664,35 @@ These are the only live acceptance criteria; the historical AC list below is non
     combined p95 overall, 902.7 ms middlegame; SQLite 0.128 ms). D1405's complete-prefix arms fail
     the 500 ms gate at every length and its 25-game rebuild takes 828.04 seconds. No result moves
     projection into a request without a later RFC and preregistered gate.
-16. **Worker reach ([[D2069]]).** The real provider-free application starts/stops one
+16. **Worker reach ([[D2069]]/[[D2231]]).** The real provider-free application starts/stops one
     `LongitudinalProjectionWorker`; all seven writers wake it after commit; polling recovers missed
     wakes/startup backlog; batches are bounded and oldest-first; crash/reclaim and clean shutdown
     pass. `make longitudinal-worker-once` reaches the same worker dependencies and is distinct from
-    rebuild.
+    rebuild. Before readiness it idempotently reconciles all old eligible run heads and records the
+    typed reconciliation receipt in the appliance startup/upgrade receipt.
 17. **Seven-return author falsifier.** `make longitudinal-store-author-contract` crosses both
     literal registries/signs, complete-population algebra, actual SQLite claim/index/constraint
     negatives, deletion/rebuild suppression, worker lifecycle, claim race/expiry/stale publisher,
     exact prefix/newer request, denominator equality, seven-operation closure and import-subject
     arms. Every negative mutates a passing positive control.
+18. **Four-way phase closure ([[D2227]]).** Actual FENs producing opening, middlegame, endgame and
+    unclear cross the runtime classifier, both STRICT tables, family-independent denominator and
+    typed read filter without coercion or omission.
+19. **Normative projector ([[D2228]]).** A real runtime event fixture crosses owner/non-owner,
+    imported mainline/fork, first/duplicate prediction, phase source, canonical refs/order and all
+    five root counters. Removing any event-to-root mapping mutates a passing expected row.
+20. **Lease liveness ([[D2229]]).** A valid derivation crosses the former 30-second boundary,
+    renews before expiry and publishes; expiry/reclaim makes the old renewal and publisher fail;
+    queued batch members are not preclaimed.
+21. **Eligible history ([[D2230]]).** Jobless eligible, complete eligible, suppressed, deleted and
+    concurrently created runs cross one fixed census; only the jobless eligible arm refuses
+    complete, and the concurrent run appears on the next transaction.
+22. **Upgrade population ([[D2231]]).** An old database containing untouched native, imported and
+    active shared runs produces exact jobs/cuts and a receipt. Rerun and rollback/restart are
+    idempotent; suppressed/empty runs remain absent; no semantic adapter runs during reconciliation.
+23. **Run-owner provenance ([[D2232]]).** Two valid learners/runs reject every crossed child row;
+    a shared non-owner writer cannot choose the learner; owner update is restricted until old rows
+    are removed; and an old-owner claim cannot renew or publish after reassignment.
 
 ## Motivation
 
@@ -1277,6 +1401,12 @@ head after that renumbering and **not yet written**:
   four-way phase closure, normative projector completeness, lease liveness, eligible-run history
   census, upgrade reconciliation and learner/run provenance. Exact review and 6-arm executable
   reproduction landed; no production implementation was authorized.
+- 2026-08-31: third author repair completed [[D2227]]–[[D2232]]. `unclear` is preserved; the full
+  event/root projector is normative; leases renew under owner CAS and claim only executable work;
+  complete history begins at eligible runs; startup reconciliation owns old databases; and
+  composite foreign keys bind every child row to the run owner. The author contract passes 24
+  arms. Exact receipt: `planning/longitudinal-store/third-author-repair-2026-08-31.md`. Fresh
+  independent review still gates acceptance and implementation.
 - 2026-08-22: adversarial cross-review (claude, independent of the author). Blockers
   fixed in place: (1) `decision_class ∈ {played, game, predicted}` added to the
   observation key with owner-only attribution derived from the durable session

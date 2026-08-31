@@ -12789,3 +12789,16 @@ with module policy, and module forms expand through `MODULE_FORM_IMAGE` so cards
 must attack the repaired artifacts before acceptance; Guided Hint and all upstream sealed
 operations retain their existing blockers. Receipt:
 `planning/learner-modules/fourth-author-repair-2026-08-31.md`.
+
+## 2026-08-31 — Longitudinal store third author repair
+
+Author-repaired [[D2227]]–[[D2232]] as one history-integrity boundary. The exact four-way phase
+authority and full event/root projector now reach an executable model; the worker uses renewable
+owner-CAS leases and immediate one-slot claims; complete-history reads start from eligible runs;
+startup/upgrade reconciliation owns old databases; and composite foreign keys bind learner rows to
+the durable run owner.
+
+No production storage, worker, API, consumer, content, archive or protected-design byte changed.
+`make longitudinal-store-author-contract` passes 24/24; full verification is required before the
+checkpoint. Third fresh independent review still gates acceptance and implementation. Receipt:
+`planning/longitudinal-store/third-author-repair-2026-08-31.md`.

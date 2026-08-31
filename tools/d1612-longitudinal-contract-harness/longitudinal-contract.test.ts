@@ -16,13 +16,18 @@ import {
   assertRunWriteOperationClosure,
   ingestRegistryDigest,
   deleteLearnerProfile,
+  eligibleRunCuts,
+  missingEligibleRunIds,
   personalPlayAdmitted,
+  projectNormativeRun,
   projectDecisionPopulation,
+  reconcileLongitudinalJobs,
   rebuildProfileOwner,
   snapshotPrefix,
   validateIngestRegistry,
   type LongitudinalConstructor,
 } from "./longitudinal-contract.js";
+import { classifyPhase, commitMove, createRun, rewind, type DrillRun } from "../../packages/runtime/src/index.js";
 
 describe("D1612 exact constructor registry", () => {
   it("publishes all 67 literal rows with the exact 46/13/8 disposition", () => {
@@ -107,8 +112,8 @@ describe("D2064/D2068 literal SQLite authority", () => {
     expect(() => insertObservation.run(...base.map((value, index) => index === 12 ? 2 : index === 4 ? "lost" : value))).toThrow();
     expect(() => insertObservation.run(...base.map((value, index) => index === 9 ? null : index === 4 ? "preserved" : index === 5 ? "preserved" : value))).toThrow();
     expect(() => db.prepare("INSERT INTO learner_structure_stats VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)").run("learner-1", "run-1", "root", "n1", "position", null, -1, 0, 0, 0, 0, "at", 1)).toThrow();
-    const indexes = db.prepare("SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'learner_%' ORDER BY name").all().map((row) => String((row as Record<string, unknown>).name));
-    expect(indexes).toEqual(["learner_observation_denominators_by_learner", "learner_observation_jobs_work", "learner_observations_by_family", "learner_observations_by_run", "learner_structure_stats_by_learner"]);
+    const indexes = db.prepare("SELECT name FROM sqlite_master WHERE type='index' AND (name LIKE 'learner_%' OR name='drill_runs_longitudinal_owner') ORDER BY name").all().map((row) => String((row as Record<string, unknown>).name));
+    expect(indexes).toEqual(["drill_runs_longitudinal_owner", "learner_observation_denominators_by_learner", "learner_observation_jobs_work", "learner_observations_by_family", "learner_observations_by_run", "learner_structure_stats_by_learner"]);
     db.close();
   });
 });
@@ -126,15 +131,15 @@ describe("D2065 deletion suppression and D2067/D2069 boundaries", () => {
 
   it("has bounded provider-free lifecycle defaults and drains in-flight work on stop", () => {
     expect(LONGITUDINAL_WORKER_ONCE_ENTRY).toBe("apps/server/src/longitudinal-worker-once.ts");
-    expect(LONGITUDINAL_WORKER_DEFAULTS).toEqual({ workerBatchSize: 4, workerPollMs: 1_000, workerLeaseMs: 30_000 });
+    expect(LONGITUDINAL_WORKER_DEFAULTS).toEqual({ workerBatchSize: 4, workerConcurrency: 1, workerPollMs: 1_000, workerLeaseMs: 120_000, workerHeartbeatMs: 10_000 });
     const worker = new LongitudinalProjectionWorker();
     worker.start();
-    expect(worker.beginBatch(99)).toBe(4);
+    expect(worker.beginBatch(99)).toBe(1);
     expect(worker.stop()).toBe("stopping");
     expect(worker.beginBatch(1)).toBe(0);
-    for (let index = 0; index < 4; index += 1) worker.finishOne();
+    worker.finishOne();
     expect(worker.state).toBe("stopped");
-    expect(() => new LongitudinalProjectionWorker({ workerBatchSize: 0, workerPollMs: 1_000, workerLeaseMs: 30_000 })).toThrow(/OPTIONS_INVALID/u);
+    expect(() => new LongitudinalProjectionWorker({ ...LONGITUDINAL_WORKER_DEFAULTS, workerBatchSize: 0 })).toThrow(/OPTIONS_INVALID/u);
   });
 
   it("binds the executable model to the exact RFC reader and worker operation", () => {
@@ -144,7 +149,7 @@ describe("D2065 deletion suppression and D2067/D2069 boundaries", () => {
     expect(rfc).toMatch(/readLongitudinalSnapshot\(/u);
     expect(rfc).toMatch(/LongitudinalProjectionWorker/u);
     expect(rfc).toMatch(/make longitudinal-worker-once/u);
-    expect(rfc).toMatch(/workerBatchSize: 4, workerPollMs: 1000,[\s\S]*workerLeaseMs: 30000/u);
+    expect(rfc).toMatch(/workerBatchSize: 4, workerConcurrency: 1,[\s\S]*workerLeaseMs: 120000,[\s\S]*workerHeartbeatMs: 10000/u);
     expect(rfc).toMatch(/longitudinal_profile_disposition='profileable'/u);
   });
 });
@@ -235,16 +240,16 @@ describe("D1613/D1615 durable claim and exact snapshot cut", () => {
 });
 
 describe("D1614 denominator algebra", () => {
-  const d1 = { id: "d1", phase: "opening" as const, decisionClass: "move" as const, families: [] };
-  const d2 = { id: "d2", phase: "opening" as const, decisionClass: "move" as const, families: [{ projectionId: "F", opportunity: true, occurred: true }] };
-  const d3 = { id: "d3", phase: "opening" as const, decisionClass: "move" as const, families: [] };
-  const d4 = { id: "d4", phase: "middlegame" as const, decisionClass: "move" as const, families: [{ projectionId: "F", opportunity: true, occurred: false }] };
+  const d1 = { id: "d1", phase: "opening" as const, decisionClass: "played" as const, families: [] };
+  const d2 = { id: "d2", phase: "opening" as const, decisionClass: "played" as const, families: [{ projectionId: "F", opportunity: true, occurred: true }] };
+  const d3 = { id: "d3", phase: "opening" as const, decisionClass: "played" as const, families: [] };
+  const d4 = { id: "d4", phase: "middlegame" as const, decisionClass: "played" as const, families: [{ projectionId: "F", opportunity: true, occurred: false }] };
 
   it("seeds a late family with prior decisions and advances it on later no-opportunity decisions", () => {
     const aggregate = new IntervalAggregate();
     aggregate.apply("1", [d1]);
     aggregate.apply("2", [d2]);
-    expect(aggregate.rows()).toEqual([{ key: "opening:move:F", decisions: 2, opportunities: 1, occurred: 1 }]);
+    expect(aggregate.rows()).toEqual([{ key: "opening:played:F", decisions: 2, opportunities: 1, occurred: 1 }]);
     aggregate.apply("3", [d3]);
     expect(aggregate.rows()[0]).toMatchObject({ decisions: 3, opportunities: 1, occurred: 1 });
   });
@@ -260,6 +265,104 @@ describe("D1614 denominator algebra", () => {
     expect(incremental.rows()).toEqual(rebuilt.rows());
     expect(incremental.rows()).toHaveLength(2);
     expect(incremental.rows().find((row) => row.key.startsWith("middlegame"))?.decisions).toBe(1);
+  });
+});
+
+describe("D2227-D2232 third author repair", () => {
+  it("carries all four runtime phase results through SQLite and denominators", () => {
+    const fens = {
+      opening: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      middlegame: "r3k2r/ppppqppp/2nbbn2/8/8/2NBBN2/PPPPQPPP/R3K2R w KQkq - 0 1",
+      endgame: "4k2r/8/8/8/8/8/RP6/4K3 w - - 0 1",
+      unclear: "3qk2r/8/8/8/8/8/3Q3R/4K3 w - - 0 1",
+    } as const;
+    expect(Object.fromEntries(Object.entries(fens).map(([name, fen]) => [name, classifyPhase(fen).phase]))).toEqual({ opening: "opening", middlegame: "middlegame", endgame: "endgame", unclear: "unclear" });
+    const db = new DatabaseSync(":memory:");
+    db.exec("PRAGMA foreign_keys=ON; CREATE TABLE learners(id TEXT PRIMARY KEY) STRICT; CREATE TABLE drill_runs(id TEXT PRIMARY KEY, owner_learner_id TEXT NOT NULL) STRICT;");
+    db.exec(LONGITUDINAL_MIGRATION_SQL);
+    db.exec("INSERT INTO learners VALUES ('learner-1'); INSERT INTO drill_runs(id,owner_learner_id) VALUES ('run-1','learner-1');");
+    const insert = db.prepare("INSERT INTO learner_observation_denominators VALUES (?,?,?,?,?,?,?)");
+    const aggregate = new IntervalAggregate();
+    for (const phase of Object.keys(fens) as (keyof typeof fens)[]) {
+      insert.run("learner-1", "run-1", phase, "played", 1, "at", 1);
+      aggregate.apply(phase, [{ id: phase, phase, decisionClass: "played", families: [{ projectionId: "F", opportunity: true, occurred: false }] }]);
+    }
+    expect(aggregate.rows().map((row) => row.key).sort()).toEqual(["endgame:played:F", "middlegame:played:F", "opening:played:F", "unclear:played:F"]);
+    db.close();
+  });
+
+  it("projects real run events into exact game/played/predicted and root counters", () => {
+    const at = "2026-08-31T10:00:00.000Z";
+    const startFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    let native = createRun({ id: "history", session: { kind: "position", start: { fen: startFen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common", targetElo: 1500 } }, sessionDigest: `sha256:${"a".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at });
+    native = commitMove(native, "e2e4", { at }).run;
+    native = commitMove(native, "e7e5", { at }).run;
+    native = rewind(native, native.nodes[0]!.id, at).run;
+    native = commitMove(native, "d2d4", { at }).run;
+    const root = native.nodes[0]!;
+    const prediction = { seq: native.events.length + 1, type: "prediction.recorded" as const, at, data: { nodeId: root.id, checkpointId: "c1", predictedUci: "e2e4", predictedMass: null, predictedRank: null, candidateCount: 1, distribution: { moveUci: "e2e4", policyModeApplied: "enumerated" as const, candidates: [{ moveUci: "e2e4", rank: 1 }], engine: { id: "fixture", name: "fixture", version: "1", seedHonored: true } } } };
+    const duplicate = { ...prediction, seq: prediction.seq + 1 };
+    const group = { seq: duplicate.seq + 1, type: "group.created" as const, at, data: { groupId: "g1", sourceNodeId: root.id, source: "hand_picked" as const, resistance: "fixed" as const, members: native.branches.map((branch) => ({ branchId: branch.id, seedMoveUci: branch.id === native.branches[0]!.id ? "e2e4" : "d2d4" })) } };
+    const imported = Object.freeze({ ...native, sessionKind: "imported" as const, events: Object.freeze([...native.events, prediction, duplicate, group]) }) satisfies DrillRun;
+    const projected = projectNormativeRun({ run: imported, shared: false, importedMainlinePlies: 2 });
+    expect(projected.decisions.map((row) => row.decisionClass)).toEqual(["game", "game", "played", "predicted"]);
+    expect(projected.decisions.filter((row) => row.decisionClass === "predicted")).toHaveLength(1);
+    expect(projected.structureStats).toHaveLength(1);
+    expect(projected.structureStats[0]).toMatchObject({ branchCount: 2, rewoundCount: 1, forkedCount: 1, groupCount: 1 });
+  });
+
+  it("renews valid slow work, claims only an executable slot, and rejects stale ownership", () => {
+    const jobs = new DurableJobProtocol("slow", 80, 1, "learner-a");
+    const first = jobs.claim("worker-a", 0, LONGITUDINAL_WORKER_DEFAULTS.workerLeaseMs)!;
+    const renewed = jobs.renew(first, 100_000, LONGITUDINAL_WORKER_DEFAULTS.workerLeaseMs)!;
+    expect(jobs.claim("worker-b", 130_000, LONGITUDINAL_WORKER_DEFAULTS.workerLeaseMs)).toBeNull();
+    expect(jobs.publish(renewed, 80, 160_000, "learner-a")).toBe(true);
+    const race = new DurableJobProtocol("race", 1, 1, "learner-a");
+    const stale = race.claim("old", 0, 60_000)!;
+    const replacement = race.claim("new", 60_000, 60_000)!;
+    expect(race.renew(stale, 60_001, 60_000)).toBeNull();
+    expect(race.publish(stale, 1, 60_001)).toBe(false);
+    expect(race.publish(replacement, 1, 60_001, "learner-b")).toBe(false);
+    const worker = new LongitudinalProjectionWorker();
+    worker.start();
+    expect(worker.beginBatch(4)).toBe(1);
+    expect(worker.beginBatch(4)).toBe(0);
+    expect(worker.stop()).toBe("stopping");
+    worker.finishOne();
+    expect(worker.state).toBe("stopped");
+  });
+
+  it("derives all-complete from eligible runs and reconciles old jobs idempotently", () => {
+    const runs = [
+      { id: "imported", ownerLearnerId: "a", shared: false, disposition: "profileable" as const, eventHead: 8 },
+      { id: "native", ownerLearnerId: "a", shared: false, disposition: "profileable" as const, eventHead: 4 },
+      { id: "shared", ownerLearnerId: "a", shared: true, disposition: "profileable" as const, eventHead: 6 },
+      { id: "suppressed", ownerLearnerId: "a", shared: true, disposition: "account_deleted" as const, eventHead: 7 },
+      { id: "empty", ownerLearnerId: "a", shared: false, disposition: "profileable" as const, eventHead: 0 },
+    ];
+    expect(eligibleRunCuts(runs, "a").map((run) => run.id)).toEqual(["imported", "native", "shared"]);
+    expect(missingEligibleRunIds(runs, [], "a")).toEqual(["imported", "native", "shared"]);
+    const first = reconcileLongitudinalJobs({ runs, jobs: [], derivedRev: 2 });
+    expect(first.receipt).toMatchObject({ scanned: 5, created: 3, suppressed: 2 });
+    expect(missingEligibleRunIds(runs, first.jobs, "a")).toEqual([]);
+    const second = reconcileLongitudinalJobs({ runs, jobs: first.jobs, derivedRev: 2 });
+    expect(second.jobs).toEqual(first.jobs);
+    expect(second.receipt).toMatchObject({ created: 0, advanced: 0, revisionReset: 0 });
+  });
+
+  it("binds every SQL row to the durable run owner and blocks stale reassignment", () => {
+    const db = new DatabaseSync(":memory:");
+    db.exec("PRAGMA foreign_keys=ON; CREATE TABLE learners(id TEXT PRIMARY KEY) STRICT; CREATE TABLE drill_runs(id TEXT PRIMARY KEY, owner_learner_id TEXT NOT NULL) STRICT;");
+    db.exec(LONGITUDINAL_MIGRATION_SQL);
+    db.exec("INSERT INTO learners VALUES ('a'),('b'); INSERT INTO drill_runs(id,owner_learner_id) VALUES ('run-a','a'),('run-b','b');");
+    const insertJob = db.prepare("INSERT INTO learner_observation_jobs(run_id,learner_id,requested_seq,completed_seq,derived_rev,state,claim_generation,updated_at) VALUES (?,?,1,0,1,'pending',0,'at')");
+    expect(() => insertJob.run("run-a", "b")).toThrow();
+    insertJob.run("run-a", "a");
+    expect(() => db.exec("UPDATE drill_runs SET owner_learner_id='b' WHERE id='run-a'")).toThrow();
+    db.exec("DELETE FROM learner_observation_jobs WHERE run_id='run-a'; UPDATE drill_runs SET owner_learner_id='b' WHERE id='run-a';");
+    expect(() => insertJob.run("run-a", "a")).toThrow();
+    insertJob.run("run-a", "b");
+    db.close();
   });
 });
 

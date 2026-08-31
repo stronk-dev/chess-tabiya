@@ -13,6 +13,8 @@ import {
   type SemanticEvidenceEvent,
 } from "../../packages/runtime/src/semantic-evidence.js";
 import type { SemanticEventSign } from "../../packages/runtime/src/evidence-contract.js";
+import { classifyPhase, type DetectedPhase } from "../../packages/runtime/src/phase.js";
+import type { DrillRun, DrillRunEvent, Node } from "../../packages/runtime/src/types.js";
 
 const PATH_IDS = Object.freeze([
   "derived.exchange.trade_completed",
@@ -127,6 +129,7 @@ export type LongitudinalFailureCode = (typeof LONGITUDINAL_FAILURE_CODES)[number
 
 export interface ObservationJob {
   readonly runId: string;
+  readonly learnerId: string;
   readonly requestedSeq: number;
   readonly completedSeq: number;
   readonly derivedRev: number;
@@ -141,6 +144,7 @@ export interface ObservationJob {
 
 export interface JobClaim {
   readonly runId: string;
+  readonly learnerId: string;
   readonly claimedRequestedSeq: number;
   readonly derivedRev: number;
   readonly generation: number;
@@ -152,8 +156,8 @@ export interface JobClaim {
 export class DurableJobProtocol {
   #job: ObservationJob;
   #publishedCut = 0;
-  constructor(runId: string, requestedSeq: number, derivedRev: number) {
-    this.#job = Object.freeze({ runId, requestedSeq, completedSeq: 0, derivedRev, state: "pending", claimGeneration: 0, claimedRequestedSeq: null, claimToken: null, claimedBy: null, leaseExpiresAt: null, failureCode: null });
+  constructor(runId: string, requestedSeq: number, derivedRev: number, learnerId = "learner-1") {
+    this.#job = Object.freeze({ runId, learnerId, requestedSeq, completedSeq: 0, derivedRev, state: "pending", claimGeneration: 0, claimedRequestedSeq: null, claimToken: null, claimedBy: null, leaseExpiresAt: null, failureCode: null });
   }
   get job(): ObservationJob { return this.#job; }
   get publishedCut(): number { return this.#publishedCut; }
@@ -169,13 +173,19 @@ export class DurableJobProtocol {
     const leaseExpiresAt = now + leaseMs;
     const claimedRequestedSeq = this.#job.requestedSeq;
     this.#job = Object.freeze({ ...this.#job, state: "running", claimGeneration: generation, claimedRequestedSeq, claimToken: token, claimedBy: workerId, leaseExpiresAt, failureCode: null });
-    return Object.freeze({ runId: this.#job.runId, claimedRequestedSeq, derivedRev: this.#job.derivedRev, generation, token, workerId, leaseExpiresAt });
+    return Object.freeze({ runId: this.#job.runId, learnerId: this.#job.learnerId, claimedRequestedSeq, derivedRev: this.#job.derivedRev, generation, token, workerId, leaseExpiresAt });
   }
   #owns(claim: JobClaim, now: number): boolean {
-    return this.#job.state === "running" && this.#job.claimGeneration === claim.generation && this.#job.claimedRequestedSeq === claim.claimedRequestedSeq && this.#job.requestedSeq >= claim.claimedRequestedSeq && this.#job.claimToken === claim.token && this.#job.claimedBy === claim.workerId && this.#job.leaseExpiresAt !== null && this.#job.leaseExpiresAt > now;
+    return this.#job.state === "running" && this.#job.learnerId === claim.learnerId && this.#job.claimGeneration === claim.generation && this.#job.claimedRequestedSeq === claim.claimedRequestedSeq && this.#job.requestedSeq >= claim.claimedRequestedSeq && this.#job.claimToken === claim.token && this.#job.claimedBy === claim.workerId && this.#job.leaseExpiresAt !== null && this.#job.leaseExpiresAt > now;
   }
-  publish(claim: JobClaim, snapshotSeq: number, now: number): boolean {
-    if (!this.#owns(claim, now) || snapshotSeq !== claim.claimedRequestedSeq || claim.derivedRev !== this.#job.derivedRev) return false;
+  renew(claim: JobClaim, now: number, leaseMs: number, currentOwner = this.#job.learnerId): JobClaim | null {
+    if (!this.#owns(claim, now) || currentOwner !== claim.learnerId) return null;
+    const leaseExpiresAt = now + leaseMs;
+    this.#job = Object.freeze({ ...this.#job, leaseExpiresAt });
+    return Object.freeze({ ...claim, leaseExpiresAt });
+  }
+  publish(claim: JobClaim, snapshotSeq: number, now: number, currentOwner = this.#job.learnerId): boolean {
+    if (!this.#owns(claim, now) || currentOwner !== claim.learnerId || snapshotSeq !== claim.claimedRequestedSeq || claim.derivedRev !== this.#job.derivedRev) return false;
     this.#publishedCut = snapshotSeq;
     const newerRequest = this.#job.requestedSeq > snapshotSeq;
     this.#job = Object.freeze({ ...this.#job, completedSeq: snapshotSeq, state: newerRequest ? "pending" : "complete", claimedRequestedSeq: null, claimToken: null, claimedBy: null, leaseExpiresAt: null, failureCode: null });
@@ -197,9 +207,92 @@ export function snapshotPrefix(events: readonly SequencedEvent[], cut: number): 
 
 export interface DecisionContribution {
   readonly id: string;
-  readonly phase: "opening" | "middlegame" | "endgame";
-  readonly decisionClass: "move" | "prediction";
+  readonly phase: DetectedPhase;
+  readonly decisionClass: "played" | "game" | "predicted";
   readonly families: readonly { readonly projectionId: string; readonly opportunity: boolean; readonly occurred: boolean }[];
+}
+
+export interface NormativeDecision {
+  readonly id: string;
+  readonly eventSeq: number;
+  readonly nodeId: string;
+  readonly branchId: string;
+  readonly phase: DetectedPhase;
+  readonly decisionClass: "played" | "game" | "predicted";
+  readonly ref: Readonly<Record<string, string | number>>;
+}
+
+export interface NormativeStructureStat {
+  readonly rootKey: string;
+  readonly rootNodeId: string;
+  readonly branchCount: number;
+  readonly rewoundCount: number;
+  readonly forkedCount: number;
+  readonly groupCount: number;
+  readonly outcomeCount: number;
+}
+
+function eventBranch(event: DrillRunEvent, nodes: ReadonlyMap<string, Node>): string | null {
+  if (event.type === "run.rewound") return event.data.branchId;
+  if (event.type === "branch.forked") return event.data.branch.id;
+  if (event.type === "group.created") return nodes.get(event.data.sourceNodeId)?.branchId ?? null;
+  if (event.type === "outcome.reached") return nodes.get(event.data.nodeId)?.branchId ?? null;
+  return null;
+}
+
+export function projectNormativeRun(input: {
+  readonly run: DrillRun;
+  readonly shared: boolean;
+  readonly importedMainlinePlies: number | null;
+  readonly moveAuthorshipByEventSeq?: Readonly<Record<number, "owner" | "other">>;
+}): { readonly decisions: readonly NormativeDecision[]; readonly structureStats: readonly NormativeStructureStat[] } {
+  const { run } = input;
+  const nodes = new Map(run.nodes.map((node) => [node.id, node] as const));
+  const branches = new Map(run.branches.map((branch) => [branch.id, branch] as const));
+  const authoredByOwner = (seq: number): boolean => input.moveAuthorshipByEventSeq?.[seq] === "owner" || (!input.shared && input.moveAuthorshipByEventSeq?.[seq] !== "other");
+  const decisions: NormativeDecision[] = [];
+  const predictions = new Set<string>();
+  for (const event of [...run.events].sort((left, right) => left.seq - right.seq)) {
+    if (event.type === "move.committed") {
+      const node = event.data.node;
+      const parent = node.parentId === null ? undefined : nodes.get(node.parentId);
+      if (node.actor !== "user" || parent === undefined || !authoredByOwner(event.seq)) continue;
+      const onImportedMainline = run.sessionKind === "imported" && node.branchId === run.branches[0]?.id && input.importedMainlinePlies !== null && node.ply <= input.importedMainlinePlies;
+      decisions.push(Object.freeze({ id: `move:${event.seq}`, eventSeq: event.seq, nodeId: node.id, branchId: node.branchId, phase: classifyPhase(parent.fen).phase, decisionClass: onImportedMainline ? "game" : "played", ref: Object.freeze({ kind: "move", eventSeq: event.seq, nodeId: node.id }) }));
+    } else if (event.type === "prediction.recorded" && authoredByOwner(event.seq)) {
+      const key = `${event.data.nodeId}\0${event.data.checkpointId}`;
+      if (predictions.has(key)) continue;
+      predictions.add(key);
+      const node = nodes.get(event.data.nodeId);
+      if (node === undefined) throw new TypeError("LONGITUDINAL_PREDICTION_NODE_MISSING");
+      decisions.push(Object.freeze({ id: `prediction:${event.seq}`, eventSeq: event.seq, nodeId: node.id, branchId: node.branchId, phase: classifyPhase(node.fen).phase, decisionClass: "predicted", ref: Object.freeze({ kind: "prediction", eventSeq: event.seq, nodeId: node.id, checkpointId: event.data.checkpointId }) }));
+    }
+  }
+  decisions.sort((left, right) => left.eventSeq - right.eventSeq || left.id.localeCompare(right.id));
+
+  const byRoot = new Map<string, { rootNodeId: string; branches: Set<string>; rewound: number; forked: number; group: number; outcome: number }>();
+  const rootForBranch = (branchId: string) => {
+    const branch = branches.get(branchId);
+    const root = branch === undefined ? undefined : nodes.get(branch.forkNodeId);
+    if (branch === undefined || root === undefined) throw new TypeError("LONGITUDINAL_ROOT_MISSING");
+    const key = `${run.sessionKind}|${run.packId ?? ""}|${root.transposeKey}`;
+    const stat = byRoot.get(key) ?? { rootNodeId: root.id, branches: new Set<string>(), rewound: 0, forked: 0, group: 0, outcome: 0 };
+    stat.branches.add(branchId);
+    byRoot.set(key, stat);
+    return stat;
+  };
+  for (const branch of run.branches) rootForBranch(branch.id);
+  for (const event of run.events) {
+    const branchId = eventBranch(event, nodes);
+    if (branchId === null) continue;
+    const stat = rootForBranch(branchId);
+    if (event.type === "run.rewound") stat.rewound += 1;
+    else if (event.type === "branch.forked") stat.forked += 1;
+    else if (event.type === "group.created") stat.group += 1;
+    else if (event.type === "outcome.reached") stat.outcome += 1;
+  }
+  const structureStats = [...byRoot.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([rootKey, stat]) => Object.freeze({ rootKey, rootNodeId: stat.rootNodeId, branchCount: stat.branches.size, rewoundCount: stat.rewound, forkedCount: stat.forked, groupCount: stat.group, outcomeCount: stat.outcome }));
+  return Object.freeze({ decisions: Object.freeze(decisions), structureStats: Object.freeze(structureStats) });
 }
 
 interface FamilyAggregate { opportunities: number; occurred: number }
@@ -234,22 +327,24 @@ export class IntervalAggregate {
 export const LONGITUDINAL_MIGRATION_SQL = `
 ALTER TABLE drill_runs ADD COLUMN longitudinal_profile_disposition TEXT NOT NULL DEFAULT 'profileable'
   CHECK (longitudinal_profile_disposition IN ('profileable','account_deleted'));
+CREATE UNIQUE INDEX drill_runs_longitudinal_owner ON drill_runs(id,owner_learner_id);
 CREATE TABLE learner_observation_denominators (
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
-  run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
-  phase TEXT NOT NULL CHECK (phase IN ('opening','middlegame','endgame')),
+  run_id TEXT NOT NULL,
+  phase TEXT NOT NULL CHECK (phase IN ('opening','middlegame','endgame','unclear')),
   decision_class TEXT NOT NULL CHECK (decision_class IN ('played','game','predicted')),
   decisions INTEGER NOT NULL CHECK (decisions > 0), observed_at TEXT NOT NULL,
   derived_rev INTEGER NOT NULL CHECK (derived_rev > 0),
-  PRIMARY KEY (learner_id,run_id,phase,decision_class)
+  PRIMARY KEY (learner_id,run_id,phase,decision_class),
+  FOREIGN KEY (run_id,learner_id) REFERENCES drill_runs(id,owner_learner_id) ON UPDATE RESTRICT ON DELETE CASCADE
 ) STRICT;
 CREATE TABLE learner_observations (
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
-  run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
+  run_id TEXT NOT NULL,
   projection_id TEXT NOT NULL, projection_version INTEGER NOT NULL CHECK (projection_version > 0),
   semantic_sign TEXT NOT NULL CHECK (semantic_sign IN ('state','gained','lost','preserved','removed','avoided','enabled','threatened')),
   source_sign TEXT NOT NULL CHECK (source_sign IN ('state','gained','lost','preserved','removed','avoided','enabled','threatened')),
-  phase TEXT NOT NULL CHECK (phase IN ('opening','middlegame','endgame')),
+  phase TEXT NOT NULL CHECK (phase IN ('opening','middlegame','endgame','unclear')),
   decision_class TEXT NOT NULL CHECK (decision_class IN ('played','game','predicted')),
   session_kind TEXT NOT NULL CHECK (session_kind IN ('pack','position','imported')), pack_id TEXT,
   opportunities INTEGER NOT NULL CHECK (opportunities > 0),
@@ -261,11 +356,12 @@ CREATE TABLE learner_observations (
   CHECK ((session_kind='pack' AND pack_id IS NOT NULL) OR (session_kind<>'pack' AND pack_id IS NULL)),
   PRIMARY KEY (learner_id,run_id,projection_id,projection_version,semantic_sign,source_sign,phase,decision_class),
   FOREIGN KEY (learner_id,run_id,phase,decision_class)
-    REFERENCES learner_observation_denominators(learner_id,run_id,phase,decision_class) ON DELETE CASCADE
+    REFERENCES learner_observation_denominators(learner_id,run_id,phase,decision_class) ON DELETE CASCADE,
+  FOREIGN KEY (run_id,learner_id) REFERENCES drill_runs(id,owner_learner_id) ON UPDATE RESTRICT ON DELETE CASCADE
 ) STRICT;
 CREATE TABLE learner_structure_stats (
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
-  run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
+  run_id TEXT NOT NULL,
   root_key TEXT NOT NULL, root_node_id TEXT NOT NULL,
   session_kind TEXT NOT NULL CHECK (session_kind IN ('pack','position','imported')), pack_id TEXT,
   branch_count INTEGER NOT NULL CHECK (branch_count >= 1),
@@ -275,10 +371,11 @@ CREATE TABLE learner_structure_stats (
   outcome_count INTEGER NOT NULL CHECK (outcome_count >= 0),
   observed_at TEXT NOT NULL, derived_rev INTEGER NOT NULL CHECK (derived_rev > 0),
   CHECK ((session_kind='pack' AND pack_id IS NOT NULL) OR (session_kind<>'pack' AND pack_id IS NULL)),
-  PRIMARY KEY (learner_id,run_id,root_key)
+  PRIMARY KEY (learner_id,run_id,root_key),
+  FOREIGN KEY (run_id,learner_id) REFERENCES drill_runs(id,owner_learner_id) ON UPDATE RESTRICT ON DELETE CASCADE
 ) STRICT;
 CREATE TABLE learner_observation_jobs (
-  run_id TEXT PRIMARY KEY REFERENCES drill_runs(id) ON DELETE CASCADE,
+  run_id TEXT PRIMARY KEY,
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
   requested_seq INTEGER NOT NULL CHECK (requested_seq > 0),
   completed_seq INTEGER NOT NULL DEFAULT 0 CHECK (completed_seq >= 0),
@@ -294,7 +391,8 @@ CREATE TABLE learner_observation_jobs (
   CHECK ((state='failed') = (failure_code IS NOT NULL)),
   CHECK ((state='running') = (claimed_requested_seq IS NOT NULL AND claim_token IS NOT NULL AND claimed_by IS NOT NULL AND lease_expires_at IS NOT NULL)),
   CHECK (state='running' OR (claimed_requested_seq IS NULL AND claim_token IS NULL AND claimed_by IS NULL AND lease_expires_at IS NULL)),
-  CHECK (state<>'complete' OR completed_seq=requested_seq)
+  CHECK (state<>'complete' OR completed_seq=requested_seq),
+  FOREIGN KEY (run_id,learner_id) REFERENCES drill_runs(id,owner_learner_id) ON UPDATE RESTRICT ON DELETE CASCADE
 ) STRICT;
 CREATE INDEX learner_observation_denominators_by_learner ON learner_observation_denominators(learner_id,observed_at,run_id);
 CREATE INDEX learner_observations_by_family ON learner_observations(learner_id,projection_id,projection_version,semantic_sign,source_sign,phase,decision_class,run_id);
@@ -314,9 +412,63 @@ export function rebuildProfileOwner(run: ProfileRun): string | null {
   return run.disposition === "profileable" ? run.ownerLearnerId : null;
 }
 
+export interface EligibleRunCut extends ProfileRun { readonly eventHead: number }
+export interface ReconciliationJob { readonly runId: string; readonly learnerId: string; readonly requestedSeq: number; readonly derivedRev: number }
+export interface LongitudinalReconciliationReceipt {
+  readonly scanned: number;
+  readonly created: number;
+  readonly advanced: number;
+  readonly revisionReset: number;
+  readonly suppressed: number;
+  readonly digest: string;
+}
+
+export function eligibleRunCuts(runs: readonly EligibleRunCut[], learnerId: string): readonly EligibleRunCut[] {
+  return Object.freeze(runs.filter((run) => run.ownerLearnerId === learnerId && run.disposition === "profileable" && run.eventHead > 0).sort((left, right) => left.id.localeCompare(right.id)));
+}
+
+export function missingEligibleRunIds(runs: readonly EligibleRunCut[], jobs: readonly ReconciliationJob[], learnerId: string): readonly string[] {
+  const jobIds = new Set(jobs.filter((job) => job.learnerId === learnerId).map((job) => job.runId));
+  return Object.freeze(eligibleRunCuts(runs, learnerId).filter((run) => !jobIds.has(run.id)).map((run) => run.id));
+}
+
+export function reconcileLongitudinalJobs(input: {
+  readonly runs: readonly EligibleRunCut[];
+  readonly jobs: readonly ReconciliationJob[];
+  readonly derivedRev: number;
+}): { readonly jobs: readonly ReconciliationJob[]; readonly receipt: LongitudinalReconciliationReceipt } {
+  const existing = new Map(input.jobs.map((job) => [job.runId, job] as const));
+  let created = 0;
+  let advanced = 0;
+  let revisionReset = 0;
+  const eligible = input.runs.filter((run) => run.disposition === "profileable" && run.eventHead > 0).sort((left, right) => left.id.localeCompare(right.id));
+  for (const run of eligible) {
+    const prior = existing.get(run.id);
+    if (prior === undefined) {
+      existing.set(run.id, Object.freeze({ runId: run.id, learnerId: run.ownerLearnerId, requestedSeq: run.eventHead, derivedRev: input.derivedRev }));
+      created += 1;
+      continue;
+    }
+    const next = Object.freeze({ runId: run.id, learnerId: run.ownerLearnerId, requestedSeq: Math.max(prior.requestedSeq, run.eventHead), derivedRev: input.derivedRev });
+    if (next.requestedSeq !== prior.requestedSeq) advanced += 1;
+    if (next.derivedRev !== prior.derivedRev || next.learnerId !== prior.learnerId) revisionReset += 1;
+    existing.set(run.id, next);
+  }
+  const jobs = Object.freeze([...existing.values()].sort((left, right) => left.runId.localeCompare(right.runId)));
+  const receipt = Object.freeze({
+    scanned: input.runs.length,
+    created,
+    advanced,
+    revisionReset,
+    suppressed: input.runs.filter((run) => run.disposition !== "profileable" || run.eventHead <= 0).length,
+    digest: `sha256:${createHash("sha256").update(JSON.stringify(jobs)).digest("hex")}`,
+  });
+  return Object.freeze({ jobs, receipt });
+}
+
 export interface LongitudinalReadFilter {
   readonly projections?: readonly { readonly id: string; readonly version: number; readonly semanticSign?: SemanticEventSign; readonly sourceSign?: SemanticEventSign }[];
-  readonly phases?: readonly ("opening" | "middlegame" | "endgame")[];
+  readonly phases?: readonly DetectedPhase[];
   readonly decisionClasses?: readonly ("played" | "game" | "predicted")[];
   readonly sessionKinds?: readonly ("pack" | "position" | "imported")[];
   readonly packIds?: readonly string[];
@@ -332,23 +484,24 @@ export type LongitudinalReadResult =
   | { readonly kind: "complete"; readonly cuts: readonly LongitudinalCut[]; readonly denominators: readonly unknown[]; readonly observations: readonly unknown[]; readonly structureStats: readonly unknown[] }
   | { readonly kind: "pending"; readonly cuts: readonly LongitudinalCut[] }
   | { readonly kind: "failed"; readonly cuts: readonly LongitudinalCut[]; readonly failureCode: LongitudinalFailureCode }
-  | { readonly kind: "unavailable"; readonly reason: "not_requested" | "revision_mismatch" | "profile_suppressed" };
+  | { readonly kind: "unavailable"; readonly reason: "not_requested" | "revision_mismatch" | "profile_suppressed"; readonly runIds?: readonly string[] };
 export interface LongitudinalReadStore {
   readLongitudinalSnapshot(actorLearnerId: string, query: LongitudinalReadQuery): LongitudinalReadResult;
   claimLongitudinalBatch(workerId: string, now: number, limit: number): readonly JobClaim[];
+  renewLongitudinalClaim(claim: JobClaim, now: number): JobClaim | null;
   publishLongitudinalProjection(claim: JobClaim, rows: unknown, now: number): boolean;
 }
 
-export const LONGITUDINAL_WORKER_DEFAULTS = Object.freeze({ workerBatchSize: 4, workerPollMs: 1_000, workerLeaseMs: 30_000 });
+export const LONGITUDINAL_WORKER_DEFAULTS = Object.freeze({ workerBatchSize: 4, workerConcurrency: 1, workerPollMs: 1_000, workerLeaseMs: 120_000, workerHeartbeatMs: 10_000 });
 export const LONGITUDINAL_WORKER_ONCE_ENTRY = "apps/server/src/longitudinal-worker-once.ts";
 export class LongitudinalProjectionWorker {
   #state: "idle" | "running" | "stopping" | "stopped" = "idle";
   #inFlight = 0;
   constructor(readonly options = LONGITUDINAL_WORKER_DEFAULTS) {
-    if (!Number.isInteger(options.workerBatchSize) || options.workerBatchSize < 1 || options.workerBatchSize > 32 || options.workerPollMs < 100 || options.workerPollMs > 5_000 || options.workerLeaseMs < 5_000) throw new TypeError("LONGITUDINAL_WORKER_OPTIONS_INVALID");
+    if (!Number.isInteger(options.workerBatchSize) || options.workerBatchSize < 1 || options.workerBatchSize > 32 || !Number.isInteger(options.workerConcurrency) || options.workerConcurrency < 1 || options.workerConcurrency > options.workerBatchSize || options.workerPollMs < 100 || options.workerPollMs > 5_000 || options.workerLeaseMs < 60_000 || options.workerHeartbeatMs < 1_000 || options.workerHeartbeatMs * 3 >= options.workerLeaseMs) throw new TypeError("LONGITUDINAL_WORKER_OPTIONS_INVALID");
   }
   start(): void { if (this.#state !== "idle") throw new TypeError("LONGITUDINAL_WORKER_LIFECYCLE"); this.#state = "running"; }
-  beginBatch(requested: number): number { if (this.#state !== "running") return 0; const claimed = Math.min(requested, this.options.workerBatchSize); this.#inFlight += claimed; return claimed; }
+  beginBatch(requested: number): number { if (this.#state !== "running") return 0; const claimed = Math.min(requested, this.options.workerBatchSize, Math.max(0, this.options.workerConcurrency - this.#inFlight)); this.#inFlight += claimed; return claimed; }
   finishOne(): void { if (this.#inFlight < 1) throw new TypeError("LONGITUDINAL_WORKER_LIFECYCLE"); this.#inFlight -= 1; if (this.#state === "stopping" && this.#inFlight === 0) this.#state = "stopped"; }
   stop(): "stopping" | "stopped" { if (this.#state !== "running" && this.#state !== "stopping") throw new TypeError("LONGITUDINAL_WORKER_LIFECYCLE"); this.#state = this.#inFlight === 0 ? "stopped" : "stopping"; return this.#state; }
   get state(): string { return this.#state; }
