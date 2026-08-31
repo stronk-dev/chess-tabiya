@@ -1,16 +1,15 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
-- **Status:** draft — **third author repair complete 2026-08-31 on
-  [[D2244]]–[[D2252]].** The repaired core now requires a grounded play witness before progression,
-  durably replays creation before a run id exists, starts both aggregates atomically, closes
-  play-run deletion, binds campaign inventory to the production module query and types official
-  curriculum metadata. This RFC is explicitly the Campaign foundation, not the whole 1.0
-  capability: the full-game boss, catalogue progression and consequential durable horizon remain
-  visible in §10's closure map; the last still requires research plus an owner ruling. No campaign
-  schema, migration, production route, official campaign or surface may resume before the author
-  contract passes; `make campaign-two-horizon-author-contract` passes 34/34. Fresh independent
-  review required after this repair, and every declared
-  dependency must land before implementation.
+- **Status:** draft — **RETURNED by third fresh independent review 2026-08-31 on
+  [[D2420]]–[[D2427]].** The prior learner-play, pre-run create identity, atomic-start, deletion,
+  assistance and official-metadata directions survive, but the normative SQL does not enforce
+  active-run uniqueness or store a replayable command envelope; emitted events cannot inhabit its
+  revision column; theory and sealed-history reads lose required gates/cuts; official curriculum
+  fields self-assert rather than join; and account/deletion lifecycle claims exceed their accepted
+  authorities. `make campaign-two-horizon-third-fresh-review` passes 8/8. This remains Campaign
+  foundation, not complete 1.0. This RFC is explicitly the Campaign foundation, not the whole 1.0.
+  No campaign schema, migration, production route, official campaign or surface may resume before
+  author repair, another fresh independent review and accepted dependencies.
   *(Prior line: [[D2077]]–[[D2086]] author repair complete 2026-08-30; fresh independent review
   required. Before that:
   implementing — 2026-08-23 authored-contract + registry + module-algebra checkpoints. Before
@@ -1001,6 +1000,33 @@ the core RFC and its named successor campaign work in one 1.0 closure map so lat
 disappear behind “v2.” No schema, migration, storage, route, client, CSS, content, archive or
 protected-design byte is authorized by this return.
 
+## Third fresh independent return (2026-08-31)
+
+The [[D2244]]–[[D2252]] directions remain useful, and all 34 author arms still pass. Joining that
+model to the actual storage/account/theory boundaries found eight later blockers. Exact review:
+`planning/campaign/third-fresh-independent-buildability-review-2026-08-31.md`.
+
+1. **[[D2420]]:** add the promised database-enforced partial unique active-run constraint and a
+   real concurrent-create transaction fixture.
+2. **[[D2421]]:** make every event inhabit the revision column, including the pre-revision create
+   event, through one explicit discriminated rule.
+3. **[[D2422]]:** persist the exact normalized operands and response image for every post-create
+   command; mutable aggregate rows are not response-loss receipts.
+4. **[[D2423]]:** carry theory applicability and disclosure/directness through the production
+   assistance query; ownership plus source availability is insufficient.
+5. **[[D2424]]:** bind sealed encounter reads to an exact event-log cut so later rewards cannot
+   retroactively widen earlier play/Review.
+6. **[[D2425]]:** derive official phase/form/provenance/dependency coverage from pinned authorities
+   and reject self-labelled phases plus ghost-node joins.
+7. **[[D2426]]:** remove fictional account import/merge acceptance or introduce an accepted
+   successor; appliance restore and account import are different operations.
+8. **[[D2427]]:** define abandon-then-delete history, Review, export/restore and corruption semantics
+   for a `node_entered` event with no seal.
+
+No product implementation is authorized by this return. The next author pass must preserve the
+full 1.0 closure map, repair these boundaries, keep both maintained targets green and request a new
+independent review.
+
 ## Campaign 1.0 closure map
 
 This RFC is the **foundation milestone**, not permission to mark the Campaign capability complete.
@@ -1224,6 +1250,14 @@ set).
   persona.
 
 ## Changelog
+
+- 2026-08-31 (**third fresh independent return**): returned the RFC on [[D2420]]–[[D2427]].
+  The database lacks the promised active-run uniqueness and post-create command receipt; event
+  rows disagree with the author model; theory and sealed-history reads omit required gates/cuts;
+  official curriculum metadata is not joined to pack/node truth; and account/deletion lifecycle
+  claims are unbuildable against the accepted parent. The earlier 34 author checks remain green;
+  `make campaign-two-horizon-third-fresh-review` adds eight able-to-fail counterexamples. Exact
+  review: `planning/campaign/third-fresh-independent-buildability-review-2026-08-31.md`.
 
 - 2026-08-31 (**third author repair**): repaired the core findings [[D2244]]–[[D2248]] and
   [[D2252]] with executable semantics. A compiler-owned participation witness closes zero-play

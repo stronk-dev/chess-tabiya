@@ -19129,6 +19129,78 @@
       "uxItems": [],
       "evidence": "tools/roadmap-receipt.mjs",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2420",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:452f72a95e48e6d74d24f3bb047b72cb55d766dc9795f10e3228c6b4576349e3",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2421",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:30bac33aa99e4240e398d1620222ffcd7edb1670a066d295b4e8b639f61b5aa1",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2422",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0f3089297898510f03252ac9336208609b276237645401b6fc92f2da6d6988fb",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2423",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:32b674211da036db79c4e5cc204fda98f998a5119a4629e66a0ccd9a7ff18040",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2424",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0b6345c7f4e342381f9c493e835130f467e0072b83bafa8abfb9fcc76b59f31e",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2425",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:288ee390058ef852aacc839409c35d5118500ac15c000ea42b39e6ffcf4e3fc4",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2426",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:af9c440a7cabd00eefc4cc5dda6f4a4e05770ce8219ba812653b64639e16f966",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2427",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e835a75402774d575e4b1229e3bef86c6011821f9a905ad5148e4a86edfbaec5",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
     }
   ]
 }

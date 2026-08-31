@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:de5a81120bbd9eef1e50a258564f4bbc6cca6bdf4bc4c59a1f1b6ce6997f0d5d",
+    "roadmap": "sha256:3339af309fcbe76d9c4b61861058d3a3ed0620d52fb74e67183869d901ba076c",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:3fa044b7ae99cfa74d3856211cf37eacaebe2fe17ae4c7185cc637f547a003ba",
-    "rfcRegister": "sha256:57905c079c570cef74c37a46a62add88186ab1c9134cb9843cfde9bc6a8f3742",
+    "workState": "sha256:32ec9784f1ba327cd1ced44e3d5e4e07399975df1376101bf03443f5e68455dc",
+    "rfcRegister": "sha256:15af3801763c8c1b0d4532b8ee6a4604adda7bf4842902d699d3535abd131121",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 655,
       "doing": 0,
-      "blocked": 806,
+      "blocked": 814,
       "done": 704,
       "refused": 3
     },
@@ -110,7 +110,7 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-08-31",
-        "summary": "Shared-resource bootstrap now specifies ten roots across four generic kinds and remains pending independent review; semantic validation is author-repaired; the candidate packet awaits a fifth fresh review; module registration and evidence presentation remain held; longitudinal store, bot policy and provider health were independently returned on production-boundary defects despite green author contracts; foundation source identity remains dependency-blocked.",
+        "summary": "Shared-resource bootstrap now specifies ten roots across four generic kinds and remains pending independent review; semantic validation is author-repaired; the candidate packet awaits a fifth fresh review; module registration and evidence presentation remain held; longitudinal store, bot policy, provider health and Campaign were independently returned on production-boundary defects despite green author contracts; foundation source identity remains dependency-blocked.",
         "impact": "held",
         "evidence": [
           "planning/shared-resource-register-bootstrap/author-repair-2026-08-31.md",
@@ -124,6 +124,7 @@
           "planning/longitudinal-store/third-fresh-independent-buildability-review-2026-08-31.md",
           "planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md",
           "planning/provider-health-degradation/second-fresh-independent-buildability-review-2026-08-31.md",
+          "planning/campaign/third-fresh-independent-buildability-review-2026-08-31.md",
           "planning/foundation-source-identity/author-audit-2026-08-31.md",
           "planning/foundation-source-identity/author-repair-2026-08-31.md",
           "rfc/shared-resource-register-bootstrap.md",
@@ -134,6 +135,7 @@
           "rfc/longitudinal-store.md",
           "rfc/bot-policy.md",
           "rfc/provider-health-degradation.md",
+          "rfc/campaign-core.md",
           "rfc/foundation-source-identity.md",
           "rfc/README.md"
         ]
@@ -210,7 +212,7 @@
       "nextAction": "Land migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results; extend export, deletion, backup and rebuild with each object.",
       "latestCheckpoint": {
         "at": "2026-08-31",
-        "summary": "Persistence contracts are specified or returned. Longitudinal state is returned on revision/cut/execution/provenance/retry defects; bot policy is returned because deterministic and durable decision identity are not yet truthful; campaign and social durable state remain blocked on accepted foundations and registered migration order.",
+        "summary": "Persistence contracts are specified or returned. Longitudinal state and bot policy remain returned; Campaign is returned because its DDL, event revision and command replay do not yet form one durable authority; social durable state remains blocked on accepted foundations and registered migration order.",
         "impact": "held",
         "evidence": [
           "rfc/longitudinal-store.md",
@@ -218,6 +220,7 @@
           "rfc/bot-policy.md",
           "planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md",
           "rfc/campaign-core.md",
+          "planning/campaign/third-fresh-independent-buildability-review-2026-08-31.md",
           "rfc/social-play.md"
         ]
       },

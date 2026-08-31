@@ -13233,3 +13233,21 @@ six-state census. Regression fixtures cover both the RFC-0000 exclusion and exec
 Mutable current counts were removed from roadmap prose and milestone summaries. Current counts come
 only from the derived command; checkpoints retain dated evidence-backed movement without pretending
 that a historical snapshot is the live register.
+
+## 2026-08-31 — Campaign third fresh review returns persistence and truth joins
+
+**What landed:** independently rejoined the [[D2244]]–[[D2252]] Campaign author repair to its
+normative SQL, accepted account lifecycle and theory/chronology semantics. All 34 author arms remain
+green, while `make campaign-two-horizon-third-fresh-review` adds eight able-to-fail returns:
+[[D2420]]–[[D2427]].
+
+**What changed:** `campaign-core` remains draft and implementation-refused. The missing partial
+unique index and command result/operand image invalidate its concurrency/replay claims; emitted
+events do not inhabit `expected_revision`; owned theory bypasses applicability/directness; sealed
+encounters read later inventory; official phase/provenance/dependency metadata can self-assert or
+name ghost nodes; account import/merge contradicts the accepted no-import contract; and an
+abandoned encounter may be deleted with no typed history projection.
+
+**Blocked/next:** repair those eight boundaries, preserve the complete four-milestone Campaign 1.0
+closure map, rerun both maintained targets and request another fresh independent review. No schema,
+migration, storage, route, client or official campaign implementation is authorized from this draft.
