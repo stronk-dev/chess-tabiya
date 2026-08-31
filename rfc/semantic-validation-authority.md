@@ -1,11 +1,12 @@
 # RFC: Executable semantic-validation authority
 
-- **Status:** draft — RETURNED by fresh adversarial buildability audit 2026-08-31 on
-  [[D2385]]–[[D2388]] before independent review. The D2331–D2333 repair survives, but reading roots
-  cannot inhabit the event-only protocol; case/root cardinality is contradictory; rules oracles
-  manufacture event expectations from event-agnostic requests; and `owner_authored` names no
-  authority store. `make semantic-validation-adversarial-audit` passes 4/4. Author repair and the
-  still-required independent review must precede acceptance or implementation.
+- **Status:** draft — FOURTH AUTHOR REPAIR COMPLETE 2026-08-31 on [[D2385]]–[[D2388]];
+  independent review remains required. One `SemanticValidationSubject`/observation union now covers
+  event and reading roots end to end; roots/declarations/profiles/verdicts are equal while cases are
+  an explicit referenced subset; rules oracles return neutral facts whose event meaning requires a
+  separately grounded proposition; and owner authority has one append-only protected store.
+  `make semantic-validation-fourth-author-repair` passes 4/4. No implementation or learner
+  eligibility is authorized before fresh acceptance.
 - **Author:** codex, executing [[D1711]] / [[D1713]] / [[D1714]] after refreshing both research
   instruments at HEAD
 - **Created:** 2026-08-29
@@ -1109,6 +1110,159 @@ typed request/result arm under import isolation and must compute an expectation 
 case. The executable author contract is `make semantic-validation-third-author-repair`; fresh
 review still owns acceptance.
 
+## Fourth author repair — observation-wide validation and grounded authority
+
+This section is normative and supersedes the event-only names and contradictory joins in §§2–7
+where they conflict. It changes no production byte and does not satisfy the independent review.
+
+### R1. One subject and one result algebra ([[D2385]])
+
+Validation is keyed by a closed subject, never by an untyped projection ref:
+
+```ts
+type SemanticValidationSubject =
+  | { readonly kind: "event"; readonly projection: VersionedEvidenceId }
+  | { readonly kind: "reading"; readonly projection: VersionedEvidenceId };
+
+type SemanticValidationObservation =
+  | { readonly kind: "event"; readonly item: SemanticEvidenceEvent<unknown> }
+  | { readonly kind: "reading"; readonly item: DeclaredEvidence<unknown> };
+
+type SemanticValidationOperationResult =
+  | { readonly kind: "completed"; readonly observations: readonly SemanticValidationObservation[] }
+  | { readonly kind: "unavailable"; readonly reason: SemanticValidationUnavailableReason };
+```
+
+Every former `event` identity field in profiles, refs, cases, population/external receipts and
+generated verdicts becomes `subject: SemanticValidationSubject`. Event adapters wrap each existing
+`SemanticEvidenceEvent`; reading adapters wrap exact declared evidence. Target selection reads the
+projection from `item.evidence.projection` for an event and `item.projection` for a reading, then
+requires both kind and projection/version to equal the case subject. Both arms require the same
+sole-factory `EvidenceValueReceipt`; a reading is not validated by construction provenance.
+
+`SemanticEventDeclaration.validation` remains the event-side reference. Reading roots have a
+separate literal `SemanticReadingValidationDeclaration` containing only `subject.kind: "reading"`
+and the profile ref. Both declaration types compile into one `SemanticValidationDeclaration`
+union before population checks. No event type is widened to pretend a reading is an event.
+
+The bounded-target dependency adds the ninth operation id
+`runtime.semantic.bounded_target_batch` only in the same commit that its three projections and
+`BoundedTargetBackgroundService.submit` land. Its operation adapter consumes the dependency-owned
+sealed batch request/result, converts the named-target and bounded-return evidence to reading
+observations and the immediate evidence to an event observation, and retains typed abstentions.
+The reading-root register may name the two future refs now, but the live root/declaration/profile/
+operation joins include them only once the projections are active; activating any one without its
+subject declaration, profile, operation adapter and non-passing initial verdict fails atomically.
+
+All generic diagnostics say `subject`, `target observation` and `observation count`. Event-specific
+diagnostics remain only inside an event operation adapter. Acceptance criteria and fixture text
+using “event” mean the event arm unless explicitly generalized here.
+
+### R2. Exact equalities and partial joins ([[D2386]])
+
+The population algebra is:
+
+1. live validation roots, compiled validation declarations, profiles and generated verdicts are
+   set-equal by `subjectKey = kind + ":" + projection.id + "@" + version`;
+2. case subjects, population-receipt subjects and external-receipt subjects are each subsets of
+   the root set;
+3. every registry row is referenced exactly once by a same-kind, same-subject, same-arm `present`
+   cell, and every `present` ref resolves exactly one row; and
+4. `required` and `not_applicable` cells reference no registry row. A root with every executable
+   case arm still `required` therefore has no fabricated case and remains a valid debt profile.
+
+The earlier §2 sentence placing “every validation case's event reference” in bidirectional root
+set equality is withdrawn. Criterion 1's four-way equality is authoritative; criterion 14 owns the
+three subset/bijection joins. Permanent fixtures include a debt-only event root, a debt-only reading
+root, an unreferenced case, a present ref with no row, a cross-kind ref and a case subject outside
+the roots.
+
+### R3. An oracle proves a fact; a proposition supplies meaning ([[D2387]])
+
+`SemanticValidationOracleResultMap[K]` returns only the neutral typed fact for K. The
+`expectation` member is deleted. `executeOracle` receives only the witness request, returns that
+fact and records its digest; it never receives the case expectation or target subject.
+
+A rules-backed case uses a conjunction:
+
+```ts
+interface SemanticValidationRulesAuthority {
+  readonly kind: "rules_and_proposition";
+  readonly oracle: SemanticValidationOracleRef;
+  readonly witness: SemanticValidationOracleWitnessRef;
+  readonly proposition:
+    | SemanticValidationExistingAssertionAuthority
+    | SemanticValidationCitedPropositionAuthority
+    | SemanticValidationOwnerAuthorityRef;
+  readonly factConstraint: readonly SemanticValidationFactConstraint[];
+}
+
+interface SemanticValidationFactConstraint {
+  readonly path: readonly (string | "*")[];
+  readonly equals: string | number | boolean | null;
+}
+```
+
+The runner first executes the isolated oracle, then applies every closed canonical leaf-equality
+constraint to its neutral fact. The separately resolved proposition owns the exact target subject,
+case id/version, constraint digest and `SemanticValidationExpectation`. Only that proposition
+supplies the expectation; its bytes must equal the case. A rules fact with no proposition, an empty
+constraint list, a proposition for another subject/case, a constraint not satisfied by the fact,
+or a result object containing an `expectation` key fails. The same rules fact may support multiple
+semantic subjects only through distinct independently grounded propositions.
+
+The old top-level `rules_oracle` authority and the claim that canonical equality between
+`result.expectation` and the case establishes truth are withdrawn. Import isolation still applies
+and prevents the neutral oracle from importing production semantic predicates.
+
+### R4. One protected owner-authority store ([[D2388]])
+
+Owner-authored propositions live only at
+`design/research/semantic-validation-owner-authorities.json`:
+
+```ts
+interface SemanticValidationOwnerAuthorityStore {
+  readonly schemaVersion: 1;
+  readonly authorities: readonly {
+    readonly id: string;              // base id, no @N suffix
+    readonly version: 1;
+    readonly subject: SemanticValidationSubject;
+    readonly case: { readonly id: string; readonly version: 1 };
+    readonly expectation: SemanticValidationExpectation;
+    readonly factConstraint: readonly SemanticValidationFactConstraint[];
+    readonly ruling: `ledger:D${number}`;
+    readonly authoredBy: "OWNER";
+    readonly authoredAt: `${number}-${number}-${number}`;
+  }[];
+}
+```
+
+`SemanticValidationOwnerAuthorityRef` contains exact id/version only. The strict parser derives the
+canonical row digest and requires exact subject, case, expectation and constraint equality. Rows are
+sorted by id/version and unique. The staged process check makes the file append-only: an existing
+row cannot change or disappear; a correction appends the next store-schema-approved authority id
+and updates the case in a later reviewed change. Each appended row must cite a live/terminal ledger
+ruling whose work-state `rulingKind` is `owner-ledger`, and its row bytes must predate the case's
+`present` transition. Same-commit owner row plus case admission fails.
+
+Law 5 supplies the single-writer boundary: only the owner, or Claude acting on the exact cited owner
+ruling, may write this protected design/research file. Codex and implementation agents may build the
+parser and consume existing rows but may not add, edit or synthesize authority. Missing, duplicate,
+unsorted, suffixed, stale-version, digest-mismatched, non-owner, non-ruling, mutated and same-commit
+rows are permanent negatives. If no owner row exists, the cell remains `required`.
+
+### R5. Repair acceptance arms
+
+26. An active reading root cannot compile through an event declaration/result, and an active event
+    cannot compile through a reading arm. Both bounded-target readings plus its event must traverse
+    the one observation result, value receipt, profile, population receipt and consumer gate.
+27. Four-way root/declaration/profile/verdict equality and the three registry subsets are tested
+    independently; a debt-only root carries zero cases and stays honest debt.
+28. Oracle results reject an `expectation` key. A neutral fact affects a case only through a
+    same-case/same-subject grounded proposition with non-empty satisfied constraints.
+29. The exact owner store/parser/staged transition crosses all negative arms in R4, and no Codex-
+    written fixture can create an owner authority row.
+
 ## Fresh adversarial return — 2026-08-31
 
 The pre-review audit in
@@ -1123,11 +1277,15 @@ returns the document to its author on four buildability blockers:
 - [[D2388]] — define an exact owner-authored authority store and write boundary, or remove that
   authority arm.
 
-This is an author-side adversarial audit, not the independent acceptance review. Implementation
-remains unauthorized until an author repair and subsequent independent review both complete.
+This remains the durable return record. R1–R4 above are the author's response and
+`make semantic-validation-fourth-author-repair` crosses them 4/4. The independent acceptance
+review remains outstanding; implementation is still unauthorized.
 
 ## Changelog
 
+- 2026-08-31: fourth author repair answers D2385–D2388 with one event/reading observation algebra,
+  exact equality/subset joins, neutral rules facts plus grounded propositions and one protected
+  append-only owner-authority store. Independent review still required; no implementation.
 - 2026-08-31: fresh adversarial author-side audit returned the RFC on D2385–D2388 before the third
   independent review. No production or eligibility implementation is authorized.
 - 2026-08-31: author-repaired [[D2331]]–[[D2333]]. Removed `@1` suffixes from operation, case and

@@ -12997,3 +12997,16 @@ request directly manufactures an event-specific expectation; and `owner_authored
 authority store or writer boundary. `make semantic-validation-adversarial-audit` reproduces 4/4.
 All seven rows are durably blocked on `semantic-validation-authority.md`; no validator, receipt,
 eligibility, schema or content byte changed.
+
+## 2026-08-31 — Semantic-validation fourth author repair
+
+Answered D2385–D2388 without implementing the validator. A closed subject and observation union now
+carries event and reading projections through the same value-receipt, profile, case, population and
+consumer gates. The population contract separates four-way root equality from three referenced
+subsets, so an honest debt-only root creates no fake case.
+
+Rules oracles now return neutral facts only. A separately grounded proposition owns the event or
+reading meaning and exact expectation. Owner-authored propositions have one proposed protected,
+append-only design/research store whose rows must predate case admission and cite an owner-ledger
+ruling; Codex cannot populate it. `make semantic-validation-fourth-author-repair` passes 4/4. The
+seven evidence-foundation rows remain blocked pending independent review and acceptance.
