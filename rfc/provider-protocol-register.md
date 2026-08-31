@@ -1,7 +1,10 @@
 # RFC: Provider-protocol shared-resource register
 
-- **Status:** draft — author-repaired 2026-08-31 on [[D2361]]; fresh independent
-  process/buildability review required before checker/register implementation
+- **Status:** draft — RETURNED by fresh independent review 2026-08-31 on
+  [[D2455]]–[[D2459]]. Named absence survives, but the bespoke register conflicts with the generic
+  bootstrap, operation rows contradict literal-field closure, the sole tuple cannot independently
+  reject swaps, previous-claim history is unavailable in CI and partial product authority still
+  reads absent. `make provider-protocol-fresh-review` reproduces 5/5; implementation is forbidden.
 - **Author:** codex
 - **Created:** 2026-08-30
 - **Design refs:** none. This is repository process and changes no provider behavior or learner UX.
@@ -17,6 +20,23 @@
 ```tabiya-claims
 none
 ```
+
+## Fresh independent return (2026-08-31)
+
+The D2361 repair correctly removes fictional head 0 and makes landed history one-way. Five
+buildability blockers remain:
+
+- [[D2455]] — the bespoke `RESOURCE_NAMES`/C11 plan conflicts with the active generic catalogue;
+- [[D2456]] — “every operation field literal” contradicts three function-witness fields and an
+  undeclared constructor;
+- [[D2457]] — the sole tuple has no independent authority capable of refusing a coordinated swap;
+- [[D2458]] — prior-claim landing has no staged/first-parent or CI history contract; and
+- [[D2459]] — absence watches only the version symbol and admits a partial declaration artifact.
+
+`make provider-protocol-fresh-review` reproduces 5/5. Exact evidence is in
+`planning/provider-protocol-register/fresh-independent-buildability-review-2026-08-31.md`.
+Generic-process reconciliation and another author repair/review are required before C11 or product
+protocol bytes.
 
 ## Summary
 
@@ -215,6 +235,9 @@ resource. Provider semantics remain in the provider RFC.
 
 ## Changelog
 
+- 2026-08-31: fresh independent review returned the D2361 repair on [[D2455]]–[[D2459]]. The
+  register architecture, literal row model, population authority, committed transition and partial
+  absence boundary remain unbuildable. No checker/register/provider implementation is authorized.
 - 2026-08-31: author-repaired [[D2361]]. Replaced fictional head 0 with named-root `absent`, unique
   `first lane 1`, absent digest and a one-way landed lifecycle. Fifteen fixtures now include
   landed→missing-root regression. Fresh review remains required.

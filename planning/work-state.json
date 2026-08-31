@@ -19444,6 +19444,51 @@
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:assistance-config-register.md"
+    },
+    {
+      "id": "D2455",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:025a966887cb772581cf832c08cc0d6175abfd92add419a735f4b203104912eb",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2456",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:04ee89697955254a1b79eb1e70c3096c3645ba49086df15303c6032c01a2e4ad",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2457",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:bcaedd6c526de015c52dbaaf272a5a75ac3467588592fa2ca2060cf1c17133cd",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2458",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:514a58c2d4588dad2c20c68ae89b28de882e93fd990c50942075c3e5d367ad05",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2459",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2b8464e63f1f9e673873fde31f318dfe45e90993d43af7e1df701cbf3517754f",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-protocol-register.md"
     }
   ]
 }

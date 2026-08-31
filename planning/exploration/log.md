@@ -13388,3 +13388,23 @@ All five findings are assigned to `assistance-and-presentation`; zero untriaged 
 before/after graphs, define exchange's landed digest and give permission operation semantics a
 versioned lifecycle. No C9, intent claim, preset or hint-v5 product implementation before repair
 and another fresh independent review.
+
+## 2026-08-31 — Provider-protocol fresh review returns circular register authority
+
+**What landed:** independently crossed the D2361 absence repair against the proposed product tuple,
+the active generic register bootstrap and current CI checkout. Named absence remains correct.
+`make provider-protocol-fresh-review` adds five able-to-fail returns: [[D2455]] a third incompatible
+register architecture; [[D2456]] function fields under an all-literal rule and an undefined
+constructor; [[D2457]] no independent authority for promised count-preserving swap refusal;
+[[D2458]] no executable previous-claim preimage in shallow CI; and [[D2459]] partial declarations
+that still classify as absent.
+
+**What changed:** `provider-protocol-register` remains draft and returned. Its register, 1.0
+foundation checkpoint and work-state rows now point to
+`planning/provider-protocol-register/fresh-independent-buildability-review-2026-08-31.md`. The five
+findings are assigned to `release-engineering`; zero untriaged work remains.
+
+**Blocked/next:** rebase onto the generic catalogue, publish compilable literal/type boundaries,
+join expected operations/domains to independent producer authorities, reuse the committed-history
+reader and make absence atomic over the complete root. No C11, lane claim or provider protocol
+product implementation before repair and another fresh independent review.
