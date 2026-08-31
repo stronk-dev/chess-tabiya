@@ -12771,3 +12771,21 @@ may claim unique `first lane 1`; landing is atomic and one-way. The first handof
 `make shared-resource-bootstrap-author-contract` passes 5/5. No checker, register, product schema,
 runtime, API, content, archive or protected-design byte changed. Fresh independent process review
 is required. Receipt: `planning/shared-resource-register-bootstrap/author-contract-2026-08-31.md`.
+
+## 2026-08-31 — Module registration fourth author repair
+
+**What changed:** repaired the third fresh return [[D2343]]–[[D2347]] without production bytes.
+D1865 and the author generator now share one explicit blocked-hint acceptance algebra. Exact
+projection/operation authority distinguishes position, edge, branch-pair and frozen-prefix grains;
+external inputs and cross-grain views are typed and every derivation join is checked. The five
+sealed pools declare subject/timing applicability, binding timing is their complete intersection
+with module policy, and module forms expand through `MODULE_FORM_IMAGE` so cards retain `list`.
+
+**Evidence:** regenerated requirements remain 117 evidence rows / 205 binding rows with
+`completionClaim: requirements_only`. `make module-registration-author-contract` passes 11/11,
+`make module-evidence-assembly` 13/13 and `make module-registration-fourth-author-repair` 5/5.
+
+**Blocked/next:** no implementation is authorized. A fourth fresh independent buildability review
+must attack the repaired artifacts before acceptance; Guided Hint and all upstream sealed
+operations retain their existing blockers. Receipt:
+`planning/learner-modules/fourth-author-repair-2026-08-31.md`.

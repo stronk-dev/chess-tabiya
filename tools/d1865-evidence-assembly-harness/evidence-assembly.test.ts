@@ -2,169 +2,14 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-import { STRUCTURAL_FEATURE_KINDS } from "../../packages/schema/src/drill-pack/types.js";
 import {
-  AVOIDANCE_EVENT_PROJECTION_IDS,
   PRIMARY_EVIDENCE_MANIFEST,
   SEMANTIC_WAVE_EVENT_PROJECTION_IDS,
-  STRUCTURAL_EVENT_PROJECTION_IDS,
-  TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS,
-  TRANSITION_EVENT_PROJECTION_IDS,
-  TRANSITION_GEOMETRY_EVENT_FAMILIES,
 } from "../../packages/runtime/src/evidence-catalog.js";
 import { AUTHOR_MODULE_ACCEPTS } from "../d2120-module-registration-author-contract/module-plan-fixture.js";
 
-const structuralEvents = STRUCTURAL_EVENT_PROJECTION_IDS.filter((id) => ![
-  "rules.structural.event.piece_count",
-  "rules.structural.event.direct_attack_count",
-  "rules.structural.event.line_blockers",
-].includes(id));
-const transitionGeometry = TRANSITION_GEOMETRY_EVENT_FAMILIES.map((family) => `rules.transition.event.${family}`);
-const transitionRules = TRANSITION_EVENT_PROJECTION_IDS.filter((id) =>
-  !transitionGeometry.includes(id) && id !== "rules.transition.event.clock_reset");
-const avoidance = [
-  ...AVOIDANCE_EVENT_PROJECTION_IDS.filter((id) => ![
-    "derived.semantic_avoidance.piece_count",
-    "derived.semantic_avoidance.direct_attack_count",
-    "derived.semantic_avoidance.line_blockers",
-  ].includes(id)),
-  ...TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS,
-];
 const observedSemanticTactics = SEMANTIC_WAVE_EVENT_PROJECTION_IDS.filter((id) => id.startsWith("derived.tactic."));
-
-const POSTCOMMIT = Object.freeze([
-  ...structuralEvents,
-  ...transitionGeometry,
-  ...transitionRules,
-  "rules.castling.event.rights_lost",
-  "rules.tactic.event.double_attack",
-  "rules.tactic.event.check",
-  "rules.tactic.event.loose_piece",
-  "derived.exchange.capture_class",
-  "derived.exchange.trade_completed",
-  "rules.structural.event.pawn_islands",
-  ...avoidance,
-  "rules.pawn.event.dynamics",
-  "derived.pawn.event.transitions",
-  "rules.king.event.zone_state",
-  "derived.king.captured_zone_defender",
-  "derived.activity.event.open_file_occupancy",
-  "derived.grade.move_quality",
-  ...observedSemanticTactics,
-]);
-
-const SIGHT = Object.freeze([
-  ...STRUCTURAL_FEATURE_KINDS.filter((kind) => kind !== "pawn_count").map((kind) => `rules.structural.reading.${kind}`),
-  "rules.castling.reading.rights",
-  "rules.castling.reading.legality",
-  "rules.tactic.reading.rook_on_seventh",
-  "rules.square.reading.control",
-  "rules.pawn.reading.contacts",
-]);
-const BLUNDER = Object.freeze([
-  "rules.tactic.consequence.threat",
-  "rules.tactic.consequence.mate_in_one",
-  "rules.tactic.reading.loose_piece",
-]);
-const THREAT = Object.freeze([
-  ...BLUNDER,
-  "rules.tactic.reading.back_rank",
-  "rules.tactic.reading.trapped_piece",
-  "rules.tactic.reading.ray_classification",
-  "derived.tactic.defender_exposure",
-]);
-const STRUCTURE = Object.freeze([
-  "theory.shapes.firing",
-  "rules.structural.reading.named_structure",
-  "rules.structural.reading.space",
-  "rules.structural.reading.pawn_connectivity",
-  "rules.phase.reading",
-  "rules.endgame.reading",
-]);
-const THEORY = Object.freeze([
-  "pack.authored.claim",
-  "theory.shapes.firing",
-  "derived.explorer.population_summary",
-  "theory.opening.current_endpoint",
-]);
-const COMPARE = Object.freeze([
-  "derived.compare.structure_delta",
-  "derived.compare.eval_delta",
-  "derived.compare.engine_trajectory",
-  "derived.compare.piece_route",
-  "run.record.fork",
-  "run.record.consequence",
-  "run.record.objective_transition",
-  "run.record.checkpoint_hit",
-]);
-const REVIEW = Object.freeze([
-  ...POSTCOMMIT,
-  "rules.pivotal.marker",
-  "rules.phase.reading",
-  "rules.endgame.reading",
-  "recorded.engine.eval",
-  "recorded.tablebase.result",
-  "live.stockfish.eval",
-  "live.stockfish.wdl",
-  "run.record.objective_transition",
-  "run.record.consequence",
-  "run.record.imported_result",
-]);
-const INSPECTOR = Object.freeze([
-  "rules.tactic.reading.loose_piece",
-  "rules.tactic.reading.ray_classification",
-  "rules.tactic.reading.rook_on_seventh",
-  "rules.tactic.reading.trapped_piece",
-  "rules.tactic.reading.back_rank",
-  "rules.tactic.reading.discovered_latency",
-  "rules.tactic.consequence.threat",
-  "rules.tactic.consequence.mate_in_one",
-  "rules.tactic.consequence.reply_breadth",
-  "rules.structural.reading.space",
-  "rules.structural.reading.pawn_connectivity",
-  "rules.phase.development",
-  "rules.castling.reading.rights",
-  "rules.castling.reading.legality",
-  "derived.tactic.discovered_executed",
-  "derived.tactic.promotion_pressure",
-  "rules.square.reading.control",
-  "rules.mobility.reading.piece_destinations",
-  "rules.pawn.reading.contacts",
-  "rules.pawn.reading.candidate_majority",
-  "derived.material.reading.role_signature",
-  "rules.king.reading.zone_state",
-  "live.stockfish.eval",
-  "live.stockfish.wdl",
-  "live.stockfish.pv",
-  "human.maia.policy",
-  "human.maia.candidate_wdl",
-  "human.explorer.population",
-  "live.syzygy.result",
-  "live.syzygy.category",
-  "live.syzygy.distance",
-  "recorded.engine.eval",
-  "recorded.tablebase.result",
-  "theory.shapes.firing",
-  "rules.phase.reading",
-  "rules.pivotal.marker",
-  "derived.compare.structure_delta",
-  "derived.compare.eval_delta",
-  "derived.story.rank",
-  "pack.authored.classifier",
-  ...observedSemanticTactics,
-]);
-
-const MODULE_ACCEPTS = Object.freeze({
-  sight_on_request: SIGHT,
-  blunder_prevention: BLUNDER,
-  threat_radar: THREAT,
-  postcommit_nudge: POSTCOMMIT,
-  structure_nudge: STRUCTURE,
-  theory_breadcrumb: THEORY,
-  compare_coach: COMPARE,
-  review_map: REVIEW,
-  full_inspector: INSPECTOR,
-});
+const MODULE_ACCEPTS = AUTHOR_MODULE_ACCEPTS;
 
 const ASSEMBLY_STAGE_BY_PRODUCER = Object.freeze({
   "rules.structural": "position_local",
@@ -224,6 +69,7 @@ describe("D1865 complete non-hint module assembly closure", () => {
       postcommit_nudge: 50,
       structure_nudge: 6,
       theory_breadcrumb: 4,
+      guided_hint: 0,
       compare_coach: 8,
       review_map: 60,
       full_inspector: 47,
@@ -377,6 +223,7 @@ describe("D1865 complete non-hint module assembly closure", () => {
       postcommit_nudge: ["evaluation", "fact", "threat"],
       structure_nudge: ["fact", "pattern", "plan", "theory"],
       theory_breadcrumb: ["fact", "pattern", "plan", "principle", "theory"],
+      guided_hint: [],
       compare_coach: ["evaluation", "fact", "move"],
       review_map: ["evaluation", "fact", "threat"],
       full_inspector: ["candidate_moves", "evaluation", "fact", "move", "pattern", "plan", "principal_variation", "theory", "threat"],

@@ -1,7 +1,7 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — RETURNED by third fresh independent review 2026-08-30 on
-  [[D2343]]–[[D2347]].** The repair rejects the returned generator's
+- **Status:** **draft — fourth author repair complete 2026-08-31 on
+  [[D2343]]–[[D2347]]; fourth fresh independent review required.** The repair rejects the prior generator's
   central premise: learner modules do not invoke 117 detector/provider functions. They consume
   projection-keyed sealed pools produced by the candidate packet, recorded semantic path, Review,
   catalogue and provider authorities. The generated artifacts are therefore digest-sealed
@@ -10,12 +10,13 @@
   are explicit; Guided Hint is an explicit D1639 owner blocker; and presentation bindings require
   real pair-specific adapters instead of fabricated ids. `make module-registration-author-contract`
   passes 11/11. Exact repair:
-  `planning/learner-modules/third-author-repair-2026-08-30.md`. The repaired artifact now makes its
-  own named assembly gate red, infers false per-projection grains, assigns one run-prefix source
-  input to edge and branch-pair joins, copies whole-module timing without an upstream-operation
-  applicability term, and drops the `list` half of every declared `card` form. Exact return:
-  `planning/learner-modules/third-fresh-independent-buildability-review-2026-08-30.md`;
-  `make module-registration-third-fresh-review` reproduces 5/5. No implementation is authorised. The
+  `planning/learner-modules/third-author-repair-2026-08-30.md`. The fourth repair now shares one
+  acceptance algebra with D1865, declares exact projection grains and lawful cross-grain views,
+  intersects module timing with sealed-operation applicability, and derives the complete form
+  image through `MODULE_FORM_IMAGE` without dropping `list` from cards. The maintained author and
+  assembly targets pass 11/11 and 13/13; `make module-registration-fourth-author-repair` passes
+  5/5. Exact receipt: `planning/learner-modules/fourth-author-repair-2026-08-31.md`. No
+  implementation is authorised before another fresh independent review. The
   [[D1870]]/[[D2030]] dependency image remains the owner-ruled measured 207-pair target,
   including requested-Sight `pawn_safe_square`. Prior
   amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt
@@ -168,6 +169,50 @@ names the exact future `module.* × projection` pair and stays
 Guided Hint is present as an empty acceptance key and explicit D1639 owner blocker. Its final rows
 must be set-equal to a non-empty measured-family × non-empty rung product. Zero rows is therefore a
 visible refusal, never a green Cartesian-product test.
+
+## Fourth author repair — one subject/timing/form authority per pair (2026-08-31)
+
+This section supersedes only the five returned requirement-artifact seams [[D2343]]–[[D2347]]. It
+does not authorize production implementation or weaken any upstream dependency.
+
+1. **One acceptance algebra.** The D1865 assembly harness imports `AUTHOR_MODULE_ACCEPTS`
+   directly. It no longer maintains a second nine-key copy. The explicit empty `guided_hint` key
+   is therefore present in both authorities, remains blocked by D1639, contributes zero rows and
+   cannot disappear in a falsely green non-hint census.
+2. **Exact subject authority.** Common sealed stages declare only their intrinsic grain. Every
+   `position_or_edge_local` and `derived_after_inputs` projection must have an exact
+   `AUTHOR_PROJECTION_SUBJECT_OVERRIDES` row; absence is a generator error. The four join rules are
+   `same_position`, `same_edge_context`, `declared_branch_pair` and `same_frozen_prefix`.
+   `derived.material.reading.role_signature@1` is position-grained,
+   `derived.grade.move_quality@1` is edge-grained, compare rows are branch-pair-grained and story
+   rank is frozen-prefix-grained. Producer family names are not consulted.
+3. **Grain-specific sealed views.** Every requirement row publishes its complete `subjectViews`.
+   The primary view is identity-sealed by its acquisition contract. A secondary view names the
+   explicit `projection_between_grains@1` adapter and the sealed acquisition that owns the target
+   grain. External inputs are keyed by `(projection, subjectKind)`, so `run.record.move@1` has
+   separate edge and branch-pair views rather than one fictional run-prefix node. Generation walks
+   every derivation edge and refuses unless the input has a view exactly matching the consumer's
+   join grain.
+4. **Operation applicability participates in timing.** Each of the five upstream source contracts
+   declares non-empty `subjectKinds` and `timings`. A module binding receives the complete
+   non-empty intersection of module policy and its exact acquisition contract. Recorded semantic
+   path evidence therefore reaches `threat_radar × defender_exposure` only at `postcommit`, never
+   its `precommit` arm. An empty intersection is an author failure, not an unavailable-at-runtime
+   binding.
+5. **Forms come from the module vocabulary.** `AUTHOR_MODULE_POLICIES.forms` contains
+   `ModuleForm` values, not copied `EvidenceForm` values. The generator expands them through the
+   shipped `MODULE_FORM_IMAGE`, intersects the projection image, and records that entire set as
+   both `forms` and `presentationRequirement.requiredForms`. The future exact pair adapter must be
+   set-equal to that requirement. Thus `card` retains both `panel` and `list` whenever the
+   projection carries both; a convenient subset cannot satisfy the artifact.
+
+Both digest-sealed artifacts were regenerated at the unchanged honest boundary: 117 evidence
+requirements, 205 non-hint binding requirements, every row still
+`awaiting_upstream_sealed_operation`/`blocked_dependencies`, and `completionClaim` still
+`requirements_only`. `make module-registration-author-contract` passes 11/11,
+`make module-evidence-assembly` passes 13/13 and
+`make module-registration-fourth-author-repair` passes 5/5. These are author/buildability facts,
+not evidence that a module reaches production.
 
 ## Summary
 
@@ -1616,11 +1661,14 @@ deleting one disclosure id from the family×rung product fails;
 
 | row | author repair; fresh review still required |
 |---|---|
-| [[D2343]] | reconcile the explicit blocked Guided Hint key with the D1865 assembly authority; both maintained targets must pass |
-| [[D2344]] | derive exact projection/operation subject grain instead of inferring it from producer family |
-| [[D2345]] | make every external DAG input's grain compatible with each edge, branch-pair or run-prefix consumer |
-| [[D2346]] | add upstream sealed-operation timing/subject applicability and derive each pair's exact timing intersection |
-| [[D2347]] | derive complete forms through `MODULE_FORM_IMAGE` and the exact pair adapter; `card` must not silently lose `list` |
+| [[D2343]] | **author-repaired:** D1865 imports the single explicit blocked-hint algebra; maintained targets pass 13/13 and 11/11 |
+| [[D2344]] | **author-repaired:** exact projection exceptions plus sealed-stage profiles produce position, edge, branch-pair and prefix grains without producer-family inference |
+| [[D2345]] | **author-repaired:** grain-keyed external inputs and typed `projection_between_grains@1` views make every derivation join exact |
+| [[D2346]] | **author-repaired:** every sealed operation declares timing/subject applicability and pair timing is the complete non-empty intersection |
+| [[D2347]] | **author-repaired:** module forms expand through `MODULE_FORM_IMAGE`; exact-pair requirements retain the complete form set including `card`'s `list` arm |
+
+All five remain open until a fourth fresh independent reviewer attacks the regenerated artifacts;
+author repair is not acceptance.
 | [[D2164]] | module policy bytes derive from one author table and sessions derive from live workflow policies |
 | [[D2165]] | direct detector call plan withdrawn; five complete sealed-pool operation requirements are explicit dependencies |
 | [[D2166]] | position/edge/branch-pair/run-prefix grains and their distinct join rules replace universal edge/same-subject |
@@ -1689,6 +1737,12 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   input-equivalence clause inside the surface built to satisfy it.
 
 ## Changelog
+
+- 2026-08-31 (fourth author repair): repaired [[D2343]]–[[D2347]] with one D1865/author
+  acceptance algebra, exact projection grains and lawful cross-grain views, sealed-operation
+  timing/subject applicability, and complete module-form expansion. Regenerated 117/205
+  requirements; author 11/11, assembly 13/13 and fourth-return 5/5 green. Fresh review still
+  required; no production implementation authorised.
 
 - 2026-08-30 (third fresh independent return): returned on [[D2343]]–[[D2347]]. The repaired
   author authority disagrees with the still-named D1865 assembly gate on Guided Hint; subject

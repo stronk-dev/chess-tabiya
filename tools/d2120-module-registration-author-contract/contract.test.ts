@@ -20,10 +20,14 @@ describe("module-registration sealed-pool author repair", () => {
     expect(sealed).toBe(digest(body));
     expect(bindings.schemaVersion).toBe(2);
     expect(bindings.population).toBe(205);
+    const requirementById = new Map(execution.rows.map((row:any) => [row.projection.id, row]));
+    const sourceById = new Map(execution.sourceContracts.map((row:any) => [row.id, row]));
     for (const row of bindings.rows) {
       const module = row.consumer.id.slice("module.".length);
       const policy = AUTHOR_MODULE_POLICIES[module as keyof typeof AUTHOR_MODULE_POLICIES];
-      expect(row.timing).toEqual(policy.timings);
+      const requirement = requirementById.get(row.projection.id) as any;
+      const source = sourceById.get(requirement.acquisition) as any;
+      expect(row.timing).toEqual(policy.timings.filter((timing) => source.timings.includes(timing)));
       expect(row.roles).toEqual(policy.roles);
       expect(row.budget.maxFacts).toBe(policy.maxFacts);
       expect(row.sessions).toEqual(WORKFLOW_CONTEXT_POLICIES.filter((context) => context.moduleCeiling.includes(module as never)).map((context) => context.id));
@@ -46,26 +50,37 @@ describe("module-registration sealed-pool author repair", () => {
 
   it("D2166 gives derived requirements explicit position, edge, branch-pair or run-prefix joins", () => {
     const derived = execution.rows.filter((row:any) => row.derivation !== null);
-    expect(new Set(derived.map((row:any) => row.subjectKind))).toEqual(new Set(["edge", "branch_pair", "run_prefix"]));
+    expect(new Set(derived.map((row:any) => row.subjectKind))).toEqual(new Set(["position", "edge", "branch_pair", "run_prefix"]));
+    expect(derived.find((row:any) => row.projection.id === "derived.material.reading.role_signature").subjectKind).toBe("position");
+    expect(derived.find((row:any) => row.projection.id === "derived.grade.move_quality").subjectKind).toBe("edge");
     expect(derived.find((row:any) => row.projection.id === "derived.story.rank").subjectKind).toBe("run_prefix");
     expect(derived.find((row:any) => row.projection.id === "derived.compare.eval_delta").subjectKind).toBe("branch_pair");
     for (const row of derived) {
       expect(row.derivation).not.toHaveProperty("sameSubject");
       expect(row.derivation.join.subjectKind).toBe(row.subjectKind);
-      expect(["same_edge_context", "declared_branch_pair", "same_frozen_prefix"]).toContain(row.derivation.join.rule);
+      expect(["same_position", "same_edge_context", "declared_branch_pair", "same_frozen_prefix"]).toContain(row.derivation.join.rule);
     }
   });
 
-  it("D2167 declares exactly the nine external DAG inputs", () => {
-    expect(execution.sourceInputs.map((row:any) => key(row.projection)).sort()).toEqual([
-      "derived.story.eval_shift@1", "derived.story.last_level@1", "rules.exchange.predicate.legal_exchange@1",
-      "rules.square.event.control@1", "rules.structural.predicate.direct_attack_count@1",
-      "rules.structural.predicate.line_blockers@1", "rules.structural.predicate.passed_pawn@1",
-      "rules.tactic.reading.defender_duty_set@1", "run.record.move@1",
+  it("D2167 declares every external DAG input at each required subject grain", () => {
+    expect(execution.sourceInputs.map((row:any) => `${key(row.projection)}:${row.subjectKind}`).sort()).toEqual([
+      "derived.story.eval_shift@1:run_prefix", "derived.story.last_level@1:run_prefix",
+      "rules.exchange.predicate.legal_exchange@1:edge", "rules.square.event.control@1:edge",
+      "rules.structural.predicate.direct_attack_count@1:edge",
+      "rules.structural.predicate.line_blockers@1:edge", "rules.structural.predicate.passed_pawn@1:edge",
+      "rules.tactic.reading.defender_duty_set@1:edge", "run.record.move@1:branch_pair",
+      "run.record.move@1:edge",
     ]);
-    const graph = new Set([...execution.rows.map((row:any) => key(row.projection)), ...execution.sourceInputs.map((row:any) => key(row.projection))]);
-    const inputs = execution.rows.flatMap((row:any) => row.derivation?.inputs?.flat?.() ?? row.derivation?.alternatives?.flat?.() ?? []);
-    expect(inputs.every((input:any) => graph.has(key(input)))).toBe(true);
+    const rows = new Map(execution.rows.map((row:any) => [key(row.projection), row]));
+    const sourceViews = new Set(execution.sourceInputs.map((row:any) => `${key(row.projection)}:${row.subjectKind}`));
+    for (const row of execution.rows) {
+      const inputs = row.derivation?.inputs?.flat?.() ?? row.derivation?.alternatives?.flat?.() ?? [];
+      for (const input of inputs) {
+        const planned = rows.get(key(input)) as any;
+        expect(planned?.subjectViews.some((view:any) => view.subjectKind === row.subjectKind)
+          ?? sourceViews.has(`${key(input)}:${row.subjectKind}`)).toBe(true);
+      }
+    }
   });
 
   it("D2168 records Guided Hint as an explicit non-vacuous owner blocker", () => {

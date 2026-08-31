@@ -40,6 +40,7 @@
         "position"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -51,12 +52,16 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.blunder_prevention@1\u0000rules.tactic.consequence.mate_in_one@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -85,6 +90,7 @@
         "position"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -96,12 +102,16 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.blunder_prevention@1\u0000rules.tactic.consequence.threat@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -130,6 +140,7 @@
         "position"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -142,12 +153,16 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.blunder_prevention@1\u0000rules.tactic.reading.loose_piece@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -166,8 +181,6 @@
         "version": 1
       },
       "timing": [
-        "checkpoint",
-        "attempt_end",
         "review",
         "analysis"
       ],
@@ -185,6 +198,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -196,12 +210,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.compare_coach@1\u0000derived.compare.engine_trajectory@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "compare.engine_trajectory@1\u0000derived.compare.engine_trajectory@1",
@@ -214,6 +232,7 @@
           }
         ],
         "componentFormCapabilityKnown": [
+          "list",
           "panel"
         ]
       }
@@ -232,8 +251,6 @@
         "version": 1
       },
       "timing": [
-        "checkpoint",
-        "attempt_end",
         "review",
         "analysis"
       ],
@@ -252,6 +269,7 @@
       ],
       "forms": [
         "sentence",
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -263,12 +281,17 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 2
+        "maxForms": 3
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.compare_coach@1\u0000derived.compare.eval_delta@1",
+        "requiredForms": [
+          "sentence",
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.voice_compare@1\u0000derived.compare.eval_delta@1",
@@ -298,8 +321,6 @@
         "version": 1
       },
       "timing": [
-        "checkpoint",
-        "attempt_end",
         "review",
         "analysis"
       ],
@@ -317,6 +338,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -329,12 +351,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.compare_coach@1\u0000derived.compare.piece_route@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "compare.structure_strip@1\u0000derived.compare.piece_route@1",
@@ -347,6 +373,7 @@
           }
         ],
         "componentFormCapabilityKnown": [
+          "list",
           "panel"
         ]
       }
@@ -365,8 +392,6 @@
         "version": 1
       },
       "timing": [
-        "checkpoint",
-        "attempt_end",
         "review",
         "analysis"
       ],
@@ -385,6 +410,7 @@
       ],
       "forms": [
         "sentence",
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -396,12 +422,17 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 2
+        "maxForms": 3
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.compare_coach@1\u0000derived.compare.structure_delta@1",
+        "requiredForms": [
+          "sentence",
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "compare.structure_strip@1\u0000derived.compare.structure_delta@1",
@@ -423,6 +454,7 @@
           }
         ],
         "componentFormCapabilityKnown": [
+          "list",
           "panel",
           "sentence"
         ]
@@ -479,6 +511,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.compare_coach@1\u0000run.record.checkpoint_hit@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "compare.structure_strip@1\u0000run.record.checkpoint_hit@1",
@@ -556,6 +592,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.compare_coach@1\u0000run.record.consequence@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -594,6 +634,7 @@
       ],
       "forms": [
         "sentence",
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -605,12 +646,17 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 2
+        "maxForms": 3
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.compare_coach@1\u0000run.record.fork@1",
+        "requiredForms": [
+          "sentence",
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.voice_compare@1\u0000run.record.fork@1",
@@ -677,6 +723,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.compare_coach@1\u0000run.record.objective_transition@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "compare.structure_strip@1\u0000run.record.objective_transition@1",
@@ -750,6 +800,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000derived.compare.eval_delta@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.voice_compare@1\u0000derived.compare.eval_delta@1",
@@ -812,6 +866,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000derived.compare.structure_delta@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "compare.structure_strip@1\u0000derived.compare.structure_delta@1",
@@ -887,6 +945,12 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000derived.material.reading.role_signature@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -939,6 +1003,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000derived.story.rank@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -991,6 +1058,11 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000derived.tactic.attraction_observed@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -1043,6 +1115,11 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000derived.tactic.check_zwischenzug_observed@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -1095,6 +1172,11 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000derived.tactic.deflection_observed@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -1149,6 +1231,11 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000derived.tactic.discovered_executed@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -1201,6 +1288,11 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000derived.tactic.interference_observed@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -1253,6 +1345,11 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000derived.tactic.line_blocker_clearance_observed@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -1305,6 +1402,11 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000derived.tactic.overload_exploitation_observed@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -1356,6 +1458,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000derived.tactic.promotion_pressure@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -1408,6 +1514,11 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000derived.tactic.square_clearance_observed@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -1459,6 +1570,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000human.explorer.population@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "inspector.corpus@1\u0000human.explorer.population@1",
@@ -1521,6 +1635,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000human.maia.candidate_wdl@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -1571,6 +1688,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000human.maia.policy@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "inspector.human_split@1\u0000human.maia.policy@1",
@@ -1633,6 +1753,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000live.stockfish.eval@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "runtime.evidence_ref@1\u0000live.stockfish.eval@1",
@@ -1695,6 +1818,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000live.stockfish.pv@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "runtime.evidence_ref@1\u0000live.stockfish.pv@1",
@@ -1757,6 +1883,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000live.stockfish.wdl@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "runtime.evidence_ref@1\u0000live.stockfish.wdl@1",
@@ -1819,6 +1948,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000live.syzygy.category@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -1870,6 +2002,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000live.syzygy.distance@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -1921,6 +2056,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000live.syzygy.result@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "runtime.evidence_ref@1\u0000live.syzygy.result@1",
@@ -1983,6 +2121,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000recorded.engine.eval@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.recorded_reading@1\u0000recorded.engine.eval@1",
@@ -2046,6 +2188,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000recorded.tablebase.result@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.recorded_reading@1\u0000recorded.tablebase.result@1",
@@ -2107,6 +2253,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.castling.reading.legality@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -2157,6 +2306,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.castling.reading.rights@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -2210,6 +2362,12 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.king.reading.zone_state@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -2263,6 +2421,12 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.mobility.reading.piece_destinations@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -2316,6 +2480,12 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.pawn.reading.candidate_majority@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -2369,6 +2539,12 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.pawn.reading.contacts@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -2421,6 +2597,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.phase.development@1",
+        "requiredForms": [
+          "panel",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -2472,6 +2652,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.phase.reading@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.deterministic@1\u0000rules.phase.reading@1",
@@ -2550,6 +2734,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.pivotal.marker@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.pivotal_marker@1\u0000rules.pivotal.marker@1",
@@ -2669,6 +2857,12 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.square.reading.control@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -2721,6 +2915,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.structural.reading.pawn_connectivity@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -2773,6 +2971,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.structural.reading.space@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -2823,6 +3025,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.tactic.consequence.mate_in_one@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -2873,6 +3078,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.tactic.consequence.reply_breadth@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -2923,6 +3131,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.tactic.consequence.threat@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -2977,6 +3188,12 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.tactic.reading.back_rank@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3032,6 +3249,12 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.tactic.reading.discovered_latency@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3083,6 +3306,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.tactic.reading.loose_piece@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3137,6 +3363,11 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.tactic.reading.ray_classification@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3190,6 +3421,11 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.tactic.reading.rook_on_seventh@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3244,6 +3480,12 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000rules.tactic.reading.trapped_piece@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3297,6 +3539,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000theory.shapes.firing@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.voice_story@1\u0000theory.shapes.firing@1",
@@ -3363,6 +3609,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows",
@@ -3377,12 +3624,19 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.activity.event.open_file_occupancy@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3417,6 +3671,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -3428,12 +3683,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.exchange.capture_class@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3468,6 +3727,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -3479,12 +3739,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.exchange.trade_completed@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3537,6 +3801,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.grade.move_quality@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3571,6 +3839,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows",
@@ -3585,12 +3854,19 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.king.captured_zone_defender@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3625,6 +3901,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows",
@@ -3639,12 +3916,19 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.pawn.event.transitions@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3679,6 +3963,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -3690,12 +3975,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.backward_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3730,6 +4019,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -3741,12 +4031,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.doubled_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3781,6 +4075,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -3792,12 +4087,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.half_open_file@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3832,6 +4131,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -3843,12 +4143,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.isolated_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3883,6 +4187,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -3894,12 +4199,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.king_opposition@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3934,6 +4243,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -3945,12 +4255,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.king_zone@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -3985,6 +4299,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -3996,12 +4311,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.loose_piece@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4036,6 +4355,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -4047,12 +4367,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.open_file@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4087,6 +4411,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -4098,12 +4423,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.passed_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4138,6 +4467,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -4149,12 +4479,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.pawn_islands@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4189,6 +4523,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -4202,12 +4537,18 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.tactic.attraction_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4242,6 +4583,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -4255,12 +4597,18 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.tactic.check_zwischenzug_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4295,6 +4643,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -4308,12 +4657,18 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.tactic.deflection_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4348,6 +4703,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -4361,12 +4717,18 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.tactic.interference_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4401,6 +4763,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -4414,12 +4777,18 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.tactic.line_blocker_clearance_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4454,6 +4823,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -4467,12 +4837,18 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.tactic.overload_exploitation_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4507,6 +4883,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -4520,12 +4897,18 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.tactic.square_clearance_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4560,6 +4943,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -4571,12 +4955,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.castling.event.rights_lost@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4611,6 +4999,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows",
@@ -4625,12 +5014,19 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.king.event.zone_state@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4665,6 +5061,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows",
@@ -4679,12 +5076,19 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.pawn.event.dynamics@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4719,6 +5123,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -4730,12 +5135,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.structural.event.backward_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4770,6 +5179,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -4781,12 +5191,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.structural.event.doubled_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4821,6 +5235,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -4832,12 +5247,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.structural.event.half_open_file@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4872,6 +5291,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -4883,12 +5303,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.structural.event.isolated_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4923,6 +5347,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -4934,12 +5359,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.structural.event.king_opposition@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -4974,6 +5403,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -4985,12 +5415,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.structural.event.king_zone@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5025,6 +5459,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5036,12 +5471,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.structural.event.open_file@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5076,6 +5515,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5087,12 +5527,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.structural.event.passed_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5127,6 +5571,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5138,12 +5583,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.structural.event.pawn_islands@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5178,6 +5627,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5189,12 +5639,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.tactic.event.check@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5229,6 +5683,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5240,12 +5695,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.tactic.event.double_attack@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5280,6 +5739,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5292,12 +5752,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.tactic.event.loose_piece@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5332,6 +5796,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5343,12 +5808,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.transition.event.capture@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5383,6 +5852,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5394,12 +5864,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.transition.event.castled@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5434,6 +5908,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5445,12 +5920,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.transition.event.checkmate@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5485,6 +5964,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5496,12 +5976,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.transition.event.defended_duty@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5536,6 +6020,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5547,12 +6032,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.transition.event.developed@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5587,6 +6076,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5598,12 +6088,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.transition.event.last_of_role@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5638,6 +6132,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5649,12 +6144,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.transition.event.occupied_attack@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5689,6 +6188,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5700,12 +6200,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.transition.event.occupied_defence@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5740,6 +6244,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5751,12 +6256,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.transition.event.pawn_contact@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5791,6 +6300,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5802,12 +6312,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.transition.event.piece_escape@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5842,6 +6356,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5853,12 +6368,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.transition.event.promotion@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5893,6 +6412,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -5904,12 +6424,16 @@
       },
       "budget": {
         "maxFacts": 2,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000rules.transition.event.slider_ray@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -5946,6 +6470,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows",
@@ -5960,12 +6485,19 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.activity.event.open_file_occupancy@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6002,6 +6534,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -6013,12 +6546,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.exchange.capture_class@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6055,6 +6592,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -6066,12 +6604,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.exchange.trade_completed@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6126,6 +6668,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.grade.move_quality@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6162,6 +6708,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows",
@@ -6176,12 +6723,19 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.king.captured_zone_defender@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6218,6 +6772,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows",
@@ -6232,12 +6787,19 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.pawn.event.transitions@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6274,6 +6836,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -6285,12 +6848,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.semantic_avoidance.backward_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6327,6 +6894,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -6338,12 +6906,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.semantic_avoidance.doubled_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6380,6 +6952,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -6391,12 +6964,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.semantic_avoidance.half_open_file@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6433,6 +7010,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -6444,12 +7022,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.semantic_avoidance.isolated_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6486,6 +7068,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -6497,12 +7080,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.semantic_avoidance.king_opposition@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6539,6 +7126,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -6550,12 +7138,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.semantic_avoidance.king_zone@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6592,6 +7184,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -6603,12 +7196,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.semantic_avoidance.loose_piece@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6645,6 +7242,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -6656,12 +7254,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.semantic_avoidance.open_file@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6698,6 +7300,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -6709,12 +7312,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.semantic_avoidance.passed_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6751,6 +7358,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -6762,12 +7370,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.semantic_avoidance.pawn_islands@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6804,6 +7416,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -6817,12 +7430,18 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.tactic.attraction_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6859,6 +7478,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -6872,12 +7492,18 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.tactic.check_zwischenzug_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6914,6 +7540,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -6927,12 +7554,18 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.tactic.deflection_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -6969,6 +7602,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -6982,12 +7616,18 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.tactic.interference_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -7024,6 +7664,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -7037,12 +7678,18 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.tactic.line_blocker_clearance_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -7079,6 +7726,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -7092,12 +7740,18 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.tactic.overload_exploitation_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -7134,6 +7788,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -7147,12 +7802,18 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.tactic.square_clearance_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -7206,6 +7867,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000live.stockfish.eval@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "runtime.evidence_ref@1\u0000live.stockfish.eval@1",
@@ -7270,6 +7934,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000live.stockfish.wdl@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "runtime.evidence_ref@1\u0000live.stockfish.wdl@1",
@@ -7335,6 +8002,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000recorded.engine.eval@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.recorded_reading@1\u0000recorded.engine.eval@1",
@@ -7401,6 +8072,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000recorded.tablebase.result@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.recorded_reading@1\u0000recorded.tablebase.result@1",
@@ -7448,6 +8123,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -7459,12 +8135,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.castling.event.rights_lost@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -7519,6 +8199,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.endgame.reading@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.deterministic@1\u0000rules.endgame.reading@1",
@@ -7592,6 +8276,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows",
@@ -7606,12 +8291,19 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.king.event.zone_state@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -7648,6 +8340,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows",
@@ -7662,12 +8355,19 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.pawn.event.dynamics@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -7722,6 +8422,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.phase.reading@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.deterministic@1\u0000rules.phase.reading@1",
@@ -7804,6 +8508,11 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.pivotal.marker@1",
+        "requiredForms": [
+          "timeline_marker",
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.pivotal_marker@1\u0000rules.pivotal.marker@1",
@@ -7907,6 +8616,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -7918,12 +8628,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.structural.event.backward_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -7960,6 +8674,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -7971,12 +8686,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.structural.event.doubled_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8013,6 +8732,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8024,12 +8744,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.structural.event.half_open_file@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8066,6 +8790,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8077,12 +8802,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.structural.event.isolated_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8119,6 +8848,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8130,12 +8860,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.structural.event.king_opposition@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8172,6 +8906,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8183,12 +8918,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.structural.event.king_zone@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8225,6 +8964,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8236,12 +8976,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.structural.event.open_file@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8278,6 +9022,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8289,12 +9034,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.structural.event.passed_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8331,6 +9080,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8342,12 +9092,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.structural.event.pawn_islands@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8384,6 +9138,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8395,12 +9150,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.tactic.event.check@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8437,6 +9196,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8448,12 +9208,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.tactic.event.double_attack@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8490,6 +9254,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8502,12 +9267,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.tactic.event.loose_piece@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8544,6 +9313,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8555,12 +9325,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.transition.event.capture@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8597,6 +9371,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8608,12 +9383,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.transition.event.castled@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8650,6 +9429,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8661,12 +9441,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.transition.event.checkmate@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8703,6 +9487,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8714,12 +9499,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.transition.event.defended_duty@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8756,6 +9545,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8767,12 +9557,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.transition.event.developed@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8809,6 +9603,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8820,12 +9615,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.transition.event.last_of_role@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8862,6 +9661,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8873,12 +9673,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.transition.event.occupied_attack@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8915,6 +9719,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8926,12 +9731,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.transition.event.occupied_defence@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -8968,6 +9777,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -8979,12 +9789,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.transition.event.pawn_contact@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -9021,6 +9835,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -9032,12 +9847,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.transition.event.piece_escape@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -9074,6 +9893,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -9085,12 +9905,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.transition.event.promotion@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -9127,6 +9951,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -9138,12 +9963,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000rules.transition.event.slider_ray@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -9199,6 +10028,11 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000run.record.consequence@1",
+        "requiredForms": [
+          "sentence",
+          "timeline_marker",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -9253,6 +10087,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000run.record.imported_result@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.voice_story@1\u0000run.record.imported_result@1",
@@ -9329,6 +10167,11 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000run.record.objective_transition@1",
+        "requiredForms": [
+          "sentence",
+          "timeline_marker",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "compare.structure_strip@1\u0000run.record.objective_transition@1",
@@ -9387,6 +10230,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -9398,12 +10242,16 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.castling.reading.legality@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -9439,6 +10287,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -9450,12 +10299,16 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.castling.reading.rights@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -9491,6 +10344,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows",
@@ -9505,12 +10359,19 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.pawn.reading.contacts@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -9546,6 +10407,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows",
@@ -9560,12 +10422,19 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.square.reading.control@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -9601,6 +10470,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -9614,12 +10484,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.backward_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.backward_pawn@1",
@@ -9643,6 +10519,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -9678,6 +10555,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -9691,12 +10569,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.bishop_on_shade@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.bishop_on_shade@1",
@@ -9720,6 +10604,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -9755,6 +10640,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -9768,12 +10654,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.direct_attack_count@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.direct_attack_count@1",
@@ -9797,6 +10689,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -9832,6 +10725,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -9845,12 +10739,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.doubled_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.doubled_pawn@1",
@@ -9874,6 +10774,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -9909,6 +10810,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -9922,12 +10824,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.half_open_file@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.half_open_file@1",
@@ -9951,6 +10859,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -9986,6 +10895,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -9999,12 +10909,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.isolated_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.isolated_pawn@1",
@@ -10028,6 +10944,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -10063,6 +10980,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -10076,12 +10994,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.king_opposition@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.king_opposition@1",
@@ -10105,6 +11029,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -10140,6 +11065,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -10153,12 +11079,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.king_zone@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.king_zone@1",
@@ -10182,6 +11114,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -10217,6 +11150,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -10230,12 +11164,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.line_blockers@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.line_blockers@1",
@@ -10259,6 +11199,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -10295,6 +11236,7 @@
       ],
       "forms": [
         "sentence",
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -10308,12 +11250,19 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.named_structure@1",
+        "requiredForms": [
+          "sentence",
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -10349,6 +11298,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -10362,12 +11312,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.open_file@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.open_file@1",
@@ -10391,6 +11347,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -10426,6 +11383,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -10439,12 +11397,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.outpost@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.outpost@1",
@@ -10468,6 +11432,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -10503,6 +11468,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -10516,12 +11482,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.passed_pawn@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.passed_pawn@1",
@@ -10545,6 +11517,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -10580,6 +11553,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -10593,12 +11567,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.pawn_safe_square@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.pawn_safe_square@1",
@@ -10622,6 +11602,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -10657,6 +11638,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -10670,12 +11652,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.piece_count@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.piece_count@1",
@@ -10699,6 +11687,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -10734,6 +11723,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -10747,12 +11737,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.piece_distance@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.piece_distance@1",
@@ -10776,6 +11772,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -10811,6 +11808,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -10824,12 +11822,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.structural.reading.piece_reach_count@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "board.selected_square_sight@1\u0000rules.structural.reading.piece_reach_count@1",
@@ -10853,6 +11857,7 @@
         "componentFormCapabilityKnown": [
           "lit_squares",
           "piece_halo",
+          "list",
           "panel"
         ]
       }
@@ -10888,6 +11893,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -10902,12 +11908,18 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.sight_on_request@1\u0000rules.tactic.reading.rook_on_seventh@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -10959,6 +11971,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.structure_nudge@1\u0000rules.endgame.reading@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.deterministic@1\u0000rules.endgame.reading@1",
@@ -11046,6 +12061,9 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.structure_nudge@1\u0000rules.phase.reading@1",
+        "requiredForms": [
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.deterministic@1\u0000rules.phase.reading@1",
@@ -11105,6 +12123,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -11116,12 +12135,16 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.structure_nudge@1\u0000rules.structural.reading.named_structure@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -11156,6 +12179,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -11168,12 +12192,16 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.structure_nudge@1\u0000rules.structural.reading.pawn_connectivity@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -11208,6 +12236,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -11220,12 +12249,16 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.structure_nudge@1\u0000rules.structural.reading.space@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -11280,6 +12313,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.structure_nudge@1\u0000theory.shapes.firing@1",
+        "requiredForms": [
+          "panel",
+          "timeline_marker"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.voice_story@1\u0000theory.shapes.firing@1",
@@ -11368,6 +12405,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.theory_breadcrumb@1\u0000pack.authored.claim@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.deterministic@1\u0000pack.authored.claim@1",
@@ -11430,6 +12471,7 @@
       ],
       "forms": [
         "sentence",
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -11442,12 +12484,17 @@
       },
       "budget": {
         "maxFacts": 1,
-        "maxForms": 2
+        "maxForms": 3
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.theory_breadcrumb@1\u0000theory.opening.current_endpoint@1",
+        "requiredForms": [
+          "sentence",
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -11502,6 +12549,10 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.theory_breadcrumb@1\u0000theory.shapes.firing@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
         "reusableBaseAdapters": [
           {
             "key": "guidance.voice_story@1\u0000theory.shapes.firing@1",
@@ -11552,7 +12603,6 @@
         "version": 1
       },
       "timing": [
-        "precommit",
         "postcommit"
       ],
       "roles": [
@@ -11569,6 +12619,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows"
@@ -11582,12 +12633,18 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.threat_radar@1\u0000derived.tactic.defender_exposure@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -11623,6 +12680,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -11634,12 +12692,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.threat_radar@1\u0000rules.tactic.consequence.mate_in_one@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -11675,6 +12737,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -11686,12 +12749,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.threat_radar@1\u0000rules.tactic.consequence.threat@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -11727,6 +12794,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows",
@@ -11742,12 +12810,19 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.threat_radar@1\u0000rules.tactic.reading.back_rank@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -11783,6 +12858,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel"
       ],
       "answerContent": [
@@ -11795,12 +12871,16 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 1
+        "maxForms": 2
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.threat_radar@1\u0000rules.tactic.reading.loose_piece@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -11836,6 +12916,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "piece_halo"
@@ -11851,12 +12932,18 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 3
+        "maxForms": 4
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.threat_radar@1\u0000rules.tactic.reading.ray_classification@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
@@ -11892,6 +12979,7 @@
         "campaign"
       ],
       "forms": [
+        "list",
         "panel",
         "lit_squares",
         "arrows",
@@ -11907,16 +12995,23 @@
       },
       "budget": {
         "maxFacts": 3,
-        "maxForms": 4
+        "maxForms": 5
       },
       "status": "blocked_dependencies",
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.threat_radar@1\u0000rules.tactic.reading.trapped_piece@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
       }
     }
   ],
-  "digest": "sha256:4600f3fa8bb3d4de3ed13bf43eb2b264b0cb9a03e9755b0226fb791a76c4bd68"
+  "digest": "sha256:0a1e3e8a003f5dc7595f7754242121cddd7659e16a9b9979b5988fced32331f9"
 }

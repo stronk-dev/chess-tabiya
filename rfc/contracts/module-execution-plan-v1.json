@@ -17,6 +17,19 @@
       "parse": "parseEvidencePayloadByProjection",
       "abstain": "CandidateEvidenceAbsence",
       "seal": "SealedCandidatePopulation",
+      "subjectKinds": [
+        "position",
+        "edge"
+      ],
+      "timings": [
+        "precommit",
+        "at_commit",
+        "postcommit",
+        "checkpoint",
+        "attempt_end",
+        "review",
+        "analysis"
+      ],
       "status": "awaiting_upstream_sealed_operation"
     },
     {
@@ -28,6 +41,19 @@
       "parse": "parseEvidencePayloadByProjection",
       "abstain": "RecordedPathAbsence",
       "seal": "SealedRecordedSemanticPath",
+      "subjectKinds": [
+        "position",
+        "edge",
+        "branch_pair",
+        "run_prefix"
+      ],
+      "timings": [
+        "postcommit",
+        "checkpoint",
+        "attempt_end",
+        "review",
+        "analysis"
+      ],
       "status": "awaiting_upstream_sealed_operation"
     },
     {
@@ -39,6 +65,16 @@
       "parse": "parseEvidencePayloadByProjection",
       "abstain": "ReviewEvidenceAbsence",
       "seal": "SealedReviewEvidencePacket",
+      "subjectKinds": [
+        "edge",
+        "branch_pair",
+        "run_prefix"
+      ],
+      "timings": [
+        "postcommit",
+        "review",
+        "analysis"
+      ],
       "status": "awaiting_upstream_sealed_operation"
     },
     {
@@ -50,6 +86,16 @@
       "parse": "parseEvidencePayloadByProjection",
       "abstain": "CatalogueEvidenceAbsence",
       "seal": "SealedCatalogueEvidencePacket",
+      "subjectKinds": [
+        "position"
+      ],
+      "timings": [
+        "postcommit",
+        "checkpoint",
+        "attempt_end",
+        "review",
+        "analysis"
+      ],
       "status": "awaiting_upstream_sealed_operation"
     },
     {
@@ -61,6 +107,18 @@
       "parse": "parseEvidencePayloadByProjection",
       "abstain": "ProviderEvidenceAbsence",
       "seal": "SealedProviderEvidencePacket",
+      "subjectKinds": [
+        "position",
+        "edge",
+        "run_prefix"
+      ],
+      "timings": [
+        "postcommit",
+        "checkpoint",
+        "attempt_end",
+        "review",
+        "analysis"
+      ],
       "status": "awaiting_upstream_sealed_operation"
     }
   ],
@@ -106,7 +164,7 @@
         "id": "rules.structural.predicate.direct_attack_count",
         "version": 1
       },
-      "subjectKind": "position",
+      "subjectKind": "edge",
       "acquisition": "candidate_population@1",
       "status": "awaiting_upstream_sealed_operation"
     },
@@ -115,7 +173,7 @@
         "id": "rules.structural.predicate.line_blockers",
         "version": 1
       },
-      "subjectKind": "position",
+      "subjectKind": "edge",
       "acquisition": "candidate_population@1",
       "status": "awaiting_upstream_sealed_operation"
     },
@@ -124,7 +182,7 @@
         "id": "rules.structural.predicate.passed_pawn",
         "version": 1
       },
-      "subjectKind": "position",
+      "subjectKind": "edge",
       "acquisition": "candidate_population@1",
       "status": "awaiting_upstream_sealed_operation"
     },
@@ -133,7 +191,7 @@
         "id": "rules.tactic.reading.defender_duty_set",
         "version": 1
       },
-      "subjectKind": "position",
+      "subjectKind": "edge",
       "acquisition": "candidate_population@1",
       "status": "awaiting_upstream_sealed_operation"
     },
@@ -142,7 +200,16 @@
         "id": "run.record.move",
         "version": 1
       },
-      "subjectKind": "run_prefix",
+      "subjectKind": "edge",
+      "acquisition": "recorded_semantic_path@1",
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "projection": {
+        "id": "run.record.move",
+        "version": 1
+      },
+      "subjectKind": "branch_pair",
       "acquisition": "recorded_semantic_path@1",
       "status": "awaiting_upstream_sealed_operation"
     }
@@ -171,6 +238,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "any",
@@ -213,6 +287,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "branch_pair",
+      "subjectViews": [
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "review_evidence_packet@1",
       "derivation": {
         "kind": "all",
@@ -247,6 +328,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "branch_pair",
+      "subjectViews": [
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "review_evidence_packet@1",
       "derivation": {
         "kind": "all",
@@ -281,6 +369,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "branch_pair",
+      "subjectViews": [
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "review_evidence_packet@1",
       "derivation": {
         "kind": "all",
@@ -315,6 +410,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "branch_pair",
+      "subjectViews": [
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "review_evidence_packet@1",
       "derivation": {
         "kind": "all",
@@ -413,6 +515,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -451,6 +560,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -488,7 +604,14 @@
         "version": 1
       },
       "stage": "derived_after_inputs",
-      "subjectKind": "run_prefix",
+      "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "review_evidence_packet@1",
       "derivation": {
         "kind": "all",
@@ -503,8 +626,8 @@
           }
         ],
         "join": {
-          "subjectKind": "run_prefix",
-          "rule": "same_frozen_prefix"
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
         }
       },
       "requiredOutput": {
@@ -527,6 +650,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -564,7 +694,14 @@
         "version": 1
       },
       "stage": "derived_after_inputs",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -575,8 +712,8 @@
           }
         ],
         "join": {
-          "subjectKind": "edge",
-          "rule": "same_edge_context"
+          "subjectKind": "position",
+          "rule": "same_position"
         }
       },
       "requiredOutput": {
@@ -599,6 +736,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -633,6 +777,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -667,6 +818,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -701,6 +859,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -735,6 +900,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -769,6 +941,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -803,6 +982,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -837,6 +1023,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -871,6 +1064,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -905,6 +1105,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -939,6 +1146,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": {
         "kind": "all",
@@ -973,6 +1187,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "run_prefix",
+      "subjectViews": [
+        {
+          "subjectKind": "run_prefix",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "review_evidence_packet@1",
       "derivation": {
         "kind": "all",
@@ -1031,6 +1252,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "any",
@@ -1085,6 +1313,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
@@ -1131,6 +1366,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
@@ -1169,6 +1411,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
@@ -1215,6 +1464,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
@@ -1253,6 +1509,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
@@ -1295,6 +1558,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
@@ -1333,6 +1603,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
@@ -1379,6 +1656,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
@@ -1421,6 +1705,13 @@
       },
       "stage": "derived_after_inputs",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "all",
@@ -1455,6 +1746,13 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "provider_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "provider_evidence_packet@1",
       "derivation": null,
       "requiredOutput": {
@@ -1477,6 +1775,13 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "provider_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "provider_evidence_packet@1",
       "derivation": null,
       "requiredOutput": {
@@ -1499,6 +1804,13 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "provider_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "provider_evidence_packet@1",
       "derivation": null,
       "requiredOutput": {
@@ -1521,6 +1833,23 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "provider_evidence_packet@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "edge",
+          "acquisition": "provider_evidence_packet@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "provider_evidence_packet@1",
       "derivation": null,
       "requiredOutput": {
@@ -1543,6 +1872,13 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "provider_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "provider_evidence_packet@1",
       "derivation": null,
       "requiredOutput": {
@@ -1565,6 +1901,13 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "provider_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "provider_evidence_packet@1",
       "derivation": null,
       "requiredOutput": {
@@ -1587,6 +1930,13 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "provider_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "provider_evidence_packet@1",
       "derivation": null,
       "requiredOutput": {
@@ -1609,6 +1959,13 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "provider_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "provider_evidence_packet@1",
       "derivation": null,
       "requiredOutput": {
@@ -1631,6 +1988,13 @@
       },
       "stage": "provider_optional",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "provider_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "provider_evidence_packet@1",
       "derivation": null,
       "requiredOutput": {
@@ -1653,6 +2017,13 @@
       },
       "stage": "pack_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "catalogue_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "catalogue_evidence_packet@1",
       "derivation": null,
       "requiredOutput": {
@@ -1674,7 +2045,19 @@
         "version": 1
       },
       "stage": "recorded_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "edge",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": null,
       "requiredOutput": {
@@ -1696,7 +2079,14 @@
         "version": 1
       },
       "stage": "recorded_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": null,
       "requiredOutput": {
@@ -1719,6 +2109,13 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -1740,7 +2137,14 @@
         "version": 1
       },
       "stage": "position_or_edge_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -1762,7 +2166,14 @@
         "version": 1
       },
       "stage": "position_or_edge_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -1785,6 +2196,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "run_prefix",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -1807,6 +2230,13 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -1828,7 +2258,19 @@
         "version": 1
       },
       "stage": "position_or_edge_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -1850,7 +2292,14 @@
         "version": 1
       },
       "stage": "position_or_edge_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -1873,6 +2322,13 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -1894,7 +2350,14 @@
         "version": 1
       },
       "stage": "position_or_edge_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -1916,7 +2379,19 @@
         "version": 1
       },
       "stage": "position_or_edge_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -1939,6 +2414,13 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -1961,6 +2443,13 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -1983,6 +2472,13 @@
       },
       "stage": "run_local",
       "subjectKind": "run_prefix",
+      "subjectViews": [
+        {
+          "subjectKind": "run_prefix",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": null,
       "requiredOutput": {
@@ -2004,7 +2500,14 @@
         "version": 1
       },
       "stage": "position_or_edge_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2026,7 +2529,14 @@
         "version": 1
       },
       "stage": "position_local",
-      "subjectKind": "position",
+      "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2048,7 +2558,14 @@
         "version": 1
       },
       "stage": "position_local",
-      "subjectKind": "position",
+      "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2070,7 +2587,14 @@
         "version": 1
       },
       "stage": "position_local",
-      "subjectKind": "position",
+      "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2092,7 +2616,14 @@
         "version": 1
       },
       "stage": "position_local",
-      "subjectKind": "position",
+      "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2114,7 +2645,14 @@
         "version": 1
       },
       "stage": "position_local",
-      "subjectKind": "position",
+      "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2136,7 +2674,14 @@
         "version": 1
       },
       "stage": "position_local",
-      "subjectKind": "position",
+      "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2158,7 +2703,14 @@
         "version": 1
       },
       "stage": "position_local",
-      "subjectKind": "position",
+      "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2180,7 +2732,14 @@
         "version": 1
       },
       "stage": "position_local",
-      "subjectKind": "position",
+      "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2202,7 +2761,14 @@
         "version": 1
       },
       "stage": "position_local",
-      "subjectKind": "position",
+      "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2225,6 +2791,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2247,6 +2825,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2269,6 +2859,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2291,6 +2893,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2313,6 +2927,23 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2335,6 +2966,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2357,6 +3000,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2379,6 +3034,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2401,6 +3068,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2423,6 +3102,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2445,6 +3136,23 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2467,6 +3175,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2489,6 +3209,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2511,6 +3243,13 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2533,6 +3272,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2555,6 +3306,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2577,6 +3340,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2599,6 +3374,18 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "branch_pair",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2621,6 +3408,13 @@
       },
       "stage": "position_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2643,6 +3437,13 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2665,6 +3466,13 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2687,6 +3495,13 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2709,6 +3524,13 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2731,6 +3553,13 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2753,6 +3582,13 @@
       },
       "stage": "position_or_edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2774,7 +3610,14 @@
         "version": 1
       },
       "stage": "position_or_edge_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2796,7 +3639,19 @@
         "version": 1
       },
       "stage": "position_or_edge_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2818,7 +3673,14 @@
         "version": 1
       },
       "stage": "position_or_edge_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2840,7 +3702,14 @@
         "version": 1
       },
       "stage": "position_or_edge_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2862,7 +3731,14 @@
         "version": 1
       },
       "stage": "position_or_edge_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2884,7 +3760,14 @@
         "version": 1
       },
       "stage": "position_or_edge_local",
-      "subjectKind": "edge",
+      "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2907,6 +3790,13 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2929,6 +3819,13 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2951,6 +3848,13 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2973,6 +3877,13 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -2995,6 +3906,13 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -3017,6 +3935,13 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -3039,6 +3964,13 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -3061,6 +3993,13 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -3083,6 +4022,13 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -3105,6 +4051,13 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -3127,6 +4080,13 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -3149,6 +4109,13 @@
       },
       "stage": "edge_local",
       "subjectKind": "edge",
+      "subjectViews": [
+        {
+          "subjectKind": "edge",
+          "acquisition": "candidate_population@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "candidate_population@1",
       "derivation": null,
       "requiredOutput": {
@@ -3171,6 +4138,13 @@
       },
       "stage": "run_local",
       "subjectKind": "run_prefix",
+      "subjectViews": [
+        {
+          "subjectKind": "run_prefix",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": null,
       "requiredOutput": {
@@ -3193,6 +4167,13 @@
       },
       "stage": "run_local",
       "subjectKind": "run_prefix",
+      "subjectViews": [
+        {
+          "subjectKind": "run_prefix",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": null,
       "requiredOutput": {
@@ -3215,6 +4196,13 @@
       },
       "stage": "run_local",
       "subjectKind": "run_prefix",
+      "subjectViews": [
+        {
+          "subjectKind": "run_prefix",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": null,
       "requiredOutput": {
@@ -3237,6 +4225,13 @@
       },
       "stage": "run_local",
       "subjectKind": "run_prefix",
+      "subjectViews": [
+        {
+          "subjectKind": "run_prefix",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": null,
       "requiredOutput": {
@@ -3259,6 +4254,13 @@
       },
       "stage": "run_local",
       "subjectKind": "run_prefix",
+      "subjectViews": [
+        {
+          "subjectKind": "run_prefix",
+          "acquisition": "recorded_semantic_path@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "recorded_semantic_path@1",
       "derivation": null,
       "requiredOutput": {
@@ -3281,6 +4283,13 @@
       },
       "stage": "catalogue_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "catalogue_evidence_packet@1",
+          "adapter": "identity"
+        }
+      ],
       "acquisition": "catalogue_evidence_packet@1",
       "derivation": null,
       "requiredOutput": {
@@ -3303,6 +4312,18 @@
       },
       "stage": "catalogue_local",
       "subjectKind": "position",
+      "subjectViews": [
+        {
+          "subjectKind": "position",
+          "acquisition": "catalogue_evidence_packet@1",
+          "adapter": "identity"
+        },
+        {
+          "subjectKind": "run_prefix",
+          "acquisition": "review_evidence_packet@1",
+          "adapter": "projection_between_grains@1"
+        }
+      ],
       "acquisition": "catalogue_evidence_packet@1",
       "derivation": null,
       "requiredOutput": {
@@ -3315,5 +4336,5 @@
       "status": "awaiting_upstream_sealed_operation"
     }
   ],
-  "digest": "sha256:d5b12ef3608d41264b1a29d1926210914b9b029517ab9c22b212b8a9f159a532"
+  "digest": "sha256:7e9b4895101a3fdf42f10f205e60c5042779747df894d4a5155ef4ed4c760ee9"
 }
