@@ -1,12 +1,11 @@
 # RFC: Assistance shared-resource registers
 
-- **Status:** draft — **RETURNED by fifth fresh independent review 2026-08-30 on
-  [[D2355]]–[[D2360]].** Workflow-v1 is not the strict grammar claimed and has no exact tree; the
-  absent exchange has no root or regression guard; the permission claim omits its semantic
-  operations; and the extension's positive test is prose-only. `make
-  assistance-register-fifth-fresh-review` passes 6/6. Exact return:
-  `planning/assistance-config-register/fifth-fresh-independent-buildability-review-2026-08-30.md`.
-  C9/register/v5 implementation remains forbidden pending author repair and another fresh review.
+- **Status:** draft — **AUTHOR-REPAIRED 2026-08-31 on [[D2355]]–[[D2360]]; fresh independent
+  review required.** The repair models historical workflow-v1 as open/context-dependent, closes
+  its exact authority tree and v2 transition, roots the future exchange at one version symbol,
+  refuses landed→absent regression, closes the permission transition, and executes all six rules
+  in `make assistance-register-fourth-author-repair` (6/6). C9/register/v5 implementation remains
+  forbidden until another fresh review accepts this contract.
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it
@@ -33,6 +32,22 @@ The extension is returned on [[D2355]], [[D2356]], [[D2357]], [[D2358]], [[D2359
 exact resource roots/trees; landed→absent is unguarded; permission semantics exceed its claim; and
 the positive test proves only prose. `make assistance-register-fifth-fresh-review` reproduces all
 six. No implementation is authorised.
+
+## Fifth-return author repair (2026-08-31)
+
+The repair keeps historical bytes honest rather than silently upgrading them. Workflow-v1 is an
+open object whose recognised `preset` is admitted against the requested context's live policy;
+unknown keys are ignored and invalid input falls back to that context's default. Workflow-v2 is
+the first strict, self-describing durable preference. Both states have exact roots and authority
+populations below.
+
+The future exchange is absent only when
+`packages/runtime/src/presets.ts#ASSISTANCE_EXCHANGE_VERSION` has never landed. Once any landed
+history exists, deletion or rename is a fatal regression, not a return to absence. The `legal`
+permission claim covers the union and all four operations that construct or project it. The
+disposable model in `tools/d2355-assistance-register-author-repair/` executes the valid first
+landing plus the invalid empty, skipped-lane and landed→absent paths. It specifies this RFC only;
+it is not production register code.
 
 ## Summary
 
@@ -260,13 +275,78 @@ using the same executable resource↔README bijection, without changing their pr
 | resource | landed tree state | transition grammar |
 |---|---|---|
 | `assistance-config` | head 4, derived from the exported versioned nine-axis interface and its complete authority graph | numeric single-writer lane; hint-distance reserves lane 5 |
-| `workflow-preference` | head 1, derived from the strict `{version:1,preset}` storage grammar in `assistance-preference.ts` | numeric single-writer lane; intent-presets reserves lane 2 |
-| `assistance-exchange` | **absent**, derived from no registered production contract root | exactly one `first lane 1` claimant; no other lane/member claim is legal while absent |
-| `assistance-permission` | members `evidence, free, locked_off, sight`, derived from the exported union | closed member claims; intent-presets claims `legal` |
+| `workflow-preference` | head 1, rooted at `apps/web/src/lib/assistance-preference.ts#loadWorkflowPreset`; open unknown-key grammar plus context-dependent preset admission | numeric single-writer lane; intent-presets reserves strict lane 2 over the exact eight-symbol transition |
+| `assistance-exchange` | **absent**, derived only from absence of `packages/runtime/src/presets.ts#ASSISTANCE_EXCHANGE_VERSION` and empty landed history | exactly one `first lane 1` claimant over the exact ten-symbol first transition; absence can never recur after landing |
+| `assistance-permission` | members `evidence, free, locked_off, sight`, derived from the exported union and every operation that returns/projects it | closed member claims; intent-presets claims `legal` over the exact five-symbol transition |
 
 `RESOURCE_NAMES` gains all three literal names. `workflow-preference` uses the existing numeric lane
-rules. `assistance-permission` uses `evidence-kinds`-style member set equality, but its tree reader
-resolves the exported TypeScript union and the authority graph of functions returning it.
+rules. Its historical head-1 grammar is exactly:
+
+```text
+root: apps/web/src/lib/assistance-preference.ts#loadWorkflowPreset
+version: 1
+recognised preset values: packages/runtime/src/presets.ts#PRESET_IDS
+unknown object keys: ignored
+context admission: WORKFLOW_CONTEXT_POLICIES[context].allowedPresets
+invalid/missing input: workflowContextPolicy(context).defaultPreset
+```
+
+This is a description of shipped compatibility, not an endorsement of open protocols. The v1
+digest contains the following ASCII-sorted authority population exactly:
+
+```ts
+interface WorkflowPreferenceTree {
+  readonly kind: "landed";
+  readonly head: 1;
+  readonly root: "apps/web/src/lib/assistance-preference.ts#loadWorkflowPreset";
+  readonly authorityNodes: readonly AssistanceAuthorityNode[];
+  readonly authorityEdges: readonly AssistanceAuthorityEdge[];
+  readonly authorityDigest: string;
+  readonly digest: string;
+}
+```
+
+`WORKFLOW_PREFERENCE_ROOTS` is the following closed authority population; it is executable input
+to tree derivation rather than a documentation-only census:
+
+```text
+apps/web/src/lib/assistance-preference.ts#loadWorkflowPreset
+apps/web/src/lib/assistance-preference.ts#saveWorkflowPreset
+apps/web/src/lib/assistance-preference.ts#workflowKey
+packages/runtime/src/presets.ts#PRESET_IDS
+packages/runtime/src/presets.ts#WORKFLOW_CONTEXT_POLICIES
+packages/runtime/src/presets.ts#workflowContextPolicy
+```
+
+Workflow-v2 is the first strict grammar and its claim/transition population is exactly:
+
+```text
+apps/web/src/lib/assistance-preference.ts#loadWorkflowPreference
+apps/web/src/lib/assistance-preference.ts#loadWorkflowPreset
+apps/web/src/lib/assistance-preference.ts#saveWorkflowPreference
+apps/web/src/lib/assistance-preference.ts#saveWorkflowPreset
+apps/web/src/lib/assistance-preference.ts#workflowKey
+packages/runtime/src/presets.ts#WorkflowPreferenceV2
+packages/runtime/src/presets.ts#parseWorkflowPreferenceV2
+packages/runtime/src/presets.ts#serializeWorkflowPreferenceV2
+```
+
+Its tree stores `head`, the named root, the authority nodes/edges and their canonical digest. A
+change to v1 preset membership, context admission/defaulting, storage key, loader or writer moves
+head-1 identity; a v2 landing must consume exactly the eight-symbol claim above. Unknown-key
+rejection belongs to v2 and is never retroactively asserted for v1.
+
+`assistance-permission` uses `evidence-kinds`-style member set equality, but its tree reader resolves
+both the exported TypeScript union and every semantic operation that returns, clamps or compiles it.
+The exact `legal` transition population is:
+
+```text
+packages/runtime/src/assistance.ts#AssistancePermission
+packages/runtime/src/assistance.ts#accessPermission
+packages/runtime/src/assistance.ts#permittedAssistance
+packages/runtime/src/presets.ts#compileAuthoritativeAssistance
+packages/runtime/src/presets.ts#contextClamp
+```
 
 `assistance-exchange` adds one new claim form:
 
@@ -278,16 +358,36 @@ The landed state is a discriminated union, never a magic integer:
 
 ```ts
 type NumericResourceTreeState =
-  | { readonly kind: "absent"; readonly contractDigest: "absent" }
-  | { readonly kind: "landed"; readonly head: number; readonly contractDigest: string };
+  | { readonly kind: "absent"; readonly history: readonly []; readonly contractDigest: "absent" }
+  | { readonly kind: "landed"; readonly head: number; readonly history: readonly number[]; readonly contractDigest: string };
 ```
 
-For an absent resource, the registered production root must not resolve. Exactly one active first
-claim is allowed. Two claimants, `lane 1`, `lane 2`, a member claim, or a claim with no derived
-changed-symbol closure fail. The implementation commit atomically creates the version-1 root,
+For an absent resource, the exact registered root
+`packages/runtime/src/presets.ts#ASSISTANCE_EXCHANGE_VERSION` must not resolve and landed history
+must be empty. Exactly one active first claim is allowed. Two claimants, `lane 1`, `lane 2`, a
+member claim, or a claim with no derived changed-symbol closure fail. The implementation commit
+atomically creates the version-1 root,
 changes the derived state to `{kind:"landed",head:1}`, appends the history row and removes the live
 claim. A landed head 1 with a lingering `first lane 1` claim fails. The CLI prints `head absent;
 next <owner> (first lane 1)`, never `head 0`.
+
+Absence is one-way. If the previous state contains any landed history, a current missing/renamed
+root is `LANDED_RESOURCE_CANNOT_BECOME_ABSENT`; it cannot validate as a withdrawal. A successor
+root is a new versioned transition from the existing resource, not deletion plus a fresh first
+claim. The exact first-lane exchange transition is:
+
+```text
+packages/runtime/src/presets.ts#ASSISTANCE_EXCHANGE_VERSION
+packages/runtime/src/presets.ts#AuthoritativeAssistanceV1
+packages/runtime/src/presets.ts#BrowserNarrowedAssistanceV1
+packages/runtime/src/presets.ts#FinalizedAssistanceV1
+packages/runtime/src/presets.ts#RequestedAssistanceV1
+packages/runtime/src/presets.ts#compileAssistanceRequest
+packages/runtime/src/presets.ts#compileAuthoritativeAssistance
+packages/runtime/src/presets.ts#finalizeAssistanceEffects
+packages/runtime/src/presets.ts#narrowBrowserChannels
+packages/runtime/src/presets.ts#parseAssistanceExchange
+```
 
 README gains three register sections (they may share one heading but each keeps its own machine
 marker):
@@ -309,15 +409,15 @@ After this process RFC lands, `intent-presets.md` replaces `none` with three cla
 author amendment:
 
 ```text
-workflow-preference | lane 2 | <checker-derived v1→v2 storage/type/parser symbols>
-assistance-exchange | first lane 1 | <checker-derived four-stage type/parser/compiler symbols>
-assistance-permission | members legal | packages/runtime/src/assistance.ts#AssistancePermission
+workflow-preference | lane 2 | apps/web/src/lib/assistance-preference.ts#loadWorkflowPreference; apps/web/src/lib/assistance-preference.ts#loadWorkflowPreset; apps/web/src/lib/assistance-preference.ts#saveWorkflowPreference; apps/web/src/lib/assistance-preference.ts#saveWorkflowPreset; apps/web/src/lib/assistance-preference.ts#workflowKey; packages/runtime/src/presets.ts#WorkflowPreferenceV2; packages/runtime/src/presets.ts#parseWorkflowPreferenceV2; packages/runtime/src/presets.ts#serializeWorkflowPreferenceV2
+assistance-exchange | first lane 1 | packages/runtime/src/presets.ts#ASSISTANCE_EXCHANGE_VERSION; packages/runtime/src/presets.ts#AuthoritativeAssistanceV1; packages/runtime/src/presets.ts#BrowserNarrowedAssistanceV1; packages/runtime/src/presets.ts#FinalizedAssistanceV1; packages/runtime/src/presets.ts#RequestedAssistanceV1; packages/runtime/src/presets.ts#compileAssistanceRequest; packages/runtime/src/presets.ts#compileAuthoritativeAssistance; packages/runtime/src/presets.ts#finalizeAssistanceEffects; packages/runtime/src/presets.ts#narrowBrowserChannels; packages/runtime/src/presets.ts#parseAssistanceExchange
+assistance-permission | members legal | packages/runtime/src/assistance.ts#AssistancePermission; packages/runtime/src/assistance.ts#accessPermission; packages/runtime/src/assistance.ts#permittedAssistance; packages/runtime/src/presets.ts#compileAuthoritativeAssistance; packages/runtime/src/presets.ts#contextClamp
 ```
 
-The angle-bracket fields above are intentionally not plausible filenames masquerading as a closed
-transition. The register implementation derives their exact source-graph populations first; the
-intent-presets claim is installed only when set equality succeeds. This RFC specifies the grammar
-and ownership transition, not product implementation bytes.
+These are specification literals and checker outputs, not caller-authored approximations. The
+register implementation derives the source-graph populations and installs the intent-presets
+claims only when set equality succeeds. This RFC specifies the grammar and ownership transition,
+not product implementation bytes.
 
 The four resource identities are independent. Moving workflow preference does not implicitly move
 effective config; changing a wire stage does not silently widen permission; adding `legal` does
@@ -489,7 +589,7 @@ or parses a lane claim as an evidence member.
 ### 5. Able-to-fail fixtures
 
 `tools/register-check.test.mjs` supplies source strings/temporary trees for every branch. The
-fixture table's unit is **mutation class**; total fifty-one:
+fixture table's unit is **mutation class**; total fifty-seven:
 
 | # | mutation | required result |
 |---|---|---|
@@ -544,6 +644,12 @@ fixture table's unit is **mutation class**; total fifty-one:
 | 49 | omit either `PRESET_DECLARATIONS.config.hintDistance` or `WORKFLOW_CONTEXT_POLICIES.configClamp.hintDistance`, or leave an old nine-field row | C9.6/shape equality fails |
 | 50 | classify the real server declaration census as observer, then mutate it into a runtime field reader | observer-only refactor leaves contract digest stable; runtime read reclassifies and moves it |
 | 51 | add a workspace package with one production AssistanceConfig consumer | package is discovered and changes closure/authority; hard-coded-root implementations fail |
+| 52 | workflow-v1 object includes arbitrary extra keys while its preset is valid for the requested context | head-1 parser admits the preset and ignores extras; a checker claiming strict rejection fails |
+| 53 | change one context's allowed/default preset without changing the v1 loader | workflow-preference authority digest moves and fixed-head validation fails |
+| 54 | absent exchange root is missing, then exact named root lands or is renamed | missing+empty history is absent; exact landing is head 1; rename after landing is failure, never a new absence |
+| 55 | staged and committed transitions each compare landed exchange history with a current missing root | both fail `LANDED_RESOURCE_CANNOT_BECOME_ABSENT` before accepting any first claim |
+| 56 | permission `legal` claim omits the union or any one of `accessPermission`, `permittedAssistance`, `compileAuthoritativeAssistance`, `contextClamp` | changed-symbol set inequality fails |
+| 57 | execute valid absent→head-1, empty first-claim, skipped next-lane and landed→absent state transitions | only the valid first landing passes; every invalid state throws its named error |
 
 The implementation also runs the real repository and asserts derived head 4, nine axes, 22 values,
 the v4 legacy parser/migrator, one shared-key reader/writer pair, both proved generic field writes,
@@ -641,18 +747,23 @@ None. No design intent changes.
     set-equal over `assistance-config`, `workflow-preference`, `assistance-exchange` and
     `assistance-permission`. Removing, merging or renaming one fails. Mutating one resource without
     its own claim fails even when another assistance resource has a live claim.
-19. **Absent first-head transition ([[D2328]]).** An absent exchange plus one exact
-    `first lane 1` claim passes; two claimants, numeric/member claims, fictional head 0, missing
-    `absent` digest, implementation bytes with no claim, or landed head 1 with a lingering first
-    claim fail independently. CLI output contains `head absent` and never `head 0`.
+19. **Absent first-head transition ([[D2328]], [[D2357]], [[D2358]]).** An absent exchange means
+    the exact `ASSISTANCE_EXCHANGE_VERSION` root is missing and landed history is empty. With one
+    exact ten-symbol `first lane 1` claim it passes; two claimants, numeric/member claims,
+    fictional head 0, missing `absent` digest, implementation bytes with no claim, or landed head 1
+    with a lingering first claim fail independently. Any landed-history→missing-root transition
+    fails in staged and committed modes. CLI output contains `head absent` and never `head 0`.
 20. **Preference and permission bootstrap.** The reader derives workflow-preference head 1 from
-    the live strict storage grammar and derives exactly four sorted permission members from the
-    exported union. Equivalent formatting/alias refactors preserve digests; parser/serializer,
-    member, return-site or package-export changes move them and require their own claim.
+    the live open/context-dependent storage grammar and exact six-symbol authority tree, and
+    derives exactly four sorted permission members plus all semantic return/projection operations.
+    Equivalent formatting/alias refactors preserve digests; preset/context admission,
+    parser/serializer, member, return-site or package-export changes move them and require their
+    own claim. Workflow-v2 is the first strict grammar and consumes the exact eight-symbol delta.
 21. **Intent handoff.** After the register lands, intent-presets carries exactly three claims:
     workflow-preference lane 2, assistance-exchange first lane 1 and permission member `legal`.
-    Their changed-symbol sets are derived from the complete resource graphs; a placeholder,
-    duplicate, omitted reader or hand-written plausible path fails.
+    Their changed-symbol sets are set-equal to the literal eight-, ten- and five-symbol populations
+    in §1a; a placeholder, duplicate, omitted semantic operation or hand-written plausible path
+    fails. Mutation classes 52–57 and the executable author model prove these extension semantics.
 
 ## Discharges
 
@@ -685,6 +796,12 @@ None. No design intent changes.
 | [[D2193]] | repaired in §§1-2/classes 50-51: workspace-derived roots and explicit authority/product/observer influence | fourth fresh independent review |
 | [[D2178]] | amended in §1a/criteria 18/20/21: three distinct shared resources, truthful claims only after their register lands | fifth fresh independent review |
 | [[D2328]] | specified in §1a/criterion 19: derived absent state and unique first-lane-1 transition; fictional head 0 refused | fifth fresh independent review |
+| [[D2355]] | repaired in §1a/class 52: workflow-v1 is explicitly open/context-dependent; strictness begins at v2 | sixth fresh independent review |
+| [[D2356]] | repaired in §1a/classes 52–53: exact root, six-symbol v1 authority tree, eight-symbol v2 transition and digest inputs | sixth fresh independent review |
+| [[D2357]] | repaired in §1a/class 54: absence derives from one named future version root and exact ten-symbol first delta | sixth fresh independent review |
+| [[D2358]] | repaired in §1a/classes 54–55: landed history makes current absence a fatal regression in both transition modes | sixth fresh independent review |
+| [[D2359]] | repaired in §1a/class 56: `legal` claims the union plus every semantic projection/compiler operation | sixth fresh independent review |
+| [[D2360]] | repaired by class 57 and `make assistance-register-fourth-author-repair`: executable valid/invalid lifecycle model | sixth fresh independent review |
 
 ## Open questions
 
@@ -693,6 +810,13 @@ contract.
 
 ## Changelog
 
+- 2026-08-31: author-repaired [[D2355]]–[[D2360]]. Historical workflow-v1 is now specified as
+  open/context-dependent over an exact six-symbol authority tree; v2 owns the exact strict
+  eight-symbol transition. The absent exchange is rooted at `ASSISTANCE_EXCHANGE_VERSION`, its
+  first delta has ten symbols and any landed→absent regression fails. Permission `legal` claims
+  five semantic symbols. Mutation classes 52–57 and `make
+  assistance-register-fourth-author-repair` execute the repair. Fresh independent review remains
+  required; no register or product implementation is authorised.
 - 2026-08-30: returned by fifth fresh independent review on [[D2355]]–[[D2360]]. The new
   resources lack exact executable roots/trees/transitions, workflow-v1 strictness is false,
   landed→absent is unguarded, permission semantics exceed the claim and the positive extension

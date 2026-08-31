@@ -12646,3 +12646,16 @@ claim's omitted semantic operations; and [[D2360]] the prose-only positive instr
 `make assistance-register-fifth-fresh-review` reproduces all six blockers. No checker, register,
 runtime, web, schema, content, archive or protected-design byte changed. Receipt:
 `planning/assistance-config-register/fifth-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-31 — Assistance-register fifth-return author repair
+
+Repaired [[D2355]]–[[D2360]] in the process RFC. The repair replaces the false strict-v1 premise
+with the shipped open/context-dependent workflow grammar and exact six-symbol authority tree;
+specifies strict workflow-v2 as an eight-symbol transition; roots the absent exchange at one
+future version symbol with an exact ten-symbol first delta; makes absence impossible after any
+landed history; and expands permission `legal` to all five semantic symbols.
+
+`make assistance-register-fourth-author-repair` passes 6/6 using the executable disposable state
+model. No production, runtime, web, schema, content, archive or protected-design byte changed.
+Sixth fresh review remains required before implementation. Receipt:
+`planning/assistance-config-register/fifth-return-author-repair-2026-08-31.md`.

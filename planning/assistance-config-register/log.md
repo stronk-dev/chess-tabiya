@@ -118,3 +118,16 @@ operation changes; and the positive extension test executes no state semantics.
 `make assistance-register-fifth-fresh-review` passes 6/6. No checker, register or product
 implementation is authorised. Exact review:
 `fifth-fresh-independent-buildability-review-2026-08-30.md`.
+
+## 2026-08-31 — Fifth-return author repair
+
+Repaired [[D2355]]–[[D2360]] without changing product bytes. Workflow-v1 is now truthfully open
+and context-dependent over one root and six authority symbols; workflow-v2 is the first strict
+grammar and owns the exact eight-symbol transition. Assistance exchange now has one named version
+root, a ten-symbol first delta and a one-way absent state: any landed-history→missing-root change
+fails. Permission `legal` owns the union and four semantic operations rather than the type alone.
+
+`make assistance-register-fourth-author-repair` passes 6/6 across valid first landing plus empty,
+skipped and regression paths. Exact receipt:
+`fifth-return-author-repair-2026-08-31.md`. Sixth fresh review is required; no process or product
+implementation is authorised.
