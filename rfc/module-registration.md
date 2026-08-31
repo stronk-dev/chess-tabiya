@@ -1,7 +1,7 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — fourth author repair complete 2026-08-31 on
-  [[D2343]]–[[D2347]]; fourth fresh independent review required.** The repair rejects the prior generator's
+- **Status:** **draft — fourth fresh independent review RETURNED 2026-08-31 on
+  [[D2398]]–[[D2400]]; fifth author repair required.** The fourth repair rejects the prior generator's
   central premise: learner modules do not invoke 117 detector/provider functions. They consume
   projection-keyed sealed pools produced by the candidate packet, recorded semantic path, Review,
   catalogue and provider authorities. The generated artifacts are therefore digest-sealed
@@ -15,8 +15,11 @@
   intersects module timing with sealed-operation applicability, and derives the complete form
   image through `MODULE_FORM_IMAGE` without dropping `list` from cards. The maintained author and
   assembly targets pass 11/11 and 13/13; `make module-registration-fourth-author-repair` passes
-  5/5. Exact receipt: `planning/learner-modules/fourth-author-repair-2026-08-31.md`. No
-  implementation is authorised before another fresh independent review. The
+  5/5. Exact repair receipt: `planning/learner-modules/fourth-author-repair-2026-08-31.md`.
+  The fresh review found an undeclared generic cross-grain relabel, contradictory surviving
+  direct-call instructions, and packet-wide rather than exact projection/view timing. Exact return:
+  `planning/learner-modules/fourth-fresh-independent-buildability-review-2026-08-31.md`. No
+  implementation is authorised before author repair and another fresh independent review. The
   [[D1870]]/[[D2030]] dependency image remains the owner-ruled measured 207-pair target,
   including requested-Sight `pawn_safe_square`. Prior
   amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt
@@ -1691,6 +1694,17 @@ deleting one disclosure id from the family×rung product fails;
 
 ## Fresh-review routing
 
+Fourth fresh review return (2026-08-31):
+
+| row | returned requirement |
+|---|---|
+| [[D2398]] | replace the generic `projection_between_grains@1` relabel with exact typed occurrence/edge/compare derivations or honest unavailability |
+| [[D2399]] | delete or rewrite §2.5's obsolete callable-operation schema and its eight-family execution criteria to the requirements-only sealed-pool architecture |
+| [[D2400]] | compile timing from the exact projection plus chosen subject-view operation, not the packet-wide source timing list |
+
+`make module-registration-fourth-fresh-review` reproduces all three. Fifth author repair and a new
+fresh independent review are required before acceptance or implementation.
+
 | row | author repair; fresh review still required |
 |---|---|
 | [[D2343]] | **author-repaired:** D1865 imports the single explicit blocked-hint algebra; maintained targets pass 13/13 and 11/11 |
@@ -1699,8 +1713,8 @@ deleting one disclosure id from the family×rung product fails;
 | [[D2346]] | **author-repaired:** every sealed operation declares timing/subject applicability and pair timing is the complete non-empty intersection |
 | [[D2347]] | **author-repaired:** module forms expand through `MODULE_FORM_IMAGE`; exact-pair requirements retain the complete form set including `card`'s `list` arm |
 
-All five remain open until a fourth fresh independent reviewer attacks the regenerated artifacts;
-author repair is not acceptance.
+The fourth fresh review confirms these five named repairs survive and closes [[D2343]]–[[D2347]].
+Its new [[D2398]]–[[D2400]] return remains above; a passing repair is not whole-RFC acceptance.
 | [[D2164]] | module policy bytes derive from one author table and sessions derive from live workflow policies |
 | [[D2165]] | direct detector call plan withdrawn; five complete sealed-pool operation requirements are explicit dependencies |
 | [[D2166]] | position/edge/branch-pair/run-prefix grains and their distinct join rules replace universal edge/same-subject |
@@ -1769,6 +1783,13 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   input-equivalence clause inside the surface built to satisfy it.
 
 ## Changelog
+
+- 2026-08-31 (fourth fresh independent return): returned the fourth repair on
+  [[D2398]]–[[D2400]]. The five named D2343–D2347 fixes survive, but generic cross-grain
+  relabelling, contradictory direct-call normative text and source-wide timing keep the
+  requirements unbuildable. Exact review:
+  `planning/learner-modules/fourth-fresh-independent-buildability-review-2026-08-31.md`. No
+  implementation is authorised.
 
 - 2026-08-31 (fourth author repair): repaired [[D2343]]–[[D2347]] with one D1865/author
   acceptance algebra, exact projection grains and lawful cross-grain views, sealed-operation

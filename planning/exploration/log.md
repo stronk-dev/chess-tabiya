@@ -13105,3 +13105,17 @@ emitter clearance and all 92 pack/candidate migrations must land together, while
 that migration Gate-F-held whole. The roadmap no longer presents schema/emitter work as an
 executable pre-gate remainder; only the already-shipped writer/read-only mechanism is outside that
 hold.
+
+## 2026-08-31 — Module-registration fourth fresh review returned
+
+The D2343–D2347 author repair passes all three maintained targets, but fresh artifact review found
+three later seams and returned the RFC on [[D2398]]–[[D2400]]. A generic
+`projection_between_grains@1` relabels position facts as edge/branch/prefix views without exact
+operands or a registered derivation; §2.5 still normatively requires the withdrawn 117-callable
+second evidence engine; and binding timing intersects module policy with a packet-wide source list
+rather than exact projection/subject-view applicability.
+
+`make module-registration-fourth-fresh-review` reproduces all three. The module layer remains a
+requirements-only artifact with every binding dependency-blocked; no production, schema, content,
+API or UX implementation is authorized before a fifth author repair and another independent
+review.

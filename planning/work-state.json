@@ -18448,48 +18448,48 @@
     },
     {
       "id": "D2343",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:50d4b45d8d8ffe4b55eb17afddebf00fe4d9dfecf88d3b19eb21ddf430660f4f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5e76bd7814cc7a2c57623c72a2c31e45d52fa09f85d6259f16b9db2b9f459e50",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "blocker": "rfc:module-registration.md"
+      "evidence": "planning/learner-modules/fourth-fresh-independent-buildability-review-2026-08-31.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2344",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4498cb2a66fdee569188c73e660eab768c693a8a60fdaa6110b2c6f30d013df3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e0ac8aa613174bdbf4af1460cf08fac061bb023b25b3be95a928db8f43de4862",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "blocker": "rfc:module-registration.md"
+      "evidence": "planning/learner-modules/fourth-fresh-independent-buildability-review-2026-08-31.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2345",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:411c6ebc8ea31588d7b56d1b149ef0db9ec66567690244c7196c1aa943047845",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:82051b7f90384a5697eb80daccba911d3ba637dc5240916372cfe348b353981b",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "blocker": "rfc:module-registration.md"
+      "evidence": "planning/learner-modules/fourth-fresh-independent-buildability-review-2026-08-31.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2346",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7352aac8af0adc87babe87c286399185ccfa7fd34ba30bc3a52e83acf3628cd7",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8ab944abcaa9ce04b58d9aac13f371082cf3f9ef7b896996ccdba2148d80985a",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "blocker": "rfc:module-registration.md"
+      "evidence": "planning/learner-modules/fourth-fresh-independent-buildability-review-2026-08-31.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2347",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:affdd807ff2880b4f28082a51bf5d1f0c8c3796ae2a1d4448d12f9515387cb0e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1e1e0e1220ffccc0e10f3a482fdab203047aeec849199cd38e5e979a4ec4e08e",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "blocker": "rfc:module-registration.md"
+      "evidence": "planning/learner-modules/fourth-fresh-independent-buildability-review-2026-08-31.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2348",
@@ -18931,6 +18931,33 @@
       "uxItems": [],
       "evidence": "planning/evidence-foundation-ux/shared-candidate-packet-fifth-author-repair-2026-08-31.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2398",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:97ccf0546a9658334c95ef8f35aa0e9a063ec0b446b930bee76406e8d815fc86",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2399",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d1cece6e9051515fe544b5fb371fa4322164fa08c9b39da90a210832eb627f91",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2400",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:fd208f5979e646baa31ff145cd179fd6b00c88697dc0f6c0fc848db07fc5dd1a",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:module-registration.md"
     }
   ]
 }
