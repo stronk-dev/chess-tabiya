@@ -3,7 +3,7 @@
   "scope": "design/BACKLOG.md ledger rows",
   "authority": "design/BACKLOG.md",
   "ownerAuthority": "planning/roadmap-1.0.json",
-  "untriagedCeiling": 1388,
+  "untriagedCeiling": 1386,
   "items": [
     {
       "id": "D1",
@@ -17584,19 +17584,21 @@
     },
     {
       "id": "D2329",
+      "state": "blocked",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:d941a881773611ba2de5c9ebdc8b16b0f2482b6c45cf8522a1707e6c17b88edd",
       "uxItems": [],
-      "state": "untriaged",
-      "owner": "unowned"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
     },
     {
       "id": "D2330",
+      "state": "blocked",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:0aaf0d01726479db57f4b2fcbece4eb4f043dfa13ebad9d786c4801f9064b7d1",
       "uxItems": [],
-      "state": "untriaged",
-      "owner": "unowned"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
     },
     {
       "id": "D2331",
@@ -18070,6 +18072,15 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-validation-authority.md"
+    },
+    {
+      "id": "D2389",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e90bdb28d995a604474d5b96d7655ba4fdb237bf772b0066d79bf54cc92013ac",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
     }
   ]
 }

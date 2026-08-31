@@ -1,6 +1,6 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — author-repaired 2026-08-31 on [[D2329]]–[[D2330]]; fourth fresh independent review required.**
+- **Status:** **draft — fourth fresh independent review returned on [[D2389]]; author repair required.**
   The D2198–D2201 author repair remains present: the product factory fixes the primary manifest authority; every collector
   result is projection-addressed; thirteen exact context adapters satisfy the executable registry;
   and memo, service-stat and receipt-reference protocols are closed. The historical return remains
@@ -8,8 +8,11 @@
   The returned falsifier remains historical evidence. The repair replaces the widened/mixed
   projection ids with one generated literal `id@version` map checked against the compiled manifest,
   and separates a scope's dependency-closed execution plan from its retained packet outputs.
-  `make candidate-packet-fourth-author-repair` is the positive author contract. Implementation
-  remains unauthorized pending a fresh review.
+  `make candidate-packet-fourth-author-repair` remains the positive author contract for those two
+  repairs. The fourth fresh review found that the packet's flat legal-move list and its sealed
+  `ExactLegalMoveMap` receipt still have two different specified value sources; exact return:
+  `planning/evidence-foundation-ux/shared-candidate-packet-fourth-fresh-independent-review-2026-08-31.md`.
+  Implementation remains unauthorized pending repair and another fresh review.
   [[D1580]] remains separate numeric appliance-tier debt. *(Prior state: D1977–D1981
   author-repaired after D1958–D1961, D1900–D1903 and D1945–D1947.)*
 - **Author:** claude (initial draft); codex (2026-08-29 operation-boundary author repair). Drafted
@@ -1806,6 +1809,26 @@ arms, and undergo another fresh independent review before acceptance.
     retaining it publicly, adding an unrelated event collector or executing a dependency after its
     reader fails.
 
+## Fourth fresh independent return (2026-08-31)
+
+The D2329/D2330 repair survives its independent checks: one literal versioned-key dialect owns
+projection identity, and each request scope has a dependency-closed execution plan distinct from
+retained output. [[D2389]] returns a different seam.
+
+The public receipt requires `legalMovesInput: DeclaredEvidence<ExactLegalMoveMap>`, but §4.1 says
+the packet's `legalMoves` is sourced from `exactLegalMoves(beforeFen)`, §6.0 fixes only that
+function in the factory, and criteria 2/5 compare against it again. The only exact declaration
+adapter accepts an `ExactLegalMoveMap` and verifies it through `exactLegalMoveMap`; the RFC never
+binds the packet's flat rows by reference to that exact payload. An implementation must therefore
+invent whether the list or the map is authoritative, and an equal re-enumeration can satisfy every
+set-equality criterion while defeating the receipt's value-identity claim.
+
+Repair with one value source: compile `exactLegalMoveMap(beforeFen)`, pass that exact object to
+`declareExactLegalMovesEvidence`, retain the resulting declaration, and flatten
+`legalMovesInput.payload.pieces[].moves` without copying move objects. Replace the independent
+`exactLegalMoves` packet source and make a separately enumerated equal list fail an identity
+fixture. Exact review and reproducer: `make candidate-packet-fourth-fresh-review`.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -1948,6 +1971,9 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-08-31 — fourth fresh independent review returned the RFC on [[D2389]]. The D2329/D2330
+  repair remains valid, but the packet's flat legal list and sealed exact-legal-map receipt have
+  separate specified sources. One exact map value must own both before acceptance.
 - 2026-08-31 — [[D2329]]–[[D2330]] fourth author repair. One generated literal `id@version` map,
   resolved and checked against the compiled manifest, now owns collector output identity across
   results, abstentions and value joins. Scope now selects retained output after a transitive

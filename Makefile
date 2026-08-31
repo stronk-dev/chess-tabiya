@@ -399,6 +399,10 @@ candidate-packet-fourth-author-repair:
 	node --test tools/d2329-candidate-packet-fourth-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2329-candidate-packet-fourth-author-repair/tsconfig.contract.json --noEmit
 
+.PHONY: candidate-packet-fourth-fresh-review
+candidate-packet-fourth-fresh-review:
+	node --test tools/d2389-candidate-packet-fourth-fresh-review/contract.test.mjs
+
 review-evidence-author-contract:
 	node --test tools/d1969-review-evidence-author-harness/*.test.mts
 

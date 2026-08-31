@@ -13010,3 +13010,16 @@ reading meaning and exact expectation. Owner-authored propositions have one prop
 append-only design/research store whose rows must predate case admission and cite an owner-ledger
 ruling; Codex cannot populate it. `make semantic-validation-fourth-author-repair` passes 4/4. The
 seven evidence-foundation rows remain blocked pending independent review and acceptance.
+
+## 2026-08-31 — Shared candidate packet fourth fresh independent return
+
+The D2329/D2330 author repair survives: projection ids use one literal versioned-key authority and
+the readings-only scope executes hidden event dependencies without exposing them. The fresh review
+returned the RFC on [[D2389]] instead of authorizing implementation.
+
+The packet receipt requires sealed `ExactLegalMoveMap` evidence while the normative compiler,
+factory and completeness criteria source the flat list from `exactLegalMoves`. Set equality permits
+an equal second object graph, so it cannot prove that the receipt owns the moves the packet serves.
+The required repair makes one exact legal-map payload the source of both the sealed declaration and
+every flattened move reference. `make candidate-packet-fourth-fresh-review` reproduces the split;
+D2329, D2330 and D2389 remain blocked on the active RFC.
