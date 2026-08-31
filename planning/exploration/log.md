@@ -13408,3 +13408,17 @@ findings are assigned to `release-engineering`; zero untriaged work remains.
 join expected operations/domains to independent producer authorities, reuse the committed-history
 reader and make absence atomic over the complete root. No C11, lane claim or provider protocol
 product implementation before repair and another fresh independent review.
+
+## 2026-08-31 — Storage recovery second fresh review returns safety boundaries
+
+**What landed:** crossed the repaired lock, publication, replacement and receipt contracts.
+`make storage-backup-second-fresh-review` returns [[D2460]]–[[D2464]]: inode equality without lock
+proof, obsolete `.partial` cleanup, `verified` before installed-main fsync, unvalidated bundle-id
+strings and arbitrary success-check arrays.
+
+**What changed:** `storage-backup-recovery` remains draft and returned; the durable-product-state
+checkpoint and work-state now carry the five `release-engineering` blockers. Population is 2,213,
+with all 1,506 open rows routed and zero untriaged.
+
+**Blocked/next:** repair the five safety boundaries and repeat fresh review before any storage,
+image, Compose, workflow, Make or operator-documentation implementation.

@@ -372,9 +372,9 @@
         "nextAction": "Land migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results; extend export, deletion, backup and rebuild with each object.",
         "latestCheckpoint": {
           "at": "2026-08-31",
-          "summary": "Persistence contracts are specified or returned. Longitudinal state and bot policy remain returned; Campaign is returned because its DDL, event revision and command replay do not yet form one durable authority; social durable state remains blocked on accepted foundations and registered migration order.",
+          "summary": "Persistence contracts are specified or returned. Storage backup/recovery is returned on lock proof, cleanup state, durability ordering and receipt authority; longitudinal state and bot policy remain returned; Campaign is returned because its DDL, event revision and command replay do not yet form one durable authority; social durable state remains blocked on accepted foundations and registered migration order.",
           "impact": "held",
-          "evidence": ["rfc/longitudinal-store.md", "planning/longitudinal-store/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/campaign-core.md", "planning/campaign/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/social-play.md"]
+          "evidence": ["rfc/storage-backup-recovery.md", "planning/storage-backup-recovery/second-fresh-independent-buildability-review-2026-08-31.md", "rfc/longitudinal-store.md", "planning/longitudinal-store/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/campaign-core.md", "planning/campaign/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/social-play.md"]
         },
         "exit": "Every workflow survives restart, retry, upgrade and projection rebuild with owner/actor identity, immutable inputs, idempotence, lifecycle coverage and no workstation-only state."
       },

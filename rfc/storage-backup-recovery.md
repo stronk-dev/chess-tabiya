@@ -1,11 +1,10 @@
 # RFC: Storage backup, restore, upgrade, and recovery
 
-- **Status:** **draft — author-repaired 2026-08-31 after the fresh independent return on
-  [[D2210]]–[[D2213]]; another fresh independent buildability review is required.** The repair
-  assigns one inherited lock owner, gives upgrade and restore one crash-recoverable SQLite-triplet
-  replacement primitive, defines collision-safe backup identity, and publishes the closed receipt
-  algebra. `make storage-backup-author-repair` passes 8/8 plus the proposed TypeScript protocol.
-  Implementation remains unauthorized.
+- **Status:** **draft — RETURNED by second fresh independent review 2026-08-31 on
+  [[D2460]]–[[D2464]].** The repair direction survives, but inherited lock ownership is forgeable,
+  backup cleanup names a retired state, the keep-new phase precedes file durability, bundle ids are
+  unvalidated strings and success checks are arbitrary arrays. `make
+  storage-backup-second-fresh-review` reproduces 5/5. Implementation remains unauthorized.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
@@ -18,6 +17,15 @@
 ```tabiya-claims
 none
 ```
+
+## Second fresh independent return (2026-08-31)
+
+The D2210–D2213 repair direction survives. The fresh review returns five remaining safety seams:
+[[D2460]] lock ownership is not proved by inode equality; [[D2461]] cleanup names the retired
+`.partial` protocol; [[D2462]] `verified` can persist before the installed main is fsynced;
+[[D2463]] bundle identity remains plain `string`; and [[D2464]] success receipts accept arbitrary
+check arrays. `make storage-backup-second-fresh-review` reproduces 5/5. Exact evidence:
+`planning/storage-backup-recovery/second-fresh-independent-buildability-review-2026-08-31.md`.
 
 ## Summary
 
@@ -646,6 +654,9 @@ algebra. Another fresh independent review is still required before acceptance.
 
 ## Changelog
 
+- 2026-08-31: second fresh independent review returned the author repair on [[D2460]]–[[D2464]].
+  Lock proof, cleanup states, durability phase ordering, validated bundle identity and
+  operation-specific success checks require repair; no implementation is authorized.
 - 2026-08-31: author-repaired [[D2210]]–[[D2213]] with one supervisor-owned inherited lock, shared
   crash-recoverable SQLite-triplet replacement, recomputable collision-safe backup identity and a
   versioned closed receipt union. `make storage-backup-author-repair` passes 8/8 plus TypeScript.
