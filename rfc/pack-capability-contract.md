@@ -1,12 +1,14 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **fifth author repair complete 2026-08-31 on [[D2334]]–[[D2339]] after the
-  fourth fresh return; a fifth fresh independent review is required.** The repair materializes the
+- **Status:** draft — **returned by fifth fresh independent review on [[D2429]]–[[D2431]].** The repair materializes the
   92-row legacy authority, splits software/corpus gates, versions unconditional selectors, compiles
   one lifecycle type, closes the server/web projection and derives operation requirements
   internally. `make pack-capability-author-repair` passes the cumulative artifact contract, 6/6
-  repair arms and strict TypeScript. No schema, registry, API, pack or digest implementation is
-  authorised; the D560 hold stays whole.
+  repair arms and strict TypeScript. Those six repairs survive, but the operation layer cannot
+  represent pack-less creation, its route/action census has no one identity grammar, and the public
+  parser lacks the availability-mode fact one of its semantic rejections requires. Exact return:
+  `planning/pack-capability-contract/fifth-fresh-independent-review-2026-08-31.md`. No schema,
+  registry, API, pack or digest implementation is authorised; the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -1414,6 +1416,24 @@ six new executable repair arms and strict TypeScript positive/negative cases. Th
 not acceptance: no production/schema/API/client/corpus/digest byte changed, D560 remains held, and a
 fifth fresh independent buildability review is mandatory.
 
+## Fifth fresh independent return (2026-08-31)
+
+The [[D2334]]–[[D2339]] repairs survive, but the new operation/public boundary returns on three
+buildability seams. [[D2429]]: `run.create` is fixed to registered-pack admission even though the
+live contract creates pack-less Position sessions. [[D2430]]: the eleven-member dotted operation
+union, twenty-two snake-case no-provider actions and coarser REST route branches have no typed
+method/route/discriminant projection joining them, so the promised exhaustive census cannot be
+implemented as specified. [[D2431]]: the shared public row omits deployment `availability`, while
+its parser is required to distinguish a lawful provider transient from an impossible local/build-
+time transient.
+
+Repair creation by exact session source, publish one generated route-branch operation map, and
+either carry the safe availability mode or separate structural parsing from registry-backed
+semantic validation. Exact review and reproducer:
+`planning/pack-capability-contract/fifth-fresh-independent-review-2026-08-31.md` and
+`make pack-capability-fifth-fresh-review`. No implementation is authorized before another fresh
+review.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -1618,6 +1638,11 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-08-31 (**fifth fresh independent return**): returned on [[D2429]]–[[D2431]]. Pack-less
+  creation has no operation-binding arm; the closed operation union and no-provider route actions
+  use unjoined identities; and the public parser lacks the deployment mode needed to reject an
+  impossible transient row. Exact review:
+  `planning/pack-capability-contract/fifth-fresh-independent-review-2026-08-31.md`.
 - 2026-08-31 (**D2334–D2339 fifth author repair**): materialized and recomputed the 92-row legacy
   manifest; split pre/post-D560 gates; structured all unconditional selectors; unified and compiled
   declaration history; closed the public projection; and replaced caller requirement lists with an

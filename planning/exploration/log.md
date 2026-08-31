@@ -13268,3 +13268,22 @@ accepted. Its register, 1.0 foundation checkpoint and work-state row point at th
 adapter can admit without recomputation, or state and measure the honest two-computation boundary.
 No packet runtime, cache, selector or product consumer is authorized until repair and another fresh
 review.
+
+## 2026-08-31 — Pack capability fifth fresh review returns operation and public-state closure
+
+**What landed:** independently crossed the [[D2334]]–[[D2339]] fifth repair against the live
+session and REST contracts. The six repaired boundaries survive. `make
+pack-capability-fifth-fresh-review` adds three able-to-fail returns: [[D2429]] pack-less Position
+creation cannot inhabit registered-pack-only `run.create`; [[D2430]] logical operation, no-provider
+action and route-branch identities are not joined; [[D2431]] the shared wire omits the deployment
+mode needed to reject impossible local/build-time transient rows.
+
+**What changed:** `pack-capability-contract` remains draft and returned. Its register, 1.0
+foundation checkpoint and work-state rows now point to
+`planning/pack-capability-contract/fifth-fresh-independent-review-2026-08-31.md`; the exact 92-row
+legacy authority and D560 content hold remain intact.
+
+**Blocked/next:** author a session-source-aware creation binding, one generated method/route/body-
+branch operation map and a public parsing/semantic-validation boundary with enough information to
+enforce availability-mode rules. No lane-0.30 schema, registry, migration, API or client landing
+before repair and another fresh review.

@@ -19210,6 +19210,33 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:shared-candidate-evidence-packet.md"
+    },
+    {
+      "id": "D2429",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b2e40affb882ea4f6e40d247578bfc374963c747045dffd74880963567f43e75",
+      "uxItems": [],
+      "owner": "content-and-theory",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2430",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:eccc4622f14e47546b78085d59097608ad41d8b1824b7d231036eeaebc514a85",
+      "uxItems": [],
+      "owner": "content-and-theory",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2431",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a671c360858c1f25973be1afe34a085d2e3cbaeb5641dccaf0817afce7ba17a1",
+      "uxItems": [],
+      "owner": "content-and-theory",
+      "blocker": "rfc:pack-capability-contract.md"
     }
   ]
 }

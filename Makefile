@@ -467,6 +467,10 @@ pack-capability-third-fresh-review:
 pack-capability-fourth-fresh-review:
 	node --test tools/d2334-pack-capability-fourth-fresh-review/*.test.mjs
 
+.PHONY: pack-capability-fifth-fresh-review
+pack-capability-fifth-fresh-review:
+	node --test tools/d2429-pack-capability-fifth-fresh-review/contract.test.mjs
+
 pack-capability-author-repair:
 	node tools/d2152-pack-capability-author-repair/contract.mjs
 	node --test tools/d2334-pack-capability-fifth-author-repair/contract.test.mjs

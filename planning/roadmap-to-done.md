@@ -164,6 +164,12 @@ Primary RFCs: `pack-capability-contract`, `claim-semantic-anchors`, `tactical-co
 `shared-candidate-evidence-packet`, `bounded-policy-targets`, `bounded-target-policy-composition`,
 `recorded-semantic-path`.
 
+The 2026-08-31 fifth fresh pack-capability review preserves its exact legacy/staged authorities but
+returns the runtime boundary on [[D2429]]–[[D2431]]: pack-less creation has no binding arm, logical
+operations and concrete route branches are not joined by one exhaustive identity map, and the
+shared public parser lacks the deployment-mode input needed for its transient-state rule. Receipt:
+`planning/pack-capability-contract/fifth-fresh-independent-review-2026-08-31.md`.
+
 The 2026-08-31 fifth fresh candidate-packet review preserves the repaired single retained legal-
 move value graph but returns its acceptance boundary on [[D2428]]: the RFC requires one
 `exactLegalMoveMap` call while the production declaration adapter necessarily recomputes the same

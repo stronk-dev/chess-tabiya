@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:00ad919c4ba37b4b4bfe91b9eded508d4afc4a8052fc9f7c6ee5a6a60f66be22",
+    "roadmap": "sha256:3b0f127b54ab20c84d88c665dbbf2a4595bd7da60ae7211a9aa20596260ac0e7",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:ab535d634784d5f2c04de8891cd2ff4d5a415c6751840efffedff77aeaa839c4",
-    "rfcRegister": "sha256:a651dd87660fb26aaf3f98d01b73a176ea0bc1629b4ef6b08ce842ceb7d3f48e",
+    "workState": "sha256:728d5618e6a3e6616caa747af544cddb7da9887ff1d0345ed904855715eae089",
+    "rfcRegister": "sha256:2e0e20a67fac2ce3e89a4b47f9cd1575e25890b8367335fdbda0ea77a656d826",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 655,
       "doing": 0,
-      "blocked": 815,
+      "blocked": 818,
       "done": 704,
       "refused": 3
     },
@@ -110,7 +110,7 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-08-31",
-        "summary": "Shared-resource bootstrap now specifies ten roots across four generic kinds and remains pending independent review; semantic validation is author-repaired; the candidate packet's fifth fresh review returned its impossible one-call legal-authority boundary; module registration and evidence presentation remain held; longitudinal store, bot policy, provider health and Campaign were independently returned on production-boundary defects despite green author contracts; foundation source identity remains dependency-blocked.",
+        "summary": "Shared-resource bootstrap now specifies ten roots across four generic kinds and remains pending independent review; semantic validation is author-repaired; candidate-packet and pack-capability fifth fresh reviews returned impossible authority/operation boundaries; module registration and evidence presentation remain held; longitudinal store, bot policy, provider health and Campaign were independently returned on production-boundary defects despite green author contracts; foundation source identity remains dependency-blocked.",
         "impact": "held",
         "evidence": [
           "planning/shared-resource-register-bootstrap/author-repair-2026-08-31.md",
@@ -119,6 +119,7 @@
           "planning/evidence-foundation-ux/shared-candidate-packet-fourth-fresh-independent-review-2026-08-31.md",
           "planning/evidence-foundation-ux/shared-candidate-packet-fifth-author-repair-2026-08-31.md",
           "planning/evidence-foundation-ux/shared-candidate-packet-fifth-fresh-independent-review-2026-08-31.md",
+          "planning/pack-capability-contract/fifth-fresh-independent-review-2026-08-31.md",
           "planning/learner-modules/fourth-fresh-independent-buildability-review-2026-08-31.md",
           "planning/learner-modules/fifth-author-repair-2026-08-31.md",
           "planning/platform-alignment/evidence-presentation/fourth-author-repair-2026-08-31.md",
@@ -131,6 +132,7 @@
           "rfc/shared-resource-register-bootstrap.md",
           "rfc/semantic-validation-authority.md",
           "rfc/shared-candidate-evidence-packet.md",
+          "rfc/pack-capability-contract.md",
           "rfc/module-registration.md",
           "rfc/evidence-presentation.md",
           "rfc/longitudinal-store.md",
