@@ -13023,3 +13023,16 @@ an equal second object graph, so it cannot prove that the receipt owns the moves
 The required repair makes one exact legal-map payload the source of both the sealed declaration and
 every flattened move reference. `make candidate-packet-fourth-fresh-review` reproduces the split;
 D2329, D2330 and D2389 remain blocked on the active RFC.
+
+## 2026-08-31 — First durable backlog-classification wave
+
+Applied the work-state instrument to every previously untriaged row whose primary durable route
+is an active RFC with exactly one roadmap capability owner. The conservative lifecycle rule is
+mechanical and reviewable: draft/awaiting rows are blocked on that RFC; accepted/implementing rows
+are todo; no activity is inferred. This classified 870 rows across 60 dependency groups and left
+planning-only routes untriaged rather than treating a document mention as execution authority.
+
+The exact census moved from 1,386 untriaged live rows (95.8%) to 516 (35.7%), with 792 blocked and
+139 todo. The roadmap's `release-truth` milestone is corrected from complete to active/held:
+source sealing is complete, but its own exit requires all live 1.0 work assigned. The remaining
+516 rows are the next work-state wave, not invisible residue.

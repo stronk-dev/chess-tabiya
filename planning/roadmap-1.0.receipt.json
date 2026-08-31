@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:14f0136a3f27363bd4e601faa2f99b5c4088ebb93ec280abe920b872445a1230",
+    "roadmap": "sha256:09d7c534d1fd43bd2d59728757e166f1ef0ab0a6481f7cdb678e2d7715c8e9b1",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
     "rfcRegister": "sha256:8994a12fb24947ea3796e4b3e6675c04cff13f6ef8889863a384147db54134e1",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
@@ -58,17 +58,17 @@
     {
       "id": "release-truth",
       "wave": 0,
-      "state": "complete",
+      "state": "active",
       "capabilities": [
         "governance",
         "operations"
       ],
       "dependsOn": [],
-      "nextAction": "Maintain the separately named verification tiers and refresh the source-sealed capability receipt whenever a joined authority changes.",
+      "nextAction": "Classify the remaining 516 planning-routed rows by real capability owner and executable dependency; maintain the separately named verification tiers and refresh the source-sealed receipt whenever a joined authority changes.",
       "latestCheckpoint": {
         "at": "2026-08-31",
-        "summary": "The roadmap is source-sealed and every one of 2,128 ledger rows now has durable execution state; the 1,395-row untriaged baseline is explicit and protected by a one-way ratchet.",
-        "impact": "advanced",
+        "summary": "All 2,138 ledger rows have durable state; 870 RFC-owned rows now carry their roadmap owner and exact RFC dependency, reducing untriaged live work from 1,386 to 516. The milestone remains active because its all-work-assigned exit is not met.",
+        "impact": "held",
         "evidence": [
           "rfc/archive/work-state.md",
           "planning/work-state.json",
