@@ -1,11 +1,11 @@
 # RFC: Verifiable runtime distribution and resource tiers
 
-- **Status:** **draft — RETURNED by fresh independent buildability review 2026-08-30 on
-  [[D2206]]–[[D2209]].** The signed multi-architecture release goal survives, but the manifest is
-  an unregistered multi-reader protocol, its image-digest embedding graph is self-referential,
-  FOSS eligibility has no closed licence policy, and the CPU resource journey has no production bot
-  operation. `make runtime-distribution-fresh-review` passes 4/4. Implementation remains
-  unauthorized and also awaits F12-A/C/D plus D1.
+- **Status:** **draft — author repair in progress after the fresh independent return on
+  [[D2206]]–[[D2209]].** [[D2207]]–[[D2209]] are repaired below. [[D2206]] now has a closed v1
+  protocol and single generated reader surface, but its required first shared-resource claim exposes
+  the register-bootstrap defect [[D2363]]: the current checker rejects a new resource before the RFC
+  that introduces it can be accepted. No checker/schema bypass is taken. Implementation remains
+  unauthorized and also awaits another fresh review, F12-A/C/D, the bot production path and D1.
 - **Author:** Codex on the owner's O13 Choice-C resource-tier ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` self-hostable appliance floor; `design/03-product-breadth.md` B8
@@ -126,7 +126,75 @@ If an accelerated artifact is published, its image, per-platform SBOM and exact 
 under `optionalArtifacts`. Their absence does not block core/cpu 1.0. An artifact absent from the
 manifest is unsupported even if an old registry tag still exists.
 
-`release-manifest.json` is canonical UTF-8 JSON with sorted keys and a trailing newline. It records:
+`release-manifest.json` is the **post-image release index**, canonical UTF-8 JSON with RFC-8785
+sorted keys and a trailing newline. Its canonical schema id is
+`urn:chess-tabiya:schema:release-manifest:1`; its closed TypeScript image is:
+
+```ts
+interface ReleaseManifestV1 {
+  readonly format: "tabiya-release-manifest";
+  readonly formatVersion: 1;
+  readonly release: {
+    readonly version: string;
+    readonly sourceRevision: string;
+    readonly createdAt: string;
+    readonly repository: string;
+    readonly sourceArchive: ReleaseFile;
+  };
+  readonly requiredArtifacts: readonly ReleaseArtifact[];
+  readonly optionalArtifacts: readonly ReleaseArtifact[];
+  readonly compose: readonly (ReleaseFile & { readonly profile: "local" | "appliance" | "hosted";
+    readonly imageDigests: readonly string[] })[];
+  readonly files: readonly ReleaseFile[];
+  readonly resourceReceipts: readonly NativeResourceReceipt[];
+  readonly contentBundle: { readonly producer: string; readonly digest: string;
+    readonly finalDischarge: boolean };
+  readonly fossPolicy: { readonly version: 1; readonly digest: string };
+}
+interface ReleaseFile { readonly path: string; readonly bytes: number; readonly sha256: string }
+type ReleaseArtifact = {
+  readonly subject: string; // fully-qualified OCI name@sha256 digest
+  readonly platforms: readonly ("linux/amd64" | "linux/arm64")[];
+  readonly platformManifests: readonly { readonly platform: "linux/amd64" | "linux/arm64";
+    readonly digest: string; readonly sbom: ReleaseFile }[];
+  readonly signatureIdentity: string;
+  readonly provenancePredicate: string;
+  readonly sbomPredicate: string;
+  readonly fossEligible: boolean;
+} & (
+  | { readonly role: "server"; readonly tier: "core"; readonly fossEligible: true }
+  | { readonly role: "maia-cpu"; readonly tier: "cpu"; readonly fossEligible: true }
+  | { readonly role: "maia-accelerated"; readonly tier: "accelerated";
+      readonly fossEligible: boolean }
+);
+interface NativeResourceReceipt {
+  readonly platform: "linux/amd64" | "linux/arm64";
+  readonly tier: "core" | "cpu";
+  readonly imageDigests: readonly string[];
+  readonly journeyId: "core.release_journey@1" | "bot.production_selection@1";
+  readonly productionProfileDigest: string | null;
+  readonly candidateWindow: { readonly operation: string; readonly requested: number;
+    readonly observed: number; readonly coverage: "bounded_top_k" } | null;
+  readonly steadyRssMiB: number; readonly peakRssMiB: number;
+  readonly unpackedImageBytes: number; readonly coldReadyMs: number;
+}
+```
+
+All strings have field-specific grammars in the generated JSON Schema: digests are lowercase
+`sha256:<64 hex>`, source revisions are 40 lowercase hex, OCI subjects contain an explicit digest,
+paths are relative POSIX paths without `..`, timestamps are canonical UTC millisecond ISO-8601,
+arrays with identity keys are unique and canonically sorted, and every object has
+`additionalProperties: false`. The schema rejects missing/extra fields, unknown versions, wrong
+digest algorithms, duplicate roles/platforms and a required artifact whose `fossEligible` is false.
+
+The generator emits the schema-derived TypeScript validator once. Manifest generation, read-only
+verification, Compose generation, release upload, About/API and the clean-host drill import that
+validator/projection; none owns a hand-copied interface or digest parser. The protocol's required
+shared-resource identity is `release-manifest-schema`, initial lane `1`. It must be added through the
+register bootstrap resolution in [[D2363]] and then declared in this document's `tabiya-claims`
+block before acceptance; the returned RFC does not add schema/checker production bytes early.
+
+The manifest records:
 
 - release version, full source Git SHA, created-at UTC, repository/source archive URL and digest;
 - each artifact's role, tier, media type, fully qualified digest, platform set, SBOM path/digest,
@@ -137,9 +205,8 @@ manifest is unsupported even if an old registry tag still exists.
 - `contentBundle` as a digest plus producer contract. Before F12-E2, release candidates must use the
   temporary allow-list in §7 and cannot claim the final 1.0 content-bundle discharge.
 
-The manifest is produced exactly once by a repository tool and then verified read-only. Compose,
-release upload and the in-app About response consume it; none transcribes image digests manually.
-It is a release-local format owned by that one producer/parser and claims no schema/register lane.
+The manifest is produced exactly once by a repository tool after image publication and then verified
+read-only. No release consumer accepts an unknown `formatVersion` or preserves unknown fields.
 
 ### 2. Immutable build inputs
 
@@ -211,11 +278,26 @@ The server image contains only:
 - the pinned Stockfish binary plus complete corresponding source/licence;
 - schemas and the compiled runtime opening catalogue;
 - the temporary/final runtime content bundle from §7;
-- Tabiya `LICENSE`, `NOTICE.txt`, exact source/release manifest and required operational docs;
+- Tabiya `LICENSE`, the pre-image `NOTICE.txt`, `build-metadata.json` and required operational docs;
 - minimal files required by F12-A/C health/locking.
 
 It contains no package manager cache, compiler, repository history, raw TSV sources, test harness,
 candidate/job/source sidecar, local path, planning tree, or arbitrary documentation.
+
+`build-metadata.json` is generated before image construction from committed inputs and contains only
+format/version, release version, source revision, source URL, build-input digests, FOSS-policy digest,
+notice digest and runtime-content digest. It contains no image, SBOM, Compose, signature,
+attestation or release-manifest digest. `NOTICE.txt` is likewise generated before the build from the
+pinned lock/material inventory plus curated records; the post-push filesystem/SBOM check validates
+those same bytes and fails rather than regenerating a notice that would change the image.
+
+The post-image `release-manifest.json` is never copied into an image. Release Compose mounts the
+downloaded, checksum-verified file read-only at `/run/chess-tabiya/release-manifest.json`. At startup
+the server validates it through the generated v1 parser and requires its source revision and server
+subject to match the embedded build metadata/current image identity. Development without a mounted
+index exposes the embedded facts with `releaseIndex: "not_attached"`; a published 1.0 appliance and
+clean-host drill require `releaseIndex: "verified"`. About/API projects the verified join and never
+fetches mutable release metadata from the network.
 
 #### Maia CPU image (`cpu`)
 
@@ -263,8 +345,8 @@ Definitions are exact:
 - hard memory is the sum of Compose `mem_limit`/cgroup `memory.max`; swap is disabled for the proof;
 - steady state is the maximum of five one-second samples after readiness plus five idle minutes;
 - peak is the maximum cgroup current/peak value during the F12-H core journey, including import,
-  run, rewind, comparison, review, export and backup preparation; CPU adds model startup plus 100
-  sequential opponent selections at the widest supported candidate window;
+  run, rewind, comparison, review, export and backup preparation; CPU adds model startup plus the
+  exact production bot journey below;
 - image bytes are the sum of unique unpacked layer sizes required by that profile on one platform,
   not compressed transfer size and not double-counted shared layers;
 - cold ready starts after images are present but with empty writable volumes/cache; network pull is
@@ -280,7 +362,85 @@ Accelerated resource numbers are mandatory in its optional manifest but are sele
 actual supported hardware matrix; they cannot be invented before that artifact exists. They do not
 weaken core/cpu limits.
 
+The CPU bot arm is dependency-gated, not synthesised by the release harness. It cannot become a
+release acceptance check until `bot-policy` and `bot-roster` are accepted and implemented, the
+production catalogue contains the compiled literal `pawn-forward.1800@1`, and the ordinary web/API
+flow can create a run that reaches `bot.production_selection@1`. The journey reads that catalogue
+member's exact RFC-8785 `profileDigest`; a fixture-created profile or a digest supplied by the test
+is refused. It invokes the production route 100 times over the committed 20-root release journey
+(five declared seeds per root), requiring the same event append/result path as learner play.
+
+Each selection must request `maia.policy_page@1` at the profile's widest declared page (v1: 20),
+record observed candidate count and `coverage: "bounded_top_k"`, traverse the profile's guard and
+pawn-transform layers, and return the committed selection receipt. The resource receipt records
+route id, exact profile id/version/digest, Maia operation/requested/observed window, provider
+generation and 100/100 committed results. Catalog empty, profile unreachable, digest mismatch,
+diagnostic `/select-move`, test-only declaration, narrower request, provider fallback or fewer than
+100 commits makes resource acceptance inapplicable/failed; it can produce research measurements but
+cannot satisfy the 1.0 CPU gate.
+
 ### 6. SBOM and notices
+
+“FOSS-eligible” is decided by one committed, versioned input—not by absence of a proprietary flag.
+`release/foss-policy.v1.json` has `format: "tabiya-foss-policy"`, `formatVersion: 1`, a sorted exact
+`acceptedLicenseIds` set, a sorted exact `acceptedWithPairs` set of `{license, exception}`, a
+`refusedLicenseIds` set, required licence-text SHA-256 by accepted id, and the schema/digest of
+`release/foss-overrides.v1.json`. Both files are closed canonical JSON and their digests appear in
+pre-image build metadata, provenance and the post-image release manifest.
+
+The parser targets SPDX 2.3 Annex D and records the exact SPDX License List version in policy. The
+specification defines `OR` as a choice, `AND` as simultaneous requirements, `WITH` as an exception
+applied to a simple expression, and `LicenseRef-*` as user-defined text; it also gives `WITH` higher
+precedence than `AND`, and `AND` higher precedence than `OR`:
+<https://spdx.github.io/spdx-spec/v2.3/SPDX-license-expressions/>. The release parser requires
+canonical identifier case and rejects the legacy `+` shorthand in favour of explicit `-or-later`,
+even though SPDX 2.3 can parse it; this is a Tabiya policy narrowing, not a claim about SPDX syntax.
+
+The v1 accepted-id set is deliberately explicit:
+
+```text
+0BSD, AGPL-3.0-only, AGPL-3.0-or-later, Apache-2.0, Artistic-2.0,
+BSD-2-Clause, BSD-3-Clause, BSL-1.0, CC0-1.0, GPL-2.0-only,
+GPL-2.0-or-later, GPL-3.0-only, GPL-3.0-or-later, ISC, LGPL-2.1-only,
+LGPL-2.1-or-later, LGPL-3.0-only, LGPL-3.0-or-later, MIT, MPL-2.0,
+PSF-2.0, Python-2.0, Unicode-3.0, Unlicense, Zlib
+```
+
+The initial accepted `WITH` pairs are exactly `GPL-2.0-only WITH Classpath-exception-2.0`,
+`GPL-2.0-or-later WITH Classpath-exception-2.0`, `Apache-2.0 WITH LLVM-exception`, and
+`GPL-3.0-or-later WITH GCC-exception-3.1`. An exception never floats to another licence. Adding an
+id/pair or changing a required text digest is a reviewed policy-version change, not a scanner update.
+
+The validator parses the SPDX 2.3 expression grammar into an AST and evaluates it as follows:
+
+- a leaf passes only when its exact id is accepted and its policy-pinned licence text exists at the
+  declared digest; missing text, `NOASSERTION`, `NONE`, unknown ids and every `LicenseRef-*` fail for
+  `server`/`maia-cpu`;
+- `A AND B` passes only when both branches pass and both texts/notices/source obligations ship;
+- `A OR B` passes only when a curated component record selects one literal branch, that branch
+  passes independently, and the exact component purl/version/artifact digest plus original
+  expression are bound to the selection; “pick whichever passes” is forbidden;
+- `A WITH E` passes only when the exact pair is in `acceptedWithPairs` and both base text and
+  exception text match policy digests;
+- nested expressions recurse without distributive rewriting, so a selection binds an exact AST
+  path rather than a normalized guess.
+
+Curated overrides are narrowly corrective authority, not a “looks open” escape hatch. Each record
+binds component purl, version, installed artifact digest, scanner id/version, observed expression,
+replacement SPDX expression, upstream source URL/revision, exact upstream licence-text digest,
+rationale, approver identity and approval commit. The replacement must itself pass this policy;
+custom `LicenseRef` text cannot be blessed by override in v1. A record that does not match every
+component byte/identity field is inapplicable. Conflicting scanner/curated results without one exact
+applicable record fail closed. D1 remains separate: Maia weight bytes stay
+`LicenseRef-MAIA3-WEIGHTS-UNRESOLVED` until explicit upstream evidence supplies an expression/text
+that passes a future reviewed policy input; the override file cannot manufacture that evidence.
+
+The optional accelerated artifact may contain a refused expression only when it records
+`fossEligible: false`, carries every available text/notice and is excluded from the required CPU
+profile. The complete distribution cannot be labelled all-FOSS while such an optional artifact is
+selected. Fixtures cross accepted leaves, AND, selected/unselected OR, all four WITH pairs plus a
+wrong pair, nested expressions, unknown/custom LicenseRef, missing/mismatched text, exact/stale
+override, scanner conflict and the unresolved Maia weight.
 
 Each platform image receives one SPDX 2.3 JSON SBOM generated from the pushed platform digest, not
 from the source tree or builder filesystem. It inventories OS packages, language packages, model,
@@ -340,17 +500,30 @@ upstream Maia merely because the image contains Maia.
 
 The publish job performs, in order:
 
-1. build required platforms from the committed source with provenance materials;
-2. push immutable platform manifests and multi-architecture index;
-3. scan each pushed platform digest and validate/export its SPDX SBOM;
-4. generate the canonical release manifest and Compose artifacts;
-5. sign every image index digest using keyless Sigstore/cosign identity bound to the release
+1. generate and validate the pre-image FOSS policy, curated override projection, `NOTICE.txt`,
+   `build-metadata.json`, source archive and runtime-content input from the committed source;
+2. build required platforms from exactly those bytes, then push immutable platform manifests and
+   multi-architecture indexes;
+3. scan each pushed platform digest, validate/export its SPDX SBOM and reconcile the embedded
+   pre-image notice/build metadata without rewriting either;
+4. generate digest-pinned Compose files from the pushed image subjects and compute their digests;
+5. generate the post-image `release-manifest.json` once from image/SBOM/Compose/resource receipts;
+   it records no digest of itself or `SHA256SUMS`;
+6. generate `SHA256SUMS` over every release file except `SHA256SUMS` itself, including the release
+   manifest; neither an image nor the release manifest embeds this later checksum file;
+7. sign every image index digest using keyless Sigstore/cosign identity bound to the release
    workflow and repository;
-6. create GitHub build-provenance and SBOM attestations for each image subject/digest;
-7. attest the source archive, Compose files, release manifest, notices and `SHA256SUMS` as release
+8. create GitHub build-provenance and SBOM attestations for each image subject/digest;
+9. attest the source archive, Compose files, release manifest, notices and `SHA256SUMS` as release
    artifacts;
-8. verify signatures and attestations from a fresh job with no build workspace before creating the
-   GitHub release.
+10. verify signatures, checksums, manifest schema/joins and attestations from a fresh job with no
+    build workspace before creating the GitHub release.
+
+This graph is acyclic by construction: committed/pre-image bytes → image digest → SBOM/resource
+receipt → Compose digest → release manifest → checksum file → signatures/attestations. About reads
+the mounted post-image index at runtime; no earlier node embeds or hashes a later node. A graph
+fixture topologically sorts every artifact edge and fails any cycle, including a notice regenerated
+from a post-push SBOM or an image embedding its own release index.
 
 Action tags, mutable image tags and the GitHub release page are discovery aids only. Compose uses
 digests. Verification binds repository, workflow path, tag/ref, issuer, subject name and digest;
@@ -416,9 +589,11 @@ self-hosted/release runner supplies that blocking receipt; emulation is not sile
 
 ### Phase 2 — inventory and legal/source surface
 
-5. Generate per-platform SPDX SBOMs and curated `NOTICE.txt`; build the filesystem↔SBOM validator.
-6. Add the canonical release manifest/source archive/checksums.
-7. Add About UI/API from the embedded manifest.
+5. Generate the pre-image FOSS policy/curated notice and build the post-image filesystem↔SBOM
+   validator without regenerating embedded bytes.
+6. Add the schema-derived post-image release manifest, source archive, Compose and checksum graph.
+7. Add About UI/API from the embedded build metadata joined to the verified read-only mounted
+   release manifest.
 8. Replace `COPY content content` with the traced temporary runtime allow-list and route the final
    F3/F4 join to F12-E2.
 
@@ -437,23 +612,24 @@ self-hosted/release runner supplies that blocking receipt; emulation is not sile
 
 ## Acceptance criteria
 
-### Fresh independent return (2026-08-30)
+### Fresh independent return and partial author repair (2026-08-30 through 2026-08-31)
 
 Exact return:
 `planning/verifiable-runtime-distribution/fresh-independent-buildability-review-2026-08-30.md`.
-Before the criteria below are buildable, the author must:
+The author repair now provides:
 
-1. register and define the versioned release-manifest protocol consumed by generation,
-   verification, Compose, About/API, upload and clean-host install ([[D2206]]);
-2. break the digest cycle in which the server image embeds the exact release manifest that records
-   the server image digest ([[D2207]]);
-3. publish one closed, versioned SPDX-expression/override policy for “FOSS-eligible” rather than
-   leaving licence classification to scanner or implementer judgement ([[D2208]]); and
-4. bind the CPU resource journey to one accepted production bot profile/route and exact candidate
-   window instead of a test-created profile while `BOT_POLICY_PROFILES` is empty ([[D2209]]).
+1. a closed `ReleaseManifestV1`, one generated validator/projection surface and the required
+   `release-manifest-schema` initial lane; its actual claim/register bootstrap remains blocked by
+   [[D2363]] rather than bypassed ([[D2206]] partial);
+2. an explicit pre-image metadata/notice versus post-image index split, mounted About join and
+   topologically ordered release graph ([[D2207]] repaired);
+3. one closed versioned SPDX-expression/text/override policy with exact AND/OR/WITH/LicenseRef
+   behavior and conflicting-authority fixtures ([[D2208]] repaired); and
+4. an exact dependency-gated `pawn-forward.1800@1` production route, profile digest,
+   `maia.policy_page@1` width-20 operation and 100 committed-selection receipt ([[D2209]] repaired).
 
-After repair, another fresh independent review and the unresolved dependency/weight-licence gates
-still precede implementation or acceptance.
+The D2206 bootstrap must be resolved and the claim inserted before another fresh independent review.
+The unresolved bot implementation and weight-licence gates still precede release acceptance.
 
 1. `server` and `maia-cpu` publish amd64/arm64 indexes whose platform manifests are all digest-pinned
    in one canonical release manifest; Compose contains no tag-only image reference.
@@ -469,7 +645,9 @@ still precede implementation or acceptance.
 6. D1 records an explicit weight licence applying to the distributed Maia weight bytes. Without it,
    release publication fails even if an automated scanner guesses AGPL or CC-BY.
 7. Per-platform SPDX 2.3 SBOMs are generated from pushed digests and are set-equal to actual package/
-   filesystem inventories under the declared exceptions. Unknown/proprietary items fail core/cpu.
+   filesystem inventories under the declared exceptions. The v1 policy fixtures cross leaves,
+   AND/OR/WITH, custom references, text digests and exact/stale overrides; unknown/proprietary items
+   fail core/cpu.
 8. `NOTICE.txt`, all referenced licence texts, corresponding-source archive and exact source link
    ship in release assets and images; the About UI/API exposes the same revision/digests.
 9. The production server image contains zero candidate/job/source/evidence sidecar, authoring tool,
@@ -478,7 +656,9 @@ still precede implementation or acceptance.
 10. Core passes 512 MiB hard / 128 MiB steady / 384 MiB peak / 650 MiB image / 30 s cold-ready limits
     natively on amd64 and arm64.
 11. CPU passes 2,048 MiB hard / 1,536 MiB steady / 1,843 MiB peak / 2.0 GiB images / 120 s cold-ready
-    limits natively on amd64 and arm64.
+    limits natively on amd64 and arm64 while 100/100 selections traverse the reachable compiled
+    `pawn-forward.1800@1` production route at `maia.policy_page@1` width 20; an empty/test catalog,
+    diagnostic route or narrower window cannot satisfy the receipt.
 12. The composed server cache population, including D1579's weighted candidate packets, retains at
     most 96 MiB JS heap and remains inside core peak; 10× attempted population demonstrates eviction
     rather than growth.
@@ -505,6 +685,12 @@ The implementation is rejected if any of these can pass:
 - an SBOM produced from the source tree passes for a pushed image containing an extra package;
 - a renamed CUDA shared library survives the CPU image because only package names were checked;
 - a model card's paper licence is automatically assigned to the weight file;
+- a `LicenseRef-*`, missing licence text, unselected `OR` branch or stale curated override passes
+  core/cpu because no proprietary keyword was found;
+- an image embeds the post-image release manifest, a post-push SBOM regenerates embedded notice
+  bytes, or the checksum file hashes itself;
+- the CPU gate creates its own bot profile or calls diagnostic `/select-move` while the production
+  catalog/route is empty;
 - a valid signature by the wrong repository/workflow verifies;
 - one platform manifest lacks an SBOM while the multiarch index has a generic SBOM;
 - the core journey passes by using swap above its cgroup limit;
@@ -535,6 +721,13 @@ the owner-ruled `core` and `cpu` 1.0 floor.
 
 ## Changelog
 
+- 2026-08-31 — author-repaired [[D2207]]–[[D2209]] and specified the protocol half of [[D2206]].
+  The release graph now splits embedded pre-image metadata/notices from the externally mounted
+  post-image index; FOSS eligibility has a closed SPDX 2.3 policy/override evaluator; and CPU proof
+  binds the exact production `pawn-forward.1800@1` route/window. The first manifest-schema claim is
+  not fabricated: it exposed register-bootstrap defect [[D2363]], which must resolve before this
+  author round can complete or re-review begin. No workflow, production, image, schema, content,
+  archive or protected-design byte changed.
 - 2026-08-30 — fresh independent review returned the draft on [[D2206]]–[[D2209]]. Exact return:
   `planning/verifiable-runtime-distribution/fresh-independent-buildability-review-2026-08-30.md`;
   reproduction: `make runtime-distribution-fresh-review`. No workflow, production, image, schema,

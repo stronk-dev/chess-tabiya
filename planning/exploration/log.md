@@ -12724,3 +12724,15 @@ reservation; and all five operator commands use one versioned discriminated rece
 `make storage-backup-author-repair` passes 8/8 plus typecheck. No production, storage, schema,
 workflow, content, archive or protected-design byte changed; another fresh independent review
 remains required. Receipt: `planning/storage-backup-recovery/author-repair-2026-08-31.md`.
+
+## 2026-08-31 — Verifiable runtime distribution partial author repair
+
+Author-repaired [[D2207]]–[[D2209]] and specified the protocol half of [[D2206]]. Embedded pre-image
+metadata/notices and a mounted post-image index now form an acyclic release graph; FOSS eligibility
+uses a closed SPDX 2.3 expression/text/override policy; and CPU proof binds the reachable compiled
+`pawn-forward.1800@1` production route at Maia width 20 for 100 committed selections.
+
+The required first `release-manifest-schema` claim exposed register-bootstrap defect [[D2363]] and
+was not bypassed, so this is explicitly a partial repair and no re-review is requested yet. `make
+runtime-distribution-author-repair` passes 7/7 plus typecheck. Receipt:
+`planning/verifiable-runtime-distribution/partial-author-repair-2026-08-31.md`.

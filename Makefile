@@ -518,6 +518,11 @@ verify: export ENGINES_REQUIRED := 1
 runtime-distribution-fresh-review:
 	node --test tools/d2206-runtime-distribution-fresh-review/contract.test.mjs
 
+.PHONY: runtime-distribution-author-repair
+runtime-distribution-author-repair:
+	node --test tools/d2206-runtime-distribution-author-repair/contract.test.mjs
+	./node_modules/.bin/tsc -p tools/d2206-runtime-distribution-author-repair/tsconfig.contract.json --noEmit
+
 .PHONY: storage-backup-fresh-review
 storage-backup-fresh-review:
 	node --test tools/d2210-storage-backup-fresh-review/contract.test.mjs
