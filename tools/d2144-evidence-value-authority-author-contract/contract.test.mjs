@@ -85,7 +85,7 @@ test("the draft closes all four authority families without a generic payload esc
 
 test("dependencies and closure gates are explicit rather than hand-waved", () => {
   assert.match(rfc, /\*\*Status:\*\* draft/u);
-  assert.match(rfc, /author-amended 2026-08-30 through \[\[D2327\]\]/u);
+  assert.match(rfc, /author-amended 2026-08-31 through \[\[D2327\]\] and the D2146 callable-operation/u);
   assert.match(rfc, /dependency-blocked on the[\s\S]*?semantic convention register\/provenance/u);
   assert.match(rfc, /provider exchange contracts/u);
   assert.match(rfc, /semantic-convention-provenance\.md/u);
@@ -155,4 +155,27 @@ test("recorded runtime readings derive from their exact sourcing-ledger evidence
   assert.match(rfc, /\[\[D2327\]\][\s\S]*?createRecordedEngineEvalV1Evidence[\s\S]*?createSourcingLedgerEngineEvalV1Evidence/u);
   assert.match(rfc, /\[\[D2327\]\][\s\S]*?createRecordedTablebaseResultV1Evidence[\s\S]*?createSourcingLedgerTablebaseResultV1Evidence/u);
   assert.match(rfc, /37 computed \/ 25 derived \/ 9 direct source \/ 4 authored/u);
+});
+
+test("every used route names an exact callable producer operation", () => {
+  assert.equal(routeReceipt.summary.rowsWithResolvedProducerOperations, 184);
+  assert.equal(routeReceipt.summary.distinctCurrentProducerOperations, 45);
+  assert.deepEqual(routeReceipt.summary.usedRowsMissingProducerOperations, []);
+  assert.deepEqual(routeReceipt.summary.exportOnlyRowsWithProducerOperations, []);
+  assert.deepEqual(routeReceipt.summary.moduleOwnedProducerOperations, []);
+
+  for (const route of routeReceipt.routes) {
+    assert.equal(route.currentProductionUseSites.length, route.currentProductionUseCount, route.currentProjection);
+    if (route.currentProductionUseCount === 0) {
+      assert.deepEqual(route.currentProducerOperations, [], route.currentProjection);
+      continue;
+    }
+    assert.ok(route.currentProducerOperations.length > 0, route.currentProjection);
+    for (const operation of route.currentProducerOperations) {
+      assert.match(operation, /^(?:apps|packages)\/.+#[A-Za-z][A-Za-z0-9.]*$/u, operation);
+      assert.doesNotMatch(operation, /#<module>$/u);
+    }
+  }
+  assert.match(rfc, /184 used routes to 45 exact enclosing callable operations/u);
+  assert.match(rfc, /seven export-only[\s\S]*?carry no current operation/u);
 });

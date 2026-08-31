@@ -26,6 +26,11 @@ interface CurrentRoute {
   readonly projection: string;
 }
 
+interface ProductionUse {
+  readonly site: string;
+  readonly operation: string;
+}
+
 interface TargetProfile {
   readonly projection: string;
   readonly factoryShape: FactoryShape;
@@ -93,8 +98,43 @@ const productionFiles = ["packages/runtime/src", "apps/server/src", "apps/web/sr
   .flatMap((path) => filesUnder(join(ROOT, path)))
   .filter((path) => relative(ROOT, path) !== ADAPTER);
 
-function productionUseIndex(operations: ReadonlySet<string>): ReadonlyMap<string, readonly string[]> {
-  const found = new Map([...operations].map((operation) => [operation, [] as string[]]));
+function declarationName(name: ts.DeclarationName | undefined): string | undefined {
+  if (name === undefined) return undefined;
+  if (ts.isIdentifier(name) || ts.isStringLiteral(name) || ts.isNumericLiteral(name)) return name.text;
+  return undefined;
+}
+
+function enclosingOperation(node: ts.Node): string {
+  for (let cursor: ts.Node | undefined = node.parent; cursor !== undefined; cursor = cursor.parent) {
+    if (ts.isFunctionDeclaration(cursor) && cursor.name !== undefined) return cursor.name.text;
+    if (ts.isMethodDeclaration(cursor) || ts.isGetAccessorDeclaration(cursor) || ts.isSetAccessorDeclaration(cursor)) {
+      const method = declarationName(cursor.name);
+      if (method === undefined) continue;
+      const owner = cursor.parent && (ts.isClassDeclaration(cursor.parent) || ts.isClassExpression(cursor.parent))
+        ? cursor.parent.name?.text
+        : undefined;
+      return owner === undefined ? method : `${owner}.${method}`;
+    }
+    if (ts.isConstructorDeclaration(cursor)) {
+      const owner = cursor.parent && (ts.isClassDeclaration(cursor.parent) || ts.isClassExpression(cursor.parent))
+        ? cursor.parent.name?.text
+        : undefined;
+      return owner === undefined ? "constructor" : `${owner}.constructor`;
+    }
+    if (ts.isArrowFunction(cursor) || ts.isFunctionExpression(cursor)) {
+      const parent = cursor.parent;
+      if (ts.isVariableDeclaration(parent) && ts.isIdentifier(parent.name)) return parent.name.text;
+      if (ts.isPropertyAssignment(parent)) {
+        const property = declarationName(parent.name);
+        if (property !== undefined) return property;
+      }
+    }
+  }
+  return "<module>";
+}
+
+function productionUseIndex(operations: ReadonlySet<string>): ReadonlyMap<string, readonly ProductionUse[]> {
+  const found = new Map([...operations].map((operation) => [operation, [] as ProductionUse[]]));
   for (const path of productionFiles) {
     const source = readFileSync(path, "utf8");
     const file = ts.createSourceFile(path, source, ts.ScriptTarget.Latest, true, path.endsWith(".svelte") ? ts.ScriptKind.TS : ts.ScriptKind.TS);
@@ -120,13 +160,17 @@ function productionUseIndex(operations: ReadonlySet<string>): ReadonlyMap<string
       const operation = direct ?? namespaced;
       if (operation !== undefined) {
         const line = file.getLineAndCharacterOfPosition(node.getStart(file)).line + 1;
-        found.get(operation)!.push(`${relative(ROOT, path)}:${line}`);
+        const sourcePath = relative(ROOT, path);
+        found.get(operation)!.push({
+          site: `${sourcePath}:${line}`,
+          operation: `${sourcePath}#${enclosingOperation(node)}`,
+        });
       }
       ts.forEachChild(node, visit);
     };
     visit(file);
   }
-  return new Map([...found].map(([operation, sites]) => [operation, sites.sort()]));
+  return new Map([...found].map(([operation, uses]) => [operation, uses.sort((left, right) => left.site.localeCompare(right.site))]));
 }
 
 function currentRoutes(): readonly CurrentRoute[] {
@@ -199,7 +243,7 @@ function buildReceipt() {
     if (declaration === undefined) throw new TypeError(`undeclared mint projection ${route.projection}`);
     const producer = producers.get(`${declaration.producer.id}@${declaration.producer.version}`);
     if (producer === undefined) throw new TypeError(`missing producer for ${route.projection}`);
-    const sites = uses.get(route.oldOperation) ?? [];
+    const productionUses = uses.get(route.oldOperation) ?? [];
     const bindings = PRIMARY_EVIDENCE_MANIFEST.bindings
       .filter((binding) => binding.projection.id === route.projection && binding.projection.version === declaration.version)
       .map((binding) => `${binding.consumer.id}@${binding.consumer.version}`)
@@ -212,8 +256,9 @@ function buildReceipt() {
       producerImplementation: producer.implementation,
       currentDisposition: declaration.disposition?.kind ?? "ordinary",
       currentBindings: bindings,
-      currentProductionUseCount: sites.length,
-      currentProductionUseSites: sites,
+      currentProductionUseCount: productionUses.length,
+      currentProductionUseSites: productionUses.map((use) => use.site),
+      currentProducerOperations: [...new Set(productionUses.map((use) => use.operation))].sort(),
     };
   });
   const projectionCounts = Map.groupBy(routes, (route) => route.currentProjection);
@@ -232,6 +277,7 @@ function buildReceipt() {
     disposition: projection.disposition?.kind ?? "ordinary",
     requiredAction: projection.disposition?.kind === "retired" ? "remain_factoryless" : "add_factory_and_profile_before_binding",
   })).sort((left, right) => left.projection.localeCompare(right.projection));
+  const currentProducerOperations = routes.flatMap((route) => route.currentProducerOperations);
   const body = { schemaVersion: 1, authority: "D2146", routes, noRoute };
   return {
     ...body,
@@ -242,6 +288,11 @@ function buildReceipt() {
       noRouteCount: noRoute.length,
       rowsWithProductionUses: routes.filter((route) => route.currentProductionUseCount > 0).length,
       rowsWithoutProductionUses: routes.filter((route) => route.currentProductionUseCount === 0).length,
+      rowsWithResolvedProducerOperations: routes.filter((route) => route.currentProducerOperations.length > 0).length,
+      distinctCurrentProducerOperations: new Set(currentProducerOperations).size,
+      usedRowsMissingProducerOperations: routes.filter((route) => route.currentProductionUseCount > 0 && route.currentProducerOperations.length === 0).map((route) => route.currentProjection),
+      exportOnlyRowsWithProducerOperations: routes.filter((route) => route.currentProductionUseCount === 0 && route.currentProducerOperations.length > 0).map((route) => route.currentProjection),
+      moduleOwnedProducerOperations: [...new Set(currentProducerOperations.filter((operation) => operation.endsWith("#<module>")))].sort(),
       boundRowsWithoutProductionUses: routes.filter((route) => route.currentProductionUseCount === 0 && route.currentBindings.length > 0).length,
       projectionsWithoutProductionUses,
       boundProjectionsWithoutProductionUses,
@@ -268,6 +319,15 @@ if (process.argv.includes("--write")) {
   }
   if (receipt.routes.some((route) => route.targetProfiles.some((profile) => profile.authorityInputs.includes("producer_authority_parameters")))) {
     throw new TypeError("route receipt retains an unresolved producer_authority_parameters placeholder");
+  }
+  if (receipt.summary.usedRowsMissingProducerOperations.length > 0) {
+    throw new TypeError(`used routes lack callable producer operations: ${receipt.summary.usedRowsMissingProducerOperations.join(", ")}`);
+  }
+  if (receipt.summary.exportOnlyRowsWithProducerOperations.length > 0) {
+    throw new TypeError(`export-only routes unexpectedly name producer operations: ${receipt.summary.exportOnlyRowsWithProducerOperations.join(", ")}`);
+  }
+  if (receipt.summary.moduleOwnedProducerOperations.length > 0) {
+    throw new TypeError(`route receipt retains module-only producer operations: ${receipt.summary.moduleOwnedProducerOperations.join(", ")}`);
   }
   console.log(`evidence-value-authority-route-map: ${receipt.summary.routeCount} routes / ${receipt.summary.distinctCurrentProjections} projections / ${receipt.summary.noRouteCount} no-route declarations sealed by ${receipt.summary.receiptDigest}`);
 }

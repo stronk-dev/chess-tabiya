@@ -25,6 +25,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:117"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -50,6 +53,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:834"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -77,6 +83,11 @@
         "packages/runtime/src/compare-strips.ts:107",
         "packages/runtime/src/compare-strips.ts:145",
         "packages/runtime/src/compare-strips.ts:29"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/compare-strips.ts#comparisonEngineTrajectory",
+        "packages/runtime/src/compare-strips.ts#comparisonStrips",
+        "packages/runtime/src/compare-strips.ts#sentenceEvidence"
       ]
     },
     {
@@ -104,6 +115,11 @@
         "packages/runtime/src/compare-strips.ts:107",
         "packages/runtime/src/compare-strips.ts:145",
         "packages/runtime/src/compare-strips.ts:29"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/compare-strips.ts#comparisonEngineTrajectory",
+        "packages/runtime/src/compare-strips.ts#comparisonStrips",
+        "packages/runtime/src/compare-strips.ts#sentenceEvidence"
       ]
     },
     {
@@ -131,6 +147,11 @@
         "packages/runtime/src/compare-strips.ts:107",
         "packages/runtime/src/compare-strips.ts:145",
         "packages/runtime/src/compare-strips.ts:29"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/compare-strips.ts#comparisonEngineTrajectory",
+        "packages/runtime/src/compare-strips.ts#comparisonStrips",
+        "packages/runtime/src/compare-strips.ts#sentenceEvidence"
       ]
     },
     {
@@ -159,6 +180,11 @@
         "packages/runtime/src/compare-strips.ts:107",
         "packages/runtime/src/compare-strips.ts:145",
         "packages/runtime/src/compare-strips.ts:29"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/compare-strips.ts#comparisonEngineTrajectory",
+        "packages/runtime/src/compare-strips.ts#comparisonStrips",
+        "packages/runtime/src/compare-strips.ts#sentenceEvidence"
       ]
     },
     {
@@ -184,6 +210,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:438"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#derivedExchangeSemanticEvents"
       ]
     },
     {
@@ -209,6 +238,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:471"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#tradeCompletedSemanticEvent"
       ]
     },
     {
@@ -234,6 +266,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:830"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -259,6 +294,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:825"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -284,6 +322,10 @@
         "apps/server/src/candidate-evidence.ts:145",
         "packages/runtime/src/semantic-evidence.ts:822",
         "packages/runtime/src/semantic-evidence.ts:822"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -309,6 +351,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:218"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#candidateFeatureVector"
       ]
     },
     {
@@ -334,6 +379,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:814"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -359,6 +407,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:846"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#pawnContactTimingSemanticEvent"
       ]
     },
     {
@@ -384,6 +435,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:851"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#harassmentPressureSemanticEvent"
       ]
     },
     {
@@ -409,6 +463,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:1035"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
       ]
     },
     {
@@ -434,6 +491,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:1035"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
       ]
     },
     {
@@ -459,6 +519,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:1035"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
       ]
     },
     {
@@ -484,6 +547,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:1035"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
       ]
     },
     {
@@ -509,6 +575,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:1035"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
       ]
     },
     {
@@ -534,6 +603,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:1035"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
       ]
     },
     {
@@ -559,6 +631,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:1035"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
       ]
     },
     {
@@ -584,6 +659,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:1035"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
       ]
     },
     {
@@ -609,6 +687,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:1035"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
       ]
     },
     {
@@ -634,6 +715,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:1035"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
       ]
     },
     {
@@ -659,6 +743,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:1035"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
       ]
     },
     {
@@ -684,6 +771,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:1035"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
       ]
     },
     {
@@ -709,6 +799,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:1035"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
       ]
     },
     {
@@ -736,6 +829,10 @@
       "currentProductionUseSites": [
         "packages/runtime/src/story.ts:232",
         "packages/runtime/src/story.ts:36"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/story.ts#storyEvidence",
+        "packages/runtime/src/story.ts#storyMoments"
       ]
     },
     {
@@ -763,6 +860,10 @@
       "currentProductionUseSites": [
         "packages/runtime/src/story.ts:232",
         "packages/runtime/src/story.ts:36"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/story.ts#storyEvidence",
+        "packages/runtime/src/story.ts#storyMoments"
       ]
     },
     {
@@ -789,6 +890,10 @@
       "currentProductionUseSites": [
         "packages/runtime/src/story.ts:232",
         "packages/runtime/src/story.ts:36"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/story.ts#storyEvidence",
+        "packages/runtime/src/story.ts#storyMoments"
       ]
     },
     {
@@ -816,6 +921,10 @@
       "currentProductionUseSites": [
         "packages/runtime/src/story.ts:232",
         "packages/runtime/src/story.ts:36"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/story.ts#storyEvidence",
+        "packages/runtime/src/story.ts#storyMoments"
       ]
     },
     {
@@ -841,6 +950,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:882"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#attractionObservedSemanticEvent"
       ]
     },
     {
@@ -866,6 +978,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:897"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#checkZwischenzugSemanticEvent"
       ]
     },
     {
@@ -891,6 +1006,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:818"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -916,6 +1034,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:874"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#deflectionObservedSemanticEvent"
       ]
     },
     {
@@ -941,6 +1062,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:415"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#discoveredExecutedSemanticEvents"
       ]
     },
     {
@@ -964,6 +1088,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:161"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#collectorResults"
       ]
     },
     {
@@ -989,6 +1116,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:892"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#interferenceSemanticEvent"
       ]
     },
     {
@@ -1014,6 +1144,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:868"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#lineBlockerClearanceSemanticEvent"
       ]
     },
     {
@@ -1039,6 +1172,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:903"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#overloadExploitationSemanticEvent"
       ]
     },
     {
@@ -1060,7 +1196,8 @@
       "currentDisposition": "inspector_only",
       "currentBindings": [],
       "currentProductionUseCount": 0,
-      "currentProductionUseSites": []
+      "currentProductionUseSites": [],
+      "currentProducerOperations": []
     },
     {
       "oldOperation": "declarePromotionPressureEvidence",
@@ -1083,6 +1220,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:140"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -1108,6 +1248,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:856"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#defenderConsequenceSemanticEvent"
       ]
     },
     {
@@ -1133,6 +1276,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:887"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#squareClearanceSemanticEvent"
       ]
     },
     {
@@ -1158,6 +1304,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/web/src/lib/inspector-evidence.ts:42"
+      ],
+      "currentProducerOperations": [
+        "apps/web/src/lib/inspector-evidence.ts#corpusEvidence"
       ]
     },
     {
@@ -1183,6 +1332,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/repertoire.ts:46"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/repertoire.ts#repertoireCorpusEvidence"
       ]
     },
     {
@@ -1204,7 +1356,8 @@
       "currentDisposition": "inspector_only",
       "currentBindings": [],
       "currentProductionUseCount": 0,
-      "currentProductionUseSites": []
+      "currentProductionUseSites": [],
+      "currentProducerOperations": []
     },
     {
       "oldOperation": "declareLivePacketEvidence",
@@ -1229,6 +1382,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/web/src/lib/evidence-sentences.ts:225"
+      ],
+      "currentProducerOperations": [
+        "apps/web/src/lib/evidence-sentences.ts#declaredSource"
       ]
     },
     {
@@ -1252,7 +1408,8 @@
         "runtime.evidence_ref@1"
       ],
       "currentProductionUseCount": 0,
-      "currentProductionUseSites": []
+      "currentProductionUseSites": [],
+      "currentProducerOperations": []
     },
     {
       "oldOperation": "declareMaiaPolicyEvidence",
@@ -1277,6 +1434,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/web/src/lib/inspector-evidence.ts:33"
+      ],
+      "currentProducerOperations": [
+        "apps/web/src/lib/inspector-evidence.ts#humanSplitEvidence"
       ]
     },
     {
@@ -1302,6 +1462,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/opponent-selector.ts:107"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/opponent-selector.ts#opponentProviderEvidence"
       ]
     },
     {
@@ -1329,6 +1492,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/web/src/lib/evidence-sentences.ts:225"
+      ],
+      "currentProducerOperations": [
+        "apps/web/src/lib/evidence-sentences.ts#declaredSource"
       ]
     },
     {
@@ -1356,6 +1522,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/guard.ts:270"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guard.ts#guardEvidence"
       ]
     },
     {
@@ -1381,6 +1550,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/web/src/lib/evidence-sentences.ts:225"
+      ],
+      "currentProducerOperations": [
+        "apps/web/src/lib/evidence-sentences.ts#declaredSource"
       ]
     },
     {
@@ -1406,6 +1578,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/opponent-selector.ts:107"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/opponent-selector.ts#opponentProviderEvidence"
       ]
     },
     {
@@ -1431,6 +1606,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/web/src/lib/evidence-sentences.ts:225"
+      ],
+      "currentProducerOperations": [
+        "apps/web/src/lib/evidence-sentences.ts#declaredSource"
       ]
     },
     {
@@ -1457,6 +1635,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/guard.ts:272"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guard.ts#guardEvidence"
       ]
     },
     {
@@ -1482,6 +1663,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/guard.ts:272"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guard.ts#guardEvidence"
       ]
     },
     {
@@ -1507,6 +1691,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/opponent-selector.ts:107"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/opponent-selector.ts#opponentProviderEvidence"
       ]
     },
     {
@@ -1532,6 +1719,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/web/src/lib/evidence-sentences.ts:225"
+      ],
+      "currentProducerOperations": [
+        "apps/web/src/lib/evidence-sentences.ts#declaredSource"
       ]
     },
     {
@@ -1555,7 +1745,8 @@
         "runtime.evidence_ref@1"
       ],
       "currentProductionUseCount": 0,
-      "currentProductionUseSites": []
+      "currentProductionUseSites": [],
+      "currentProducerOperations": []
     },
     {
       "oldOperation": "declareAuthoredClaimEvidence",
@@ -1582,6 +1773,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/guidance.ts:139"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket"
       ]
     },
     {
@@ -1607,6 +1801,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/web/src/lib/claim-presentation.ts:32"
+      ],
+      "currentProducerOperations": [
+        "apps/web/src/lib/claim-presentation.ts#claimProvenance"
       ]
     },
     {
@@ -1634,6 +1831,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/guidance.ts:133"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket"
       ]
     },
     {
@@ -1658,6 +1858,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/guidance.ts:140"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket"
       ]
     },
     {
@@ -1682,6 +1885,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/guidance.ts:140"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket"
       ]
     },
     {
@@ -1706,6 +1912,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:423"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#castlingSemanticEvents"
       ]
     },
     {
@@ -1730,6 +1939,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:128"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -1752,6 +1964,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:127"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -1790,6 +2005,10 @@
       "currentProductionUseSites": [
         "apps/server/src/guidance.ts:137",
         "packages/runtime/src/story.ts:200"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/story.ts#storyMoments"
       ]
     },
     {
@@ -1814,6 +2033,11 @@
         "apps/server/src/candidate-evidence.ts:157",
         "packages/runtime/src/semantic-evidence.ts:439",
         "packages/runtime/src/semantic-evidence.ts:816"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#collectorResults",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents",
+        "packages/runtime/src/semantic-evidence.ts#derivedExchangeSemanticEvents"
       ]
     },
     {
@@ -1838,6 +2062,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:827"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -1861,6 +2088,10 @@
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:146",
         "packages/runtime/src/semantic-evidence.ts:828"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -1885,6 +2116,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:811"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -1905,7 +2139,8 @@
       "currentDisposition": "inspector_only",
       "currentBindings": [],
       "currentProductionUseCount": 0,
-      "currentProductionUseSites": []
+      "currentProductionUseSites": [],
+      "currentProducerOperations": []
     },
     {
       "oldOperation": "declareMobilityReadingEvidence",
@@ -1927,6 +2162,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:142"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -1951,6 +2189,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:812"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -1973,6 +2214,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:144"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -1996,6 +2240,10 @@
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:143",
         "packages/runtime/src/semantic-evidence.ts:813"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -2018,6 +2266,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:133"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -2044,6 +2295,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/guidance.ts:132"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket"
       ]
     },
     {
@@ -2109,6 +2363,12 @@
         "packages/runtime/src/compare-strips.ts:142",
         "packages/runtime/src/pivotal.ts:109",
         "packages/runtime/src/story.ts:181"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/compare-strips.ts#comparisonStrips",
+        "packages/runtime/src/pivotal.ts#pivotalMarkerEvidence",
+        "packages/runtime/src/story.ts#storyMoments"
       ]
     },
     {
@@ -2134,6 +2394,9 @@
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:809",
         "packages/runtime/src/semantic-evidence.ts:816"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -2156,6 +2419,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:141"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -2180,6 +2446,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:322"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareStructuralEventEvidence"
       ]
     },
     {
@@ -2204,6 +2473,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:322"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareStructuralEventEvidence"
       ]
     },
     {
@@ -2228,6 +2500,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:322"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareStructuralEventEvidence"
       ]
     },
     {
@@ -2252,6 +2527,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:322"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareStructuralEventEvidence"
       ]
     },
     {
@@ -2276,6 +2554,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:322"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareStructuralEventEvidence"
       ]
     },
     {
@@ -2300,6 +2581,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:322"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareStructuralEventEvidence"
       ]
     },
     {
@@ -2324,6 +2608,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:322"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareStructuralEventEvidence"
       ]
     },
     {
@@ -2348,6 +2635,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:322"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareStructuralEventEvidence"
       ]
     },
     {
@@ -2372,6 +2662,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:322"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareStructuralEventEvidence"
       ]
     },
     {
@@ -2396,6 +2689,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:322"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareStructuralEventEvidence"
       ]
     },
     {
@@ -2420,6 +2716,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:391"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#pawnIslandSemanticEvents"
       ]
     },
     {
@@ -2444,6 +2743,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:322"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareStructuralEventEvidence"
       ]
     },
     {
@@ -2468,6 +2770,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2492,6 +2797,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2516,6 +2824,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2540,6 +2851,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2564,6 +2878,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2588,6 +2905,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2612,6 +2932,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2636,6 +2959,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2660,6 +2986,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2684,6 +3013,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2708,6 +3040,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2732,6 +3067,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2756,6 +3094,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2780,6 +3121,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2804,6 +3148,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2828,6 +3175,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2852,6 +3202,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2876,6 +3229,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:114"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2902,6 +3258,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/structural-evidence.ts:118"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/structural-evidence.ts#declareStructuralPredicateEvidence"
       ]
     },
     {
@@ -2929,6 +3288,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -2956,6 +3320,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -2983,6 +3352,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3010,6 +3384,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3037,6 +3416,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3064,6 +3448,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3091,6 +3480,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3118,6 +3512,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3145,6 +3544,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3174,6 +3578,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/guidance.ts:134"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket"
       ]
     },
     {
@@ -3205,6 +3612,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3232,6 +3644,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3259,6 +3676,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3286,6 +3708,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3308,6 +3735,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:132"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -3335,6 +3765,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3362,6 +3797,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3389,6 +3829,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3416,6 +3861,11 @@
         "apps/server/src/guidance.ts:135",
         "packages/runtime/src/reading-evidence.ts:19",
         "packages/runtime/src/semantic-evidence.ts:833"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/reading-evidence.ts#declareStructuralReadingEvidence",
+        "packages/runtime/src/semantic-evidence.ts#breadthSemanticEvents"
       ]
     },
     {
@@ -3438,6 +3888,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:135"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -3460,7 +3913,8 @@
       "currentDisposition": "inspector_only",
       "currentBindings": [],
       "currentProductionUseCount": 0,
-      "currentProductionUseSites": []
+      "currentProductionUseSites": [],
+      "currentProducerOperations": []
     },
     {
       "oldOperation": "declareMateInOneEvidence",
@@ -3482,6 +3936,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:139"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -3506,6 +3963,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:374"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#tacticalSemanticEvents"
       ]
     },
     {
@@ -3528,6 +3988,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:131"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -3552,6 +4015,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:376"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#tacticalSemanticEvents"
       ]
     },
     {
@@ -3577,6 +4043,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:911"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#semanticDutyEvents"
       ]
     },
     {
@@ -3602,6 +4071,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:910"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#semanticDutyEvents"
       ]
     },
     {
@@ -3626,6 +4098,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:378"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#tacticalSemanticEvents"
       ]
     },
     {
@@ -3650,6 +4125,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:401"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#loosePieceSemanticEvents"
       ]
     },
     {
@@ -3672,6 +4150,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:138"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -3692,7 +4173,8 @@
       "currentDisposition": "inspector_only",
       "currentBindings": [],
       "currentProductionUseCount": 0,
-      "currentProductionUseSites": []
+      "currentProductionUseSites": [],
+      "currentProducerOperations": []
     },
     {
       "oldOperation": "declareDiscoveredLatencyEvidence",
@@ -3715,6 +4197,10 @@
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:136",
         "packages/runtime/src/semantic-evidence.ts:410"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings",
+        "packages/runtime/src/semantic-evidence.ts#discoveredExecutedSemanticEvents"
       ]
     },
     {
@@ -3737,6 +4223,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:129"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -3759,6 +4248,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:130"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -3781,6 +4273,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:134"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -3803,6 +4298,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/candidate-evidence.ts:137"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/candidate-evidence.ts#childReadings"
       ]
     },
     {
@@ -3827,6 +4325,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:356"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareTransitionEventEvidence"
       ]
     },
     {
@@ -3851,6 +4352,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:356"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareTransitionEventEvidence"
       ]
     },
     {
@@ -3875,6 +4379,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:356"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareTransitionEventEvidence"
       ]
     },
     {
@@ -3899,6 +4406,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:356"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareTransitionEventEvidence"
       ]
     },
     {
@@ -3923,6 +4433,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:356"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareTransitionEventEvidence"
       ]
     },
     {
@@ -3947,6 +4460,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:356"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareTransitionEventEvidence"
       ]
     },
     {
@@ -3971,6 +4487,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:356"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareTransitionEventEvidence"
       ]
     },
     {
@@ -3995,6 +4514,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:356"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareTransitionEventEvidence"
       ]
     },
     {
@@ -4019,6 +4541,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:356"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareTransitionEventEvidence"
       ]
     },
     {
@@ -4043,6 +4568,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:356"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareTransitionEventEvidence"
       ]
     },
     {
@@ -4067,6 +4595,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:356"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareTransitionEventEvidence"
       ]
     },
     {
@@ -4091,6 +4622,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:356"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareTransitionEventEvidence"
       ]
     },
     {
@@ -4115,6 +4649,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/semantic-evidence.ts:356"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/semantic-evidence.ts#declareTransitionEventEvidence"
       ]
     },
     {
@@ -4139,6 +4676,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/reading-evidence.ts:25"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/reading-evidence.ts#declareTransitionReadingEvidence"
       ]
     },
     {
@@ -4163,6 +4703,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/reading-evidence.ts:25"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/reading-evidence.ts#declareTransitionReadingEvidence"
       ]
     },
     {
@@ -4187,6 +4730,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/reading-evidence.ts:25"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/reading-evidence.ts#declareTransitionReadingEvidence"
       ]
     },
     {
@@ -4211,6 +4757,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/reading-evidence.ts:25"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/reading-evidence.ts#declareTransitionReadingEvidence"
       ]
     },
     {
@@ -4235,6 +4784,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/reading-evidence.ts:25"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/reading-evidence.ts#declareTransitionReadingEvidence"
       ]
     },
     {
@@ -4259,6 +4811,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/reading-evidence.ts:25"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/reading-evidence.ts#declareTransitionReadingEvidence"
       ]
     },
     {
@@ -4283,6 +4838,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/reading-evidence.ts:25"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/reading-evidence.ts#declareTransitionReadingEvidence"
       ]
     },
     {
@@ -4307,6 +4865,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/reading-evidence.ts:25"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/reading-evidence.ts#declareTransitionReadingEvidence"
       ]
     },
     {
@@ -4331,6 +4892,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/reading-evidence.ts:25"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/reading-evidence.ts#declareTransitionReadingEvidence"
       ]
     },
     {
@@ -4355,6 +4919,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/reading-evidence.ts:25"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/reading-evidence.ts#declareTransitionReadingEvidence"
       ]
     },
     {
@@ -4379,6 +4946,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/reading-evidence.ts:25"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/reading-evidence.ts#declareTransitionReadingEvidence"
       ]
     },
     {
@@ -4403,6 +4973,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/reading-evidence.ts:25"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/reading-evidence.ts#declareTransitionReadingEvidence"
       ]
     },
     {
@@ -4427,6 +5000,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/reading-evidence.ts:25"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/reading-evidence.ts#declareTransitionReadingEvidence"
       ]
     },
     {
@@ -4451,6 +5027,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "packages/runtime/src/reading-evidence.ts:25"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/reading-evidence.ts#declareTransitionReadingEvidence"
       ]
     },
     {
@@ -4479,6 +5058,10 @@
         "packages/runtime/src/compare-strips.ts:29",
         "packages/runtime/src/story.ts:207",
         "packages/runtime/src/story.ts:209"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/compare-strips.ts#sentenceEvidence",
+        "packages/runtime/src/story.ts#storyMoments"
       ]
     },
     {
@@ -4508,6 +5091,10 @@
         "packages/runtime/src/compare-strips.ts:29",
         "packages/runtime/src/story.ts:207",
         "packages/runtime/src/story.ts:209"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/compare-strips.ts#sentenceEvidence",
+        "packages/runtime/src/story.ts#storyMoments"
       ]
     },
     {
@@ -4533,6 +5120,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/web/src/lib/evidence-sentences.ts:254"
+      ],
+      "currentProducerOperations": [
+        "apps/web/src/lib/evidence-sentences.ts#renderEvidenceRef"
       ]
     },
     {
@@ -4560,6 +5150,10 @@
         "packages/runtime/src/compare-strips.ts:29",
         "packages/runtime/src/story.ts:207",
         "packages/runtime/src/story.ts:209"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/compare-strips.ts#sentenceEvidence",
+        "packages/runtime/src/story.ts#storyMoments"
       ]
     },
     {
@@ -4588,6 +5182,10 @@
         "packages/runtime/src/compare-strips.ts:29",
         "packages/runtime/src/story.ts:207",
         "packages/runtime/src/story.ts:209"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/compare-strips.ts#sentenceEvidence",
+        "packages/runtime/src/story.ts#storyMoments"
       ]
     },
     {
@@ -4615,6 +5213,10 @@
         "packages/runtime/src/compare-strips.ts:29",
         "packages/runtime/src/story.ts:207",
         "packages/runtime/src/story.ts:209"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/compare-strips.ts#sentenceEvidence",
+        "packages/runtime/src/story.ts#storyMoments"
       ]
     },
     {
@@ -4643,6 +5245,10 @@
         "packages/runtime/src/compare-strips.ts:29",
         "packages/runtime/src/story.ts:207",
         "packages/runtime/src/story.ts:209"
+      ],
+      "currentProducerOperations": [
+        "packages/runtime/src/compare-strips.ts#sentenceEvidence",
+        "packages/runtime/src/story.ts#storyMoments"
       ]
     },
     {
@@ -4668,6 +5274,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/sourcing/claim-binding.ts:183"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/sourcing/claim-binding.ts#claimBindingLedger"
       ]
     },
     {
@@ -4693,6 +5302,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/sourcing/claim-binding.ts:183"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/sourcing/claim-binding.ts#claimBindingLedger"
       ]
     },
     {
@@ -4718,6 +5330,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/sourcing/claim-binding.ts:183"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/sourcing/claim-binding.ts#claimBindingLedger"
       ]
     },
     {
@@ -4743,6 +5358,9 @@
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
         "apps/server/src/sourcing/claim-binding.ts:183"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/sourcing/claim-binding.ts#claimBindingLedger"
       ]
     },
     {
@@ -4772,6 +5390,11 @@
         "apps/server/src/guidance.ts:138",
         "packages/runtime/src/shape-firing.ts:41",
         "packages/runtime/src/story.ts:203"
+      ],
+      "currentProducerOperations": [
+        "apps/server/src/guidance.ts#evidencePacket",
+        "packages/runtime/src/shape-firing.ts#declareShapeFiringEvidence",
+        "packages/runtime/src/story.ts#storyMoments"
       ]
     }
   ],
@@ -4819,6 +5442,11 @@
     "noRouteCount": 6,
     "rowsWithProductionUses": 184,
     "rowsWithoutProductionUses": 7,
+    "rowsWithResolvedProducerOperations": 184,
+    "distinctCurrentProducerOperations": 45,
+    "usedRowsMissingProducerOperations": [],
+    "exportOnlyRowsWithProducerOperations": [],
+    "moduleOwnedProducerOperations": [],
     "boundRowsWithoutProductionUses": 2,
     "projectionsWithoutProductionUses": [
       "derived.tactic.overloaded_defender_response_conflict@1",
@@ -4828,6 +5456,6 @@
       "rules.tactic.reading.defender_duty_set@1"
     ],
     "boundProjectionsWithoutProductionUses": [],
-    "receiptDigest": "sha256:bfd97830399a9cd9c7639abb8fc57a0580a571d592f4701146e45be697885448"
+    "receiptDigest": "sha256:50143710c4a542b49508e04f4fead18615d16bcdb253bc90e59bb9aa6ba47468"
   }
 }

@@ -12877,3 +12877,18 @@ discharges with living owners. `make foundation-source-author-contract`, `make r
 `make status-parity`, `make roadmap-check` and `make work-index` pass. Fresh independent
 buildability review and the semantic-convention register/provenance dependency still gate
 acceptance and implementation.
+
+## 2026-08-31 — Evidence value-authority callable-operation closure
+
+Completed the remaining D2146 author obligation without changing production behavior. The literal
+191-route migration receipt now derives the enclosing callable operation for every syntax-aware
+production use: 184 used rows resolve to 45 exact operations; seven export-only rows carry no
+operation; no used row is missing or resolves only to module scope. The manifest's file-level
+`producerImplementation` remains provenance and cannot serve as callable factory authority.
+
+The maintained author contract now fails on a used route without an operation, an operation on an
+export-only route, module-scope ownership, mismatched use counts or a non-literal operation symbol.
+`make evidence-value-authority-author-contract` passes 7/7, the regenerated route receipt passes,
+and register/status/roadmap/work-index governance is green. Semantic-convention provenance,
+provider exchange, semantic validation and fresh independent review still gate RFC acceptance and
+implementation; no learner binding, source payload, content or product byte changed.

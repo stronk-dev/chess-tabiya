@@ -1,6 +1,7 @@
 # RFC: Evidence value authority — compute, derive or project before sealing
 
-- **Status:** draft — author-amended 2026-08-30 through [[D2327]]; dependency-blocked on the
+- **Status:** draft — author-amended 2026-08-31 through [[D2327]] and the D2146 callable-operation
+  closure; dependency-blocked on the
   returned semantic convention register/provenance and provider exchange contracts, then fresh
   independent buildability review
 - **Author:** codex (agent), for Marco
@@ -263,9 +264,10 @@ The checked-in author receipt at
 table, not a prose census. Its syntax-aware use pass records 184 used routes, seven export-only
 routes and zero bound projections without a production use. The earlier direct-call-only probe that
 reported 25 export-only / 19 bound rows is rejected by [[D2147]] because it missed callback use.
-Before acceptance, author review replaces each manifest implementation path with the exact producer
-operation symbol where the current catalogue names only a file; no `producerImplementation` path is
-accepted as a factory's callable authority.
+The 2026-08-31 author pass resolves those 184 used routes to 45 exact enclosing callable operations;
+no used route lacks an operation and no route resolves only to module scope. The seven export-only
+routes deliberately carry no current operation. `producerImplementation` remains copied manifest
+provenance and is never accepted as a factory's callable authority.
 
 The set is partitioned at baseline as follows:
 
@@ -422,8 +424,9 @@ planes, optional LLM renderer and assistance ceilings.
 3. The semantic-convention and provider-exchange dependencies are accepted with the exact closure
    and receipt types consumed here; this RFC does not restate them.
 4. The checked-in literal 191-row migration receipt names every old route, target factory symbol,
-   shape, authority input, dependency and production use; author review resolves every remaining
-   file-only producer implementation to an exact callable operation. The four duplicates must
+   shape, authority input, dependency and production use; its syntax-aware author pass resolves all
+   184 used rows to 45 exact callable operations and leaves only seven export-only rows operationless.
+   The four duplicates must
    collapse and duplicate/missing/wildcard rows fail.
 5. Only the package-private mint boundary calls `declareEvidence`; mint internals and old adapters
    are absent from runtime exports.
@@ -491,6 +494,9 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-08-31: D2146 callable-operation closure derives the exact enclosing production symbol for
+  every syntax-aware use: 184 used rows resolve to 45 operations; seven export-only rows remain
+  empty by definition; no used row is missing or module-owned.
 - 2026-08-30: [[D2327]] corrects the recorded-reading route class: runtime engine and tablebase
   readings are derived from their exact validated sourcing-ledger evidence, changing the reviewed
   75-row partition from 23/11 to 25/9 derived/direct-source without changing its total. Pinned the
