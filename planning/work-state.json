@@ -19237,6 +19237,42 @@
       "uxItems": [],
       "owner": "content-and-theory",
       "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2432",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0ac12d3cd3450693c9088a507a4a42ba3b1376ea897f0ec92f1ce61ec5e81c0a",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2433",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:01ff2d814139e438fea6ea80277c868a8aa8c3ff07e110c826afcdbb5e9b335e",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2434",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4757b2701b5d0ef2666db44c83f76d6df0d579d8f914bf451a9fca00cd6e451a",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2435",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e34858280805d924cfb041216816871b62e85fa2fe38bf0000f8a114eb97aaeb",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:module-registration.md"
     }
   ]
 }

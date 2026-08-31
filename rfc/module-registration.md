@@ -1,7 +1,7 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — fifth author repair complete 2026-08-31 on
-  [[D2398]]–[[D2400]]; fifth fresh independent review required.** The fourth repair rejects the prior generator's
+- **Status:** **draft — returned by fifth fresh independent review on
+  [[D2432]]–[[D2435]].** The fourth repair rejects the prior generator's
   central premise: learner modules do not invoke 117 detector/provider functions. They consume
   projection-keyed sealed pools produced by the candidate packet, recorded semantic path, Review,
   catalogue and provider authorities. The generated artifacts are therefore digest-sealed
@@ -23,7 +23,11 @@
   typed derivation relations, makes the direct-call block explicitly non-normative, and refuses to
   mint final timing until the exact upstream operation supplies applicability. Exact repair:
   `planning/learner-modules/fifth-author-repair-2026-08-31.md`; maintained targets plus
-  `make module-registration-fifth-author-repair` pass. Another fresh independent review is required. The
+  `make module-registration-fifth-author-repair` pass. That repair keeps timing unresolved, but
+  its grain-only relations cannot express multi-edge tactics or ordered delta operands; the candidate
+  packet has no root/child occurrence selector; and the five source contracts name operations their
+  owners do not declare. Exact return:
+  `planning/learner-modules/fifth-fresh-independent-buildability-review-2026-08-31.md`. A sixth author repair and another fresh review are required. The
   [[D1870]]/[[D2030]] dependency image remains the owner-ruled measured 207-pair target,
   including requested-Sight `pawn_safe_square`. Prior
   amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt
@@ -1765,6 +1769,18 @@ Fifth author repair (2026-08-31):
 `make module-registration-fifth-author-repair` passes 4/4. Another fresh independent review is
 required; no production implementation is authorized.
 
+Fifth fresh independent return (2026-08-31):
+
+| row | returned requirement |
+|---|---|
+| [[D2432]] | replace grain-only `same_edge` bindings with operation-owned ordered occurrence/window topology for multi-edge semantic tactics |
+| [[D2433]] | distinguish candidate-packet root, child, selected-candidate, committed-edge and complete-population occurrences before assigning its items to module moments |
+| [[D2434]] | give comparison/grade operations exact operand roles, cardinalities and equality joins rather than generic endpoint membership |
+| [[D2435]] | bind the five pools to exact upstream operations or declared module-owned adapters and delete the rejected additional-subject-view authority |
+
+`make module-registration-fifth-fresh-review` reproduces all four. No implementation is authorized
+before a sixth author repair and another fresh independent review.
+
 | row | author repair; fresh review still required |
 |---|---|
 | [[D2343]] | **author-repaired:** D1865 imports the single explicit blocked-hint algebra; maintained targets pass 13/13 and 11/11 |
@@ -1843,6 +1859,12 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   input-equivalence clause inside the surface built to satisfy it.
 
 ## Changelog
+
+- 2026-08-31 (fifth fresh independent return): returned on [[D2432]]–[[D2435]]. The requirements
+  collapse multi-edge tactics to one edge, do not distinguish candidate-packet root/child/selected
+  occurrences, omit signed endpoint roles/cardinality, and name five unowned upstream invocation
+  symbols while retaining the rejected subject-view table. Exact review:
+  `planning/learner-modules/fifth-fresh-independent-buildability-review-2026-08-31.md`.
 
 - 2026-08-31 (fifth author repair): repaired [[D2398]]–[[D2400]] without pretending blocked
   upstream operations ship. Inputs keep intrinsic grains through typed derived-operation

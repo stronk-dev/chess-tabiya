@@ -13287,3 +13287,24 @@ legacy authority and D560 content hold remain intact.
 branch operation map and a public parsing/semantic-validation boundary with enough information to
 enforce availability-mode rules. No lane-0.30 schema, registry, migration, API or client landing
 before repair and another fresh review.
+
+## 2026-08-31 — Module registration fifth fresh review returns occurrence topology
+
+**What landed:** independently crossed the [[D2398]]–[[D2400]] fifth author repair against the
+candidate-packet, semantic-tactic, Review and provider contracts it claims to consume. The prior
+requirements-only, intrinsic-grain and unresolved-timing repairs survive. `make
+module-registration-fifth-fresh-review` adds four able-to-fail returns: [[D2432]] multi-edge
+tactics collapse to `same_edge`; [[D2433]] candidate root/child/selected occurrences are absent;
+[[D2434]] comparison and grade endpoints have no roles/cardinality; and [[D2435]] the five source
+contracts name invocations their owners do not declare while retaining the rejected view table.
+
+**What changed:** `module-registration` remains draft and returned. Its register, 1.0 foundation
+checkpoint and work-state rows now point to
+`planning/learner-modules/fifth-fresh-independent-buildability-review-2026-08-31.md`. The 117
+evidence and 205 binding requirements remain honest dependency-blocked artifacts; their population
+count is not treated as an executable producer-to-module join.
+
+**Blocked/next:** publish operation-owned ordered occurrence topology, exact candidate packet views,
+signed endpoint operands/cardinality and real upstream operation/adaptor identities; delete the
+obsolete generic subject-view authority. No module registry, API, seat, reducer or presentation
+landing before a sixth author repair and another fresh independent review.

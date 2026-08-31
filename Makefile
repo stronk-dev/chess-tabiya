@@ -176,6 +176,10 @@ module-registration-author-contract:
 module-registration-fresh-review:
 	node --test tools/d2120-module-registration-fresh-review/*.test.mjs
 
+.PHONY: module-registration-fifth-fresh-review
+module-registration-fifth-fresh-review:
+	node --test tools/d2432-module-registration-fifth-fresh-review/contract.test.mjs
+
 intent-presets-author-contract:
 	node --test tools/d1659-intent-presets-author-contract/contract.test.mjs
 
