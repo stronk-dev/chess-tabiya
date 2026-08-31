@@ -536,6 +536,11 @@ storage-backup-author-repair:
 safe-deployment-fresh-review:
 	node --test tools/d2214-safe-deployment-fresh-review/contract.test.mjs
 
+.PHONY: safe-deployment-author-repair
+safe-deployment-author-repair:
+	node --test tools/d2214-safe-deployment-author-repair/contract.test.mjs
+	./node_modules/.bin/tsc -p tools/d2214-safe-deployment-author-repair/tsconfig.contract.json --noEmit
+
 pack-check:
 	@test -n "$(FILE)" || (echo "Usage: make pack-check FILE=<path-to-pack.json>" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/pack-check.ts --bundle --platform=node --format=esm --outfile=dist/pack-check.js

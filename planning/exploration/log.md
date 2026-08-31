@@ -12736,3 +12736,15 @@ The required first `release-manifest-schema` claim exposed register-bootstrap de
 was not bypassed, so this is explicitly a partial repair and no re-review is requested yet. `make
 runtime-distribution-author-repair` passes 7/7 plus typecheck. Receipt:
 `planning/verifiable-runtime-distribution/partial-author-repair-2026-08-31.md`.
+
+## 2026-08-31 — Safe deployment profiles author repair
+
+Author-repaired [[D2214]]–[[D2218]]. One closed operator config now drives all profiles; appliance
+uses literal operator-managed LAN DNS; the Caddy authority has an exact public/proxy/provider graph;
+request budgets join every live unsafe method/template/discriminant to one partition with a pinned
+Caddy capability probe; and check/start/probe share one versioned artifact-bound receipt.
+
+`make safe-deployment-author-repair` passes 8/8 plus strict TypeScript. No production server,
+Compose, Caddy, deployment, workflow, release, schema, content, archive or protected-design byte
+changed; another fresh independent buildability review remains required. Receipt:
+`planning/safe-deployment-profiles/author-repair-2026-08-31.md`.

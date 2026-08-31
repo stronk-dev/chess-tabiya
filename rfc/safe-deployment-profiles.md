@@ -1,10 +1,11 @@
 # RFC: Safe deployment profiles and reverse proxy
 
-- **Status:** **draft — RETURNED by fresh independent buildability review 2026-08-30 on
-  [[D2214]]–[[D2218]].** The three-profile safety boundary survives, but operator input and receipt
-  protocols are undefined, appliance name resolution is missing, proxy isolation is not specified,
-  and route budgets have no exact manifest. `make safe-deployment-fresh-review` passes 5/5.
-  Implementation remains unauthorized.
+- **Status:** **draft — author-repaired 2026-08-31 after the fresh independent return on
+  [[D2214]]–[[D2218]]; another fresh independent buildability review is required.** The repair
+  publishes one typed config, literal LAN-DNS workflow, closed proxy network, exact route-operation
+  budget join, digest-pinned Caddy probe and versioned deployment receipt. `make
+  safe-deployment-author-repair` passes 8/8 plus the proposed TypeScript algebra. Implementation
+  remains unauthorized.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
@@ -100,6 +101,61 @@ interface DeploymentBoundary {
 }
 ```
 
+Operator input is one UTF-8 JSON document with no duplicate keys and this closed union:
+
+```ts
+type DeploymentConfigV1 = {
+  readonly format: "tabiya-deployment-config";
+  readonly configVersion: 1;
+} & (
+  | { readonly profile: "local"; readonly port?: number }
+  | { readonly profile: "appliance"; readonly hostname: string;
+      readonly resolution: { readonly kind: "operator_dns";
+        readonly expectedAddresses: readonly string[] } }
+  | { readonly profile: "hosted"; readonly hostname: string;
+      readonly tls: { readonly kind: "acme"; readonly contactEmail: string } }
+  | { readonly profile: "hosted"; readonly hostname: string;
+      readonly tls: { readonly kind: "files";
+        readonly certificate: SecretFileRef; readonly privateKey: SecretFileRef } }
+);
+interface SecretFileRef { readonly sourceFile: string; readonly mountName: string }
+
+type DeploymentConfigResult =
+  | { readonly ok: true; readonly config: DeploymentConfigV1;
+      readonly boundary: DeploymentBoundary; readonly configDigest: `sha256:${string}` }
+  | { readonly ok: false; readonly code: DeploymentConfigError; readonly field: string };
+type DeploymentConfigError =
+  | "CONFIG_NOT_REGULAR" | "CONFIG_SYMLINK_REFUSED" | "CONFIG_PERMISSIONS_REFUSED"
+  | "CONFIG_JSON_INVALID" | "CONFIG_UNKNOWN_KEY" | "CONFIG_VERSION_UNSUPPORTED"
+  | "PROFILE_HYBRID_REFUSED" | "PORT_INVALID" | "HOSTNAME_INVALID"
+  | "RESOLUTION_INVALID" | "SECRET_PATH_INVALID" | "SECRET_NOT_REGULAR"
+  | "SECRET_SYMLINK_REFUSED" | "SECRET_PERMISSIONS_REFUSED" | "SECRET_COLLISION";
+```
+
+The parser rejects unknown/missing keys per union arm. The config path is absolute, opened with
+no-follow semantics, and must remain the same regular inode from `lstat` through `fstat`; it must not
+be group/other-writable. `SecretFileRef.sourceFile` is an absolute host path opened the same way.
+`mountName` matches `^[a-z][a-z0-9_]{0,63}$` and becomes a fixed
+`/run/secrets/<mountName>` container path; it is never interpolated as a path. Certificate bytes may
+be world-readable but not writable; private-key bytes must have no group/other permission bits.
+Certificate and key must be distinct inodes, parse successfully, match cryptographically, and have
+the configured canonical hostname in SAN. Secret contents never enter config digests or rendered
+Compose/Caddy bytes.
+
+Hostnames are lower-case ASCII DNS names with 1–63 byte labels, total length ≤253, no underscore,
+wildcard, leading/trailing hyphen, IP literal, `.localhost`, `.local`, or trailing dot. Unicode input
+is refused rather than silently punycoded. `local.port` is an integer 1024–65535 (default 3000).
+The compiler alone derives `publicOrigin`: `http://127.0.0.1:<port>` for local and
+`https://<hostname>` otherwise. No config field may supply origin, listen address, cookie security,
+proxy trust, certificate mode outside the selected arm, or rendered environment variables.
+
+Canonical config digest is RFC-8785 SHA-256 over the parsed union after defaulting local port and
+normalizing/sorting appliance addresses. The same compiled `DeploymentConfigResult` is the sole
+input to server environment, Compose/Caddy rendering, validation, start and receipts; those
+consumers never reparse environment folklore. The config/receipt implementation is server-owned and
+unpersisted: callers invoke its parser/verifier rather than copy the union. It therefore claims no
+shared schema lane; a second independent writer/parser or persisted config format must register it.
+
 Development tests may construct this value directly. A production process may not infer profile
 from `NODE_ENV`, `TABIYA_COOKIE_SECURE`, forwarded headers, or whether a Caddy container happens to
 be reachable. `NODE_ENV` continues to govern development-only code; it is not a deployment safety
@@ -173,6 +229,29 @@ restore does not claim to.
 The hostname is literal and closed at render time. Wildcards, catch-all HTTPS, on-demand TLS, IP-only
 certificates, arbitrary Host forwarding, and a profile that silently falls back to HTTP are refused.
 
+The supported 1.0 name-resolution path is **operator-managed LAN DNS**, not mDNS or a Host-header
+override. Before start, the guided command requires the appliance host to have a stable DHCP
+reservation/static address, instructs the operator to add the exact configured hostname as an
+A/AAAA record in the LAN resolver (router, Pi-hole, AdGuard Home or equivalent), and probes that
+hostname through the system resolver. Every returned address must be in the configured
+`expectedAddresses` set and at least one configured address must answer; loopback, unspecified,
+multicast, link-local, public or unexpected answers are refused. A DNS name collision therefore
+fails before Caddy issuance rather than serving whichever host answered.
+
+`make appliance-name-check CONFIG=<file>` performs the same DNS lookup from the host and from a
+disposable client attached only as an ordinary LAN client; it sends no Host override and connects to
+`https://<exact-hostname>`. The trust probe then repeats using only the exported Caddy root and
+requires both DNS address and certificate SAN to match the literal hostname. D1 repeats this on the
+owner desktop and phone/tablet. Container-only DNS, `/etc/hosts` injected into the test client, and
+direct-IP TLS cannot satisfy the appliance journey.
+
+The guide owns change/removal: stop the profile, change config and LAN DNS together, run the name
+check, generate/serve the new certificate, re-probe clients, then remove the old record. Uninstalling
+removes the LAN record and Caddy root from every client; losing Caddy state requires removing the old
+root and installing the newly exported root. Tabiya does not edit router/client DNS or trust stores
+automatically. Networks without configurable DNS use `local`; mDNS and per-device hosts files are
+explicitly unsupported in 1.0 because they do not provide one portable phone/desktop workflow.
+
 ### 5. Hosted profile
 
 The hosted profile uses the same Caddy/app network boundary, but Caddy obtains and renews a
@@ -209,6 +288,31 @@ Caddy passes the original Host, overwrites forwarded proto/host/for, and strips 
 headers. Direct access to the internal application socket is an unsupported topology and is
 mechanically unreachable from the host in appliance/hosted profiles.
 
+Rendered appliance/hosted Compose declares three named edges rather than using `default`:
+
+```yaml
+networks:
+  proxy_edge: { internal: true }
+  provider_edge: { internal: true }
+  public_edge: {}
+```
+
+`proxy_edge` contains exactly `app` and `caddy`; the app receives the unique alias
+`tabiya-proxy-origin` on that edge and resolves/binds its HTTP listener only to that interface,
+never `0.0.0.0`. `provider_edge` contains `app` plus configured engine/provider sidecars and no
+Caddy. `public_edge` contains Caddy only; it owns published 80/443 and the hosted ACME egress path.
+Database/backup services use volumes and are absent from `proxy_edge`; maintenance, test, admin and
+optional provider containers are also absent. No service joins Compose `default`.
+
+The renderer derives this adjacency as a closed set and refuses extra services/networks on
+`proxy_edge`, app attachment to `public_edge`, Caddy attachment to `provider_edge`, any app `ports`,
+or a missing `internal: true`. Caddy targets only `tabiya-proxy-origin:3000` and overwrites forwarded
+headers. Production probes use the rendered artifact to prove: host→app fails; public-edge
+sibling→app fails; provider-edge sibling→the proxy-bound listener fails; an intentionally injected
+untrusted sibling makes config validation fail if placed on `proxy_edge`; and client-supplied
+forwarded headers arrive at Caddy but are replaced before app receipt. The positive path is public
+client→Caddy→proxy edge→app. Static inspection alone cannot discharge these probes.
+
 ### 7. Browser mutation/origin policy
 
 The application sends no permissive CORS headers. For every unsafe method (`POST`, `PUT`, `PATCH`,
@@ -235,6 +339,119 @@ The application declares a closed route budget registry:
 type RequestBodyBudget = "none" | "json_256k" | "document_8m";
 ```
 
+Route and budget identity come from one generated descriptor table, not parallel `if` branches.
+Its key is `<method> <normalized-template>#<semantic-operation>`; path matching, allowed method,
+operation-discriminant parsing, content type and budget all compile from that descriptor. The
+current unsafe semantic-operation set is closed as follows (prefixes are part of the literal ids):
+
+```text
+auth.{register,login,logout,export,deletion_preview,delete}
+classroom.{create,archive,member_invite,member_remove,member_accept,member_decline,member_leave,assign}
+assignment.{withdraw,submit,submission_withdraw}
+shared.join_accept
+shape_draft.{create,update,lint,register}
+repertoire.{create,delete,scan,gap_enter,answer}
+pack_draft.{create,update,lint,playtest,register,withdraw}
+run.{create,import,share_revoke}
+rated_game.create
+progress.schedule_dismiss
+opponent.select
+cohort_standing.{open,close,window,publish,withdraw,show_rating,hide_rating,show_record,hide_record}
+live.session.{create,close}
+live.board.{offer,withdraw,advance,reclaim}
+live.match.{propose_pause,accept_pause,withdraw_pause,pause,resume}
+live.link.{mint,revoke}
+live.proposal.{create,apply,decline}
+live.vote.{open,cast,close}
+live.invitation.create
+live.leg.import_pgn
+run_action.{marks_replace,marks_rescope,deletion_preview,delete,distill,reasoning_review,
+  voice,speech,share,flip,lease,reveal,duplicate,schedule,grant,revoke,group,group_reply,
+  move_user,move_opponent,rewind,fork,compare,branch_decidedness,analysis,simulate,
+  simulate_enter,prediction,reasoning,evidence}
+```
+
+Those identities bind to the current normalized route templates and discriminants as follows.
+`:<name>` denotes one decoded non-empty segment; braces denote the only admitted body/action
+discriminants. This table is input to descriptor generation, not documentation copied from it:
+
+```text
+POST   /auth/:action                                      auth.{register|login|logout|export|deletion-preview→deletion_preview|delete}
+POST   /classrooms                                       classroom.create
+POST   /classrooms/:classroomId                          classroom.archive {op=archive}
+POST   /classrooms/:classroomId/members                  classroom.{member_invite|member_remove|member_accept|member_decline|member_leave} {op}
+POST   /classrooms/:classroomId/assignments              classroom.assign
+POST   /assignments/:assignmentId                        assignment.withdraw {op=withdraw}
+POST   /assignments/:assignmentId/submissions            assignment.{submit|submission_withdraw} {op absent|withdraw}
+POST   /api/shared/:token/join                           shared.join_accept
+POST   /shapes/drafts                                    shape_draft.create
+PUT    /shapes/drafts/:draftId                           shape_draft.update
+POST   /shapes/drafts/:draftId/:action                   shape_draft.{lint|register} {action}
+POST   /repertoires                                      repertoire.create
+DELETE /repertoires/:repertoireId                        repertoire.delete
+POST   /repertoires/:repertoireId/scan                   repertoire.scan
+POST   /repertoires/:repertoireId/gaps/enter             repertoire.gap_enter
+POST   /repertoires/:repertoireId/answers                repertoire.answer
+POST   /packs/drafts                                     pack_draft.create
+PUT    /packs/drafts/:draftId                            pack_draft.update
+POST   /packs/drafts/:draftId/:action                    pack_draft.{lint|playtest|register|withdraw} {action}
+POST   /runs                                             run.create
+POST   /runs/import                                      run.import
+DELETE /runs/:runId/share/:shareId                       run.share_revoke
+POST   /rated-games                                      rated_game.create
+POST   /progress/schedules/:scheduleId                   progress.schedule_dismiss {op=dismiss}
+POST   /select-move                                      opponent.select
+POST   /cohorts/:classroomId/standing                    cohort_standing.{open|close|window|publish|withdraw|showRating→show_rating|hideRating→hide_rating|showRecord→show_record|hideRecord→hide_record} {op}
+POST   /sessions                                         live.session.create
+POST   /sessions/:sessionId                              live.session.close {op=close}
+POST   /sessions/:sessionId/board                        live.board.{offer|withdraw|advance|reclaim} {op}
+POST   /sessions/:sessionId/match                        live.match.{propose_pause|accept_pause|withdraw_pause|pause|resume} {op}
+POST   /sessions/:sessionId/links                        live.link.mint
+POST   /sessions/:sessionId/links/:linkId                live.link.revoke {op=revoke}
+POST   /sessions/:sessionId/proposals                    live.proposal.create
+POST   /sessions/:sessionId/proposals/:proposalId        live.proposal.{apply|decline} {op}
+POST   /sessions/:sessionId/votes                        live.vote.{open|cast|close} {op}
+POST   /sessions/:sessionId/invitations                  live.invitation.create
+POST   /sessions/:sessionId/legs/:leg/pgn                live.leg.import_pgn
+PUT    /runs/:runId/marks                                run_action.{marks_replace|marks_rescope} {rescopeFrom absent|present}
+POST   /runs/:runId/:action                              run_action.<normalized-action>
+```
+
+For the final row, `<normalized-action>` is the literal `parseRunRoute` action enum with hyphens
+normalized to underscores. `moves` splits to `move_user | move_opponent` from its closed actor
+discriminant and `grants` splits to `grant | revoke` from its closed `op`; all other POST actions are
+one-to-one. GET descriptors for `graph`, `events`, `evidence`, `authored-feedback`, `pgn`, `grants`,
+`reasoning`, `import`, `story`, `share`, `derivations`, `human-split` and `corpus` independently use
+budget `none`, even when the same normalized template has a separately declared POST descriptor.
+Generation proves the method/template/discriminant expansions are set-equal to the actual router
+grammar and that every generated semantic id occurs exactly once in the budget partition.
+
+The exact non-default assignments are:
+
+```text
+none:
+  shared.join_accept, repertoire.delete, run.share_revoke,
+  method_not_allowed:<every generated route id>, not_found
+
+document_8m:
+  shape_draft.create, shape_draft.update, shape_draft.lint,
+  repertoire.create,
+  pack_draft.create, pack_draft.update, pack_draft.lint, pack_draft.playtest,
+  run.import, live.leg.import_pgn
+
+json_256k:
+  every other literal unsafe operation in the closed set above
+```
+
+“Every other” is computed as exact set difference at generation and serialized into the manifest;
+it is not a runtime fallback. Empty/intersecting/unassigned sets fail generation. A discriminated
+route such as classroom members, cohort standing, live board/match/vote or run moves resolves its
+semantic operation before body read. Unknown operation/method resolves to the generated `none`
+refusal descriptor and cannot spend a JSON budget. The adapter accepts only a compiled descriptor,
+so its reader key is the same object the census counts. Fixtures mislabel one document operation
+small, one ordinary command large, add an unsafe operation, remove its parser, cross a route/action,
+and invoke an unsafe method on a GET-only route; every mutation fails before listening.
+
 - `none`: every GET/HEAD and unsafe route that accepts no body; any non-empty body is refused.
 - `json_256k`: ordinary commands, identity, run mutations, marks, classroom/social operations.
 - `document_8m`: explicit PGN import, account/pack/shape/repertoire document operations whose
@@ -251,6 +468,16 @@ complete headers, 30 s to complete the request body, 5 s keep-alive idle, and no
 response timeout. Long operations own their own cancellation/deadline contracts. Caddy uses
 compatible edge timeouts and an 8 MiB `request_body max_size`; app limits still pass when Caddy is
 bypassed in focused tests.
+
+The release proxy is pinned to
+`docker.io/library/caddy:2.11.4-alpine@sha256:5f5c8640aae01df9654968d946d8f1a56c497f1dd5c5cda4cf95ab7c14d58648`
+(resolved 2026-08-31; amd64 manifest `sha256:98eb57d…423a`, arm64 manifest
+`sha256:1172d4…dcba`). Caddy documents `request_body max_size` as experimental in v2.10.0+ and
+returns 413 when later handlers read beyond it:
+<https://caddyserver.com/docs/caddyfile/directives/request_body>. Consequently the rendered-image
+gate runs `caddy validate` plus an actual 8 MiB/8 MiB+1 read through this exact digest on both
+architectures. A future Caddy digest must repeat that capability probe; version comparison alone is
+insufficient. Node's per-route reader remains authoritative even when the edge probe passes.
 
 ### 9. Streaming responses and upgrades
 
@@ -315,6 +542,97 @@ root/certificate chain may be exported by the appliance trust command.
 
 ### 13. Operator surfaces
 
+#### 13.1 One deployment operation and receipt protocol
+
+`apps/server/src/deployment-admin.ts` owns configuration compilation, artifact rendering,
+validation, start/probe orchestration, canonical receipt serialization and receipt verification.
+Make, CI and the release proof invoke that entry point; they do not parse a second environment or
+reconstruct success from container logs. The operation vocabulary is closed:
+
+```ts
+type DeploymentAdminOperation = "command" | "check" | "start" | "probe";
+type DeploymentCheckId =
+  | "config" | "hostname_resolution" | "certificate" | "compose"
+  | "proxy_config" | "image_pins" | "network_graph" | "origin"
+  | "cookie" | "request_budgets" | "streaming" | "readiness" | "core_journey";
+type DeploymentArtifactIdentityV1 = {
+  readonly deploymentRevision: string;
+  readonly serverImageDigest: `sha256:${string}`;
+  readonly caddyImageDigest: `sha256:${string}` | null;
+  readonly composeDigest: `sha256:${string}`;
+  readonly caddyConfigDigest: `sha256:${string}` | null;
+  readonly routeBudgetManifestDigest: `sha256:${string}`;
+};
+interface DeploymentReceiptBaseV1 {
+  readonly protocol: "tabiya-deployment-admin-receipt";
+  readonly protocolVersion: 1;
+  readonly operationId: string; // canonical UUID generated once at process entry
+  readonly operation: DeploymentAdminOperation;
+  readonly profile: DeploymentProfile;
+  readonly configDigest: `sha256:${string}`;
+  readonly publicUrl: string;   // exactly the compiler-derived canonical publicOrigin
+  readonly elapsedMs: number;  // non-negative integer from a monotonic clock
+}
+type DeploymentAdminReceiptV1 = DeploymentReceiptBaseV1 & (
+  | { readonly operation: "check"; readonly result: "succeeded";
+      readonly artifacts: DeploymentArtifactIdentityV1;
+      readonly checks: readonly ("config" | "hostname_resolution" | "certificate"
+        | "compose" | "proxy_config" | "image_pins" | "network_graph")[] }
+  | { readonly operation: "start"; readonly result: "succeeded";
+      readonly artifacts: DeploymentArtifactIdentityV1;
+      readonly services: readonly ("app" | "caddy")[];
+      readonly checks: readonly ("config" | "compose" | "proxy_config"
+        | "image_pins" | "network_graph" | "readiness")[] }
+  | { readonly operation: "probe"; readonly result: "succeeded";
+      readonly artifacts: DeploymentArtifactIdentityV1;
+      readonly checks: readonly DeploymentCheckId[] }
+  | { readonly result: "refused"; readonly code: DeploymentRefusalCode }
+  | { readonly result: "failed"; readonly code: DeploymentFailureCode;
+      readonly failedCheck: DeploymentCheckId | null }
+  | { readonly result: "cancelled"; readonly code: "OPERATION_CANCELLED";
+      readonly signal: "SIGINT" | "SIGTERM" }
+);
+type DeploymentRefusalCode =
+  | "USAGE_ERROR" | "CONFIG_REFUSED" | "PROFILE_HYBRID_REFUSED"
+  | "SECRET_REFUSED" | "HOSTNAME_RESOLUTION_REFUSED"
+  | "ARTIFACT_IDENTITY_REFUSED" | "PROFILE_SWITCH_REFUSED";
+type DeploymentFailureCode =
+  | "COMPOSE_VALIDATION_FAILED" | "PROXY_VALIDATION_FAILED"
+  | "IMAGE_PIN_MISMATCH" | "NETWORK_GRAPH_FAILED" | "START_FAILED"
+  | "READINESS_FAILED" | "TLS_PROBE_FAILED" | "ORIGIN_PROBE_FAILED"
+  | "COOKIE_PROBE_FAILED" | "REQUEST_BUDGET_PROBE_FAILED"
+  | "STREAMING_PROBE_FAILED" | "CORE_JOURNEY_FAILED" | "INTERNAL_ERROR";
+```
+
+Successful `check` means the exact rendered artifacts and pins validate without starting learner
+traffic. Successful `start` means those same artifact digests were started and readiness passed;
+`services` is exactly `["app"]` for local and `["app", "caddy"]` for appliance/hosted. Successful
+`probe` means the running deployment with those same identities passed the complete profile-
+applicable check set: local omits hostname/certificate/proxy checks, while appliance/hosted require
+them. Check lists are canonical, duplicate-free and sorted by the enum order above. A receipt cannot
+substitute an omitted check with prose. `probe` refuses if the live container/image/config identity
+does not equal the preceding start/check identity.
+
+Every invocation writes exactly one RFC-8785-canonical JSON value followed by one newline and no
+other stdout bytes. Diagnostics and progress use stderr only. Unknown fields or versions,
+non-canonical JSON, multiple JSON values and bytes after the terminal newline make verification
+fail. Exit status is `0` only for `succeeded`, `2` for `refused`, `3` for declared operational/probe
+`failed`, and `4` only for `INTERNAL_ERROR`. A caught SIGINT/SIGTERM emits `cancelled` and exits
+`130`/`143`; SIGKILL or host loss cannot promise a receipt. `elapsedMs` begins before argument
+validation, uses a monotonic clock and is never a performance gate.
+
+`configDigest` is the canonical digest from §1, including the synthesized default-local config.
+Artifact digests cover the exact bytes consumed by Docker/Caddy; image identities are registry
+digests, never mutable tags. `publicUrl` is the compiler output, not a request-derived URL. Receipts
+contain logical operation/profile/check identities only: no host secret paths, certificate bytes,
+container environment, credentials, learner data or arbitrary logs.
+
+This remains one server-owned, non-persisted CLI protocol: the implementation exports one parser,
+verifier and serializer, and every TypeScript/Make/CI/F12-H consumer invokes or imports those exact
+symbols. F12-H may retain the canonical receipt bytes as release evidence but does not implement a
+second parser or writer. A persisted product schema, a non-server writer, or an independently
+implemented parser is a second authority and must first enter the shared-resource register.
+
 The release publishes:
 
 ```text
@@ -338,7 +656,8 @@ make deployment-check PROFILE=<local|appliance|hosted> CONFIG=<file-if-required>
 ```
 
 Wrappers validate configuration, render Compose, run `caddy validate`, print the exact public URL,
-and fail before starting on missing/unsafe values. They do not write secrets into generated files.
+and fail before starting on missing/unsafe values. The URL is the `publicUrl` field in the sole
+stdout receipt, not an additional human line. They do not write secrets into generated files.
 The docs provide one guided path per profile, a support matrix, CA trust/remove steps, DNS/port
 prerequisites, backup interaction, update/rollback links, and exact diagnostics. Advanced proxy
 customization is explicitly unsupported rather than exposed as dozens of learner settings.
@@ -399,6 +718,28 @@ Exact evidence and required repairs are in
 `planning/safe-deployment-profiles/fresh-independent-buildability-review-2026-08-30.md`. The
 loopback default, TLS split, exact-origin boundary, bounded Node ingress and streaming egress remain
 the right scope. No production/deployment implementation is authorized by this return.
+
+### Author repair (2026-08-31)
+
+The repair closes all five returned seams in the normative specification:
+
+1. [[D2214]]: `DeploymentConfigV1` is one closed JSON union with ACME/file-certificate arms,
+   no-follow file/secret validation, canonical origin/config digest and closed refusal codes.
+2. [[D2215]]: appliance 1.0 uses operator-managed LAN DNS, exact expected-address and certificate
+   probes, and a complete change/removal/re-trust procedure; mDNS/hosts overrides are unsupported.
+3. [[D2216]]: the trusted proxy path is one closed `public_edge → caddy → proxy_edge → app` graph,
+   separate from provider traffic, with rendered-artifact bypass and header-replacement probes.
+4. [[D2217]]: the budget source is an exact method/template/discriminant descriptor join over the
+   live route families, with one partition, a digest-pinned Caddy 2.11.4 outer guard and Node as the
+   per-route authority.
+5. [[D2218]]: check/start/probe use one versioned receipt binding canonical config, artifact/image
+   digests, checks, stdout/stderr and exit/signal semantics. It remains server-owned; any second
+   writer/parser or persisted schema must enter the shared-resource register first.
+
+`make safe-deployment-author-repair` passes eight executable contract arms plus strict TypeScript
+positive/negative cases. This records author repair only: production, Compose, proxy, server,
+workflow and release bytes remain untouched, and another independent review is mandatory before
+acceptance or implementation.
 
 ## Acceptance criteria
 
@@ -466,6 +807,10 @@ implementation detail.
 
 ## Changelog
 
+- 2026-08-31: author-repaired [[D2214]]–[[D2218]] with one typed configuration authority,
+  operator-DNS appliance journey, three-edge proxy graph, exact route/budget join, Caddy capability
+  pin/probe and closed deployment receipt. `make safe-deployment-author-repair` passes 8/8 plus
+  TypeScript. No production/deployment/workflow/release byte changed; fresh review remains required.
 - 2026-08-30: returned by fresh independent buildability review on D2214–D2218; added executable
   review guard `make safe-deployment-fresh-review`; no implementation authorized.
 - 2026-08-27: drafted from O13/F12-A, D607, and the current release-platform audit; added the
