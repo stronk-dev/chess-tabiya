@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:7f6a081fa194eff4c1155fe8c1d58ada71d99ee5dd8eaf2ba3660bda85cde1c4",
+    "roadmap": "sha256:2fd7cdb3957cb09cb93ddefad9dd0a61d5ccb69e18f52f6380c2fc8c33b7b4a3",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "rfcRegister": "sha256:81a09bd3da1ad80cce7fe00b80963e6ccd68e3f2ddb5b9e5e6c4315024f05a61",
+    "rfcRegister": "sha256:626499e17eaa52657969fa4775521aa09fac75ff1706f56cc2f20a909cf37d80",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -99,12 +99,13 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-08-31",
-        "summary": "The shared-resource bootstrap author repair now specifies truthful empty roots, all nine resources, kind-generic semantics and exact staged/CI history; bot, concept and release roots remain blocked pending repeat independent review.",
+        "summary": "The shared-resource bootstrap is repaired pending review, while a fresh semantic-validation audit caught four event/reading and authority contradictions before they could enter the evidence-to-consumer foundation.",
         "impact": "held",
         "evidence": [
-          "planning/shared-resource-register-bootstrap/fresh-independent-buildability-review-2026-08-31.md",
           "planning/shared-resource-register-bootstrap/author-repair-2026-08-31.md",
+          "planning/semantic-validation-authority/third-author-fresh-adversarial-audit-2026-08-31.md",
           "rfc/shared-resource-register-bootstrap.md",
+          "rfc/semantic-validation-authority.md",
           "rfc/README.md"
         ]
       },

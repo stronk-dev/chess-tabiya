@@ -1,11 +1,11 @@
 # RFC: Executable semantic-validation authority
 
-- **Status:** draft — AUTHOR-REPAIRED 2026-08-31 on [[D2331]]–[[D2333]]; third fresh independent
-  review required. Operation, case, receipt and oracle identities now use base id plus numeric
-  version once; `present` cells are distributive across case/population/external refs; and rules
-  oracles resolve a sealed witness, execute a typed request/result operation and bind the computed
-  expectation exactly to the case. `make semantic-validation-third-author-repair` passes 3/3.
-  Implementation and learner eligibility remain forbidden until fresh acceptance.
+- **Status:** draft — RETURNED by fresh adversarial buildability audit 2026-08-31 on
+  [[D2385]]–[[D2388]] before independent review. The D2331–D2333 repair survives, but reading roots
+  cannot inhabit the event-only protocol; case/root cardinality is contradictory; rules oracles
+  manufacture event expectations from event-agnostic requests; and `owner_authored` names no
+  authority store. `make semantic-validation-adversarial-audit` passes 4/4. Author repair and the
+  still-required independent review must precede acceptance or implementation.
 - **Author:** codex, executing [[D1711]] / [[D1713]] / [[D1714]] after refreshing both research
   instruments at HEAD
 - **Created:** 2026-08-29
@@ -1109,8 +1109,27 @@ typed request/result arm under import isolation and must compute an expectation 
 case. The executable author contract is `make semantic-validation-third-author-repair`; fresh
 review still owns acceptance.
 
+## Fresh adversarial return — 2026-08-31
+
+The pre-review audit in
+`planning/semantic-validation-authority/third-author-fresh-adversarial-audit-2026-08-31.md`
+returns the document to its author on four buildability blockers:
+
+- [[D2385]] — either generalize the full declaration/operation/case/receipt/eligibility protocol
+  over reading and event observations, or remove the late reading roots into a separate authority;
+- [[D2386]] — state exact equal sets and the permitted case subset, including a debt-only root;
+- [[D2387]] — stop an event-agnostic rules request from directly returning an event-specific
+  expectation without an independently grounded proposition; and
+- [[D2388]] — define an exact owner-authored authority store and write boundary, or remove that
+  authority arm.
+
+This is an author-side adversarial audit, not the independent acceptance review. Implementation
+remains unauthorized until an author repair and subsequent independent review both complete.
+
 ## Changelog
 
+- 2026-08-31: fresh adversarial author-side audit returned the RFC on D2385–D2388 before the third
+  independent review. No production or eligibility implementation is authorized.
 - 2026-08-31: author-repaired [[D2331]]–[[D2333]]. Removed `@1` suffixes from operation, case and
   oracle ids while retaining numeric version fields; made present cells distributive over exact
   case/population/external refs; and replaced digest-only rules-oracle authority with sealed witness

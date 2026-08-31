@@ -3,7 +3,7 @@
   "scope": "design/BACKLOG.md ledger rows",
   "authority": "design/BACKLOG.md",
   "ownerAuthority": "planning/roadmap-1.0.json",
-  "untriagedCeiling": 1391,
+  "untriagedCeiling": 1388,
   "items": [
     {
       "id": "D1",
@@ -17600,27 +17600,30 @@
     },
     {
       "id": "D2331",
+      "state": "blocked",
       "sourceGlyph": "📝",
       "sourceDigest": "sha256:180da37070cc8fcb97cb8614523a8d8bfc42e07c30bc263c4c8ff0c8b5385fed",
       "uxItems": [],
-      "state": "untriaged",
-      "owner": "unowned"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-validation-authority.md"
     },
     {
       "id": "D2332",
+      "state": "blocked",
       "sourceGlyph": "📝",
       "sourceDigest": "sha256:8eef09f72ef8e06015e5d80ce109a86771ab1ed40d6f09f2e0caa5c32fdc05d2",
       "uxItems": [],
-      "state": "untriaged",
-      "owner": "unowned"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-validation-authority.md"
     },
     {
       "id": "D2333",
+      "state": "blocked",
       "sourceGlyph": "📝",
       "sourceDigest": "sha256:b9326cb3a817cbf80425f29c51c5f462f2c3e1a68e7078a6d39d150cf5660f71",
       "uxItems": [],
-      "state": "untriaged",
-      "owner": "unowned"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-validation-authority.md"
     },
     {
       "id": "D2334",
@@ -18031,6 +18034,42 @@
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2385",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:548bf050b1dd21c281b4cc12927cf4a2812e90e1ba3899b2c742332fb5ef213f",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-validation-authority.md"
+    },
+    {
+      "id": "D2386",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:80ba040f4a4ac0c3841308513020217ac2bb8fd4742a8a01f49a91d54ef89307",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-validation-authority.md"
+    },
+    {
+      "id": "D2387",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d8ba56d649997dea3f48c5be55e2e44c2c0db7039a74a42ee10ec3311a23133a",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-validation-authority.md"
+    },
+    {
+      "id": "D2388",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7c4d70ef137f475d137d0b38b4f9156b486bf60bab0880f72d353b0eda928c67",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-validation-authority.md"
     }
   ]
 }

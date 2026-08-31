@@ -12983,3 +12983,17 @@ criteria, including the two closed introduced roots. The four defects remain ope
 this RFC because implementation is still unauthorized. Another independent process/buildability
 review is required before acceptance; release-manifest, concept-registry, bot and Campaign work
 cannot claim progress through these roots yet.
+
+## 2026-08-31 — Semantic-validation pre-review return
+
+The durable work-state program classified D2331–D2333 as evidence-foundation work blocked on their
+active RFC rather than leaving them in the generic untriaged mass. A fresh adversarial pass then
+verified that their identity/cell/oracle-witness repairs survive, but found four later executable
+contradictions before the scheduled independent review.
+
+D2385–D2388 record the return: late reading roots cannot inhabit an event-only operation and receipt
+algebra; roots and cases are simultaneously required to be equal and a subset; a generic rules
+request directly manufactures an event-specific expectation; and `owner_authored` has no named
+authority store or writer boundary. `make semantic-validation-adversarial-audit` reproduces 4/4.
+All seven rows are durably blocked on `semantic-validation-authority.md`; no validator, receipt,
+eligibility, schema or content byte changed.

@@ -327,9 +327,9 @@
         "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
         "latestCheckpoint": {
           "at": "2026-08-31",
-          "summary": "The shared-resource bootstrap author repair now specifies truthful empty roots, all nine resources, kind-generic semantics and exact staged/CI history; bot, concept and release roots remain blocked pending repeat independent review.",
+          "summary": "The shared-resource bootstrap is repaired pending review, while a fresh semantic-validation audit caught four event/reading and authority contradictions before they could enter the evidence-to-consumer foundation.",
           "impact": "held",
-          "evidence": ["planning/shared-resource-register-bootstrap/fresh-independent-buildability-review-2026-08-31.md", "planning/shared-resource-register-bootstrap/author-repair-2026-08-31.md", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"]
+          "evidence": ["planning/shared-resource-register-bootstrap/author-repair-2026-08-31.md", "planning/semantic-validation-authority/third-author-fresh-adversarial-audit-2026-08-31.md", "rfc/shared-resource-register-bootstrap.md", "rfc/semantic-validation-authority.md", "rfc/README.md"]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
       },
