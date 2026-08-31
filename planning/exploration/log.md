@@ -13183,3 +13183,23 @@ Exact review:
 author round specifies exact revision reset, truthful cut semantics, isolated/bounded execution,
 shared structure attribution and bounded failure recovery, followed by another fresh independent
 review.
+## 2026-08-31 — bot policy third fresh review returns execution identity
+
+**What landed:** independently re-applied the D2219–D2226/D2364 author repair to the sampler,
+deterministic decision image, durable reload and provider-health boundary. Five new blockers are
+recorded as [[D2407]]–[[D2411]]. `make bot-policy-third-fresh-review` passes 5/5: the author
+sampler keeps a move the declared normalized top-p algorithm removes; complete timestamp-bearing
+deliveries enter the deterministic digest; a forged chosen move survives save/reload with the old
+digest; four health types are recreated privately; and request-specific cached-only health becomes
+general roster availability.
+
+**What changed:** `rfc/bot-policy.md` and its register row are returned, not accepted or
+implementing. The v1 roadmap records the return in foundation-contracts, durable-product-state and
+the bot capability rather than treating the 31-arm author checkpoint as product movement. Exact
+review:
+`planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md`.
+
+**Blocked/next:** no catalog, schema, migration, route, roster or client landing before one author
+round uses the normalized sampler, separates provenance from deterministic source identity,
+recomputes durable envelopes, imports provider health exactly and makes cache availability
+request-bound, followed by another fresh independent review.

@@ -1,11 +1,13 @@
 # RFC: Bot policy
 
-- **Status:** **draft — third author repair complete 2026-08-31 on [[D2219]]–[[D2226]] and
-  dependency cycle [[D2364]].** The executable author contract now binds the exact sampler/model,
-  legal-board pawn classifier, retained provider deliveries, provider-health join, public route
-  result, shared catalog, closed decision algebra and split replay/concurrent-commit identities;
-  `make bot-policy-author-contract` passes 31/31 plus strict TypeScript. **Acceptance and implementation remain blocked**
-  on fresh review, accepted provider health, and the shared-resource bootstrap/register claim. No
+- **Status:** **draft — RETURNED by the third fresh independent review 2026-08-31 on
+  [[D2407]]–[[D2411]].** The D2219–D2226 repair retains its exact model, legal-board classifier,
+  delivery, route and concurrency improvements, but the author sampler applies top-p before
+  normalization; deterministic identity hashes delivery timestamps; save/reload accepts a forged
+  decision; provider-health types are copied; and exact-cache state is promoted to global roster
+  availability. `make bot-policy-third-fresh-review` passes 5/5 as the blocker reproduction.
+  **Acceptance and implementation remain blocked** on author repair, another fresh review,
+  accepted provider health, and the shared-resource bootstrap/register claim. No
   implementation is authorized. Claims 0.18/migration remain held. *(Prior checkpoints:
   implementing; accepted 2026-08-22; draft; D1601–D1609 author-amended; D1970–D1976
   author-amended.)*
@@ -1239,6 +1241,27 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
   *Fails if* any dependency is called implemented out of order, a copied enum passes, or a green
   author fixture uses fake model/provider identities.
 
+## Third fresh independent return (2026-08-31)
+
+The D2219–D2226/D2364 repair survives at its named seams, but fresh application to the complete
+operation returns five blockers. Exact evidence and executable controls are in
+`planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md`.
+
+1. **[[D2407]]:** top-p membership is computed from unnormalized powered weights, and the captured
+   positive control never executes that constructor.
+2. **[[D2408]]:** the deterministic decision hashes the complete provider delivery, including the
+   three timestamps the RFC says are excluded.
+3. **[[D2409]]:** save/reload compares a decision digest string with itself instead of recomputing
+   the durable decision image, so forged decision fields survive.
+4. **[[D2410]]:** the author model recreates four provider-health types rather than importing the
+   dependency's exact authority.
+5. **[[D2411]]:** request-specific cached-only state becomes general roster availability without a
+   request/cache identity.
+
+`make bot-policy-third-fresh-review` passes 5/5. No catalog, schema, migration, route, roster,
+client or content implementation is authorized until an author repair inverts these controls and
+another fresh independent review passes.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -1342,3 +1365,8 @@ as a named future measured layer (Open question 4).
   pass 31/31 plus strict TypeScript. [[D2364]] stages provider health's claim-free authority before bot lane 0.18 and keeps
   durable acquisition at lane 0.26. Fresh review plus both process/provider dependencies still gate
   acceptance and implementation; no product/schema/migration/content byte changed.
+- 2026-08-31: third fresh independent review returned the repair on [[D2407]]–[[D2411]]: the
+  author sampler truncates unnormalized weights; deterministic identity includes delivery time;
+  durable reload accepts forged decision fields; provider-health authority is copied; and
+  request-specific cache state is advertised globally. Exact review:
+  `planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md`.

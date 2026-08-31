@@ -19012,6 +19012,51 @@
       "uxItems": [],
       "owner": "learner-history",
       "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2407",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7a89ed734d5abf0b9858e021aaa711a2f7bce20b3b7e805410a4d5f21ff16573",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D2408",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f840a75d69b9b0a1cca150a7225b27e82613f25a30ad661087592ef32335d7b1",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D2409",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:42e6da035aef33158c47a91976ff2f90a1b0ed575fb2da42eca2c918792a62d2",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D2410",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6be5ab58b879bbb7f5168563e9b1407bc80f4c276af412acc8c3d0dc265d0170",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D2411",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2739deb34ccde4265620621ed19ea740cf02731ec494ff521ac894adcd61b360",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
     }
   ]
 }

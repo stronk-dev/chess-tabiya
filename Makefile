@@ -435,6 +435,10 @@ bot-policy-fresh-review:
 bot-policy-second-fresh-review:
 	node --test tools/d2219-bot-policy-second-fresh-review/contract.test.mjs
 
+.PHONY: bot-policy-third-fresh-review
+bot-policy-third-fresh-review:
+	./node_modules/.bin/vitest run --config tools/d2407-bot-policy-third-fresh-review/vitest.config.ts --reporter=verbose
+
 pack-capability-closure:
 	./node_modules/.bin/vitest run --config tools/d1620-pack-capability-closure/vitest.config.ts
 

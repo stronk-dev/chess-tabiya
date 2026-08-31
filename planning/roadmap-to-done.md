@@ -102,7 +102,7 @@ fails `make roadmap-check` until it has an owner.
 shared-resource register, intent parity and persistent UX-item registry are real. Every generic
 ledger row now has one durable state joined to its exact source bytes; terminal rows retain landing
 or refusal evidence; live work has an explicit owner or the honest `untriaged`/`unowned` state.
-The current census reads 2,145 rows: 695 done, three refused, 655 todo, 792 blocked, zero doing
+The current census reads 2,160 rows: 702 done, three refused, 655 todo, 800 blocked, zero doing
 and zero untriaged. The RFC-owned migration classified 870 rows conservatively: draft/awaiting
 RFC work is blocked on that exact RFC; accepted/implementing RFC work is todo for its roadmap
 capability; nothing becomes doing by inference. Four further source-aware waves assigned every
@@ -662,6 +662,13 @@ not make an awaited move atomic/idempotent ([[D1970]], [[D1971]], [[D1972]], [[D
 [[D1975]], [[D1976]]). [[D1610]] and [[D1611]] retain
 the final persona assets and explicit default as owner choices. An honest non-empty catalogue is
 downstream of those repairs, not a substitute for them.
+
+The 2026-08-31 third fresh review also prevents a 31-green-test author checkpoint from being
+misreported as bot progress. The executable model truncates unnormalized sampler weights, hashes
+delivery timestamps into deterministic identity, accepts forged durable decision fields, copies the
+provider-health authority and promotes an exact cache entry to global roster availability
+([[D2407]]–[[D2411]]). These are operation-integrity blockers, not roster polish. Exact return:
+`planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md`.
 
 **1.0 exit:** four measured bands × three behavior families carry immutable policy digests;
 grounded route proposals and guard fallback never throw; repertoire, traits, plausible errors,
