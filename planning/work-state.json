@@ -19399,6 +19399,51 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-validation-authority.md"
+    },
+    {
+      "id": "D2450",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e778722690e98b71954b9bc66cf747d346a79ae338c7238e1c156b62c2f97baa",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:assistance-config-register.md"
+    },
+    {
+      "id": "D2451",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ed757b8482c6174b24b34e8507e2cb4fc64f87155a4c081002af3478017a3cea",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:assistance-config-register.md"
+    },
+    {
+      "id": "D2452",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9ee391878b246d0fcc017e5bd59e99fe3acaf5f39a275696befc111ebd123e70",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:assistance-config-register.md"
+    },
+    {
+      "id": "D2453",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b9088b807f559fefedbfa6a8fc7f6dc47ceaa63cd8e5afe6521f8474f15b290d",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:assistance-config-register.md"
+    },
+    {
+      "id": "D2454",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6be42f8a3fa1418e764195cd6c72f399435f07912a69d234d697240249dde461",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:assistance-config-register.md"
     }
   ]
 }

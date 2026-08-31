@@ -1,11 +1,11 @@
 # RFC: Assistance shared-resource registers
 
-- **Status:** draft — **AUTHOR-REPAIRED 2026-08-31 on [[D2355]]–[[D2360]]; fresh independent
-  review required.** The repair models historical workflow-v1 as open/context-dependent, closes
-  its exact authority tree and v2 transition, roots the future exchange at one version symbol,
-  refuses landed→absent regression, closes the permission transition, and executes all six rules
-  in `make assistance-register-fourth-author-repair` (6/6). C9/register/v5 implementation remains
-  forbidden until another fresh review accepts this contract.
+- **Status:** draft — **RETURNED by sixth fresh independent review 2026-08-31 on
+  [[D2450]]–[[D2454]].** The truthful workflow-v1 and one-way absence repairs survive, but the
+  workflow/permission deltas omit their own authorities, exchange has no landed semantic tree,
+  permission operation identity has no same-membership lifecycle, and the RFC conflicts with the
+  active generic register bootstrap. `make assistance-register-sixth-fresh-review` reproduces
+  5/5. C9/register/v5 implementation remains forbidden.
 - **Author:** codex
 - **Created:** 2026-08-26
 - **Design refs:** none. This is repository process over an already-ruled assistance contract; it
@@ -48,6 +48,23 @@ permission claim covers the union and all four operations that construct or proj
 disposable model in `tools/d2355-assistance-register-author-repair/` executes the valid first
 landing plus the invalid empty, skipped-lane and landed→absent paths. It specifies this RFC only;
 it is not production register code.
+
+## Sixth fresh independent return (2026-08-31)
+
+The fifth-return repair's truthful workflow-v1 and landed-to-absent rules survive. The amended
+resource boundaries remain unbuildable on five seams:
+
+- [[D2450]] — workflow-v2's eight-symbol delta omits changed authority nodes and transitive grammar;
+- [[D2451]] — the permission delta omits `ConfigClamp` and pointwise composition;
+- [[D2452]] — exchange has no landed authority graph or canonical contract-digest image;
+- [[D2453]] — permission operation semantics can change without a representable member claim; and
+- [[D2454]] — this bespoke `RESOURCE_NAMES`/C9 architecture conflicts with the active catalogue
+  bootstrap that deletes `RESOURCE_NAMES`.
+
+`make assistance-register-sixth-fresh-review` reproduces 5/5. Exact evidence is in
+`planning/assistance-config-register/sixth-fresh-independent-buildability-review-2026-08-31.md`.
+An author repair must reconcile the process dependency and close the complete before/after
+authority graphs before another independent review.
 
 ## Summary
 
@@ -810,6 +827,10 @@ contract.
 
 ## Changelog
 
+- 2026-08-31: sixth fresh independent review returned the fifth repair on [[D2450]]–[[D2454]].
+  Workflow and permission deltas omit semantic authorities, exchange lacks its landed tree,
+  permission lifecycle cannot express same-membership semantic changes, and the bespoke register
+  architecture conflicts with the active generic bootstrap. No implementation is authorized.
 - 2026-08-31: author-repaired [[D2355]]–[[D2360]]. Historical workflow-v1 is now specified as
   open/context-dependent over an exact six-symbol authority tree; v2 owns the exact strict
   eight-symbol transition. The absent exchange is rooted at `ASSISTANCE_EXCHANGE_VERSION`, its

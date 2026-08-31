@@ -145,6 +145,7 @@ semantic-validation-author-contract:
 
 .PHONY: semantic-validation-author-repair semantic-validation-fresh-review semantic-validation-second-fresh-review
 .PHONY: semantic-validation-third-author-repair semantic-validation-adversarial-audit semantic-validation-fourth-author-repair semantic-validation-fifth-fresh-review
+.PHONY: assistance-register-sixth-fresh-review
 semantic-validation-author-repair:
 	node --test tools/d2194-semantic-validation-author-repair/contract.test.mjs
 
@@ -165,6 +166,9 @@ semantic-validation-fourth-author-repair:
 
 semantic-validation-fifth-fresh-review:
 	node --test tools/d2445-semantic-validation-fifth-fresh-review/contract.test.mjs
+
+assistance-register-sixth-fresh-review:
+	node --test tools/d2450-assistance-register-sixth-fresh-review/contract.test.mjs
 
 module-evidence-assembly:
 	./node_modules/.bin/vitest run --config tools/d1865-evidence-assembly-harness/vitest.config.ts --reporter=verbose

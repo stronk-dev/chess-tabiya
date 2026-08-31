@@ -13368,3 +13368,23 @@ The five findings are assigned to `evidence-foundation`; no untriaged work was i
 staged-byte-derived owner transition, uniqueness before population equality and an explicit
 owner/Claude empty-store bootstrap. Repair and review again before any runtime validation receipt
 or learner-eligibility implementation.
+
+## 2026-08-31 — Assistance-register sixth fresh review returns transitive authority
+
+**What landed:** independently crossed the fifth-return repair against `intent-presets` and the
+active generic register bootstrap. The truthful workflow-v1 and one-way absence repairs survive.
+`make assistance-register-sixth-fresh-review` adds five able-to-fail returns: [[D2450]] workflow-v2
+omits changed/transitive authorities; [[D2451]] permission omits clamp/minimum authority; [[D2452]]
+exchange has no landed semantic tree; [[D2453]] same-membership permission semantics have no legal
+lifecycle; and [[D2454]] the bespoke `RESOURCE_NAMES`/C9 plan conflicts with the catalogue plan
+that deletes `RESOURCE_NAMES`.
+
+**What changed:** `assistance-config-register` remains draft and returned. Its register, 1.0
+foundation checkpoint and work-state rows now point to
+`planning/assistance-config-register/sixth-fresh-independent-buildability-review-2026-08-31.md`.
+All five findings are assigned to `assistance-and-presentation`; zero untriaged work remains.
+
+**Blocked/next:** reconcile the generic process dependency, derive complete workflow/permission
+before/after graphs, define exchange's landed digest and give permission operation semantics a
+versioned lifecycle. No C9, intent claim, preset or hint-v5 product implementation before repair
+and another fresh independent review.
