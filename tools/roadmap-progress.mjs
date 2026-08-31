@@ -17,6 +17,7 @@ export function formatRoadmapProgress(receipt) {
     "",
     `Capability dimensions (${total(receipt.summary.dimensionStates)}): ${Object.entries(receipt.summary.dimensionStates).map(([state, count]) => `${state}=${count}`).join(", ")}`,
     `Active RFCs (${total(receipt.summary.activeRfcLifecycle)}): ${Object.entries(receipt.summary.activeRfcLifecycle).map(([state, count]) => `${state}=${count}`).join(", ")}`,
+    `Ledger execution (${total(receipt.summary.workState)}): ${Object.entries(receipt.summary.workState).map(([state, count]) => `${state}=${count}`).join(", ")}`,
     `Persistent UX work (${total(receipt.summary.workItems)}): ${Object.entries(receipt.summary.workItems).map(([state, count]) => `${state}=${count}`).join(", ")}`,
     "",
     "Milestone and dimension states are strict 1.0 release gates. Latest checkpoints report incremental delivery and never promote a gate by implication.",

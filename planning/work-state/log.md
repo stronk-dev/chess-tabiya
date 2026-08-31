@@ -74,3 +74,14 @@ positive checks; this is author repair, not independent acceptance or implementa
 The census remains 2,145 rows: 695 done, three refused, 655 todo, 792 blocked, zero doing and zero
 untriaged. All 1,447 live rows remain assigned. The RFC stays blocked on its exact semantic-register
 dependencies before fresh review, so the five repair closures do not widen implementation authority.
+
+## 2026-08-31 — Live progress receipt closure
+
+Closed [[D2418]] and [[D2419]] after the supposedly source-derived report disagreed with its own
+roadmap check and omitted the ledger execution authority entirely. Product-RFC lifecycle counts now
+range over the roadmap's exact assigned RFC set, excluding RFC-0000, and the receipt seals
+`planning/work-state.json` as an input. `make roadmap-progress` prints the current six-state census
+directly; hand-maintained roadmap prose no longer copies that mutable count.
+
+The two repair rows were visible as `doing` during implementation and become `done` at closeout,
+so the tracking mechanism also exercised the state its earlier census had never used.

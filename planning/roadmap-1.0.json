@@ -312,9 +312,9 @@
         "nextAction": "Keep every new live row assigned at creation, maintain the separately named verification tiers, and refresh the source-sealed receipt whenever a joined authority changes.",
         "latestCheckpoint": {
           "at": "2026-08-31",
-          "summary": "All 2,166 ledger rows have durable state and every one of the 1,461 live rows has a roadmap capability owner: 655 todo, 806 blocked, zero doing and zero untriaged. Post-zero additions must enter work-state in the same checkpoint, preserving the zero ceiling.",
+          "summary": "The progress receipt now seals the complete ledger execution store, prints its current six-state census directly and excludes RFC-0000 from product lifecycle counts. Post-zero additions must enter work-state in the same checkpoint, preserving the zero ceiling.",
           "impact": "advanced",
-          "evidence": ["rfc/archive/work-state.md", "planning/work-state.json", "tools/work-state.mjs", "docs/progress-tracking.md"]
+          "evidence": ["rfc/archive/work-state.md", "planning/work-state.json", "tools/work-state.mjs", "tools/roadmap-receipt.mjs", "tools/roadmap-progress.mjs", "docs/progress-tracking.md"]
         },
         "exit": "Every required check has one owner and failure meaning; all live 1.0 work is assigned; local parity matches GitHub; no planning census masquerades as a product contract."
       },

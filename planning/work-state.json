@@ -19111,6 +19111,24 @@
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2418",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7d468b9c9a0f256602c7d32402c15a3757ff67feea5df6c55e215e664cbc42bf",
+      "uxItems": [],
+      "evidence": "tools/roadmap-receipt.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2419",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:30c3aa15fe23aee4ea1b9221a0d89a6e3f539c7a25ddc7ecd6e404cd1a235479",
+      "uxItems": [],
+      "evidence": "tools/roadmap-receipt.mjs",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -24,7 +24,11 @@ const sources = {
     { id: "ONE-a1", capability: "one", state: "queued" },
     { id: "TWO-d1", capability: "two", state: "completed" },
   ] }),
-  rfcRegister: "## Active\n\n| RFC | Status | Parent | Implementation |\n|---|---|---|---|\n| `a.md` | **draft** | — | — |\n| `b.md` | **accepted** | — | — |\n\n## Archive\n",
+  workState: JSON.stringify({ items: [
+    { id: "D1", state: "doing" },
+    { id: "D2", state: "blocked" },
+  ] }),
+  rfcRegister: "## Active\n\n| RFC | Status | Parent | Implementation |\n|---|---|---|---|\n| `0000-rfc-process.md` | **accepted** | — | process |\n| `a.md` | **draft** | — | — |\n| `b.md` | **accepted** | — | — |\n\n## Archive\n",
   uxIndex: "index",
   router: "router",
   application: "application",
@@ -35,6 +39,7 @@ test("builds a deterministic vertical status receipt", () => {
   const receipt = buildRoadmapReceipt(sources);
   assert.deepEqual(receipt.summary.releaseClasses, { core: 1, breadth: 1, post_1_0: 0 });
   assert.deepEqual(receipt.summary.workItems, { queued: 1, blocked_owner: 0, blocked_rfc: 0, completed: 1, retired: 0 });
+  assert.deepEqual(receipt.summary.workState, { untriaged: 0, todo: 0, doing: 1, blocked: 1, done: 0, refused: 0 });
   assert.deepEqual(receipt.summary.appRoutes, { live: 1, live_but_inadequate: 0, missing: 1 });
   assert.equal(receipt.capabilities[0].workItems.queued, 1);
   assert.equal(receipt.capabilities[1].apiFamilies.missing, 1);

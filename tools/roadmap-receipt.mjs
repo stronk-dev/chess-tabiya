@@ -9,6 +9,7 @@ import { parseActiveRecords } from "./status-parity.mjs";
 export const SOURCE_PATHS = Object.freeze({
   roadmap: "planning/roadmap-1.0.json",
   workItems: "planning/work-items-1.0.json",
+  workState: "planning/work-state.json",
   rfcRegister: "rfc/README.md",
   uxIndex: "planning/ux-implementation-index.md",
   router: "apps/web/src/lib/router.ts",
@@ -29,13 +30,17 @@ function counts(values, vocabulary) {
 export function buildRoadmapReceipt(sources) {
   const roadmap = JSON.parse(sources.roadmap);
   const workItems = JSON.parse(sources.workItems).items;
+  const workState = JSON.parse(sources.workState).items;
   const workItemStates = ["queued", "blocked_owner", "blocked_rfc", "completed", "retired"];
+  const ledgerStates = ["untriaged", "todo", "doing", "blocked", "done", "refused"];
   const dimensionStates = ["proven", "partial", "blocked", "broken", "missing", "not_applicable"];
   const routeStates = ["live", "live_but_inadequate", "missing"];
   const apiStates = ["live", "live_direct", "implemented_but_unreachable", "missing"];
   const assignedRfcs = new Set(roadmap.capabilities.flatMap((capability) => capability.rfcs));
   const activeRfcLifecycle = counts(
-    parseActiveRecords(sources.rfcRegister).map((record) => record.status.token),
+    parseActiveRecords(sources.rfcRegister)
+      .filter((record) => assignedRfcs.has(record.rfc))
+      .map((record) => record.status.token),
     ["draft", "accepted", "implementing", "awaiting", "implemented", "superseded", "withdrawn"],
   );
 
@@ -65,6 +70,7 @@ export function buildRoadmapReceipt(sources) {
       releaseClasses: counts(roadmap.capabilities.map((capability) => capability.release), ["core", "breadth", "post_1_0"]),
       assignedRfcs: assignedRfcs.size,
       activeRfcLifecycle,
+      workState: counts(workState.map((item) => item.state), ledgerStates),
       workItems: counts(workItems.map((item) => item.state), workItemStates),
       dimensionStates: counts(
         roadmap.capabilities.flatMap((capability) => roadmap.definitionOfDone.map((dimension) => capability.completion[dimension][0])),

@@ -13221,3 +13221,15 @@ author repair as acceptance progress. Exact review:
 before an author repair derives correlated result types from the operation map, represents
 recovery, gives cache inventory exact grain, retains local origin, reconciles TTS and adds upstream
 coordination, followed by another independent review.
+
+## 2026-08-31 — 1.0 progress report now seals live execution truth
+
+Closed [[D2418]] and [[D2419]]. `roadmap-progress` had counted the process constitution as a product
+RFC and its receipt did not digest or summarize `planning/work-state.json`, so live execution-state
+changes could leave the source-derived report unchanged. The receipt now filters lifecycle state
+through the roadmap's exact product-RFC assignment, seals the ledger state store and prints its
+six-state census. Regression fixtures cover both the RFC-0000 exclusion and execution counts.
+
+Mutable current counts were removed from roadmap prose and milestone summaries. Current counts come
+only from the derived command; checkpoints retain dated evidence-backed movement without pretending
+that a historical snapshot is the live register.

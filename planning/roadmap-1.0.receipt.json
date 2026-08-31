@@ -2,8 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a7a4e046d372e9986911edbd6c758aa5442755cbccdfa77d196323116d08f7f2",
+    "roadmap": "sha256:de5a81120bbd9eef1e50a258564f4bbc6cca6bdf4bc4c59a1f1b6ce6997f0d5d",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
+    "workState": "sha256:3fa044b7ae99cfa74d3856211cf37eacaebe2fe17ae4c7185cc637f547a003ba",
     "rfcRegister": "sha256:57905c079c570cef74c37a46a62add88186ab1c9134cb9843cfde9bc6a8f3742",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
@@ -20,12 +21,20 @@
     "assignedRfcs": 66,
     "activeRfcLifecycle": {
       "draft": 52,
-      "accepted": 4,
+      "accepted": 3,
       "implementing": 5,
       "awaiting": 6,
       "implemented": 0,
       "superseded": 0,
       "withdrawn": 0
+    },
+    "workState": {
+      "untriaged": 0,
+      "todo": 655,
+      "doing": 0,
+      "blocked": 806,
+      "done": 704,
+      "refused": 3
     },
     "workItems": {
       "queued": 153,
@@ -67,12 +76,14 @@
       "nextAction": "Keep every new live row assigned at creation, maintain the separately named verification tiers, and refresh the source-sealed receipt whenever a joined authority changes.",
       "latestCheckpoint": {
         "at": "2026-08-31",
-        "summary": "All 2,166 ledger rows have durable state and every one of the 1,461 live rows has a roadmap capability owner: 655 todo, 806 blocked, zero doing and zero untriaged. Post-zero additions must enter work-state in the same checkpoint, preserving the zero ceiling.",
+        "summary": "The progress receipt now seals the complete ledger execution store, prints its current six-state census directly and excludes RFC-0000 from product lifecycle counts. Post-zero additions must enter work-state in the same checkpoint, preserving the zero ceiling.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/work-state.md",
           "planning/work-state.json",
           "tools/work-state.mjs",
+          "tools/roadmap-receipt.mjs",
+          "tools/roadmap-progress.mjs",
           "docs/progress-tracking.md"
         ]
       },

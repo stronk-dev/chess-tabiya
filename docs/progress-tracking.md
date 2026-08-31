@@ -13,13 +13,16 @@ The 1.0 roadmap distinguishes strict release gates from incremental delivery.
   inventories. Ordinary checks never rewrite it.
 
 Run `make roadmap-progress` for a current status report. It first verifies the source-sealed
-receipt, then prints milestone states and checkpoints, capability-dimension counts, RFC lifecycle
-counts and persistent UX-work counts. A checkpoint can advance while its milestone remains active
-or blocked; it never promotes a release gate by implication.
+receipt, then prints milestone states and checkpoints, capability-dimension counts, product-RFC
+lifecycle counts, the complete six-state ledger execution census, and persistent UX-work counts.
+RFC-0000 is a process constitution rather than a product RFC and is excluded through the roadmap's
+set-equal assignment. A checkpoint can advance while its milestone remains active or blocked; it
+never promotes a release gate by implication.
 
-Every milestone checkpoint records a date, an `advanced`/`held`/`regressed` impact, a short current
-fact and repository-relative evidence files. `make roadmap-check` rejects absent evidence,
-malformed checkpoints and a stale receipt.
+Every milestone checkpoint records a date, an `advanced`/`held`/`regressed` impact, a short
+evidence-backed fact and repository-relative evidence files. Mutable live counts belong in the
+derived report, not checkpoint prose. `make roadmap-check` rejects absent evidence, malformed
+checkpoints and a stale receipt, including any change to `planning/work-state.json`.
 
 The staged process guard closes the implementation flow-back gap. A staged change containing both
 non-test product code and an active RFC body must also stage the roadmap and regenerated receipt.
