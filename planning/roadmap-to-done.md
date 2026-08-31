@@ -614,7 +614,8 @@ then official content covers openings, middlegames, endgames, trajectories, form
 counter-cases and honest empties. Runtime ships an allow-listed immutable content bundle.
 
 Primary RFCs: `graduation-clearance`, `pack-population-provenance`,
-`theory-knowledge-pipeline`, `theory-drill-current-joins`, `famous-games`. UX owner: AUT items.
+`concept-registry`, `theory-knowledge-pipeline`, `theory-drill-current-joins`, `famous-games`. UX
+owner: AUT items.
 Owner ruling [[D1563]] funds the authoring board, community-author workflow, Knowledge replacement,
 principle provenance and official-content review instrument. The four-door chooser must not ship as
 a boardless placeholder; it is now implementation work rather than an owner fork.
@@ -665,7 +666,7 @@ rating stays isolated from move feedback; style is continuous evidence, not a ma
 skills are credits, not levels; opening/phase trends lead to relevant theory/drills; learners
 control privacy, sharing, export and deletion.
 
-Primary RFCs: `longitudinal-store`, `player-style`, `learner-rating`, `skills`.
+Primary RFCs: `longitudinal-store`, `concept-registry`, `player-style`, `learner-rating`, `skills`.
 
 ### 9. Campaign, progression, encounters, resources, and failure
 
@@ -682,7 +683,8 @@ web has an accessible map, encounter prep, in-run context, results, inventory an
 One varied campaign is authored and replayed end-to-end. Library remains open; progression is never
 sold.
 
-Primary RFCs: `campaign-core`, `campaign-boss-games`, `training-mode-variants`. UX owner: CMP items.
+Primary RFCs: `campaign-core`, `concept-registry`, `campaign-boss-games`,
+`campaign-catalogue-progression`, `training-mode-variants`. UX owner: CMP items.
 Owner ruling [[D1565]] requires two explicit progression horizons: a run-scoped inventory of
 drip-fed theory, modules and tools that matters in later encounters and bosses, plus durable
 long-term rewards across runs. Exact consequential failure arithmetic remains research-owned.

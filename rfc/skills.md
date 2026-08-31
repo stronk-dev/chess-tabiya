@@ -17,7 +17,8 @@
 - **Exploration gate:** the owner's commission recorded as [[D1232]]; the drafting mandate
   [[D1093]] does **not** enumerate this lane, and this RFC does not claim that it does
 - **Depends on:** `rfc/longitudinal-store.md` (accepted; **100% paper** — zero code at HEAD),
-  `rfc/learner-modules.md`, `rfc/move-quality-grades.md`; [[D300]] adopted rather than awaited (§4)
+  `rfc/learner-modules.md`, `rfc/move-quality-grades.md`, `rfc/concept-registry.md`; [[D300]]'s
+  neutral identity foundation is consumed rather than re-owned (§4)
 - **Parent / amends:** — (first RFC in the F9 lane)
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/skills/` — `full-depth-derivation.md` (769 lines) is the authority for
@@ -290,10 +291,12 @@ author's grouping, (ii) propose a grouping as a ledger row for the owner to rule
 `advance-chain-base` is a string judgement. A careless merge becomes a chess judgement, which is
 Open question 3.
 
-### §4 — The concept registry ([[D300]] adopted, not awaited)
+### §4 — Concept registry dependency ([[D300]] factored, not duplicated)
 
-[[D300]] is owned by nobody and blocks both this lane and the ruled catalogue. This RFC **adopts**
-it rather than deferring to an unowned row.
+[[D300]] blocks both this lane and the ruled catalogue. [[D2370]] identifies the registry as a
+shared resource, so `concept-registry.md` now owns the neutral identity foundation and this RFC is
+its Skills consumer. That split prevents Campaign from waiting on Skills' unrelated valence,
+taxonomy and learner-claim rulings, or copying a second registry.
 
 **Today:** `apps/server/src/progress.ts:52-59` —
 `resolve(packId, raw) { return { key: \`pack:${packId}#${raw}\`, label: raw } }`. There is **no
@@ -307,18 +310,18 @@ authoring contract — **contains the word "concept" zero times**.
 defined once, packs referencing them — is an authoring contract and belongs with the pack studio**,
 not with the scheduler."*
 
-**Specification — four parts, none of which changes the pack schema:**
+**Dependency handoff — four parts, none duplicated here:**
 
-1. **`content/concepts/registry.json`** — one row per global concept id: `{ id, label, note,
-   introducedAt }`. Author-written; law 8 keeps it out of an LLM's hands beyond mechanical
-   operations.
-2. **A corpus-global `ConceptResolver`** replacing the pack-namespacing implementation.
-   `ConceptResolver` is already an injectable interface (`progress.ts:52-54`), so this is one class.
-3. **`same_concept_in_pack` drops `AND a.pack_id = ?`** (`apps/server/src/storage.ts:2708-2714`).
-   The resolver swap alone leaves the query's only product consumer pack-scoped — this is why
-   [[D300]] is under-priced everywhere it is called *"one injectable class"*.
-4. **The lint upgrades from warning to error** on registry membership, and `pack-validation.ts`
-   gains a publication-time membership check.
+1. `concept-registry.md` owns the versioned registry document, schema, compiler and digest.
+2. It replaces the pack-scoped resolver with one global `ConceptRef` identity.
+3. It widens `same_concept_in_pack` to the cross-pack `same_concept` operation and migrates legacy
+   persisted keys atomically.
+4. It upgrades lint/publication membership checks and emits the identity-only
+   `pack.authored.concept_reference@1` projection.
+
+Skills may consume that compiled `ConceptRef`; it may not parse pack strings, mint labels or carry
+a local identity fallback. Skills still owns every semantic layer above identity: category,
+valence, opportunity, credit, mark and unlock meaning.
 
 **Why this claims no pack-schema lane, stated so the owner may overrule it.** A registry id already
 satisfies `nonEmptyString`, so membership is enforceable by lint and validator without a schema
@@ -458,7 +461,7 @@ the surface.**
 | Row | Flips when |
 |---|---|
 | [[D549]] | this RFC is implemented through rung 1 |
-| [[D300]] | §4 lands (registry + resolver + query + lint) |
+| [[D300]] | `concept-registry.md` lands (registry + resolver + query + lint + migration) |
 | [[D1191]] | corrected by this RFC's §2 — already recorded as [[D1220]] |
 | [[D1193]] | withdrawn — already recorded as [[D1232]] |
 | [[D297]] | when §6.3's unlock binds in `campaign-core` |

@@ -27,7 +27,7 @@
 - **Planning:** `planning/live-sources/`
 
 ```tabiya-claims
-migration | position behind campaign-core | imported_games.source_kind CHECK gains 'lichess_broadcast' (storage.ts:3356; STRICT table — SQLite CHECK edits require a rebuild migration)
+migration | position behind campaign-catalogue-progression | imported_games.source_kind CHECK gains 'lichess_broadcast' (storage.ts:3356; STRICT table — SQLite CHECK edits require a rebuild migration)
 ```
 
 ## Summary
@@ -240,8 +240,8 @@ table with `source_kind TEXT NOT NULL CHECK (source_kind IN
 `"lichess_broadcast"` **fails the CHECK on every database at HEAD** — the record
 this RFC specifies was unwritable as drafted. SQLite cannot alter a CHECK in
 place; the implementing commit ships the next-numbered storage migration (claim
-`position behind campaign-core` in the tabiya-claims block — behind the same-day
-campaign draft, which already held `position behind bot-policy`): a standard table
+`position behind campaign-catalogue-progression` in the tabiya-claims block — behind the Campaign
+catalogue successor, which follows `campaign-core`): a standard table
 rebuild of `imported_games` widening the CHECK to admit `'lichess_broadcast'`,
 no data rewrite. `ImportedGameRecord.sourceKind` (`storage.ts:144`) and the
 resolved-source `sourceKind` union widen by the same one member.
@@ -448,8 +448,8 @@ at landing** — these are current, not promised.
   CHECK closed over `('pgn_paste','lichess_url')` (`storage.ts:3356`), so §4's
   INSERT fails on every database at HEAD; the RFC now ships a CHECK-rebuild
   migration, the tabiya-claims block claims `migration | position behind
-  campaign-core` (was `none`; `behind bot-policy` would collide with the same-day
-  campaign draft, C3-verified — **the register row's claims cell and a migration
+  campaign-catalogue-progression` (was `position behind campaign-core`; the catalogue successor
+  now owns that contiguous Campaign slot — **the register row's claims cell and a migration
   Live-claims row must move with it at acceptance**), and criterion 11 pins both
   arms. **(2) The sanitizer in §3 had a
   measured hole**: 61 third-party suffix glyphs (`?`×9, `?!`×39, `??`×13) sit in

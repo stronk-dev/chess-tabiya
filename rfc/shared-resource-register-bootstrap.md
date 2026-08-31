@@ -1,7 +1,7 @@
 # RFC: Shared-resource register bootstrap and absent roots
 
-- **Status:** draft — author contract complete 2026-08-31; fresh independent process/buildability
-  review required before implementation
+- **Status:** draft — author contract amended 2026-08-31 on [[D2370]]; fresh independent
+  process/buildability review required before implementation
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -25,7 +25,9 @@ its tree-discovery metadata. Second, the product RFC declares the unique `first 
 later implementation creates version 1 and converts that claim into the first landed row.
 
 This repairs [[D2363]] and immediately bootstraps `release-manifest-schema` for
-`verifiable-runtime-distribution.md`. It also replaces the seven-name hard-coded checker ceiling
+`verifiable-runtime-distribution.md`. [[D2370]] adds the second proved consumer of the generic
+protocol: `concept-registry-schema`, whose product bytes belong to `concept-registry.md`, not this
+process RFC. It also replaces the seven-name hard-coded checker ceiling
 with a checked catalogue, so the next legitimate resource uses the same protocol rather than
 another one-off exception.
 
@@ -37,6 +39,7 @@ another one-off exception.
 ## Shared-resource catalogue
 | resource | kind | tree authority | version authority |
 | release-manifest-schema | schema | schemas/release_manifest.schema.json#urn:chess-tabiya:schema:release-manifest | packages/schema/src/index.ts#RELEASE_MANIFEST_SCHEMA_VERSION |
+| concept-registry-schema | schema | schemas/concept_registry.schema.json#urn:chess-tabiya:schema:concept-registry | packages/schema/src/index.ts#CONCEPT_REGISTRY_SCHEMA_VERSION |
 ```
 
 The implementation migrates the seven current resources into the same table. Schema rows name an
@@ -109,23 +112,35 @@ The same implementation also updates RFC-0000 rule 7 and `rfc/template.md`: auth
 new resource, draft/accept this small process extension, and may claim the resource only after its
 absent root lands. “Add the name to `RESOURCE_NAMES`” is removed because that list no longer exists.
 
+### 3.1 D2370 handoff
+
+The implementation also adds an absent `concept-registry-schema` catalogue/register root and no
+concept schema, registry or product bytes. Only after this process RFC lands may
+`concept-registry.md` claim `first lane 1`. Its implementation owns the schema, exported version,
+reviewed registry, compiler, consumers and first landed row. `skills.md` relinquishes direct
+ownership of D300's registry mechanics and consumes that one compiled authority; Campaign does the
+same. A third concept enum, pack-local fallback or unvalidated registry file fails the product
+RFC's set-equality contract.
+
+Skills and Campaign consume one compiled authority; neither may own a parallel identity map.
+
 ## Acceptance criteria
 
 1. `make shared-resource-bootstrap-check` derives all resource names and schema slugs from the
    catalogue; removing any current row, adding a duplicate/unknown row or restoring a parallel
    hard-coded resource list fails.
-2. The committed release-manifest register is `absent`, has no tree file/constant/digest/landed row
-   and names this implemented process RFC as introducer.
+2. The committed release-manifest and concept-registry registers are both `absent`, have no tree
+   file/constant/digest/landed row and name this implemented process RFC as introducer.
 3. Fixtures cross unique `first lane 1`, duplicate first, ordinary lane on absent, first on landed,
    file-before-claim, claim-without-root, partial landing and attempted return to absent.
 4. Staged governance refuses catalogue/register growth without the accepted+archived introducing
    process RFC, ledger update and append-only log entry in the same commit.
 5. Existing C1–C8 behavior and all seven current register/tree joins remain green after catalogue
    derivation; `make verify` invokes the new checks through the same register target.
-6. No production schema, package export, release manifest, API, runtime, content or protected-design
-   byte changes in this implementation.
-7. [[D2363]] closes only when criteria 1–6 pass; `verifiable-runtime-distribution` then carries the
-   sole first product claim and still requires fresh review.
+6. No production schema, package export, release manifest, concept registry, API, runtime, content
+   or protected-design byte changes in this implementation.
+7. [[D2363]] and [[D2370]] close only when criteria 1–6 pass; the two named product RFCs then carry
+   the sole first claims for their distinct resources and still require fresh review.
 
 ## Discharges
 
@@ -139,6 +154,8 @@ into a second list.
 
 ## Changelog
 
+- 2026-08-31: amended on [[D2370]] to exercise the generic protocol with the concept-registry
+  schema root; no concept product bytes authorized.
 - 2026-08-31: drafted from [[D2363]] with generic catalogue derivation, accepted-process bootstrap,
   absent-root lifecycle, exact release-manifest handoff and seven able-to-fail acceptance arms. No
   checker/register/product implementation yet.

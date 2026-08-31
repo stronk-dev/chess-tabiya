@@ -555,6 +555,14 @@ safe-deployment-author-repair:
 shared-resource-bootstrap-author-contract:
 	node --test tools/d2363-shared-resource-bootstrap-author-contract/contract.test.mjs
 
+.PHONY: concept-registry-author-contract
+concept-registry-author-contract:
+	node --test tools/concept-registry-author-contract/contract.test.mjs
+
+.PHONY: campaign-catalogue-author-contract
+campaign-catalogue-author-contract:
+	node --test tools/campaign-catalogue-author-contract/contract.test.mjs
+
 pack-check:
 	@test -n "$(FILE)" || (echo "Usage: make pack-check FILE=<path-to-pack.json>" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/pack-check.ts --bundle --platform=node --format=esm --outfile=dist/pack-check.js

@@ -66,7 +66,7 @@
 
 ```tabiya-claims
 run-schema | lane 0.18 | OpponentSelection.policy event envelope + RunOpponentPolicy exact profile reference (packages/runtime/src/types.ts:69,102; run.started and opponent.move_selected payloads widen together)
-migration | position behind longitudinal-store | stamp-only frozen-literal run-schema stamp "0.17"->"0.18" in apps/server/src/storage.ts; no table, no data rewrite
+migration | position behind concept-registry | stamp-only frozen-literal run-schema stamp "0.17"->"0.18" in apps/server/src/storage.ts; no table, no data rewrite
 ```
 
 **Why these two claims and nothing else, verified at HEAD.** The register heads at drafting

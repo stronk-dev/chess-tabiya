@@ -29,6 +29,12 @@ test("D2363: release manifest handoff creates no premature product bytes", () =>
   assert.match(rfc, /first lane 1/);
 });
 
+test("D2370: concept registry uses the same absent-root protocol without premature bytes", () => {
+  assert.match(rfc, /`concept-registry-schema` catalogue\/register root and no[\s\S]*?concept schema, registry or product bytes/);
+  assert.match(rfc, /`concept-registry\.md` claim `first lane 1`/);
+  assert.match(rfc, /Skills and Campaign consume one compiled authority|`skills\.md` relinquishes direct[\s\S]*?Campaign does the same/);
+});
+
 test("D2363: acceptance crosses bootstrap, partial landing and history", () => {
   assert.match(rfc, /duplicate first, ordinary lane on absent, first on landed/);
   assert.match(rfc, /file-before-claim, claim-without-root, partial landing/);
