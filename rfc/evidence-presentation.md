@@ -1,14 +1,12 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft — **RETURNED by fourth fresh independent buildability review 2026-08-30 on
-  [[D2348]]–[[D2354]].** The third repair's direction survives, but its post-P population still
-  contains every pre-P repair/removal plus one appended row; citation output is flat against the
-  nested operand and its attribution register has neither version nor resolver; generic source
-  errors collapse to empty; lifecycle questions are arbitrary strings; and the denominator and
-  named-structure witness paths name components/fields without constructing their operands.
-  `make evidence-presentation-fourth-fresh-review` passes 7/7. Exact return:
-  `planning/platform-alignment/evidence-presentation/fourth-fresh-independent-buildability-review-2026-08-30.md`.
-  [[D1672]]'s owner-only design amendment also remains required. No implementation is authorised.
+- **Status:** draft — **FOURTH AUTHOR REPAIR COMPLETE 2026-08-31 on
+  [[D2348]]–[[D2354]]; fifth fresh independent review required.** Checkpoint P now has one exact
+  transformed 112-row authority; citation, source attribution, failure disposition, question
+  identity, Explorer denominators and named-structure witnesses have executable typed boundaries.
+  `make evidence-presentation-fourth-author-repair` passes 7/7 plus lifecycle typecheck, and all
+  earlier author controls remain green. [[D1672]]'s owner-only design amendment and [[D2401]]'s
+  source-attribution shared-resource bootstrap still block acceptance. No implementation is authorised.
   Landing remains three checkpoints (§2.1): manifest truth, sealed current consumers, then
   module/hint seats.
   Prior amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
@@ -156,6 +154,42 @@ The requested attacks exposed seven further buildability blockers:
 `make evidence-presentation-fourth-fresh-review` reproduces 7/7. Exact evidence and required
 repairs are in the fourth fresh review dossier. Production and protected design remain untouched;
 author repair plus another fresh review are mandatory.
+
+## Fourth author repair (2026-08-31)
+
+The returned seams now share literal authorities in
+`tools/d1862-presentation-adapter-plan/plan.ts`:
+
+1. `POST_P_PRESENTATION_ADAPTER_ROWS` is the sole post-P population: remove the selection-only
+   story-rank binding, replace all eleven operand-repair rows, add exactly one source-bound
+   citation, sort, freeze and require 112 unique `adapt` rows. Abstention and post-P coverage read
+   that image directly; no preimage-plus-append population remains.
+2. `CitationOperand` is exactly nested `{content,source}`. One exact parser rejects flat roots,
+   extra fields and crossed content/source shapes; the derivation and adapter retain the same two
+   roots.
+3. `source-attribution-registry@1` carries literal source/title/locator metadata, exact literal or
+   deployment-receipt licence/revision resolvers, one resolver symbol and digest
+   `sha256:bea3f246780e7bc2c5fb6502f1159e639c062d23887cfcfc74e92c9f009532c6`.
+   Missing receipt fields abstain; neither a URL guess nor provider prose may fill them. [[D2401]]
+   keeps this resource unclaimed until the shared-resource bootstrap registers its absent root.
+4. `PRESENTATION_SOURCE_REASON_DISPOSITIONS` is set-equal to the closed source-reason vocabulary.
+   Every reason has one explicit absence class and learner reason; there is no default arm, and
+   artifact, digest, budget, mate-score, missing-eval and unequal-instrument failures cannot become
+   `no_witness`.
+5. Lifecycle receipts carry a process-sealed `RegisteredPresentationQuestion`, constructed only
+   by exact adapter-key + registered-question-id lookup. Copy is derived from that object; arbitrary
+   and cross-adapter questions fail at type and runtime boundaries.
+6. `constructExplorerCountOperands` emits one candidate-grained operand per exact Explorer move,
+   with numerator `playedCount`, denominator `result.total`, registered population meaning and
+   committed-move identity. Zero/non-integer denominators, duplicate candidate identities,
+   numerator overflow and W/D/L mismatch fail.
+7. Named structures use one proposed `STRUCTURE_PREDICATES@1` atomic matcher/witness operation.
+   It traverses the same matched expression and retains the occupied positive `pieceOnSquare`
+   leaves as non-empty witness geometry: Carlsbad `c6,d4,d5`; white/black IQP `d4`/`d5`; Maroczy
+   `c4,e4`. A second hand-maintained matcher or empty/inconsistent geometry is forbidden.
+
+This is author repair, not acceptance. A fifth independent reviewer must attack all seven seams;
+protected design remains untouched pending [[D1672]], and product implementation remains forbidden.
 
 ## Summary
 
@@ -1510,9 +1544,12 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     sibling lookup. *Wrong impl:* one that "helpfully" adds a
     `chart` form or module field, which would fork the design tier or collide with
     `module-registration`.
-19. **`register-check` is green with this RFC active**, and its `tabiya-claims` block reads
-    `none` consistently with `rfc/README.md`'s registers — this RFC claims no schema lane, no
-    migration position and no evidence kind.
+19. **`register-check` is green with this RFC active.** During this author repair the claims block
+    remains `none` because `source-attribution-registry` is not yet a registered root. [[D2401]]
+    blocks acceptance: the shared-resource bootstrap must first add its exact absent root; then
+    this RFC must atomically replace `none` with the unique `first lane 1` claim for the registry
+    bytes, resolver and digest. It still claims no schema lane, migration position or evidence kind.
+    *RED:* accept this RFC while the root is absent or while its claim remains `none`.
 20. **All four §8 instruments are in the `verify` target, and `make schema-check` is green with
     them there.** *RED:* remove any one from the `verify` target. [[D1440]]'s prerequisite is
     already green at HEAD: the scaffold guard accepts added checks and fails missing required
@@ -1563,6 +1600,13 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 | [[D2161]] | abstention lifecycle and plan rows retain question/projection/producer plus exact source reasons |
 | [[D2162]] | silent targets are set-disjoint from abstention rows; requested source failures stay visible |
 | [[D2163]] | Explorer population's real Inspector adapter owns the denominator component |
+| [[D2348]] | one sorted, frozen 112-row post-P image replaces repairs/removal and adds exactly one citation |
+| [[D2349]] | parser, derivation and adapter share nested `CitationOperand {content,source}` |
+| [[D2350]] | digest-sealed version-1 attribution resource carries literal/resolved metadata; [[D2401]] gates its claim |
+| [[D2351]] | source-reason vocabulary and explicit learner dispositions are set-equal; no default exists |
+| [[D2352]] | lifecycle questions are adapter-local sealed registry objects, never caller prose |
+| [[D2353]] | Explorer candidate counts construct exact candidate-grained numerator/denominator operands |
+| [[D2354]] | all four structures declare one atomic predicate/witness operation and non-empty geometry |
 
 ## Discharges
 
@@ -1637,6 +1681,13 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-08-31 — fourth author repair for [[D2348]]–[[D2354]]. Published the single transformed
+  112-row post-P authority, nested citation parser, digest-sealed attribution resolver, total
+  source-reason disposition, sealed adapter-local question identity, exact Explorer denominator
+  constructor and atomic named-structure predicate/witness contract. `make
+  evidence-presentation-fourth-author-repair` passes 7/7 plus lifecycle typecheck; all prior author
+  controls remain green. Fifth fresh review, [[D1672]] and the newly explicit [[D2401]] resource
+  bootstrap gate acceptance and all production work.
 - 2026-08-30 — returned by fourth fresh independent buildability review on [[D2348]]–[[D2354]].
   The post-P adapter image is not transformed; citation and source-attribution authorities are
   unbuildable as written; failure reasons and question identity are not closed; and the Explorer

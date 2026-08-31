@@ -18495,7 +18495,7 @@
       "id": "D2348",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1023fe92e5c8796a3613d11d326fd3d0c7e366a2fdded3a55a19514beb39b525",
+      "sourceDigest": "sha256:08294f6d67a08a8f0760ab7b6684468838248f7eddb8f77936283b835ff7f194",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
@@ -18504,7 +18504,7 @@
       "id": "D2349",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e6b1a5959ed2348fbfaefe5860ce379309c5e201bfffa270813317257f4aa481",
+      "sourceDigest": "sha256:4175644ae58ba12f2730e8e70a7316b03be464e875ef3ce68fc5580d0f6b9b15",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
@@ -18513,7 +18513,7 @@
       "id": "D2350",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ab1b862bedafcba2c1de9ecb24e42c3686d923f96ada0a2272ef7551b3ba2990",
+      "sourceDigest": "sha256:9c166d0b81ff6dd9f7e7c96fde1353e79d3f0c832aae81290a1554e05a597ae7",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
@@ -18522,7 +18522,7 @@
       "id": "D2351",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:22cb485df819458e3296ead444cfb1f54d476edcb5652b6a0ab8a5e92c4f7851",
+      "sourceDigest": "sha256:26efe36ef431bf4954822e8e2540d3eab0b4a4cdff5d13fa94b6dd8cacfb0883",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
@@ -18531,7 +18531,7 @@
       "id": "D2352",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ce2039709ac1185db61d48d605fcabf19b85dca43a2d4c06d73e93a1fc7587d1",
+      "sourceDigest": "sha256:ce3bce4cbc7ac67186d4b05287c80ddd173198183af4a4e88627619058920375",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
@@ -18540,7 +18540,7 @@
       "id": "D2353",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1006029c234a6f20dc74712731dacf61971f376d5610aea02829bf756c32dd51",
+      "sourceDigest": "sha256:96e74b747f4e885429139beed39fa594ae953699908109e8a3c828a4330011f7",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
@@ -18549,7 +18549,7 @@
       "id": "D2354",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b4491700e491070545abc6cc664dff74f382b537df0bc4bb36ecb861972f6ddb",
+      "sourceDigest": "sha256:c070d01450e5334f1f60148b56763972d7a7592e9abec25e00f796d16f4a0d92",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
@@ -18958,6 +18958,15 @@
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2401",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a9528966491db9fb1807df931c8899dda91652906e28e6ff6231a5b8e699c1e6",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
     }
   ]
 }

@@ -76,7 +76,9 @@ describe("evidence-presentation D2135-D2140 second author repair", () => {
     ]);
     expect(rfc).toMatch(/Checkpoint P — manifest presentation repair predecessor/u);
     expect(rfc).toMatch(/exactly 112 post-P presentation pairs/u);
-    expect(POST_P_PRESENTATION_ADAPTER_ROWS).toHaveLength(1);
+    expect(POST_P_PRESENTATION_ADAPTER_ROWS).toHaveLength(112);
+    expect(POST_P_PRESENTATION_ADAPTER_ROWS.every((row) => row.disposition === "adapt")).toBe(true);
+    expect(POST_P_PRESENTATION_ADAPTER_ROWS.filter((row) => row.projection === "derived.citation.attribution@1")).toHaveLength(1);
     expect(rfc).not.toMatch(/no edit to\s+`packages\/runtime\/src\/evidence-catalog\.ts`/u);
   });
 

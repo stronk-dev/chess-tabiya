@@ -13132,3 +13132,18 @@ The sealed artifacts remain 117 evidence requirements / 205 binding requirements
 dependency-blocked. Maintained author/assembly/return targets and the new four-arm fifth-author
 contract pass. A fresh independent review and `evidence-value-authority` successor regeneration
 still gate acceptance; no production, schema, content, API or UX implementation was authorized.
+
+## 2026-08-31 — Evidence-presentation fourth author repair
+
+Repaired [[D2348]]–[[D2354]] at the RFC contract boundary. Checkpoint P now has one exact
+112-row post-repair authority; citation is nested and runtime-parseable; attribution has an exact
+version/digest/resolver; source failures have a total non-default learner disposition; questions
+are sealed to adapter-local registry identity; Explorer counts construct their real denominator
+operands; and all four named structures declare atomic predicate-derived witness geometry.
+
+`make evidence-presentation-fourth-author-repair` passes seven runtime arms plus lifecycle
+typecheck, and the prior author controls remain green. The pass also surfaced [[D2401]] instead of
+hiding it: the attribution registry is now exact enough to be a shared resource, so the process
+bootstrap must register its absent root and this RFC must claim first lane 1 before acceptance.
+Fifth fresh review, [[D1672]] and [[D2401]] still gate acceptance; no production, protected-design,
+schema, content, API or UX implementation was authorized.

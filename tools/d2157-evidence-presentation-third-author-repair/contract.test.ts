@@ -6,9 +6,9 @@ import {
   FACT_STATEMENT_RENDERERS,
   MANIFEST_PRESENTATION_REPAIRS,
   NAMED_STRUCTURE_LABEL_AUTHORITY,
+  NAMED_STRUCTURE_WITNESS_AUTHORITY,
   POST_P_PRESENTATION_ADAPTER_ROWS,
   PRESENTATION_ABSTENTION_ROWS,
-  PRESENTATION_ADAPTER_ROWS,
   PRESENTATION_SOURCE_REASON_LABELS,
   SOURCE_ATTRIBUTION_REGISTRY,
   SOURCE_BOUND_CITATION_DERIVATION,
@@ -19,7 +19,7 @@ const components = (row: ExactPresentationAdapterRow): readonly string[] => row.
   ? [] : row.target.kind === "component" ? [row.target.component] : row.target.members.map((member) => member.component);
 
 test("D2157: named structure identity, label and witness geometry move atomically", () => {
-  const rows = PRESENTATION_ADAPTER_ROWS.filter((row) => row.projection === "rules.structural.reading.named_structure@1");
+  const rows = POST_P_PRESENTATION_ADAPTER_ROWS.filter((row) => row.projection === "rules.structural.reading.named_structure@1");
   assert.equal(rows.length, 5);
   for (const row of rows) assert.deepEqual(row.retained, ["id", "name", "provenanceNote", "squares"]);
   const repair = MANIFEST_PRESENTATION_REPAIRS.find((row) => row.id === "named-structure-geometry");
@@ -31,16 +31,15 @@ test("D2157: named structure identity, label and witness geometry move atomicall
   ]));
   assert.equal(NAMED_STRUCTURE_LABEL_AUTHORITY.registry, "STRUCTURE_METADATA");
   assert.equal(NAMED_STRUCTURE_LABEL_AUTHORITY.witnessField, "squares");
+  assert.equal(NAMED_STRUCTURE_WITNESS_AUTHORITY.rows.length, 4);
 });
 
 test("D2158: citation is a sealed multi-input derivation with complete attribution", () => {
-  assert.equal(POST_P_PRESENTATION_ADAPTER_ROWS.length, 1);
-  const adapter = POST_P_PRESENTATION_ADAPTER_ROWS[0]!;
+  assert.equal(POST_P_PRESENTATION_ADAPTER_ROWS.length, 112);
+  const adapter = POST_P_PRESENTATION_ADAPTER_ROWS.find((row) => row.projection === "derived.citation.attribution@1")!;
   assert.equal(adapter.projection, "derived.citation.attribution@1");
   assert.deepEqual(components(adapter), ["citation"]);
-  assert.deepEqual(SOURCE_BOUND_CITATION_DERIVATION.outputFields, [
-    "content", "binding", "source", "title", "locator", "licence", "url", "revision",
-  ]);
+  assert.deepEqual(SOURCE_BOUND_CITATION_DERIVATION.outputFields, ["content", "source"]);
   assert.deepEqual(new Set(SOURCE_BOUND_CITATION_DERIVATION.inputAlternatives.map((row) => row[1])),
     new Set(SOURCE_ATTRIBUTION_REGISTRY.map((row) => row.sourceProjection)));
   for (const alternative of SOURCE_BOUND_CITATION_DERIVATION.inputAlternatives) {
@@ -48,7 +47,7 @@ test("D2158: citation is a sealed multi-input derivation with complete attributi
   }
   assert.deepEqual(SOURCE_BOUND_CITATION_DERIVATION.joins,
     ["same_evidence_reference", "same_source_receipt", "same_content_digest"]);
-  assert.ok(SOURCE_ATTRIBUTION_REGISTRY.every((row) => row.requiredFields.includes("licence") && row.requiredFields.includes("revision")));
+  assert.ok(SOURCE_ATTRIBUTION_REGISTRY.every((row) => row.attribution.licence !== undefined && row.attribution.revision !== undefined));
 });
 
 test("D2159: every interpolated operand has one total typed formatter", () => {
@@ -85,13 +84,13 @@ test("D2161: abstention rows preserve exact authority and source reasons", () =>
 });
 
 test("D2162: silent components produce no abstention row", () => {
-  const silentKeys = new Set(PRESENTATION_ADAPTER_ROWS.filter((row) => components(row).some((component) => COMPONENT_EMPTY_BEHAVIOR[component as keyof typeof COMPONENT_EMPTY_BEHAVIOR] === "silent")).map((row) => row.key));
+  const silentKeys = new Set(POST_P_PRESENTATION_ADAPTER_ROWS.filter((row) => components(row).some((component) => COMPONENT_EMPTY_BEHAVIOR[component as keyof typeof COMPONENT_EMPTY_BEHAVIOR] === "silent")).map((row) => row.key));
   assert.ok(silentKeys.size > 0);
   assert.ok(PRESENTATION_ABSTENTION_ROWS.every((row) => !silentKeys.has(row.adapterKey)));
 });
 
 test("D2163: count-with-denominator has a real Explorer adapter", () => {
-  const explorer = PRESENTATION_ADAPTER_ROWS.find((row) => row.familyId === "explorer_population");
+  const explorer = POST_P_PRESENTATION_ADAPTER_ROWS.find((row) => row.familyId === "explorer_population");
   assert.ok(explorer);
   assert.ok(components(explorer).includes("count_with_denominator"));
   assert.equal(explorer.consumer, "inspector.corpus@1");
