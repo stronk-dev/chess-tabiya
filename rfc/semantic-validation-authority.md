@@ -1,11 +1,11 @@
 # RFC: Executable semantic-validation authority
 
-- **Status:** draft — RETURNED by second fresh independent review 2026-08-30 on
-  [[D2331]]–[[D2333]]. The D2194–D2197 author repair survives, but versioned operation/case
-  identities have two authorities, population/external `present` cells are not expressible through
-  the case-ref algebra, and rules-oracle authorities retain digests without an executable witness or
-  typed result binding. `make semantic-validation-second-fresh-review` reproduces the three
-  blockers. Implementation and learner eligibility remain forbidden.
+- **Status:** draft — AUTHOR-REPAIRED 2026-08-31 on [[D2331]]–[[D2333]]; third fresh independent
+  review required. Operation, case, receipt and oracle identities now use base id plus numeric
+  version once; `present` cells are distributive across case/population/external refs; and rules
+  oracles resolve a sealed witness, execute a typed request/result operation and bind the computed
+  expectation exactly to the case. `make semantic-validation-third-author-repair` passes 3/3.
+  Implementation and learner eligibility remain forbidden until fresh acceptance.
 - **Author:** codex, executing [[D1711]] / [[D1713]] / [[D1714]] after refreshing both research
   instruments at HEAD
 - **Created:** 2026-08-29
@@ -140,8 +140,19 @@ type SemanticValidationArm =
   | "imported_population"
   | "external_label";
 
-type SemanticValidationCell =
-  | { readonly disposition: "present"; readonly cases: readonly SemanticValidationCaseRef[] }
+type SemanticValidationCaseArm = Exclude<
+  SemanticValidationArm,
+  "imported_population" | "external_label"
+>;
+
+type SemanticValidationPresentRef<A extends SemanticValidationArm> =
+  A extends "imported_population" ? SemanticPopulationReceiptRef
+  : A extends "external_label" ? SemanticExternalDisagreementReceiptRef
+  : A extends SemanticValidationCaseArm ? SemanticValidationCaseRef<A>
+  : never;
+
+type SemanticValidationCell<A extends SemanticValidationArm> =
+  | { readonly disposition: "present"; readonly refs: readonly SemanticValidationPresentRef<A>[] }
   | {
       readonly disposition: "required";
       readonly owner: string;
@@ -157,18 +168,21 @@ type SemanticValidationCell =
 
 interface SemanticValidationProfile {
   readonly event: VersionedEvidenceId;
-  readonly positive: SemanticValidationCell;
-  readonly semanticNegative: SemanticValidationCell;
-  readonly orientation: SemanticValidationCell;
-  readonly counterfactual: SemanticValidationCell;
-  readonly importedPopulation: SemanticValidationCell;
-  readonly externalLabel: SemanticValidationCell;
+  readonly positive: SemanticValidationCell<"positive">;
+  readonly semanticNegative: SemanticValidationCell<"semantic_negative">;
+  readonly orientation: SemanticValidationCell<"orientation">;
+  readonly counterfactual: SemanticValidationCell<"counterfactual">;
+  readonly importedPopulation: SemanticValidationCell<"imported_population">;
+  readonly externalLabel: SemanticValidationCell<"external_label">;
 }
 ```
 
-Every profile carries all six keys. An empty array is invalid. A `present` case must resolve and
-pass. A `required` cell is honest debt and makes the event unvalidated. `not_applicable` needs one
-closed reason and is never inferred from absence.
+Every profile carries all six keys. An empty `refs` array is invalid. A case arm can reference only
+a same-event, same-arm executable case; imported population can reference only a versioned
+population receipt; external label can reference only a versioned disagreement receipt. Each
+parser rejects extra keys, stale versions and a ref whose event differs from the profile. A
+`required` cell is honest debt and makes the event unvalidated. `not_applicable` needs one closed
+reason and is never inferred from absence.
 
 ### 3.2 Requirement law
 
@@ -213,14 +227,14 @@ function member.
 
 ```ts
 type SemanticValidationOperationId =
-  | "runtime.semantic.local_edge@1"
-  | "runtime.semantic.structural_edge@1"
-  | "runtime.semantic.transition_edge@1"
-  | "runtime.semantic.breadth_edge@1"
-  | "runtime.semantic.duty_edge@1"
-  | "runtime.semantic.recorded_path@1"
-  | "runtime.semantic.recorded_sequence@1"
-  | "runtime.semantic.complete_alternatives@1";
+  | "runtime.semantic.local_edge"
+  | "runtime.semantic.structural_edge"
+  | "runtime.semantic.transition_edge"
+  | "runtime.semantic.breadth_edge"
+  | "runtime.semantic.duty_edge"
+  | "runtime.semantic.recorded_path"
+  | "runtime.semantic.recorded_sequence"
+  | "runtime.semantic.complete_alternatives";
 
 interface SemanticEdgeInput {
   readonly kind: "edge";
@@ -266,14 +280,14 @@ interface SemanticCompleteAlternativesInput {
 }
 
 type SemanticValidationOperationInputMap = {
-  readonly "runtime.semantic.local_edge@1": SemanticEdgeInput;
-  readonly "runtime.semantic.structural_edge@1": SemanticEdgeInput;
-  readonly "runtime.semantic.transition_edge@1": SemanticEdgeInput;
-  readonly "runtime.semantic.breadth_edge@1": SemanticEdgeInput;
-  readonly "runtime.semantic.duty_edge@1": SemanticEdgeInput;
-  readonly "runtime.semantic.recorded_path@1": SemanticRecordedPathInput;
-  readonly "runtime.semantic.recorded_sequence@1": SemanticRecordedSequenceInput;
-  readonly "runtime.semantic.complete_alternatives@1": SemanticCompleteAlternativesInput;
+  readonly "runtime.semantic.local_edge": SemanticEdgeInput;
+  readonly "runtime.semantic.structural_edge": SemanticEdgeInput;
+  readonly "runtime.semantic.transition_edge": SemanticEdgeInput;
+  readonly "runtime.semantic.breadth_edge": SemanticEdgeInput;
+  readonly "runtime.semantic.duty_edge": SemanticEdgeInput;
+  readonly "runtime.semantic.recorded_path": SemanticRecordedPathInput;
+  readonly "runtime.semantic.recorded_sequence": SemanticRecordedSequenceInput;
+  readonly "runtime.semantic.complete_alternatives": SemanticCompleteAlternativesInput;
 };
 
 type SemanticValidationOperationResultMap = {
@@ -285,18 +299,19 @@ type SemanticValidationOperationRef<K extends SemanticValidationOperationId = Se
 type SemanticValidationOperationInput<K extends SemanticValidationOperationId> =
   SemanticValidationOperationInputMap[K];
 
-interface SemanticValidationCaseRef {
+interface SemanticValidationCaseRef<A extends SemanticValidationCaseArm = SemanticValidationCaseArm> {
+  readonly kind: "case";
   readonly id: string;
   readonly version: 1;
   readonly event: VersionedEvidenceId;
-  readonly arm: Exclude<SemanticValidationArm, "imported_population" | "external_label">;
+  readonly arm: A;
 }
 
 type SemanticValidationCaseFor<K extends SemanticValidationOperationId> = {
   readonly id: string;
   readonly version: 1;
   readonly event: VersionedEvidenceId;
-  readonly arm: Exclude<SemanticValidationArm, "imported_population" | "external_label">;
+  readonly arm: SemanticValidationCaseArm;
   readonly operation: SemanticValidationOperationRef<K>;
   readonly input: SemanticValidationOperationInput<K>;
   readonly authority: SemanticValidationCaseAuthority;
@@ -338,12 +353,89 @@ interface SemanticMirrorOperandRule {
 }
 
 type SemanticValidationOracleId =
-  | "rules.legal_successor@1"
-  | "rules.attack_map@1"
-  | "rules.material_ledger@1"
-  | "rules.line_occupancy@1"
-  | "rules.complete_legal_set@1"
-  | "rules.tablebase_result@1";
+  | "rules.legal_successor"
+  | "rules.attack_map"
+  | "rules.material_ledger"
+  | "rules.line_occupancy"
+  | "rules.complete_legal_set"
+  | "rules.tablebase_result";
+
+type SemanticValidationOracleRequestMap = {
+  readonly "rules.legal_successor": SemanticEdgeInput;
+  readonly "rules.attack_map": {
+    readonly kind: "attack_map"; readonly fen: string; readonly square: string;
+    readonly by: "white" | "black";
+  };
+  readonly "rules.material_ledger": {
+    readonly kind: "material_ledger"; readonly fen: string;
+  };
+  readonly "rules.line_occupancy": {
+    readonly kind: "line_occupancy"; readonly fen: string;
+    readonly from: string; readonly to: string;
+  };
+  readonly "rules.complete_legal_set": SemanticCompleteAlternativesInput;
+  readonly "rules.tablebase_result": {
+    readonly kind: "tablebase_result"; readonly fen: string;
+    readonly tablebaseReceipt: VersionedEvidenceId;
+  };
+};
+
+type SemanticValidationOracleFactMap = {
+  readonly "rules.legal_successor": {
+    readonly kind: "legal_successor"; readonly legal: boolean; readonly canonicalAfterFen: string;
+  };
+  readonly "rules.attack_map": {
+    readonly kind: "attack_map"; readonly attacked: boolean; readonly attackers: readonly string[];
+  };
+  readonly "rules.material_ledger": {
+    readonly kind: "material_ledger"; readonly pieces: readonly {
+      readonly color: "white" | "black"; readonly role: string; readonly square: string;
+    }[];
+  };
+  readonly "rules.line_occupancy": {
+    readonly kind: "line_occupancy"; readonly aligned: boolean; readonly blockers: readonly string[];
+  };
+  readonly "rules.complete_legal_set": {
+    readonly kind: "complete_legal_set"; readonly legalUci: readonly string[];
+    readonly legalSetDigest: string;
+  };
+  readonly "rules.tablebase_result": {
+    readonly kind: "tablebase_result"; readonly category: "win" | "draw" | "loss";
+    readonly dtz: number | null;
+  };
+};
+
+type SemanticValidationOracleResultMap = {
+  readonly [K in SemanticValidationOracleId]: SemanticValidationOracleFactMap[K] & {
+    readonly expectation: SemanticValidationExpectation;
+  };
+};
+
+type SemanticValidationOracleRef<K extends SemanticValidationOracleId = SemanticValidationOracleId> = {
+  readonly id: K;
+  readonly version: 1;
+};
+
+interface SemanticValidationOracleWitnessRef {
+  readonly id: string;
+  readonly version: 1;
+  readonly oracle: SemanticValidationOracleRef;
+  readonly case: { readonly id: string; readonly version: 1 };
+  readonly event: VersionedEvidenceId;
+}
+
+type SemanticValidationOracleWitnessFor<K extends SemanticValidationOracleId> = {
+  readonly id: string;
+  readonly version: 1;
+  readonly oracle: SemanticValidationOracleRef<K>;
+  readonly case: { readonly id: string; readonly version: 1 };
+  readonly event: VersionedEvidenceId;
+  readonly request: SemanticValidationOracleRequestMap[K];
+};
+
+type SemanticValidationOracleWitness = {
+  readonly [K in SemanticValidationOracleId]: SemanticValidationOracleWitnessFor<K>
+}[SemanticValidationOracleId];
 
 type SemanticValidationCaseAuthority =
   | {
@@ -355,9 +447,8 @@ type SemanticValidationCaseAuthority =
     }
   | {
       readonly kind: "rules_oracle";
-      readonly oracle: SemanticValidationOracleId;
-      readonly witnessSha256: string;
-      readonly resultSha256: string;
+      readonly oracle: SemanticValidationOracleRef;
+      readonly witness: SemanticValidationOracleWitnessRef;
     }
   | {
       readonly kind: "cited_proposition";
@@ -377,11 +468,28 @@ type SemanticValidationCaseAuthority =
 
 Authority is not decorative provenance. An `existing_assertion` is legal only for a row already
 classified valid in the D1713 migration matrix; its expectation bytes must remain identical while
-being moved, and the test site plus source digest must resolve. A `rules_oracle` invokes a separate
-closed oracle registry over the case's serialized input and witness. Oracle implementations may
-import chess rules and tablebase receipt validators, but the static import graph must exclude the
-semantic event operation, its predicate helper, the case expectation and every semantic-event
-constructor. The runner derives `resultSha256`; the author cannot submit a boolean answer.
+being moved, and the test site plus source digest must resolve. A `rules_oracle` resolves exactly
+one sealed row in `SEMANTIC_VALIDATION_ORACLE_WITNESSES`. The witness is distributive on
+`oracle.id`: its request must inhabit `SemanticValidationOracleRequestMap[K]`, its oracle/case/event
+refs must equal the authority row and containing case, and all ids use the base-id-plus-version
+grammar. Witness bytes, not only their digest, remain available to the runner; the generated receipt
+retains their canonical digest.
+
+The closed oracle operation registry accepts only its corresponding request and returns
+`SemanticValidationOracleResultMap[K]`. The runner derives the result digest and requires
+canonical equality between `result.expectation` and the containing case's
+`SemanticValidationExpectation`; neither the authority row nor witness may supply a result digest
+or an alternate expected boolean. A result computed for a different case/event, wrong oracle grain
+or different expectation fails before receipt emission.
+
+Oracle implementations may import the pinned chess-rules library and tablebase receipt validators,
+but their complete static import graph must exclude the semantic event operation, its predicate
+helper, case registry, case expectation bytes and every semantic-event constructor. The oracle
+registry itself contains no callback supplied by a case. Its permanent tests cross each request and
+result discriminant, while cited/owner authority remains necessary for any new chess-semantic
+mapping not mechanically entailed by the independent rules result. The runner derives
+`witnessSha256` and `resultSha256`; an author cannot submit either digest as a substitute for
+execution.
 
 A `cited_proposition` resolves through the immutable source manifest and exact revision/span rules;
 the proposition digest is bound to the case expectation. `owner_authored` resolves to a committed
@@ -400,10 +508,13 @@ event/arm/version differs from its target all fail `SEMANTIC_VALIDATION_OPERATIO
 `SEMANTIC_VALIDATION_CASE_REF_STALE` before execution. No `as SemanticValidationOperationInput`
 cast exists at a registry boundary.
 
-Case ids are independent author-chosen ids such as `castled.standard-white.positive@1`, never
+Case ids are independent author-chosen base ids such as `castled.standard-white.positive`, with
+`version: 1` carried separately, never
 `semantic-event:${projection}:positive`. The compiler rejects an id equal to or containing the
-event id as a generated suffix/prefix template. This is a cheap guard, not the independence proof;
-the closed input type and operation lookup are the proof.
+event id as a generated suffix/prefix template. Every operation, case, population, external and
+oracle parser also rejects an id ending in `@<integer>`; stale identity is represented only by the
+numeric `version`. This is a cheap guard, not the independence proof; the closed input type and
+operation lookup are the proof.
 
 Every edge input retains canonical before FEN, canonical UCI and canonical after FEN. The runner
 checks the move is legal, the after position is the exact successor and the UCI dialect is canonical
@@ -508,15 +619,15 @@ learner-eligibility verdict.
 `packages/runtime/src/semantic-validation-operations.ts` owns the only function registry. It maps
 versioned operation ids to production exports already used by the application, including:
 
-- `runtime.semantic.local_edge@1` → `localSemanticEvents`;
-- `runtime.semantic.structural_edge@1` → `structuralSemanticEvents`;
-- `runtime.semantic.transition_edge@1` → `transitionSemanticEvents`;
-- `runtime.semantic.breadth_edge@1` → `breadthSemanticEvents`;
-- `runtime.semantic.duty_edge@1` → `semanticDutyEvents`;
-- `runtime.semantic.recorded_path@1` → the accepted total recorded-path operation; and
-- `runtime.semantic.recorded_sequence@1` → the production sequence dispatcher over a sealed
+- `runtime.semantic.local_edge` version 1 → `localSemanticEvents`;
+- `runtime.semantic.structural_edge` version 1 → `structuralSemanticEvents`;
+- `runtime.semantic.transition_edge` version 1 → `transitionSemanticEvents`;
+- `runtime.semantic.breadth_edge` version 1 → `breadthSemanticEvents`;
+- `runtime.semantic.duty_edge` version 1 → `semanticDutyEvents`;
+- `runtime.semantic.recorded_path` version 1 → the accepted total recorded-path operation; and
+- `runtime.semantic.recorded_sequence` version 1 → the production sequence dispatcher over a sealed
   recorded-path receipt and one closed `SemanticSequenceFamily`; and
-- `runtime.semantic.complete_alternatives@1` → the production all-legal-successors dispatcher over
+- `runtime.semantic.complete_alternatives` version 1 → the production all-legal-successors dispatcher over
   the exact canonical legal set.
 
 The case registry selects an operation id and supplies its serializable input; it cannot replace
@@ -541,7 +652,7 @@ type SemanticValidationApplicationReach =
 
 `direct` is legal only for an operation called by a non-test application module. A narrower
 structural/transition/breadth/duty operation uses `exact_projection_multiset` through
-`runtime.semantic.local_edge@1`: on every case, the runner invokes both and proves the canonical
+`runtime.semantic.local_edge` version 1: on every case, the runner invokes both and proves the canonical
 multiset of the declared projections is byte-equal after composition. Sequence operations do the
 same through the accepted recorded-path application operation. A `required` reach is honest debt
 and can execute for migration purposes but cannot pass an event profile. This is how the current
@@ -606,17 +717,29 @@ The imported-population runner invokes the current production operation and its 
 check over that frozen population. Its receipt is per event/version and retains:
 
 ```ts
+interface SemanticPopulationReceiptRef {
+  readonly kind: "population_receipt";
+  readonly id: string;
+  readonly version: 1;
+  readonly event: VersionedEvidenceId;
+  readonly inputVersion: 1;
+  readonly resultVersion: 1;
+}
+
 interface SemanticPopulationReceipt {
+  readonly id: string;
+  readonly version: 1;
   readonly event: VersionedEvidenceId;
   readonly operation: SemanticValidationOperationRef;
   readonly predicateImplementationDigest: string;
   readonly input: {
     readonly id: string;
+    readonly version: 1;
     readonly projection: "sampled_edges" | "recorded_paths" | "complete_alternatives";
     readonly sha256: string;
     readonly invocations: number;
   };
-  readonly result: { readonly sha256: string; readonly positiveCount: number; readonly abstainedCount: number };
+  readonly result: { readonly version: 1; readonly sha256: string; readonly positiveCount: number; readonly abstainedCount: number };
 }
 ```
 
@@ -642,6 +765,35 @@ The eight D872 families retain dataset identity, local predicate/version, theme 
 local positive count, labelled positive count, agreement cells and result digest. The receipt is
 named `external_disagreement`, never `external_truth` or `ground_truth`. It cannot satisfy positive,
 negative, orientation or counterfactual requirements.
+
+```ts
+interface SemanticExternalDisagreementReceiptRef {
+  readonly kind: "external_disagreement_receipt";
+  readonly id: string;
+  readonly version: 1;
+  readonly event: VersionedEvidenceId;
+  readonly datasetVersion: 1;
+  readonly resultVersion: 1;
+}
+
+interface SemanticExternalDisagreementReceipt {
+  readonly id: string;
+  readonly version: 1;
+  readonly event: VersionedEvidenceId;
+  readonly dataset: { readonly id: string; readonly version: 1; readonly sha256: string };
+  readonly localPredicate: VersionedEvidenceId;
+  readonly denominator: number;
+  readonly localPositiveCount: number;
+  readonly labelledPositiveCount: number;
+  readonly cells: Readonly<Record<string, number>>;
+  readonly result: { readonly version: 1; readonly sha256: string };
+}
+```
+
+`parseSemanticPopulationReceiptRef` and `parseSemanticExternalDisagreementReceiptRef` are strict,
+reject `@<integer>`-suffixed ids and stale input/dataset/result versions, and require exact event
+identity at profile compilation. An ordinary case cannot inhabit either cell, and neither receipt
+can inhabit a case arm or the other receipt arm.
 
 ## 6. Generated receipt and drift check
 
@@ -771,10 +923,14 @@ no UI or content is added by this RFC.
    prove no `positives`, `hardNegatives`, `externalPopulation` or generated
    `semantic-event:<id>` label remains.
 3. Every live-root profile carries all six arms; no empty array or unrecognized reason compiles.
+   Present cells are arm-distributive: case, population and external refs cannot cross arms, and
+   stale/cross-event refs fail their strict parser.
 4. A plausible generated label with no case fails `SEMANTIC_VALIDATION_CASE_MISSING`.
 5. A case object cannot express a callback, `DeclaredEvidence`, `SemanticEvidenceEvent` or direct
    compiler call; runtime protection additionally rejects a forged extra key.
-6. The operation map is distributive over all eight exact operation ids. Edge/path/sequence/
+6. The operation map is distributive over all eight exact base operation ids at numeric version 1.
+   An `@1`-suffixed id, stale numeric version or registry/receipt using the alternate dialect fails.
+   Edge/path/sequence/
    complete-alternative cross-pairs, invalid sequence families/horizons, incomplete legal sets and
    stale case refs fail before an operation runs.
 7. A positive reaching its operation with zero target events fails
@@ -792,14 +948,17 @@ no UI or content is added by this RFC.
 12. A later event pointing at the old R2 token fails `SEMANTIC_VALIDATION_POPULATION_STALE`.
 13. Keeping the population input digest while changing predicate or result digest invalidates the
     receipt independently in both fixtures.
-14. Every present case resolves to exactly one registry row and every registry row is referenced;
-    dead, duplicate, stale-version and cross-event cases fail.
+14. Every present case/population/external ref resolves to exactly one matching registry row and
+    every registry row is referenced; dead, duplicate, stale-version, wrong-arm and cross-event
+    refs fail. Population input/result and external dataset/result versions are checked separately.
 15. Each operation invokes a production symbol, carries a complete local import-file closure and
     proves either a real non-test application caller or exact target-projection multiset retention
     through its declared application operation; `compileSemanticEvidenceEvent` and
     `declareEvidence` are refused targets.
 16. Every registered case resolves one admissible authority. Existing assertions reproduce frozen
-    expectation bytes, rules oracles are dependency-separated and derive their result, cited
+    expectation bytes; rules oracles resolve a sealed same-case/same-event typed witness, execute
+    the exact request/result arm under an import-isolated registry and return an expectation
+    canonically equal to the case; cited
     propositions resolve an exact immutable span, and owner cases resolve a matching owner-authored
     receipt. An invented expectation or Codex-authored owner receipt fails.
 17. The generated receipt is byte-stable across two runs. `make semantic-validation-check` fails
@@ -858,6 +1017,12 @@ The independent review must run, not merely read, these fixtures:
 25. missing/unresolved authority, changed frozen assertion, cyclic oracle import and a forged
     Codex owner receipt; and
 26. mirror zero/zero, zero/non-zero, duplicate, reordered, unmatched and ambiguous populations.
+27. operation/case/oracle ids with `@1`, numeric version 2 and one mixed-dialect registry/receipt;
+28. population ref in a case or external cell, ordinary case in population/external, stale
+    input/dataset/result versions and a same-id receipt for another event; and
+29. missing, swapped and stale oracle witnesses; request for the wrong oracle grain; computed
+    result paired with another expectation; and an oracle import closure reaching the production
+    semantic predicate or constructor.
 
 Each negative records the diagnostic it would fail to catch if the implementation were weakened.
 A green fixture whose selected population is zero is itself a failure.
@@ -921,8 +1086,21 @@ The author repair must invert `make semantic-validation-second-fresh-review`, pr
 and D2194 contracts, and request a third independent review. No implementation is authorized by
 this return.
 
+The 2026-08-31 author repair discharges these author obligations in §§3.1, 4.1 and 5. Operation,
+case, receipt and oracle ids are base ids with numeric version fields exactly once. Present cells
+select their reference algebra by arm. A rules oracle resolves sealed witness bytes, executes one
+typed request/result arm under import isolation and must compute an expectation byte-equal to its
+case. The executable author contract is `make semantic-validation-third-author-repair`; fresh
+review still owns acceptance.
+
 ## Changelog
 
+- 2026-08-31: author-repaired [[D2331]]–[[D2333]]. Removed `@1` suffixes from operation, case and
+  oracle ids while retaining numeric version fields; made present cells distributive over exact
+  case/population/external refs; and replaced digest-only rules-oracle authority with sealed witness
+  resolution, a six-arm request/result map, import isolation and exact computed-expectation binding.
+  `make semantic-validation-third-author-repair` passes 3/3. Third fresh review remains required;
+  no implementation or learner eligibility is authorised.
 - 2026-08-30: second fresh independent review returned the D2194–D2197 author repair on
   [[D2331]]–[[D2333]]. The new operation map double-versions operation and case identity; the one
   `present` cell shape cannot represent its population/external arms; and rules-oracle rows have no

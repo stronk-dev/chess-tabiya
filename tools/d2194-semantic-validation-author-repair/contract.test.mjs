@@ -8,14 +8,14 @@ const rfc = read("rfc/semantic-validation-authority.md");
 const valueAuthority = read("rfc/evidence-value-authority.md");
 
 const operationKinds = new Map([
-  ["runtime.semantic.local_edge@1", "edge"],
-  ["runtime.semantic.structural_edge@1", "edge"],
-  ["runtime.semantic.transition_edge@1", "edge"],
-  ["runtime.semantic.breadth_edge@1", "edge"],
-  ["runtime.semantic.duty_edge@1", "edge"],
-  ["runtime.semantic.recorded_path@1", "recorded_path"],
-  ["runtime.semantic.recorded_sequence@1", "recorded_sequence"],
-  ["runtime.semantic.complete_alternatives@1", "complete_alternatives"],
+  ["runtime.semantic.local_edge", "edge"],
+  ["runtime.semantic.structural_edge", "edge"],
+  ["runtime.semantic.transition_edge", "edge"],
+  ["runtime.semantic.breadth_edge", "edge"],
+  ["runtime.semantic.duty_edge", "edge"],
+  ["runtime.semantic.recorded_path", "recorded_path"],
+  ["runtime.semantic.recorded_sequence", "recorded_sequence"],
+  ["runtime.semantic.complete_alternatives", "complete_alternatives"],
 ]);
 
 const validateInput = (operation, input) => {
@@ -42,15 +42,15 @@ test("D2194: operation protocol is closed, distributive and crosses wrong grains
   for (const operation of operationKinds.keys()) assert.match(rfc, new RegExp(operation.replaceAll(".", "\\."), "u"));
 
   const edge = { kind: "edge", beforeFen: "before", moveUci: "e2e4", afterFen: "after" };
-  assert.doesNotThrow(() => validateInput("runtime.semantic.local_edge@1", edge));
-  assert.throws(() => validateInput("runtime.semantic.recorded_path@1", edge), /grain mismatch/u);
-  assert.throws(() => validateInput("runtime.semantic.recorded_path@1", { kind: "recorded_path", edges: [] }), /non-empty/u);
+  assert.doesNotThrow(() => validateInput("runtime.semantic.local_edge", edge));
+  assert.throws(() => validateInput("runtime.semantic.recorded_path", edge), /grain mismatch/u);
+  assert.throws(() => validateInput("runtime.semantic.recorded_path", { kind: "recorded_path", edges: [] }), /non-empty/u);
   assert.throws(
-    () => validateInput("runtime.semantic.recorded_sequence@1", { kind: "recorded_sequence", path: { kind: "recorded_path" }, horizon: 8 }),
+    () => validateInput("runtime.semantic.recorded_sequence", { kind: "recorded_sequence", path: { kind: "recorded_path" }, horizon: 8 }),
     /closed sequence horizon/u,
   );
   assert.throws(
-    () => validateInput("runtime.semantic.complete_alternatives@1", { kind: "complete_alternatives", played: edge, alternatives: [] }),
+    () => validateInput("runtime.semantic.complete_alternatives", { kind: "complete_alternatives", played: edge, alternatives: [] }),
     /played move/u,
   );
 });

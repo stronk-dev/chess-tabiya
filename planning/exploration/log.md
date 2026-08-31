@@ -12659,3 +12659,14 @@ landed history; and expands permission `legal` to all five semantic symbols.
 model. No production, runtime, web, schema, content, archive or protected-design byte changed.
 Sixth fresh review remains required before implementation. Receipt:
 `planning/assistance-config-register/fifth-return-author-repair-2026-08-31.md`.
+
+## 2026-08-31 — Semantic-validation second-return author repair
+
+Author-repaired [[D2331]]–[[D2333]]. Semantic validation now uses base ids plus numeric versions
+once across operations, cases, receipts and oracles; profile cells select exact same-event refs by
+arm; and rules-oracle authority resolves sealed request bytes and binds its typed computed
+expectation exactly to the case under an import-isolated operation registry.
+
+`make semantic-validation-third-author-repair` passes 3/3. No production, schema, content, archive
+or protected-design byte changed; third fresh independent review remains required. Receipt:
+`planning/semantic-validation-authority/second-return-author-repair-2026-08-31.md`.

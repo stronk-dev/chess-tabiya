@@ -27,3 +27,14 @@ canonical `{projection, sign, operands}` identity before the leaf walk.
 `make semantic-validation-author-contract` passes the maintained 6 + 5 arms. This is author-side
 positive evidence, not acceptance. Production, learner eligibility, schema, content, archive and
 protected intent remain untouched pending a new independent review.
+
+## 2026-08-31 — D2331–D2333 author repair
+
+Normalized every validation identity to base id plus numeric version once; made `present` cells
+distributive across exact case, population and external-disagreement refs; and replaced digest-only
+rules-oracle authority with a sealed typed witness, closed request/result map, import isolation and
+canonical computed-expectation equality.
+
+`make semantic-validation-third-author-repair` passes 3/3 across identity, cell and oracle failure
+paths. This remains author-side evidence only. Production and learner eligibility stay forbidden
+until third fresh review. Receipt: `second-return-author-repair-2026-08-31.md`.
