@@ -1,7 +1,9 @@
 # RFC: Shared-resource register bootstrap and absent roots
 
-- **Status:** draft — author contract amended 2026-08-31 on [[D2370]]; fresh independent
-  process/buildability review required before implementation
+- **Status:** draft — RETURNED by fresh independent process/buildability review 2026-08-31 on
+  [[D2381]]–[[D2384]]. The absent-table image parses as data; kind semantics remain resource-name
+  branches; the nine-row catalogue is not published; and the two-commit/one-way lifecycle has no
+  exact preimage authority. Author repair plus another independent review required.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -124,6 +126,22 @@ RFC's set-equality contract.
 
 Skills and Campaign consume one compiled authority; neither may own a parallel identity map.
 
+## Fresh-review return — 2026-08-31
+
+Implementation remains unauthorized until an author repair closes all four buildability findings:
+
+- [[D2381]] — replace the em-dash data rows with a parser-safe empty-table representation;
+- [[D2382]] — derive claim, head, landing and output semantics from resource kind rather than the
+  literal names `migration` and `evidence-kinds`;
+- [[D2383]] — publish the complete nine-row catalogue, including exact authorities for all three
+  kinds; and
+- [[D2384]] — name and fixture the staged/base plus CI-parent preimages that enforce separate
+  introduction/first-claim commits and prohibit landed→absent regression.
+
+The fresh review receipt is
+`planning/shared-resource-register-bootstrap/fresh-independent-buildability-review-2026-08-31.md`.
+Another independent review is required after the author repair.
+
 ## Acceptance criteria
 
 1. `make shared-resource-bootstrap-check` derives all resource names and schema slugs from the
@@ -154,6 +172,8 @@ into a second list.
 
 ## Changelog
 
+- 2026-08-31: returned by fresh independent buildability review on D2381–D2384; no checker,
+  register or product implementation authorized.
 - 2026-08-31: amended on [[D2370]] to exercise the generic protocol with the concept-registry
   schema root; no concept product bytes authorized.
 - 2026-08-31: drafted from [[D2363]] with generic catalogue derivation, accepted-process bootstrap,

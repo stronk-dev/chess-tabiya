@@ -90,6 +90,24 @@ test("sync adds rows as untriaged and set is the only state transition", () => {
   assert.equal(set.untriagedCeiling, registry.untriagedCeiling - 1);
 });
 
+test("sync and batch assignment add multiple rows atomically without rebasing the ratchet", () => {
+  const registry = buildInitialWorkState({ ledger, roadmap, workItems });
+  const nextLedger = `${ledger}\n| D6 ⚠️ | first new row | open |\n| D7 🐞 | second new row | open |`;
+  const synced = synchronizeWorkState({ registry, ledger: nextLedger, workItems });
+  assert.match(validateWorkState({ registry: synced, ledger: nextLedger, roadmap, workItems, priorCeiling: registry.untriagedCeiling }).errors.join("\n"), /W9 untriaged 4 exceeds ceiling 2/u);
+  const assigned = setWorkState({
+    registry: synced,
+    ledger: nextLedger,
+    workItems,
+    ids: ["D6", "D7"],
+    state: "todo",
+    values: { owner: "review-and-return" },
+    ceilingEligibleIds: new Set(registry.items.map((item) => item.id)),
+  });
+  assert.equal(assigned.untriagedCeiling, registry.untriagedCeiling);
+  assert.deepEqual(validateWorkState({ registry: assigned, ledger: nextLedger, roadmap, workItems, priorCeiling: registry.untriagedCeiling }).errors, []);
+});
+
 test("the production glyph vocabulary remains an explicit closed set", () => {
   assert.deepEqual(LEDGER_GLYPHS, ["🐞", "✅", "📊", "💡", "🛠", "⚖️", "🔬", "📝", "📜", "🔨", "⛔", "🏗", "⚠️"]);
 });

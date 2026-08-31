@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2acb6cdc4da59374c9fd8c93f54ea21372167fe886fde0c777c58a948d6a1cc9",
+    "roadmap": "sha256:68faf14b5cda3e0ae7ed4b3680ac3a96319f6683f80a6acf8b284f973d5ebde9",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "rfcRegister": "sha256:318fbdcf6e16a8207d827c32a61d49271490601053c90e5c2ac050a6d2075bde",
+    "rfcRegister": "sha256:066a55de827f76652041ddb232fd47e311b550692a8d631c20c68f06586e3bc7",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -99,11 +99,11 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-08-31",
-        "summary": "The thirty-family evidence basis was re-derived and the paired runtime opening lookup now shares one normalized key; returned producer-to-consumer contracts remain the binding work.",
-        "impact": "advanced",
+        "summary": "Fresh review returned the shared-resource bootstrap before it could encode false empty roots or unprovable history; bot, concept and release roots remain blocked pending an exact generic repair.",
+        "impact": "held",
         "evidence": [
-          "design/research/foundation-capability-closure-2026-08-31.md",
-          "rfc/runtime-opening-identity.md",
+          "planning/shared-resource-register-bootstrap/fresh-independent-buildability-review-2026-08-31.md",
+          "rfc/shared-resource-register-bootstrap.md",
           "rfc/README.md"
         ]
       },

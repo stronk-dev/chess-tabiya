@@ -33,6 +33,7 @@ checkpoint shape, receipt drift and staged-flow-back refusal.
 Run `make work-state` for the assignment census. It always prints the complete ledger denominator,
 state counts, per-owner live counts, weak closeout evidence, source-row refusals, historical
 live-UX→terminal references, and the untriaged ratio. New ledger rows enter as `untriaged`; use
-`node tools/work-state.mjs --sync` followed by the validated `--set=D… --state=…` transition in
-the same change. The untriaged ceiling only falls, so a later census cannot erase unfinished
+`node tools/work-state.mjs --sync --set=D1,D2 --state=todo --owner=<lane>` to add and classify a
+batch atomically in the same change. Existing rows may use a single `--set=D…` transition. The
+untriaged ceiling only falls, so a later census cannot erase unfinished
 classification by rebasing its baseline.

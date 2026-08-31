@@ -566,9 +566,12 @@ safe-deployment-author-repair:
 	node --test tools/d2214-safe-deployment-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2214-safe-deployment-author-repair/tsconfig.contract.json --noEmit
 
-.PHONY: shared-resource-bootstrap-author-contract
+.PHONY: shared-resource-bootstrap-author-contract shared-resource-bootstrap-fresh-review
 shared-resource-bootstrap-author-contract:
 	node --test tools/d2363-shared-resource-bootstrap-author-contract/contract.test.mjs
+
+shared-resource-bootstrap-fresh-review:
+	node --test tools/d2381-shared-resource-bootstrap-fresh-review/contract.test.mjs
 
 .PHONY: concept-registry-author-contract
 concept-registry-author-contract:

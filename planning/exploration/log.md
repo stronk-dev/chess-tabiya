@@ -12945,3 +12945,27 @@ owners, live blockers, bidirectional closure, exact-row digests, truthful UX rev
 and the untriaged ratchet. Historical live-UX→terminal citations are reported as evidence and do
 not become execution ownership. D1523, D1741, D2377 and D2378 close; D1742 remains open because
 438 closed rows still rely on closeout prose and three refusals still carry source-row authority.
+
+## 2026-08-31 — Work-state first-use ratchet repair
+
+The first review wave added five ledger rows and reproduced a write deadlock: standalone `--sync`
+correctly refused to raise the untriaged ceiling, but the validated writer could not assign ids
+that had not entered the store. The write path now supports an atomic sync plus comma-separated
+batch transition. New rows assigned in that transaction preserve the prior ceiling; existing rows
+leaving `untriaged` still lower it. A permanent negative proves partial sync remains red, and the
+positive proves a two-row batch is green without rebasing. D2380 closes on the first real use of
+the instrument rather than after a later audit.
+
+## 2026-08-31 — Shared-resource bootstrap fresh return
+
+Fresh independent process/buildability review returned `shared-resource-register-bootstrap` on
+D2381–D2384. The intended two-step absent-root direction survives, but four implementation images
+do not: em-dash placeholder rows are live data to the shipped parser; resource-name semantic
+branches survive the proposed catalogue; only two of the required nine literal catalogue rows are
+published; and neither the two-commit rule nor landed→absent refusal names a preimage authority.
+
+`make shared-resource-bootstrap-fresh-review` crosses all four findings against the actual RFC and
+checker. No register or product byte changed, and the release-manifest/concept-registry roots remain
+unclaimable until an author repair and another independent review. The foundation-contracts
+checkpoint records the hold so the bot, Campaign-concept and release lanes cannot report progress
+through a process root that has not earned acceptance.

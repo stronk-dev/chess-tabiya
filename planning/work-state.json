@@ -17986,6 +17986,47 @@
       "uxItems": [],
       "evidence": "tools/work-state.mjs",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2380",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:838a031e4326b50f1dfa467b50749268c876ed21ad0afc4179747cd4bb94ea2e",
+      "uxItems": [],
+      "evidence": "tools/work-state.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2381",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ab6d7de83dfc816b4fe4a15cf29120d778a1cad6aed0c7cd7675598496446f96",
+      "uxItems": [],
+      "owner": "coordinator"
+    },
+    {
+      "id": "D2382",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:02245caf4ba72821bf7588964b9d108e5cf0620fe76915674012329bff01f583",
+      "uxItems": [],
+      "owner": "coordinator"
+    },
+    {
+      "id": "D2383",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a9ed7c93bd4de15b643b43bc24de0723cddd5a22a5aca243b4567984be7d3c3f",
+      "uxItems": [],
+      "owner": "coordinator"
+    },
+    {
+      "id": "D2384",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f72d23242e72d8f2feb8e7f2b21c0ec6fc495c874c76cc7ece5c14214582a32a",
+      "uxItems": [],
+      "owner": "coordinator"
     }
   ]
 }

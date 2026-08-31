@@ -220,16 +220,19 @@ export function synchronizeWorkState({ registry, ledger, workItems }) {
   return Object.freeze({ ...registry, items: Object.freeze(items) });
 }
 
-export function setWorkState({ registry, ledger, workItems, id, state, values }) {
+export function setWorkState({ registry, ledger, workItems, id, ids, state, values, ceilingEligibleIds }) {
   const rows = new Map(parseLedgerSourceRows(ledger).map((row) => [row.id, row]));
-  if (!rows.has(id)) throw new Error(`unknown ledger row ${id}`);
+  const requested = new Set(ids ?? [id]);
+  const unknown = [...requested].filter((requestedId) => !rows.has(requestedId));
+  if (unknown.length) throw new Error(`unknown ledger row(s): ${unknown.join(", ")}`);
   const uxJoin = buildUxJoin(workItems);
   let lowered = 0;
   const items = registry.items.map((old) => {
     const row = rows.get(old.id);
-    const common = { id: old.id, state: old.id === id ? state : old.state, ...sourceFields(row, uxJoin) };
-    if (old.id !== id) return Object.freeze({ ...old, ...common });
-    if (old.state === "untriaged" && state !== "untriaged") lowered = 1;
+    const selected = requested.has(old.id);
+    const common = { id: old.id, state: selected ? state : old.state, ...sourceFields(row, uxJoin) };
+    if (!selected) return Object.freeze({ ...old, ...common });
+    if (old.state === "untriaged" && state !== "untriaged" && (ceilingEligibleIds === undefined || ceilingEligibleIds.has(old.id))) lowered += 1;
     return Object.freeze({ ...common, ...values });
   });
   return Object.freeze({ ...registry, untriagedCeiling: registry.untriagedCeiling - lowered, items: Object.freeze(items) });
@@ -265,6 +268,7 @@ export function main(root = process.cwd()) {
     return;
   }
   let registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
+  const ceilingEligibleIds = new Set(registry.items.map((item) => item.id));
   if (process.argv.includes("--sync")) {
     registry = synchronizeWorkState({ registry, ledger, workItems });
     writeJson(registryPath, registry);
@@ -277,7 +281,7 @@ export function main(root = process.cwd()) {
       ["question", option("question")], ["evidence", option("evidence")], ["evidenceKind", option("evidence-kind")],
       ["ruling", option("ruling")], ["rulingKind", option("ruling-kind")],
     ].filter(([, value]) => value !== undefined));
-    registry = setWorkState({ registry, ledger, workItems, id: setId, state, values });
+    registry = setWorkState({ registry, ledger, workItems, ids: setId.split(",").filter(Boolean), state, values, ceilingEligibleIds });
   }
   const readme = read("rfc/README.md");
   const result = validateWorkState({ registry, ledger, roadmap, workItems, activeRfcs: parseActiveRfcRows(readme), priorCeiling: previousCeiling(root) });
