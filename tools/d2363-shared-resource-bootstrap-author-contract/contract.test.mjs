@@ -35,6 +35,13 @@ test("D2370: concept registry uses the same absent-root protocol without prematu
   assert.match(rfc, /Skills and Campaign consume one compiled authority|`skills\.md` relinquishes direct[\s\S]*?Campaign does the same/);
 });
 
+test("D2401: source attribution uses a generic versioned-registry root without premature bytes", () => {
+  assert.match(rfc, /`source-attribution-registry` catalogue\/register root and[\s\S]*?no runtime file, attribution row, resolver or product binding/u);
+  assert.match(rfc, /`versioned_registry` root/u);
+  assert.match(rfc, /`evidence-presentation\.md` replace `claims none`/u);
+  assert.match(rfc, /source-attribution-registry \| first lane 1 \| SOURCE_ATTRIBUTION_REGISTRY_RESOURCE/u);
+});
+
 test("D2363: acceptance crosses bootstrap, partial landing and history", () => {
   assert.match(rfc, /duplicate first, ordinary lane on absent, first on landed/);
   assert.match(rfc, /file-before-claim, claim-without-root, partial landing/);

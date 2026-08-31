@@ -18,21 +18,21 @@ test("D2381 repair: absent registers are literally rowless", () => {
 
 test("D2382 repair: kind closes the semantic algebra without resource-name dispatch", () => {
   assert.match(rfc, /Kind, rather than resource name, selects all semantics/u);
-  for (const kind of ["schema", "migration", "closed_vocabulary"]) {
+  for (const kind of ["schema", "migration", "closed_vocabulary", "versioned_registry"]) {
     assert.match(rfc, new RegExp("- `" + kind + "`:"));
   }
-  assert.match(rfc, /no branch on `migration`, `evidence-kinds`, or a `-schema` resource-name suffix/u);
+  assert.match(rfc, /no branch on `migration`, `evidence-kinds`, `source-attribution-registry`, or a[\s\S]*?`-schema` resource-name suffix/u);
   assert.match(rfc, /second synthetic resource of every kind/u);
 });
 
-test("D2383 repair: catalogue is the exact nine-row normative population", () => {
+test("D2383/D2401 repair: catalogue is the exact ten-row normative population", () => {
   const catalogue = normativeCatalogue();
   const dataRows = catalogue.split("\n").filter((line) => /^\| [a-z]/u.test(line)).slice(1);
-  assert.equal(dataRows.length, 9);
+  assert.equal(dataRows.length, 10);
   for (const resource of [
     "pack-schema", "run-schema", "shape-entry-schema", "principle-entry-schema",
     "campaign-schema", "migration", "evidence-kinds", "release-manifest-schema",
-    "concept-registry-schema",
+    "concept-registry-schema", "source-attribution-registry",
   ]) assert.match(catalogue, new RegExp(`\\| ${resource.replaceAll("-", "\\-")} \\|`));
   assert.match(catalogue, /campaign\.schema\.json[^\n]+\| none \|/u);
   assert.match(catalogue, /SqliteStorage\.#migrate\/local:migrations\[\]\.version/u);
@@ -55,7 +55,15 @@ test("the introducing roots are a closed machine-readable set", () => {
   const match = rfc.match(/```tabiya-resource-roots\n([\s\S]*?)\n```/u);
   assert.ok(match);
   const rows = match[1].split("\n");
-  assert.equal(rows.length, 2);
+  assert.equal(rows.length, 3);
   assert.match(rows[0], /^release-manifest-schema \| schema \|/u);
   assert.match(rows[1], /^concept-registry-schema \| schema \|/u);
+  assert.match(rows[2], /^source-attribution-registry \| versioned_registry \|/u);
+});
+
+test("D2401 extension: versioned registry owns a complete generic lane and product handoff", () => {
+  assert.match(rfc, /- `versioned_registry`:[\s\S]*?`id,version,digest,rows`/u);
+  assert.match(rfc, /`digest` equals `sha256\(canonical\(rows\)\)`/u);
+  assert.match(rfc, /source-attribution-registry \| first lane 1 \| SOURCE_ATTRIBUTION_REGISTRY_RESOURCE/u);
+  assert.match(rfc, /disposable author[\s\S]*?not a current tree authority/u);
 });

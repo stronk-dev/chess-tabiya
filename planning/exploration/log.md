@@ -13147,3 +13147,17 @@ hiding it: the attribution registry is now exact enough to be a shared resource,
 bootstrap must register its absent root and this RFC must claim first lane 1 before acceptance.
 Fifth fresh review, [[D1672]] and [[D2401]] still gate acceptance; no production, protected-design,
 schema, content, API or UX implementation was authorized.
+
+## 2026-08-31 — Source-attribution shared-resource handoff
+
+Extended the still-draft shared-resource bootstrap on [[D2401]] rather than letting evidence
+presentation accept an unregistered metadata authority. The catalogue now has ten normative rows
+and a fourth generic kind, `versioned_registry`, whose frozen id/version/digest/rows object,
+canonical digest, version head, lane claims and landed parity are defined without resource-name
+dispatch. The exact absent root points at the future runtime source-attribution object; evidence
+presentation owns its later first-lane claim and every product byte.
+
+The existing bootstrap author targets now cover the third handoff and four-kind algebra. This is
+still author work: independent review, process acceptance/implementation and the subsequent product
+claim all remain required. No checker, register, runtime attribution, citation, schema, content,
+API or UX implementation was authorized.
