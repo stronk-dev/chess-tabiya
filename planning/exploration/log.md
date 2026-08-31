@@ -12701,3 +12701,15 @@ dependencies privately without exposing event output.
 content, archive or protected-design byte changed; fourth fresh independent review remains
 required. Receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-fourth-author-repair-2026-08-31.md`.
+
+## 2026-08-31 — Provider health/degradation author repair
+
+Author-repaired [[D1910]]–[[D1915]] and self-audit [[D2362]]. Provider family, concrete instance and
+operation identities are separate; clean-start requestability is total; voice/TTS use one compiled
+execution DAG/deadline; operation results are closed; run-schema lane 0.26 owns durable opponent
+acquisition; and cache-only state derives from current generation-valid inventory.
+
+`make provider-health-author-repair` passes 7/7 plus typecheck. No production, schema, runtime,
+API, client, content, archive or protected-design byte changed. Second fresh review and the
+provider-protocol dependencies remain. Receipt:
+`planning/provider-health-degradation/author-repair-2026-08-31.md`.
