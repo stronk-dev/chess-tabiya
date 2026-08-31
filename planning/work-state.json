@@ -18913,6 +18913,15 @@
       "uxItems": [],
       "evidence": "tools/work-state.test.mjs",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2396",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0c388ac759ff32d55c9f0731e91b09763cc5b46f865ed5551cff07485e66b6f5",
+      "uxItems": [],
+      "evidence": "apps/server/src/sourcing/graduation-clear.ts",
+      "evidenceKind": "path"
     }
   ]
 }

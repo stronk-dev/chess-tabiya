@@ -51,3 +51,14 @@ without rebasing the ratchet.
 Five foundation-source findings are blocked on their exact RFC and the writer defect is closed.
 The census is now 2,144 rows: 689 done, three refused, 655 todo, 797 blocked, zero doing and zero
 untriaged. All 1,452 live rows remain assigned.
+
+## 2026-08-31 — Graduation implementation checkpoint reconciled
+
+[[D2396]] found a shipped implementation recorded as “accepted, unbuilt” in the RFC register and
+two platform-alignment audits. The source RFC, register, audits and 1.0 roadmap now agree that the
+writer and read-only plan shipped at `bcb706e0` and were hardened at `ec52f61d`, while pack 0.28,
+emitter templates and the Gate-F-held corpus application remain open.
+
+The census is now 2,145 rows: 690 done, three refused, 655 todo, 797 blocked, zero doing and zero
+untriaged. All 1,452 live rows remain assigned; this reconciliation changes lifecycle truth without
+pretending the content milestone advanced or that any pack graduated.

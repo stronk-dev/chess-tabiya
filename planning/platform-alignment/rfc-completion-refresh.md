@@ -57,7 +57,7 @@ and too strong as a register-closeout claim until this repair.
 | RFC | Audited reality | What may happen next |
 |---|---|---|
 | `teacher-surface` | accepted, unbuilt | Wait for R15/O11 or amend first; do not equate it with a coherent Coach mode |
-| `graduation-clearance` | accepted, unbuilt; holds pack 0.28; D642 found one stale criterion and a pre-hold scale migration | After Feedback Stage 1, correct criterion 13 and build the mechanism/read-only plan; D560 gates corpus apply and archival |
+| `graduation-clearance` | implementing; writer/read-only plan shipped at `bcb706e0` and hardened at `ec52f61d`; holds pack 0.28 | Build the schema and emitter-template remainder; D560/Gate F still gates corpus apply and archival |
 | `feedback-delivery` | accepted; Stage 1 dirty; D643/D644 find incomplete criterion coverage and an unsatisfiable criterion 20 | Apply the narrow criterion-20 author correction, close the Stage-1 matrix and land scoped work; Stage 2 remains separate authored/content work |
 | `assistance-controls` | draft; old control-shaped framing is superseded by O4/A5 | Return for an author round around modules, presets, workflow identity, per-kind ceilings and advanced configuration |
 | `measurement-records` | returned; large uncommitted authoring revision, no implementation | Resolve its subject/sub-expression and pack-vs-shape questions before acceptance |
@@ -85,7 +85,7 @@ scoped files. The content hold still prevents treating Stage 2 as a general cont
 
 1. Resolve and accept the two process RFCs before the alignment program creates more shared claims.
 2. Coordinate and finish feedback-delivery Stage 1; never broad-add the shared worktree.
-3. After Feedback Stage 1, correct `graduation-clearance` criterion 13 and implement its mechanism plus read-only plan. Apply the 92-document migration and release 0.28 only after D560's measured-budget decision.
+3. Continue `graduation-clearance` from its shipped writer/read-only checkpoint: implement pack 0.28 and emitter templates. Apply the corpus migration and release 0.28 only after D560's Gate-F decision.
 4. Return `assistance-controls`, `teacher-surface`, and the provenance/measurement/rating drafts
    through their named research and owner gates instead of mechanically shipping stale UX intent.
 5. Preserve the distinction between historical RFC completion and F1-F12 current capability work

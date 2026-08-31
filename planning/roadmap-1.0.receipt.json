@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:5369a46f76daad25fbd18b360b8e63124f363135d58435f4133960b17735b965",
+    "roadmap": "sha256:baf643c02f07c48c222db2c233f8e7e7e3aac0e12bb6b03948606fa3e42436e6",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "rfcRegister": "sha256:3b335da539ad2ce3913f2f22e25373089f56c29c513354815ef5f5decd21f265",
+    "rfcRegister": "sha256:6b809960d8fddbca6b4c60964b89098ec03890838829b171c1b8488229cd0273",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -20,8 +20,8 @@
     "assignedRfcs": 66,
     "activeRfcLifecycle": {
       "draft": 52,
-      "accepted": 5,
-      "implementing": 4,
+      "accepted": 4,
+      "implementing": 5,
       "awaiting": 6,
       "implemented": 0,
       "superseded": 0,
@@ -67,7 +67,7 @@
       "nextAction": "Keep every new live row assigned at creation, maintain the separately named verification tiers, and refresh the source-sealed receipt whenever a joined authority changes.",
       "latestCheckpoint": {
         "at": "2026-08-31",
-        "summary": "All 2,144 ledger rows have durable state and every one of the 1,452 live rows has a roadmap capability owner: 655 todo, 797 blocked, zero doing and zero untriaged. The first post-zero additions exposed and repaired the assignment writer while preserving the zero ceiling.",
+        "summary": "All 2,145 ledger rows have durable state and every one of the 1,452 live rows has a roadmap capability owner: 655 todo, 797 blocked, zero doing and zero untriaged. The first post-zero additions exposed and repaired the assignment writer while preserving the zero ceiling.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/work-state.md",
@@ -281,7 +281,7 @@
       "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
       "latestCheckpoint": {
         "at": "2026-08-31",
-        "summary": "No official pack is graduated; broad content authoring remains intentionally held until capability, claim-anchor and event-version contracts stabilize.",
+        "summary": "The graduation writer and read-only plan ship, but no official pack is graduated; pack 0.28, emitter templates and the Gate-F-held corpus application remain before broad content authoring.",
         "impact": "held",
         "evidence": [
           "planning/content-era/plan.md",

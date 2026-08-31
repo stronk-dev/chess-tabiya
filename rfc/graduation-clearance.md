@@ -1,6 +1,9 @@
 # RFC: Graduation clearance — how a blocker stops blocking
 
-- **Status:** **accepted 2026-08-17 by the register owner; status token reconciled 2026-08-20.**
+- **Status:** **implementing 2026-08-31.** The writer and read-only planning checkpoint shipped in
+  `bcb706e0` and was hardened in `ec52f61d`; pack schema 0.28, emitter-template migration and the
+  Gate-F-held corpus application remain. **Accepted 2026-08-17 by the register owner; status token
+  reconciled 2026-08-20.**
   **[author round 3, 2026-08-17]** D503 is closed, and it is closed as an
   **instance of a class rather than as six entries**: three of the six mechanical kinds join to their
   evidence through a **pointer grammar the shipped code enforces**, and this RFC stated that grammar
@@ -2957,6 +2960,16 @@ RFC do is call a convention a mechanism.**
     (`.dockerignore`, `loadDefault`'s development gate, the Dockerfile's `COPY` set), and each was
     prose rather than an assertion. **A premise an RFC argues from and no test holds is a premise that
     will be refuted by a commit nobody connected to this document.**
+
+## Implementation checkpoint — 2026-08-31
+
+[[D2396]] corrects the lifecycle record after the implementation moved without its planning
+surfaces. `clearGraduationEntries`, the `make graduation-clear` writer, read-only planning,
+transition sidecars, non-vacuity checks, report filtering, content-tier coverage and documentation
+ship at `bcb706e0` plus `ec52f61d`. This is a real implementation checkpoint, not completion: the
+pack-0.28 grammar, emitter templates and corpus application have not shipped, and the last of those
+remains held by Gate F. The RFC therefore reads **implementing**, while its historical acceptance
+record remains intact.
 
 ## Discharges
 

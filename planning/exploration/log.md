@@ -13066,3 +13066,15 @@ and still requires a genuinely independent buildability review afterward; no sou
 content, runtime, API or UX implementation was authorized. The same change repaired [[D2395]], a
 post-zero work-state writer defect found when these rows correctly failed while ownerless. The
 zero ceiling remains enforced and all 1,452 live rows are assigned.
+
+## 2026-08-31 — Graduation-clearance lifecycle truth reconciled
+
+[[D2396]] re-derived `graduation-clearance` from shipped symbols and commits after the generic 1.0
+update repeated the older “accepted, unbuilt” label. `bcb706e0` already shipped
+`clearGraduationEntries`, `make graduation-clear`, transition sidecars, tests and the read-only
+plan; `ec52f61d` hardened non-vacuity, report filtering, content-tier coverage and documentation.
+The RFC body/register, both platform-alignment audits and roadmap now say **implementing**.
+
+This does not manufacture completion: pack schema 0.28, emitter templates and the Gate-F-held
+corpus application remain, and zero official packs graduate. The correction closes one stale
+progress claim while preserving the content hold and makes the next executable boundary explicit.
