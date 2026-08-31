@@ -32,23 +32,25 @@ test("D2344: exact projection authority distinguishes position, edge, branch and
   assert.equal(executionById.get("derived.story.rank").subjectKind, "run_prefix");
 });
 
-test("D2345: every derivation input has a grain-compatible sealed view", () => {
+test("D2345: every derivation input has a grain-compatible typed relation", () => {
   const sourceViews = new Set(execution.sourceInputs.map((row) => `${key(row.projection)}:${row.subjectKind}`));
   assert.ok(sourceViews.has("run.record.move@1:edge"));
-  assert.ok(sourceViews.has("run.record.move@1:branch_pair"));
+  assert.equal(sourceViews.has("run.record.move@1:branch_pair"), false);
   assert.equal(sourceViews.has("run.record.move@1:run_prefix"), false);
   for (const row of execution.rows) {
     const inputs = row.derivation?.kind === "all"
       ? row.derivation.inputs
       : row.derivation?.alternatives.flat() ?? [];
-    for (const input of inputs) {
+    assert.deepEqual(row.derivation?.inputBindings.map((binding) => key(binding.projection)) ?? [], inputs.map(key));
+    for (const binding of row.derivation?.inputBindings ?? []) {
+      const input = binding.projection;
       const planned = executionById.get(input.id);
-      const compatible = planned?.subjectViews.some((view) => view.subjectKind === row.subjectKind)
-        ?? sourceViews.has(`${key(input)}:${row.subjectKind}`);
-      assert.equal(compatible, true, `${row.projection.id} <- ${input.id}/${row.subjectKind}`);
+      const external = execution.sourceInputs.find((source) => key(source.projection) === key(input));
+      assert.equal(binding.sourceSubjectKind, planned?.subjectKind ?? external?.subjectKind);
+      assert.match(binding.relation, /^(same_|edge_position_endpoints|branch_pair_|prefix_)/u);
     }
   }
-  assert.ok(execution.rows.some((row) => row.subjectViews.some((view) => view.adapter === "projection_between_grains@1")));
+  assert.doesNotMatch(generator, /projection_between_grains@1/u);
 });
 
 test("D2346: binding timing is the non-empty module and sealed-operation intersection", () => {
@@ -58,10 +60,11 @@ test("D2346: binding timing is the non-empty module and sealed-operation interse
   }
   const defender = bindings.rows.find((row) =>
     row.consumer.id === "module.threat_radar" && row.projection.id === "derived.tactic.defender_exposure");
-  assert.deepEqual(defender.timing, ["postcommit"]);
+  assert.deepEqual(defender.timingRequirement.sourceCeiling, ["postcommit"]);
+  assert.equal(defender.timingRequirement.exactProjectionOperation, null);
   assert.doesNotMatch(generator, /timing: policy\.timings[,}]/u);
-  assert.match(generator, /const timing = policy\.timings\.filter/u);
-  assert.ok(bindings.rows.every((row) => row.timing.length > 0));
+  assert.match(generator, /const sourceTimingCeiling = policy\.timings\.filter/u);
+  assert.ok(bindings.rows.every((row) => row.timingRequirement.sourceCeiling.length > 0));
 });
 
 test("D2347: card requirements retain the complete panel and list image", () => {

@@ -9,7 +9,6 @@ import { MODULE_FORM_IMAGE } from "../../packages/runtime/src/module-contract.js
 import { WORKFLOW_CONTEXT_POLICIES } from "../../packages/runtime/src/presets.js";
 import { COMPONENT_FORM_CAPABILITIES, PRESENTATION_ADAPTER_ROWS } from "../d1862-presentation-adapter-plan/plan.js";
 import {
-  AUTHOR_ADDITIONAL_SUBJECT_VIEWS,
   AUTHOR_MODULE_ACCEPTS,
   AUTHOR_MODULE_POLICIES,
   AUTHOR_PROJECTION_SUBJECT_OVERRIDES,
@@ -43,7 +42,6 @@ const SOURCE_INPUTS = Object.freeze([
   ["rules.structural.predicate.passed_pawn", "edge", "candidate_population@1"],
   ["rules.tactic.reading.defender_duty_set", "edge", "candidate_population@1"],
   ["run.record.move", "edge", "recorded_semantic_path@1"],
-  ["run.record.move", "branch_pair", "recorded_semantic_path@1"],
 ].map(([id, subjectKind, acquisition]) => Object.freeze({ projection: ref(id!), subjectKind, acquisition, status: "awaiting_upstream_sealed_operation" })));
 
 const sourceFor = (producer: string, stage: string): string => {
@@ -77,6 +75,23 @@ const derivationFor = (projection: (typeof PRIMARY_EVIDENCE_MANIFEST.projections
   throw new TypeError(`derived projection has no declared inputs: ${projection.id}`);
 };
 
+const inputRelation = (sourceSubjectKind: string, outputSubjectKind: string): string => {
+  const relation = {
+    "position:position": "same_position",
+    "edge:edge": "same_edge",
+    "branch_pair:branch_pair": "same_branch_pair",
+    "run_prefix:run_prefix": "same_frozen_prefix",
+    "position:edge": "edge_position_endpoints",
+    "edge:branch_pair": "branch_pair_edges",
+    "position:branch_pair": "branch_pair_position_endpoints",
+    "position:run_prefix": "prefix_position_occurrences",
+    "edge:run_prefix": "prefix_edge_occurrences",
+    "branch_pair:run_prefix": "prefix_branch_pair_occurrences",
+  }[`${sourceSubjectKind}:${outputSubjectKind}`];
+  if (relation === undefined) throw new TypeError(`no typed input relation: ${sourceSubjectKind} -> ${outputSubjectKind}`);
+  return relation;
+};
+
 const pairs = Object.entries(AUTHOR_MODULE_ACCEPTS).flatMap(([module, ids]) => ids.filter((id) => !awaiting.has(id)).map((id) => ({ module, projection: id })));
 const compiledIds = [...new Set(pairs.map((row) => row.projection))].sort();
 const requirementRows = compiledIds.map((id) => {
@@ -87,17 +102,11 @@ const requirementRows = compiledIds.map((id) => {
   const stage = STAGE_BY_PRODUCER[producer.id as keyof typeof STAGE_BY_PRODUCER];
   if (stage === undefined) throw new TypeError(`missing source stage ${producer.id}`);
   const subjectKind = subjectFor(projection.id, stage);
-  const additionalViews = AUTHOR_ADDITIONAL_SUBJECT_VIEWS[projection.id as keyof typeof AUTHOR_ADDITIONAL_SUBJECT_VIEWS] ?? [];
   const source = sourceContractById.get(sourceFor(producer.id, stage));
   if (source === undefined || !source.subjectKinds.includes(subjectKind as never)) throw new TypeError(`source contract cannot provide primary subject: ${projection.id}/${subjectKind}`);
-  const subjectViews = [subjectKind, ...additionalViews].map((subject) => {
-    const direct = source.subjectKinds.includes(subject as never);
-    const acquisition = direct ? source : sourceContractById.get("review_evidence_packet@1")!;
-    if (!acquisition.subjectKinds.includes(subject as never)) throw new TypeError(`no lawful subject projection: ${projection.id}/${subject}`);
-    return { subjectKind: subject, acquisition: acquisition.id, adapter: direct ? "identity" : "projection_between_grains@1" };
-  });
   return { projection: ref(projection.id, projection.version), producer: projection.producer, stage, subjectKind,
-    subjectViews, acquisition: source.id, derivation: stage === "derived_after_inputs" ? derivationFor(projection, subjectKind) : null,
+    subjectAuthority: { subjectKind, acquisition: source.id, adapter: "identity" }, acquisition: source.id,
+    derivation: stage === "derived_after_inputs" ? derivationFor(projection, subjectKind) : null,
     requiredOutput: { kind: "sealed_projection_item", projection: ref(projection.id, projection.version) }, status: "awaiting_upstream_sealed_operation" };
 });
 
@@ -105,11 +114,18 @@ const requirementById = new Map(requirementRows.map((row) => [row.projection.id,
 for (const row of requirementRows) {
   if (row.derivation === null) continue;
   const inputs = row.derivation.kind === "all" ? row.derivation.inputs : row.derivation.alternatives.flat();
+  const inputBindings = inputs.map((input) => {
+    const planned = requirementById.get(input.id);
+    const external = SOURCE_INPUTS.find((source) => source.projection.id === input.id);
+    const sourceSubjectKind = planned?.subjectKind ?? external?.subjectKind;
+    if (sourceSubjectKind === undefined) throw new TypeError(`missing derivation input: ${row.projection.id} needs ${input.id}`);
+    return { projection: input, sourceSubjectKind, relation: inputRelation(sourceSubjectKind, row.subjectKind) };
+  });
+  Object.assign(row.derivation, { inputBindings });
   for (const input of inputs) {
     const planned = requirementById.get(input.id);
-    const compatible = planned?.subjectViews.some((view) => view.subjectKind === row.subjectKind) ?? SOURCE_INPUTS.some((source) =>
-      source.projection.id === input.id && source.subjectKind === row.subjectKind);
-    if (!compatible) throw new TypeError(`derivation grain mismatch: ${row.projection.id} needs ${input.id}/${row.subjectKind}`);
+    const external = SOURCE_INPUTS.find((source) => source.projection.id === input.id);
+    if (planned === undefined && external === undefined) throw new TypeError(`missing derivation input: ${row.projection.id} needs ${input.id}`);
   }
 }
 
@@ -125,14 +141,16 @@ const bindingRows = pairs.map(({ module, projection: projectionId }) => {
   const forms = projection.forms.filter((form) => moduleForms.includes(form));
   const requirement = requirementById.get(projectionId)!;
   const source = sourceContractById.get(requirement.acquisition)!;
-  const timing = policy.timings.filter((value) => source.timings.includes(value as never));
-  if (sessions.length === 0 || forms.length === 0 || timing.length === 0) throw new TypeError(`empty policy intersection: ${module}/${projectionId}`);
+  const sourceTimingCeiling = policy.timings.filter((value) => source.timings.includes(value as never));
+  if (sessions.length === 0 || forms.length === 0 || sourceTimingCeiling.length === 0) throw new TypeError(`empty policy intersection: ${module}/${projectionId}`);
   const baseAdapters = (presentationByProjection.get(`${projectionId}@${projection.version}`) ?? [])
     .filter((row) => row.disposition === "adapt")
     .map((row) => ({ key: row.key, consumer: row.consumer, familyId: row.familyId, forms: row.forms }));
   const knownForms = [...new Set(baseAdapters.flatMap((row) => row.forms).filter((form) => forms.includes(form as never)))];
   return { producer: projection.producer, projection: ref(projection.id, projection.version), consumer: ref(`module.${module}`),
-    timing, roles: policy.roles, sessions, forms, answerContent: projection.answerContent,
+    timingRequirement: { moduleRequested: policy.timings, sourceCeiling: sourceTimingCeiling,
+      exactProjectionOperation: null, status: "awaiting_upstream_exact_operation" },
+    roles: policy.roles, sessions, forms, answerContent: projection.answerContent,
     latency: { mode: producer.latency, maxMs: producer.latency === "sync" ? 50 : producer.latency === "interactive" ? 500 : null },
     budget: { maxFacts: policy.maxFacts, maxForms: forms.length }, status: "blocked_dependencies",
     presentationRequirement: { status: "awaiting_exact_module_pair_adapter", requiredPair: `module.${module}@1\u0000${projectionId}@${projection.version}`, requiredForms: forms, reusableBaseAdapters: baseAdapters, componentFormCapabilityKnown: knownForms } };

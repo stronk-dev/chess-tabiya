@@ -27,7 +27,12 @@ describe("module-registration sealed-pool author repair", () => {
       const policy = AUTHOR_MODULE_POLICIES[module as keyof typeof AUTHOR_MODULE_POLICIES];
       const requirement = requirementById.get(row.projection.id) as any;
       const source = sourceById.get(requirement.acquisition) as any;
-      expect(row.timing).toEqual(policy.timings.filter((timing) => source.timings.includes(timing)));
+      expect(row.timingRequirement).toEqual({
+        moduleRequested: policy.timings,
+        sourceCeiling: policy.timings.filter((timing) => source.timings.includes(timing)),
+        exactProjectionOperation: null,
+        status: "awaiting_upstream_exact_operation",
+      });
       expect(row.roles).toEqual(policy.roles);
       expect(row.budget.maxFacts).toBe(policy.maxFacts);
       expect(row.sessions).toEqual(WORKFLOW_CONTEXT_POLICIES.filter((context) => context.moduleCeiling.includes(module as never)).map((context) => context.id));
@@ -68,17 +73,18 @@ describe("module-registration sealed-pool author repair", () => {
       "rules.exchange.predicate.legal_exchange@1:edge", "rules.square.event.control@1:edge",
       "rules.structural.predicate.direct_attack_count@1:edge",
       "rules.structural.predicate.line_blockers@1:edge", "rules.structural.predicate.passed_pawn@1:edge",
-      "rules.tactic.reading.defender_duty_set@1:edge", "run.record.move@1:branch_pair",
-      "run.record.move@1:edge",
+      "rules.tactic.reading.defender_duty_set@1:edge", "run.record.move@1:edge",
     ]);
     const rows = new Map(execution.rows.map((row:any) => [key(row.projection), row]));
-    const sourceViews = new Set(execution.sourceInputs.map((row:any) => `${key(row.projection)}:${row.subjectKind}`));
     for (const row of execution.rows) {
-      const inputs = row.derivation?.inputs?.flat?.() ?? row.derivation?.alternatives?.flat?.() ?? [];
-      for (const input of inputs) {
-        const planned = rows.get(key(input)) as any;
-        expect(planned?.subjectViews.some((view:any) => view.subjectKind === row.subjectKind)
-          ?? sourceViews.has(`${key(input)}:${row.subjectKind}`)).toBe(true);
+      const inputs = row.derivation?.inputs ?? row.derivation?.alternatives?.flat?.() ?? [];
+      const bindings = row.derivation?.inputBindings ?? [];
+      expect(bindings.map((binding:any) => key(binding.projection))).toEqual(inputs.map(key));
+      for (const binding of bindings) {
+        const planned = rows.get(key(binding.projection)) as any;
+        const external = execution.sourceInputs.find((source:any) => key(source.projection) === key(binding.projection));
+        expect(binding.sourceSubjectKind).toBe(planned?.subjectKind ?? external?.subjectKind);
+        expect(binding.relation).toMatch(/^(same_|edge_position_endpoints|branch_pair_|prefix_)/u);
       }
     }
   });

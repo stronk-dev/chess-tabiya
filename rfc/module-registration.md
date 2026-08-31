@@ -1,7 +1,7 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — fourth fresh independent review RETURNED 2026-08-31 on
-  [[D2398]]–[[D2400]]; fifth author repair required.** The fourth repair rejects the prior generator's
+- **Status:** **draft — fifth author repair complete 2026-08-31 on
+  [[D2398]]–[[D2400]]; fifth fresh independent review required.** The fourth repair rejects the prior generator's
   central premise: learner modules do not invoke 117 detector/provider functions. They consume
   projection-keyed sealed pools produced by the candidate packet, recorded semantic path, Review,
   catalogue and provider authorities. The generated artifacts are therefore digest-sealed
@@ -19,7 +19,11 @@
   The fresh review found an undeclared generic cross-grain relabel, contradictory surviving
   direct-call instructions, and packet-wide rather than exact projection/view timing. Exact return:
   `planning/learner-modules/fourth-fresh-independent-buildability-review-2026-08-31.md`. No
-  implementation is authorised before author repair and another fresh independent review. The
+  implementation is authorised. The fifth repair retains every input's intrinsic grain through
+  typed derivation relations, makes the direct-call block explicitly non-normative, and refuses to
+  mint final timing until the exact upstream operation supplies applicability. Exact repair:
+  `planning/learner-modules/fifth-author-repair-2026-08-31.md`; maintained targets plus
+  `make module-registration-fifth-author-repair` pass. Another fresh independent review is required. The
   [[D1870]]/[[D2030]] dependency image remains the owner-ruled measured 207-pair target,
   including requested-Sight `pawn_safe_square`. Prior
   amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt
@@ -219,6 +223,36 @@ requirements, 205 non-hint binding requirements, every row still
 `make module-evidence-assembly` passes 13/13 and
 `make module-registration-fourth-author-repair` passes 5/5. These are author/buildability facts,
 not evidence that a module reaches production.
+
+## Fifth author repair — intrinsic subjects and unresolved exact timing (2026-08-31)
+
+This section repairs [[D2398]]–[[D2400]] and supersedes the withdrawn direct-call draft in
+historical §2.5.0. It does not make any requirements-only row executable.
+
+1. **Inputs keep their intrinsic grain.** `subjectViews` and `projection_between_grains@1` are
+   deleted. A derived row carries one `inputBinding` per literal input: the input projection, its
+   intrinsic `sourceSubjectKind`, and one closed relation owned by the derived operation:
+   `same_position`, `same_edge`, `same_branch_pair`, `same_frozen_prefix`,
+   `edge_position_endpoints`, `branch_pair_edges`, `branch_pair_position_endpoints`,
+   `prefix_position_occurrences`, `prefix_edge_occurrences`, or
+   `prefix_branch_pair_occurrences`. These relations bind retained occurrences into the output
+   subject; they never relabel an evidence item. `run.record.move@1` therefore has one edge-grained
+   source input and `piece_route` consumes recorded edges through `branch_pair_edges`.
+2. **Exact timing remains visibly unresolved.** A requirements-only binding has no `timing` field.
+   It carries `timingRequirement`: the module-requested timings, the broad sealed-pool ceiling,
+   `exactProjectionOperation: null`, and `status: awaiting_upstream_exact_operation`. The final F1
+   binding cannot exist until the upstream exact operation supplies applicability and the compiler
+   intersects all three terms. A packet being callable never proves that every item inside it is
+   applicable.
+3. **The direct-call plan is withdrawn from the contract.** Historical §2.5.0 is retained only to
+   explain the D2165 return; every interface, callable test and eight-family execution instruction
+   in it is explicitly non-normative and must not be implemented. Normative §2.5 contains only the
+   sealed-pool requirement schema, typed input relations, unresolved timing requirement and
+   final-emission refusal.
+
+The regenerated artifacts remain 117 evidence requirements and 205 non-hint binding requirements,
+all dependency-blocked and `requirements_only`. `make module-registration-fifth-author-repair`
+crosses all three returned seams. Another fresh independent review remains required.
 
 ## Summary
 
@@ -835,7 +869,22 @@ Named non-module dispositions retained at the original decision boundary include
 a decision with a boundary rather than a sweep. The acceptance gate derives the complete retained
 complement from the manifest; this prose list is illustrative, not a second cardinality authority.
 
-#### 2.5 Steps 3–4 — evidence assembly and packet construction, server side
+#### 2.5 — Sealed-pool requirement assembly
+
+The current machine-readable contract is `module-execution-plan-v1.json` plus
+`module-binding-plan-v1.json`. An evidence row names its intrinsic subject authority and, for a
+derived output, literal input bindings with the closed relations in the fifth author repair. A
+binding row is a requirement only: forms/roles/sessions/budgets are fixed, while exact operation
+timing and pair presentation remain explicitly unresolved. No module operation may invoke a raw
+detector or provider, and no final F1 row may be emitted while either dependency is unresolved.
+
+#### 2.5.0 — Withdrawn direct-call draft (historical, non-normative)
+
+Everything from this heading through §2.5.4 is retained solely as the evidence that produced
+[[D2165]] and [[D2399]]. Its interfaces, callable-operation requirements, source-family execution
+tests and direct assembly instructions are **deleted from the implementation contract and must not
+be implemented**. Where this historical text conflicts with §2.5 or the fifth author repair, the
+requirements-only sealed-pool contract is the sole authority.
 
 `apps/server/src/module-evidence-assembler.ts` (new) owns the operation missing in [[D1865]]. Its
 input is one authoritative, timing-specific subject frame; its output is a frozen declared pool
@@ -1705,6 +1754,17 @@ Fourth fresh review return (2026-08-31):
 `make module-registration-fourth-fresh-review` reproduces all three. Fifth author repair and a new
 fresh independent review are required before acceptance or implementation.
 
+Fifth author repair (2026-08-31):
+
+| row | author repair; fifth fresh review still required |
+|---|---|
+| [[D2398]] | inputs retain intrinsic grains; derived rows bind them through one closed exact subject relation instead of a generic relabel |
+| [[D2399]] | normative §2.5 is requirements-only; the direct-call draft is explicitly historical/non-normative and forbidden to implement |
+| [[D2400]] | binding rows carry a requested/source-ceiling timing requirement and `exactProjectionOperation:null`; no final timing is claimed before dependency landing |
+
+`make module-registration-fifth-author-repair` passes 4/4. Another fresh independent review is
+required; no production implementation is authorized.
+
 | row | author repair; fresh review still required |
 |---|---|
 | [[D2343]] | **author-repaired:** D1865 imports the single explicit blocked-hint algebra; maintained targets pass 13/13 and 11/11 |
@@ -1783,6 +1843,13 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   input-equivalence clause inside the surface built to satisfy it.
 
 ## Changelog
+
+- 2026-08-31 (fifth author repair): repaired [[D2398]]–[[D2400]] without pretending blocked
+  upstream operations ship. Inputs keep intrinsic grains through typed derived-operation
+  relations; the direct-call section is non-normative history; and timing remains an unresolved
+  requirement rather than a final binding. Regenerated 117/205 requirements and all maintained
+  targets pass, including `make module-registration-fifth-author-repair` 4/4. Fresh independent
+  review remains required; no implementation is authorised.
 
 - 2026-08-31 (fourth fresh independent return): returned the fourth repair on
   [[D2398]]–[[D2400]]. The five named D2343–D2347 fixes survive, but generic cross-grain

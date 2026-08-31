@@ -18936,7 +18936,7 @@
       "id": "D2398",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:97ccf0546a9658334c95ef8f35aa0e9a063ec0b446b930bee76406e8d815fc86",
+      "sourceDigest": "sha256:f563b803e744514c2204638ca929c59dddb25d41d58fa3f11db473267ee8e14a",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:module-registration.md"
@@ -18945,7 +18945,7 @@
       "id": "D2399",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d1cece6e9051515fe544b5fb371fa4322164fa08c9b39da90a210832eb627f91",
+      "sourceDigest": "sha256:096590ff6bbeee320d6c8a394440924cb101d117a5965280e9516886dc4c80c4",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:module-registration.md"
@@ -18954,7 +18954,7 @@
       "id": "D2400",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:fd208f5979e646baa31ff145cd179fd6b00c88697dc0f6c0fc848db07fc5dd1a",
+      "sourceDigest": "sha256:9b62249300694fe53d31506f2ccc9b16d334cda3a518f8835f2d8dc9bdf29ebd",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:module-registration.md"

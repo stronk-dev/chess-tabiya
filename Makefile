@@ -480,6 +480,10 @@ module-registration-fourth-author-repair:
 module-registration-fourth-fresh-review:
 	node --test tools/d2398-module-registration-fourth-fresh-review/*.test.mjs
 
+.PHONY: module-registration-fifth-author-repair
+module-registration-fifth-author-repair:
+	node --test tools/d2398-module-registration-fifth-author-repair/*.test.mjs
+
 pack-capability-author-contract: pack-capability-closure pack-capability-repeat-review pack-capability-fresh-review pack-capability-second-fresh-review pack-capability-author-repair
 
 theory-drill-author-contract:

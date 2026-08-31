@@ -13119,3 +13119,16 @@ rather than exact projection/subject-view applicability.
 requirements-only artifact with every binding dependency-blocked; no production, schema, content,
 API or UX implementation is authorized before a fifth author repair and another independent
 review.
+
+## 2026-08-31 — Module-registration fifth author repair
+
+Repaired [[D2398]]–[[D2400]] without promoting a blocked requirement into executable code. The
+generic cross-grain relabel is gone: inputs retain intrinsic grain and derived operations declare
+typed edge/branch/prefix occurrence relations. Normative §2.5 is requirements-only and the old
+direct-call block is explicitly non-normative history. Binding rows no longer claim final timing;
+they publish module request plus source ceiling and wait for exact upstream applicability.
+
+The sealed artifacts remain 117 evidence requirements / 205 binding requirements, all
+dependency-blocked. Maintained author/assembly/return targets and the new four-arm fifth-author
+contract pass. A fresh independent review and `evidence-value-authority` successor regeneration
+still gate acceptance; no production, schema, content, API or UX implementation was authorized.

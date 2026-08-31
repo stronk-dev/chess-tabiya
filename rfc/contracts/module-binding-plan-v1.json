@@ -29,9 +29,16 @@
         "id": "module.blunder_prevention",
         "version": 1
       },
-      "timing": [
-        "at_commit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "at_commit"
+        ],
+        "sourceCeiling": [
+          "at_commit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -79,9 +86,16 @@
         "id": "module.blunder_prevention",
         "version": 1
       },
-      "timing": [
-        "at_commit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "at_commit"
+        ],
+        "sourceCeiling": [
+          "at_commit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -129,9 +143,16 @@
         "id": "module.blunder_prevention",
         "version": 1
       },
-      "timing": [
-        "at_commit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "at_commit"
+        ],
+        "sourceCeiling": [
+          "at_commit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -180,10 +201,20 @@
         "id": "module.compare_coach",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "checkpoint",
+          "attempt_end",
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -250,10 +281,20 @@
         "id": "module.compare_coach",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "checkpoint",
+          "attempt_end",
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -320,10 +361,20 @@
         "id": "module.compare_coach",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "checkpoint",
+          "attempt_end",
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -391,10 +442,20 @@
         "id": "module.compare_coach",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "checkpoint",
+          "attempt_end",
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -473,12 +534,22 @@
         "id": "module.compare_coach",
         "version": 1
       },
-      "timing": [
-        "checkpoint",
-        "attempt_end",
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "checkpoint",
+          "attempt_end",
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "checkpoint",
+          "attempt_end",
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -554,12 +625,22 @@
         "id": "module.compare_coach",
         "version": 1
       },
-      "timing": [
-        "checkpoint",
-        "attempt_end",
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "checkpoint",
+          "attempt_end",
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "checkpoint",
+          "attempt_end",
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -613,12 +694,22 @@
         "id": "module.compare_coach",
         "version": 1
       },
-      "timing": [
-        "checkpoint",
-        "attempt_end",
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "checkpoint",
+          "attempt_end",
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "checkpoint",
+          "attempt_end",
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -685,12 +776,22 @@
         "id": "module.compare_coach",
         "version": 1
       },
-      "timing": [
-        "checkpoint",
-        "attempt_end",
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "checkpoint",
+          "attempt_end",
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "checkpoint",
+          "attempt_end",
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -766,10 +867,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -832,10 +941,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -909,10 +1026,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -968,10 +1093,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1023,10 +1156,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1080,10 +1221,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1137,10 +1286,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1194,10 +1351,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1253,10 +1418,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1310,10 +1483,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1367,10 +1548,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1424,10 +1613,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1479,10 +1676,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1536,10 +1741,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1602,10 +1815,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1655,10 +1876,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1720,10 +1949,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1784,10 +2021,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1850,10 +2095,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1914,10 +2167,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -1968,10 +2229,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2022,10 +2291,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2087,10 +2364,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2153,10 +2438,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2220,10 +2513,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2273,10 +2574,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2326,10 +2635,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2385,10 +2702,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2444,10 +2769,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2503,10 +2836,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2562,10 +2903,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2618,10 +2967,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2700,10 +3057,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2821,10 +3186,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2880,10 +3253,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2936,10 +3317,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -2992,10 +3381,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3045,10 +3442,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3098,10 +3503,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3151,10 +3564,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3211,10 +3632,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3272,10 +3701,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3326,10 +3763,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3385,10 +3830,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3443,10 +3896,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3503,10 +3964,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3592,9 +4061,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3654,9 +4130,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3710,9 +4193,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3766,9 +4256,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3822,9 +4319,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3884,9 +4388,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -3946,9 +4457,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4002,9 +4520,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4058,9 +4583,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4114,9 +4646,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4170,9 +4709,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4226,9 +4772,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4282,9 +4835,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4338,9 +4898,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4394,9 +4961,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4450,9 +5024,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4506,9 +5087,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4566,9 +5154,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4626,9 +5221,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4686,9 +5288,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4746,9 +5355,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4806,9 +5422,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4866,9 +5489,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4926,9 +5556,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -4982,9 +5619,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5044,9 +5688,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5106,9 +5757,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5162,9 +5820,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5218,9 +5883,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5274,9 +5946,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5330,9 +6009,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5386,9 +6072,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5442,9 +6135,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5498,9 +6198,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5554,9 +6261,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5610,9 +6324,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5666,9 +6387,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5722,9 +6450,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5779,9 +6514,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5835,9 +6577,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5891,9 +6640,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -5947,9 +6703,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -6003,9 +6766,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -6059,9 +6829,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -6115,9 +6892,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -6171,9 +6955,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -6227,9 +7018,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -6283,9 +7081,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -6339,9 +7144,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -6395,9 +7207,16 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -6451,10 +7270,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -6515,10 +7342,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -6573,10 +7408,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -6631,10 +7474,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -6689,10 +7540,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -6753,10 +7612,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -6817,10 +7684,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -6875,10 +7750,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -6933,10 +7816,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -6991,10 +7882,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7049,10 +7948,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7107,10 +8014,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7165,10 +8080,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7223,10 +8146,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7281,10 +8212,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7339,10 +8278,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7397,10 +8344,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7459,10 +8414,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7521,10 +8484,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7583,10 +8554,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7645,10 +8624,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7707,10 +8694,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7769,10 +8764,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7831,10 +8834,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7898,10 +8909,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -7965,10 +8984,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -8034,10 +9061,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -8104,10 +9139,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -8162,10 +9205,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -8257,10 +9308,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -8321,10 +9380,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -8385,10 +9452,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -8470,10 +9545,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -8597,10 +9680,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -8655,10 +9746,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -8713,10 +9812,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -8771,10 +9878,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -8829,10 +9944,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -8887,10 +10010,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -8945,10 +10076,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9003,10 +10142,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9061,10 +10208,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9119,10 +10274,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9177,10 +10340,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9235,10 +10406,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9294,10 +10473,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9352,10 +10539,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9410,10 +10605,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9468,10 +10671,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9526,10 +10737,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9584,10 +10803,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9642,10 +10869,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9700,10 +10935,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9758,10 +11001,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9816,10 +11067,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9874,10 +11133,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9932,10 +11199,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -9990,10 +11265,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -10050,10 +11333,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -10129,10 +11420,18 @@
         "id": "module.review_map",
         "version": 1
       },
-      "timing": [
-        "review",
-        "analysis"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host",
@@ -10212,10 +11511,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -10269,10 +11576,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -10326,10 +11641,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -10389,10 +11712,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -10452,10 +11783,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -10537,10 +11876,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -10622,10 +11969,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -10707,10 +12062,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -10792,10 +12155,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -10877,10 +12248,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -10962,10 +12341,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -11047,10 +12434,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -11132,10 +12527,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -11217,10 +12620,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -11280,10 +12691,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -11365,10 +12784,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -11450,10 +12877,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -11535,10 +12970,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -11620,10 +13063,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -11705,10 +13156,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -11790,10 +13249,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -11875,10 +13342,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -11937,9 +13412,16 @@
         "id": "module.structure_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12027,9 +13509,16 @@
         "id": "module.structure_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12106,9 +13595,16 @@
         "id": "module.structure_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12162,9 +13658,16 @@
         "id": "module.structure_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12219,9 +13722,16 @@
         "id": "module.structure_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12276,9 +13786,16 @@
         "id": "module.structure_nudge",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12366,9 +13883,16 @@
         "id": "module.theory_breadcrumb",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12453,9 +13977,16 @@
         "id": "module.theory_breadcrumb",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12512,9 +14043,16 @@
         "id": "module.theory_breadcrumb",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12602,9 +14140,17 @@
         "id": "module.threat_radar",
         "version": 1
       },
-      "timing": [
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12662,10 +14208,18 @@
         "id": "module.threat_radar",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12719,10 +14273,18 @@
         "id": "module.threat_radar",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12776,10 +14338,18 @@
         "id": "module.threat_radar",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12840,10 +14410,18 @@
         "id": "module.threat_radar",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12898,10 +14476,18 @@
         "id": "module.threat_radar",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -12961,10 +14547,18 @@
         "id": "module.threat_radar",
         "version": 1
       },
-      "timing": [
-        "precommit",
-        "postcommit"
-      ],
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_operation"
+      },
       "roles": [
         "learner",
         "host"
@@ -13013,5 +14607,5 @@
       }
     }
   ],
-  "digest": "sha256:0a1e3e8a003f5dc7595f7754242121cddd7659e16a9b9979b5988fced32331f9"
+  "digest": "sha256:1203774f80d2a55d56da3aaf1d7fa2b53b254bcb19f2475f175c5dd331d9660e"
 }
