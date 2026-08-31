@@ -1,11 +1,13 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **third author repair complete 2026-08-31 on [[D2227]]–[[D2232]],
-  awaiting a third fresh independent review.** The repair carries `unclear` end-to-end, restores
+- **Status:** draft — **RETURNED by the third fresh independent review 2026-08-31 on
+  [[D2402]]–[[D2406]].** The D2227–D2232 repair carries `unclear` end-to-end, restores
   the event projector to the normative fold, adds renewable immediately-executable leases,
   derives complete history from eligible runs, makes upgrade reconciliation mandatory, and binds
   every learner row to the durable run owner. `make longitudinal-store-author-contract` exercises
-  24 author arms. Implementation remains forbidden pending fresh review. The
+  24 author arms, but revision reset, exact-cut reads, request-thread isolation, shared structure
+  provenance and permanent-failure scheduling remain unbuildable. Implementation remains
+  forbidden pending author repair and another fresh review. The
   2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
   returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
@@ -598,6 +600,26 @@ The six second-return rows are author-repaired as one coherent store boundary:
 `make longitudinal-store-author-contract` is the executable author checkpoint. The historical
 second-review harness is expected to invert after this repair and is not a completion gate. A new
 fresh independent review is still mandatory before implementation.
+
+## Third fresh independent return (2026-08-31)
+
+The D2227–D2232 repair survives, but fresh application to the complete operation returns five new
+seams. Exact evidence and executable reproductions are in
+`planning/longitudinal-store/third-fresh-independent-buildability-review-2026-08-31.md`.
+
+1. **[[D2402]]:** wrong-revision reconciliation changes an integer without specifying how complete,
+   running or failed jobs and prior rows become pending/current safely.
+2. **[[D2403]]:** caller-supplied historical cuts outlive the only row set that replacement storage
+   retains, with no cut-mismatch result.
+3. **[[D2404]]:** the 47.29-second synchronous projector is composed in the HTTP process with no
+   isolation/yield or event-loop responsiveness criterion.
+4. **[[D2405]]:** shared-run structure events bypass owner authorship and become learner-keyed facts.
+5. **[[D2406]]:** every failed job is immediately retryable forever, including permanently invalid
+   snapshots.
+
+`make longitudinal-store-third-fresh-review` passes 5/5 as a blocker reproduction. No migration,
+worker, reader, consumer or content implementation is authorized until an author repair inverts
+these controls and another fresh independent review passes.
 
 ### F. Acceptance criteria
 
@@ -1407,6 +1429,11 @@ head after that renumbering and **not yet written**:
   composite foreign keys bind every child row to the run owner. The author contract passes 24
   arms. Exact receipt: `planning/longitudinal-store/third-author-repair-2026-08-31.md`. Fresh
   independent review still gates acceptance and implementation.
+- 2026-08-31: third fresh independent review returned the repair on [[D2402]]–[[D2406]]: revision
+  reset can relabel old rows; historical cut reads exceed replacement storage; synchronous
+  projection can block the HTTP event loop and its heartbeat; shared structure events have no
+  learner attribution; and permanent failures retry without bound. Exact review:
+  `planning/longitudinal-store/third-fresh-independent-buildability-review-2026-08-31.md`.
 - 2026-08-22: adversarial cross-review (claude, independent of the author). Blockers
   fixed in place: (1) `decision_class ∈ {played, game, predicted}` added to the
   observation key with owner-only attribution derived from the durable session

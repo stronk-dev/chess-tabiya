@@ -13161,3 +13161,25 @@ The existing bootstrap author targets now cover the third handoff and four-kind 
 still author work: independent review, process acceptance/implementation and the subsequent product
 claim all remain required. No checker, register, runtime attribution, citation, schema, content,
 API or UX implementation was authorized.
+## 2026-08-31 — longitudinal store third fresh review returns the operation boundary
+
+**What landed:** independently re-applied the D2227–D2232 third author repair to revision changes,
+replacement-cut reads, the Node execution model, shared-run structure provenance and permanent
+failure. The six repaired properties survive, but five new blockers are now recorded as
+[[D2402]]–[[D2406]]. `make longitudinal-store-third-fresh-review` passes 5/5 and demonstrates each
+failure from a positive control: revision reconciliation can change the revision without resetting
+completion; a caller can request a cut the latest-only tables cannot retain; the measured
+47.29-second synchronous projector is composed in the HTTP process without isolation or a yield
+budget; shared runs emit learner-keyed structure rows even when every move belongs to another
+learner; and `snapshot_invalid` is immediately retryable forever.
+
+**What changed:** `rfc/longitudinal-store.md` and its register row are returned, not accepted or
+implementing. The v1 roadmap now carries the return in both foundation-contracts and
+durable-product-state, so the 24-arm author checkpoint cannot masquerade as milestone movement.
+Exact review:
+`planning/longitudinal-store/third-fresh-independent-buildability-review-2026-08-31.md`.
+
+**Blocked/next:** no longitudinal migration, worker, reader or consumer implementation before one
+author round specifies exact revision reset, truthful cut semantics, isolated/bounded execution,
+shared structure attribution and bounded failure recovery, followed by another fresh independent
+review.

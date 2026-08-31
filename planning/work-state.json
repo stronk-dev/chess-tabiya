@@ -18967,6 +18967,51 @@
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2402",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f16c3110b418e9364ab2f4f660b49cdb575a28ddad79bd6e23d9915e7a10e5c1",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2403",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:15d17685f400979e31ebc61d9aeebf85c92d4a93455f870ff3494eba18fc33df",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2404",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e8d986ab662624c0b39161b0e1707045ae1d2095c4c188e4bc5113e7a124d34f",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2405",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e22ed4f2db5a892eab9afbcc6fab26547dfe77155cd5d571233649dc90413eaf",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2406",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:cbad1b81ae5e9006dfea68dc0633842bff0c4f86e709e1b0336f8c3511747d60",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
     }
   ]
 }
