@@ -42,6 +42,10 @@ membership from one artifact identity. Invalid input returns `400 INVALID_REQUES
 invalid, or digest-mismatched artifact does not stop the server: the endpoint returns typed
 abstentions and `/capabilities` reports the exact producer failure.
 
+The production operation validates the ply and normalizes the FEN once, then reads both immutable
+maps. Individual endpoint and membership methods remain available for consumers that need only one
+projection.
+
 ## Honesty boundaries
 
 - Exact endpoint absence does not mean “out of book.”

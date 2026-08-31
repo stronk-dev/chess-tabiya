@@ -12,6 +12,8 @@ Start with:
 - [Extending Tabiya](extending.md) — where code/content changes belong and their integration checks.
 - [Development foundation](development.md) — toolchain, workspace and commands.
 - [Testing](testing.md) — verification tiers and what each tier proves.
+- [1.0 progress tracking](progress-tracking.md) — strict gates, incremental checkpoints, the sealed
+  receipt and staged implementation flow-back.
 
 Current completion state is deliberately not copied here. Use the
 [authoritative 1.0 roadmap](../planning/roadmap-to-done.md) and its

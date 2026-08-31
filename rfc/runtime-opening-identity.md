@@ -3,6 +3,8 @@
 - **Status:** **awaiting D1/D2 — implementation complete 2026-08-24 at `44637013`.** The pinned
   compiler, canonical artifact, strict loader, four inspector-only projections, exact HTTP route,
   typed capability failure, deterministic renderers, and production-image boundary are green.
+  The 2026-08-31 [[D2376]] repair makes the paired production lookup normalize one FEN once and
+  keeps criterion 14 on the unchanged 50 µs budget rather than measuring two independent calls.
   D1 retains learner-facing theory/Review/module bindings; D2 retains the F12 rights inventory.
 - **Acceptance history:** accepted — 2026-08-23, by claude as register owner on the buildability test, after an
   independent cross-review that re-derived 22 claims and failed 2, both corrected in place. **The
@@ -491,7 +493,8 @@ move.
     `vendor/chess-openings/<commit>/` tree is a build input and is asserted **present in the repo
     and absent from the image** by `tools/verify-packaging.mjs`; the two halves are separate
     assertions, since §1.1 requires the files to exist and this criterion requires them not to ship.
-14. **Performance:** after load, both current lookups complete synchronously under **50 µs p95** over
+14. **Performance:** after load, the [[D2376]] production pair computes one canonical position key
+    and both current lookups complete synchronously under **50 µs p95** over
     all 6,991 fixed imported positions (the same committed corpus as criterion 7; its ply bands sum
     to 6,991 and its named-endpoint column to 401 at
     `design/research/runtime-opening-identity.md:64-69`) on the existing CI runner; artifact load and map construction
@@ -526,6 +529,8 @@ move.
 
 ## Changelog
 
+- 2026-08-31: [[D2376]] repaired the paired production lookup and performance fixture without
+  changing its projections, response bytes or latency budget.
 - 2026-08-23: initial draft from the completed D894 instrument and Semantic Collectors D3.
 - 2026-08-23 implementation return: corrected the `b.tsv` SHA-256 authority in the referenced D894
   README after a fresh fetch from the exact pinned commit disagreed with the accepted transcription.

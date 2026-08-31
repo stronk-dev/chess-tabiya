@@ -4,8 +4,9 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseActiveRecords } from "./status-parity.mjs";
 
-const SOURCE_PATHS = Object.freeze({
+export const SOURCE_PATHS = Object.freeze({
   roadmap: "planning/roadmap-1.0.json",
   workItems: "planning/work-items-1.0.json",
   rfcRegister: "rfc/README.md",
@@ -33,6 +34,10 @@ export function buildRoadmapReceipt(sources) {
   const routeStates = ["live", "live_but_inadequate", "missing"];
   const apiStates = ["live", "live_direct", "implemented_but_unreachable", "missing"];
   const assignedRfcs = new Set(roadmap.capabilities.flatMap((capability) => capability.rfcs));
+  const activeRfcLifecycle = counts(
+    parseActiveRecords(sources.rfcRegister).map((record) => record.status.token),
+    ["draft", "accepted", "implementing", "awaiting", "implemented", "superseded", "withdrawn"],
+  );
 
   const capabilities = roadmap.capabilities.map((capability) => {
     const ownedItems = workItems.filter((item) => item.capability === capability.id);
@@ -52,13 +57,14 @@ export function buildRoadmapReceipt(sources) {
   });
 
   return {
-    schemaVersion: 1,
+    schemaVersion: roadmap.schemaVersion,
     authority: roadmap.authority,
     sourceDigests: Object.fromEntries(Object.entries(SOURCE_PATHS).map(([name]) => [name, digest(sources[name])])),
     summary: {
       capabilities: roadmap.capabilities.length,
       releaseClasses: counts(roadmap.capabilities.map((capability) => capability.release), ["core", "breadth", "post_1_0"]),
       assignedRfcs: assignedRfcs.size,
+      activeRfcLifecycle,
       workItems: counts(workItems.map((item) => item.state), workItemStates),
       dimensionStates: counts(
         roadmap.capabilities.flatMap((capability) => roadmap.definitionOfDone.map((dimension) => capability.completion[dimension][0])),
@@ -74,6 +80,7 @@ export function buildRoadmapReceipt(sources) {
       capabilities: milestone.capabilities,
       dependsOn: milestone.dependsOn,
       nextAction: milestone.nextAction,
+      latestCheckpoint: milestone.latestCheckpoint,
       exit: milestone.exit,
     })),
     capabilities,

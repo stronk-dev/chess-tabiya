@@ -90,6 +90,7 @@ export type DeepestOpeningReached =
 export interface CompiledOpeningCatalogue {
   readonly artifact: RuntimeOpeningCatalogue;
   readonly ref: OpeningCatalogueRef;
+  openingIdentity(fen: string, observedPly: number): { readonly currentEndpoint: CurrentOpeningEndpoint; readonly catalogueMembership: OpeningCatalogueMembership };
   currentEndpoint(fen: string, observedPly: number): CurrentOpeningEndpoint;
   catalogueMembership(fen: string, observedPly: number): OpeningCatalogueMembership;
 }
@@ -195,24 +196,38 @@ export function compileLoadedOpeningCatalogue(value: unknown): CompiledOpeningCa
   const artifact = value as unknown as RuntimeOpeningCatalogue;
   const catalogueRef = Object.freeze({ sourceId: OPENING_SOURCE_ID, commit: CHESS_OPENINGS_COMMIT, artifactDigest: digest });
   const observed = (ply: number): void => { if (!Number.isSafeInteger(ply) || ply < 0) throw new TypeError("observedPly must be a non-negative safe integer"); };
+  const currentEndpointFor = (positionKey: string, observedPly: number): CurrentOpeningEndpoint => {
+    const found = endpoints.get(positionKey);
+    return found === undefined
+      ? Object.freeze({ kind: "absent", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.currentEndpoint, positionKey, observedPly, reason: "no_named_endpoint", catalogue: catalogueRef })
+      : Object.freeze({ kind: "matched", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.currentEndpoint, positionKey, observedPly, eco: found.eco, name: found.name, sourcePly: found.sourcePly, catalogue: catalogueRef });
+  };
+  const catalogueMembershipFor = (positionKey: string, observedPly: number): OpeningCatalogueMembership => {
+    const count = members.get(positionKey);
+    return count === undefined
+      ? Object.freeze({ kind: "absent", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.catalogueMembership, positionKey, observedPly, reason: "no_catalogue_path", catalogue: catalogueRef })
+      : Object.freeze({ kind: "member", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.catalogueMembership, positionKey, observedPly, descendantEndpointCount: count, catalogue: catalogueRef });
+  };
   return Object.freeze({
     artifact,
     ref: catalogueRef,
+    openingIdentity(fen: string, observedPly: number) {
+      observed(observedPly);
+      const positionKey = transposeKey(fen);
+      return Object.freeze({
+        currentEndpoint: currentEndpointFor(positionKey, observedPly),
+        catalogueMembership: catalogueMembershipFor(positionKey, observedPly),
+      });
+    },
     currentEndpoint(fen: string, observedPly: number): CurrentOpeningEndpoint {
       observed(observedPly);
       const positionKey = transposeKey(fen);
-      const found = endpoints.get(positionKey);
-      return found === undefined
-        ? Object.freeze({ kind: "absent", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.currentEndpoint, positionKey, observedPly, reason: "no_named_endpoint", catalogue: catalogueRef })
-        : Object.freeze({ kind: "matched", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.currentEndpoint, positionKey, observedPly, eco: found.eco, name: found.name, sourcePly: found.sourcePly, catalogue: catalogueRef });
+      return currentEndpointFor(positionKey, observedPly);
     },
     catalogueMembership(fen: string, observedPly: number): OpeningCatalogueMembership {
       observed(observedPly);
       const positionKey = transposeKey(fen);
-      const count = members.get(positionKey);
-      return count === undefined
-        ? Object.freeze({ kind: "absent", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.catalogueMembership, positionKey, observedPly, reason: "no_catalogue_path", catalogue: catalogueRef })
-        : Object.freeze({ kind: "member", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.catalogueMembership, positionKey, observedPly, descendantEndpointCount: count, catalogue: catalogueRef });
+      return catalogueMembershipFor(positionKey, observedPly);
     },
   });
 }
@@ -235,7 +250,7 @@ export function openingIdentityAt(availability: OpeningCatalogueAvailability, fe
     currentEndpoint: Object.freeze({ kind: "abstained", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.currentEndpoint, reason: availability.reason }),
     catalogueMembership: Object.freeze({ kind: "abstained", projectionId: OPENING_CATALOGUE_PROJECTION_IDS.catalogueMembership, reason: availability.reason }),
   });
-  return Object.freeze({ currentEndpoint: availability.catalogue.currentEndpoint(fen, observedPly), catalogueMembership: availability.catalogue.catalogueMembership(fen, observedPly) });
+  return availability.catalogue.openingIdentity(fen, observedPly);
 }
 
 export function recordedOpeningPosition(nodeId: string, ply: number, fen: string): RecordedPosition {

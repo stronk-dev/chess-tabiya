@@ -352,16 +352,20 @@
     {
       "id": "A11-a27",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.7 fallout-5",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "Rotating an iPad to landscape shrinks the board 96px because the desktop branch subtracts the rail",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:b2a347f2681b14e9477b43903b59b202a1e791cbb4f45fc662a39550096d8283"
+      "sourceDigest": "sha256:b2a347f2681b14e9477b43903b59b202a1e791cbb4f45fc662a39550096d8283",
+      "completion": {
+        "completedOn": "2026-08-31",
+        "evidence": "play-composition uses one shared closed-form geometry authority at all seven projections; the board rect stays byte-equal across companion switches and post-gesture states, including the tablet landscape projection"
+      }
     },
     {
       "id": "A11-a28",

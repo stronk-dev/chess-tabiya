@@ -45,8 +45,7 @@ describe("runtime opening catalogue performance", () => {
           const started = performance.now();
           for (const [batchIndex, fen] of batch.entries()) {
             const observedPly = offset + batchIndex;
-            loaded.catalogue.currentEndpoint(fen, observedPly);
-            loaded.catalogue.catalogueMembership(fen, observedPly);
+            loaded.catalogue.openingIdentity(fen, observedPly);
           }
           // A single-call microbenchmark measures scheduler and timer jitter as much as
           // catalogue work on shared CI runners. Each sample remains a per-position
@@ -57,7 +56,8 @@ describe("runtime opening catalogue performance", () => {
       return percentile(values, 0.95);
     };
     const fullP95Us = measure(positions);
-    // This runs 55,928 lookup pairs against the complete production maps. The former
+    console.info(`OPENING_CATALOGUE_PERFORMANCE ${JSON.stringify({ loadMs, fullP95Us, positions: positions.length, repetitions: 8 })}`);
+    // This runs 55,928 combined production lookups against the complete production maps. The former
     // "size scaling" ratio compared two query-set lengths against these same maps, so
     // it measured query mix and timer noise rather than catalogue population size.
     // The full-population absolute budget is the product contract and remains unchanged.

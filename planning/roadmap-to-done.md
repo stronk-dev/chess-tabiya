@@ -54,12 +54,15 @@ make work-item-check
 make status-parity
 make register-check
 make roadmap-check
+make roadmap-progress
 ```
 
 `make roadmap-receipt` deliberately updates the checked status artefact; ordinary verification
 never rewrites it. `make roadmap-check` fails when any joined source changes without the receipt,
 so a release/status report cannot silently survive changed milestones, RFC ownership, routes,
-API reach or item assignments.
+API reach or item assignments. `make roadmap-progress` prints the current sealed milestone
+checkpoints, strict capability dimensions, RFC lifecycle and persistent UX-work counts without a
+hand-copied snapshot.
 
 ## What “full” means
 
@@ -84,9 +87,10 @@ impossible.
 
 ## Capability inventory
 
-The machine map assigns all 46 active product RFCs, all twelve UX dossiers, all 569 stable UX item
-ids, every client route, and every declared API family. A new active RFC, dossier, item prefix, or
-route fails `make roadmap-check` until it has an owner.
+The machine map is set-equal to the active product RFC register, every UX dossier and stable UX
+item id, every client route, and every declared API family. The exact live counts come from
+`make roadmap-progress`; they are not copied here. A new active RFC, dossier, item prefix, or route
+fails `make roadmap-check` until it has an owner.
 
 ### 1. Work truth, measurement, and release accounting
 
@@ -440,9 +444,10 @@ with the actual affected islands rather than a directionless integer.
 
 <!-- roadmap-capability: rehearsal -->
 
-**State: runtime proven, journey partial.** Commit, consequence, rewind, fork, compare, replay,
-resume, leases, pack-optional play, and training forms are real. First-run teaching, phase-first
-catalogue, board-stable layout, consequence horizon, branch intent, compare alignment,
+**State: runtime and stable board shell proven; journey partial.** Commit, consequence, rewind,
+fork, compare, replay, resume, leases, pack-optional play, training forms, stable board geometry and
+the one-expanded structural companion queue are real. First-run teaching, phase-first catalogue,
+module-backed consequence guidance, branch intent, complete compare alignment,
 replay-at-another-band, and opinionated entry are not one finished experience.
 
 **1.0 exit:** a new learner experiences the thesis on rails over real content; Just Play,
@@ -457,10 +462,12 @@ Primary RFCs: `play-composition`, `pack-training-forms`. UX owners: ARR and CLP 
 
 <!-- roadmap-capability: support -->
 
-**State: contracts in flight, ordinary UX missing.** The goal is not rated engine moves. Modules
+**State: stable composition shipped; evidence-backed ordinary UX missing.** The goal is not rated engine moves. Modules
 translate selected evidence at controlled disclosure distance: theory breadcrumb, pattern,
 relevant square/piece, threat/defence relation, prevention highlight, or an explicit move only when
-the workflow permits. Raw engine/Maia/explorer/classifier facts belong in an opt-in inspector.
+the workflow permits. The board/companion shell now provides stable seats, but the eleven typed
+modules, preset-driven activation and their honest-empty paths do not yet inhabit them. Raw
+engine/Maia/explorer/classifier facts belong in an opt-in inspector.
 
 **1.0 exit:** Quiet, Guided, Support, Drill, Review, Campaign, Academy and Stream open with useful
 defaults and promises; module doors name learner questions; one unasked interrupter may claim
@@ -776,10 +783,11 @@ Two researched scope decisions now sit in this capability rather than outside th
 
 <!-- roadmap-capability: accessibility -->
 
-**State: board input repaired; full client floor not met.** Shared controller, permanent cells,
-input modes, semantic grid and themes are real. The app still has dead shortcuts, focus/skip
-issues, unsupported devices, overflow, post-gesture failures, weak contrast/animation instruments,
-and a layout where panels stack around or resize the board. A manifest is not offline/update UX.
+**State: board input and in-run composition repaired; full client floor not met.** Shared
+controller, permanent cells, input modes, semantic grid, themes, stable board geometry and
+responsive in-run companion regions are real. The app still has route-wide dead shortcuts,
+focus/skip issues, unsupported devices, overflow, post-gesture gaps, weak contrast/animation
+instruments, and no coherent PWA/offline/update journey.
 
 **1.0 exit:** board occupies one stable region; nothing grows in its column; adjacent regions
 scroll and become drawers/tabs on small screens; every route works with pointer, touch, keyboard,
@@ -895,9 +903,11 @@ This is dependency order, not a single-thread rule. Parallel work is welcome whe
 an unaccepted contract or claimed resource/migration lane.
 
 The machine map now carries nine guarded dependency milestones, each with a current state, exact
-next action, dependencies, capability coverage and exit. `make roadmap-check` refuses an unknown
-dependency, a cycle, a missing exit/action, or any 1.0 capability absent from that graph. The
-readable spine is:
+next action, latest evidence-backed checkpoint, dependencies, capability coverage and exit.
+`make roadmap-check` refuses an unknown dependency, a cycle, missing checkpoint evidence, a
+missing exit/action, or any 1.0 capability absent from that graph. Staged product+RFC checkpoints
+must update the roadmap and receipt and name their RFC in the changed checkpoint. The readable
+spine is:
 
 | Order | Milestone | Outcome |
 |---:|---|---|

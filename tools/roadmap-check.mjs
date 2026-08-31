@@ -21,6 +21,7 @@ const DIMENSION_STATES = new Set(["proven", "partial", "blocked", "broken", "mis
 const ROUTE_STATES = new Set(["live", "live_but_inadequate", "missing"]);
 const API_STATES = new Set(["live", "live_direct", "implemented_but_unreachable", "missing"]);
 const MILESTONE_STATES = new Set(["active", "implementing", "queued", "blocked_contract", "blocked_foundation", "complete"]);
+const CHECKPOINT_IMPACTS = new Set(["advanced", "held", "regressed"]);
 
 const sameSet = (left, right) =>
   left.size === right.size && [...left].every((value) => right.has(value));
@@ -54,6 +55,7 @@ export function parseUxItemIds(source) {
 
 export function validateRegistry(registry, context) {
   const errors = [];
+  if (registry.schemaVersion !== 2) errors.push("schemaVersion must be 2");
   if (registry.workItemRegistry !== "planning/work-items-1.0.json") {
     errors.push("workItemRegistry must name planning/work-items-1.0.json");
   }
@@ -70,6 +72,32 @@ export function validateRegistry(registry, context) {
     if (!Number.isInteger(milestone.wave) || milestone.wave < 0) errors.push(`${milestone.id}: invalid execution wave`);
     if (!MILESTONE_STATES.has(milestone.state)) errors.push(`${milestone.id}: invalid milestone state ${milestone.state}`);
     if (!milestone.nextAction?.trim() || !milestone.exit?.trim()) errors.push(`${milestone.id}: nextAction and exit are required`);
+    const checkpoint = milestone.latestCheckpoint;
+    if (!checkpoint || typeof checkpoint !== "object") {
+      errors.push(`${milestone.id}: latestCheckpoint is required`);
+    } else {
+      const parsedCheckpointDate = new Date(`${checkpoint.at}T00:00:00Z`);
+      if (!/^\d{4}-\d{2}-\d{2}$/u.test(checkpoint.at ?? "")
+        || Number.isNaN(parsedCheckpointDate.valueOf())
+        || parsedCheckpointDate.toISOString().slice(0, 10) !== checkpoint.at) {
+        errors.push(`${milestone.id}: latestCheckpoint.at must be a real YYYY-MM-DD date`);
+      }
+      if (!checkpoint.summary?.trim()) errors.push(`${milestone.id}: latestCheckpoint.summary is required`);
+      if (!CHECKPOINT_IMPACTS.has(checkpoint.impact)) errors.push(`${milestone.id}: invalid latestCheckpoint impact ${checkpoint.impact}`);
+      if (!Array.isArray(checkpoint.evidence) || checkpoint.evidence.length === 0) {
+        errors.push(`${milestone.id}: latestCheckpoint.evidence must be non-empty`);
+      } else {
+        for (const reference of checkpoint.evidence) {
+          const file = typeof reference === "string" ? reference.split("#", 1)[0] : "";
+          if (!file || path.isAbsolute(file) || file.split("/").includes("..")) {
+            errors.push(`${milestone.id}: invalid checkpoint evidence ${JSON.stringify(reference)}`);
+          } else if (context.evidenceExists && !context.evidenceExists(file)) {
+            errors.push(`${milestone.id}: checkpoint evidence does not exist: ${file}`);
+          }
+        }
+        for (const reference of duplicates(checkpoint.evidence)) errors.push(`${milestone.id}: duplicate checkpoint evidence ${reference}`);
+      }
+    }
     for (const capability of milestone.capabilities ?? []) {
       if (!capabilitySet.has(capability)) errors.push(`${milestone.id}: unknown capability ${capability}`);
       executionCoverage.add(capability);
@@ -195,6 +223,7 @@ export function main(root = process.cwd()) {
     clientRoutes: parseClientRoutes(read("apps/web/src/lib/router.ts")),
     application: read("apps/server/src/application.ts"),
     rest: read("apps/server/src/rest.ts"),
+    evidenceExists: (relative) => fs.existsSync(path.join(root, relative)),
   });
   if (result.errors.length > 0) {
     console.error(`roadmap-check failed:\n- ${result.errors.join("\n- ")}`);

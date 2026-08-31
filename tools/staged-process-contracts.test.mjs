@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 
-import { assertStagedLogsAppendOnly, materializeGitIndex, PROCESS_CONTRACT_TARGETS } from "./staged-process-contracts.mjs";
+import { assertStagedLogsAppendOnly, assertStagedRoadmapFlowback, materializeGitIndex, PROCESS_CONTRACT_TARGETS } from "./staged-process-contracts.mjs";
 
 function committedRepository(context) {
   const root = mkdtempSync(path.join(tmpdir(), "tabiya-log-fixture-"));
@@ -71,4 +71,48 @@ test("refuses deleting an append-only log", (context) => {
   rmSync(log);
   execFileSync("git", ["add", "planning/exploration/log.md"], { cwd: root });
   assert.throws(() => assertStagedLogsAppendOnly(root), /cannot be removed/u);
+});
+
+function roadmapFlowbackRepository(context) {
+  const root = mkdtempSync(path.join(tmpdir(), "tabiya-roadmap-flowback-fixture-"));
+  context.after(() => rmSync(root, { recursive: true, force: true }));
+  execFileSync("git", ["init", "--quiet"], { cwd: root });
+  execFileSync("git", ["config", "user.email", "test@example.invalid"], { cwd: root });
+  execFileSync("git", ["config", "user.name", "Test"], { cwd: root });
+  for (const directory of ["apps/web/src", "rfc", "planning"]) mkdirSync(path.join(root, directory), { recursive: true });
+  writeFileSync(path.join(root, "apps/web/src/feature.ts"), "export const value = 1;\n");
+  writeFileSync(path.join(root, "rfc/feature.md"), "# Feature\n");
+  writeFileSync(path.join(root, "rfc/README.md"), "## Active\n\n| RFC | Status | Parent | Implementation |\n|---|---|---|---|\n| `feature.md` | **implementing** | — | — |\n\n## Archive\n");
+  const roadmap = { executionPlan: { milestones: [{ id: "feature", latestCheckpoint: { at: "2026-08-30", summary: "old", impact: "held", evidence: ["rfc/feature.md"] } }] } };
+  writeFileSync(path.join(root, "planning/roadmap-1.0.json"), `${JSON.stringify(roadmap)}\n`);
+  writeFileSync(path.join(root, "planning/roadmap-1.0.receipt.json"), "{}\n");
+  execFileSync("git", ["add", "."], { cwd: root });
+  execFileSync("git", ["commit", "--quiet", "-m", "baseline"], { cwd: root });
+  return { root, roadmap };
+}
+
+test("requires a changed grounded checkpoint for staged product plus active RFC work", (context) => {
+  const { root, roadmap } = roadmapFlowbackRepository(context);
+  writeFileSync(path.join(root, "apps/web/src/feature.ts"), "export const value = 2;\n");
+  writeFileSync(path.join(root, "rfc/feature.md"), "# Feature\n\ncheckpoint\n");
+  execFileSync("git", ["add", "apps/web/src/feature.ts", "rfc/feature.md"], { cwd: root });
+  assert.throws(() => assertStagedRoadmapFlowback(root), /must also stage planning\/roadmap-1\.0\.json/u);
+
+  roadmap.executionPlan.milestones[0].latestCheckpoint = { at: "2026-08-31", summary: "new", impact: "advanced", evidence: ["docs/missing.md"] };
+  writeFileSync(path.join(root, "planning/roadmap-1.0.json"), `${JSON.stringify(roadmap)}\n`);
+  writeFileSync(path.join(root, "planning/roadmap-1.0.receipt.json"), "{\"changed\":true}\n");
+  execFileSync("git", ["add", "planning/roadmap-1.0.json", "planning/roadmap-1.0.receipt.json"], { cwd: root });
+  assert.throws(() => assertStagedRoadmapFlowback(root), /do not name staged RFC evidence rfc\/feature\.md/u);
+
+  roadmap.executionPlan.milestones[0].latestCheckpoint.evidence = ["rfc/feature.md"];
+  writeFileSync(path.join(root, "planning/roadmap-1.0.json"), `${JSON.stringify(roadmap)}\n`);
+  execFileSync("git", ["add", "planning/roadmap-1.0.json"], { cwd: root });
+  assert.deepEqual(assertStagedRoadmapFlowback(root), ["feature"]);
+});
+
+test("ignores another worker's unstaged implementation bytes", (context) => {
+  const { root } = roadmapFlowbackRepository(context);
+  writeFileSync(path.join(root, "apps/web/src/feature.ts"), "export const value = 2;\n");
+  writeFileSync(path.join(root, "rfc/feature.md"), "# Feature\n\nunstaged\n");
+  assert.deepEqual(assertStagedRoadmapFlowback(root), []);
 });

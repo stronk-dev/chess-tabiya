@@ -12908,3 +12908,24 @@ than exposing raw UCI. `make test-software` passes 1,097/1,097 and `make test-br
 one optional Maia latency probe skipped. The RFC remains implementing: 77/112 screenshot cells are
 real; the remaining 35 are the five module-emission states, and the eleven compiled module seats,
 fact badges and D924 Inspector bindings remain blocked on the returned module-registration chain.
+
+## 2026-08-31 — Roadmap progress flow-back and opening performance repair
+
+The sealed roadmap now distinguishes strict 1.0 gates from incremental delivery. All nine
+milestones carry a dated, evidence-backed checkpoint; `make roadmap-progress` derives milestone,
+capability-dimension, RFC-lifecycle and persistent UX-work counts from joined sources. The
+stable-board shell is recorded as shipped and its milestone is active, while the eleven learner
+modules, presets and emitter-dependent matrix cells remain explicitly open.
+
+The staged process check now refuses a product implementation that also edits an active RFC unless
+the roadmap and receipt are staged, a milestone checkpoint changed, and the checkpoint evidence
+names every staged RFC. Negative fixtures reproduce the exact `24bda670` escape and prove another
+worker's unstaged files cannot trigger or satisfy the rule.
+
+The first full verification pass exposed the recurring opening-catalogue 50 µs failure at 117.7 µs
+p95. The threshold was not raised. The production endpoint/membership pair now validates the ply
+and normalizes one FEN once before reading both immutable maps; individual projection methods remain.
+The performance test measures that combined production operation, and the compiler artifact was
+regenerated because its source closure changed. Final `make verify` passes 1,097 software tests,
+both isolated performance contracts, all governance/build checks and 172 content tests. D2375 and
+D2376 close; `roadmap-progress-flowback` archives with canonical docs.

@@ -9,13 +9,14 @@ const dimensions = Object.fromEntries([
 
 const sources = {
   roadmap: JSON.stringify({
+    schemaVersion: 2,
     authority: "planning/roadmap-to-done.md",
     definitionOfDone: Object.keys(dimensions),
     capabilities: [
       { id: "one", name: "One", release: "core", owner: "a", rfcs: ["a.md"], completion: dimensions },
       { id: "two", name: "Two", release: "breadth", owner: "b", rfcs: ["b.md"], completion: dimensions },
     ],
-    executionPlan: { milestones: [{ id: "first", wave: 0, state: "active", capabilities: ["one", "two"], dependsOn: [], nextAction: "act", exit: "exit" }] },
+    executionPlan: { milestones: [{ id: "first", wave: 0, state: "active", capabilities: ["one", "two"], dependsOn: [], nextAction: "act", latestCheckpoint: { at: "2026-08-31", summary: "advanced", impact: "advanced", evidence: ["rfc/a.md"] }, exit: "exit" }] },
     appRoutes: [["home", "one", "live"], ["campaign", "two", "missing"]],
     apiFamilies: [["/runs", "one", "live"], ["/campaigns", "two", "missing"]],
   }),
@@ -23,7 +24,7 @@ const sources = {
     { id: "ONE-a1", capability: "one", state: "queued" },
     { id: "TWO-d1", capability: "two", state: "completed" },
   ] }),
-  rfcRegister: "register",
+  rfcRegister: "## Active\n\n| RFC | Status | Parent | Implementation |\n|---|---|---|---|\n| `a.md` | **draft** | — | — |\n| `b.md` | **accepted** | — | — |\n\n## Archive\n",
   uxIndex: "index",
   router: "router",
   application: "application",
@@ -38,6 +39,8 @@ test("builds a deterministic vertical status receipt", () => {
   assert.equal(receipt.capabilities[0].workItems.queued, 1);
   assert.equal(receipt.capabilities[1].apiFamilies.missing, 1);
   assert.equal(receipt.milestones[0].nextAction, "act");
+  assert.equal(receipt.milestones[0].latestCheckpoint.summary, "advanced");
+  assert.deepEqual(receipt.summary.activeRfcLifecycle, { draft: 1, accepted: 1, implementing: 0, awaiting: 0, implemented: 0, superseded: 0, withdrawn: 0 });
 });
 
 test("distinguishes source drift from derived-status corruption", () => {

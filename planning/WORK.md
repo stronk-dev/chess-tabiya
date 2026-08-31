@@ -17,6 +17,10 @@ Do not copy counts from these registers into a new queue. Run the checks. A row 
 the same as being assigned, and an RFC being implemented is not the same as its capability being
 complete.
 
+For a current 1.0 status update, run `make roadmap-progress`. It reports strict release-gate states
+and incremental checkpoints separately, so a shipped foundation slice remains visible without
+being misreported as a completed learner capability.
+
 ## Taking work
 
 1. Pick the next lawful item from the capability wave in `roadmap-to-done.md`.

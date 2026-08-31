@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "workItemRegistry": "planning/work-items-1.0.json",
   "definitionOfDone": [
@@ -77,7 +77,7 @@
         "evidence": ["partial", "The loop can consume grounded evidence without becoming an engine review screen."],
         "state": ["proven", "Immutable run graph, forks, rewinds, comparisons, leases, and pack-optional runs survive resume."],
         "api": ["partial", "All run actions are reachable through the production application and carry typed errors."],
-        "experience": ["partial", "A first-time learner can start, understand the consequence horizon, finish, rewind, compare, and replay without settings or internal vocabulary."],
+        "experience": ["partial", "The board shell and one-expanded companion queue are stable; first-run teaching, module-backed consequence guidance, and complete return flows remain incomplete."],
         "defaults": ["blocked", "Just Play, plan, outcome, trajectory, and imported-game flows each start with an opinionated composition."],
         "content": ["blocked", "Each training form has representative official content and honest empty behavior."],
         "verification": ["partial", "Desktop, phone, keyboard, touch, resume, branch, compare, and failure paths run as full journeys."],
@@ -101,7 +101,7 @@
         "evidence": ["blocked", "Each module names its eligible projections, disclosure distance, timing, role, and abstention."],
         "state": ["partial", "Preset, workflow context, assistance ceiling, learner overrides, and disclosure events compose deterministically."],
         "api": ["blocked", "Module views and availability come from one server contract; provider use cannot widen evidence."],
-        "experience": ["missing", "Ordinary play shows named learner questions and compact modules, never a dump of producer strings; the board does not shrink or move between stacked panels."],
+        "experience": ["partial", "The stable board and structural companion seats ship; ordinary play still lacks the eleven evidence-backed learner modules, preset-driven disclosure, and complete honest-empty states."],
         "defaults": ["blocked", "Quiet, Guided, Support, Drill, Review, Stream, Academy, and Campaign start useful; 72 primitive controls remain Advanced."],
         "content": ["blocked", "Theory-only, pattern, square, piece, distance, move, prevention, and honest-empty examples are authored and tested."],
         "verification": ["blocked", "Leakage, word budget, interruption, source-off, LLM-off, per-context ceiling, and responsive layout matrices pass."],
@@ -258,7 +258,7 @@
         "evidence": ["not_applicable", "This slice consumes product semantics but creates no chess truth."],
         "state": ["partial", "One board-input controller and theme preferences exist; global focus, responsive composition, and offline/update state remain."],
         "api": ["not_applicable", "Existing APIs must remain usable under every supported input and viewport."],
-        "experience": ["partial", "Board input is broad; page layout still stacks around and shrinks the board, overflows, traps shortcuts, refuses device classes, and lacks a coherent mobile shell."],
+        "experience": ["partial", "Board input and the in-run stable-board shell are broad; route-wide overflow, focus/shortcut, device, mobile-shell, PWA, zoom and post-gesture coverage remain incomplete."],
         "defaults": ["partial", "Device theme and permanent board cells have defaults; animation, density, panel placement, and small-screen composition do not."],
         "content": ["partial", "Piece assets and themes exist; previews, licence presentation, offline shell, and update UX remain."],
         "verification": ["partial", "Board matrices pass; every route still needs keyboard, screen-reader, zoom, contrast, reduced-motion, phone, tablet, desktop, and post-gesture layout proof."],
@@ -310,6 +310,12 @@
         "capabilities": ["governance", "operations"],
         "dependsOn": [],
         "nextAction": "Maintain the separately named verification tiers and refresh the source-sealed capability receipt whenever a joined authority changes.",
+        "latestCheckpoint": {
+          "at": "2026-08-31",
+          "summary": "The roadmap is source-sealed, its verification tiers remain separate, and product implementation checkpoints must now flow back through a grounded staged guard.",
+          "impact": "advanced",
+          "evidence": ["rfc/archive/roadmap-progress-flowback.md", "docs/progress-tracking.md", "tools/roadmap-receipt.mjs"]
+        },
         "exit": "Every required check has one owner and failure meaning; all live 1.0 work is assigned; local parity matches GitHub; no planning census masquerades as a product contract."
       },
       {
@@ -319,6 +325,12 @@
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
         "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
+        "latestCheckpoint": {
+          "at": "2026-08-31",
+          "summary": "The thirty-family evidence basis was re-derived and the paired runtime opening lookup now shares one normalized key; returned producer-to-consumer contracts remain the binding work.",
+          "impact": "advanced",
+          "evidence": ["design/research/foundation-capability-closure-2026-08-31.md", "rfc/runtime-opening-identity.md", "rfc/README.md"]
+        },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
       },
       {
@@ -328,15 +340,27 @@
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
         "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
+        "latestCheckpoint": {
+          "at": "2026-08-31",
+          "summary": "The closure audit proves that all semantic projections still stop before a live application operation, so producer-to-consumer runtime closure remains the active foundation target.",
+          "impact": "held",
+          "evidence": ["design/research/foundation-capability-closure-2026-08-31.md", "planning/platform-alignment/execution-queue.md"]
+        },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."
       },
       {
         "id": "stable-board-and-presets",
         "wave": 2,
-        "state": "queued",
+        "state": "active",
         "capabilities": ["accessibility", "support", "rehearsal"],
         "dependsOn": ["evidence-to-consumer-spine"],
-        "nextAction": "Replace stacked board-column panels with one stable board region plus companion/drawer regions; finish preset composition and render evidence as typed components with touch, hover, focus and screen-reader parity.",
+        "nextAction": "Keep the shipped stable board shell fixed while completing the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
+        "latestCheckpoint": {
+          "at": "2026-08-31",
+          "summary": "The stable board region, desktop rail, tablet band, phone overlay and one-expanded Support/Branches/Actions queue ship; module seats and presets remain open.",
+          "impact": "advanced",
+          "evidence": ["rfc/play-composition.md", "docs/play-composition.md", "planning/play-composition/plan.md"]
+        },
         "exit": "Quiet, Guided, Support, Drill, Review, Campaign, Academy and Stream open useful by default; the board never shrinks or moves; every primitive remains available under Advanced."
       },
       {
@@ -346,6 +370,12 @@
         "capabilities": ["learner_model", "bots", "campaign", "social_play", "account_data", "operations"],
         "dependsOn": ["foundation-contracts"],
         "nextAction": "Land migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results; extend export, deletion, backup and rebuild with each object.",
+        "latestCheckpoint": {
+          "at": "2026-08-31",
+          "summary": "Persistence contracts are specified or returned, but longitudinal, bot, campaign and social durable state remain blocked on accepted foundations and registered migration order.",
+          "impact": "held",
+          "evidence": ["rfc/longitudinal-store.md", "rfc/campaign-core.md", "rfc/social-play.md"]
+        },
         "exit": "Every workflow survives restart, retry, upgrade and projection rebuild with owner/actor identity, immutable inputs, idempotence, lifecycle coverage and no workstation-only state."
       },
       {
@@ -355,6 +385,12 @@
         "capabilities": ["evidence", "theory_content", "learner_model", "bots", "campaign", "social_play", "professional", "account_data", "operations"],
         "dependsOn": ["durable-product-state"],
         "nextAction": "Route principles/theory, longitudinal/profile, registered opponents, campaign, native/social/clocks and professional verbs through createApplication with typed auth, errors, availability and release-container tests.",
+        "latestCheckpoint": {
+          "at": "2026-08-31",
+          "summary": "The production application route inventory is sealed, while foundation-dependent learner, bot, campaign, social and professional operation families remain incomplete.",
+          "impact": "held",
+          "evidence": ["apps/server/src/application.ts", "planning/roadmap-to-done.md"]
+        },
         "exit": "No feature is declared live from a direct REST handler alone; every advertised family crosses the production application and release-image boundary."
       },
       {
@@ -364,6 +400,12 @@
         "capabilities": ["rehearsal", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional", "accessibility", "account_data"],
         "dependsOn": ["stable-board-and-presets", "production-api-closure"],
         "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
+        "latestCheckpoint": {
+          "at": "2026-08-31",
+          "summary": "The in-run shell advanced, but full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
+          "impact": "held",
+          "evidence": ["planning/ux-implementation-index.md", "rfc/play-composition.md"]
+        },
         "exit": "Every route has opinionated defaults, loading/empty/error/recovery, responsive and accessible behavior, return doors, and no raw enum/JSON/cp or settings-first workflow."
       },
       {
@@ -373,6 +415,12 @@
         "capabilities": ["theory_content", "rehearsal", "support", "review", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["evidence-to-consumer-spine", "complete-learner-journeys"],
         "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
+        "latestCheckpoint": {
+          "at": "2026-08-31",
+          "summary": "No official pack is graduated; broad content authoring remains intentionally held until capability, claim-anchor and event-version contracts stabilize.",
+          "impact": "held",
+          "evidence": ["planning/content-era/plan.md", "rfc/graduation-clearance.md"]
+        },
         "exit": "The release contains an allow-listed official corpus exercising every important handshake, counter-case, honest-empty state and complete campaign without blind mass rewrites."
       },
       {
@@ -382,6 +430,12 @@
         "capabilities": ["governance", "evidence", "rehearsal", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional", "accessibility", "account_data", "operations"],
         "dependsOn": ["official-content"],
         "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
+        "latestCheckpoint": {
+          "at": "2026-08-31",
+          "summary": "Release proof remains blocked on official content and complete learner journeys; CI tier separation exists but is not release-candidate evidence.",
+          "impact": "held",
+          "evidence": ["planning/roadmap-to-done.md", "deploy/compose.release.template.yaml"]
+        },
         "exit": "Every core and breadth capability proves all applicable completion dimensions or has an explicit owner-approved descope; the owner can use the release without interpreting implementation vocabulary."
       }
     ]
