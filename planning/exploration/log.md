@@ -13050,3 +13050,19 @@ blocked, zero doing and zero untriaged. Every one of the 1,447 live rows now has
 capability owner, so the `release-truth` milestone returns to complete on its actual exit rather
 than on instrument presence alone. The one-way ceiling is zero: any future ownerless live row is
 a failing gate, not invisible debt. No product, schema, content or semantic-harness byte changed.
+
+## 2026-08-31 — Foundation-source author audit return
+
+Rechecked the first `foundation-source-identity` author pass against its nine handoffs, the
+semantic-convention register grammar and its literal 23-row plan before sending it to independent
+review. Five contradictions are now [[D2390]]–[[D2394]]: one scalar conflates source dependencies
+and conventions and cannot express closure; the clock projection cannot derive recorded time from
+a board-edge receipt; two position rows contradict the RFC's own operation routing; the seven
+style atoms omit required actor/decision attribution; and two successor event algebras are partial
+for truth-preserving subject changes.
+
+`make foundation-source-author-audit` reproduces all five. The draft is returned for author repair
+and still requires a genuinely independent buildability review afterward; no source, schema,
+content, runtime, API or UX implementation was authorized. The same change repaired [[D2395]], a
+post-zero work-state writer defect found when these rows correctly failed while ownerless. The
+zero ceiling remains enforced and all 1,452 live rows are assigned.

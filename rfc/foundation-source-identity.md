@@ -1,7 +1,9 @@
 # RFC: Foundation source identity repair
 
-- **Status:** draft — first author pass 2026-08-31 from [[D1717]], [[D1723]], [[D1724]],
-  [[D1726]]–[[D1736]] and [[D1739]]; fresh independent buildability review required
+- **Status:** draft — **RETURNED BY AUTHOR AUDIT 2026-08-31 on [[D2390]]–[[D2394]].** The
+  23-row scope remains useful, but convention/dependency authority, clock grain, position-operation
+  routing, style attribution and truth-preserving event cardinality require repair before the
+  fresh independent buildability review.
 - **Author:** codex, executing the D1736 shared-wave handoff
 - **Created:** 2026-08-31
 - **Design refs:** `design/03-product-breadth.md` evidence architecture;
@@ -371,15 +373,31 @@ value, operation, validation and consumer state separately.
 | D9 | 8/5/23 authored occurrences receive human-reviewed migration dispositions | `planning/content-wave-work-order.md` under Gate F | content commit + content log | |
 | D10 | style atoms enter longitudinal storage only with exact opportunity denominators | `longitudinal-store` successor | store/reader fixtures | |
 
+## Author-repair obligations
+
+| ledger row | required repair before independent review |
+|---|---|
+| [[D2390]] | replace scalar `authority` with typed source-dependency and convention sets; publish a valid exact convention claim |
+| [[D2391]] | give recorded clock decisions an authenticating run-event/prefix grain and accepted recorded-clock source |
+| [[D2392]] | reconcile every checked operation owner with its grain and separate reusable position facts from recorded occurrences |
+| [[D2393]] | preserve actor and decision class through an exact contextual receipt before style/history use |
+| [[D2394]] | define and fixture total event cardinality for truth-preserving subject-identity changes |
+
 ## Open questions
 
-None for source semantics. Consumer priorities, preset defaults, habit floors, bot trait strength,
-Review ranking and content judgements remain with their existing owners. A fresh buildability review
-may return any id, operand, schema claim, factory seam or operation ownership that cannot be made
-literal; it must not replace it with prose or a generic payload escape.
+No owner ruling is required. The author must resolve [[D2390]]–[[D2394]] literally before the
+fresh independent review: split source dependencies from conventions, use valid convention
+lineage, give clocks an authenticating recorded-event grain, make operation routing agree with
+grain, preserve actor/decision attribution and totalize successor event cardinality. Consumer
+priorities, preset defaults, habit floors, bot trait strength, Review ranking and content
+judgements remain with their existing owners.
 
 ## Changelog
 
+- 2026-08-31: author audit returned the first pass on [[D2390]]–[[D2394]].
+  `planning/foundation-source-identity/author-audit-2026-08-31.md` and
+  `make foundation-source-author-audit` pin the five contradictions. This is not the required
+  independent review and authorizes no implementation.
 - 2026-08-31: first author pass from the D1736 shared source-repair wave. The scope is 23 exact
   source projections plus two schema lanes, with nine external ownership boundaries kept explicit.
   No production, schema, content, manifest, runtime, API, UX or archive bytes changed.

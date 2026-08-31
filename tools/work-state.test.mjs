@@ -108,6 +108,32 @@ test("sync and batch assignment add multiple rows atomically without rebasing th
   assert.deepEqual(validateWorkState({ registry: assigned, ledger: nextLedger, roadmap, workItems, priorCeiling: registry.untriagedCeiling }).errors, []);
 });
 
+test("a persisted post-zero sync can be assigned without manufacturing a negative ceiling", () => {
+  const baseline = buildInitialWorkState({ ledger, roadmap, workItems });
+  const zero = {
+    ...baseline,
+    untriagedCeiling: 0,
+    items: baseline.items.map((item) => item.state === "untriaged"
+      ? { ...item, state: "todo", owner: "review-and-return" }
+      : item),
+  };
+  const nextLedger = `${ledger}\n| D6 🐞 | first row after the zero ratchet | open |`;
+  const synced = synchronizeWorkState({ registry: zero, ledger: nextLedger, workItems });
+  assert.match(validateWorkState({ registry: synced, ledger: nextLedger, roadmap, workItems, priorCeiling: 0 }).errors.join("\n"), /W9 untriaged 1 exceeds ceiling 0/u);
+
+  const assigned = setWorkState({
+    registry: synced,
+    ledger: nextLedger,
+    workItems,
+    ids: ["D6"],
+    state: "todo",
+    values: { owner: "review-and-return" },
+    ceilingEligibleIds: new Set(synced.items.map((item) => item.id)),
+  });
+  assert.equal(assigned.untriagedCeiling, 0);
+  assert.deepEqual(validateWorkState({ registry: assigned, ledger: nextLedger, roadmap, workItems, priorCeiling: 0 }).errors, []);
+});
+
 test("the production glyph vocabulary remains an explicit closed set", () => {
   assert.deepEqual(LEDGER_GLYPHS, ["🐞", "✅", "📊", "💡", "🛠", "⚖️", "🔬", "📝", "📜", "🔨", "⛔", "🏗", "⚠️"]);
 });

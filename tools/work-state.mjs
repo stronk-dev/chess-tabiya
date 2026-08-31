@@ -235,7 +235,7 @@ export function setWorkState({ registry, ledger, workItems, id, ids, state, valu
     if (old.state === "untriaged" && state !== "untriaged" && (ceilingEligibleIds === undefined || ceilingEligibleIds.has(old.id))) lowered += 1;
     return Object.freeze({ ...common, ...values });
   });
-  return Object.freeze({ ...registry, untriagedCeiling: registry.untriagedCeiling - lowered, items: Object.freeze(items) });
+  return Object.freeze({ ...registry, untriagedCeiling: Math.max(0, registry.untriagedCeiling - lowered), items: Object.freeze(items) });
 }
 
 function printCensus(census) {

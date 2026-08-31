@@ -102,7 +102,7 @@ fails `make roadmap-check` until it has an owner.
 shared-resource register, intent parity and persistent UX-item registry are real. Every generic
 ledger row now has one durable state joined to its exact source bytes; terminal rows retain landing
 or refusal evidence; live work has an explicit owner or the honest `untriaged`/`unowned` state.
-The current census reads 2,138 rows: 688 done, three refused, 655 todo, 792 blocked, zero doing
+The current census reads 2,144 rows: 689 done, three refused, 655 todo, 797 blocked, zero doing
 and zero untriaged. The RFC-owned migration classified 870 rows conservatively: draft/awaiting
 RFC work is blocked on that exact RFC; accepted/implementing RFC work is todo for its roadmap
 capability; nothing becomes doing by inference. Four further source-aware waves assigned every

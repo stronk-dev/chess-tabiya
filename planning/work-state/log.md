@@ -39,3 +39,15 @@ The exact census is 2,138 rows: 688 done, three refused, 655 todo, 792 blocked, 
 zero untriaged. All 1,447 live rows therefore have a capability owner, and the one-way untriaged
 ceiling is zero. `release-truth` completes on its stated all-live-work-assigned exit; future live
 rows without an owner now fail `make work-state` at creation.
+
+## 2026-08-31 — First post-zero additions and writer repair
+
+The first six rows added after the ceiling reached zero failed immediately while unassigned, as
+designed. That live use exposed a writer defect: assigning rows persisted by a failed sync could
+subtract the transition count below zero. The writer now clamps the one-way ceiling at zero; its
+new regression first proves the unassigned row fails and then proves the assigned row passes
+without rebasing the ratchet.
+
+Five foundation-source findings are blocked on their exact RFC and the writer defect is closed.
+The census is now 2,144 rows: 689 done, three refused, 655 todo, 797 blocked, zero doing and zero
+untriaged. All 1,452 live rows remain assigned.
