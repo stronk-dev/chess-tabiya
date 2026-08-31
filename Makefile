@@ -375,6 +375,10 @@ provider-health-author-repair:
 	node --test tools/d1910-provider-health-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d1910-provider-health-author-repair/tsconfig.contract.json --noEmit
 
+.PHONY: provider-health-second-fresh-review
+provider-health-second-fresh-review:
+	node --test tools/d2412-provider-health-second-fresh-review/contract.test.mjs
+
 candidate-packet-contract:
 	node --test tools/d1900-candidate-packet-amendment-harness/*.test.mts
 	./node_modules/.bin/tsc -p tools/d1900-candidate-packet-amendment-harness/tsconfig.contract.json --noEmit

@@ -13203,3 +13203,21 @@ review:
 round uses the normalized sampler, separates provenance from deterministic source identity,
 recomputes durable envelopes, imports provider health exactly and makes cache availability
 request-bound, followed by another fresh independent review.
+## 2026-08-31 — provider health second fresh review returns operation/cache identity
+
+**What landed:** independently crossed the D1910–D1915/D2362/D2364 author repair through its
+normative result, state, cache, execution and circuit contracts. Six blockers are recorded as
+[[D2412]]–[[D2417]]. `make provider-health-second-fresh-review` passes 6/6 and proves the author
+checkpoint's reduced type/prose checks do not cover crossed receipt identity, recovery state,
+operation/request cache grain, local-service provenance, the orphan ninth operation or shared
+upstream coordination.
+
+**What changed:** `rfc/provider-health-degradation.md` and its register row are returned. The v1
+foundation and Operations rollups now retain the exact return rather than reporting the eight-arm
+author repair as acceptance progress. Exact review:
+`planning/provider-health-degradation/second-fresh-independent-buildability-review-2026-08-31.md`.
+
+**Blocked/next:** neither the claim-free runtime checkpoint nor lane-0.26 persistence may land
+before an author repair derives correlated result types from the operation map, represents
+recovery, gives cache inventory exact grain, retains local origin, reconciles TTS and adds upstream
+coordination, followed by another independent review.

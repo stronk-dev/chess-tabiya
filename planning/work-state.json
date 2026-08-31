@@ -19057,6 +19057,60 @@
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D2412",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:dfef16af942d731561921d776bdeeceb7b986d2688310945a998309aa453c0b3",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2413",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:eb42eb4aa1b3c22bf0a34413055b4f39060b25477cd8e0e3bf5572e1f04b478d",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2414",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:913a46a521a82d9251df5f67fb04db6bc5f9ced84489ffbf7db4fde7f9135306",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2415",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e1c805c8c8bda5ecfb009071fb04d81303ce1034a713d9fcb182d944ade259e6",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2416",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8455646dec7a84a61aba21665e1e0ea30d8605e5d9bad27ca257ae6909725ff9",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2417",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:fc7057b90aabfb10052af8491f0cfa0c48cdf72d013b5f6681db5e9908621b84",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
     }
   ]
 }

@@ -1,8 +1,12 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — author-repaired 2026-08-31 on [[D1910]]–[[D1915]], [[D2362]] and
-  [[D2364]]; second fresh independent
-  buildability review required before acceptance or implementation
+- **Status:** draft — **RETURNED by the second fresh independent review 2026-08-31 on
+  [[D2412]]–[[D2417]].** The D1910–D1915/D2362/D2364 repairs survive, but result identities are
+  uncorrelated; recovery overloads `unverified`; cache inventory has instance rather than
+  operation/request grain; production-local origin is unrecordable; nine operation ids have only
+  eight described executions; and shared-upstream backoff has no identity. `make
+  provider-health-second-fresh-review` passes 6/6. Author repair and another fresh independent
+  buildability review are required before acceptance or either implementation checkpoint
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -611,6 +615,28 @@ No persistent health history is required for 1.0. Process-restart state begins f
 and real handshakes/outcomes; it does not claim yesterday's provider is currently healthy. Aggregate
 metrics may be added later without changing this state authority.
 
+## Second fresh independent return (2026-08-31)
+
+The first repair survives at its named seams, but the complete operation still returns six
+buildability blockers. Exact evidence and executable controls are in
+`planning/provider-health-degradation/second-fresh-independent-buildability-review-2026-08-31.md`.
+
+1. **[[D2412]]:** result, operation, instance, generation and cached-origin identities are not
+   correlated by the normative type or parser contract.
+2. **[[D2413]]:** `unverified` represents both never-tried and a successful first recovery probe,
+   while carrying none of the outcome/recovery state needed for the second-success rule.
+3. **[[D2414]]:** instance-wide cache counts cannot establish operation- or request-specific cache
+   availability, especially for the three operations sharing `external-voice`.
+4. **[[D2415]]:** `local_service` is a production implementation with no origin-receipt
+   representation.
+5. **[[D2416]]:** the nine-id operation union has only eight described execution members;
+   `render.tts` is orphaned.
+6. **[[D2417]]:** per-upstream rate-limit coordination has no upstream/backoff-group identity.
+
+`make provider-health-second-fresh-review` passes 6/6. Neither the claim-free runtime checkpoint nor
+the lane-0.26 persistence checkpoint may land until an author repair inverts these controls and
+another fresh review passes.
+
 ## Implementation plan
 
 **Staged dependency rule ([[D2364]]).** This RFC may remain `implementing` across two checked
@@ -832,6 +858,10 @@ for the total state/result/operation types. It is an author contract, not implem
   explicit first implementation checkpoint; bot policy consumes it at lane 0.18, while durable
   acquisition remains this RFC's later lane-0.26 checkpoint. The RFC remains implementing between
   checkpoints and no schema claim or dependency is misstated.
+- 2026-08-31 — second fresh independent review returned the repair on [[D2412]]–[[D2417]]:
+  correlated receipt identity, recovery state, operation/request cache grain, local-service
+  provenance, the ninth operation and shared-upstream coordination remain unbuildable. Exact
+  review: `planning/provider-health-degradation/second-fresh-independent-buildability-review-2026-08-31.md`.
 - 2026-08-27 — independent buildability review returned the first draft on [[D1910]]–[[D1915]].
   Exact return: `planning/provider-health-degradation/independent-buildability-review-2026-08-27.md`.
 
