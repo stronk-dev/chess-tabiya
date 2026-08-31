@@ -12969,3 +12969,17 @@ checker. No register or product byte changed, and the release-manifest/concept-r
 unclaimable until an author repair and another independent review. The foundation-contracts
 checkpoint records the hold so the bot, Campaign-concept and release lanes cannot report progress
 through a process root that has not earned acceptance.
+
+## 2026-08-31 — Shared-resource bootstrap author repair
+
+Repaired the returned process RFC without changing a checker, register or product byte. The absent
+image is now literally rowless; the complete nine-resource catalogue is normative; schema,
+migration and closed-vocabulary behavior is derived from kind rather than resource names; and a
+single `assertSharedResourceTransition` contract receives committed/staged preimages locally plus
+every first-parent transition in a required CI range.
+
+`make shared-resource-bootstrap-author-repair` crosses D2381–D2384 with five executable author
+criteria, including the two closed introduced roots. The four defects remain open and blocked on
+this RFC because implementation is still unauthorized. Another independent process/buildability
+review is required before acceptance; release-manifest, concept-registry, bot and Campaign work
+cannot claim progress through these roots yet.
