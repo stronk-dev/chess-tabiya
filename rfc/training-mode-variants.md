@@ -1,6 +1,6 @@
 # RFC: Training-mode variants — the encounter-kind widening and the solitaire family
 
-- **Status:** draft 2026-08-23 — the rank-1 live-debt lane ([[D1330]]). Two accepted-or-drafted documents currently refuse the owner's ask: `rfc/variants.md:667` **names and ejects** solitaire chess ("its own lane, in parallel"), and `rfc/campaign-core.md:115` keeps `encounter.kind` **closed at one member**. This is that lane. It widens the encounter vocabulary by **exactly two members** — the two `campaign-core.md` itself names as belonging to its Discharge D2 — resolves the law-8 seal collision D2 demands rather than inheriting it, and prices the **whole family** ([[D1230]]), not the one format that happens to be cheapest.
+- **Status:** draft 2026-08-23 — register claim repaired 2026-08-31 on [[D2365]]. The rank-1 live-debt lane ([[D1330]]) widens the encounter vocabulary by exactly two members after campaign-core lane 2 and campaign-boss-games lane 3. It resolves the law-8 seal collision D2 demands and prices the **whole family** ([[D1230]]), not the one format that happens to be cheapest. Fresh author review remains required before acceptance.
 - **Author:** claude (drafted from `design/research/training-mode-variants.md` — the 30-format catalogue — and `planning/variants/rfc-derivation.md` §5, §7 gaps 16–17, §8 rank 2)
 - **Created:** 2026-08-23
 - **Design refs:** `design/06-campaign.md:461-464` (the four-row encounter vocabulary, closed at four by [[D1152]]); `design/06-campaign.md` §5's authored-boundary arithmetic; `design/00-thesis.md` §§70, 93-94 (the play-the-consequence constraint)
@@ -11,7 +11,7 @@
 - **Planning:** `planning/variants/` (`rfc-derivation.md` §5, §7, §8)
 
 ```tabiya-claims
-none
+campaign-schema | lane 4 | adds prediction and survival encounter arms after campaign-boss-games; pack and boss_game arms remain byte-identical
 ```
 
 ## Summary
@@ -61,7 +61,7 @@ mostly law-8-clean over existing primitives; **rule variants** (Chess960 etc.) a
 already parked under [[D327]]/[[D328]] and stay parked."* `rfc/variants.md` owns the rule axis; its
 §9 deferral row for solitaire already points here (*"its own lane, in parallel (claude)"*). The two
 documents share no schema surface: `variants.md` claims run-schema lane 0.20 (`DrillRun.rules`),
-this one claims no lane at all (§2.4). The consequence worth stating plainly, because it makes the
+this one claims only campaign-schema lane 4 (§2.4). The consequence worth stating plainly, because it makes the
 family cheap: **a training-mode variant is not a variant.** Every format specified here is standard
 chess on a standard board, so every rung of the evidence stack survives it unchanged — the
 degradation-tier reasoning that governs `variants.md` has nothing to bite on here.
@@ -173,7 +173,7 @@ closed set, and criterion 3 makes a fifth kind a lint failure rather than a judg
 
 #### §2.4 The claims decision, argued
 
-**This RFC claims no register lane, and the argument is the interesting part.**
+**This RFC claims campaign-schema lane 4; the correction is the interesting part.**
 
 The pack-schema register governs `DRILL_PACK_SCHEMA_VERSION` (`packages/schema/src/index.ts:2`,
 `"0.27"`) and `schemas/drill_pack.schema.json`'s `$id`. Neither moves here: §3.3 leaves the pack's
@@ -186,25 +186,15 @@ are live claims and 0.33 is next free (`node tools/register-check.mjs`); **takin
 that touches no pack document would corrupt the register**, which exists to serialise a single
 shared resource, not to number RFCs.
 
-But the resource this RFC *does* touch has no register at all. `schemas/campaign.schema.json`
-ships at HEAD with `"$id": "urn:chess-tabiya:schema:campaign:1"` — **a major integer, not a `0.x`
-lane** — and `rfc/README.md` carries registers for pack-schema, run-schema, shape-entry,
-principle-entry, evidence-kinds and migrations, and **none for campaign**. Two drafts already
-write to `$defs/encounter`: campaign-core's Discharge D1 owns `position`, this RFC's D2 owns
-`prediction` and `survival`. That is exactly the collision class the pack-schema register was
-instituted for in the first place — *"a shared, single-writer resource"* — appearing on a surface
-no instrument watches.
+At drafting time the resource this RFC touches had no register. That observation was true on
+2026-08-23 and the register owner subsequently fixed it: `rfc/README.md` now carries the
+Campaign-schema-version register, derives schema membership from disk, and refuses undeclared
+digest movement. The old no-lane argument and ownership pin became stale rather than timeless.
 
-The correct instrument for a shared *implementation surface* rather than a shared *number* is the
-one `rfc/README.md` §Cross-draft ownership pins already institutes, and this RFC takes one:
-
-> **Pin, 2026-08-23:** `rfc/campaign-core.md` owns `$defs/encounter` and the `position` arm
-> (its Discharge D1). `rfc/training-mode-variants.md` adds the `prediction` and `survival` arms
-> (campaign-core Discharge D2) and touches no other campaign `$def`. Landing order follows the
-> dependency: campaign-core, then this.
-
-The missing register is a real gap and is **not** silently absorbed: Open question 1 puts it to
-the register owner, and the proposed ledger row (§9) records it whatever the answer.
+[[D2365]] repairs the live order without rewriting history: campaign-core owns lane 2,
+campaign-boss-games owns lane 3 for the ruled `boss_game` arm, and this RFC owns lane 4 for
+`prediction` and `survival`. It changes no pack/run schema and leaves the prior campaign arms
+byte-identical. Register-check, not the historical pin, is now the serialization authority.
 
 ### §3 — Solitaire chess: the seal, and the v0.9 collision resolved
 
@@ -495,7 +485,7 @@ never a reason.** Each row states the blocker that actually exists.
 | **Hold-under-shrinking-clock** ([[D862]]) | both halves ship pointed the wrong way — the tempo scheduler needs a shrinking direction — and the Woodpecker cycle is **already owned elsewhere**: `rfc/pack-training-forms.md` (lane 0.32) is the training-methods lane's pack-format half | `rfc/pack-training-forms.md` (claude) |
 | **Band-split solitaire** ([[D888]]) | the multi-rung Maia query is new; and it should follow §3's seal rather than race it | this RFC's Discharge D5 (claude), after v1 lands |
 | **Brain with a banded hand** ([[D891]]) | needs the `position` arm, which this RFC does not own, plus piece-restricted sampling; collides with the rated-game contract, so it is unrated by construction | `rfc/campaign-core.md` Discharge D1 (`planning/campaign/`) |
-| **A campaign-schema register** | no register governs `schemas/campaign.schema.json`, and two drafts write to it (§2.4) | Open question 1 (register owner) |
+| **Campaign-schema serialization** | register exists; campaign-core lane 2, boss games lane 3, this RFC lane 4 (§2.4) | resolved on [[D2365]]; register-check is authority |
 
 Not deferred and not this RFC's: rule variants of every tier (`rfc/variants.md`), the `position`
 arm (campaign-core D1), prestige contents (campaign-core D3/D6).
@@ -625,12 +615,9 @@ this document.
 
 ## Open questions
 
-1. **Should `schemas/campaign.schema.json` have a register in `rfc/README.md`?** (§2.4.) It ships
-   at HEAD with `"$id": "urn:chess-tabiya:schema:campaign:1"` — a major integer, not a lane — and
-   two drafts write to `$defs/encounter`. This RFC takes a cross-draft ownership pin, which is the
-   right instrument for a shared *surface*; a register would be the right instrument if the `$id`
-   integer is meant to move. **Owner: the register owner**, resolved before `accepted`. Whatever
-   the answer, the gap is recorded as a ledger row (§9) rather than absorbed.
+1. **Campaign schema register — RESOLVED 2026-08-23, live claim repaired 2026-08-31.** The register
+   exists and governs the resource. This RFC follows campaign-core lane 2 and campaign-boss-games
+   lane 3 at lane 4. [[D2365]] records why the stale no-register prose was corrected.
 2. **Does a standalone solitaire session belong to `sessionKind: "imported"` or to a fifth session
    kind?** §3.1 uses `imported`, which is true and costs nothing. A distinct kind would make
    solitaire runs queryable as a cohort, at the price of a run-schema lane. Deferred to the
@@ -644,11 +631,9 @@ this document.
 
 ## Ledger rows (proposed — id assigned at landing; head was **D1332** when drafted)
 
-- **💡 The campaign schema is a single-writer resource with no register**, and two drafts write to
-  `$defs/encounter` (`rfc/campaign-core.md` D1 owns `position`; `rfc/training-mode-variants.md`
-  owns `prediction`/`survival`). The pack-schema register exists for exactly this class; the
-  campaign schema shipped without one. Open question 1 puts it to the register owner. Destination:
-  `rfc/README.md` §Cross-draft ownership pins (taken now) and, if ruled, a sixth register.
+- **💡 Historical finding, resolved by [[D2365]]:** the campaign schema shipped as a single-writer
+  resource with no register while two drafts targeted `$defs/encounter`. The register now exists;
+  live order is campaign-core lane 2 → campaign-boss-games lane 3 → this RFC lane 4.
 - **🐞 [[D1303]]'s gate citation drifted again, and the same gate is dead in both clauses.**
   Re-measured at HEAD: `#requiredRegisteredPack` at `service.ts:1512`, throw at `:1514` (D1303
   recorded `:1514/:1515`); and **0 of 56** pack documents in `content/drafts/` carry a prediction

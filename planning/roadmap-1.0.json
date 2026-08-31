@@ -192,7 +192,7 @@
       "name": "Campaign, progression, encounters, resources, and failure",
       "release": "core",
       "owner": "campaign",
-      "rfcs": ["campaign-core.md", "training-mode-variants.md"],
+      "rfcs": ["campaign-core.md", "campaign-boss-games.md", "training-mode-variants.md"],
       "completion": {
         "evidence": ["partial", "Encounter eligibility and rewards spend only registered pack, module, rating, skill, and bot facts."],
         "state": ["partial", "Schema, registry, and deterministic fold exist; persistence, abandoned-run rebuild, failure economy, and versioned authored campaigns do not."],

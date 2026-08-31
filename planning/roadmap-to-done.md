@@ -682,7 +682,7 @@ web has an accessible map, encounter prep, in-run context, results, inventory an
 One varied campaign is authored and replayed end-to-end. Library remains open; progression is never
 sold.
 
-Primary RFCs: `campaign-core`, `training-mode-variants`. UX owner: CMP items.
+Primary RFCs: `campaign-core`, `campaign-boss-games`, `training-mode-variants`. UX owner: CMP items.
 Owner ruling [[D1565]] requires two explicit progression horizons: a run-scoped inventory of
 drip-fed theory, modules and tools that matters in later encounters and bosses, plus durable
 long-term rewards across runs. Exact consequential failure arithmetic remains research-owned.
@@ -694,6 +694,11 @@ and generic durable skip-start/modifier/variant ids remain refused without a reg
 universal later+boss opportunity, exact prestige, event-owned abandonment, idempotent portable
 awards and the complete Campaign home→map→prep→play→result→Review journey. Its author target is
 green; fresh independent review and the named dependencies still gate implementation.
+The full-game successor is now explicit rather than hidden in a discharge: `campaign-boss-games`
+owns campaign-schema lane 3 and the complete Act-II position-game journey. It composes one exact
+calibrated human-like bot profile, rules-terminal result, clean rating versus explicit
+void-before-Support activation, atomic Campaign+run+rating start/finish, Review and lifecycle
+receipts. Campaign remains incomplete until that journey and one official Act-II boss ship.
 Variant campaigns remain a successor structure, not a `DrillRun.rules` rider: [[D1681]] proves the
 current pack-seal campaign cannot advance an evidence-dark Tier-2 node without inventing a verdict.
 

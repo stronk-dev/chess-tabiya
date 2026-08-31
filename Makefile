@@ -256,6 +256,10 @@ campaign-two-horizon-author-contract:
 campaign-two-horizon-fresh-review:
 	node --test tools/d2077-campaign-fresh-review/contract.test.mjs
 
+.PHONY: campaign-boss-author-contract
+campaign-boss-author-contract:
+	node --test tools/campaign-boss-author-contract/contract.test.mjs
+
 .PHONY: campaign-second-fresh-review
 campaign-second-fresh-review:
 	node --test tools/d2244-campaign-second-fresh-review/contract.test.mjs
