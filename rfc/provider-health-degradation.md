@@ -1,6 +1,7 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — author-repaired 2026-08-31 on [[D1910]]–[[D1915]] and [[D2362]]; second fresh independent
+- **Status:** draft — author-repaired 2026-08-31 on [[D1910]]–[[D1915]], [[D2362]] and
+  [[D2364]]; second fresh independent
   buildability review required before acceptance or implementation
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
@@ -612,6 +613,17 @@ metrics may be added later without changing this state authority.
 
 ## Implementation plan
 
+**Staged dependency rule ([[D2364]]).** This RFC may remain `implementing` across two checked
+checkpoints because its run-schema claim is lane 0.26 while `bot-policy.md` owns lane 0.18 and
+consumes the health authority. The **claim-free runtime-authority checkpoint** lands Phases 1–3
+items 1–11 plus the exact
+`ProviderRegistrySnapshot`, `ProviderOperationResult`, profile-availability selector and
+generation-bound release-receipt types, with no persisted run-shape change. `bot-policy` may then
+consume those production symbols and land lane 0.18. Item 12's acquisition persistence and every
+criterion that depends on it remain open until lanes 0.19–0.25 and this RFC's lane 0.26 land. The
+first checkpoint does not archive this RFC, claim its durable receipt complete, or permit a copied
+bot-private health projection.
+
 ### Phase 1 — runtime authority
 
 1. Add `provider-health.ts` with closed family/instance ids, the state-specific snapshot union,
@@ -726,7 +738,13 @@ metrics may be added later without changing this state authority.
 22. Configured implementation is a checked member of the instance declaration's closed
     `allowedImplementations` set ([[D2362]]). Switching tablebase/Explorer remote→local changes the
     generation and invalidates old cache/health. Release compilation rejects `local_fixture`; a
-    local production service is labeled `local_service` and never impersonates Lichess.
+   local production service is labeled `local_service` and never impersonates Lichess.
+23. The staged dependency receipt proves the claim-free runtime-authority checkpoint changes no
+    run-schema byte and exports the exact snapshot/result/release types consumed by bot policy.
+    Bot policy has zero parallel health state. Provider health remains implementing until lane 0.26
+    makes every new opponent selection persist the acquisition receipt. *Fails if* either RFC
+    claims the other fully implemented before its registered lane can land, or if lane 0.26 is
+    renumbered to conceal the dependency.
 
 ## Falsifiers and negative fixtures
 
@@ -768,6 +786,12 @@ fixtures cross live, local-fixture and cached-exact selections, including the ca
 embedded original origin. Unknown sources, failure receipts and deterministic fallbacks are invalid
 inside `OpponentSelection` because no opponent move is committed on those arms.
 
+The earlier claim-free runtime-authority checkpoint is forward-compatible with this widening: its
+release receipt and operation result are the acquisition field's source authority, but it writes
+no placeholder field and infers no historical receipt. This is a staged implementation of one
+accepted RFC, not a second schema owner; [[D2364]] exists specifically to keep lane 0.18→0.26
+ordering executable.
+
 Rollback may remove the new API fields only before a release claims F12-H. It may never restore the
 60-second Maia wait, unbounded cache, or static green capability behavior as a compatibility fix.
 
@@ -788,6 +812,7 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 | [[D1914]] | durable opponent receipt contradicts the `none` run-schema claim | run-schema lane 0.26 plus old/new write/read contract in rollout; criterion 10 |
 | [[D1915]] | cache-only global state has no cache-inventory transition | generation-valid inventory joined at snapshot time in §§2/7; criterion 20 |
 | [[D2362]] | one fixed implementation contradicts remote→local instance evolution | declared allowed set plus generation-bound configured member in §1; criterion 22 |
+| [[D2364]] | bot policy needs health before its lane 0.18 while health's durable field is lane 0.26 | claim-free runtime-authority checkpoint before bot 0.18; acquisition persistence remains the later lane-0.26 checkpoint; criterion 23 |
 
 `make provider-health-author-repair` executes one able-to-fail arm per row plus a TypeScript image
 for the total state/result/operation types. It is an author contract, not implementation or review.
@@ -803,6 +828,10 @@ for the total state/result/operation types. It is an author contract, not implem
 - 2026-08-31 — self-audit repaired [[D2362]] before closeout: instance declarations now own a
   closed allowed-implementation set while configured state selects one generation-bound member;
   `local_fixture` is test-only and `local_service` is the honest production-local label.
+- 2026-08-31 — repaired [[D2364]]: the claim-free runtime snapshot/result/release authority is an
+  explicit first implementation checkpoint; bot policy consumes it at lane 0.18, while durable
+  acquisition remains this RFC's later lane-0.26 checkpoint. The RFC remains implementing between
+  checkpoints and no schema claim or dependency is misstated.
 - 2026-08-27 — independent buildability review returned the first draft on [[D1910]]–[[D1915]].
   Exact return: `planning/provider-health-degradation/independent-buildability-review-2026-08-27.md`.
 

@@ -382,6 +382,7 @@ bot-policy-independent-review:
 
 bot-policy-author-contract:
 	./node_modules/.bin/vitest run --config tools/d1970-bot-policy-author-repair/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc -p tools/d1970-bot-policy-author-repair/tsconfig.contract.json --noEmit
 
 bot-policy-fresh-review:
 	node --test tools/d2087-bot-policy-fresh-review/contract.test.mjs

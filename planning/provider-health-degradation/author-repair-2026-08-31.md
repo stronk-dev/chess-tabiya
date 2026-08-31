@@ -2,7 +2,7 @@
 
 ## Verdict
 
-Author repair complete for [[D1910]]–[[D1915]] plus self-audit row [[D2362]]. This is not acceptance
+Author repair complete for [[D1910]]–[[D1915]] plus self-audit rows [[D2362]] and [[D2364]]. This is not acceptance
 or implementation. Second fresh independent buildability review is required, and the execution
 declaration remains dependency-blocked on provider-protocol register/exchange landing.
 
@@ -23,9 +23,12 @@ declaration remains dependency-blocked on provider-protocol register/exchange la
   of the last row removes cache-only availability without a provider call.
 - Instance declarations carry closed allowed-implementation sets; configured generation chooses one.
   `local_fixture` is test-only and `local_service` is the production-local label.
+- A claim-free runtime-authority checkpoint may land while this RFC remains implementing; bot
+  policy then consumes those exact symbols at run lane 0.18, while acquisition persistence remains
+  this RFC's later lane 0.26. This removes the dependency cycle without copied health state.
 
 ## Verification
 
-`make provider-health-author-repair` passes seven executable contract arms plus the proposed total
+`make provider-health-author-repair` passes eight executable contract arms plus the proposed total
 TypeScript algebra. No production, schema, runtime, API, client, content, archive or protected-design
 byte changed. The lane is a declaration only.

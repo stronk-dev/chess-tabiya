@@ -12802,3 +12802,25 @@ No production storage, worker, API, consumer, content, archive or protected-desi
 `make longitudinal-store-author-contract` passes 24/24; full verification is required before the
 checkpoint. Third fresh independent review still gates acceptance and implementation. Receipt:
 `planning/longitudinal-store/third-author-repair-2026-08-31.md`.
+
+## 2026-08-31 — Bot-policy third author repair and provider-health lane correction
+
+Author-repaired [[D2219]]–[[D2226]] and recorded the run-schema dependency cycle [[D2364]]. Bot
+profiles now bind the exact Maia3 source/model/sampler and ordered layers; pawn classification uses
+exact legal moves; admitted provider deliveries survive decision, persistence and replay; roster
+availability joins generation-bound provider-health operation state; route outcomes and
+concurrency/retry semantics are closed and executable. The shared profile catalogue is routed
+through the shared-resource bootstrap rather than copied into this RFC.
+
+Provider health now declares a claim-free runtime-authority checkpoint. It remains implementing:
+bot policy may consume the staged snapshot/result/release symbols before landing run lane 0.18,
+while durable acquisition stays in provider health's lane 0.26. No lane was renumbered and no
+bot-private health model was introduced.
+
+`make bot-policy-author-contract` passes 31/31 plus strict TypeScript;
+`make provider-health-author-repair` passes 8/8 plus strict TypeScript. Full `make verify` passes
+1,085 software tests, 2 performance tests and 172 real-content tests, with schema, build,
+browser/contract and governance gates green. No production/schema/migration/catalog/provider/
+runtime/client/content/archive/protected-design byte changed. Fresh independent review and the
+declared dependency checkpoints still gate acceptance and implementation. Receipt:
+`planning/platform-alignment/bot-policy/third-author-repair-2026-08-31.md`.

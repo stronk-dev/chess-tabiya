@@ -1,4 +1,4 @@
-// DISPOSABLE positive author contract for D1910-D1915 and D2362. Not production code.
+// DISPOSABLE positive author contract for D1910-D1915, D2362 and D2364. Not production code.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
@@ -73,4 +73,14 @@ test("D1915 derives cache-only state from current generation-valid inventory", (
   assert.match(cache, /validExactEntries/u);
   assert.match(cache, /TTL expiry, LRU eviction, explicit invalidation and generation\s+cleanup monotonically advance `revision`/u);
   assert.match(cache, /removal of the\s+last entry changes `\/capabilities` even when no new provider outcome occurred/u);
+});
+
+test("D2364 stages claim-free health authority before bot lane 0.18 and acquisition lane 0.26", () => {
+  const plan = section("## Implementation plan", "## Acceptance criteria");
+  const rollout = section("## Rollout and compatibility", "## Discharges");
+  assert.match(plan, /claim-free runtime-authority checkpoint/u);
+  assert.match(plan, /`bot-policy` may then\s+consume those production symbols and land lane 0\.18/u);
+  assert.match(plan, /lane 0\.26 land/u);
+  assert.match(rollout, /writes\s+no placeholder field and infers no historical receipt/u);
+  assert.match(rfc, /Bot policy has zero parallel health state/u);
 });
