@@ -7,10 +7,12 @@ const rfc = readFileSync("rfc/shared-candidate-evidence-packet.md", "utf8");
 const legal = readFileSync("packages/runtime/src/legal-moves.ts", "utf8");
 const adapters = readFileSync("packages/runtime/src/evidence-source-adapters.ts", "utf8");
 
-test("D2389 reproduces the two specified legal-population value sources", () => {
+test("D2389's returned two-source contract is repaired without erasing the historical return", () => {
   assert.match(rfc, /legalMovesInput: DeclaredEvidence<ExactLegalMoveMap>/u);
-  assert.match(rfc, /`legalMoves` is `exactLegalMoves\(beforeFen\)`/u);
-  assert.match(rfc, /factory fixes `PRIMARY_EVIDENCE_MANIFEST`, `exactLegalMoves`/u);
+  assert.doesNotMatch(rfc, /`legalMoves` is `exactLegalMoves\(beforeFen\)`/u);
+  assert.doesNotMatch(rfc, /factory fixes `PRIMARY_EVIDENCE_MANIFEST`, `exactLegalMoves`/u);
+  assert.match(rfc, /## Fourth fresh independent return \(2026-08-31\)/u);
+  assert.match(rfc, /## Fifth author repair \(2026-08-31\)/u);
   assert.match(legal, /export function exactLegalMoves\(fen: string\)[\s\S]*return movesFor\(positionFromFen\(fen\)\)/u);
   assert.match(legal, /export function exactLegalMoveMap\(fen: string\)[\s\S]*const moves = movesFor\(position\)/u);
   assert.match(adapters, /declareExactLegalMovesEvidence\(payload: ExactLegalMoveMap\)[\s\S]*const expected = exactLegalMoveMap\(payload\.fen\)/u);

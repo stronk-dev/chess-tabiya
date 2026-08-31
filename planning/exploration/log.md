@@ -13091,3 +13091,17 @@ truth-preserving exact subject change.
 `make foundation-source-author-repair` passes 11/11. The RFC remains draft and dependency-blocked:
 semantic-convention register/provenance must land before its future set becomes a live claim and a
 fresh independent review may begin. No schema, content, runtime, API, UX or consumer was changed.
+
+## 2026-08-31 — Candidate legal authority repaired and graduation remainder reclassified
+
+Closed [[D2389]] at the author boundary. `shared-candidate-evidence-packet` now compiles one
+`exactLegalMoveMap`, seals that exact object and flattens only its retained move references; a
+field-equal second enumeration fails the new identity falsifier. The prior projection/dependency
+contract, historical return check and `make candidate-packet-fifth-author-repair` all pass. A fifth
+fresh independent review remains required, and no production implementation is authorized.
+
+Also closed [[D2397]] after re-reading `graduation-clearance` criteria 1–2. Pack schema 0.28,
+emitter clearance and all 92 pack/candidate migrations must land together, while the owner ruled
+that migration Gate-F-held whole. The roadmap no longer presents schema/emitter work as an
+executable pre-gate remainder; only the already-shipped writer/read-only mechanism is outside that
+hold.

@@ -1,6 +1,6 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — fourth fresh independent review returned on [[D2389]]; author repair required.**
+- **Status:** **draft — [[D2389]] fifth author repair complete; fifth fresh independent review required.**
   The D2198–D2201 author repair remains present: the product factory fixes the primary manifest authority; every collector
   result is projection-addressed; thirteen exact context adapters satisfy the executable registry;
   and memo, service-stat and receipt-reference protocols are closed. The historical return remains
@@ -10,9 +10,11 @@
   and separates a scope's dependency-closed execution plan from its retained packet outputs.
   `make candidate-packet-fourth-author-repair` remains the positive author contract for those two
   repairs. The fourth fresh review found that the packet's flat legal-move list and its sealed
-  `ExactLegalMoveMap` receipt still have two different specified value sources; exact return:
+  `ExactLegalMoveMap` receipt still had two different specified value sources; exact return:
   `planning/evidence-foundation-ux/shared-candidate-packet-fourth-fresh-independent-review-2026-08-31.md`.
-  Implementation remains unauthorized pending repair and another fresh review.
+  The author repair now compiles and seals one exact map, flattens its retained payload by reference,
+  and refuses an equal second enumeration. `make candidate-packet-fifth-author-repair` is its
+  positive contract. Implementation remains unauthorized pending another fresh review.
   [[D1580]] remains separate numeric appliance-tier debt. *(Prior state: D1977–D1981
   author-repaired after D1958–D1961, D1900–D1903 and D1945–D1947.)*
 - **Author:** claude (initial draft); codex (2026-08-29 operation-boundary author repair). Drafted
@@ -503,6 +505,11 @@ function compileCandidatePopulationReceipt(
   candidateInputs: CandidatePopulationReceipt["candidateInputs"],
 ): CandidatePopulationReceipt;
 
+function compileLegalPopulation(beforeFen: string): Readonly<{
+  legalMovesInput: DeclaredEvidence<ExactLegalMoveMap>;
+  legalMoves: readonly ExactLegalMove[];
+}>;
+
 export function assertCandidatePopulationReceipt(
   value: unknown,
 ): asserts value is CandidatePopulationReceipt;
@@ -513,9 +520,20 @@ export function projectCandidatePopulationReceipt<
 >(receipt: CandidatePopulationReceipt<S>, scope: T): CandidatePopulationProjectionResult<T>;
 ```
 
-`compileCandidatePopulationReceipt` is module-private and the only constructor. It closes over the
+`compileLegalPopulation` is module-private and has exactly one source call. It computes
+`const payload = exactLegalMoveMap(beforeFen)`, passes that **same object** to
+`declareExactLegalMovesEvidence(payload)`, and freezes
+`legalMovesInput.payload.pieces.flatMap(piece => piece.moves)`. `flatMap` allocates only the flat
+container; it does not copy a move object. The service builds every packet row from that returned
+pair and has no import or call to `exactLegalMoves`. A separately enumerated list is not a legal
+compiler input even when its UCI set is equal.
+
+`compileCandidatePopulationReceipt` is module-private and the only receipt constructor. It closes over the
 exact imported `PRIMARY_EVIDENCE_MANIFEST`, requires `packet.manifestDigest` and every retained
-event/reading assertion to agree with that object, then freezes the receipt. It stores the exact
+event/reading assertion to agree with that object, then checks that `packet.legalMoves` is the exact
+flat array returned by `compileLegalPopulation` and that every member is reference-identical to one
+member of `legalMovesInput.payload.pieces[].moves`; equality by UCI or fields is insufficient. It
+then freezes the receipt. It stores the exact
 manifest/packet/legal/event/reading/**collector-outcome** references in the module-private `WeakMap`, and
 returns the opaque execution value. `assertCandidatePopulationReceipt` requires a map entry and
 then checks the receipt still points to the exact primary manifest, packet, legal input, candidate
@@ -568,7 +586,10 @@ anchor, basis or derivation input, or any reading. Every one of those is derived
 from the root and the legal-move authority. This is the whole of the repair: the population stops
 being an argument and becomes an output. Criterion 1.
 
-**§3.3 — Completeness is set equality, not a count.** The compiler establishes, and asserts, that
+**§3.3 — Completeness is reference ownership plus set equality, not a count.** The compiler first
+establishes that `packet.legalMoves` is the frozen flat container returned from the one sealed map
+payload and that each member is the same object retained under
+`legalMovesInput.payload.pieces[].moves`. It then asserts that
 `candidates.map(row => row.moveUci)` is **set-equal** to `legalMoves.map(move => move.uci)` — same
 cardinality, no duplicates, no omissions, no extras, order irrelevant to meaning. It is asserted
 against the authority's output, not against a number ([[D1240]]: a criterion asserts set equality
@@ -630,12 +651,15 @@ does not make Chess960 a malformed FEN or silently interpret it as standard ches
 remains D6 and must introduce a registered ruleset authority through the request, legal compiler,
 key and every affected collector before another literal becomes admissible.
 
-**§4.1 — One authority.** `legalMoves` is `exactLegalMoves(beforeFen)` — the authority
-`rfc/exact-legal-mobility.md` accepted, which enumerates four promotion identities per promoting move
-(`legal-moves.ts:42-46`) where a bare `allDests()` walk enumerates one. `[V]` The packet compiler is a
-ninth consumer of that authority and adds no tenth enumerator; `exact-legal-mobility` §1.2 already
-names `semantic-evidence.ts` as one of its eight, and this RFC keeps that promise rather than opening
-a parallel one.
+**§4.1 — One authority and one value graph.** The service calls
+`exactLegalMoveMap(beforeFen)` once, seals that exact object with
+`declareExactLegalMovesEvidence`, and derives `legalMoves` by flattening
+`legalMovesInput.payload.pieces[].moves` without copying move objects. The accepted authority
+enumerates four promotion identities per promoting move (`legal-moves.ts:42-46`) where a bare
+`allDests()` walk enumerates one. `[V]` The packet compiler is a consumer of the exact-map authority,
+not another enumerator: it neither imports nor calls `exactLegalMoves`, and the receipt rejects a
+separately enumerated equal list. This preserves both semantic completeness and the exact value
+identity the receipt claims.
 
 **§4.2 — The convention is retained, not re-declared.** `legalConvention` is the versioned id of
 `rules.mobility.reading.legal_moves@1` and `moveIdentityConvention` is `MOVE_IDENTITY_CONVENTION`
@@ -982,7 +1006,8 @@ export function createCandidatePopulationService(
 ): CandidatePopulationService;
 ```
 
-The product factory fixes `PRIMARY_EVIDENCE_MANIFEST`, `exactLegalMoves`,
+The product factory fixes `PRIMARY_EVIDENCE_MANIFEST`, `exactLegalMoveMap`,
+`declareExactLegalMovesEvidence`,
 `CANDIDATE_COLLECTOR_EXECUTION`, receipt constructors and `messageChannelMacrotaskYield` by import;
 callers cannot replace any of them. Only bounded numeric deployment limits enter. Options are
 strictly validated: an unknown `manifest`, digest or collector field is rejected before key/job/
@@ -1515,10 +1540,14 @@ arms, and undergo another fresh independent review before acceptance.
    `legalMoves`, `afterFen`, or any event or reading to the packet compiler **fails to type-check**
    (`.typecheck.ts`), and no runtime predicate is the enforcement. *Wrong implementation that would
    pass a weaker check: one that accepts a caller population and validates it.*
-2. **Completeness is set equality against the authority, not a count.** A fixture asserts
-   `candidates.map(r => r.moveUci)` set-equal to `exactLegalMoves(beforeFen).map(m => m.uci)` on
+2. **Completeness is set equality against the retained exact-map payload, not a count.** A fixture
+   compiles one `exactLegalMoveMap(beforeFen)`, seals that same object, asserts every
+   `packet.legalMoves[i]` is reference-identical to the corresponding member obtained by flattening
+   `legalMovesInput.payload.pieces[].moves`, then asserts `candidates.map(r => r.moveUci)` set-equal
+   to `packet.legalMoves.map(m => m.uci)` on
    ordinary, check-evasion, castling, en-passant and **promotion** positions. Must-fail fixtures: one
-   omitted move, one duplicate, one extra, one wrong child FEN. The promotion case is required
+   omitted move, one duplicate, one extra, one wrong child FEN, and a separately enumerated
+   field-equal legal list whose members have different object identities. The promotion case is required
    because §0's correction 5 shows a plausible enumerator that silently drops three of four
    identities. Integers appear only as drift tripwires.
 3. **Terminal and truncated are distinguishable.** A checkmate root yields zero candidates **with**
@@ -1545,8 +1574,8 @@ arms, and undergo another fresh independent review before acceptance.
    afterFen)` pairs, not on cardinality.** The cardinality arm alone **cannot fail**:
    `alternatives = candidates.filter(row => row.moveUci !== playedUci)` makes
    `|alternatives| = |candidates| − 1` an arithmetic consequence of criterion 2's set-equality, and
-   both sides of the `legalAlternativeEdges` comparison read the same `exactLegalMoves` authority
-   (`semantic-evidence.ts:968`), so a moveUci-only comparison restates criterion 2. What *can* differ
+   `legalAlternativeEdges` independently derives its comparison population
+   (`semantic-evidence.ts:968`), so a moveUci-only comparison largely restates criterion 2. What *can* differ
    is the **child FEN and the canonical dialect**, because `legalAlternativeEdges` re-canonicalizes
    every uci through `canonicalMoveUci` (`:971`) and computes its own `afterFen` by a separate
    `position.play` path (`:977-978`), while the packet derives both in its compiler. So: from a
@@ -1808,6 +1837,15 @@ arms, and undergo another fresh independent review before acceptance.
     declarations, and exposes no event value, outcome or abstention. Omitting either dependency,
     retaining it publicly, adding an unrelated event collector or executing a dependency after its
     reader fails.
+36. **One sealed exact-map object owns the flat population ([[D2389]]).** Instrument the private
+    legal source and assert exactly one `exactLegalMoveMap(beforeFen)` call, that the exact returned
+    object is passed to `declareExactLegalMovesEvidence`, and that the packet's frozen flat array
+    contains the exact move-object references reachable from `legalMovesInput.payload.pieces`.
+    `exactLegalMoves` is absent from the product factory/compiler import graph. A negative rebuilds
+    every move as `{...move}`: its fields and UCI set remain equal, but receipt compilation returns
+    `invariant_failed: "receipt"`. A second negative calls an independently instrumented enumerator
+    with equal output and is rejected for the same reason. These negatives must fail by identity,
+    not by order, fields or cardinality.
 
 ## Fourth fresh independent return (2026-08-31)
 
@@ -1828,6 +1866,19 @@ Repair with one value source: compile `exactLegalMoveMap(beforeFen)`, pass that 
 `legalMovesInput.payload.pieces[].moves` without copying move objects. Replace the independent
 `exactLegalMoves` packet source and make a separately enumerated equal list fail an identity
 fixture. Exact review and reproducer: `make candidate-packet-fourth-fresh-review`.
+
+## Fifth author repair (2026-08-31)
+
+[[D2389]] is repaired at the contract boundary rather than hidden behind another equality check.
+The service compiles one `ExactLegalMoveMap`, seals that same object, and constructs the packet's
+flat container solely from the sealed payload's move references. The product factory no longer
+imports `exactLegalMoves`; receipt construction rejects equal rebuilt moves because the retained
+object graph, not their spelling, is the authority.
+
+Criterion 36 makes the source-call count, exact declaration input, flattened member references and
+equal-rebuild refusal independently failable. `make candidate-packet-fifth-author-repair` is the
+positive author contract. A fifth fresh independent review is still required; no production,
+schema, content, API or UX implementation is authorized by this repair.
 
 ## Discharges
 
@@ -1971,6 +2022,10 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-08-31 — [[D2389]] fifth author repair. One `exactLegalMoveMap` object now owns declaration,
+  packet population and receipt identity; the factory has no second `exactLegalMoves` source and an
+  equal rebuilt move list is an explicit negative. `make candidate-packet-fifth-author-repair`
+  passes; fifth fresh independent review remains required and no implementation is authorized.
 - 2026-08-31 — fourth fresh independent review returned the RFC on [[D2389]]. The D2329/D2330
   repair remains valid, but the packet's flat legal list and sealed exact-legal-map receipt have
   separate specified sources. One exact map value must own both before acceptance.

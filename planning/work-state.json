@@ -18853,12 +18853,12 @@
     },
     {
       "id": "D2389",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e90bdb28d995a604474d5b96d7655ba4fdb237bf772b0066d79bf54cc92013ac",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:67d2160ba3d86363dd5efb2a57f162a43edf600b744523b934d2e77b8bd8d032",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "evidence": "planning/evidence-foundation-ux/shared-candidate-packet-fifth-author-repair-2026-08-31.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2390",
@@ -18921,6 +18921,15 @@
       "sourceDigest": "sha256:0c388ac759ff32d55c9f0731e91b09763cc5b46f865ed5551cff07485e66b6f5",
       "uxItems": [],
       "evidence": "apps/server/src/sourcing/graduation-clear.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2397",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1efb6cb4d767484aec94d46b612ceb466d7eb66c1ed23b88493264f15b6503a0",
+      "uxItems": [],
+      "evidence": "planning/evidence-foundation-ux/shared-candidate-packet-fifth-author-repair-2026-08-31.md",
       "evidenceKind": "path"
     }
   ]
