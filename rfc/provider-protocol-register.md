@@ -1,7 +1,7 @@
 # RFC: Provider-protocol shared-resource register
 
-- **Status:** draft — author checkpoint 2026-08-30; fresh independent process/buildability review
-  required before checker/register implementation
+- **Status:** draft — author-repaired 2026-08-31 on [[D2361]]; fresh independent
+  process/buildability review required before checker/register implementation
 - **Author:** codex
 - **Created:** 2026-08-30
 - **Design refs:** none. This is repository process and changes no provider behavior or learner UX.
@@ -22,7 +22,7 @@ none
 
 Register `provider-protocol` before `provider-exchange-and-execution.md` creates a tenth
 cross-package authority with hand-copied operation, digest, endpoint, parser, factory and CLI lists.
-The landed tree starts absent at head 0. The provider RFC claims lane 1 only after this process RFC
+The tree starts explicitly absent. The provider RFC claims `first lane 1` only after this process RFC
 lands; its implementation creates one literal protocol declaration artifact from which runtime
 types, server registries, source factories, CLI names and register checks derive.
 
@@ -31,20 +31,26 @@ only makes the future authority claimable and drift-checked.
 
 ## 1. Resource and claim grammar
 
-`RESOURCE_NAMES` gains `provider-protocol`. Its only claim form is:
+The explicit absent-root lifecycle, unique `first lane 1` claim and landed-to-missing refusal are
+the durable owner route for [[D2361]]; a fresh reviewer must verify that repair before this RFC can
+be accepted.
+
+`RESOURCE_NAMES` gains `provider-protocol`. Its claim forms are:
 
 ```text
-provider-protocol | lane <positive safe integer> | <one or more sorted unique symbol tokens>
+provider-protocol | first lane 1 | <one or more sorted unique symbol tokens>
+provider-protocol | lane <positive safe integer greater than the landed head> | <one or more sorted unique symbol tokens>
 ```
 
-The resource is sequential and single-writer. At most one live claim exists and it must equal
-`tree head + 1`; same-head, skipped, backward, duplicate or parallel claims fail. Symbol tokens use
+The resource is sequential and single-writer. While absent, exactly one claimant uses `first lane
+1`; ordinary numeric/member claims fail. Once landed, at most one live claim exists and it must
+equal `tree head + 1`; first, same-head, skipped, backward, duplicate or parallel claims fail. Symbol tokens use
 the existing `path#symbol` grammar and are compared as a sorted set, not prose.
 
 When this process RFC lands, `provider-exchange-and-execution.md` atomically replaces `none` with:
 
 ```text
-provider-protocol | lane 1 | packages/runtime/src/provider-protocol.ts#PROVIDER_PROTOCOL_DECLARATIONS; packages/runtime/src/provider-protocol.ts#PROVIDER_PROTOCOL_VERSION
+provider-protocol | first lane 1 | packages/runtime/src/provider-protocol.ts#PROVIDER_PROTOCOL_DECLARATIONS; packages/runtime/src/provider-protocol.ts#PROVIDER_PROTOCOL_VERSION
 ```
 
 Its Active-register claim cell and the new register's live row contain the same lane, owner and
@@ -108,12 +114,16 @@ join, not their implementation meaning.
 
 ```text
 ## Provider-protocol register
-<!-- register: provider-protocol head=0 -->
+<!-- register: provider-protocol head=absent -->
+<!-- contract-digest: provider-protocol absent -->
 ```
 
-The Landed table is empty and the Live claims table contains provider exchange lane 1. A missing
-tree file is legal only while head is 0, Landed is empty and exactly one valid lane-1 claim exists.
-Once head is positive, missing/computed/broad/unparseable version or declarations fail closed.
+The exact future root is
+`packages/runtime/src/provider-protocol.ts#PROVIDER_PROTOCOL_VERSION`. The Landed table is empty and
+the Live claims table contains provider exchange `first lane 1`. A missing root is legal only while
+the state is `absent`, Landed is empty and exactly one valid first claim exists. Head 0 is invalid
+in markers, rows, claims and CLI output. Once any Landed row exists, a missing or renamed root is
+`LANDED_RESOURCE_CANNOT_BECOME_ABSENT`, never a withdrawal or a second first claim.
 
 On the product landing, the checker derives head 1 and the complete identities from the literal
 artifact, the README moves lane 1 to Landed with its owning RFC, and the live claim disappears in
@@ -127,7 +137,7 @@ Program/TypeChecker, it proves:
 
 1. exactly one resource/register/head line exists;
 2. claim and README rows are bijective and sequential;
-3. the pre-landing exception has head 0, empty Landed and exactly one lane-1 claim;
+3. the pre-landing state is `absent`, has empty Landed and exactly one `first lane 1` claim;
 4. after landing, version and declaration tuple are literal, closed and tree/Landed-equal;
 5. operation ids are unique and every operation field is literal and exact;
 6. digest domains and constructor symbols are unique and exact;
@@ -146,8 +156,8 @@ parallel ownership only.
 
 The process implementation crosses at least:
 
-1. absent tree + head 0 + empty Landed + exact lane-1 claim passes;
-2. absent tree without a claim, or with head/Landed > 0, fails;
+1. absent named root + `head=absent` + empty Landed + exact first-lane-1 claim passes;
+2. absent root without a first claim, with numeric head, ordinary lane/member claim or Landed row fails;
 3. duplicate resource/register/head or claim fails;
 4. same/skipped/backward/unsafe lane fails;
 5. two live claimants fail;
@@ -160,7 +170,8 @@ The process implementation crosses at least:
 12. count-preserving operation, parser, projection, factory, CLI or domain swap fails;
 13. product landing without the prior exact claimant, with wrong owner/symbols or leaving the claim
     live fails; and
-14. unrelated provider semantic byte changes remain outside C11 rather than producing a false
+14. landed history followed by missing/renamed root fails and cannot accept another first claim;
+15. unrelated provider semantic byte changes remain outside C11 rather than producing a false
     process guarantee.
 
 ## 6. Implementation boundary and order
@@ -171,7 +182,7 @@ roadmap receipt. It creates no provider protocol product file.
 
 Order:
 
-1. fresh independent review executes the fourteen process fixtures;
+1. fresh independent review executes the fifteen process fixtures;
 2. implement C11 plus the empty register and provider lane-1 claim;
 3. run normal `make register-check`, governance and full verification;
 4. archive this process RFC with ledger and exploration-log closeout;
@@ -184,7 +195,7 @@ Order:
 3. The legal absent-tree phase cannot persist after a product landing.
 4. The exact provider claim exists in its RFC and README only after this process implementation.
 5. The product declaration becomes the sole identity authority; copied equal vocabularies fail.
-6. All fourteen negative/positive process fixtures execute and can fail for their named reason.
+6. All fifteen negative/positive process fixtures execute and can fail for their named reason.
 7. `make register-check`, `make verify-governance` and `make verify` pass through normal targets.
 8. No production, schema, migration, API, content, archive or protected-design byte changes before
    acceptance.
@@ -204,6 +215,9 @@ resource. Provider semantics remain in the provider RFC.
 
 ## Changelog
 
-- 2026-08-30: drafted from the second fresh provider return. Defines the pre-landing head-0 state,
+- 2026-08-31: author-repaired [[D2361]]. Replaced fictional head 0 with named-root `absent`, unique
+  `first lane 1`, absent digest and a one-way landed lifecycle. Fifteen fixtures now include
+  landed→missing-root regression. Fresh review remains required.
+- 2026-08-30: drafted from the second fresh provider return. Defined the pre-landing head-0 state,
   sequential lane grammar, one tuple authority, C11 joins and fourteen able-to-fail fixtures. No
   checker, register or product implementation is authorized yet.

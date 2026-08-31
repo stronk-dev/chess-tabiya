@@ -12682,3 +12682,10 @@ registry importer. Value receipts remain construction provenance, never semantic
 bounded-target-fourth-author-repair` passes 3/3 plus the imported typecheck. No production, schema,
 content, archive or protected-design byte changed. Receipt:
 `planning/bounded-policy-targets/third-return-author-repair-2026-08-31.md`.
+
+## 2026-08-31 — Provider-protocol pre-review lifecycle repair
+
+Recorded and author-repaired [[D2361]] before independent review. The future provider wire now uses
+named-root `absent`, an absent digest, unique `first lane 1` and a fatal landed→missing-root
+regression; fictional head 0 is never serialized. `make provider-protocol-author-repair` passes
+2/2. No checker, register, product, schema, content, archive or protected-design byte changed.

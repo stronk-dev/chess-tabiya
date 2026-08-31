@@ -330,6 +330,7 @@ provider-exchange-second-fresh-review:
 	node --test tools/d2184-provider-exchange-second-fresh-review/*.test.mts
 
 .PHONY: provider-exchange-second-author-repair
+.PHONY: provider-protocol-author-repair
 provider-exchange-second-author-repair:
 	node --test tools/d2184-provider-exchange-second-author-repair/*.test.mjs
 
@@ -593,3 +594,6 @@ up-engines:
 
 down:
 	docker compose --profile engines --profile devcontainer down
+
+provider-protocol-author-repair:
+	node --test tools/d2361-provider-protocol-author-repair/*.test.mjs
