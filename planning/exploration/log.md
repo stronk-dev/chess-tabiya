@@ -12843,3 +12843,21 @@ tests, 2 performance tests and 172 real-content tests, with schema, build and go
 green. No production schema/migration/storage/route/runtime/client/CSS/official-content/archive/
 protected-design byte changed. Fresh independent review and accepted dependencies still gate
 implementation. Receipt: `planning/campaign/third-author-repair-2026-08-31.md`.
+
+## 2026-08-31 — Evidence foundation closure re-derived at HEAD
+
+Closed [[D2374]] by joining the current compiled manifest to four independent authorities instead
+of extending the stale 2026-08-23 absence list. The declared thirty-family 1.0 source basis is 14
+landed / 7 version-repair / 9 specified-unlanded. The manifest is 37 producers / 193 projections /
+25 consumers / 210 bindings, but all 67 semantic projections still terminate before a live
+application operation. Event-level validation reaches 39 positives and 10 semantic negatives;
+value routing leaves five non-retired projections with no route and five routed projections with no
+production use; bindings split 93 current / 67 research-only / 33 unbound.
+
+The result changes the next wave from generic collector expansion to explicit closure of
+source→value→operation→validation→consumer. Overload, deflection, clearance, mating nets and
+the other requested basic motifs already have grounded predicates; they are not learner/bot/Review
+capabilities until the remaining authority chain lands. `make foundation-closure-check` is the new
+normal entry point and passed against manifest digest
+`eb36f05e25a007f036e750c8555a7ebd032443c3b720d8888ceeb1f8dc1cb6be`. Full receipt:
+`design/research/foundation-capability-closure-2026-08-31.md`.

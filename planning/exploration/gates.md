@@ -315,6 +315,15 @@ observations and agree with exact W/D/L throughout. The preregistered ±25 cp sc
 fixed population, but B4 does not gain a scalar normalization: cp/mate and W/D/L/DTZ/DTM remain
 typed, source-local operands, and cross-version/independent-population validation is still absent.
 
+**B4 closure note, 2026-08-31 ([[D2374]]):** `make foundation-closure-check` joins the current
+37/193/25/210 manifest to the source, value-route, execution and validation authorities. The
+declared thirty-family source basis is 14 landed / 7 version-repair / 9 specified-unlanded; all 67
+semantic projections stop before a live application operation; event validation is 39 positives /
+10 semantic negatives; and projection bindings split 93 current / 67 research-only / 33 unbound.
+This is evidence that B4's residual is foundation closure rather than an absent motif-name list.
+B4 remains open; catalogue breadth cannot discharge source identity, execution, validation,
+consumer selection or owner-use.
+
 **Watch item — the Lucas Chess failure mode:** breadth without unifying depth
 produces a mode menu, not a product (our own competitor research named this
 case). If surfaces accumulate while B4 stays unmet, that is K6/K4 evidence

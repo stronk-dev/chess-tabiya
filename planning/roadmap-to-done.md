@@ -124,6 +124,16 @@ endpoint/path/history projections, typed availability, production API route, and
 ship. Its learner-facing Review, theory, bot, and longitudinal bindings deliberately remain owned
 by those capabilities rather than being smuggled in as raw labels.
 
+The 2026-08-31 closure re-run makes the remaining foundation work exact. The declared thirty-family
+source basis is 14 landed / 7 version-repair / 9 specified-unlanded. The 193 projections split 93
+current-bound / 67 research-only / 33 unbound, and all 67 semantic projections still stop before a
+live application operation. Event-level validation reaches 39 positives and 10 semantic negatives;
+five non-retired projections have no value route and five routed projections have no production
+use. `make foundation-closure-check` joins those independent authorities. This replaces the stale
+question "which motif names are missing?" with the release path
+source→value→operation→validation→consumer. Receipt:
+`design/research/foundation-capability-closure-2026-08-31.md` ([[D2374]]).
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded
