@@ -472,6 +472,7 @@ test("immediate guard waits for the consequence, preserves play-on, and rewinds 
   await prompt.getByRole("button", { name: "Rewind" }).click();
   await expect(page.getByText("Active line 0 plies")).toBeVisible();
   await move(page, "h2", "h4");
+  await page.getByRole("button", { name: "Branches", exact: true }).click();
   await expect(page.getByRole("button", { name: /Switch to branch 1:/ })).toBeVisible();
   await expect(page.getByRole("button", { name: /Switch to branch 2:/ })).toBeVisible();
 });
@@ -1342,6 +1343,7 @@ test("branch group captures three candidates, rotates, recovers evidence, compar
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.getByText("Active line 2 plies")).toBeVisible();
 
+  await page.getByRole("button", { name: "Actions", exact: true }).click();
   await page.getByRole("button", { name: "Branch group" }).click();
   await expect(page.getByRole("heading", { name: "Create a branch group" })).toBeVisible();
   await move(page, "f2", "f3");
@@ -1498,6 +1500,7 @@ test("a granted spectator follows a run without receiving a write control", asyn
   await expect(reviewAccess).toContainText("Review tools open after this attempt reaches its recorded outcome");
   await expect(reviewAccess).toContainText("Read access remains available now");
   await expect(spectator.getByRole("button", { name: "Take the board on this device" })).toHaveCount(0);
+  await spectator.getByRole("button", { name: "Actions", exact: true }).click();
   await expect(spectator.getByRole("button", { name: /^Fork/ })).toBeDisabled();
   await expect(spectator.getByRole("button", { name: "Branch group" })).toBeDisabled();
 
@@ -1592,7 +1595,19 @@ test("@matrix play composition keeps one exact board rectangle through reachable
     await assertRunViewport(page, viewport);
     const calm = await page.getByLabel("Chessboard").boundingBox();
     expect(calm).not.toBeNull();
+    await expect(page.locator(".companion-section:visible")).toHaveCount(viewport.width <= 719 ? 0 : 1);
     await attachCompositionCell(page, testInfo, viewport, "01-calm-rest");
+
+    for (const region of ["Support", "Branches", "Actions"] as const) {
+      await page.getByRole("button", { name: region, exact: true }).click();
+      const regionLabel = region === "Actions" ? "Run actions" : region;
+      await expect(page.getByRole("region", { name: regionLabel, exact: true })).toBeVisible();
+      await expect(page.locator(".companion-section:visible")).toHaveCount(1);
+      expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
+      if (viewport.width <= 719) {
+        await page.getByRole("button", { name: "Collapse companion" }).click();
+      }
+    }
 
     await page.getByText("Assistance", { exact: true }).click();
     await expect(page.locator("details.assistance-control")).toHaveAttribute("open", "");
@@ -1814,10 +1829,8 @@ test("@matrix rewind, fork re-entry, and comparison remain composed at every vie
       await page.getByRole("button", { name: "Continue" }).click();
     }
 
+    await page.getByRole("button", { name: "Branches", exact: true }).click();
     const mainBranch = page.getByRole("button", { name: /Switch to branch 1: main/ });
-    if (!await mainBranch.isVisible()) {
-      await page.getByRole("button", { name: "Branches", exact: true }).click();
-    }
     await mainBranch.click();
     await page.getByRole("button", { name: /Switch to branch 2: quiet setup/ }).click();
     await expect(page.locator(".rail li.active strong")).toHaveText("quiet setup");
@@ -2312,6 +2325,7 @@ test("drill shortcuts keep native controls and never leak a shell chord from the
   await page.keyboard.press("Escape");
   await expect(page.locator("main.drill")).toBeFocused();
 
+  await page.getByRole("button", { name: "Actions", exact: true }).click();
   await expect(page.getByRole("button", { name: "Fork branch", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Replay", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Export", exact: true })).toBeVisible();
@@ -2368,11 +2382,18 @@ test("@matrix normal Tab traversal reaches every drill region in both directions
     throw new Error(`${keys} did not leave the drill region`);
   }
 
-  const expected = ["assistance", "inspector", "help", "text-summary", "text-input", "text-submit", "board-grid", "timeline", "companion-tabs", "branches", "board-marks", "run-actions"];
-  const forward = await trace("Tab", page.locator("main.drill .wordmark"));
-  for (const item of expected) expect(forward.has(item), `forward traversal missed ${item}`).toBe(true);
-  const backward = await trace("Shift+Tab", page.locator(".quick-actions button").last());
-  for (const item of expected) expect(backward.has(item), `reverse traversal missed ${item}`).toBe(true);
+  const alwaysReachable = ["assistance", "inspector", "help", "text-summary", "text-input", "text-submit", "board-grid", "timeline", "companion-tabs"];
+  for (const [region, regionMarkers, reverseStart] of [
+    ["Branches", ["branches"], ".branch-seat button"],
+    ["Actions", ["board-marks", "run-actions"], ".quick-actions button:last-child"],
+  ] as const) {
+    await page.getByRole("button", { name: region, exact: true }).click();
+    const expected = [...alwaysReachable, ...regionMarkers];
+    const forward = await trace("Tab", page.locator("main.drill .wordmark"));
+    for (const item of expected) expect(forward.has(item), `${region} forward traversal missed ${item}`).toBe(true);
+    const backward = await trace("Shift+Tab", page.locator(reverseStart).last());
+    for (const item of expected) expect(backward.has(item), `${region} reverse traversal missed ${item}`).toBe(true);
+  }
 });
 
 test("@matrix mobile shell, settings, and install manifest preserve the run regions", async ({ page }) => {

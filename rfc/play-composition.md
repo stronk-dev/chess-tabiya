@@ -1,6 +1,6 @@
 # RFC: Play composition
 
-- **Status:** implementing — shell checkpoint landed 2026-08-22; the 2026-08-26 comparison checkpoint removes raw objective/engine/detector/route records from the ordinary comparison and gives them one explicit, focus-restoring Evidence inspector. Exact seven-viewport geometry, closed stage, responsive companion, stable board instance and post-gesture browser gates remain live. Module seats, remaining vocabulary cleanup and the full 7×16 screenshot matrix remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
+- **Status:** implementing — shell checkpoint landed 2026-08-22; the 2026-08-26 comparison checkpoint removes raw objective/engine/detector/route records from the ordinary comparison; the 2026-08-31 queue checkpoint makes Support/Branches/Actions one-expanded at every viewport, selects the relevant seat on critical/branch transitions, and fails learner move labels closed instead of exposing UCI. Exact seven-viewport geometry, stable board identity and the permanent browser gates are live. Module seats/badges, remaining vocabulary cleanup and the five module-dependent columns of the 7×16 matrix remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
 - **Author:** claude (drafted on the D717 program routing, Phase 4)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §1 (invariants), §2 (the five regions),
@@ -731,6 +731,17 @@ document's to rewrite). Rows proposed by the cross-review, from head+1, NOT writ
   is required before A4 can close on those rows — held by this RFC's Discharges D4.
 
 ## Changelog
+
+- 2026-08-31: the structural companion now obeys §2.2 instead of stacking Support, Branches and
+  Actions on desktop. Exactly one structural seat is expanded; Support is the ordinary default;
+  consequence guards select Support; branch/group creation selects Branches without forcing the
+  phone overlay over the next move. The browser gate switches all three seats at all seven
+  viewports, asserts one visible seat (zero while the phone rim is collapsed), byte-equal board
+  geometry, and forward/reverse keyboard reachability per selected region. Ordinary Compare and
+  theory copy now render SAN or honest unavailable copy and never fall back to raw UCI. `make
+  test-software` passes 1,097/1,097; `make test-browser` passes 60 with one optional Maia latency
+  probe skipped. The RFC remains implementing: this is the structural queue, not the eleven module
+  seats or their five remaining matrix states.
 
 - 2026-08-22: adversarial cross-review (independent), at HEAD `d8dff66` (`register-check`
   13 active / C1–C6 green, `status-parity` 14 active / P1–P6 green, `make intent-parity`

@@ -132,6 +132,7 @@ test("two learners alternate a native match, pause to branch, and return to the 
     await white.page.reload();
     await expect(white.page.getByLabel("Live session rail")).toContainText("Paused — rehearsal is open");
     await play(white.page, "d2", "d4", "white");
+    await white.page.getByRole("button", { name: "Branches", exact: true }).click();
     await expect(white.page.getByRole("button", { name: /Switch to branch/ })).toHaveCount(2);
     const reveal = await white.page.request.post(`/runs/${encodeURIComponent(runId)}/reveal`, {
       headers: { "x-writer-id": pausedWriter! }, data: {},

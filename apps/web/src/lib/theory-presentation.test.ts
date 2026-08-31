@@ -35,4 +35,10 @@ describe("theory verdict presentation", () => {
       "Ply 8, Qd2: the pack has authored commentary about this alternative.",
     );
   });
+
+  it("does not expose the UCI anchor when the run lacks SAN", () => {
+    expect(theoryVerdictSentence(item(), { nodes: [{ id: "n1", moveSan: null }] } as unknown as DrillRun)).toBe(
+      "Ply 8, the recorded move: the pack has authored commentary about this alternative.",
+    );
+  });
 });

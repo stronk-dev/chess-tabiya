@@ -1,6 +1,7 @@
 import type { DrillRun } from "@chess-tabiya/runtime";
 
 import type { AuthoredFeedbackItem } from "./api.js";
+import { learnerMoveLabel } from "./learner-move-label.js";
 
 export const UNKNOWN_THEORY_NOTE =
   "Unknown is not a judgement. The author wrote nothing about this move, and nothing here says it was good or bad.";
@@ -9,7 +10,10 @@ export function theoryVerdictSentence(
   item: Extract<AuthoredFeedbackItem, { kind: "theory_verdict" }>,
   run: DrillRun,
 ): string {
-  const san = run.nodes.find((node) => node.id === item.anchor.nodeId)?.moveSan ?? item.anchor.moveUci;
+  const san = learnerMoveLabel(
+    run.nodes.find((node) => node.id === item.anchor.nodeId)?.moveSan,
+    "the recorded move",
+  );
   if (item.verdict === "on_line") {
     return `Ply ${item.anchor.ply}, ${san}: on the authored line.`;
   }

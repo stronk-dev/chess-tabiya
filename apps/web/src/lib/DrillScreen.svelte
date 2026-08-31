@@ -213,7 +213,7 @@
   let boardActiveRunId: string | undefined = $state();
   let boardMoveAnnouncement: string | undefined = $state();
   let boardFocusRequested = $state(false);
-  let compactTab: "timeline" | "branches" | "evidence" = $state("timeline");
+  let compactTab: "timeline" | "branches" | "evidence" = $state("evidence");
   let companionInvoker = $state<HTMLElement>();
   let companionElement = $state<HTMLElement>();
   let decidedness: Readonly<Record<string, Decidedness>> = $state({});
@@ -525,6 +525,8 @@
     });
     groupOpen = false;
     groupCandidates = [];
+    compactTab = "branches";
+    sheetOpen = viewportSupport.width > 719;
   }
 
   async function nextGroupMember(group: BranchGroup): Promise<void> {
@@ -752,6 +754,8 @@
     await onFork(forkLabel, forkIntent);
     forkLabel = "";
     forkIntent = "";
+    compactTab = "branches";
+    sheetOpen = viewportSupport.width > 719;
   }
 
   async function continueFromCheckpoint(): Promise<void> {
@@ -894,6 +898,12 @@
       compactTab = "evidence";
       sheetOpen = true;
     }
+  });
+
+  $effect(() => {
+    if (guardEvent?.type !== "feedback.generated") return;
+    compactTab = "evidence";
+    sheetOpen = true;
   });
 
   $effect(() => {
@@ -1680,8 +1690,9 @@
   }
 
   .rail-stack{min-width:0;min-height:0;display:grid;grid-template-rows:auto auto minmax(0,1fr);overflow:hidden;border-left:1px solid var(--line);background:var(--panel)}
-  .companion-scroll { min-height: 0; display: grid; gap: .65rem; padding: .65rem; overflow-y: auto; overscroll-behavior: contain; }
-  .companion-section { min-width: 0; display: grid; gap: .55rem; }
+  .companion-scroll { min-height: 0; display: grid; padding: .65rem; overflow: hidden; }
+  .companion-section { min-width: 0; min-height: 0; display: none; gap: .55rem; overflow-y: auto; overscroll-behavior: contain; }
+  .companion-section.compact-active { display: grid; }
   .next-member{justify-self:start;padding:.4rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--panel);color:inherit}.group-creator{position:fixed;z-index:24;left:50%;bottom:1rem;width:min(60rem,calc(100% - 2rem));transform:translateX(-50%);display:flex;align-items:end;gap:.65rem;flex-wrap:wrap;padding:.65rem;border:1px solid var(--accent);border-radius:.75rem;background:var(--panel);box-shadow:var(--shadow)}.group-creator p,.group-creator h2{margin:0}.group-creator h2{font:600 1rem var(--display-font)}.group-creator label{display:grid;gap:.2rem;font-size:.7rem;color:var(--muted)}.group-creator select,.group-creator input,.group-creator button{padding:.45rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--paper);color:inherit}.capture-help{flex-basis:100%;color:var(--muted);font-size:.72rem}.candidate-chips{display:flex;gap:.35rem;flex-wrap:wrap}.creator-actions{display:flex;gap:.35rem}.group-creator .honest{flex-basis:100%;color:var(--muted);font-size:.68rem}
   .mark-controls { display: grid; gap: .35rem; padding: .55rem; border: 1px solid var(--line); border-radius: .65rem; color: var(--muted); font-size: .72rem; }
   .mark-controls label { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }

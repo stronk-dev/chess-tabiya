@@ -23,15 +23,22 @@ moves; position changes use the component's `board.set()` path.
 ## Companion and Inspector
 
 Desktop uses a fixed 336 px companion rail. Tablet uses a fixed 176 px band. Phone keeps a 48 px
-rim in layout and expands its companion as an overlay sheet. The current structural seats are
-Support, Branches and Actions; they are the shell into which the accepted learner modules will be
-compiled, not a substitute for those modules.
+rim in layout and expands its companion as an overlay sheet. Support, Branches and Actions form one
+queue: exactly one structural seat is expanded, Support is the ordinary default, a consequence guard
+selects Support, and creating a branch or branch group selects Branches. On phone, branch creation
+selects the seat without covering the board before the learner's next move. These structural seats
+are the shell into which the accepted learner modules will be compiled, not a substitute for those
+modules.
 
 Raw position structure, transition census, human-model candidates and corpus counts are available
 only in the explicit full-screen Evidence Inspector. Ordinary play does not render those diagnostic
 readings as a hint stream. The attempt-complete dialog follows the same boundary: it keeps the
 outcome, authored commentary and return actions in view, while an explicit “Inspect recorded
 evidence” door opens the exact terminal engine/tablebase records in the Inspector.
+
+Ordinary move copy has one final boundary: it renders SAN or honest unavailable copy. It never
+falls back to the run's UCI identity when SAN is absent; raw move identities remain Inspector/export
+data.
 
 The same boundary applies before the attempt ends. Branches, branch groups, Support and checkpoint
 sheets share learner-facing labels for objective progress and game outcomes. They describe where
@@ -54,5 +61,5 @@ text entry, Inspector, objective overlays and the phone companion sheet. It sepa
 stable board identity after a committed move, permanent pointer/touch/keyboard/text input and
 multi-user match behavior.
 
-The RFC remains implementing. The module queue, remaining SAN/vocabulary cleanup and complete
+The RFC remains implementing. The module seats and badges, remaining vocabulary cleanup and complete
 7×16 screenshot matrix are still required before archival.

@@ -360,12 +360,15 @@ describe("Layer 3 screens", () => {
     const ambient = document.querySelector<HTMLButtonElement>('button[aria-label="Open assistance"]')!;
     const tabs = [...document.querySelectorAll<HTMLButtonElement>(".compact-tabs button:not(.sheet-close)")];
     expect(tabs.map((tab) => [tab.textContent, tab.getAttribute("aria-pressed")])).toEqual([
-      ["Support", "false"],
+      ["Support", "true"],
       ["Branches", "false"],
-      ["Actions", "true"],
+      ["Actions", "false"],
     ]);
     expect(ambient.getAttribute("aria-controls")).toBe("run-support-region");
     expect(document.querySelector(".rail-stack")?.classList.contains("sheet-open")).toBe(false);
+    tabs[2]!.click();
+    await tick();
+    expect(tabs[2]?.getAttribute("aria-pressed")).toBe("true");
     ambient.click();
     await tick();
     expect(document.querySelector(".rail-stack")?.classList.contains("sheet-open")).toBe(true);

@@ -21,7 +21,7 @@ remain in their owning RFCs.
    is gone; a reset token re-asserts capture state through the existing `board.set()` path.
 7. Permanent browser checks cover exact geometry at all seven viewports, text entry, objective and
    Inspector overlays, phone sheet gestures, stable board DOM identity, keyboard traversal, the
-   150 input projections, visible move interpolation and the multi-user match flows. Current browser result: 37 passed, one
+   150 input projections, visible move interpolation and the multi-user match flows. Current browser result: 60 passed, one
    optional Maia latency test skipped. Successful CI now retains an HTML report on every outcome;
    the first explicit state matrix contributes 42 named attachments (six reachable states × seven
    viewports) instead of producing evidence only when a test fails.
@@ -46,12 +46,19 @@ remain in their owning RFCs.
 13. Selected-square captions follow Chessboard's authoritative settled selection across pointer,
     keyboard, commit and history changes. The tablet branch band separates identity, horizontally
     scrollable cards and actions, so its real branch buttons are not covered by footer controls.
+14. Support, Branches and Actions now use one expanded structural seat at every viewport instead of
+    stacking all three in the desktop rail. Support is the ordinary default; consequence guards
+    select Support; branch and branch-group creation select Branches without forcing the phone sheet
+    over the next move. The seven-viewport browser matrix proves every switch preserves the exact
+    board rectangle, and keyboard traversal proves each queued region remains reachable in both
+    directions. Learner-visible move labels also fail closed when SAN is absent rather than exposing
+    raw UCI from the run or authored anchor.
 
 ## Remaining before archive
 
-1. Compile and seat the eleven learner modules once their collector dependencies land; implement
-   the one-expanded queue and fact-count badges rather than treating the three structural tabs as
-   final module composition.
+1. Compile and seat the eleven learner modules once their collector dependencies land; extend the
+   shipped one-expanded structural queue with the declared module seats and fact-count badges rather
+   than treating Support/Branches/Actions as final module composition.
 2. Remove the remaining ordinary-surface vocabulary leaks named by §5. The related-pack relation
    currently suppresses its raw UCI until an authoritative SAN projection exists; phase, compare,
    tablebase and voice families still need their compiled module renderers.

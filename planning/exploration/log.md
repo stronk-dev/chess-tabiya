@@ -12892,3 +12892,19 @@ export-only route, module-scope ownership, mismatched use counts or a non-litera
 and register/status/roadmap/work-index governance is green. Semantic-convention provenance,
 provider exchange, semantic validation and fresh independent review still gate RFC acceptance and
 implementation; no learner binding, source payload, content or product byte changed.
+
+## 2026-08-31 — Play composition structural queue checkpoint
+
+Finished the dependency-free remainder of the accepted play-composition shell without pretending
+the returned module registry is available. Support, Branches and Actions now share one expanded
+structural seat on desktop and tablet; phone retains zero expanded seats while its rim is collapsed.
+Support is the ordinary default, consequence guards select Support, and branch/group creation
+selects Branches without forcing the phone sheet over the learner's next move. Every region switch
+at all seven accepted viewports preserves the exact board rectangle, and forward/reverse keyboard
+passes prove that queued content remains reachable rather than merely hidden.
+
+Ordinary Compare and theory feedback also fail closed to honest move copy when SAN is absent rather
+than exposing raw UCI. `make test-software` passes 1,097/1,097 and `make test-browser` passes 60 with
+one optional Maia latency probe skipped. The RFC remains implementing: 77/112 screenshot cells are
+real; the remaining 35 are the five module-emission states, and the eleven compiled module seats,
+fact badges and D924 Inspector bindings remain blocked on the returned module-registration chain.

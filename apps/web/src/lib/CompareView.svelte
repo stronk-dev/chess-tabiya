@@ -15,6 +15,7 @@
     type ComparisonZoomBand,
   } from "./compare-geometry.js";
   import { renderEvidenceRef } from "./evidence-sentences.js";
+  import { learnerMoveLabel } from "./learner-move-label.js";
   import { resistanceModeLabel, resistanceSentences } from "./outcome-presentation.js";
   import { comparisonNode, evidencePayloads } from "./screen-model.js";
   import { renderStructuralObservation } from "./structural-sentences.js";
@@ -75,7 +76,7 @@
       branchId: column.branchId,
       label: column.label,
       intent: run.branches.find((branch) => branch.id === column.branchId)?.intent,
-      moveSan: node.moveSan ?? node.moveUci,
+      moveSan: learnerMoveLabel(node.moveSan),
       actor: node.actor,
       index,
       from: displayed[0],
