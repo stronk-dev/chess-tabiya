@@ -119,7 +119,7 @@ test("claims and implementation boundary stay honest", () => {
   assert.match(rfc, /No ordinary module binding, preset, relevance rule, wording or content file changes/u);
   assert.match(rfc, /fresh independent buildability review/u);
   const criteria = rfc.match(/## Acceptance criteria\n([\s\S]*?)\n## Discharges/u)?.[1] ?? "";
-  assert.equal([...criteria.matchAll(/^\d+\./gmu)].length, 25);
+  assert.equal([...criteria.matchAll(/^\d+\./gmu)].length, 26);
 });
 
 test("recorded runtime readings derive from their exact sourcing-ledger evidence", () => {

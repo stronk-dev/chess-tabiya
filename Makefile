@@ -563,6 +563,10 @@ concept-registry-author-contract:
 campaign-catalogue-author-contract:
 	node --test tools/campaign-catalogue-author-contract/contract.test.mjs
 
+.PHONY: module-successor-alignment-contract
+module-successor-alignment-contract:
+	node --test tools/d2373-module-successor-alignment/contract.test.mjs
+
 pack-check:
 	@test -n "$(FILE)" || (echo "Usage: make pack-check FILE=<path-to-pack.json>" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/pack-check.ts --bundle --platform=node --format=esm --outfile=dist/pack-check.js

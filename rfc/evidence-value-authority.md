@@ -208,11 +208,16 @@ Neither duplicates the other.
 FEN. Every current consumer migrates atomically; v1 remains readable only for in-process backward
 compatibility during the implementation commit and is absent from the final binding set.
 
-`rules.structural.reading.named_structure@1` is retired from new bindings. Its successor
+[[D1727]] is closed at the position-evidence boundary: `rules.structural.reading.named_structure@1`
+is retired from new bindings. Its successor
 `rules.structural.reading.named_structure@2` carries exactly `id`, `name` and
 `provenanceNote`, declares `declared_convention/convention`, and is computed from FEN through the
 registered structure catalogue. The current one-operand declaration is deleted; arbitrary
 `provenanceNote` cannot be sealed.
+
+The payload deliberately carries no run node. [[D2372]] therefore belongs to the Campaign consumer:
+`campaign-catalogue-progression.md` derives a same-position sighting from this value plus sealed
+`run.record.position@1`. This RFC must not widen a reusable position fact with a Campaign subject.
 
 Both successor truth sets remain byte-compatible with current producer outputs. The version change
 records corrected authority and operands rather than silently rewriting v1.
@@ -465,6 +470,10 @@ planes, optional LLM renderer and assistance ceilings.
     `recorded.engine.eval@1` and `recorded.tablebase.result@1` consume their exact same-record
     `sourcing.ledger.*` evidence outputs; caller bytes, another record and same-FEN value mutations
     fail before either runtime reading is minted ([[D2327]]).
+26. `named_structure@2` has exactly `id`, `name`, and `provenanceNote`; arbitrary payloads and the v1
+    prose-only route fail. The module successor handoff is explicit, while Campaign node identity is
+    supplied only by its separately declared same-position derivation ([[D1727]], [[D2372]],
+    [[D2373]]).
 
 ## Discharges
 

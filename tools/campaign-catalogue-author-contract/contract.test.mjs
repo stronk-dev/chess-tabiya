@@ -17,8 +17,9 @@ test("two durable tables retain exact occurrence and projection state", () => {
 });
 
 test("shape and structure require exact evidence while concepts abstain", () => {
-  has("theory.shapes.firing@1", "D1727", "no_position_scoped_occurrence_authority", "pack-wide concept reference");
+  has("theory.shapes.firing@1", "D1727", "derived.campaign.catalogue.named_structure_sighting@1", "byte-identical RecordedPosition.fen", "no_position_scoped_occurrence_authority", "pack-wide concept reference");
   assert.match(backlog, /D2371/);
+  assert.match(backlog, /D2372/);
 });
 
 test("migration chain stays contiguous", () => {

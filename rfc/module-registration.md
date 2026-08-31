@@ -43,6 +43,9 @@
   region, the seat mechanics of its §4, the leak-destination table of its §5);
   implementing `rfc/move-quality-grades.md` (its projection landed — §0.3);
   accepted `rfc/tactical-collectors.md` and `rfc/breadth-collectors.md` (the projection ids).
+  **Acceptance additionally depends on `rfc/evidence-value-authority.md` landing its complete
+  successor image.** [[D2373]] proves that four families in the current sealed requirements are
+  retired there; §1.3.1 owns the deterministic post-landing regeneration.
   The arrow form additionally consumes `rfc/evidence-presentation.md`'s amended sealed
   `relation_overlay`; the existing identity-preserving transition-event layer, its literal
   relation adapters, and the measured per-family guided-hint horizon **and disclosure** registries are mandatory
@@ -540,6 +543,28 @@ the declarations.
 | `module.compare_coach` | `derived.compare.{structure_delta, eval_delta, engine_trajectory, piece_route}`; `run.record.{fork, consequence, objective_transition, checkpoint_hit}` | 8 |
 | `module.review_map` | the complete 50-row Post-commit Nudge set; `rules.pivotal.marker`, `rules.phase.reading`, `rules.endgame.reading`; `recorded.engine.eval`, `recorded.tablebase.result`; `live.stockfish.{eval, wdl}`; `run.record.{objective_transition, consequence, imported_result}` | 60 |
 | `module.full_inspector` | `rules.tactic.reading.{loose_piece, ray_classification, rook_on_seventh, trapped_piece, back_rank, discovered_latency}`, `rules.tactic.consequence.{threat, mate_in_one, reply_breadth}`, `rules.structural.reading.{space, pawn_connectivity}`, `rules.phase.development`, `rules.castling.reading.{rights, legality}`, `derived.tactic.{discovered_executed, promotion_pressure}` (16); `rules.square.reading.control`, `rules.mobility.reading.piece_destinations`, `rules.pawn.reading.{contacts, candidate_majority}`, `derived.material.reading.role_signature`, `rules.king.reading.zone_state` (6); `live.stockfish.{eval, wdl, pv}`, `human.maia.{policy, candidate_wdl}`, `human.explorer.population`, `live.syzygy.{result, category, distance}`, `recorded.engine.eval`, `recorded.tablebase.result`, `theory.shapes.firing` (12); `rules.phase.reading`, `rules.pivotal.marker`, `derived.compare.{structure_delta, eval_delta}`, `derived.story.rank` (5); all seven observed semantic-tactic projections; ◇ `pack.authored.classifier` (1) | 47 |
+
+#### 1.3.1 Mandatory successor rebase before acceptance ([[D2373]])
+
+The table above and the checked-in 117/205 artifacts are a truthful snapshot of the compiled
+manifest at the fourth author repair. They are not the acceptance image: `evidence-value-authority`
+retires four families and the module requirements cannot accept retired refs. After that dependency
+lands, the generator—not a hand edit—applies this exact set replacement:
+
+| retired ref | successor refs | consuming modules | pair delta |
+|---|---|---|---:|
+| `rules.structural.reading.named_structure@1` | `rules.structural.reading.named_structure@2` | Sight, Structure Nudge | 0 |
+| `rules.phase.reading@1` | `rules.phase.reading@2` | Structure Nudge, Review Map, Full Inspector | 0 |
+| `rules.endgame.reading@1` | `rules.endgame.classification@1`; `theory.endgame.technique_candidate@1` | Structure Nudge, Review Map | +2 |
+| `rules.pivotal.marker@1` | `derived.pivotal.irreversibility@1`; `derived.pivotal.phase_change@1`; `derived.pivotal.human_divergence@1`; `derived.pivotal.option_collapse@1` | Review Map, Full Inspector | +6 |
+
+The replacement is set-equal over the four retired and eight successor refs. No v1/v2 pair may
+coexist in one module. The post-dependency drift tripwires are **declared `215 + R` / compiled
+`213 + R` / awaiting `2`**, and the unique requirement projection population is **121**, not 117.
+The two awaiting rows are unchanged; successor availability cannot be hidden as a third awaiting
+wildcard. The generated execution/binding JSON, digests, family witness, D1865 assembly fixture and
+all counts regenerate in one author-repair commit before fresh review. Until then the current
+artifacts remain evidence of the old manifest and cannot authorize implementation.
 
 Here `H = HINT_HORIZON_PROJECTION_IDS.length` and
 `R = HINT_DISCLOSURE_PROJECTION_IDS.length = H × HINT_RUNGS.length`; both are derived from the
@@ -1629,7 +1654,14 @@ deleting one disclosure id from the family×rung product fails;
     refuses mutation, duplicate/omitted boundary cursors and cancelled provider continuation. The
     sole role projection maps `solo→learner` plus the three identity arms and refuses unknown,
     author and operator route values; both module and F1 checks consume its output.
-21. **A21 — Closeout.** The landing commit flips this RFC's ledger rows, appends the
+21. **A21 — Successor image is current and set-equal** ([[D2373]]). After
+    `evidence-value-authority` lands, regeneration removes exactly the four retired refs, adds
+    exactly the eight successors in §1.3.1, produces 121 unique requirements and the derived
+    `215 + R` / `213 + R` / `2` pair image, and leaves no v1/v2 coexistence. Removing one successor,
+    retaining one retired ref, hand-editing either sealed JSON file or treating an unavailable
+    technique candidate as an awaiting wildcard fails independently. **RED now:** the dependency
+    has not landed and the checked artifacts correctly describe the pre-successor manifest.
+22. **A22 — Closeout.** The landing commit flips this RFC's ledger rows, appends the
     `planning/exploration/log.md` entry in the same commit, and writes its SHA into
     `move-quality-grades.md`'s D1 (which its Status line says blocks archival),
     `learner-modules.md`'s D1, and `play-composition.md`'s D2 where those are discharged.

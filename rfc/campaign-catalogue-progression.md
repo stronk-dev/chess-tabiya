@@ -11,7 +11,8 @@
 - **Exploration gate:** [[D1151]] is the owner ruling; [[D1171]] fixes the claim boundary;
   [[D2368]]/[[D2369]] reproduce the missing durable projection and migration seam.
 - **Depends on:** accepted/implemented `campaign-core.md`; exact registered shape library;
-  [[D1727]]'s identity-rich named-structure successor; accepted/implemented
+  `evidence-value-authority.md`'s [[D1727]] identity-rich named-structure successor plus sealed
+  `run.record.position@1`; accepted/implemented
   `concept-registry.md` for an honest declared-but-unavailable concept axis; account portability.
 - **Parent / amends:** `campaign-core.md` Discharge D6 and §10 closure map; supersedes no shipped
   recommendation API.
@@ -40,7 +41,7 @@ The v1 catalogue has three declared axes:
 | axis | denominator authority | occurrence authority | v1 availability |
 |---|---|---|---|
 | shape | installed compiled shape registry and digest | `theory.shapes.firing@1` exact entry/span | available |
-| named structure | installed closed `StructureId` metadata and digest | identity-rich successor to `rules.structural.reading.named_structure@1` at an exact node | dependency-blocked on [[D1727]] |
+| named structure | installed closed `StructureId` metadata and digest | `derived.campaign.catalogue.named_structure_sighting@1` over `named_structure@2` + `run.record.position@1` | dependency-blocked on [[D1727]]/[[D2372]] |
 | concept | compiled `ConceptRef` registry/digest | none: pack-wide reference is not position applicability | typed unavailable on [[D2371]] |
 
 The response renders counts only as catalogue facts: “8 of 25 shapes have appeared in this run.” It
@@ -107,10 +108,24 @@ An occurrence enters only when all of these are true:
 
 Shape admission stores `entryId`, `firstNodeId`, `lastNodeId` and `openEnded` from
 `theory.shapes.firing@1`; it does not re-run current triggers over historical FENs. Named-structure
-admission waits for [[D1727]]'s successor carrying exact `id`, `name` and node identity under one
-payload authority. The current `@1` projection is refused: it can carry only `provenanceNote` on one
-path and a `StructureMatch` on another, so neither prose nor an empty-square observation may be
-parsed into collection identity.
+admission waits for [[D1727]]'s `named_structure@2` successor, then derives exactly one Campaign-
+local projection:
+
+```text
+derived.campaign.catalogue.named_structure_sighting@1
+inputs: rules.structural.reading.named_structure@2 + run.record.position@1
+payload: { nodeId, ply, fen, id, name, provenanceNote }
+join: the structure factory was computed from byte-identical RecordedPosition.fen
+```
+
+The factory accepts two sealed items, recomputes/checks the structure against the recorded FEN,
+requires exact ID/name/provenance equality, and only then retains node/ply. Its grounding is
+`declared_convention`, exactness `convention`, answer content `fact|pattern`, and limitation says
+that presence is not importance, skill, intention, or plan. Raw adjacency, same-ID/different-FEN,
+caller-supplied node IDs and post-hoc service joins fail. The current `@1` projection is also
+refused: it can carry only `provenanceNote` on one path and a `StructureMatch` on another, so neither
+prose nor an empty-square observation may be parsed into collection identity. This is [[D2372]]'s
+run-bound closure without polluting the reusable position fact.
 
 Pack `concepts[]`, pack completion and `pack.authored.concept_reference@1` do not establish a
 concept occurrence. The concept axis returns `unavailable: no_position_scoped_occurrence_authority`
@@ -207,7 +222,8 @@ digest mismatch shows no mark plus an inspectable reason, never “complete.”
 1. Migration ordering is byte-equal in claims/register: catalogue follows `campaign-core`, and
    `live-sources` follows catalogue; migration creates exactly the two declared tables atomically.
    This is [[D2369]]'s contiguous-order repair.
-2. Projector fixtures cross shape span, repeated occurrence, named-structure identity, opponent-
+2. Projector fixtures cross shape span, repeated occurrence, sealed same-FEN named-structure join,
+   wrong-FEN/wrong-node/raw-object refusal, opponent-
    caused occurrence, analysis branch refusal, non-Campaign refusal, unknown ID and stale digest.
 3. Current named-structure `@1` and pack-wide concept references are permanent negative fixtures;
    neither can produce a sighting.
@@ -235,7 +251,7 @@ digest mismatch shows no mark plus an inspectable reason, never “complete.”
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | D1 | implement/accept `campaign-core` persistence and run origin | campaign-core | archive receipt | |
-| D2 | seal exact named-structure identity ([[D1727]]) | module-registration.md | accepted successor + implementation receipt | |
+| D2 | seal exact named-structure identity ([[D1727]]) | evidence-value-authority.md | accepted successor + implementation receipt | |
 | D3 | land global concept identity and preserve concept-axis unavailability | concept-registry | archive receipt + negative fixture | |
 | D4 | implement persistent projection/API/pack mark/act diff | codex | full verification + archive closeout | |
 | D5 | owner use on phone and desktop | OWNER | dated play-session receipt | |
