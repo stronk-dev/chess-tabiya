@@ -1,9 +1,10 @@
 # RFC: Storage backup, restore, upgrade, and recovery
 
-- **Status:** **draft — RETURNED by fresh independent buildability review 2026-08-30 on
-  [[D2210]]–[[D2213]].** The verified-bundle/staged-recovery model survives, but startup lock
-  ownership is contradictory, staged upgrade omits WAL/SHM quarantine, backup-id derivation is
-  undefined, and the closed CLI receipt has no type. `make storage-backup-fresh-review` passes 4/4.
+- **Status:** **draft — author-repaired 2026-08-31 after the fresh independent return on
+  [[D2210]]–[[D2213]]; another fresh independent buildability review is required.** The repair
+  assigns one inherited lock owner, gives upgrade and restore one crash-recoverable SQLite-triplet
+  replacement primitive, defines collision-safe backup identity, and publishes the closed receipt
+  algebra. `make storage-backup-author-repair` passes 8/8 plus the proposed TypeScript protocol.
   Implementation remains unauthorized.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
@@ -87,17 +88,42 @@ the maintenance container. The command refuses:
 - an unresolved glob, directory traversal outside the configured roots, or symlink that escapes
   either root.
 
-Manual backup and every restore require the HTTP server to be stopped. Both the server entry point
-and the maintenance entry point acquire the same non-blocking OS advisory lock under `/data` with
-`flock`; the server wrapper holds it for the complete `prepare-start` + HTTP-process lifetime, while
-the maintenance wrapper holds it for the complete operation. A live server therefore makes the
-maintenance command fail before SQLite opens, and a live maintenance operation makes server start
-fail. Process exit releases the kernel lock, so a stale lock-file pathname after a crash is not a
-false owner. The image installs the exact minimal package providing `flock`, and a production-image
-fixture proves mutual exclusion in both directions.
+Manual backup and every restore require the HTTP server to be stopped. One image-owned
+`storage-supervisor` is the only process allowed to open and acquire the storage lock. It opens
+`/data/.tabiya-storage.lock` as FD 3 without `O_CLOEXEC`, acquires non-blocking exclusive `flock`
+once, validates by `fstat` that FD 3 still names the configured lock inode, and exports
+`TABIYA_STORAGE_LOCK_FD=3`. The resulting kernel open-file description—not the pathname, PID,
+environment variable, or file contents—is the authority.
 
-The shipped Compose workflow runs a one-shot `storage-admin` service that shares `/data` but never
-starts the HTTP process. The lock file records only diagnostics (operation, PID, start time, release
+The supervisor is a checked POSIX-shell entry point over the image's pinned util-linux `flock`; its
+normative ownership sequence is `exec 3>>lock-path`, `flock -n 3`, export the inherited-FD marker,
+then run exactly one mode. Because `flock` operates on FD 3 inherited from the shell, its child exit
+does not unlock the open-file description retained by the supervisor. Lock refusal invokes the
+admin receipt serializer in no-storage mode and exits `2`; it does not hand-write a second JSON
+shape. The image fixture verifies the installed shell and util-linux version rather than substituting
+a host `flock`.
+
+For `serve`, the supervisor retains FD 3 while it spawns
+`storage-admin prepare-start --inherited-lock-fd 3`, waits for a successful receipt and exit, and
+then replaces itself with `node apps/server/dist/main.js` using `execve` while preserving FD 3.
+There is no unlock/relock boundary: the same open-file description exists before inspection,
+through migration, at the instant after migration and before HTTP open, and for the HTTP lifetime.
+`prepare-start` and `main.js` validate the inherited descriptor/inode but never acquire or release
+the lock. Production `main.js` refuses startup when the inherited descriptor contract is absent.
+If preflight fails, the supervisor exits and kernel close releases authority without starting HTTP.
+
+For maintenance, the supervisor acquires the same lock once and replaces itself with the requested
+`storage-admin` operation, again preserving FD 3. A directly invoked production admin command
+without the inherited descriptor refuses before opening SQLite. A live server therefore makes
+maintenance fail before SQLite opens, and live maintenance makes server start fail. Process exit
+releases the kernel lock, so a stale lock-file pathname after a crash is not a false owner. The
+image installs the exact minimal package providing `flock`, and a production-image fixture crosses
+a competing process before preflight, during backup/migration, after staged installation but before
+HTTP open, during HTTP service, and after owner death.
+
+The shipped Compose workflow runs a one-shot maintenance service whose entry point is
+`storage-supervisor maintenance -- storage-admin <operation>`. It shares `/data` but never starts
+the HTTP process. The lock file records only diagnostics (operation, PID, start time, release
 revision); file contents are not lock authority.
 
 The source may retain `-wal` and `-shm` files after shutdown. Backup opens the source through
@@ -123,7 +149,8 @@ interface StorageBackupManifestV1 {
   readonly format: "tabiya-storage-backup";
   readonly formatVersion: 1;
   readonly backupId: string;             // UTC basic timestamp + 12 lowercase hex digest chars
-  readonly createdAt: string;            // canonical UTC ISO-8601
+  readonly createdAt: string;            // UTC ISO-8601 with exactly millisecond precision
+  readonly reservationNonce: string;     // 32 lowercase hex chars from 128 random bits
   readonly reason: "manual" | "pre_upgrade" | "pre_restore";
   readonly applicationRevision: string; // immutable image/source revision, never "latest"
   readonly sourceStorageVersion: number;
@@ -143,6 +170,40 @@ interface StorageBackupManifestV1 {
   };
 }
 ```
+
+Backup identity is derived only after the standalone snapshot and all manifest facts exist. Let
+`manifestWithoutBackupId` be the exact closed manifest above with `backupId` omitted, including
+`reservationNonce`, rendered as the canonical JSON form defined by this section but without its
+trailing newline. Then:
+
+```text
+digestImage = UTF8("tabiya-storage-backup-id-v1\0") || UTF8(manifestWithoutBackupId)
+backupId    = basic(createdAt) + "-" + firstLowerHex(SHA256(digestImage), 12)
+basic(t)    = YYYYMMDDTHHmmss.SSSZ
+```
+
+`createdAt` is captured once from UTC wall time with exactly three fractional digits;
+`reservationNonce` comes from the operating-system CSPRNG. Verification recomputes `backupId`
+from the published manifest and refuses any mismatch. The nonce is identity salt, not a secret.
+
+The writer first works in an owner-only, randomly named directory that is not syntactically a
+bundle and that verifiers refuse. After computing the identity, it refuses an existing legacy
+`<backup-id>.partial/` and atomically reserves the final `<backup-id>/` directory using `mkdir` with
+exclusive-create semantics. Either an existing legacy partial path or final path is a collision;
+neither is opened, removed, renamed, or overwritten. The writer chooses a new 128-bit nonce and
+recomputes the canonical manifest image/backup id before retrying reservation, at most 16 times,
+while retaining the same `createdAt` and snapshot facts.
+Exhaustion returns `BACKUP_ID_COLLISION`.
+
+The exclusively created final directory is an invalid bundle until publication. The writer creates
+an owner-only `.publishing` marker carrying only its operation id, moves the snapshot into the
+directory, writes the manifest, verifies it internally while requiring that exact marker, fsyncs
+both files and the directory, then atomically unlinks `.publishing` and fsyncs the backup root. The
+unlink is the validity commit: public verification rejects the empty/incomplete directory and any
+directory with `.publishing`, while after the unlink the directory has the exact two-file grammar.
+A crash can therefore leave an identifiable invalid reservation but cannot expose a valid partial
+bundle or overwrite an earlier bundle. Startup reports abandoned reservations and never adopts,
+deletes, or publishes them automatically.
 
 `applicationRevision` is the full source Git SHA embedded as an OCI revision label and build-time
 constant in the server image. The implementation must not use the package's present `0.0.0`
@@ -164,20 +225,24 @@ more restrictive umask.
 
 `storage-admin backup` performs these ordered steps:
 
-1. resolve and validate all paths, acquire the maintenance lock, and inspect the source read-only;
+1. resolve and validate all paths, validate the inherited maintenance-lock descriptor, and inspect
+   the source read-only;
 2. refuse storage version `0`, a version greater than `STORAGE_VERSION`, or a missing application
    table inventory; an absent database is `NO_DATABASE`, not an empty successful backup;
-3. create `<backup-id>.partial/` with owner-only permissions;
-4. open the source read-only and run `backup(source, partial/database.sqlite)`;
+3. create an owner-only non-bundle work directory with an exclusive random name;
+4. open the source read-only and run `backup(source, work/database.sqlite)`;
 5. open the snapshot read-only and require `PRAGMA integrity_check` to return exactly one `ok` row;
 6. require `PRAGMA foreign_key_check` to return zero rows. `integrity_check` alone does not test
    foreign-key constraints (<https://www.sqlite.org/pragma.html#pragma_integrity_check>);
 7. require the snapshot's `user_version` and application-table set to agree with the canonical
    inventory for that exact historical storage version; for the current version that inventory
    must also be set-equal to `ACCOUNT_DATA_INVENTORY`;
-8. close SQLite handles, compute byte length and SHA-256, write canonical `manifest.json`, then
-   parse and verify the bundle through the public verifier;
-9. atomically rename the partial directory to `<backup-id>/` on the same filesystem.
+8. close SQLite handles; compute byte length, SHA-256 and the §2 identity; exclusively reserve the
+   corresponding final directory under the bounded collision rule; create its `.publishing`
+   marker; move the snapshot into it; write canonical `manifest.json`; then parse and verify the
+   reservation through the same internal verifier while requiring that exact marker;
+9. fsync both files and the reserved directory, atomically unlink `.publishing`, and fsync the
+   backup-root directory before reporting success.
 
 No valid backup path exists before step 9. Failure closes handles, releases the lock, leaves the
 source untouched, and retains or removes only the explicitly named `.partial` directory. Verifiers
@@ -241,13 +306,51 @@ The release artifact publishes this matrix alongside the image digest. A databas
 `creates` is rejected by read-only preflight before WAL mode, schema creation, or migration code.
 An unsupported-old database is rejected the same way.
 
+### 5a. Shared quiesced replacement primitive
+
+Upgrade and restore install bytes through one `replaceSqliteTriplet` primitive; neither caller may
+rename a main database directly. Its target set is exactly `<live>`, `<live>-wal`, and
+`<live>-shm`. It runs only while the supervisor's inherited lock is held, after every SQLite handle
+on the live and staged databases is closed. The staged database must already be a verified,
+standalone main file with no sidecars.
+
+The primitive creates an exclusive same-filesystem transaction directory, records a canonical
+intent containing the target basename, operation id, existence and SHA-256 of each old triplet
+member, staged digest, and phase, and fsyncs the intent and both transaction/live parent directories.
+It then performs this state machine:
+
+1. `prepared` — move every old member that exists into the transaction's quarantine directory;
+   fsync quarantine and the live parent; no new database may be opened;
+2. `old_quarantined` — assert all three live paths are absent, use same-filesystem `link` to create
+   the live main path exclusively from the staged standalone inode, unlink the staged name, and
+   fsync the live parent; an unsupported-hard-link filesystem is refused during preflight;
+3. `new_installed` — assert both sidecar paths are still absent, open and run the complete declared
+   version/integrity/foreign-key/inventory/migration-invariant checks, then close it;
+4. `verified` — fsync the installed main and live parent, retain the operation's verified backup as
+   the recovery artifact, remove the quarantined triplet/intent, and fsync the transaction parent.
+
+Each phase is atomically rewritten and fsynced only after its preceding filesystem mutations and
+directory fsyncs complete. A normal failure in `prepared`, `old_quarantined`, or `new_installed`
+closes handles, moves any new live main into a failed-artifact location inside the transaction,
+restores every originally present main/WAL/SHM member by its recorded digest, fsyncs both
+directories, and only then removes the intent. The old triplet is therefore restored exactly; an
+old sidecar is never left beside new main bytes.
+
+On supervisor startup, a transaction intent is recovered before any SQLite open. `prepared`,
+`old_quarantined`, and `new_installed` deterministically roll back using the recorded path/digest
+set; `verified` deterministically keeps the installed main and finishes quarantine cleanup. If the
+actual path/digest set matches neither the recorded old nor staged state, startup returns
+`REPLACEMENT_RECOVERY_REQUIRED` and touches nothing further. A fixture crashes at every rename,
+phase-write, and directory-fsync boundary, including an old source with committed rows resident in
+WAL and a pre-existing SHM; recovery must produce either the exact old triplet or the fully verified
+new standalone database, never a mixed set.
+
 ### 6. Production startup and automatic pre-upgrade snapshot
 
-The image entry point becomes:
+The image entry point becomes one lock-owning command:
 
 ```text
-storage-admin prepare-start --database "$DATABASE_PATH" --backup-root "$TABIYA_BACKUP_ROOT"
-node apps/server/dist/main.js
+storage-supervisor serve --database "$DATABASE_PATH" --backup-root "$TABIYA_BACKUP_ROOT" -- node apps/server/dist/main.js
 ```
 
 `prepare-start` owns disk migration. `main.js` then opens only an absent database or the exact
@@ -258,15 +361,15 @@ For an absent database, `prepare-start` creates nothing and `main.js` creates th
 For the current version, it performs read-only integrity, foreign-key, and inventory checks and
 returns. For an upgradeable version it:
 
-1. acquires the storage lock and proves no HTTP process is active;
+1. validates the supervisor's inherited lock FD and proves no HTTP process is active;
 2. creates and verifies a `pre_upgrade` bundle whose intended version is the image's current
    `STORAGE_VERSION`;
 3. copies that verified snapshot to a same-filesystem staged database;
 4. applies the production migration chain to the staged database only;
 5. checks current `user_version`, integrity, foreign keys, application inventory, and every
    migration-specific data invariant;
-6. closes all handles and atomically installs the staged database as the live database, retaining
-   the original bytes in the verified pre-upgrade bundle;
+6. closes all handles and invokes `replaceSqliteTriplet`, retaining the original bytes in the
+   verified pre-upgrade bundle;
 7. emits a closed migration receipt naming source version, target version, backup id, release
    revision, and the checks performed.
 
@@ -294,9 +397,9 @@ fresh named volume. Replacing an existing database is also supported, but requir
 The server must be stopped. Restore first verifies the immutable source bundle. It then copies the
 bundle database to a same-filesystem staged path, migrates the staged copy when the disposition is
 `upgradeable`, and repeats integrity, foreign-key, inventory, version, and migration-invariant
-checks. Only after those checks does it atomically install the staged database. Stale target
-`-wal`/`-shm` files are quarantined with the replaced database and are never attached to restored
-bytes.
+checks. Only after those checks does it invoke `replaceSqliteTriplet`. The primitive quarantines
+the exact old main/WAL/SHM set, fsyncs the replacement boundaries, and prevents stale sidecars from
+ever being attached to restored bytes.
 
 On any failure before the atomic install, the existing target is unchanged. On a failure after the
 install but before the application becomes ready, the documented recovery is to stop the new image,
@@ -342,51 +445,117 @@ configured production volume.
 
 ### 9. Failure taxonomy and observability
 
-The CLI uses a closed code vocabulary:
+Stdout is a protocol, not a log. Every invocation writes exactly one canonical JSON value followed
+by one newline and no other stdout bytes. Progress and diagnostics go only to stderr and must not
+contain manifest bodies, learner data, password hashes, sessions, tokens, or arbitrary absolute
+paths. Unknown receipt versions/fields, more than one JSON value, non-canonical JSON and diagnostic
+stdout bytes are protocol failures for Make, Compose and release-drill consumers.
 
-```text
-NO_DATABASE
-MAINTENANCE_LOCKED
-PATH_REFUSED
-BUNDLE_INVALID
-DIGEST_MISMATCH
-SQLITE_INTEGRITY_FAILED
-FOREIGN_KEY_VIOLATION
-INVENTORY_MISMATCH
-STORAGE_NEWER_THAN_APPLICATION
-STORAGE_TOO_OLD
-BACKUP_FAILED
-MIGRATION_FAILED
-RESTORE_CONFIRMATION_REQUIRED
-RESTORE_FAILED
+The public receipt algebra is:
+
+```ts
+type StorageAdminOperation =
+  | "command" | "backup" | "verify" | "prepare_start" | "restore" | "rehearsal";
+type StorageCheck =
+  | "digest" | "integrity" | "foreign_keys" | "inventory" | "compatibility"
+  | "migration_invariants" | "identity_retention" | "readiness";
+type StoragePathRef =
+  | { readonly role: "database"; readonly identity: "live" }
+  | { readonly role: "backup_root"; readonly identity: "configured" }
+  | { readonly role: "bundle"; readonly identity: string } // validated backupId only
+  | { readonly role: "staging"; readonly identity: "internal" }
+  | { readonly role: "volume"; readonly identity: "disposable_rehearsal" };
+type StorageCompatibilityDisposition =
+  | "current" | "upgradeable" | "newer_than_application" | "unsupported_old" | "invalid";
+
+interface StorageReceiptBaseV1 {
+  readonly protocol: "tabiya-storage-admin-receipt";
+  readonly protocolVersion: 1;
+  readonly operationId: string;       // canonical UUID generated once per invocation
+  readonly applicationRevision: string;
+  readonly elapsedMs: number;         // non-negative integer from a monotonic clock
+  readonly paths: readonly StoragePathRef[];
+}
+
+type StorageAdminReceiptV1 = StorageReceiptBaseV1 & (
+  | { readonly operation: "backup"; readonly result: "succeeded";
+      readonly backupId: string; readonly reason: "manual" | "pre_upgrade" | "pre_restore";
+      readonly sourceStorageVersion: number; readonly intendedStorageVersion: number;
+      readonly checks: readonly StorageCheck[] }
+  | { readonly operation: "verify"; readonly result: "succeeded";
+      readonly backupId: string; readonly compatibility: "current" | "upgradeable";
+      readonly sourceStorageVersion: number; readonly currentStorageVersion: number;
+      readonly checks: readonly StorageCheck[] }
+  | { readonly operation: "prepare_start"; readonly result: "succeeded";
+      readonly action: "fresh" | "current" | "upgraded";
+      readonly sourceStorageVersion: number | null; readonly targetStorageVersion: number;
+      readonly backupId: string | null; readonly checks: readonly StorageCheck[] }
+  | { readonly operation: "restore"; readonly result: "succeeded";
+      readonly sourceBackupId: string; readonly preRestoreBackupId: string | null;
+      readonly sourceStorageVersion: number; readonly targetStorageVersion: number;
+      readonly checks: readonly StorageCheck[] }
+  | { readonly operation: "rehearsal"; readonly result: "succeeded";
+      readonly sourceBackupId: string; readonly imageDigest: string;
+      readonly architecture: "linux/amd64" | "linux/arm64";
+      readonly checks: readonly StorageCheck[] }
+  | { readonly operation: StorageAdminOperation; readonly result: "refused";
+      readonly code: StorageRefusalCode;
+      readonly compatibility?: "newer_than_application" | "unsupported_old" }
+  | { readonly operation: StorageAdminOperation; readonly result: "failed";
+      readonly code: StorageFailureCode; readonly compatibility?: "invalid" }
+  | { readonly operation: StorageAdminOperation; readonly result: "cancelled";
+      readonly code: "OPERATION_CANCELLED"; readonly signal: "SIGINT" | "SIGTERM" }
+);
+
+type StorageRefusalCode =
+  | "USAGE_ERROR" | "NO_DATABASE" | "MAINTENANCE_LOCKED" | "LOCK_AUTHORITY_MISSING"
+  | "PATH_REFUSED" | "BACKUP_ID_COLLISION" | "STORAGE_NEWER_THAN_APPLICATION"
+  | "STORAGE_TOO_OLD" | "RESTORE_CONFIRMATION_REQUIRED";
+type StorageFailureCode =
+  | "BUNDLE_INVALID" | "DIGEST_MISMATCH" | "SQLITE_INTEGRITY_FAILED"
+  | "FOREIGN_KEY_VIOLATION" | "INVENTORY_MISMATCH" | "BACKUP_FAILED"
+  | "MIGRATION_FAILED" | "RESTORE_FAILED" | "REPLACEMENT_RECOVERY_REQUIRED"
+  | "INTERNAL_ERROR";
 ```
 
-Every command emits a single terminal result with operation id, release revision, versions,
-non-secret paths, elapsed time, and code. It never logs manifest contents, learner data, password
-hashes, sessions, or token values. `/healthz` is not reachable until `prepare-start` succeeds;
-readiness after restore proves the exact current schema and storage checks, not merely an open TCP
-port.
+The success arms bind operation identity to operation-specific fields rather than exposing one bag
+of optional properties. `paths` uses logical identities only: it never copies an argv path, host
+checkout, username or volume name. `elapsedMs` starts immediately after process entry (before argv
+validation), ends immediately before receipt serialization, uses a monotonic clock, rounds down to
+an integer millisecond and is never used as a pass/fail performance assertion.
+
+The exit map is exact: `0` for `succeeded`; `2` for `refused`; `3` for every declared `failed`
+validation/storage arm; and `4` only for `INTERNAL_ERROR`. A caught SIGINT/SIGTERM before the
+irreversible replacement boundary emits `cancelled` and exits `130`/`143`; after that boundary the
+operation masks those signals until it either completes verification or rolls back, then emits its
+ordinary terminal receipt. SIGKILL and host loss cannot promise stdout; the persisted replacement
+intent is the recovery authority. A usage failure uses operation `command`. The parser rejects an
+unknown operation before touching storage but still emits the typed refusal.
+
+`/healthz` is not reachable until `prepare-start` succeeds; readiness after restore proves the
+exact current schema and storage checks, not merely an open TCP port.
 
 ### 10. Code-site inventory
 
 The unit in this table is a production or verification boundary that must consume the contract.
-There are **12 boundaries**; acceptance criterion 12 derives the same set from declared anchors and
+There are **13 boundaries**; acceptance criterion 12 derives the same set from declared anchors and
 fails on a missing or duplicate consumer.
 
 | # | Boundary | Required change |
 |---:|---|---|
 | 1 | `apps/server/src/storage.ts` | split read-only inspection/current-only open from migration; export compatibility and migration invariants |
 | 2 | `apps/server/src/storage-admin.ts` | implement backup, verify, prepare-start, restore, receipts, and closed failures |
-| 3 | `apps/server/src/main.ts` | refuse an unprepared old/future database before creating the HTTP application |
-| 4 | `apps/server/package.json` | build/run the admin entry point from the shipped package |
-| 5 | `apps/server/Dockerfile` | install the storage-lock primitive, hold it across preflight + HTTP, and include the admin executable/build revision |
-| 6 | `compose.yaml` | development maintenance service and backup mount |
-| 7 | `deploy/compose.release.template.yaml` | digest-identical release maintenance service and backup mount |
-| 8 | `Makefile` | thin backup/verify/restore/rehearsal targets |
-| 9 | `.gitignore` / packaging checks | exclude local backups and refuse their inclusion in images/artifacts |
-| 10 | `.github/workflows/verify.yml` | native recovery contract tier using committed fixtures |
-| 11 | `.github/workflows/release.yml` | image/Compose upgrade-rehearsal smoke for both published architectures or declared emulation |
-| 12 | `docs/storage-backup-and-recovery.md` | operator procedure, compatibility, retention responsibility, and last-known-good recovery |
+| 3 | `apps/server/storage-supervisor.sh` | own FD 3, acquire `flock` once, run preflight/maintenance and exec HTTP without releasing the open-file description |
+| 4 | `apps/server/src/main.ts` | refuse an unprepared old/future database before creating the HTTP application |
+| 5 | `apps/server/package.json` | build/run the admin entry point from the shipped package |
+| 6 | `apps/server/Dockerfile` | install the exact POSIX-shell/util-linux lock boundary and include the supervisor/admin/build revision |
+| 7 | `compose.yaml` | development maintenance service and backup mount |
+| 8 | `deploy/compose.release.template.yaml` | digest-identical release maintenance service and backup mount |
+| 9 | `Makefile` | thin backup/verify/restore/rehearsal targets |
+| 10 | `.gitignore` / packaging checks | exclude local backups and refuse their inclusion in images/artifacts |
+| 11 | `.github/workflows/verify.yml` | native recovery contract tier using committed fixtures |
+| 12 | `.github/workflows/release.yml` | image/Compose upgrade-rehearsal smoke for both published architectures or declared emulation |
+| 13 | `docs/storage-backup-and-recovery.md` | operator procedure, compatibility, retention responsibility, and last-known-good recovery |
 
 ## Deviations from design
 
@@ -397,22 +566,23 @@ not weaken the appliance floor or claim downgrade reads.
 
 ## Acceptance criteria
 
-### Fresh independent return (2026-08-30)
+### Fresh independent return and author repair (2026-08-30 through 2026-08-31)
 
 Exact return:
 `planning/storage-backup-recovery/fresh-independent-buildability-review-2026-08-30.md`.
-Before criteria 1–17 are buildable, the author must:
+The 2026-08-31 author repair addresses the four returned seams without declaring acceptance:
 
-1. assign the advisory lock to one parent process/open-file description and specify exact FD
-   inheritance so `prepare-start` neither self-conflicts nor releases authority before HTTP
-   ([[D2210]]);
-2. quarantine/remove old live `-wal`/`-shm` files during staged upgrade exactly as restore does,
-   before the replacement is first opened ([[D2211]]);
-3. define the backup-id digest image, atomic reservation and collision/retry rule ([[D2212]]); and
-4. publish one versioned discriminated stdout receipt and exit-code/stderr mapping for every
-   operation/result arm ([[D2213]]).
+1. §1 assigns the advisory lock to the supervisor's one inherited open-file description and crosses
+   every preflight-to-HTTP boundary ([[D2210]]);
+2. §5a gives upgrade and restore one journalled main/WAL/SHM replacement primitive with deterministic
+   crash recovery before first open ([[D2211]]);
+3. §2 defines the domain-separated backup-id image, canonical millisecond timestamp, exclusive
+   reservation, marker-removal validity commit and bounded collision behavior ([[D2212]]); and
+4. §9 publishes one versioned discriminated stdout receipt, safe path grammar, exact stdout/stderr
+   boundary and exit-code/signal mapping for every operation/result arm ([[D2213]]).
 
-Another fresh independent review is required after those repairs.
+`make storage-backup-author-repair` proves eight able-to-fail arms plus the proposed TypeScript
+algebra. Another fresh independent review is still required before acceptance.
 
 1. A unit fixture keeps committed transactions in WAL, stops the writer, creates a backup through
    `node:sqlite.backup`, removes the source database/WAL/SHM, and restores all sentinel rows from the
@@ -444,7 +614,7 @@ Another fresh independent review is required after those repairs.
     restore, and last-known-good recovery pass using the built server image rather than tsx/source.
 11. The recovery drill runs for linux/amd64 and linux/arm64 release artifacts, natively or under the
     same declared emulation used to qualify the image, and records architecture plus image digest.
-12. A derived census is set-equal to all 12 code-site boundaries in §10 and proves the two Compose
+12. A derived census is set-equal to all 13 code-site boundaries in §10 and proves the two Compose
     services use the identical server image digest.
 13. `make verify` remains green; the ordinary software tier runs deterministic unit/fixture checks,
     while Docker/architecture recovery is a separately named release tier with no flaky wall-clock
@@ -476,6 +646,11 @@ Another fresh independent review is required after those repairs.
 
 ## Changelog
 
+- 2026-08-31: author-repaired [[D2210]]–[[D2213]] with one supervisor-owned inherited lock, shared
+  crash-recoverable SQLite-triplet replacement, recomputable collision-safe backup identity and a
+  versioned closed receipt union. `make storage-backup-author-repair` passes 8/8 plus TypeScript.
+  No production, storage, schema, workflow, content, archive or protected-design byte changed;
+  another fresh independent buildability review is required.
 - 2026-08-30: fresh independent review returned the draft on [[D2210]]–[[D2213]]. Exact return:
   `planning/storage-backup-recovery/fresh-independent-buildability-review-2026-08-30.md`;
   reproduction: `make storage-backup-fresh-review`. No production, storage, workflow, schema,

@@ -522,6 +522,11 @@ runtime-distribution-fresh-review:
 storage-backup-fresh-review:
 	node --test tools/d2210-storage-backup-fresh-review/contract.test.mjs
 
+.PHONY: storage-backup-author-repair
+storage-backup-author-repair:
+	node --test tools/d2210-storage-backup-author-repair/contract.test.mjs
+	./node_modules/.bin/tsc -p tools/d2210-storage-backup-author-repair/tsconfig.contract.json --noEmit
+
 .PHONY: safe-deployment-fresh-review
 safe-deployment-fresh-review:
 	node --test tools/d2214-safe-deployment-fresh-review/contract.test.mjs

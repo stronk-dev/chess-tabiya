@@ -12713,3 +12713,14 @@ acquisition; and cache-only state derives from current generation-valid inventor
 API, client, content, archive or protected-design byte changed. Second fresh review and the
 provider-protocol dependencies remain. Receipt:
 `planning/provider-health-degradation/author-repair-2026-08-31.md`.
+
+## 2026-08-31 — Storage backup/recovery author repair
+
+Author-repaired [[D2210]]–[[D2213]]. One supervisor-owned inherited open-file description now spans
+preflight, staged replacement, exec and HTTP; upgrade and restore share one crash-recoverable
+main/WAL/SHM replacement; backup identity has a recomputable domain image plus bounded no-overwrite
+reservation; and all five operator commands use one versioned discriminated receipt/exit protocol.
+
+`make storage-backup-author-repair` passes 8/8 plus typecheck. No production, storage, schema,
+workflow, content, archive or protected-design byte changed; another fresh independent review
+remains required. Receipt: `planning/storage-backup-recovery/author-repair-2026-08-31.md`.
