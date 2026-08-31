@@ -19273,6 +19273,60 @@
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2436",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:923d5369ceedc3278feda4bfc0f9d4cfad37eb446e3054407b1fbea5a264a45d",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D2437",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:551d5bc8480e133b7895074cc7aedeed89a7ea4eb117b53946e6aad7b91a70de",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D2438",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:fb736508bbb7bdbddaea866db56fb1f290370b0faf2c5871c31a6222a61550b7",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D2439",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2bca9413d7fcf064e3f79db709de4aaa2527b7bc67c30d1e443f61c54bc7973f",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D2440",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0fc16b68e923a8c0dea24b410d303810018fdc46877de778266703bdb2ee9848",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D2441",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:87c663a9d7223740e167de96d1328c74a896f6d6fb858f8718f19814c671fcec",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md"
     }
   ]
 }

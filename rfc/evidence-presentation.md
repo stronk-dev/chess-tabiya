@@ -1,12 +1,12 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft — **FOURTH AUTHOR REPAIR COMPLETE 2026-08-31 on
-  [[D2348]]–[[D2354]]; fifth fresh independent review required.** Checkpoint P now has one exact
-  transformed 112-row authority; citation, source attribution, failure disposition, question
-  identity, Explorer denominators and named-structure witnesses have executable typed boundaries.
-  `make evidence-presentation-fourth-author-repair` passes 7/7 plus lifecycle typecheck, and all
-  earlier author controls remain green. [[D1672]]'s owner-only design amendment and [[D2401]]'s
-  source-attribution shared-resource bootstrap still block acceptance. No implementation is authorised.
+- **Status:** draft — **RETURNED by fifth fresh independent review 2026-08-31 on
+  [[D2436]]–[[D2441]].** The post-P population survives, but the attribution digest omits resource
+  semantics; citation admits missing revision metadata; source-reason totality is local rather
+  than operation-derived; the question seal is copyable; structure witnesses remain a second
+  static table; and Explorer move identity mixes SAN with UCI. `make
+  evidence-presentation-fifth-fresh-review` reproduces 6/6. [[D1672]] and [[D2401]] remain
+  independent blockers. No implementation is authorised.
   Landing remains three checkpoints (§2.1): manifest truth, sealed current consumers, then
   module/hint seats.
   Prior amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
@@ -190,6 +190,22 @@ The returned seams now share literal authorities in
 
 This is author repair, not acceptance. A fifth independent reviewer must attack all seven seams;
 protected design remains untouched pending [[D1672]], and product implementation remains forbidden.
+
+## Fifth fresh independent return (2026-08-31)
+
+The fourth repair's post-P row transformation survives, but its new authorities expose six more
+buildability blockers:
+
+1. [[D2436]] — the attribution resource digest covers only rows, not id/version/resolver/policy;
+2. [[D2437]] — citation parsing accepts missing or empty revision metadata despite mandatory abstention;
+3. [[D2438]] — source-reason closure compares local copies and pads adapters with guessed reasons;
+4. [[D2439]] — object spread preserves the registered-question brand while replacing its prose;
+5. [[D2440]] — named-structure witnesses are still hard-coded beside the production predicate; and
+6. [[D2441]] — Explorer de-duplicates `(SAN,UCI)` but treats SAN alone as committed identity.
+
+`make evidence-presentation-fifth-fresh-review` reproduces 6/6. Exact evidence and required
+repairs are in the fifth fresh review dossier. Production and protected design remain untouched;
+fifth author repair plus another fresh review are mandatory.
 
 ## Summary
 
@@ -1607,6 +1623,12 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 | [[D2352]] | lifecycle questions are adapter-local sealed registry objects, never caller prose |
 | [[D2353]] | Explorer candidate counts construct exact candidate-grained numerator/denominator operands |
 | [[D2354]] | all four structures declare one atomic predicate/witness operation and non-empty geometry |
+| [[D2436]] | the resource digest covers id, version, resolver, policy and rows in one canonical image |
+| [[D2437]] | complete citations require non-empty revision metadata or take the typed absence arm |
+| [[D2438]] | each adapter reason set is compiled from its owning operation and rejects extras or omissions |
+| [[D2439]] | question authority uses non-copyable runtime membership checked at lifecycle admission |
+| [[D2440]] | matcher and witness traverse one exported registered expression, not parallel tables |
+| [[D2441]] | Explorer candidates and committed edges share unique canonical UCI identity |
 
 ## Discharges
 
@@ -1681,6 +1703,12 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-08-31 — returned by fifth fresh independent buildability review on [[D2436]]–[[D2441]].
+  Attribution resource identity, mandatory revision, operation-derived absence reasons,
+  non-copyable question authority, atomic structure witnesses and canonical Explorer move identity
+  remain unbuildable as written. `make evidence-presentation-fifth-fresh-review` passes 6/6.
+  Exact return: `planning/platform-alignment/evidence-presentation/fifth-fresh-independent-buildability-review-2026-08-31.md`.
+  No implementation is authorised.
 - 2026-08-31 — fourth author repair for [[D2348]]–[[D2354]]. Published the single transformed
   112-row post-P authority, nested citation parser, digest-sealed attribution resolver, total
   source-reason disposition, sealed adapter-local question identity, exact Explorer denominator

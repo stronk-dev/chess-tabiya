@@ -13308,3 +13308,24 @@ count is not treated as an executable producer-to-module join.
 signed endpoint operands/cardinality and real upstream operation/adaptor identities; delete the
 obsolete generic subject-view authority. No module registry, API, seat, reducer or presentation
 landing before a sixth author repair and another fresh independent review.
+
+## 2026-08-31 — Evidence presentation fifth fresh review returns source and operand authority
+
+**What landed:** independently crossed the [[D2348]]–[[D2354]] fourth repair against its live
+structure and Explorer sources. The exact post-P population remains intact, while `make
+evidence-presentation-fifth-fresh-review` adds six able-to-fail returns: [[D2436]] the resource
+digest omits semantic fields; [[D2437]] incomplete citations pass; [[D2438]] source reasons are
+closed only against local copies; [[D2439]] the question brand survives object spread; [[D2440]]
+structure witnesses remain a second static table; and [[D2441]] Explorer identity mixes SAN/UCI.
+
+**What changed:** `evidence-presentation` remains draft and returned. Its register, 1.0 foundation
+checkpoint and work-state rows now point to
+`planning/platform-alignment/evidence-presentation/fifth-fresh-independent-buildability-review-2026-08-31.md`.
+The component vocabulary remains the intended typed-fact-to-pixel boundary, but its new authority
+objects are not accepted merely because their local author controls are green.
+
+**Blocked/next:** author one canonical resource digest image, mandatory resolved citation revision,
+operation-derived exact absence reasons, non-copyable question admission, one predicate/witness
+traversal and canonical UCI candidate identity; then run another fresh independent review.
+[[D1672]] and [[D2401]] remain independent blockers. No production renderer, module seat or UX
+implementation is authorized from this draft.
