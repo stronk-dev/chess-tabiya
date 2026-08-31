@@ -12670,3 +12670,15 @@ expectation exactly to the case under an import-isolated operation registry.
 `make semantic-validation-third-author-repair` passes 3/3. No production, schema, content, archive
 or protected-design byte changed; third fresh independent review remains required. Receipt:
 `planning/semantic-validation-authority/second-return-author-repair-2026-08-31.md`.
+
+## 2026-08-31 — Bounded-target third-return author repair
+
+Author-repaired [[D2340]]–[[D2342]]. Semantic validation now admits two explicit bounded-target
+reading roots beside the ordinary immediate event; the protocol fixture imports one exact proposed
+declaration module; and the three factories export only from an internal module to the sole value
+registry importer. Value receipts remain construction provenance, never semantic proof.
+
+`make bounded-target-third-author-repair` preserves 4/4 prior guarantees and `make
+bounded-target-fourth-author-repair` passes 3/3 plus the imported typecheck. No production, schema,
+content, archive or protected-design byte changed. Receipt:
+`planning/bounded-policy-targets/third-return-author-repair-2026-08-31.md`.

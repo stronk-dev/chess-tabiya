@@ -66,7 +66,7 @@ test("D2204: each projection has one named compute route and central value recei
     "assertBoundedTargetImmediateEvidence",
     "assertBoundedTargetReturnEvidence",
   ];
-  for (const symbol of factories) assert.match(operation, new RegExp(`declare function ${symbol}\\(`, "u"));
+  for (const symbol of factories) assert.match(operation, new RegExp(`export declare function ${symbol}\\(`, "u"));
   for (const symbol of assertions) assert.match(operation, new RegExp(`declare function ${symbol}\\(`, "u"));
   assert.match(rfc, /sole package-private mint boundary atomically stores the central `EvidenceValueReceipt`/u);
   assert.match(rfc, /generic `declareEvidence` call with the same id[\s\S]{0,180}fails/u);
@@ -99,7 +99,9 @@ test("D2205: the entire consumer protocol is public while mint authorities remai
     assert.doesNotMatch(rfc, new RegExp(`export interface ${name}\\b`, "u"));
   }
   for (const name of ["makeNamedMaterialTargetEvidence", "makeBoundedTargetImmediateEvidence", "makeBoundedTargetReturnEvidence"]) {
-    assert.doesNotMatch(rfc, new RegExp(`export (?:declare )?function ${name}\\b`, "u"));
+    assert.match(rfc, new RegExp(`export declare function ${name}\\b`, "u"));
   }
+  assert.match(rfc, /absent from the runtime barrel,[\s\S]{0,120}package\.json.*export\/subpath/u);
+  assert.match(rfc, /sole non-test importer/u);
   assert.match(rfc, /compile fixture imports only the package subpath and exhaustively switches every top-/u);
 });

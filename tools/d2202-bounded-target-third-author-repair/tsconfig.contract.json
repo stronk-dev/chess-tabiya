@@ -4,5 +4,5 @@
     "noEmit": true,
     "types": []
   },
-  "include": ["protocol.typecheck.ts"]
+  "include": ["protocol.proposed.ts", "protocol.typecheck.ts"]
 }

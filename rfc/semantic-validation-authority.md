@@ -100,7 +100,7 @@ executed validation result.
 ## 2. Independent root inventory
 
 The closed population is not another copied list. `compileEvidenceManifest` derives the semantic
-root inventory from every active projection satisfying all of:
+root inventory as the union of every active event projection satisfying all of:
 
 ```ts
 projection.role === "event"
@@ -108,9 +108,25 @@ projection.disposition === undefined
 projection.forms.includes("machine_condition")
 ```
 
+and the explicit `SEMANTIC_READING_VALIDATION_ROOTS`. A reading root is admitted only when the
+projection is active, has role `reading`, includes `machine_condition`, resolves an exact sole
+factory through `evidence-value-authority`, and its owning accepted RFC requires executable chess-
+semantic validation. The literal register contains only versioned projection refs; its compiler
+derives operation/case/population authority through the same profile algebra as events. Removing a
+registered reading profile, adding an unregistered reading profile, registering a projection with
+no sole factory or changing its role/form fails root set equality. This is an explicit opt-in, not
+permission to call every reading validated.
+
+`bounded-policy-targets` owns the first two reading roots:
+`derived.bounded_target.named_material_target@1` and
+`derived.bounded_target.bounded_return@1`. Its event projection
+`derived.bounded_target.immediate@1` enters through the ordinary event derivation. All three use
+the same profile/case/receipt/oracle rules; construction provenance alone never passes a semantic
+cell.
+
 The compiler then asserts set equality, independently and in both directions, among:
 
-- those active event roots;
+- those active event roots plus the explicit admissible reading roots;
 - `SemanticEventDeclaration.projection`;
 - `SemanticValidationProfile.event`;
 - the generated receipt's event rows; and

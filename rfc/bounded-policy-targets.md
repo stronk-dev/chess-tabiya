@@ -1,11 +1,10 @@
 # RFC: Convention-grounded bounded material targets
 
-- **Status:** **draft — RETURNED by third fresh independent review 2026-08-30 on
-  [[D2340]]–[[D2342]].** The D2202–D2205 repair survives, but semantic validation cannot profile
-  the two reading projections, the public-protocol type fixture is a non-importing lookalike with
-  different discriminants, and the value factories are simultaneously required and forbidden to
-  export across internal modules. `make bounded-target-third-fresh-review` reproduces 3/3 blockers.
-  Implementation remains unauthorised.
+- **Status:** **draft — AUTHOR-REPAIRED 2026-08-31 on [[D2340]]–[[D2342]]; fourth fresh review
+  required.** Semantic validation now admits two explicit reading roots without treating value
+  receipts as semantic proof; the protocol fixture imports one exact proposed declaration module;
+  and the three factories export only from an internal non-barrel module with one non-test importer.
+  `make bounded-target-fourth-author-repair` passes 3/3. Implementation remains unauthorised.
 - **Author:** codex, preserving the D1023 research contract and applying `planning/bounded-policy-targets/author-repair-2026-08-26.md`
 - **Created:** 2026-08-23; narrowed 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; executable contract closure in `design/research/bounded-policy-target-contract-closure.md`
@@ -495,16 +494,16 @@ interface BoundedTargetTraversalAuthority {
   readonly batchCounter: BoundedTargetBatchCounterAuthority;
 }
 
-declare function makeNamedMaterialTargetEvidence(input: Readonly<{
+export declare function makeNamedMaterialTargetEvidence(input: Readonly<{
   threat: ThreatEvidence;
   exchange: LegalExchangeEvidence;
   sourcePosition: SourceLegalMovesEvidence;
 }>): NamedMaterialTargetFactoryResult;
-declare function makeBoundedTargetImmediateEvidence(input: Readonly<{
+export declare function makeBoundedTargetImmediateEvidence(input: Readonly<{
   target: NamedMaterialTargetEvidence;
   candidate: ExactLegalMove;
 }>): BoundedTargetImmediateFactoryResult;
-declare function makeBoundedTargetReturnEvidence(input: Readonly<{
+export declare function makeBoundedTargetReturnEvidence(input: Readonly<{
   immediate: BoundedTargetImmediateEvidence<
     Extract<ImmediateTargetOutcome, { readonly result: "removed" }>
   >;
@@ -667,6 +666,14 @@ export declare function createBoundedTargetBackgroundService(
 ): BoundedTargetBackgroundService;
 ```
 
+The three callable factories above are exported from
+`packages/runtime/src/internal/bounded-target-factories.ts` only so the package-internal
+`evidence-value-authority` route registry can import them. They are absent from the runtime barrel,
+every `package.json` export/subpath and every application import graph. A static import census
+requires the central route registry to be their sole non-test importer; tests may import the
+internal source path only. Application consumers receive the background service and specialized
+assertions, never a mint function.
+
 `evidence-value-authority` registers exactly three bounded-target routes, keyed by the three
 projection refs and the literal factory symbols `makeNamedMaterialTargetEvidence`,
 `makeBoundedTargetImmediateEvidence` and `makeBoundedTargetReturnEvidence`. They are exported only
@@ -689,8 +696,12 @@ immediate retains named target plus legal move, and return retains removed-immed
 service traversal result. A generic `declareEvidence` call with the same id, a wrapper minted by
 another factory, an equal rebuilt input, altered traversal counter or payload-shaped cast fails.
 Semantic-validation profiles are set-equal to these three routes and validate the factory positives
-and falsifiers, not merely the projection ids. No local second receipt or generic compatibility
-adapter is introduced.
+and falsifiers, not merely the projection ids. `immediate` enters the derived event-root inventory;
+`named_material_target` and `bounded_return` are the first two explicit
+`SEMANTIC_READING_VALIDATION_ROOTS`. Each reading root must still execute positive, negative,
+orientation and population cells through the shared authority; its value-factory receipt is a
+necessary construction conjunct, never semantic validation by itself. No local second receipt or
+generic compatibility adapter is introduced.
 
 `boundedTargetInputDigest(item)` calls the shipped browser-safe `evidenceDigest()` over exactly
 `{ domain: "tabiya:bounded-target-input@1", producer, projection, payload }`. The non-serializable
@@ -1089,6 +1100,16 @@ undergo another fresh independent review before implementation.
     discriminant. Omitting an arm, crossing request/result/identity/evidence members or naming a
     private factory, counter, traversal or test symbol fails. The barrel census is set-equal to the
     explicitly exported family in §4.
+26. **Reading validation is executable ([[D2340]]).** The event root admits `immediate`; the explicit
+    reading-root register admits named target and bounded return. Each has a full executable profile
+    and exact value receipt; deleting either conjunct, adding an unregistered reading or presenting
+    construction provenance as a semantic cell fails.
+27. **One protocol image ([[D2341]]).** The type fixture imports the generated proposed declaration
+    module and declares no local protocol copy. Preserved/removed causes, nested evidence and every
+    top-level result compile from those bytes; changing either side alone fails.
+28. **Internal export, public refusal ([[D2342]]).** The three factories export from one internal
+    module, are absent from barrel/subpath/package exports and have exactly one non-test importer:
+    the central value-route registry. An application import or second registry fails the census.
 
 ## Discharges
 
@@ -1168,8 +1189,16 @@ The author repair must invert `make bounded-target-third-fresh-review`, preserve
 contract, and request a fourth fresh independent review. No production implementation is authorized
 by an author-side green check.
 
+The 2026-08-31 author repair closes these obligations in the semantic root inventory, §4 protocol
+image and package-internal factory boundary. `make bounded-target-fourth-author-repair` executes all
+three; fresh review still owns acceptance.
+
 ## Changelog
 
+- 2026-08-31 — author-repaired [[D2340]]–[[D2342]]. Registered two explicit reading-validation
+  roots beside the event root, replaced the divergent fixture with an imported generated protocol
+  image, and made factory exports internal with a sole non-test route-registry importer. `make
+  bounded-target-fourth-author-repair` passes 3/3. Fourth fresh review remains required.
 - 2026-08-30 — third fresh independent review returned the D2202–D2205 repair on
   [[D2340]]–[[D2342]]. The semantic authority cannot profile two reading projections; the public
   protocol typecheck is a divergent local lookalike; and internal factory registration conflicts

@@ -38,3 +38,10 @@ canonical computed-expectation equality.
 `make semantic-validation-third-author-repair` passes 3/3 across identity, cell and oracle failure
 paths. This remains author-side evidence only. Production and learner eligibility stay forbidden
 until third fresh review. Receipt: `second-return-author-repair-2026-08-31.md`.
+
+## 2026-08-31 — Explicit reading-root extension
+
+The bounded-target D2340 repair adds an explicit reading-root register to the validation inventory.
+It is opt-in and admits only active `reading`/`machine_condition` projections with an exact sole
+value factory and an owning accepted semantic requirement. Named target and bounded return are the
+first two roots; construction receipts remain necessary but cannot satisfy semantic cells.
