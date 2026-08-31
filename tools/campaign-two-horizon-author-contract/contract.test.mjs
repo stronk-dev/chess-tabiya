@@ -8,14 +8,14 @@ const normative = rfc.split("\n## Changelog\n", 1)[0];
 const includesAll = (text, fragments) => fragments.forEach((fragment) => assert.match(text, fragment));
 
 test("D2077-D2086 repair remains draft and implementation-refused", () => {
-  includesAll(rfc, [/D2077.*D2086.*author repair/su, /fresh\s+independent review required/u,
-    /No campaign schema, migration, production route, official\s+campaign or surface may resume/u]);
+  includesAll(rfc, [/D2077.*D2086.*author repair/su, /fresh\s+independent\s+review\s+required/iu,
+    /No campaign\s+schema, migration, production route, official\s+campaign or surface may resume/u]);
 });
 
 test("all three versioned claims are registered once", () => {
   assert.equal((rfc.match(/campaign-schema \| lane 2 \|/gu) ?? []).length, 1);
   assert.equal((rfc.match(/run-schema \| lane 0\.25 \|/gu) ?? []).length, 1);
-  assert.match(rfc, /migration \| position behind bot-policy \| campaign_runs; campaign_events; campaign_reward_awards/u);
+  assert.match(rfc, /migration \| position behind bot-policy \| campaign_runs; campaign_run_creations; campaign_events; campaign_reward_awards/u);
   assert.match(register, /\| lane 2 \| `campaign-core\.md` \|/u);
 });
 
@@ -81,7 +81,7 @@ test("D2085 terminal transition is the award issuer", () => {
 
 test("D2086 fixture and official campaign have different authorities", () => {
   includesAll(normative, [/tools\/campaign-two-horizon-author-contract\/fixtures\/campaign-contract\.json/u,
-    /never registered or rendered/u, /owner\/human chess-content authority/iu,
+    /never registered\s+or rendered/u, /owner\/human chess-content authority/iu,
     /opening, middlegame and endgame consequence encounters/u,
     /law 8 forbids.*choosing the campaign's\s+chess lessons/su,
     /D8 \| At least one official 1\.0 campaign/u]);

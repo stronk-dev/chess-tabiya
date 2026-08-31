@@ -12824,3 +12824,22 @@ browser/contract and governance gates green. No production/schema/migration/cata
 runtime/client/content/archive/protected-design byte changed. Fresh independent review and the
 declared dependency checkpoints still gate acceptance and implementation. Receipt:
 `planning/platform-alignment/bot-policy/third-author-repair-2026-08-31.md`.
+
+## 2026-08-31 — Campaign foundation third author repair
+
+Author-repaired the core of [[D2244]]–[[D2252]] without production bytes. Progression now requires
+a compiler-owned learner-move plus absorbing/authored-boundary witness; create replay has a pre-run
+`campaign_run_creations` authority; encounter start is one rollback-safe play/campaign transaction;
+active run deletion refuses while sealed deletion preserves progress with typed unavailable Review;
+and current campaign inventory/suppression/source state joins the production `RunService.queryModules`
+boundary. Official publication now carries registry-joined curriculum metadata and a digest-bound
+human review receipt.
+
+The RFC is explicitly the Campaign foundation, not complete 1.0. The Act-II full-game boss,
+catalogue pack-card projection and consequential durable-variety milestones remain assigned in
+`planning/campaign/1.0-closure-map.md`; the last still requires research plus an owner ruling.
+`make campaign-two-horizon-author-contract` passes 34/34. Full `make verify` passes 1,085 software
+tests, 2 performance tests and 172 real-content tests, with schema, build and governance gates
+green. No production schema/migration/storage/route/runtime/client/CSS/official-content/archive/
+protected-design byte changed. Fresh independent review and accepted dependencies still gate
+implementation. Receipt: `planning/campaign/third-author-repair-2026-08-31.md`.

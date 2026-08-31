@@ -1,6 +1,7 @@
 {
   "id": "fixture-only",
   "version": 1,
+  "publication": { "channel": "community" },
   "economy": { "startingCharges": 2 },
   "startingModules": ["rules_floor"],
   "acts": [

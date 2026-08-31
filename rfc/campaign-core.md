@@ -1,14 +1,16 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
-- **Status:** draft — **RETURNED by second fresh independent review 2026-08-30 on
-  [[D2244]]–[[D2252]].** The D2077–D2086 repair survives, but the contract still permits a
-  zero-move reward/completion click-through; cannot durably replay run creation; does not make
-  encounter start atomic; leaves active-encounter run deletion undefined; and never binds earned
-  modules/theory to the production assistance-delivery operation. Its claimed complete 1.0 boundary
-  also omits the ruled boss-game, catalogue-progression and consequential durable-reward horizons,
-  while the official-content metadata it requires has no typed home. `make
-  campaign-second-fresh-review` passes 9/9. No campaign schema, migration, production route,
-  official campaign or surface may resume before author repair and another independent review.
+- **Status:** draft — **third author repair complete 2026-08-31 on
+  [[D2244]]–[[D2252]].** The repaired core now requires a grounded play witness before progression,
+  durably replays creation before a run id exists, starts both aggregates atomically, closes
+  play-run deletion, binds campaign inventory to the production module query and types official
+  curriculum metadata. This RFC is explicitly the Campaign foundation, not the whole 1.0
+  capability: the full-game boss, catalogue progression and consequential durable horizon remain
+  visible in §10's closure map; the last still requires research plus an owner ruling. No campaign
+  schema, migration, production route, official campaign or surface may resume before the author
+  contract passes; `make campaign-two-horizon-author-contract` passes 34/34. Fresh independent
+  review required after this repair, and every declared
+  dependency must land before implementation.
   *(Prior line: [[D2077]]–[[D2086]] author repair complete 2026-08-30; fresh independent review
   required. Before that:
   implementing — 2026-08-23 authored-contract + registry + module-algebra checkpoints. Before
@@ -43,15 +45,15 @@
 - **Planning:** `planning/campaign/`
 
 ```tabiya-claims
-migration | position behind bot-policy | campaign_runs; campaign_events; campaign_reward_awards
-campaign-schema | lane 2 | reward becomes a closed three-member run-reward union; nodes declare exact reward consumers; durable cosmetic awards reference the shared appearance catalog
+migration | position behind bot-policy | campaign_runs; campaign_run_creations; campaign_events; campaign_reward_awards
+campaign-schema | lane 2 | reward becomes a closed three-member run-reward union; nodes declare exact reward consumers; durable cosmetic awards reference the shared appearance catalog; official publication carries checked curriculum metadata
 run-schema | lane 0.25 | RunSession.origin gains optional exact campaign encounter identity (campaignRunId, nodeId, campaignDocumentDigest); run.started persists it for Review/export/restore
 ```
 
 ## Summary
 
-This RFC specifies the **pure-chess campaign** — the definite half of the owner's D893 ruling —
-as a buildable v1: a 9-node, 3-act authored map whose every node is a **shape-1 authored
+This RFC specifies the **Campaign foundation** — the definite pack-encounter half of the owner's
+D893 ruling — as a buildable v1: a 9-node, 3-act authored map whose every node is a **shape-1 authored
 encounter** (a drill pack), whose run-scoped progression consists of **typed module, theory and
 rewind-resource rewards that must have later and boss consumption opportunities**, whose
 difficulty pressure is the **suppressor boss** (capability suppression, never chess judgement),
@@ -62,10 +64,11 @@ more forgiving. The campaign registers as the **eighth `WorkflowContextId`** in 
 intent-presets registry (discharging that RFC's D3), holds run state **server-side** in
 `campaign_runs` and `campaign_events`, and records durable cross-run marks/cosmetics in the
 append-only `campaign_reward_awards` authority in the same migration position behind `bot-policy`.
-It seals nodes by the submitted branch through the shipped `reveal` verb. Rated bosses,
-prediction/survival encounters, evidence-dark nodes, time controls and reward families without a
-real registry/consumer are **deferred with named discharge rows** — each has an owner fork or missing
-seal mechanism this v1 refuses to decide silently. The campaign never grades a move, never
+It seals nodes by the submitted branch through the shipped `reveal` verb, but only after that branch
+proves one committed learner move and its authored consequence boundary. This foundation does not
+claim complete Campaign 1.0: §10 keeps the ruled full-game boss, catalogue denomination and
+consequential durable horizon in the same closure unit instead of hiding them behind “v2.” The
+campaign never grades a move, never
 manufactures chess truth, and never surfaces a rewind count as a score: the three named traps
 each get a refusal clause with a criterion behind it.
 
@@ -88,7 +91,9 @@ unlocks the educational path, winning gates only prestige, a run owns a meaningf
 build, and a separate durable horizon survives the run. This amendment specifies that ruled
 contract without inventing unregistered titles, modifiers, skip starts or variant ids.
 
-Out of scope: everything deferred above (each with a Discharge row); opponent-policy internals
+Out of this foundation RFC, but **not out of Campaign 1.0**: §10's full-game boss, catalogue and
+durable-variety successors; prediction/survival encounters; evidence-dark nodes and time controls.
+Also out of scope: opponent-policy internals
 (bot-policy's seam ends at `run.opponentPolicy`); module eligibility (the D660 bar);
 campaign-screen visual composition beyond the boundary rule in §7 (composition last, per D717);
 any change to authored pack bytes; authorship of the official campaign's chess curriculum (an
@@ -123,6 +128,7 @@ CampaignDocument {
   id: string;                    // slug
   title: string;
   version: number;               // authored document version
+  publication: CampaignPublication;
   acts: [Act, Act, Act];         // exactly three — v1 is fixed-shape
   economy: CampaignEconomy;      // §2
   startingModules: UnlockableModuleId[];  // §3.2's start grants; may be empty
@@ -143,6 +149,25 @@ Node {
   consumes?: CampaignRunRewardRef[]; // checked declaration over compiled consumers, §3.4
   boss?: true;                   // exactly one per act; layer 3's only choice (lint)
 }
+
+type CampaignPublication =
+  | { channel: "community" }
+  | { channel: "official"; curriculum: CampaignCurriculumMetadata };
+
+interface CampaignCurriculumMetadata {
+  readonly targetLearner: { readonly bracketId: string; readonly prerequisites: readonly string[] };
+  readonly expectedEnvelope: { readonly minimumMinutes: number; readonly maximumMinutes: number };
+  readonly phaseCoverage: Readonly<Record<"opening" | "middlegame" | "endgame", readonly NodeId[]>>;
+  readonly formCoverage: readonly { readonly encounterKind: CampaignEncounterKind;
+    readonly nodeIds: readonly NodeId[] }[];
+  readonly theoryProvenance: readonly { readonly nodeId: NodeId;
+    readonly passage: ExactTheoryPassageRef; readonly evidenceRefs: readonly EvidenceRef[] }[];
+  readonly dependencyAvailability: readonly { readonly requirement: CampaignDependencyRequirementId;
+    readonly requiredAt: readonly NodeId[]; readonly unavailableAction: "refuse_start" | "honest_degradation";
+    readonly fallbackOperation?: ProviderOperationId }[];
+  readonly reviewReceipt: { readonly authority: "owner_human_chess_review";
+    readonly documentDigest: `sha256:${string}`; readonly reviewedAt: string };
+}
 ```
 
 Campaign schema **lane 2** owns these additions. `CampaignRunReward` is a discriminated union;
@@ -155,7 +180,7 @@ gate. `training-mode-variants` follows lane 2 and must widen the then-landed sch
 version 1 in parallel. No implementation may change `schemas/campaign.schema.json` while the
 registered head remains 1; `make register-check` must observe the live lane-2 claim.
 
-The `encounter.kind` union is **closed at one member in v1**; adding `position` (rated boss),
+The `encounter.kind` union is **closed at one member in this foundation**; adding `position` (rated boss),
 `prediction` or `survival` is a schema change belonging to the Discharge rows. A validator rule
 `CAMPAIGN_ENCOUNTER_PACK_UNKNOWN` (error) refuses a `packId` absent from the registry, and
 `CAMPAIGN_BOSS_PLACEMENT` (error) enforces, per act: exactly one `boss: true` node, in layer 3,
@@ -185,7 +210,17 @@ failable in both directions.
 **Contract fixture and product content are different artifacts.** The deterministic nine-node
 mechanical fixture lives under
 `tools/campaign-two-horizon-author-contract/fixtures/campaign-contract.json`; it exists only to
-falsify schema/fold/API invariants and is never registered or rendered. The 1.0 product requires at
+falsify schema/fold/API invariants, uses `publication.channel: "community"`, and is never registered
+or rendered. An official registry entry uses `publication.channel: "official"`; schema lane 2 then
+requires the complete `CampaignCurriculumMetadata`, and `validateOfficialCampaign` checks its node
+sets against the exact document, resolves learner bracket, theory passage, evidence and provider-
+operation identities from their owning registries, requires all three phase sets and every declared
+encounter form to be non-empty, rejects inverted or zero time envelopes, and byte-joins the review
+receipt to the canonical document digest. The metadata declares and joins curriculum coverage; it
+never proves that a lesson is good or manufactures a chess claim. Unknown, copied, extra or
+unavailable dependencies fail with one path-addressed issue rather than being silently dropped.
+
+The 1.0 product requires at
 least one separate official document under `content/campaigns/`, authored and reviewed by the
 OWNER/human chess-content authority after the producer/module/theory contracts stabilize. Its
 curriculum must include grounded opening, middlegame and endgame consequence encounters, varied
@@ -193,7 +228,8 @@ path choices, later and boss consumption for every reward, source/provenance for
 passage, and a checked dependency/provider availability matrix. Codex may validate, attach existing
 registered identities and implement the machinery; law 8 forbids it from choosing the campaign's
 chess lessons, pack sequence, strategic rationale or boss curriculum. The fixture passing cannot
-satisfy the official-content criterion, and official content cannot weaken the mechanical fixture.
+satisfy the official-content criterion, a community document cannot acquire the official badge by
+carrying look-alike fields, and official content cannot weaken the mechanical fixture.
 
 **Map progression** is strictly forward: layer N+1 opens when a node in layer N seals (§4). No
 node re-entry after seal — retrying a node means retrying it before declaring done (§2 prices
@@ -446,11 +482,23 @@ interface NodeCommittedEvent {
   readonly runId: string;
   readonly branchId: string;
   readonly verdict: "achieved" | "failed" | "transitioned" | "open";
+  readonly participation: CampaignParticipationWitness;
   readonly actIncome: { readonly source: "act_seal"; readonly act: ActId; readonly amount: PositiveInteger };
   readonly reward: CampaignRunReward | null;
   readonly terminal: "continue" | "completed";
 }
 ```
+
+`CampaignParticipationWitness` is compiler-owned and exactly
+`{ learnerMoveEventSeq, consequenceTipNodeId, completion: "objective_absorbing" |
+"authored_boundary" }`. `deriveCampaignParticipationWitness` reads the submitted branch's exact
+ancestor path and the pinned pack definition. It requires at least one `move.committed` whose actor
+is the learner after the run root, and then either an absorbing objective at the submitted tip or
+the pack's checked `authoredBoundary` at that tip. The learner move and consequence tip must both
+belong to the submitted branch and the consequence tip cannot precede the learner move. An untouched
+root, a system-only line, a learner move on another fork, or a tip before either completion witness
+refuses `CAMPAIGN_PARTICIPATION_REQUIRED`. This is a participation fact, never a grade: the learner
+move may be good, bad or losing and every absorbing verdict remains eligible for core progression.
 
 The payload includes the node's typed reward **whatever the verdict**—the same
 finishing-not-winning principle as §2.1 and ADR-0007's unlocked-by-playing—and its resource amount
@@ -464,15 +512,17 @@ fold validation, status update or any award insert rolls back all effects. A con
 response-loss retry with the same command and operands returns the stored event/result/award bytes;
 same command with different operands refuses `CAMPAIGN_COMMAND_REUSED`. The node verdict vocabulary
 **is** `ObjectiveState`'s absorbing subset
-plus the non-absorbing fallback: `verdict = "achieved" | "failed" | "transitioned" | "open"`,
-mapped 1:1 from the submitted tip (an `active`/`preserved`/`degraded` tip seals as `"open"` —
-submitting an unfinished line is legal and priced only by its own verdict). No new judgement
+plus the bounded non-absorbing fallback: `verdict = "achieved" | "failed" | "transitioned" |
+"open"`, mapped 1:1 from the submitted tip. An `active`/`preserved`/`degraded` tip may seal as
+`"open"` only after `completion: "authored_boundary"`; submitting an unfinished pre-boundary line
+is refused. No new judgement
 enters: the seal is a copy of the pack's own objective machinery. The verdict is a **new object
 whose only home is `node_committed.verdict`** — it is not the shipped `AttemptVerdict`
 (`"open" | "unstable" | "stable"`, `progress.ts:62`), which stays untouched; the two share the
 `"open"` token but not a type.
 
-**RULED 2026-08-23 ([[D1040]]) — the any-verdict grant above is the settled core behaviour, not
+**RULED 2026-08-23 ([[D1040]]) — the any-verdict grant above is the settled core behaviour after
+the participation witness, not
 an unexamined default.** The owner ruled *progression is unlocked by PLAYING; WINNING gates the
 PRESTIGE layer only*. The `node_committed.reward`-on-any-verdict field **is** that
 ruling, and it is recorded here so no future reader re-opens it as an oversight: a `failed` seal
@@ -571,13 +621,46 @@ Per `rfc/intent-presets.md` Discharge D3 (quoted whole in derivation §3.1), reg
    retains the origin and renders `campaign_history_unavailable`; restoring matching campaign rows
    reconnects only when run id/node/document digest all match. The campaign-side active pointer is
    still the mutation guard, but is no longer the sole identity source.
+   The route calls one storage operation, `startCampaignEncounterExactlyOnce`. Under one database
+   write transaction it serializes `(campaignRunId, expectedRevision)`, validates the selected node
+   and absence of another active encounter, creates the play-run row, persists `run.started` with
+   the server-authored origin, appends `node_entered { nodeId, runId }`, advances the campaign
+   revision, sets `active_encounter_run_id`, and stores the exact command result. Failure after any
+   write rolls back every write. Same command and operands after response loss returns the stored
+   play-run/event/result bytes; changed operands refuse `CAMPAIGN_COMMAND_REUSED`. Two concurrent
+   starts at the same revision serialize: the winner commits one run and event, while an identical
+   command replays it and a distinct command returns `CAMPAIGN_REVISION_STALE`; no orphan play run
+   or dangling campaign pointer is observable.
 4. The per-encounter ceiling (D3's *"encounter-authored ceilings"*) is §3.2's composition —
    narrowing inside the contract, exactly the algebra's shape.
 
+**5.1 Earned inventory reaches one production assistance operation.** Campaign does not add a
+parallel hint endpoint. The accepted module-registration boundary is the owner:
+`RunService.queryModules` calls `compileAuthoritativeAssistance`, assembles registered module
+packets, and then calls `finalizeAssistanceEffects`. For a run whose verified origin is
+`campaign_encounter`, it first calls `campaignAssistanceAuthority` inside the same authenticated
+read snapshot. That join reads the current CampaignRun revision, pinned document digest, active or
+sealed node/run identity, module ownership and loadout, exact theory-passage ownership, node
+suppression, provider/source availability and the workflow/context/role ceiling. No client-sent
+inventory, revision, suppression or availability fact is accepted.
+
+The returned `CampaignAssistanceAuthorityReceipt` contains exact campaign run/revision/node/run/
+document identities plus the family-specific effective module and authorized theory sets. It is an
+input to `compileAuthoritativeAssistance`, not prose and not evidence. The ordinary compiler then
+intersects preset request, context ceiling, honesty/access, role and current source availability;
+`finalizeAssistanceEffects` emits only effects whose registered evidence dependencies were actually
+assembled. This keeps the existing rule that every term narrows. Wrong campaign, learner, node,
+play run or document digest refuses; a stale loadout is impossible because every query reads the
+current revision; boss suppression removes the module before rendering; provider absence returns
+the registered unavailable reason; and preset narrowing can hide an owned tool but never enable
+one. The §3.4 opportunity checker is discharged only by an integration fixture where an earlier
+reward appears in this exact operation at a later boss. A shelf card, map badge or raw inventory
+response is not delivery.
+
 ### §6. Persistence — run events plus durable awards, one migration position
 
-Claimed above: `migration | position behind bot-policy | campaign_runs; campaign_events;
-campaign_reward_awards`. The named predecessor is the authority; no prose ordinal is copied from
+Claimed above: `migration | position behind bot-policy | campaign_runs; campaign_run_creations;
+campaign_events; campaign_reward_awards`. The named predecessor is the authority; no prose ordinal is copied from
 the moving queue. The migration number is taken at landing as `STORAGE_VERSION + 1` per the
 register rule and the body uses frozen literals.
 
@@ -590,12 +673,24 @@ CREATE TABLE campaign_runs (
   campaign_document_digest TEXT NOT NULL, -- RFC-8785 SHA-256 of canonical snapshot
   campaign_document TEXT NOT NULL,    -- canonical immutable bytes used for all replay/restore
   status TEXT NOT NULL CHECK (status IN ('active','completed','abandoned')),
-  active_encounter_run_id TEXT,       -- NULL between encounters; no FK by choice (drill_runs is snapshot storage with its own deletion path; the §2.2 guard validates at lookup)
+  active_encounter_run_id TEXT,       -- NULL between encounters; §6.3 refuses deletion while active
   created_at TEXT NOT NULL
 ) STRICT;
 CREATE INDEX idx_campaign_runs_active_encounter ON campaign_runs(active_encounter_run_id)
   WHERE active_encounter_run_id IS NOT NULL;   -- §2.2's guard is one indexed lookup
 CREATE INDEX idx_campaign_runs_learner ON campaign_runs(learner_id, status);
+
+CREATE TABLE campaign_run_creations (
+  learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
+  campaign_id TEXT NOT NULL,
+  command_id TEXT NOT NULL,
+  campaign_version INTEGER NOT NULL,
+  operands_digest TEXT NOT NULL,
+  campaign_run_id TEXT NOT NULL UNIQUE REFERENCES campaign_runs(id) ON DELETE CASCADE,
+  result_payload TEXT NOT NULL,       -- canonical exact create result returned on response-loss replay
+  created_at TEXT NOT NULL,
+  PRIMARY KEY (learner_id, campaign_id, command_id)
+) STRICT;
 
 CREATE TABLE campaign_events (
   campaign_run_id TEXT NOT NULL REFERENCES campaign_runs(id) ON DELETE CASCADE,
@@ -635,9 +730,19 @@ CampaignRun per `campaign_id` (partial unique index in the migration; a second s
 typed `CAMPAIGN_RUN_ACTIVE_EXISTS`). Earned state is server-held by ruling (`06:237-239`,
 [[D945]]): none of this ever lives in `AssistanceConfig` or any localStorage key.
 
-**6.0 Definition pin and command identity.** Campaign creation validates a registry document, writes
-its RFC-8785 canonical bytes and digest into `campaign_runs`, and appends `campaign_created` in the
-same transaction. `CampaignRegistry` keys by `{id,version,digest}` and refuses a second byte image at
+**6.0 Definition pin and command identity.** Campaign creation validates a registry document and
+calls `createCampaignRunExactlyOnce`. One database transaction writes its RFC-8785 canonical bytes
+and digest into `campaign_runs`, appends `campaign_created`, and inserts the exact normalized
+operands/result into `campaign_run_creations`. The pre-run idempotency identity is
+`(authenticated learner id, campaign id, command id)`; it is resolvable before a generated run id
+exists. Same identity plus byte-identical `{campaignVersion}` returns `result_payload` without a
+second run/event. A changed version or normalized operand refuses `CAMPAIGN_COMMAND_REUSED`; another
+learner has an independent namespace. A crash before commit leaves none of the three rows; a lost
+response after commit replays all bytes. The partial active-run guard and creation receipt are
+checked under the same write serialization, so two concurrent creates yield one run plus replay or
+one typed `CAMPAIGN_RUN_ACTIVE_EXISTS`, never two runs.
+
+`CampaignRegistry` keys by `{id,version,digest}` and refuses a second byte image at
 the same id/version (`CAMPAIGN_DOCUMENT_VERSION_MUTATED`). Every later fold, command, Review join,
 award check and restore parses the row snapshot and re-hashes it before use; the installed registry
 is needed for new creation and source availability, not historical replay. Removing a document from
@@ -645,8 +750,9 @@ a newer release therefore makes it unavailable for **new** runs but does not mak
 unreplayable. Export/backup carries the canonical snapshot; restore refuses a digest mismatch and
 can replay it even when the current release no longer offers that version.
 
-Every mutation has a validated `CampaignCommandId` and expected integer event revision. The unique
-event index is the durable idempotency authority. Same command plus byte-identical normalized
+Every mutation has a validated `CampaignCommandId` and, after creation, an expected integer event
+revision. `campaign_run_creations` is the durable create authority; the unique event index is the
+durable authority for later mutations. Same command plus byte-identical normalized
 operands returns the stored result; same command with different operands returns
 `CAMPAIGN_COMMAND_REUSED`; an unmatched revision returns `CAMPAIGN_REVISION_STALE`. No mutation
 depends on a process-local idempotency map.
@@ -665,15 +771,32 @@ transaction. Crash/fault injection before commit leaves neither; after commit, r
 The learner's durable inventory is the distinct projection of award rows, never a second writable
 authority.
 
-**6.2 Account and appliance lifecycle.** All three tables join the exhaustive account-data
-inventory in the landing commit. Export includes campaign run/event history, award history and the
-derived owned reward set. Hard deletion cascades all three. Restore imports canonical rows and
+**6.2 Account and appliance lifecycle.** All four tables join the exhaustive account-data
+inventory in the landing commit. Export includes campaign run/create-receipt/event history, award
+history and the derived owned reward set. Hard deletion cascades all four. Restore imports canonical rows and
 replays award identity through the same uniqueness key; duplicates remain one award. Account merge
 cannot silently choose between colliding learner ids: it rekeys campaign runs/events and awards in
 the portable-account-data transaction before the source learner is deleted. Backup/restore and
-upgrade verification exercise the three tables through the normal appliance database receipt. A
+upgrade verification exercise the four tables through the normal appliance database receipt. A
 missing table from export, deletion, restore, merge or backup inventory fails the exhaustive guard;
 “private solo history” is a data classification, not permission to omit it.
+
+**6.3 Play-run deletion is campaign-aware.** The existing `deleteOwnedRun` transaction first
+performs the indexed `active_encounter_run_id` lookup. If the owned run is the active encounter of
+an active CampaignRun, deletion refuses `CAMPAIGN_ACTIVE_ENCOUNTER_DELETE` and changes no run,
+event, pointer or campaign revision. The learner may submit/leave the encounter or abandon the
+CampaignRun first; ordinary play runs remain deletable with byte-identical behavior.
+
+After `node_committed`, the campaign event is the durable seal authority and the play run remains
+learner-owned history. Deleting that sealed play run does not erase or rewrite the seal, rewards,
+progression or awards. Its Review projection becomes the closed unavailable result
+`{ kind: "unavailable"; reason: "campaign_encounter_run_deleted"; runId; nodeId;
+campaignDocumentDigest }`; the map and result show that exact reason and never synthesize moves or
+an analysis from the seal. Export after deletion preserves the campaign event and its unavailable
+projection but contains no deleted play-run bytes; restore does not resurrect them. Export before
+deletion followed by restore restores both and re-enables Review only when run id, node id and
+document digest all match. A missing run that is still named by an active pointer is corruption and
+refuses restore/startup reconciliation rather than being mislabeled a learner deletion.
 
 ### §7. Surfaces — where campaign chrome lives
 
@@ -685,7 +808,7 @@ an endpoint mention without the request/result/error contract does not count:
 | `GET /campaigns` | authenticated learner + installed registry | catalogue, availability, active/completion/prestige projections |
 | `POST /campaigns/:campaignId/runs` | `{ campaignVersion, commandId }`; unique active-run guard | created CampaignRun with pinned snapshot/digest or idempotent replay |
 | `GET /campaign-runs/:campaignRunId` | owner | canonical map, revision, inventory-family projections, charge ledger, active encounter |
-| `POST /campaign-runs/:campaignRunId/nodes/:nodeId/start` | `{ expectedRevision, commandId }` | one play run with server-authored `RunOrigin`, or stored replay |
+| `POST /campaign-runs/:campaignRunId/nodes/:nodeId/start` | `{ expectedRevision, commandId }` | one atomically created play run with server-authored `RunOrigin` plus `node_entered`, or stored replay |
 | `PUT /campaign-runs/:campaignRunId/loadout` | `{ equippedModuleIds, expectedRevision, commandId }` | canonical module loadout/revision |
 | `POST /campaign-runs/:campaignRunId/nodes/:nodeId/submit` | `{ runId, branchId, expectedRevision, commandId }` | atomic node result, rewards, state and terminal awards |
 | `POST /campaign-runs/:campaignRunId/abandon` | `{ expectedRevision, commandId }` | abandoned terminal projection or stored replay |
@@ -703,6 +826,7 @@ union is `CAMPAIGN_NOT_FOUND | CAMPAIGN_FORBIDDEN | CAMPAIGN_RUN_ACTIVE_EXISTS |
 CAMPAIGN_REVISION_STALE | CAMPAIGN_COMMAND_REUSED | CAMPAIGN_RUN_TERMINAL |
 CAMPAIGN_NODE_UNAVAILABLE | CAMPAIGN_ACTIVE_ENCOUNTER_MISMATCH | CAMPAIGN_LOADOUT_INVALID |
 CAMPAIGN_LOADOUT_FAMILY_INVALID | CAMPAIGN_SUBMIT_INVALID |
+CAMPAIGN_PARTICIPATION_REQUIRED | CAMPAIGN_ACTIVE_ENCOUNTER_DELETE |
 CAMPAIGN_CONSUMER_AUTHORITY_UNAVAILABLE | CAMPAIGN_SOURCE_UNAVAILABLE |
 CAMPAIGN_REWIND_EXHAUSTED`. Each has one HTTP mapping and typed body; no handler returns a generic
 500 for a member of this algebra.
@@ -877,6 +1001,26 @@ the core RFC and its named successor campaign work in one 1.0 closure map so lat
 disappear behind “v2.” No schema, migration, storage, route, client, CSS, content, archive or
 protected-design byte is authorized by this return.
 
+## Campaign 1.0 closure map
+
+This RFC is the **foundation milestone**, not permission to mark the Campaign capability complete.
+`planning/campaign/1.0-closure-map.md` is the durable execution map and the roadmap receipt must keep
+all four milestones assigned until their end-to-end receipts exist:
+
+| milestone | exact 1.0 boundary | prerequisite / authority | completion receipt |
+|---|---|---|---|
+| Campaign foundation (this RFC) | safe create/start/submit/delete/replay; pack encounters; earned run tools; official metadata; complete foundation browser journey | accepted dependencies named at the top of this RFC | implemented RFC archive receipt plus owner-use journey |
+| Boss games (`campaign-boss-games`, working title) | the ruled Act-II `position` full game; calibrated bot profile/opponent receipt; start FEN/side; rules-terminal result; earned-rewind interaction; rated-when-clean admission; Review | `design/research/training-mode-variants.md`, `planning/campaign/rfc-derivation.md`, accepted bot-policy and learner-rating | full-game boss route/browser/save/reload/Review matrix; Act-I/III pack-boss controls |
+| Catalogue progression (`campaign-catalogue-progression`, working title) | exact shapes-met and structures-played projection; the what's-missing mark on each pack card; no learner-grade language | [[D1151]]/[[D300]], evidence vocabulary authority, pack-card surface owner | projection-to-pack-card browser receipt over named/unnamed controls |
+| Durable variety (`campaign-durable-variety`, working title) | a small closed non-paywalled set whose every member changes a future campaign through a named consumer; never ordinary content access or chess strength | dedicated research dossier, then the explicit owner ruling required by [[D2251]] | registry/consumer set equality plus new-run effect and unknown-id refusal |
+
+The official campaign is the human-authored content delivery across all applicable milestones, not
+a fifth mechanism. It cannot pass the complete 1.0 journey while the Act-II full-game boss or
+catalogue pack-card projection is absent. The durable-variety choice may be authored later than the
+foundation repair, but Campaign stays incomplete and the roadmap stays open until the owner rules
+and its accepted successor lands. “Deferred,” “v2,” a generic reward id or a progress page standing
+in for the pack-card mark are not valid closure states.
+
 ## Acceptance criteria
 
 Unit note: mechanical criteria count over the disposable contract fixture (9 nodes, 3 acts, 3
@@ -914,9 +1058,12 @@ authority; neither artifact can stand in for the other.
    a copied list would pass while the contract drifts).
 7. **Suppression disclosed**: every node with `suppress` renders the suppressed module names on
    its map card before entry; the fixture asserts the card text against the document bytes.
-8. **Seal correctness**: submitting a branch whose tip sealed `achieved` / `failed` /
-   `transitioned` / non-absorbing yields exactly that node verdict (4 fixtures); a branch from a
-   different run, or a node not the active encounter, refuses typed (2 negative fixtures).
+8. **Seal correctness and participation**: submitting a branch whose tip sealed `achieved` /
+   `failed` / `transitioned`, or reached its authored boundary non-absorbing, yields exactly that
+   node verdict and a compiler-owned participation witness (4 fixtures). Untouched root,
+   system-only path, learner move on another fork, pre-boundary tip, branch from a different run and
+   node not active each refuse before income/reward/progression; a played failed line still grants
+   the core reward (non-judgmental negative and positive controls).
 9. **Rebuild determinism**: `campaignRunState` folded from `campaign_events` byte-equals the
    incrementally maintained state after the criterion-2 script (the longitudinal-store
    discipline, same assertion shape), including module ownership/loadout, theory ownership,
@@ -938,8 +1085,9 @@ authority; neither artifact can stand in for the other.
     packet — vacuously green at landing, red the day someone wires it (the D302 guard).
 14. **Migration hygiene**: the migration is create-table/index only, `STRICT`, literal CHECKs,
    lands as `STORAGE_VERSION + 1` at its queue turn behind `bot-policy`, and the register row
-   flips in the landing commit (C1–C8, P1–P7 green). It creates all three tables, pins canonical
-   document bytes/digest, provides the event command-id unique index and award identity in §6.
+   flips in the landing commit (C1–C8, P1–P7 green). It creates all four tables, pins canonical
+   document bytes/digest, provides the pre-run create receipt, event command-id unique index and
+   award identity in §6.
 15. **`CAMPAIGN_PATH_WIDTH` is a discriminating warning** (§1, amendment 2026-08-23): a fixture
     document whose act-1 layers 1 and 2 each carry **one** choice emits the warning naming both
     layers and **does not** emit an error; the seed fixture (layers of width 3, layer 3 the
@@ -976,7 +1124,7 @@ authority; neither artifact can stand in for the other.
     award bytes. Crash before commit leaves neither event nor award; crash after commit/retry sees
     both. Active/abandoned runs, wrong learner, snapshot/digest mismatch, wrong gate, unknown
     appearance id and absent document grant insert zero rows.
-22. **Account lifecycle is exhaustive**: the account-data guard fails if any campaign table or the
+22. **Account lifecycle is exhaustive**: the account-data guard fails if any of the four campaign tables or the
     run-origin/document-snapshot fields are
     absent from export, hard delete, restore or merge. An export→delete→restore round trip preserves
     canonical run/events/award bytes and derived ownership; the appliance backup/restore journey
@@ -985,10 +1133,14 @@ authority; neither artifact can stand in for the other.
     consumer and durable-grant shapes; the register digest changes in the landing commit. Editing
     schema v1, omitting the live claim, or landing `training-mode-variants` against v1 fails the
     register/first-parent checks.
-24. **Official content + complete campaign UX journey**: at least one registered, OWNER/human-
+24. **Official foundation content + complete foundation UX journey**: at least one registered, OWNER/human-
     authored official campaign spans grounded opening, middlegame and endgame consequence packs,
     has reviewed theory/provenance and a dependency availability matrix, and is not byte-equal to
-    the disposable fixture. Browser tests exercise the full closed endpoint family: start from
+   the disposable fixture. Its `publication.channel` is `official`; the exact curriculum metadata
+   resolves its target bracket, non-empty opening/middlegame/endgame node sets, encounter-form sets,
+   theory/evidence provenance, dependency availability actions and digest-bound human review
+   receipt. Community/fixture bytes cannot acquire official treatment. Browser tests exercise the
+   full closed foundation endpoint family: start from
     Campaign home, choose a path,
     inspect/equip a reward, start and play an encounter, submit it, see the acquired reward, use it
     at a later boss, complete the run, receive idempotent durable awards, open Review and start a
@@ -996,21 +1148,45 @@ authority; neither artifact can stand in for the other.
    forbidden learner and terminal mutations render typed errors. Direct Review URL/refresh and
    export/delete/restore preserve `RunOrigin`; a plain run remains originless. A parallel
    abandonment journey reaches no completion/prestige award.
-25. **Board and access stability**: the campaign journey passes desktop, narrow mobile, 200% zoom,
+25. **Board and access stability**: the campaign foundation journey passes desktop, narrow mobile, 200% zoom,
     reduced-motion, keyboard and semantic-grid projections with no horizontal page overflow, no
     post-hint/reward square-size change, no covered tappable square and no primitive settings wall.
+26. **Create replay exists before the run id**: same learner/campaign/command and version returns
+    byte-identical run/event/result with one row per table; changed version refuses, another learner
+    is independent, and injected failure before each write leaves zero rows.
+27. **Encounter start is one cross-aggregate commit**: failure after play-run creation,
+    `run.started`, `node_entered`, revision or active-pointer write leaves no effect. Response-loss
+    retry returns the winner; concurrent identical/different commands produce replay/stale exactly
+    as §5.3 specifies, with no orphan or dangling pointer.
+28. **Run deletion cannot corrupt Campaign**: active encounter deletion refuses without mutation;
+    sealed deletion keeps progression/rewards and returns the typed Review-unavailable projection;
+    plain deletion is unchanged. Export-before and export-after deletion restore their respective
+    states, and an active missing run is rejected as corruption.
+29. **Earned tools reach the real module query**: an earlier module and theory reward is delivered
+    by `RunService.queryModules` at a later boss through `campaignAssistanceAuthority` and the
+    compiled assistance receipt. Wrong run/node/digest, stale client loadout, suppression, source
+    absence and preset narrowing each fail or narrow at their declared layer; a shelf-only fixture
+    does not satisfy the criterion.
+30. **Official metadata is able to fail**: missing phase, empty form, unknown bracket/passage/
+    evidence/provider operation, inverted envelope, wrong review digest, community-only fixture and
+    an extra copied dependency each trigger their exact validator issue. One official-shaped
+    control passes structural validation without claiming its chess curriculum is correct.
+31. **Campaign 1.0 cannot close at the foundation**: the roadmap receipt fails complete while any
+    §10 milestone lacks its end-to-end receipt. In particular, a pack-only boss, a progress page
+    without the pack-card mark, or marks/cosmetics with no future-run effect cannot discharge the
+    corresponding milestone.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | The Act II rated boss — absorbs [[D945]]'s ruled reading (earned rewinds can win the encounter; ratedness follows R11 unchanged: rated when clean, winnable regardless) as a v2 amendment once `learner-rating` is accepted, resolving the persona/`targetElo` disjointness (a profile forbids the rung field the rated predicate requires — calibrate a profile per bot-policy §7 or the boss drops the persona) | `planning/campaign/` | the amendment's registration | |
+| D1 | The Act II rated boss — absorbs [[D945]]'s ruled reading (earned rewinds can win the encounter; ratedness follows R11 unchanged: rated when clean, winnable regardless), resolving the persona/`targetElo` disjointness (calibrate a profile per bot-policy or drop the persona). It is the §10 `campaign-boss-games` **1.0 successor**, not v2 | `planning/campaign/1.0-closure-map.md` | accepted successor registration plus full-game journey receipt | |
 | D2 | Prediction (shape 3) and survival (shape 4) encounter classes — each needs a seal mechanism absent at HEAD (the prediction-score threshold must be authored-parameter-shaped and reconciled with format v0.9's no-verdict rule; survival needs grounded counters and an unbounded-run objective), and each re-cuts its formats as play-the-consequence, never find-the-tactic. **Amended 2026-08-23 (claude on [[D1152]]): survival breaks the run's minute bound, and the amendment must carry it.** Every v1 encounter is bounded by device D — the shipped `authoredBoundary.plyHorizon` (`06:416-428`) — so a run's minute envelope is the sum of its nine horizons. A survival encounter is bounded by *"nothing but failure"* (`06:444`), which makes shape 4 **the one class device D does not bound**: with it the envelope stops being that sum and the *"~35–55 minutes"* frame (`06:406-410`) no longer follows from the node count. The successor amendment specifies survival's own bound (a ply cap, a wall-clock cap, or an explicit statement that the class is unbounded and the run frame excludes it) — it may not simply inherit the horizon language | `planning/campaign/` | that amendment's registration | |
-| D6 | **The [[D1151]] catalogue-progression surface** (amendment 2026-08-23, claude on that ruling). The owner ruled campaign progression denominated in *the catalogue* — shapes met, structures played, the what's-missing mark **on the pack card** rather than a progress screen (`06:368-397`) — and this RFC has no seam for it: no collection surface, and §7's node-card vocabulary is a **closed list** (`:415-419`) that cannot express a what's-missing mark. The successor owes (a) the surface, (b) the mark's home on the pack card, and (c) the [[D300]] vocabulary prerequisite, which is **already counted and need not be re-derived**: the supply-side census is **15 of 49 lenses and 9 of 25 shapes unnamed** (`roguelike-run-design.md:294-311`), so the prerequisite is a bounded naming job against a measured denominator rather than an open-ended vocabulary design. Carries the standing guard from [[D1171]]: the catalogue is lawful **precisely because it claims nothing about the learner**, and one careless sentence collapses it into the skill-credit shape R20 disqualifies | `planning/campaign/` | that amendment's registration | |
+| D6 | **The [[D1151]] catalogue-progression surface**. The owner ruled campaign progression denominated in *the catalogue* — shapes met, structures played, the what's-missing mark **on the pack card** rather than a progress screen (`06:368-397`). The §10 `campaign-catalogue-progression` 1.0 successor owns the projection, pack-card consumer and the [[D300]] vocabulary prerequisite, already counted at **15 of 49 lenses and 9 of 25 shapes unnamed**. The catalogue claims nothing about the learner; one careless sentence collapses it into the skill-credit shape R20 disqualifies | `planning/campaign/1.0-closure-map.md` | accepted successor plus projection-to-pack-card receipt | |
 | D3 | Army-building / prestige — was blocked on the OWNER fork: D893(3)'s *"unlocks harder bosses"* versus D334's *"winning may unlock convenience and variety, never content"* | OWNER | the ruling's log entry; the amendment citing it | **DISCHARGED 2026-08-23 by [[D1040]] and folded 2026-08-30.** Playing unlocks the core path; winning gates only §3.6's exact prestige mark/cosmetic layer. Neither prestige nor durable ownership enters the educational availability algebra |
 | D4 | Evidence-dark fun nodes and time controls (nothing exists to build on — `clockState` is an untyped passthrough). Generic cosmetic rewards are no longer in this discharge: §3.6 admits only shared-catalog appearance ids after [[D1696]] lands | `planning/campaign/` | that amendment's registration | |
 | D5 | v1 mechanics implementation per this specification, excluding chess-curriculum authorship | codex | the implementing commits; ledger flips per §9 | |
-| D7 | Richer cross-run variety rewards (titles, modifiers, skip starts, variant runs) require a typed meta-reward registry and one real consumer per member; [[D1698]] refuses generic ids. This does not block the 1.0 marks + shared-catalog cosmetic horizon | `planning/campaign/` | the successor meta-reward RFC's accepted registration | |
+| D7 | Consequential cross-run variety rewards require dedicated research, the [[D2251]] owner ruling, a typed registry and one future-run consumer per member; [[D1698]] refuses generic ids. Marks/cosmetics remain valid receipts but do not complete Campaign 1.0 | `planning/campaign/1.0-closure-map.md` | research dossier + owner ruling + accepted `campaign-durable-variety` registration | |
 | D8 | At least one official 1.0 campaign authored/reviewed as chess curriculum over opening, middlegame and endgame consequences, with grounded theory/provenance, varied paths, later/boss reward opportunities and a dependency availability matrix; the disposable fixture cannot discharge this | OWNER / human chess-content authority | official content commit + criterion-24 journey receipt after foundations stabilize | |
 
 **Discharged BY this RFC's registration:** `rfc/intent-presets.md` Discharge D3 (campaign as an
@@ -1048,6 +1224,19 @@ set).
   persona.
 
 ## Changelog
+
+- 2026-08-31 (**third author repair**): repaired the core findings [[D2244]]–[[D2248]] and
+  [[D2252]] with executable semantics. A compiler-owned participation witness closes zero-play
+  progression; `campaign_run_creations` makes create replay resolvable before a run id;
+  `startCampaignEncounterExactlyOnce` commits the play and campaign aggregates together; active
+  run deletion refuses while sealed deletion returns an honest unavailable Review; and
+  `campaignAssistanceAuthority` feeds current inventory/suppression/source state into the existing
+  `RunService.queryModules` boundary. Official publication now carries registry-joined curriculum
+  metadata and a digest-bound human review receipt. The RFC is explicitly a foundation: [[D2249]],
+  [[D2250]] and [[D2251]] remain in `planning/campaign/1.0-closure-map.md`, with durable variety
+  still research/owner-blocked. `make campaign-two-horizon-author-contract` passes 34/34; no
+  production/schema/migration/route/client/content/protected-design byte changed. Exact receipt:
+  `planning/campaign/third-author-repair-2026-08-31.md`.
 
 - 2026-08-30 (**second author repair**): repaired the ten returned blockers as one replayable
   operation boundary. The final seal, act/reward income, unlock, auto-equip, terminal marker and

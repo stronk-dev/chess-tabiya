@@ -251,7 +251,7 @@ longitudinal-store-cost:
 		./node_modules/.bin/vitest run --config tools/d1405b-single-decision-harness/vitest.config.ts
 
 campaign-two-horizon-author-contract:
-	node --test tools/d1592-two-horizon-harness/model.test.mjs tools/campaign-two-horizon-author-contract/contract.test.mjs
+	node --test tools/d1592-two-horizon-harness/model.test.mjs tools/campaign-two-horizon-author-contract/contract.test.mjs tools/d2244-campaign-author-repair/contract.test.mjs
 
 campaign-two-horizon-fresh-review:
 	node --test tools/d2077-campaign-fresh-review/contract.test.mjs
