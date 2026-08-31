@@ -13329,3 +13329,23 @@ operation-derived exact absence reasons, non-copyable question admission, one pr
 traversal and canonical UCI candidate identity; then run another fresh independent review.
 [[D1672]] and [[D2401]] remain independent blockers. No production renderer, module seat or UX
 implementation is authorized from this draft.
+
+## 2026-08-31 — Shared-resource bootstrap second fresh review returns generic registry identity
+
+**What landed:** independently crossed the repaired bootstrap against its first
+`versioned_registry` consumer. `make shared-resource-bootstrap-second-fresh-review` adds three
+able-to-fail returns: [[D2442]] the four-key rows-only resource cannot carry or seal attribution
+resolver semantics; [[D2443]] absence/uniqueness is keyed to whole files rather than structural
+selectors; and [[D2444]] canonical digest bytes are undefined and already differ from the consumer
+author model.
+
+**What changed:** `shared-resource-register-bootstrap` remains draft and returned. Its register,
+1.0 foundation checkpoint and work-state rows now point to
+`planning/shared-resource-register-bootstrap/second-fresh-independent-buildability-review-2026-08-31.md`.
+[[D2401]] is corrected from author-repaired to process-returned; no absent root or product first
+claim is treated as available.
+
+**Blocked/next:** define one generic semantic resource descriptor/digest, selector-level absent
+identity and named canonical byte authority; repair and review again before implementing the
+catalogue, history checker or any of the three roots. Runtime distribution, concept registry and
+evidence presentation remain blocked on that honest process boundary.

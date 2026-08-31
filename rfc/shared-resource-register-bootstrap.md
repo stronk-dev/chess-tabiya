@@ -1,8 +1,10 @@
 # RFC: Shared-resource register bootstrap and absent roots
 
-- **Status:** draft — AUTHOR REPAIRED AND EXTENDED 2026-08-31 after the fresh independent return
-  on [[D2381]]–[[D2384]] and evidence-presentation handoff [[D2401]]; another independent
-  process/buildability review is required before acceptance or implementation
+- **Status:** draft — RETURNED by second fresh independent review 2026-08-31 on
+  [[D2442]]–[[D2444]]. The four-kind catalogue and temporal lifecycle survive, but
+  `versioned_registry` excludes required semantic fields, absent-root identity is tied to whole
+  files instead of selectors, and canonical digest bytes are undefined. `make
+  shared-resource-bootstrap-second-fresh-review` reproduces 3/3. No implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -253,6 +255,23 @@ The fresh review receipt is
 `planning/shared-resource-register-bootstrap/fresh-independent-buildability-review-2026-08-31.md`.
 Another independent review is required after the author repair.
 
+## Second fresh independent return — 2026-08-31
+
+The repaired prior findings survive. The generic `versioned_registry` extension and its exact
+evidence-presentation handoff expose three further blockers:
+
+- [[D2442]] — exact `{id,version,digest,rows}` plus a rows-only digest cannot carry or seal the
+  source-attribution resolver and missing-metadata policy;
+- [[D2443]] — requiring whole-file absence and globally unique paths prevents a distinct resource
+  selector from being introduced in an existing authority module; and
+- [[D2444]] — `canonical(rows)` has no named byte-level algorithm and already differs from the
+  consumer author model's insertion-order `JSON.stringify`.
+
+`make shared-resource-bootstrap-second-fresh-review` reproduces 3/3. Exact evidence and required
+repairs are in
+`planning/shared-resource-register-bootstrap/second-fresh-independent-buildability-review-2026-08-31.md`.
+Another author repair and fresh review are required before acceptance or implementation.
+
 ## Acceptance criteria
 
 1. `make shared-resource-bootstrap-check` derives all resource names and schema slugs from the
@@ -288,6 +307,11 @@ into a second list.
 
 ## Changelog
 
+- 2026-08-31: returned by second fresh independent review on [[D2442]]–[[D2444]]. The
+  `versioned_registry` object/digest cannot represent its first consumer, absent-root identity is
+  file-bound rather than selector-bound, and canonical digest bytes are unspecified. `make
+  shared-resource-bootstrap-second-fresh-review` passes 3/3; no process or product implementation
+  is authorized.
 - 2026-08-31: amended on [[D2401]] with the generic `versioned_registry` kind, exact
   source-attribution absent root and evidence-presentation first-lane handoff. No runtime
   attribution, resolver, citation or product byte is authorized; another independent review is
