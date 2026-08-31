@@ -10,6 +10,7 @@ This file is navigation. The authoritative strategic rollup is
 |---|---|---|
 | What does full 1.0 require, and in what dependency order? | `planning/roadmap-to-done.md` | `make roadmap-check` |
 | What ideas, defects and rulings exist? | `design/BACKLOG.md` | `make work-index` |
+| What is each ledger row's execution state, owner, blocker or landing evidence? | `planning/work-state.json` | `make work-state` |
 | Which RFC owns a contract/resource and what state is it in? | `rfc/README.md` | `make status-parity register-check` |
 | What does the learner-facing audit require item by item? | `planning/ux-implementation-index.md` | covered by `make roadmap-check` |
 
@@ -24,7 +25,8 @@ being misreported as a completed learner capability.
 ## Taking work
 
 1. Pick the next lawful item from the capability wave in `roadmap-to-done.md`.
-2. Follow its source row/RFC/research link. `make work-index` prints the complete current join.
+2. Follow its source row/RFC/research link. `make work-index` prints citation routing;
+   `make work-state` prints durable assignment and the remaining untriaged population.
 3. Respect the exploration/RFC gate and all resource claims in `rfc/README.md`.
 4. Deliver a vertical slice through evidence, state, production API, UX/defaults, content fixture,
    verification and release impact. If a dimension is intentionally absent, record why.

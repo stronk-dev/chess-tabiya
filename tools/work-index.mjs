@@ -8,6 +8,7 @@ import { parseActiveRfcRows } from "./register-check.mjs";
 import { parseArchiveRows } from "./status-parity.mjs";
 
 const CLOSED = new Set(["✅", "⛔"]);
+const GRAPHEMES = new Intl.Segmenter("en", { granularity: "grapheme" });
 const ROUTE_BASENAME = /(?:queue|plan|work-order|handoff|roadmap|triage|brief)\.md$/u;
 const ROUTE_EXACT = new Set([
   "planning/app-reality-check.md",
@@ -25,11 +26,22 @@ const EXCLUDED = new Set([
 
 function posix(value) { return value.split(path.sep).join("/"); }
 
-export function parseLedgerRows(markdown) {
-  return [...markdown.matchAll(/^\|\s*(D\d+[a-z]?)(?=\s|\|)\s*([^|]*)\|/gimu)].map((match) => {
-    const state = (match[2] ?? "").trim();
-    return Object.freeze({ id: match[1], state, open: ![...CLOSED].some((glyph) => state.includes(glyph)) });
+export function parseLedgerSourceRows(markdown) {
+  return [...markdown.matchAll(/^(\|\s*(D\d+[a-z]?)(?=\s|\|)\s*([^|]*)\|.*)$/gimu)].map((match) => {
+    const state = (match[3] ?? "").trim();
+    const sourceGlyph = GRAPHEMES.segment(state)[Symbol.iterator]().next().value?.segment ?? "";
+    return Object.freeze({
+      id: match[2],
+      state,
+      open: ![...CLOSED].some((glyph) => state.includes(glyph)),
+      sourceGlyph,
+      sourceLine: match[1],
+    });
   });
+}
+
+export function parseLedgerRows(markdown) {
+  return parseLedgerSourceRows(markdown).map(({ id, state, open }) => Object.freeze({ id, state, open }));
 }
 
 function markdownFiles(root, relative) {

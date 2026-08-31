@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:99f9c57f968893506e3e89d3c8b2e8a3da1c861a65a2ec4c588974ec7bb1de1d",
+    "roadmap": "sha256:2acb6cdc4da59374c9fd8c93f54ea21372167fe886fde0c777c58a948d6a1cc9",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "rfcRegister": "sha256:2859290e2d5f4cf655b9b3883cf950233b9d9cd0089791961fa404a98c6d0c1a",
+    "rfcRegister": "sha256:318fbdcf6e16a8207d827c32a61d49271490601053c90e5c2ac050a6d2075bde",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -17,9 +17,9 @@
       "breadth": 2,
       "post_1_0": 0
     },
-    "assignedRfcs": 67,
+    "assignedRfcs": 66,
     "activeRfcLifecycle": {
-      "draft": 53,
+      "draft": 52,
       "accepted": 5,
       "implementing": 4,
       "awaiting": 6,
@@ -35,8 +35,8 @@
       "retired": 24
     },
     "dimensionStates": {
-      "proven": 1,
-      "partial": 49,
+      "proven": 2,
+      "partial": 48,
       "blocked": 45,
       "broken": 0,
       "missing": 9,
@@ -67,12 +67,13 @@
       "nextAction": "Maintain the separately named verification tiers and refresh the source-sealed capability receipt whenever a joined authority changes.",
       "latestCheckpoint": {
         "at": "2026-08-31",
-        "summary": "The roadmap is source-sealed, its verification tiers remain separate, and product implementation checkpoints must now flow back through a grounded staged guard.",
+        "summary": "The roadmap is source-sealed and every one of 2,128 ledger rows now has durable execution state; the 1,395-row untriaged baseline is explicit and protected by a one-way ratchet.",
         "impact": "advanced",
         "evidence": [
-          "rfc/archive/roadmap-progress-flowback.md",
-          "docs/progress-tracking.md",
-          "tools/roadmap-receipt.mjs"
+          "rfc/archive/work-state.md",
+          "planning/work-state.json",
+          "tools/work-state.mjs",
+          "docs/progress-tracking.md"
         ]
       },
       "exit": "Every required check has one owner and failure meaning; all live 1.0 work is assigned; local parity matches GitHub; no planning census masquerades as a product contract."
@@ -324,7 +325,7 @@
       "name": "Work truth, measurement, and release accounting",
       "release": "core",
       "owner": "coordinator",
-      "rfcCount": 3,
+      "rfcCount": 2,
       "workItems": {
         "queued": 0,
         "blocked_owner": 0,
@@ -349,8 +350,8 @@
           "Measurements retain inputs, revisions, and negative results."
         ],
         "state": [
-          "partial",
-          "Every live item has one durable state, one owner, and one capability."
+          "proven",
+          "Every ledger and UX item has durable validated execution state; live work has a roadmap capability owner or the explicit untriaged/unowned state, and the untriaged ceiling only falls."
         ],
         "api": [
           "not_applicable",

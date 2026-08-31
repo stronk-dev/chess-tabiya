@@ -1,8 +1,9 @@
 # Full 1.0 roadmap — the authoritative product rollup
 
 **Owner:** coordinator · **Rebuilt:** 2026-08-24 under [[D1504]] · **Machine map:**
-`planning/roadmap-1.0.json` · **Per-item state:** `planning/work-items-1.0.json` · **Guards:**
-`make roadmap-check work-item-check` · **Generated status:** `planning/roadmap-1.0.receipt.json`
+`planning/roadmap-1.0.json` · **UX-item state:** `planning/work-items-1.0.json` · **Ledger-item
+state:** `planning/work-state.json` · **Guards:** `make roadmap-check work-item-check work-state` ·
+**Generated status:** `planning/roadmap-1.0.receipt.json`
 
 This is the one strategic answer to “what remains before a full 1.0?”. `design/BACKLOG.md` remains
 the idea/defect ledger, `rfc/README.md` the lifecycle/resource register,
@@ -50,6 +51,7 @@ Run these for current counts; prose counts are dated evidence, not authority:
 
 ```sh
 make work-index
+make work-state
 make work-item-check
 make status-parity
 make register-check
@@ -96,20 +98,20 @@ fails `make roadmap-check` until it has an owner.
 
 <!-- roadmap-capability: governance -->
 
-**State: partial.** The ledger, RFC register, work index, status parity, shared-resource register,
-intent parity, and persistent UX-item registry are real. The 569-item register now distinguishes
-250 queued, 61 owner-blocked, 116 RFC-blocked, 118 complete and 24 retired items, with zero live
-items unassigned; a source-row edit or a new id fails until its durable state is reconciled. Generic
-non-UX ledger rows still answer “mentioned?” more reliably than “actively delivered?”, so the
-capability remains partial rather than overstated as proven.
+**State: instrumented, backlog not yet triaged.** The ledger, RFC register, status parity,
+shared-resource register, intent parity and persistent UX-item registry are real. Every generic
+ledger row now has one durable state joined to its exact source bytes; terminal rows retain landing
+or refusal evidence; live work has an explicit owner or the honest `untriaged`/`unowned` state.
+The first complete census reads 2,128 rows: 683 done, three refused, 47 todo and 1,395 untriaged.
+That 96.7% is not progress—it is the newly visible triage debt, protected by a one-way ratchet.
 
 **1.0 exit:** coverage stays green; generic queue-only rows are assigned as touched; RFC, content,
 research and release closeout flows into its register, log, docs, intent proposal, and this rollup;
 measurement records retain inputs, revisions, failures and reproducible commands.
 
-Primary RFCs: `measurement-records`, `shared-resource-register-bootstrap`. Debt: [[D1504]],
-[[D1505]]; [[D1523]]/[[D1528]] are discharged for the exhaustive UX inventory by [[D1535]] and
-`make work-item-check`, while the generic-ledger extension stays inside the exit above. The
+Primary RFCs: `measurement-records`, `shared-resource-register-bootstrap`, `work-state`. Debt:
+[[D1504]], [[D1505]]; [[D1523]] is discharged for the generic ledger by `make work-state`, while
+[[D1528]]'s historical measurement remains the reason the persistent UX registry exists. The
 bootstrap RFC owns the product-byte-free absent-root protocol needed before a new versioned shared
 resource can be claimed.
 

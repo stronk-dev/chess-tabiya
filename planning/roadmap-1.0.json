@@ -18,10 +18,10 @@
       "name": "Work truth, measurement, and release accounting",
       "release": "core",
       "owner": "coordinator",
-      "rfcs": ["measurement-records.md", "shared-resource-register-bootstrap.md", "work-state.md"],
+      "rfcs": ["measurement-records.md", "shared-resource-register-bootstrap.md"],
       "completion": {
         "evidence": ["partial", "Measurements retain inputs, revisions, and negative results."],
-        "state": ["partial", "Every live item has one durable state, one owner, and one capability."],
+        "state": ["proven", "Every ledger and UX item has durable validated execution state; live work has a roadmap capability owner or the explicit untriaged/unowned state, and the untriaged ceiling only falls."],
         "api": ["not_applicable", "This slice governs delivery rather than a product endpoint."],
         "experience": ["not_applicable", "This slice has no learner surface."],
         "defaults": ["not_applicable", "This slice has no learner configuration."],
@@ -312,9 +312,9 @@
         "nextAction": "Maintain the separately named verification tiers and refresh the source-sealed capability receipt whenever a joined authority changes.",
         "latestCheckpoint": {
           "at": "2026-08-31",
-          "summary": "The roadmap is source-sealed, its verification tiers remain separate, and product implementation checkpoints must now flow back through a grounded staged guard.",
+          "summary": "The roadmap is source-sealed and every one of 2,128 ledger rows now has durable execution state; the 1,395-row untriaged baseline is explicit and protected by a one-way ratchet.",
           "impact": "advanced",
-          "evidence": ["rfc/archive/roadmap-progress-flowback.md", "docs/progress-tracking.md", "tools/roadmap-receipt.mjs"]
+          "evidence": ["rfc/archive/work-state.md", "planning/work-state.json", "tools/work-state.mjs", "docs/progress-tracking.md"]
         },
         "exit": "Every required check has one owner and failure meaning; all live 1.0 work is assigned; local parity matches GitHub; no planning census masquerades as a product contract."
       },

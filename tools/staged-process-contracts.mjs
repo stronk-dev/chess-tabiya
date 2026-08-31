@@ -11,6 +11,7 @@ export const PROCESS_CONTRACT_TARGETS = Object.freeze([
   "register-check",
   "status-parity",
   "work-index",
+  "work-state",
   "roadmap-check",
   "intent-parity",
 ]);

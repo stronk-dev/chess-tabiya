@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 
-import { buildWorkIndex, parseLedgerRows, routeDocumentPaths } from "./work-index.mjs";
+import { buildWorkIndex, parseLedgerRows, parseLedgerSourceRows, routeDocumentPaths } from "./work-index.mjs";
 
 test("parses open and terminal ledger glyphs without treating measured rows as closed", () => {
   assert.deepEqual(parseLedgerRows([
@@ -18,6 +18,18 @@ test("parses open and terminal ledger glyphs without treating measured rows as c
     { id: "D3", state: "📊", open: true },
     { id: "D4", state: "⛔", open: false },
   ]);
+});
+
+test("exposes exact source rows and one grapheme without widening the existing parser", () => {
+  const source = "| D123a 🛠 | description with `a | b` | routed |";
+  assert.deepEqual(parseLedgerSourceRows(source), [{
+    id: "D123a",
+    state: "🛠",
+    open: true,
+    sourceGlyph: "🛠",
+    sourceLine: source,
+  }]);
+  assert.deepEqual(parseLedgerRows(source), [{ id: "D123a", state: "🛠", open: true }]);
 });
 
 test("routes an open row to a living queue or active RFC and exposes every reference", () => {

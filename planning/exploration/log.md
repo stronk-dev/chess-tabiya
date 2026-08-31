@@ -12929,3 +12929,19 @@ The performance test measures that combined production operation, and the compil
 regenerated because its source closure changed. Final `make verify` passes 1,097 software tests,
 both isolated performance contracts, all governance/build checks and 172 content tests. D2375 and
 D2376 close; `roadmap-progress-flowback` archives with canonical docs.
+
+## 2026-08-31 — Durable work-state closeout
+
+Replaced citation-as-progress for the generic ledger with durable state over every one of 2,128
+rows. The deterministic bootstrap found 683 done, three refused, 47 todo through one unambiguous
+live UX capability owner, and 1,395 genuinely untriaged. It inferred neither activity nor blockers
+from prose. Four closeout rows then reduced the untriaged count to 1,391 while retaining the
+bootstrap ceiling as a one-way baseline.
+
+`parseLedgerSourceRows` now supplies the exact bytes and leading glyph from the same parser that
+continues to power `work-index`; its old public result and CLI are fixtured unchanged. The new
+`make work-state` check enforces population equality, the six-state algebra, roadmap-derived
+owners, live blockers, bidirectional closure, exact-row digests, truthful UX reverse references
+and the untriaged ratchet. Historical live-UX→terminal citations are reported as evidence and do
+not become execution ownership. D1523, D1741, D2377 and D2378 close; D1742 remains open because
+438 closed rows still rely on closeout prose and three refusals still carry source-row authority.

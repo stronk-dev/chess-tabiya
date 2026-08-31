@@ -5,6 +5,9 @@ The 1.0 roadmap distinguishes strict release gates from incremental delivery.
 - `planning/roadmap-1.0.json` owns capabilities, eight completion dimensions, dependency
   milestones and each milestone's latest evidence-backed checkpoint.
 - `planning/work-items-1.0.json` owns persistent learner-facing work-item state.
+- `planning/work-state.json` owns execution state for every generic ledger row: `untriaged`,
+  `todo`, `doing`, `blocked`, `done`, or `refused`, with roadmap-derived owners and exact-row
+  digests.
 - `rfc/README.md` owns RFC lifecycle state.
 - `planning/roadmap-1.0.receipt.json` is derived from those sources and the live route/API
   inventories. Ordinary checks never rewrite it.
@@ -26,3 +29,10 @@ Only staged bytes are inspected, so another worker's dirty files cannot trigger 
 Use `make roadmap-receipt` only after intentionally changing a joined source. Use
 `make verify-governance` to exercise the complete governance tier, including negative fixtures for
 checkpoint shape, receipt drift and staged-flow-back refusal.
+
+Run `make work-state` for the assignment census. It always prints the complete ledger denominator,
+state counts, per-owner live counts, weak closeout evidence, source-row refusals, historical
+live-UX→terminal references, and the untriaged ratio. New ledger rows enter as `untriaged`; use
+`node tools/work-state.mjs --sync` followed by the validated `--set=D… --state=…` transition in
+the same change. The untriaged ceiling only falls, so a later census cannot erase unfinished
+classification by rebasing its baseline.

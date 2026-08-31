@@ -47,6 +47,7 @@ test("runs the complete governance subset used by the pre-commit hook", () => {
     "register-check",
     "status-parity",
     "work-index",
+    "work-state",
     "roadmap-check",
     "intent-parity",
   ]);
