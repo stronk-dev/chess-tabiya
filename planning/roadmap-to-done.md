@@ -103,9 +103,11 @@ capability remains partial rather than overstated as proven.
 research and release closeout flows into its register, log, docs, intent proposal, and this rollup;
 measurement records retain inputs, revisions, failures and reproducible commands.
 
-Primary RFC: `measurement-records`. Debt: [[D1504]], [[D1505]]; [[D1523]]/[[D1528]] are discharged
-for the exhaustive UX inventory by [[D1535]] and `make work-item-check`, while the generic-ledger
-extension stays inside the exit above.
+Primary RFCs: `measurement-records`, `shared-resource-register-bootstrap`. Debt: [[D1504]],
+[[D1505]]; [[D1523]]/[[D1528]] are discharged for the exhaustive UX inventory by [[D1535]] and
+`make work-item-check`, while the generic-ledger extension stays inside the exit above. The
+bootstrap RFC owns the product-byte-free absent-root protocol needed before a new versioned shared
+resource can be claimed.
 
 ### 2. Evidence collection, semantic events, selection, and grounding
 

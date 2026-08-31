@@ -12760,3 +12760,14 @@ and operation requirements derive internally before first-flight writes.
 new repair arms and strict TypeScript. No production schema, registry, API, client, pack, content,
 digest, archive or protected-design byte changed. Fifth fresh review and [[D560]] remain. Receipt:
 `planning/pack-capability-contract/fifth-author-repair-2026-08-31.md`.
+
+## 2026-08-31 — Shared-resource bootstrap draft
+
+Drafted `shared-resource-register-bootstrap.md` for [[D2363]]. One checked catalogue replaces the
+seven-name/schema-slug ceiling; an accepted process RFC lands an `absent` root before a product RFC
+may claim unique `first lane 1`; landing is atomic and one-way. The first handoff is
+`release-manifest-schema`, with no premature release schema bytes.
+
+`make shared-resource-bootstrap-author-contract` passes 5/5. No checker, register, product schema,
+runtime, API, content, archive or protected-design byte changed. Fresh independent process review
+is required. Receipt: `planning/shared-resource-register-bootstrap/author-contract-2026-08-31.md`.
