@@ -13349,3 +13349,22 @@ claim is treated as available.
 identity and named canonical byte authority; repair and review again before implementing the
 catalogue, history checker or any of the three roots. Runtime distribution, concept registry and
 evidence presentation remain blocked on that honest process boundary.
+
+## 2026-08-31 — Semantic-validation fifth fresh review returns authority seams
+
+**What landed:** independently crossed the fourth author repair against its normative types and
+executable model. The event/reading population and neutral-oracle direction survives. `make
+semantic-validation-fifth-fresh-review` adds five able-to-fail returns: [[D2445]] the proposition
+union names three undeclared types; [[D2446]] wildcard paths have no executable quantifier;
+[[D2447]] prior-commit owner authority trusts a caller-supplied admission list; [[D2448]] set
+equality erases duplicate rows; and [[D2449]] the protected owner store has no lawful bootstrap.
+
+**What changed:** `semantic-validation-authority` remains draft and returned. Its register, 1.0
+foundation checkpoint and work-state rows now point to
+`planning/semantic-validation-authority/fifth-fresh-independent-buildability-review-2026-08-31.md`.
+The five findings are assigned to `evidence-foundation`; no untriaged work was introduced.
+
+**Blocked/next:** define the closed proposition records, one collection-constraint algebra, a
+staged-byte-derived owner transition, uniqueness before population equality and an explicit
+owner/Claude empty-store bootstrap. Repair and review again before any runtime validation receipt
+or learner-eligibility implementation.

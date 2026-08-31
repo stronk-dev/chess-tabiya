@@ -1,12 +1,11 @@
 # RFC: Executable semantic-validation authority
 
-- **Status:** draft — FOURTH AUTHOR REPAIR COMPLETE 2026-08-31 on [[D2385]]–[[D2388]];
-  independent review remains required. One `SemanticValidationSubject`/observation union now covers
-  event and reading roots end to end; roots/declarations/profiles/verdicts are equal while cases are
-  an explicit referenced subset; rules oracles return neutral facts whose event meaning requires a
-  separately grounded proposition; and owner authority has one append-only protected store.
-  `make semantic-validation-fourth-author-repair` passes 4/4. No implementation or learner
-  eligibility is authorized before fresh acceptance.
+- **Status:** draft — RETURNED by fifth fresh independent review 2026-08-31 on
+  [[D2445]]–[[D2449]]. The event/reading and neutral-oracle direction survives, but proposition
+  types are undefined, wildcard constraints have no executable meaning, owner chronology trusts a
+  caller list, duplicate authority rows survive set equality and the protected owner store has no
+  lawful bootstrap. `make semantic-validation-fifth-fresh-review` reproduces 5/5. No
+  implementation or learner eligibility is authorized.
 - **Author:** codex, executing [[D1711]] / [[D1713]] / [[D1714]] after refreshing both research
   instruments at HEAD
 - **Created:** 2026-08-29
@@ -1263,6 +1262,24 @@ rows are permanent negatives. If no owner row exists, the cell remains `required
 29. The exact owner store/parser/staged transition crosses all negative arms in R4, and no Codex-
     written fixture can create an owner authority row.
 
+## Fifth fresh independent return — 2026-08-31
+
+The fourth repair's direction survives, but its newly added seams expose five buildability
+blockers:
+
+- [[D2445]] — the rules-proposition union names three undeclared authority/reference types;
+- [[D2446]] — wildcard fact paths are declared but rejected by the author model and have no
+  collection quantifier;
+- [[D2447]] — the owner prior-commit guard trusts caller-supplied admitted refs instead of deriving
+  before/after case/profile transitions;
+- [[D2448]] — set conversion hides duplicate declaration/profile/verdict rows; and
+- [[D2449]] — the required protected store is absent while the only agents allowed to create it
+  have no named bootstrap discharge.
+
+`make semantic-validation-fifth-fresh-review` reproduces 5/5. Exact evidence and repairs are in
+`planning/semantic-validation-authority/fifth-fresh-independent-buildability-review-2026-08-31.md`.
+A fifth author repair, owner-store bootstrap and another fresh review are required before acceptance.
+
 ## Fresh adversarial return — 2026-08-31
 
 The pre-review audit in
@@ -1283,6 +1300,11 @@ review remains outstanding; implementation is still unauthorized.
 
 ## Changelog
 
+- 2026-08-31: fifth fresh independent review returned the fourth repair on [[D2445]]–[[D2449]].
+  Proposition types, wildcard constraint semantics, derived owner chronology, one-row-per-subject
+  authority and the owner-only store bootstrap remain unbuildable. `make
+  semantic-validation-fifth-fresh-review` passes 5/5; no implementation or learner eligibility is
+  authorized.
 - 2026-08-31: fourth author repair answers D2385–D2388 with one event/reading observation algebra,
   exact equality/subset joins, neutral rules facts plus grounded propositions and one protected
   append-only owner-authority store. Independent review still required; no implementation.
