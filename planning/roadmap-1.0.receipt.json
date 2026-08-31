@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:7ac51332f8370adce2da3a08e80769e4b60a2fe452f058c6048be2e937cf131a",
+    "roadmap": "sha256:9cfe0dc79edd4e65929b3675af2be70016f5d0cce830eebdc8b8ee4ab4d0866c",
     "workItems": "sha256:753a52b5efbbcbc8df6431d10885d6600cba6d70c485a6fd28721417fdaec8a2",
-    "rfcRegister": "sha256:4c113e1c831056fbf4fcaa707653daf1480e99f35e734aa6a484920fac3e2c8c",
+    "rfcRegister": "sha256:0a47649dd3da50d47bccc0fded532269b60ce6f60075b05f4f1454f7fefffe29",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -17,7 +17,7 @@
       "breadth": 2,
       "post_1_0": 0
     },
-    "assignedRfcs": 66,
+    "assignedRfcs": 67,
     "workItems": {
       "queued": 154,
       "blocked_owner": 61,
@@ -289,7 +289,7 @@
       "name": "Evidence collection, semantic events, selection, and grounding",
       "release": "core",
       "owner": "evidence-foundation",
-      "rfcCount": 18,
+      "rfcCount": 19,
       "workItems": {
         "queued": 0,
         "blocked_owner": 0,

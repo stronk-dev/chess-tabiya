@@ -147,7 +147,7 @@ grounding, latency and abstention; selectors compile consumer-specific eligibili
 significance; raw-sentence side channels are gone; modules, bots and Review share the manifest.
 
 Primary RFCs: `pack-capability-contract`, `claim-semantic-anchors`, `tactical-collectors`,
-`semantic-collectors`, `semantic-validation-authority`, `semantic-convention-register`,
+`semantic-collectors`, `foundation-source-identity`, `semantic-validation-authority`, `semantic-convention-register`,
 `semantic-convention-provenance`,
 `runtime-opening-identity`, `exact-legal-mobility`, `breadth-collectors`, `evidence-move-selector`,
 `shared-candidate-evidence-packet`, `bounded-policy-targets`, `bounded-target-policy-composition`,

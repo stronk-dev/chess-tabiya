@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "scope": "D1736 stage-1 source identity only",
+  "rows": [
+    { "projection": "rules.structural.reading.king_opposition@2", "family": "king_opposition", "grain": "position", "authority": "king-opposition-unobstructed@2", "executionOwner": "shared-candidate-evidence-packet", "state": "successor" },
+    { "projection": "rules.structural.event.king_opposition@2", "family": "king_opposition", "grain": "edge", "authority": "king-opposition-unobstructed@2", "executionOwner": "shared-candidate-evidence-packet", "state": "successor" },
+    { "projection": "rules.structural.reading.backward_pawn@2", "family": "backward_pawn", "grain": "position", "authority": "backward-pawn@2", "executionOwner": "shared-candidate-evidence-packet", "state": "successor" },
+    { "projection": "rules.structural.event.backward_pawn@2", "family": "backward_pawn", "grain": "edge", "authority": "backward-pawn@2", "executionOwner": "shared-candidate-evidence-packet", "state": "successor" },
+    { "projection": "derived.pawn.consequence.backward_pawn_legal_advance@1", "family": "backward_pawn", "grain": "candidate", "authority": "legal-exchange@1", "executionOwner": "shared-candidate-evidence-packet", "state": "new" },
+    { "projection": "derived.structural.reading.pawn_file_group@1", "family": "pawn_file_identity", "grain": "position", "authority": "pawn-connectivity@1", "executionOwner": "shared-candidate-evidence-packet", "state": "new" },
+    { "projection": "derived.structural.event.pawn_file_group@1", "family": "pawn_file_identity", "grain": "edge", "authority": "pawn-connectivity@1", "executionOwner": "shared-candidate-evidence-packet", "state": "new" },
+    { "projection": "rules.transition.event.slider_ray@2", "family": "line_identity", "grain": "edge", "authority": "line-blocker-membership@1", "executionOwner": "shared-candidate-evidence-packet", "state": "successor" },
+    { "projection": "derived.activity.reading.file_state@1", "family": "file_activity", "grain": "position", "authority": "pawn-connectivity@1", "executionOwner": "shared-candidate-evidence-packet", "state": "new" },
+    { "projection": "derived.activity.event.file_state@1", "family": "file_activity", "grain": "edge", "authority": "pawn-connectivity@1", "executionOwner": "shared-candidate-evidence-packet", "state": "new" },
+    { "projection": "derived.activity.event.file_access_revealed@1", "family": "file_activity", "grain": "edge", "authority": "pawn-connectivity@1", "executionOwner": "shared-candidate-evidence-packet", "state": "new" },
+    { "projection": "rules.structural.event.pawn_islands@2", "family": "pawn_islands", "grain": "edge", "authority": "pawn-connectivity@1", "executionOwner": "shared-candidate-evidence-packet", "state": "successor" },
+    { "projection": "derived.square.reading.future_file_challenge@1", "family": "square_denial_outpost", "grain": "position", "authority": "future-file-challenge@1", "executionOwner": "shared-candidate-evidence-packet", "state": "new" },
+    { "projection": "derived.square.reading.capture_migration_reach@1", "family": "square_denial_outpost", "grain": "position", "authority": "capture-migration-reach@1", "executionOwner": "shared-candidate-evidence-packet", "state": "new" },
+    { "projection": "derived.structural.reading.outpost_candidate@1", "family": "square_denial_outpost", "grain": "position", "authority": "outpost-candidate@1", "executionOwner": "shared-candidate-evidence-packet", "state": "new" },
+    { "projection": "derived.structural.reading.occupied_outpost@1", "family": "square_denial_outpost", "grain": "position", "authority": "outpost-candidate@1", "executionOwner": "shared-candidate-evidence-packet", "state": "new" },
+    { "projection": "rules.structural.reading.fianchetto_setup@1", "family": "style_atoms", "grain": "position", "authority": "fianchetto-configuration@1", "executionOwner": "recorded-semantic-path", "state": "new" },
+    { "projection": "rules.structural.reading.fianchetto_knight_screen@1", "family": "style_atoms", "grain": "position", "authority": "fianchetto-configuration@1", "executionOwner": "recorded-semantic-path", "state": "new" },
+    { "projection": "rules.mobility.reading.candidate_role@1", "family": "style_atoms", "grain": "candidate", "authority": "exact-legal-mobility@1", "executionOwner": "shared-candidate-evidence-packet", "state": "new" },
+    { "projection": "rules.mobility.reading.pawn_extended_center_destination@1", "family": "style_atoms", "grain": "candidate", "authority": "extended-center-destination@1", "executionOwner": "shared-candidate-evidence-packet", "state": "new" },
+    { "projection": "rules.mobility.reading.early_queen_move@1", "family": "style_atoms", "grain": "candidate", "authority": "early-queen-ply@1", "executionOwner": "shared-candidate-evidence-packet", "state": "new" },
+    { "projection": "run.record.castling_eligibility@1", "family": "style_atoms", "grain": "frozen_prefix", "authority": "castling-first-decision@1", "executionOwner": "recorded-semantic-path", "state": "new" },
+    { "projection": "run.record.clock_decision@1", "family": "style_atoms", "grain": "edge", "authority": "clock-spend-input@1", "executionOwner": "recorded-clocks", "state": "new" }
+  ],
+  "explicitExternalOwners": [
+    "rules.structural.reading.named_structure@2 -> evidence-value-authority",
+    "derived semantic avoidance @2 -> subject-safe avoidance successor",
+    "promotion geometry/outcome -> semantic-collectors",
+    "provider receipts -> provider-exchange-and-execution",
+    "bounded target policy -> bounded-policy-targets and bounded-target-policy-composition",
+    "cited theory applicability -> theory-knowledge-pipeline",
+    "variant rules identity -> variants",
+    "learner module migration -> module-registration",
+    "validation admission -> semantic-validation-authority"
+  ]
+}

@@ -12861,3 +12861,19 @@ capabilities until the remaining authority chain lands. `make foundation-closure
 normal entry point and passed against manifest digest
 `eb36f05e25a007f036e750c8555a7ebd032443c3b720d8888ceeb1f8dc1cb6be`. Full receipt:
 `design/research/foundation-capability-closure-2026-08-31.md`.
+
+## 2026-08-31 — Foundation source-identity RFC first author pass
+
+Drafted the shared [[D1736]] source-identity repair as one closed 23-projection image rather than
+seven term-specific RFCs. The draft preserves literal position, edge, candidate or frozen-prefix
+identity across king opposition, backward pawns, pawn-file groups, slider rays, file activity,
+pawn-island topology, outpost/square consequences and seven style atoms. It claims pack-schema lane
+0.33 and shape-entry lane 0.5 for one optional convention reference while preserving legacy absence.
+
+The draft deliberately supplies no learner operation, module selection, move grade, plan,
+personality or authored chess judgement. Source→value, execution, validation, avoidance,
+longitudinal opportunity denominators, module migration and content migration remain named
+discharges with living owners. `make foundation-source-author-contract`, `make register-check`,
+`make status-parity`, `make roadmap-check` and `make work-index` pass. Fresh independent
+buildability review and the semantic-convention register/provenance dependency still gate
+acceptance and implementation.
