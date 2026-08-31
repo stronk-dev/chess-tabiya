@@ -42,6 +42,15 @@ outcomes. `planning/evidence-foundation-ux/shared-candidate-packet-second-author
 is the exact receipt. The RFC remains draft and implementation remains forbidden until a fresh
 independent buildability review accepts this repaired boundary.
 
+**2026-08-31 Phase-2h fourth author checkpoint.** The third fresh review's [[D2329]]–[[D2330]]
+return is author-repaired without production bytes. Collector projections now have one proposed
+generated literal `id@version` authority checked against the compiled manifest. Scope chooses
+retained output only after a transitive dependency-closure plan, so readings-only privately runs
+transition/tactical predecessors without exposing event results. `make
+candidate-packet-fourth-author-repair` passes 2/2 plus typecheck. Exact receipt:
+`shared-candidate-packet-fourth-author-repair-2026-08-31.md`; fourth fresh review still gates
+implementation.
+
 **2026-08-30 Phase-2g local-target checkpoint.** `bounded-policy-targets` has been author-repaired
 for [[D2105]]–[[D2111]] without adding consumer authority: one source-bound threat constructor,
 literal tracked identities, a concrete fixed-scheduler service, deterministic candidate/job bounds,

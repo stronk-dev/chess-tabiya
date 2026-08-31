@@ -12689,3 +12689,15 @@ Recorded and author-repaired [[D2361]] before independent review. The future pro
 named-root `absent`, an absent digest, unique `first lane 1` and a fatal landed→missing-root
 regression; fictional head 0 is never serialized. `make provider-protocol-author-repair` passes
 2/2. No checker, register, product, schema, content, archive or protected-design byte changed.
+
+## 2026-08-31 — Shared candidate packet fourth author repair
+
+Author-repaired [[D2329]]–[[D2330]]. One generated manifest-checked `id@version` authority now owns
+collector outputs, results, abstentions and value joins; request scope now derives a transitive
+execution plan separately from retained packet evidence. Readings-only runs its transition/tactical
+dependencies privately without exposing event output.
+
+`make candidate-packet-fourth-author-repair` passes 2/2 plus typecheck. No production, schema,
+content, archive or protected-design byte changed; fourth fresh independent review remains
+required. Receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-fourth-author-repair-2026-08-31.md`.
