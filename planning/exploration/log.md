@@ -13251,3 +13251,20 @@ abandoned encounter may be deleted with no typed history projection.
 **Blocked/next:** repair those eight boundaries, preserve the complete four-milestone Campaign 1.0
 closure map, rerun both maintained targets and request another fresh independent review. No schema,
 migration, storage, route, client or official campaign implementation is authorized from this draft.
+
+## 2026-08-31 — Candidate packet fifth fresh review returns the legal-authority call boundary
+
+**What landed:** independently joined the [[D2389]] fifth author repair to the production
+`declareExactLegalMovesEvidence` adapter. The repaired single retained object graph survives, but
+`make candidate-packet-fifth-fresh-review` proves [[D2428]]: the compiler's explicit
+`exactLegalMoveMap` call plus the adapter's validation recomputation produce two authority calls
+where criterion 36 requires exactly one.
+
+**What changed:** `shared-candidate-evidence-packet` remains draft and is returned rather than
+accepted. Its register, 1.0 foundation checkpoint and work-state row point at the exact review:
+`planning/evidence-foundation-ux/shared-candidate-packet-fifth-fresh-independent-review-2026-08-31.md`.
+
+**Blocked/next:** the author must either make the legal authority mint an opaque/sealed result the
+adapter can admit without recomputation, or state and measure the honest two-computation boundary.
+No packet runtime, cache, selector or product consumer is authorized until repair and another fresh
+review.

@@ -1,6 +1,6 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — [[D2389]] fifth author repair complete; fifth fresh independent review required.**
+- **Status:** **draft — returned by fifth fresh independent review on [[D2428]].**
   The D2198–D2201 author repair remains present: the product factory fixes the primary manifest authority; every collector
   result is projection-addressed; thirteen exact context adapters satisfy the executable registry;
   and memo, service-stat and receipt-reference protocols are closed. The historical return remains
@@ -14,7 +14,11 @@
   `planning/evidence-foundation-ux/shared-candidate-packet-fourth-fresh-independent-review-2026-08-31.md`.
   The author repair now compiles and seals one exact map, flattens its retained payload by reference,
   and refuses an equal second enumeration. `make candidate-packet-fifth-author-repair` is its
-  positive contract. Implementation remains unauthorized pending another fresh review.
+  positive contract. The fifth review found that criterion 36's one-call requirement cannot hold
+  against the production declaration adapter, which recomputes the exact map while validating the
+  retained payload. Exact return:
+  `planning/evidence-foundation-ux/shared-candidate-packet-fifth-fresh-independent-review-2026-08-31.md`.
+  Implementation remains unauthorized pending author repair and another fresh review.
   [[D1580]] remains separate numeric appliance-tier debt. *(Prior state: D1977–D1981
   author-repaired after D1958–D1961, D1900–D1903 and D1945–D1947.)*
 - **Author:** claude (initial draft); codex (2026-08-29 operation-boundary author repair). Drafted
@@ -1880,6 +1884,23 @@ equal-rebuild refusal independently failable. `make candidate-packet-fifth-autho
 positive author contract. A fifth fresh independent review is still required; no production,
 schema, content, API or UX implementation is authorized by this repair.
 
+## Fifth fresh independent return (2026-08-31)
+
+The D2389 value-identity repair survives: the declaration and flat packet retain one exact-map
+object graph, and an equal second enumeration is refused. [[D2428]] returns the call-count boundary.
+
+The compiler's specified `exactLegalMoveMap(beforeFen)` call is followed by
+`declareExactLegalMovesEvidence(payload)`, whose production implementation validates that payload
+by calling `exactLegalMoveMap(payload.fen)` again. Criterion 36 nevertheless requires exactly one
+instrumented call, and §12 names no adapter change. The author harness substitutes a declaration
+wrapper that does not perform the production validation, so its green result cannot prove the
+criterion buildable.
+
+Repair by making the authority mint a sealed result the adapter can admit without recomputation,
+or by specifying and measuring the honest two-computation boundary while retaining the single
+packet value graph. Renaming only the first call as the one that counts is refused. Exact review and
+reproducer: `make candidate-packet-fifth-fresh-review`.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -2022,6 +2043,10 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-08-31 — fifth fresh independent review returned the RFC on [[D2428]]. The D2389 single-value-
+  graph repair survives, but the production declaration adapter recomputes `exactLegalMoveMap`, so
+  criterion 36's exactly-one-call requirement is not buildable. Exact review:
+  `planning/evidence-foundation-ux/shared-candidate-packet-fifth-fresh-independent-review-2026-08-31.md`.
 - 2026-08-31 — [[D2389]] fifth author repair. One `exactLegalMoveMap` object now owns declaration,
   packet population and receipt identity; the factory has no second `exactLegalMoves` source and an
   equal rebuilt move list is an explicit negative. `make candidate-packet-fifth-author-repair`

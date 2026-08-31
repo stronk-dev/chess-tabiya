@@ -19201,6 +19201,15 @@
       "uxItems": [],
       "owner": "campaign",
       "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2428",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:79320da50855fb45dcabba9c5d971161c6a4077dbdbcdfb8c0264fe1d11e261d",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
     }
   ]
 }

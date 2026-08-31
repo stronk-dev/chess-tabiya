@@ -164,6 +164,13 @@ Primary RFCs: `pack-capability-contract`, `claim-semantic-anchors`, `tactical-co
 `shared-candidate-evidence-packet`, `bounded-policy-targets`, `bounded-target-policy-composition`,
 `recorded-semantic-path`.
 
+The 2026-08-31 fifth fresh candidate-packet review preserves the repaired single retained legal-
+move value graph but returns its acceptance boundary on [[D2428]]: the RFC requires one
+`exactLegalMoveMap` call while the production declaration adapter necessarily recomputes the same
+authority to validate the payload. The author must either provide one sealed authority-producing
+operation or document and measure the honest two-computation contract before implementation.
+Receipt: `planning/evidence-foundation-ux/shared-candidate-packet-fifth-fresh-independent-review-2026-08-31.md`.
+
 The 2026-08-28 shared-candidate packet author repair records the owner's foundation-first sequence
 without laundering verification into product reach: the provider-free complete population may
 land with zero product consumers, while Support/Review/bot discharges remain open. The draft now
