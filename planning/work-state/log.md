@@ -25,3 +25,17 @@ The resulting full census is 2,138 rows: 688 done, three refused, 139 todo, 792 
 untriaged. Untriaged live work fell from 1,386/1,447 (95.8%) to 516/1,447 (35.7%), and the
 one-way ceiling fell with it. `release-truth` returned to active because its own all-live-work-
 assigned exit is not yet met; the instrument is green, the triage is not complete.
+
+## 2026-08-31 — Full live-work ownership
+
+Finished the source-aware classification rather than equating a planning citation with an owner.
+Ten routing-queue sections assigned 147 rows, the named evidence/campaign/release work orders
+assigned 79, mixed review/research/decision sources assigned 59, the Codex execution queue
+assigned 108, and the RFC-drafting and defect-triage queues assigned the final 123. Each row now
+names the roadmap capability accountable for taking its next executable step; none was marked
+doing merely because it appeared in a queue.
+
+The exact census is 2,138 rows: 688 done, three refused, 655 todo, 792 blocked, zero doing and
+zero untriaged. All 1,447 live rows therefore have a capability owner, and the one-way untriaged
+ceiling is zero. `release-truth` completes on its stated all-live-work-assigned exit; future live
+rows without an owner now fail `make work-state` at creation.

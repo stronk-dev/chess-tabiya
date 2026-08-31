@@ -13036,3 +13036,17 @@ The exact census moved from 1,386 untriaged live rows (95.8%) to 516 (35.7%), wi
 139 todo. The roadmap's `release-truth` milestone is corrected from complete to active/held:
 source sealing is complete, but its own exit requires all live 1.0 work assigned. The remaining
 516 rows are the next work-state wave, not invisible residue.
+
+## 2026-08-31 — Release-truth ownership exit completed
+
+The remaining planning-routed backlog was classified by the capability that must execute it, not
+by the document that happened to mention it. Section-scoped routing queues assigned 147 rows;
+named evidence, campaign, learner-module and release work orders assigned 79; review, research,
+decision and roadmap sources assigned 59; the Codex queue assigned 108; and the RFC-drafting plus
+defect-triage queues assigned the final 123.
+
+The resulting source-sealed census is 2,138 total rows: 688 done, three refused, 655 todo, 792
+blocked, zero doing and zero untriaged. Every one of the 1,447 live rows now has a roadmap
+capability owner, so the `release-truth` milestone returns to complete on its actual exit rather
+than on instrument presence alone. The one-way ceiling is zero: any future ownerless live row is
+a failing gate, not invisible debt. No product, schema, content or semantic-harness byte changed.

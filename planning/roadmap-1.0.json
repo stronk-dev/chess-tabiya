@@ -306,14 +306,14 @@
       {
         "id": "release-truth",
         "wave": 0,
-        "state": "active",
+        "state": "complete",
         "capabilities": ["governance", "operations"],
         "dependsOn": [],
-        "nextAction": "Classify the remaining 516 planning-routed rows by real capability owner and executable dependency; maintain the separately named verification tiers and refresh the source-sealed receipt whenever a joined authority changes.",
+        "nextAction": "Keep every new live row assigned at creation, maintain the separately named verification tiers, and refresh the source-sealed receipt whenever a joined authority changes.",
         "latestCheckpoint": {
           "at": "2026-08-31",
-          "summary": "All 2,138 ledger rows have durable state; 870 RFC-owned rows now carry their roadmap owner and exact RFC dependency, reducing untriaged live work from 1,386 to 516. The milestone remains active because its all-work-assigned exit is not met.",
-          "impact": "held",
+          "summary": "All 2,138 ledger rows have durable state and every one of the 1,447 live rows has a roadmap capability owner: 655 todo, 792 blocked, zero doing and zero untriaged. The one-way ceiling is zero, so future ownerless live work fails the work-state gate at creation.",
+          "impact": "advanced",
           "evidence": ["rfc/archive/work-state.md", "planning/work-state.json", "tools/work-state.mjs", "docs/progress-tracking.md"]
         },
         "exit": "Every required check has one owner and failure meaning; all live 1.0 work is assigned; local parity matches GitHub; no planning census masquerades as a product contract."

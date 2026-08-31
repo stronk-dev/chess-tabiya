@@ -98,18 +98,19 @@ fails `make roadmap-check` until it has an owner.
 
 <!-- roadmap-capability: governance -->
 
-**State: instrumented, backlog triage in progress.** The ledger, RFC register, status parity,
+**State: complete and ratcheted.** The ledger, RFC register, status parity,
 shared-resource register, intent parity and persistent UX-item registry are real. Every generic
 ledger row now has one durable state joined to its exact source bytes; terminal rows retain landing
 or refusal evidence; live work has an explicit owner or the honest `untriaged`/`unowned` state.
-The current census reads 2,138 rows: 688 done, three refused, 139 todo, 792 blocked and 516
-untriaged. The first RFC-owned migration classified 870 rows conservatively: draft/awaiting RFC
-work is blocked on that exact RFC; accepted/implementing RFC work is todo for its roadmap
-capability; nothing becomes doing by inference. Untriaged live work fell from 95.8% to 35.7%, and
-the remaining planning-routed rows stay honestly unowned until their dependency is established.
-The one-way ratchet prevents either population from being hidden again.
+The current census reads 2,138 rows: 688 done, three refused, 655 todo, 792 blocked, zero doing
+and zero untriaged. The RFC-owned migration classified 870 rows conservatively: draft/awaiting
+RFC work is blocked on that exact RFC; accepted/implementing RFC work is todo for its roadmap
+capability; nothing becomes doing by inference. Four further source-aware waves assigned every
+planning queue, work order, decision record and defect-triage row to its real capability owner.
+The one-way ceiling is now zero: a new ownerless live row fails the gate instead of disappearing
+into a generic queue.
 
-**1.0 exit:** coverage stays green; generic queue-only rows are assigned as touched; RFC, content,
+**1.0 exit:** coverage stays green; every new live row is assigned at creation; RFC, content,
 research and release closeout flows into its register, log, docs, intent proposal, and this rollup;
 measurement records retain inputs, revisions, failures and reproducible commands.
 
