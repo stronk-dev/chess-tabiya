@@ -11,56 +11,76 @@ const section = (start, end) => {
   return rfc.slice(startIndex, rfc.indexOf(end, startIndex + start.length));
 };
 
-test("D2390: scalar authority loses dependency closure and the future convention claim is invalid", () => {
-  assert.equal(row("derived.pawn.consequence.backward_pawn_legal_advance@1").authority, "legal-exchange@1");
-  assert.match(section("### 3.2 Backward pawn v2", "### 3.3 Exact pawn-file groups"), /backward-pawn@2` plus `legal-exchange@1/u);
-  assert.match(rfc, /exact member claim for\s+the eight convention ids/u);
-  const future = [
-    "king-opposition-unobstructed@2", "backward-pawn@2", "line-blocker-membership@1",
-    "pawn-island-topology@1", "future-file-challenge@1", "capture-migration-reach@1",
-    "outpost-candidate@1", "fianchetto-configuration@1", "extended-center-destination@1",
-    "early-queen-ply@1", "castling-first-decision@1", "clock-spend-input@1",
-  ];
-  assert.equal(future.length, 12);
-  const landedBases = new Set(seed.members.map(({ ref }) => ref.replace(/@[1-9][0-9]*$/u, "")));
-  for (const invalidNewV2 of future.slice(0, 2)) {
-    assert.equal(landedBases.has(invalidNewV2.replace(/@[1-9][0-9]*$/u, "")), false);
-    assert.match(invalidNewV2, /@2$/u);
+test("D2390: dependencies and conventions are separate, closed sets with valid future lineage", () => {
+  assert.equal(plan.schemaVersion, 2);
+  assert.equal(plan.futureConventionClaim.length, 12);
+  assert.deepEqual(plan.futureConventionClaim, [...plan.futureConventionClaim].sort());
+  const landedHeads = new Map();
+  for (const { ref } of seed.members) {
+    const [base, versionText] = ref.split("@");
+    landedHeads.set(base, Math.max(landedHeads.get(base) ?? 0, Number(versionText)));
   }
+  for (const ref of plan.futureConventionClaim) {
+    const [base, versionText] = ref.split("@");
+    assert.equal(Number(versionText), (landedHeads.get(base) ?? 0) + 1, ref);
+  }
+  for (const item of plan.rows) {
+    assert.equal("authority" in item, false, item.projection);
+    assert.ok(Array.isArray(item.sourceDependencies), item.projection);
+    assert.ok(Array.isArray(item.conventions), item.projection);
+  }
+  const consequence = row("derived.pawn.consequence.backward_pawn_legal_advance@1");
+  assert.deepEqual(consequence.conventions, ["backward-pawn@1", "legal-exchange@1"]);
+  assert.deepEqual(consequence.sourceDependencies.map(({ ref }) => ref), [
+    "rules.exchange.predicate.legal_exchange@1",
+    "rules.structural.reading.backward_pawn@2",
+  ]);
 });
 
-test("D2391: clock_decision requires operands its edge grain cannot authenticate", () => {
-  assert.equal(row("run.record.clock_decision@1").grain, "edge");
+test("D2391: clock decision authenticates a recorded event and resolves operands through recorded-clocks", () => {
+  const clock = row("run.record.clock_decision@1");
+  assert.equal(clock.grain, "recorded_decision");
+  assert.deepEqual(clock.sourceDependencies, [{ kind: "rfc", ref: "recorded-clocks" }]);
   const grain = section("type FoundationSourceGrain", "The value constructor");
-  const edge = grain.split("\n").find((line) => line.includes('kind: "edge"'));
-  assert.match(edge, /kind: "edge"; readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string/u);
-  assert.doesNotMatch(edge, /clock|timeControl|eventHead|actor/u);
-  const clock = section("- `run.record.clock_decision@1`", "Conventions:");
-  for (const operand of ["actor", "decision", "previous/current clock", "base", "increment", "source event"]) {
-    assert.match(clock, new RegExp(operand.replace("/", "\\/"), "u"));
+  for (const operand of ["runId", "eventHead", "eventId", "actorClass", "decisionClass", "decisionId"]) {
+    assert.match(grain, new RegExp(operand, "u"));
   }
+  assert.match(section("- `run.record.clock_decision@1`", "Conventions:"), /`recorded_decision` receipt and `recorded-clocks` contract/u);
 });
 
-test("D2392: position-grain fianchetto rows contradict the RFC operation rule", () => {
+test("D2392: operation owners agree with grain and fianchetto remains a reusable position fact", () => {
+  const ownerForGrain = {
+    candidate: "shared-candidate-evidence-packet",
+    edge: "shared-candidate-evidence-packet",
+    position: "shared-candidate-evidence-packet",
+    frozen_prefix: "recorded-semantic-path",
+    recorded_decision: "recorded-clocks",
+  };
+  for (const item of plan.rows) assert.equal(item.executionOwner, ownerForGrain[item.grain], item.projection);
   for (const projection of ["rules.structural.reading.fianchetto_setup@1", "rules.structural.reading.fianchetto_knight_screen@1"]) {
     assert.equal(row(projection).grain, "position");
-    assert.equal(row(projection).executionOwner, "recorded-semantic-path");
+    assert.equal(row(projection).executionOwner, "shared-candidate-evidence-packet");
   }
-  assert.match(rfc, /One-edge\/position\/candidate rows go\s+through `shared-candidate-evidence-packet`/u);
 });
 
-test("D2393: style source payloads omit required actor and decision class", () => {
-  const style = section("### 3.8 Literal style atoms", "## 4. Authored predicate compatibility");
-  assert.doesNotMatch(style, /decisionClass|decisionId|actorClass/u);
-  assert.match(readFileSync("planning/evidence-foundation-ux/style-foundation-atoms-author-repair-2026-08-26.md", "utf8"), /Every atom retains actor\/decision class/u);
+test("D2393: every style atom requires an actor/decision occurrence envelope", () => {
+  const style = plan.rows.filter(({ family }) => family === "style_atoms");
+  assert.equal(style.length, 7);
+  assert.ok(style.every(({ contextRequirement }) => contextRequirement === "actor_decision"));
+  const text = section("### 3.8 Literal style atoms", "## 4. Authored predicate compatibility");
+  for (const operand of ["ContextualFoundationOccurrence", "actorClass", "decisionClass", "decisionId", "source-receipt digest"]) {
+    assert.match(text, new RegExp(operand, "u"));
+  }
+  assert.match(text, /bare source fact cannot satisfy an occurrence consumer/u);
 });
 
-test("D2394: successor event cardinality is partial for changed-but-still-present relations", () => {
+test("D2394: opposition and backward-pawn successor events have total five-case algebras", () => {
   const opposition = section("### 3.1 Unobstructed king opposition v2", "### 3.2 Backward pawn v2");
-  assert.match(opposition, /sign is `gained \| lost`/u);
-  assert.match(opposition, /Equal exact readings emit no event/u);
-  assert.doesNotMatch(opposition, /membership_changed|lost\+gained|truth-preserving/u);
+  for (const transition of ["Absent→absent", "absent→present", "present→absent", "present→present", "membership_changed"]) {
+    assert.match(opposition, new RegExp(transition, "iu"));
+  }
   const backward = section("### 3.2 Backward pawn v2", "### 3.3 Exact pawn-file groups");
-  assert.match(backward, /including pawn move or\s+removal/u);
-  assert.doesNotMatch(backward, /signs? (?:are|is)|membership_changed|lost\+gained/u);
+  for (const rule of ["from-square row to its to-square row", "remaining before", "remaining after", "membership_changed", "matched equal row emits nothing"]) {
+    assert.match(backward, new RegExp(rule, "u"));
+  }
 });

@@ -13078,3 +13078,16 @@ The RFC body/register, both platform-alignment audits and roadmap now say **impl
 This does not manufacture completion: pack schema 0.28, emitter templates and the Gate-F-held
 corpus application remain, and zero official packs graduate. The correction closes one stale
 progress claim while preserving the content hold and makes the next executable boundary explicit.
+
+## 2026-08-31 — Foundation-source author repair closes five contradictions
+
+Repaired [[D2390]]–[[D2394]] without adding a production source or learner surface. The checked
+23-row plan now has typed source-dependency and convention sets, an exact valid 12-member future
+convention predeclaration, a recorded-decision clock grain, grain-compatible source owners and an
+actor/decision occurrence requirement for every style atom. King opposition and backward pawn now
+define all absent/present/equal/changed transitions, with exactly one `membership_changed` for a
+truth-preserving exact subject change.
+
+`make foundation-source-author-repair` passes 11/11. The RFC remains draft and dependency-blocked:
+semantic-convention register/provenance must land before its future set becomes a live claim and a
+fresh independent review may begin. No schema, content, runtime, API, UX or consumer was changed.

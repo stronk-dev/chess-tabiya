@@ -1,9 +1,11 @@
 # RFC: Foundation source identity repair
 
-- **Status:** draft — **RETURNED BY AUTHOR AUDIT 2026-08-31 on [[D2390]]–[[D2394]].** The
-  23-row scope remains useful, but convention/dependency authority, clock grain, position-operation
-  routing, style attribution and truth-preserving event cardinality require repair before the
-  fresh independent buildability review.
+- **Status:** draft — **AUTHOR REPAIR COMPLETE 2026-08-31 on [[D2390]]–[[D2394]]; dependency-
+  blocked before fresh independent review.** The 23-row source image now separates dependency and
+  convention authority, authenticates clock decisions, routes facts by grain, requires contextual
+  style occurrences and totalizes truth-preserving event changes. The semantic-convention register
+  and provenance dependencies must land before this RFC may add its live member claim or enter
+  buildability review.
 - **Author:** codex, executing the D1736 shared-wave handoff
 - **Created:** 2026-08-31
 - **Design refs:** `design/03-product-breadth.md` evidence architecture;
@@ -24,9 +26,10 @@ pack-schema | lane 0.33 | optional closed structuralFeature.conventionRef plus c
 shape-entry-schema | lane 0.5 | the same structuralFeature.conventionRef grammar and conditional compatibility as pack-schema 0.33
 ```
 
-The future semantic-convention member claim is deliberately absent while its process register is
-draft. Before acceptance, the register must land and this RFC must add the exact member claim for
-the eight convention ids in §3. A private list in this RFC is not a second register.
+The live semantic-convention member claim is deliberately absent while its process register is
+draft. The checked projection plan predeclares the exact **12-member** future set so lineage and
+closure are reviewable now; it is not a resource claim. Before acceptance, the register and
+provenance owner must land and this RFC must promote that same set into one checked live claim.
 
 ## Summary
 
@@ -80,14 +83,19 @@ type FoundationSourceGrain =
   | { readonly kind: "position"; readonly fen: string }
   | { readonly kind: "edge"; readonly beforeFen: string; readonly moveUci: string; readonly afterFen: string }
   | { readonly kind: "candidate"; readonly fen: string; readonly moveUci: string }
-  | { readonly kind: "frozen_prefix"; readonly runId: string; readonly eventHead: string };
+  | { readonly kind: "frozen_prefix"; readonly runId: string; readonly eventHead: string }
+  | { readonly kind: "recorded_decision"; readonly runId: string; readonly eventHead: string;
+      readonly eventId: string; readonly actorClass: "learner" | "opponent" | "imported" | "coach";
+      readonly decisionClass: "played" | "game" | "predicted"; readonly decisionId: string };
 ```
 
 The value constructor receives a sealed source receipt for that exact grain. It may not accept a
 caller-written FEN, node id, ply, color, role, square list or convention ref beside the receipt and
 silently trust both. Position and edge payloads retain literal FEN/move identity; candidate
 payloads derive role/destination from the sealed exact legal move; frozen-prefix payloads derive
-the learner actor and event range from the run.
+the actor and event range from the run; recorded-decision payloads authenticate one actor/decision
+against that frozen prefix. They do not contain caller-written clock values: `recorded-clocks`
+resolves the event to typed readings and declared control or returns unavailable.
 
 Every successful result is immutable and includes:
 
@@ -104,9 +112,11 @@ false, zero or an empty array by a consumer.
 
 ## 3. Exact projection image
 
-The checked JSON plan is normative for ids, versions, family, grain, convention authority,
-execution owner and new/successor state. This section is normative for payload operands and
-predicate boundaries.
+The checked JSON plan is normative for ids, versions, family, grain, typed source dependencies,
+convention set, execution owner, context requirement and new/successor state. A dependency is a
+typed projection or RFC prerequisite; a convention is only an `id@version` from the shared
+semantic register. Empty dependency or convention sets are explicit roots, never omitted fields.
+This section is normative for payload operands and predicate boundaries.
 
 ### 3.1 Unobstructed king opposition v2
 
@@ -116,8 +126,10 @@ predicate boundaries.
 between square must be empty, and the opponent of `color` must move.
 
 `rules.structural.event.king_opposition@2` retains before/after readings and exact edge identity;
-its sign is `gained | lost`. Equal exact readings emit no event. Neither projection claims endgame,
-importance, force, win/draw status or best play. Convention: `king-opposition-unobstructed@2`.
+its sign is `gained | lost | membership_changed`. Absent→absent and equal present→present emit
+nothing; absent→present is gained; present→absent is lost; unequal present→present is one
+`membership_changed` event. Neither projection claims endgame, importance, force, win/draw status
+or best play. Convention: `king-opposition-unobstructed@1`.
 The v1 reading/event remain historical/research-only and cannot satisfy a v2 consumer.
 
 ### 3.2 Backward pawn v2
@@ -129,10 +141,15 @@ The v1 reading/event remain historical/research-only and cannot satisfy a v2 con
 support plus enemy pseudo-pawn control of the next square.
 
 `rules.structural.event.backward_pawn@2` retains exact before/after rows, including pawn move or
-removal; `{color,file}` is never the identity. `derived.pawn.consequence.backward_pawn_legal_advance@1`
+removal; `{color,file}` is never the identity. Unchanged `(color,pawn)` subjects match first. The
+edge's exact pawn mover then matches its from-square row to its to-square row; all remaining before
+rows are lost and remaining after rows are gained. A matched unequal row emits one
+`membership_changed`; a matched equal row emits nothing. This makes absent/present and
+truth-preserving subject changes total without pretending FEN contains persistent piece ids.
+`derived.pawn.consequence.backward_pawn_legal_advance@1`
 exists only for an empty stop that is the exact submitted legal pawn move. It retains the complete
 legal opponent pawn-capture replies after that hypothetical push. Pseudo-control alone cannot
-populate the reply set. Convention: `backward-pawn@2` plus `legal-exchange@1` for the consequence.
+populate the reply set. Convention: `backward-pawn@1` plus `legal-exchange@1` for the consequence.
 
 ### 3.3 Exact pawn-file groups
 
@@ -209,11 +226,20 @@ style conclusions.
 - `run.record.castling_eligibility@1`: learner color and exact castling sides retained at that
   color's first decision. It is neither current legality nor castling advice.
 - `run.record.clock_decision@1`: actor, decision, phase, previous/current clock, base, increment and
-  source event. Spend-share arithmetic is downstream. Missing clock/control, non-positive available
-  time or current greater than available yields typed unavailable.
+  source event, all resolved through the `recorded_decision` receipt and `recorded-clocks` contract.
+  Spend-share arithmetic is downstream. Missing clock/control, non-positive available time or
+  current greater than available yields typed unavailable.
 
 Conventions: `fianchetto-configuration@1`, `extended-center-destination@1`,
 `early-queen-ply@1`, `castling-first-decision@1`, and `clock-spend-input@1`.
+
+The seven source facts remain reusable and actor-neutral. Every plan row in `style_atoms` therefore
+also declares `contextRequirement: "actor_decision"`. Before Review, bots, drills or longitudinal
+storage may consume one, `recorded-semantic-path` seals a `ContextualFoundationOccurrence` carrying
+`runId`, `eventHead`, `eventId`, `actorClass`, `decisionClass`, `decisionId`, the source projection
+ref and source-receipt digest. An imported/opponent/coach occurrence cannot be re-labelled learner;
+a bare source fact cannot satisfy an occurrence consumer. This envelope is operation context, not a
+24th chess projection, and it creates no style conclusion.
 
 ## 4. Authored predicate compatibility and schema migration
 
@@ -255,9 +281,11 @@ This RFC deliberately stops at exact source identity:
    for the 23 rows may land after acceptance.
 2. **Value authority:** `evidence-value-authority` supplies the sole sealed factory/profile for
    each final projection. A shape-only adapter cannot activate it.
-3. **Operation:** the JSON plan assigns one owner to every row. One-edge/position/candidate rows go
-   through `shared-candidate-evidence-packet`; path/frozen-prefix rows go through
-   `recorded-semantic-path`; clocks wait on `recorded-clocks`.
+3. **Operation:** the JSON plan assigns one source owner to every row as a function of grain.
+   Position/edge/candidate rows go through `shared-candidate-evidence-packet`; frozen-prefix rows go
+   through `recorded-semantic-path`; recorded-decision rows wait on `recorded-clocks`. A style row's
+   separate actor/decision occurrence envelope is sealed by `recorded-semantic-path` after source
+   construction and before any occurrence consumer.
 4. **Validation:** `semantic-validation-authority` owns independent positives, semantic negatives,
    mirror/orientation, counterfactual, imported and external-labelled witnesses.
 5. **Consumers:** `module-registration`, Review, bot policy, drills and longitudinal storage each
@@ -288,7 +316,8 @@ Production implementation must port, not merely cite, the research falsifiers:
    empty/occupied distinction, rank/support negatives, h2h3/g4 and a2a3/b4 identity fixtures;
 8. style atoms: all four color/wing fianchetto mirrors, wrong-color/missing-pawn negatives, all
    eight extended-centre squares plus adjacent negative, ply 15/16 queen boundary, promotions,
-   Chess960-safe castling sides and every clock abstention arm; and
+   Chess960-safe castling sides, every clock abstention arm, and learner/opponent/imported/coach
+   context swaps that must fail closed; and
 9. a mutation control for every fixture family. Each control names the field/predicate it breaks;
    a fixture that reads its own expected output is rejected.
 
@@ -329,12 +358,13 @@ value, operation, validation and consumer state separately.
 ## 9. Acceptance criteria
 
 1. The checked projection plan contains exactly 23 unique `id@version` rows across the declared
-   eight source families plus style atoms; every row has one grain, authority, execution owner and
-   new/successor state.
+   eight source families plus style atoms; every row has one grain, typed source-dependency set,
+   convention set, execution owner, context requirement and new/successor state.
 2. All nine handoffs are represented exactly once and all nine external owner boundaries remain
    excluded from the projection set.
-3. The convention register precedes acceptance and this RFC's exact eight-member claim is added;
-   a copied/private convention list fails.
+3. The plan's exact 12-member future convention set is valid against landed lineage, with new base
+   ids beginning at `@1`; the register/provenance dependencies precede acceptance and promotion of
+   that exact set into one live claim. A copied, divergent or private runtime list fails.
 4. Pack 0.33 and shape-entry 0.5 carry byte-equivalent convention-ref grammar and generated
    kind/ref compatibility; absent refs preserve current content truth/digests.
 5. Source payloads retain every operand in §3. Dropping, swapping, spreading/JSON-forging or
@@ -357,12 +387,17 @@ value, operation, validation and consumer state separately.
     `make verify-governance` pass before implementation closeout.
 13. Implementation closeout flips only source/schema rows actually shipped, appends the exploration
     log, retains all operation/validation/module/content discharges, and updates the 1.0 roadmap.
+14. King-opposition and backward-pawn events fixture absent→absent, absent→present,
+    present→absent, equal present→present and unequal present→present; the last emits exactly one
+    `membership_changed`, including an exact moved-pawn lineage case.
+15. All seven style atoms require a runtime-sealed actor/decision occurrence before history use;
+    swapping actor, decision class/id, event head or source receipt fails rather than re-attributing.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | convention register/provenance supplies the eight exact convention members and receipts | `semantic-convention-provenance` | accepted dependency + checked member claim | |
+| D1 | convention register/provenance supplies the 12 exact convention members and receipts | `semantic-convention-provenance` | accepted dependency + checked member claim | |
 | D2 | every final projection has a sealed exact value factory/profile | `evidence-value-authority` | value-route receipt after implementation | |
 | D3 | position/edge/candidate projections reach a real application operation | `shared-candidate-evidence-packet` | execution census after implementation | |
 | D4 | frozen-prefix/path sources reach a real recorded operation | `recorded-semantic-path` | execution census after implementation | |
@@ -377,23 +412,26 @@ value, operation, validation and consumer state separately.
 
 | ledger row | required repair before independent review |
 |---|---|
-| [[D2390]] | replace scalar `authority` with typed source-dependency and convention sets; publish a valid exact convention claim |
-| [[D2391]] | give recorded clock decisions an authenticating run-event/prefix grain and accepted recorded-clock source |
-| [[D2392]] | reconcile every checked operation owner with its grain and separate reusable position facts from recorded occurrences |
-| [[D2393]] | preserve actor and decision class through an exact contextual receipt before style/history use |
-| [[D2394]] | define and fixture total event cardinality for truth-preserving subject-identity changes |
+| [[D2390]] | **repaired:** plan v2 separates typed dependency/convention sets and predeclares 12 valid `@1` members |
+| [[D2391]] | **repaired:** `recorded_decision` authenticates the run event; clock operands resolve only through `recorded-clocks` |
+| [[D2392]] | **repaired:** fianchetto position facts route through the shared packet; recorded occurrence is a separate envelope |
+| [[D2393]] | **repaired:** all seven style rows require the sealed actor/decision occurrence before history use |
+| [[D2394]] | **repaired:** both successor event families use a total five-case algebra with `membership_changed` |
 
 ## Open questions
 
-No owner ruling is required. The author must resolve [[D2390]]–[[D2394]] literally before the
-fresh independent review: split source dependencies from conventions, use valid convention
-lineage, give clocks an authenticating recorded-event grain, make operation routing agree with
-grain, preserve actor/decision attribution and totalize successor event cardinality. Consumer
-priorities, preset defaults, habit floors, bot trait strength, Review ranking and content
-judgements remain with their existing owners.
+No owner ruling is required. [[D2390]]–[[D2394]] are author-repaired and checked by
+`make foundation-source-author-repair`. Fresh independent review remains dependency-blocked until
+the semantic convention register/provenance land and this RFC can promote its exact future set to
+one live claim. Consumer priorities, preset defaults, habit floors, bot trait strength, Review
+ranking and content judgements remain with their existing owners.
 
 ## Changelog
 
+- 2026-08-31: author repair closes [[D2390]]–[[D2394]] in the draft and plan v2. Dependency and
+  convention authority are separate; convention lineage is valid; clock and occurrence context
+  are authenticating; operation routing agrees with grain; and identity-preserving event changes
+  are total. `make foundation-source-author-repair` replaces the negative current-byte witnesses.
 - 2026-08-31: author audit returned the first pass on [[D2390]]–[[D2394]].
   `planning/foundation-source-identity/author-audit-2026-08-31.md` and
   `make foundation-source-author-audit` pin the five contradictions. This is not the required

@@ -18862,48 +18862,48 @@
     },
     {
       "id": "D2390",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:690488ad06b99e44686acc1f61ba4f7b6cf03fda4e281f4500384aff97ad0dbd",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:20662a9fc64d1ef36aa555d141bdd6bde5c65e95681152a3189b9323e77ed15b",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:foundation-source-identity.md"
+      "evidence": "planning/foundation-source-identity/author-repair-2026-08-31.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2391",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c1d6bdab2fb23e2d1c8a791ac5fb7f8332f71fa150049398a66459c4fe88b9dd",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7ff1d3c7e31df9d42e1bda736e063cf40bb51a944e35a47e442f02f2dbccbd56",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:foundation-source-identity.md"
+      "evidence": "planning/foundation-source-identity/author-repair-2026-08-31.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2392",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2937268f4c27a6d6b2fef2779e2c0adf9245da657d21d99bb0a7bf823c47a017",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f68b973dcbeca91514cf8d2de558fb2d9d84efe4f24d513d6c5e271c17789767",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:foundation-source-identity.md"
+      "evidence": "planning/foundation-source-identity/author-repair-2026-08-31.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2393",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:6e5d0300eb4a7fcc782a582e79df7d2a74141934b0904b6492736f150c571f28",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e64b7cffa154b1db35c19a4fbc00dbe08d8a460b8a6713d666704f495761e330",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:foundation-source-identity.md"
+      "evidence": "planning/foundation-source-identity/author-repair-2026-08-31.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2394",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4b967b0864de23f5bb8e4244b3a476c4eeb30771ff0b47bf447a69b13119958c",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d06d0e8b5ef90f67e18fa317807b02215f216748584c1c7d1dc1b961b4dd506e",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:foundation-source-identity.md"
+      "evidence": "planning/foundation-source-identity/author-repair-2026-08-31.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2395",

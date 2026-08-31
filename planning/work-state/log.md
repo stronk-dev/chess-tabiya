@@ -62,3 +62,15 @@ emitter templates and the Gate-F-held corpus application remain open.
 The census is now 2,145 rows: 690 done, three refused, 655 todo, 797 blocked, zero doing and zero
 untriaged. All 1,452 live rows remain assigned; this reconciliation changes lifecycle truth without
 pretending the content milestone advanced or that any pack graduated.
+
+## 2026-08-31 — Foundation-source author repair
+
+[[D2390]]–[[D2394]] moved from blocked to done after projection-plan v2 and the RFC separated typed
+dependencies from conventions, added an authenticating recorded-decision grain, aligned source
+owners with grain, required actor/decision occurrence context for every style atom and totalized
+king-opposition/backward-pawn identity changes. `make foundation-source-author-repair` passes 11
+positive checks; this is author repair, not independent acceptance or implementation.
+
+The census remains 2,145 rows: 695 done, three refused, 655 todo, 792 blocked, zero doing and zero
+untriaged. All 1,447 live rows remain assigned. The RFC stays blocked on its exact semantic-register
+dependencies before fresh review, so the five repair closures do not widen implementation authority.

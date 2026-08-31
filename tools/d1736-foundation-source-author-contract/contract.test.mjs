@@ -8,7 +8,7 @@ const rfc = readFileSync("rfc/foundation-source-identity.md", "utf8");
 const key = (row) => row.projection;
 
 test("the source wave is one closed 23-projection image", () => {
-  assert.equal(plan.schemaVersion, 1);
+  assert.equal(plan.schemaVersion, 2);
   assert.equal(plan.rows.length, 23);
   assert.equal(new Set(plan.rows.map(key)).size, 23);
   assert.deepEqual(
@@ -28,16 +28,26 @@ test("the source wave is one closed 23-projection image", () => {
   assert.deepEqual(
     Object.fromEntries([...Map.groupBy(plan.rows, (row) => row.grain)]
       .map(([grain, rows]) => [grain, rows.length]).sort(([a], [b]) => a.localeCompare(b))),
-    { candidate: 4, edge: 8, frozen_prefix: 1, position: 10 },
+    { candidate: 4, edge: 7, frozen_prefix: 1, position: 10, recorded_decision: 1 },
   );
 });
 
-test("every projection has literal authority, owner and lifecycle state", () => {
+test("every projection has typed dependencies, conventions, owner, context and lifecycle state", () => {
   const owners = new Set(["shared-candidate-evidence-packet", "recorded-semantic-path", "recorded-clocks"]);
   for (const row of plan.rows) {
     assert.match(row.projection, /^(?:derived|rules|run)\.[a-z0-9_.]+@[1-9][0-9]*$/u, row.projection);
-    assert.match(row.authority, /^[a-z0-9-]+@[1-9][0-9]*$/u, row.projection);
+    assert.equal("authority" in row, false, row.projection);
+    assert.ok(Array.isArray(row.sourceDependencies), row.projection);
+    assert.ok(Array.isArray(row.conventions), row.projection);
+    for (const dependency of row.sourceDependencies) {
+      assert.ok(dependency.kind === "projection" || dependency.kind === "rfc", row.projection);
+      assert.match(dependency.ref, dependency.kind === "projection"
+        ? /^(?:derived|rules|run)\.[a-z0-9_.]+@[1-9][0-9]*$/u
+        : /^[a-z0-9-]+$/u, row.projection);
+    }
+    for (const convention of row.conventions) assert.match(convention, /^[a-z0-9-]+@[1-9][0-9]*$/u, row.projection);
     assert.ok(owners.has(row.executionOwner), row.projection);
+    assert.ok(row.contextRequirement === "none" || row.contextRequirement === "actor_decision", row.projection);
     assert.ok(row.state === "new" || row.state === "successor", row.projection);
     assert.ok(rfc.includes(`\`${row.projection}\``), row.projection);
   }

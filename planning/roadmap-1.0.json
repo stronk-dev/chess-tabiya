@@ -312,7 +312,7 @@
         "nextAction": "Keep every new live row assigned at creation, maintain the separately named verification tiers, and refresh the source-sealed receipt whenever a joined authority changes.",
         "latestCheckpoint": {
           "at": "2026-08-31",
-          "summary": "All 2,145 ledger rows have durable state and every one of the 1,452 live rows has a roadmap capability owner: 655 todo, 797 blocked, zero doing and zero untriaged. The first post-zero additions exposed and repaired the assignment writer while preserving the zero ceiling.",
+          "summary": "All 2,145 ledger rows have durable state and every one of the 1,447 live rows has a roadmap capability owner: 655 todo, 792 blocked, zero doing and zero untriaged. The first post-zero additions exposed and repaired the assignment writer while preserving the zero ceiling.",
           "impact": "advanced",
           "evidence": ["rfc/archive/work-state.md", "planning/work-state.json", "tools/work-state.mjs", "docs/progress-tracking.md"]
         },
@@ -327,9 +327,9 @@
         "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
         "latestCheckpoint": {
           "at": "2026-08-31",
-          "summary": "Shared-resource and semantic-validation contracts are author-repaired pending independent review; candidate packet remains returned on legal-map authority; foundation source identity is author-returned on five authority, grain, routing, attribution and event-algebra contradictions.",
+          "summary": "Shared-resource and semantic-validation contracts are author-repaired pending independent review; candidate packet remains returned on legal-map authority; foundation source identity is now author-repaired on all five authority, grain, routing, attribution and event-algebra contradictions and waits on semantic-register dependencies before fresh review.",
           "impact": "held",
-          "evidence": ["planning/shared-resource-register-bootstrap/author-repair-2026-08-31.md", "planning/semantic-validation-authority/third-author-fresh-adversarial-audit-2026-08-31.md", "planning/semantic-validation-authority/fourth-author-repair-2026-08-31.md", "planning/evidence-foundation-ux/shared-candidate-packet-fourth-fresh-independent-review-2026-08-31.md", "planning/foundation-source-identity/author-audit-2026-08-31.md", "rfc/shared-resource-register-bootstrap.md", "rfc/semantic-validation-authority.md", "rfc/shared-candidate-evidence-packet.md", "rfc/foundation-source-identity.md", "rfc/README.md"]
+          "evidence": ["planning/shared-resource-register-bootstrap/author-repair-2026-08-31.md", "planning/semantic-validation-authority/third-author-fresh-adversarial-audit-2026-08-31.md", "planning/semantic-validation-authority/fourth-author-repair-2026-08-31.md", "planning/evidence-foundation-ux/shared-candidate-packet-fourth-fresh-independent-review-2026-08-31.md", "planning/foundation-source-identity/author-audit-2026-08-31.md", "planning/foundation-source-identity/author-repair-2026-08-31.md", "rfc/shared-resource-register-bootstrap.md", "rfc/semantic-validation-authority.md", "rfc/shared-candidate-evidence-packet.md", "rfc/foundation-source-identity.md", "rfc/README.md"]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
       },

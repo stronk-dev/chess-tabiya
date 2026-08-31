@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:baf643c02f07c48c222db2c233f8e7e7e3aac0e12bb6b03948606fa3e42436e6",
+    "roadmap": "sha256:885f2612bf8bd58f1a55653fc914c873e033a82db93deb23c8066a25f2ef11e9",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "rfcRegister": "sha256:6b809960d8fddbca6b4c60964b89098ec03890838829b171c1b8488229cd0273",
+    "rfcRegister": "sha256:54c89187eba96e2a45dd50c1f858e3e3700efdd1ba1c40d594b1e84d3a1422b5",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -67,7 +67,7 @@
       "nextAction": "Keep every new live row assigned at creation, maintain the separately named verification tiers, and refresh the source-sealed receipt whenever a joined authority changes.",
       "latestCheckpoint": {
         "at": "2026-08-31",
-        "summary": "All 2,145 ledger rows have durable state and every one of the 1,452 live rows has a roadmap capability owner: 655 todo, 797 blocked, zero doing and zero untriaged. The first post-zero additions exposed and repaired the assignment writer while preserving the zero ceiling.",
+        "summary": "All 2,145 ledger rows have durable state and every one of the 1,447 live rows has a roadmap capability owner: 655 todo, 792 blocked, zero doing and zero untriaged. The first post-zero additions exposed and repaired the assignment writer while preserving the zero ceiling.",
         "impact": "advanced",
         "evidence": [
           "rfc/archive/work-state.md",
@@ -99,7 +99,7 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-08-31",
-        "summary": "Shared-resource and semantic-validation contracts are author-repaired pending independent review; candidate packet remains returned on legal-map authority; foundation source identity is author-returned on five authority, grain, routing, attribution and event-algebra contradictions.",
+        "summary": "Shared-resource and semantic-validation contracts are author-repaired pending independent review; candidate packet remains returned on legal-map authority; foundation source identity is now author-repaired on all five authority, grain, routing, attribution and event-algebra contradictions and waits on semantic-register dependencies before fresh review.",
         "impact": "held",
         "evidence": [
           "planning/shared-resource-register-bootstrap/author-repair-2026-08-31.md",
@@ -107,6 +107,7 @@
           "planning/semantic-validation-authority/fourth-author-repair-2026-08-31.md",
           "planning/evidence-foundation-ux/shared-candidate-packet-fourth-fresh-independent-review-2026-08-31.md",
           "planning/foundation-source-identity/author-audit-2026-08-31.md",
+          "planning/foundation-source-identity/author-repair-2026-08-31.md",
           "rfc/shared-resource-register-bootstrap.md",
           "rfc/semantic-validation-authority.md",
           "rfc/shared-candidate-evidence-packet.md",
