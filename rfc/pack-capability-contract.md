@@ -1,12 +1,12 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **RETURNED by fourth fresh independent review 2026-08-30 on
-  [[D2334]]–[[D2339]].** The prior repairs survive, but the legacy catalogue is an opaque digest,
-  the software-first transition conflicts with the all-stamped criterion, unconditional authority
-  omits versions, lifecycle fixtures do not inhabit the declared types, the public capabilities
-  response is not closed across server/web, and transient checks trust caller-supplied requirement
-  lists. `make pack-capability-fourth-fresh-review` reproduces 6/6 blockers. No schema, registry,
-  pack or digest implementation is authorised; the D560 hold stays whole.
+- **Status:** draft — **fifth author repair complete 2026-08-31 on [[D2334]]–[[D2339]] after the
+  fourth fresh return; a fifth fresh independent review is required.** The repair materializes the
+  92-row legacy authority, splits software/corpus gates, versions unconditional selectors, compiles
+  one lifecycle type, closes the server/web projection and derives operation requirements
+  internally. `make pack-capability-author-repair` passes the cumulative artifact contract, 6/6
+  repair arms and strict TypeScript. No schema, registry, API, pack or digest implementation is
+  authorised; the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -209,8 +209,8 @@ export type CapabilitySubjectKind =
   | "error_contract";
 
 export interface CapabilityDeclaration {
-  readonly id: string;
-  readonly version: CapabilityVersion;
+  readonly subjectId: string;                   // stable lifecycle identity
+  readonly id: CapabilityId;                    // exact subject + version
   readonly subject: CapabilitySubjectKind;
   readonly sources: readonly CapabilityMeaningSource[]; // >= 1; subject-appropriate authority
   readonly dependsOn: readonly CapabilityId[];           // acyclic; digest closes transitively
@@ -393,7 +393,7 @@ closed schema vocabulary rows may not use it. This closes [[D2055]].
 
 The complete **author authority** is
 `rfc/contracts/pack-capability-applicability-v1.json` (SHA-256
-`acad66f3f236ed8d7f6f5995567a7797477229873d8ff17a983ddccf6d5d1320`). It freezes the legacy and
+`231b8c3504a017149ae9127ec35ab3f42214b5d7c14833471f87994bf449dbc3`). It freezes the legacy and
 target schema digests, target-transition artifact, traversal and public-id algorithms, the literal
 target source inventory, exact coverage counts, the expanded mapping digest, all module-qualified
 unconditional and constant sites, every resolved-reference selector, the seven interpreter-root
@@ -418,7 +418,13 @@ canonical source inventory digest is
 the stable v2 expansion yields 397 collision-free public mappings with digest
 `a4b424ee765f4ae556f399895f90de5a5d469722214d753c2ac53fc4d8fd86a7`; joining those rows to the 14
 always rows and five resolved-reference rows yields expanded-authority digest
-`88f34288f4098ed8a28cf5d3f4c0562fba45a48d52fdf7994879c004ca078c65`.
+`76620efd3801c1f07adcb3f5525ebc603cbaada062066f63726b6eb5a7a794a3`.
+
+Every unconditional row is the literal `CapabilityApplicability` shape: it carries
+`selector:{kind:"always"}` and a structured `{id,version}` capability. Meaning sites and transitive
+dependencies remain separate checked fields; they never substitute for the selector or version.
+The generator refuses a bare string, a missing selector, a non-integer/stale version or an
+unconditional row whose capability is absent from the declaration registry.
 
 `closed-schema-members-v1` walks object keys in lexical order and records every scalar member of an
 `enum`. It also records a discriminated `oneOf` when every branch has exactly one direct property
@@ -706,8 +712,8 @@ legacy mode:
   changed legacy byte fails `PACK_LEGACY_IMAGE_MISMATCH`; neither condition falls back to generic
   0.27 validation.
 
-`rfc/contracts/pack-capability-schema-transition-v1.json` (artifact v2; SHA-256
-`dc5df2689f1a27cce83096d294f9134088420ec6dad0b18392e7f1da2cb5ab75`) seals the legacy schema,
+`rfc/contracts/pack-capability-schema-transition-v1.json` (artifact v3; SHA-256
+`b3e936c805927287f28c423fd75b7f4be834dfbde4bb5ffd6827edbb9e627c72`) seals the legacy schema,
 the sorted path+raw-digest population (`92`, digest
 `933eeecd0aee6e50b2a595b62bfc22485ba8a4d2dc945a5b4efdd9cf35fca849`), and three ordered
 owner-qualified stages. The exact post-images are: 0.28 = 84,113 canonical bytes / SHA-256
@@ -718,6 +724,14 @@ is the prior stage's target digest. Implementation applies the stages in order a
 post-image; it cannot skip, regenerate or amend predecessor authority. The final target contains
 typed graduation clearance, `corpusEvidence`, the widened timing note, `provenance_note`,
 `citable_text`, and required capability declarations.
+
+The artifact's `legacy.documents` is the literal sorted 92-row `{path,sha256}` authority, not an
+opaque digest. `make pack-capability-author-repair` independently discovers the eligible
+`content/drafts/*.json` and `content/candidates/*/pack.json` population, recomputes each raw digest,
+set-equals all rows and recomputes `populationSha256` over the exact ordered row image. Editing,
+deleting, renaming or swapping a path, or adding an otherwise-valid 93rd pack fails. Runtime legacy
+admission indexes this generated checked table by the internally discovered canonical path; a
+caller never supplies either field.
 
 The compatibility arm is repository-catalogue-only. The server never accepts a caller-supplied
 path as proof of legacy membership. `PackRegistry` supplies an internal catalogue identity after
@@ -730,7 +744,15 @@ transition, not a second permanent format.
 every byte with no field filter, so a requirement cannot drift from the content it describes. The
 cost, accepted knowingly by [[D1058]]: **all 92 packs churn their digest** when the held migration
 is applied and every ledger `packDigest` must be re-stamped (§6 plans it). The software transition
-lands first without changing those legacy bytes.
+lands first without changing those legacy bytes. Its pre-apply gate is
+`make pack-capability-software-check`: it proves the exact 92 legacy rows are admitted, every other
+unstamped input is refused, and a complete canonical 92-document projected migration exists
+without writing content. It does **not** claim the current corpus has authored `requires` arrays.
+After [[D560]] authorizes the content transaction, `make pack-capability-corpus-check` instead
+requires all 92 files to contain the exact projected canonical arrays, verifies every dependent
+digest/ledger update, and proves the compatibility reader plus allowlist are absent. The post-apply
+gate refuses even one unstamped file; the pre-apply gate refuses pretending projected arrays are
+authored bytes. These are sequential gates, never two simultaneous assertions over one tree.
 
 **The Gate F cost, stated plainly.** Clause 1 requires that *no active RFC holds a drill-pack schema
 lane*. Lane 0.28 is held by accepted `graduation-clearance`, 0.29 by draft
@@ -767,6 +789,46 @@ capabilities; `assistance:arrows` is an assistance-surface capability; and
 `error:SIMULATE_BUDGET_EXCEEDED` is a retired error-contract capability. A literal mapping table in
 the registry covers all 12 rows and criterion 8 rejects the shortcut that labels every row
 `vocabulary_arm`.
+
+The public field has one closed wire authority in
+`packages/schema/src/capability/public.ts`; server and web may not declare local lookalikes:
+
+```ts
+export type PublicCapabilitySemanticDispositionV1 =
+  | { readonly kind: "active" }
+  | { readonly kind: "deprecated"; readonly successor: CapabilityId;
+      readonly reasonCode: "superseded" | "scheduled_withdrawal" };
+export type PublicCapabilityReachabilityV1 =
+  | { readonly kind: "supported" }
+  | { readonly kind: "temporarily_unavailable";
+      readonly providerFamily: "opponent" | "analysis" | "corpus" | "tablebase" | "voice" | "tts";
+      readonly retryAfterMs?: number };
+export interface PackCapabilityPublicRowV1 {
+  readonly capability: CapabilityId;
+  readonly semanticDisposition: PublicCapabilitySemanticDispositionV1;
+  readonly reachability: PublicCapabilityReachabilityV1;
+}
+export interface PackCapabilitiesPublicProjectionV1 {
+  readonly protocol: "tabiya.pack-capabilities";
+  readonly protocolVersion: 1;
+  readonly rows: readonly PackCapabilityPublicRowV1[];
+}
+```
+
+Rows sort by canonical `capabilityKey` and are unique by that key. Arbitrary semantic reasons,
+provider instance ids, endpoints, tokens and health diagnostics are not public; the closed reason
+codes and provider families above are the complete safe projection. `active`/`deprecated` never
+occupy `reachability`, and supported/temporarily-unavailable never occupy semantic disposition.
+`parsePackCapabilitiesPublicProjectionV1` rejects unknown/missing fields, versions, enum members,
+duplicates, non-canonical order, a transient local/build-time capability and any successor absent
+from the published configured declaration set.
+
+`apps/server/src/capabilities.ts` imports the row/projector and is the sole producer.
+`apps/web/src/lib/api.ts` imports that exact parser and inferred result type before exposing the
+field to stores/components; it deletes its local `packCapabilities` belief. A contract test
+serializes every lawful semantic/reachability combination through the server, parses it through the
+web entry point, and crosses unknown fields plus a server-only added row member. Thus both sides
+either accept the same bytes or the build fails.
 
 #### §4.3 The handshake
 
@@ -918,6 +980,7 @@ export interface CapabilityDeploymentBinding {
   readonly availability: "local" | "recorded" | "provider" | "build_time";
   readonly configured: boolean;
   readonly providerId?: string;
+  readonly operationIds: readonly CapabilityOperationId[];
 }
 
 export interface CapabilityHistory {
@@ -927,7 +990,10 @@ export interface CapabilityHistory {
 }
 ```
 
-`CapabilityDeclaration` identity is `(subjectId, version)`, not subject alone. Histories retain
+`CapabilityDeclaration` has exactly one identity model: `subjectId` names the lifecycle and `id` is
+the structured `CapabilityId` for that subject/version; there is no parallel top-level `version`
+field. `id.id` must equal `subjectId`, and `CapabilityHistory.subjectId` must equal every member's
+`subjectId` and `id.id`. Declaration identity is `(subjectId, id.version)`, not subject alone. Histories retain
 deprecated and withdrawn declarations so an old pack requirement resolves as known-obsolete rather
 than unknown. Exactly one declaration equals `current`; it must be `active`. Every deprecated row
 has one successor in the same history. A withdrawn row has exactly one of two compile-time shapes:
@@ -1069,9 +1135,50 @@ right thing with no new field.
   wrongly unavailable for the process's lifetime. It is a per-request condition on the 503 arm,
   retryable, and the run survives it.
 
-The operation boundary is shared and typed. Before an operation appends any run event or mutates
-run state, `requireCapabilities(operationId, requiredIds)` reads the current deployment projection.
-A transient miss returns HTTP 503 with
+The operation boundary is shared and typed. It never accepts a requirement list from a route:
+
+```ts
+type CapabilityOperationId =
+  | "pack.register" | "run.create" | "opponent.select"
+  | "run.group_reply" | "run.branch_decidedness" | "run.analysis"
+  | "run.simulate" | "run.prediction" | "run.voice" | "run.speech"
+  | "run.reasoning_review";
+type OperationCapabilitySource =
+  | { readonly kind: "registered_pack"; readonly phase: "static_admission" }
+  | { readonly kind: "registered_pack_operation" }
+  | { readonly kind: "fixed"; readonly capabilities: readonly CapabilityId[] };
+interface OperationCapabilityBinding {
+  readonly operationId: CapabilityOperationId;
+  readonly source: OperationCapabilitySource;
+}
+```
+
+`CAPABILITY_OPERATION_BINDINGS` is closed and unique by `operationId`. `pack.register` and
+`run.create` use `registered_pack/static_admission`, so they internally resolve the parsed/registered
+pack and require its complete canonical `requires` set against configured support. The eight
+run/provider operations plus `opponent.select` use either `registered_pack_operation` or an exact
+fixed provider capability. For a registered-pack operation the server loads the authenticated
+run, resolves its immutable registered pack identity, and computes
+`pack.requires ∩ {binding.capability | operationId ∈ binding.operationIds}` from the registry.
+Routes supply only `{operationId, runId/idempotencyKey when applicable}`; they cannot add, omit or
+replace capability ids, a pack path or a requirement array.
+
+Every other current mutating run action is mechanically set-equal to an explicit no-provider set:
+`marks_replace`, `marks_rescope`, `deletion_preview`, `delete`, `distill`, `share`, `flip`, `lease`,
+`reveal`, `duplicate`, `schedule`, `grant`, `revoke`, `group`, `move_user`, `move_opponent`,
+`rewind`, `fork`, `compare`, `simulate_enter`, `reasoning` and `evidence`. Those actions still pass
+through the operation census but do not call transient capability enforcement; `move_opponent`
+commits an already admitted provider-delivery receipt, so provider death after delivery cannot
+invalidate the received move. Adding a mutating route fails the census until it is assigned to
+exactly one provider-bound or explicit-no-provider set. Crossed fixtures move one operation between
+sets, omit a provider binding, add an extra caller id and place the check after the first write.
+
+Before a first-flight provider operation appends any run event or mutates run state,
+`requireCapabilities({operationId, runId})` derives the authoritative set above and reads the current
+deployment projection. Idempotent replay first returns the stored terminal operation receipt and
+does not re-decide historical provider reachability; a concurrent first flight shares one admitted
+operation. Recovery of a previously uncommitted request re-runs the pre-write check. A transient
+miss returns HTTP 503 with
 `{code:"PACK_CAPABILITY_TEMPORARILY_UNAVAILABLE", operationId, capabilities, retryable:true,
 retryAfterMs?}`. It appends no event, advances no cursor/revision and preserves the idempotency key,
 so retry after provider recovery continues the same run. Boot without a configured provider takes
@@ -1285,6 +1392,28 @@ reproducer is `make pack-capability-fourth-fresh-review` (6/6).
 This is an author return, not an implementation checkpoint. The D560 corpus hold remains whole and
 fifth fresh independent review is required after repair.
 
+## Fifth author repair (2026-08-31) — D2334–D2339
+
+- [[D2334]]: transition artifact v3 contains the exact independently recomputed 92 sorted
+  path/raw-digest rows; population movement, edits, deletion, rename/path swap and a 93rd member fail.
+- [[D2335]]: pre-D560 software admission proves the exact legacy set plus projected migrations;
+  post-D560 corpus admission requires real canonical stamps and legacy-reader deletion. Neither gate
+  may impersonate the other.
+- [[D2336]]: applicability authority v2 stores all 14 unconditional rows as literal
+  `always` selectors with structured integer-version capabilities.
+- [[D2337]]: declarations use one `subjectId` plus structured `CapabilityId` identity; successor,
+  refusal and cycle fixtures compile with `satisfies CapabilityDeclaration`.
+- [[D2338]]: one closed safe public projection separates semantic disposition from deployment
+  reachability and is the sole server producer/web parser authority.
+- [[D2339]]: operation bindings derive requirements from registered pack/fixed registry facts;
+  routes cannot pass ids, every mutation belongs to provider-bound or explicit-no-provider census,
+  and first-flight/replay ordering is closed.
+
+`make pack-capability-author-repair` passes the cumulative three-stage/397-mapping author contract,
+six new executable repair arms and strict TypeScript positive/negative cases. This is author repair,
+not acceptance: no production/schema/API/client/corpus/digest byte changed, D560 remains held, and a
+fifth fresh independent buildability review is mandatory.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -1305,8 +1434,12 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
    its base schema-member source plus every interpreter root and transitive symbol dependency named
    by the author authority; helper-only edits in structural, transition and objective families move
    the intended closed digest, while unused and unreachable same-name symbols do not.
-3. **Declared equals applicable closure.** For all 92 packs, `requires` set-equals §2.7's selector
-   result plus transitive dependencies and resolved entries. The outpost/default fixture derives
+3. **Declared equals applicable closure, in two sequential gates.** Before D560,
+   `pack-capability-software-check` admits exactly the sealed 92 unstamped rows and proves a
+   read-only projected `requires` array for every one; it never asserts those arrays exist in the
+   current files. After the authorized apply, `pack-capability-corpus-check` requires all 92 authored
+   arrays to byte-equal those projections and requires the legacy reader/manifest to be absent.
+   Neither gate may pass in the other's tree state. The outpost/default fixture derives
    exactly `guard.defaults`, `objective.state_machine`, `structuralFeature.outpost` and
    `structuralFeature.pawn_safe_square`; omitting the helper and adding unrelated
    `structuralFeature.isolated_pawn` fail with distinct under/over-declaration diagnostics.
@@ -1338,7 +1471,10 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
    `supported`/`temporarily_unavailable` reachability. An unconfigured capability is absent and a
    refused capability cannot be made supported by provider health. The format-row fixture also
    proves assistance, error and resolved-reference rows retain their actual subject kinds instead
-   of being coerced to `vocabulary_arm`.
+   of being coerced to `vocabulary_arm`. The server serializes and the web parses the same
+   `PackCapabilitiesPublicProjectionV1` authority; every lawful semantic/reachability pair
+   round-trips, while an unknown field, unsafe reason/provider detail, duplicate row, bad order or
+   server-only member fails the shared parser.
 9. **Every history resolves.** Declarations are unique by subject+version; each history retains old
    rows and has exactly one active current declaration. Fixtures cross 1→2, 1→2→3, withdrawal with
    a successor, lawful `successor:null` plus typed refusal, bare/missing refusal, duplicate current,
@@ -1386,6 +1522,10 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     *Wrong implementation that passes criteria 1–15 and fails this:* one resolving both states at
     registration, which makes a pack permanently unavailable for the process lifetime because a
     provider was down for two minutes — the precise flexibility the ruling exists to preserve.
+    Routes never supply `requiredIds`: the operation id plus authenticated run/pack identity derives
+    the exact set from `CAPABILITY_OPERATION_BINDINGS`. Every current mutating route is set-equal to
+    one provider-bound or explicit-no-provider set, and first-flight checks precede first write;
+    replay returns the stored receipt without re-deciding historical reachability.
 17. **Instruments stay green.** `make verify` passes with shape-only `migration-plan-check`,
     `capability-census` and `capability-check` wired in; CI invokes the same Make targets.
 18. **The staged schema transition is exact and temporary ([[D2070]]–[[D2074]], [[D2152]]).**
@@ -1478,6 +1618,12 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-08-31 (**D2334–D2339 fifth author repair**): materialized and recomputed the 92-row legacy
+  manifest; split pre/post-D560 gates; structured all unconditional selectors; unified and compiled
+  declaration history; closed the public projection; and replaced caller requirement lists with an
+  internally derived operation census. `make pack-capability-author-repair` passes the cumulative
+  artifact contract, 6/6 new arms and TypeScript. No implementation/corpus bytes changed; fifth
+  fresh review and D560 remain.
 - 2026-08-30 (**fourth fresh independent return**): returned on [[D2334]]–[[D2339]]. The exact
   legacy allowlist has no rows or recomputation; software-first and all-stamped gates conflict;
   unconditional rows omit structured versions; history fixtures use a different type from the RFC;

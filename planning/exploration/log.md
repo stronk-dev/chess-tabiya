@@ -12748,3 +12748,15 @@ Caddy capability probe; and check/start/probe share one versioned artifact-bound
 Compose, Caddy, deployment, workflow, release, schema, content, archive or protected-design byte
 changed; another fresh independent buildability review remains required. Receipt:
 `planning/safe-deployment-profiles/author-repair-2026-08-31.md`.
+
+## 2026-08-31 — Pack capability fifth author repair
+
+Author-repaired [[D2334]]–[[D2339]]. The transition now carries all 92 exact legacy path/digests;
+software and corpus gates are sequential; unconditional capabilities are structured/versioned;
+declaration history compiles one identity; the capability wire separates semantic/reachability;
+and operation requirements derive internally before first-flight writes.
+
+`make pack-capability-author-repair` passes the cumulative three-stage/397-mapping contract, six
+new repair arms and strict TypeScript. No production schema, registry, API, client, pack, content,
+digest, archive or protected-design byte changed. Fifth fresh review and [[D560]] remain. Receipt:
+`planning/pack-capability-contract/fifth-author-repair-2026-08-31.md`.

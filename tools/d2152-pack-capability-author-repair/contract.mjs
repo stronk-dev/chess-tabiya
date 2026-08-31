@@ -1,7 +1,7 @@
 // Author contract for D2152-D2156. It publishes reviewed bytes; it does not implement lane 0.30.
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const transitionPath = "rfc/contracts/pack-capability-schema-transition-v1.json";
 const applicabilityPath = "rfc/contracts/pack-capability-applicability-v1.json";
@@ -44,8 +44,27 @@ function applyPatch(source, operations) {
   return target;
 }
 
+function legacyPopulation() {
+  const rows = [];
+  for (const name of readdirSync("content/drafts")) {
+    if (!name.endsWith(".json") || name.endsWith(".sources.json") || name.endsWith(".evidence.json") || name.endsWith(".job.json")) continue;
+    const path = `content/drafts/${name}`;
+    rows.push({ path, sha256: sha256(readFileSync(path)) });
+  }
+  for (const directory of readdirSync("content/candidates")) {
+    const path = `content/candidates/${directory}/pack.json`;
+    if (existsSync(path)) rows.push({ path, sha256: sha256(readFileSync(path)) });
+  }
+  return rows.sort((left, right) => left.path.localeCompare(right.path));
+}
+
 function sealedTransition(input) {
   const output = structuredClone(input);
+  const legacyDocuments = legacyPopulation();
+  assert.equal(legacyDocuments.length, 92, "legacy catalogue population moved");
+  output.legacy.catalogueDocuments = legacyDocuments.length;
+  output.legacy.documents = legacyDocuments;
+  output.legacy.populationSha256 = sha256(JSON.stringify(legacyDocuments));
   let image = JSON.parse(read(schemaPath));
   let sourceSha = sha256(read(schemaPath));
   assert.equal(sourceSha, output.legacy.schemaSha256);
@@ -189,6 +208,18 @@ function assertChessopsSource(source) {
 
 function sealedApplicability(input, targetSchema, targetSha) {
   const output = structuredClone(input);
+  output.always = output.always.map((row) => ({
+    ...row,
+    selector: { kind: "always" },
+    capability: typeof row.capability === "string"
+      ? { id: row.capability, version: { kind: "integer", value: 1 } }
+      : row.capability,
+  }));
+  for (const row of output.always) {
+    assert.deepEqual(row.selector, { kind: "always" });
+    assert.equal(typeof row.capability.id, "string");
+    assert.deepEqual(row.capability.version, { kind: "integer", value: 1 });
+  }
   output.schema.sha256 = sha256(read(schemaPath));
   output.schema.targetSha256 = targetSha;
   const inventory = closedVocabulary(targetSchema, output.metadataExclusions);
@@ -214,7 +245,8 @@ function sealedApplicability(input, targetSchema, targetSha) {
   return output;
 }
 
-function followHistory(subjectId, start, declarations) {
+function followHistory(start, declarations) {
+  const subjectId = start.id;
   const seen = new Set();
   let cursor = start;
   while (true) {
@@ -224,6 +256,7 @@ function followHistory(subjectId, start, declarations) {
     const declaration = declarations.find((row) => canonical(row.id) === key);
     assert.ok(declaration, "CAPABILITY_SUCCESSOR_UNKNOWN");
     assert.equal(declaration.subjectId, subjectId, "CAPABILITY_SUCCESSOR_SUBJECT_MISMATCH");
+    assert.equal(declaration.id.id, subjectId, "CAPABILITY_SUCCESSOR_SUBJECT_MISMATCH");
     if (declaration.disposition.kind === "active") return declaration.id;
     if (declaration.disposition.kind === "withdrawn" && declaration.disposition.successor === null) {
       assert.ok(declaration.disposition.noSuccessor, "CAPABILITY_WITHDRAWAL_REFUSAL_MISSING");
@@ -244,15 +277,15 @@ function assertWithdrawalContract() {
     { subjectId: "example", id: id1, disposition: { kind: "withdrawn", successor: id2 } },
     { subjectId: "example", id: id2, disposition: { kind: "active" } },
   ];
-  assert.deepEqual(followHistory("example", id1, successor), id2);
+  assert.deepEqual(followHistory(id1, successor), id2);
   const refusal = { kind: "no_migration_exists", reason: "the old answer shape has no truthful projection" };
-  assert.deepEqual(followHistory("example", id1, [
+  assert.deepEqual(followHistory(id1, [
     { subjectId: "example", id: id1, disposition: { kind: "withdrawn", successor: null, noSuccessor: refusal } },
   ]), refusal);
-  assert.throws(() => followHistory("example", id1, [
+  assert.throws(() => followHistory(id1, [
     { subjectId: "different", id: id1, disposition: { kind: "active" } },
   ]), /CAPABILITY_SUCCESSOR_SUBJECT_MISMATCH/u);
-  assert.throws(() => followHistory("example", id1, [
+  assert.throws(() => followHistory(id1, [
     { subjectId: "example", id: id1, disposition: { kind: "withdrawn", successor: id2 } },
     { subjectId: "example", id: id2, disposition: { kind: "withdrawn", successor: id1 } },
   ]), /CAPABILITY_SUCCESSOR_CYCLE/u);
@@ -277,5 +310,9 @@ assert.throws(() => assertChessopsSource({ ...applicability.meaningAuthority.ext
 const shortened = structuredClone(applicability);
 shortened.closedVocabulary.sourceInventory.pop();
 assert.notDeepEqual(shortened.closedVocabulary.sourceInventory, closedVocabulary(targetSchema, shortened.metadataExclusions).rows);
+const editedLegacy = structuredClone(transition.legacy.documents);
+editedLegacy[0].sha256 = "0".repeat(64);
+assert.notEqual(sha256(JSON.stringify(editedLegacy)), transition.legacy.populationSha256);
+assert.equal(new Set(transition.legacy.documents.map((row) => row.path)).size, 92);
 
 console.log(`pack capability author contract: ${transition.stages.length} cumulative stages; ${applicability.closedVocabulary.sourceInventory.length} checked mappings; ${applicability.always.length} unconditional roots; ${applicability.meaningAuthority.constantRoots.length} constant roots; chessops ${applicability.meaningAuthority.externalSources[0].version}`);

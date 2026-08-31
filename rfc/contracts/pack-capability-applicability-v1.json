@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "artifact": "tabiya.pack-capability-applicability.authority.v1",
+  "artifact": "tabiya.pack-capability-applicability.authority.v2",
   "schema": {
     "path": "schemas/drill_pack.schema.json",
     "sha256": "7da4d49506eb028872bd909d7ab34a3107b44ba2374f4a686ac625d112d653b0",
@@ -1612,82 +1612,169 @@
   },
   "always": [
     {
-      "capability": "grade.move_quality",
+      "capability": {
+        "id": "grade.move_quality",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
       "sites": [
         "packages/runtime/src/grade.ts#moveQualityGrade",
         "packages/runtime/src/grade.ts#classFromThresholds"
       ],
       "dependencies": [
         "packages/runtime/src/grade.ts#GRADE_CONVENTION"
-      ]
+      ],
+      "selector": {
+        "kind": "always"
+      }
     },
     {
-      "capability": "objective.state_machine",
+      "capability": {
+        "id": "objective.state_machine",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
       "sites": [
         "packages/runtime/src/objective.ts#evaluateObjective",
         "packages/runtime/src/objective.ts#transitionObjective"
       ],
       "dependencies": [
         "packages/runtime/src/objective-state.ts#assertObjectiveTransition"
-      ]
+      ],
+      "selector": {
+        "kind": "always"
+      }
     },
     {
-      "capability": "objective.transition_legality",
+      "capability": {
+        "id": "objective.transition_legality",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
       "sites": [
         "packages/runtime/src/objective-state.ts#assertObjectiveTransition",
         "packages/runtime/src/objective-state.ts#ALLOWED_TRANSITIONS"
       ],
-      "dependencies": []
+      "dependencies": [],
+      "selector": {
+        "kind": "always"
+      }
     },
     {
-      "capability": "outcome.terminal",
+      "capability": {
+        "id": "outcome.terminal",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
       "sites": [
         "packages/runtime/src/outcome.ts#terminalOutcome"
       ],
-      "dependencies": []
+      "dependencies": [],
+      "selector": {
+        "kind": "always"
+      }
     },
     {
-      "capability": "tempo.window",
+      "capability": {
+        "id": "tempo.window",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
       "sites": [
         "packages/runtime/src/tempo.ts#evaluateWindow"
       ],
       "dependencies": [
         "packages/runtime/src/tempo.ts#UNAUTHORED_TEMPO_DEFAULTS"
-      ]
+      ],
+      "selector": {
+        "kind": "always"
+      }
     },
     {
-      "capability": "tempo.unauthored_default",
+      "capability": {
+        "id": "tempo.unauthored_default",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
       "sites": [
         "packages/runtime/src/tempo.ts#UNAUTHORED_TEMPO_DEFAULTS",
         "packages/runtime/src/tempo.ts#unauthoredTempoTransition"
       ],
-      "dependencies": []
+      "dependencies": [],
+      "selector": {
+        "kind": "always"
+      }
     },
     {
-      "capability": "line.membership",
+      "capability": {
+        "id": "line.membership",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
       "sites": [
         "packages/runtime/src/line.ts#lineMembership"
       ],
-      "dependencies": []
+      "dependencies": [],
+      "selector": {
+        "kind": "always"
+      }
     },
     {
-      "capability": "trajectory.verdict",
+      "capability": {
+        "id": "trajectory.verdict",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
       "sites": [
         "packages/runtime/src/trajectory.ts#trajectoryVerdict"
       ],
-      "dependencies": []
+      "dependencies": [],
+      "selector": {
+        "kind": "always"
+      }
     },
     {
-      "capability": "branch.decidedness",
+      "capability": {
+        "id": "branch.decidedness",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
       "sites": [
         "packages/runtime/src/branch-scale.ts#branchDecidedness"
       ],
       "dependencies": [
         "packages/runtime/src/branch-scale.ts#RANK"
-      ]
+      ],
+      "selector": {
+        "kind": "always"
+      }
     },
     {
-      "capability": "guard.immediate",
+      "capability": {
+        "id": "guard.immediate",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
       "sites": [
         "apps/server/src/guard.ts#applyRulesGuard",
         "apps/server/src/guard.ts#applyRecordedEngineGuard"
@@ -1695,37 +1782,76 @@
       "dependencies": [
         "packages/runtime/src/objective.ts#MATERIAL_VALUES",
         "apps/server/src/sourcing/tablebase-category.ts#CATEGORY_RANK"
-      ]
+      ],
+      "selector": {
+        "kind": "always"
+      }
     },
     {
-      "capability": "reasoning.key_point_match",
+      "capability": {
+        "id": "reasoning.key_point_match",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
       "sites": [
         "packages/runtime/src/reasoning.ts#matchKeyPoints"
       ],
-      "dependencies": []
+      "dependencies": [],
+      "selector": {
+        "kind": "always"
+      }
     },
     {
-      "capability": "claim.earning",
+      "capability": {
+        "id": "claim.earning",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
       "sites": [
         "apps/server/src/authored-feedback.ts#projectAuthoredFeedback",
         "apps/server/src/sourcing/claim-binding.ts#MACHINE_LABEL_EVIDENCE_KINDS"
       ],
-      "dependencies": []
+      "dependencies": [],
+      "selector": {
+        "kind": "always"
+      }
     },
     {
-      "capability": "opponent.selection",
+      "capability": {
+        "id": "opponent.selection",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
       "sites": [
         "apps/server/src/opponent-selector.ts#OpponentSelector",
         "apps/server/src/opponent-selector.ts#neutralTiebreakKey"
       ],
-      "dependencies": []
+      "dependencies": [],
+      "selector": {
+        "kind": "always"
+      }
     },
     {
-      "capability": "guard.defaults",
+      "capability": {
+        "id": "guard.defaults",
+        "version": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
       "sites": [
         "apps/server/src/guard-conditions.ts#baseGuardConditionSettings"
       ],
-      "dependencies": []
+      "dependencies": [],
+      "selector": {
+        "kind": "always"
+      }
     }
   ],
   "resolvedReferences": [
@@ -1945,5 +2071,5 @@
       "source file location"
     ]
   },
-  "expandedAuthoritySha256": "88f34288f4098ed8a28cf5d3f4c0562fba45a48d52fdf7994879c004ca078c65"
+  "expandedAuthoritySha256": "76620efd3801c1f07adcb3f5525ebc603cbaada062066f63726b6eb5a7a794a3"
 }

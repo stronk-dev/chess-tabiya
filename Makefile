@@ -410,6 +410,8 @@ pack-capability-fourth-fresh-review:
 
 pack-capability-author-repair:
 	node tools/d2152-pack-capability-author-repair/contract.mjs
+	node --test tools/d2334-pack-capability-fifth-author-repair/contract.test.mjs
+	./node_modules/.bin/tsc -p tools/d2334-pack-capability-fifth-author-repair/tsconfig.contract.json --noEmit
 
 pack-capability-author-repair-update:
 	node tools/d2152-pack-capability-author-repair/contract.mjs --update
