@@ -19359,7 +19359,7 @@
       "id": "D2445",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:730264c234fe27164e4d25ab8917962e5974b89ae3c682c6b5af90b06dffac31",
+      "sourceDigest": "sha256:9de6a9fa1033538972781be2b4c9ca59844227f826c53afc25a4a947cae6a675",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-validation-authority.md"
@@ -19368,7 +19368,7 @@
       "id": "D2446",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4b8877359591714cd9801f64ba0dd0eb14a012b3b0e5b23af4c670b72b5d9a6c",
+      "sourceDigest": "sha256:c9bcd5171fe9b3962a07049ab3c469367aaa61e767d42be124a47b03d6dddcfe",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-validation-authority.md"
@@ -19377,7 +19377,7 @@
       "id": "D2447",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0c81b42c81c571266476b86cd7541cfc6b1bec2080cf6ba9b0df0910ed6f9204",
+      "sourceDigest": "sha256:6d6d37b76712554cd5ebcbcb782f0487afd39e92e7bb33b2bf9413c0f18bcea6",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-validation-authority.md"
@@ -19386,7 +19386,7 @@
       "id": "D2448",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f78375396c1be247647ab804db23c23f379684fa2cd0f02ec7a7baefdd5b6297",
+      "sourceDigest": "sha256:bcbc6a4e7e370a6c7e25472d668020920ca36f383c8340edf7c92e37fce42346",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-validation-authority.md"
@@ -19395,7 +19395,7 @@
       "id": "D2449",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:666862880513a267c42f599acb94866cbcf796f3ccac864ca45c3ffce7ca1858",
+      "sourceDigest": "sha256:4e53d9fb1bb46ec531e82302cc3de6e3bdeda642fca3f114f3f8bdc0ed53aa43",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-validation-authority.md"

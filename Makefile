@@ -144,7 +144,7 @@ semantic-validation-author-contract:
 	node --test tools/d2194-semantic-validation-author-repair/contract.test.mjs
 
 .PHONY: semantic-validation-author-repair semantic-validation-fresh-review semantic-validation-second-fresh-review
-.PHONY: semantic-validation-third-author-repair semantic-validation-adversarial-audit semantic-validation-fourth-author-repair semantic-validation-fifth-fresh-review
+.PHONY: semantic-validation-third-author-repair semantic-validation-adversarial-audit semantic-validation-fourth-author-repair semantic-validation-fifth-fresh-review semantic-validation-fifth-author-repair
 .PHONY: assistance-register-sixth-fresh-review
 .PHONY: provider-protocol-fresh-review
 .PHONY: storage-backup-second-fresh-review
@@ -168,6 +168,10 @@ semantic-validation-fourth-author-repair:
 
 semantic-validation-fifth-fresh-review:
 	node --test tools/d2445-semantic-validation-fifth-fresh-review/contract.test.mjs
+
+semantic-validation-fifth-author-repair:
+	node --test tools/d2445-semantic-validation-fifth-author-repair/contract.test.mjs
+	./node_modules/.bin/tsc -p tools/d2445-semantic-validation-fifth-author-repair/tsconfig.contract.json --noEmit
 
 assistance-register-sixth-fresh-review:
 	node --test tools/d2450-assistance-register-sixth-fresh-review/contract.test.mjs

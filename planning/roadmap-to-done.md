@@ -164,6 +164,15 @@ Primary RFCs: `pack-capability-contract`, `claim-semantic-anchors`, `tactical-co
 `shared-candidate-evidence-packet`, `bounded-policy-targets`, `bounded-target-policy-composition`,
 `recorded-semantic-path`.
 
+The 2026-09-01 semantic-validation fifth author repair closes four authority seams without
+pretending the evidence is validated: all proposition sources resolve one subject/case/constraint/
+expectation record; collection constraints compare whole arrays; owner chronology is derived from
+repository transitions; and duplicate roots/declarations/profiles/verdicts fail before equality.
+The remaining D0 is deliberately process-only and visible: the owner, or Claude on an explicit
+owner ruling, must create the exact empty protected authority root in a prior commit before fresh
+review or Slice A. Receipt:
+`planning/semantic-validation-authority/fifth-author-repair-2026-09-01.md`.
+
 The 2026-08-31 fifth fresh module-registration review returns the evidence-to-consumer join on
 [[D2432]]–[[D2435]]. The artifact's 117/205 population is honest about being requirements-only, but
 its relations do not identify ordered multi-edge tactic operands, candidate root/child/selected

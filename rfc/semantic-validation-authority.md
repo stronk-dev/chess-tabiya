@@ -1,11 +1,12 @@
 # RFC: Executable semantic-validation authority
 
-- **Status:** draft — RETURNED by fifth fresh independent review 2026-08-31 on
-  [[D2445]]–[[D2449]]. The event/reading and neutral-oracle direction survives, but proposition
-  types are undefined, wildcard constraints have no executable meaning, owner chronology trusts a
-  caller list, duplicate authority rows survive set equality and the protected owner store has no
-  lawful bootstrap. `make semantic-validation-fifth-fresh-review` reproduces 5/5. No
-  implementation or learner eligibility is authorized.
+- **Status:** draft — fifth author repair complete for [[D2445]]–[[D2448]]; **dependency-blocked on
+  the owner-authorised empty-store bootstrap in [[D2449]]**, then another fresh independent
+  review. The repair defines every proposition reference and resolved record, replaces wildcard
+  cherry-picking with whole-value collection equality, derives owner chronology from repository
+  transitions, and rejects duplicate root/declaration/profile/verdict subjects before equality.
+  `make semantic-validation-fifth-author-repair` is the positive author contract. No runtime
+  validation or learner eligibility implementation is authorized.
 - **Author:** codex, executing [[D1711]] / [[D1713]] / [[D1714]] after refreshing both research
   instruments at HEAD
 - **Created:** 2026-08-29
@@ -422,9 +423,7 @@ type SemanticValidationOracleFactMap = {
 };
 
 type SemanticValidationOracleResultMap = {
-  readonly [K in SemanticValidationOracleId]: SemanticValidationOracleFactMap[K] & {
-    readonly expectation: SemanticValidationExpectation;
-  };
+  readonly [K in SemanticValidationOracleId]: SemanticValidationOracleFactMap[K];
 };
 
 type SemanticValidationOracleRef<K extends SemanticValidationOracleId = SemanticValidationOracleId> = {
@@ -453,50 +452,133 @@ type SemanticValidationOracleWitness = {
   readonly [K in SemanticValidationOracleId]: SemanticValidationOracleWitnessFor<K>
 }[SemanticValidationOracleId];
 
+type SemanticCanonicalScalar = string | number | boolean | null;
+type SemanticCanonicalValue =
+  | SemanticCanonicalScalar
+  | readonly SemanticCanonicalValue[]
+  | { readonly [key: string]: SemanticCanonicalValue };
+
+interface SemanticValidationFactConstraint {
+  readonly path: readonly string[];
+  readonly comparison: "scalar" | "ordered" | "canonical_multiset";
+  readonly equals: SemanticCanonicalValue;
+}
+
+interface SemanticValidationPropositionRecord {
+  readonly subject: SemanticValidationSubject;
+  readonly case: { readonly id: string; readonly version: 1 };
+  readonly factConstraint: readonly SemanticValidationFactConstraint[];
+  readonly factConstraintSha256: string;
+  readonly expectation: SemanticValidationExpectation;
+}
+
+interface SemanticValidationExistingAssertionAuthority {
+  readonly kind: "existing_assertion";
+  readonly matrixRow: string;
+  readonly testSite: `${string}.test.ts#${string}`;
+  readonly sourceSha256: string;
+  readonly frozenExpectationSha256: string;
+}
+interface SemanticValidationResolvedExistingAssertionAuthority {
+  readonly kind: "existing_assertion";
+  readonly ref: SemanticValidationExistingAssertionAuthority;
+  readonly proposition: SemanticValidationPropositionRecord;
+}
+
+interface SemanticValidationCitedPropositionAuthority {
+  readonly kind: "cited_proposition";
+  readonly sourceId: string;
+  readonly sourceRevision: string;
+  readonly licence: string;
+  readonly span: { readonly start: number; readonly end: number; readonly textSha256: string };
+  readonly propositionSha256: string;
+}
+interface SemanticValidationResolvedCitedPropositionAuthority {
+  readonly kind: "cited_proposition";
+  readonly ref: SemanticValidationCitedPropositionAuthority;
+  readonly proposition: SemanticValidationPropositionRecord;
+}
+
+interface SemanticValidationOwnerAuthorityRef {
+  readonly kind: "owner_authored";
+  readonly id: string;
+  readonly version: 1;
+}
+interface SemanticValidationResolvedOwnerAuthority {
+  readonly kind: "owner_authored";
+  readonly ref: SemanticValidationOwnerAuthorityRef;
+  readonly rowSha256: string;
+  readonly proposition: SemanticValidationPropositionRecord;
+}
+
+type SemanticValidationPropositionAuthority =
+  | SemanticValidationExistingAssertionAuthority
+  | SemanticValidationCitedPropositionAuthority
+  | SemanticValidationOwnerAuthorityRef;
+type SemanticValidationResolvedPropositionAuthority =
+  | SemanticValidationResolvedExistingAssertionAuthority
+  | SemanticValidationResolvedCitedPropositionAuthority
+  | SemanticValidationResolvedOwnerAuthority;
+
+declare function parseSemanticValidationExistingAssertionAuthority(
+  value: unknown,
+): SemanticValidationExistingAssertionAuthority;
+declare function parseSemanticValidationCitedPropositionAuthority(
+  value: unknown,
+): SemanticValidationCitedPropositionAuthority;
+declare function parseSemanticValidationOwnerAuthorityRef(
+  value: unknown,
+): SemanticValidationOwnerAuthorityRef;
+declare function resolveSemanticValidationExistingAssertionAuthority(
+  ref: SemanticValidationExistingAssertionAuthority,
+): SemanticValidationResolvedExistingAssertionAuthority;
+declare function resolveSemanticValidationCitedPropositionAuthority(
+  ref: SemanticValidationCitedPropositionAuthority,
+): SemanticValidationResolvedCitedPropositionAuthority;
+declare function resolveSemanticValidationOwnerAuthority(
+  ref: SemanticValidationOwnerAuthorityRef,
+): SemanticValidationResolvedOwnerAuthority;
+
 type SemanticValidationCaseAuthority =
+  | SemanticValidationExistingAssertionAuthority
   | {
-      readonly kind: "existing_assertion";
-      readonly matrixRow: string;
-      readonly testSite: `${string}.test.ts#${string}`;
-      readonly sourceSha256: string;
-      readonly frozenExpectationSha256: string;
-    }
-  | {
-      readonly kind: "rules_oracle";
+      readonly kind: "rules_and_proposition";
       readonly oracle: SemanticValidationOracleRef;
       readonly witness: SemanticValidationOracleWitnessRef;
+      readonly proposition: SemanticValidationPropositionAuthority;
+      readonly factConstraint: readonly SemanticValidationFactConstraint[];
     }
-  | {
-      readonly kind: "cited_proposition";
-      readonly sourceId: string;
-      readonly sourceRevision: string;
-      readonly licence: string;
-      readonly span: { readonly start: number; readonly end: number; readonly textSha256: string };
-      readonly propositionSha256: string;
-    }
-  | {
-      readonly kind: "owner_authored";
-      readonly receipt: string;
-      readonly caseSha256: string;
-      readonly expectationSha256: string;
-    };
+  | SemanticValidationCitedPropositionAuthority
+  | SemanticValidationOwnerAuthorityRef;
 ```
+
+`parseSemanticValidationExistingAssertionAuthority`,
+`parseSemanticValidationCitedPropositionAuthority` and
+`parseSemanticValidationOwnerAuthorityRef` are strict reference parsers. Their three resolvers
+return only the corresponding `SemanticValidationResolved*` arm; callers cannot submit a resolved
+record. The resolvers import their fixed package-owned stores; none accepts a caller-supplied
+lookup, payload or proposition. `resolveSemanticValidationProposition` normalizes all three arms to the one closed
+`SemanticValidationPropositionRecord` and re-derives `factConstraintSha256` from its canonical
+constraint bytes. The runner then requires exact subject, case, constraint and expectation equality
+against the containing case. A parser or resolver that omits any of those four bindings is a
+compile-time and permanent-fixture failure.
 
 Authority is not decorative provenance. An `existing_assertion` is legal only for a row already
 classified valid in the D1713 migration matrix; its expectation bytes must remain identical while
-being moved, and the test site plus source digest must resolve. A `rules_oracle` resolves exactly
-one sealed row in `SEMANTIC_VALIDATION_ORACLE_WITNESSES`. The witness is distributive on
+being moved, and the test site plus source digest must resolve. A `rules_and_proposition` authority
+resolves exactly one sealed row in `SEMANTIC_VALIDATION_ORACLE_WITNESSES` and one independently
+grounded proposition. The witness is distributive on
 `oracle.id`: its request must inhabit `SemanticValidationOracleRequestMap[K]`, its oracle/case/event
 refs must equal the authority row and containing case, and all ids use the base-id-plus-version
 grammar. Witness bytes, not only their digest, remain available to the runner; the generated receipt
 retains their canonical digest.
 
 The closed oracle operation registry accepts only its corresponding request and returns
-`SemanticValidationOracleResultMap[K]`. The runner derives the result digest and requires
-canonical equality between `result.expectation` and the containing case's
-`SemanticValidationExpectation`; neither the authority row nor witness may supply a result digest
-or an alternate expected boolean. A result computed for a different case/event, wrong oracle grain
-or different expectation fails before receipt emission.
+`SemanticValidationOracleResultMap[K]`. That result is a neutral fact and has no expectation arm.
+The runner derives its digest, evaluates the case's declared constraints, resolves the separate
+proposition, and requires the resolved proposition record to match the containing case. Neither the
+authority row nor witness may supply a result digest or alternate expectation. A fact computed for
+a different case/event or wrong oracle grain fails before proposition resolution.
 
 Oracle implementations may import the pinned chess-rules library and tablebase receipt validators,
 but their complete static import graph must exclude the semantic event operation, its predicate
@@ -1047,6 +1129,7 @@ A green fixture whose selected population is zero is itself a failure.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
+| D0 | Create the exact empty protected owner-authority root in a prior commit, without adding chess authority or admitting a case | OWNER, or Claude on an explicit owner ruling | protected file exists, parses as schema v1 with zero authorities, and its commit precedes Slice A | |
 | D1 | Repair exact subject/outcome identity for the avoidance family before any successor receives validation | codex, after the [[D1716]] successor is independently accepted | accepted RFC + production operation + permanent crossed-subject fixtures | |
 | D2 | Replace blocker-blind king opposition with the versioned unobstructed successor | codex, after the [[D1717]] successor is independently accepted | accepted RFC + migrated authored refs + permanent blocker/mirror fixtures | |
 | D3 | Land the total recorded-path production operation before source-predicate sequence negatives are elevated | recorded-semantic-path | implemented operation + receipt-bound sequence cases | |
@@ -1054,14 +1137,16 @@ A green fixture whose selected population is zero is itself a failure.
 | D5 | Accept an independent authority for every new chess expectation still required by a learner consumer; the authority itself must be a rules oracle, cited immutable source or owner-authored receipt, never Codex's unsupported judgement | OWNER | case authority resolves and its expectation digest is independently reproducible | |
 | D6 | Recompile each learner/module/Review/bot/skill/longitudinal consumer against passing receipts | codex, through each accepted consumer RFC and the [[D1710]] handoff | production operation and consumer fixture, not manifest membership alone | |
 
-The RFC remains implementing after Slice A. It may archive only when every D1–D6 row is either
+The RFC remains implementing after Slice A. It may archive only when every D0–D6 row is either
 discharged or explicitly transferred to an accepted successor with a reader that takes a different
 action. A learner feature cannot satisfy D6 by selecting only the events that happened to be easy
 to validate unless its accepted consumer contract names that narrower set.
 
 ## Open questions
 
-None require an owner ruling before independent review. The strict choices are made here:
+One process-only ruling remains before implementation: authorize D0's exact empty protected-store
+bootstrap. It creates no chess claim and does not authorize later authority rows. All semantic
+choices are otherwise made here:
 
 - all events need positives, semantic negatives, orientation and a current population execution;
 - only avoidance/reply-breadth events require a counterfactual arm under current semantics;
@@ -1071,6 +1156,21 @@ None require an owner ruling before independent review. The strict choices are m
 The buildability reviewer may return operation boundaries, digest closure or profile classifications
 that do not resolve to current symbols. That return is the intended gate, not permission to soften
 the criteria.
+
+## Initial author-audit obligations (2026-08-30)
+
+- [[D2039]] — retain one authenticated population and exact traversal denominator per execution
+  grain rather than a hand-written coverage claim;
+- [[D2040]] — preserve the closed completed/unavailable result algebra so abstention can never be
+  inferred from an empty event population;
+- [[D2041]] — preserve the typed total mirror transform and reject incomplete, overlapping or
+  arbitrary operand maps;
+- [[D2042]] — prove exact projection-multiset retention from each internal collector through its
+  real application operation; and
+- [[D2043]] — derive live validation-root cardinality rather than pinning the pre-promotion count.
+
+These repairs remain normative in §§4.1–4.4 and §5. None is superseded by the later proposition,
+population or owner-authority amendments.
 
 ## Fresh-return obligations (2026-08-30)
 
@@ -1161,8 +1261,9 @@ using “event” mean the event arm unless explicitly generalized here.
 
 The population algebra is:
 
-1. live validation roots, compiled validation declarations, profiles and generated verdicts are
-   set-equal by `subjectKey = kind + ":" + projection.id + "@" + version`;
+1. live validation roots, compiled validation declarations, profiles and generated verdicts each
+   contain exactly one row per
+   `subjectKey = kind + ":" + projection.id + "@" + version`, then are set-equal by that key;
 2. case subjects, population-receipt subjects and external-receipt subjects are each subsets of
    the root set;
 3. every registry row is referenced exactly once by a same-kind, same-subject, same-arm `present`
@@ -1170,11 +1271,14 @@ The population algebra is:
 4. `required` and `not_applicable` cells reference no registry row. A root with every executable
    case arm still `required` therefore has no fabricated case and remains a valid debt profile.
 
-The earlier §2 sentence placing “every validation case's event reference” in bidirectional root
-set equality is withdrawn. Criterion 1's four-way equality is authoritative; criterion 14 owns the
-three subset/bijection joins. Permanent fixtures include a debt-only event root, a debt-only reading
-root, an unreferenced case, a present ref with no row, a cross-kind ref and a case subject outside
-the roots.
+The compiler performs the uniqueness pass on the arrays before constructing any set or map. It
+retains the exact source-row index and canonical row digest in the generated receipt, so duplicate
+or contradictory rows cannot disappear during normalization. The earlier §2 sentence placing
+“every validation case's event reference” in bidirectional root set equality is withdrawn.
+Criterion 1's four-way equality is authoritative; criterion 14 owns the three subset/bijection
+joins. Permanent fixtures include a duplicate in each of the four equal populations, a debt-only
+event root, a debt-only reading root, an unreferenced case, a present ref with no row, a cross-kind
+ref and a case subject outside the roots.
 
 ### R3. An oracle proves a fact; a proposition supplies meaning ([[D2387]])
 
@@ -1189,26 +1293,29 @@ interface SemanticValidationRulesAuthority {
   readonly kind: "rules_and_proposition";
   readonly oracle: SemanticValidationOracleRef;
   readonly witness: SemanticValidationOracleWitnessRef;
-  readonly proposition:
-    | SemanticValidationExistingAssertionAuthority
-    | SemanticValidationCitedPropositionAuthority
-    | SemanticValidationOwnerAuthorityRef;
+  readonly proposition: SemanticValidationPropositionAuthority;
   readonly factConstraint: readonly SemanticValidationFactConstraint[];
-}
-
-interface SemanticValidationFactConstraint {
-  readonly path: readonly (string | "*")[];
-  readonly equals: string | number | boolean | null;
 }
 ```
 
-The runner first executes the isolated oracle, then applies every closed canonical leaf-equality
-constraint to its neutral fact. The separately resolved proposition owns the exact target subject,
-case id/version, constraint digest and `SemanticValidationExpectation`. Only that proposition
-supplies the expectation; its bytes must equal the case. A rules fact with no proposition, an empty
-constraint list, a proposition for another subject/case, a constraint not satisfied by the fact,
-or a result object containing an `expectation` key fails. The same rules fact may support multiple
-semantic subjects only through distinct independently grounded propositions.
+The runner first executes the isolated oracle, then applies every closed equality constraint to its
+neutral fact. Paths contain object keys only; `*` is not part of the grammar. `scalar` rejects an
+array/object and compares canonical scalar bytes. `ordered` requires arrays and compares every
+member in order. `canonical_multiset` requires arrays, canonicalizes every complete member, sorts
+those bytes and retains multiplicity; it never means “any” or “every”. The `equals` value must have
+the matching scalar/array shape. An unresolved path, object leaf, wrong comparison mode, duplicate
+lost during canonicalization, empty actual versus non-empty expected, or any unequal complete
+collection fails `SEMANTIC_VALIDATION_FACT_CONSTRAINT_INVALID` or
+`SEMANTIC_VALIDATION_FACT_CONSTRAINT_UNSATISFIED`. Thus attackers, material pieces and legal UCI
+moves are constrained as whole collections and no case may cherry-pick a convenient member.
+
+The separately resolved proposition owns the exact target subject, case id/version, canonical
+constraint digest and `SemanticValidationExpectation`. Only that proposition supplies the
+expectation; its bytes must equal the case. A rules fact with no proposition, an empty constraint
+list, a proposition for another subject/case, a proposition whose own constraint bytes differ, a
+constraint not satisfied by the fact, or a result object containing an `expectation` key fails. The
+same rules fact may support multiple semantic subjects only through distinct independently grounded
+propositions.
 
 The old top-level `rules_oracle` authority and the claim that canonical equality between
 `result.expectation` and the case establishes truth are withdrawn. Import isolation still applies
@@ -1244,11 +1351,43 @@ and updates the case in a later reviewed change. Each appended row must cite a l
 ruling whose work-state `rulingKind` is `owner-ledger`, and its row bytes must predate the case's
 `present` transition. Same-commit owner row plus case admission fails.
 
+The temporal guard has three canonical source files and no caller-supplied ref list:
+
+- `design/research/semantic-validation-owner-authorities.json`;
+- `packages/runtime/src/semantic-validation-cases.json`; and
+- `packages/runtime/src/semantic-validation-profiles.json`.
+
+The TypeScript registries import and strictly parse the latter two JSON roots; they are not second
+copies. `semantic-validation-owner-transition-check` reads base and candidate bytes itself. In a
+pre-commit it compares repository `HEAD` with the staged index; in CI it compares the commit's first
+parent with the checked-out commit. It parses all six JSON documents plus the base/candidate work
+state, resolves each profile's `present` case references, resolves those cases' authority refs, and
+derives the admitted owner-authority keys. The function accepts repository tree readers, never
+`admittedRefs`, case rows, profile rows or owner rulings from its caller. It rejects:
+
+1. any mutation/removal of a base owner row;
+2. any candidate owner row whose ruling is not an exact owner-ledger row in the candidate work
+   state;
+3. any owner key introduced in the candidate tree that is reachable from a candidate `present`
+   profile cell; and
+4. any newly `present` case whose owner row did not already exist in the base tree.
+
+The generated transition receipt retains both tree identities and the canonical digest of all six
+parsed roots. An unstaged worktree, caller-supplied empty list, same-commit row/case pair, case hidden
+behind an unchanged profile, or profile hidden behind an unchanged case therefore cannot alter the
+decision.
+
 Law 5 supplies the single-writer boundary: only the owner, or Claude acting on the exact cited owner
 ruling, may write this protected design/research file. Codex and implementation agents may build the
 parser and consume existing rows but may not add, edit or synthesize authority. Missing, duplicate,
 unsorted, suffixed, stale-version, digest-mismatched, non-owner, non-ruling, mutated and same-commit
 rows are permanent negatives. If no owner row exists, the cell remains `required`.
+
+The store itself has a named bootstrap discharge: before implementation, the owner—or Claude acting
+on an explicit owner ruling—creates exactly `{"schemaVersion":1,"authorities":[]}` at the protected
+path and runs the strict parser. That commit contains no case/profile admission and creates no chess
+truth. Codex may not perform or silently combine this discharge with implementation. Until it
+lands, Slice A is dependency-blocked even though the other author repairs may be reviewed.
 
 ### R5. Repair acceptance arms
 
@@ -1261,6 +1400,16 @@ rows are permanent negatives. If no owner row exists, the cell remains `required
     same-case/same-subject grounded proposition with non-empty satisfied constraints.
 29. The exact owner store/parser/staged transition crosses all negative arms in R4, and no Codex-
     written fixture can create an owner authority row.
+30. All three proposition refs parse independently and resolve to the same closed proposition
+    record; omitting or swapping subject, case, constraint digest or expectation fails.
+31. Fact constraints contain no wildcard. Empty, multiple, reordered and duplicate collection
+    fixtures distinguish `ordered` from multiplicity-preserving `canonical_multiset` equality.
+32. The temporal guard derives owner admissions from base/candidate store, case and profile bytes;
+    its public operation has no caller-supplied admission or ruling population.
+33. Duplicate roots, declarations, profiles and verdicts each fail before four-way equality and
+    receipt generation retains exactly one source row per subject.
+34. The protected empty root exists in a prior owner-authorised commit before Slice A starts; its
+    absence is a dependency failure, never an invitation for an implementer to create it.
 
 ## Fifth fresh independent return — 2026-08-31
 
@@ -1279,6 +1428,26 @@ blockers:
 `make semantic-validation-fifth-fresh-review` reproduces 5/5. Exact evidence and repairs are in
 `planning/semantic-validation-authority/fifth-fresh-independent-buildability-review-2026-08-31.md`.
 A fifth author repair, owner-store bootstrap and another fresh review are required before acceptance.
+
+## Fifth author repair — 2026-09-01
+
+The return is answered without weakening the prior four repairs:
+
+- [[D2445]]: the three reference types, three resolved types, strict parsers and one normalized
+  proposition record are now explicit. All resolved arms bind the same subject, case, constraint
+  digest and expectation.
+- [[D2446]]: wildcard paths are removed. Whole arrays use exact ordered or canonical-multiset
+  equality, with multiplicity retained; no existential member selection exists.
+- [[D2447]]: the transition guard owns three exact source paths and derives admissions from base and
+  candidate repository trees. Its API accepts neither admission refs nor authority rows.
+- [[D2448]]: every equal population proves uniqueness before set construction and receipt rows retain
+  source identity.
+- [[D2449]]: the protected empty-store bootstrap is now an explicit owner/Claude-on-ruling discharge
+  and an implementation dependency. It remains deliberately unperformed by Codex.
+
+`make semantic-validation-fifth-author-repair` crosses the four executable repairs and verifies the
+bootstrap remains a named, absent dependency. Another fresh independent review is required after
+the owner-authorised bootstrap; no production or learner-eligibility implementation is authorized.
 
 ## Fresh adversarial return — 2026-08-31
 

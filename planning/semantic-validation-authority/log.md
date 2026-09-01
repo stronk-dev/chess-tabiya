@@ -45,3 +45,16 @@ The bounded-target D2340 repair adds an explicit reading-root register to the va
 It is opt-in and admits only active `reading`/`machine_condition` projections with an exact sole
 value factory and an owning accepted semantic requirement. Named target and bounded return are the
 first two roots; construction receipts remain necessary but cannot satisfy semantic cells.
+
+## 2026-09-01 — D2445–D2449 fifth author repair
+
+The fifth return found undefined proposition records, wildcard constraints without quantifiers,
+caller-trusted chronology, duplicate-erasing set equality and an impossible protected-store
+bootstrap. The RFC now defines all proposition reference/resolution arms, compares complete
+collections without wildcards, derives temporal admission from repository trees and proves
+uniqueness before equality. D0 names the protected empty-root bootstrap without letting Codex cross
+law 5.
+
+`make semantic-validation-fifth-author-repair` passes 5/5 plus strict TypeScript. D2445–D2448 are
+author-repaired; D2449 waits on an explicit owner ruling and a separate owner/Claude-authored root
+commit. Production and learner eligibility remain unauthorized pending fresh independent review.

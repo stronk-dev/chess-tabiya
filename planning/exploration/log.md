@@ -13440,3 +13440,21 @@ authorized.
 **Blocked/next:** fresh independent review of the generic engine, then its implementation through
 normal full verification. Assistance population follows; provider and semantic population can then
 proceed independently. Product lanes remain downstream of their registered roots.
+
+## 2026-09-01 — Semantic-validation fifth author repair closes four authority seams
+
+**What landed:** repaired the draft `semantic-validation-authority` contract on [[D2445]]–[[D2448]].
+All three proposition sources now resolve to one closed subject/case/constraint/expectation record;
+wildcard fact selection is replaced by whole ordered or multiplicity-preserving collection
+equality; the owner chronology guard derives admission from repository base/candidate roots; and
+all four equal populations prove uniqueness before set construction. `make
+semantic-validation-fifth-author-repair` passes 5/5 plus strict TypeScript.
+
+**What changed:** [[D2449]] now has a named D0 rather than an impossible implicit bootstrap. The
+exact empty protected root must be created in a prior commit by the owner or Claude acting on an
+explicit owner ruling. Codex did not create it, and no production collector, verdict, consumer,
+content, schema or protected-design byte changed.
+
+**Blocked/next:** owner authorization and the separate empty-root commit, then fresh independent
+review. Only acceptance may authorize Slice A; all incomplete semantic evidence remains
+research-only meanwhile.
