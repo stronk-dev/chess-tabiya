@@ -1,6 +1,6 @@
 # RFC: Move-quality grades — the grade-family projection and its convention document
 
-- **Status:** implementing — 2026-08-22 projection checkpoint landed: the cited convention, pure grade/mate arithmetic, renderer, and experimental manifest declaration are implemented and verified. D1 remains open until learner-modules compiles the two production consumers; this RFC must not archive before that edge exists. *(Accepted 2026-08-22 by claude after adversarial cross-review; prior line: draft.)*
+- **Status:** implementing — 2026-09-01 same-lane derivation repair landed: the manifest now declares recorded-pair OR live-pair, matching the already-enforced runtime instrument guard. The cited convention, pure grade/mate arithmetic, renderer, and experimental projection remain implemented and verified. D1 remains open until learner-modules compiles the two production consumers; this RFC must not archive before that edge exists. *(Accepted 2026-08-22 by claude after adversarial cross-review; prior line: draft.)*
 - **Author:** claude, on the [[D879]] BUILD-IT verdict and the [[D899]] routing (learner-modules `## Discharges` D3)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §3 (grounding ladder, §3-forms honesty split), `design/research/assistance-surface-taxonomy.md` §2b (pinned Lichess constants), §2d-1 (two-ladder precedent), §4a (the explicit verdict); `design/research/classifier-coverage-and-noise.md` §4a layer 2 (as quoted by both)
@@ -631,3 +631,10 @@ to the ledger by this review:**
   declaration landed. The manifest compiles at 34/184/25/207; 19 focused grade/catalogue
   fixtures and runtime typecheck pass. D1 remains deliberately blank because no production
   module declaration consumes the projection yet.
+- 2026-09-01 ([[D2473]] repair): corrected the projection derivation from the false
+  recorded-plus-live conjunction to two same-lane alternatives. The production grade
+  function already rejects unequal lane, engine id and search limit; the catalogue regression
+  now proves the manifest cannot restore the cross-lane conjunction. The module requirement
+  generator consumes the alternative declaration and retains two ordered before/after
+  occurrences per selected lane. D1 remains open: this repair supplies the prerequisite but
+  does not invent either learner consumer.

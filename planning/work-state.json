@@ -19609,12 +19609,12 @@
     },
     {
       "id": "D2473",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c17652fd1b67b8f2bb6da3d127edb02340b45eeef5390278248f6b313bfc25f2",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6a4ed734ed280f1cda2b2c705fff11b27b0a1e2a99210b5efdb13cfee1f50a31",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:move-quality-grades.md"
+      "evidence": "Production manifest publishes recorded-pair OR live-pair; moveQualityGrade rejects unequal lane, engine and search limit; generated module occurrence contract retains ordered before/after pair; make verify green.",
+      "evidenceKind": "closeout-prose"
     }
   ]
 }

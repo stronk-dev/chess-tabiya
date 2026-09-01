@@ -26,13 +26,14 @@ What changed:
   `compileCatalogueEvidencePool`, and `ProviderExchangeScheduler.get`; and
 - the rejected `AUTHOR_ADDITIONAL_SUBJECT_VIEWS` table is deleted.
 
-## New upstream finding
+## Upstream finding and repair
 
-[[D2473]] is not papered over. `derived.grade.move_quality@1` currently declares recorded and live
-eval as one conjunction, while its accepted RFC requires a before/after pair from either lane and
-forbids cross-lane grading. The requirements artifact records the correct same-lane alternatives
-but remains `awaiting_upstream_same_lane_anyof_D2473`; it cannot emit a binding until the manifest
-and sole value operation agree.
+[[D2473]] was not papered over. `derived.grade.move_quality@1` declared recorded and live eval as
+one conjunction, while its accepted RFC requires a before/after pair from either lane and forbids
+cross-lane grading. The production manifest now declares the two alternatives, the grade operation
+enforces lane/engine/search-limit equality, and the regenerated requirements artifact records the
+exact two-occurrence before/after contract as `upstream_same_lane_anyof_verified`. This clears the
+specific upstream contradiction; exact consumer adapters and presentation remain separately blocked.
 
 ## Executable evidence
 

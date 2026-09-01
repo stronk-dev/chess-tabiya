@@ -215,9 +215,10 @@ without claiming execution. Seven multi-edge tactics retain ordered windows and 
 candidate packets expose exact root/legal, child, edge and population views while refusing
 committed/root-projection impersonation; signed deltas retain ordered endpoints and equality joins;
 and all five pool boundaries name an owner callable. All 117 evidence requirements and 205 module
-pairs remain blocked on exact occurrence/timing/presentation operations. [[D2473]] records that
-move quality's manifest currently requires both eval lanes while its accepted operation requires a
-same-lane before/after alternative. Receipt:
+pairs remain blocked on exact occurrence/timing/presentation operations. [[D2473]] is repaired:
+move quality's production manifest now declares recorded-pair OR live-pair, its operation rejects
+mixed instruments, and the regenerated requirements retain the exact ordered two-occurrence
+contract without claiming either consumer. Receipt:
 `planning/learner-modules/sixth-author-repair-2026-09-01.md`.
 
 The 2026-08-28 shared-candidate packet author repair records the owner's foundation-first sequence

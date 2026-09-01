@@ -72,7 +72,11 @@ describe("primary evidence catalogue", () => {
       exactness: "convention", answerContent: ["evaluation"],
       disposition: { kind: "experimental" },
     });
-    expect(grade?.derivation?.inputs).toEqual([{ id: "recorded.engine.eval", version: 1 }, { id: "live.stockfish.eval", version: 1 }]);
+    expect(grade?.derivation).toEqual({ anyOf: [
+      [{ id: "recorded.engine.eval", version: 1 }],
+      [{ id: "live.stockfish.eval", version: 1 }],
+    ] });
+    expect(grade?.derivation).not.toHaveProperty("inputs");
     expect(grade?.answerContent).not.toContain("move");
   });
 
@@ -101,6 +105,18 @@ describe("primary evidence catalogue", () => {
     });
     expect(() => compileEvidenceManifest(mutateGrade({ answerContent: ["evaluation", "move"] }))).toThrowError(expect.objectContaining<Partial<EvidenceManifestError>>({ code: "EVIDENCE_DERIVATION_WIDENS" }));
     expect(() => compileEvidenceManifest(mutateGrade({ derivation: { inputs: [] } }))).toThrowError(expect.objectContaining<Partial<EvidenceManifestError>>({ code: "EVIDENCE_PROJECTION_INCOMPLETE" }));
+  });
+
+  it("keeps move-quality lanes alternative rather than requiring or mixing them", () => {
+    const grade = EVIDENCE_PRODUCERS.find((item) => item.id === "derived.grade")?.outputs[0];
+    expect(grade?.derivation).toEqual({ anyOf: [
+      [{ id: "recorded.engine.eval", version: 1 }],
+      [{ id: "live.stockfish.eval", version: 1 }],
+    ] });
+    expect(grade?.derivation).not.toEqual({ inputs: [
+      { id: "recorded.engine.eval", version: 1 },
+      { id: "live.stockfish.eval", version: 1 },
+    ] });
   });
 
   it("registers the nine Wave-C events whose accepted derivations are buildable", () => {

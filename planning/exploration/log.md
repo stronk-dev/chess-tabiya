@@ -13513,3 +13513,21 @@ repair, the 11-test author contract and the 13-test assembly contract all pass.
 **Blocked/next:** fresh independent review, plus accepted/implemented occurrence, timing, value and
 presentation dependencies. The artifacts remain 117/205 `requirements_only`; no executable module,
 API, content, pack, provider, bot or learner-visible UX byte changed.
+
+## 2026-09-01 — Move-quality derivation now names one same-instrument lane
+
+**What landed:** closed [[D2473]] at the production evidence boundary. The
+`derived.grade.move_quality@1` manifest declaration now has two alternatives — recorded eval or
+live eval — instead of one false recorded-plus-live conjunction. The existing
+`moveQualityGrade` operation continues to require two ordered readings with equal lane, engine id
+and search limit. A permanent catalogue regression rejects restoration of the conjunction.
+
+**What changed:** regenerated module-registration's requirements-only artifact from the production
+manifest. Its grade row now reads the alternative derivation and retains the exact cardinality-two
+before/after occurrence contract for the selected lane. [[D2473]] moves blocked → done in the
+work-state registry; the overall 117/205 module requirements remain dependency-blocked.
+
+**Blocked/next:** this is prerequisite closure, not learner reach. The post-commit nudge and Review
+Map adapters still have to compile before move-quality can leave experimental disposition or the
+move-quality RFC can discharge D1. No API, content, pack, provider, bot or learner-visible UX byte
+changed in this checkpoint.

@@ -825,7 +825,7 @@ export const EVIDENCE_PRODUCERS: readonly ProducerDeclaration[] = Object.freeze(
       grounding: "bounded_search", exactness: "convention", confidence: "reported",
       abstention: { possible: true, reasons: ["input_abstained", "missing_eval", "unequal_instrument", "mate_score_inconsistent"] },
       answerContent: ["evaluation"], forms: ["sentence", "panel"],
-      derivation: { inputs: [ref("recorded.engine.eval"), ref("live.stockfish.eval")] },
+      derivation: { anyOf: [[ref("recorded.engine.eval")], [ref("live.stockfish.eval")]] },
       limitations: ["Single-line evals only: the drop compares one engine's paired readings at one search limit.", "Not a lesson: the grade can be right about the position and wrong about the reason."],
       disposition: { kind: "experimental", reason: "Awaits learner-module consumer compilation for postcommit_nudge and review_map." },
     }),

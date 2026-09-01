@@ -152,7 +152,7 @@ const EXACT_OCCURRENCE_CONTRACTS = Object.freeze({
   "derived.grade.move_quality": { kind: "ordered_endpoints", alternatives: [
     { operands: [{ projection: "recorded.engine.eval", cardinality: 2, endpointRoles: ["before", "after"] }] },
     { operands: [{ projection: "live.stockfish.eval", cardinality: 2, endpointRoles: ["before", "after"] }] },
-  ], equality: ["same_edge", "same_lane", "same_engine_id", "same_search_limit"], status: "awaiting_upstream_same_lane_anyof_D2473" },
+  ], equality: ["same_edge", "same_lane", "same_engine_id", "same_search_limit"], status: "upstream_same_lane_anyof_verified" },
 } as const);
 
 const pairs = Object.entries(AUTHOR_MODULE_ACCEPTS).flatMap(([module, ids]) => ids.filter((id) => !awaiting.has(id)).map((id) => ({ module, projection: id })));

@@ -1,6 +1,6 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — sixth author repair complete on [[D2432]]–[[D2435]] and [[D2473]];
+- **Status:** **draft — sixth author repair complete on [[D2432]]–[[D2435]]; [[D2473]] upstream repair consumed;
   another fresh independent review is required.** The fourth repair rejects the prior generator's
   central premise: learner modules do not invoke 117 detector/provider functions. They consume
   projection-keyed sealed pools produced by the candidate packet, recorded semantic path, Review,
@@ -31,7 +31,7 @@
   sixth repair now retains operation-owned ordered window/endpoints contracts, publishes four exact
   candidate occurrence views while forbidding committed/root projection impersonation, binds the
   five sources to their actual callable contracts (including one module-owned catalogue adapter),
-  and leaves every exact occurrence/timing operation unresolved. It also records [[D2473]]: move
+  and leaves every exact occurrence/timing operation unresolved. It also consumed [[D2473]]: move
   quality's manifest conjunction contradicts its accepted same-lane alternative rule. `make
   module-registration-sixth-author-repair` passes 5/5; no row becomes executable. Another fresh
   review is required. The
@@ -267,7 +267,7 @@ crosses all three returned seams. Another fresh independent review remains requi
 
 ## Sixth author repair — exact occurrences without a second execution engine (2026-09-01)
 
-This section repairs [[D2432]]–[[D2435]] and records the upstream contradiction [[D2473]]. It does
+This section repairs [[D2432]]–[[D2435]] and records the repaired upstream contradiction [[D2473]]. It does
 not turn any requirement into an executable binding.
 
 1. **Multi-edge tactics retain their operation-owned topology.** The seven observed projections
@@ -286,7 +286,7 @@ not turn any requirement into an executable binding.
 3. **Signed deltas retain ordered operands.** Compare eval delta requires exactly branch-A and
    branch-B eval occurrences with identical engine/search/domain. Move quality requires exactly
    before/after occurrences from either the recorded lane or the live lane, with identical
-   engine/search limit. The latter is held `awaiting_upstream_same_lane_anyof_D2473`, because its
+   engine/search limit. The latter is `upstream_same_lane_anyof_verified`, because its
    current manifest declares the two lanes as a conjunction while its accepted RFC forbids mixing.
 4. **Five source contracts name real operations.** Candidate, recorded path, Review and provider
    sources reference their owners' exact callable APIs. Catalogue acquisition is the one new
@@ -1874,7 +1874,7 @@ Sixth author repair (2026-09-01):
 | [[D2433]] | candidate service publishes four exact views; child/edge require canonical UCI, while committed edge and arbitrary current-root projection are forbidden |
 | [[D2434]] | eval delta and move quality carry ordered endpoint roles/cardinality plus instrument/search/domain equalities; final operation remains null |
 | [[D2435]] | four source contracts reference exact owner callables; catalogue uses one fully specified module-owned adapter; the rejected additional-view export is deleted |
-| [[D2473]] | move quality remains explicitly blocked until its manifest changes from a cross-lane conjunction to the accepted same-lane alternative operation |
+| [[D2473]] | discharged 2026-09-01: the manifest now declares recorded-pair OR live-pair and the generated requirement retains two ordered occurrences from the selected lane; consumer adapters remain separate dependencies |
 
 `make module-registration-sixth-author-repair` passes 5/5. Artifacts remain
 `requirements_only`; another fresh independent review is required before acceptance or

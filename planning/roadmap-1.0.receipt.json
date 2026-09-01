@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:61023138b95c37fafd5f943513dcb4c99040c8fc6ecbd8301c2cc3f911d40618",
+    "roadmap": "sha256:46f52cef41959111173850a70edb75f5c51502b89e45a84c888ec70fc234a95a",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:5c0feb44e82b52185a9cc9d20c7143a1644f65340f70a8070291d4eda1572e9d",
-    "rfcRegister": "sha256:059750e1683fd474ab3b23a4c034e432752f7e9d5834c5c2a193faf3dc83f5f7",
+    "workState": "sha256:5e22fcd9f4e60b04a26ad93ad4ff28e572dd9c4fc29a95cdcd56962b089b8dee",
+    "rfcRegister": "sha256:7ede47caf95d9a9c79e6c28d379b2fb86830a9b48dc2f70bcb295d908d610309",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 655,
       "doing": 0,
-      "blocked": 860,
-      "done": 704,
+      "blocked": 859,
+      "done": 705,
       "refused": 3
     },
     "workItems": {
@@ -163,10 +163,13 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-01",
-        "summary": "The candidate packet consumes the registered value-authority route and the held promotion pair remains returned on four honest-result/invocation seams. Module registration's sixth repair now carries exact multi-edge window topology, candidate root/child/edge/population views, ordered signed-delta operands and five real source-call boundaries while retaining all 117/205 rows as dependency-blocked requirements. It also exposes move-quality's cross-lane manifest contradiction as D2473. The original twelve semantic projections remain implemented; no Support, Review or bot consumer receives new credit yet.",
+        "summary": "The candidate packet consumes the registered value-authority route and the held promotion pair remains returned on four honest-result/invocation seams. Module registration's sixth repair now carries exact multi-edge window topology, candidate root/child/edge/population views, ordered signed-delta operands and five real source-call boundaries while retaining all 117/205 rows as dependency-blocked requirements. D2473 is repaired in production: move quality now declares recorded-pair OR live-pair and the generated requirement retains the exact ordered same-instrument occurrences. The original twelve semantic projections remain implemented; no Support, Review or bot consumer receives new credit yet.",
         "impact": "advanced",
         "evidence": [
           "planning/learner-modules/sixth-author-repair-2026-09-01.md",
+          "packages/runtime/src/evidence-catalog.ts",
+          "packages/runtime/src/evidence-catalog.test.ts",
+          "rfc/move-quality-grades.md",
           "planning/evidence-foundation-ux/semantic-collectors-promotion-third-fresh-independent-buildability-review-2026-09-01.md",
           "planning/evidence-foundation-ux/shared-candidate-packet-sixth-author-repair-2026-09-01.md",
           "planning/evidence-foundation-ux/shared-candidate-packet-fifth-fresh-independent-review-2026-08-31.md",

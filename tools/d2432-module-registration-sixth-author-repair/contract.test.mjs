@@ -59,7 +59,12 @@ test("D2434 signed deltas require ordered endpoints and equality joins", () => {
   assert.deepEqual(grade.alternatives.map((arm) => arm.operands[0].projection), ["recorded.engine.eval", "live.stockfish.eval"]);
   assert.ok(grade.alternatives.every((arm) => arm.operands[0].cardinality === 2));
   assert.ok(grade.alternatives.every((arm) => arm.operands[0].endpointRoles.join("/") === "before/after"));
-  assert.equal(grade.status, "awaiting_upstream_same_lane_anyof_D2473");
+  assert.equal(grade.status, "upstream_same_lane_anyof_verified");
+  assert.equal(byId.get("derived.grade.move_quality").derivation.kind, "any");
+  assert.deepEqual(byId.get("derived.grade.move_quality").derivation.alternatives, [
+    [{ id: "recorded.engine.eval", version: 1 }],
+    [{ id: "live.stockfish.eval", version: 1 }],
+  ]);
 });
 
 test("D2435 source contracts name exact owner operations and no rejected view authority survives", () => {

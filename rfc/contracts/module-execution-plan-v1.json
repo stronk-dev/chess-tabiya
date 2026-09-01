@@ -905,16 +905,20 @@
       },
       "acquisition": "review_evidence_packet@1",
       "derivation": {
-        "kind": "all",
-        "inputs": [
-          {
-            "id": "recorded.engine.eval",
-            "version": 1
-          },
-          {
-            "id": "live.stockfish.eval",
-            "version": 1
-          }
+        "kind": "any",
+        "alternatives": [
+          [
+            {
+              "id": "recorded.engine.eval",
+              "version": 1
+            }
+          ],
+          [
+            {
+              "id": "live.stockfish.eval",
+              "version": 1
+            }
+          ]
         ],
         "join": {
           "subjectKind": "edge",
@@ -972,7 +976,7 @@
             "same_engine_id",
             "same_search_limit"
           ],
-          "status": "awaiting_upstream_same_lane_anyof_D2473"
+          "status": "upstream_same_lane_anyof_verified"
         },
         "operationRequirement": {
           "owner": "rfc/move-quality-grades.md",
@@ -5331,5 +5335,5 @@
       "status": "awaiting_upstream_sealed_operation"
     }
   ],
-  "digest": "sha256:5b744f7abb68ff9de2b0e4fc323b1c18f9a8966ed2908cd31e20225b2f5106d5"
+  "digest": "sha256:9fccac3a29fc586a3111fa7309567be7246ff780bf0b3bb8e233c60769b6201f"
 }

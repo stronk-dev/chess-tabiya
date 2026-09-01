@@ -28,7 +28,8 @@ policy. The executable manifest and semantic-evidence checks own this tuple.
 
 The additional inert projection is `derived.grade.move_quality@1`: it thresholds paired,
 same-instrument engine readings under the cited `grade-convention@1`, retains typed mate scores,
-and can carry evaluation only. It remains `experimental` until the post-commit and Review module
+and can carry evaluation only. Its derivation is an explicit same-lane alternative: two recorded
+readings or two live readings, never one of each. It remains `experimental` until the post-commit and Review module
 consumers compile; catalogue presence alone does not make it visible.
 
 `rules.mobility.reading.legal_moves@1` is likewise additive and inspector-only. It is the complete
