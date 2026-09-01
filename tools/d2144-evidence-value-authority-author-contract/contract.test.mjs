@@ -71,6 +71,29 @@ test("successors repair rather than silently relabel the five false or mixed row
   assert.match(rfc, /Lucena\/Philidor\/Vancura candidate cannot render without a cited theory authority/u);
 });
 
+test("the phase successor carries the measured five-arm decision instead of old prose", () => {
+  assert.match(rfc, /PhaseBandReadingV2/u);
+  for (const kind of [
+    "endgame_material_band",
+    "material_transition_gap",
+    "opening_development_band",
+    "middlegame_development_band",
+    "development_transition_gap",
+  ]) assert.match(rfc, new RegExp(`\\b${kind}\\b`, "u"));
+  for (const field of [
+    "marginInsideBand",
+    "distanceToEndgameBand",
+    "distanceToDevelopedBand",
+    "distanceToMiddlegameBand",
+    "distanceToOpeningBand",
+  ]) assert.match(rfc, new RegExp(`\\b${field}\\b`, "u"));
+  assert.match(rfc, /computes phase, operands and decision in one operation from FEN/u);
+  assert.match(rfc, /never a probability, accuracy estimate, number of[\s\S]*?moves to transition, opening identity or provider-availability signal/u);
+  assert.match(rfc, /13\/14, 17\/18, 2\/3 and 4\/5 boundary controls/u);
+  assert.doesNotMatch(rfc, /rules\.phase\.reading@2` retains the current `PhaseReading` payload/u);
+  assert.doesNotMatch(rfc, /Both successor truth sets remain byte-compatible/u);
+});
+
 test("the draft closes all four authority families without a generic payload escape", () => {
   for (const heading of ["Computed", "Derived", "Source receipt", "Authored authority"]) {
     assert.match(rfc, new RegExp(`#### 2\\.[1-4] ${heading}`, "u"));
@@ -85,7 +108,7 @@ test("the draft closes all four authority families without a generic payload esc
 
 test("dependencies and closure gates are explicit rather than hand-waved", () => {
   assert.match(rfc, /\*\*Status:\*\* draft/u);
-  assert.match(rfc, /author-amended 2026-08-31 through \[\[D2327\]\] and the D2146 callable-operation/u);
+  assert.match(rfc, /author-amended 2026-09-01 through \[\[D2484\]\], \[\[D2327\]\] and the D2146/u);
   assert.match(rfc, /dependency-blocked on the[\s\S]*?semantic convention register\/provenance/u);
   assert.match(rfc, /provider exchange contracts/u);
   assert.match(rfc, /semantic-convention-provenance\.md/u);

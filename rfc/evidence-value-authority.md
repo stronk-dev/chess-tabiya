@@ -1,7 +1,7 @@
 # RFC: Evidence value authority — compute, derive or project before sealing
 
-- **Status:** draft — author-amended 2026-08-31 through [[D2327]] and the D2146 callable-operation
-  closure; dependency-blocked on the
+- **Status:** draft — author-amended 2026-09-01 through [[D2484]], [[D2327]] and the D2146
+  callable-operation closure; dependency-blocked on the
   returned semantic convention register/provenance and provider exchange contracts, then fresh
   independent buildability review
 - **Author:** codex (agent), for Marco
@@ -11,7 +11,8 @@
   evidence ceilings and §3-forms
 - **Exploration gate:** [[D2144]] and [[D2145]], answered by
   `design/research/evidence-seal-value-authority.md` and
-  `design/research/evidence-grounding-taxonomy.md`; executable population in
+  `design/research/evidence-grounding-taxonomy.md`; [[D2484]], answered by
+  `design/research/phase-band-and-abstention-contract.md`; executable population in
   `tools/d2144-evidence-seal-audit/`
 - **Depends on:** implemented `rfc/archive/evidence-contract-manifest.md`; implemented
   `rfc/archive/semantic-evidence-selection.md`; draft `rfc/semantic-convention-register.md` and
@@ -204,10 +205,33 @@ Neither duplicates the other.
 #### 3.3 Replace two product classifiers
 
 `rules.phase.reading@1` is retired from new bindings. Its successor
-`rules.phase.reading@2` retains the current `PhaseReading` payload but declares
-`declared_convention/convention`, direct phase-band convention identity, and a computed factory over
-FEN. Every current consumer migrates atomically; v1 remains readable only for in-process backward
-compatibility during the implementation commit and is absent from the final binding set.
+`rules.phase.reading@2` carries `PhaseBandReadingV2`, declares
+`declared_convention/convention`, retains the direct registered phase-band convention identity, and
+has a computed factory over FEN. `PhaseBandReadingV2` contains the canonical FEN, the existing
+`phase`, per-color non-pawn `material`, per-color `undevelopedMinors`, literal
+`conventionId: "phase-bands@1"`, and one `decision` from this closed union:
+
+| `decision.kind` | fixed fields after `kind`, `phase`, `axis`, `observed` |
+|---|---|
+| `endgame_material_band` | `phase: "endgame"`; `axis: "maximum_non_pawn_material"`; `boundary`; `marginInsideBand` |
+| `material_transition_gap` | `phase: "unclear"`; `axis: "maximum_non_pawn_material"`; `endgameBoundary`; `developedBoundary`; `distanceToEndgameBand`; `distanceToDevelopedBand` |
+| `opening_development_band` | `phase: "opening"`; `axis: "undeveloped_home_minors"`; `boundary`; `marginInsideBand` |
+| `middlegame_development_band` | `phase: "middlegame"`; `axis: "undeveloped_home_minors"`; `boundary`; `marginInsideBand` |
+| `development_transition_gap` | `phase: "unclear"`; `axis: "undeveloped_home_minors"`; `middlegameBoundary`; `openingBoundary`; `distanceToMiddlegameBand`; `distanceToOpeningBand` |
+
+The factory computes phase, operands and decision in one operation from FEN. It does not accept a
+caller phase, reason, margin, boundary or output payload. Selected-band margins are non-negative
+integer operand distances inside the chosen band. Gap distances are positive integer operand
+distances to the two adjacent bands. They are never a probability, accuracy estimate, number of
+moves to transition, opening identity or provider-availability signal. The direct convention owns
+the boundary values; the payload makes the exact values used for this reading inspectable.
+
+Every current consumer migrates atomically. A deterministic renderer may name the selected band or
+the exact abstention arm, but it may not translate a zero/one margin into “uncertain” without a
+separately calibrated authority. v1 remains readable only for in-process backward compatibility
+during the implementation commit and is absent from the final binding set. This is the [[D2484]]
+amendment; the 804-position author instrument supplies all five positive arms and the inconsistent
+phase falsifier.
 
 [[D1727]] is closed at the position-evidence boundary: `rules.structural.reading.named_structure@1`
 is retired from new bindings. Its successor
@@ -220,8 +244,11 @@ The payload deliberately carries no run node. [[D2372]] therefore belongs to the
 `campaign-catalogue-progression.md` derives a same-position sighting from this value plus sealed
 `run.record.position@1`. This RFC must not widen a reusable position fact with a Campaign subject.
 
-Both successor truth sets remain byte-compatible with current producer outputs. The version change
-records corrected authority and operands rather than silently rewriting v1.
+The phase label truth set remains compatible with the current classifier, but its successor payload
+is deliberately not byte-compatible: it replaces free prose provenance with registered convention
+identity and adds the exact decision arm. The named-structure successor retains its current rich
+producer fields. Both version changes record corrected authority and operands rather than silently
+rewriting v1.
 
 #### 3.4 Split three multi-authority projections
 
@@ -435,7 +462,10 @@ planes, optional LLM renderer and assistance ceilings.
 7. The nine literal and six exact-under-convention rows are computed from their authority inputs;
    the latter six carry the exact convention closure.
 8. Phase and named-structure v1 have zero consumer bindings; their corrected successors have exact
-   operands, grounding, factories and migrated consumers.
+   operands, grounding, factories and migrated consumers. `PhaseBandReadingV2` is set-equal to the
+   five §3.3 arms; its factory derives phase and arm together from one FEN, rejects caller-supplied
+   decision fields, and the 13/14, 17/18, 2/3 and 4/5 boundary controls can fail independently.
+   No `confidence: number`, generic reason string or nullable margin is admitted.
 9. Endgame, pivotal and structural-result v1 have zero consumer bindings; every successor in §3.4
    has one truthful authority/factory profile, including an explicit unavailable arm where the
    required upstream authority does not yet exist.
@@ -494,6 +524,10 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-09-01: [[D2484]] replaces the proposed byte-compatible phase payload with the measured
+  five-arm `PhaseBandReadingV2`: registered convention identity, exact operand boundaries and
+  deterministic margin/distances. It explicitly refuses probability, move-distance and provider
+  absence semantics; D2483/D2484 supply the author population and all-arm controls.
 - 2026-08-31: D2146 callable-operation closure derives the exact enclosing production symbol for
   every syntax-aware use: 184 used rows resolve to 45 operations; seven export-only rows remain
   empty by definition; no used row is missing or module-owned.
