@@ -3,6 +3,7 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { EMITTER_TEMPLATE_IDS } from "../apps/server/src/graduation-blocker-templates.mjs";
 
 export const CLEARANCE_RULES = Object.freeze([
   { rule: "unbuilt", kind: "unbuilt", keywords: [
@@ -61,17 +62,7 @@ export const HAND_ASSIGNMENTS = Object.freeze({
   "trajectory-legs.browser/mechanical-acceptance-fixture-only-it-asserts-no-chess-p": "unreachable",
 });
 
-export const EMITTER_TEMPLATE_IDS = Object.freeze([
-  "mechanical-objective-placeholder",
-  "outcome-ungraded",
-  "start-assessment-absent",
-  "target-elo-authored",
-  "authored-teaching-absent",
-  "opponent-policy-authored",
-  "tablebase-opponent-not-selected",
-  "recorded-play-needs-authoring",
-  "mechanical-objective-needs-grounding",
-]);
+export { EMITTER_TEMPLATE_IDS };
 
 export const KNOWN_CANDIDATE_EXCEPTIONS = Object.freeze([
   "immediate-blunder-guard-is-not-selectable-defect-d8-dela",

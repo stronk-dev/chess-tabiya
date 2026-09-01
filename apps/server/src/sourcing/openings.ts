@@ -9,6 +9,7 @@ import { makeSanAndPlay, parseSan } from "chessops/san";
 import { makeUci } from "chessops/util";
 
 import { validatePackDocument } from "../pack-validation.js";
+import { emitterGraduationBlocker } from "../graduation-blocker-templates.mjs";
 import { emissionJobDigest, readJson, sha256, writeCanonicalJson } from "./canonical.js";
 import { checkSourcingDirectory } from "./check.js";
 import { type EvidenceLedger, type SourceEntry, type SourceManifest, SourcingError } from "./types.js";
@@ -112,7 +113,7 @@ export async function emitOpeningCandidate(options: OpeningEmitOptions): Promise
       reviewStatus: "draft",
       sources: [sourceString],
       licence: "CC-BY-SA-4.0",
-      graduationBlockers: [{ id: "mechanical-objective-placeholder", state: "blocking", statement: "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft" }],
+      graduationBlockers: [emitterGraduationBlocker("mechanical-objective-placeholder")],
     },
   } satisfies DrillPackDefinition;
   const validation = validatePackDocument(pack);

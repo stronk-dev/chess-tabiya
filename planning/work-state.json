@@ -1975,11 +1975,12 @@
     },
     {
       "id": "D240",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ed0a8968dcf52510055423dd7181d10220677ba891acd03f927d9a10bb0e0289",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:19648c8a28e498e5a34feae5b7866499290ab6078f2d48209fdb3ed5711255d7",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "apps/server/src/graduation-blocker-templates.mjs",
+      "evidenceKind": "path"
     },
     {
       "id": "D241",

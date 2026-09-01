@@ -14,6 +14,7 @@ import { parseUci } from "chessops/util";
 import { StockfishEvidenceExecutor } from "../evidence-queue.js";
 import { EngineSupervisor } from "../engine-supervisor.js";
 import { validatePackDocument } from "../pack-validation.js";
+import { emitterGraduationBlocker } from "../graduation-blocker-templates.mjs";
 import { emissionJobDigest, readJson, writeCanonicalJson } from "./canonical.js";
 import { checkSourcingDirectory } from "./check.js";
 import { SourceLock } from "./lock.js";
@@ -225,11 +226,11 @@ export async function emitPositionSeeds(options: PositionSeedOptions): Promise<r
     collisionCounts.set(baseId, occurrence);
     const id = occurrence === 1 ? baseId : `${baseId}-${occurrence}`;
     const blockers = [
-      { id: "outcome-ungraded", state: "blocking" as const, statement: "The objective transitions on reaching the checkpoint, i.e. on playing the position out. No shipped mechanism grades how it was played out or what happened to the position; adding one is an authored act." },
-      { id: "start-assessment-absent", state: "blocking" as const, statement: "The start position is whatever the puzzle's solution produced; it is not asserted to be winning, equal, or better for the learner. No engine or tablebase has evaluated it." },
-      { id: "mechanical-objective-placeholder", state: "blocking" as const, statement: "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft" },
-      { id: "target-elo-authored", state: "blocking" as const, statement: "targetElo clamp [1100, 2000] is an authoring convention, not a Maia capability claim" },
-      { id: "authored-teaching-absent", state: "blocking" as const, statement: "No authored plan, deviation, or feedback claim exists; a reviewer must add any chess judgement rather than infer one from puzzle metadata." },
+      emitterGraduationBlocker("outcome-ungraded"),
+      emitterGraduationBlocker("start-assessment-absent"),
+      emitterGraduationBlocker("mechanical-objective-placeholder"),
+      emitterGraduationBlocker("target-elo-authored"),
+      emitterGraduationBlocker("authored-teaching-absent"),
     ];
     const pack = {
       id, version: "0.1.0", title: `Play on from Lichess puzzle ${row.puzzleId}`, mode: "outcome",

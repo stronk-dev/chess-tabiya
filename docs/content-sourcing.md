@@ -48,6 +48,13 @@ CC0-1.0, CC-BY-SA-4.0 with notice text, and `no-rights-asserted` with a rational
 emitted candidate declares CC-BY-SA-4.0 wholesale. Evidence records may not support prose
 pointers. Authored claims instead use span-level `claimBindings`; direct support remains forbidden.
 
+All four candidate emitters construct their nine mechanical graduation blockers from
+`graduation-blocker-templates.mjs`. The registry owns both stable ids and sentence templates;
+parameterized opponent-policy sentences substitute only the declared `opponent` value. The
+graduation migration imports the same id set, so changing an emitter template cannot silently
+create a second migration identity. Unknown templates and missing, blank, or extra substitutions
+are refused before a pack is emitted.
+
 ## Reproducibility and source access
 
 JSON uses RFC 8785 canonicalization plus one trailing newline. `sourcedAt` comes from the

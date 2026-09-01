@@ -13580,3 +13580,19 @@ fixtures, not a claim that learner modules are complete.
 it does not supply semantic module admission, board-lighting budgets, false-absence prevention,
 citation preservation, a qualified local model or a provider promotion gate. Those downstream
 contracts must not inherit these closures by implication.
+
+## 2026-09-01 — Emitter blocker templates become one shared authority
+
+**What landed:** closed [[D240]] with a checked-in registry for the nine mechanical graduation
+blockers emitted by opening, position-seed, Syzygy and session-distillation paths. Every emitter
+now constructs its entries through the same typed factory, and the graduation-clearance planner
+imports the registry's id set instead of maintaining a parallel list.
+
+**What changed:** stable identity now belongs to the template rather than rendered output. The two
+Syzygy sentences declare `opponent` as their sole substitution; unknown templates and missing,
+blank or extra values fail at runtime. Permanent tests pin the nine-id inventory, fixed and dynamic
+rendering, and each refusal arm. Existing emitted sentences remain byte-for-byte unchanged.
+
+**Blocked/next:** none for [[D240]]. This is source and migration alignment, not content clearance;
+all mechanical blockers still require their declared author or evidence work. The evidence
+foundation queue continues with the next independently executable producer-to-module gap.

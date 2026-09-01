@@ -6,6 +6,7 @@ import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
 
 import { validatePackDocument } from "../pack-validation.js";
+import { emitterGraduationBlocker } from "../graduation-blocker-templates.mjs";
 import { emissionJobDigest, readJson, sha256, writeCanonicalJson } from "./canonical.js";
 import { SourcingHttpClient } from "./http.js";
 import { ingestLocalFile } from "./inputs.js";
@@ -167,9 +168,9 @@ export async function emitSyzygyCandidates(options: SyzygyEmitOptions): Promise<
       abstentions = [{ kind: "tablebase_result", anchor: { fen: input.fen }, sourceId: ingested.entry.sourceId, retrievedAt: ingested.entry.retrievedAt, reason: "out_of_range", detail: `${pieces} pieces; Syzygy covers <=7` }];
     }
     const blockers = [
-      { id: "mechanical-objective-placeholder", state: "blocking" as const, statement: "objective.summary is the emitter's mechanical placeholder; an author must replace it with this pack's actual teaching objective before reviewStatus leaves draft" },
-      { id: "opponent-policy-authored", state: "blocking" as const, statement: `opponent mode ${options.opponent} is an authoring choice that must be reviewed for this convert/hold/save drill` },
-      ...(pieces <= 7 ? [{ id: "tablebase-opponent-not-selected", state: "blocking" as const, statement: `Exact tablebase grading is available for this root and perfect_tablebase is selectable where the provider is published; this draft still requests ${options.opponent}, which can deviate from perfect play` }] : []),
+      emitterGraduationBlocker("mechanical-objective-placeholder"),
+      emitterGraduationBlocker("opponent-policy-authored", { opponent: options.opponent }),
+      ...(pieces <= 7 ? [emitterGraduationBlocker("tablebase-opponent-not-selected", { opponent: options.opponent })] : []),
     ];
     const pack = {
       id,

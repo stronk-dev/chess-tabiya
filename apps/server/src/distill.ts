@@ -4,6 +4,7 @@ import type { PackRecord } from "./pack-registry.js";
 import { validatePackDocument } from "./pack-validation.js";
 import { ServerError } from "./errors.js";
 import { SourcingError } from "./sourcing/types.js";
+import { emitterGraduationBlocker } from "./graduation-blocker-templates.mjs";
 
 export interface DistillProposal {
   readonly kind: "deviation";
@@ -53,8 +54,8 @@ export function distillRun(run: DrillRun, source: PackRecord | undefined, input:
     .map((node) => Object.freeze({ id: distilledId(node.id), moveUci: node.moveUci!, moveSan: node.moveSan!, children: build(node.id) }));
 
   const blockers: GraduationEntry[] = [
-    { id: "recorded-play-needs-authoring", state: "blocking", statement: "Session-distilled moves are recorded play, not reviewed theory; a human author must judge every line before publication." },
-    { id: "mechanical-objective-needs-grounding", state: "blocking", statement: "The mechanical objective and checkpoint are navigation facts, not a chess assessment; replace or ground them before publication." },
+    emitterGraduationBlocker("recorded-play-needs-authoring"),
+    emitterGraduationBlocker("mechanical-objective-needs-grounding"),
   ];
   const dropped: string[] = [];
   const fired = run.events.filter((event): event is Extract<DrillRun["events"][number], { type: "checkpoint.reached" }> => event.type === "checkpoint.reached");
