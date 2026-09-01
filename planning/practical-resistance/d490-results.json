@@ -1,0 +1,2196 @@
+{
+ "schema": "tabiya.research.d490-practical-resistance.v1",
+ "historicalPopulation": {
+  "path": "tools/r5-maia-stability-harness/out/selection-summary.json",
+  "sha256": "9aca0458abba70ed7488dfc76320f8d48fb3dc296def05b737ef5f1959e2219d",
+  "roots": 40,
+  "historicalOutcomes": {
+   "floatToleranceFailure": 30,
+   "practicalResistanceUndecidable": 5,
+   "selection": 5
+  }
+ },
+ "packAttribution": {
+  "path": "planning/dtz-census/d457-positions.jsonl",
+  "sha256": "896990af5b28d55d07fe2ce76746d5e8bad559b57f205a8656b33846ea34903d",
+  "matchedRoots": 40
+ },
+ "tablebaseSource": {
+  "path": "planning/practical-resistance/d490-tablebase.json",
+  "sha256": "db254364a94ad3fbd7ff02731cde5b0da71da563094795dde0c1783213808d93",
+  "positions": 186
+ },
+ "maia": {
+  "image": "chess-tabiya-maia:dev",
+  "imageId": "sha256:b240b7c5c27ad8b578d856c4d8c1cabbc081dae5ef28840b03fd7b87f0530774",
+  "sourceCommit": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+  "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+  "band": 1500
+ },
+ "repeatsPerRoot": 3,
+ "rootsByOutcome": {
+  "refusal:PRACTICAL_RESISTANCE_UNDECIDABLE": 26,
+  "selection:a7a2": 2,
+  "selection:a7b6": 1,
+  "selection:d6c6": 1,
+  "selection:d6c7": 1,
+  "selection:d7e7": 3,
+  "selection:d7e8": 1,
+  "selection:e6e7": 1,
+  "selection:e7d7": 1,
+  "selection:e7f6": 1,
+  "selection:e8f8": 1,
+  "selection:f6g6": 1
+ },
+ "outcomesByRootCategory": {
+  "draw": {
+   "refusal:PRACTICAL_RESISTANCE_UNDECIDABLE": 2,
+   "selection": 4
+  },
+  "loss": {
+   "refusal:PRACTICAL_RESISTANCE_UNDECIDABLE": 2,
+   "selection": 10
+  },
+  "win": {
+   "refusal:PRACTICAL_RESISTANCE_UNDECIDABLE": 22
+  }
+ },
+ "outcomesByPack": {
+  "lucena-bridge-convert": {
+   "refusal:PRACTICAL_RESISTANCE_UNDECIDABLE": 4
+  },
+  "mate-bishop-knight": {
+   "refusal:PRACTICAL_RESISTANCE_UNDECIDABLE": 4,
+   "selection": 2
+  },
+  "mate-k-q-technique": {
+   "refusal:PRACTICAL_RESISTANCE_UNDECIDABLE": 3
+  },
+  "mate-k-r-technique": {
+   "refusal:PRACTICAL_RESISTANCE_UNDECIDABLE": 3,
+   "selection": 2
+  },
+  "mate-two-bishops": {
+   "refusal:PRACTICAL_RESISTANCE_UNDECIDABLE": 1,
+   "selection": 1
+  },
+  "opposite-bishops-fortress-hold": {
+   "refusal:PRACTICAL_RESISTANCE_UNDECIDABLE": 2
+  },
+  "pawn-breakthrough-convert": {
+   "selection": 2
+  },
+  "pawn-opposition-convert": {
+   "refusal:PRACTICAL_RESISTANCE_UNDECIDABLE": 4,
+   "selection": 2
+  },
+  "philidor-passive-rook-convert": {
+   "refusal:PRACTICAL_RESISTANCE_UNDECIDABLE": 2,
+   "selection": 1
+  },
+  "philidor-third-rank-hold": {
+   "selection": 4
+  },
+  "queen-vs-pawn-seventh-convert": {
+   "refusal:PRACTICAL_RESISTANCE_UNDECIDABLE": 3
+  }
+ },
+ "inconsistentRoots": 0,
+ "rows": [
+  {
+   "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1",
+   "packId": "lucena-bridge-convert",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "1K6/1P2k3/8/8/3R4/8/8/r7 w - - 4 3",
+   "packId": "lucena-bridge-convert",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "2k5/8/2K3N1/8/8/6B1/8/8 w - - 12 7",
+   "packId": "mate-bishop-knight",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "3B2k1/8/3N2K1/8/8/8/8/8 w - - 32 17",
+   "packId": "mate-bishop-knight",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "3b4/3k4/8/2PKP3/8/8/4B3/8 b - - 0 1",
+   "packId": "opposite-bishops-fortress-hold",
+   "rootCategory": "draw",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "3k4/4N3/4K3/8/8/6B1/8/8 w - - 18 10",
+   "packId": "mate-bishop-knight",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "3k4/8/4K3/8/8/4P3/8/8 w - - 9 6",
+   "packId": "pawn-opposition-convert",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "3k4/R7/8/3K4/8/8/8/8 w - - 10 6",
+   "packId": "mate-k-r-technique",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "4k3/8/3K2B1/8/3B4/8/8/8 b - - 3 2",
+   "packId": "mate-two-bishops",
+   "rootCategory": "loss",
+   "repeats": [
+    {
+     "kind": "selection",
+     "moveUci": "e8f8",
+     "candidates": [
+      {
+       "moveUci": "e8d8",
+       "rank": 1,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "e8f8",
+       "rank": 2,
+       "concessionRatio": 0.00588554874327174
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "e8f8",
+     "candidates": [
+      {
+       "moveUci": "e8d8",
+       "rank": 1,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "e8f8",
+       "rank": 2,
+       "concessionRatio": 0.00588554874327174
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "e8f8",
+     "candidates": [
+      {
+       "moveUci": "e8d8",
+       "rank": 1,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "e8f8",
+       "rank": 2,
+       "concessionRatio": 0.00588554874327174
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    }
+   ]
+  },
+  {
+   "fen": "4k3/8/5K2/4P3/8/8/8/8 w - - 1 10",
+   "packId": "pawn-opposition-convert",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "4k3/R7/1r6/3KP3/8/8/8/8 w - - 1 4",
+   "packId": "philidor-third-rank-hold",
+   "rootCategory": "draw",
+   "repeats": [
+    {
+     "kind": "selection",
+     "moveUci": "a7a2",
+     "candidates": [
+      {
+       "moveUci": "a7a1",
+       "rank": 1,
+       "concessionRatio": 0.003712193121606642
+      },
+      {
+       "moveUci": "a7a2",
+       "rank": 2,
+       "concessionRatio": 0.0045893556830088195
+      },
+      {
+       "moveUci": "a7a3",
+       "rank": 3,
+       "concessionRatio": 0.004132960235789209
+      },
+      {
+       "moveUci": "a7a4",
+       "rank": 4,
+       "concessionRatio": 0.004164723787815653
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "a7a2",
+     "candidates": [
+      {
+       "moveUci": "a7a1",
+       "rank": 1,
+       "concessionRatio": 0.003712193121606642
+      },
+      {
+       "moveUci": "a7a2",
+       "rank": 2,
+       "concessionRatio": 0.0045893556830088195
+      },
+      {
+       "moveUci": "a7a3",
+       "rank": 3,
+       "concessionRatio": 0.004132960235789209
+      },
+      {
+       "moveUci": "a7a4",
+       "rank": 4,
+       "concessionRatio": 0.004164723787815653
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "a7a2",
+     "candidates": [
+      {
+       "moveUci": "a7a1",
+       "rank": 1,
+       "concessionRatio": 0.003712193121606642
+      },
+      {
+       "moveUci": "a7a2",
+       "rank": 2,
+       "concessionRatio": 0.0045893556830088195
+      },
+      {
+       "moveUci": "a7a3",
+       "rank": 3,
+       "concessionRatio": 0.004132960235789209
+      },
+      {
+       "moveUci": "a7a4",
+       "rank": 4,
+       "concessionRatio": 0.004164723787815653
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    }
+   ]
+  },
+  {
+   "fen": "4k3/R7/1r6/4K3/4P3/8/8/8 w - - 1 2",
+   "packId": "philidor-third-rank-hold",
+   "rootCategory": "draw",
+   "repeats": [
+    {
+     "kind": "selection",
+     "moveUci": "a7a2",
+     "candidates": [
+      {
+       "moveUci": "a7a1",
+       "rank": 1,
+       "concessionRatio": 0.005976268204455103
+      },
+      {
+       "moveUci": "a7a2",
+       "rank": 2,
+       "concessionRatio": 0.008021210549547788
+      },
+      {
+       "moveUci": "a7a3",
+       "rank": 3,
+       "concessionRatio": 0.007237552923321871
+      },
+      {
+       "moveUci": "a7a4",
+       "rank": 4,
+       "concessionRatio": 0.0079505458785953
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "a7a2",
+     "candidates": [
+      {
+       "moveUci": "a7a1",
+       "rank": 1,
+       "concessionRatio": 0.005976268204455103
+      },
+      {
+       "moveUci": "a7a2",
+       "rank": 2,
+       "concessionRatio": 0.008021210549547788
+      },
+      {
+       "moveUci": "a7a3",
+       "rank": 3,
+       "concessionRatio": 0.007237552923321871
+      },
+      {
+       "moveUci": "a7a4",
+       "rank": 4,
+       "concessionRatio": 0.0079505458785953
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "a7a2",
+     "candidates": [
+      {
+       "moveUci": "a7a1",
+       "rank": 1,
+       "concessionRatio": 0.005976268204455103
+      },
+      {
+       "moveUci": "a7a2",
+       "rank": 2,
+       "concessionRatio": 0.008021210549547788
+      },
+      {
+       "moveUci": "a7a3",
+       "rank": 3,
+       "concessionRatio": 0.007237552923321871
+      },
+      {
+       "moveUci": "a7a4",
+       "rank": 4,
+       "concessionRatio": 0.0079505458785953
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    }
+   ]
+  },
+  {
+   "fen": "4k3/R7/3KP3/8/8/8/8/3r4 w - - 3 6",
+   "packId": "philidor-third-rank-hold",
+   "rootCategory": "draw",
+   "repeats": [
+    {
+     "kind": "selection",
+     "moveUci": "d6c6",
+     "candidates": [
+      {
+       "moveUci": "d6c5",
+       "rank": 1,
+       "concessionRatio": 0.006858059665813892
+      },
+      {
+       "moveUci": "d6c6",
+       "rank": 2,
+       "concessionRatio": 0.03849259459709795
+      },
+      {
+       "moveUci": "d6c7",
+       "rank": 3,
+       "concessionRatio": 0.012684924335475847
+      },
+      {
+       "moveUci": "d6e5",
+       "rank": 4,
+       "concessionRatio": 0.018534151225025622
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "d6c6",
+     "candidates": [
+      {
+       "moveUci": "d6c5",
+       "rank": 1,
+       "concessionRatio": 0.006858059665813892
+      },
+      {
+       "moveUci": "d6c6",
+       "rank": 2,
+       "concessionRatio": 0.03849259459709795
+      },
+      {
+       "moveUci": "d6c7",
+       "rank": 3,
+       "concessionRatio": 0.012684924335475847
+      },
+      {
+       "moveUci": "d6e5",
+       "rank": 4,
+       "concessionRatio": 0.018534151225025622
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "d6c6",
+     "candidates": [
+      {
+       "moveUci": "d6c5",
+       "rank": 1,
+       "concessionRatio": 0.006858059665813892
+      },
+      {
+       "moveUci": "d6c6",
+       "rank": 2,
+       "concessionRatio": 0.03849259459709795
+      },
+      {
+       "moveUci": "d6c7",
+       "rank": 3,
+       "concessionRatio": 0.012684924335475847
+      },
+      {
+       "moveUci": "d6e5",
+       "rank": 4,
+       "concessionRatio": 0.018534151225025622
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    }
+   ]
+  },
+  {
+   "fen": "4k3/R7/4PK2/8/8/8/8/5r2 w - - 7 8",
+   "packId": "philidor-third-rank-hold",
+   "rootCategory": "draw",
+   "repeats": [
+    {
+     "kind": "selection",
+     "moveUci": "f6g6",
+     "candidates": [
+      {
+       "moveUci": "f6e5",
+       "rank": 1,
+       "concessionRatio": 0.015179044669053707
+      },
+      {
+       "moveUci": "f6g5",
+       "rank": 2,
+       "concessionRatio": 0.028567945295118333
+      },
+      {
+       "moveUci": "f6g6",
+       "rank": 3,
+       "concessionRatio": 0.04554130994966174
+      },
+      {
+       "moveUci": "f6g7",
+       "rank": 4,
+       "concessionRatio": 0.025701520742665775
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "f6g6",
+     "candidates": [
+      {
+       "moveUci": "f6e5",
+       "rank": 1,
+       "concessionRatio": 0.015179044669053707
+      },
+      {
+       "moveUci": "f6g5",
+       "rank": 2,
+       "concessionRatio": 0.028567945295118333
+      },
+      {
+       "moveUci": "f6g6",
+       "rank": 3,
+       "concessionRatio": 0.04554130994966174
+      },
+      {
+       "moveUci": "f6g7",
+       "rank": 4,
+       "concessionRatio": 0.025701520742665775
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "f6g6",
+     "candidates": [
+      {
+       "moveUci": "f6e5",
+       "rank": 1,
+       "concessionRatio": 0.015179044669053707
+      },
+      {
+       "moveUci": "f6g5",
+       "rank": 2,
+       "concessionRatio": 0.028567945295118333
+      },
+      {
+       "moveUci": "f6g6",
+       "rank": 3,
+       "concessionRatio": 0.04554130994966174
+      },
+      {
+       "moveUci": "f6g7",
+       "rank": 4,
+       "concessionRatio": 0.025701520742665775
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    }
+   ]
+  },
+  {
+   "fen": "5k2/2B5/3NK3/8/8/8/8/8 w - - 26 14",
+   "packId": "mate-bishop-knight",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "5k2/2Q5/8/8/8/8/6K1/8 w - - 6 4",
+   "packId": "mate-k-q-technique",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "5k2/R7/4K3/8/8/8/8/8 w - - 14 8",
+   "packId": "mate-k-r-technique",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "6k1/8/5KB1/2B5/8/8/8/8 w - - 10 6",
+   "packId": "mate-two-bishops",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "7R/4k3/8/3KP3/8/8/8/8 b - - 0 5",
+   "packId": "philidor-passive-rook-convert",
+   "rootCategory": "loss",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "7R/4k3/8/4K3/4P3/8/8/8 b - - 0 3",
+   "packId": "philidor-passive-rook-convert",
+   "rootCategory": "loss",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "7k/4Q3/8/8/6K1/8/8/8 w - - 14 8",
+   "packId": "mate-k-q-technique",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "7k/R7/6K1/8/8/8/8/8 w - - 18 10",
+   "packId": "mate-k-r-technique",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "8/1P2k3/1K6/8/3R4/8/8/1r6 w - - 8 5",
+   "packId": "lucena-bridge-convert",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "8/1P2k3/8/1K6/3R4/8/8/1r6 w - - 12 7",
+   "packId": "lucena-bridge-convert",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "8/2k2K2/8/4P3/8/8/8/8 w - - 5 12",
+   "packId": "pawn-opposition-convert",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "8/3k4/6N1/3KB3/8/8/8/8 b - - 7 4",
+   "packId": "mate-bishop-knight",
+   "rootCategory": "loss",
+   "repeats": [
+    {
+     "kind": "selection",
+     "moveUci": "d7e8",
+     "candidates": [
+      {
+       "moveUci": "d7c8",
+       "rank": 1,
+       "concessionRatio": 0.004032328800477221
+      },
+      {
+       "moveUci": "d7d8",
+       "rank": 2,
+       "concessionRatio": 0.008415407002530994
+      },
+      {
+       "moveUci": "d7e8",
+       "rank": 3,
+       "concessionRatio": 0.07584458343755893
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "d7e8",
+     "candidates": [
+      {
+       "moveUci": "d7c8",
+       "rank": 1,
+       "concessionRatio": 0.004032328800477221
+      },
+      {
+       "moveUci": "d7d8",
+       "rank": 2,
+       "concessionRatio": 0.008415407002530994
+      },
+      {
+       "moveUci": "d7e8",
+       "rank": 3,
+       "concessionRatio": 0.07584458343755893
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "d7e8",
+     "candidates": [
+      {
+       "moveUci": "d7c8",
+       "rank": 1,
+       "concessionRatio": 0.004032328800477221
+      },
+      {
+       "moveUci": "d7d8",
+       "rank": 2,
+       "concessionRatio": 0.008415407002530994
+      },
+      {
+       "moveUci": "d7e8",
+       "rank": 3,
+       "concessionRatio": 0.07584458343755893
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    }
+   ]
+  },
+  {
+   "fen": "8/3k4/7R/3K4/8/8/8/8 b - - 5 3",
+   "packId": "mate-k-r-technique",
+   "rootCategory": "loss",
+   "repeats": [
+    {
+     "kind": "selection",
+     "moveUci": "d7e7",
+     "candidates": [
+      {
+       "moveUci": "d7c7",
+       "rank": 1,
+       "concessionRatio": 0.000056298514603904284
+      },
+      {
+       "moveUci": "d7c8",
+       "rank": 2,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "d7d8",
+       "rank": 3,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "d7e7",
+       "rank": 4,
+       "concessionRatio": 0.00023743996927734623
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "d7e7",
+     "candidates": [
+      {
+       "moveUci": "d7c7",
+       "rank": 1,
+       "concessionRatio": 0.000056298514603904284
+      },
+      {
+       "moveUci": "d7c8",
+       "rank": 2,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "d7d8",
+       "rank": 3,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "d7e7",
+       "rank": 4,
+       "concessionRatio": 0.00023743996927734623
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "d7e7",
+     "candidates": [
+      {
+       "moveUci": "d7c7",
+       "rank": 1,
+       "concessionRatio": 0.000056298514603904284
+      },
+      {
+       "moveUci": "d7c8",
+       "rank": 2,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "d7d8",
+       "rank": 3,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "d7e7",
+       "rank": 4,
+       "concessionRatio": 0.00023743996927734623
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    }
+   ]
+  },
+  {
+   "fen": "8/3k4/7R/8/8/3K4/8/8 b - - 1 1",
+   "packId": "mate-k-r-technique",
+   "rootCategory": "loss",
+   "repeats": [
+    {
+     "kind": "selection",
+     "moveUci": "d7e7",
+     "candidates": [
+      {
+       "moveUci": "d7c7",
+       "rank": 1,
+       "concessionRatio": 0.00008211136764943114
+      },
+      {
+       "moveUci": "d7c8",
+       "rank": 2,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "d7d8",
+       "rank": 3,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "d7e7",
+       "rank": 4,
+       "concessionRatio": 0.00014664500202617818
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "d7e7",
+     "candidates": [
+      {
+       "moveUci": "d7c7",
+       "rank": 1,
+       "concessionRatio": 0.00008211136764943114
+      },
+      {
+       "moveUci": "d7c8",
+       "rank": 2,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "d7d8",
+       "rank": 3,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "d7e7",
+       "rank": 4,
+       "concessionRatio": 0.00014664500202617818
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "d7e7",
+     "candidates": [
+      {
+       "moveUci": "d7c7",
+       "rank": 1,
+       "concessionRatio": 0.00008211136764943114
+      },
+      {
+       "moveUci": "d7c8",
+       "rank": 2,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "d7d8",
+       "rank": 3,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "d7e7",
+       "rank": 4,
+       "concessionRatio": 0.00014664500202617818
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    }
+   ]
+  },
+  {
+   "fen": "8/3k4/8/3KB3/8/3N4/8/8 b - - 3 2",
+   "packId": "mate-bishop-knight",
+   "rootCategory": "loss",
+   "repeats": [
+    {
+     "kind": "selection",
+     "moveUci": "d7e7",
+     "candidates": [
+      {
+       "moveUci": "d7c8",
+       "rank": 1,
+       "concessionRatio": 0.002031613728740685
+      },
+      {
+       "moveUci": "d7d8",
+       "rank": 2,
+       "concessionRatio": 0.0026710598032083552
+      },
+      {
+       "moveUci": "d7e7",
+       "rank": 3,
+       "concessionRatio": 0.002945680973701267
+      },
+      {
+       "moveUci": "d7e8",
+       "rank": 4,
+       "concessionRatio": 0
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "d7e7",
+     "candidates": [
+      {
+       "moveUci": "d7c8",
+       "rank": 1,
+       "concessionRatio": 0.002031613728740685
+      },
+      {
+       "moveUci": "d7d8",
+       "rank": 2,
+       "concessionRatio": 0.0026710598032083552
+      },
+      {
+       "moveUci": "d7e7",
+       "rank": 3,
+       "concessionRatio": 0.002945680973701267
+      },
+      {
+       "moveUci": "d7e8",
+       "rank": 4,
+       "concessionRatio": 0
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "d7e7",
+     "candidates": [
+      {
+       "moveUci": "d7c8",
+       "rank": 1,
+       "concessionRatio": 0.002031613728740685
+      },
+      {
+       "moveUci": "d7d8",
+       "rank": 2,
+       "concessionRatio": 0.0026710598032083552
+      },
+      {
+       "moveUci": "d7e7",
+       "rank": 3,
+       "concessionRatio": 0.002945680973701267
+      },
+      {
+       "moveUci": "d7e8",
+       "rank": 4,
+       "concessionRatio": 0
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    }
+   ]
+  },
+  {
+   "fen": "8/4k2R/4P3/3K4/8/8/8/8 b - - 2 7",
+   "packId": "philidor-passive-rook-convert",
+   "rootCategory": "loss",
+   "repeats": [
+    {
+     "kind": "selection",
+     "moveUci": "e7f6",
+     "candidates": [
+      {
+       "moveUci": "e7d8",
+       "rank": 1,
+       "concessionRatio": 0.00021335599268372716
+      },
+      {
+       "moveUci": "e7e8",
+       "rank": 2,
+       "concessionRatio": 0.0006758957645382605
+      },
+      {
+       "moveUci": "e7f6",
+       "rank": 3,
+       "concessionRatio": 0.0007185581829644554
+      },
+      {
+       "moveUci": "e7f8",
+       "rank": 4,
+       "concessionRatio": 0.00035571795241948743
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "e7f6",
+     "candidates": [
+      {
+       "moveUci": "e7d8",
+       "rank": 1,
+       "concessionRatio": 0.00021335599268372716
+      },
+      {
+       "moveUci": "e7e8",
+       "rank": 2,
+       "concessionRatio": 0.0006758957645382605
+      },
+      {
+       "moveUci": "e7f6",
+       "rank": 3,
+       "concessionRatio": 0.0007185581829644554
+      },
+      {
+       "moveUci": "e7f8",
+       "rank": 4,
+       "concessionRatio": 0.00035571795241948743
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "e7f6",
+     "candidates": [
+      {
+       "moveUci": "e7d8",
+       "rank": 1,
+       "concessionRatio": 0.00021335599268372716
+      },
+      {
+       "moveUci": "e7e8",
+       "rank": 2,
+       "concessionRatio": 0.0006758957645382605
+      },
+      {
+       "moveUci": "e7f6",
+       "rank": 3,
+       "concessionRatio": 0.0007185581829644554
+      },
+      {
+       "moveUci": "e7f8",
+       "rank": 4,
+       "concessionRatio": 0.00035571795241948743
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    }
+   ]
+  },
+  {
+   "fen": "8/4k3/1bP1P3/3K4/8/8/4B3/8 b - - 0 3",
+   "packId": "opposite-bishops-fortress-hold",
+   "rootCategory": "draw",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "8/4k3/8/4K3/8/4P3/8/8 b - - 4 3",
+   "packId": "pawn-opposition-convert",
+   "rootCategory": "loss",
+   "repeats": [
+    {
+     "kind": "selection",
+     "moveUci": "e7d7",
+     "candidates": [
+      {
+       "moveUci": "e7d7",
+       "rank": 1,
+       "concessionRatio": 0.410821698393113
+      },
+      {
+       "moveUci": "e7d8",
+       "rank": 2,
+       "concessionRatio": 0.23539195206068075
+      },
+      {
+       "moveUci": "e7e8",
+       "rank": 3,
+       "concessionRatio": 0.31093657052947005
+      },
+      {
+       "moveUci": "e7f7",
+       "rank": 4,
+       "concessionRatio": 0.40737249808199266
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "e7d7",
+     "candidates": [
+      {
+       "moveUci": "e7d7",
+       "rank": 1,
+       "concessionRatio": 0.410821698393113
+      },
+      {
+       "moveUci": "e7d8",
+       "rank": 2,
+       "concessionRatio": 0.23539195206068075
+      },
+      {
+       "moveUci": "e7e8",
+       "rank": 3,
+       "concessionRatio": 0.31093657052947005
+      },
+      {
+       "moveUci": "e7f7",
+       "rank": 4,
+       "concessionRatio": 0.40737249808199266
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "e7d7",
+     "candidates": [
+      {
+       "moveUci": "e7d7",
+       "rank": 1,
+       "concessionRatio": 0.410821698393113
+      },
+      {
+       "moveUci": "e7d8",
+       "rank": 2,
+       "concessionRatio": 0.23539195206068075
+      },
+      {
+       "moveUci": "e7e8",
+       "rank": 3,
+       "concessionRatio": 0.31093657052947005
+      },
+      {
+       "moveUci": "e7f7",
+       "rank": 4,
+       "concessionRatio": 0.40737249808199266
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    }
+   ]
+  },
+  {
+   "fen": "8/5K2/3k4/8/4P3/8/8/8 w - - 1 8",
+   "packId": "pawn-opposition-convert",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "8/7K/8/8/8/1Q6/1p6/2k5 w - - 4 3",
+   "packId": "queen-vs-pawn-seventh-convert",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "8/8/3k4/8/8/2Q5/6K1/8 w - - 0 1",
+   "packId": "mate-k-q-technique",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "8/8/4k3/8/4K3/4P3/8/8 b - - 0 1",
+   "packId": "pawn-opposition-convert",
+   "rootCategory": "loss",
+   "repeats": [
+    {
+     "kind": "selection",
+     "moveUci": "e6e7",
+     "candidates": [
+      {
+       "moveUci": "e6d6",
+       "rank": 1,
+       "concessionRatio": 0.006082046781863563
+      },
+      {
+       "moveUci": "e6d7",
+       "rank": 2,
+       "concessionRatio": 0.014321529989433432
+      },
+      {
+       "moveUci": "e6e7",
+       "rank": 3,
+       "concessionRatio": 0.02601940556632965
+      },
+      {
+       "moveUci": "e6f6",
+       "rank": 4,
+       "concessionRatio": 0.0077216697094168235
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "e6e7",
+     "candidates": [
+      {
+       "moveUci": "e6d6",
+       "rank": 1,
+       "concessionRatio": 0.006082046781863563
+      },
+      {
+       "moveUci": "e6d7",
+       "rank": 2,
+       "concessionRatio": 0.014321529989433432
+      },
+      {
+       "moveUci": "e6e7",
+       "rank": 3,
+       "concessionRatio": 0.02601940556632965
+      },
+      {
+       "moveUci": "e6f6",
+       "rank": 4,
+       "concessionRatio": 0.0077216697094168235
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "e6e7",
+     "candidates": [
+      {
+       "moveUci": "e6d6",
+       "rank": 1,
+       "concessionRatio": 0.006082046781863563
+      },
+      {
+       "moveUci": "e6d7",
+       "rank": 2,
+       "concessionRatio": 0.014321529989433432
+      },
+      {
+       "moveUci": "e6e7",
+       "rank": 3,
+       "concessionRatio": 0.02601940556632965
+      },
+      {
+       "moveUci": "e6f6",
+       "rank": 4,
+       "concessionRatio": 0.0077216697094168235
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    }
+   ]
+  },
+  {
+   "fen": "8/8/6K1/8/8/2Q5/kp6/8 w - - 8 5",
+   "packId": "queen-vs-pawn-seventh-convert",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "8/8/8/5K2/Q7/8/1p6/2k5 w - - 14 8",
+   "packId": "queen-vs-pawn-seventh-convert",
+   "rootCategory": "win",
+   "repeats": [
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    },
+    {
+     "kind": "refusal",
+     "code": "PRACTICAL_RESISTANCE_UNDECIDABLE",
+     "message": "No category-preserving reply leaves measured concession mass"
+    }
+   ]
+  },
+  {
+   "fen": "8/P7/1ppk4/8/8/8/6K1/8 b - - 0 4",
+   "packId": "pawn-breakthrough-convert",
+   "rootCategory": "loss",
+   "repeats": [
+    {
+     "kind": "selection",
+     "moveUci": "d6c7",
+     "candidates": [
+      {
+       "moveUci": "b6b5",
+       "rank": 1,
+       "concessionRatio": 0.0020737787663473273
+      },
+      {
+       "moveUci": "c6c5",
+       "rank": 2,
+       "concessionRatio": 0.0021563958533059773
+      },
+      {
+       "moveUci": "d6c5",
+       "rank": 3,
+       "concessionRatio": 0.0019026308140599024
+      },
+      {
+       "moveUci": "d6c7",
+       "rank": 4,
+       "concessionRatio": 0.04265416878783173
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "d6c7",
+     "candidates": [
+      {
+       "moveUci": "b6b5",
+       "rank": 1,
+       "concessionRatio": 0.0020737787663473273
+      },
+      {
+       "moveUci": "c6c5",
+       "rank": 2,
+       "concessionRatio": 0.0021563958533059773
+      },
+      {
+       "moveUci": "d6c5",
+       "rank": 3,
+       "concessionRatio": 0.0019026308140599024
+      },
+      {
+       "moveUci": "d6c7",
+       "rank": 4,
+       "concessionRatio": 0.04265416878783173
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "d6c7",
+     "candidates": [
+      {
+       "moveUci": "b6b5",
+       "rank": 1,
+       "concessionRatio": 0.0020737787663473273
+      },
+      {
+       "moveUci": "c6c5",
+       "rank": 2,
+       "concessionRatio": 0.0021563958533059773
+      },
+      {
+       "moveUci": "d6c5",
+       "rank": 3,
+       "concessionRatio": 0.0019026308140599024
+      },
+      {
+       "moveUci": "d6c7",
+       "rank": 4,
+       "concessionRatio": 0.04265416878783173
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    }
+   ]
+  },
+  {
+   "fen": "8/p7/1Pp1k3/P7/8/8/6K1/8 b - - 0 2",
+   "packId": "pawn-breakthrough-convert",
+   "rootCategory": "loss",
+   "repeats": [
+    {
+     "kind": "selection",
+     "moveUci": "a7b6",
+     "candidates": [
+      {
+       "moveUci": "a7a6",
+       "rank": 1,
+       "concessionRatio": 0.4512294326754787
+      },
+      {
+       "moveUci": "a7b6",
+       "rank": 2,
+       "concessionRatio": 0.6180514797693132
+      },
+      {
+       "moveUci": "c6c5",
+       "rank": 3,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "e6d5",
+       "rank": 4,
+       "concessionRatio": 0
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "a7b6",
+     "candidates": [
+      {
+       "moveUci": "a7a6",
+       "rank": 1,
+       "concessionRatio": 0.4512294326754787
+      },
+      {
+       "moveUci": "a7b6",
+       "rank": 2,
+       "concessionRatio": 0.6180514797693132
+      },
+      {
+       "moveUci": "c6c5",
+       "rank": 3,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "e6d5",
+       "rank": 4,
+       "concessionRatio": 0
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    },
+    {
+     "kind": "selection",
+     "moveUci": "a7b6",
+     "candidates": [
+      {
+       "moveUci": "a7a6",
+       "rank": 1,
+       "concessionRatio": 0.4512294326754787
+      },
+      {
+       "moveUci": "a7b6",
+       "rank": 2,
+       "concessionRatio": 0.6180514797693132
+      },
+      {
+       "moveUci": "c6c5",
+       "rank": 3,
+       "concessionRatio": 0
+      },
+      {
+       "moveUci": "e6d5",
+       "rank": 4,
+       "concessionRatio": 0
+      }
+     ],
+     "engine": {
+      "id": "maia-5m",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true,
+      "eloApplied": 1500
+     }
+    }
+   ]
+  }
+ ]
+}

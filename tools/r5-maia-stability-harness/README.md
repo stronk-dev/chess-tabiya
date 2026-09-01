@@ -61,6 +61,28 @@ across repeats — the tablebase positive cache never expires, so the tablebase
 input is constant — and builds a **fresh** `OpponentSelector` per repeat so the
 shipped in-process selection cache cannot answer.
 
+## D490 current-code refusal rerun
+
+Run the exact 40 historical roots through the current production selector with:
+
+```sh
+make practical-resistance-measurement
+```
+
+The target builds the pinned Maia image when absent, runs two able-to-fail population controls,
+and retains both the exact tablebase inputs and deterministic three-repeat result under
+`planning/practical-resistance/`. `probe-practical-resistance.ts` rate-limits live tablebase
+requests, waits past the production source's 60-second negative-cache window before retrying, and
+rewrites its tablebase cache in sorted order after each successful new probe. Subsequent runs make
+no tablebase network requests. The output deliberately excludes latency so identical current-code
+answers reproduce identical bytes.
+
+The 40 FENs come from the committed historical `out/selection-summary.json`; the harness refuses
+any population other than 40 unique roots. Re-rooting each request at the recorded FEN preserves
+the exact position consumed by both Maia and Syzygy while avoiding a dependency on the discarded
+historical path file. D457's retained exact-position rows supply pack attribution for all 40 roots,
+and the harness refuses a missing join. The report retains both transformations and input digests.
+
 ## Artifacts in `out/`
 
 Summary JSON only. The per-probe JSONL is regenerable from the committed pack

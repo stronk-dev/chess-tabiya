@@ -2848,12 +2848,12 @@
     },
     {
       "id": "D375",
-      "state": "blocked",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:83fddf3b4ff50df641a69622f8aa6635034dcb769fa33fcca4d7f42b648cbf85",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a4e8a1c90843e49f80e3c17d0e411967bf36fb83c17b268035fa9d7e8329eeb7",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:measurement-records.md"
+      "evidence": "design/research/practical-resistance-reach.md and planning/practical-resistance/d490-results.json",
+      "evidenceKind": "path"
     },
     {
       "id": "D376",
@@ -3843,11 +3843,12 @@
     },
     {
       "id": "D490",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9942b111490c38a34f24453bd68f7c3d6d4f935968e115de23d2f145ab5f48fd",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2c6e3ad9b92b94cb683eb2d49e5ded6631d66af463e6651bf46f364de92ae4e2",
       "uxItems": [],
-      "owner": "coordinator"
+      "evidence": "design/research/practical-resistance-reach.md and planning/practical-resistance/d490-results.json",
+      "evidenceKind": "path"
     },
     {
       "id": "D491",
@@ -19629,6 +19630,15 @@
       "uxItems": [],
       "evidence": "Production manifest publishes recorded-pair OR live-pair; moveQualityGrade rejects unequal lane, engine and search limit; generated module occurrence contract retains ordered before/after pair; make verify green.",
       "evidenceKind": "closeout-prose"
+    },
+    {
+      "id": "D2474",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:68bff1acf50a636512af2eb9a20e8f79c71dc9933b4ef986e6cf3b7f77cf5363",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
     }
   ]
 }

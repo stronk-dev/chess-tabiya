@@ -91,22 +91,18 @@ Ranked by **what changes what we build next**, not by cost and not by interest. 
 - **Gating: A** (after the wave). **This is the single highest-value measurement in the queue that
   is not an owner ruling** — see §8.
 
-### Q-03 · How often does `practical_resistance` actually refuse? ([[D375]] — *"How often does
-`practical_resistance` actually refuse?"*)
-- **Question:** across the in-range corpus, what fraction of roots yield a selection, a named
-  refusal, or nothing — now that the float32 tolerance bug is fixed?
-- **Settled by:** re-running the R5 arm (`tools/r5-maia-stability-harness/`, exists `[V]`) over the
-  same 40 in-range roots.
-- **Cost:** [afternoon] + Maia container time.
-- **Unblocks:** whether one of five shipped opponent modes is a real alternative or *"a refusal
-  wearing a mode's name"* (the row's words), which is E4's framing and the two in-range `hold` packs.
-- **Gating: A.** **And the row understates the problem — I verified this.** The only existing
-  measurement is `design/research/maia-policy-scalar-stability.md:314` `[V]`: of 40 in-range roots,
-  **30 (75%) returned HTTP 500**, 5 refused correctly, 5 selected. That 75% was a `TypeError` from a
-  tolerance two orders of magnitude too tight — and it has since been fixed
-  (`packages/runtime/src/practical-difficulty.ts:43,49` now compare against
-  `FLOAT32_POLICY_MASS_TOLERANCE` `[V]`). **So the refusal frequency is not unmeasured; it is
-  measured under a confound that no longer exists.** Proposed as [[D490]].
+### Q-03 · DONE 2026-09-01 — `practical_resistance` reach ([[D375]]/[[D490]])
+- **Answer:** 14/40 exact historical roots select and 26/40 (65%) return the named
+  `PRACTICAL_RESISTANCE_UNDECIDABLE` refusal; zero internal/provider errors survive. All three
+  repeats agree at every root.
+- **Boundary:** win-for-side-to-move 0/22 select; loss 10/12; draw 4/6. The two in-range `hold`
+  packs split: `philidor-third-rank-hold` 4/4 select, `opposite-bishops-fortress-hold` 0/2.
+- **Settled by:** `make practical-resistance-measurement`, pinned Maia image, 186 retained
+  tablebase positions, exact 40-FEN historical denominator and D457 pack join `[V]`.
+- **Evidence:** `design/research/practical-resistance-reach.md`,
+  `planning/practical-resistance/`.
+- **Successor:** [[D2474]] routes to `rfc/bot-policy.md` author repair. Preserve the honest
+  selector refusal; specify explicit applied-policy composition before content adoption.
 
 ### Q-04 · Is our endgame mode materially faster and more usable than Chess Endgame Training? (K9, C7)
 - **Question:** restart latency, response latency, and unaided task completion in *our* endgame
@@ -338,7 +334,7 @@ gate, a kill criterion, or an RFC that cannot otherwise be drafted. **Nine entri
 
 | Rank | Entry | Instrument | Unblocks |
 |---|---|---|---|
-| 1 | **Q-03** [[D375]] | `tools/r5-maia-stability-harness/` `[V]` | is `practical_resistance` a real mode (E4) |
+| ~~1~~ | **Q-03 DONE 2026-09-01** [[D375]]/[[D490]] | `make practical-resistance-measurement` `[V]` | conditional reach measured; [[D2474]] composition successor routed |
 | 2 | **Q-04** K9/C7 | `tests/browser/` + CET numbers on file `[V]` | **K9** (kill criterion, zero own-side evidence) and **C7** |
 | ~~3~~ | **Q-07 DONE 2026-09-01** [[D457]] | `make dtz-census-measurement` `[V]` | exact retained rerun landed; no longer queued |
 | 4 | **Q-08** [[D403]] | `make graduation-report`, `make expression-census` `[V]` | B4, K6, the graduation gate |

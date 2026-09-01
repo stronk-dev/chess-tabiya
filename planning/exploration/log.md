@@ -13673,3 +13673,22 @@ discarded rounded-DTZ post-fix number is not promoted.
 **Blocked/next:** E4 remains unmet because exact outcome-preserving DTZ play is not evidence of
 believable human resistance. The next executable bot-foundation question is [[D375]]/[[D490]]:
 rerun `practical_resistance` refusal frequency after the float32 repair.
+
+## 2026-09-01 — Practical-resistance reach is conditional, not broken
+
+**What landed:** [[D375]]/[[D490]]'s exact current-code rerun over the original 40 unique R5 FENs.
+The normal `make practical-resistance-measurement` target verifies the historical denominator,
+builds/checks the pinned Maia image, retains 186 rate-limited Syzygy positions, joins every root to
+D457's pack attribution and runs three fresh-selector repeats. All 120 results agree; no internal
+or provider error survives.
+
+**What changed:** the repaired selector selects 14/40 roots (35%) and returns the honest
+`PRACTICAL_RESISTANCE_UNDECIDABLE` refusal on 26/40 (65%, Wilson 95% 49.5–77.9%). The old 5/40
+selection figure measured a broken program: all thirty float-overflow failures disappear. Reach is
+outcome-shaped—0/22 roots won for the side-to-move select, versus 10/12 lost and 4/6 drawn roots.
+The two named `hold` packs split: Philidor third-rank 4/4 selects; opposite-bishop fortress 0/2.
+
+**Blocked/next:** E4 remains unmet. The selector's vacuity refusal is correct and must not be
+weakened. The new gap is [[D2474]]: a conditional objective is exposed as a standalone pack policy,
+so one learner deviation can produce a run-stopping 422. Route explicit, recorded policy
+composition to `rfc/bot-policy.md`; do not invent or silently relabel a fallback in implementation.
