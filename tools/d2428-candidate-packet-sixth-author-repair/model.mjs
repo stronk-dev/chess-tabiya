@@ -10,8 +10,8 @@ export function createExactLegalEvidenceFactory(exactLegalMoveMap) {
   };
 }
 
-export function compileLegalPopulation(beforeFen, declareExactLegalMovesEvidence) {
-  const legalMovesInput = declareExactLegalMovesEvidence(beforeFen);
+export function compileLegalPopulation(beforeFen, createRulesMobilityReadingLegalMovesV1Evidence) {
+  const legalMovesInput = createRulesMobilityReadingLegalMovesV1Evidence(beforeFen);
   const legalMoves = Object.freeze(legalMovesInput.payload.pieces.flatMap((piece) => piece.moves));
   return Object.freeze({ legalMovesInput, legalMoves });
 }

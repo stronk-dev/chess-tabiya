@@ -1,8 +1,9 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
 - **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The held
-  promotion pair is author-repaired 2026-08-30 on [[D2179]]–[[D2183]]; third fresh independent
-  review required.** Geometry and recorded tablebase inputs now require their exact value-authority
+  promotion pair was returned by its third fresh independent review on 2026-09-01 for
+  [[D2469]]–[[D2472]]; another author repair is required.** Geometry and recorded tablebase inputs
+  from the prior repair still require their exact value-authority
   factory receipts; the available outcome returns one sealed derivation receipt retaining geometry,
   legal moves and the selected source; no-race is distinct from input failure; and the duplicate
   `promotionWithCheck` operand is removed in favour of the existing exact check producer joined by
@@ -930,13 +931,16 @@ recorded/live whole-item source union and total normalization; [[D2143]] has a t
 geometry/domain-fact member and total invocation algebra. The second fresh review returned that
 repair on [[D2179]]–[[D2183]]; only projections 13–14 remain blocked.
 
-## Promotion amendment return
+## Promotion amendment returns
 
-The held pair remains owned here and is author-repaired on [[D2179]]–[[D2183]], pending a third
-fresh independent review. Exact value assertions now name the central factory receipts; available
-outcomes return a sealed receipt retaining every input; no-race is not input failure; and check is
-kept at its existing exact authority rather than duplicated. Provider and value-authority
-acceptance/implementation remain separate landing dependencies, not prose delegated to them.
+The held pair remains owned here. The D2179–D2183 repair preserved exact factory receipts, sealed
+success inputs and the existing check authority, but the 2026-09-01 third fresh review returned the
+invocation/result boundary on [[D2469]]–[[D2472]]. The next author repair must publish a closed
+request and operation signature, resolve outside-domain before requiring success-only legal moves,
+fail invalid authority rather than calling it absence, and represent a valid no-witness result as
+completed/no-output. Exact review:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-third-fresh-independent-buildability-review-2026-09-01.md`.
+Provider and value-authority acceptance/implementation remain separate landing dependencies.
 
 | row | live repair owner in this RFC |
 |---|---|
@@ -948,6 +952,10 @@ acceptance/implementation remain separate landing dependencies, not prose delega
 | [[D2181]] | author-repaired: one sealed available derivation receipt retains geometry, legal map, selected whole source and output by reference |
 | [[D2182]] | author-repaired: no-race/no-witness is a typed no-output arm distinct from `input_abstained` |
 | [[D2183]] | author-repaired: `promotionWithCheck` is removed; the existing exact check event composes by before-FEN and move UCI |
+| [[D2469]] | returned: outside-domain member cannot require an undeclared legal map before domain resolution |
+| [[D2470]] | returned: publish one closed request/source-selection algebra and collector signature |
+| [[D2471]] | returned: invalid authority is an invariant failure; only typed missing/unavailable inputs abstain |
+| [[D2472]] | returned: valid no-race is completed/no-output, not unavailable |
 
 ## Appendix A — registered projection ids
 
@@ -973,6 +981,9 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-01: third fresh review returned the held promotion pair on [[D2469]]–[[D2472]] and
+  corrected the candidate packet's conflicting exact-legal factory alias on [[D2468]]. Original
+  projections 1–12 remain accepted and unchanged.
 - 2026-08-30: author-repaired the held promotion pair on [[D2179]]–[[D2183]]. Exact
   value-authority receipts now gate contacts, legal moves and recorded tablebase inputs; successful
   outcomes return one sealed derivation receipt retaining every input; no-race is a typed no-output

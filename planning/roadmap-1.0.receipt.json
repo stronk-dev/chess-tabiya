@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:21652324a1e9d99b83491730088789da6814c593e2186a04d2b8cd79e2d6fb7e",
+    "roadmap": "sha256:1419e887f059940ac8bec37681f2fa7847ef8b65438849d3086048c1bb67d88d",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:8309a90525d0adf383c4020bb95cf8a3e473327bd50b6c4f0528d71177599dc3",
-    "rfcRegister": "sha256:fc8bf9833fcc37e86f3e7fde93414f98f48644f8b9559d935e7068b64fd54011",
+    "workState": "sha256:33da4dbe0eeb85ab944916cdc443b835eac443defae43d5c809cebdaa8d725f6",
+    "rfcRegister": "sha256:10842acc94f0dd64f0520c9a1c2842e8bd3126323953e4c935893e95e4651f78",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 655,
       "doing": 0,
-      "blocked": 854,
+      "blocked": 859,
       "done": 704,
       "refused": 3
     },
@@ -163,11 +163,13 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-01",
-        "summary": "The shared candidate packet now has one buildable legal-authority graph: one FEN factory owns one exact-map computation, declaration and retained candidate population, with caller maps refused. The current duplicate path measured 2.724× the single-authority floor. Fresh acceptance still gates implementation and no Support, Review or bot consumer receives credit yet.",
+        "summary": "The candidate packet's one-map repair now consumes the registered value-authority route instead of inventing an alias; its 2.724× duplicate-path measurement is unchanged and fresh acceptance still gates implementation. The held promotion pair's third fresh review returned four result/invocation seams: undeclared outside-domain legal-map dependence, no closed request/source algebra, invalid authority laundered into abstention and completed no-witness encoded unavailable. The original twelve semantic projections remain implemented; no Support, Review or bot consumer receives new credit yet.",
         "impact": "advanced",
         "evidence": [
+          "planning/evidence-foundation-ux/semantic-collectors-promotion-third-fresh-independent-buildability-review-2026-09-01.md",
           "planning/evidence-foundation-ux/shared-candidate-packet-sixth-author-repair-2026-09-01.md",
           "planning/evidence-foundation-ux/shared-candidate-packet-fifth-fresh-independent-review-2026-08-31.md",
+          "rfc/semantic-collectors.md",
           "rfc/shared-candidate-evidence-packet.md",
           "design/research/foundation-capability-closure-2026-08-31.md"
         ]

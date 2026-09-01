@@ -194,12 +194,21 @@ operation or document and measure the honest two-computation contract before imp
 Receipt: `planning/evidence-foundation-ux/shared-candidate-packet-fifth-fresh-independent-review-2026-08-31.md`.
 
 The 2026-09-01 sixth author repair chooses the single-authority operation and measures why. The
-exact evidence adapter becomes a FEN factory that owns one `exactLegalMoveMap` call and returns the
+registered `createRulesMobilityReadingLegalMovesV1Evidence` route becomes a FEN factory that owns
+one `exactLegalMoveMap` call and returns the
 only declared graph the packet may flatten; caller maps are refused. Across six positions the
 current compiler-plus-validating-adapter path measured 0.080278 ms/position against a 0.029465 ms
 single-authority floor (2.724×). Fresh review still gates implementation and downstream consumer
 credit. Receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-sixth-author-repair-2026-09-01.md`.
+
+The 2026-09-01 promotion-pair third fresh review also corrected the candidate repair's initially
+invented factory alias ([[D2468]]) and returned only the held semantic projections on
+[[D2469]]–[[D2472]]: their outside-domain arm depends on an undeclared legal map; their invocation
+has no closed request/source-selection type; invalid authority is mislabeled as abstention; and a
+valid no-race result is mislabeled unavailable. The original twelve collectors remain implemented.
+Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-third-fresh-independent-buildability-review-2026-09-01.md`.
 
 The 2026-08-28 shared-candidate packet author repair records the owner's foundation-first sequence
 without laundering verification into product reach: the provider-free complete population may

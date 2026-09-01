@@ -13474,3 +13474,22 @@ duplicate cost as permanent. This changes no projection, move convention or evid
 **Blocked/next:** fresh independent buildability review, then acceptance before any packet, adapter,
 cache, selector, server, API or UX implementation. Support, Review and bots still have zero packet
 consumer credit until their separate discharges land.
+
+## 2026-09-01 — Promotion third review returns the invocation/result boundary
+
+**What landed:** the third fresh independent buildability review of the two held promotion
+collectors. Five executable controls pass. Four returns remain on the held pair: the outside-domain
+member has an undeclared legal-map prerequisite ([[D2469]]); no closed request/source-selection
+algebra exists ([[D2470]]); invalid evidence is laundered into `input_abstained` ([[D2471]]); and a
+completed no-race calculation is encoded as unavailable ([[D2472]]). The twelve implemented
+collectors remain unchanged.
+
+**What changed:** the review also found the candidate packet's sixth repair had invented
+`declareExactLegalMovesEvidence(fen)` while `evidence-value-authority` explicitly pins
+`createRulesMobilityReadingLegalMovesV1Evidence(fen)` and forbids aliases ([[D2468]]). The candidate
+draft, author contract and roadmap now consume the registered route and declare the dependency. Its
+one-object-graph design and 2.724× current-path measurement are unchanged.
+
+**Blocked/next:** Claude/owner author repair for the held promotion pair, followed by a fourth fresh
+review. Candidate packet still needs its own fresh review after value-authority dependency closure.
+No product, content, pack, API, provider, bot or learner-visible bytes changed.

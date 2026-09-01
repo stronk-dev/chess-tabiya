@@ -2,19 +2,20 @@
 
 - **Date:** 2026-09-01
 - **Input:** fifth fresh return [[D2428]]
-- **Status:** author-repaired; fresh independent review required
+- **Status:** author-repaired and D2468-corrected; fresh independent review required
 - **Boundary:** RFC, disposable measurement/author contracts and planning/register records only
 
 ## Decision
 
 Use one projection-specific FEN factory rather than retaining the current two-computation adapter.
-`declareExactLegalMovesEvidence(fen)` owns the sole `exactLegalMoveMap` invocation, seals that exact
-return and accepts no caller-authored map. The packet compiler imports only the factory and flattens
-the declared payload by reference.
+`createRulesMobilityReadingLegalMovesV1Evidence(fen)` owns the sole `exactLegalMoveMap` invocation,
+seals that exact return and accepts no caller-authored map. The packet compiler imports only the
+registered factory and flattens the declared payload by reference.
 
 This preserves the accepted exact-mobility semantics while strengthening authority: a caller can no
-longer submit an equal or forged map for validation. The adapter signature change is explicitly in
-the RFC implementation surface and amends `exact-legal-mobility` only at that source boundary.
+longer submit an equal or forged map for validation. The route lands through
+`evidence-value-authority`; this RFC consumes that exact symbol and declares the dependency instead
+of creating the forbidden `declareExactLegalMovesEvidence(fen)` alias.
 
 ## Measurement
 

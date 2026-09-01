@@ -51,8 +51,10 @@ test("D2428 caller maps and equal packet rebuilds cannot cross the source bounda
   assert.throws(() => assertLegalPopulationOwned(rebuilt), /RECEIPT_INVALID/u);
 });
 
-test("D2428 RFC owns the production adapter correction and measured boundary", () => {
-  assert.match(rfc, /declareExactLegalMovesEvidence\(fen: string\)/u);
+test("D2428/D2468 RFC consumes the registered production route and measured boundary", () => {
+  assert.match(rfc, /createRulesMobilityReadingLegalMovesV1Evidence\(fen: string\)/u);
+  assert.match(rfc, /draft `rfc\/evidence-value-authority\.md`/u);
+  assert.doesNotMatch(rfc, /The public adapter signature changes from/u);
   assert.match(rfc, /imports neither `exactLegalMoveMap` nor `exactLegalMoves`/u);
   assert.match(rfc, /\| 1b \| `packages\/runtime\/src\/evidence-source-adapters\.ts`/u);
   assert.match(rfc, /\*\*2\.724×\*\*/u);
