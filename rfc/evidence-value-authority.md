@@ -1,6 +1,6 @@
 # RFC: Evidence value authority — compute, derive or project before sealing
 
-- **Status:** draft — author-amended 2026-09-01 through [[D2495]], [[D2484]], [[D2327]] and the D2146
+- **Status:** draft — author-amended 2026-09-01 through [[D2496]], [[D2495]], [[D2484]], [[D2327]] and the D2146
   callable-operation closure; dependency-blocked on the
   returned semantic convention register/provenance and provider exchange contracts, then fresh
   independent buildability review
@@ -13,13 +13,16 @@
   `design/research/evidence-seal-value-authority.md` and
   `design/research/evidence-grounding-taxonomy.md`; [[D2484]], answered by
   `design/research/phase-band-and-abstention-contract.md`; [[D2495]], answered for the static
-  setup arm by `design/research/endgame-technique-applicability.md`; executable population in
+  setup arm by `design/research/endgame-technique-applicability.md`; [[D2496]], answered for
+  observed method stages and reachability semantics by
+  `design/research/endgame-method-and-reachability.md`; executable population in
   `tools/d2144-evidence-seal-audit/`
 - **Depends on:** implemented `rfc/archive/evidence-contract-manifest.md`; implemented
   `rfc/archive/semantic-evidence-selection.md`; draft `rfc/semantic-convention-register.md` and
   `rfc/semantic-convention-provenance.md` for convention closure; draft
   `rfc/provider-exchange-and-execution.md` for source receipts; draft
-  `rfc/semantic-validation-authority.md` for event validation profiles
+  `rfc/semantic-validation-authority.md` for event validation profiles; draft
+  `rfc/recorded-semantic-path.md` for exact `run.record.edge@1` path authority
 - **Parent / amends:** follow-up to `rfc/archive/evidence-contract-manifest.md` and
   `rfc/archive/semantic-evidence-selection.md`
 - **Supersedes / superseded by:** —
@@ -271,13 +274,49 @@ the three canonical prototypes, colour symmetry, hard negatives and the blocked-
 falsifier. Its current-corpus result is exactly 4 Lucena / 6 Philidor / 0 Vancura setup matches out
 of 31 KRPKR positions; the zero Vancura count is absence of population, not a negative truth set.
 
-No method or reachability projection is introduced by this RFC. A future
-`theory.endgame.method_stage@1` requires witnessed transition semantics; a future
-`derived.endgame.setup_reachable@1` requires a declared bounded path/search/provider. Those are
-research GAPs and cannot be represented by `setup_match`. Existing recorded/live tablebase
-evidence remains the separate outcome authority and retains side-to-move/pawn-side perspective.
-Until the setup convention exists, this projection is honest-unavailable and no
-Lucena/Philidor/Vancura sentence is rendered.
+`theory.endgame.method_stage@1` is an additive retrospective event derived from:
+
+- one positive `theory.endgame.setup_match@1` input under the same technique convention;
+- an exact ordered, contiguous, same-path window of sealed `run.record.edge@1` inputs; and
+- one registered, cited and versioned method convention whose stage grammar is closed.
+
+Its payload is `MethodStageV1`: exact `technique`, `stage`, `beneficiary`, convention ref,
+`pathId`, start/end node ids, the ordered edge ids, exact before/after FEN and the triggering UCI.
+`stage` is one of the eight D2496 source-bounded identities: Lucena bridge prepared / king
+excursion started / bridge interposed; Philidor pawn entered defender third / rear-rank switch /
+rear check delivered; or Vančura pawn entered seventh / rook moved behind. `beneficiary` is
+computed: the pawn side for Lucena and the defender for Philidor/Vančura. It is never supplied by
+the caller.
+
+The factory symbol is exactly `createTheoryEndgameMethodStageV1Evidence`. It accepts the sealed
+inputs above, replays the convention's deterministic state machine, and returns
+`matched(readonly DeclaredEvidence<MethodStageV1>[]) | no_stage | unavailable(reason)`. Callers
+cannot submit a technique, stage, beneficiary, boolean, event list or output payload. The factory
+mints zero or more events discovered by replay; a later stage cannot exist without its exact setup
+and prerequisite-stage lineage on the same path. Same moves outside that lineage, reordered or
+non-contiguous edges, mixed paths, changed endpoint FENs and wrong convention versions fail before
+sealing.
+
+The D2496 author population supplies the full three-stage Lucena and Philidor paths, the two-stage
+Vančura `a7 ...Ra6` control, the `...Rf7` hard negative, same-move/no-lineage refusal and colour/
+beneficiary orientation. Its 100-path corpus result is exactly six events (three Lucena, three
+Philidor) and zero authored Vančura events. Those are able-to-fail population controls, not an
+ordinary consumer binding.
+
+Method-stage evidence carries no tablebase category, result-preserved flag, correctness, advice,
+reachability or significance. A consumer may compose it with separate before/after tablebase
+evidence only through a declared derived/module operation. Existing recorded/live tablebase
+evidence remains the separate outcome authority and retains its own perspective.
+
+No `derived.endgame.setup_reachable@1` is introduced. Witnessed arrival, cooperative possibility,
+forceability against all replies and inevitability under all moves are distinct D2496 readings.
+The latter three require a declared target convention, beneficiary, root, horizon, provider,
+frontier/completeness receipt and exact quantifier; incomplete search must be typed unknown rather
+than false. Until that provider is researched and specified, `setup_match` and `method_stage`
+cannot represent reachability or render “aim for/force/reach this technique.”
+
+Until the setup and method conventions plus `run.record.edge@1` exist, these projections are
+honest-unavailable and no Lucena/Philidor/Vančura sentence is rendered.
 
 `rules.pivotal.marker@1` is retired from new bindings and replaced by four exact outputs:
 
@@ -359,7 +398,7 @@ RFC. The route/profile set-equality gate must absorb those rows in the same impl
 neither document may introduce a compatibility alias.
 
 At the 2026-08-30 baseline the catalogue has 193 declarations. Section 3 retires five old v1 rows
-and adds nine successors, yielding 202 declarations: six retired and 196 non-retired factory
+and adds ten successors, yielding 203 declarations: six retired and 197 non-retired factory
 targets. The implementation re-derives those numbers at HEAD and fails on unexplained drift; it
 does not copy them as timeless constants. “Uses generic factory” and wildcards are invalid rows.
 
@@ -490,9 +529,12 @@ planes, optional LLM renderer and assistance ceilings.
    required upstream authority does not yet exist.
 10. A Lucena/Philidor/Vancura setup cannot render without a cited/versioned setup convention and
     the exact factory-computed operand intersection. Canonical positives, colour symmetry, hard
-    negatives and a blocked rook ray are independent falsifiers. A setup match cannot render a
-    method-stage, reachability, advice or outcome claim; the zero-population Vancura corpus arm
-    cannot be reported as validation.
+    negatives and a blocked rook ray are independent falsifiers. A method stage requires the
+    matching setup, registered method convention and exact contiguous same-path `run.record.edge@1`
+    lineage; reordered/mixed/changed/no-lineage controls fail, and the 100-path population remains
+    exactly 3 Lucena / 3 Philidor / 0 Vančura events. Neither setup nor method stage can render
+    reachability, advice, significance, correctness or outcome preservation; zero Vančura corpus
+    events cannot be reported as population validation.
 11. Each pivotal kind reaches its own projection; a rule marker cannot be relabelled human-model
     evidence and a Maia split cannot be relabelled a position-rule marker.
 12. Structural predicate results cannot be minted without the exact sealed authored condition; a
@@ -538,6 +580,7 @@ planes, optional LLM renderer and assistance ceilings.
 | D2 | Provider/source receipt contract accepted and exact nine direct plus two chained recorded-reading source shapes consumable | provider-exchange-and-execution | accepted dependency plus exact source/derived receipt contract fixture | |
 | D3 | Semantic event authority profiles accepted for reuse without duplicating cases | semantic-validation-authority | accepted dependency plus set-equal authority-profile receipt | |
 | D4 | Fresh independent buildability review after D1–D3 and the literal 191-route author table | codex | fresh review record with every blocking finding closed or routed | |
+| D5 | Exact ordered path authority for retrospective method-stage derivation | recorded-semantic-path | accepted `run.record.edge@1` plus mixed/reordered/non-contiguous path refusals | |
 
 ## Open questions
 
@@ -546,6 +589,11 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-09-01: [[D2496]] adds only retrospective `theory.endgame.method_stage@1`, derived from a
+  matching setup, registered method convention and exact ordered `run.record.edge@1` lineage. The
+  eight stage identities and 100-path population are executable. Reachability remains absent until
+  a target/horizon/provider/completeness/quantifier contract exists; witnessed arrival is not
+  forceability.
 - 2026-09-01: [[D2495]] replaces the broad `theory.endgame.technique_candidate@1` with the
   source-bounded, factory-computed `theory.endgame.setup_match@1`. Material classification,
   witnessed method stage, bounded reachability and perspective-oriented tablebase outcome remain

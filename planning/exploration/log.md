@@ -13926,3 +13926,23 @@ instrument. The value-authority RFC may now specify observed stage receipts; for
 still needs a declared chess search/provider, completeness/horizon receipts and module eligibility.
 Broader independent labels, authored Vančura population and owner-use wording remain open. No
 product code, pack, schema or authored chess statement changed.
+
+## 2026-09-01 — Value authority admits observed method stages, not steering
+
+**What landed:** the [[D2496]] author amendment to `rfc/evidence-value-authority.md` and its updated
+8/8 disposable author contract. `theory.endgame.method_stage@1` is now specified as a retrospective
+derivation over one matching setup, a registered cited method convention and exact ordered,
+contiguous, same-path `run.record.edge@1` inputs.
+
+**What changed:** all eight measured stage identities retain beneficiary, convention, path, node,
+edge and exact FEN/UCI operands. The factory replays the convention and discovers events; callers
+cannot submit a stage or payload. Tablebase outcome stays a separate evidence join. The register's
+stale 37/25/9/4 partition is corrected to the author-contract population of 38 computed / 25
+derived / 9 direct source / 3 authored current adapter routes; the new additive method factory is
+outside that 75-route migration baseline.
+
+**Blocked/next:** the draft remains dependency-blocked on convention/provenance, provider receipts,
+semantic validation and exact recorded-path authority, then fresh independent buildability review.
+No `setup_reachable` projection exists: target, horizon, provider, completeness and quantifier are
+still mandatory before Support can say “aim for” or “force” a named setup. No production, learner,
+pack or schema bytes changed.

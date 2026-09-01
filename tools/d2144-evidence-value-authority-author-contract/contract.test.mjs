@@ -57,6 +57,7 @@ test("successors repair rather than silently relabel the five false or mixed row
     "rules.structural.reading.named_structure@2",
     "rules.endgame.classification@1",
     "theory.endgame.setup_match@1",
+    "theory.endgame.method_stage@1",
     "derived.pivotal.irreversibility@1",
     "derived.pivotal.phase_change@1",
     "derived.pivotal.human_divergence@1",
@@ -69,7 +70,8 @@ test("successors repair rather than silently relabel the five false or mixed row
   }
   assert.match(rfc, /v1 is retired from new bindings|v1 have zero consumer bindings/u);
   assert.match(rfc, /Lucena\/Philidor\/Vancura setup cannot render without a cited\/versioned setup convention/u);
-  assert.match(rfc, /method_stage@1[\s\S]*?research GAPs and cannot be represented by `setup_match`/u);
+  assert.match(rfc, /createTheoryEndgameMethodStageV1Evidence[\s\S]*?exactly six events/u);
+  assert.match(rfc, /No `derived\.endgame\.setup_reachable@1` is introduced[\s\S]*?incomplete search must be typed unknown/u);
 });
 
 test("the phase successor carries the measured five-arm decision instead of old prose", () => {
@@ -109,12 +111,13 @@ test("the draft closes all four authority families without a generic payload esc
 
 test("dependencies and closure gates are explicit rather than hand-waved", () => {
   assert.match(rfc, /\*\*Status:\*\* draft/u);
-  assert.match(rfc, /author-amended 2026-09-01 through \[\[D2495\]\], \[\[D2484\]\], \[\[D2327\]\] and the D2146/u);
+  assert.match(rfc, /author-amended 2026-09-01 through \[\[D2496\]\], \[\[D2495\]\], \[\[D2484\]\], \[\[D2327\]\] and the D2146/u);
   assert.match(rfc, /dependency-blocked on the[\s\S]*?semantic convention register\/provenance/u);
   assert.match(rfc, /provider exchange contracts/u);
   assert.match(rfc, /semantic-convention-provenance\.md/u);
   assert.match(rfc, /provider-exchange-and-execution\.md/u);
   assert.match(rfc, /semantic-validation-authority\.md/u);
+  assert.match(rfc, /recorded-semantic-path\.md/u);
   assert.match(rfc, /set equality among all non-retired final catalogue projections, factory rows and authority[\s\S]*?profiles, with bindings a checked subset/u);
   assert.match(rfc, /191-route \/ 187-projection/u);
   assert.match(rfc, /four duplicate paths and six no-route declarations/u);
