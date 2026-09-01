@@ -65,3 +65,14 @@ The assistance-register author has repaired both inherited seams: exact two-comm
 first-parent acquisition and a generated runtime-codec/browser-persistence authority census. C10
 remains dependency-blocked until that complete repair survives fresh independent review; this row
 does not declare the shared transition accepted or authorise semantic-register implementation.
+
+## 2026-09-01 — Generic-engine rebase
+
+Removed the assistance/C9 predecessor, C10 and `RESOURCE_NAMES` architecture. Semantic conventions
+now use the generic `lineage_set/versioned_declarations@1` profile directly while retaining the
+exact 39-member seed/census, checked source generator and append-only semantic-history product
+hooks. The process transition introduces only an absent descriptor/register; the product claim is
+a later reviewed transition.
+
+`make shared-register-reconciliation-author-repair` passes 6/6. Fresh independent review waits on
+the generic engine, not assistance.

@@ -14,3 +14,14 @@ Replaced fictional head 0 with named-root `absent`, an absent digest, unique `fi
 one-way landed lifecycle. `make provider-protocol-author-repair` passes 2/2. No checker, register or
 product byte changed; fresh independent review remains required. Receipt:
 `author-repair-2026-08-31.md`.
+
+## 2026-09-01 — Generic-engine reconciliation author repair
+
+Removed the bespoke C11 architecture. Provider protocol is now one atomic generic absent root;
+runtime identity rows contain canonical literal data only, compile-time request/result relations
+sit beside them, and the prior accepted product-obligation block supplies the independent expected
+population needed to refuse coordinated swaps. Selector absence and staged/first-parent history are
+inherited from the shared engine.
+
+`make shared-register-reconciliation-author-repair` passes 6/6. No provider product bytes changed.
+Fresh independent review waits on the generic engine.

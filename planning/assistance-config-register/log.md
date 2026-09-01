@@ -131,3 +131,15 @@ fails. Permission `legal` owns the union and four semantic operations rather tha
 skipped and regression paths. Exact receipt:
 `fifth-return-author-repair-2026-08-31.md`. Sixth fresh review is required; no process or product
 implementation is authorised.
+
+## 2026-09-01 — Generic-engine reconciliation author repair
+
+Replaced the bespoke C9 architecture with five generic catalogue entries. Assistance config v4,
+workflow preference v1 and the live permission union now use honest adoption; permission operation
+semantics are a distinct sequential contract; exchange is one atomic absent resource. Complete
+before/after projections replace hand-written symbol deltas. [[D2467]] was found during the repair:
+the live permission authority is a type union, so the generic engine gained a union projector
+instead of rewriting product bytes into a tuple.
+
+`make shared-register-reconciliation-author-repair` passes 6/6. Product bytes remain unchanged.
+Fresh independent review waits on acceptance/implementation of the generic engine.

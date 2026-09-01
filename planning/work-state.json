@@ -19534,6 +19534,33 @@
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"
+    },
+    {
+      "id": "D2465",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:124a5baf5d2602d40ff33435b2d341220b5440b29d34579ee4ad222a83be26ae",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2466",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:483f598cefaf8dd21d51d8d088093ecd200d73ea5509ba3bca6c443e0368ae2c",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2467",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9297dc6fb3bbf7912e5c65e50fa5eb83571a77317a1252cd99e902cd80bd681d",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
     }
   ]
 }

@@ -1,246 +1,258 @@
-# RFC: Provider-protocol shared-resource register
+# RFC: Provider-protocol shared-resource catalogue population
 
-- **Status:** draft — RETURNED by fresh independent review 2026-08-31 on
-  [[D2455]]–[[D2459]]. Named absence survives, but the bespoke register conflicts with the generic
-  bootstrap, operation rows contradict literal-field closure, the sole tuple cannot independently
-  reject swaps, previous-claim history is unavailable in CI and partial product authority still
-  reads absent. `make provider-protocol-fresh-review` reproduces 5/5; implementation is forbidden.
-- **Author:** codex
+- **Status:** draft — author-repaired 2026-09-01 on [[D2455]]–[[D2459]]. Provider protocol now
+  inhabits the generic atomic-resource lifecycle, separates runtime literals from compile-time
+  relations and binds population to independent accepted product obligations. Fresh independent
+  review is required; implementation is unauthorized.
+- **Author:** Codex
 - **Created:** 2026-08-30
 - **Design refs:** none. This is repository process and changes no provider behavior or learner UX.
-- **Exploration gate:** [[D2189]] and the executable second fresh provider review establish the
-  cross-package collision/drift defect
-- **Depends on:** implemented `rfc/archive/shared-resource-registers.md`; the returned assistance
-  and semantic-convention register RFCs do not need to land first because this resource receives a
-  distinct grammar/check number and no shared node walker
-- **Parent / amends:** RFC-0000 rule 7; `rfc/README.md`; `tools/register-check.mjs`
-- **Supersedes / superseded by:** —
+- **Exploration gate:** [[D2189]] and the fresh buildability review establish the cross-package
+  collision/drift problem and the failed bespoke solution
+- **Depends on:** accepted and implemented `rfc/shared-resource-register-bootstrap.md`
+- **Parent / amends:** adds one descriptor/register through the generic engine
+- **Supersedes / superseded by:** supersedes the former C11/`RESOURCE_NAMES` plan
 - **Planning:** `planning/provider-protocol-register/`
 
 ```tabiya-claims
 none
 ```
 
-## Fresh independent return (2026-08-31)
-
-The D2361 repair correctly removes fictional head 0 and makes landed history one-way. Five
-buildability blockers remain:
-
-- [[D2455]] — the bespoke `RESOURCE_NAMES`/C11 plan conflicts with the active generic catalogue;
-- [[D2456]] — “every operation field literal” contradicts three function-witness fields and an
-  undeclared constructor;
-- [[D2457]] — the sole tuple has no independent authority capable of refusing a coordinated swap;
-- [[D2458]] — prior-claim landing has no staged/first-parent or CI history contract; and
-- [[D2459]] — absence watches only the version symbol and admits a partial declaration artifact.
-
-`make provider-protocol-fresh-review` reproduces 5/5. Exact evidence is in
-`planning/provider-protocol-register/fresh-independent-buildability-review-2026-08-31.md`.
-Generic-process reconciliation and another author repair/review are required before C11 or product
-protocol bytes.
+```tabiya-resource-roots
+provider-protocol | sequential/canonical_resource@1/absent | packages/runtime/src/provider-protocol.ts#export:PROVIDER_PROTOCOL_RESOURCE | packages/runtime/src/provider-protocol.ts#export:PROVIDER_PROTOCOL_RESOURCE.version
+```
 
 ## Summary
 
-Register `provider-protocol` before `provider-exchange-and-execution.md` creates a tenth
-cross-package authority with hand-copied operation, digest, endpoint, parser, factory and CLI lists.
-The tree starts explicitly absent. The provider RFC claims `first lane 1` only after this process RFC
-lands; its implementation creates one literal protocol declaration artifact from which runtime
-types, server registries, source factories, CLI names and register checks derive.
+This RFC introduces one absent `provider-protocol` catalogue root and generated README register.
+The future product RFC will create a single atomic
+`packages/runtime/src/provider-protocol.ts#PROVIDER_PROTOCOL_RESOURCE` object. Runtime operation and
+digest-domain identities derive from that object; request/result type relations are checked beside
+it at compile time.
 
-This RFC changes no provider, engine, source evidence, API, schema, content or learner binding. It
-only makes the future authority claimable and drift-checked.
+This process document does not create provider bytes, add C11, edit the generic checker, allocate a
+second Git history reader or decide provider semantics. It applies the accepted generic
+`sequential/canonical_resource@1` profile.
 
-## 1. Resource and claim grammar
+## 1. Exact descriptor and absent image
 
-The explicit absent-root lifecycle, unique `first lane 1` claim and landed-to-missing refusal are
-the durable owner route for [[D2361]]; a fresh reviewer must verify that repair before this RFC can
-be accepted.
+The catalogue entry is:
 
-`RESOURCE_NAMES` gains `provider-protocol`. Its claim forms are:
+| field | value |
+|---|---|
+| id | `provider-protocol` |
+| lifecycle | `sequential` |
+| projection adapter | `canonical_resource@1` |
+| claim mode | `whole_projection` |
+| introduction | `absent` |
+| owned selector | `packages/runtime/src/provider-protocol.ts#export:PROVIDER_PROTOCOL_RESOURCE` |
+| introduced by | `provider-protocol-register.md` |
+
+Because version, payload and digest are fields of one atomic export, absence means that exact
+selector does not resolve. A file with unrelated exports remains absent; a malformed/partial
+`PROVIDER_PROTOCOL_RESOURCE` is partial and fails. Once a landed row exists, a missing or renamed
+selector is a regression, never a new absence ([[D2459]]).
+
+The process implementation adds `head=absent` with header-only Landed and Live-claims tables. It
+does not add the product claim in the same transition.
+
+After this process RFC is implemented and archived,
+`provider-exchange-and-execution.md` may be amended to:
 
 ```text
-provider-protocol | first lane 1 | <one or more sorted unique symbol tokens>
-provider-protocol | lane <positive safe integer greater than the landed head> | <one or more sorted unique symbol tokens>
+provider-protocol | first lane 1 | whole projection
 ```
 
-The resource is sequential and single-writer. While absent, exactly one claimant uses `first lane
-1`; ordinary numeric/member claims fail. Once landed, at most one live claim exists and it must
-equal `tree head + 1`; first, same-head, skipped, backward, duplicate or parallel claims fail. Symbol tokens use
-the existing `path#symbol` grammar and are compared as a sorted set, not prose.
+The generic transition reader owns staged index-vs-HEAD, committed first-parent history, required
+CI base/depth and fail-closed missing-parent behavior ([[D2458]]).
 
-When this process RFC lands, `provider-exchange-and-execution.md` atomically replaces `none` with:
+## 2. Future atomic product image
 
-```text
-provider-protocol | first lane 1 | packages/runtime/src/provider-protocol.ts#PROVIDER_PROTOCOL_DECLARATIONS; packages/runtime/src/provider-protocol.ts#PROVIDER_PROTOCOL_VERSION
-```
-
-Its Active-register claim cell and the new register's live row contain the same lane, owner and
-symbols. Until then the provider RFC remains draft and explicitly cannot be accepted.
-
-## 2. One tree authority
-
-The product landing creates `packages/runtime/src/provider-protocol.ts` with exactly:
+The product landing creates exactly:
 
 ```ts
-export const PROVIDER_PROTOCOL_VERSION = 1 as const;
-
-export const PROVIDER_PROTOCOL_DECLARATIONS = defineProviderProtocol([
-  // five literal rows; no second operation list
-] as const, [
-  // ten literal digest-domain rows; no second domain list
-] as const);
+export const PROVIDER_PROTOCOL_RESOURCE = defineProviderProtocolResource({
+  id: "provider-protocol",
+  version: 1,
+  payload: {
+    operations: [/* literal runtime identity rows */],
+    digestDomains: [/* literal domain/constructor rows */],
+  },
+  digest: "sha256:...",
+} as const);
 ```
 
-Each operation row is one discriminated declaration containing:
+`defineProviderProtocolResource` is imported from one declared module and has a compilable generic
+signature. It validates literal runtime identity and returns the exact generic
+`{ id, version, payload, digest }` shape; it does not store functions inside the payload.
+
+Each operation payload row contains only canonical JSON fields:
 
 ```ts
-interface ProviderProtocolOperationDeclaration<
-  K extends string,
-  Request,
-  Result,
-  LocalResult,
-> {
-  readonly operation: K;
+interface ProviderProtocolOperationIdentity {
+  readonly operation: string;
   readonly provider: "stockfish" | "maia" | "syzygy" | "lichess_explorer";
-  readonly endpoint: ProviderEndpoint;
-  readonly parser: string;
-  readonly sourceProjection: VersionedEvidenceId;
-  readonly sourceFactory: string;
+  readonly endpoint: string;
+  readonly parserId: string;
+  readonly sourceProjection: string;
+  readonly sourceFactoryId: string;
   readonly cliName: string;
-  readonly requestType: (value: Request) => Request;
-  readonly resultType: (value: Result) => Result;
-  readonly localResultType: (value: LocalResult) => LocalResult;
 }
 ```
 
-The three type witnesses are identity-only compile-time helpers created inside the module; they are
-not parsers or callbacks supplied by consumers. `ProviderOperationId`, provider/endpoint maps,
-request/result/local maps, parser-id map, source projection/factory maps and CLI-name union derive
-from the tuple. Server descriptors and parsers are mapped sets keyed by its derived operation union.
-The CLI dispatch iterates/looks up the declaration rather than declaring a second switch vocabulary.
+Each digest row is literal `{ domain, constructorId }`. Function/type witnesses do not appear in
+the canonical payload ([[D2456]]).
 
-The digest-domain tuple contains literal `{ domain, constructor }` rows. `ProviderDigestDomain` and
-the constructor census derive from it. The ten initial domains are the three engine identities plus
-seven provider identities specified by the provider RFC; their literal membership is supplied by
-that RFC's lane claim and author contract, not copied into this process RFC.
+Beside the resource, derived types index the literal operation union and one exact compile-only
+relation checks:
 
-No dependent RFC may export a competing operation/domain union. Friendly aliases must be derived
-types over this artifact. Request/result chess semantics, parser behavior and digest byte images
-remain owned by `provider-exchange-and-execution`; this resource owns their shared identities and
-join, not their implementation meaning.
-
-## 3. Pre-landing state and README register
-
-`rfc/README.md` gains:
-
-```text
-## Provider-protocol register
-<!-- register: provider-protocol head=absent -->
-<!-- contract-digest: provider-protocol absent -->
+```ts
+interface ProviderProtocolTypeRelations {
+  readonly [operation: ProviderOperationId]: {
+    readonly request: unknown;
+    readonly result: unknown;
+    readonly localResult: unknown;
+  };
+}
 ```
 
-The exact future root is
-`packages/runtime/src/provider-protocol.ts#PROVIDER_PROTOCOL_VERSION`. The Landed table is empty and
-the Live claims table contains provider exchange `first lane 1`. A missing root is legal only while
-the state is `absent`, Landed is empty and exactly one valid first claim exists. Head 0 is invalid
-in markers, rows, claims and CLI output. Once any Landed row exists, a missing or renamed root is
-`LANDED_RESOURCE_CANNOT_BECOME_ABSENT`, never a withdrawal or a second first claim.
+The product RFC supplies the exact mapped declaration using `satisfies`/indexed types. Server
+descriptors, response parsers, source factories, evidence projections and CLI dispatch are mapped
+sets keyed by the resource-derived operation union. A copied operation/domain union, array or
+switch vocabulary fails the product consumer census.
 
-On the product landing, the checker derives head 1 and the complete identities from the literal
-artifact, the README moves lane 1 to Landed with its owning RFC, and the live claim disappears in
-the same commit. Later claims must target the next integer and their product transition must change
-the literal version plus declaration image atomically.
+This distinction is exact: the register seals runtime identity and version; TypeScript proves
+request/result relations; provider able-to-fail fixtures prove parser/transport semantics. No
+function is mislabeled as a literal field.
 
-## 4. C11 closure
+## 3. Independent population obligation
 
-`make register-check` adds C11 without changing C1–C10 semantics. Using the pinned TypeScript
-Program/TypeChecker, it proves:
+The resource tuple cannot validate its own intended members. A coordinated swap of the tuple and
+all derived consumers would otherwise remain internally consistent ([[D2457]]).
 
-1. exactly one resource/register/head line exists;
-2. claim and README rows are bijective and sequential;
-3. the pre-landing state is `absent`, has empty Landed and exactly one `first lane 1` claim;
-4. after landing, version and declaration tuple are literal, closed and tree/Landed-equal;
-5. operation ids are unique and every operation field is literal and exact;
-6. digest domains and constructor symbols are unique and exact;
-7. runtime exported maps/types, server descriptor/parser mapped sets, value-authority factory map and
-   CLI dispatch derive from the tuple—AST aliases/indexed access are admitted; copied unions,
-   switches or arrays fail;
-8. every declaration reaches exactly one descriptor, parser, source factory/projection and CLI name;
-9. lane transition bytes match the previous claim owner/symbols and remove that claim; and
-10. a count-preserving operation/domain/factory/CLI swap fails.
+Before product acceptance, `provider-exchange-and-execution.md` must publish one
+`tabiya-provider-obligations` metadata block containing the already-specified five operation ids
+with provider/endpoint/parser/projection/factory/CLI pairings and ten digest
+domain/constructor-id pairs. That block is product intent, independently reviewed before runtime
+bytes exist. It is not imported by production and is not a second mutable runtime registry.
 
-The checker does not infer that a parser is truthful or an engine digest is byte-authoritative;
-those able-to-fail behaviors remain provider acceptance criteria. It prevents identity drift and
-parallel ownership only.
+At product landing, the generic whole-projection transition additionally invokes the product RFC's
+declared obligation join:
 
-## 5. Able-to-fail process fixtures
+1. parse the exact accepted preimage block from the prior product RFC;
+2. derive the candidate resource payload from product bytes;
+3. require operation and digest-domain rows to be set-equal by complete row identity;
+4. require every operation to reach one mapped descriptor, parser, source factory/projection and
+   CLI binding; and
+5. consume the sole prior lane claim into an owner-bound landed row.
 
-The process implementation crosses at least:
+The obligation block is immutable after acceptance except through a reviewed RFC amendment that
+also owns a next resource lane. A count-preserving operation/provider/parser/factory/domain swap in
+product bytes alone fails. A coordinated change to both accepted intent and product bytes in one
+landing fails because the transition reads the prior accepted claim/obligation preimage.
 
-1. absent named root + `head=absent` + empty Landed + exact first-lane-1 claim passes;
-2. absent root without a first claim, with numeric head, ordinary lane/member claim or Landed row fails;
-3. duplicate resource/register/head or claim fails;
-4. same/skipped/backward/unsafe lane fails;
-5. two live claimants fail;
-6. literal product tuple + matching Landed + no claim passes;
-7. missing/duplicate/computed/broad operation row fails;
-8. missing/duplicate/computed digest row fails;
-9. copied runtime/server/CLI operation list fails even when equal;
-10. derived mapped/indexed aliases pass;
-11. one descriptor/parser/factory/projection/CLI omission or extra fails;
-12. count-preserving operation, parser, projection, factory, CLI or domain swap fails;
-13. product landing without the prior exact claimant, with wrong owner/symbols or leaving the claim
-    live fails; and
-14. landed history followed by missing/renamed root fails and cannot accept another first claim;
-15. unrelated provider semantic byte changes remain outside C11 rather than producing a false
-    process guarantee.
+The initial obligations are not copied into this process RFC. Their authoritative current values
+remain the five operation and ten digest-domain declarations already normative in
+`provider-exchange-and-execution.md`; its author amendment converts them to the machine block.
+
+## 4. Register and transition behavior
+
+The generic engine supplies all claim and history behavior:
+
+- absent permits only one later `first lane 1 | whole projection` claimant;
+- first landing must create the one atomic root, valid digest and version 1;
+- it must consume the prior claimant and append exactly one owner-bound landed row;
+- later claims target exactly the next positive safe integer;
+- fixed-head payload drift, skipped/backward lanes, duplicate claimants and partial roots fail; and
+- landed history cannot be deleted, rewritten or returned to absent.
+
+No provider-specific branch exists in `register-check`. Product obligation/consumer joins are
+declared validation hooks attached to the descriptor and executed through the generic projection
+hook protocol. A hook must be named in the accepted product RFC, receive immutable projected
+before/after images, return structured diagnostics and may not read or alter Git state.
+
+## 5. Able-to-fail population fixtures
+
+Using the generic engine, this process implementation crosses:
+
+1. exact absent descriptor/register with no product bytes;
+2. absent root plus no claim, ordinary lane, head 0 or landed row;
+3. file exists with unrelated export and remains selector-absent;
+4. malformed/partial atomic root is not absent;
+5. process introduction plus product claim in one transition;
+6. exact later first claim;
+7. product landing without prior claim, wrong owner or lingering claim;
+8. missing/duplicate/computed/non-canonical operation/domain row;
+9. runtime function field inside canonical payload;
+10. compile-only type map missing/extra operation;
+11. copied runtime/server/CLI identity list even when equal;
+12. exact derived mapped/indexed consumers;
+13. obligation omission, extra and count-preserving coordinated product swap;
+14. obligation block changed in the same product landing;
+15. version-only/payload-only/digest-only partial resource;
+16. fixed-head nested payload drift; and
+17. landed-to-missing root with generic first-parent history.
 
 ## 6. Implementation boundary and order
 
-The process implementation may change only `tools/register-check.mjs`, its tests, `rfc/README.md`,
-the provider RFC claim block/register cell, this RFC's docs/closeout records and the deterministic
-roadmap receipt. It creates no provider protocol product file.
+The accepted process implementation changes only the shared catalogue, generated README register,
+one population fixture set, development docs and this RFC's ledger/log/roadmap closeout. It does
+not change `tools/register-check.mjs` except through the already-implemented generic engine and
+creates no provider product file.
 
 Order:
 
-1. fresh independent review executes the fifteen process fixtures;
-2. implement C11 plus the empty register and provider lane-1 claim;
-3. run normal `make register-check`, governance and full verification;
-4. archive this process RFC with ledger and exploration-log closeout;
-5. only then may provider exchange seek fresh acceptance and implement the claimed product artifact.
+1. generic engine is accepted, implemented and archived;
+2. fresh independent review executes these seventeen population fixtures;
+3. implement the absent descriptor/register and run full normal verification;
+4. archive this process RFC with ledger and append-only exploration log;
+5. amend/review/accept provider exchange with the exact machine obligation block and lane claim;
+6. only then land the atomic resource, type relations and consumers.
 
-## 7. Acceptance criteria
+## Historical finding routing
 
-1. C1 recognizes the new exact grammar and rejects `none` plus a claim.
-2. C3/C6/C11 enforce one resource, one register and one sequential claimant.
-3. The legal absent-tree phase cannot persist after a product landing.
-4. The exact provider claim exists in its RFC and README only after this process implementation.
-5. The product declaration becomes the sole identity authority; copied equal vocabularies fail.
-6. All fifteen negative/positive process fixtures execute and can fail for their named reason.
-7. `make register-check`, `make verify-governance` and `make verify` pass through normal targets.
-8. No production, schema, migration, API, content, archive or protected-design byte changes before
-   acceptance.
+[[D2361]] remains the named-absence/first-lane/one-way-history obligation. Its repair is now
+implemented by the generic absent lifecycle and atomic selector boundary rather than a bespoke
+provider state machine. It closes only after this population's executable criteria pass.
+
+## Acceptance criteria
+
+1. `provider-protocol` exists once in the generic catalogue/register and nowhere in a parallel
+   resource-name list.
+2. Exact selector absence and atomic canonical-resource semantics refuse partial product authority.
+3. The process implementation adds no C11, parser branch, canonicalizer or Git history reader.
+4. Runtime payload fields and compile-only type relations are separate and compilable
+   ([[D2456]]).
+5. Product population is joined to the prior independently accepted obligation block; coordinated
+   swaps fail ([[D2457]]).
+6. Prior-claim and landed history use the generic staged/first-parent contract ([[D2458]]).
+7. All seventeen fixture families can fail for their named reason.
+8. Normal `make verify` covers snapshot and transition checks without bespoke user commands.
+9. No provider/engine/source/API/schema/storage/content/web/archive/protected-design product bytes
+   change in the process implementation.
+10. [[D2189]] and [[D2455]]–[[D2459]] close only after executable process criteria pass; provider
+    semantics remain blocked on the product RFC.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Fresh independent process/buildability review executes the complete pre/post-landing matrix | claude | review receipt plus corrections or acceptance | |
-| D2 | Implement C11, empty register and atomic provider lane-1 claim without product bytes | codex | implementation commit plus green register/governance/full verification | |
-| D3 | Provider exchange lands the literal version/declarations, moves lane 1 to Landed and removes its claim | `provider-exchange-and-execution` | provider implementation transition receipt | |
+| D1 | Generic register engine lands first | shared-resource-register-bootstrap | archived SHA | |
+| D2 | Fresh independent review executes the seventeen fixtures | claude | review receipt plus acceptance/corrections | |
+| D3 | Absent descriptor/register lands with full verification | codex | implementation SHA plus green `make verify` | |
+| D4 | Product RFC publishes accepted obligations, claims lane 1 and later lands the atomic image | provider-exchange-and-execution | accepted preimage plus product SHA | |
 
 ## Open questions
 
-None. This is a mechanical application of implemented RFC-0000 rule 7 to the measured [[D2189]]
-resource. Provider semantics remain in the provider RFC.
+None for the owner. The five operations, providers and ten digest domains are existing product-RFC
+semantics, not choices made by this process document.
 
 ## Changelog
 
-- 2026-08-31: fresh independent review returned the D2361 repair on [[D2455]]–[[D2459]]. The
-  register architecture, literal row model, population authority, committed transition and partial
-  absence boundary remain unbuildable. No checker/register/provider implementation is authorized.
-- 2026-08-31: author-repaired [[D2361]]. Replaced fictional head 0 with named-root `absent`, unique
-  `first lane 1`, absent digest and a one-way landed lifecycle. Fifteen fixtures now include
-  landed→missing-root regression. Fresh review remains required.
-- 2026-08-30: drafted from the second fresh provider return. Defined the pre-landing head-0 state,
-  sequential lane grammar, one tuple authority, C11 joins and fourteen able-to-fail fixtures. No
-  checker, register or product implementation is authorized yet.
+- 2026-09-01: author-repaired [[D2455]]–[[D2459]]. Rebased onto the generic atomic resource,
+  separated runtime literals from type relations, added an independent accepted obligation join
+  and inherited the shared temporal/absence contract. Fresh review required; implementation
+  remains unauthorized.
+- 2026-08-31: fresh independent review returned the D2361 repair on [[D2455]]–[[D2459]].
+- 2026-08-31: prior repair removed fictional head 0 and made absence one-way.
+- 2026-08-30: initial draft proposed a bespoke C11 and sole tuple authority; both are superseded.

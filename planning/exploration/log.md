@@ -13422,3 +13422,21 @@ with all 1,506 open rows routed and zero untriaged.
 
 **Blocked/next:** repair the five safety boundaries and repeat fresh review before any storage,
 image, Compose, workflow, Make or operator-documentation implementation.
+
+## 2026-09-01 — Shared-register architecture reconciled before implementation
+
+**What landed:** author-repaired `shared-resource-register-bootstrap` on [[D2442]]–[[D2444]] and
+rebased assistance, provider and semantic-convention process RFCs onto it. One JSON catalogue,
+seven generic projections, three lifecycles, selector-level absence, honest adoption, exact
+canonical bytes and one staged/first-parent reader replace the incompatible C9/C10/C11 plans.
+Executable author controls pass 8/8 and 6/6.
+
+**What changed:** [[D2465]] records the previously missing adoption lifecycle; [[D2466]] removes
+semantic conventions' dependency on the obsolete assistance checker; [[D2467]] records and repairs
+the live permission-union/projector mismatch. Work-state now covers 2,216 ledger rows, 1,509 open,
+zero untriaged. No product or protected-design bytes changed and no process implementation is yet
+authorized.
+
+**Blocked/next:** fresh independent review of the generic engine, then its implementation through
+normal full verification. Assistance population follows; provider and semantic population can then
+proceed independently. Product lanes remain downstream of their registered roots.

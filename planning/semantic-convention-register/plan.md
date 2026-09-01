@@ -1,29 +1,24 @@
-# Semantic-convention register plan
+# Semantic-convention shared-resource population plan
 
 ## State
 
-Draft process RFC dependency-blocked pending fresh review of its author-repaired AssistanceConfig
-predecessor. The [[D2013]]–[[D2018]] repairs and author-found [[D2019]] retain their seven-arm
-contract, but C10 reuses C9's transition reader and therefore inherits [[D2037]]/[[D2038]]. Fresh
-semantic-register review waits for predecessor acceptance; no implementation is authorised.
+Author-rebased 2026-09-01. The lineage profile depends directly on the generic engine and no longer
+waits on assistance C9. The exact 39-member seed/census, source generator and semantic-history
+product obligations survive. No implementation is authorized before the generic engine lands and
+this population survives fresh review.
 
 ## Order
 
-1. ✅ Amend lineage ownership, semantic-byte scope and the stable seed authority; correct the
-   resource count.
-2. ✅ Repeat independent review; return recorded in
-   `repeat-independent-buildability-review-2026-08-28.md`.
-3. ✅ Repair [[D2013]]–[[D2018]] using `repeat-author-handoff.md`; [[D2019]] was found and repaired
-   during process/product reconciliation. Seven transition-capable author fixtures replace the six
-   review reproductions.
-4. WAIT: the assistance-register transition is author-repaired on [[D2037]]/[[D2038]]; freshly
-   review it, then run semantic-register fresh review against that accepted API.
-5. Implement the distinct ref grammar, pre-landing state, future tree reader and repaired fixtures.
-6. Add the empty landed register and atomically transfer the exact 39-member live claim.
-7. Update development docs, ledger, RFC register, roadmap receipt and append-only log.
-8. Run Node-24 governance and staged process checks on exact committed bytes.
+1. ✅ Remove `RESOURCE_NAMES`, C10 and the assistance transition dependency.
+2. ✅ Express per-base lineage through `lineage_set/versioned_declarations@1`.
+3. ✅ Retain the immutable seed/census and declared product source/history hooks.
+4. WAIT: fresh independent review after `shared-resource-register-bootstrap` acceptance.
+5. Implement the absent descriptor/register only; add no member claim or product bytes.
+6. Run normal full verification and archive with ledger/log closeout.
+7. Amend/review semantic-convention provenance with the exact 39-member claim.
+8. Only then land generated declarations and append-only semantic history.
 
 ## Boundary
 
-No runtime convention declaration, projection migration, disclosure, schema, storage, content, web
-or archive byte belongs to this process RFC.
+Process descriptor/register bytes only. Runtime conventions, evidence semantics, schema, content,
+web and protected design are excluded.
