@@ -7891,11 +7891,12 @@
     },
     {
       "id": "D966",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2c1870cb0c6b266835f176c7a0e77c4645ffc0be6699b5d65620f4f0ce695e2c",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:64abf0b6c1d06786af8452ef2e1419a93ad6b9c25c88f9e70fd4d1663cd07551",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "packages/runtime/src/module-reducers.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D967",
@@ -8291,19 +8292,21 @@
     },
     {
       "id": "D1016",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b2e1ed93baec405349e1a74abc0220d88de9df70632e181384898f3b2a8136a2",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0dec76d19e28c81a1dcc92b92ff5868e8ef453d1da2e4f088072038f8bc3f543",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "packages/runtime/src/module-reducers.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1017",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:94d926ae1d1019338abdedd7b7f2235c9b47a7475b5b25e3623be51cbe25e450",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a62bf6cdba05e80c2e17043ccd6ff305d3ec2b76a153446645bbb3b2419605f3",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "packages/runtime/src/module-reducers.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1018",

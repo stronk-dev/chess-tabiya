@@ -47,3 +47,15 @@ product, schema, content, archive or protected intent byte changed.
 - Two family smoke tests do not prove any of the 117 row-to-projection mappings.
 - `make module-registration-second-fresh-review` passes 7/7. Exact review:
   `second-fresh-independent-buildability-review-2026-08-30.md`. No implementation is authorised.
+
+## 2026-09-01 — Shipped parent checkpoints reconciled into lifecycle truth
+
+The parent `learner-modules` RFC now says implementing rather than accepted-only. Commit
+`2a54d057` shipped its exported fourteen-field contract compiler; `6e52c99c` shipped the reducer
+checkpoint with registered fact equivalence, directed rules subsumption, honest novelty abstention
+and reduction-pressure recording. D1016, D1017 and D966 close against those exact symbols and tests.
+
+This correction does not claim the module registry. D1164 retains the stable real-ancestor identity
+residual, and this plan's draft `module-registration` RFC still owns the production declaration,
+205 consumer bindings, execution plan, reseal and delivery operation. Its fresh independent review
+remains the next authority gate.

@@ -13596,3 +13596,20 @@ rendering, and each refusal arm. Existing emitted sentences remain byte-for-byte
 **Blocked/next:** none for [[D240]]. This is source and migration alignment, not content clearance;
 all mechanical blockers still require their declared author or evidence work. The evidence
 foundation queue continues with the next independently executable producer-to-module gap.
+
+## 2026-09-01 — Learner-module lifecycle reconciled to two shipped checkpoints
+
+**What landed:** closed [[D1016]], [[D1017]] and [[D966]] as tracking residue. The active RFC and
+register now say implementing and name the exported contract compiler (`2a54d057`) and semantic
+reducer checkpoint (`6e52c99c`). The accepted §3a/A18 contract and production tests supply the
+literal pipeline, equivalence and subsumption declarations, novelty abstention, overflow event and
+failure-isolated sink that the two older return rows said were absent.
+
+**What changed:** this is a lifecycle correction, not production module reach. [[D1164]] remains
+open for stable identity across real ancestor nodes, and draft `module-registration.md` remains the
+only owner of real declarations, 205 consumer bindings, source execution, reseal and delivery.
+No preset, module surface, evidence disposition, schema or learner-visible byte changed.
+
+**Blocked/next:** production module registration still requires its fresh independent review and
+dependencies. Work moves to an unblocked research gap rather than implementing that draft early:
+measure the still-unmeasured `human_divergence` pivotal marker ([[D52]]).
