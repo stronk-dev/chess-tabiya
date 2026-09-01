@@ -19727,8 +19727,8 @@
     {
       "id": "D2484",
       "state": "todo",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:31a32bf077dfbb411531289cc27a304a07a615b1c533f1a9a82136560e371035",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:d8bfd9eefebebca5755f706385d35d8e0023fcc6e2c3f1d03aaede3761dec771",
       "uxItems": [],
       "owner": "evidence-foundation"
     },
@@ -19739,6 +19739,15 @@
       "sourceDigest": "sha256:54f5c910ad2bd14b55d58312e3c00af4051f067bf0b212fa8cf0c10314f43252",
       "uxItems": [],
       "owner": "evidence-foundation"
+    },
+    {
+      "id": "D2486",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b2bde717b37f93aff82599dcaa02e2ce665668edd0f08192c3d5cc45fc88f35d",
+      "uxItems": [],
+      "evidence": "tools/d2484-phase-band-census/run-isolated.test.mjs",
+      "evidenceKind": "path"
     }
   ]
 }

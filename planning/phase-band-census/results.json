@@ -1,0 +1,158 @@
+{
+  "schema": "tabiya.research.phase-band-census.v1",
+  "boundary": "Exact classifier threshold sensitivity over curated authored positions; not probability or chess-phase accuracy",
+  "corpus": {
+    "packs": 50,
+    "positions": 804,
+    "roots": 50
+  },
+  "thresholds": {
+    "endgameMaterialMax": 13,
+    "developedMaterialMin": 18,
+    "openingUndevelopedMin": 5,
+    "middlegameUndevelopedMax": 2
+  },
+  "arms": {
+    "endgame_material_band": {
+      "positions": 296,
+      "roots": 14
+    },
+    "material_transition_gap": {
+      "positions": 5,
+      "roots": 0
+    },
+    "opening_development_band": {
+      "positions": 153,
+      "roots": 21
+    },
+    "middlegame_development_band": {
+      "positions": 233,
+      "roots": 10
+    },
+    "development_transition_gap": {
+      "positions": 117,
+      "roots": 5
+    }
+  },
+  "selectedBandMargins": {
+    "endgame_material_band": {
+      "0": 5,
+      "4": 40,
+      "5": 5,
+      "7": 98,
+      "8": 95,
+      "10": 20,
+      "13": 33
+    },
+    "opening_development_band": {
+      "0": 46,
+      "1": 28,
+      "2": 37,
+      "3": 42
+    },
+    "middlegame_development_band": {
+      "0": 96,
+      "1": 76,
+      "2": 61
+    }
+  },
+  "selectedBandsAtBoundary": 147,
+  "selectedBandsWithinOneUnit": 251,
+  "abstentions": {
+    "positions": 122,
+    "roots": 5,
+    "byReason": {
+      "material_transition_gap": 5,
+      "development_transition_gap": 117
+    },
+    "materialGapObserved": {
+      "14": 5
+    },
+    "developmentGapObserved": {
+      "3": 53,
+      "4": 64
+    },
+    "rootDetails": [
+      {
+        "packId": "berlin-queenless-press",
+        "declared": "middlegame",
+        "nodeId": "$start",
+        "detected": "unclear",
+        "decision": {
+          "kind": "development_transition_gap",
+          "phase": "unclear",
+          "axis": "undeveloped_home_minors",
+          "observed": 4,
+          "middlegameBoundary": 2,
+          "openingBoundary": 5,
+          "distanceToMiddlegameBand": 2,
+          "distanceToOpeningBand": 1
+        }
+      },
+      {
+        "packId": "closed-centre-chain-black-base-strike",
+        "declared": "middlegame",
+        "nodeId": "$start",
+        "detected": "unclear",
+        "decision": {
+          "kind": "development_transition_gap",
+          "phase": "unclear",
+          "axis": "undeveloped_home_minors",
+          "observed": 4,
+          "middlegameBoundary": 2,
+          "openingBoundary": 5,
+          "distanceToMiddlegameBand": 2,
+          "distanceToOpeningBand": 1
+        }
+      },
+      {
+        "packId": "italian-center-attack-white",
+        "declared": "opening",
+        "nodeId": "$start",
+        "detected": "unclear",
+        "decision": {
+          "kind": "development_transition_gap",
+          "phase": "unclear",
+          "axis": "undeveloped_home_minors",
+          "observed": 4,
+          "middlegameBoundary": 2,
+          "openingBoundary": 5,
+          "distanceToMiddlegameBand": 2,
+          "distanceToOpeningBand": 1
+        }
+      },
+      {
+        "packId": "kid-classical-black",
+        "declared": "opening",
+        "nodeId": "$start",
+        "detected": "unclear",
+        "decision": {
+          "kind": "development_transition_gap",
+          "phase": "unclear",
+          "axis": "undeveloped_home_minors",
+          "observed": 4,
+          "middlegameBoundary": 2,
+          "openingBoundary": 5,
+          "distanceToMiddlegameBand": 2,
+          "distanceToOpeningBand": 1
+        }
+      },
+      {
+        "packId": "open-centre-french-exchange-black",
+        "declared": "middlegame",
+        "nodeId": "$start",
+        "detected": "unclear",
+        "decision": {
+          "kind": "development_transition_gap",
+          "phase": "unclear",
+          "axis": "undeveloped_home_minors",
+          "observed": 4,
+          "middlegameBoundary": 2,
+          "openingBoundary": 5,
+          "distanceToMiddlegameBand": 2,
+          "distanceToOpeningBand": 1
+        }
+      }
+    ]
+  }
+}

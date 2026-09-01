@@ -13788,3 +13788,26 @@ return to opening or from endgame. The classifier is coarse but not chattering.
 [[D2485]] owns source-retaining downstream composition with exact opening identity and endgame
 evidence. Independent position/edge labels, reviewer agreement and false-transition cost remain
 unmeasured. No product classifier, selector, module, schema or chess content changed.
+
+## 2026-09-01 — Phase abstention becomes five typed threshold arms
+
+**What landed:** [[D2484]]'s disposable `make phase-band-census` instrument and research contract.
+Across the same 50 packs / 804 legal authored positions, it reconstructs the classifier's exact
+ordered decision arm and refuses disagreement with the shipped result. The population contains 296
+endgame-band, 5 material-gap, 153 opening-band, 233 middlegame-band and 117 development-gap readings.
+
+**What changed:** “confidence” is narrowed to deterministic threshold sensitivity until independent
+labels exist. The required payload is a five-member discriminated union carrying the observed
+operand, named boundary or boundaries, and exact non-negative margin/distances. Of 682 concrete
+labels, 147 sit exactly on a boundary and 251 within one operand unit; neither count is a probability
+or move distance. The unlanded `rules.phase.reading@2` draft must stop retaining the old payload.
+
+**Instrument correction:** the first bundle executed D2483's imported CLI and rewrote its report
+byte-identically. [[D2486]] splits reusable census logic from the executable and wraps every D2484
+run in a prior-result byte guard with a mutation negative control. D2483 retains SHA-256
+`87120a31b5c36b6edea17cb2b2820d9936f890f4341c4d393b602d4980482102`.
+
+**Blocked/next:** amend and re-review the draft value-authority successor before production code.
+[[D2485]] still owns the separately sourced phase-arc composition. Q4c still lacks independent
+position/edge labels, reviewer agreement, false-transition costs and owner-use evidence. No product
+classifier, evidence projection, module, pack, schema or authored chess statement changed.

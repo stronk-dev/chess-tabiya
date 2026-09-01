@@ -216,10 +216,13 @@ round-tripped through `pgn-import.ts`"*)
   39 label changes across 754 authored edges contain zero two-edge reversals. This is a consistency
   control, not the required independent position-label population. Evidence:
   `design/research/phase-classifier-corpus-conformance.md`.
-- **Owned successors:** [[D2484]] specifies the typed abstention reason/band-margin research
-  boundary; [[D2485]] specifies source-retaining downstream phase-arc composition over the exact
-  opening producer, rules convention and endgame evidence. Neither authorizes product code before
-  the exploration/RFC gate.
+- **Typed-band result 2026-09-01:** `make phase-band-census` partitions all 804 positions into five
+  exact arms. There are 122 abstentions (5 material gap, 117 development gap); 251/682 concrete
+  labels lie within one operand unit of their selected boundary. [[D2484]]'s research contract is
+  complete and routes to the draft `evidence-value-authority` successor amendment; [[D2486]]'s
+  dual-entrypoint defect is closed. [[D2485]] still owns source-retaining downstream phase-arc
+  composition over opening identity, rules convention and endgame evidence. None authorizes product
+  code before the RFC gate.
 - **Question:** B10 shipped *"attributed phase classification with honest abstention"* (`gates.md`
   `[V]`). Nothing measures its accuracy or its abstention rate. Q4c's own definition requires
   labeled ground truth, inter-reviewer agreement, and false-transition costs (`plan.md` `[V]`).

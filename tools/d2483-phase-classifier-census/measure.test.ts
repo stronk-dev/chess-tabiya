@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { DrillPackDefinition } from "../../packages/schema/src/drill-pack/index.js";
-import { phaseCensus } from "./measure.js";
+import { phaseCensus } from "./census.js";
 
 function pack(id: string, phase: DrillPackDefinition["phase"], fen: string): DrillPackDefinition {
   return {
