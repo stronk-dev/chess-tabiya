@@ -1296,11 +1296,12 @@
     },
     {
       "id": "D145",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e04e3840c9d1d2df115e200d697e7a98259af00d064db10bde95663fb2cd99d8",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3160db2ec893c3550ae4c259ea0b60779f53ab5029e923ad81938fbfc07fe73a",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "rfc/archive/evidence-contract-manifest.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D146",
@@ -1775,11 +1776,12 @@
     },
     {
       "id": "D214",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9d0047e5889ad6b26a9e5ba52fb48693566d5e887e646b5def9e552b7965e9f0",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:123f31df2141f6830f986125067148c3f0d46b571928e75ead3b78f26d9bd06b",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "rfc/archive/evidence-contract-manifest.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D215",
@@ -4494,11 +4496,12 @@
     },
     {
       "id": "D568",
-      "state": "todo",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:7a7ef576e8e854af59fb6b9a213e6f6732182027834a263767c1aa753d39c019",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:91217cc1bc67bbc53e84b9813a8a850e23bca530ef2403f33ea86065de59ddba",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "rfc/archive/evidence-contract-manifest.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D569",

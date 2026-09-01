@@ -13562,3 +13562,21 @@ and docs.
 **Blocked/next:** none for D223. This repairs evidence trust; it creates no evidence, content,
 schema, provider request, learner judgement or new surface. Work continues upstream on the
 remaining evidence-to-module closure rather than the blocked promotion/provider contracts.
+
+## 2026-09-01 — Three stale evidence-foundation rows reconciled to shipped F1
+
+**What landed:** closed [[D145]], [[D214]] and [[D568]] after re-deriving each at the production
+symbols and the archived F1 discharge table. The six-plane manifest compiles producers,
+projections, consumers and explicit dispositions. Raw packet sentences no longer exist as a
+parallel authority: admitted evidence and registered deterministic sentences travel together in
+one runtime-sealed `RenderedEvidenceView`, which both provider serialization and `voiceCheck`
+assert before reading.
+
+**What changed:** work-state now reports these shipped contracts as done rather than executable
+product debt. This is a tracking correction backed by production types and permanent negative
+fixtures, not a claim that learner modules are complete.
+
+**Blocked/next:** [[D583]]–[[D589]] remain open. The F1 seal closes transport/authority bypasses;
+it does not supply semantic module admission, board-lighting budgets, false-absence prevention,
+citation preservation, a qualified local model or a provider promotion gate. Those downstream
+contracts must not inherit these closures by implication.
