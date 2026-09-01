@@ -13946,3 +13946,25 @@ semantic validation and exact recorded-path authority, then fresh independent bu
 No `setup_reachable` projection exists: target, horizon, provider, completeness and quantifier are
 still mandatory before Support can say “aim for” or “force” a named setup. No production, learner,
 pack or schema bytes changed.
+
+## 2026-09-01 — Endgame setup reachability gains proof states, not another boolean
+
+**What landed:** [[D2497]]'s cited dossier, dated three-root Lichess tablebase snapshot, disposable
+quantified solver and `make endgame-setup-reachability-contract`. The instrument independently
+checks that each snapshot contains the complete legal root move set and normalizes WDL to the
+named method beneficiary before applying an exact-outcome-preserving edge filter.
+
+**What changed:** the complete one-ply readings separate all three quantifiers. Lucena has 3 target
+moves among 5 preserving replies and is possible but not forceable or inevitable because the
+opponent chooses. Philidor has 1 target among 5 preserving choices and is forceable but not
+inevitable because the beneficiary chooses. Vančura has 4 target moves among all 4 preserving
+choices and is inevitable under that filter. A finite claim horizon can prove false; an operational
+search ceiling or missing child provider returns typed unknown for an unbounded claim. Seventeen
+visited nodes is a node-budget result, not a production latency result.
+
+**Blocked/next:** no eventual reachability, best-method, steering sentence or learner projection is
+authorized. `evidence-value-authority` and provider exchange must carry target convention,
+beneficiary, edge filter, finite claim horizon, operational budget, provider/version, frontier
+completeness and proof status. Multi-ply coverage, cache/transposition semantics, latency, broader
+positions and module presentation remain open. No production, pack, schema or authored chess bytes
+changed.

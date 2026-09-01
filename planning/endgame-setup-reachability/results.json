@@ -1,0 +1,104 @@
+{
+  "schema": "tabiya.research.endgame-setup-reachability.v1",
+  "boundary": "Exact one-ply setup reachability on complete tablebase root move sets; no eventual reachability, best-method or advice claim",
+  "sourceSnapshot": {
+    "fixtureSchema": "tabiya.research.endgame-setup-reachability.fixtures.v1",
+    "fetchedAt": "2026-09-01",
+    "endpoint": "https://tablebase.lichess.ovh/standard"
+  },
+  "proofVocabulary": [
+    "proved_true",
+    "proved_false",
+    "unknown_horizon",
+    "unknown_provider"
+  ],
+  "constraints": {
+    "targetConvention": "d2495.canonical-krpkr-geometry.v1",
+    "edgeFilter": "exact beneficiary WDL preservation",
+    "finiteClaimHorizonPlies": 1,
+    "operationalSearchBudgetPlies": 1
+  },
+  "nodeBudget": {
+    "maximumVisitedPerControl": 6,
+    "totalVisitedFiniteControls": 17
+  },
+  "controls": [
+    {
+      "id": "lucena_opponent_can_enter",
+      "technique": "lucena",
+      "beneficiary": "white",
+      "rootFen": "1K6/1P1k4/8/8/8/8/r7/3R4 b - - 1 1",
+      "rootOutcome": "win",
+      "legalMoves": 5,
+      "exactOutcomePreservingMoves": 5,
+      "targetMoves": [
+        "d7e6",
+        "d7e7",
+        "d7e8"
+      ],
+      "withinOnePly": {
+        "possible": "proved_true",
+        "forceable": "proved_false",
+        "inevitable": "proved_false",
+        "visitedNodes": 6
+      },
+      "unboundedQuestionWithOnePlySearch": {
+        "possible": "proved_true",
+        "forceable": "unknown_provider",
+        "inevitable": "unknown_provider",
+        "visitedNodes": 6
+      }
+    },
+    {
+      "id": "philidor_defender_can_enter",
+      "technique": "philidor",
+      "beneficiary": "white",
+      "rootFen": "8/8/8/8/1R2pk2/8/7r/4K3 w - - 0 1",
+      "rootOutcome": "draw",
+      "legalMoves": 13,
+      "exactOutcomePreservingMoves": 5,
+      "targetMoves": [
+        "b4b3"
+      ],
+      "withinOnePly": {
+        "possible": "proved_true",
+        "forceable": "proved_true",
+        "inevitable": "proved_false",
+        "visitedNodes": 6
+      },
+      "unboundedQuestionWithOnePlySearch": {
+        "possible": "proved_true",
+        "forceable": "proved_true",
+        "inevitable": "unknown_provider",
+        "visitedNodes": 6
+      }
+    },
+    {
+      "id": "vancura_defender_can_enter",
+      "technique": "vancura",
+      "beneficiary": "black",
+      "rootFen": "R7/6k1/P5r1/8/2K5/8/8/8 b - - 0 1",
+      "rootOutcome": "draw",
+      "legalMoves": 16,
+      "exactOutcomePreservingMoves": 4,
+      "targetMoves": [
+        "g6b6",
+        "g6e6",
+        "g6f6",
+        "g7h7"
+      ],
+      "withinOnePly": {
+        "possible": "proved_true",
+        "forceable": "proved_true",
+        "inevitable": "proved_true",
+        "visitedNodes": 5
+      },
+      "unboundedQuestionWithOnePlySearch": {
+        "possible": "proved_true",
+        "forceable": "proved_true",
+        "inevitable": "proved_true",
+        "visitedNodes": 5
+      }
+    }
+  ]
+}

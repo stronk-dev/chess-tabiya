@@ -71,7 +71,9 @@ test("successors repair rather than silently relabel the five false or mixed row
   assert.match(rfc, /v1 is retired from new bindings|v1 have zero consumer bindings/u);
   assert.match(rfc, /Lucena\/Philidor\/Vancura setup cannot render without a cited\/versioned setup convention/u);
   assert.match(rfc, /createTheoryEndgameMethodStageV1Evidence[\s\S]*?exactly six events/u);
-  assert.match(rfc, /No `derived\.endgame\.setup_reachable@1` is introduced[\s\S]*?incomplete search must be typed unknown/u);
+  assert.match(rfc, /No `derived\.endgame\.setup_reachable@1` is introduced[\s\S]*?proved_true \| proved_false \|[\s\S]*?unknown_horizon \| unknown_provider/u);
+  assert.match(rfc, /finite claim[\s\S]*?operational search budget[\s\S]*?may not/u);
+  assert.match(rfc, /Lucena possible\/not-forceable\/not-inevitable[\s\S]*?Philidor[\s\S]*?Vančura/u);
 });
 
 test("the phase successor carries the measured five-arm decision instead of old prose", () => {
@@ -111,7 +113,7 @@ test("the draft closes all four authority families without a generic payload esc
 
 test("dependencies and closure gates are explicit rather than hand-waved", () => {
   assert.match(rfc, /\*\*Status:\*\* draft/u);
-  assert.match(rfc, /author-amended 2026-09-01 through \[\[D2496\]\], \[\[D2495\]\], \[\[D2484\]\], \[\[D2327\]\] and the D2146/u);
+  assert.match(rfc, /author-amended 2026-09-01 through \[\[D2497\]\], \[\[D2496\]\], \[\[D2495\]\], \[\[D2484\]\], \[\[D2327\]\] and the D2146/u);
   assert.match(rfc, /dependency-blocked on the[\s\S]*?semantic convention register\/provenance/u);
   assert.match(rfc, /provider exchange contracts/u);
   assert.match(rfc, /semantic-convention-provenance\.md/u);

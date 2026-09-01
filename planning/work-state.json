@@ -19838,6 +19838,15 @@
       "sourceGlyph": "🔬",
       "sourceDigest": "sha256:20e7eee9965c84ec30fed298289761d4889c6a3bee27e48ad56791f6ba5c00aa",
       "uxItems": []
+    },
+    {
+      "id": "D2497",
+      "state": "blocked",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:c2a9e7c4edf7791f0a54a6085b676b3cc60134e69396dc1a87ff092fca28ed2b",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-value-authority.md"
     }
   ]
 }

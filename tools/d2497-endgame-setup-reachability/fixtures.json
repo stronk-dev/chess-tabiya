@@ -1,0 +1,68 @@
+{
+  "schema": "tabiya.research.endgame-setup-reachability.fixtures.v1",
+  "fetchedAt": "2026-09-01",
+  "source": "https://tablebase.lichess.ovh/standard",
+  "controls": [
+    {
+      "id": "lucena_opponent_can_enter",
+      "technique": "lucena",
+      "beneficiary": "white",
+      "fen": "1K6/1P1k4/8/8/8/8/r7/3R4 b - - 1 1",
+      "rootCategory": "loss",
+      "moves": [
+        { "uci": "d7e7", "category": "win" },
+        { "uci": "d7e6", "category": "win" },
+        { "uci": "d7e8", "category": "win" },
+        { "uci": "d7c6", "category": "win" },
+        { "uci": "a2d2", "category": "win" }
+      ]
+    },
+    {
+      "id": "philidor_defender_can_enter",
+      "technique": "philidor",
+      "beneficiary": "white",
+      "fen": "8/8/8/8/1R2pk2/8/7r/4K3 w - - 0 1",
+      "rootCategory": "draw",
+      "moves": [
+        { "uci": "b4b3", "category": "draw" },
+        { "uci": "b4b5", "category": "draw" },
+        { "uci": "b4b6", "category": "draw" },
+        { "uci": "b4b7", "category": "draw" },
+        { "uci": "b4b8", "category": "draw" },
+        { "uci": "e1d1", "category": "win" },
+        { "uci": "b4a4", "category": "win" },
+        { "uci": "b4c4", "category": "win" },
+        { "uci": "e1f1", "category": "win" },
+        { "uci": "b4b1", "category": "win" },
+        { "uci": "b4d4", "category": "win" },
+        { "uci": "b4b2", "category": "win" },
+        { "uci": "b4e4", "category": "win" }
+      ]
+    },
+    {
+      "id": "vancura_defender_can_enter",
+      "technique": "vancura",
+      "beneficiary": "black",
+      "fen": "R7/6k1/P5r1/8/2K5/8/8/8 b - - 0 1",
+      "rootCategory": "draw",
+      "moves": [
+        { "uci": "g6b6", "category": "draw" },
+        { "uci": "g6e6", "category": "draw" },
+        { "uci": "g6f6", "category": "draw" },
+        { "uci": "g7h7", "category": "draw" },
+        { "uci": "g6d6", "category": "win" },
+        { "uci": "g6g4", "category": "win" },
+        { "uci": "g6h6", "category": "win" },
+        { "uci": "g6c6", "category": "win" },
+        { "uci": "g6g1", "category": "win" },
+        { "uci": "g6g2", "category": "win" },
+        { "uci": "g6g3", "category": "win" },
+        { "uci": "g6g5", "category": "win" },
+        { "uci": "g7f7", "category": "win" },
+        { "uci": "g7h6", "category": "win" },
+        { "uci": "g7f6", "category": "win" },
+        { "uci": "g6a6", "category": "win" }
+      ]
+    }
+  ]
+}

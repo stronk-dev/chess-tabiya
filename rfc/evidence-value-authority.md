@@ -1,6 +1,6 @@
 # RFC: Evidence value authority — compute, derive or project before sealing
 
-- **Status:** draft — author-amended 2026-09-01 through [[D2496]], [[D2495]], [[D2484]], [[D2327]] and the D2146
+- **Status:** draft — author-amended 2026-09-01 through [[D2497]], [[D2496]], [[D2495]], [[D2484]], [[D2327]] and the D2146
   callable-operation closure; dependency-blocked on the
   returned semantic convention register/provenance and provider exchange contracts, then fresh
   independent buildability review
@@ -15,7 +15,8 @@
   `design/research/phase-band-and-abstention-contract.md`; [[D2495]], answered for the static
   setup arm by `design/research/endgame-technique-applicability.md`; [[D2496]], answered for
   observed method stages and reachability semantics by
-  `design/research/endgame-method-and-reachability.md`; executable population in
+  `design/research/endgame-method-and-reachability.md`; [[D2497]], answered for scoped proof and
+  incomplete-frontier semantics by `design/research/endgame-setup-reachability.md`; executable population in
   `tools/d2144-evidence-seal-audit/`
 - **Depends on:** implemented `rfc/archive/evidence-contract-manifest.md`; implemented
   `rfc/archive/semantic-evidence-selection.md`; draft `rfc/semantic-convention-register.md` and
@@ -309,10 +310,23 @@ evidence only through a declared derived/module operation. Existing recorded/liv
 evidence remains the separate outcome authority and retains its own perspective.
 
 No `derived.endgame.setup_reachable@1` is introduced. Witnessed arrival, cooperative possibility,
-forceability against all replies and inevitability under all moves are distinct D2496 readings.
-The latter three require a declared target convention, beneficiary, root, horizon, provider,
-frontier/completeness receipt and exact quantifier; incomplete search must be typed unknown rather
-than false. Until that provider is researched and specified, `setup_match` and `method_stage`
+forceability against all replies and inevitability under all moves are distinct D2496/D2497
+readings. D2497 closes the proof-state vocabulary as `proved_true | proved_false |
+unknown_horizon | unknown_provider` and makes two horizons non-interchangeable: a finite claim
+horizon is part of the asserted proposition, while an operational search budget only bounds the
+provider. A complete search through a declared finite claim horizon may prove false; exhausting an
+operational budget on an unbounded or larger claim may not.
+
+Any future setup-reachability projection therefore requires a declared target convention/version,
+beneficiary, canonical root, exact edge-admission filter, finite claim horizon or explicit
+unbounded arm, operational node/ply budget, provider/version, frontier/completeness receipt and
+exact quantifier. The factory must compute the proof status from the complete admitted graph and
+must not accept a caller boolean/status. The D2497 author population supplies three complete
+one-ply tablebase roots: Lucena possible/not-forceable/not-inevitable; Philidor
+possible/forceable/not-inevitable; and Vančura possible/forceable/inevitable under exact
+beneficiary-WDL preservation. The same snapshots abstain beyond their child frontier. They settle
+the value algebra, not a production multi-ply provider, latency, transposition/cache semantics or
+consumer eligibility. Until those are researched and specified, `setup_match` and `method_stage`
 cannot represent reachability or render “aim for/force/reach this technique.”
 
 Until the setup and method conventions plus `run.record.edge@1` exist, these projections are
@@ -534,7 +548,10 @@ planes, optional LLM renderer and assistance ceilings.
     lineage; reordered/mixed/changed/no-lineage controls fail, and the 100-path population remains
     exactly 3 Lucena / 3 Philidor / 0 Vančura events. Neither setup nor method stage can render
     reachability, advice, significance, correctness or outcome preservation; zero Vančura corpus
-    events cannot be reported as population validation.
+    events cannot be reported as population validation. A future reachability value must retain
+    D2497's target convention, beneficiary, edge filter, claim horizon, operational budget,
+    provider/version, completeness and exact proof status; one-ply snapshots cannot authorize an
+    eventual or ordinary-language steering claim.
 11. Each pivotal kind reaches its own projection; a rule marker cannot be relabelled human-model
     evidence and a Maia split cannot be relabelled a position-rule marker.
 12. Structural predicate results cannot be minted without the exact sealed authored condition; a
@@ -589,6 +606,11 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-09-01: [[D2497]] closes the scoped proof algebra without adding a reachability projection.
+  `proved_true`, `proved_false`, `unknown_horizon` and `unknown_provider` are distinct; finite claim
+  horizon and operational search budget cannot share one field. Three complete one-ply tablebase
+  controls separate possible/forceable/inevitable, but no production multi-ply provider, latency or
+  learner sentence is authorized.
 - 2026-09-01: [[D2496]] adds only retrospective `theory.endgame.method_stage@1`, derived from a
   matching setup, registered method convention and exact ordered `run.record.edge@1` lineage. The
   eight stage identities and 100-path population are executable. Reachability remains absent until
