@@ -1,13 +1,11 @@
 # Codex queue — rewritten in full 2026-08-16
 
-## 0-CONTENT-TIER-SHARED-SETUP. D2119 follows the D2118 stability repair
+## 0-CONTENT-TIER-SHARED-SETUP. ✅ D2119 retired after re-measurement
 
-`make test-content` is deterministic with two workers and passes 172/172, but the verified run
-still takes 173.84 seconds because isolated files repeatedly load and validate the same committed
-pack/shape/principle corpus (144.91 seconds of imports; 181.42 seconds summed test work). Design a
-read-only precompiled corpus fixture/cache or co-located integration authority that preserves test
-isolation, content-tier ownership and mutation sensitivity. Do not re-expand workers, raise
-deadlock timeouts, cache across commits, or move real-corpus assertions into the software tier.
+The 173.84-second / 144.91-second-import premise did not reproduce on 2026-09-01. Two normal
+isolated runs passed 172/172 in 32.35s and 31.73s, with 15.56s and 15.45s of imports. Keep the
+existing two-worker isolated tier. Do not add shared module state or a precompiled cache unless a
+new reproducible regression has a stated threshold; D2119 is no longer executable queue work.
 
 ## 0-RECORDED-CLOCKS-HOLD. D2021 blocks the query-only import task
 

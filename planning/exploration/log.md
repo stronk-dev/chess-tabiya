@@ -13531,3 +13531,17 @@ work-state registry; the overall 117/205 module requirements remain dependency-b
 Map adapters still have to compile before move-quality can leave experimental disposition or the
 move-quality RFC can discharge D1. No API, content, pack, provider, bot or learner-visible UX byte
 changed in this checkpoint.
+
+## 2026-09-01 — Content-tier cache proposal retired on re-measurement
+
+**What landed:** closed [[D2119]] without adding a cache. The normal content tier passed 172/172
+twice in 32.35 seconds and 31.73 seconds, with imports at 15.56 seconds and 15.45 seconds. The
+ledgered 173.84-second run and 144.91-second import cost did not reproduce.
+
+**What changed:** the existing two-worker, file-isolated content tier remains the authority. A
+shared module cache would add test-state coupling to solve a 5× stale premise, so the queue now
+requires a fresh reproducible regression and explicit threshold before reopening that design.
+
+**Blocked/next:** none for D2119. CI still reports content contracts separately from software and
+performance. Work returns to accepted product slices; the released Feedback Stage-2 binding arm is
+next because it can retire existing evidence debt without crossing the Gate-F graduation hold.
