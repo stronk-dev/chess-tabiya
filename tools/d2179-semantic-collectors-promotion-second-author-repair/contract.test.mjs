@@ -47,7 +47,8 @@ test("D2182: no-race is a typed no-output state, never input failure", () => {
   assert.match(geometry, /reason: "input_abstained";[\s\S]*missing: readonly \["contacts"\]/u);
   const outcome = section("type PromotionRaceTablebaseResult", "Recorded normalization");
   assert.match(outcome, /reason: "no_opposing_passed_clear_paths";[\s\S]*input: PawnContactsEvidence/u);
-  assert.match(promotion, /valid position with no opposing passed clear-path[\s\S]{0,100}mints no geometry value/iu);
+  assert.match(promotion, /valid position with no opposing passed clear-path/iu);
+  assert.match(promotion, /mints no geometry\s+value/iu);
 });
 
 test("D2183: check remains one separately composed exact authority", () => {

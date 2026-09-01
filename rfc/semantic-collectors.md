@@ -1,14 +1,15 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
 - **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The held
-  promotion pair was returned by its third fresh independent review on 2026-09-01 for
-  [[D2469]]–[[D2472]]; another author repair is required.** Geometry and recorded tablebase inputs
+  promotion pair is author-repaired 2026-09-01 for [[D2469]]–[[D2472]] and awaits a fourth fresh
+  independent review.** Geometry and recorded tablebase inputs
   from the prior repair still require their exact value-authority
   factory receipts; the available outcome returns one sealed derivation receipt retaining geometry,
   legal moves and the selected source; no-race is distinct from input failure; and the duplicate
   `promotionWithCheck` operand is removed in favour of the existing exact check producer joined by
-  FEN/move identity. `make semantic-collectors-promotion-second-author-repair` is the positive
-  author contract. The original 12 projections remain
+  FEN/move identity. The third repair adds a closed request, sealed recorded-source resolution,
+  lazy success-only legal-map resolution, invariant failures and completed/no-output results.
+  `make semantic-collectors-promotion-third-author-repair` is the positive author contract. The original 12 projections remain
   accepted/implemented; the amendment does not reopen or relabel their bytes. Accepted 2026-08-22
   by claude as register owner on the buildability test, after cross-review with corrections applied
   in place (seven blockers; all eight observed ids verified **checkable, not
@@ -240,7 +241,7 @@ edits no consumer timing.
 | `defence-duty@1` | A **duty** is a directed pseudo defence edge: piece D's chessops attack set, under current occupancy, contains the square of a same-color piece T. Any piece including the king may hold a duty; **T is never a king** (the harness `duties()` byte — a king is not a defended target under this convention). **Sole defender** = D holds the only such edge onto T. Duties are occupancy-current pseudo edges and deliberately not legality-filtered — an absolutely pinned defender still holds its duty; whether a recapture is *legal* is decided only where a predicate enumerates legal moves. Declared limitation: a pseudo duty may be legally unexecutable; multiple duties are a state, never by themselves exploitable overload. |
 | `overload-conflict@1` | The `9f7112c` four-clause candidate-time relation, verbatim from the measured repair: (1) one named defender is the **sole** defender (`defence-duty@1`) of the captured target **and** of at least one other surviving named target; (2) the candidate captures the first target and the same defender has at least one **legal** recapture on that square; (3) no such recapture preserves every retained sole duty; (4) after **every** such recapture, at least one retained named target is positively capturable under `legal-exchange@1` (the recapturing turn is real — no clone). Abstention `no_legal_recapture`. The broad lost-duty-edge rule (52/754 authored, 515/6,991 imported) is **rejected and pinned as the permanent hard negative**. |
 | `mate-proof@1` | The D908 bounded solver: the declared candidate move is fixed; later attacker moves are existential; **every** defender reply is enumerated; promotions fully enumerated; horizon = **1–4 attacker moves, the candidate counting as attacker move one** (the harness's `2·N−2` remaining-edge accounting: horizon H proves mate delivered on or before the attacker's Hth move, and **H = 1 means the candidate itself mates** — layered beside 2c's `rules.tactic.consequence.mate_in_one@1`, which stays the position-level enumeration authority; this predicate proves one declared candidate and never re-enumerates all mating moves). Node cap **250,000**, with the accounting pinned because the cap verdict is order-dependent (the boundary probe's 250,001 witnesses): **one node per visited position including transposition revisits, incremented before the cap test and every terminal test**, so a capped run reports cap+1; a transposition memo keyed by (four-field FEN, remaining edges, attacker) is consulted after the terminal tests. **Enumeration order is part of the convention**: attacker moves sorted check-giving first, then ascending canonical UCI; defender replies in ascending canonical UCI (the harness's attacker ordering made normative for both sides — its incidental defender order is chessops-internal and not reproducible; the measured node statistics are therefore reference figures under the harness order, and C6 binds the proved/refuted/abstained counts while node statistics are reported with any ordering-driven divergence named). Result is exactly one of `proved` (retained horizon and proof-tree digest/node count), `refuted` (at least one legal escaping root reply retained, or the terminal non-mate state when the candidate ends the game without mate), or `budget_exhausted` (abstention — never false, never an engine-derived guess). **The proof-tree digest is re-derivable from the retained tree; its serialization and hash are pinned in the declaration's semantics at implementation with a changelog line (pin-the-encoding: no digest algorithm is invented here), and the cross-authority join key is candidate + position + horizon — never the digest** (D2's `mate_transition` joins on exactly that key). Five-plus attacker moves is outside this convention: a separately declared offline budget or a typed engine mate authority may serve it later, and the external `mateIn5` tag is a five-**or-more** bucket, never exact evidence. "Mating net" is presentation vocabulary over a proved tree; king-zone counts, reduced escapes and check sequences remain operands that **cannot emit the name**. |
-| `race-arrival@1` | The D909/D1699 descriptive ordering: two or more exact `passed: true` pawn rows of opposite colors from one sealed `rules.pawn.reading.contacts@1` item, each with a clear forward path under current occupancy. Side to move and the initial double push are respected; arrival order is strict turn alternation with no arbitrary-piece captures, checks or activity modeled. Output is ordering and per-pawn arrival distance, **explicitly descriptive**: winning/losing/drawing are structurally absent (measured 7/10 agreement with Syzygy, including two loss→win inversions). Fewer than two opposing declared participants with clear paths abstains `no_opposing_passed_clear_paths`; missing declared input abstains `input_abstained`. |
+| `race-arrival@1` | The D909/D1699 descriptive ordering: two or more exact `passed: true` pawn rows of opposite colors from one sealed `rules.pawn.reading.contacts@1` item, each with a clear forward path under current occupancy. Side to move and the initial double push are respected; arrival order is strict turn alternation with no arbitrary-piece captures, checks or activity modeled. Output is ordering and per-pawn arrival distance, **explicitly descriptive**: winning/losing/drawing are structurally absent (measured 7/10 agreement with Syzygy, including two loss→win inversions). Fewer than two opposing declared participants with clear paths completes with no output, reason `no_opposing_passed_clear_paths`; typed unavailable declared input abstains `input_abstained`; invalid authority fails. |
 | `observed-window@1` | Recorded-path windows adopt `breadth-collectors.md` §3.4's continuity rule by reference: N consecutive move anchors, N+1 ordered board nodes, byte-equal shared node/FEN at every join, canonical UCI per anchor, and the named subject identities surviving every applicable edge or transforming only through an explicitly recorded capture/relocation edge. Horizons are per-projection (§3) and part of the identity. Observed order never establishes intent, force, best play or causality. |
 
 The observed split contracts (§3.2–§3.4) are conventions too; their exact clauses are pinned in
@@ -476,7 +477,7 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
   color/square/pawn role. The population is opposing passed pawns with clear forward paths; it
   retains `fen`, `pawns`, `arrivalConvention`, `ordering` and `sideToMove`. Grounding/exactness/
   confidence are `position_rules` / `convention` / `not_applicable`; answer content is `fact`;
-  abstention is `["no_opposing_passed_clear_paths", "input_abstained"]`. The old
+  completed omission is `no_opposing_passed_clear_paths`; abstention is `["input_abstained"]`. The old
   `blocked_or_capturable_path_outside_convention` reason is withdrawn: this convention knows enemy
   pawn passage, not arbitrary-piece capturability. **Hard negatives, measured:** a2 versus b7 in
   `4k3/1p6/8/8/8/8/P7/4K3 w - - 0 1` is not a race because both contact rows are `passed: false`;
@@ -494,28 +495,48 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
   type PawnContactsEvidence = DeclaredEvidence<PawnContactsReading>;
   type PromotionRaceGeometryEvidence = DeclaredEvidence<PromotionRaceGeometry>;
 
-  type PromotionRaceGeometryResult =
-    | Readonly<{
-        kind: "evidence";
-        input: PawnContactsEvidence;
-        output: PromotionRaceGeometryEvidence;
-      }>
+  type PromotionRaceContactsInput =
+    | Readonly<{ kind: "evidence"; evidence: PawnContactsEvidence }>
     | Readonly<{
         kind: "unavailable";
-        reason: "no_opposing_passed_clear_paths";
-        input: PawnContactsEvidence;
+        reason: "not_collected" | "upstream_unavailable";
+      }>;
+
+  type PromotionRaceGeometryResult =
+    | Readonly<{
+        kind: "completed";
+        output: Readonly<{
+          kind: "evidence";
+          input: PawnContactsEvidence;
+          item: PromotionRaceGeometryEvidence;
+        }>;
+      }>
+    | Readonly<{
+        kind: "completed";
+        output: Readonly<{
+          kind: "no_evidence";
+          reason: "no_opposing_passed_clear_paths";
+          input: PawnContactsEvidence;
+        }>;
       }>
     | Readonly<{
         kind: "unavailable";
         reason: "input_abstained";
         missing: readonly ["contacts"];
+        upstreamReason: "not_collected" | "upstream_unavailable";
       }>;
+
+  declare function derivePromotionRaceGeometry(
+    input: PromotionRaceContactsInput,
+  ): PromotionRaceGeometryResult;
   ```
 
   The evidence arm retains the exact contacts object and its output's central derivation receipt
   retains that same input reference/digest. A valid position with no opposing passed clear-path
-  population returns `no_opposing_passed_clear_paths` and mints no geometry value. Only missing,
-  invalid or unavailable upstream evidence returns `input_abstained`. A generic `declareEvidence`
+  population returns `completed/no_evidence/no_opposing_passed_clear_paths` and mints no geometry
+  value. Only the typed `PromotionRaceContactsInput.kind === "unavailable"` arm returns
+  `input_abstained`. The evidence arm always calls `assertPawnContactsEvidence` first; assertion
+  failure throws `EvidenceInvariantError` and is never caught or relabelled as absence. A generic `declareEvidence`
   wrapper carrying correct ids and false contacts, a value minted by another factory, an equal
   rebuilt input, unsealed lookalike, wrong producer/id/version, and mutations of `passed`, blocker,
   pawn identity or FEN all fail before geometry calculation.
@@ -549,8 +570,8 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
   promotion UCI. This preserves the full primitive without duplicating check computation or using
   missing check evidence as proof of a negative. Grounding/exactness/confidence are
   `declared_convention` / `convention` / `not_applicable`; answer content is `fact + evaluation`;
-  abstention is `["no_opposing_passed_clear_paths", "outside_tablebase_domain",
-  "provider_unavailable", "input_abstained"]`.
+  completed omission is `no_opposing_passed_clear_paths`; abstention is
+  `["outside_tablebase_domain", "provider_unavailable", "input_abstained"]`.
   Only the tablebase input supplies outcome. Source absence never becomes refuted, empty or draw;
   geometry remains independently usable. The recorded population remains 288 unique FENs / 157
   pawn-bearing, with 23 side-to-move seventh-rank positions split 11 win / 1 draw / 11 loss.
@@ -567,6 +588,48 @@ type RecordedTablebaseEvidence = DeclaredEvidence<RecordedTablebaseReading>;
 declare function assertPawnContactsEvidence(value: unknown): asserts value is PawnContactsEvidence;
 declare function assertExactLegalMovesEvidence(value: unknown): asserts value is ExactLegalMovesEvidence;
 declare function assertRecordedTablebaseEvidence(value: unknown): asserts value is RecordedTablebaseEvidence;
+
+type PromotionRaceRecordedResolution =
+  | Readonly<{
+      kind: "recorded";
+      fen: CanonicalFullFen;
+      evidence: RecordedTablebaseEvidence;
+    }>
+  | Readonly<{
+      kind: "absent";
+      fen: CanonicalFullFen;
+    }>;
+
+declare const PROMOTION_RACE_RECORDED_RESOLUTIONS: WeakSet<PromotionRaceRecordedResolution>;
+declare function resolvePromotionRaceRecordedSource(
+  fen: CanonicalFullFen,
+  lookup: RecordedTablebaseEvidenceLookup,
+): PromotionRaceRecordedResolution;
+declare function assertPromotionRaceRecordedResolution(
+  value: unknown,
+): asserts value is PromotionRaceRecordedResolution;
+
+type PromotionRaceLegalMovesResolution =
+  | Readonly<{ kind: "evidence"; evidence: ExactLegalMovesEvidence }>
+  | Readonly<{ kind: "unavailable"; reason: "not_collected" | "upstream_unavailable" }>;
+
+interface PromotionRaceTablebaseRequest {
+  readonly geometry: PromotionRaceGeometryResult;
+  readonly providerScope: ProviderRequestScope;
+  readonly signal: AbortSignal;
+}
+
+interface PromotionRaceTablebaseDependencies {
+  readonly recordedLookup: RecordedTablebaseEvidenceLookup;
+  readonly resolveLegalMoves: (
+    fen: CanonicalFullFen,
+  ) => PromotionRaceLegalMovesResolution;
+  readonly syzygyPosition: (
+    request: SyzygyPositionRequest,
+    scope: ProviderRequestScope,
+    signal: AbortSignal,
+  ) => Promise<ProviderEvidenceTraversalResult<"syzygy.position@1">>;
+}
 
 type PromotionRaceTablebaseSource =
   | Readonly<{
@@ -623,15 +686,23 @@ type PromotionRaceTablebaseResult =
       providerReason: ProviderSourceFailure<"syzygy.position@1">["reason"];
     }>
   | Readonly<{
-      kind: "unavailable";
-      reason: "no_opposing_passed_clear_paths";
-      input: PawnContactsEvidence;
+      kind: "completed";
+      output: Readonly<{
+        kind: "no_evidence";
+        reason: "no_opposing_passed_clear_paths";
+        input: PawnContactsEvidence;
+      }>;
     }>
   | Readonly<{
       kind: "unavailable";
       reason: "input_abstained";
       missing: readonly ("geometry" | "legal_moves")[];
     }>;
+
+declare function collectPromotionRaceTablebase(
+  request: PromotionRaceTablebaseRequest,
+  dependencies: PromotionRaceTablebaseDependencies,
+): Promise<PromotionRaceTablebaseResult>;
 ```
 
 Recorded normalization calls `assertRecordedTablebaseEvidence`, whose value receipt names
@@ -647,26 +718,45 @@ arm synthesizes `sourceId`, retrieval time, occurrence or acquisition fields; th
 original sealed item. Crossed source kind, producer, occurrence, retrieval, acquisition,
 category or DTZ substitutions fail.
 
-`collectPromotionRaceTablebase` owns the invocation algebra. A geometry result carrying
-`no_opposing_passed_clear_paths` returns that exact no-race arm and makes no tablebase request;
-missing/invalid/unavailable upstream evidence or an absent exact legal map returns
-`input_abstained`. It calls `assertExactLegalMovesEvidence` before reading a move. A recorded item
-takes member 1. Otherwise the operation calls the provider scheduler itself for the exact geometry FEN:
-a sealed success delivery takes member 2, the scheduler-sealed local-domain result is first wrapped
-by `declareSyzygyTablebaseDomainEvidence` and takes member 3, and a scheduler failure returns
+`collectPromotionRaceTablebase(request, dependencies)` owns the invocation and source-selection
+algebra; callers cannot select recorded versus live. It first pattern-matches the closed geometry
+result. A completed `no_opposing_passed_clear_paths` returns the exact completed/no-output arm and
+calls neither `recordedLookup`, `resolveLegalMoves` nor `syzygyPosition`. A typed unavailable
+geometry returns `input_abstained`; a malformed or forged completed geometry fails its specialized
+assertion and throws `EvidenceInvariantError`.
+
+For an evidence geometry, the operation calls the sole sealed
+`resolvePromotionRaceRecordedSource(geometry.fen, recordedLookup)`. That resolver reads the
+authoritative recorded-evidence index itself and returns only a sealed exact same-FEN `recorded` or
+sealed exact-FEN `absent`; there is no caller-authored preference, source kind or evidence object.
+It calls `assertRecordedTablebaseEvidence` before sealing `recorded`. Store/read failure throws and
+does not become `absent`. The collector asserts the resolution seal and FEN. An invalid, forged,
+wrong-FEN or value-mutated recorded resolution throws and **never falls back live**.
+
+A sealed recorded resolution takes member 1. Only sealed `absent` permits the operation to call the
+shared provider dependency for the exact geometry FEN. The provider's scheduler preflight occurs
+before the success-only legal-map resolver: a sealed success delivery takes member 2; the
+scheduler-sealed local-domain result is first wrapped by
+`declareSyzygyTablebaseDomainEvidence` and takes member 3, and a scheduler failure returns
 `provider_unavailable` with operation/request digest and the exact provider failure reason but
 emits no declared chess evidence. For member 3 the operation recomputes the normalized Syzygy
 request from the geometry FEN and requires its branded digest to equal the local-domain envelope;
 the domain item therefore cannot be crossed from another FEN even though its inner fact contains
-only piece count. Callers
-cannot pass a structural `ProviderSourceFailure` into the collector. A success is minted only by
+only piece count. Neither outside-domain nor provider-failure resolution calls
+`resolveLegalMoves`.
+
+Only after a recorded or live success is fixed does the operation call
+`resolveLegalMoves(geometry.fen)`. Its typed unavailable arm returns `input_abstained`; its evidence
+arm calls `assertExactLegalMovesEvidence` before reading a move, and invalid evidence throws. A
+success is minted only by
 `createDerivedPawnPromotionRaceTablebaseV1Evidence({geometry, legalMoves, source})`; the central value receipt and
 the sealed returned `PromotionRaceTablebaseDerivationReceipt` retain the same exact three input
 objects. The result assertion requires `derivation.output === item`, receipt-set membership and
 reference identity for every input. Replacing the legal map or source after construction, even with
 an equal separately sealed value, fails. All arms require byte-equal
-canonical full FEN; precedence is `no_opposing_passed_clear_paths`, then `input_abstained`, then
-source resolution, local domain and provider failure. Substituting provider failure for domain evidence, a bare domain payload for
+canonical full FEN; precedence is completed/no-output, typed geometry absence, sealed recorded
+resolution, live local-domain/provider result, success-only legal-map resolution, then derivation.
+Substituting provider failure for domain evidence, a bare domain payload for
 its sealed item, or a live success for a recorded member fails.
 
 The geometry declaration may land after this amendment passes fresh review. The outcome declaration
@@ -766,9 +856,11 @@ shipped around — no criterion here carries a pre-authorized fallback.
    promotion pair specifically, geometry has exactly one declared contacts input; outcome has the
    two ordered three-input success alternatives plus the ordered geometry/domain-fact alternative
    in §3.7. Those success members require exact value receipts for contacts, legal moves and the
-   recorded source; no-race is a separate no-output arm. A missing legal map, generic-sealed contacts item,
-   cross-FEN source, crossed recorded/live source kind or piece-count-only match fails before an
-   event is emitted.
+   recorded source; no-race is a separate completed/no-output arm. The closed collector operation
+   resolves the authoritative recorded index before live execution and resolves the legal map only
+   after recorded/live source success. A typed unavailable legal map abstains; a generic-sealed
+   contacts item, invalid recorded resolution, cross-FEN source, crossed recorded/live source kind
+   or piece-count-only match throws before an event is emitted and cannot trigger live fallback.
 3. **C3 — Convention pinning.** The §2 convention texts (values included: the four
    overload clauses, 250,000 nodes, 1–4 attacker moves, the heavy-piece set K/Q/R, the
    race-arrival clauses) appear verbatim in the declarations' semantics/limitations.
@@ -861,9 +953,10 @@ shipped around — no criterion here carries a pre-authorized fallback.
     geometry absence; and compiled execution paths `[sync, interactive]` without changing the
     `derived.pawn` producer's own `sync` operation. The production suite adds an unsealed
     declared-item forge, sealed-false contacts mutations for passed/blocker/pawn/FEN, wrong
-    producer/id/version, no-race versus missing-input separation, missing/substituted legal-map,
-    same-FEN recorded category/DTZ/piece-count mutations, crossed recorded/live
-    source/occurrence/acquisition, bare and crossed domain facts, provider-failure-for-domain
+    producer/id/version, completed-no-race versus missing-input separation with zero source/legal
+    calls, typed-missing versus invalid/substituted legal-map, same-FEN recorded
+    category/DTZ/piece-count mutations, crossed recorded/live source/occurrence/acquisition,
+    forged/changed recorded resolution with no live fallback, bare and crossed domain facts, provider-failure-for-domain
     substitution, absence of `promotionWithCheck`, exact external check composition, and reproduces
     D909's geometric inversion.
 
@@ -934,11 +1027,11 @@ repair on [[D2179]]–[[D2183]]; only projections 13–14 remain blocked.
 ## Promotion amendment returns
 
 The held pair remains owned here. The D2179–D2183 repair preserved exact factory receipts, sealed
-success inputs and the existing check authority, but the 2026-09-01 third fresh review returned the
-invocation/result boundary on [[D2469]]–[[D2472]]. The next author repair must publish a closed
-request and operation signature, resolve outside-domain before requiring success-only legal moves,
-fail invalid authority rather than calling it absence, and represent a valid no-witness result as
-completed/no-output. Exact review:
+success inputs and the existing check authority; the 2026-09-01 third fresh review returned the
+invocation/result boundary on [[D2469]]–[[D2472]], and the author repair above now publishes the
+closed request/signature, resolves local domain before the success-only legal map, fails invalid
+authority, and represents a valid no-witness result as completed/no-output. A fourth fresh review
+must now try to falsify that repair. Exact return:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-third-fresh-independent-buildability-review-2026-09-01.md`.
 Provider and value-authority acceptance/implementation remain separate landing dependencies.
 
@@ -952,10 +1045,10 @@ Provider and value-authority acceptance/implementation remain separate landing d
 | [[D2181]] | author-repaired: one sealed available derivation receipt retains geometry, legal map, selected whole source and output by reference |
 | [[D2182]] | author-repaired: no-race/no-witness is a typed no-output arm distinct from `input_abstained` |
 | [[D2183]] | author-repaired: `promotionWithCheck` is removed; the existing exact check event composes by before-FEN and move UCI |
-| [[D2469]] | returned: outside-domain member cannot require an undeclared legal map before domain resolution |
-| [[D2470]] | returned: publish one closed request/source-selection algebra and collector signature |
-| [[D2471]] | returned: invalid authority is an invariant failure; only typed missing/unavailable inputs abstain |
-| [[D2472]] | returned: valid no-race is completed/no-output, not unavailable |
+| [[D2469]] | author-repaired: provider preflight/domain and provider-failure arms execute before the lazy success-only legal-map resolver |
+| [[D2470]] | author-repaired: one request, dependency interface, sealed recorded resolver and exact collector signature fix source precedence |
+| [[D2471]] | author-repaired: specialized assertion failure throws `EvidenceInvariantError`; only typed unavailable inputs abstain, and invalid recorded bytes never permit live fallback |
+| [[D2472]] | author-repaired: valid no-race is `completed/no_evidence` and passes through the outcome operation without source or legal-map calls |
 
 ## Appendix A — registered projection ids
 
@@ -981,6 +1074,11 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-01: author-repaired [[D2469]]–[[D2472]]. The held pair now has one typed request and
+  dependency signature, a sealed authoritative recorded-source resolution with fixed recorded-first
+  precedence, lazy legal-map resolution only after an in-domain source succeeds, invariant failures
+  that cannot become abstention or live fallback, and completed/no-output no-race results. A fourth
+  fresh independent review still gates the pair; projections 1–12 remain unchanged.
 - 2026-09-01: third fresh review returned the held promotion pair on [[D2469]]–[[D2472]] and
   corrected the candidate packet's conflicting exact-legal factory alias on [[D2468]]. Original
   projections 1–12 remain accepted and unchanged.

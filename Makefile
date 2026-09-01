@@ -520,7 +520,7 @@ candidate-packet-fourth-author-repair:
 candidate-packet-fourth-fresh-review:
 	node --test tools/d2389-candidate-packet-fourth-fresh-review/contract.test.mjs
 
-.PHONY: candidate-packet-fifth-author-repair candidate-packet-fifth-fresh-review candidate-packet-d2428-measurement candidate-packet-sixth-author-repair semantic-collectors-promotion-third-fresh-review
+.PHONY: candidate-packet-fifth-author-repair candidate-packet-fifth-fresh-review candidate-packet-d2428-measurement candidate-packet-sixth-author-repair semantic-collectors-promotion-third-fresh-review semantic-collectors-promotion-third-author-repair
 candidate-packet-fifth-author-repair:
 	node --test tools/d2389-candidate-packet-fifth-author-repair/contract.test.mjs
 
@@ -536,6 +536,10 @@ candidate-packet-sixth-author-repair:
 
 semantic-collectors-promotion-third-fresh-review:
 	node --test tools/d2468-semantic-collectors-promotion-third-fresh-review/*.test.mjs
+
+semantic-collectors-promotion-third-author-repair:
+	node --test tools/d2469-semantic-collectors-promotion-third-author-repair/*.test.mjs
+	./node_modules/.bin/tsc -p tools/d2469-semantic-collectors-promotion-third-author-repair/tsconfig.contract.json --noEmit
 
 review-evidence-author-contract:
 	node --test tools/d1969-review-evidence-author-harness/*.test.mts

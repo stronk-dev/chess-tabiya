@@ -13968,3 +13968,21 @@ beneficiary, edge filter, finite claim horizon, operational budget, provider/ver
 completeness and proof status. Multi-ply coverage, cache/transposition semantics, latency, broader
 positions and module presentation remain open. No production, pack, schema or authored chess bytes
 changed.
+
+## 2026-09-01 — Held promotion pair closes its invocation algebra
+
+**What landed:** the [[D2469]]–[[D2472]] author repair in `semantic-collectors`, its four-arm
+disposable prose contract, strict TypeScript protocol model and foundation-plan/register checkpoint.
+The original twelve implemented Wave-C projections are unchanged.
+
+**What changed:** the outcome operation now owns one request and fixed source order. A sealed
+authoritative recorded lookup wins; only sealed absence permits live Syzygy. Provider preflight,
+outside-domain and source failure resolve before the success-only exact legal-map resolver. Invalid
+authority throws and cannot become honest absence or live fallback. A valid position with no
+opposing passed clear paths is `completed/no_evidence`, and the outcome operation preserves it
+without touching recorded storage, legal moves or the provider.
+
+**Blocked/next:** a fourth fresh independent review must falsify the repaired boundary before the
+held pair can be accepted. Production still waits on the exact value-authority factories and shared
+provider-exchange Syzygy operation; learner modules/presets remain a later literal-id amendment.
+No runtime, API, schema, pack, content, bot or learner UX bytes changed.
