@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "resources": [
+    {
+      "id": "campaign-schema",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "json_schema_id@1",
+        "schemaSelector": "schemas/campaign.schema.json#$id",
+        "versionSelector": null
+      },
+      "claimMode": "prose",
+      "introducedBy": "shared-resource-register-bootstrap.md",
+      "introduction": "existing"
+    },
+    {
+      "id": "concept-registry-schema",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "json_schema_id@1",
+        "schemaSelector": "schemas/concept_registry.schema.json#$id",
+        "versionSelector": "packages/schema/src/index.ts#export:CONCEPT_REGISTRY_SCHEMA_VERSION"
+      },
+      "claimMode": "whole_projection",
+      "introducedBy": "shared-resource-register-bootstrap.md",
+      "introduction": "absent"
+    },
+    {
+      "id": "evidence-kinds",
+      "lifecycle": "member_set",
+      "projection": {
+        "adapter": "literal_string_tuple@1",
+        "rootSelector": "apps/server/src/sourcing/types.ts#export:EVIDENCE_KINDS"
+      },
+      "claimMode": "members",
+      "introducedBy": "shared-resource-registers.md",
+      "introduction": "existing"
+    },
+    {
+      "id": "migration",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "migration_sequence@1",
+        "sequenceSelector": "apps/server/src/storage.ts#class:SQLiteRunStorage/private-method:migrate/local:migrations",
+        "headSelector": "apps/server/src/storage.ts#export:STORAGE_VERSION"
+      },
+      "claimMode": "prose",
+      "introducedBy": "shared-resource-registers.md",
+      "introduction": "existing"
+    },
+    {
+      "id": "pack-schema",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "json_schema_id@1",
+        "schemaSelector": "schemas/drill_pack.schema.json#$id",
+        "versionSelector": "packages/schema/src/index.ts#export:DRILL_PACK_SCHEMA_VERSION"
+      },
+      "claimMode": "prose",
+      "introducedBy": "shared-resource-registers.md",
+      "introduction": "existing"
+    },
+    {
+      "id": "principle-entry-schema",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "json_schema_id@1",
+        "schemaSelector": "schemas/principle_entry.schema.json#$id",
+        "versionSelector": "packages/schema/src/index.ts#export:PRINCIPLE_ENTRY_SCHEMA_VERSION"
+      },
+      "claimMode": "prose",
+      "introducedBy": "shared-resource-registers.md",
+      "introduction": "existing"
+    },
+    {
+      "id": "release-manifest-schema",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "json_schema_id@1",
+        "schemaSelector": "schemas/release_manifest.schema.json#$id",
+        "versionSelector": "packages/schema/src/index.ts#export:RELEASE_MANIFEST_SCHEMA_VERSION"
+      },
+      "claimMode": "whole_projection",
+      "introducedBy": "shared-resource-register-bootstrap.md",
+      "introduction": "absent"
+    },
+    {
+      "id": "run-schema",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "json_schema_id@1",
+        "schemaSelector": "schemas/drill_run.schema.json#$id",
+        "versionSelector": "packages/schema/src/index.ts#export:DRILL_RUN_SCHEMA_VERSION"
+      },
+      "claimMode": "prose",
+      "introducedBy": "shared-resource-registers.md",
+      "introduction": "existing"
+    },
+    {
+      "id": "shape-entry-schema",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "json_schema_id@1",
+        "schemaSelector": "schemas/shape_entry.schema.json#$id",
+        "versionSelector": "packages/schema/src/index.ts#export:SHAPE_ENTRY_SCHEMA_VERSION"
+      },
+      "claimMode": "prose",
+      "introducedBy": "shared-resource-registers.md",
+      "introduction": "existing"
+    },
+    {
+      "id": "source-attribution-registry",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "canonical_resource@1",
+        "rootSelector": "packages/runtime/src/source-attribution.ts#export:SOURCE_ATTRIBUTION_REGISTRY_RESOURCE"
+      },
+      "claimMode": "whole_projection",
+      "introducedBy": "shared-resource-register-bootstrap.md",
+      "introduction": "absent"
+    }
+  ]
+}

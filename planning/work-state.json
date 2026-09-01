@@ -19762,7 +19762,7 @@
       "id": "D2488",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4756493b191ed950c376a02514d8547e9ca09f66adfcc2736f480d81c855f8ea",
+      "sourceDigest": "sha256:c512cd05861921ffb4bc7916da63bfc45ce7ba3ce008a556e3b2dfd3bc86d795",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md"
@@ -19771,7 +19771,7 @@
       "id": "D2489",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a317b55629b82aa79bf63d399ddf6b7dd9927d40cb2b90c70004b9ba2ad3990b",
+      "sourceDigest": "sha256:a7f02f6d5659fb3d2ec5925aaaee958c8488d2df4da368653704a686777b9790",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md"
@@ -19780,7 +19780,7 @@
       "id": "D2490",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e738618af519c13424699d9ccacbcfb211c2f364c2f76a49e16e491c9c10e9ad",
+      "sourceDigest": "sha256:d2060613bd4c3a78e858ce6bc4b27ec6566b75260c7c15ebe5060159536944a3",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md"
@@ -19789,7 +19789,7 @@
       "id": "D2491",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:60d1a8095c52552b61ef459eac52d06f018e15e44fc15351dfb084d7ede38a67",
+      "sourceDigest": "sha256:0d84c8148d5eb1709a000c3ccb04033076dfd425609a6176fb18adf82410452a",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md"
@@ -19798,7 +19798,7 @@
       "id": "D2492",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:14241ac411824fb12e1d6a41f588ea35def8f34f88b58a8d2331775fb5893509",
+      "sourceDigest": "sha256:a4a2481a78970c52d2582be4365edf04f33e6d9208e1e448de9b4db37e838c34",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md"
@@ -19807,7 +19807,7 @@
       "id": "D2493",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:690455c194f0fd19a4800bcde0ffe9281f799873ef7d4b128ff1610df5a7dd2f",
+      "sourceDigest": "sha256:0c3bf251d96586251f6c1a7ff68ac2248fa65faa83736e9633315f271c9d1f8d",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md"
@@ -19816,7 +19816,7 @@
       "id": "D2494",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2e1633a70bbd3c0d997178693db3bb933f8a9befbfeed21f723f8f1534c53850",
+      "sourceDigest": "sha256:7bd369890973b6cd1f87b4fd168c20a499ec47821fb10a5acf80a070aeca543a",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md"

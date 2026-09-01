@@ -13872,3 +13872,20 @@ resolver/adapter/README semantics, and make the pre-acceptance matrix executable
 implementation-only arms. No catalogue, register or product implementation is authorized. This
 return remains the nearest blocker for semantic-convention/provider roots, value authority and the
 source-retaining phase composer.
+
+## 2026-09-01 — Generic register bootstrap third author repair
+
+**What landed:** the author repair for [[D2488]]–[[D2494]], its checked-in literal ten-resource
+catalogue seed and `make shared-resource-bootstrap-third-author-repair` (8/8). The prior
+canonical/adoption (8/8) and cross-RFC reconciliation (6/6) controls remain green.
+
+**What changed:** every descriptor can now be encoded through a closed projection union; selector
+resolution retains absent, partial, invalid and landed as different states; all pre-canonical
+adapter semantic images and the TypeScript repository/external edge boundary are explicit; and
+README remains check-not-generate with no tool-owned prose. The review order no longer requires an
+unimplemented sixteen-family engine suite: fresh review tests the literal author contract, while
+all sixteen families remain mandatory after acceptance during implementation.
+
+**Blocked/next:** another fresh independent buildability review must try to falsify the repaired
+contract. The RFC is still draft and implementation remains unauthorized. No catalogue runtime,
+register, schema, storage, product or UX bytes changed.

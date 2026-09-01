@@ -1,11 +1,10 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — RETURNED by third fresh independent review 2026-09-01 on [[D2488]]–[[D2494]].
-  The one-engine direction survives, but the projection/config union and seven complete baseline
-  descriptors are absent; `partial` is unrepresentable; three adapter normal forms and the
-  TypeScript traversal boundary are undefined; README byte ownership is ambiguous; and the review
-  order requires sixteen unimplemented fixture families. Author repair and another fresh review
-  are required; no implementation is authorized.
+- **Status:** draft — author-repaired 2026-09-01 on [[D2488]]–[[D2494]] after the third fresh
+  independent return. The repair supplies the projection/config union, a checked-in ten-descriptor
+  baseline, typed absent/partial/invalid/landed resolution, closed adapter images, check-not-generate
+  README ownership and an honest pre-implementation review boundary. Another fresh review is
+  required; no implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -25,9 +24,16 @@ none
 ```
 
 ```tabiya-resource-roots
-release-manifest-schema | sequential/json_schema_id@1 | schemas/release_manifest.schema.json#$id | packages/schema/src/index.ts#export:RELEASE_MANIFEST_SCHEMA_VERSION
-concept-registry-schema | sequential/json_schema_id@1 | schemas/concept_registry.schema.json#$id | packages/schema/src/index.ts#export:CONCEPT_REGISTRY_SCHEMA_VERSION
-source-attribution-registry | sequential/canonical_resource@1 | packages/runtime/src/source-attribution.ts#export:SOURCE_ATTRIBUTION_REGISTRY_RESOURCE | packages/runtime/src/source-attribution.ts#export:SOURCE_ATTRIBUTION_REGISTRY_RESOURCE.version
+campaign-schema | sequential/json_schema_id@1/existing | schemas/campaign.schema.json#$id | none
+concept-registry-schema | sequential/json_schema_id@1/absent | schemas/concept_registry.schema.json#$id | packages/schema/src/index.ts#export:CONCEPT_REGISTRY_SCHEMA_VERSION
+evidence-kinds | member_set/literal_string_tuple@1/existing | apps/server/src/sourcing/types.ts#export:EVIDENCE_KINDS | none
+migration | sequential/migration_sequence@1/existing | apps/server/src/storage.ts#class:SQLiteRunStorage/private-method:migrate/local:migrations | apps/server/src/storage.ts#export:STORAGE_VERSION
+pack-schema | sequential/json_schema_id@1/existing | schemas/drill_pack.schema.json#$id | packages/schema/src/index.ts#export:DRILL_PACK_SCHEMA_VERSION
+principle-entry-schema | sequential/json_schema_id@1/existing | schemas/principle_entry.schema.json#$id | packages/schema/src/index.ts#export:PRINCIPLE_ENTRY_SCHEMA_VERSION
+release-manifest-schema | sequential/json_schema_id@1/absent | schemas/release_manifest.schema.json#$id | packages/schema/src/index.ts#export:RELEASE_MANIFEST_SCHEMA_VERSION
+run-schema | sequential/json_schema_id@1/existing | schemas/drill_run.schema.json#$id | packages/schema/src/index.ts#export:DRILL_RUN_SCHEMA_VERSION
+shape-entry-schema | sequential/json_schema_id@1/existing | schemas/shape_entry.schema.json#$id | packages/schema/src/index.ts#export:SHAPE_ENTRY_SCHEMA_VERSION
+source-attribution-registry | sequential/canonical_resource@1/absent | packages/runtime/src/source-attribution.ts#export:SOURCE_ATTRIBUTION_REGISTRY_RESOURCE | none
 ```
 
 ## Summary
@@ -48,10 +54,20 @@ not.
 
 ## 1. One machine-readable catalogue
 
-The implementation creates `rfc/shared-resource-catalogue.json`. `rfc/README.md` renders its
-human-readable catalogue and register sections, and `make register-check` fails if the rendered
-resource population differs in either direction. There is no independent `RESOURCE_NAMES`,
-`SCHEMA_SLUGS`, check-number resource list or hand-maintained count.
+The implementation creates `rfc/shared-resource-catalogue.json`. Its exact bootstrap preimage is
+checked in now as
+`planning/shared-resource-register-bootstrap/initial-catalogue.v1.json`; author review validates
+that file against the type and compatibility table below, the ten-row metadata block above and the
+live selectors. Implementation copies it byte-for-byte to the runtime catalogue before adding any
+derived register state. There is no prose-only seventh-resource reconstruction left to an
+implementer ([[D2489]]).
+
+`rfc/README.md` is **not generated**. It remains the human-owned explanation/register surface from
+the implemented parent. `make register-check` parses its resource markers and table rows and fails
+when their checked projection differs from the catalogue/tree/claims in either direction. No tool
+rewrites, deletes or owns the file's wave order, pins, rationale, archive links or any other bytes
+([[D2493]]). There is no independent `RESOURCE_NAMES`, `SCHEMA_SLUGS`, check-number resource list
+or hand-maintained count.
 
 The catalogue has schema version 1 and exact top-level keys in this order:
 
@@ -75,13 +91,65 @@ interface SharedResourceDescriptorV1 {
 }
 ```
 
+The previously undefined projection field is this exact closed discriminated union ([[D2488]]):
+
+```ts
+type StructuralSelectorV1 = string;
+
+type SharedResourceProjectionV1 =
+  | {
+      readonly adapter: "json_schema_id@1";
+      readonly schemaSelector: StructuralSelectorV1;
+      readonly versionSelector: StructuralSelectorV1 | null;
+    }
+  | {
+      readonly adapter: "migration_sequence@1";
+      readonly sequenceSelector: StructuralSelectorV1;
+      readonly headSelector: StructuralSelectorV1;
+    }
+  | {
+      readonly adapter: "literal_string_tuple@1";
+      readonly rootSelector: StructuralSelectorV1;
+    }
+  | {
+      readonly adapter: "literal_string_union@1";
+      readonly rootSelector: StructuralSelectorV1;
+    }
+  | {
+      readonly adapter: "canonical_resource@1";
+      readonly rootSelector: StructuralSelectorV1;
+    }
+  | {
+      readonly adapter: "typescript_contract@1";
+      readonly versionSelector: StructuralSelectorV1;
+      readonly roots: readonly [StructuralSelectorV1, ...StructuralSelectorV1[]];
+      readonly repositoryEdges: "transitive";
+      readonly externalEdges: "resolved_signature";
+    }
+  | {
+      readonly adapter: "versioned_declarations@1";
+      readonly rootSelector: StructuralSelectorV1;
+      readonly idField: "id";
+      readonly versionField: "version";
+    };
+```
+
+No adapter accepts an open `options` object. The exact keys above are the only configuration;
+missing or extra keys fail. `StructuralSelectorV1` is parsed, not merely type-checked as a string:
+the repository-relative POSIX path precedes `#`, and the suffix is exactly one of `$id`,
+`export:<name>`, `interface:<name>`, `type:<name>`, `function:<name>` or a `/`-separated descent of
+`class:<name>`, `private-method:<name>`, `method:<name>`, `local:<name>`, `member:<name>` and
+`literal`. Identifier components use ECMAScript IdentifierName spelling. A selector must resolve
+to exactly one JSON property or TypeScript compiler symbol/AST node. Text or regex matching is not
+resolution.
+
 `id` matches `^[a-z][a-z0-9-]*$`, is unique, and equals the README register marker. `introducedBy`
 is one active or archived process RFC basename. Catalogue entries are ASCII-sorted by `id`.
 Unknown/missing/extra keys, duplicate ids, unsafe paths, unknown adapters or incompatible
 lifecycle/claim-mode pairs fail before claims are parsed.
 
 The initial catalogue is exactly the seven already-registered resources plus these three absent
-ones:
+ones. The table is a reading aid; the checked-in JSON is the complete normative image:
 
 | resource | lifecycle | projection |
 |---|---|---|
@@ -96,6 +164,14 @@ ones:
 | `shape-entry-schema` | `sequential` | `json_schema_id@1` |
 | `source-attribution-registry` | `sequential` | `canonical_resource@1` |
 
+The exact compatibility table is closed:
+
+| lifecycle | allowed adapters | required claim mode |
+|---|---|---|
+| `sequential` | `json_schema_id@1`, `migration_sequence@1`, `canonical_resource@1`, `typescript_contract@1` | `prose` or `whole_projection` |
+| `member_set` | `literal_string_tuple@1`, `literal_string_union@1` | `members` |
+| `lineage_set` | `versioned_declarations@1` | `members` |
+
 Existing rows retain `claimMode: prose`; the three new sequential roots use
 `claimMode: whole_projection`. Follow-on process RFCs use the same engine and may add only the
 closed adapters/lifecycles specified below. Adding an adapter or lifecycle requires an accepted
@@ -104,17 +180,47 @@ RFC cannot add checker code.
 
 ## 2. Closed projection adapters
 
-Every adapter returns one immutable `ProjectedResource`:
+Selector population and semantic validity are different facts. Every adapter returns this exact
+union; `partial` is not represented by throwing or collapsed into absence ([[D2490]]):
 
 ```ts
-interface ProjectedResource {
-  readonly state: "absent" | "landed";
+interface ProjectedResourceV1 {
   readonly identity: Readonly<Record<string, CanonicalValue>>;
   readonly semantic: CanonicalValue;
   readonly digest: `sha256:${string}` | null;
   readonly resolvedSelectors: readonly string[];
 }
+
+type ResourceResolutionV1 =
+  | {
+      readonly state: "absent";
+      readonly resolvedSelectors: readonly [];
+      readonly missingSelectors: readonly string[];
+    }
+  | {
+      readonly state: "partial";
+      readonly resolvedSelectors: readonly string[];
+      readonly missingSelectors: readonly string[];
+    }
+  | {
+      readonly state: "invalid";
+      readonly resolvedSelectors: readonly string[];
+      readonly missingSelectors: readonly [];
+      readonly diagnostics: readonly ResourceDiagnosticV1[];
+    }
+  | {
+      readonly state: "landed";
+      readonly resolvedSelectors: readonly string[];
+      readonly missingSelectors: readonly [];
+      readonly projection: ProjectedResourceV1;
+    };
 ```
+
+The engine first expands the descriptor's selector fields in their declared order. Zero resolved
+selectors is `absent`; a strict non-zero subset is `partial`; all selectors resolving but failing
+adapter grammar/digest/agreement is `invalid`; only a valid complete projection is `landed`.
+`assertSharedResourceTransition` receives immutable before/after maps of descriptor id to this
+union, so introduction, adoption and regression rules cannot reinterpret an adapter exception.
 
 The adapter is selected by `projection.adapter`, never by resource id. Exact selector identity is
 `<repository-relative POSIX path>#<structural selector>`. Paths may repeat across resources;
@@ -125,40 +231,80 @@ resolution.
 The closed adapter set is:
 
 1. `json_schema_id@1` — resolves one JSON file `$id` and optional exported version selector;
-   identity is the parsed version, semantic is the complete parsed schema object, and the digest is
-   over that object. `$id` and exported version must agree.
+   identity is the terminal version component parsed from the exact
+   `urn:chess-tabiya:schema:<slug>:<version>` id, semantic is the complete JSON value parsed with
+   duplicate-key rejection, and the digest is over that value. When non-null, the exported version
+   must be one literal string/positive safe integer equal to the parsed id component after canonical
+   decimal/dotted-decimal spelling. No comments or non-JSON number forms exist in the input.
 2. `migration_sequence@1` — resolves one literal ordered migration array and one exported positive
-   safe-integer head; identity is the contiguous `1..head` sequence and semantic includes each
-   literal migration version/name plus the normalized SQL body.
+   safe-integer head; identity is the contiguous `1..head` sequence. Each array member must be the
+   exact object `{ version, name, apply }`, where `version` is a literal positive safe integer,
+   `name` a literal string and `apply` an arrow/function expression whose repository calls resolve
+   under the TypeScript graph rules below. Semantic is the ordered array of
+   `{ version, name, applyGraph }`; SQL is retained as decoded string-literal values inside that
+   graph. There is no separately “normalized SQL” text and therefore no second SQL parser/image.
 3. `literal_string_tuple@1` — resolves one exported readonly literal string tuple; identity and
-   semantic are its unique ordered members.
+   semantic are the ASCII-sorted unique member set. Source order, whitespace and comments do not
+   move a set resource.
 4. `literal_string_union@1` — resolves one exported type alias whose complete body is a union of
-   unique string literals; identity is the ASCII-sorted member set and semantic retains the
-   normalized union declaration. It exists because adoption must describe the live
+   unique string literals; identity and semantic are the ASCII-sorted member set. Parentheses,
+   source order, whitespace and comments do not enter the image; every non-string-literal arm,
+   duplicate or alias fails. It exists because adoption must describe the live
    `AssistancePermission` authority rather than rewriting it into a tuple ([[D2467]]).
 5. `canonical_resource@1` — resolves one atomic exported object with exact keys
    `{ id, version, payload, digest }`. `id` equals the descriptor id, `version` is a positive safe
    integer, `payload` is a canonical JSON object, and `digest` equals the shared-resource digest of
    `{ id, version, payload }`. Extra semantic fields outside `payload` fail. This is the required
    shape for source attribution, provider protocol and assistance exchange.
-6. `typescript_contract@1` — resolves a positive integer version selector plus one or more exported
-   type/value roots. The adapter closes over referenced local/imported type aliases, interfaces,
-   literal const objects/tuples, called functions/methods and referenced constants within the
-   repository. It records normalized node identity/body and resolved directed edges; unresolved
-   dynamic property access, `any`, broad index signatures, computed registry membership or an
-   unclassified repository edge fails. Local bindings are alpha-renamed by first declaration;
-   comments, whitespace and import aliases do not enter the semantic image. Exported/member names,
-   literals, type structure, call order and property edges do. This is the complete before/after
-   authority used by assistance resources; callers cannot supply a changed-symbol list.
-7. `versioned_declarations@1` — resolves one literal declaration array whose members contain a
-   base id and canonical positive safe-integer version. Identity is the `id@version` set; semantic
-   is the complete declaration image. This supplies semantic conventions' per-base lineage without
-   a bespoke checker.
+6. `typescript_contract@1` — resolves a positive safe-integer literal version selector plus one or
+   more type/value roots using the repository-pinned TypeScript compiler. Starting from each root,
+   it follows every compiler-symbol reference in type positions, initializers, property access,
+   call/new/tagged-template expressions and return/throw/control-flow expressions. It traverses
+   repository declarations transitively, including re-export origins, generic declarations,
+   constraints/defaults and every local overload signature plus its implementation. Repository
+   edges are exactly `type_reference`, `value_reference`, `property_reference`, `call`,
+   `construct`, `tag`, `extends`, `implements`, `import` and `re_export`; any repository symbol edge
+   outside that enum fails.
 
-Adapter configuration is data within the catalogue projection: exact root selectors, version
-selector, and adapter-specific closed options. All owned selectors are listed there. The generic
-engine rejects a descriptor whose configuration omits a required root, repeats a selector or
-contains an option the adapter does not consume.
+   The semantic graph is a canonical JSON object with ASCII-sorted root selectors, node rows and
+   edge rows. A node row is `{ id, kind, exportedName, tree }`: `id` is its resolved repository
+   path plus the declaration's zero-based preorder ordinal among AST declarations (trivia does not
+   affect it); `kind` is the TypeScript `SyntaxKind` name; `exportedName`
+   is the root/re-export name or `null`; and `tree` is the recursively ordered SyntaxKind tree with
+   identifier spellings and decoded literal values. Trivia, comments and source offsets do not
+   enter `tree`; binding names, member names, operators, statement/argument order and type
+   structure do. This deliberately treats a local/import alias rename as a semantic change—the
+   adapter promises deterministic complete coverage, not equivalence proving.
+
+   External boundaries are closed rather than ignored ([[D2491]]):
+   - `node:` builtins record `{ kind:"node_builtin", module, exportPath, signatureTree }` plus the
+     exact `@types/node` lockfile version;
+   - ECMAScript/DOM library symbols record `{ kind:"typescript_lib", libFile, exportPath,
+     signatureTree }` plus the exact `typescript` lockfile version;
+   - package imports record `{ kind:"external_package", package, exportPath, signatureTree }` plus
+     the exact resolved `pnpm-lock.yaml` package/version/integrity identity; and
+   - an overload call records the compiler-resolved signature plus the complete public overload
+     set at that external symbol.
+
+   Ambient declarations without one of those three origins, `any`/`unknown`-based member or call
+   resolution, `eval`, dynamic `import()`, computed property names not reducible to one literal,
+   broad index-signature lookup and missing/ambiguous lockfile identity fail. Re-exports resolve to
+   origin while retaining the public export path. This is the complete before/after authority used
+   by adopted assistance resources; callers cannot supply a changed-symbol list.
+7. `versioned_declarations@1` — resolves one literal declaration array whose members contain a
+   base id and canonical positive safe-integer version under the descriptor's literal field names.
+   Every member must be a recursively canonical JSON object literal: no spread, shorthand,
+   computed key, method, accessor, identifier reference or non-canonical numeric literal.
+   Identity is the ASCII-sorted `id@version` set; semantic is the same-order array of the complete
+   parsed objects, with object keys canonicalized by §2.1. Declaration/source order, comments and
+   whitespace do not enter the image. This supplies semantic conventions' per-base lineage without
+   a bespoke checker ([[D2492]]).
+
+Adapter configuration is the discriminated data union in §1: exact roots/version selector and no
+open options. All owned selectors are derived from those fields. The generic engine rejects a
+descriptor whose configuration omits a required root, repeats a selector or contains a key the
+adapter does not consume. These rules define the pre-canonical semantic values; §2.1 alone defines
+their bytes and digest ([[D2492]]).
 
 ### 2.1 One canonical byte authority
 
@@ -226,11 +372,11 @@ must match that RFC's `tabiya-resource-roots` declaration. A product RFC cannot 
 
 ### 4.1 Genuinely absent root
 
-`unregistered -> absent` is legal only when **none** of the descriptor's owned selectors resolves.
+`unregistered -> absent` is legal only when the adapter result is exactly `state: "absent"`.
 File existence is irrelevant: a new export may be introduced in an existing module ([[D2443]]).
-If some but not all selectors resolve, the state is `partial`, never `absent`, and registration
-fails. The README image is `head=absent`, header-only Landed and Live-claims tables, and an immutable
-`introduced-by` marker.
+`partial` and `invalid` both refuse introduction with distinct stable diagnostics. The README image
+is `head=absent`, header-only Landed and Live-claims tables, and an immutable `introduced-by`
+marker.
 
 After the process RFC archives, one product RFC may add `first lane 1`. A later product transition
 must make every owned selector resolve, produce a valid projection, remove the claim and append the
@@ -259,7 +405,7 @@ vocabulary enter the generic engine without being described as absent or histori
 
 ## 5. One temporal authority
 
-Snapshot validation and register rendering remain in `register-check`, but every temporal rule is
+Snapshot validation and checked register projection remain in `register-check`, but every temporal rule is
 implemented by one exported pure function:
 
 ```text
@@ -312,7 +458,7 @@ The exact reconciliation is recorded in
 
 ## 7. Able-to-fail matrix
 
-The implementation supplies executable fixtures for at least:
+The implementation—not pre-acceptance review—supplies executable fixtures for at least:
 
 1. catalogue derivation over all ten initial resources with no hard-coded resource list;
 2. a second synthetic resource for every lifecycle and adapter, proving no resource-id dispatch;
@@ -333,7 +479,8 @@ The implementation supplies executable fixtures for at least:
 14. staged index-vs-HEAD, committed first-parent, missing parent, shallow range, hidden bad commit and
     second-parent-only prerequisite;
 15. landed-to-absent and landed-to-partial regression; and
-16. generated README/catalogue bijection and stable diagnostics after adding a resource.
+16. checked README/catalogue bijection, preservation of unrelated README prose and stable
+    diagnostics after adding a resource.
 
 ## 8. Implementation boundary and order
 
@@ -345,12 +492,19 @@ semantic product authority, API, storage, content, web or protected-design bytes
 
 Order:
 
-1. fresh independent buildability review executes the sixteen fixture families;
-2. implement the generic catalogue/projection/lifecycle/transition engine and three absent roots;
+1. fresh independent buildability review executes the author-repair contract: parse and validate
+   the literal ten-descriptor seed, projection union, compatibility matrix, four resolution states,
+   adapter semantic-image rules, README ownership and the implementation-test boundary;
+2. only after acceptance, implement the generic catalogue/projection/lifecycle/transition engine,
+   all sixteen fixture families and three absent roots;
 3. run normal `make register-check`, governance and full `make verify`;
 4. archive this RFC with ledger and append-only exploration-log closeout;
 5. rebase/accept/implement the assistance population RFC, then semantic/provider population RFCs;
 6. only then accept and implement their product lanes.
+
+Step 1 proves the contract is literal and implementable; it does not pretend the unimplemented
+engine already executes its implementation acceptance suite. Step 2 must make every family in §7
+red against its named mutation before the implementation can complete ([[D2494]]).
 
 ## Historical finding routing
 
@@ -390,8 +544,9 @@ criteria land; rewriting the architecture does not retire the findings.
    [[D2466]]).
 7. One transition function validates staged and every committed first-parent image; CI/local
    preimages are explicit and fail closed.
-8. All sixteen fixture families are able to fail for their named reason, including a second
-   synthetic resource for every adapter/lifecycle.
+8. After implementation, all sixteen fixture families are able to fail for their named reason,
+   including a second synthetic resource for every adapter/lifecycle; pre-acceptance review instead
+   executes the bounded author contract named in §8.
 9. Existing C1–C8 behavioral protections remain green through compatibility tests even though
    implementation diagnostics move to resource-scoped codes.
 10. `make verify` invokes snapshot, staged and committed-history checks through normal targets; no
@@ -406,7 +561,7 @@ criteria land; rewriting the architecture does not retire the findings.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Fresh independent review executes all sixteen families and verifies the cross-RFC profile fit | claude | review receipt plus acceptance/corrections | |
+| D1 | Fresh independent review executes the bounded author-repair contract and verifies the cross-RFC profile fit | claude | review receipt plus acceptance/corrections | |
 | D2 | Generic engine/catalogue/three absent roots land with normal full verification | codex | implementing SHA plus green `make verify` | |
 | D3 | Assistance population removes bespoke architecture and names this dependency | assistance-config-register.md | amended RFC plus fresh review | |
 | D4 | Semantic-convention population removes bespoke architecture and names this dependency | semantic-convention-register.md | amended RFC plus fresh review | |
@@ -420,6 +575,11 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-01: author-repaired [[D2488]]–[[D2494]] after the third return. Added the closed
+  projection/config union, literal ten-descriptor seed, four-state resolver result, explicit
+  adapter semantic images and TypeScript edge boundary, check-not-generate README contract and an
+  honest split between pre-acceptance author checks and implementation fixtures. Another fresh
+  independent review remains required; implementation is unauthorized.
 - 2026-09-01: returned by third fresh independent buildability review on [[D2488]]–[[D2494]];
   receipt: `planning/shared-resource-register-bootstrap/third-fresh-independent-buildability-review-2026-09-01.md`.
 - 2026-09-01: author-repaired the second return and reconciled the three competing follow-ons.
