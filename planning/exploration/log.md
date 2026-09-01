@@ -13986,3 +13986,22 @@ without touching recorded storage, legal moves or the provider.
 held pair can be accepted. Production still waits on the exact value-authority factories and shared
 provider-exchange Syzygy operation; learner modules/presets remain a later literal-id amendment.
 No runtime, API, schema, pack, content, bot or learner UX bytes changed.
+
+## 2026-09-01 — Shared-resource bootstrap closes four cross-RFC author gaps
+
+**What landed:** the [[D2498]]–[[D2501]] fourth author repair and [[D2502]] compatibility closeout.
+Bootstrap, assistance, semantic-convention and provider protocol now name canonical descriptor
+candidate files; `make shared-resource-bootstrap-fourth-author-repair` resolves both adopted
+assistance version selectors on the real TypeScript AST and validates all seventeen descriptor
+rows. Prior bootstrap/reconciliation controls remain green.
+
+**What changed:** structural selectors gain closed slash-only member/object/literal descent;
+process authorization reads complete descriptor bytes rather than reconstructing fields from
+prose. TypeScript/migration graphs now have exact node, edge, signature, overload and ordering
+images. Atomic resources are statically parsed closed literal ASTs and never imported or executed.
+The semantic history path/Make hook and provider atomic-version author target are reconciled, so
+their maintained local Make targets are green again.
+
+**Blocked/next:** another fresh independent review still gates acceptance, and acceptance still
+gates the generic engine/ten-root implementation. No catalogue, README register, product authority,
+schema, API, storage, content or web bytes changed.

@@ -1,7 +1,7 @@
 # RFC: Assistance shared-resource catalogue population
 
-- **Status:** draft — author-repaired 2026-09-01 on [[D2450]]–[[D2454]] and [[D2465]]–[[D2467]].
-  The document now depends on the generic register engine, adopts three truthful current
+- **Status:** draft — generic descriptor/selector repair complete 2026-09-01 under
+  [[D2498]]/[[D2499]], after [[D2450]]–[[D2454]] and [[D2465]]–[[D2467]]. The document now depends on the generic register engine, adopts three truthful current
   authorities, introduces two atomic future contracts and adds no bespoke checker. Fresh
   independent review is required; implementation is unauthorized.
 - **Author:** Codex
@@ -22,11 +22,15 @@ none
 ```
 
 ```tabiya-resource-roots
-assistance-config | sequential/typescript_contract@1/adopted | packages/runtime/src/assistance.ts#interface:AssistanceConfig | packages/runtime/src/assistance.ts#interface:AssistanceConfig.member:version.literal
-workflow-preference | sequential/typescript_contract@1/adopted | apps/web/src/lib/assistance-preference.ts#function:loadWorkflowPreset | apps/web/src/lib/assistance-preference.ts#function:loadWorkflowPreset/object:version.literal
+assistance-config | sequential/typescript_contract@1/adopted | packages/runtime/src/assistance.ts#interface:AssistanceConfig | packages/runtime/src/assistance.ts#interface:AssistanceConfig/member:version/literal
+workflow-preference | sequential/typescript_contract@1/adopted | apps/web/src/lib/assistance-preference.ts#function:loadWorkflowPreset | apps/web/src/lib/assistance-preference.ts#function:saveWorkflowPreset/object:version/literal
 assistance-permission | member_set/literal_string_union@1/adopted | packages/runtime/src/assistance.ts#type:AssistancePermission | none
 assistance-permission-contract | sequential/canonical_resource@1/absent | packages/runtime/src/assistance.ts#export:ASSISTANCE_PERMISSION_CONTRACT_RESOURCE | packages/runtime/src/assistance.ts#export:ASSISTANCE_PERMISSION_CONTRACT_RESOURCE.version
 assistance-exchange | sequential/canonical_resource@1/absent | packages/runtime/src/assistance-exchange.ts#export:ASSISTANCE_EXCHANGE_RESOURCE | packages/runtime/src/assistance-exchange.ts#export:ASSISTANCE_EXCHANGE_RESOURCE.version
+```
+
+```tabiya-resource-descriptor-source
+planning/assistance-config-register/catalogue-additions.v1.json
 ```
 
 ## Summary
@@ -79,7 +83,8 @@ v1–v3 semantic history.
 ### 1.2 Workflow preference — adopted sequential TypeScript contract
 
 The profile is `sequential/typescript_contract@1/adopted`, `claimMode: whole_projection`, with
-current head 1 derived from the accepted persisted object grammar. Roots are:
+current head 1 derived from the unique `version` property in the object literal passed by
+`saveWorkflowPreset` to persistence. Roots are:
 
 ```text
 packages/runtime/src/presets.ts#export:PRESET_IDS
@@ -255,6 +260,9 @@ intent/RFC concerns. This document governs shared authority identity and change 
 
 ## Changelog
 
+- 2026-09-01: added the complete canonical descriptor candidate; corrected config/workflow version
+  selectors to the generic slash grammar and the real persisted workflow object. Generic-engine
+  acceptance/implementation and fresh review still gate this process population.
 - 2026-09-01: author-repaired the sixth return. Rebased onto the generic engine, replaced C9 with
   five catalogue entries, added honest adoption, split permission vocabulary from operations, made
   exchange atomic and made semantic deltas projection-derived. Fresh review is required;

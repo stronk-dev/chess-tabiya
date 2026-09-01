@@ -50,7 +50,7 @@ function assertSelector(selector, nullable = false) {
   if (suffix === "$id") return;
   const segments = suffix.split("/");
   for (const segment of segments) {
-    if (!/^(?:export|interface|type|function|class|private-method|method|local|member):[$\p{ID_Start}_][$\p{ID_Continue}_]*$/u.test(segment) && segment !== "literal") {
+    if (!/^(?:export|interface|type|function|class|private-method|method|local|member|object):[$\p{ID_Start}_][$\p{ID_Continue}_]*$/u.test(segment) && segment !== "literal") {
       fail(`invalid selector segment ${segment}`);
     }
   }

@@ -1,6 +1,7 @@
 # RFC: Provider-protocol shared-resource catalogue population
 
-- **Status:** draft — author-repaired 2026-09-01 on [[D2455]]–[[D2459]]. Provider protocol now
+- **Status:** draft — canonical descriptor/static-resource repair complete 2026-09-01 under
+  [[D2499]]/[[D2501]]/[[D2502]], after [[D2455]]–[[D2459]]. Provider protocol now
   inhabits the generic atomic-resource lifecycle, separates runtime literals from compile-time
   relations and binds population to independent accepted product obligations. Fresh independent
   review is required; implementation is unauthorized.
@@ -16,6 +17,10 @@
 
 ```tabiya-claims
 none
+```
+
+```tabiya-resource-descriptor-source
+planning/provider-protocol-register/catalogue-additions.v1.json
 ```
 
 ```tabiya-resource-roots
@@ -53,7 +58,8 @@ selector does not resolve. A file with unrelated exports remains absent; a malfo
 `PROVIDER_PROTOCOL_RESOURCE` is partial and fails. Once a landed row exists, a missing or renamed
 selector is a regression, never a new absence ([[D2459]]).
 
-The process implementation adds `head=absent` with header-only Landed and Live-claims tables. It
+The process implementation adds the exact marker `provider-protocol head=absent` with header-only
+Landed and Live-claims tables. It
 does not add the product claim in the same transition.
 
 After this process RFC is implemented and archived,
@@ -71,20 +77,21 @@ CI base/depth and fail-closed missing-parent behavior ([[D2458]]).
 The product landing creates exactly:
 
 ```ts
-export const PROVIDER_PROTOCOL_RESOURCE = defineProviderProtocolResource({
+export const PROVIDER_PROTOCOL_RESOURCE = Object.freeze({
   id: "provider-protocol",
   version: 1,
-  payload: {
+  payload: Object.freeze({
     operations: [/* literal runtime identity rows */],
     digestDomains: [/* literal domain/constructor rows */],
-  },
+  }),
   digest: "sha256:...",
 } as const);
 ```
 
-`defineProviderProtocolResource` is imported from one declared module and has a compilable generic
-signature. It validates literal runtime identity and returns the exact generic
-`{ id, version, payload, digest }` shape; it does not store functions inside the payload.
+The generic adapter parses this closed literal AST without importing the module and verifies the
+digest over `{ id, version, payload }`. A sibling compile-only `satisfies` assertion checks the
+payload interface; no helper call, spread or referenced object participates in the governed value,
+and no function is stored inside the payload.
 
 Each operation payload row contains only canonical JSON fields:
 
@@ -249,6 +256,9 @@ semantics, not choices made by this process document.
 
 ## Changelog
 
+- 2026-09-01: added the complete canonical descriptor candidate and replaced the executable helper
+  image with the generic adapter's side-effect-free literal `Object.freeze` shape; the maintained
+  author target now asserts the atomic version field.
 - 2026-09-01: author-repaired [[D2455]]–[[D2459]]. Rebased onto the generic atomic resource,
   separated runtime literals from type relations, added an independent accepted obligation join
   and inherited the shared temporal/absence contract. Fresh review required; implementation

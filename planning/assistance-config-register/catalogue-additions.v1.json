@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "resources": [
+    {
+      "id": "assistance-config",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "typescript_contract@1",
+        "versionSelector": "packages/runtime/src/assistance.ts#interface:AssistanceConfig/member:version/literal",
+        "roots": [
+          "packages/runtime/src/assistance.ts#interface:AssistanceConfig",
+          "packages/runtime/src/assistance.ts#export:SILENT_ASSISTANCE",
+          "apps/web/src/lib/assistance-preference.ts#export:PROFILE_DEFAULTS",
+          "apps/web/src/lib/assistance-preference.ts#function:assistanceKey",
+          "apps/web/src/lib/assistance-preference.ts#function:validV4",
+          "apps/web/src/lib/assistance-preference.ts#function:migrate",
+          "apps/web/src/lib/assistance-preference.ts#function:loadAssistance",
+          "apps/web/src/lib/assistance-preference.ts#function:saveAssistance"
+        ],
+        "repositoryEdges": "transitive",
+        "externalEdges": "resolved_signature"
+      },
+      "claimMode": "whole_projection",
+      "introducedBy": "assistance-config-register.md",
+      "introduction": "adopted"
+    },
+    {
+      "id": "assistance-exchange",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "canonical_resource@1",
+        "rootSelector": "packages/runtime/src/assistance-exchange.ts#export:ASSISTANCE_EXCHANGE_RESOURCE"
+      },
+      "claimMode": "whole_projection",
+      "introducedBy": "assistance-config-register.md",
+      "introduction": "absent"
+    },
+    {
+      "id": "assistance-permission",
+      "lifecycle": "member_set",
+      "projection": {
+        "adapter": "literal_string_union@1",
+        "rootSelector": "packages/runtime/src/assistance.ts#type:AssistancePermission"
+      },
+      "claimMode": "members",
+      "introducedBy": "assistance-config-register.md",
+      "introduction": "adopted"
+    },
+    {
+      "id": "assistance-permission-contract",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "canonical_resource@1",
+        "rootSelector": "packages/runtime/src/assistance.ts#export:ASSISTANCE_PERMISSION_CONTRACT_RESOURCE"
+      },
+      "claimMode": "whole_projection",
+      "introducedBy": "assistance-config-register.md",
+      "introduction": "absent"
+    },
+    {
+      "id": "workflow-preference",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "typescript_contract@1",
+        "versionSelector": "apps/web/src/lib/assistance-preference.ts#function:saveWorkflowPreset/object:version/literal",
+        "roots": [
+          "packages/runtime/src/presets.ts#export:PRESET_IDS",
+          "packages/runtime/src/presets.ts#type:PresetId",
+          "packages/runtime/src/presets.ts#export:WORKFLOW_CONTEXTS",
+          "packages/runtime/src/presets.ts#type:WorkflowContextId",
+          "packages/runtime/src/presets.ts#interface:WorkflowContextPolicy",
+          "packages/runtime/src/presets.ts#export:WORKFLOW_CONTEXT_POLICIES",
+          "packages/runtime/src/presets.ts#function:workflowContextPolicy",
+          "apps/web/src/lib/assistance-preference.ts#function:workflowKey",
+          "apps/web/src/lib/assistance-preference.ts#function:loadWorkflowPreset",
+          "apps/web/src/lib/assistance-preference.ts#function:saveWorkflowPreset"
+        ],
+        "repositoryEdges": "transitive",
+        "externalEdges": "resolved_signature"
+      },
+      "claimMode": "whole_projection",
+      "introducedBy": "assistance-config-register.md",
+      "introduction": "adopted"
+    }
+  ]
+}

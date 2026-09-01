@@ -1,6 +1,7 @@
 # RFC: Semantic-convention shared-resource catalogue population
 
-- **Status:** draft — author-rebased 2026-09-01 on [[D2454]] and [[D2466]]. The 39-member lineage
+- **Status:** draft — canonical descriptor/history repair complete 2026-09-01 under
+  [[D2499]]/[[D2502]], after [[D2454]] and [[D2466]]. The 39-member lineage
   contract now consumes the generic register engine directly; no assistance dependency, C10 or
   resource-name literal remains. Fresh independent review is required; implementation is
   unauthorized.
@@ -18,6 +19,10 @@
 none
 ```
 
+```tabiya-resource-descriptor-source
+planning/semantic-convention-register/catalogue-additions.v1.json
+```
+
 ```tabiya-resource-roots
 semantic-conventions | lineage_set/versioned_declarations@1/absent | packages/runtime/src/evidence-conventions.ts#export:CONVENTION_DECLARATIONS | none
 ```
@@ -30,8 +35,9 @@ adds no product claim in the same transition.
 
 After the root exists, `semantic-convention-provenance.md` may claim the exact 39 initial
 `id@1` members. Its later implementation creates one literal `CONVENTION_DECLARATIONS` array, the
-checked source-recovery generator and append-only semantic history. Identity membership and
-claim-to-landing time use the generic engine; semantic-byte immutability remains the product RFC's
+checked source-recovery generator and append-only semantic history. The generic register governs
+identity membership only; claim-to-landing time uses the generic engine, while semantic-byte
+immutability remains the product RFC's
 declared validation hook.
 
 The resource depends on the generic engine, not assistance. It adds no C10, Git reader or
@@ -101,9 +107,10 @@ product RFC attaches two declared validation hooks:
 
 1. `semantic-convention-source-check` — initial runtime declarations are byte-for-byte generated
    from the reviewed source and every initial member remains present; and
-2. `semantic-convention-history-check` — one canonical JSONL row per landed declaration version
-   carries exactly `ref`, `semanticDigest`, `registryDigest` and `ownerRfc`, in landing order with
-   append-only bytes.
+2. `semantic-convention-history-check` — one canonical JSONL row per landed declaration version in
+   `packages/runtime/src/evidence-convention-history.jsonl` carries exactly `ref`,
+   `semanticDigest`, `registryDigest` and `ownerRfc`, in landing order with append-only bytes. Its
+   stable public verification surface is `make semantic-convention-history-check`.
 
 Hooks receive projected before/after images and no Git authority; the generic transition reader
 supplies the introducing commit/preimage. A row does not contain its impossible own commit hash.
@@ -206,6 +213,8 @@ semantics already under review; this document governs identity, lineage and chan
 
 ## Changelog
 
+- 2026-09-01: added the complete canonical descriptor candidate and restored the exact append-only
+  history path plus stable Make surface during generic-engine compatibility review.
 - 2026-09-01: rebased onto the generic engine. Removed the assistance/C9 dependency,
   `RESOURCE_NAMES` and C10, retained lineage semantics and delegated time/history to the shared
   reader. Fresh review required; implementation remains unauthorized.

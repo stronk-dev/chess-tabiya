@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "resources": [
+    {
+      "id": "semantic-conventions",
+      "lifecycle": "lineage_set",
+      "projection": {
+        "adapter": "versioned_declarations@1",
+        "rootSelector": "packages/runtime/src/evidence-conventions.ts#export:CONVENTION_DECLARATIONS",
+        "idField": "id",
+        "versionField": "version"
+      },
+      "claimMode": "members",
+      "introducedBy": "semantic-convention-register.md",
+      "introduction": "absent"
+    }
+  ]
+}

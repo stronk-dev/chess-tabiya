@@ -1,10 +1,11 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — author-repaired 2026-09-01 on [[D2488]]–[[D2494]] after the third fresh
-  independent return. The repair supplies the projection/config union, a checked-in ten-descriptor
-  baseline, typed absent/partial/invalid/landed resolution, closed adapter images, check-not-generate
-  README ownership and an honest pre-implementation review boundary. Another fresh review is
-  required; no implementation is authorized.
+- **Status:** draft — fourth author repair complete 2026-09-01 on [[D2498]]–[[D2501]]. The
+  previous repair's projection/config union, ten-descriptor baseline, four-state resolution,
+  check-not-generate README ownership and review boundary survive. The selector grammar now encodes
+  the real assistance profiles, process RFCs carry complete descriptor authority, and the two
+  remaining adapter images are literal. Another fresh independent review is required; no
+  implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -68,6 +69,26 @@ when their checked projection differs from the catalogue/tree/claims in either d
 rewrites, deletes or owns the file's wave order, pins, rationale, archive links or any other bytes
 ([[D2493]]). There is no independent `RESOURCE_NAMES`, `SCHEMA_SLUGS`, check-number resource list
 or hand-maintained count.
+
+Every process RFC that introduces or adopts resources carries exactly one
+`tabiya-resource-descriptor-source` fenced block naming a repository-relative canonical JSON file.
+That file has the same `{ "schemaVersion": 1, "resources": [...] }` envelope and complete
+descriptor grammar as the catalogue, and contains exactly the descriptors that RFC authorizes.
+The path is literal (no glob, absolute path, `..` or symlink traversal), is checked in before
+acceptance and is part of review. The transition reader obtains no descriptor field from prose: it
+requires canonical equality between the source file's rows and the rows appended to the catalogue,
+then checks the RFC's `tabiya-resource-roots` block as a routing summary of the same ids,
+lifecycle/adapter/introduction profiles, primary roots and version selectors. Missing, extra or
+cross-RFC descriptor rows fail. For every post-bootstrap introduction or adoption, `introducedBy`
+must equal that declaring RFC's basename, not merely name any active process RFC. The bootstrap
+seed alone retains `shared-resource-registers.md` on the six authorities that parent actually
+introduced; its four rows first governed here name this RFC ([[D2499]]).
+
+This RFC's descriptor authority is:
+
+```tabiya-resource-descriptor-source
+planning/shared-resource-register-bootstrap/initial-catalogue.v1.json
+```
 
 The catalogue has schema version 1 and exact top-level keys in this order:
 
@@ -139,9 +160,14 @@ missing or extra keys fail. `StructuralSelectorV1` is parsed, not merely type-ch
 the repository-relative POSIX path precedes `#`, and the suffix is exactly one of `$id`,
 `export:<name>`, `interface:<name>`, `type:<name>`, `function:<name>` or a `/`-separated descent of
 `class:<name>`, `private-method:<name>`, `method:<name>`, `local:<name>`, `member:<name>` and
-`literal`. Identifier components use ECMAScript IdentifierName spelling. A selector must resolve
-to exactly one JSON property or TypeScript compiler symbol/AST node. Text or regex matching is not
-resolution.
+`object:<name>` and `literal`. Identifier components use ECMAScript IdentifierName spelling. A
+declaration segment resolves one compiler declaration; `member:<name>` resolves one named member
+directly owned by the current declaration; `object:<name>` resolves exactly one object-literal
+property assignment with that static identifier/string-literal key in the current node's subtree;
+and `literal` resolves that member/property's sole literal type or initializer after stripping
+parentheses, `as const` and `satisfies`. Zero or multiple matches fail. Segments are always separated
+by `/`; dotted pseudo-paths fail. A selector must resolve to exactly one JSON property or TypeScript
+compiler symbol/AST node. Text or regex matching is not resolution ([[D2498]]).
 
 `id` matches `^[a-z][a-z0-9-]*$`, is unique, and equals the README register marker. `introducedBy`
 is one active or archived process RFC basename. Catalogue entries are ASCII-sorted by `id`.
@@ -241,8 +267,9 @@ The closed adapter set is:
    exact object `{ version, name, apply }`, where `version` is a literal positive safe integer,
    `name` a literal string and `apply` an arrow/function expression whose repository calls resolve
    under the TypeScript graph rules below. Semantic is the ordered array of
-   `{ version, name, applyGraph }`; SQL is retained as decoded string-literal values inside that
-   graph. There is no separately “normalized SQL” text and therefore no second SQL parser/image.
+   `{ version, name, applyGraph }`; `applyGraph` is the exact `TypeScriptGraphV1` image below with
+   the migration callback as its sole root. SQL is retained as decoded string-literal values inside
+   that graph. There is no separately “normalized SQL” text and therefore no second SQL parser/image.
 3. `literal_string_tuple@1` — resolves one exported readonly literal string tuple; identity and
    semantic are the ASCII-sorted unique member set. Source order, whitespace and comments do not
    move a set resource.
@@ -251,11 +278,18 @@ The closed adapter set is:
    source order, whitespace and comments do not enter the image; every non-string-literal arm,
    duplicate or alias fails. It exists because adoption must describe the live
    `AssistancePermission` authority rather than rewriting it into a tuple ([[D2467]]).
-5. `canonical_resource@1` — resolves one atomic exported object with exact keys
-   `{ id, version, payload, digest }`. `id` equals the descriptor id, `version` is a positive safe
-   integer, `payload` is a canonical JSON object, and `digest` equals the shared-resource digest of
-   `{ id, version, payload }`. Extra semantic fields outside `payload` fail. This is the required
-   shape for source attribution, provider protocol and assistance exchange.
+5. `canonical_resource@1` — statically resolves one exported `const` declaration; it never imports,
+   bundles or executes the target module. Its initializer may contain only parentheses, `as const`
+   or `satisfies` wrappers and optional `Object.freeze(...)` wrappers around a plain object literal.
+   Object members are property assignments with static identifier or string-literal keys; values
+   recurse only through JSON literals, arrays and plain object literals under the same wrappers.
+   Spread, shorthand, computed keys, methods/accessors, identifier references, calls other than the
+   admitted `Object.freeze`, templates, getters, holes and duplicate keys fail. After the wrappers
+   are erased, the value has exact keys `{ id, version, payload, digest }`: `id` equals the
+   descriptor id, `version` is a positive safe integer, `payload` is a canonical JSON object, and
+   literal `digest` equals the shared-resource digest of `{ id, version, payload }`. Extra semantic
+   fields outside `payload` fail. This side-effect-free AST image is the required shape for source
+   attribution, provider protocol and assistance exchange ([[D2501]]).
 6. `typescript_contract@1` — resolves a positive safe-integer literal version selector plus one or
    more type/value roots using the repository-pinned TypeScript compiler. Starting from each root,
    it follows every compiler-symbol reference in type positions, initializers, property access,
@@ -266,25 +300,65 @@ The closed adapter set is:
    `construct`, `tag`, `extends`, `implements`, `import` and `re_export`; any repository symbol edge
    outside that enum fails.
 
-   The semantic graph is a canonical JSON object with ASCII-sorted root selectors, node rows and
-   edge rows. A node row is `{ id, kind, exportedName, tree }`: `id` is its resolved repository
-   path plus the declaration's zero-based preorder ordinal among AST declarations (trivia does not
-   affect it); `kind` is the TypeScript `SyntaxKind` name; `exportedName`
-   is the root/re-export name or `null`; and `tree` is the recursively ordered SyntaxKind tree with
-   identifier spellings and decoded literal values. Trivia, comments and source offsets do not
-   enter `tree`; binding names, member names, operators, statement/argument order and type
-   structure do. This deliberately treats a local/import alias rename as a semantic change—the
-   adapter promises deterministic complete coverage, not equivalence proving.
+   The semantic graph is exactly this canonical value ([[D2500]]):
+
+   ```ts
+   interface SyntaxTreeV1 {
+     readonly kind: string; // TypeScript SyntaxKind name
+     readonly text: string | number | boolean | null;
+     readonly children: readonly SyntaxTreeV1[];
+   }
+
+   interface ContractNodeV1 {
+     readonly id: string;
+     readonly origin: "repository" | "node_builtin" | "typescript_lib" | "external_package";
+     readonly exportedName: string | null;
+     readonly tree: SyntaxTreeV1;
+     readonly dependencyIdentity: CanonicalValue | null;
+   }
+
+   interface ContractEdgeV1 {
+     readonly from: string;
+     readonly to: string;
+     readonly kind: "type_reference" | "value_reference" | "property_reference" | "call" |
+       "construct" | "tag" | "extends" | "implements" | "import" | "re_export";
+     readonly exportPath: readonly string[];
+     readonly resolvedSignature: SyntaxTreeV1 | null;
+     readonly overloads: readonly SyntaxTreeV1[];
+   }
+
+   interface TypeScriptGraphV1 {
+     readonly roots: readonly string[];
+     readonly nodes: readonly ContractNodeV1[];
+     readonly edges: readonly ContractEdgeV1[];
+   }
+   ```
+
+   A repository node id is its resolved repository path plus the declaration's zero-based preorder
+   ordinal among AST declarations. An external node id is its origin, dependency identity and
+   public export path joined with NUL separators. `SyntaxTreeV1.children` retains compiler child
+   order; `text` is non-null only for identifiers, decoded literals and operator tokens, and is
+   otherwise null. Trivia, comments and source offsets do not enter the tree; binding/member names,
+   operators, statement/argument order and type structure do. Roots are ASCII-sorted unique
+   selector strings; nodes sort by `id`; edges sort by the canonical bytes of the complete edge and
+   exact duplicate edges collapse. Every edge endpoint must name a retained node. Repository edges
+   have `resolvedSignature: null` and empty overloads unless the edge is call/construct/tag; those
+   three retain the compiler-selected signature and the complete public overload set. This
+   deliberately treats a local/import alias rename as a semantic change—the adapter promises
+   deterministic complete coverage, not equivalence proving.
 
    External boundaries are closed rather than ignored ([[D2491]]):
-   - `node:` builtins record `{ kind:"node_builtin", module, exportPath, signatureTree }` plus the
-     exact `@types/node` lockfile version;
-   - ECMAScript/DOM library symbols record `{ kind:"typescript_lib", libFile, exportPath,
-     signatureTree }` plus the exact `typescript` lockfile version;
-   - package imports record `{ kind:"external_package", package, exportPath, signatureTree }` plus
-     the exact resolved `pnpm-lock.yaml` package/version/integrity identity; and
-   - an overload call records the compiler-resolved signature plus the complete public overload
-     set at that external symbol.
+   - `node:` builtins use `origin: "node_builtin"`, the module/export path in `id`, the exported
+     declaration as `tree`, and `{ package:"@types/node", version, integrity:null }` as
+     `dependencyIdentity`;
+   - ECMAScript/DOM library symbols use `origin: "typescript_lib"`, the normalized lib filename and
+     export path in `id`, the declaration as `tree`, and `{ package:"typescript", version,
+     integrity }` from the exact lockfile package;
+   - package imports use `origin: "external_package"`, package/export path in `id`, the public
+     declaration as `tree`, and the exact resolved `{ package, version, integrity }` identity from
+     `pnpm-lock.yaml`; workspace links resolve as repository nodes, not external packages; and
+   - every call/construct/tag edge records the compiler-selected signature plus the complete public
+     overload set in the exact `ContractEdgeV1` fields above.
 
    Ambient declarations without one of those three origins, `any`/`unknown`-based member or call
    resolution, `eval`, dynamic `import()`, computed property names not reducible to one literal,
@@ -368,7 +442,8 @@ semantic conventions' distinct profile, not C10.
 
 Catalogue growth is authorized only by an accepted process RFC. Its implementation changes the
 catalogue, README register, process closeout, ledger and append-only exploration log together and
-must match that RFC's `tabiya-resource-roots` declaration. A product RFC cannot add its own entry.
+must match both that RFC's canonical `tabiya-resource-descriptor-source` and its
+`tabiya-resource-roots` routing summary. A product RFC cannot add its own entry.
 
 ### 4.1 Genuinely absent root
 
@@ -525,6 +600,13 @@ The third fresh review adds the author-repair batch without changing that direct
 - [[D2493]] fixes README derived-byte ownership while preserving hand-authored prose; and
 - [[D2494]] makes the pre-acceptance review matrix executable without implementing product bytes.
 
+The fourth author preflight found four remaining literal-contract gaps:
+
+- [[D2498]] closes selector descent and proves the two adopted assistance heads resolve;
+- [[D2499]] makes each process RFC authorize complete descriptor bytes rather than prose fields;
+- [[D2500]] defines the exact TypeScript/migration node, edge, signature and ordering image; and
+- [[D2501]] makes canonical resources a static side-effect-free literal AST projection.
+
 Their earlier repairs are incorporated into §§1–7. They close only when the amended executable
 criteria land; rewriting the architecture does not retire the findings.
 
@@ -532,16 +614,19 @@ criteria land; rewriting the architecture does not retire the findings.
 
 1. Catalogue and README register populations are set-equal; no `RESOURCE_NAMES`, `SCHEMA_SLUGS` or
    numbered resource-specific branch remains.
-2. All ten initial descriptors resolve through their adapter/lifecycle or the exact absent state.
-3. `canonical_resource@1` seals every payload semantic field through the one named canonical byte
-   authority; [[D2442]] and [[D2444]] fixtures fail before the repair and pass after it.
+2. All ten initial descriptors resolve through their adapter/lifecycle or the exact absent state;
+   the assistance, semantic-convention and provider follow-on descriptor candidates validate under
+   the same union, and both adopted assistance version selectors resolve exactly once.
+3. `canonical_resource@1` statically seals every payload semantic field through the one named
+   canonical byte authority without importing the target module; [[D2442]], [[D2444]] and
+   [[D2501]] fixtures fail before the repair and pass after it.
 4. Selector-level absence admits an export in an existing file, refuses duplicate selector
    identity and refuses every partial artifact ([[D2443]], [[D2459]]).
 5. Adoption pins current product bytes without mutating them or inventing prior history; later
    lanes begin above the adopted baseline ([[D2465]]).
 6. Lifecycle behavior is selected by descriptor data. Assistance/provider/semantic follow-ons can
    inhabit the closed profiles without adding C9/C10/C11 or Git readers ([[D2454]]–[[D2455]],
-   [[D2466]]).
+   [[D2466]]); the exact catalogue addition must equal the declaring RFC's checked descriptor file.
 7. One transition function validates staged and every committed first-parent image; CI/local
    preimages are explicit and fail closed.
 8. After implementation, all sixteen fixture families are able to fail for their named reason,
@@ -575,6 +660,11 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-01: fourth author repair on [[D2498]]–[[D2501]]. Selector descent now admits exact
+  member/object/literal paths and the two assistance heads use resolvable slash paths; every process
+  RFC supplies canonical descriptor-candidate bytes; TypeScript/migration graphs define exact
+  nodes, edges, signatures and ordering; canonical resources are statically parsed closed literal
+  ASTs. Another fresh independent review remains required; implementation is unauthorized.
 - 2026-09-01: author-repaired [[D2488]]–[[D2494]] after the third return. Added the closed
   projection/config union, literal ten-descriptor seed, four-state resolver result, explicit
   adapter semantic images and TypeScript edge boundary, check-not-generate README contract and an

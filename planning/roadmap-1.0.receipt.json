@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a4835f7832328daa2d7c1a6574f75ffa5cf452a25512076593e94dd10edf5457",
+    "roadmap": "sha256:31254db51fc2904f91f6996dafa5265726e21547f096df6724583de05314381f",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:7500736883acb81a631efd4d63a0a8260254b9edd92caef5d52c30c0cdfdf281",
-    "rfcRegister": "sha256:c762bb05a3597175ea7d7304052ba99bf11f4f0b0235e08ec2a58cc0bd2f4fa5",
+    "workState": "sha256:b0e78d51624433094b6ba43e7f5dc1f4e01dcde6fea2979c3f9353449c31c322",
+    "rfcRegister": "sha256:4c52e04523a46fc8468321e1558580ac3058c871bfb38f5b9c396464aa1b6dcd",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 642,
       "doing": 0,
-      "blocked": 874,
-      "done": 727,
+      "blocked": 878,
+      "done": 728,
       "refused": 3
     },
     "workItems": {
@@ -110,11 +110,15 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-01",
-        "summary": "The incompatible shared-resource register RFCs are reconciled onto one generic catalogue with honest adoption, atomic absence and one transition reader; their author contracts are green and fresh review now gates implementation. Semantic validation's fifth author repair closes proposition typing, collection semantics, caller-trusted chronology and duplicate-erasing equality; its sole remaining process dependency is the explicit owner-authorised empty protected-store bootstrap, followed by fresh review. Candidate-packet, pack-capability, module-registration, evidence presentation, longitudinal store, bot policy, provider health and Campaign remain returned on their named production boundaries; foundation source identity remains dependency-blocked.",
+        "summary": "The shared-resource engine's fourth author repair now fits its real dependent profiles: both adopted assistance heads resolve, four process RFCs carry complete canonical descriptor candidates, TypeScript/migration graphs have literal node/edge/signature images and atomic resources are parsed without execution. All current author/reconciliation contracts are green; fresh independent review still gates implementation. Semantic validation's fifth repair remains blocked only on the explicit owner-authorised empty protected-store bootstrap. Candidate-packet, pack-capability, module-registration, evidence presentation, longitudinal store, bot policy, provider health and Campaign remain returned on their named production boundaries; foundation source identity remains dependency-blocked.",
         "impact": "advanced",
         "evidence": [
+          "planning/shared-resource-register-bootstrap/fourth-author-repair-2026-09-01.md",
           "planning/shared-resource-register-bootstrap/cross-rfc-reconciliation-2026-09-01.md",
           "planning/shared-resource-register-bootstrap/second-author-repair-2026-09-01.md",
+          "planning/assistance-config-register/catalogue-additions.v1.json",
+          "planning/semantic-convention-register/catalogue-additions.v1.json",
+          "planning/provider-protocol-register/catalogue-additions.v1.json",
           "planning/semantic-validation-authority/fifth-author-repair-2026-09-01.md",
           "planning/semantic-validation-authority/fifth-fresh-independent-buildability-review-2026-08-31.md",
           "planning/evidence-foundation-ux/shared-candidate-packet-fifth-fresh-independent-review-2026-08-31.md",

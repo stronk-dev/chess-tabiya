@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "resources": [
+    {
+      "id": "provider-protocol",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "canonical_resource@1",
+        "rootSelector": "packages/runtime/src/provider-protocol.ts#export:PROVIDER_PROTOCOL_RESOURCE"
+      },
+      "claimMode": "whole_projection",
+      "introducedBy": "provider-protocol-register.md",
+      "introduction": "absent"
+    }
+  ]
+}

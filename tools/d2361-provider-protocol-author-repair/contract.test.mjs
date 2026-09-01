@@ -12,7 +12,9 @@ const transition = (previous, current) => {
 test("D2361 uses named-root absence and a unique first claim", () => {
   assert.match(rfc, /provider-protocol head=absent/u);
   assert.match(rfc, /provider-protocol \| first lane 1 \|/u);
-  assert.match(rfc, /packages\/runtime\/src\/provider-protocol\.ts#PROVIDER_PROTOCOL_VERSION/u);
+  assert.match(rfc, /packages\/runtime\/src\/provider-protocol\.ts#export:PROVIDER_PROTOCOL_RESOURCE/u);
+  assert.match(rfc, /version: 1/u);
+  assert.doesNotMatch(current, /PROVIDER_PROTOCOL_VERSION/u);
   assert.doesNotMatch(current, /head=0|head 0 \+|pre-landing head-0 state/u);
 });
 test("D2361 makes absence one-way", () => {
