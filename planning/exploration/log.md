@@ -13613,3 +13613,23 @@ No preset, module surface, evidence disposition, schema or learner-visible byte 
 **Blocked/next:** production module registration still requires its fresh independent review and
 dependencies. Work moves to an unblocked research gap rather than implementing that draft early:
 measure the still-unmeasured `human_divergence` pivotal marker ([[D52]]).
+
+## 2026-09-01 — Human-divergence marker measured against people and volume
+
+**What landed:** [[D52]]'s first applicable measurement. A disposable instrument drives the
+shipped `OpponentSelector` for 2,047/2,047 successful Maia selections: 133 recorded R9 Lichess
+human-choice positions at their matching rating bands, plus all 638 current corpus positions at
+1100/1500/1900. The raw distribution agrees on the top human move 80.45% of the time (median TV
+0.1289); the binary marker is 58.82% precise and 66.67% recalling, improving accuracy only 2.26
+points over never firing.
+
+**What changed:** the marker is no longer “unmeasured.” It is also not silently endorsed. It
+fires at an estimated 0.0763 per played ply—76.3% of the complete live-union budget—changes label
+across bands on 22.73% of corpus positions, and has 109/292 firings within 0.02 of a cutoff. This
+separates a useful evidence producer (the policy vector) from a weak unasked presentation (three
+raw percentages).
+
+**Blocked/next:** `live-marker-quality` L2(ii) requires the owner to approve the substitute
+population, then decide whether the result triggers L6 demotion; recommendation: approve and
+demote to on-request/retrospective while preserving the vector. Work continues to the remaining
+free-parameter live-marker obligation [[D53]] rather than waiting on that ruling.

@@ -38,3 +38,17 @@ review and owner-tier ledger disposition.
   scaffold and packaging checks; no blocker surfaced.
 - D48/D50/D51/D68 remain closed; D52/D53 correctly remain open measurement obligations. RFC
   moved to the archive without claiming those residuals were discharged.
+
+## 2026-09-01 — D52 substitute-population measurement landed
+
+- `make human-divergence-measurement` completed 2,047/2,047 production-selector probes with the
+  pinned Maia3 identity: 133 R9 Lichess human-choice distributions at matching bands and all 638
+  current corpus positions crossed with bands 1100/1500/1900.
+- The full Maia distribution corroborates human choice better than the thresholded marker does:
+  80.45% top-move agreement and median total-variation distance 0.1289, versus 58.82% marker
+  precision and 66.67% recall. Its accuracy improves only 2.26 points over always-negative.
+- Corpus volume is 0.0763 estimated markers per played ply, 76.3% of L3's whole-union ceiling;
+  22.73% of positions change label across bands and 109/292 firings sit within 0.02 of a cutoff.
+- D52 is measured, not closed. L2(ii) reserves approval of this substitute population to the
+  owner; the recorded recommendation is approve it and demote the unasked raw-mass sentence under
+  L6 while retaining the raw distribution for on-request and retrospective modules.

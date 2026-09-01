@@ -492,11 +492,13 @@
     },
     {
       "id": "D52",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4e6a7b3cd3bdc5dba18b1a14a187fa63d8a216c421df4b4ca915857b7b57216e",
+      "state": "blocked",
+      "sourceGlyph": "📊",
+      "sourceDigest": "sha256:28efb19a27ea34efa19ff30ca6ed209e9f9cfbb648fdcd8d613f07dfb390ec3d",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "OWNER",
+      "blocker": "owner-ruling",
+      "question": "Approve the R9 human-choice population as L2(ii) substitute and demote human_divergence from unasked live to on-request/retrospective under L6?"
     },
     {
       "id": "D53",

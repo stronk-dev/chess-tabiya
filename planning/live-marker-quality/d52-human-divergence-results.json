@@ -1,0 +1,371 @@
+{
+ "schema": "tabiya.research.human-divergence.v1",
+ "generatedAt": "2026-09-01T12:32:30.059Z",
+ "engine": {
+  "kind": "identity",
+  "identity": {
+   "id": "maia-5m",
+   "kind": "opponent",
+   "name": "Maia3",
+   "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+   "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+   "seedHonored": false,
+   "eloHonored": true
+  },
+  "jobs": 2047
+ },
+ "detector": {
+  "maxTop": 0.5,
+  "minThird": 0.15,
+  "minCandidates": 3
+ },
+ "population": {
+  "probes": 2047,
+  "valid": 2047,
+  "errors": 0,
+  "explorer": 133,
+  "corpus": 1914,
+  "corpusPositions": 638,
+  "bands": [
+   1100,
+   1400,
+   1500,
+   1600,
+   1800,
+   1900
+  ]
+ },
+ "externalHumanChoiceAgreement": {
+  "n": 133,
+  "humanPositive": 15,
+  "maiaPositive": 17,
+  "confusion": {
+   "truePositive": 10,
+   "falsePositive": 7,
+   "falseNegative": 5,
+   "trueNegative": 111
+  },
+  "precision": 0.5882,
+  "precisionWilson95": [
+   0.3601,
+   0.7839
+  ],
+  "recall": 0.6667,
+  "recallWilson95": [
+   0.4171,
+   0.8482
+  ],
+  "accuracy": 0.9098,
+  "alwaysNegativeAccuracy": 0.8872,
+  "topMoveAgreement": 0.8045,
+  "totalVariationMedian": 0.1289,
+  "jsDivergenceBitsMedian": 0.0368,
+  "scope": "R9 greedy opening walks only; Lichess blitz+rapid distributions are truncated to the recorded top 12 moves."
+ },
+ "corpusVolume": {
+  "overall": {
+   "n": 1914,
+   "fires": 292,
+   "rate": 0.1526
+  },
+  "estimatedMarkersPerPlayedPly": 0.0763,
+  "l3CeilingPerPlayedPly": 0.1,
+  "byBand": {
+   "1100": {
+    "n": 638,
+    "fires": 111,
+    "rate": 0.174
+   },
+   "1500": {
+    "n": 638,
+    "fires": 97,
+    "rate": 0.152
+   },
+   "1900": {
+    "n": 638,
+    "fires": 84,
+    "rate": 0.1317
+   }
+  },
+  "byPhase": {
+   "cross_phase": {
+    "n": 327,
+    "fires": 42,
+    "rate": 0.1284
+   },
+   "endgame": {
+    "n": 684,
+    "fires": 92,
+    "rate": 0.1345
+   },
+   "middlegame": {
+    "n": 441,
+    "fires": 69,
+    "rate": 0.1565
+   },
+   "opening": {
+    "n": 462,
+    "fires": 89,
+    "rate": 0.1926
+   }
+  },
+  "bandVariantPositionGroups": 145,
+  "bandComparedPositionGroups": 638,
+  "bandVariantPositionRate": 0.2273,
+  "firingBoundaryMarginMedian": 0.0293,
+  "firingBoundaryMarginMin": 0.0001,
+  "firingWithinOnePointOfBoundary": 56,
+  "firingWithinTwoPointsOfBoundary": 109
+ },
+ "thresholdGrid": [
+  {
+   "maxTop": 0.4,
+   "minThird": 0.1,
+   "minCandidates": 2,
+   "corpusRate": 0.3067,
+   "externalPrecision": 0.3704,
+   "externalRecall": 0.6667,
+   "externalPredictedPositive": 27
+  },
+  {
+   "maxTop": 0.4,
+   "minThird": 0.1,
+   "minCandidates": 3,
+   "corpusRate": 0.2649,
+   "externalPrecision": 0.4,
+   "externalRecall": 0.6667,
+   "externalPredictedPositive": 25
+  },
+  {
+   "maxTop": 0.4,
+   "minThird": 0.1,
+   "minCandidates": 4,
+   "corpusRate": 0.1144,
+   "externalPrecision": 0.5,
+   "externalRecall": 0.4667,
+   "externalPredictedPositive": 14
+  },
+  {
+   "maxTop": 0.4,
+   "minThird": 0.15,
+   "minCandidates": 2,
+   "corpusRate": 0.2659,
+   "externalPrecision": 0.4167,
+   "externalRecall": 0.6667,
+   "externalPredictedPositive": 24
+  },
+  {
+   "maxTop": 0.4,
+   "minThird": 0.15,
+   "minCandidates": 3,
+   "corpusRate": 0.1165,
+   "externalPrecision": 0.5833,
+   "externalRecall": 0.4667,
+   "externalPredictedPositive": 12
+  },
+  {
+   "maxTop": 0.4,
+   "minThird": 0.15,
+   "minCandidates": 4,
+   "corpusRate": 0.0089,
+   "externalPrecision": 0.5,
+   "externalRecall": 0.1333,
+   "externalPredictedPositive": 4
+  },
+  {
+   "maxTop": 0.4,
+   "minThird": 0.2,
+   "minCandidates": 2,
+   "corpusRate": 0.1724,
+   "externalPrecision": 0.5294,
+   "externalRecall": 0.6,
+   "externalPredictedPositive": 17
+  },
+  {
+   "maxTop": 0.4,
+   "minThird": 0.2,
+   "minCandidates": 3,
+   "corpusRate": 0.0282,
+   "externalPrecision": 0.5,
+   "externalRecall": 0.0667,
+   "externalPredictedPositive": 2
+  },
+  {
+   "maxTop": 0.4,
+   "minThird": 0.2,
+   "minCandidates": 4,
+   "corpusRate": 0,
+   "externalPrecision": null,
+   "externalRecall": 0,
+   "externalPredictedPositive": 0
+  },
+  {
+   "maxTop": 0.5,
+   "minThird": 0.1,
+   "minCandidates": 2,
+   "corpusRate": 0.4634,
+   "externalPrecision": 0.2653,
+   "externalRecall": 0.8667,
+   "externalPredictedPositive": 49
+  },
+  {
+   "maxTop": 0.5,
+   "minThird": 0.1,
+   "minCandidates": 3,
+   "corpusRate": 0.3615,
+   "externalPrecision": 0.4063,
+   "externalRecall": 0.8667,
+   "externalPredictedPositive": 32
+  },
+  {
+   "maxTop": 0.5,
+   "minThird": 0.1,
+   "minCandidates": 4,
+   "corpusRate": 0.1249,
+   "externalPrecision": 0.5,
+   "externalRecall": 0.4667,
+   "externalPredictedPositive": 14
+  },
+  {
+   "maxTop": 0.5,
+   "minThird": 0.15,
+   "minCandidates": 2,
+   "corpusRate": 0.396,
+   "externalPrecision": 0.3095,
+   "externalRecall": 0.8667,
+   "externalPredictedPositive": 42
+  },
+  {
+   "maxTop": 0.5,
+   "minThird": 0.15,
+   "minCandidates": 3,
+   "corpusRate": 0.1526,
+   "externalPrecision": 0.5882,
+   "externalRecall": 0.6667,
+   "externalPredictedPositive": 17
+  },
+  {
+   "maxTop": 0.5,
+   "minThird": 0.15,
+   "minCandidates": 4,
+   "corpusRate": 0.0089,
+   "externalPrecision": 0.5,
+   "externalRecall": 0.1333,
+   "externalPredictedPositive": 4
+  },
+  {
+   "maxTop": 0.5,
+   "minThird": 0.2,
+   "minCandidates": 2,
+   "corpusRate": 0.2701,
+   "externalPrecision": 0.375,
+   "externalRecall": 0.8,
+   "externalPredictedPositive": 32
+  },
+  {
+   "maxTop": 0.5,
+   "minThird": 0.2,
+   "minCandidates": 3,
+   "corpusRate": 0.0345,
+   "externalPrecision": 0.5,
+   "externalRecall": 0.0667,
+   "externalPredictedPositive": 2
+  },
+  {
+   "maxTop": 0.5,
+   "minThird": 0.2,
+   "minCandidates": 4,
+   "corpusRate": 0,
+   "externalPrecision": null,
+   "externalRecall": 0,
+   "externalPredictedPositive": 0
+  },
+  {
+   "maxTop": 0.6,
+   "minThird": 0.1,
+   "minCandidates": 2,
+   "corpusRate": 0.5883,
+   "externalPrecision": 0.1867,
+   "externalRecall": 0.9333,
+   "externalPredictedPositive": 75
+  },
+  {
+   "maxTop": 0.6,
+   "minThird": 0.1,
+   "minCandidates": 3,
+   "corpusRate": 0.4044,
+   "externalPrecision": 0.3421,
+   "externalRecall": 0.8667,
+   "externalPredictedPositive": 38
+  },
+  {
+   "maxTop": 0.6,
+   "minThird": 0.1,
+   "minCandidates": 4,
+   "corpusRate": 0.1275,
+   "externalPrecision": 0.5,
+   "externalRecall": 0.4667,
+   "externalPredictedPositive": 14
+  },
+  {
+   "maxTop": 0.6,
+   "minThird": 0.15,
+   "minCandidates": 2,
+   "corpusRate": 0.501,
+   "externalPrecision": 0.2258,
+   "externalRecall": 0.9333,
+   "externalPredictedPositive": 62
+  },
+  {
+   "maxTop": 0.6,
+   "minThird": 0.15,
+   "minCandidates": 3,
+   "corpusRate": 0.163,
+   "externalPrecision": 0.5556,
+   "externalRecall": 0.6667,
+   "externalPredictedPositive": 18
+  },
+  {
+   "maxTop": 0.6,
+   "minThird": 0.15,
+   "minCandidates": 4,
+   "corpusRate": 0.0089,
+   "externalPrecision": 0.5,
+   "externalRecall": 0.1333,
+   "externalPredictedPositive": 4
+  },
+  {
+   "maxTop": 0.6,
+   "minThird": 0.2,
+   "minCandidates": 2,
+   "corpusRate": 0.348,
+   "externalPrecision": 0.25,
+   "externalRecall": 0.8,
+   "externalPredictedPositive": 48
+  },
+  {
+   "maxTop": 0.6,
+   "minThird": 0.2,
+   "minCandidates": 3,
+   "corpusRate": 0.0376,
+   "externalPrecision": 0.5,
+   "externalRecall": 0.0667,
+   "externalPredictedPositive": 2
+  },
+  {
+   "maxTop": 0.6,
+   "minThird": 0.2,
+   "minCandidates": 4,
+   "corpusRate": 0,
+   "externalPrecision": null,
+   "externalRecall": 0,
+   "externalPredictedPositive": 0
+  }
+ ],
+ "limitations": [
+  "The external population covers opening walks, not middlegames or endgames.",
+  "The corpus arm estimates frequency from authored decision positions; it is not a log of learner-selected positions.",
+  "Agreement with human move dispersion validates the marker's name, not whether an unasked sentence helps a learner.",
+  "The live union's L3 rate still requires the other admitted marker kinds on the same played-run population."
+ ]
+}
