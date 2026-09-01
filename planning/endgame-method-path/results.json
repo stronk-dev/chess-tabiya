@@ -1,0 +1,149 @@
+{
+  "schema": "tabiya.research.endgame-method-path.v1",
+  "boundary": "Observed authored-path stages and witnessed setup arrivals only; no best-play reachability, advice, correctness or universal technique verdict",
+  "corpus": {
+    "packs": 50,
+    "authoredRootToLeafPaths": 100,
+    "pathsWithObservedStages": 2
+  },
+  "observedStages": {
+    "total": 6,
+    "byStage": {
+      "lucena_bridge_interposed": 1,
+      "lucena_bridge_prepared": 1,
+      "lucena_king_excursion_started": 1,
+      "philidor_pawn_entered_defender_third": 1,
+      "philidor_rear_check_delivered": 1,
+      "philidor_rear_rank_switch": 1
+    },
+    "byPack": {
+      "lucena-bridge-convert": 3,
+      "philidor-third-rank-hold": 3
+    },
+    "withBothTablebaseOutcomes": 6,
+    "withRecordedOutcomePreserved": 6,
+    "rows": [
+      {
+        "packId": "lucena-bridge-convert",
+        "pathId": "w-rd1/b-ke7/w-rd4/b-ra1/w-kc7/b-rc1/w-kb6/b-rb1/w-kc6/b-rc1-2/w-kb5/b-rb1-2/w-rb4",
+        "technique": "lucena",
+        "stage": "lucena_bridge_prepared",
+        "beneficiary": "white",
+        "moveUci": "d1d4",
+        "beforeFen": "1K6/1P2k3/8/8/8/8/r7/3R4 w - - 2 2",
+        "afterFen": "1K6/1P2k3/8/8/3R4/8/r7/8 b - - 3 2",
+        "beforeOutcome": "win",
+        "afterOutcome": "win",
+        "recordedOutcomePreserved": true
+      },
+      {
+        "packId": "lucena-bridge-convert",
+        "pathId": "w-rd1/b-ke7/w-rd4/b-ra1/w-kc7/b-rc1/w-kb6/b-rb1/w-kc6/b-rc1-2/w-kb5/b-rb1-2/w-rb4",
+        "technique": "lucena",
+        "stage": "lucena_king_excursion_started",
+        "beneficiary": "white",
+        "moveUci": "b8c7",
+        "beforeFen": "1K6/1P2k3/8/8/3R4/8/8/r7 w - - 4 3",
+        "afterFen": "8/1PK1k3/8/8/3R4/8/8/r7 b - - 5 3",
+        "beforeOutcome": "win",
+        "afterOutcome": "win",
+        "recordedOutcomePreserved": true
+      },
+      {
+        "packId": "lucena-bridge-convert",
+        "pathId": "w-rd1/b-ke7/w-rd4/b-ra1/w-kc7/b-rc1/w-kb6/b-rb1/w-kc6/b-rc1-2/w-kb5/b-rb1-2/w-rb4",
+        "technique": "lucena",
+        "stage": "lucena_bridge_interposed",
+        "beneficiary": "white",
+        "moveUci": "d4b4",
+        "beforeFen": "8/1P2k3/8/1K6/3R4/8/8/1r6 w - - 12 7",
+        "afterFen": "8/1P2k3/8/1K6/1R6/8/8/1r6 b - - 13 7",
+        "beforeOutcome": "win",
+        "afterOutcome": "win",
+        "recordedOutcomePreserved": true
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "pathId": "b-rb6/w-kd5/b-rg6/w-e5/b-rb6-2/w-e6/b-rb1/w-kd6/b-rd1/w-ke5/b-re1/w-kf6/b-rf1",
+        "technique": "philidor",
+        "stage": "philidor_pawn_entered_defender_third",
+        "beneficiary": "black",
+        "moveUci": "e5e6",
+        "beforeFen": "4k3/R7/1r6/3KP3/8/8/8/8 w - - 1 4",
+        "afterFen": "4k3/R7/1r2P3/3K4/8/8/8/8 b - - 0 4",
+        "beforeOutcome": "draw",
+        "afterOutcome": "draw",
+        "recordedOutcomePreserved": true
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "pathId": "b-rb6/w-kd5/b-rg6/w-e5/b-rb6-2/w-e6/b-rb1/w-kd6/b-rd1/w-ke5/b-re1/w-kf6/b-rf1",
+        "technique": "philidor",
+        "stage": "philidor_rear_rank_switch",
+        "beneficiary": "black",
+        "moveUci": "b6b1",
+        "beforeFen": "4k3/R7/1r2P3/3K4/8/8/8/8 b - - 0 4",
+        "afterFen": "4k3/R7/4P3/3K4/8/8/8/1r6 w - - 1 5",
+        "beforeOutcome": "draw",
+        "afterOutcome": "draw",
+        "recordedOutcomePreserved": true
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "pathId": "b-rb6/w-kd5/b-rg6/w-e5/b-rb6-2/w-e6/b-rb1/w-kd6/b-rd1/w-ke5/b-re1/w-kf6/b-rf1",
+        "technique": "philidor",
+        "stage": "philidor_rear_check_delivered",
+        "beneficiary": "black",
+        "moveUci": "b1d1",
+        "beforeFen": "4k3/R7/3KP3/8/8/8/8/1r6 b - - 2 5",
+        "afterFen": "4k3/R7/3KP3/8/8/8/8/3r4 w - - 3 6",
+        "beforeOutcome": "draw",
+        "afterOutcome": "draw",
+        "recordedOutcomePreserved": true
+      }
+    ]
+  },
+  "witnessedSetupArrivals": {
+    "total": 1,
+    "byTechnique": {
+      "lucena": 1
+    },
+    "rows": [
+      {
+        "packId": "lucena-bridge-convert",
+        "pathId": "w-rd1/b-ke7/w-rd4/b-ra1/w-kc7/b-rc1/w-kb6/b-rb1/w-kc6/b-rc1-2/w-kb5/b-rb1-2/w-rb4",
+        "technique": "lucena",
+        "moveUci": "d7e7",
+        "afterFen": "1K6/1P2k3/8/8/8/8/r7/3R4 w - - 2 2"
+      }
+    ]
+  },
+  "canonicalVancuraControl": {
+    "startFen": "R7/6k1/P4r2/8/2K5/8/8/8 w - - 0 1",
+    "moves": [
+      "a6a7",
+      "f6a6"
+    ],
+    "stages": [
+      "vancura_pawn_entered_seventh",
+      "vancura_rook_moved_behind"
+    ],
+    "tablebaseObservation": {
+      "rootCategory": "draw",
+      "afterA7Category": "draw",
+      "drawPreservingDefenderReplies": [
+        "f6f4",
+        "f6a6"
+      ],
+      "nonPreservingDefenderReplies": 16,
+      "rootUrl": "https://tablebase.lichess.ovh/standard?fen=R7%2F6k1%2FP4r2%2F8%2F2K5%2F8%2F8%2F8%20w%20-%20-%200%201",
+      "afterA7Url": "https://tablebase.lichess.ovh/standard?fen=R7%2FP5k1%2F5r2%2F8%2F2K5%2F8%2F8%2F8%20b%20-%20-%200%201",
+      "scope": "Externally probed fixed control; the local detector verifies stage identity only"
+    }
+  },
+  "reachabilityClaimsNotMeasured": [
+    "possible_under_cooperation",
+    "forceable_against_all_replies",
+    "inevitable_under_all_moves"
+  ]
+}

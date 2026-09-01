@@ -235,8 +235,16 @@ round-tripped through `pgn-import.ts`"*)
   pawn and therefore cannot validate Vancura. All 31 carry recorded tablebase outcomes, but raw
   side-to-move and pawn-side result orientations differ. [[D2495]] closes the static setup
   research arm and requires separate material, cited setup, witnessed method, bounded reachability
-  and outcome identities. Method/reachability and independent-label accuracy remain open.
+  and outcome identities. Independent-label accuracy remains open.
   Evidence: `design/research/endgame-technique-applicability.md`.
+- **Method/path result 2026-09-01:** `make endgame-method-path-contract` walks 100 authored paths
+  and emits exactly six source-bounded stages across the Lucena and Philidor packs. All six have
+  before/after tablebase receipts and preserve the method beneficiary's outcome; one edge witnesses
+  entry into a Lucena setup. The fixed Vančura `a7 ...Ra6` control matches the published stage pair
+  and tablebase draw, while `...Rf7` loses the draw. [[D2496]] makes witnessed arrival, possible,
+  forceable and inevitable distinct executable readings; no search/provider or product projection
+  is authorized by the research harness. Evidence:
+  `design/research/endgame-method-and-reachability.md`.
 - **Question:** B10 shipped *"attributed phase classification with honest abstention"* (`gates.md`
   `[V]`). Nothing measures its accuracy or its abstention rate. Q4c's own definition requires
   labeled ground truth, inter-reviewer agreement, and false-transition costs (`plan.md` `[V]`).

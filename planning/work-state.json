@@ -19829,6 +19829,15 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:evidence-value-authority.md"
+    },
+    {
+      "id": "D2496",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-value-authority.md",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:20e7eee9965c84ec30fed298289761d4889c6a3bee27e48ad56791f6ba5c00aa",
+      "uxItems": []
     }
   ]
 }

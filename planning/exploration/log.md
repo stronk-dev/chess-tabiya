@@ -13907,3 +13907,22 @@ witnessed method stage, bounded reachability and perspective-oriented tablebase 
 hint, drill claim or LLM bridge is authorized yet. Method-stage predicates, reachability semantics,
 a populated Vancura validation set, independent broader labels and owner-use presentation remain
 open. No product code, pack, schema or authored chess statement changed.
+
+## 2026-09-01 — Endgame methods and reachability stop sharing one verb
+
+**What landed:** [[D2496]]'s cited method/path dossier, disposable seven-control semantic model and
+`make endgame-method-path-contract`. The deterministic corpus arm walks 100 authored root-to-leaf
+paths across all 50 draft packs.
+
+**What changed:** exactly six source-bounded method stages fire — three Lucena and three Philidor —
+and all six join to before/after tablebase receipts that preserve the method beneficiary's result.
+Only one authored edge witnesses entry into a canonical setup. The fixed Vančura `a7 ...Ra6`
+control matches its published two-stage sequence and preserves the tablebase draw; `...Rf7` does
+not. The executable game-graph model separates cooperative possibility, forceability against every
+reply and inevitability under every move. One stored path is none of those claims.
+
+**Blocked/next:** no production method or reachability projection is authorized by this research
+instrument. The value-authority RFC may now specify observed stage receipts; forceable steering
+still needs a declared chess search/provider, completeness/horizon receipts and module eligibility.
+Broader independent labels, authored Vančura population and owner-use wording remain open. No
+product code, pack, schema or authored chess statement changed.
