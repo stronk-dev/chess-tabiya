@@ -41,7 +41,7 @@ measurement standing.**
 | Items | Owner |
 |---|---|
 | D69 (tolerance), D47 (pin tests encode content facts), D54 (refusal scanner scope) | `rfc/fixture-realism.md` — READY |
-| D52 (human-divergence measurement landed; L2(ii)/L6 owner disposition open), D53 (option-collapse free-parameter thresholds) | `rfc/live-marker-quality.md` — LANDED; residuals recorded |
+| D52 (human-divergence measurement landed; L2(ii)/L6 owner disposition open), D53 (option-collapse measurement landed; L2(ii)/L6 owner disposition open) | `rfc/live-marker-quality.md` — LANDED; residuals recorded |
 | D61, D62 (vacuous phone assertion, inert tabs) | `rfc/client-surface-floor.md` — READY |
 | D65, D66, D67, D71, D72 (handshake discards the option table; abort leaves MultiPV; `sameEngine` band-blind) | `rfc/archive/engine-request-contract.md` — landed; residuals below |
 

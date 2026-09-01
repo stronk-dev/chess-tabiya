@@ -52,3 +52,17 @@ review and owner-tier ledger disposition.
 - D52 is measured, not closed. L2(ii) reserves approval of this substitute population to the
   owner; the recorded recommendation is approve it and demote the unasked raw-mass sentence under
   L6 while retaining the raw distribution for on-request and retrospective modules.
+
+## 2026-09-01 — D53 alternative-continuation measurement landed
+
+- `make option-collapse-measurement` measured the exact shipped 8→3→3 predicate over every path
+  in the 108-game CC0 Lichess fixture and every current authored root-to-leaf path.
+- The real-game arm fires 31/6,667 eligible spans (0.00443/played ply), and all 31 put the marked
+  side in check at both low-choice states. It finds no quiet constraint and fires zero times over
+  555 authored spans.
+- The chosen continuation is highly discriminating—510/1,206,199 enumerated alternatives
+  co-signal—but the prior floor is nearly inert, the low ceiling controls volume, and promotion
+  weighting changes neither measured population.
+- D53 is measured, not silently endorsed. L2(ii) reserves approval of this span-shaped substitute
+  population to the owner; recommendation: approve it, demote the generic unasked count sentence,
+  retain its exact operands, and require a named sustained-check module for any future live form.

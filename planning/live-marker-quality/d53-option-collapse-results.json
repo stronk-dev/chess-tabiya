@@ -1,0 +1,642 @@
+{
+ "schema": "tabiya.research.option-collapse.v1",
+ "generatedAt": "2026-09-01T12:48:58.457Z",
+ "convention": {
+  "priorFloor": 8,
+  "firstCeiling": 3,
+  "secondCeiling": 3,
+  "promotionWeight": 4
+ },
+ "populations": {
+  "imported": {
+   "paths": 108,
+   "plies": 6991,
+   "sameSideSpans": 6667,
+   "currentFirings": 31,
+   "firingsPerPlayedPly": 0.00443,
+   "destinationCountFirings": 31,
+   "promotionWeightSuppressed": 0,
+   "phaseCounts": {
+    "endgame": 4,
+    "middlegame": 19,
+    "unclear": 8
+   },
+   "baselineContexts": {
+    "checkAtEither": 830,
+    "checkAtBoth": 144,
+    "forcedAtEither": 97,
+    "recaptureAtFirst": 591
+   },
+   "contexts": {
+    "firstInCheck": 31,
+    "secondInCheck": 31,
+    "checkAtEither": 31,
+    "forcedAtFirst": 7,
+    "forcedAtSecond": 14,
+    "forcedAtEither": 16,
+    "recaptureAtFirst": 4,
+    "checkOrRecapture": 31,
+    "quietNoncheckNonrecapture": 0
+   },
+   "alternatives": {
+    "measuredFirings": 31,
+    "immediateLowShareMedian": 0.05882,
+    "immediateLowShareP90": 0.15,
+    "continuationCoSignalShareMedian": 0.0003,
+    "continuationCoSignalShareP90": 0.00145,
+    "continuationCoSignalAbove18_6Pct": 0,
+    "continuationCoSignalAbove50Pct": 0,
+    "totalContinuations": 1206199,
+    "signallingContinuations": 510,
+    "pooledContinuationCoSignalShare": 0.00042
+   },
+   "examples": [
+    {
+     "id": "imported:0:72",
+     "priorFen": "8/3r3k/p3qr1p/1p5Q/8/P6R/1PP1p3/1K5R w - - 0 37",
+     "firstFen": "8/7k/p3qr1p/1p5Q/8/P6R/1PP1p3/1K1rR3 w - - 2 38",
+     "secondFen": "8/7k/p3qr1p/1p5Q/8/P6R/1PP5/1K1q4 w - - 0 39",
+     "phase": "middlegame",
+     "priorCount": 35,
+     "firstCount": 1,
+     "secondCount": 1,
+     "firstInCheck": true,
+     "secondInCheck": true,
+     "forcedAtFirst": true,
+     "forcedAtSecond": true,
+     "recaptureAtFirst": false
+    },
+    {
+     "id": "imported:4:107",
+     "priorFen": "5k2/3P1p2/5K2/r4nP1/5P2/3R4/8/8 b - - 4 54",
+     "firstFen": "3Q1k2/5pn1/5K2/r5P1/5P2/3R4/8/8 b - - 0 55",
+     "secondFen": "4Qk2/5p2/5K2/r5P1/5P2/3R4/8/8 b - - 0 56",
+     "phase": "unclear",
+     "priorCount": 20,
+     "firstCount": 1,
+     "secondCount": 1,
+     "firstInCheck": true,
+     "secondInCheck": true,
+     "forcedAtFirst": true,
+     "forcedAtSecond": true,
+     "recaptureAtFirst": false
+    },
+    {
+     "id": "imported:10:61",
+     "priorFen": "7k/p3q2r/1n1bPpQ1/1p3P2/3pBP2/3P3R/PPr4P/6RK b - - 2 31",
+     "firstFen": "2r4k/p3q2R/1n1bPpQ1/1p3P2/3pBP2/3P4/PP5P/6RK b - - 0 32",
+     "secondFen": "2r4k/p6q/1n1bPQ2/1p3P2/3pBP2/3P4/PP5P/6RK b - - 0 33",
+     "phase": "middlegame",
+     "priorCount": 42,
+     "firstCount": 1,
+     "secondCount": 1,
+     "firstInCheck": true,
+     "secondInCheck": true,
+     "forcedAtFirst": true,
+     "forcedAtSecond": true,
+     "recaptureAtFirst": true
+    },
+    {
+     "id": "imported:12:40",
+     "priorFen": "r1b3qk/pp2bp1p/2p5/3p1p2/3PnPr1/3B4/PPP1N2P/R5RK w - - 4 21",
+     "firstFen": "r1b3qk/pp2bp1p/2p5/3p1p2/3PnP2/3B3P/PPP1N3/R5rK w - - 0 22",
+     "secondFen": "r1b3qk/pp2bp1p/2p5/3p1p2/3P1P2/3B3P/PPP2n2/R5NK w - - 1 23",
+     "phase": "middlegame",
+     "priorCount": 28,
+     "firstCount": 3,
+     "secondCount": 1,
+     "firstInCheck": true,
+     "secondInCheck": true,
+     "forcedAtFirst": false,
+     "forcedAtSecond": true,
+     "recaptureAtFirst": true
+    },
+    {
+     "id": "imported:16:43",
+     "priorFen": "4kb1r/5ppp/N3pn2/8/3r1B2/1P4P1/P4P1P/2R2RK1 b k - 0 22",
+     "firstFen": "2R1k2r/4bppp/N3pn2/8/3r1B2/1P4P1/P4P1P/5RK1 b k - 2 23",
+     "secondFen": "2Rbk2r/2N2ppp/4pn2/8/3r1B2/1P4P1/P4P1P/5RK1 b k - 4 24",
+     "phase": "unclear",
+     "priorCount": 32,
+     "firstCount": 3,
+     "secondCount": 3,
+     "firstInCheck": true,
+     "secondInCheck": true,
+     "forcedAtFirst": false,
+     "forcedAtSecond": false,
+     "recaptureAtFirst": false
+    },
+    {
+     "id": "imported:18:29",
+     "priorFen": "r1bqk2r/p4p2/1pnp2p1/2p5/2P1P3/2Q1BN1p/P3BPPP/R4RK1 b kq - 1 15",
+     "firstFen": "r1bqk2Q/p4p2/1pnp2p1/2p5/2P1P3/4BN2/P3BPpP/R4RK1 b q - 0 16",
+     "secondFen": "r1bQ4/p2k1p2/1pnp2p1/2p5/2P1P3/4BN2/P3BPpP/R4RK1 b - - 0 17",
+     "phase": "middlegame",
+     "priorCount": 37,
+     "firstCount": 2,
+     "secondCount": 3,
+     "firstInCheck": true,
+     "secondInCheck": true,
+     "forcedAtFirst": false,
+     "forcedAtSecond": false,
+     "recaptureAtFirst": false
+    },
+    {
+     "id": "imported:21:71",
+     "priorFen": "2Q5/8/4pbkp/1p3pp1/3P4/5NP1/5PPK/1q6 b - - 2 36",
+     "firstFen": "6Q1/8/4pbkp/1p3pp1/3Pq3/5NP1/5PPK/8 b - - 4 37",
+     "secondFen": "4Q3/6b1/4p1kp/1p3pp1/3Pq3/5NP1/5PPK/8 b - - 6 38",
+     "phase": "endgame",
+     "priorCount": 29,
+     "firstCount": 2,
+     "secondCount": 2,
+     "firstInCheck": true,
+     "secondInCheck": true,
+     "forcedAtFirst": false,
+     "forcedAtSecond": false,
+     "recaptureAtFirst": false
+    },
+    {
+     "id": "imported:21:76",
+     "priorFen": "4Q3/6bk/4p2p/1p3pp1/3Pq3/5NP1/5PPK/8 w - - 7 39",
+     "firstFen": "4Q3/6bk/4p2p/1p3p2/3Pq1p1/5NPK/5PP1/8 w - - 0 40",
+     "secondFen": "4Q3/6bk/4p2p/1p3p2/3Pq2K/5pP1/5PP1/8 w - - 0 41",
+     "phase": "endgame",
+     "priorCount": 26,
+     "firstCount": 2,
+     "secondCount": 3,
+     "firstInCheck": true,
+     "secondInCheck": true,
+     "forcedAtFirst": false,
+     "forcedAtSecond": false,
+     "recaptureAtFirst": false
+    },
+    {
+     "id": "imported:26:36",
+     "priorFen": "4r1k1/ppp2p1p/2n3p1/8/3brP2/8/PP4PP/1RBR3K w - - 4 19",
+     "firstFen": "4r1k1/ppp2p1p/2n3p1/8/3b1P2/7P/PP4P1/1RBRr2K w - - 1 20",
+     "secondFen": "6k1/ppp2p1p/2n3p1/8/3b1P2/7P/PP4P1/1RB1r2K w - - 0 21",
+     "phase": "unclear",
+     "priorCount": 18,
+     "firstCount": 2,
+     "secondCount": 1,
+     "firstInCheck": true,
+     "secondInCheck": true,
+     "forcedAtFirst": false,
+     "forcedAtSecond": true,
+     "recaptureAtFirst": false
+    },
+    {
+     "id": "imported:28:45",
+     "priorFen": "1rb1qr1k/4N1p1/p2p2Pp/1p1Np3/4PP2/3Q4/PPP4R/2K4R b - - 2 23",
+     "firstFen": "1rb1qr1k/4N1p1/p2p2PR/1p1N4/4Pp2/3Q4/PPP5/2K4R b - - 0 24",
+     "secondFen": "1rb1qr1k/4N3/p2p2PR/1p1N4/4Pp2/3Q4/PPP5/2K5 b - - 0 25",
+     "phase": "middlegame",
+     "priorCount": 24,
+     "firstCount": 1,
+     "secondCount": 1,
+     "firstInCheck": true,
+     "secondInCheck": true,
+     "forcedAtFirst": true,
+     "forcedAtSecond": true,
+     "recaptureAtFirst": true
+    },
+    {
+     "id": "imported:30:43",
+     "priorFen": "r3rknQ/ppqb2p1/5nB1/3p2N1/2pPpB2/2P3P1/PP3P2/RN3R1K b - - 4 22",
+     "firstFen": "r2qrknQ/pp1b2p1/3B1nB1/3p2N1/2pPp3/2P3P1/PP3P2/RN3R1K b - - 6 23",
+     "secondFen": "r2q1knQ/pp1br1pN/3B1nB1/3p4/2pPp3/2P3P1/PP3P2/RN3R1K b - - 8 24",
+     "phase": "middlegame",
+     "priorCount": 36,
+     "firstCount": 2,
+     "secondCount": 1,
+     "firstInCheck": true,
+     "secondInCheck": true,
+     "forcedAtFirst": false,
+     "forcedAtSecond": true,
+     "recaptureAtFirst": false
+    },
+    {
+     "id": "imported:37:16",
+     "priorFen": "rn1qk2r/pbp2pbp/1p1p2p1/3np3/4P2N/2NP3P/PPPBBPP1/R2QK2R w KQkq - 3 9",
+     "firstFen": "rn2k2r/pbp2pbp/1p1p2p1/3np3/4PP1q/2NP3P/PPPBB1P1/R2QK2R w KQkq - 0 10",
+     "secondFen": "rn2k2r/pbp2pbp/1p1p2p1/3np3/4PP2/2NP2qP/PPPBB3/R2QK2R w KQkq - 0 11",
+     "phase": "middlegame",
+     "priorCount": 35,
+     "firstCount": 2,
+     "secondCount": 1,
+     "firstInCheck": true,
+     "secondInCheck": true,
+     "forcedAtFirst": false,
+     "forcedAtSecond": true,
+     "recaptureAtFirst": false
+    }
+   ]
+  },
+  "authored": {
+   "paths": 100,
+   "plies": 754,
+   "sameSideSpans": 555,
+   "currentFirings": 0,
+   "firingsPerPlayedPly": 0,
+   "destinationCountFirings": 0,
+   "promotionWeightSuppressed": 0,
+   "phaseCounts": {},
+   "baselineContexts": {
+    "checkAtEither": 50,
+    "checkAtBoth": 13,
+    "forcedAtEither": 52,
+    "recaptureAtFirst": 29
+   },
+   "contexts": {
+    "firstInCheck": 0,
+    "secondInCheck": 0,
+    "checkAtEither": 0,
+    "forcedAtFirst": 0,
+    "forcedAtSecond": 0,
+    "forcedAtEither": 0,
+    "recaptureAtFirst": 0,
+    "checkOrRecapture": 0,
+    "quietNoncheckNonrecapture": 0
+   },
+   "alternatives": null,
+   "examples": []
+  }
+ },
+ "fixture": {
+  "schema": "tabiya.research.r2-fixture.v1",
+  "source": {
+   "url": "https://database.lichess.org/standard/lichess_db_standard_rated_2026-07.pgn.zst",
+   "licence": "CC0-1.0",
+   "compressedRange": "bytes=0-16777215",
+   "compressedBytes": 16777216,
+   "compressedRangeSha256": "ee4fff08e9e88cbcc0e650487310d1e70910c103d26b9cfa572bb1a41a50300f",
+   "decompressedPrefixBytes": 120061952,
+   "decompressedPrefixSha256": "6446d0ba6d613f4723875c8695078d4c67ea4ba39e709449da34617859831004",
+   "originalMeasurementInputSha256": "5fb40add89903d24cfcf1d5dabc94074e6cfcefa867fdda432cb1049d25e1400"
+  },
+  "fixture": {
+   "path": "imported-sample.pgn",
+   "bytes": 248593,
+   "sha256": "a10a233e8e51f6a0877f65cee417339080d2fd32cd22886f755f576c84fa58ec",
+   "games": 108,
+   "decisions": 579,
+   "strata": {
+    "blitz/1000-1399": 12,
+    "blitz/1400-1799": 12,
+    "blitz/1800-2199": 12,
+    "bullet/1000-1399": 12,
+    "bullet/1400-1799": 12,
+    "bullet/1800-2199": 12,
+    "rapid/1000-1399": 12,
+    "rapid/1400-1799": 12,
+    "rapid/1800-2199": 12
+   }
+  },
+  "equivalence": "Every generated report line after the input digest matches the original R2 output byte for byte."
+ },
+ "thresholdGrid": [
+  {
+   "priorFloor": 6,
+   "ceiling": 1,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 6
+  },
+  {
+   "priorFloor": 6,
+   "ceiling": 1,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 6
+  },
+  {
+   "priorFloor": 6,
+   "ceiling": 2,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 16
+  },
+  {
+   "priorFloor": 6,
+   "ceiling": 2,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 16
+  },
+  {
+   "priorFloor": 6,
+   "ceiling": 3,
+   "promotionWeight": 1,
+   "authoredFirings": 1,
+   "importedFirings": 33
+  },
+  {
+   "priorFloor": 6,
+   "ceiling": 3,
+   "promotionWeight": 4,
+   "authoredFirings": 1,
+   "importedFirings": 33
+  },
+  {
+   "priorFloor": 6,
+   "ceiling": 4,
+   "promotionWeight": 1,
+   "authoredFirings": 1,
+   "importedFirings": 52
+  },
+  {
+   "priorFloor": 6,
+   "ceiling": 4,
+   "promotionWeight": 4,
+   "authoredFirings": 1,
+   "importedFirings": 51
+  },
+  {
+   "priorFloor": 6,
+   "ceiling": 5,
+   "promotionWeight": 1,
+   "authoredFirings": 1,
+   "importedFirings": 84
+  },
+  {
+   "priorFloor": 6,
+   "ceiling": 5,
+   "promotionWeight": 4,
+   "authoredFirings": 1,
+   "importedFirings": 84
+  },
+  {
+   "priorFloor": 8,
+   "ceiling": 1,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 6
+  },
+  {
+   "priorFloor": 8,
+   "ceiling": 1,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 6
+  },
+  {
+   "priorFloor": 8,
+   "ceiling": 2,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 16
+  },
+  {
+   "priorFloor": 8,
+   "ceiling": 2,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 16
+  },
+  {
+   "priorFloor": 8,
+   "ceiling": 3,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 31
+  },
+  {
+   "priorFloor": 8,
+   "ceiling": 3,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 31
+  },
+  {
+   "priorFloor": 8,
+   "ceiling": 4,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 47
+  },
+  {
+   "priorFloor": 8,
+   "ceiling": 4,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 46
+  },
+  {
+   "priorFloor": 8,
+   "ceiling": 5,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 71
+  },
+  {
+   "priorFloor": 8,
+   "ceiling": 5,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 71
+  },
+  {
+   "priorFloor": 10,
+   "ceiling": 1,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 6
+  },
+  {
+   "priorFloor": 10,
+   "ceiling": 1,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 6
+  },
+  {
+   "priorFloor": 10,
+   "ceiling": 2,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 16
+  },
+  {
+   "priorFloor": 10,
+   "ceiling": 2,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 16
+  },
+  {
+   "priorFloor": 10,
+   "ceiling": 3,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 31
+  },
+  {
+   "priorFloor": 10,
+   "ceiling": 3,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 31
+  },
+  {
+   "priorFloor": 10,
+   "ceiling": 4,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 45
+  },
+  {
+   "priorFloor": 10,
+   "ceiling": 4,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 44
+  },
+  {
+   "priorFloor": 10,
+   "ceiling": 5,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 68
+  },
+  {
+   "priorFloor": 10,
+   "ceiling": 5,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 68
+  },
+  {
+   "priorFloor": 12,
+   "ceiling": 1,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 6
+  },
+  {
+   "priorFloor": 12,
+   "ceiling": 1,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 6
+  },
+  {
+   "priorFloor": 12,
+   "ceiling": 2,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 16
+  },
+  {
+   "priorFloor": 12,
+   "ceiling": 2,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 16
+  },
+  {
+   "priorFloor": 12,
+   "ceiling": 3,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 31
+  },
+  {
+   "priorFloor": 12,
+   "ceiling": 3,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 31
+  },
+  {
+   "priorFloor": 12,
+   "ceiling": 4,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 45
+  },
+  {
+   "priorFloor": 12,
+   "ceiling": 4,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 44
+  },
+  {
+   "priorFloor": 12,
+   "ceiling": 5,
+   "promotionWeight": 1,
+   "authoredFirings": 0,
+   "importedFirings": 68
+  },
+  {
+   "priorFloor": 12,
+   "ceiling": 5,
+   "promotionWeight": 4,
+   "authoredFirings": 0,
+   "importedFirings": 68
+  }
+ ],
+ "asymmetricCeilingGrid": [
+  {
+   "firstCeiling": 2,
+   "secondCeiling": 2,
+   "authoredFirings": 0,
+   "importedFirings": 16
+  },
+  {
+   "firstCeiling": 2,
+   "secondCeiling": 3,
+   "authoredFirings": 0,
+   "importedFirings": 21
+  },
+  {
+   "firstCeiling": 2,
+   "secondCeiling": 4,
+   "authoredFirings": 0,
+   "importedFirings": 24
+  },
+  {
+   "firstCeiling": 3,
+   "secondCeiling": 2,
+   "authoredFirings": 0,
+   "importedFirings": 21
+  },
+  {
+   "firstCeiling": 3,
+   "secondCeiling": 3,
+   "authoredFirings": 0,
+   "importedFirings": 31
+  },
+  {
+   "firstCeiling": 3,
+   "secondCeiling": 4,
+   "authoredFirings": 0,
+   "importedFirings": 36
+  },
+  {
+   "firstCeiling": 4,
+   "secondCeiling": 2,
+   "authoredFirings": 0,
+   "importedFirings": 25
+  },
+  {
+   "firstCeiling": 4,
+   "secondCeiling": 3,
+   "authoredFirings": 0,
+   "importedFirings": 36
+  },
+  {
+   "firstCeiling": 4,
+   "secondCeiling": 4,
+   "authoredFirings": 0,
+   "importedFirings": 46
+  }
+ ],
+ "limitations": [
+  "The imported population is a deterministic chronological prefix stratified by speed and broad rating, not a representative sample of all players.",
+  "Check, forced-move and recapture labels are mechanical contexts, not learner usefulness judgements.",
+  "Legal-continuation enumeration weights every legal continuation equally and therefore overweights implausible play.",
+  "Authored branch-path counts deduplicate shared spans but do not estimate production traffic."
+ ]
+}

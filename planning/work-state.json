@@ -502,11 +502,13 @@
     },
     {
       "id": "D53",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:64aa003815cbf702433a1e6a6cff3a545fa0d7e052beba6bd3bb7cda7b87e6f5",
+      "state": "blocked",
+      "sourceGlyph": "📊",
+      "sourceDigest": "sha256:338f2df3eda8253e66f18820306b95f3dde6e90cbda76b16747a03f2bb01e57e",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "OWNER",
+      "blocker": "owner-ruling",
+      "question": "Approve the alternative-continuation population as the L2(ii) substitute and demote option_collapse from unasked live to on-request/retrospective under L6?"
     },
     {
       "id": "D54",

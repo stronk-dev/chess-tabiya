@@ -13633,3 +13633,23 @@ raw percentages).
 population, then decide whether the result triggers L6 demotion; recommendation: approve and
 demote to on-request/retrospective while preserving the vector. Work continues to the remaining
 free-parameter live-marker obligation [[D53]] rather than waiting on that ruling.
+
+## 2026-09-01 — Option collapse measured as a repeated-check detector
+
+**What landed:** [[D53]]'s span-shaped measurement. A disposable instrument walks 6,667 eligible
+same-side spans across the fixed 108-game CC0 Lichess population and 555 spans across all current
+authored root-to-leaf paths, then enumerates every three-ply legal continuation from each fired
+real-game parent.
+
+**What changed:** the 8→3→3 predicate is no longer “unmeasured,” but its name is not validated.
+It fires 31 times in real games and zero times in authored paths; every real-game firing has the
+marked side in check at both low-choice states. Only 510/1,206,199 legal continuations co-signal,
+so it is highly branch-discriminating, but the high floor is nearly inert and ceiling selection
+changes volume from 6 to 71 firings. Promotion ×4 changes neither measured population. Precise
+counts/check states remain useful evidence; the raw live sentence is not promoted into a module
+by those facts.
+
+**Blocked/next:** L2(ii) leaves substitute-population approval and the L6 disposition to the
+owner. Recommendation: approve + demote the generic unasked count sentence, preserve the operands,
+and require any future live form to name and validate the sustained-check event it actually serves.
+Work moves to the next unblocked 1.0 foundation obligation rather than waiting on that ruling.
