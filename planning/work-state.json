@@ -19734,11 +19734,12 @@
     },
     {
       "id": "D2485",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🔬",
       "sourceDigest": "sha256:decfb3b56dd3354f2fe4609d310422f7901a702d17cd04d9a93e3f11b8159770",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:phase-source-composition.md"
     },
     {
       "id": "D2486",

@@ -13831,3 +13831,22 @@ applicability. Draft and review the focused production composition RFC, then imp
 its value-authority/provider/recorded-path dependencies accept. Independent position labels, error
 costs and ordinary-learner presentation remain open Q4c work. No product producer, projection,
 module, pack, schema or authored chess statement changed.
+
+## 2026-09-01 — Source-retaining composition enters the RFC gate
+
+**What landed:** the first author pass of `rfc/phase-source-composition.md` and its eight-arm
+`make phase-source-composition-author-contract` falsifier. The draft specifies one private branded
+exact-node vector and ordered source-local arc, with independently retained opening endpoint,
+catalogue membership, five-arm rules phase, endgame classification, tablebase domain, recorded
+tablebase state and live provider state.
+
+**What changed:** the five production handoffs are now operation-level obligations rather than a
+free-text producer/feature promise. Support and Review are mandatory real call sites before the RFC
+can complete; bot policy, longitudinal publication and the advanced inspector each receive an exact
+typed boundary. The draft explicitly creates no renderer, source rank, preset, bot weight, style
+label or Campaign meaning, and refuses completion with an unused compiler.
+
+**Blocked/next:** the RFC remains draft and implementation is unauthorized. It waits on accepted
+value authority, convention provenance and provider receipts, then fresh independent buildability
+review. [[D2487]] remains independent: this RFC withholds false material-only technique fields but
+does not manufacture their missing theory geometry.
