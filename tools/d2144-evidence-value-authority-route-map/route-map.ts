@@ -74,7 +74,7 @@ const CORRECTED_TARGETS: Readonly<Record<string, readonly TargetProfile[]>> = Ob
   "rules.structural.reading.named_structure": [{ projection: "rules.structural.reading.named_structure@2", factoryShape: "computed", authorityInputs: ["fen", "registered_structure_catalogue"], dependency: "semantic-convention-provenance:named-structure" }],
   "rules.endgame.reading": [
     { projection: "rules.endgame.classification@1", factoryShape: "computed", authorityInputs: ["fen"], dependency: "semantic-convention-provenance:endgame-classification" },
-    { projection: "theory.endgame.technique_candidate@1", factoryShape: "authored_authority", authorityInputs: ["cited_theory_record", "applicability_predicate"], dependency: "theory-knowledge-pipeline" },
+    { projection: "theory.endgame.setup_match@1", factoryShape: "computed", authorityInputs: ["fen", "registered_cited_setup_convention"], dependency: "semantic-convention-provenance:endgame-setup" },
   ],
   "rules.pivotal.marker": [
     { projection: "derived.pivotal.irreversibility@1", factoryShape: "derived", authorityInputs: ["sealed_transition_event", "run_node_identity"], dependency: "semantic-validation-authority" },

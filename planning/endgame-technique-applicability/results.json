@@ -1,0 +1,140 @@
+{
+  "schema": "tabiya.research.endgame-technique-applicability.v1",
+  "boundary": "Published necessary/canonical setup geometry only; no method applicability, reachability, advice or universal chess-truth label",
+  "corpus": {
+    "packs": 50,
+    "krpkrPositions": 31,
+    "packsWithKrpkr": 3
+  },
+  "currentMaterialLabels": {
+    "lucena": 31,
+    "philidor": 31,
+    "vancura": 0
+  },
+  "operands": {
+    "rookPawn": 0,
+    "pawnRank": {
+      "4": 7,
+      "5": 2,
+      "6": 8,
+      "7": 14
+    },
+    "attackerKingOnPromotionSquare": 5,
+    "defenderKingOnPromotionSquareOrAdjacent": 17,
+    "attackerKingBeyondDefenderThird": 16,
+    "defenderRookOnThirdRank": 7,
+    "attackerRookCutsDefenderKingByFile": 12,
+    "attackerRookInFrontOfPawn": 0,
+    "defenderRookAttacksPawnFromSide": 1,
+    "defenderKingBeyondSideRook": 4,
+    "defenderKingAtOppositeCornerBand": 0
+  },
+  "canonicalSetupCandidates": {
+    "lucenaCanonicalSetup": 4,
+    "philidorCanonicalSetup": 6,
+    "vancuraCanonicalSetup": 0
+  },
+  "tablebase": {
+    "rawSideToMove": {
+      "draw": 14,
+      "loss": 8,
+      "win": 9
+    },
+    "attackerOutcome": {
+      "draw": 14,
+      "win": 17
+    },
+    "attackerOutcomeByCandidate": {
+      "lucenaCanonicalSetup": {
+        "win": 4
+      },
+      "philidorCanonicalSetup": {
+        "draw": 6
+      },
+      "vancuraCanonicalSetup": {}
+    }
+  },
+  "candidateRows": {
+    "lucenaCanonicalSetup": [
+      {
+        "packId": "lucena-bridge-convert",
+        "nodeId": "$start",
+        "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1",
+        "recordedTablebase": "win",
+        "attackerTablebaseOutcome": "win"
+      },
+      {
+        "packId": "lucena-bridge-convert",
+        "nodeId": "b-ke7",
+        "fen": "1K6/1P2k3/8/8/8/8/r7/3R4 w - - 2 2",
+        "recordedTablebase": "win",
+        "attackerTablebaseOutcome": "win"
+      },
+      {
+        "packId": "lucena-bridge-convert",
+        "nodeId": "w-rd4",
+        "fen": "1K6/1P2k3/8/8/3R4/8/r7/8 b - - 3 2",
+        "recordedTablebase": "loss",
+        "attackerTablebaseOutcome": "win"
+      },
+      {
+        "packId": "lucena-bridge-convert",
+        "nodeId": "b-ra1",
+        "fen": "1K6/1P2k3/8/8/3R4/8/8/r7 w - - 4 3",
+        "recordedTablebase": "win",
+        "attackerTablebaseOutcome": "win"
+      }
+    ],
+    "philidorCanonicalSetup": [
+      {
+        "packId": "philidor-third-rank-hold",
+        "nodeId": "$start",
+        "fen": "4k3/R7/7r/4K3/4P3/8/8/8 b - - 0 1",
+        "recordedTablebase": "draw",
+        "attackerTablebaseOutcome": "draw"
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "nodeId": "b-rb6",
+        "fen": "4k3/R7/1r6/4K3/4P3/8/8/8 w - - 1 2",
+        "recordedTablebase": "draw",
+        "attackerTablebaseOutcome": "draw"
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "nodeId": "w-kd5",
+        "fen": "4k3/R7/1r6/3K4/4P3/8/8/8 b - - 2 2",
+        "recordedTablebase": "draw",
+        "attackerTablebaseOutcome": "draw"
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "nodeId": "b-rg6",
+        "fen": "4k3/R7/6r1/3K4/4P3/8/8/8 w - - 3 3",
+        "recordedTablebase": "draw",
+        "attackerTablebaseOutcome": "draw"
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "nodeId": "w-e5",
+        "fen": "4k3/R7/6r1/3KP3/8/8/8/8 b - - 0 3",
+        "recordedTablebase": "draw",
+        "attackerTablebaseOutcome": "draw"
+      },
+      {
+        "packId": "philidor-third-rank-hold",
+        "nodeId": "b-rb6-2",
+        "fen": "4k3/R7/1r6/3KP3/8/8/8/8 w - - 1 4",
+        "recordedTablebase": "draw",
+        "attackerTablebaseOutcome": "draw"
+      }
+    ],
+    "vancuraCanonicalSetup": []
+  },
+  "invariants": {
+    "materialLabelsMinusCanonicalLucena": 27,
+    "materialLabelsMinusCanonicalPhilidor": 25,
+    "dualCanonicalLucenaPhilidor": 0,
+    "nonRookPawnVancura": 0
+  }
+}

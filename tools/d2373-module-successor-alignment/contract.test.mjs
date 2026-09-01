@@ -13,7 +13,7 @@ test("the module RFC consumes the value-authority successor boundary", () => {
 
 test("four retired refs map set-equally to eight successors", () => {
   for (const ref of ["named_structure@1", "phase.reading@1", "endgame.reading@1", "pivotal.marker@1"]) assert.ok(rfc.includes(ref));
-  for (const ref of ["named_structure@2", "phase.reading@2", "endgame.classification@1", "theory.endgame.technique_candidate@1", "pivotal.irreversibility@1", "pivotal.phase_change@1", "pivotal.human_divergence@1", "pivotal.option_collapse@1"]) {
+  for (const ref of ["named_structure@2", "phase.reading@2", "endgame.classification@1", "theory.endgame.setup_match@1", "pivotal.irreversibility@1", "pivotal.phase_change@1", "pivotal.human_divergence@1", "pivotal.option_collapse@1"]) {
     assert.ok(rfc.includes(ref), `missing ${ref}`);
     assert.ok(value.includes(ref), `value authority missing ${ref}`);
   }

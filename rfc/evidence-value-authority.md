@@ -1,6 +1,6 @@
 # RFC: Evidence value authority — compute, derive or project before sealing
 
-- **Status:** draft — author-amended 2026-09-01 through [[D2484]], [[D2327]] and the D2146
+- **Status:** draft — author-amended 2026-09-01 through [[D2495]], [[D2484]], [[D2327]] and the D2146
   callable-operation closure; dependency-blocked on the
   returned semantic convention register/provenance and provider exchange contracts, then fresh
   independent buildability review
@@ -12,7 +12,8 @@
 - **Exploration gate:** [[D2144]] and [[D2145]], answered by
   `design/research/evidence-seal-value-authority.md` and
   `design/research/evidence-grounding-taxonomy.md`; [[D2484]], answered by
-  `design/research/phase-band-and-abstention-contract.md`; executable population in
+  `design/research/phase-band-and-abstention-contract.md`; [[D2495]], answered for the static
+  setup arm by `design/research/endgame-technique-applicability.md`; executable population in
   `tools/d2144-evidence-seal-audit/`
 - **Depends on:** implemented `rfc/archive/evidence-contract-manifest.md`; implemented
   `rfc/archive/semantic-evidence-selection.md`; draft `rfc/semantic-convention-register.md` and
@@ -256,9 +257,27 @@ rewriting v1.
 
 - `rules.endgame.classification@1`: product material/phase classification under a registered
   convention, with no technique records; and
-- `theory.endgame.technique_candidate@1`: a cited theory candidate whose payload names the exact
-  source/citation and applicability predicate. Until those citations and predicates exist, this
-  projection is honest-empty and no Lucena/Philidor/Vancura sentence is rendered.
+- `theory.endgame.setup_match@1`: a positive static setup match computed from a canonical FEN under
+  one registered, cited and versioned setup convention. The projection carries `fen`,
+  `technique: "lucena" | "philidor" | "vancura"`, the exact convention ref/source citation and
+  the convention's closed, technique-specific operand values. The operation returns
+  `matched(value) | not_matched({ convention, failedOperandIds }) | unavailable(reason)` and mints
+  evidence only for `matched`.
+
+The setup factory accepts `fen` plus the registered setup convention, computes every operand and
+the intersection itself, and then seals the positive. It accepts no technique name, boolean,
+operand result, tablebase category or caller applicability. The D2495 author population supplies
+the three canonical prototypes, colour symmetry, hard negatives and the blocked-rook-ray
+falsifier. Its current-corpus result is exactly 4 Lucena / 6 Philidor / 0 Vancura setup matches out
+of 31 KRPKR positions; the zero Vancura count is absence of population, not a negative truth set.
+
+No method or reachability projection is introduced by this RFC. A future
+`theory.endgame.method_stage@1` requires witnessed transition semantics; a future
+`derived.endgame.setup_reachable@1` requires a declared bounded path/search/provider. Those are
+research GAPs and cannot be represented by `setup_match`. Existing recorded/live tablebase
+evidence remains the separate outcome authority and retains side-to-move/pawn-side perspective.
+Until the setup convention exists, this projection is honest-unavailable and no
+Lucena/Philidor/Vancura sentence is rendered.
 
 `rules.pivotal.marker@1` is retired from new bindings and replaced by four exact outputs:
 
@@ -300,10 +319,10 @@ The set is partitioned at baseline as follows:
 
 | Factory family after grounding repair | Current rows | Source of authority |
 |---|---:|---|
-| computed rules/product operations | 37 | FEN, validated edge or bounded rule inputs |
+| computed rules/product operations | 38 | FEN, validated edge or bounded rule inputs |
 | derived operations | 25 | exact sealed derivation member, including the two runtime recorded-reading projections |
 | recorded/provider/model/corpus/run projection | 9 | sealed source/exchange/run receipt |
-| authored/theory projection | 4 | registered document/provenance authority |
+| authored/theory projection | 3 | registered document/provenance authority |
 | **Total generic adapters** | **75** | — |
 
 Those 75 rows are one subset of the route table, not the full boundary. The complete 191-row receipt
@@ -426,9 +445,9 @@ software-contracts CI job. It is not a pre-push hook and requires no custom envi
 1. Land the semantic-convention register/provenance dependencies and provider receipt contract.
 2. Add the private mint/value-receipt boundary without changing call sites.
 3. Implement §3's corrected/split projection identities and update the catalogue.
-4. Migrate the 37 computed rows, starting with the twelve already-bound current rows.
+4. Migrate the 38 computed rows, starting with the twelve already-bound current rows.
 5. Migrate the 25 derived rows and invert semantic-event compilation.
-6. Migrate the 9 direct source-receipt and 4 authored rows.
+6. Migrate the 9 direct source-receipt and 3 authored rows.
 7. Delete all generic adapters/root exports and enable the permanent closure gate.
 8. Run complete software, browser, content, packaging and CI-parity gates before status changes.
 
@@ -469,8 +488,11 @@ planes, optional LLM renderer and assistance ceilings.
 9. Endgame, pivotal and structural-result v1 have zero consumer bindings; every successor in §3.4
    has one truthful authority/factory profile, including an explicit unavailable arm where the
    required upstream authority does not yet exist.
-10. A Lucena/Philidor/Vancura candidate cannot render without a cited theory authority and exact
-    applicability predicate.
+10. A Lucena/Philidor/Vancura setup cannot render without a cited/versioned setup convention and
+    the exact factory-computed operand intersection. Canonical positives, colour symmetry, hard
+    negatives and a blocked rook ray are independent falsifiers. A setup match cannot render a
+    method-stage, reachability, advice or outcome claim; the zero-population Vancura corpus arm
+    cannot be reported as validation.
 11. Each pivotal kind reaches its own projection; a rule marker cannot be relabelled human-model
     evidence and a Maia split cannot be relabelled a position-rule marker.
 12. Structural predicate results cannot be minted without the exact sealed authored condition; a
@@ -499,7 +521,7 @@ planes, optional LLM renderer and assistance ceilings.
     exploration-log entry and RFC closeout.
 24. A fresh independent buildability review finds no caller-payload bypass, false authority join,
     missing production call site, undeclared shared-resource claim or green-by-construction test.
-25. The 75-row partition is exactly 37 computed / 25 derived / 9 direct source / 4 authored.
+25. The 75-row partition is exactly 38 computed / 25 derived / 9 direct source / 3 authored.
     `recorded.engine.eval@1` and `recorded.tablebase.result@1` consume their exact same-record
     `sourcing.ledger.*` evidence outputs; caller bytes, another record and same-FEN value mutations
     fail before either runtime reading is minted ([[D2327]]).
@@ -524,6 +546,10 @@ None for the owner. Author review must settle exact successor symbol spelling an
 
 ## Changelog
 
+- 2026-09-01: [[D2495]] replaces the broad `theory.endgame.technique_candidate@1` with the
+  source-bounded, factory-computed `theory.endgame.setup_match@1`. Material classification,
+  witnessed method stage, bounded reachability and perspective-oriented tablebase outcome remain
+  separate; the two research-GAP projections are not introduced.
 - 2026-09-01: [[D2484]] replaces the proposed byte-compatible phase payload with the measured
   five-arm `PhaseBandReadingV2`: registered convention identity, exact operand boundaries and
   deterministic margin/distances. It explicitly refuses probability, move-distance and provider

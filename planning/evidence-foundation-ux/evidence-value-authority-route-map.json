@@ -1983,14 +1983,14 @@
           "factorySymbol": "createRulesEndgameClassificationV1Evidence"
         },
         {
-          "projection": "theory.endgame.technique_candidate@1",
-          "factoryShape": "authored_authority",
+          "projection": "theory.endgame.setup_match@1",
+          "factoryShape": "computed",
           "authorityInputs": [
-            "cited_theory_record",
-            "applicability_predicate"
+            "fen",
+            "registered_cited_setup_convention"
           ],
-          "dependency": "theory-knowledge-pipeline",
-          "factorySymbol": "createTheoryEndgameTechniqueCandidateV1Evidence"
+          "dependency": "semantic-convention-provenance:endgame-setup",
+          "factorySymbol": "createTheoryEndgameSetupMatchV1Evidence"
         }
       ],
       "producerImplementation": "packages/runtime/src/endgame.ts",
@@ -5456,6 +5456,6 @@
       "rules.tactic.reading.defender_duty_set@1"
     ],
     "boundProjectionsWithoutProductionUses": [],
-    "receiptDigest": "sha256:50143710c4a542b49508e04f4fead18615d16bcdb253bc90e59bb9aa6ba47468"
+    "receiptDigest": "sha256:bb61f78a34c187e663e7ae8c91e7f43dc6aa9fed049293d0ab947eaec4a2e057"
   }
 }

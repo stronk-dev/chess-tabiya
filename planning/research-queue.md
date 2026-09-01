@@ -229,6 +229,14 @@ round-tripped through `pgn-import.ts`"*)
   availability. [[D2487]] separately withholds technique names: all 31 KRPvKR positions currently
   emit both Lucena and Philidor from material alone. None authorizes product code before the RFC
   gate. Evidence: `design/research/phase-source-composition.md`.
+- **Named-technique result 2026-09-01:** `make endgame-technique-applicability-census` finds 31
+  exact KRPKR positions: the material reading labels all 31 Lucena + Philidor, while declared
+  source-bounded setup intersections match 4 Lucena and 6 Philidor; the corpus contains no rook
+  pawn and therefore cannot validate Vancura. All 31 carry recorded tablebase outcomes, but raw
+  side-to-move and pawn-side result orientations differ. [[D2495]] closes the static setup
+  research arm and requires separate material, cited setup, witnessed method, bounded reachability
+  and outcome identities. Method/reachability and independent-label accuracy remain open.
+  Evidence: `design/research/endgame-technique-applicability.md`.
 - **Question:** B10 shipped *"attributed phase classification with honest abstention"* (`gates.md`
   `[V]`). Nothing measures its accuracy or its abstention rate. Q4c's own definition requires
   labeled ground truth, inter-reviewer agreement, and false-transition costs (`plan.md` `[V]`).

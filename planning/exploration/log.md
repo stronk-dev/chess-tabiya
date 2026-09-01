@@ -13889,3 +13889,21 @@ all sixteen families remain mandatory after acceptance during implementation.
 **Blocked/next:** another fresh independent buildability review must try to falsify the repaired
 contract. The RFC is still draft and implementation remains unauthorized. No catalogue runtime,
 register, schema, storage, product or UX bytes changed.
+
+## 2026-09-01 — Named rook-endgame techniques split into five authorities
+
+**What landed:** [[D2495]]'s cited dossier, disposable geometry/corpus instrument and
+`make endgame-technique-applicability-census`. Four prototype arms cover the three published
+canonical setups, hard negatives, a blocked rook ray and colour symmetry.
+
+**What changed:** the current material reading labels all 31 KRPKR positions both Lucena and
+Philidor. Source-bounded setup intersections match only 4 Lucena and 6 Philidor positions; the
+corpus contains zero rook-pawn positions and therefore cannot validate Vancura. All 31 carry
+tablebase evidence, but raw side-to-move categories differ from the pawn-side outcome. The reusable
+contract is now five separate authorities: material classification, cited/versioned setup match,
+witnessed method stage, bounded reachability and perspective-oriented tablebase outcome.
+
+**Blocked/next:** amend and re-review `evidence-value-authority`; no named-technique product label,
+hint, drill claim or LLM bridge is authorized yet. Method-stage predicates, reachability semantics,
+a populated Vancura validation set, independent broader labels and owner-use presentation remain
+open. No product code, pack, schema or authored chess statement changed.

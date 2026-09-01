@@ -201,9 +201,11 @@ Philidor or Vancura names.
 This refusal is failable: the fixed 804-position corpus contains 31 KRPvKR positions and the
 current reader emits both `lucena` and `philidor` on all 31. The point/arc output must contain zero
 technique fields and zero technique-name bytes for that population. A future
-`theory.endgame.technique_candidate@1` enters only with cited exact geometry/applicability under
-`evidence-value-authority.md`; the composer may then add it as another independent source slot,
-never fold it into the rules material class.
+`theory.endgame.setup_match@1` enters only with a cited/versioned setup convention and a
+factory-computed exact operand intersection under `evidence-value-authority.md`; the composer may
+then add it as another independent source slot, never fold it into the rules material class.
+Method stage, bounded reachability and tablebase outcome remain different sources and cannot be
+inferred from that slot.
 
 ### 5. Production handoffs
 

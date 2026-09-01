@@ -635,7 +635,7 @@ lands, the generator—not a hand edit—applies this exact set replacement:
 |---|---|---|---:|
 | `rules.structural.reading.named_structure@1` | `rules.structural.reading.named_structure@2` | Sight, Structure Nudge | 0 |
 | `rules.phase.reading@1` | `rules.phase.reading@2` | Structure Nudge, Review Map, Full Inspector | 0 |
-| `rules.endgame.reading@1` | `rules.endgame.classification@1`; `theory.endgame.technique_candidate@1` | Structure Nudge, Review Map | +2 |
+| `rules.endgame.reading@1` | `rules.endgame.classification@1`; `theory.endgame.setup_match@1` | Structure Nudge, Review Map | +2 |
 | `rules.pivotal.marker@1` | `derived.pivotal.irreversibility@1`; `derived.pivotal.phase_change@1`; `derived.pivotal.human_divergence@1`; `derived.pivotal.option_collapse@1` | Review Map, Full Inspector | +6 |
 
 The replacement is set-equal over the four retired and eight successor refs. No v1/v2 pair may

@@ -19820,6 +19820,15 @@
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2495",
+      "state": "blocked",
+      "sourceGlyph": "🔬",
+      "sourceDigest": "sha256:c78cc8bc0de6e0837443c2a3aa152381e668055a6e5eb86fac56fc5723649f50",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-value-authority.md"
     }
   ]
 }

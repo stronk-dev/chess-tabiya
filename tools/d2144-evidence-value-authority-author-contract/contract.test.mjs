@@ -56,7 +56,7 @@ test("successors repair rather than silently relabel the five false or mixed row
     "rules.phase.reading@2",
     "rules.structural.reading.named_structure@2",
     "rules.endgame.classification@1",
-    "theory.endgame.technique_candidate@1",
+    "theory.endgame.setup_match@1",
     "derived.pivotal.irreversibility@1",
     "derived.pivotal.phase_change@1",
     "derived.pivotal.human_divergence@1",
@@ -68,7 +68,8 @@ test("successors repair rather than silently relabel the five false or mixed row
     if (!successor.endsWith("@2")) assert.doesNotMatch(catalog, new RegExp(`"${successor.split("@")[0].replaceAll(".", "\\.")}"`, "u"));
   }
   assert.match(rfc, /v1 is retired from new bindings|v1 have zero consumer bindings/u);
-  assert.match(rfc, /Lucena\/Philidor\/Vancura candidate cannot render without a cited theory authority/u);
+  assert.match(rfc, /Lucena\/Philidor\/Vancura setup cannot render without a cited\/versioned setup convention/u);
+  assert.match(rfc, /method_stage@1[\s\S]*?research GAPs and cannot be represented by `setup_match`/u);
 });
 
 test("the phase successor carries the measured five-arm decision instead of old prose", () => {
@@ -108,7 +109,7 @@ test("the draft closes all four authority families without a generic payload esc
 
 test("dependencies and closure gates are explicit rather than hand-waved", () => {
   assert.match(rfc, /\*\*Status:\*\* draft/u);
-  assert.match(rfc, /author-amended 2026-09-01 through \[\[D2484\]\], \[\[D2327\]\] and the D2146/u);
+  assert.match(rfc, /author-amended 2026-09-01 through \[\[D2495\]\], \[\[D2484\]\], \[\[D2327\]\] and the D2146/u);
   assert.match(rfc, /dependency-blocked on the[\s\S]*?semantic convention register\/provenance/u);
   assert.match(rfc, /provider exchange contracts/u);
   assert.match(rfc, /semantic-convention-provenance\.md/u);
@@ -177,7 +178,7 @@ test("recorded runtime readings derive from their exact sourcing-ledger evidence
 
   assert.match(rfc, /\[\[D2327\]\][\s\S]*?createRecordedEngineEvalV1Evidence[\s\S]*?createSourcingLedgerEngineEvalV1Evidence/u);
   assert.match(rfc, /\[\[D2327\]\][\s\S]*?createRecordedTablebaseResultV1Evidence[\s\S]*?createSourcingLedgerTablebaseResultV1Evidence/u);
-  assert.match(rfc, /37 computed \/ 25 derived \/ 9 direct source \/ 4 authored/u);
+  assert.match(rfc, /38 computed \/ 25 derived \/ 9 direct source \/ 3 authored/u);
 });
 
 test("every used route names an exact callable producer operation", () => {

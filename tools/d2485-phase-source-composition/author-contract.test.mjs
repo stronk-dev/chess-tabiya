@@ -83,7 +83,8 @@ test("material classification cannot launder endgame technique names", () => {
   const boundary = section("### 4. Endgame technique boundary", "### 5. Production handoffs");
   assert.match(boundary, /drops\s+the legacy `techniqueCandidates` array entirely/u);
   assert.match(boundary, /zero\s+technique fields and zero technique-name bytes/u);
-  assert.match(boundary, /theory\.endgame\.technique_candidate@1/u);
+  assert.match(boundary, /theory\.endgame\.setup_match@1/u);
+  assert.match(boundary, /Method stage, bounded reachability and tablebase outcome remain different sources/u);
 });
 
 test("completion requires real consumers, normal gates and fresh review", () => {
