@@ -19757,6 +19757,69 @@
       "sourceDigest": "sha256:a0d8c595f2a0a5a1a8f4d421707070b88936a106d148915d19505a8430c443b3",
       "uxItems": [],
       "owner": "evidence-foundation"
+    },
+    {
+      "id": "D2488",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4756493b191ed950c376a02514d8547e9ca09f66adfcc2736f480d81c855f8ea",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2489",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a317b55629b82aa79bf63d399ddf6b7dd9927d40cb2b90c70004b9ba2ad3990b",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2490",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e738618af519c13424699d9ccacbcfb211c2f364c2f76a49e16e491c9c10e9ad",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2491",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:60d1a8095c52552b61ef459eac52d06f018e15e44fc15351dfb084d7ede38a67",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2492",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:14241ac411824fb12e1d6a41f588ea35def8f34f88b58a8d2331775fb5893509",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2493",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:690455c194f0fd19a4800bcde0ffe9281f799873ef7d4b128ff1610df5a7dd2f",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2494",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2e1633a70bbd3c0d997178693db3bb933f8a9befbfeed21f723f8f1534c53850",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
     }
   ]
 }

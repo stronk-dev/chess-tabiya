@@ -128,5 +128,5 @@ test("the repaired RFC declares one engine, adoption, exact canonical bytes and 
     "resource-scoped",
   ]) assert.ok(rfc.includes(required), "missing " + required);
   assert.match(rfc, /no longer add C9, C10 or C11/);
-  assert.match(rfc, /Fresh independent review is required; no\s+implementation is authorized/);
+  assert.match(rfc, /(?:fresh independent|another fresh) review[\s\S]{0,100}required; no\s+implementation is authorized/i);
 });

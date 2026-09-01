@@ -59,8 +59,8 @@ test("semantic conventions retain lineage without assistance or C10 ownership", 
 
 test("all four RFCs remain non-implementable until fresh review", () => {
   for (const [name, source] of Object.entries({ generic, assistance, provider, semantic })) {
-    assert.match(source, /Fresh independent review is required|Fresh independent review required|Fresh review is required|Fresh review required/i, name);
-    assert.match(source, /implementation is unauthorized|implementation remains unauthorized/i, name);
+    assert.match(source, /(?:fresh independent|another fresh|fresh) review[\s\S]{0,100}required/i, name);
+    assert.match(source, /implementation is unauthorized|implementation remains unauthorized|no implementation is authorized/i, name);
   }
 });
 

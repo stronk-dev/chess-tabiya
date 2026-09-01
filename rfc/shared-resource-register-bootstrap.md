@@ -1,9 +1,11 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — author-repaired 2026-09-01 on [[D2442]]–[[D2444]], [[D2454]],
-  [[D2455]], [[D2465]]–[[D2467]]. One catalogue, projection/lifecycle engine and temporal reader
-  now replace the competing C9/C10/C11 plans. Fresh independent review is required; no
-  implementation is authorized.
+- **Status:** draft — RETURNED by third fresh independent review 2026-09-01 on [[D2488]]–[[D2494]].
+  The one-engine direction survives, but the projection/config union and seven complete baseline
+  descriptors are absent; `partial` is unrepresentable; three adapter normal forms and the
+  TypeScript traversal boundary are undefined; README byte ownership is ambiguous; and the review
+  order requires sixteen unimplemented fixture families. Author repair and another fresh review
+  are required; no implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -359,7 +361,17 @@ The generic engine retains the earlier returned obligations rather than making t
 - [[D2383]] remains exact catalogue population and selector-grammar closure; and
 - [[D2384]] remains staged-index plus committed first-parent temporal verification.
 
-Their earlier repairs are incorporated into ``1–7. They close only when the amended executable
+The third fresh review adds the author-repair batch without changing that direction:
+
+- [[D2488]] defines the missing projection/config discriminated union;
+- [[D2489]] supplies all ten literal complete baseline descriptors;
+- [[D2490]] carries selector `partial` through one typed resolver/transition image;
+- [[D2491]] closes TypeScript traversal and external-edge semantics;
+- [[D2492]] defines the three missing adapter normal forms;
+- [[D2493]] fixes README derived-byte ownership while preserving hand-authored prose; and
+- [[D2494]] makes the pre-acceptance review matrix executable without implementing product bytes.
+
+Their earlier repairs are incorporated into §§1–7. They close only when the amended executable
 criteria land; rewriting the architecture does not retire the findings.
 
 ## Acceptance criteria
@@ -408,6 +420,8 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-01: returned by third fresh independent buildability review on [[D2488]]–[[D2494]];
+  receipt: `planning/shared-resource-register-bootstrap/third-fresh-independent-buildability-review-2026-09-01.md`.
 - 2026-09-01: author-repaired the second return and reconciled the three competing follow-ons.
   Added a descriptor catalogue, seven closed projection adapters, three lifecycles, exact canonical
   bytes, selector-level absence, honest adoption, one temporal reader and resource-scoped

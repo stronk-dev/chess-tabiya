@@ -13850,3 +13850,25 @@ label or Campaign meaning, and refuses completion with an unused compiler.
 value authority, convention provenance and provider receipts, then fresh independent buildability
 review. [[D2487]] remains independent: this RFC withholds false material-only technique fields but
 does not manufacture their missing theory geometry.
+
+## 2026-09-01 — Generic register bootstrap returned on executable grammar
+
+**What landed:** the third fresh independent buildability review of
+`shared-resource-register-bootstrap.md`. `make shared-resource-bootstrap-third-fresh-review`
+reproduces seven blocking findings ([[D2488]]–[[D2494]]). The prior 8/8 canonical/adoption author
+control and 6/6 cross-RFC reconciliation control remain green.
+
+**What survives:** one catalogue/adapter/lifecycle/history engine, selector-level absence, honest
+adoption, one canonical byte authority and the removal of competing C9/C10/C11 architectures are
+still the correct direction.
+
+**Why returned:** the central projection/config type is undefined; seven of ten complete baseline
+descriptors are absent; `partial` has no result type; TypeScript traversal and three other adapter
+normal forms are not closed; README derived-byte ownership is ambiguous; and fresh review is asked
+to execute sixteen fixture families before the engine or a complete disposable model exists.
+
+**Blocked/next:** author the literal descriptor/config grammar and all ten baseline images, close
+resolver/adapter/README semantics, and make the pre-acceptance matrix executable or move its
+implementation-only arms. No catalogue, register or product implementation is authorized. This
+return remains the nearest blocker for semantic-convention/provider roots, value authority and the
+source-retaining phase composer.
