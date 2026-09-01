@@ -331,6 +331,13 @@ This is evidence that B4's residual is foundation closure rather than an absent 
 B4 remains open; catalogue breadth cannot discharge source identity, execution, validation,
 consumer selection or owner-use.
 
+**B4 Syzygy reach note, 2026-09-01 ([[D110]]):** the accepted authored tablebase population now
+has complete successor facts: 12/12 Syzygy drafts, 235/235 non-terminal parents, 199/199
+choice-bearing parents and 2,888/2,888 exact successor slots. `make tablebase-census-check` is the
+read-only receipt; `design/research/tablebase-successor-census-2026-09-01.md` records why the stale
+277 denominator is withdrawn. B4 remains open: the wave creates no prose or claim bindings, and
+the evidence-to-module/LLM delivery residual above is unchanged.
+
 **Watch item — the Lucas Chess failure mode:** breadth without unifying depth
 produces a mode menu, not a product (our own competitor research named this
 case). If surfaces accumulate while B4 stays unmet, that is K6/K4 evidence

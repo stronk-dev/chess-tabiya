@@ -13727,3 +13727,47 @@ retire `VERIFY_LEDGER_MERGE_CONFLICT` from the live refusal-debt register.
 adoption denominator remains one backed claim and zero graduated packs. Run the mechanical census
 over the twelve Syzygy-backed drafts under the 400-query per-pack ceiling, record the corpus-wide
 Q-17 result, then leave claim selection and prose bindings to the separate human-authored wave.
+
+## 2026-09-01 — Q-17 tablebase successor census completes its accepted population
+
+**What landed:** the twelve-pack mechanical wave and the independent read-only receipt. The exact
+result is 235/235 authored non-terminal parents, 199/199 choice-bearing parents and 2,888/2,888
+successor slots with committed `tablebase_result` records. The dossier is
+`design/research/tablebase-successor-census-2026-09-01.md`.
+
+**What changed:** Q-17 and [[D110]]'s mechanical census gap close. The stale 277 denominator is
+withdrawn because it reproduces under no declared population; the accepted Stage-2 population is
+the 199 authored start/spine choice parents. Four tool findings became [[D2477]]–[[D2480]] rather
+than disappearing into the wave: provenance-complete caching, progress, honest cache/source
+accounting, and a corpus-wide checker.
+
+**Blocked/next:** the wave authored no chess claim and no binding. [[D476]] still owns the seven
+human claim judgements, and `backedClaims` should therefore remain one until that separate wave.
+[[D224]] and [[D225]] retain their wider transposition/frontier scopes and are not closed by this
+receipt. B4 gains Syzygy fact reach, not completed module or LLM delivery.
+
+## 2026-09-01 — The Q-17 full gate closes a local/CI population leak
+
+**What landed:** [[D2481]] narrows the outpost dependency census from every JSON file below
+`content/` to its declared population, `content/shapes/`. The contract still measures 23
+expressions in three committed documents and no longer reads gitignored Syzygy answer caches.
+
+**What changed:** a local checkout with valid authoring residue and a clean CI checkout now execute
+the same software-contract population. The full software gate passes 1,110/1,110 after the repair;
+encoded FEN slashes in cache filenames are no longer inputs to an unrelated catalogue assertion.
+
+**Blocked/next:** none for this defect. Continue the complete repository gate on the final Q-17
+closeout bytes, then move to the next evidence-foundation item.
+
+## 2026-09-01 — Runtime evidence coverage stops pinning yesterday's corpus
+
+**What landed:** [[D2482]] replaces three frozen evidence totals with an independent join from the
+committed ledgers to the runtime registry. The contract requires exact equality for admitted pack
+ids, recorded-reading count and per-pack transposition keys.
+
+**What changed:** Q-17's growth from 732 to 3,291 runtime readings is now accepted without
+weakening the test to a lower bound. A dropped record, extra admission, wrong pack attachment or
+collapsed anchor still fails. The real-content tier passes 172/172.
+
+**Blocked/next:** none for this defect. Re-run the complete repository gate after terminal
+tracking and receipt refresh.

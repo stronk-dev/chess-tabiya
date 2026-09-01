@@ -57,6 +57,7 @@ make pack-check FILE=content/drafts/my-pack.json
 make pack-preview FILE=content/drafts/my-pack.json
 make tablebase-walk FILE=content/drafts/my-pack.json OFFLINE=1
 make tablebase-census FILE=content/drafts/my-pack.json
+make tablebase-census-check
 make expression-census OUT=/tmp/expression-census.json
 make up
 make up-engines
@@ -123,7 +124,15 @@ existing unique records, preserves non-tablebase evidence and claim bindings, an
 duplicates or a query count above `MAX_QUERIES` (400 by default). Pack validation, evidence
 validation, and both complete replacement images finish before either sibling sidecar is
 replaced; an ordinary partial replacement is rolled back. The command never authors claims
-or edits pack prose.
+or edits pack prose. It reports progress every 25 successors, separating live queries,
+provenance-cache hits, and ledger reuse, and stores FEN-bound answer
+envelopes under the gitignored `content/sources/syzygy/` directory, so later packs can reuse
+both the immutable payload and its exact HTTP provenance.
+
+`make tablebase-census-check [ROOT=<draft-directory>] [OUT=<report.json>]` is the read-only
+corpus join. It discovers Syzygy-assessed drafts and reports authored parents, choice-bearing
+parents, unique exact successors, recorded successors, and fully-censused counts per pack and
+in aggregate. It exits non-zero while any parent or successor remains incomplete.
 
 `make graduation-plan` is the read-only D560 migration instrument. It re-derives the accepted
 graduation classifier over drafts, inventories candidate emitter templates, and reports the

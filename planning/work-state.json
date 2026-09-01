@@ -1012,11 +1012,12 @@
     },
     {
       "id": "D110",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:bd80b17894027b9428b4f300cce59e12ebb6a886f6ddfed87d3b5bf1483ad8da",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b492c9d785c8a27520e54a6394013861c12d93d02f9201001bc3505ebe4fab44",
       "uxItems": [],
-      "owner": "review-and-return"
+      "evidence": "design/research/tablebase-successor-census-2026-09-01.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D111",
@@ -19658,6 +19659,60 @@
       "sourceDigest": "sha256:ef81b3000df0512334690845b82595a2256968af32fdd7f5d4fa6d1fa7057794",
       "uxItems": [],
       "evidence": "apps/server/src/sourcing/tablebase-census.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2477",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ca65c8cf1a494cde4b6e22739fef6963aad85124e9625f6302d70b0018af1e3d",
+      "uxItems": [],
+      "evidence": "apps/server/src/sourcing/tablebase-census.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2478",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f84eb969f20ffadeb34ad6d2623915892851adfcd9023874de49be45663ec91e",
+      "uxItems": [],
+      "evidence": "apps/server/src/sourcing/tablebase-census.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2479",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3296d8cb0ea5407db750a9cf821e435d287e6f7ec3266d325ddbebea8e5d7286",
+      "uxItems": [],
+      "evidence": "apps/server/src/sourcing/tablebase-census.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2480",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:08ba54138077f7ff6642d466514efad2ab135e45d60ceb9f8b306dde731eedde",
+      "uxItems": [],
+      "evidence": "design/research/tablebase-successor-census-2026-09-01.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2481",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:83d8ccf394bebd3f2df07cc0c8a1a891256eb6dc0436a7e47a7f147331a5d397",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/evidence-catalog.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2482",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:70c0603650e162f20206f46b88d490c27c5fb8170669e6e78c815dff2960b906",
+      "uxItems": [],
+      "evidence": "apps/server/src/evidence-at-runtime.test.ts",
       "evidenceKind": "path"
     }
   ]

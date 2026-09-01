@@ -159,7 +159,7 @@ describe("primary evidence catalogue", () => {
   });
 
   it("walks outpost's transitive dependency to the current 23 expressions in three documents", () => {
-    const documents = jsonFiles(new URL("content/", ROOT)).map((url) => readFileSync(url, "utf8"));
+    const documents = jsonFiles(new URL("content/shapes/", ROOT)).map((url) => readFileSync(url, "utf8"));
     const counts = documents.map((text) => [...text.matchAll(/"kind"\s*:\s*"outpost"/gu)].length);
     expect(counts.reduce((sum, count) => sum + count, 0)).toBe(23);
     expect(counts.filter((count) => count > 0)).toHaveLength(3);

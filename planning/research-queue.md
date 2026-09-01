@@ -40,13 +40,13 @@ defect table is not a status** ([[D419]], [[D459]]) — every ledger id below wa
 
 | Gating state | Count | Entries | What it needs from you |
 |---|---|---|---|
-| **A — gated on someone running it** | **12** | Q-02, Q-03, Q-04, Q-06 to Q-10, Q-13, Q-15, Q-16, Q-17 | assign an agent; the instrument exists or is ~a day's work |
+| **A — gated on someone running it** | **11** | Q-02, Q-03, Q-04, Q-06 to Q-10, Q-13, Q-15, Q-16 | assign an agent; the instrument exists or is ~a day's work |
 | **B — gated on the owner playing a session** | **4** | Q-01 (R8), Q-11 (R6), Q-12 (R7), Q-14 (Q9) | and the session is itself blocked on two rulings (§0) |
 | **C — gated on human subjects beyond the owner** | **7** | Q-18 to Q-24 | a study: recruitment, N, delay period. **None is blocking construction** |
 | **D — not research at all: an owner ruling** | **5** | Q-05, Q-25 to Q-28 | routed to §6, which spells out **10 rulings and standing guards**, including three that block the queue above |
 
-**28 entries total.** The A/B split is the one that matters: **12 of the 16 non-study questions can
-start today**, and none of the 12 is waiting on the owner for anything but a "go". Only **four** are
+**28 entries total.** The A/B split is the one that matters: **11 of the 15 remaining non-study questions can
+start today**, and none of the 11 is waiting on the owner for anything but a "go". Only **four** are
 genuinely waiting on the loop being felt — and R6 and R7 are each smaller than their rows claim
 (Q-11, Q-12).
 
@@ -264,13 +264,17 @@ not been run"*)
 - **Note:** the *generalisable* half of D420 — *"a falsifier that simulates under the assumption it
   tests is not a falsifier"* — is **not research**. It is a standing rule (§6.7).
 
-### Q-17 · What does the corpus-wide tablebase legal-successor census say? (`defect-triage.md` §7a)
-- **Question:** **0 of 277** choice-bearing positions have been censused `[row]`.
-- **Settled by:** `make tablebase-walk` pointed at the corpus.
-- **Cost:** [afternoon] + API time. **Gating: A.**
-- **Unblocks:** graduation blockers on endgame packs, and the evidence layer B4's Syzygy residual
-  sits on.
-- **Ranked below Q-08 because it is a subset of the same adoption gap**, not a separate question.
+### Q-17 · DONE 2026-09-01 — corpus-wide tablebase legal-successor census ([[D110]])
+- **Answer:** the accepted authored population is complete: **12/12** Syzygy drafts,
+  **235/235** non-terminal authored parents, **199/199** choice-bearing parents and
+  **2,888/2,888** unique successor slots carry records. `[V]`
+- **Denominator correction:** the inherited **277** reproduces under no declared population and is
+  withdrawn; the accepted Stage-2 start/spine population is 199 choice-bearing parents. `[V]`
+- **Settled by:** `make tablebase-census-check`; per-pack and aggregate receipt
+  `tabiya.sourcing.tablebase-census-report.v1`.
+- **Evidence:** `design/research/tablebase-successor-census-2026-09-01.md`.
+- **Residual:** records author no prose or bindings. The seven full-set claim judgements remain in
+  the [[D476]] human-authored wave; [[D224]] and [[D225]] keep their explicitly wider scopes.
 
 ### Q-18 · Does branch comparison beat viewing two engine lines? (H2, K4)
 - **Settled by:** a controlled comparison — played-branches condition vs two-PV viewing, measuring
@@ -339,7 +343,7 @@ gate, a kill criterion, or an RFC that cannot otherwise be drafted. **Nine entri
 | 6 | **Q-10** [[D378]] | `make expression-census` `[V]` | `rfc/measurement-records.md` (draft) |
 | 7 | **Q-15** Q6 residual | explorer position-census wave `[row]` | 60 `corpus_observed` claims with 0 backing |
 | 8 | **Q-16** [[D442]] | simulation, no engine `[V]` | `rfc/learner-rating.md` (draft) cannot accept an unrun falsifier |
-| 9 | **Q-17** tablebase successors | `make tablebase-walk` `[V]` | endgame graduation blockers, B4's Syzygy residual |
+| ~~9~~ | **Q-17 DONE 2026-09-01** tablebase successors | `make tablebase-census-check` `[V]` | 199/199 choice parents and 2,888/2,888 successor slots complete; D476 binding residue retained |
 
 **Q-02 is deliberately not in this table.** The re-run is an afternoon, but it is gated on a content
 wave that has no owner ([[D476]]) — it is cheap and **blocked**, which is a different action: assign

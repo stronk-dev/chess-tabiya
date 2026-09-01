@@ -50,6 +50,21 @@ before either sidecar moves; both next images are staged first, and an ordinary 
 after the first replacement restores the original bytes. This is a mechanical evidence
 operation: it does not add `moveCensus` claims or decide which prose deserves one.
 
+The read-only walker retains its legacy payload cache. The evidence writer additionally stores
+`tabiya.sourcing.tablebase-answer-cache.v1` envelopes beside it. Each envelope binds the exact
+requested FEN to the original tablebase payload and HTTP source entry; a mismatched FEN or URL is
+refused rather than relabelled. A validated ledger can hydrate the same cache without inventing
+provenance. This richer cache is required because an evidence record must retain provenance, not
+merely the computed result. Progress is emitted every 25 completed successors and at completion,
+with disjoint `queried`, `cached`, and `ledger-reused` counts. Only a cache miss is charged against
+the live-query ceiling; request serialization and the hard budget are unchanged.
+
+`make tablebase-census-check` performs the corresponding read-only corpus join. It discovers the
+Syzygy-assessed draft set rather than accepting a hand-maintained list, separates all authored
+non-terminal parents from the choice-bearing subset, and exits non-zero unless every exact legal
+successor has one recorded tablebase fact. `OUT=<path>` retains the per-pack and aggregate JSON
+receipt for a research dossier.
+
 Pack declarations distinguish five determinate categories (`win`, `loss`, `draw`,
 `cursed-win`, `blessed-loss`) from uncertain Syzygy categories. Cursed/blessed roots are
 admitted only for compatible objectives and require a declared ply budget long enough to

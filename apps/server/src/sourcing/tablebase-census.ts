@@ -1,11 +1,12 @@
-import { readFile, rename, unlink, writeFile } from "node:fs/promises";
-import { basename, dirname, extname, resolve } from "node:path";
+import { mkdir, readFile, readdir, rename, unlink, writeFile } from "node:fs/promises";
+import { basename, dirname, extname, join, resolve } from "node:path";
 
 import {
   canonicalizeJson,
   digestDrillPack,
   type DrillPackDefinition,
 } from "@chess-tabiya/schema/drill-pack";
+import { transposeKey } from "@chess-tabiya/runtime";
 
 import { validatePackDocument } from "../pack-validation.js";
 import { countFenPieces } from "./chess-facts.js";
@@ -24,6 +25,24 @@ interface CensusPaths {
 export interface TablebaseCensusOptions {
   readonly query?: TablebaseQuery;
   readonly maxQueries?: number;
+  readonly cacheRoot?: string | null;
+  readonly onProgress?: (progress: TablebaseCensusProgress) => void;
+  readonly queryMeter?: TablebaseQueryMeter;
+}
+
+export interface TablebaseCensusProgress {
+  readonly completed: number;
+  readonly total: number;
+  readonly queried: number;
+  readonly cached: number;
+  readonly reused: number;
+}
+
+export interface TablebaseQueryMeter {
+  readonly sourceQueries: number;
+  readonly cacheHits: number;
+  beforeSource(): void;
+  cacheHit(): void;
 }
 
 export interface TablebaseCensusCompilation {
@@ -32,12 +51,31 @@ export interface TablebaseCensusCompilation {
   readonly parentPositions: number;
   readonly successorPositions: number;
   readonly queried: number;
+  readonly cached: number;
   readonly reused: number;
 }
 
 export interface TablebaseCensusResult extends TablebaseCensusCompilation {
   readonly packId: string;
   readonly paths: CensusPaths;
+}
+
+export interface TablebaseCensusStatus {
+  readonly packId: string;
+  readonly file: string;
+  readonly parentPositions: number;
+  readonly choiceBearingParents: number;
+  readonly fullyCensusedParents: number;
+  readonly fullyCensusedChoiceBearingParents: number;
+  readonly successorPositions: number;
+  readonly coveredSuccessors: number;
+}
+
+export interface TablebaseCensusReport {
+  readonly schema: "tabiya.sourcing.tablebase-census-report.v1";
+  readonly root: string;
+  readonly packs: readonly TablebaseCensusStatus[];
+  readonly totals: Omit<TablebaseCensusStatus, "packId" | "file"> & { readonly packs: number };
 }
 
 function sidecars(file: string): CensusPaths {
@@ -71,6 +109,147 @@ function tablebaseValues(fen: string, payload: TablebasePayload): Readonly<Recor
     stalemate: payload.stalemate,
     insufficient_material: payload.insufficient_material,
   });
+}
+
+interface CachedTablebaseAnswer {
+  readonly schema: "tabiya.sourcing.tablebase-answer-cache.v1";
+  readonly fen: string;
+  readonly answer: TablebaseAnswer;
+}
+
+function answerCachePath(root: string, fen: string): string {
+  const halfmoves = fen.split(" ")[4] ?? "0";
+  return resolve(root, `${encodeURIComponent(transposeKey(fen))}-${halfmoves}.answer.json`);
+}
+
+function assertCachedAnswer(value: unknown, fen: string): asserts value is CachedTablebaseAnswer {
+  const cached = value as Partial<CachedTablebaseAnswer> | null;
+  const expectedUrl = `https://tablebase.lichess.org/standard?fen=${encodeURIComponent(fen)}`;
+  if (
+    cached?.schema !== "tabiya.sourcing.tablebase-answer-cache.v1"
+    || cached.fen !== fen
+    || typeof cached.answer !== "object"
+    || cached.answer === null
+    || typeof cached.answer.payload !== "object"
+    || cached.answer.payload === null
+    || typeof cached.answer.source !== "object"
+    || cached.answer.source === null
+    || cached.answer.source.origin.kind !== "http"
+    || cached.answer.source.origin.url !== expectedUrl
+  ) {
+    throw new SourcingError("VERIFY_LEDGER_MERGE_CONFLICT", `cached tablebase answer does not match requested FEN ${fen}`);
+  }
+}
+
+async function readCachedAnswer(root: string, fen: string): Promise<CachedTablebaseAnswer | undefined> {
+  try {
+    const cached = JSON.parse(await readFile(answerCachePath(root, fen), "utf8")) as unknown;
+    assertCachedAnswer(cached, fen);
+    return cached;
+  } catch (error) {
+    if (typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT") return undefined;
+    throw error;
+  }
+}
+
+async function storeCachedAnswer(root: string, fen: string, answer: TablebaseAnswer): Promise<void> {
+  const existing = await readCachedAnswer(root, fen);
+  if (existing !== undefined) {
+    if (canonicalizeJson(existing.answer.payload) !== canonicalizeJson(answer.payload)) {
+      throw new SourcingError("VERIFY_LEDGER_MERGE_CONFLICT", `cached tablebase payload conflicts for ${fen}`);
+    }
+    return;
+  }
+  const path = answerCachePath(root, fen);
+  const cached: CachedTablebaseAnswer = Object.freeze({
+    schema: "tabiya.sourcing.tablebase-answer-cache.v1",
+    fen,
+    answer,
+  });
+  await mkdir(root, { recursive: true });
+  const temporary = `${path}.${process.pid}-${Date.now()}.tmp`;
+  try {
+    await writeFile(temporary, `${canonicalizeJson(cached)}\n`, { encoding: "utf8", flag: "wx" });
+    await rename(temporary, path);
+  } finally {
+    try { await unlink(temporary); } catch { /* already renamed or never created */ }
+  }
+}
+
+export function createTablebaseQueryMeter(maxQueries: number): TablebaseQueryMeter {
+  if (!Number.isSafeInteger(maxQueries) || maxQueries < 0) {
+    throw new SourcingError("ARGUMENT_INVALID", `maxQueries must be a non-negative integer; received ${maxQueries}`);
+  }
+  let sourceQueries = 0;
+  let cacheHits = 0;
+  return {
+    get sourceQueries() { return sourceQueries; },
+    get cacheHits() { return cacheHits; },
+    beforeSource() {
+      if (sourceQueries >= maxQueries) {
+        throw new SourcingError("WALK_QUERY_BUDGET_EXCEEDED", `tablebase census requires more than ${maxQueries} new successor queries`);
+      }
+      sourceQueries += 1;
+    },
+    cacheHit() { cacheHits += 1; },
+  };
+}
+
+export function cachedTablebaseQuery(
+  root: string,
+  query: TablebaseQuery = liveTablebaseQuery,
+  meter?: TablebaseQueryMeter,
+): TablebaseQuery {
+  return async (fen) => {
+    const existing = await readCachedAnswer(root, fen);
+    if (existing !== undefined) {
+      meter?.cacheHit();
+      return existing.answer;
+    }
+    meter?.beforeSource();
+    const answer = await query(fen);
+    await storeCachedAnswer(root, fen, answer);
+    return answer;
+  };
+}
+
+function payloadFromRecord(record: EvidenceRecord): TablebasePayload {
+  const values = record.values;
+  if (
+    typeof values.checkmate !== "boolean"
+    || typeof values.stalemate !== "boolean"
+    || typeof values.insufficient_material !== "boolean"
+    || !(typeof values.dtz === "number" || values.dtz === null)
+    || !(typeof values.precise_dtz === "number" || values.precise_dtz === null)
+    || !(typeof values.dtm === "number" || values.dtm === null)
+    || typeof values.category !== "string"
+  ) {
+    throw new SourcingError("VERIFY_LEDGER_MERGE_CONFLICT", "validated tablebase record cannot hydrate an answer cache");
+  }
+  return Object.freeze({
+    checkmate: values.checkmate,
+    stalemate: values.stalemate,
+    insufficient_material: values.insufficient_material,
+    dtz: values.dtz,
+    precise_dtz: values.precise_dtz,
+    dtm: values.dtm,
+    category: values.category,
+  });
+}
+
+export async function hydrateTablebaseAnswerCache(root: string, ledger: EvidenceLedger, manifest: SourceManifest): Promise<number> {
+  const sources = new Map(manifest.entries.map((entry) => [sourceKey(entry), entry]));
+  let hydrated = 0;
+  for (const record of ledger.records) {
+    if (record.kind !== "tablebase_result") continue;
+    const fen = recordFen(record);
+    if (fen === undefined) continue;
+    const source = sources.get(sourceKey(record));
+    if (source?.origin.kind !== "http") continue;
+    await storeCachedAnswer(root, fen, { payload: payloadFromRecord(record), source });
+    hydrated += 1;
+  }
+  return hydrated;
 }
 
 function sameSource(left: SourceEntry, right: SourceEntry): boolean {
@@ -137,7 +316,11 @@ export async function compileTablebaseCensus(
   const replacements = new Map<string, EvidenceRecord>();
   const newSources: SourceEntry[] = [];
   let queried = 0;
+  let cached = 0;
   let reused = 0;
+  let completed = 0;
+  const report = (): void => options.onProgress?.(Object.freeze({ completed, total: parentPointers.size, queried, cached, reused }));
+  report();
 
   for (const [fen, pointers] of [...parentPointers.entries()].sort(([left], [right]) => left.localeCompare(right))) {
     const existing = existingByFen.get(fen);
@@ -147,16 +330,19 @@ export async function compileTablebaseCensus(
         ...existing,
         supports: Object.freeze([...new Set([...existing.supports, ...pointers])].sort()),
       }));
+      completed += 1;
+      report();
       continue;
     }
-    if (queried >= maxQueries) {
-      throw new SourcingError(
-        "WALK_QUERY_BUDGET_EXCEEDED",
-        `tablebase census requires more than ${maxQueries} new successor queries`,
-      );
+    if (options.queryMeter === undefined && queried >= maxQueries) {
+      throw new SourcingError("WALK_QUERY_BUDGET_EXCEEDED", `tablebase census requires more than ${maxQueries} new successor queries`);
     }
     const answer: TablebaseAnswer = await query(fen);
-    queried += 1;
+    if (options.queryMeter === undefined) queried += 1;
+    else {
+      queried = options.queryMeter.sourceQueries;
+      cached = options.queryMeter.cacheHits;
+    }
     newSources.push(answer.source);
     replacements.set(fen, Object.freeze({
       kind: "tablebase_result",
@@ -167,6 +353,8 @@ export async function compileTablebaseCensus(
       values: tablebaseValues(fen, answer.payload),
       supports: Object.freeze([...pointers].sort()),
     }));
+    completed += 1;
+    report();
   }
 
   const records = [
@@ -203,6 +391,7 @@ export async function compileTablebaseCensus(
     parentPositions,
     successorPositions: parentPointers.size,
     queried,
+    cached,
     reused,
   });
 }
@@ -264,15 +453,91 @@ export async function tablebaseCensus(file: string, options: TablebaseCensusOpti
     throw new SourcingError("DRAFT_PACK_INVALID", validation.issues.map((issue) => `${issue.path} ${issue.code}: ${issue.message}`).join("; "));
   }
   const pack = raw as DrillPackDefinition;
+  const cacheRoot = options.cacheRoot === null || (options.query !== undefined && options.cacheRoot === undefined)
+    ? null
+    : options.cacheRoot ?? resolve("content/sources/syzygy");
+  const underlyingQuery = options.query ?? liveTablebaseQuery;
+  const queryMeter = cacheRoot === null ? undefined : createTablebaseQueryMeter(options.maxQueries ?? 400);
+  const query = cacheRoot === null ? underlyingQuery : cachedTablebaseQuery(cacheRoot, underlyingQuery, queryMeter);
   const compiled = await compileTablebaseCensus(
     pack,
     JSON.parse(ledgerBytes) as EvidenceLedger,
     JSON.parse(manifestBytes) as SourceManifest,
-    options,
+    { ...options, query, ...(queryMeter === undefined ? {} : { queryMeter }) },
   );
   assertSourcingArtifacts(pack, compiled.ledger.packDigest!, compiled.ledger, compiled.manifest, true);
+  if (cacheRoot !== null) await hydrateTablebaseAnswerCache(cacheRoot, compiled.ledger, compiled.manifest);
   await writePair(paths, compiled.ledger, compiled.manifest, { ledger: ledgerBytes, manifest: manifestBytes });
   return Object.freeze({ ...compiled, packId: pack.id, paths });
+}
+
+export function tablebaseCensusStatus(
+  file: string,
+  pack: DrillPackDefinition,
+  ledger: EvidenceLedger,
+): TablebaseCensusStatus {
+  const recorded = new Set(
+    ledger.records
+      .filter((record) => record.kind === "tablebase_result")
+      .map(recordFen)
+      .filter((fen): fen is string => fen !== undefined),
+  );
+  const successors = new Set<string>();
+  let parentPositions = 0;
+  let choiceBearingParents = 0;
+  let fullyCensusedParents = 0;
+  let fullyCensusedChoiceBearingParents = 0;
+  for (const item of packPositions(pack)) {
+    if (countFenPieces(item.fen) > 7) continue;
+    const legal = legalSuccessors(item.fen);
+    if (legal.length === 0) continue;
+    parentPositions += 1;
+    if (legal.length > 1) choiceBearingParents += 1;
+    const complete = legal.every((successor) => recorded.has(successor.fen));
+    if (complete) {
+      fullyCensusedParents += 1;
+      if (legal.length > 1) fullyCensusedChoiceBearingParents += 1;
+    }
+    for (const successor of legal) successors.add(successor.fen);
+  }
+  return Object.freeze({
+    packId: pack.id,
+    file,
+    parentPositions,
+    choiceBearingParents,
+    fullyCensusedParents,
+    fullyCensusedChoiceBearingParents,
+    successorPositions: successors.size,
+    coveredSuccessors: [...successors].filter((fen) => recorded.has(fen)).length,
+  });
+}
+
+export async function tablebaseCensusReport(root: string): Promise<TablebaseCensusReport> {
+  const absolute = resolve(root);
+  const packs: TablebaseCensusStatus[] = [];
+  for (const name of (await readdir(absolute)).sort()) {
+    if (!name.endsWith(".json") || /\.(?:evidence|sources|job|priority|browser)\.json$/u.test(name)) continue;
+    const file = join(absolute, name);
+    const raw = JSON.parse(await readFile(file, "utf8")) as unknown;
+    if ((raw as { objective?: { grading?: { assessedBy?: { kind?: unknown } } } }).objective?.grading?.assessedBy?.kind !== "syzygy") continue;
+    const validation = validatePackDocument(raw);
+    if (!validation.valid) {
+      throw new SourcingError("DRAFT_PACK_INVALID", validation.issues.map((issue) => `${issue.path} ${issue.code}: ${issue.message}`).join("; "));
+    }
+    const pack = raw as DrillPackDefinition;
+    const ledger = JSON.parse(await readFile(sidecars(file).ledger, "utf8")) as EvidenceLedger;
+    packs.push(tablebaseCensusStatus(name, pack, ledger));
+  }
+  const totals = packs.reduce((sum, status) => ({
+    packs: sum.packs + 1,
+    parentPositions: sum.parentPositions + status.parentPositions,
+    choiceBearingParents: sum.choiceBearingParents + status.choiceBearingParents,
+    fullyCensusedParents: sum.fullyCensusedParents + status.fullyCensusedParents,
+    fullyCensusedChoiceBearingParents: sum.fullyCensusedChoiceBearingParents + status.fullyCensusedChoiceBearingParents,
+    successorPositions: sum.successorPositions + status.successorPositions,
+    coveredSuccessors: sum.coveredSuccessors + status.coveredSuccessors,
+  }), { packs: 0, parentPositions: 0, choiceBearingParents: 0, fullyCensusedParents: 0, fullyCensusedChoiceBearingParents: 0, successorPositions: 0, coveredSuccessors: 0 });
+  return Object.freeze({ schema: "tabiya.sourcing.tablebase-census-report.v1", root: absolute, packs: Object.freeze(packs), totals: Object.freeze(totals) });
 }
 
 function args(values: readonly string[]): Map<string, string> {
@@ -290,10 +555,29 @@ function args(values: readonly string[]): Map<string, string> {
 async function main(): Promise<number> {
   try {
     const values = args(process.argv.slice(2));
+    const checkRoot = values.get("check-root");
+    if (checkRoot !== undefined) {
+      const report = await tablebaseCensusReport(checkRoot);
+      const output = `${JSON.stringify(report, null, 2)}\n`;
+      const out = values.get("out");
+      if (out === undefined) process.stdout.write(output);
+      else await writeFile(resolve(out), output, "utf8");
+      console.error(`Tablebase census check: ${report.totals.packs} packs; ${report.totals.fullyCensusedChoiceBearingParents}/${report.totals.choiceBearingParents} choice-bearing parents; ${report.totals.coveredSuccessors}/${report.totals.successorPositions} successors`);
+      return report.totals.fullyCensusedParents === report.totals.parentPositions
+        && report.totals.coveredSuccessors === report.totals.successorPositions ? 0 : 1;
+    }
     const file = values.get("file");
     if (file === undefined) throw new SourcingError("ARGUMENT_MISSING", "provide --file <pack.json>");
-    const result = await tablebaseCensus(file, { maxQueries: Number(values.get("max-queries") ?? "400") });
-    console.log(`Censused ${result.packId}: ${result.parentPositions} authored positions; ${result.successorPositions} unique successors; ${result.queried} queried; ${result.reused} reused`);
+    let lastPrinted = -25;
+    const result = await tablebaseCensus(file, {
+      maxQueries: Number(values.get("max-queries") ?? "400"),
+      onProgress: (progress) => {
+        if (progress.completed !== progress.total && progress.completed - lastPrinted < 25) return;
+        lastPrinted = progress.completed;
+        console.log(`Tablebase census: ${progress.completed}/${progress.total} successors; ${progress.queried} queried; ${progress.cached} cached; ${progress.reused} ledger-reused`);
+      },
+    });
+    console.log(`Censused ${result.packId}: ${result.parentPositions} authored positions; ${result.successorPositions} unique successors; ${result.queried} queried; ${result.cached} cached; ${result.reused} ledger-reused`);
     return 0;
   } catch (error) {
     if (error instanceof SourcingError) console.error(`${error.code}: ${error.message}`);

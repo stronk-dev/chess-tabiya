@@ -3848,3 +3848,20 @@ until a second pass measured the pack start positions the sentence actually name
 - No move, predicate expression, annotation, evidence label or chess claim was authored or changed.
   Executable replay moved absorbing non-leaf paths from ten to zero and Feedback C1 from 42/50 to
   50/50.
+
+## 2026-09-01 — tablebase legal-successor evidence wave
+
+- Ran the bounded `make tablebase-census` writer over all 12 Syzygy-assessed drafts. Only sibling
+  `.evidence.json` and `.sources.json` artifacts changed; no pack prose, move, claim, binding,
+  objective, or authored judgement changed.
+- The independent `make tablebase-census-check` receipt reads 235/235 complete non-terminal
+  authored parents, 199/199 complete choice-bearing parents and 2,888/2,888 exact successor slots.
+  All queen, rook, bishop, and knight promotion successors remain distinct.
+- The inherited 277 denominator is withdrawn: the previous work-order audit could reproduce 199
+  authored start/spine choice parents, 240 recorded choice anchors, or 2,473 one-ply-expanded
+  positions, never 277. This wave uses the accepted Stage-2 start/spine population.
+- Authoring-tool frictions found and repaired in-wave: provenance-complete answer caching, visible
+  progress, disjoint source/cache/ledger-reuse accounting, and a read-only corpus checker
+  ([[D2477]]–[[D2480]]).
+- `backedClaims` is expected to remain 1: records do not select or author the seven full-set census
+  claims. That human binding residue stays with [[D476]] rather than being manufactured here.

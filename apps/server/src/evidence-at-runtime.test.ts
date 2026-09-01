@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from "node:fs";
 
-import { attachEvidence, createRun, renderRecordedReading, type RecordedReading } from "@chess-tabiya/runtime";
+import { attachEvidence, createRun, renderRecordedReading, transposeKey, type RecordedReading } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { describe, expect, it } from "vitest";
 
@@ -19,10 +19,26 @@ describe("recorded evidence at runtime", () => {
     const indexed = records.filter((record) => record.positionEvidence.size > 0);
     const readings = indexed.reduce((sum, record) => sum + [...record.positionEvidence.values()].reduce((inner, rows) => inner + rows.length, 0), 0);
     const entries = indexed.reduce((sum, record) => sum + record.positionEvidence.size, 0);
-    expect(indexed).toHaveLength(32);
-    expect(readings).toBe(732);
-    expect(entries).toBe(731);
-    expect(records.filter((record) => record.positionEvidence.size === 0)).toHaveLength(records.length - 32);
+
+    const draftDirectory = new URL("../../../content/drafts/", import.meta.url);
+    const evidenceFiles = readdirSync(draftDirectory).filter((name) => name.endsWith(".evidence.json"));
+    const ledgers = evidenceFiles.map((name) => JSON.parse(readFileSync(new URL(name, draftDirectory), "utf8")) as {
+      packId?: string;
+      records?: { kind?: string; grounds?: string; templateId?: string; anchor?: { fen?: string } }[];
+    });
+    const admitted = ledgers.flatMap((ledger) => (ledger.records ?? []).flatMap((row) =>
+      (row.kind === "engine_eval" || row.kind === "tablebase_result") && row.grounds === "machine_validation" &&
+      row.templateId === undefined && typeof row.anchor?.fen === "string" && ledger.packId !== undefined
+        ? [{ packId: ledger.packId, key: transposeKey(row.anchor.fen) }]
+        : [],
+    ));
+    const admittedPacks = [...new Set(admitted.map((row) => row.packId))].sort();
+    const admittedEntries = new Set(admitted.map((row) => `${row.packId}:${row.key}`));
+
+    expect(indexed.map((record) => record.document.id).sort()).toEqual(admittedPacks);
+    expect(readings).toBe(admitted.length);
+    expect(entries).toBe(admittedEntries.size);
+    expect(records.filter((record) => record.positionEvidence.size === 0)).toHaveLength(records.length - admittedPacks.length);
     expect(indexed.every((record) => record.assessmentGrounding === "ledger_verified")).toBe(true);
 
     const squares = Array.from({ length: 8 }, (_rank, rank) =>
@@ -33,12 +49,8 @@ describe("recorded evidence at runtime", () => {
       expect(squares.some((square) => sentence.includes(square))).toBe(false);
     }
 
-    const draftDirectory = new URL("../../../content/drafts/", import.meta.url);
-    const evidenceFiles = readdirSync(draftDirectory).filter((name) => name.endsWith(".evidence.json"));
-    const refusedLegality = evidenceFiles.reduce((count, name) => {
-      const ledger = JSON.parse(readFileSync(new URL(name, draftDirectory), "utf8")) as { records?: { kind?: string }[] };
-      return count + (ledger.records ?? []).filter((row) => row.kind === "position_legality").length;
-    }, 0);
+    const refusedLegality = ledgers.reduce((count, ledger) =>
+      count + (ledger.records ?? []).filter((row) => row.kind === "position_legality").length, 0);
     expect(refusedLegality).toBe(32);
   });
 
