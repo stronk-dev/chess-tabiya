@@ -144,18 +144,17 @@ measured rungs today, not five to nine"*)
   **untracked in git** (`git status` `[V]`). The instrument behind the H5 arm, the D335/D336
   transfer ratios and `learner-rating`'s entire calibration exists only in a working tree.
 
-### Q-07 · Does the DTZ ordering claim survive a reproducible census? ([[D457]] — *"The census
-reproduced the shipped comparator on rounded `dtz` while runtime uses `preciseDtz`"*)
-- **Question:** with `preciseDtz` retained and the source JSONL kept, does the won-root enrichment
-  hold, and was the pre-fix effect lexicographic?
-- **Settled by:** one census run on a newly retained corpus. **The instrument is already fixed** —
-  the row's own column 1 reads `🐞` with *"INSTRUMENT FIXED 2026-08-16, RESULT STILL OPEN"* `[V]`.
-- **Cost:** [afternoon]. **Gating: A.**
-- **Unblocks:** [[D451]]'s corrected diagnosis (*"69% of the won-root excess over uniform was
-  lexicographic, not DTZ"*) and [[D456]], which was **closed by withdrawal** rather than by
-  measurement — the post-fix figures are on record as a *non-reproducible run record* `[V]`.
-- **Why it ranks here:** it is the only open row where a **published number is known to be wrong**
-  and the fix is a single run.
+### Q-07 · DONE 2026-09-01 — exact DTZ census ([[D457]])
+- **Answer:** yes against a uniform preserving-move null, but the narrower causal reading matters.
+  Across 821 winning roots, the selector chooses capture/pawn moves at **1.275×** uniform
+  expectation (`p=0.0096`); against a null that first applies the intended `preciseDtz` primary
+  ordering, the residual is **1.079×** (`p=0.172`). The measurable effect is therefore explained
+  by DTZ; no hash-tiebreak bias is demonstrated.
+- **Settled by:** `make dtz-census-measurement` over a retained 1,919-position JSONL with exact
+  selector semantics, two nulls, four able-to-fail controls and source digest `[V]`.
+- **Evidence:** `design/research/dtz-selector-census-rerun.md`, `planning/dtz-census/`.
+- **Correction retained:** the pre-fix lexical diagnosis remains historical; the discarded
+  rounded-DTZ post-fix figures are not promoted into this reproducible result.
 
 ### Q-08 · Do the corpus's evidence claims have any backing at all? ([[D403]] — *"Three mechanisms
 landed in one day and the corpus uses them once between them"*)
@@ -341,7 +340,7 @@ gate, a kill criterion, or an RFC that cannot otherwise be drafted. **Nine entri
 |---|---|---|---|
 | 1 | **Q-03** [[D375]] | `tools/r5-maia-stability-harness/` `[V]` | is `practical_resistance` a real mode (E4) |
 | 2 | **Q-04** K9/C7 | `tests/browser/` + CET numbers on file `[V]` | **K9** (kill criterion, zero own-side evidence) and **C7** |
-| 3 | **Q-07** [[D457]] | census instrument already fixed `[V]` | a published number known to be wrong ([[D451]]/[[D456]]) |
+| ~~3~~ | **Q-07 DONE 2026-09-01** [[D457]] | `make dtz-census-measurement` `[V]` | exact retained rerun landed; no longer queued |
 | 4 | **Q-08** [[D403]] | `make graduation-report`, `make expression-census` `[V]` | B4, K6, the graduation gate |
 | 5 | **Q-09** [[D414]] | ~20 lines vs `pgn-import.ts` `[V]` | whether live relay can become an RFC |
 | 6 | **Q-10** [[D378]] | `make expression-census` `[V]` | `rfc/measurement-records.md` (draft) |

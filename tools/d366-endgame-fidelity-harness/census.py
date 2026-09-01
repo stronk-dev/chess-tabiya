@@ -20,6 +20,8 @@ Two Maia-free measurements over the whole tablebase-ground-truthed corpus:
 """
 import json
 import hashlib
+import math
+import os
 import sys
 from collections import Counter, defaultdict
 
@@ -52,9 +54,50 @@ def dtz_metric(move):
     return abs(precise if precise is not None else (move.get("dtz") or 0))
 
 
+def ordered_preserving(row):
+    own = row["resultClass"]
+    preserving = [move for move in row["moves"] if move["moverClass"] == own]
+    winning = "win" in row["category"]
+    losing = "loss" in row["category"]
+    return sorted(
+        preserving,
+        key=lambda move: (
+            dtz_metric(move) if winning else (-dtz_metric(move) if losing else 0),
+            neutral_key(row["fen"], move["uci"]),
+            move["uci"],
+        ),
+    )
+
+
+def wilson(successes, total, z=1.959963984540054):
+    if total == 0:
+        return [None, None]
+    proportion = successes / total
+    denominator = 1 + z * z / total
+    centre = (proportion + z * z / (2 * total)) / denominator
+    radius = z * math.sqrt(proportion * (1 - proportion) / total + z * z / (4 * total * total)) / denominator
+    return [centre - radius, centre + radius]
+
+
+def poisson_binomial_upper_tail(probabilities, observed):
+    distribution = [1.0]
+    for probability in probabilities:
+        updated = [0.0] * (len(distribution) + 1)
+        for count, mass in enumerate(distribution):
+            updated[count] += mass * (1 - probability)
+            updated[count + 1] += mass * probability
+        distribution = updated
+    return sum(distribution[observed:])
+
+
 def main():
-    rows = load(sys.argv[1])
+    source_path = sys.argv[1]
+    rows = load(source_path)
     out_path = sys.argv[2]
+    for row in rows:
+        for move in row["moves"]:
+            if "preciseDtz" not in move:
+                raise ValueError(f'{row["fen"]}: move {move.get("uci")} omitted preciseDtz')
 
     census = defaultdict(lambda: {"positions": 0, "critical": 0})
     per_pack = defaultdict(lambda: {"positions": 0, "critical": 0})
@@ -76,10 +119,13 @@ def main():
     picks = {"win": Counter(), "draw": Counter(), "loss": Counter()}
     pools = {"win": Counter(), "draw": Counter(), "loss": Counter()}
     uniform_expected = {"win": Counter(), "draw": Counter(), "loss": Counter()}
+    uniform_probabilities = {"win": [], "draw": [], "loss": []}
+    primary_expected = {"win": Counter(), "draw": Counter(), "loss": Counter()}
+    primary_probabilities = {"win": [], "draw": [], "loss": []}
     dtz_ties = {"win": 0, "draw": 0, "loss": 0}
     for row in rows:
         own = row["resultClass"]
-        preserving = [m for m in row["moves"] if m["moverClass"] == own]
+        preserving = ordered_preserving(row)
         if not preserving:
             continue
         winning = "win" in row["category"]
@@ -88,16 +134,9 @@ def main():
             dtz_metric(m) if winning else (-dtz_metric(m) if losing else 0)
             for m in preserving
         ]
-        dtz_ties[own] += 1 if sum(value == min(primary) for value in primary) > 1 else 0
-        ordered = sorted(
-            preserving,
-            key=lambda m: (
-                dtz_metric(m) if winning else (-dtz_metric(m) if losing else 0),
-                neutral_key(row["fen"], m["uci"]),
-                m["uci"],
-            ),
-        )
-        pick = ordered[0]
+        primary_pool = [move for move, value in zip(preserving, primary) if value == min(primary)]
+        dtz_ties[own] += 1 if len(primary_pool) > 1 else 0
+        pick = preserving[0]
         picks[own]["n"] += 1
         picks[own]["capture"] += 1 if is_capture(pick["san"]) else 0
         picks[own]["pawn"] += 1 if is_pawn_move(pick["san"]) else 0
@@ -113,8 +152,54 @@ def main():
         uniform_expected[own]["captureOrPawn"] += sum(
             1 for m in preserving if is_capture(m["san"]) or is_pawn_move(m["san"])
         ) / len(preserving)
+        uniform_probabilities[own].append(
+            sum(1 for m in preserving if is_capture(m["san"]) or is_pawn_move(m["san"])) / len(preserving)
+        )
+        primary_probability = sum(
+            1 for m in primary_pool if is_capture(m["san"]) or is_pawn_move(m["san"])
+        ) / len(primary_pool)
+        primary_expected[own]["captureOrPawn"] += primary_probability
+        primary_probabilities[own].append(primary_probability)
 
+    with open(source_path, "rb") as source_handle:
+        source_bytes = source_handle.read()
+    rates = {}
+    for own in ("win", "draw", "loss"):
+        total = picks[own]["n"]
+        selected = picks[own]["captureOrPawn"]
+        expected_total = uniform_expected[own]["captureOrPawn"]
+        primary_expected_total = primary_expected[own]["captureOrPawn"]
+        selected_rate = selected / total if total else None
+        expected_rate = expected_total / total if total else None
+        rates[own] = {
+            "positions": total,
+            "selectedCaptureOrPawn": selected,
+            "selectedRate": selected_rate,
+            "selectedRateWilson95": wilson(selected, total),
+            "uniformExpectedCount": expected_total,
+            "uniformExpectedRate": expected_rate,
+            "enrichment": selected_rate / expected_rate if expected_rate else None,
+            "uniformUpperTailP": poisson_binomial_upper_tail(uniform_probabilities[own], selected),
+            "dtzPrimaryExpectedCount": primary_expected_total,
+            "dtzPrimaryExpectedRate": primary_expected_total / total if total else None,
+            "enrichmentOverDtzPrimary": selected / primary_expected_total if primary_expected_total else None,
+            "dtzPrimaryUpperTailP": poisson_binomial_upper_tail(primary_probabilities[own], selected),
+        }
     report = {
+        "schema": "tabiya.research.d457-dtz-census.v1",
+        "source": {
+            "path": source_path,
+            "bytes": os.path.getsize(source_path),
+            "sha256": hashlib.sha256(source_bytes).hexdigest(),
+            "preciseDtzPresentOnEveryMove": True,
+        },
+        "selectorConvention": {
+            "primary": "abs(preciseDtz ?? dtz ?? 0)",
+            "winning": "ascending",
+            "losing": "descending",
+            "drawn": "neutral_sha256",
+            "neutralFenFields": 5,
+        },
         "corpusPositions": len(rows),
         "packs": dict(Counter(r["packId"] for r in rows)),
         "byResultClass": {k: dict(v) for k, v in census.items()},
@@ -123,6 +208,8 @@ def main():
         "perfectTablebasePick": {k: dict(v) for k, v in picks.items()},
         "preservingMovePool": {k: dict(v) for k, v in pools.items()},
         "uniformExpectedPick": {k: dict(v) for k, v in uniform_expected.items()},
+        "dtzPrimaryExpectedPick": {k: dict(v) for k, v in primary_expected.items()},
+        "perfectTablebaseRates": rates,
         "dtzTiedRoots": dtz_ties,
         "pieceCounts": dict(Counter(r["pieceCount"] for r in rows)),
     }

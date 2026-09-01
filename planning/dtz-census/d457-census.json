@@ -1,0 +1,233 @@
+{
+ "schema": "tabiya.research.d457-dtz-census.v1",
+ "source": {
+  "path": "planning/dtz-census/d457-positions.jsonl",
+  "bytes": 3137933,
+  "sha256": "896990af5b28d55d07fe2ce76746d5e8bad559b57f205a8656b33846ea34903d",
+  "preciseDtzPresentOnEveryMove": true
+ },
+ "selectorConvention": {
+  "primary": "abs(preciseDtz ?? dtz ?? 0)",
+  "winning": "ascending",
+  "losing": "descending",
+  "drawn": "neutral_sha256",
+  "neutralFenFields": 5
+ },
+ "corpusPositions": 1919,
+ "packs": {
+  "lucena-bridge-convert": 150,
+  "mate-bishop-knight": 391,
+  "mate-k-q-technique": 186,
+  "mate-k-r-technique": 197,
+  "mate-two-bishops": 163,
+  "opposite-bishops-fortress-hold": 65,
+  "pawn-breakthrough-convert": 96,
+  "pawn-opposition-convert": 209,
+  "philidor-passive-rook-convert": 146,
+  "philidor-third-rank-hold": 144,
+  "queen-vs-pawn-seventh-convert": 172
+ },
+ "byResultClass": {
+  "win": {
+   "positions": 821,
+   "critical": 566
+  },
+  "loss": {
+   "positions": 889,
+   "critical": 0
+  },
+  "draw": {
+   "positions": 209,
+   "critical": 163
+  }
+ },
+ "byPack": {
+  "lucena-bridge-convert": {
+   "positions": 150,
+   "critical": 71
+  },
+  "mate-bishop-knight": {
+   "positions": 391,
+   "critical": 121
+  },
+  "mate-k-q-technique": {
+   "positions": 186,
+   "critical": 76
+  },
+  "mate-k-r-technique": {
+   "positions": 197,
+   "critical": 51
+  },
+  "mate-two-bishops": {
+   "positions": 163,
+   "critical": 55
+  },
+  "opposite-bishops-fortress-hold": {
+   "positions": 65,
+   "critical": 31
+  },
+  "pawn-breakthrough-convert": {
+   "positions": 96,
+   "critical": 31
+  },
+  "pawn-opposition-convert": {
+   "positions": 209,
+   "critical": 59
+  },
+  "philidor-passive-rook-convert": {
+   "positions": 146,
+   "critical": 18
+  },
+  "philidor-third-rank-hold": {
+   "positions": 144,
+   "critical": 132
+  },
+  "queen-vs-pawn-seventh-convert": {
+   "positions": 172,
+   "critical": 84
+  }
+ },
+ "bySideOfThePack": {
+  "learner-side": {
+   "positions": 927,
+   "critical": 668
+  },
+  "maia-side": {
+   "positions": 992,
+   "critical": 61
+  }
+ },
+ "perfectTablebasePick": {
+  "win": {
+   "n": 821,
+   "capture": 21,
+   "pawn": 41,
+   "captureOrPawn": 59
+  },
+  "draw": {
+   "n": 209,
+   "capture": 1,
+   "pawn": 9,
+   "captureOrPawn": 10
+  },
+  "loss": {
+   "n": 889,
+   "capture": 9,
+   "pawn": 18,
+   "captureOrPawn": 25
+  }
+ },
+ "preservingMovePool": {
+  "win": {
+   "n": 13628,
+   "capture": 60,
+   "pawn": 263,
+   "captureOrPawn": 307
+  },
+  "draw": {
+   "n": 2429,
+   "capture": 6,
+   "pawn": 101,
+   "captureOrPawn": 107
+  },
+  "loss": {
+   "n": 4297,
+   "capture": 43,
+   "pawn": 158,
+   "captureOrPawn": 189
+  }
+ },
+ "uniformExpectedPick": {
+  "win": {
+   "capture": 10.00387325287446,
+   "pawn": 38.12886186098199,
+   "captureOrPawn": 46.269856325977706
+  },
+  "draw": {
+   "capture": 0.9083333333333332,
+   "pawn": 6.624022030600971,
+   "captureOrPawn": 7.532355363934303
+  },
+  "loss": {
+   "capture": 6.165209175928987,
+   "pawn": 19.61861471861471,
+   "captureOrPawn": 24.586349147068958
+  }
+ },
+ "dtzPrimaryExpectedPick": {
+  "win": {
+   "captureOrPawn": 54.67713693965214
+  },
+  "draw": {
+   "captureOrPawn": 7.532355363934303
+  },
+  "loss": {
+   "captureOrPawn": 23.55744255744255
+  }
+ },
+ "perfectTablebaseRates": {
+  "win": {
+   "positions": 821,
+   "selectedCaptureOrPawn": 59,
+   "selectedRate": 0.07186358099878197,
+   "selectedRateWilson95": [
+    0.05612031344443533,
+    0.09159468986649827
+   ],
+   "uniformExpectedCount": 46.269856325977706,
+   "uniformExpectedRate": 0.05635792487938819,
+   "enrichment": 1.2751282300151663,
+   "uniformUpperTailP": 0.009618012677656163,
+   "dtzPrimaryExpectedCount": 54.67713693965214,
+   "dtzPrimaryExpectedRate": 0.06659821795329128,
+   "enrichmentOverDtzPrimary": 1.0790616206755497,
+   "dtzPrimaryUpperTailP": 0.1723827840850648
+  },
+  "draw": {
+   "positions": 209,
+   "selectedCaptureOrPawn": 10,
+   "selectedRate": 0.04784688995215311,
+   "selectedRateWilson95": [
+    0.02619413461984277,
+    0.0858209725533283
+   ],
+   "uniformExpectedCount": 7.532355363934303,
+   "uniformExpectedRate": 0.036039977817867476,
+   "enrichment": 1.3276059767282138,
+   "uniformUpperTailP": 0.21715058391242875,
+   "dtzPrimaryExpectedCount": 7.532355363934303,
+   "dtzPrimaryExpectedRate": 0.036039977817867476,
+   "enrichmentOverDtzPrimary": 1.3276059767282138,
+   "dtzPrimaryUpperTailP": 0.21715058391242875
+  },
+  "loss": {
+   "positions": 889,
+   "selectedCaptureOrPawn": 25,
+   "selectedRate": 0.0281214848143982,
+   "selectedRateWilson95": [
+    0.019119411581270424,
+    0.04118408159635418
+   ],
+   "uniformExpectedCount": 24.586349147068958,
+   "uniformExpectedRate": 0.027656185767231674,
+   "enrichment": 1.0168244114023068,
+   "uniformUpperTailP": 0.5029772710082044,
+   "dtzPrimaryExpectedCount": 23.55744255744255,
+   "dtzPrimaryExpectedRate": 0.026498810525807142,
+   "enrichmentOverDtzPrimary": 1.0612357406386501,
+   "dtzPrimaryUpperTailP": 0.361064306223679
+  }
+ },
+ "dtzTiedRoots": {
+  "win": 461,
+  "draw": 203,
+  "loss": 376
+ },
+ "pieceCounts": {
+  "5": 347,
+  "4": 873,
+  "3": 596,
+  "6": 88,
+  "7": 15
+ }
+}

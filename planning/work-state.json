@@ -3556,11 +3556,12 @@
     },
     {
       "id": "D457",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a687076c550cb894cef8e5c337d4099e8c9e645743f384f7d67874aa5d457a1d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ac9a2ef95999077c5bc83c52247dcd03e46f4d1d062f44be989f1ec6d7ff1d88",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "design/research/dtz-selector-census-rerun.md and planning/dtz-census/d457-census.json",
+      "evidenceKind": "path"
     },
     {
       "id": "D458",

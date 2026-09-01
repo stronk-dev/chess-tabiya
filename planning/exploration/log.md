@@ -13653,3 +13653,23 @@ by those facts.
 owner. Recommendation: approve + demote the generic unasked count sentence, preserve the operands,
 and require any future live form to name and validate the sustained-check event it actually serves.
 Work moves to the next unblocked 1.0 foundation obligation rather than waiting on that ruling.
+
+## 2026-09-01 — Exact DTZ selector census closes the discarded-result gap
+
+**What landed:** [[D457]]'s reproducible rerun. The normal
+`make dtz-census-measurement` target retains 1,919 exact tablebase rows, including every move's
+`preciseDtz`, and derives a SHA-256-bound report through the production selector ordering. Four
+able-to-fail controls pin precise-versus-rounded ordering, the loss direction and the exact
+position-specific null. A cached rerun rehydrated all 1,919 answers with zero network probes.
+
+**What changed:** winning roots select a capture or pawn move 59/821 times (7.19%), against 46.27
+expected under uniform choice over category-preserving moves (5.64%, 1.275×, upper-tail
+`p=0.0096`). But a second null first applies the intended DTZ-primary rule and expects 54.68
+(6.66%); the residual 1.079× has `p=0.172`. The current selector's measurable enrichment is thus
+explained by DTZ semantics, with no demonstrated hash-tiebreak bias. Draw and loss arms do not
+distinguish from either relevant null. The old pre-fix lexical result remains historical and the
+discarded rounded-DTZ post-fix number is not promoted.
+
+**Blocked/next:** E4 remains unmet because exact outcome-preserving DTZ play is not evidence of
+believable human resistance. The next executable bot-foundation question is [[D375]]/[[D490]]:
+rerun `practical_resistance` refusal frequency after the float32 repair.

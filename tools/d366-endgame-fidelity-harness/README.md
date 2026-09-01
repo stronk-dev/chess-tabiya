@@ -102,3 +102,19 @@ checkpoint).
 rounded `dtz`) remains primary in won/lost roots and every residual tie uses the first five FEN
 fields plus UCI, excluding only the fullmove counter. Its report includes `dtzTiedRoots`, making
 explicit whether a won-root re-run had enough ties for a tiebreak change to affect the aggregate.
+
+## D457 reproducible rerun
+
+The repository-owned workflow for the corrected census is now:
+
+```sh
+make dtz-census-measurement
+```
+
+It runs four able-to-fail ordering/statistical controls, builds this collector through the workspace
+toolchain, walks the current endgame corpus at a public-API-safe cadence, and retains both the
+exact source rows and the derived report under `planning/dtz-census/`. The collector is resumable;
+an interrupted run rehydrates the recorded tablebase responses and does not contact the provider
+again for them. The report refuses a source row if any move omits the `preciseDtz` field and seals
+the source byte count and SHA-256 digest, so D457 cannot close on another summary whose population
+has disappeared.
