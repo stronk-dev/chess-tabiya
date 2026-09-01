@@ -193,6 +193,14 @@ authority to validate the payload. The author must either provide one sealed aut
 operation or document and measure the honest two-computation contract before implementation.
 Receipt: `planning/evidence-foundation-ux/shared-candidate-packet-fifth-fresh-independent-review-2026-08-31.md`.
 
+The 2026-09-01 sixth author repair chooses the single-authority operation and measures why. The
+exact evidence adapter becomes a FEN factory that owns one `exactLegalMoveMap` call and returns the
+only declared graph the packet may flatten; caller maps are refused. Across six positions the
+current compiler-plus-validating-adapter path measured 0.080278 ms/position against a 0.029465 ms
+single-authority floor (2.724×). Fresh review still gates implementation and downstream consumer
+credit. Receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-sixth-author-repair-2026-09-01.md`.
+
 The 2026-08-28 shared-candidate packet author repair records the owner's foundation-first sequence
 without laundering verification into product reach: the provider-free complete population may
 land with zero product consumers, while Support/Review/bot discharges remain open. The draft now

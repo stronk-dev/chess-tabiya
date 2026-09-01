@@ -341,10 +341,10 @@
         "dependsOn": ["foundation-contracts"],
         "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
         "latestCheckpoint": {
-          "at": "2026-08-31",
-          "summary": "The closure audit proves that all semantic projections still stop before a live application operation, so producer-to-consumer runtime closure remains the active foundation target.",
-          "impact": "held",
-          "evidence": ["design/research/foundation-capability-closure-2026-08-31.md", "planning/platform-alignment/execution-queue.md"]
+          "at": "2026-09-01",
+          "summary": "The shared candidate packet now has one buildable legal-authority graph: one FEN factory owns one exact-map computation, declaration and retained candidate population, with caller maps refused. The current duplicate path measured 2.724× the single-authority floor. Fresh acceptance still gates implementation and no Support, Review or bot consumer receives credit yet.",
+          "impact": "advanced",
+          "evidence": ["planning/evidence-foundation-ux/shared-candidate-packet-sixth-author-repair-2026-09-01.md", "planning/evidence-foundation-ux/shared-candidate-packet-fifth-fresh-independent-review-2026-08-31.md", "rfc/shared-candidate-evidence-packet.md", "design/research/foundation-capability-closure-2026-08-31.md"]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."
       },

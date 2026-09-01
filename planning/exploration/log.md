@@ -13458,3 +13458,19 @@ content, schema or protected-design byte changed.
 **Blocked/next:** owner authorization and the separate empty-root commit, then fresh independent
 review. Only acceptance may authorize Slice A; all incomplete semantic evidence remains
 research-only meanwhile.
+
+## 2026-09-01 — Candidate packet removes the duplicate legal-authority path
+
+**What landed:** author-repaired the shared-candidate packet draft on [[D2428]]. The exact evidence
+adapter becomes one FEN-to-declared-evidence factory: one internal `exactLegalMoveMap` call produces
+the one sealed map whose move references populate every candidate row. Caller-authored maps are no
+longer an input. `make candidate-packet-sixth-author-repair` passes 3/3 plus strict TypeScript.
+
+**What changed:** a six-position production-symbol measurement found 0.029465 ms/position for one
+authority computation versus 0.080278 ms/position for the current compiler-plus-validating-adapter
+path, 2.724×. The RFC therefore owns the adapter signature correction rather than documenting the
+duplicate cost as permanent. This changes no projection, move convention or evidence operands.
+
+**Blocked/next:** fresh independent buildability review, then acceptance before any packet, adapter,
+cache, selector, server, API or UX implementation. Support, Review and bots still have zero packet
+consumer credit until their separate discharges land.

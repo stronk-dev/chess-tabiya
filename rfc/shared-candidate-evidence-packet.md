@@ -1,6 +1,7 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — returned by fifth fresh independent review on [[D2428]].**
+- **Status:** **draft — sixth author repair complete on [[D2428]]; fresh independent review
+  required.**
   The D2198–D2201 author repair remains present: the product factory fixes the primary manifest authority; every collector
   result is projection-addressed; thirteen exact context adapters satisfy the executable registry;
   and memo, service-stat and receipt-reference protocols are closed. The historical return remains
@@ -14,11 +15,15 @@
   `planning/evidence-foundation-ux/shared-candidate-packet-fourth-fresh-independent-review-2026-08-31.md`.
   The author repair now compiles and seals one exact map, flattens its retained payload by reference,
   and refuses an equal second enumeration. `make candidate-packet-fifth-author-repair` is its
-  positive contract. The fifth review found that criterion 36's one-call requirement cannot hold
-  against the production declaration adapter, which recomputes the exact map while validating the
+  positive contract. The fifth review found that criterion 36's one-call requirement could not hold
+  against the production declaration adapter, which recomputed the exact map while validating the
   retained payload. Exact return:
   `planning/evidence-foundation-ux/shared-candidate-packet-fifth-fresh-independent-review-2026-08-31.md`.
-  Implementation remains unauthorized pending author repair and another fresh review.
+  The sixth repair makes the exact evidence adapter a FEN-to-declared-evidence factory: it owns the
+  sole `exactLegalMoveMap` call, accepts no caller payload, and returns the one object graph the
+  packet flattens by reference. The measured current two-computation path costs 2.724× the single-
+  authority floor across six positions. `make candidate-packet-sixth-author-repair` is the positive
+  contract. Implementation remains unauthorized pending another fresh review.
   [[D1580]] remains separate numeric appliance-tier debt. *(Prior state: D1977–D1981
   author-repaired after D1958–D1961, D1900–D1903 and D1945–D1947.)*
 - **Author:** claude (initial draft); codex (2026-08-29 operation-boundary author repair). Drafted
@@ -29,7 +34,7 @@
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — the split this RFC executes in code: one factual population, separate opinionated derivations) and §3b-i (*"The LLM is the voice, never the source"*); `design/03-product-breadth.md` §Play (opponent selection) and §Intelligence and explanation
 - **Exploration gate:** [[D1071]] 📊 and [[D1072]] 🐞 — research complete 2026-08-23, dossier `design/research/shared-candidate-evidence-packet.md`, executable falsifier `tools/d1071-candidate-packet-harness/` under `rfc/0000-rfc-process.md` §Exploration gate. [[D1330]]'s per-dossier classification of all 118 research artifacts ranked this **live debt rank 6**: the population finding was partially adopted by `evidence-move-selector.md`, *"but the packet itself is that RFC's Discharge D2, unbuilt"*
 - **Depends on:** **accepted** `rfc/exact-legal-mobility.md` — it ships the single actual-turn move authority (`exactLegalMoves`/`exactLegalMoveMap`), `MOVE_IDENTITY_CONVENTION`, `MOVE_DESTINATION_CONVENTION` and the `rules.mobility.reading.legal_moves@1` projection, which is this packet's legal-convention field rather than a new one (§4.2); implemented F1 evidence contract (`rfc/archive/evidence-contract-manifest.md`, `rfc/archive/semantic-evidence-selection.md`) and the compiled catalogue at HEAD. The provider RFC is a dependency of held Discharge D10, not of this provider-free landing
-- **Parent / amends:** amends the `SemanticSelectionInput` contract in `packages/runtime/src/semantic-evidence.ts` (§3 — the caller-supplied alternative population becomes a compiled packet). It supplies the complete-population input and one-root score-source correction to `evidence-move-selector.md`/bot Discharge D10 without implementing a dormant candidate vector here. Review's separate node-free position evaluation stays owned by `provider-exchange-and-execution` plus `review-evidence-compiler`; this RFC does not turn it into N child searches. **Discharges rebuilt `rfc/hint-distance.md` D2 on landing**; that row is its author's to flip
+- **Parent / amends:** amends the `SemanticSelectionInput` contract in `packages/runtime/src/semantic-evidence.ts` (§3 — the caller-supplied alternative population becomes a compiled packet) and, on acceptance, amends `exact-legal-mobility.md` only at the exact evidence adapter's input boundary: FEN in, one authority-owned map out; projection, operands and move semantics do not change. It supplies the complete-population input and one-root score-source correction to `evidence-move-selector.md`/bot Discharge D10 without implementing a dormant candidate vector here. Review's separate node-free position evaluation stays owned by `provider-exchange-and-execution` plus `review-evidence-compiler`; this RFC does not turn it into N child searches. **Discharges rebuilt `rfc/hint-distance.md` D2 on landing**; that row is its author's to flip
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/evidence-foundation-ux/` (once implementing)
 
@@ -524,13 +529,14 @@ export function projectCandidatePopulationReceipt<
 >(receipt: CandidatePopulationReceipt<S>, scope: T): CandidatePopulationProjectionResult<T>;
 ```
 
-`compileLegalPopulation` is module-private and has exactly one source call. It computes
-`const payload = exactLegalMoveMap(beforeFen)`, passes that **same object** to
-`declareExactLegalMovesEvidence(payload)`, and freezes
+`compileLegalPopulation` is module-private and has exactly one source call. It calls
+`declareExactLegalMovesEvidence(beforeFen)`; that projection-specific factory validates the FEN,
+invokes `exactLegalMoveMap` exactly once, seals the returned payload and accepts no caller-supplied
+move map. The compiler then freezes
 `legalMovesInput.payload.pieces.flatMap(piece => piece.moves)`. `flatMap` allocates only the flat
 container; it does not copy a move object. The service builds every packet row from that returned
-pair and has no import or call to `exactLegalMoves`. A separately enumerated list is not a legal
-compiler input even when its UCI set is equal.
+declaration and has no import or call to either legal enumerator. A separately enumerated list or
+field-equal map is not a legal factory/compiler input even when its UCI set is equal.
 
 `compileCandidatePopulationReceipt` is module-private and the only receipt constructor. It closes over the
 exact imported `PRIMARY_EVIDENCE_MANIFEST`, requires `packet.manifestDigest` and every retained
@@ -656,14 +662,25 @@ remains D6 and must introduce a registered ruleset authority through the request
 key and every affected collector before another literal becomes admissible.
 
 **§4.1 — One authority and one value graph.** The service calls
-`exactLegalMoveMap(beforeFen)` once, seals that exact object with
-`declareExactLegalMovesEvidence`, and derives `legalMoves` by flattening
+`declareExactLegalMovesEvidence(beforeFen)` once. The adapter is the sole evidence factory for this
+projection: it accepts the FEN rather than a payload, calls `exactLegalMoveMap` once, seals that
+exact returned object and derives no second value. The compiler derives `legalMoves` by flattening
 `legalMovesInput.payload.pieces[].moves` without copying move objects. The accepted authority
 enumerates four promotion identities per promoting move (`legal-moves.ts:42-46`) where a bare
-`allDests()` walk enumerates one. `[V]` The packet compiler is a consumer of the exact-map authority,
-not another enumerator: it neither imports nor calls `exactLegalMoves`, and the receipt rejects a
-separately enumerated equal list. This preserves both semantic completeness and the exact value
-identity the receipt claims.
+`allDests()` walk enumerates one. `[V]` The packet compiler is a consumer of the exact evidence
+factory, not another enumerator: it imports neither `exactLegalMoveMap` nor `exactLegalMoves`, and
+the receipt rejects a separately enumerated equal list or copied move. This preserves semantic
+completeness, exact value identity and one computation.
+
+The public adapter signature changes from
+`declareExactLegalMovesEvidence(payload: ExactLegalMoveMap)` to
+`declareExactLegalMovesEvidence(fen: string)`. Runtime validation rejects a non-string before the
+authority runs. The adapter's output remains `DeclaredEvidence<ExactLegalMoveMap>` and retains the
+exact frozen payload returned by the authority. This is a source-factory correction, not a weaker
+validator: callers lose the ability to propose bytes for validation. Existing payload-mutation
+tests become compile/runtime refusal tests at the input boundary; map integrity remains covered by
+the exact-mobility authority's permanent ordinary, pin/check, castling, en-passant, promotion and
+terminal fixtures.
 
 **§4.2 — The convention is retained, not re-declared.** `legalConvention` is the versioned id of
 `rules.mobility.reading.legal_moves@1` and `moveIdentityConvention` is `MOVE_IDENTITY_CONVENTION`
@@ -1010,8 +1027,7 @@ export function createCandidatePopulationService(
 ): CandidatePopulationService;
 ```
 
-The product factory fixes `PRIMARY_EVIDENCE_MANIFEST`, `exactLegalMoveMap`,
-`declareExactLegalMovesEvidence`,
+The product factory fixes `PRIMARY_EVIDENCE_MANIFEST`, `declareExactLegalMovesEvidence`,
 `CANDIDATE_COLLECTOR_EXECUTION`, receipt constructors and `messageChannelMacrotaskYield` by import;
 callers cannot replace any of them. Only bounded numeric deployment limits enter. Options are
 strictly validated: an unknown `manifest`, digest or collector field is rejected before key/job/
@@ -1419,6 +1435,7 @@ listed symbol moved exactly once rather than rewarding a hand count.
 |---|---|---|
 | 1 | `packages/runtime/src/cooperative-yield.ts` (new), `packages/runtime/src/candidate-population.ts` (new) | one dependency-free `messageChannelMacrotaskYield`; compiler, legal-authority read, closed collector results, code-derived bounded groups, the **moved** one-authority `candidateChildReadings`, set equality, terminal/scope rules, typed abstentions and private `WeakMap` receipt authority (§3–§5/§6.0) |
 | 1a | `packages/runtime/src/candidate-population-projections.generated.ts` (new) | one generated frozen `as const` collector→versioned-key map plus projection→reason map; public identity/result/abstention unions derive from these literal bytes |
+| 1b | `packages/runtime/src/evidence-source-adapters.ts` | change only the exact-legal adapter from caller-payload validation to the sole FEN→`DeclaredEvidence<ExactLegalMoveMap>` factory; one internal authority call, no caller map, same projection/operands/output |
 | 2 | `packages/runtime/src/candidate-population-cache.ts` (new) | exported generic service/factory, closed result/failure/limits, typed+runtime scope projector, neutral receipt, standard-only key, waiter-aware cancellation, bounded FIFO admission, idempotent shutdown, single-flight, dual-bound LRU, stats and invalidation (§3.1/§6) |
 | 3 | `packages/runtime/src/semantic-evidence.ts` | selection accepts and runtime-asserts a packet receipt instead of a callback; both enumerators consume one code-derived closure; counts become measurements (§1.2–§1.5, §5.4) |
 | 4 | `packages/runtime/src/index.ts` | public packet/service/scope/readings contracts; no consumer deep-imports source files |
@@ -1545,7 +1562,8 @@ arms, and undergo another fresh independent review before acceptance.
    (`.typecheck.ts`), and no runtime predicate is the enforcement. *Wrong implementation that would
    pass a weaker check: one that accepts a caller population and validates it.*
 2. **Completeness is set equality against the retained exact-map payload, not a count.** A fixture
-   compiles one `exactLegalMoveMap(beforeFen)`, seals that same object, asserts every
+   calls `declareExactLegalMovesEvidence(beforeFen)` once, asserts the adapter invokes
+   `exactLegalMoveMap` once, and asserts every
    `packet.legalMoves[i]` is reference-identical to the corresponding member obtained by flattening
    `legalMovesInput.payload.pieces[].moves`, then asserts `candidates.map(r => r.moveUci)` set-equal
    to `packet.legalMoves.map(m => m.uci)` on
@@ -1841,15 +1859,17 @@ arms, and undergo another fresh independent review before acceptance.
     declarations, and exposes no event value, outcome or abstention. Omitting either dependency,
     retaining it publicly, adding an unrelated event collector or executing a dependency after its
     reader fails.
-36. **One sealed exact-map object owns the flat population ([[D2389]]).** Instrument the private
-    legal source and assert exactly one `exactLegalMoveMap(beforeFen)` call, that the exact returned
-    object is passed to `declareExactLegalMovesEvidence`, and that the packet's frozen flat array
+36. **One sealed exact-map object owns the flat population ([[D2389]], [[D2428]]).** Instrument the
+    projection-specific factory and assert one `declareExactLegalMovesEvidence(beforeFen)` call and
+    exactly one internal `exactLegalMoveMap(beforeFen)` call. Assert the adapter retains that exact
+    returned object as its payload and that the packet's frozen flat array
     contains the exact move-object references reachable from `legalMovesInput.payload.pieces`.
-    `exactLegalMoves` is absent from the product factory/compiler import graph. A negative rebuilds
-    every move as `{...move}`: its fields and UCI set remain equal, but receipt compilation returns
-    `invariant_failed: "receipt"`. A second negative calls an independently instrumented enumerator
-    with equal output and is rejected for the same reason. These negatives must fail by identity,
-    not by order, fields or cardinality.
+    Both legal enumerators are absent from the product factory/compiler import graph. An object,
+    equal rebuilt map and wrong FEN type are rejected as adapter inputs before authority execution.
+    A packet-internal negative rebuilds every move as `{...move}`: its fields and UCI set remain
+    equal, but receipt compilation returns `invariant_failed: "receipt"`. A second negative calls an
+    independently instrumented enumerator with equal output and is rejected for the same reason.
+    These negatives must fail by source boundary or identity, not by order, fields or cardinality.
 
 ## Fourth fresh independent return (2026-08-31)
 
@@ -1900,6 +1920,28 @@ Repair by making the authority mint a sealed result the adapter can admit withou
 or by specifying and measuring the honest two-computation boundary while retaining the single
 packet value graph. Renaming only the first call as the one that counts is refused. Exact review and
 reproducer: `make candidate-packet-fifth-fresh-review`.
+
+## Sixth author repair (2026-09-01)
+
+[[D2428]] is repaired by removing caller-authored exact-map payloads from the source adapter. The
+projection-specific `declareExactLegalMovesEvidence(fen)` factory validates one FEN, invokes the
+accepted `exactLegalMoveMap` authority once, and seals that exact return. The packet compiler calls
+only this factory and flattens only its declared payload. There is no opaque brand a caller can
+forge, no second equality oracle, and no payload-validation recomputation.
+
+The choice is measured rather than aesthetic. On the current production symbols, six positions
+(ordinary, castling, promotion, middlegame, pawn endgame and terminal), 20 warm-up rounds and 100
+measured rounds produced median **0.029465 ms/position** for one authority computation and
+**0.080278 ms/position** for the current compiler-plus-validating-adapter path: **2.724×**. This is
+a local author measurement, not a release latency promise; its purpose is to show that the duplicate
+trust path is measurable work even before candidate collectors run. Reproducer:
+`make candidate-packet-d2428-measurement`.
+
+Criterion 36 now binds one factory call to one internal authority call and the same declared object
+graph. The acceptance model includes malformed/non-string/caller-map inputs, a mocked second
+authority call, an equal map rebuild and a copied packet move. §12 explicitly owns the adapter
+signature correction. `make candidate-packet-sixth-author-repair` is positive author evidence only;
+another fresh independent review is required before implementation.
 
 ## Discharges
 
@@ -2043,6 +2085,11 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-09-01 — [[D2428]] sixth author repair. The exact evidence adapter becomes the sole
+  FEN-to-declared-evidence factory, removing caller payloads and the second legality computation.
+  Current production symbols measure 0.029465 ms/position for one authority computation versus
+  0.080278 ms/position for the current two-stage path (2.724×) across the six-position author
+  instrument. Fresh independent review remains required; no product implementation is authorized.
 - 2026-08-31 — fifth fresh independent review returned the RFC on [[D2428]]. The D2389 single-value-
   graph repair survives, but the production declaration adapter recomputes `exactLegalMoveMap`, so
   criterion 36's exactly-one-call requirement is not buildable. Exact review:

@@ -19206,7 +19206,7 @@
       "id": "D2428",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:79320da50855fb45dcabba9c5d971161c6a4077dbdbcdfb8c0264fe1d11e261d",
+      "sourceDigest": "sha256:21a4d01231c120ec56f9a1122a35ae743b5cf68a265196153f10f23c00723478",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:shared-candidate-evidence-packet.md"

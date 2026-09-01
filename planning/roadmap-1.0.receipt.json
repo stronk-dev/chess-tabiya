@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:516f9ec560d6ec95986432fc8cffcf4363a22eacb00096f43ebe14ed349e1039",
+    "roadmap": "sha256:21652324a1e9d99b83491730088789da6814c593e2186a04d2b8cd79e2d6fb7e",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:fba282c49927cd5a4deda3c094a69d52a3906a32385183425d758ba4d80085db",
-    "rfcRegister": "sha256:0ee31ebbcecf5150163a849a39c3d460d01958cf787a2c205e6afd14b1b6aff8",
+    "workState": "sha256:8309a90525d0adf383c4020bb95cf8a3e473327bd50b6c4f0528d71177599dc3",
+    "rfcRegister": "sha256:fc8bf9833fcc37e86f3e7fde93414f98f48644f8b9559d935e7068b64fd54011",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -162,12 +162,14 @@
       ],
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
-        "at": "2026-08-31",
-        "summary": "The closure audit proves that all semantic projections still stop before a live application operation, so producer-to-consumer runtime closure remains the active foundation target.",
-        "impact": "held",
+        "at": "2026-09-01",
+        "summary": "The shared candidate packet now has one buildable legal-authority graph: one FEN factory owns one exact-map computation, declaration and retained candidate population, with caller maps refused. The current duplicate path measured 2.724× the single-authority floor. Fresh acceptance still gates implementation and no Support, Review or bot consumer receives credit yet.",
+        "impact": "advanced",
         "evidence": [
-          "design/research/foundation-capability-closure-2026-08-31.md",
-          "planning/platform-alignment/execution-queue.md"
+          "planning/evidence-foundation-ux/shared-candidate-packet-sixth-author-repair-2026-09-01.md",
+          "planning/evidence-foundation-ux/shared-candidate-packet-fifth-fresh-independent-review-2026-08-31.md",
+          "rfc/shared-candidate-evidence-packet.md",
+          "design/research/foundation-capability-closure-2026-08-31.md"
         ]
       },
       "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."
