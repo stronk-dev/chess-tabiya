@@ -2,7 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 
-import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import { digestDrillPack, type DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { Chess } from "chessops/chess";
 import { parseFen } from "chessops/fen";
 import { makeUci } from "chessops/util";
@@ -25,8 +25,8 @@ async function artifact(stem: string): Promise<{ pack: DrillPackDefinition; ledg
   };
 }
 
-function grounding(pack: DrillPackDefinition, ledger: EvidenceLedger, manifest: SourceManifest): string {
-  return assessmentGrounding({ document: pack, ledger, manifest });
+async function grounding(pack: DrillPackDefinition, ledger: EvidenceLedger, manifest: SourceManifest): Promise<string> {
+  return assessmentGrounding({ document: pack, documentDigest: await digestDrillPack(pack), ledger, manifest });
 }
 
 describe("opening engine evidence", () => {
@@ -41,7 +41,7 @@ describe("opening engine evidence", () => {
       expect(pack.provenance.engineValidation, name).toBeUndefined();
       expect(pack.objective.grading?.assessedBy.kind, name).toBe("engine");
       const stem = name.slice(0, -5), value = await artifact(stem);
-      expect(grounding(value.pack, value.ledger, value.manifest), name).toBe("ledger_verified");
+      expect(await grounding(value.pack, value.ledger, value.manifest), name).toBe("ledger_verified");
       const costIssues: SourcingIssue[] = [];
       deviationCostEvidenceIssues(value.pack, value.ledger.records, costIssues);
       expect(costIssues, name).toEqual([]);
@@ -57,7 +57,7 @@ describe("opening engine evidence", () => {
 
   it("requires one exact root record and its exact engine instrument", async () => {
     const { pack, ledger, manifest } = await artifact("anti-caro-advance");
-    expect(grounding(pack, ledger, manifest)).toBe("ledger_verified");
+    expect(await grounding(pack, ledger, manifest)).toBe("ledger_verified");
     const rootIndex = ledger.records.findIndex((record) => record.kind === "engine_eval" && record.supports.includes("/start/fen"));
     const mutations: Array<(next: any) => void> = [
       (next) => { next.ledger.records[rootIndex].kind = "position_legality"; },
@@ -81,11 +81,11 @@ describe("opening engine evidence", () => {
     for (const mutate of mutations) {
       const next = structuredClone({ pack, ledger, manifest });
       mutate(next);
-      expect(grounding(next.pack, next.ledger, next.manifest)).toBe("unverified");
+      expect(await grounding(next.pack, next.ledger, next.manifest)).toBe("unverified");
     }
     const duplicate = structuredClone(ledger) as any;
     duplicate.records.push(structuredClone(duplicate.records[rootIndex]));
-    expect(grounding(pack, duplicate, manifest)).toBe("unverified");
+    expect(await grounding(pack, duplicate, manifest)).toBe("unverified");
   });
 
   it("walks engine positions without editing and refuses exhaustive enumeration", async () => {

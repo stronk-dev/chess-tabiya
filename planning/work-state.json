@@ -1825,11 +1825,12 @@
     },
     {
       "id": "D223",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d4c894f8c8ea7faad0d5e684eb7da195ce02bc79652bbcfc76e43837895189ec",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ff361e5ee67f899648a03ec53c43813760dc6b0d3eb925e8036dc5439ee5b49d",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "apps/server/src/sourcing/ledger-validation.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D224",

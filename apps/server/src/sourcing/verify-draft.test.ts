@@ -68,7 +68,7 @@ describe("verify-draft", () => {
     const regressedFen = makeFen(anchor.toSetup());
     const result = await verifyDraft(file, { query: async (fen) => answer(fen, fen === regressedFen ? "win" : fen.split(" ")[1] === "w" ? "win" : "loss"), now: () => new Date("2026-08-14T01:00:00.000Z") });
     expect(result.paths).toEqual({ ledger: file.replace(/\.json$/, ".evidence.json"), manifest: file.replace(/\.json$/, ".sources.json"), job: file.replace(/\.json$/, ".job.json") });
-    expect(assessmentGrounding({ document: result.pack, ledger: result.ledger, manifest: result.manifest })).toBe("ledger_verified");
+    expect(assessmentGrounding({ document: result.pack, documentDigest: await digestDrillPack(result.pack), ledger: result.ledger, manifest: result.manifest })).toBe("ledger_verified");
     expect(result.ledger.packDigest).toBe(await digestDrillPack(result.pack));
     expect(result.ledger.records.some((record) => record.supports[0]?.startsWith("/spine/"))).toBe(true);
     expect(result.ledger.records.some((record) => record.supports[0]?.startsWith("/deviations/"))).toBe(true);
@@ -103,7 +103,7 @@ describe("verify-draft", () => {
     });
     const tablebaseSource = result.manifest.entries.find((entry) => entry.sourceId === "syzygy-offline-fixture");
     expect(tablebaseSource?.origin.kind).toBe("local-file");
-    expect(assessmentGrounding({ document: result.pack, ledger: result.ledger, manifest: result.manifest })).toBe("unverified");
+    expect(assessmentGrounding({ document: result.pack, documentDigest: await digestDrillPack(result.pack), ledger: result.ledger, manifest: result.manifest })).toBe("unverified");
 
     const forgedManifest = structuredClone(result.manifest) as any;
     const forged = forgedManifest.entries.find((entry: any) => entry.sourceId === "syzygy-offline-fixture");

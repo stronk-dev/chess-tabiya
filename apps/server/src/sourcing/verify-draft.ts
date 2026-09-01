@@ -129,6 +129,7 @@ async function createOfflineQuery(retrievedAt: string): Promise<TablebaseQuery> 
 
 function assertArtifacts(
   pack: DrillPackDefinition,
+  packDigest: string,
   ledger: EvidenceLedger,
   manifest: SourceManifest,
   requireGrounding: boolean,
@@ -141,7 +142,7 @@ function assertArtifacts(
   evidenceSemantics(ledger, issues, manifest, pack);
   evidenceSupports(pack, ledger, manifest, issues, costRecords);
   if (issues.some((issue) => issue.severity === "error")) throw new SourcingError("DRAFT_PACK_INVALID", issues.map((issue) => `${issue.path} ${issue.code}: ${issue.message}`).join("; "));
-  if (requireGrounding && assessmentGrounding({ document: pack, ledger, manifest }) !== "ledger_verified") throw new SourcingError("DRAFT_PACK_INVALID", "emitted sidecars did not earn ledger_verified admission");
+  if (requireGrounding && assessmentGrounding({ document: pack, documentDigest: packDigest, ledger, manifest }) !== "ledger_verified") throw new SourcingError("DRAFT_PACK_INVALID", "emitted sidecars did not earn ledger_verified admission");
 }
 
 async function verifySyzygyDraft(file: string, options: VerifyDraftOptions = {}): Promise<VerifyDraftResult> {
@@ -203,7 +204,7 @@ async function verifySyzygyDraft(file: string, options: VerifyDraftOptions = {})
   const manifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: Object.freeze([...entries.values()]) };
   const sourcedAt = manifest.entries.map((entry) => entry.retrievedAt).sort().at(-1)!;
   const ledger: EvidenceLedger = { schema: "tabiya.sourcing.evidence.v1", packId: pack.id, packVersion: pack.version, packDigest: digest, sourcedAt, records: Object.freeze(records), abstentions: Object.freeze(abstentions) };
-  assertArtifacts(pack, ledger, manifest, options.offline !== true, records);
+  assertArtifacts(pack, digest, ledger, manifest, options.offline !== true, records);
 
   const paths = sidecars(absolute);
   const args = { file: absolute.replace(`${resolve(".")}/`, ""), offline: options.offline === true };
@@ -311,7 +312,7 @@ async function verifyEngineDraft(file: string, options: VerifyDraftOptions): Pro
   const manifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: Object.freeze([...entries.values()]) };
   const sourcedAt = manifest.entries.map((entry) => entry.retrievedAt).sort().at(-1)!;
   const ledger: EvidenceLedger = { schema: "tabiya.sourcing.evidence.v1", packId: pack.id, packVersion: pack.version, packDigest: digest, sourcedAt, records: Object.freeze(records), abstentions: Object.freeze((existing.ledger?.abstentions ?? []).filter((value) => value.kind !== "engine_eval")) };
-  assertArtifacts(pack, ledger, manifest, true, produced);
+  assertArtifacts(pack, digest, ledger, manifest, true, produced);
   const args = { file: absolute.replace(`${resolve(".")}/`, ""), offline: options.offline === true };
   await writeFile(absolute, `${JSON.stringify(pack, null, 2)}\n`, "utf8");
   await writeCanonicalJson(paths.ledger, ledger);
@@ -334,7 +335,7 @@ async function main(): Promise<number> {
   try {
     const result = await verifyDraft(file, { offline: process.env.OFFLINE === "1" });
     for (const warning of result.warnings) console.warn(`WARNING ${warning}`);
-    const grounding = assessmentGrounding({ document: result.pack, ledger: result.ledger, manifest: result.manifest });
+    const grounding = assessmentGrounding({ document: result.pack, documentDigest: await digestDrillPack(result.pack), ledger: result.ledger, manifest: result.manifest });
     console.log(`Verified ${result.pack.id}: ${grounding}${process.env.OFFLINE === "1" ? " (offline fixture; not promotion evidence)" : ""}`);
     return 0;
   } catch (error) {

@@ -289,7 +289,7 @@ export class PackRegistry {
       const provenance = raw.provenance as Record<string, unknown>;
       const feedbackPolicy = raw.feedbackPolicy as FeedbackPolicy;
       const digest = await digestDrillPack(document);
-      const grounding = assessmentGrounding({ document, ledger, manifest });
+      const grounding = assessmentGrounding({ document, documentDigest: digest, ledger, manifest });
       const positionEvidence = buildPositionEvidenceIndex({ ledger, grounding, packDigest: digest });
       const bindingIssues: SourcingIssue[] = [];
       const validatedLedger = validateLedger(ledger, bindingIssues);

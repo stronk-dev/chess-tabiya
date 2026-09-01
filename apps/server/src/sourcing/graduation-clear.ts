@@ -115,11 +115,11 @@ function shapePredicate(pack: DrillPackDefinition, clearance: GraduationClearanc
   return subject?.coverage?.corpus?.packs?.some((candidate: any) => candidate.id === pack.id && candidate.count > 0) === true;
 }
 
-function evaluate(pack: DrillPackDefinition, ledger: EvidenceLedger, manifest: SourceManifest, clearance: GraduationClearance, census: ReturnType<typeof runExpressionCensus>): PredicateResult | undefined {
+function evaluate(pack: DrillPackDefinition, packDigest: string, ledger: EvidenceLedger, manifest: SourceManifest, clearance: GraduationClearance, census: ReturnType<typeof runExpressionCensus>): PredicateResult | undefined {
   if (!MECHANICAL_KINDS.has(clearance.kind)) return undefined;
   switch (clearance.kind) {
     case "assessment_grounded": {
-      const grounding = assessmentGrounding({ document: pack, ledger, manifest });
+      const grounding = assessmentGrounding({ document: pack, documentDigest: packDigest, ledger, manifest });
       const relevant = ledger.records.filter((record) => record.kind === "tablebase_result" || record.kind === "engine_eval").length;
       return { holds: grounding === "ledger_verified", evidence: `assessmentGrounding = ${grounding}; ${relevant} assessment records` };
     }
@@ -181,7 +181,7 @@ export async function clearGraduationEntries(file: string, options: { readonly n
       held.push({ id: blocking.id, kind: "unspecified", verdict: "no predicate" });
       return entry;
     }
-    const result = evaluate(pack, ledger, manifest, clearance, census);
+    const result = evaluate(pack, before, ledger, manifest, clearance, census);
     if (result === undefined) {
       held.push({ id: blocking.id, kind: clearance.kind, ...(clearance.recordKind === undefined ? {} : { recordKind: clearance.recordKind }), verdict: "no predicate" });
       return entry;

@@ -417,6 +417,7 @@ export async function checkSourcingDirectory(directory: string, options: { reado
     (pack.objective.grading.assessedBy.kind === "syzygy" || pack.objective.grading.assessedBy.kind === "engine") &&
     assessmentGrounding({
       document: pack as unknown as import("@chess-tabiya/schema/drill-pack").DrillPackDefinition,
+      documentDigest: await digestDrillPack(pack as import("@chess-tabiya/schema/drill-pack").DrillPackDefinition),
       ledger,
       manifest,
     }) === "unverified"
@@ -468,7 +469,7 @@ export async function checkSourcingFile(file: string, options: { readonly strict
       if (digest !== ledger.packDigest) issues.push(issue("EVIDENCE_DIGEST_STALE", "/packDigest", `stored ${ledger.packDigest}; current ${digest}; re-confirm evidence`, "warning"));
     }
   }
-  if (strict && object(pack) && object(pack.objective) && object(pack.objective.grading) && object(pack.objective.grading.assessedBy) && ["syzygy", "engine"].includes(String(pack.objective.grading.assessedBy.kind)) && assessmentGrounding({ document: pack as unknown as import("@chess-tabiya/schema/drill-pack").DrillPackDefinition, ledger, manifest }) === "unverified") {
+  if (strict && object(pack) && object(pack.objective) && object(pack.objective.grading) && object(pack.objective.grading.assessedBy) && ["syzygy", "engine"].includes(String(pack.objective.grading.assessedBy.kind)) && assessmentGrounding({ document: pack as unknown as import("@chess-tabiya/schema/drill-pack").DrillPackDefinition, documentDigest: await digestDrillPack(pack as import("@chess-tabiya/schema/drill-pack").DrillPackDefinition), ledger, manifest }) === "unverified") {
     const engine = pack.objective.grading.assessedBy.kind === "engine";
     issues.push(issue(engine ? "ENGINE_ASSESSMENT_UNGROUNDED" : "SYZYGY_ASSESSMENT_UNGROUNDED", "/objective/grading/assessedBy", engine ? "engine assessment has no valid, manifest-linked engine_eval evidence record" : "Syzygy assessment has no valid, manifest-linked tablebase evidence record"));
   }

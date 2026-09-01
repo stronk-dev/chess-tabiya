@@ -96,10 +96,12 @@ A pack's `assessedBy.kind: syzygy` declaration does not earn an exact label.
 Registry admission derives `ledger_verified` only when the complete ledger and
 manifest pass the same validators as `sourcing-check`, their linkage is valid,
 and the tablebase record matches the declaration and root on every required
-field. Missing, malformed, unlinked, or mismatched sidecars leave the assessment
-unverified; strict candidate checks reject that condition. The pack digest is
-excluded from the tablebase fact match because it binds the whole mutable draft,
-not the immutable position/result evidence.
+field. The ledger must also carry the current canonical pack digest; a stale or
+unstamped ledger describes different document bytes and therefore leaves the
+assessment unverified. Strict candidate checks reject that condition. The digest
+is not a tablebase-result operand—it is the separate whole-document admission
+conjunct, so position/result matching and ledger currency cannot substitute for
+one another.
 
 `make verify-draft FILE=<pack.json>` closes this loop for an existing authored
 draft. It walks the root, spine, and deviations, emits the flat sibling evidence,

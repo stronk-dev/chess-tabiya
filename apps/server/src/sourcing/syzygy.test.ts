@@ -6,6 +6,7 @@ import { Chess } from "chessops/chess";
 import { makeFen } from "chessops/fen";
 import { makeUci } from "chessops/util";
 import { describe, expect, it, vi } from "vitest";
+import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
 
 import { StockfishEvidenceExecutor } from "../evidence-queue.js";
 import { PackRegistry, projectPackDocument } from "../pack-registry.js";
@@ -87,15 +88,16 @@ describe("Syzygy sourcing", () => {
       successConditions: [],
     };
 
+    const stampedLedger = { ...(ledger as Record<string, unknown>), packDigest: await digestDrillPack(pack) };
     const verified = await PackRegistry.fromDocuments([
-      { source: "pack.json", value: pack, ledger, manifest },
+      { source: "pack.json", value: pack, ledger: stampedLedger, manifest },
     ]);
     expect(verified.required(pack.id).assessmentGrounding).toBe("ledger_verified");
     expect(projectPackDocument(pack, "ledger_verified")).toMatchObject({
       objective: { grading: { grounding: "ledger_verified" } },
     });
 
-    const forged = structuredClone(ledger) as any;
+    const forged = structuredClone(stampedLedger) as any;
     forged.records.push({ kind: "tablebase_result" });
     const unverified = await PackRegistry.fromDocuments([
       { source: "pack.json", value: pack, ledger: forged, manifest },
@@ -103,6 +105,7 @@ describe("Syzygy sourcing", () => {
     expect(unverified.required(pack.id).assessmentGrounding).toBe("unverified");
 
     await writeCanonicalJson(resolve(emitted.directory, "pack.json"), pack);
+    await writeCanonicalJson(resolve(emitted.directory, "evidence.json"), stampedLedger);
     expect((await checkSourcingDirectory(emitted.directory, { strict: true })).issues)
       .not.toContainEqual(expect.objectContaining({ code: "SYZYGY_ASSESSMENT_UNGROUNDED" }));
     await writeCanonicalJson(resolve(emitted.directory, "evidence.json"), forged);

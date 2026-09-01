@@ -13545,3 +13545,20 @@ requires a fresh reproducible regression and explicit threshold before reopening
 **Blocked/next:** none for D2119. CI still reports content contracts separately from software and
 performance. Work returns to accepted product slices; the released Feedback Stage-2 binding arm is
 next because it can retire existing evidence debt without crossing the Gate-F graduation hold.
+
+## 2026-09-01 — Assessment grounding now binds the current pack digest
+
+**What landed:** closed [[D223]] at the shared grounding boundary. `assessmentGrounding` now
+requires the canonical document digest and refuses stale or unstamped ledgers before awarding
+`ledger_verified`. Pack registry load, strict sourcing checks, draft verification and graduation
+clearance all pass the same canonical digest. The runtime regression now proves both consequences:
+the public pack projection says `unverified`, and recorded machine readings remain unavailable.
+
+**What changed:** the former split authority is gone. A ledger can no longer pass root-record and
+manifest linkage while describing different pack bytes. The Syzygy synthetic fixture now re-stamps
+its ledger after mutating the pack, making the whole-document admission boundary explicit in tests
+and docs.
+
+**Blocked/next:** none for D223. This repairs evidence trust; it creates no evidence, content,
+schema, provider request, learner judgement or new surface. Work continues upstream on the
+remaining evidence-to-module closure rather than the blocked promotion/provider contracts.

@@ -94,7 +94,9 @@ declaration is projected as `ledger_verified` only when the sibling evidence
 ledger and source manifest both pass the sourcing validators, link to one
 another, and contain a matching `tablebase_result` for the root. Piece count,
 category, source identity, retrieval time, FEN, support pointer, and pack
-identity are checked. A malformed or missing sidecar cannot earn the label.
+identity are checked, and the ledger digest must equal the current canonical
+pack digest. A malformed, missing, stale, or unstamped sidecar cannot earn the
+label.
 
 Unverified and authored assessments remain visible only as authored, unproved
 claims. This is important above Syzygy's seven-piece limit: a completed run has

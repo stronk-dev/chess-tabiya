@@ -422,6 +422,7 @@ export function linkage(
 
 export function assessmentGrounding(input: {
   readonly document: DrillPackDefinition;
+  readonly documentDigest: string;
   readonly ledger?: unknown;
   readonly manifest?: unknown;
 }): "ledger_verified" | "unverified" {
@@ -432,6 +433,7 @@ export function assessmentGrounding(input: {
   const ledger = validateLedger(input.ledger, issues);
   const manifest = validateManifest(input.manifest, issues);
   if (ledger === undefined || manifest === undefined) return "unverified";
+  if (ledger.packDigest !== input.documentDigest) return "unverified";
   linkage(manifest, ledger, issues);
   if (issues.length > 0) return "unverified";
 

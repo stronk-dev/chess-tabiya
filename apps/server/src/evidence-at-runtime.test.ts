@@ -42,16 +42,16 @@ describe("recorded evidence at runtime", () => {
     expect(refusedLegality).toBe(32);
   });
 
-  it("refuses digest-stale and unstamped ledgers without changing published grounding", async () => {
+  it("refuses digest-stale and unstamped ledgers in both runtime evidence and published grounding", async () => {
     for (const ledger of [
       { ...antiCaroLedger, packDigest: `sha256:${"0".repeat(64)}` },
       (() => { const value = { ...antiCaroLedger }; delete value.packDigest; return value; })(),
     ]) {
       const registry = await PackRegistry.fromDocuments([{ source: "anti-caro", value: antiCaro, ledger, manifest: antiCaroManifest }]);
       const record = registry.required(antiCaro.id);
-      expect(record.assessmentGrounding).toBe("ledger_verified");
+      expect(record.assessmentGrounding).toBe("unverified");
       expect(record.positionEvidence.size).toBe(0);
-      expect(projectPackDocument(record.document, record.assessmentGrounding, record.channel)).toMatchObject({ objective: { grading: { grounding: "ledger_verified" } } });
+      expect(projectPackDocument(record.document, record.assessmentGrounding, record.channel)).toMatchObject({ objective: { grading: { grounding: "unverified" } } });
     }
   });
 
