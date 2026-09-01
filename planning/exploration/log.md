@@ -13771,3 +13771,20 @@ collapsed anchor still fails. The real-content tier passes 172/172.
 
 **Blocked/next:** none for this defect. Re-run the complete repository gate after terminal
 tracking and receipt refresh.
+
+## 2026-09-01 — The phase classifier is conservative and stable, not a Just Play authority
+
+**What landed:** [[D2483]]'s disposable corpus instrument and dossier. It walks 50 non-browser
+drafts / 804 legal authored positions through the shipped `classifyPhase` convention. At 48
+single-phase roots, 42 match the curated pack label, five abstain and one differs. Across all 681
+single-phase authored positions, 517 match, 108 abstain and 56 differ.
+
+**What changed:** the endgame arm is clean on this population (273/273), while opening consequence
+paths are only 121/256 same-label and cannot be called wrong without position-level labels. The
+stability arm is stronger: 39 label changes across 754 edges contain zero two-edge reversals and no
+return to opening or from endgame. The classifier is coarse but not chattering.
+
+**Blocked/next:** Q4c remains partial. [[D2484]] owns typed abstention reason/band margin;
+[[D2485]] owns source-retaining downstream composition with exact opening identity and endgame
+evidence. Independent position/edge labels, reviewer agreement and false-transition cost remain
+unmeasured. No product classifier, selector, module, schema or chess content changed.

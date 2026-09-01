@@ -211,6 +211,15 @@ round-tripped through `pgn-import.ts`"*)
   campaign's load-bearing promise.
 
 ### Q-13 · Does the in-run phase/structure classifier abstain honestly, and how often is it wrong? (Q4c)
+- **Partial result 2026-09-01:** `make phase-classifier-census` measures the shipped rules phase
+  convention against curated pack labels: 42/48 single-phase roots match, 5 abstain and 1 differs;
+  39 label changes across 754 authored edges contain zero two-edge reversals. This is a consistency
+  control, not the required independent position-label population. Evidence:
+  `design/research/phase-classifier-corpus-conformance.md`.
+- **Owned successors:** [[D2484]] specifies the typed abstention reason/band-margin research
+  boundary; [[D2485]] specifies source-retaining downstream phase-arc composition over the exact
+  opening producer, rules convention and endgame evidence. Neither authorizes product code before
+  the exploration/RFC gate.
 - **Question:** B10 shipped *"attributed phase classification with honest abstention"* (`gates.md`
   `[V]`). Nothing measures its accuracy or its abstention rate. Q4c's own definition requires
   labeled ground truth, inter-reviewer agreement, and false-transition costs (`plan.md` `[V]`).

@@ -19714,6 +19714,31 @@
       "uxItems": [],
       "evidence": "apps/server/src/evidence-at-runtime.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2483",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0d9332a8a5c144e4fa53be91336b1f91720f95f57280417a30403e82b6af7c8f",
+      "uxItems": [],
+      "evidence": "design/research/phase-classifier-corpus-conformance.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2484",
+      "state": "todo",
+      "sourceGlyph": "💡",
+      "sourceDigest": "sha256:31a32bf077dfbb411531289cc27a304a07a615b1c533f1a9a82136560e371035",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D2485",
+      "state": "todo",
+      "sourceGlyph": "💡",
+      "sourceDigest": "sha256:54f5c910ad2bd14b55d58312e3c00af4051f067bf0b212fa8cf0c10314f43252",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

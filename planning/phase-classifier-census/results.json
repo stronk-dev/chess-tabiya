@@ -1,0 +1,2092 @@
+{
+  "schema": "tabiya.research.phase-classifier-census.v1",
+  "boundary": "Curated pack phase conformance; not independent position ground truth",
+  "convention": {
+    "endgameMaterialMax": 13,
+    "developedMaterialMin": 18,
+    "openingUndevelopedMin": 5,
+    "middlegameUndevelopedMax": 2
+  },
+  "corpus": {
+    "packs": 50,
+    "positions": 804,
+    "byDeclared": {
+      "opening": 20,
+      "middlegame": 14,
+      "endgame": 14,
+      "cross_phase": 2
+    }
+  },
+  "roots": {
+    "positions": 48,
+    "matches": 42,
+    "abstains": 5,
+    "mismatches": 1
+  },
+  "authoredPositions": {
+    "positions": 681,
+    "matches": 517,
+    "abstains": 108,
+    "mismatches": 56
+  },
+  "detected": {
+    "opening": 153,
+    "middlegame": 233,
+    "endgame": 296,
+    "unclear": 122
+  },
+  "edgeChanges": 39,
+  "transitionMatrix": {
+    "middlegame->endgame": 1,
+    "middlegame->unclear": 1,
+    "opening->unclear": 19,
+    "unclear->endgame": 1,
+    "unclear->middlegame": 17
+  },
+  "transitionDetails": [
+    {
+      "packId": "anti-caro-advance-c5-race",
+      "nodeId": "be3-hold",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "anti-dutch-leningrad-white",
+      "nodeId": "p9-nf3",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "anti-italian-center-attack-black",
+      "nodeId": "p6-bc5",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "anti-italian-center-attack-black",
+      "nodeId": "p13-bd2",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "anti-italian-center-attack-black",
+      "nodeId": "nf6-two-knights",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "anti-kid-classical-white",
+      "nodeId": "p9-nf3",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "anti-kid-classical-white",
+      "nodeId": "p14-nc6",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "anti-london-black",
+      "nodeId": "p8-nc6",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "anti-london-black",
+      "nodeId": "p12-bd6",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "anti-scandinavian-white",
+      "nodeId": "p10-bg4",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "anti-scandinavian-white",
+      "nodeId": "p12-nc6-vs-be2",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "anti-sicilian-najdorf-english-attack",
+      "nodeId": "p11-be3",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "anti-sicilian-najdorf-english-attack",
+      "nodeId": "be7-classical",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "berlin-queenless-press",
+      "nodeId": "be6-post",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "berlin-queenless-press",
+      "nodeId": "bd7-develop",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "caro-kann-advance-black",
+      "nodeId": "be3-tension",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "closed-centre-chain-black-base-strike",
+      "nodeId": "be3-develop",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "italian-center-attack-white",
+      "nodeId": "p13-bd2",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "kid-classical-black",
+      "nodeId": "p14-nc6",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "leningrad-dutch-black",
+      "nodeId": "p9-nf3",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "leningrad-dutch-black",
+      "nodeId": "nc6-matulovic",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "london-system-white",
+      "nodeId": "p8-nc6",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "london-system-white",
+      "nodeId": "p12-bd6",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "najdorf-english-attack-black",
+      "nodeId": "p11-be3",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "najdorf-english-attack-black",
+      "nodeId": "be7-race",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "open-centre-french-exchange-black",
+      "nodeId": "bg5-pin-main",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "open-centre-ruy-exchange",
+      "nodeId": "be6-develop",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "open-centre-ruy-exchange",
+      "nodeId": "bd6-develop",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "opening-principles-black",
+      "nodeId": "b3-bc5",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "opening-principles-white",
+      "nodeId": "b3-bc5",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "scandinavian-mainline-black",
+      "nodeId": "p10-bg4",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "scandinavian-mainline-black",
+      "nodeId": "p12-nc6",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "nodeId": "p14-nc6",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "nodeId": "p19-nc3",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "nodeId": "p37-ab3",
+      "from": "middlegame",
+      "to": "endgame"
+    },
+    {
+      "packId": "trajectory-qgd-exchange-minority",
+      "nodeId": "p10-be7",
+      "from": "opening",
+      "to": "unclear"
+    },
+    {
+      "packId": "trajectory-qgd-exchange-minority",
+      "nodeId": "p14-nbd7",
+      "from": "unclear",
+      "to": "middlegame"
+    },
+    {
+      "packId": "trajectory-qgd-exchange-minority",
+      "nodeId": "p49-rb2",
+      "from": "middlegame",
+      "to": "unclear"
+    },
+    {
+      "packId": "trajectory-qgd-exchange-minority",
+      "nodeId": "p54-ra5",
+      "from": "unclear",
+      "to": "endgame"
+    }
+  ],
+  "twoEdgeReversals": 0,
+  "packs": [
+    {
+      "packId": "anti-caro-advance-c5-race",
+      "declared": "opening",
+      "positions": 11,
+      "detected": {
+        "opening": 10,
+        "middlegame": 0,
+        "endgame": 0,
+        "unclear": 1
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 4,
+          "black": 4
+        }
+      },
+      "conformance": {
+        "matches": 10,
+        "abstains": 1,
+        "mismatches": 0
+      },
+      "edgeChanges": 1,
+      "edgeTransitions": [
+        {
+          "nodeId": "be3-hold",
+          "from": "opening",
+          "to": "unclear"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "anti-caro-advance-early-c5",
+      "declared": "opening",
+      "positions": 14,
+      "detected": {
+        "opening": 14,
+        "middlegame": 0,
+        "endgame": 0,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkbnr/pp2pppp/8/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 4,
+          "black": 4
+        }
+      },
+      "conformance": {
+        "matches": 14,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "anti-dutch-leningrad-white",
+      "declared": "opening",
+      "positions": 17,
+      "detected": {
+        "opening": 9,
+        "middlegame": 0,
+        "endgame": 0,
+        "unclear": 8
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 4,
+          "black": 4
+        }
+      },
+      "conformance": {
+        "matches": 9,
+        "abstains": 8,
+        "mismatches": 0
+      },
+      "edgeChanges": 1,
+      "edgeTransitions": [
+        {
+          "nodeId": "p9-nf3",
+          "from": "opening",
+          "to": "unclear"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "anti-french-advance-white",
+      "declared": "opening",
+      "positions": 11,
+      "detected": {
+        "opening": 11,
+        "middlegame": 0,
+        "endgame": 0,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 4,
+          "black": 4
+        }
+      },
+      "conformance": {
+        "matches": 11,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "anti-italian-center-attack-black",
+      "declared": "opening",
+      "positions": 15,
+      "detected": {
+        "opening": 1,
+        "middlegame": 6,
+        "endgame": 0,
+        "unclear": 8
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 2,
+          "black": 3
+        }
+      },
+      "conformance": {
+        "matches": 1,
+        "abstains": 8,
+        "mismatches": 6
+      },
+      "edgeChanges": 3,
+      "edgeTransitions": [
+        {
+          "nodeId": "p6-bc5",
+          "from": "opening",
+          "to": "unclear"
+        },
+        {
+          "nodeId": "p13-bd2",
+          "from": "unclear",
+          "to": "middlegame"
+        },
+        {
+          "nodeId": "nf6-two-knights",
+          "from": "opening",
+          "to": "unclear"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "anti-kid-classical-white",
+      "declared": "opening",
+      "positions": 14,
+      "detected": {
+        "opening": 1,
+        "middlegame": 8,
+        "endgame": 0,
+        "unclear": 5
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 3,
+          "black": 2
+        }
+      },
+      "conformance": {
+        "matches": 1,
+        "abstains": 5,
+        "mismatches": 8
+      },
+      "edgeChanges": 2,
+      "edgeTransitions": [
+        {
+          "nodeId": "p9-nf3",
+          "from": "opening",
+          "to": "unclear"
+        },
+        {
+          "nodeId": "p14-nc6",
+          "from": "unclear",
+          "to": "middlegame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "anti-london-black",
+      "declared": "opening",
+      "positions": 13,
+      "detected": {
+        "opening": 3,
+        "middlegame": 6,
+        "endgame": 0,
+        "unclear": 4
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 3 3",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 2,
+          "black": 3
+        }
+      },
+      "conformance": {
+        "matches": 3,
+        "abstains": 4,
+        "mismatches": 6
+      },
+      "edgeChanges": 2,
+      "edgeTransitions": [
+        {
+          "nodeId": "p8-nc6",
+          "from": "opening",
+          "to": "unclear"
+        },
+        {
+          "nodeId": "p12-bd6",
+          "from": "unclear",
+          "to": "middlegame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "anti-scandinavian-white",
+      "declared": "opening",
+      "positions": 23,
+      "detected": {
+        "opening": 13,
+        "middlegame": 3,
+        "endgame": 0,
+        "unclear": 7
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 4,
+          "black": 4
+        }
+      },
+      "conformance": {
+        "matches": 13,
+        "abstains": 7,
+        "mismatches": 3
+      },
+      "edgeChanges": 2,
+      "edgeTransitions": [
+        {
+          "nodeId": "p10-bg4",
+          "from": "opening",
+          "to": "unclear"
+        },
+        {
+          "nodeId": "p12-nc6-vs-be2",
+          "from": "unclear",
+          "to": "middlegame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "anti-sicilian-najdorf-english-attack",
+      "declared": "opening",
+      "positions": 16,
+      "detected": {
+        "opening": 3,
+        "middlegame": 2,
+        "endgame": 0,
+        "unclear": 11
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 3,
+          "black": 3
+        }
+      },
+      "conformance": {
+        "matches": 3,
+        "abstains": 11,
+        "mismatches": 2
+      },
+      "edgeChanges": 2,
+      "edgeTransitions": [
+        {
+          "nodeId": "p11-be3",
+          "from": "opening",
+          "to": "unclear"
+        },
+        {
+          "nodeId": "be7-classical",
+          "from": "unclear",
+          "to": "middlegame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "berlin-queenless-press",
+      "declared": "middlegame",
+      "positions": 9,
+      "detected": {
+        "opening": 0,
+        "middlegame": 5,
+        "endgame": 0,
+        "unclear": 4
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - - 0 9",
+        "detected": "unclear",
+        "material": {
+          "white": 19,
+          "black": 19
+        },
+        "undevelopedMinors": {
+          "white": 2,
+          "black": 2
+        }
+      },
+      "conformance": {
+        "matches": 5,
+        "abstains": 4,
+        "mismatches": 0
+      },
+      "edgeChanges": 2,
+      "edgeTransitions": [
+        {
+          "nodeId": "be6-post",
+          "from": "unclear",
+          "to": "middlegame"
+        },
+        {
+          "nodeId": "bd7-develop",
+          "from": "unclear",
+          "to": "middlegame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "carlsbad-minority-attack",
+      "declared": "middlegame",
+      "positions": 19,
+      "detected": {
+        "opening": 0,
+        "middlegame": 19,
+        "endgame": 0,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10",
+        "detected": "middlegame",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 1
+        }
+      },
+      "conformance": {
+        "matches": 19,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "caro-kann-advance-black",
+      "declared": "opening",
+      "positions": 12,
+      "detected": {
+        "opening": 10,
+        "middlegame": 0,
+        "endgame": 0,
+        "unclear": 2
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 4,
+          "black": 4
+        }
+      },
+      "conformance": {
+        "matches": 10,
+        "abstains": 2,
+        "mismatches": 0
+      },
+      "edgeChanges": 1,
+      "edgeTransitions": [
+        {
+          "nodeId": "be3-tension",
+          "from": "opening",
+          "to": "unclear"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "closed-centre-chain-black-base-strike",
+      "declared": "middlegame",
+      "positions": 12,
+      "detected": {
+        "opening": 0,
+        "middlegame": 1,
+        "endgame": 0,
+        "unclear": 11
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r1b1kb1r/pp2nppp/1qn1p3/2ppP3/3P4/2P2N2/PP2BPPP/RNBQ1RK1 b kq - 6 7",
+        "detected": "unclear",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 2,
+          "black": 2
+        }
+      },
+      "conformance": {
+        "matches": 1,
+        "abstains": 11,
+        "mismatches": 0
+      },
+      "edgeChanges": 1,
+      "edgeTransitions": [
+        {
+          "nodeId": "be3-develop",
+          "from": "unclear",
+          "to": "middlegame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "conversion-up-a-piece",
+      "declared": "endgame",
+      "positions": 8,
+      "detected": {
+        "opening": 0,
+        "middlegame": 0,
+        "endgame": 8,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "3rk3/pp3ppp/4p3/8/8/2N1P3/PP3PPP/3RK3 w - - 0 1",
+        "detected": "endgame",
+        "material": {
+          "white": 8,
+          "black": 5
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 8,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "dragon-yugoslav-race",
+      "declared": "middlegame",
+      "positions": 12,
+      "detected": {
+        "opening": 0,
+        "middlegame": 12,
+        "endgame": 0,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2BNP3/2N1BP2/PPPQ2PP/2KR3R b - - 6 10",
+        "detected": "middlegame",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 12,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "french-advance-black",
+      "declared": "opening",
+      "positions": 8,
+      "detected": {
+        "opening": 8,
+        "middlegame": 0,
+        "endgame": 0,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 4,
+          "black": 4
+        }
+      },
+      "conformance": {
+        "matches": 8,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "french-advance-chain-white",
+      "declared": "middlegame",
+      "positions": 10,
+      "detected": {
+        "opening": 0,
+        "middlegame": 10,
+        "endgame": 0,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r3kb1r/pp1b1ppp/1qn1p3/3pPn2/3P4/2N2N2/PP2BPPP/R1BQ1RK1 w kq - 3 10",
+        "detected": "middlegame",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 1,
+          "black": 1
+        }
+      },
+      "conformance": {
+        "matches": 10,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "grunfeld-exchange-fianchetto",
+      "declared": "middlegame",
+      "positions": 8,
+      "detected": {
+        "opening": 0,
+        "middlegame": 8,
+        "endgame": 0,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r1bq1rk1/pp2ppbp/2n3p1/8/3PP3/4BN2/P3BPPP/R2Q1RK1 b - - 0 11",
+        "detected": "middlegame",
+        "material": {
+          "white": 28,
+          "black": 28
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 1
+        }
+      },
+      "conformance": {
+        "matches": 8,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "iqp-black-tarrasch-defence",
+      "declared": "middlegame",
+      "positions": 10,
+      "detected": {
+        "opening": 0,
+        "middlegame": 10,
+        "endgame": 0,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r1bq1rk1/pp2bppp/2n2n2/3p2B1/3N4/2N3P1/PP2PPBP/R2Q1RK1 b - - 0 10",
+        "detected": "middlegame",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 1
+        }
+      },
+      "conformance": {
+        "matches": 10,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "iqp-white-panov-attack",
+      "declared": "middlegame",
+      "positions": 8,
+      "detected": {
+        "opening": 0,
+        "middlegame": 8,
+        "endgame": 0,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r1bq1rk1/pp2bppp/2n1p3/3n4/3P4/2NB1N2/PP3PPP/R1BQ1RK1 w - - 4 10",
+        "detected": "middlegame",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 1,
+          "black": 1
+        }
+      },
+      "conformance": {
+        "matches": 8,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "italian-center-attack-white",
+      "declared": "opening",
+      "positions": 14,
+      "detected": {
+        "opening": 0,
+        "middlegame": 6,
+        "endgame": 0,
+        "unclear": 8
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+        "detected": "unclear",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 2,
+          "black": 2
+        }
+      },
+      "conformance": {
+        "matches": 0,
+        "abstains": 8,
+        "mismatches": 6
+      },
+      "edgeChanges": 1,
+      "edgeTransitions": [
+        {
+          "nodeId": "p13-bd2",
+          "from": "unclear",
+          "to": "middlegame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "kid-classical-black",
+      "declared": "opening",
+      "positions": 13,
+      "detected": {
+        "opening": 0,
+        "middlegame": 8,
+        "endgame": 0,
+        "unclear": 5
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 5",
+        "detected": "unclear",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 2,
+          "black": 2
+        }
+      },
+      "conformance": {
+        "matches": 0,
+        "abstains": 5,
+        "mismatches": 8
+      },
+      "edgeChanges": 1,
+      "edgeTransitions": [
+        {
+          "nodeId": "p14-nc6",
+          "from": "unclear",
+          "to": "middlegame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "kid-mar-del-plata-white",
+      "declared": "middlegame",
+      "positions": 12,
+      "detected": {
+        "opening": 0,
+        "middlegame": 12,
+        "endgame": 0,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r1bq1rk1/ppp1npbp/3p1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 1 9",
+        "detected": "middlegame",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 1,
+          "black": 1
+        }
+      },
+      "conformance": {
+        "matches": 12,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "leningrad-dutch-black",
+      "declared": "opening",
+      "positions": 13,
+      "detected": {
+        "opening": 6,
+        "middlegame": 1,
+        "endgame": 0,
+        "unclear": 6
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkbnr/ppppp1pp/8/5p2/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 4,
+          "black": 4
+        }
+      },
+      "conformance": {
+        "matches": 6,
+        "abstains": 6,
+        "mismatches": 1
+      },
+      "edgeChanges": 2,
+      "edgeTransitions": [
+        {
+          "nodeId": "p9-nf3",
+          "from": "opening",
+          "to": "unclear"
+        },
+        {
+          "nodeId": "nc6-matulovic",
+          "from": "unclear",
+          "to": "middlegame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "london-system-white",
+      "declared": "opening",
+      "positions": 12,
+      "detected": {
+        "opening": 2,
+        "middlegame": 6,
+        "endgame": 0,
+        "unclear": 4
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/5N2/PPP1PPPP/RN1QKB1R w KQkq - 0 4",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 2,
+          "black": 3
+        }
+      },
+      "conformance": {
+        "matches": 2,
+        "abstains": 4,
+        "mismatches": 6
+      },
+      "edgeChanges": 2,
+      "edgeTransitions": [
+        {
+          "nodeId": "p8-nc6",
+          "from": "opening",
+          "to": "unclear"
+        },
+        {
+          "nodeId": "p12-bd6",
+          "from": "unclear",
+          "to": "middlegame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "london-wedge-black-counterplay",
+      "declared": "middlegame",
+      "positions": 15,
+      "detected": {
+        "opening": 0,
+        "middlegame": 15,
+        "endgame": 0,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r1bq1rk1/pp3ppp/2nbpn2/2pp4/3P4/2PBPNB1/PP1N1PPP/R2QK2R b KQ - 5 8",
+        "detected": "middlegame",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 1
+        }
+      },
+      "conformance": {
+        "matches": 15,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "lucena-bridge-convert",
+      "declared": "endgame",
+      "positions": 14,
+      "detected": {
+        "opening": 0,
+        "middlegame": 0,
+        "endgame": 14,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1",
+        "detected": "endgame",
+        "material": {
+          "white": 5,
+          "black": 5
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 14,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "maroczy-bind-white-squeeze",
+      "declared": "middlegame",
+      "positions": 10,
+      "detected": {
+        "opening": 0,
+        "middlegame": 10,
+        "endgame": 0,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/R2Q1RK1 w - - 2 10",
+        "detected": "middlegame",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 10,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "mate-bishop-knight",
+      "declared": "endgame",
+      "positions": 40,
+      "detected": {
+        "opening": 0,
+        "middlegame": 0,
+        "endgame": 40,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "8/8/4k3/8/4K3/2BN4/8/8 w - - 0 1",
+        "detected": "endgame",
+        "material": {
+          "white": 6,
+          "black": 0
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 40,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "mate-k-q-technique",
+      "declared": "endgame",
+      "positions": 20,
+      "detected": {
+        "opening": 0,
+        "middlegame": 0,
+        "endgame": 20,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "8/8/3k4/8/8/2Q5/6K1/8 w - - 0 1",
+        "detected": "endgame",
+        "material": {
+          "white": 9,
+          "black": 0
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 20,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "mate-k-r-technique",
+      "declared": "endgame",
+      "positions": 20,
+      "detected": {
+        "opening": 0,
+        "middlegame": 0,
+        "endgame": 20,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "8/3k4/8/8/8/3K4/7R/8 w - - 0 1",
+        "detected": "endgame",
+        "material": {
+          "white": 5,
+          "black": 0
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 20,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "mate-two-bishops",
+      "declared": "endgame",
+      "positions": 18,
+      "detected": {
+        "opening": 0,
+        "middlegame": 0,
+        "endgame": 18,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "3k4/8/8/3K4/3BB3/8/8/8 w - - 0 1",
+        "detected": "endgame",
+        "material": {
+          "white": 6,
+          "black": 0
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 18,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "najdorf-english-attack-black",
+      "declared": "opening",
+      "positions": 9,
+      "detected": {
+        "opening": 2,
+        "middlegame": 1,
+        "endgame": 0,
+        "unclear": 6
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 2,
+          "black": 3
+        }
+      },
+      "conformance": {
+        "matches": 2,
+        "abstains": 6,
+        "mismatches": 1
+      },
+      "edgeChanges": 2,
+      "edgeTransitions": [
+        {
+          "nodeId": "p11-be3",
+          "from": "opening",
+          "to": "unclear"
+        },
+        {
+          "nodeId": "be7-race",
+          "from": "unclear",
+          "to": "middlegame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "nimzo-doubled-c-pawns",
+      "declared": "middlegame",
+      "positions": 8,
+      "detected": {
+        "opening": 0,
+        "middlegame": 8,
+        "endgame": 0,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r2q1rk1/pbpn1ppp/1p1ppn2/6B1/2PP4/P1PBPN2/5PPP/R2QK2R w KQ - 2 10",
+        "detected": "middlegame",
+        "material": {
+          "white": 28,
+          "black": 28
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 8,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "open-centre-french-exchange-black",
+      "declared": "middlegame",
+      "positions": 9,
+      "detected": {
+        "opening": 0,
+        "middlegame": 5,
+        "endgame": 0,
+        "unclear": 4
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbq1rk1/ppp1nppp/3b4/3p4/3P4/3B1N2/PPP2PPP/RNBQR1K1 b - - 7 7",
+        "detected": "unclear",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 2,
+          "black": 2
+        }
+      },
+      "conformance": {
+        "matches": 5,
+        "abstains": 4,
+        "mismatches": 0
+      },
+      "edgeChanges": 1,
+      "edgeTransitions": [
+        {
+          "nodeId": "bg5-pin-main",
+          "from": "unclear",
+          "to": "middlegame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "open-centre-ruy-exchange",
+      "declared": "middlegame",
+      "positions": 10,
+      "detected": {
+        "opening": 5,
+        "middlegame": 0,
+        "endgame": 0,
+        "unclear": 5
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "r1bqkbnr/1pp3pp/p1p2p2/8/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 7",
+        "detected": "opening",
+        "material": {
+          "white": 28,
+          "black": 28
+        },
+        "undevelopedMinors": {
+          "white": 2,
+          "black": 3
+        }
+      },
+      "conformance": {
+        "matches": 0,
+        "abstains": 5,
+        "mismatches": 5
+      },
+      "edgeChanges": 2,
+      "edgeTransitions": [
+        {
+          "nodeId": "be6-develop",
+          "from": "opening",
+          "to": "unclear"
+        },
+        {
+          "nodeId": "bd6-develop",
+          "from": "opening",
+          "to": "unclear"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "opening-principles-black",
+      "declared": "opening",
+      "positions": 8,
+      "detected": {
+        "opening": 5,
+        "middlegame": 0,
+        "endgame": 0,
+        "unclear": 3
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 4,
+          "black": 4
+        }
+      },
+      "conformance": {
+        "matches": 5,
+        "abstains": 3,
+        "mismatches": 0
+      },
+      "edgeChanges": 1,
+      "edgeTransitions": [
+        {
+          "nodeId": "b3-bc5",
+          "from": "opening",
+          "to": "unclear"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "opening-principles-white",
+      "declared": "opening",
+      "positions": 8,
+      "detected": {
+        "opening": 6,
+        "middlegame": 0,
+        "endgame": 0,
+        "unclear": 2
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 4,
+          "black": 4
+        }
+      },
+      "conformance": {
+        "matches": 6,
+        "abstains": 2,
+        "mismatches": 0
+      },
+      "edgeChanges": 1,
+      "edgeTransitions": [
+        {
+          "nodeId": "b3-bc5",
+          "from": "opening",
+          "to": "unclear"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "opponent-intent-early-queen",
+      "declared": "opening",
+      "positions": 8,
+      "detected": {
+        "opening": 8,
+        "middlegame": 0,
+        "endgame": 0,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 4,
+          "black": 4
+        }
+      },
+      "conformance": {
+        "matches": 8,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "opposite-bishops-fortress-hold",
+      "declared": "endgame",
+      "positions": 6,
+      "detected": {
+        "opening": 0,
+        "middlegame": 0,
+        "endgame": 6,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "3b4/3k4/8/2PKP3/8/8/4B3/8 b - - 0 1",
+        "detected": "endgame",
+        "material": {
+          "white": 3,
+          "black": 3
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 6,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "pawn-breakthrough-convert",
+      "declared": "endgame",
+      "positions": 10,
+      "detected": {
+        "opening": 0,
+        "middlegame": 0,
+        "endgame": 10,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "8/pp6/4k3/PPP5/8/8/6K1/8 w - - 0 1",
+        "detected": "endgame",
+        "material": {
+          "white": 0,
+          "black": 0
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 10,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "pawn-opposition-convert",
+      "declared": "endgame",
+      "positions": 24,
+      "detected": {
+        "opening": 0,
+        "middlegame": 0,
+        "endgame": 24,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "8/8/4k3/8/4K3/8/4P3/8 w - - 0 1",
+        "detected": "endgame",
+        "material": {
+          "white": 0,
+          "black": 0
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 24,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "philidor-passive-rook-convert",
+      "declared": "endgame",
+      "positions": 16,
+      "detected": {
+        "opening": 0,
+        "middlegame": 0,
+        "endgame": 16,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "4k2r/R7/8/4K3/4P3/8/8/8 w - - 1 2",
+        "detected": "endgame",
+        "material": {
+          "white": 5,
+          "black": 5
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 16,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "philidor-third-rank-hold",
+      "declared": "endgame",
+      "positions": 14,
+      "detected": {
+        "opening": 0,
+        "middlegame": 0,
+        "endgame": 14,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "4k3/R7/7r/4K3/4P3/8/8/8 b - - 0 1",
+        "detected": "endgame",
+        "material": {
+          "white": 5,
+          "black": 5
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 14,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "queen-vs-pawn-seventh-convert",
+      "declared": "endgame",
+      "positions": 19,
+      "detected": {
+        "opening": 0,
+        "middlegame": 0,
+        "endgame": 19,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "8/7K/8/8/4Q3/8/1p6/2k5 w - - 0 1",
+        "detected": "endgame",
+        "material": {
+          "white": 9,
+          "black": 0
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 19,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "rook-4v3-same-side-hold",
+      "declared": "endgame",
+      "positions": 24,
+      "detected": {
+        "opening": 0,
+        "middlegame": 0,
+        "endgame": 24,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "3r2k1/5pp1/7p/8/4P3/8/5PPP/R5K1 w - - 0 1",
+        "detected": "endgame",
+        "material": {
+          "white": 5,
+          "black": 5
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 24,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "scandinavian-mainline-black",
+      "declared": "opening",
+      "positions": 17,
+      "detected": {
+        "opening": 9,
+        "middlegame": 4,
+        "endgame": 0,
+        "unclear": 4
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 4,
+          "black": 4
+        }
+      },
+      "conformance": {
+        "matches": 9,
+        "abstains": 4,
+        "mismatches": 4
+      },
+      "edgeChanges": 2,
+      "edgeTransitions": [
+        {
+          "nodeId": "p10-bg4",
+          "from": "opening",
+          "to": "unclear"
+        },
+        {
+          "nodeId": "p12-nc6",
+          "from": "unclear",
+          "to": "middlegame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "declared": "cross_phase",
+      "positions": 58,
+      "detected": {
+        "opening": 17,
+        "middlegame": 20,
+        "endgame": 16,
+        "unclear": 5
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 4,
+          "black": 4
+        }
+      },
+      "edgeChanges": 3,
+      "edgeTransitions": [
+        {
+          "nodeId": "p14-nc6",
+          "from": "opening",
+          "to": "unclear"
+        },
+        {
+          "nodeId": "p19-nc3",
+          "from": "unclear",
+          "to": "middlegame"
+        },
+        {
+          "nodeId": "p37-ab3",
+          "from": "middlegame",
+          "to": "endgame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "trajectory-mate-bishop-knight",
+      "declared": "endgame",
+      "positions": 40,
+      "detected": {
+        "opening": 0,
+        "middlegame": 0,
+        "endgame": 40,
+        "unclear": 0
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "8/8/4k3/8/4K3/2BN4/8/8 w - - 0 1",
+        "detected": "endgame",
+        "material": {
+          "white": 6,
+          "black": 0
+        },
+        "undevelopedMinors": {
+          "white": 0,
+          "black": 0
+        }
+      },
+      "conformance": {
+        "matches": 40,
+        "abstains": 0,
+        "mismatches": 0
+      },
+      "edgeChanges": 0,
+      "edgeTransitions": [],
+      "twoEdgeReversals": 0
+    },
+    {
+      "packId": "trajectory-qgd-exchange-minority",
+      "declared": "cross_phase",
+      "positions": 65,
+      "detected": {
+        "opening": 10,
+        "middlegame": 39,
+        "endgame": 7,
+        "unclear": 9
+      },
+      "root": {
+        "nodeId": "$start",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "detected": "opening",
+        "material": {
+          "white": 31,
+          "black": 31
+        },
+        "undevelopedMinors": {
+          "white": 4,
+          "black": 4
+        }
+      },
+      "edgeChanges": 4,
+      "edgeTransitions": [
+        {
+          "nodeId": "p10-be7",
+          "from": "opening",
+          "to": "unclear"
+        },
+        {
+          "nodeId": "p14-nbd7",
+          "from": "unclear",
+          "to": "middlegame"
+        },
+        {
+          "nodeId": "p49-rb2",
+          "from": "middlegame",
+          "to": "unclear"
+        },
+        {
+          "nodeId": "p54-ra5",
+          "from": "unclear",
+          "to": "endgame"
+        }
+      ],
+      "twoEdgeReversals": 0
+    }
+  ]
+}
