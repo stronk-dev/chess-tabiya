@@ -198,35 +198,6 @@ export const AUTHOR_PROJECTION_SUBJECT_OVERRIDES = Object.freeze({
   "rules.tactic.reading.trapped_piece": "position",
 } as const);
 
-/** Grain-specific sealed views required by a derivation without changing the
- * projection's primary subject. Each entry is an exact projection id. */
-export const AUTHOR_ADDITIONAL_SUBJECT_VIEWS = Object.freeze({
-  "live.stockfish.eval": Object.freeze(["edge", "branch_pair"]),
-  "recorded.engine.eval": Object.freeze(["edge"]),
-  "rules.endgame.reading": Object.freeze(["run_prefix"]),
-  "rules.king.reading.zone_state": Object.freeze(["edge"]),
-  "rules.pawn.reading.contacts": Object.freeze(["edge"]),
-  "rules.structural.reading.backward_pawn": Object.freeze(["branch_pair"]),
-  "rules.structural.reading.bishop_on_shade": Object.freeze(["branch_pair"]),
-  "rules.structural.reading.direct_attack_count": Object.freeze(["branch_pair"]),
-  "rules.structural.reading.doubled_pawn": Object.freeze(["branch_pair"]),
-  "rules.structural.reading.half_open_file": Object.freeze(["edge", "branch_pair"]),
-  "rules.structural.reading.isolated_pawn": Object.freeze(["branch_pair"]),
-  "rules.structural.reading.king_opposition": Object.freeze(["branch_pair"]),
-  "rules.structural.reading.king_zone": Object.freeze(["branch_pair"]),
-  "rules.structural.reading.line_blockers": Object.freeze(["branch_pair"]),
-  "rules.structural.reading.named_structure": Object.freeze(["branch_pair"]),
-  "rules.structural.reading.open_file": Object.freeze(["edge", "branch_pair"]),
-  "rules.structural.reading.outpost": Object.freeze(["branch_pair"]),
-  "rules.structural.reading.passed_pawn": Object.freeze(["branch_pair"]),
-  "rules.structural.reading.pawn_safe_square": Object.freeze(["branch_pair"]),
-  "rules.structural.reading.piece_count": Object.freeze(["branch_pair"]),
-  "rules.structural.reading.piece_distance": Object.freeze(["branch_pair"]),
-  "rules.structural.reading.piece_reach_count": Object.freeze(["branch_pair"]),
-  "rules.tactic.reading.discovered_latency": Object.freeze(["edge"]),
-  "theory.shapes.firing": Object.freeze(["run_prefix"]),
-} as const);
-
 export const STAGE_BY_PRODUCER = Object.freeze({
   "rules.structural": "position_local", "rules.transition": "edge_local",
   "rules.castling": "position_or_edge_local", "rules.exchange": "edge_local",

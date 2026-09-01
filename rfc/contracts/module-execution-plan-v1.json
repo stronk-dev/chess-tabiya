@@ -10,13 +10,26 @@
   "sourceContracts": [
     {
       "id": "candidate_population@1",
-      "authority": "candidate-packet",
+      "authority": "shared-candidate-evidence-packet",
       "input": "CandidatePopulationRequest",
-      "invoke": "collectCandidatePopulation",
-      "extract": "projection-keyed admitted items",
-      "parse": "parseEvidencePayloadByProjection",
-      "abstain": "CandidateEvidenceAbsence",
-      "seal": "SealedCandidatePopulation",
+      "operation": {
+        "owner": "rfc/shared-candidate-evidence-packet.md",
+        "callable": "CandidatePopulationService.get(request, signal)"
+      },
+      "extract": "candidate occurrence view only",
+      "views": [
+        "root_legal_population",
+        "candidate_child_position_by_uci",
+        "candidate_edge_by_uci",
+        "complete_candidate_population"
+      ],
+      "forbiddenViews": [
+        "committed_edge",
+        "current_root_projection"
+      ],
+      "parse": "assertCandidatePopulationReceipt",
+      "abstain": "CandidatePopulationFailure",
+      "seal": "CandidatePopulationReceipt",
       "subjectKinds": [
         "position",
         "edge"
@@ -34,13 +47,25 @@
     },
     {
       "id": "recorded_semantic_path@1",
-      "authority": "semantic-collectors",
+      "authority": "recorded-semantic-path",
       "input": "RecordedSemanticPathRequest",
-      "invoke": "compileRecordedSemanticPath",
-      "extract": "ordered projection-keyed path events",
-      "parse": "parseEvidencePayloadByProjection",
-      "abstain": "RecordedPathAbsence",
-      "seal": "SealedRecordedSemanticPath",
+      "operation": {
+        "owner": "rfc/recorded-semantic-path.md",
+        "callable": "compileRecordedSemanticPath(input)"
+      },
+      "extract": "ordered projection-keyed path occurrences",
+      "views": [
+        "recorded_position",
+        "recorded_edge",
+        "recorded_branch_pair",
+        "frozen_run_prefix"
+      ],
+      "forbiddenViews": [
+        "hypothetical_candidate"
+      ],
+      "parse": "assertRecordedSemanticPathResult",
+      "abstain": "RecordedPathRefusalReason",
+      "seal": "RecordedSemanticPathResult.available",
       "subjectKinds": [
         "position",
         "edge",
@@ -59,12 +84,24 @@
     {
       "id": "review_evidence_packet@1",
       "authority": "review-evidence-compiler",
-      "input": "ReviewEvidenceRequest",
-      "invoke": "compileReviewEvidencePacket",
-      "extract": "projection-keyed frozen-prefix items",
-      "parse": "parseEvidencePayloadByProjection",
-      "abstain": "ReviewEvidenceAbsence",
-      "seal": "SealedReviewEvidencePacket",
+      "input": "ReviewEvidenceInput",
+      "operation": {
+        "owner": "rfc/review-evidence-compiler.md",
+        "callable": "compileReviewEvidence(input)"
+      },
+      "extract": "projection-keyed frozen-prefix occurrences",
+      "views": [
+        "recorded_edge",
+        "recorded_branch_pair",
+        "frozen_run_prefix"
+      ],
+      "forbiddenViews": [
+        "current_root",
+        "hypothetical_candidate"
+      ],
+      "parse": "assertReviewEvidencePacket",
+      "abstain": "ReviewFamilyState",
+      "seal": "ReviewEvidencePacket",
       "subjectKinds": [
         "edge",
         "branch_pair",
@@ -79,13 +116,23 @@
     },
     {
       "id": "catalogue_evidence_packet@1",
-      "authority": "pack-population-provenance",
-      "input": "CatalogueEvidenceRequest",
-      "invoke": "resolveCatalogueEvidence",
-      "extract": "projection-keyed cited catalogue items",
-      "parse": "parseEvidencePayloadByProjection",
-      "abstain": "CatalogueEvidenceAbsence",
-      "seal": "SealedCatalogueEvidencePacket",
+      "authority": "module-registration",
+      "input": "CatalogueEvidencePoolRequest",
+      "operation": {
+        "owner": "rfc/module-registration.md",
+        "callable": "compileCatalogueEvidencePool(input)"
+      },
+      "extract": "exact cited pack/shape/theory declared items",
+      "views": [
+        "applicable_catalogue_position"
+      ],
+      "forbiddenViews": [
+        "uncited_text",
+        "whole_catalogue_search"
+      ],
+      "parse": "assertCatalogueEvidencePool",
+      "abstain": "CatalogueEvidencePoolAbsence",
+      "seal": "CatalogueEvidencePoolReceipt",
       "subjectKinds": [
         "position"
       ],
@@ -96,17 +143,28 @@
         "review",
         "analysis"
       ],
-      "status": "awaiting_upstream_sealed_operation"
+      "status": "awaiting_module_owned_adapter"
     },
     {
       "id": "provider_evidence_packet@1",
-      "authority": "provider-evidence-exchange",
-      "input": "ProviderEvidenceRequest",
-      "invoke": "requestProviderEvidence",
-      "extract": "projection-keyed provider receipts",
-      "parse": "parseEvidencePayloadByProjection",
-      "abstain": "ProviderEvidenceAbsence",
-      "seal": "SealedProviderEvidencePacket",
+      "authority": "provider-exchange-and-execution",
+      "input": "TypedProviderRequest",
+      "operation": {
+        "owner": "rfc/provider-exchange-and-execution.md",
+        "callable": "ProviderExchangeScheduler.get(request, scope, signal)"
+      },
+      "extract": "one operation-keyed declared provider delivery",
+      "views": [
+        "request_position",
+        "request_edge",
+        "frozen_run_prefix"
+      ],
+      "forbiddenViews": [
+        "generic_provider_pool"
+      ],
+      "parse": "assertProviderDelivery",
+      "abstain": "TypedProviderResult.unavailable",
+      "seal": "DeclaredEvidence<ProviderEvidenceDelivery>",
       "subjectKinds": [
         "position",
         "edge",
@@ -232,6 +290,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -297,6 +356,7 @@
       "subjectAuthority": {
         "subjectKind": "branch_pair",
         "acquisition": "review_evidence_packet@1",
+        "occurrenceView": "recorded_branch_pair",
         "adapter": "identity"
       },
       "acquisition": "review_evidence_packet@1",
@@ -346,6 +406,7 @@
       "subjectAuthority": {
         "subjectKind": "branch_pair",
         "acquisition": "review_evidence_packet@1",
+        "occurrenceView": "recorded_branch_pair",
         "adapter": "identity"
       },
       "acquisition": "review_evidence_packet@1",
@@ -368,9 +429,37 @@
               "version": 1
             },
             "sourceSubjectKind": "position",
-            "relation": "branch_pair_position_endpoints"
+            "relation": "operation_owned_occurrences"
           }
-        ]
+        ],
+        "occurrenceContract": {
+          "kind": "ordered_endpoints",
+          "alternatives": [
+            {
+              "operands": [
+                {
+                  "projection": "live.stockfish.eval",
+                  "cardinality": 2,
+                  "endpointRoles": [
+                    "branch_a",
+                    "branch_b"
+                  ]
+                }
+              ]
+            }
+          ],
+          "equality": [
+            "declared_branch_pair_order",
+            "same_engine_id",
+            "same_search_limit",
+            "same_score_domain"
+          ]
+        },
+        "operationRequirement": {
+          "owner": "rfc/review-evidence-compiler.md",
+          "callable": "compileReviewEvidence(input)",
+          "status": "awaiting_upstream_occurrence_receipt"
+        }
       },
       "requiredOutput": {
         "kind": "sealed_projection_item",
@@ -395,6 +484,7 @@
       "subjectAuthority": {
         "subjectKind": "branch_pair",
         "acquisition": "review_evidence_packet@1",
+        "occurrenceView": "recorded_branch_pair",
         "adapter": "identity"
       },
       "acquisition": "review_evidence_packet@1",
@@ -444,6 +534,7 @@
       "subjectAuthority": {
         "subjectKind": "branch_pair",
         "acquisition": "review_evidence_packet@1",
+        "occurrenceView": "recorded_branch_pair",
         "adapter": "identity"
       },
       "acquisition": "review_evidence_packet@1",
@@ -685,6 +776,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -746,6 +838,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -807,6 +900,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "review_evidence_packet@1",
+        "occurrenceView": "recorded_edge",
         "adapter": "identity"
       },
       "acquisition": "review_evidence_packet@1",
@@ -833,7 +927,7 @@
               "version": 1
             },
             "sourceSubjectKind": "position",
-            "relation": "edge_position_endpoints"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -841,9 +935,50 @@
               "version": 1
             },
             "sourceSubjectKind": "position",
-            "relation": "edge_position_endpoints"
+            "relation": "operation_owned_occurrences"
           }
-        ]
+        ],
+        "occurrenceContract": {
+          "kind": "ordered_endpoints",
+          "alternatives": [
+            {
+              "operands": [
+                {
+                  "projection": "recorded.engine.eval",
+                  "cardinality": 2,
+                  "endpointRoles": [
+                    "before",
+                    "after"
+                  ]
+                }
+              ]
+            },
+            {
+              "operands": [
+                {
+                  "projection": "live.stockfish.eval",
+                  "cardinality": 2,
+                  "endpointRoles": [
+                    "before",
+                    "after"
+                  ]
+                }
+              ]
+            }
+          ],
+          "equality": [
+            "same_edge",
+            "same_lane",
+            "same_engine_id",
+            "same_search_limit"
+          ],
+          "status": "awaiting_upstream_same_lane_anyof_D2473"
+        },
+        "operationRequirement": {
+          "owner": "rfc/move-quality-grades.md",
+          "callable": "moveQualityGrade(before, after, context)",
+          "status": "awaiting_upstream_occurrence_receipt"
+        }
       },
       "requiredOutput": {
         "kind": "sealed_projection_item",
@@ -868,6 +1003,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -929,6 +1065,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -978,6 +1115,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -1027,6 +1165,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -1076,6 +1215,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -1125,6 +1265,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -1174,6 +1315,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -1223,6 +1365,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -1272,6 +1415,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -1321,6 +1465,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -1370,6 +1515,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -1419,6 +1565,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -1468,6 +1615,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -1517,6 +1665,7 @@
       "subjectAuthority": {
         "subjectKind": "run_prefix",
         "acquisition": "review_evidence_packet@1",
+        "occurrenceView": "frozen_run_prefix",
         "adapter": "identity"
       },
       "acquisition": "review_evidence_packet@1",
@@ -1638,6 +1787,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "recorded_edge",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -1680,7 +1830,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -1688,7 +1838,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -1696,7 +1846,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -1704,7 +1854,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -1712,9 +1862,101 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           }
-        ]
+        ],
+        "occurrenceContract": {
+          "kind": "ordered_window",
+          "alternatives": [
+            {
+              "horizon": 3,
+              "outputEdgeOffset": 3,
+              "operands": [
+                {
+                  "projection": "run.record.move",
+                  "cardinality": 3,
+                  "edgeOffsets": [
+                    1,
+                    2,
+                    3
+                  ],
+                  "roles": [
+                    "bait_move",
+                    "heavy_piece_capture",
+                    "checking_consequence"
+                  ]
+                },
+                {
+                  "projection": "rules.transition.event.capture",
+                  "cardinality": 1,
+                  "edgeOffsets": [
+                    2
+                  ],
+                  "roles": [
+                    "heavy_piece_capture"
+                  ]
+                },
+                {
+                  "projection": "rules.tactic.event.check",
+                  "cardinality": 1,
+                  "edgeOffsets": [
+                    3
+                  ],
+                  "roles": [
+                    "checking_consequence"
+                  ]
+                }
+              ]
+            },
+            {
+              "horizon": 5,
+              "outputEdgeOffset": 5,
+              "operands": [
+                {
+                  "projection": "run.record.move",
+                  "cardinality": 5,
+                  "edgeOffsets": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5
+                  ],
+                  "roles": [
+                    "bait_move",
+                    "heavy_piece_capture",
+                    "attack_arrival",
+                    "reply",
+                    "heavy_piece_consequence"
+                  ]
+                },
+                {
+                  "projection": "rules.transition.event.capture",
+                  "cardinality": 2,
+                  "edgeOffsets": [
+                    2,
+                    5
+                  ],
+                  "roles": [
+                    "heavy_piece_capture",
+                    "heavy_piece_consequence"
+                  ]
+                }
+              ]
+            }
+          ],
+          "equality": [
+            "same_recorded_branch",
+            "contiguous_node_fen",
+            "same_arrival_square",
+            "same_heavy_piece_identity"
+          ]
+        },
+        "operationRequirement": {
+          "owner": "rfc/semantic-collectors.md",
+          "callable": "recordedSemanticPath(run, branchId)",
+          "status": "awaiting_upstream_occurrence_receipt"
+        }
       },
       "requiredOutput": {
         "kind": "sealed_projection_item",
@@ -1739,6 +1981,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "recorded_edge",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -1773,7 +2016,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -1781,7 +2024,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -1789,7 +2032,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -1797,9 +2040,78 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           }
-        ]
+        ],
+        "occurrenceContract": {
+          "kind": "ordered_window",
+          "alternatives": [
+            {
+              "horizon": 4,
+              "outputEdgeOffset": 4,
+              "operands": [
+                {
+                  "projection": "run.record.move",
+                  "cardinality": 4,
+                  "edgeOffsets": [
+                    1,
+                    2,
+                    3,
+                    4
+                  ],
+                  "roles": [
+                    "initial_capture",
+                    "intermediate_check",
+                    "check_reply",
+                    "retained_recapture"
+                  ]
+                },
+                {
+                  "projection": "rules.transition.event.capture",
+                  "cardinality": 2,
+                  "edgeOffsets": [
+                    1,
+                    4
+                  ],
+                  "roles": [
+                    "initial_capture",
+                    "retained_recapture"
+                  ]
+                },
+                {
+                  "projection": "rules.tactic.event.check",
+                  "cardinality": 1,
+                  "edgeOffsets": [
+                    2
+                  ],
+                  "roles": [
+                    "intermediate_check"
+                  ]
+                },
+                {
+                  "projection": "rules.exchange.predicate.legal_exchange",
+                  "cardinality": 1,
+                  "edgeOffsets": [
+                    4
+                  ],
+                  "roles": [
+                    "positive_retained_recapture"
+                  ]
+                }
+              ]
+            }
+          ],
+          "equality": [
+            "same_recorded_branch",
+            "contiguous_node_fen",
+            "same_recapture_square"
+          ]
+        },
+        "operationRequirement": {
+          "owner": "rfc/semantic-collectors.md",
+          "callable": "recordedSemanticPath(run, branchId)",
+          "status": "awaiting_upstream_occurrence_receipt"
+        }
       },
       "requiredOutput": {
         "kind": "sealed_projection_item",
@@ -1824,6 +2136,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "recorded_edge",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -1885,6 +2198,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "recorded_edge",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -1919,7 +2233,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -1927,7 +2241,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -1935,7 +2249,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -1943,9 +2257,76 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           }
-        ]
+        ],
+        "occurrenceContract": {
+          "kind": "ordered_window",
+          "alternatives": [
+            {
+              "horizon": 3,
+              "outputEdgeOffset": 3,
+              "operands": [
+                {
+                  "projection": "run.record.move",
+                  "cardinality": 3,
+                  "edgeOffsets": [
+                    1,
+                    2,
+                    3
+                  ],
+                  "roles": [
+                    "bait_move",
+                    "defender_reply",
+                    "target_capture"
+                  ]
+                },
+                {
+                  "projection": "rules.tactic.reading.defender_duty_set",
+                  "cardinality": 1,
+                  "positionOffsets": [
+                    0
+                  ],
+                  "roles": [
+                    "duty_before"
+                  ]
+                },
+                {
+                  "projection": "rules.transition.event.capture",
+                  "cardinality": 2,
+                  "edgeOffsets": [
+                    2,
+                    3
+                  ],
+                  "roles": [
+                    "bait_capture",
+                    "target_capture"
+                  ]
+                },
+                {
+                  "projection": "rules.exchange.predicate.legal_exchange",
+                  "cardinality": 1,
+                  "edgeOffsets": [
+                    3
+                  ],
+                  "roles": [
+                    "positive_target_capture"
+                  ]
+                }
+              ]
+            }
+          ],
+          "equality": [
+            "same_recorded_branch",
+            "contiguous_node_fen",
+            "retained_piece_identities"
+          ]
+        },
+        "operationRequirement": {
+          "owner": "rfc/semantic-collectors.md",
+          "callable": "recordedSemanticPath(run, branchId)",
+          "status": "awaiting_upstream_occurrence_receipt"
+        }
       },
       "requiredOutput": {
         "kind": "sealed_projection_item",
@@ -1970,6 +2351,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "recorded_edge",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -2031,6 +2413,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "recorded_edge",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -2061,7 +2444,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -2069,7 +2452,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -2077,9 +2460,64 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           }
-        ]
+        ],
+        "occurrenceContract": {
+          "kind": "ordered_window",
+          "alternatives": [
+            {
+              "horizon": 3,
+              "outputEdgeOffset": 3,
+              "operands": [
+                {
+                  "projection": "run.record.move",
+                  "cardinality": 3,
+                  "edgeOffsets": [
+                    1,
+                    2,
+                    3
+                  ],
+                  "roles": [
+                    "interposition",
+                    "reply",
+                    "target_capture"
+                  ]
+                },
+                {
+                  "projection": "rules.tactic.reading.defender_duty_set",
+                  "cardinality": 1,
+                  "positionOffsets": [
+                    0
+                  ],
+                  "roles": [
+                    "duty_before"
+                  ]
+                },
+                {
+                  "projection": "rules.exchange.predicate.legal_exchange",
+                  "cardinality": 1,
+                  "edgeOffsets": [
+                    3
+                  ],
+                  "roles": [
+                    "positive_target_capture"
+                  ]
+                }
+              ]
+            }
+          ],
+          "equality": [
+            "same_recorded_branch",
+            "contiguous_node_fen",
+            "same_duty_and_target"
+          ]
+        },
+        "operationRequirement": {
+          "owner": "rfc/semantic-collectors.md",
+          "callable": "recordedSemanticPath(run, branchId)",
+          "status": "awaiting_upstream_occurrence_receipt"
+        }
       },
       "requiredOutput": {
         "kind": "sealed_projection_item",
@@ -2104,6 +2542,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "recorded_edge",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -2130,7 +2569,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -2138,9 +2577,54 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           }
-        ]
+        ],
+        "occurrenceContract": {
+          "kind": "ordered_window",
+          "alternatives": [
+            {
+              "horizon": 3,
+              "outputEdgeOffset": 3,
+              "operands": [
+                {
+                  "projection": "run.record.move",
+                  "cardinality": 3,
+                  "edgeOffsets": [
+                    1,
+                    2,
+                    3
+                  ],
+                  "roles": [
+                    "blocker_vacates",
+                    "reply",
+                    "slider_capture"
+                  ]
+                },
+                {
+                  "projection": "rules.exchange.predicate.legal_exchange",
+                  "cardinality": 1,
+                  "edgeOffsets": [
+                    3
+                  ],
+                  "roles": [
+                    "positive_slider_capture"
+                  ]
+                }
+              ]
+            }
+          ],
+          "equality": [
+            "same_recorded_branch",
+            "contiguous_node_fen",
+            "same_slider_and_target"
+          ]
+        },
+        "operationRequirement": {
+          "owner": "rfc/semantic-collectors.md",
+          "callable": "recordedSemanticPath(run, branchId)",
+          "status": "awaiting_upstream_occurrence_receipt"
+        }
       },
       "requiredOutput": {
         "kind": "sealed_projection_item",
@@ -2165,6 +2649,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "recorded_edge",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -2199,7 +2684,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -2207,7 +2692,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -2215,7 +2700,7 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           },
           {
             "projection": {
@@ -2223,9 +2708,79 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           }
-        ]
+        ],
+        "occurrenceContract": {
+          "kind": "ordered_window",
+          "alternatives": [
+            {
+              "horizon": 3,
+              "outputEdgeOffset": 3,
+              "operands": [
+                {
+                  "projection": "run.record.move",
+                  "cardinality": 3,
+                  "edgeOffsets": [
+                    1,
+                    2,
+                    3
+                  ],
+                  "roles": [
+                    "first_target_capture",
+                    "defender_recapture",
+                    "second_target_capture"
+                  ]
+                },
+                {
+                  "projection": "rules.tactic.reading.defender_duty_set",
+                  "cardinality": 1,
+                  "positionOffsets": [
+                    0
+                  ],
+                  "roles": [
+                    "multi_duty_before"
+                  ]
+                },
+                {
+                  "projection": "rules.transition.event.capture",
+                  "cardinality": 3,
+                  "edgeOffsets": [
+                    1,
+                    2,
+                    3
+                  ],
+                  "roles": [
+                    "first_target_capture",
+                    "defender_recapture",
+                    "second_target_capture"
+                  ]
+                },
+                {
+                  "projection": "rules.exchange.predicate.legal_exchange",
+                  "cardinality": 1,
+                  "edgeOffsets": [
+                    3
+                  ],
+                  "roles": [
+                    "positive_second_capture"
+                  ]
+                }
+              ]
+            }
+          ],
+          "equality": [
+            "same_recorded_branch",
+            "contiguous_node_fen",
+            "same_defender",
+            "different_retained_target"
+          ]
+        },
+        "operationRequirement": {
+          "owner": "rfc/semantic-collectors.md",
+          "callable": "recordedSemanticPath(run, branchId)",
+          "status": "awaiting_upstream_occurrence_receipt"
+        }
       },
       "requiredOutput": {
         "kind": "sealed_projection_item",
@@ -2250,6 +2805,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "recorded_edge",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -2323,6 +2879,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "recorded_edge",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -2345,9 +2902,44 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "same_edge"
+            "relation": "operation_owned_occurrences"
           }
-        ]
+        ],
+        "occurrenceContract": {
+          "kind": "ordered_window",
+          "alternatives": [
+            {
+              "horizon": 3,
+              "outputEdgeOffset": 3,
+              "operands": [
+                {
+                  "projection": "run.record.move",
+                  "cardinality": 3,
+                  "edgeOffsets": [
+                    1,
+                    2,
+                    3
+                  ],
+                  "roles": [
+                    "square_vacated",
+                    "reply",
+                    "quiet_slider_move"
+                  ]
+                }
+              ]
+            }
+          ],
+          "equality": [
+            "same_recorded_branch",
+            "contiguous_node_fen",
+            "same_vacated_square"
+          ]
+        },
+        "operationRequirement": {
+          "owner": "rfc/semantic-collectors.md",
+          "callable": "recordedSemanticPath(run, branchId)",
+          "status": "awaiting_upstream_occurrence_receipt"
+        }
       },
       "requiredOutput": {
         "kind": "sealed_projection_item",
@@ -2372,6 +2964,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "provider_evidence_packet@1",
+        "occurrenceView": "request_position",
         "adapter": "identity"
       },
       "acquisition": "provider_evidence_packet@1",
@@ -2399,6 +2992,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "provider_evidence_packet@1",
+        "occurrenceView": "request_position",
         "adapter": "identity"
       },
       "acquisition": "provider_evidence_packet@1",
@@ -2426,6 +3020,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "provider_evidence_packet@1",
+        "occurrenceView": "request_position",
         "adapter": "identity"
       },
       "acquisition": "provider_evidence_packet@1",
@@ -2453,6 +3048,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "provider_evidence_packet@1",
+        "occurrenceView": "request_position",
         "adapter": "identity"
       },
       "acquisition": "provider_evidence_packet@1",
@@ -2480,6 +3076,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "provider_evidence_packet@1",
+        "occurrenceView": "request_position",
         "adapter": "identity"
       },
       "acquisition": "provider_evidence_packet@1",
@@ -2507,6 +3104,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "provider_evidence_packet@1",
+        "occurrenceView": "request_position",
         "adapter": "identity"
       },
       "acquisition": "provider_evidence_packet@1",
@@ -2534,6 +3132,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "provider_evidence_packet@1",
+        "occurrenceView": "request_position",
         "adapter": "identity"
       },
       "acquisition": "provider_evidence_packet@1",
@@ -2561,6 +3160,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "provider_evidence_packet@1",
+        "occurrenceView": "request_position",
         "adapter": "identity"
       },
       "acquisition": "provider_evidence_packet@1",
@@ -2588,6 +3188,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "provider_evidence_packet@1",
+        "occurrenceView": "request_position",
         "adapter": "identity"
       },
       "acquisition": "provider_evidence_packet@1",
@@ -2615,6 +3216,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "catalogue_evidence_packet@1",
+        "occurrenceView": "applicable_catalogue_position",
         "adapter": "identity"
       },
       "acquisition": "catalogue_evidence_packet@1",
@@ -2642,6 +3244,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "recorded_position",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -2669,6 +3272,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "recorded_position",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -2696,6 +3300,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -2723,6 +3328,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -2750,6 +3356,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -2777,6 +3384,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -2804,6 +3412,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -2831,6 +3440,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -2858,6 +3468,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -2885,6 +3496,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -2912,6 +3524,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -2939,6 +3552,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -2966,6 +3580,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -2993,6 +3608,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3020,6 +3636,7 @@
       "subjectAuthority": {
         "subjectKind": "run_prefix",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "frozen_run_prefix",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -3047,6 +3664,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3074,6 +3692,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3101,6 +3720,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3128,6 +3748,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3155,6 +3776,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3182,6 +3804,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3209,6 +3832,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3236,6 +3860,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3263,6 +3888,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3290,6 +3916,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3317,6 +3944,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3344,6 +3972,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3371,6 +4000,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3398,6 +4028,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3425,6 +4056,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3452,6 +4084,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3479,6 +4112,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3506,6 +4140,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3533,6 +4168,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3560,6 +4196,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3587,6 +4224,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3614,6 +4252,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3641,6 +4280,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3668,6 +4308,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3695,6 +4336,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3722,6 +4364,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3749,6 +4392,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3776,6 +4420,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3803,6 +4448,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3830,6 +4476,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3857,6 +4504,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3884,6 +4532,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3911,6 +4560,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3938,6 +4588,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3965,6 +4616,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -3992,6 +4644,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4019,6 +4672,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4046,6 +4700,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4073,6 +4728,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4100,6 +4756,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4127,6 +4784,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4154,6 +4812,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4181,6 +4840,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4208,6 +4868,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4235,6 +4896,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4262,6 +4924,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4289,6 +4952,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4316,6 +4980,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4343,6 +5008,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4370,6 +5036,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4397,6 +5064,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4424,6 +5092,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4451,6 +5120,7 @@
       "subjectAuthority": {
         "subjectKind": "edge",
         "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
         "adapter": "identity"
       },
       "acquisition": "candidate_population@1",
@@ -4478,6 +5148,7 @@
       "subjectAuthority": {
         "subjectKind": "run_prefix",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "frozen_run_prefix",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -4505,6 +5176,7 @@
       "subjectAuthority": {
         "subjectKind": "run_prefix",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "frozen_run_prefix",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -4532,6 +5204,7 @@
       "subjectAuthority": {
         "subjectKind": "run_prefix",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "frozen_run_prefix",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -4559,6 +5232,7 @@
       "subjectAuthority": {
         "subjectKind": "run_prefix",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "frozen_run_prefix",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -4586,6 +5260,7 @@
       "subjectAuthority": {
         "subjectKind": "run_prefix",
         "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "frozen_run_prefix",
         "adapter": "identity"
       },
       "acquisition": "recorded_semantic_path@1",
@@ -4613,6 +5288,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "catalogue_evidence_packet@1",
+        "occurrenceView": "applicable_catalogue_position",
         "adapter": "identity"
       },
       "acquisition": "catalogue_evidence_packet@1",
@@ -4640,6 +5316,7 @@
       "subjectAuthority": {
         "subjectKind": "position",
         "acquisition": "catalogue_evidence_packet@1",
+        "occurrenceView": "applicable_catalogue_position",
         "adapter": "identity"
       },
       "acquisition": "catalogue_evidence_packet@1",
@@ -4654,5 +5331,5 @@
       "status": "awaiting_upstream_sealed_operation"
     }
   ],
-  "digest": "sha256:7be8b01c32970a905e1727ca30b3f43f8c02e8ddc579db50c35df04cb472e75e"
+  "digest": "sha256:5b744f7abb68ff9de2b0e4fc323b1c18f9a8966ed2908cd31e20225b2f5106d5"
 }

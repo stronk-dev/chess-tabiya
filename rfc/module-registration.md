@@ -1,7 +1,7 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — returned by fifth fresh independent review on
-  [[D2432]]–[[D2435]].** The fourth repair rejects the prior generator's
+- **Status:** **draft — sixth author repair complete on [[D2432]]–[[D2435]] and [[D2473]];
+  another fresh independent review is required.** The fourth repair rejects the prior generator's
   central premise: learner modules do not invoke 117 detector/provider functions. They consume
   projection-keyed sealed pools produced by the candidate packet, recorded semantic path, Review,
   catalogue and provider authorities. The generated artifacts are therefore digest-sealed
@@ -24,10 +24,17 @@
   mint final timing until the exact upstream operation supplies applicability. Exact repair:
   `planning/learner-modules/fifth-author-repair-2026-08-31.md`; maintained targets plus
   `make module-registration-fifth-author-repair` pass. That repair keeps timing unresolved, but
-  its grain-only relations cannot express multi-edge tactics or ordered delta operands; the candidate
-  packet has no root/child occurrence selector; and the five source contracts name operations their
-  owners do not declare. Exact return:
-  `planning/learner-modules/fifth-fresh-independent-buildability-review-2026-08-31.md`. A sixth author repair and another fresh review are required. The
+  its grain-only relations could not express multi-edge tactics or ordered delta operands; the candidate
+  packet had no root/child occurrence selector; and the five source contracts named operations their
+  owners did not declare. Exact return:
+  `planning/learner-modules/fifth-fresh-independent-buildability-review-2026-08-31.md`. The
+  sixth repair now retains operation-owned ordered window/endpoints contracts, publishes four exact
+  candidate occurrence views while forbidding committed/root projection impersonation, binds the
+  five sources to their actual callable contracts (including one module-owned catalogue adapter),
+  and leaves every exact occurrence/timing operation unresolved. It also records [[D2473]]: move
+  quality's manifest conjunction contradicts its accepted same-lane alternative rule. `make
+  module-registration-sixth-author-repair` passes 5/5; no row becomes executable. Another fresh
+  review is required. The
   [[D1870]]/[[D2030]] dependency image remains the owner-ruled measured 207-pair target,
   including requested-Sight `pawn_safe_square`. Prior
   amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt
@@ -257,6 +264,38 @@ historical §2.5.0. It does not make any requirements-only row executable.
 The regenerated artifacts remain 117 evidence requirements and 205 non-hint binding requirements,
 all dependency-blocked and `requirements_only`. `make module-registration-fifth-author-repair`
 crosses all three returned seams. Another fresh independent review remains required.
+
+## Sixth author repair — exact occurrences without a second execution engine (2026-09-01)
+
+This section repairs [[D2432]]–[[D2435]] and records the upstream contradiction [[D2473]]. It does
+not turn any requirement into an executable binding.
+
+1. **Multi-edge tactics retain their operation-owned topology.** The seven observed projections
+   carry literal alternative windows with horizon, ordered edge/position offsets, occurrence roles,
+   cardinalities, output edge and equality joins. Three-, four- and five-edge operations can no
+   longer compile as `same_edge`. Their callable owner remains `recordedSemanticPath(run,branchId)`;
+   final emission waits for its sealed per-projection occurrence receipt.
+2. **Candidate population has four exact views, not one generic pool.** Its service operation is
+   `CandidatePopulationService.get(request,signal)`. `root_legal_population` contains only the
+   legal root authority; `candidate_child_position_by_uci` and `candidate_edge_by_uci` select one
+   canonical row; `complete_candidate_population` retains all rows for denominators. It explicitly
+   cannot provide `committed_edge` or an arbitrary `current_root_projection`. Every candidate-backed
+   module pair names its view and canonical-UCI selector, while its exact projection operation stays
+   null. A post-commit/current-position consumer must resolve through the recorded path or a real
+   position operation; it cannot reinterpret a hypothetical child.
+3. **Signed deltas retain ordered operands.** Compare eval delta requires exactly branch-A and
+   branch-B eval occurrences with identical engine/search/domain. Move quality requires exactly
+   before/after occurrences from either the recorded lane or the live lane, with identical
+   engine/search limit. The latter is held `awaiting_upstream_same_lane_anyof_D2473`, because its
+   current manifest declares the two lanes as a conjunction while its accepted RFC forbids mixing.
+4. **Five source contracts name real operations.** Candidate, recorded path, Review and provider
+   sources reference their owners' exact callable APIs. Catalogue acquisition is the one new
+   module-owned adapter, `compileCatalogueEvidencePool(input)`, specified below. The rejected
+   `AUTHOR_ADDITIONAL_SUBJECT_VIEWS` export is deleted. No placeholder invocation string survives.
+
+The artifacts remain digest-sealed requirements: 117 evidence rows and 205 pairs, all final timing,
+occurrence-operation and presentation fields blocked. `make module-registration-sixth-author-repair`
+is positive author evidence only; another fresh review gates acceptance.
 
 ## Summary
 
@@ -877,10 +916,56 @@ complement from the manifest; this prose list is illustrative, not a second card
 
 The current machine-readable contract is `module-execution-plan-v1.json` plus
 `module-binding-plan-v1.json`. An evidence row names its intrinsic subject authority and, for a
-derived output, literal input bindings with the closed relations in the fifth author repair. A
-binding row is a requirement only: forms/roles/sessions/budgets are fixed, while exact operation
-timing and pair presentation remain explicitly unresolved. No module operation may invoke a raw
-detector or provider, and no final F1 row may be emitted while either dependency is unresolved.
+derived output, literal inputs plus the operation-owned occurrence contract in the sixth author
+repair. A binding row is a requirement only: forms/roles/sessions/budgets are fixed, while exact
+operation timing, occurrence selection and pair presentation remain explicitly unresolved. No
+module operation may invoke a raw detector or provider, and no final F1 row may be emitted while
+any dependency is unresolved.
+
+The source contract vocabulary is closed over five callable boundaries:
+
+```ts
+type ModuleEvidenceSourceOperation =
+  | "CandidatePopulationService.get(request, signal)"
+  | "compileRecordedSemanticPath(input)"
+  | "compileReviewEvidence(input)"
+  | "compileCatalogueEvidencePool(input)"
+  | "ProviderExchangeScheduler.get(request, scope, signal)";
+
+type CandidatePopulationOccurrenceView =
+  | "root_legal_population"
+  | "candidate_child_position_by_uci"
+  | "candidate_edge_by_uci"
+  | "complete_candidate_population";
+```
+
+The candidate root view contains only the retained exact legal-move declaration; arbitrary root
+structural/tactical projections are structurally absent. Both child views require one canonical UCI
+that is a member of the packet and retain that row's exact `afterFen`. The complete view is a
+denominator and cannot stand for a selected or committed move. `committed_edge` and
+`current_root_projection` are forbidden candidate views. Recorded, Review, catalogue and provider
+sources likewise publish their literal view lists in the artifact; a module pair names one view and
+one selector and still carries `exactProjectionOperation:null` until the owner lands it.
+
+Catalogue is the only module-owned source adapter:
+
+```ts
+type CatalogueEvidencePoolResult =
+  | { readonly kind: "available"; readonly receipt: CatalogueEvidencePoolReceipt }
+  | { readonly kind: "unavailable"; readonly reason:
+      | "applicability_absent" | "citation_absent" | "source_unavailable" };
+
+declare function compileCatalogueEvidencePool(input: Readonly<{
+  position: DeclaredEvidence<CanonicalPositionIdentity>;
+  applicability: DeclaredEvidence<TheoryApplicabilityIdentity>;
+  requested: readonly VersionedEvidenceId[];
+}>): CatalogueEvidencePoolResult;
+```
+
+It reads only already-declared cited pack/shape/theory items whose applicability identity equals the
+sealed position identity. It performs no text search, classifier inference or chess judgement;
+uncited text and whole-catalogue retrieval are typed refusals. Its receipt retains each exact input
+and output declaration. This adapter cannot land before the theory/provenance authorities it names.
 
 #### 2.5.0 — Withdrawn direct-call draft (historical, non-normative)
 
@@ -1780,6 +1865,20 @@ Fifth fresh independent return (2026-08-31):
 
 `make module-registration-fifth-fresh-review` reproduces all four. No implementation is authorized
 before a sixth author repair and another fresh independent review.
+
+Sixth author repair (2026-09-01):
+
+| row | author repair; fresh review still required |
+|---|---|
+| [[D2432]] | seven multi-edge operations retain ordered alternatives, horizons, offsets, roles, cardinalities, output anchors and equality joins owned by their upstream callable |
+| [[D2433]] | candidate service publishes four exact views; child/edge require canonical UCI, while committed edge and arbitrary current-root projection are forbidden |
+| [[D2434]] | eval delta and move quality carry ordered endpoint roles/cardinality plus instrument/search/domain equalities; final operation remains null |
+| [[D2435]] | four source contracts reference exact owner callables; catalogue uses one fully specified module-owned adapter; the rejected additional-view export is deleted |
+| [[D2473]] | move quality remains explicitly blocked until its manifest changes from a cross-lane conjunction to the accepted same-lane alternative operation |
+
+`make module-registration-sixth-author-repair` passes 5/5. Artifacts remain
+`requirements_only`; another fresh independent review is required before acceptance or
+implementation.
 
 | row | author repair; fresh review still required |
 |---|---|

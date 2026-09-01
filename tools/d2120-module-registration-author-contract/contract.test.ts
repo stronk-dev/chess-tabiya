@@ -40,7 +40,7 @@ describe("module-registration sealed-pool author repair", () => {
   });
 
   it("D2165 publishes complete typed upstream source contracts and no direct detector operation", () => {
-    const required = ["input", "invoke", "extract", "parse", "abstain", "seal", "status"];
+    const required = ["input", "operation", "extract", "parse", "abstain", "seal", "status"];
     expect(execution.sourceContracts.map((row:any) => row.id)).toEqual([
       "candidate_population@1", "recorded_semantic_path@1", "review_evidence_packet@1",
       "catalogue_evidence_packet@1", "provider_evidence_packet@1",
@@ -84,7 +84,7 @@ describe("module-registration sealed-pool author repair", () => {
         const planned = rows.get(key(binding.projection)) as any;
         const external = execution.sourceInputs.find((source:any) => key(source.projection) === key(binding.projection));
         expect(binding.sourceSubjectKind).toBe(planned?.subjectKind ?? external?.subjectKind);
-        expect(binding.relation).toMatch(/^(same_|edge_position_endpoints|branch_pair_|prefix_)/u);
+        expect(binding.relation).toMatch(/^(same_|edge_position_endpoints|branch_pair_|prefix_|operation_owned_occurrences)/u);
       }
     }
   });

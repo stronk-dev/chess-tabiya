@@ -23,7 +23,7 @@ test("D2398 retains intrinsic input grains through typed derivation relations", 
     const inputs = row.derivation.kind === "all" ? row.derivation.inputs : row.derivation.alternatives.flat();
     assert.deepEqual(row.derivation.inputBindings.map((binding) => key(binding.projection)), inputs.map(key));
     assert.ok(row.derivation.inputBindings.every((binding) => binding.sourceSubjectKind !== undefined));
-    assert.ok(row.derivation.inputBindings.every((binding) => /^(same_|edge_position_endpoints|branch_pair_|prefix_)/u.test(binding.relation)));
+    assert.ok(row.derivation.inputBindings.every((binding) => /^(same_|edge_position_endpoints|branch_pair_|prefix_|operation_owned_occurrences)/u.test(binding.relation)));
   }
 });
 

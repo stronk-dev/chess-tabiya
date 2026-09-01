@@ -19606,6 +19606,15 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2473",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c17652fd1b67b8f2bb6da3d127edb02340b45eeef5390278248f6b313bfc25f2",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:move-quality-grades.md"
     }
   ]
 }

@@ -13493,3 +13493,23 @@ one-object-graph design and 2.724× current-path measurement are unchanged.
 **Blocked/next:** Claude/owner author repair for the held promotion pair, followed by a fourth fresh
 review. Candidate packet still needs its own fresh review after value-authority dependency closure.
 No product, content, pack, API, provider, bot or learner-visible bytes changed.
+
+## 2026-09-01 — Module requirements gain exact occurrence topology
+
+**What landed:** sixth author repair of `module-registration` on [[D2432]]–[[D2435]]. Seven
+multi-edge tactics now retain ordered window alternatives, horizons, occurrence roles,
+cardinalities and output anchors. Candidate acquisition has four exact views and explicitly cannot
+impersonate a committed edge or arbitrary current-position projection. Compare/grade requirements
+retain ordered endpoints and equality joins. The five source contracts now reference four exact
+upstream callables plus one fully specified module-owned catalogue adapter. The rejected additional
+subject-view table is deleted.
+
+**What changed:** [[D2473]] records an upstream contract contradiction: move quality's manifest
+declares recorded+live eval as a conjunction, while its accepted chess operation requires a
+before/after pair from either same lane and forbids mixing. The module row stays blocked on that
+same-lane `anyOf` repair. `make module-registration-sixth-author-repair`, the maintained fifth
+repair, the 11-test author contract and the 13-test assembly contract all pass.
+
+**Blocked/next:** fresh independent review, plus accepted/implemented occurrence, timing, value and
+presentation dependencies. The artifacts remain 117/205 `requirements_only`; no executable module,
+API, content, pack, provider, bot or learner-visible UX byte changed.

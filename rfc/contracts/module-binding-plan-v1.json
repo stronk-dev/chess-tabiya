@@ -29,6 +29,18 @@
         "id": "module.blunder_prevention",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "at_commit"
@@ -85,6 +97,18 @@
       "consumer": {
         "id": "module.blunder_prevention",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -143,6 +167,18 @@
         "id": "module.blunder_prevention",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "at_commit"
@@ -200,6 +236,17 @@
       "consumer": {
         "id": "module.compare_coach",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "review_evidence_packet@1",
+        "view": "recorded_branch_pair",
+        "subjectKind": "branch_pair",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -281,6 +328,17 @@
         "id": "module.compare_coach",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "review_evidence_packet@1",
+        "view": "recorded_branch_pair",
+        "subjectKind": "branch_pair",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "checkpoint",
@@ -360,6 +418,17 @@
       "consumer": {
         "id": "module.compare_coach",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "review_evidence_packet@1",
+        "view": "recorded_branch_pair",
+        "subjectKind": "branch_pair",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -441,6 +510,17 @@
       "consumer": {
         "id": "module.compare_coach",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "review_evidence_packet@1",
+        "view": "recorded_branch_pair",
+        "subjectKind": "branch_pair",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -534,6 +614,17 @@
         "id": "module.compare_coach",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "frozen_run_prefix",
+        "subjectKind": "run_prefix",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "checkpoint",
@@ -625,6 +716,17 @@
         "id": "module.compare_coach",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "frozen_run_prefix",
+        "subjectKind": "run_prefix",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "checkpoint",
@@ -693,6 +795,17 @@
       "consumer": {
         "id": "module.compare_coach",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "frozen_run_prefix",
+        "subjectKind": "run_prefix",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -775,6 +888,17 @@
       "consumer": {
         "id": "module.compare_coach",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "frozen_run_prefix",
+        "subjectKind": "run_prefix",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -867,6 +991,17 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "review_evidence_packet@1",
+        "view": "recorded_branch_pair",
+        "subjectKind": "branch_pair",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -940,6 +1075,17 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "review_evidence_packet@1",
+        "view": "recorded_branch_pair",
+        "subjectKind": "branch_pair",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -1026,6 +1172,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -1093,6 +1251,17 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "review_evidence_packet@1",
+        "view": "frozen_run_prefix",
+        "subjectKind": "run_prefix",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -1155,6 +1324,17 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -1221,6 +1401,17 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -1286,6 +1477,17 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -1350,6 +1552,17 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -1418,6 +1631,17 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -1482,6 +1706,17 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -1548,6 +1783,17 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -1613,6 +1859,17 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -1675,6 +1932,17 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -1740,6 +2008,17 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "provider_evidence_packet@1",
+        "view": "request_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "provider_request_subject",
+          "suppliedBy": "typed_provider_request"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -1815,6 +2094,17 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "provider_evidence_packet@1",
+        "view": "request_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "provider_request_subject",
+          "suppliedBy": "typed_provider_request"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -1875,6 +2165,17 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "provider_evidence_packet@1",
+        "view": "request_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "provider_request_subject",
+          "suppliedBy": "typed_provider_request"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -1949,6 +2250,17 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "provider_evidence_packet@1",
+        "view": "request_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "provider_request_subject",
+          "suppliedBy": "typed_provider_request"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -2020,6 +2332,17 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "provider_evidence_packet@1",
+        "view": "request_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "provider_request_subject",
+          "suppliedBy": "typed_provider_request"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -2095,6 +2418,17 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "provider_evidence_packet@1",
+        "view": "request_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "provider_request_subject",
+          "suppliedBy": "typed_provider_request"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -2167,6 +2501,17 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "provider_evidence_packet@1",
+        "view": "request_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "provider_request_subject",
+          "suppliedBy": "typed_provider_request"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -2229,6 +2574,17 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "provider_evidence_packet@1",
+        "view": "request_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "provider_request_subject",
+          "suppliedBy": "typed_provider_request"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -2290,6 +2646,17 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "provider_evidence_packet@1",
+        "view": "request_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "provider_request_subject",
+          "suppliedBy": "typed_provider_request"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -2364,6 +2731,17 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -2437,6 +2815,17 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -2513,6 +2902,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -2574,6 +2975,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -2634,6 +3047,18 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -2702,6 +3127,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -2768,6 +3205,18 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -2836,6 +3285,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -2903,6 +3364,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -2966,6 +3439,18 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -3056,6 +3541,17 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "frozen_run_prefix",
+        "subjectKind": "run_prefix",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -3186,6 +3682,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -3253,6 +3761,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -3316,6 +3836,18 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -3381,6 +3913,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -3441,6 +3985,18 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -3503,6 +4059,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -3563,6 +4131,18 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -3631,6 +4211,18 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -3701,6 +4293,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -3762,6 +4366,18 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -3830,6 +4446,18 @@
         "id": "module.full_inspector",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -3895,6 +4523,18 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -3963,6 +4603,17 @@
       "consumer": {
         "id": "module.full_inspector",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "catalogue_evidence_packet@1",
+        "view": "applicable_catalogue_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "applicability_identity",
+          "suppliedBy": "sealed_catalogue_adapter"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -4061,6 +4712,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -4130,6 +4793,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -4192,6 +4867,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -4256,6 +4943,17 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "review_evidence_packet@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -4318,6 +5016,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -4388,6 +5098,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -4457,6 +5179,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -4519,6 +5253,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -4583,6 +5329,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -4645,6 +5403,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -4709,6 +5479,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -4771,6 +5553,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -4835,6 +5629,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -4897,6 +5703,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -4961,6 +5779,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -5024,6 +5854,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -5086,6 +5928,17 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -5154,6 +6007,17 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -5220,6 +6084,17 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -5288,6 +6163,17 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -5354,6 +6240,17 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -5422,6 +6319,17 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -5488,6 +6396,17 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -5556,6 +6475,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -5618,6 +6549,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -5688,6 +6631,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -5757,6 +6712,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -5819,6 +6786,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -5883,6 +6862,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -5945,6 +6936,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -6009,6 +7012,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -6071,6 +7086,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -6135,6 +7162,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -6197,6 +7236,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -6261,6 +7312,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -6323,6 +7386,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -6387,6 +7462,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -6449,6 +7536,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -6514,6 +7613,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -6576,6 +7687,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -6640,6 +7763,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -6702,6 +7837,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -6766,6 +7913,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -6828,6 +7987,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -6892,6 +8063,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -6954,6 +8137,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -7018,6 +8213,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -7080,6 +8287,18 @@
       "consumer": {
         "id": "module.postcommit_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -7144,6 +8363,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -7207,6 +8438,18 @@
         "id": "module.postcommit_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -7269,6 +8512,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -7342,6 +8597,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -7407,6 +8674,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -7474,6 +8753,17 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "review_evidence_packet@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -7539,6 +8829,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -7612,6 +8914,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -7684,6 +8998,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -7749,6 +9075,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -7816,6 +9154,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -7881,6 +9231,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -7948,6 +9310,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -8013,6 +9387,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -8080,6 +9466,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -8145,6 +9543,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -8212,6 +9622,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -8278,6 +9700,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -8343,6 +9777,17 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -8414,6 +9859,17 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -8483,6 +9939,17 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -8554,6 +10021,17 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -8623,6 +10101,17 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -8694,6 +10183,17 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -8764,6 +10264,17 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -8833,6 +10344,17 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "provider_evidence_packet@1",
+        "view": "request_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "provider_request_subject",
+          "suppliedBy": "typed_provider_request"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -8909,6 +10431,17 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "provider_evidence_packet@1",
+        "view": "request_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "provider_request_subject",
+          "suppliedBy": "typed_provider_request"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -8983,6 +10516,17 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -9060,6 +10604,17 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -9139,6 +10694,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -9204,6 +10771,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -9308,6 +10887,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -9380,6 +10971,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -9451,6 +11054,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -9544,6 +11159,17 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "frozen_run_prefix",
+        "subjectKind": "run_prefix",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -9680,6 +11306,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -9745,6 +11383,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -9812,6 +11462,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -9877,6 +11539,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -9944,6 +11618,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -10009,6 +11695,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -10076,6 +11774,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -10141,6 +11851,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -10208,6 +11930,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -10273,6 +12007,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -10340,6 +12086,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -10405,6 +12163,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -10473,6 +12243,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -10538,6 +12320,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -10605,6 +12399,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -10670,6 +12476,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -10737,6 +12555,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -10802,6 +12632,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -10869,6 +12711,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -10934,6 +12788,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -11001,6 +12867,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -11066,6 +12944,18 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -11133,6 +13023,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -11199,6 +13101,18 @@
         "id": "module.review_map",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "review",
@@ -11264,6 +13178,17 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "frozen_run_prefix",
+        "subjectKind": "run_prefix",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -11332,6 +13257,17 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "frozen_run_prefix",
+        "subjectKind": "run_prefix",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -11419,6 +13355,17 @@
       "consumer": {
         "id": "module.review_map",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "frozen_run_prefix",
+        "subjectKind": "run_prefix",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -11511,6 +13458,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -11576,6 +13535,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -11640,6 +13611,18 @@
       "consumer": {
         "id": "module.sight_on_request",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -11712,6 +13695,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -11782,6 +13777,18 @@
       "consumer": {
         "id": "module.sight_on_request",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -11876,6 +13883,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -11968,6 +13987,18 @@
       "consumer": {
         "id": "module.sight_on_request",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -12062,6 +14093,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -12154,6 +14197,18 @@
       "consumer": {
         "id": "module.sight_on_request",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -12248,6 +14303,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -12340,6 +14407,18 @@
       "consumer": {
         "id": "module.sight_on_request",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -12434,6 +14513,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -12526,6 +14617,18 @@
       "consumer": {
         "id": "module.sight_on_request",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -12620,6 +14723,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -12690,6 +14805,18 @@
       "consumer": {
         "id": "module.sight_on_request",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -12784,6 +14911,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -12876,6 +15015,18 @@
       "consumer": {
         "id": "module.sight_on_request",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -12970,6 +15121,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -13062,6 +15225,18 @@
       "consumer": {
         "id": "module.sight_on_request",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -13156,6 +15331,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -13248,6 +15435,18 @@
       "consumer": {
         "id": "module.sight_on_request",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -13342,6 +15541,18 @@
         "id": "module.sight_on_request",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -13411,6 +15622,18 @@
       "consumer": {
         "id": "module.structure_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -13509,6 +15732,18 @@
         "id": "module.structure_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -13595,6 +15830,18 @@
         "id": "module.structure_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -13657,6 +15904,18 @@
       "consumer": {
         "id": "module.structure_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -13722,6 +15981,18 @@
         "id": "module.structure_nudge",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -13785,6 +16056,17 @@
       "consumer": {
         "id": "module.structure_nudge",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "catalogue_evidence_packet@1",
+        "view": "applicable_catalogue_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "applicability_identity",
+          "suppliedBy": "sealed_catalogue_adapter"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -13883,6 +16165,17 @@
         "id": "module.theory_breadcrumb",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "catalogue_evidence_packet@1",
+        "view": "applicable_catalogue_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "applicability_identity",
+          "suppliedBy": "sealed_catalogue_adapter"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -13977,6 +16270,17 @@
         "id": "module.theory_breadcrumb",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "catalogue_evidence_packet@1",
+        "view": "applicable_catalogue_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "applicability_identity",
+          "suppliedBy": "sealed_catalogue_adapter"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "postcommit"
@@ -14042,6 +16346,17 @@
       "consumer": {
         "id": "module.theory_breadcrumb",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "catalogue_evidence_packet@1",
+        "view": "applicable_catalogue_position",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "applicability_identity",
+          "suppliedBy": "sealed_catalogue_adapter"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -14140,6 +16455,17 @@
         "id": "module.threat_radar",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "recorded_semantic_path@1",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "recorded_occurrence_identity",
+          "suppliedBy": "sealed_run_path"
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -14208,6 +16534,18 @@
         "id": "module.threat_radar",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -14273,6 +16611,18 @@
         "id": "module.threat_radar",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_edge_by_uci",
+        "subjectKind": "edge",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -14337,6 +16687,18 @@
       "consumer": {
         "id": "module.threat_radar",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -14410,6 +16772,18 @@
         "id": "module.threat_radar",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -14475,6 +16849,18 @@
       "consumer": {
         "id": "module.threat_radar",
         "version": 1
+      },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
       },
       "timingRequirement": {
         "moduleRequested": [
@@ -14547,6 +16933,18 @@
         "id": "module.threat_radar",
         "version": 1
       },
+      "occurrenceRequirement": {
+        "source": "candidate_population@1",
+        "view": "candidate_child_position_by_uci",
+        "subjectKind": "position",
+        "selector": {
+          "kind": "canonical_candidate_uci",
+          "suppliedBy": "authoritative_module_moment",
+          "committedEdgeForbidden": true
+        },
+        "exactProjectionOperation": null,
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
       "timingRequirement": {
         "moduleRequested": [
           "precommit",
@@ -14607,5 +17005,5 @@
       }
     }
   ],
-  "digest": "sha256:1203774f80d2a55d56da3aaf1d7fa2b53b254bcb19f2475f175c5dd331d9660e"
+  "digest": "sha256:3162983e2dc98bee37ec5b00cc86a8ce4836916050be279512a4449486802275"
 }
