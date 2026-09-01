@@ -1,0 +1,3741 @@
+{
+  "schema": "tabiya.research.phase-source-composition.v1",
+  "boundary": "Source-retaining corpus composition; no merged phase truth, precedence or learner advice",
+  "catalogue": {
+    "sourceId": "lichess-chess-openings",
+    "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+    "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+  },
+  "corpus": {
+    "packs": 50,
+    "positions": 804,
+    "paths": 100,
+    "pathPositionOccurrences": 1069
+  },
+  "sourceReach": {
+    "endpoint": {
+      "absent": 672,
+      "matched": 132
+    },
+    "membership": {
+      "absent": 600,
+      "member": 204
+    },
+    "phase": {
+      "endgame": 296,
+      "middlegame": 233,
+      "opening": 153,
+      "unclear": 122
+    },
+    "decisionArm": {
+      "development_transition_gap": 117,
+      "endgame_material_band": 296,
+      "material_transition_gap": 5,
+      "middlegame_development_band": 233,
+      "opening_development_band": 153
+    },
+    "endgame": {
+      "minor": 14,
+      "not_applicable": 508,
+      "pawn": 33,
+      "rook": 31,
+      "rook-and-pawn-vs-rook": 31,
+      "untyped": 187
+    },
+    "currentTechniqueCandidates": {
+      "lucena": 31,
+      "philidor": 31
+    },
+    "recordedTablebase": {
+      "outside_domain": 563,
+      "recorded": 241
+    },
+    "openingPhaseMatrix": {
+      "absent|endgame": 296,
+      "absent|middlegame": 203,
+      "absent|opening": 49,
+      "absent|unclear": 52,
+      "member|middlegame": 30,
+      "member|opening": 104,
+      "member|unclear": 70
+    },
+    "endpointPhaseMatrix": {
+      "absent|endgame": 296,
+      "absent|middlegame": 219,
+      "absent|opening": 74,
+      "absent|unclear": 83,
+      "matched|middlegame": 14,
+      "matched|opening": 79,
+      "matched|unclear": 39
+    },
+    "tablebasePhaseMatrix": {
+      "outside_domain|endgame": 55,
+      "outside_domain|middlegame": 233,
+      "outside_domain|opening": 153,
+      "outside_domain|unclear": 122,
+      "recorded|endgame": 241
+    }
+  },
+  "history": {
+    "deepestOpening": {
+      "absent": 43,
+      "matched": 57
+    },
+    "pathsWithNamedEndpoint": 57,
+    "endpointChanges": 199,
+    "membershipChanges": 63,
+    "phaseChanges": 56,
+    "endgameChanges": 5,
+    "tablebaseChanges": 0,
+    "compositeStateChanges": 260,
+    "endpointTransitions": {
+      "absent->matched": 85,
+      "matched->absent": 114
+    },
+    "membershipTransitions": {
+      "absent->member": 14,
+      "member->absent": 49
+    },
+    "phaseTransitions": {
+      "middlegame->endgame": 1,
+      "middlegame->unclear": 1,
+      "opening->unclear": 31,
+      "unclear->endgame": 1,
+      "unclear->middlegame": 22
+    },
+    "endgameTransitions": {
+      "not_applicable->rook": 1,
+      "not_applicable->untyped": 1,
+      "pawn->untyped": 1,
+      "rook-and-pawn-vs-rook->untyped": 1,
+      "untyped->minor": 1
+    },
+    "tablebaseTransitions": {}
+  },
+  "invariants": {
+    "matchedEndpointWithoutMembership": 0,
+    "endgameApplicabilityMismatch": 0,
+    "recordedTablebaseOutsideDomain": 0,
+    "collapsedTopLevelPhaseField": 0
+  },
+  "samples": [
+    {
+      "packId": "anti-caro-advance-c5-race",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 5,
+          "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "observedPly": 5,
+            "eco": "B12",
+            "name": "Caro-Kann Defense: Advance Variation",
+            "sourcePly": 5,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "observedPly": 5,
+            "descendantEndpointCount": 11,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 4,
+              "black": 4
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 8,
+            "boundary": 5,
+            "marginInsideBand": 3
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 11,
+      "paths": 3
+    },
+    {
+      "packId": "anti-caro-advance-early-c5",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 6,
+          "fen": "rnbqkbnr/pp2pppp/8/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkbnr/pp2pppp/8/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq -",
+            "observedPly": 6,
+            "eco": "B12",
+            "name": "Caro-Kann Defense: Advance Variation, Botvinnik-Carls Defense",
+            "sourcePly": 6,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkbnr/pp2pppp/8/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq -",
+            "observedPly": 6,
+            "descendantEndpointCount": 1,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkbnr/pp2pppp/8/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 4,
+              "black": 4
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 8,
+            "boundary": 5,
+            "marginInsideBand": 3
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 14,
+      "paths": 4
+    },
+    {
+      "packId": "anti-dutch-leningrad-white",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 2,
+          "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+            "observedPly": 2,
+            "eco": "A80",
+            "name": "Dutch Defense",
+            "sourcePly": 2,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+            "observedPly": 2,
+            "descendantEndpointCount": 70,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 4,
+              "black": 4
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 8,
+            "boundary": 5,
+            "marginInsideBand": 3
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 17,
+      "paths": 4
+    },
+    {
+      "packId": "anti-french-advance-white",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 5,
+          "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "observedPly": 5,
+            "eco": "C02",
+            "name": "French Defense: Advance Variation",
+            "sourcePly": 5,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "observedPly": 5,
+            "descendantEndpointCount": 22,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 4,
+              "black": 4
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 8,
+            "boundary": 5,
+            "marginInsideBand": 3
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 11,
+      "paths": 2
+    },
+    {
+      "packId": "anti-italian-center-attack-black",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 5,
+          "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -",
+            "observedPly": 5,
+            "eco": "C50",
+            "name": "Italian Game",
+            "sourcePly": 5,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -",
+            "observedPly": 5,
+            "descendantEndpointCount": 184,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 2,
+              "black": 3
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 5,
+            "boundary": 5,
+            "marginInsideBand": 0
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 15,
+      "paths": 2
+    },
+    {
+      "packId": "anti-kid-classical-white",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 8,
+          "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq -",
+            "observedPly": 8,
+            "eco": "E70",
+            "name": "King's Indian Defense: Normal Variation",
+            "sourcePly": 8,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq -",
+            "observedPly": 8,
+            "descendantEndpointCount": 84,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 3,
+              "black": 2
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 5,
+            "boundary": 5,
+            "marginInsideBand": 0
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 14,
+      "paths": 2
+    },
+    {
+      "packId": "anti-london-black",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 5,
+          "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 3 3"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq -",
+            "observedPly": 5,
+            "eco": "D02",
+            "name": "Queen's Pawn Game: London System",
+            "sourcePly": 5,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq -",
+            "observedPly": 5,
+            "descendantEndpointCount": 5,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 3 3",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 2,
+              "black": 3
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 5,
+            "boundary": 5,
+            "marginInsideBand": 0
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 13,
+      "paths": 1
+    },
+    {
+      "packId": "anti-scandinavian-white",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 2,
+          "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+            "observedPly": 2,
+            "eco": "B01",
+            "name": "Scandinavian Defense",
+            "sourcePly": 2,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+            "observedPly": 2,
+            "descendantEndpointCount": 48,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 4,
+              "black": 4
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 8,
+            "boundary": 5,
+            "marginInsideBand": 3
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 23,
+      "paths": 4
+    },
+    {
+      "packId": "anti-sicilian-najdorf-english-attack",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 8,
+          "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq -",
+            "observedPly": 8,
+            "eco": "B54",
+            "name": "Sicilian Defense: Modern Variations, Main Line",
+            "sourcePly": 8,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq -",
+            "observedPly": 8,
+            "descendantEndpointCount": 101,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 3,
+              "black": 3
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 6,
+            "boundary": 5,
+            "marginInsideBand": 1
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 30
+        }
+      },
+      "positions": 16,
+      "paths": 4
+    },
+    {
+      "packId": "berlin-queenless-press",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 16,
+          "fen": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - - 0 9"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - -",
+            "observedPly": 16,
+            "eco": "C67",
+            "name": "Ruy Lopez: Berlin Defense, l'Hermet Variation, Berlin Wall Defense",
+            "sourcePly": 16,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - -",
+            "observedPly": 16,
+            "descendantEndpointCount": 2,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - - 0 9",
+            "phase": "unclear",
+            "material": {
+              "white": 19,
+              "black": 19
+            },
+            "undevelopedMinors": {
+              "white": 2,
+              "black": 2
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "development_transition_gap",
+            "phase": "unclear",
+            "axis": "undeveloped_home_minors",
+            "observed": 4,
+            "middlegameBoundary": 2,
+            "openingBoundary": 5,
+            "distanceToMiddlegameBand": 2,
+            "distanceToOpeningBand": 1
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 26
+        }
+      },
+      "positions": 9,
+      "paths": 2
+    },
+    {
+      "packId": "carlsbad-minority-attack",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 19,
+          "fen": "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - -",
+            "observedPly": 19,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - -",
+            "observedPly": 19,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10",
+            "phase": "middlegame",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 1
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "middlegame_development_band",
+            "phase": "middlegame",
+            "axis": "undeveloped_home_minors",
+            "observed": 1,
+            "boundary": 2,
+            "marginInsideBand": 1
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 30
+        }
+      },
+      "positions": 19,
+      "paths": 4
+    },
+    {
+      "packId": "caro-kann-advance-black",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 5,
+          "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "observedPly": 5,
+            "eco": "B12",
+            "name": "Caro-Kann Defense: Advance Variation",
+            "sourcePly": 5,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "observedPly": 5,
+            "descendantEndpointCount": 11,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 4,
+              "black": 4
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 8,
+            "boundary": 5,
+            "marginInsideBand": 3
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 12,
+      "paths": 3
+    },
+    {
+      "packId": "closed-centre-chain-black-base-strike",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 13,
+          "fen": "r1b1kb1r/pp2nppp/1qn1p3/2ppP3/3P4/2P2N2/PP2BPPP/RNBQ1RK1 b kq - 6 7"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r1b1kb1r/pp2nppp/1qn1p3/2ppP3/3P4/2P2N2/PP2BPPP/RNBQ1RK1 b kq -",
+            "observedPly": 13,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r1b1kb1r/pp2nppp/1qn1p3/2ppP3/3P4/2P2N2/PP2BPPP/RNBQ1RK1 b kq -",
+            "observedPly": 13,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r1b1kb1r/pp2nppp/1qn1p3/2ppP3/3P4/2P2N2/PP2BPPP/RNBQ1RK1 b kq - 6 7",
+            "phase": "unclear",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 2,
+              "black": 2
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "development_transition_gap",
+            "phase": "unclear",
+            "axis": "undeveloped_home_minors",
+            "observed": 4,
+            "middlegameBoundary": 2,
+            "openingBoundary": 5,
+            "distanceToMiddlegameBand": 2,
+            "distanceToOpeningBand": 1
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 12,
+      "paths": 2
+    },
+    {
+      "packId": "conversion-up-a-piece",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 0,
+          "fen": "3rk3/pp3ppp/4p3/8/8/2N1P3/PP3PPP/3RK3 w - - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "3rk3/pp3ppp/4p3/8/8/2N1P3/PP3PPP/3RK3 w - -",
+            "observedPly": 0,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "3rk3/pp3ppp/4p3/8/8/2N1P3/PP3PPP/3RK3 w - -",
+            "observedPly": 0,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "3rk3/pp3ppp/4p3/8/8/2N1P3/PP3PPP/3RK3 w - - 0 1",
+            "phase": "endgame",
+            "material": {
+              "white": 8,
+              "black": 5
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "endgame_material_band",
+            "phase": "endgame",
+            "axis": "maximum_non_pawn_material",
+            "observed": 8,
+            "boundary": 13,
+            "marginInsideBand": 5
+          }
+        },
+        "rulesEndgame": {
+          "kind": "classified",
+          "reading": {
+            "type": null,
+            "techniques": [],
+            "provenanceNote": "Tabiya's material-census convention"
+          }
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 17
+        }
+      },
+      "positions": 8,
+      "paths": 1
+    },
+    {
+      "packId": "dragon-yugoslav-race",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 19,
+          "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2BNP3/2N1BP2/PPPQ2PP/2KR3R b - - 6 10"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r2q1rk1/pp1bppbp/2np1np1/8/2BNP3/2N1BP2/PPPQ2PP/2KR3R b - -",
+            "observedPly": 19,
+            "eco": "B78",
+            "name": "Sicilian Defense: Dragon Variation, Yugoslav Attack",
+            "sourcePly": 19,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r2q1rk1/pp1bppbp/2np1np1/8/2BNP3/2N1BP2/PPPQ2PP/2KR3R b - -",
+            "observedPly": 19,
+            "descendantEndpointCount": 5,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2BNP3/2N1BP2/PPPQ2PP/2KR3R b - - 6 10",
+            "phase": "middlegame",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "middlegame_development_band",
+            "phase": "middlegame",
+            "axis": "undeveloped_home_minors",
+            "observed": 0,
+            "boundary": 2,
+            "marginInsideBand": 2
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 30
+        }
+      },
+      "positions": 12,
+      "paths": 2
+    },
+    {
+      "packId": "french-advance-black",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 5,
+          "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "observedPly": 5,
+            "eco": "C02",
+            "name": "French Defense: Advance Variation",
+            "sourcePly": 5,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "observedPly": 5,
+            "descendantEndpointCount": 22,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 4,
+              "black": 4
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 8,
+            "boundary": 5,
+            "marginInsideBand": 3
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 8,
+      "paths": 1
+    },
+    {
+      "packId": "french-advance-chain-white",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 18,
+          "fen": "r3kb1r/pp1b1ppp/1qn1p3/3pPn2/3P4/2N2N2/PP2BPPP/R1BQ1RK1 w kq - 3 10"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r3kb1r/pp1b1ppp/1qn1p3/3pPn2/3P4/2N2N2/PP2BPPP/R1BQ1RK1 w kq -",
+            "observedPly": 18,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r3kb1r/pp1b1ppp/1qn1p3/3pPn2/3P4/2N2N2/PP2BPPP/R1BQ1RK1 w kq -",
+            "observedPly": 18,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r3kb1r/pp1b1ppp/1qn1p3/3pPn2/3P4/2N2N2/PP2BPPP/R1BQ1RK1 w kq - 3 10",
+            "phase": "middlegame",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 1,
+              "black": 1
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "middlegame_development_band",
+            "phase": "middlegame",
+            "axis": "undeveloped_home_minors",
+            "observed": 2,
+            "boundary": 2,
+            "marginInsideBand": 0
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 30
+        }
+      },
+      "positions": 10,
+      "paths": 2
+    },
+    {
+      "packId": "grunfeld-exchange-fianchetto",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 21,
+          "fen": "r1bq1rk1/pp2ppbp/2n3p1/8/3PP3/4BN2/P3BPPP/R2Q1RK1 b - - 0 11"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r1bq1rk1/pp2ppbp/2n3p1/8/3PP3/4BN2/P3BPPP/R2Q1RK1 b - -",
+            "observedPly": 21,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r1bq1rk1/pp2ppbp/2n3p1/8/3PP3/4BN2/P3BPPP/R2Q1RK1 b - -",
+            "observedPly": 21,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r1bq1rk1/pp2ppbp/2n3p1/8/3PP3/4BN2/P3BPPP/R2Q1RK1 b - - 0 11",
+            "phase": "middlegame",
+            "material": {
+              "white": 28,
+              "black": 28
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 1
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "middlegame_development_band",
+            "phase": "middlegame",
+            "axis": "undeveloped_home_minors",
+            "observed": 1,
+            "boundary": 2,
+            "marginInsideBand": 1
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 26
+        }
+      },
+      "positions": 8,
+      "paths": 2
+    },
+    {
+      "packId": "iqp-black-tarrasch-defence",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 19,
+          "fen": "r1bq1rk1/pp2bppp/2n2n2/3p2B1/3N4/2N3P1/PP2PPBP/R2Q1RK1 b - - 0 10"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r1bq1rk1/pp2bppp/2n2n2/3p2B1/3N4/2N3P1/PP2PPBP/R2Q1RK1 b - -",
+            "observedPly": 19,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r1bq1rk1/pp2bppp/2n2n2/3p2B1/3N4/2N3P1/PP2PPBP/R2Q1RK1 b - -",
+            "observedPly": 19,
+            "descendantEndpointCount": 4,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r1bq1rk1/pp2bppp/2n2n2/3p2B1/3N4/2N3P1/PP2PPBP/R2Q1RK1 b - - 0 10",
+            "phase": "middlegame",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 1
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "middlegame_development_band",
+            "phase": "middlegame",
+            "axis": "undeveloped_home_minors",
+            "observed": 1,
+            "boundary": 2,
+            "marginInsideBand": 1
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 28
+        }
+      },
+      "positions": 10,
+      "paths": 2
+    },
+    {
+      "packId": "iqp-white-panov-attack",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 18,
+          "fen": "r1bq1rk1/pp2bppp/2n1p3/3n4/3P4/2NB1N2/PP3PPP/R1BQ1RK1 w - - 4 10"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r1bq1rk1/pp2bppp/2n1p3/3n4/3P4/2NB1N2/PP3PPP/R1BQ1RK1 w - -",
+            "observedPly": 18,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r1bq1rk1/pp2bppp/2n1p3/3n4/3P4/2NB1N2/PP3PPP/R1BQ1RK1 w - -",
+            "observedPly": 18,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r1bq1rk1/pp2bppp/2n1p3/3n4/3P4/2NB1N2/PP3PPP/R1BQ1RK1 w - - 4 10",
+            "phase": "middlegame",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 1,
+              "black": 1
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "middlegame_development_band",
+            "phase": "middlegame",
+            "axis": "undeveloped_home_minors",
+            "observed": 2,
+            "boundary": 2,
+            "marginInsideBand": 0
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 28
+        }
+      },
+      "positions": 8,
+      "paths": 2
+    },
+    {
+      "packId": "italian-center-attack-white",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 6,
+          "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq -",
+            "observedPly": 6,
+            "eco": "C50",
+            "name": "Italian Game: Giuoco Piano",
+            "sourcePly": 6,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq -",
+            "observedPly": 6,
+            "descendantEndpointCount": 118,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+            "phase": "unclear",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 2,
+              "black": 2
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "development_transition_gap",
+            "phase": "unclear",
+            "axis": "undeveloped_home_minors",
+            "observed": 4,
+            "middlegameBoundary": 2,
+            "openingBoundary": 5,
+            "distanceToMiddlegameBand": 2,
+            "distanceToOpeningBand": 1
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 14,
+      "paths": 2
+    },
+    {
+      "packId": "kid-classical-black",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 9,
+          "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 5"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq -",
+            "observedPly": 9,
+            "eco": "E90",
+            "name": "King's Indian Defense: Normal Variation, Rare Defenses",
+            "sourcePly": 9,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq -",
+            "observedPly": 9,
+            "descendantEndpointCount": 30,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 5",
+            "phase": "unclear",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 2,
+              "black": 2
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "development_transition_gap",
+            "phase": "unclear",
+            "axis": "undeveloped_home_minors",
+            "observed": 4,
+            "middlegameBoundary": 2,
+            "openingBoundary": 5,
+            "distanceToMiddlegameBand": 2,
+            "distanceToOpeningBand": 1
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 13,
+      "paths": 2
+    },
+    {
+      "packId": "kid-mar-del-plata-white",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 16,
+          "fen": "r1bq1rk1/ppp1npbp/3p1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 1 9"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r1bq1rk1/ppp1npbp/3p1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQ1RK1 w - -",
+            "observedPly": 16,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r1bq1rk1/ppp1npbp/3p1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQ1RK1 w - -",
+            "observedPly": 16,
+            "descendantEndpointCount": 10,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r1bq1rk1/ppp1npbp/3p1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 1 9",
+            "phase": "middlegame",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 1,
+              "black": 1
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "middlegame_development_band",
+            "phase": "middlegame",
+            "axis": "undeveloped_home_minors",
+            "observed": 2,
+            "boundary": 2,
+            "marginInsideBand": 0
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 12,
+      "paths": 2
+    },
+    {
+      "packId": "leningrad-dutch-black",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 3,
+          "fen": "rnbqkbnr/ppppp1pp/8/5p2/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkbnr/ppppp1pp/8/5p2/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+            "observedPly": 3,
+            "eco": "A84",
+            "name": "Dutch Defense",
+            "sourcePly": 3,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkbnr/ppppp1pp/8/5p2/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+            "observedPly": 3,
+            "descendantEndpointCount": 34,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkbnr/ppppp1pp/8/5p2/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 4,
+              "black": 4
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 8,
+            "boundary": 5,
+            "marginInsideBand": 3
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 13,
+      "paths": 2
+    },
+    {
+      "packId": "london-system-white",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 6,
+          "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/5N2/PPP1PPPP/RN1QKB1R w KQkq - 0 4"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/5N2/PPP1PPPP/RN1QKB1R w KQkq -",
+            "observedPly": 6,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/5N2/PPP1PPPP/RN1QKB1R w KQkq -",
+            "observedPly": 6,
+            "descendantEndpointCount": 4,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/5N2/PPP1PPPP/RN1QKB1R w KQkq - 0 4",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 2,
+              "black": 3
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 5,
+            "boundary": 5,
+            "marginInsideBand": 0
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 12,
+      "paths": 1
+    },
+    {
+      "packId": "london-wedge-black-counterplay",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 15,
+          "fen": "r1bq1rk1/pp3ppp/2nbpn2/2pp4/3P4/2PBPNB1/PP1N1PPP/R2QK2R b KQ - 5 8"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r1bq1rk1/pp3ppp/2nbpn2/2pp4/3P4/2PBPNB1/PP1N1PPP/R2QK2R b KQ -",
+            "observedPly": 15,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r1bq1rk1/pp3ppp/2nbpn2/2pp4/3P4/2PBPNB1/PP1N1PPP/R2QK2R b KQ -",
+            "observedPly": 15,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r1bq1rk1/pp3ppp/2nbpn2/2pp4/3P4/2PBPNB1/PP1N1PPP/R2QK2R b KQ - 5 8",
+            "phase": "middlegame",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 1
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "middlegame_development_band",
+            "phase": "middlegame",
+            "axis": "undeveloped_home_minors",
+            "observed": 1,
+            "boundary": 2,
+            "marginInsideBand": 1
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 15,
+      "paths": 4
+    },
+    {
+      "packId": "lucena-bridge-convert",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 0,
+          "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "1K6/1P1k4/8/8/8/8/r7/2R5 w - -",
+            "observedPly": 0,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "1K6/1P1k4/8/8/8/8/r7/2R5 w - -",
+            "observedPly": 0,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "1K6/1P1k4/8/8/8/8/r7/2R5 w - - 0 1",
+            "phase": "endgame",
+            "material": {
+              "white": 5,
+              "black": 5
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "endgame_material_band",
+            "phase": "endgame",
+            "axis": "maximum_non_pawn_material",
+            "observed": 5,
+            "boundary": 13,
+            "marginInsideBand": 8
+          }
+        },
+        "rulesEndgame": {
+          "kind": "classified",
+          "reading": {
+            "type": {
+              "id": "rook-and-pawn-vs-rook",
+              "label": "Rook and pawn versus rook"
+            },
+            "techniques": [
+              {
+                "id": "lucena",
+                "name": "Lucena",
+                "forSide": "attacker",
+                "provenance": {
+                  "note": "Standard endgame-literature name; Tabiya's material-census convention."
+                },
+                "shapeEntryId": "lucena"
+              },
+              {
+                "id": "philidor",
+                "name": "Philidor",
+                "forSide": "defender",
+                "provenance": {
+                  "note": "Standard endgame-literature name; Tabiya's material-census convention."
+                },
+                "shapeEntryId": "philidor"
+              }
+            ],
+            "provenanceNote": "Tabiya's material-census convention"
+          }
+        },
+        "recordedTablebase": {
+          "kind": "recorded",
+          "pieceCount": 5,
+          "category": "win",
+          "sourceId": "syzygy"
+        }
+      },
+      "positions": 14,
+      "paths": 1
+    },
+    {
+      "packId": "maroczy-bind-white-squeeze",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 18,
+          "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/R2Q1RK1 w - - 2 10"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r2q1rk1/pp1bppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/R2Q1RK1 w - -",
+            "observedPly": 18,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r2q1rk1/pp1bppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/R2Q1RK1 w - -",
+            "observedPly": 18,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/R2Q1RK1 w - - 2 10",
+            "phase": "middlegame",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "middlegame_development_band",
+            "phase": "middlegame",
+            "axis": "undeveloped_home_minors",
+            "observed": 0,
+            "boundary": 2,
+            "marginInsideBand": 2
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 30
+        }
+      },
+      "positions": 10,
+      "paths": 2
+    },
+    {
+      "packId": "mate-bishop-knight",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 0,
+          "fen": "8/8/4k3/8/4K3/2BN4/8/8 w - - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "8/8/4k3/8/4K3/2BN4/8/8 w - -",
+            "observedPly": 0,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "8/8/4k3/8/4K3/2BN4/8/8 w - -",
+            "observedPly": 0,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "8/8/4k3/8/4K3/2BN4/8/8 w - - 0 1",
+            "phase": "endgame",
+            "material": {
+              "white": 6,
+              "black": 0
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "endgame_material_band",
+            "phase": "endgame",
+            "axis": "maximum_non_pawn_material",
+            "observed": 6,
+            "boundary": 13,
+            "marginInsideBand": 7
+          }
+        },
+        "rulesEndgame": {
+          "kind": "classified",
+          "reading": {
+            "type": null,
+            "techniques": [],
+            "provenanceNote": "Tabiya's material-census convention"
+          }
+        },
+        "recordedTablebase": {
+          "kind": "recorded",
+          "pieceCount": 4,
+          "category": "win",
+          "sourceId": "syzygy"
+        }
+      },
+      "positions": 40,
+      "paths": 1
+    },
+    {
+      "packId": "mate-k-q-technique",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 0,
+          "fen": "8/8/3k4/8/8/2Q5/6K1/8 w - - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "8/8/3k4/8/8/2Q5/6K1/8 w - -",
+            "observedPly": 0,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "8/8/3k4/8/8/2Q5/6K1/8 w - -",
+            "observedPly": 0,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "8/8/3k4/8/8/2Q5/6K1/8 w - - 0 1",
+            "phase": "endgame",
+            "material": {
+              "white": 9,
+              "black": 0
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "endgame_material_band",
+            "phase": "endgame",
+            "axis": "maximum_non_pawn_material",
+            "observed": 9,
+            "boundary": 13,
+            "marginInsideBand": 4
+          }
+        },
+        "rulesEndgame": {
+          "kind": "classified",
+          "reading": {
+            "type": null,
+            "techniques": [],
+            "provenanceNote": "Tabiya's material-census convention"
+          }
+        },
+        "recordedTablebase": {
+          "kind": "recorded",
+          "pieceCount": 3,
+          "category": "win",
+          "sourceId": "syzygy"
+        }
+      },
+      "positions": 20,
+      "paths": 1
+    },
+    {
+      "packId": "mate-k-r-technique",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 0,
+          "fen": "8/3k4/8/8/8/3K4/7R/8 w - - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "8/3k4/8/8/8/3K4/7R/8 w - -",
+            "observedPly": 0,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "8/3k4/8/8/8/3K4/7R/8 w - -",
+            "observedPly": 0,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "8/3k4/8/8/8/3K4/7R/8 w - - 0 1",
+            "phase": "endgame",
+            "material": {
+              "white": 5,
+              "black": 0
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "endgame_material_band",
+            "phase": "endgame",
+            "axis": "maximum_non_pawn_material",
+            "observed": 5,
+            "boundary": 13,
+            "marginInsideBand": 8
+          }
+        },
+        "rulesEndgame": {
+          "kind": "classified",
+          "reading": {
+            "type": null,
+            "techniques": [],
+            "provenanceNote": "Tabiya's material-census convention"
+          }
+        },
+        "recordedTablebase": {
+          "kind": "recorded",
+          "pieceCount": 3,
+          "category": "win",
+          "sourceId": "syzygy"
+        }
+      },
+      "positions": 20,
+      "paths": 1
+    },
+    {
+      "packId": "mate-two-bishops",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 0,
+          "fen": "3k4/8/8/3K4/3BB3/8/8/8 w - - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "3k4/8/8/3K4/3BB3/8/8/8 w - -",
+            "observedPly": 0,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "3k4/8/8/3K4/3BB3/8/8/8 w - -",
+            "observedPly": 0,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "3k4/8/8/3K4/3BB3/8/8/8 w - - 0 1",
+            "phase": "endgame",
+            "material": {
+              "white": 6,
+              "black": 0
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "endgame_material_band",
+            "phase": "endgame",
+            "axis": "maximum_non_pawn_material",
+            "observed": 6,
+            "boundary": 13,
+            "marginInsideBand": 7
+          }
+        },
+        "rulesEndgame": {
+          "kind": "classified",
+          "reading": {
+            "type": null,
+            "techniques": [],
+            "provenanceNote": "Tabiya's material-census convention"
+          }
+        },
+        "recordedTablebase": {
+          "kind": "recorded",
+          "pieceCount": 4,
+          "category": "win",
+          "sourceId": "syzygy"
+        }
+      },
+      "positions": 18,
+      "paths": 1
+    },
+    {
+      "packId": "najdorf-english-attack-black",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 9,
+          "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq -",
+            "observedPly": 9,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq -",
+            "observedPly": 9,
+            "descendantEndpointCount": 98,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 2,
+              "black": 3
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 5,
+            "boundary": 5,
+            "marginInsideBand": 0
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 30
+        }
+      },
+      "positions": 9,
+      "paths": 2
+    },
+    {
+      "packId": "nimzo-doubled-c-pawns",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 18,
+          "fen": "r2q1rk1/pbpn1ppp/1p1ppn2/6B1/2PP4/P1PBPN2/5PPP/R2QK2R w KQ - 2 10"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r2q1rk1/pbpn1ppp/1p1ppn2/6B1/2PP4/P1PBPN2/5PPP/R2QK2R w KQ -",
+            "observedPly": 18,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r2q1rk1/pbpn1ppp/1p1ppn2/6B1/2PP4/P1PBPN2/5PPP/R2QK2R w KQ -",
+            "observedPly": 18,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r2q1rk1/pbpn1ppp/1p1ppn2/6B1/2PP4/P1PBPN2/5PPP/R2QK2R w KQ - 2 10",
+            "phase": "middlegame",
+            "material": {
+              "white": 28,
+              "black": 28
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "middlegame_development_band",
+            "phase": "middlegame",
+            "axis": "undeveloped_home_minors",
+            "observed": 0,
+            "boundary": 2,
+            "marginInsideBand": 2
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 30
+        }
+      },
+      "positions": 8,
+      "paths": 2
+    },
+    {
+      "packId": "open-centre-french-exchange-black",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 13,
+          "fen": "rnbq1rk1/ppp1nppp/3b4/3p4/3P4/3B1N2/PPP2PPP/RNBQR1K1 b - - 7 7"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbq1rk1/ppp1nppp/3b4/3p4/3P4/3B1N2/PPP2PPP/RNBQR1K1 b - -",
+            "observedPly": 13,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbq1rk1/ppp1nppp/3b4/3p4/3P4/3B1N2/PPP2PPP/RNBQR1K1 b - -",
+            "observedPly": 13,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbq1rk1/ppp1nppp/3b4/3p4/3P4/3B1N2/PPP2PPP/RNBQR1K1 b - - 7 7",
+            "phase": "unclear",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 2,
+              "black": 2
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "development_transition_gap",
+            "phase": "unclear",
+            "axis": "undeveloped_home_minors",
+            "observed": 4,
+            "middlegameBoundary": 2,
+            "openingBoundary": 5,
+            "distanceToMiddlegameBand": 2,
+            "distanceToOpeningBand": 1
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 30
+        }
+      },
+      "positions": 9,
+      "paths": 2
+    },
+    {
+      "packId": "open-centre-ruy-exchange",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 13,
+          "fen": "r1bqkbnr/1pp3pp/p1p2p2/8/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 7"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "r1bqkbnr/1pp3pp/p1p2p2/8/3NP3/8/PPP2PPP/RNBQ1RK1 b kq -",
+            "observedPly": 13,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "r1bqkbnr/1pp3pp/p1p2p2/8/3NP3/8/PPP2PPP/RNBQ1RK1 b kq -",
+            "observedPly": 13,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "r1bqkbnr/1pp3pp/p1p2p2/8/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 7",
+            "phase": "opening",
+            "material": {
+              "white": 28,
+              "black": 28
+            },
+            "undevelopedMinors": {
+              "white": 2,
+              "black": 3
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 5,
+            "boundary": 5,
+            "marginInsideBand": 0
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 28
+        }
+      },
+      "positions": 10,
+      "paths": 2
+    },
+    {
+      "packId": "opening-principles-black",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 1,
+          "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "observedPly": 1,
+            "eco": "B00",
+            "name": "King's Pawn Game",
+            "sourcePly": 1,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "observedPly": 1,
+            "descendantEndpointCount": 2023,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 4,
+              "black": 4
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 8,
+            "boundary": 5,
+            "marginInsideBand": 3
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 8,
+      "paths": 1
+    },
+    {
+      "packId": "opening-principles-white",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 0,
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+            "observedPly": 0,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+            "observedPly": 0,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 4,
+              "black": 4
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 8,
+            "boundary": 5,
+            "marginInsideBand": 3
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 8,
+      "paths": 1
+    },
+    {
+      "packId": "opponent-intent-early-queen",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 1,
+          "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "matched",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "observedPly": 1,
+            "eco": "B00",
+            "name": "King's Pawn Game",
+            "sourcePly": 1,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "observedPly": 1,
+            "descendantEndpointCount": 2023,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 4,
+              "black": 4
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 8,
+            "boundary": 5,
+            "marginInsideBand": 3
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 8,
+      "paths": 1
+    },
+    {
+      "packId": "opposite-bishops-fortress-hold",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 1,
+          "fen": "3b4/3k4/8/2PKP3/8/8/4B3/8 b - - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "3b4/3k4/8/2PKP3/8/8/4B3/8 b - -",
+            "observedPly": 1,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "3b4/3k4/8/2PKP3/8/8/4B3/8 b - -",
+            "observedPly": 1,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "3b4/3k4/8/2PKP3/8/8/4B3/8 b - - 0 1",
+            "phase": "endgame",
+            "material": {
+              "white": 3,
+              "black": 3
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "endgame_material_band",
+            "phase": "endgame",
+            "axis": "maximum_non_pawn_material",
+            "observed": 3,
+            "boundary": 13,
+            "marginInsideBand": 10
+          }
+        },
+        "rulesEndgame": {
+          "kind": "classified",
+          "reading": {
+            "type": {
+              "id": "minor",
+              "label": "Minor-piece ending"
+            },
+            "techniques": [],
+            "provenanceNote": "Tabiya's material-census convention"
+          }
+        },
+        "recordedTablebase": {
+          "kind": "recorded",
+          "pieceCount": 6,
+          "category": "draw",
+          "sourceId": "syzygy"
+        }
+      },
+      "positions": 6,
+      "paths": 1
+    },
+    {
+      "packId": "pawn-breakthrough-convert",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 0,
+          "fen": "8/pp6/4k3/PPP5/8/8/6K1/8 w - - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "8/pp6/4k3/PPP5/8/8/6K1/8 w - -",
+            "observedPly": 0,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "8/pp6/4k3/PPP5/8/8/6K1/8 w - -",
+            "observedPly": 0,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "8/pp6/4k3/PPP5/8/8/6K1/8 w - - 0 1",
+            "phase": "endgame",
+            "material": {
+              "white": 0,
+              "black": 0
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "endgame_material_band",
+            "phase": "endgame",
+            "axis": "maximum_non_pawn_material",
+            "observed": 0,
+            "boundary": 13,
+            "marginInsideBand": 13
+          }
+        },
+        "rulesEndgame": {
+          "kind": "classified",
+          "reading": {
+            "type": {
+              "id": "pawn",
+              "label": "Pawn ending"
+            },
+            "techniques": [],
+            "provenanceNote": "Tabiya's material-census convention"
+          }
+        },
+        "recordedTablebase": {
+          "kind": "recorded",
+          "pieceCount": 7,
+          "category": "win",
+          "sourceId": "syzygy"
+        }
+      },
+      "positions": 10,
+      "paths": 1
+    },
+    {
+      "packId": "pawn-opposition-convert",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 0,
+          "fen": "8/8/4k3/8/4K3/8/4P3/8 w - - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "8/8/4k3/8/4K3/8/4P3/8 w - -",
+            "observedPly": 0,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "8/8/4k3/8/4K3/8/4P3/8 w - -",
+            "observedPly": 0,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "8/8/4k3/8/4K3/8/4P3/8 w - - 0 1",
+            "phase": "endgame",
+            "material": {
+              "white": 0,
+              "black": 0
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "endgame_material_band",
+            "phase": "endgame",
+            "axis": "maximum_non_pawn_material",
+            "observed": 0,
+            "boundary": 13,
+            "marginInsideBand": 13
+          }
+        },
+        "rulesEndgame": {
+          "kind": "classified",
+          "reading": {
+            "type": {
+              "id": "pawn",
+              "label": "Pawn ending"
+            },
+            "techniques": [],
+            "provenanceNote": "Tabiya's material-census convention"
+          }
+        },
+        "recordedTablebase": {
+          "kind": "recorded",
+          "pieceCount": 3,
+          "category": "win",
+          "sourceId": "syzygy"
+        }
+      },
+      "positions": 24,
+      "paths": 1
+    },
+    {
+      "packId": "philidor-passive-rook-convert",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 2,
+          "fen": "4k2r/R7/8/4K3/4P3/8/8/8 w - - 1 2"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "4k2r/R7/8/4K3/4P3/8/8/8 w - -",
+            "observedPly": 2,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "4k2r/R7/8/4K3/4P3/8/8/8 w - -",
+            "observedPly": 2,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "4k2r/R7/8/4K3/4P3/8/8/8 w - - 1 2",
+            "phase": "endgame",
+            "material": {
+              "white": 5,
+              "black": 5
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "endgame_material_band",
+            "phase": "endgame",
+            "axis": "maximum_non_pawn_material",
+            "observed": 5,
+            "boundary": 13,
+            "marginInsideBand": 8
+          }
+        },
+        "rulesEndgame": {
+          "kind": "classified",
+          "reading": {
+            "type": {
+              "id": "rook-and-pawn-vs-rook",
+              "label": "Rook and pawn versus rook"
+            },
+            "techniques": [
+              {
+                "id": "lucena",
+                "name": "Lucena",
+                "forSide": "attacker",
+                "provenance": {
+                  "note": "Standard endgame-literature name; Tabiya's material-census convention."
+                },
+                "shapeEntryId": "lucena"
+              },
+              {
+                "id": "philidor",
+                "name": "Philidor",
+                "forSide": "defender",
+                "provenance": {
+                  "note": "Standard endgame-literature name; Tabiya's material-census convention."
+                },
+                "shapeEntryId": "philidor"
+              }
+            ],
+            "provenanceNote": "Tabiya's material-census convention"
+          }
+        },
+        "recordedTablebase": {
+          "kind": "recorded",
+          "pieceCount": 5,
+          "category": "win",
+          "sourceId": "syzygy"
+        }
+      },
+      "positions": 16,
+      "paths": 1
+    },
+    {
+      "packId": "philidor-third-rank-hold",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 1,
+          "fen": "4k3/R7/7r/4K3/4P3/8/8/8 b - - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "4k3/R7/7r/4K3/4P3/8/8/8 b - -",
+            "observedPly": 1,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "4k3/R7/7r/4K3/4P3/8/8/8 b - -",
+            "observedPly": 1,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "4k3/R7/7r/4K3/4P3/8/8/8 b - - 0 1",
+            "phase": "endgame",
+            "material": {
+              "white": 5,
+              "black": 5
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "endgame_material_band",
+            "phase": "endgame",
+            "axis": "maximum_non_pawn_material",
+            "observed": 5,
+            "boundary": 13,
+            "marginInsideBand": 8
+          }
+        },
+        "rulesEndgame": {
+          "kind": "classified",
+          "reading": {
+            "type": {
+              "id": "rook-and-pawn-vs-rook",
+              "label": "Rook and pawn versus rook"
+            },
+            "techniques": [
+              {
+                "id": "lucena",
+                "name": "Lucena",
+                "forSide": "attacker",
+                "provenance": {
+                  "note": "Standard endgame-literature name; Tabiya's material-census convention."
+                },
+                "shapeEntryId": "lucena"
+              },
+              {
+                "id": "philidor",
+                "name": "Philidor",
+                "forSide": "defender",
+                "provenance": {
+                  "note": "Standard endgame-literature name; Tabiya's material-census convention."
+                },
+                "shapeEntryId": "philidor"
+              }
+            ],
+            "provenanceNote": "Tabiya's material-census convention"
+          }
+        },
+        "recordedTablebase": {
+          "kind": "recorded",
+          "pieceCount": 5,
+          "category": "draw",
+          "sourceId": "syzygy"
+        }
+      },
+      "positions": 14,
+      "paths": 1
+    },
+    {
+      "packId": "queen-vs-pawn-seventh-convert",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 0,
+          "fen": "8/7K/8/8/4Q3/8/1p6/2k5 w - - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "8/7K/8/8/4Q3/8/1p6/2k5 w - -",
+            "observedPly": 0,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "8/7K/8/8/4Q3/8/1p6/2k5 w - -",
+            "observedPly": 0,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "8/7K/8/8/4Q3/8/1p6/2k5 w - - 0 1",
+            "phase": "endgame",
+            "material": {
+              "white": 9,
+              "black": 0
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "endgame_material_band",
+            "phase": "endgame",
+            "axis": "maximum_non_pawn_material",
+            "observed": 9,
+            "boundary": 13,
+            "marginInsideBand": 4
+          }
+        },
+        "rulesEndgame": {
+          "kind": "classified",
+          "reading": {
+            "type": null,
+            "techniques": [],
+            "provenanceNote": "Tabiya's material-census convention"
+          }
+        },
+        "recordedTablebase": {
+          "kind": "recorded",
+          "pieceCount": 4,
+          "category": "win",
+          "sourceId": "syzygy"
+        }
+      },
+      "positions": 19,
+      "paths": 1
+    },
+    {
+      "packId": "rook-4v3-same-side-hold",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 0,
+          "fen": "3r2k1/5pp1/7p/8/4P3/8/5PPP/R5K1 w - - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "3r2k1/5pp1/7p/8/4P3/8/5PPP/R5K1 w - -",
+            "observedPly": 0,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "3r2k1/5pp1/7p/8/4P3/8/5PPP/R5K1 w - -",
+            "observedPly": 0,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "3r2k1/5pp1/7p/8/4P3/8/5PPP/R5K1 w - - 0 1",
+            "phase": "endgame",
+            "material": {
+              "white": 5,
+              "black": 5
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "endgame_material_band",
+            "phase": "endgame",
+            "axis": "maximum_non_pawn_material",
+            "observed": 5,
+            "boundary": 13,
+            "marginInsideBand": 8
+          }
+        },
+        "rulesEndgame": {
+          "kind": "classified",
+          "reading": {
+            "type": {
+              "id": "rook",
+              "label": "Rook ending"
+            },
+            "techniques": [],
+            "provenanceNote": "Tabiya's material-census convention"
+          }
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 11
+        }
+      },
+      "positions": 24,
+      "paths": 4
+    },
+    {
+      "packId": "scandinavian-mainline-black",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 3,
+          "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "observedPly": 3,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "member",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "observedPly": 3,
+            "descendantEndpointCount": 42,
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 4,
+              "black": 4
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 8,
+            "boundary": 5,
+            "marginInsideBand": 3
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 31
+        }
+      },
+      "positions": 17,
+      "paths": 3
+    },
+    {
+      "packId": "trajectory-caro-advance-chain-bishops",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 0,
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+            "observedPly": 0,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+            "observedPly": 0,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 4,
+              "black": 4
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 8,
+            "boundary": 5,
+            "marginInsideBand": 3
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 58,
+      "paths": 3
+    },
+    {
+      "packId": "trajectory-mate-bishop-knight",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 0,
+          "fen": "8/8/4k3/8/4K3/2BN4/8/8 w - - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "8/8/4k3/8/4K3/2BN4/8/8 w - -",
+            "observedPly": 0,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "8/8/4k3/8/4K3/2BN4/8/8 w - -",
+            "observedPly": 0,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "8/8/4k3/8/4K3/2BN4/8/8 w - - 0 1",
+            "phase": "endgame",
+            "material": {
+              "white": 6,
+              "black": 0
+            },
+            "undevelopedMinors": {
+              "white": 0,
+              "black": 0
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "endgame_material_band",
+            "phase": "endgame",
+            "axis": "maximum_non_pawn_material",
+            "observed": 6,
+            "boundary": 13,
+            "marginInsideBand": 7
+          }
+        },
+        "rulesEndgame": {
+          "kind": "classified",
+          "reading": {
+            "type": null,
+            "techniques": [],
+            "provenanceNote": "Tabiya's material-census convention"
+          }
+        },
+        "recordedTablebase": {
+          "kind": "recorded",
+          "pieceCount": 4,
+          "category": "win",
+          "sourceId": "syzygy"
+        }
+      },
+      "positions": 40,
+      "paths": 1
+    },
+    {
+      "packId": "trajectory-qgd-exchange-minority",
+      "root": {
+        "position": {
+          "nodeId": "$start",
+          "ply": 0,
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "opening": {
+          "currentEndpoint": {
+            "kind": "absent",
+            "projectionId": "theory.opening.current_endpoint@1",
+            "positionKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+            "observedPly": 0,
+            "reason": "no_named_endpoint",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          },
+          "catalogueMembership": {
+            "kind": "absent",
+            "projectionId": "theory.opening.catalogue_membership@1",
+            "positionKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+            "observedPly": 0,
+            "reason": "no_catalogue_path",
+            "catalogue": {
+              "sourceId": "lichess-chess-openings",
+              "commit": "4b8622759e7ae6f93f011cc6c83a3823401ab45e",
+              "artifactDigest": "sha256:d1fd3e956122f9dd2b4124464fb223aac1caa0c0379da7604bc05e7bc7172f18"
+            }
+          }
+        },
+        "rulesPhase": {
+          "reading": {
+            "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            "phase": "opening",
+            "material": {
+              "white": 31,
+              "black": 31
+            },
+            "undevelopedMinors": {
+              "white": 4,
+              "black": 4
+            },
+            "provenanceNote": "Tabiya's phase bands"
+          },
+          "decision": {
+            "kind": "opening_development_band",
+            "phase": "opening",
+            "axis": "undeveloped_home_minors",
+            "observed": 8,
+            "boundary": 5,
+            "marginInsideBand": 3
+          }
+        },
+        "rulesEndgame": {
+          "kind": "not_applicable"
+        },
+        "recordedTablebase": {
+          "kind": "outside_domain",
+          "pieceCount": 32
+        }
+      },
+      "positions": 65,
+      "paths": 3
+    }
+  ]
+}

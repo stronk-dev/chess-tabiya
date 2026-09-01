@@ -220,9 +220,15 @@ round-tripped through `pgn-import.ts`"*)
   exact arms. There are 122 abstentions (5 material gap, 117 development gap); 251/682 concrete
   labels lie within one operand unit of their selected boundary. [[D2484]]'s research contract is
   complete and routes to the draft `evidence-value-authority` successor amendment; [[D2486]]'s
-  dual-entrypoint defect is closed. [[D2485]] still owns source-retaining downstream phase-arc
-  composition over opening identity, rules convention and endgame evidence. None authorizes product
-  code before the RFC gate.
+  dual-entrypoint defect is closed.
+- **Source-composition result 2026-09-01:** `make phase-source-composition-census` joins 804 exact
+  authored positions and 100 paths without collapsing authority. Catalogue membership overlaps 70
+  rules-unclear and 30 rules-middlegame positions; across paths it exits 49 times and re-enters 14.
+  [[D2485]] therefore resolves to an exact-node source vector plus ordered source-local changes over
+  opening endpoint/membership, the rules convention, endgame classification and exact tablebase
+  availability. [[D2487]] separately withholds technique names: all 31 KRPvKR positions currently
+  emit both Lucena and Philidor from material alone. None authorizes product code before the RFC
+  gate. Evidence: `design/research/phase-source-composition.md`.
 - **Question:** B10 shipped *"attributed phase classification with honest abstention"* (`gates.md`
   `[V]`). Nothing measures its accuracy or its abstention rate. Q4c's own definition requires
   labeled ground truth, inter-reviewer agreement, and false-transition costs (`plan.md` `[V]`).

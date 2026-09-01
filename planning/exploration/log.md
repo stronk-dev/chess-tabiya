@@ -13811,3 +13811,23 @@ run in a prior-result byte guard with a mutation negative control. D2483 retains
 [[D2485]] still owns the separately sourced phase-arc composition. Q4c still lacks independent
 position/edge labels, reviewer agreement, false-transition costs and owner-use evidence. No product
 classifier, evidence projection, module, pack, schema or authored chess statement changed.
+
+## 2026-09-01 — Phase composition retains sources instead of inventing one stage
+
+**What landed:** [[D2485]]'s disposable `make phase-source-composition-census` instrument and
+dossier. It joins the committed opening catalogue, the five-arm rules convention, current endgame
+classification and exact committed tablebase records over 50 packs / 804 positions / 100 authored
+paths while preserving every source's own identity, availability and abstention.
+
+**What changed:** the downstream contract is now evidence-backed: an exact-node source vector plus
+ordered source-local changes, never a merged `phase`, precedence scalar or sticky `inBook` flag.
+Catalogue membership overlaps 70 rules-unclear and 30 rules-middlegame positions; it exits 49 times
+and re-enters 14 across the authored paths. The same run finds 241 exact tablebase records, 109 typed
+endgames and 187 untyped rules-endgames without laundering one source into another.
+
+**Defect/next:** [[D2487]] records that all 31 current rook-and-pawn-versus-rook readings emit both
+Lucena and Philidor from material alone; technique naming remains withheld pending exact cited
+applicability. Draft and review the focused production composition RFC, then implement it only after
+its value-authority/provider/recorded-path dependencies accept. Independent position labels, error
+costs and ordinary-learner presentation remain open Q4c work. No product producer, projection,
+module, pack, schema or authored chess statement changed.

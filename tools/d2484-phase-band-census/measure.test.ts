@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { PhaseReading } from "../../packages/runtime/src/phase.js";
-import { phaseDecision } from "./measure.js";
+import { phaseDecision } from "./bands.js";
 
 function reading(phase: PhaseReading["phase"], maximumMaterial: number, undeveloped: number): PhaseReading {
   return {
