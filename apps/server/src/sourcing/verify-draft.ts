@@ -127,7 +127,7 @@ async function createOfflineQuery(retrievedAt: string): Promise<TablebaseQuery> 
   };
 }
 
-function assertArtifacts(
+export function assertSourcingArtifacts(
   pack: DrillPackDefinition,
   packDigest: string,
   ledger: EvidenceLedger,
@@ -204,7 +204,7 @@ async function verifySyzygyDraft(file: string, options: VerifyDraftOptions = {})
   const manifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: Object.freeze([...entries.values()]) };
   const sourcedAt = manifest.entries.map((entry) => entry.retrievedAt).sort().at(-1)!;
   const ledger: EvidenceLedger = { schema: "tabiya.sourcing.evidence.v1", packId: pack.id, packVersion: pack.version, packDigest: digest, sourcedAt, records: Object.freeze(records), abstentions: Object.freeze(abstentions) };
-  assertArtifacts(pack, digest, ledger, manifest, options.offline !== true, records);
+  assertSourcingArtifacts(pack, digest, ledger, manifest, options.offline !== true, records);
 
   const paths = sidecars(absolute);
   const args = { file: absolute.replace(`${resolve(".")}/`, ""), offline: options.offline === true };
@@ -312,7 +312,7 @@ async function verifyEngineDraft(file: string, options: VerifyDraftOptions): Pro
   const manifest: SourceManifest = { schema: "tabiya.sourcing.manifest.v1", entries: Object.freeze([...entries.values()]) };
   const sourcedAt = manifest.entries.map((entry) => entry.retrievedAt).sort().at(-1)!;
   const ledger: EvidenceLedger = { schema: "tabiya.sourcing.evidence.v1", packId: pack.id, packVersion: pack.version, packDigest: digest, sourcedAt, records: Object.freeze(records), abstentions: Object.freeze((existing.ledger?.abstentions ?? []).filter((value) => value.kind !== "engine_eval")) };
-  assertArtifacts(pack, digest, ledger, manifest, true, produced);
+  assertSourcingArtifacts(pack, digest, ledger, manifest, true, produced);
   const args = { file: absolute.replace(`${resolve(".")}/`, ""), offline: options.offline === true };
   await writeFile(absolute, `${JSON.stringify(pack, null, 2)}\n`, "utf8");
   await writeCanonicalJson(paths.ledger, ledger);

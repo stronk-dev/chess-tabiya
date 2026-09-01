@@ -56,6 +56,7 @@ make test-browser
 make pack-check FILE=content/drafts/my-pack.json
 make pack-preview FILE=content/drafts/my-pack.json
 make tablebase-walk FILE=content/drafts/my-pack.json OFFLINE=1
+make tablebase-census FILE=content/drafts/my-pack.json
 make expression-census OUT=/tmp/expression-census.json
 make up
 make up-engines
@@ -114,6 +115,15 @@ without moving files into `content/packs/`.
 `make tablebase-walk` is the read-only Syzygy authoring instrument. It accepts one pack or
 a newline-delimited FEN file, can enumerate learner decisions, and writes only its report
 when `OUT` is supplied. It never promotes or rewrites content.
+
+`make tablebase-census FILE=<pack>` is the bounded evidence writer for tablebase census
+claims. For every authored start/spine position in Syzygy range that has a legal move, it
+records every distinct exact legal successor, including all four promotion roles. It reuses
+existing unique records, preserves non-tablebase evidence and claim bindings, and refuses
+duplicates or a query count above `MAX_QUERIES` (400 by default). Pack validation, evidence
+validation, and both complete replacement images finish before either sibling sidecar is
+replaced; an ordinary partial replacement is rolled back. The command never authors claims
+or edits pack prose.
 
 `make graduation-plan` is the read-only D560 migration instrument. It re-derives the accepted
 graduation classifier over drafts, inventories candidate emitter templates, and reports the

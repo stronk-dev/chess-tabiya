@@ -275,6 +275,12 @@ The **277** does not; treat it as unsourced and use one of the three above, stat
 
 **Two blockers before a command can be written.**
 
+> **2026-09-01 correction.** The promotion blocker below no longer exists at HEAD: the shared
+> `legalSuccessors` path preserves queen, rook, bishop, and knight promotion roles and its
+> complete-census regression covers them. The reused D526 route is also obsolete. [[D2476]] owns
+> the remaining writer only; the historical diagnosis below is retained to show why the wave was
+> previously blocked.
+
 1. **There is no writer from a walk report to an evidence ledger.** `make tablebase-walk` returns
    `{schema: "tabiya.sourcing.walk.v1", nodes, abstentions}` and writes it to `--out` or stdout
    (`tablebase-walk.ts:127`, `:157`). It emits **no `EvidenceRecord`**. The only shipped producer of

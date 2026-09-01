@@ -152,18 +152,15 @@ measured rungs today, not five to nine"*)
 - **Correction retained:** the pre-fix lexical diagnosis remains historical; the discarded
   rounded-DTZ post-fix figures are not promoted into this reproducible result.
 
-### Q-08 · Do the corpus's evidence claims have any backing at all? ([[D403]] — *"Three mechanisms
-landed in one day and the corpus uses them once between them"*)
-- **Question:** is the adoption gap closing or static — `graduation-report` graduable count, and
-  `expression-census` `backedClaims`?
-- **Settled by:** two shipped `make` targets. **Already re-measured on 2026-08-16 in the running
-  app** `[V]`: `make graduation-report` → *documents: 56; blocking: 220; accepted: 43;* **graduable:
-  none**. `make expression-census` at the row's writing: **196 claims, `backedClaims: 1`** `[row]`.
-- **Cost:** [afternoon] to re-measure; the **fix** is 27 mechanical corpus rows in
-  `defect-triage.md` §7a, three of which are a shipped target pointed at the corpus `[row]`.
-- **Unblocks:** B4, K6, Q-02's denominator, and the graduation gate that is holding the product shut.
-- **Gating: A.** **The open *question* half is not a measurement** — *"may a mechanism land without
-  one exercising customer?"* is a process ruling (§6.4).
+### Q-08 · DONE 2026-09-01 — evidence adoption remains static ([[D403]])
+- **Answer:** `make graduation-report` still finds **0/50** authored packs graduable.
+  `make expression-census` still finds **196 claims, one backed claim and zero recorded
+  populations**; all 60 rung-4 `corpus_observed` claims remain unbacked. `[V]`
+- **Boundary:** the freshness gate independently names 42/68 ledgers fresh and 26 stale, but zero
+  packs are otherwise graduable. Re-stamping evidence cannot move this result. `[V]`
+- **Evidence:** `design/research/evidence-adoption-rerun-2026-09-01.md`.
+- **Successor:** execute the ownerless [[D476]] binding/population wave. The process-policy half is
+  split to [[D2475]] rather than leaving a completed measurement mixed with an owner ruling.
 
 ### Q-09 · Does real broadcast PGN survive our importer? ([[D414]] — *"No broadcast has been
 round-tripped through `pgn-import.ts`"*)
@@ -337,7 +334,7 @@ gate, a kill criterion, or an RFC that cannot otherwise be drafted. **Nine entri
 | ~~1~~ | **Q-03 DONE 2026-09-01** [[D375]]/[[D490]] | `make practical-resistance-measurement` `[V]` | conditional reach measured; [[D2474]] composition successor routed |
 | 2 | **Q-04** K9/C7 | `tests/browser/` + CET numbers on file `[V]` | **K9** (kill criterion, zero own-side evidence) and **C7** |
 | ~~3~~ | **Q-07 DONE 2026-09-01** [[D457]] | `make dtz-census-measurement` `[V]` | exact retained rerun landed; no longer queued |
-| 4 | **Q-08** [[D403]] | `make graduation-report`, `make expression-census` `[V]` | B4, K6, the graduation gate |
+| ~~4~~ | **Q-08 DONE 2026-09-01** [[D403]] | `make graduation-report`, `make expression-census` `[V]` | confirms the binding/population wave remains the blocker |
 | 5 | **Q-09** [[D414]] | ~20 lines vs `pgn-import.ts` `[V]` | whether live relay can become an RFC |
 | 6 | **Q-10** [[D378]] | `make expression-census` `[V]` | `rfc/measurement-records.md` (draft) |
 | 7 | **Q-15** Q6 residual | explorer position-census wave `[row]` | 60 `corpus_observed` claims with 0 backing |

@@ -31,6 +31,25 @@ pack or writes admission sidecars. Successful online probes are cached without e
 under the gitignored `content/sources/syzygy/` directory, keyed by normalized position
 plus halfmove clock, so a repeat walk performs no network request.
 
+For evidence adoption rather than exploration, run:
+
+```sh
+make tablebase-census FILE=content/drafts/<pack>.json
+```
+
+The census writer uses the narrower, declared Stage-2 population: authored start/spine
+positions with seven pieces or fewer. For each non-terminal parent it enumerates the exact
+legal successors and writes one `tablebase_result` per unique successor into the existing
+evidence ledger, retaining all queen, rook, bishop, and knight promotions. Existing unique
+facts are reused; duplicate facts for one successor are refused. It preserves unrelated
+records, abstentions, bindings, and their manifest sources, re-stamps the current pack
+digest, and removes only manifest entries no longer referenced by the merged artifacts.
+
+The default 400-query ceiling is per pack. Compilation and the full sourcing validation run
+before either sidecar moves; both next images are staged first, and an ordinary rename failure
+after the first replacement restores the original bytes. This is a mechanical evidence
+operation: it does not add `moveCensus` claims or decide which prose deserves one.
+
 Pack declarations distinguish five determinate categories (`win`, `loss`, `draw`,
 `cursed-win`, `blessed-loss`) from uncertain Syzygy categories. Cursed/blessed roots are
 admitted only for compatible objectives and require a declared ply budget long enough to

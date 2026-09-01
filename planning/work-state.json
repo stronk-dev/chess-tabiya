@@ -3092,11 +3092,12 @@
     },
     {
       "id": "D403",
-      "state": "todo",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:08d5f8b3e394dcc3f3023648c14b4a3d63fc61ffc57f8d8749761297d218b788",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:601d163a680a70494f893a4816b0335666cff824e7fef9e0a1097dbd6f980e4e",
       "uxItems": [],
-      "owner": "content-and-theory"
+      "owner": "content-and-theory",
+      "blocker": "item:D476"
     },
     {
       "id": "D404",
@@ -19639,6 +19640,25 @@
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D2475",
+      "state": "blocked",
+      "sourceGlyph": "⚖️",
+      "sourceDigest": "sha256:9d6335163c5de3d776254ead0aec4725abffc7c491660fe87921d0f0fc9baabe",
+      "uxItems": [],
+      "owner": "OWNER",
+      "blocker": "owner-ruling",
+      "question": "May a foundation mechanism land without one real exercising content or product consumer, or must it remain implementing with an owned staged discharge?"
+    },
+    {
+      "id": "D2476",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ef81b3000df0512334690845b82595a2256968af32fdd7f5d4fa6d1fa7057794",
+      "uxItems": [],
+      "evidence": "apps/server/src/sourcing/tablebase-census.ts",
+      "evidenceKind": "path"
     }
   ]
 }

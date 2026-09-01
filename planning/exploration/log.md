@@ -13692,3 +13692,38 @@ The two named `hold` packs split: Philidor third-rank 4/4 selects; opposite-bish
 weakened. The new gap is [[D2474]]: a conditional objective is exposed as a standalone pack policy,
 so one learner deviation can produce a run-stopping 422. Route explicit, recorded policy
 composition to `rfc/bot-policy.md`; do not invent or silently relabel a fallback in implementation.
+
+## 2026-09-01 — Evidence adoption rerun closes Q-08 without pretending the gap closed
+
+**What landed:** Q-08 / [[D403]] was rerun through the shipped read-only instruments. Graduation
+finds 0/50 authored packs graduable. The expression census finds 196 claims, one backed claim and
+zero recorded populations; all 60 rung-4 corpus-labelled claims remain unbacked. Evidence-ledger
+freshness is independently explicit at 42/68 fresh, 26 stale and zero invalid.
+
+**What changed:** the research question is answered and the adoption result is unchanged. Digest
+staleness is not the explanation: zero packs are otherwise graduable. The process-policy question
+previously bundled into D403 is now [[D2475]], so an owner ruling cannot be confused with an
+instrument result.
+
+**Blocked/next:** execute the [[D476]] binding/population content wave. Another schema, endpoint or
+renderer with no exercising content would reproduce the measured failure. K6 remains open because
+the curated/bound tier required to test specificity still has not been exercised.
+
+## 2026-09-01 — Tablebase successor evidence now has a bounded writer
+
+**What landed:** [[D2476]] adds `make tablebase-census FILE=<pack>`. It walks the accepted Stage-2
+population of authored start/spine positions in Syzygy range, records every distinct exact legal
+successor, preserves all four promotion roles, reuses unique existing facts, merges unrelated
+evidence and sources, re-stamps the pack digest and refuses duplicates or a per-pack budget overrun.
+Both validated sidecar images are staged before replacement, with rollback after an ordinary
+partial rename failure.
+
+**What changed:** Q-17's missing-instrument prerequisite is closed. Seventeen focused contracts
+include a real Lucena pack through validation and disk replacement; the full repository gate passes
+1,106 software, 2 performance and 172 real-content tests. The direct merge-conflict fixtures also
+retire `VERIFY_LEDGER_MERGE_CONFLICT` from the live refusal-debt register.
+
+**Blocked/next:** no corpus sidecar or authored claim changed in this foundation commit, so the
+adoption denominator remains one backed claim and zero graduated packs. Run the mechanical census
+over the twelve Syzygy-backed drafts under the 400-query per-pack ceiling, record the corpus-wide
+Q-17 result, then leave claim selection and prose bindings to the separate human-authored wave.

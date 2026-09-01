@@ -243,6 +243,13 @@ eligible pool. It is not evidence that curated authored explanations remain gene
 call K6. F5 must compile module-specific semantic eligibility before local selection and permit an
 unused budget slot to remain empty; owner use then tests the bounded output.
 
+**K6 prerequisite rechecked, 2026-09-01.**
+`design/research/evidence-adoption-rerun-2026-09-01.md` reruns the two shipped content instruments:
+0/50 authored packs graduate, 1/196 claims is backed, and 0/60 `corpus_observed` claims carries a
+recorded population. This is not another specificity reading and does not call K6; it proves the
+curated/bound tier required to test K6 has still not been exercised. The next action remains the
+[[D476]] binding/population wave, not another generated-prose experiment.
+
 ## Exploration-to-slice gate
 
 The first experimental vertical-slice RFC may open when all of the following have reached

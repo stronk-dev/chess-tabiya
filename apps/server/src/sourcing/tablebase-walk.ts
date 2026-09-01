@@ -16,7 +16,7 @@ import { exactLegalMoves } from "./legal-moves.js";
 import { SourcingError } from "./types.js";
 
 const OFFLINE_FIXTURES = resolve("apps/server/src/sourcing/fixtures/verify-draft.json");
-interface WalkPosition { readonly fen: string; readonly pointer: string; readonly ply: number }
+export interface WalkPosition { readonly fen: string; readonly pointer: string; readonly ply: number }
 
 function position(fen: string): Chess {
   try { return Chess.fromSetup(parseFen(fen).unwrap()).unwrap(); }
@@ -30,7 +30,7 @@ function after(fen: string, uci: string): string {
   return makeFen(board.toSetup());
 }
 
-function packPositions(pack: DrillPackDefinition): readonly WalkPosition[] {
+export function packPositions(pack: DrillPackDefinition): readonly WalkPosition[] {
   const values: WalkPosition[] = [{ fen: pack.start.fen, pointer: "/start/fen", ply: 0 }];
   const walk = (nodes: readonly SpineNode[], fen: string, pointer: string, ply: number): void => {
     nodes.forEach((node, index) => {
