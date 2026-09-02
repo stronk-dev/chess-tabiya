@@ -20198,6 +20198,51 @@
       "sourceDigest": "sha256:cfdb81a67024e740906e694f1bbae260da62bcf339d54768133bfd36a4c296ab",
       "uxItems": [],
       "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2537",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:635a0181efffc7774a36752dbfa6408d0199119a0b9a2aebe8f86b83122242ff",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2538",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f4a12c8b81ac2b69375cfa9a34519b2b717f0d001b1da140ac3b2cef03ca4629",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2539",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:230c6a7e720ab05bee81d6704e6cdd4de264325096b1797033920851aa04ef19",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2540",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ed6e1f24b565b8d8d96a501f23f6f0b8b31efff7ec282eebd0d479c5598d5d77",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2541",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0ddb24c6bed979fd184835ab938a75ac50bc126298d907c15f047f250db37e46",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
     }
   ]
 }

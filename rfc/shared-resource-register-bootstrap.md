@@ -1,11 +1,11 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — fourth author repair complete 2026-09-01 on [[D2498]]–[[D2501]]. The
-  previous repair's projection/config union, ten-descriptor baseline, four-state resolution,
-  check-not-generate README ownership and review boundary survive. The selector grammar now encodes
-  the real assistance profiles, process RFCs carry complete descriptor authority, and the two
-  remaining adapter images are literal. Another fresh independent review is required; no
-  implementation is authorized.
+- **Status:** draft — RETURNED by fourth fresh independent review 2026-09-02 on
+  [[D2537]]–[[D2541]]. The catalogue/lifecycle/adoption direction and repaired live selectors
+  survive, but the canonical-resource receipt accepts forbidden images, TypeScript graph ids drift
+  on unrelated declarations, compiler-program authority is absent, migration callback roots are
+  unrepresentable, and two adapters omit their complete projected image. Author repair and another
+  fresh review are required; no implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -610,6 +610,18 @@ The fourth author preflight found four remaining literal-contract gaps:
 Their earlier repairs are incorporated into §§1–7. They close only when the amended executable
 criteria land; rewriting the architecture does not retire the findings.
 
+The fourth fresh review returns five remaining generic-image obligations to this RFC:
+
+- [[D2537]] makes the canonical-resource author receipt enforce its digest and literal grammar;
+- [[D2538]] replaces file-global declaration ordinals with stable retained-symbol identities;
+- [[D2539]] defines one reproducible compiler-program and module-resolution authority;
+- [[D2540]] gives each migration callback graph a representable deterministic root; and
+- [[D2541]] defines complete projected identity, semantic, digest and lifecycle-head values for the
+  canonical-resource and TypeScript-contract adapters.
+
+They require a bounded fifth author repair and another fresh independent review. None authorizes
+implementation while this RFC remains returned.
+
 ## Acceptance criteria
 
 1. Catalogue and README register populations are set-equal; no `RESOURCE_NAMES`, `SCHEMA_SLUGS` or
@@ -660,6 +672,9 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-02: returned by fourth fresh independent buildability review on [[D2537]]–[[D2541]];
+  receipt:
+  `planning/shared-resource-register-bootstrap/fourth-fresh-independent-buildability-review-2026-09-02.md`.
 - 2026-09-01: fourth author repair on [[D2498]]–[[D2501]]. Selector descent now admits exact
   member/object/literal paths and the two assistance heads use resolvable slash paths; every process
   RFC supplies canonical descriptor-candidate bytes; TypeScript/migration graphs define exact

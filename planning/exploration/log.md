@@ -14396,3 +14396,20 @@ protected-design byte changed.
 **Evidence/next:** `make semantic-collectors-deflection-authority-author-contract` passes 4/4 plus
 strict TypeScript. Fresh independent review must attack derivation widening, stable identity,
 anchor equality and both call sites before production implementation.
+
+## 2026-09-02 — Shared-resource bootstrap fourth fresh review returns five projection gaps
+
+**What landed:** independently reviewed the fourth author repair against its generic adapter image,
+the live cross-project assistance descriptors and the migration sequence. The one-catalogue,
+four-state resolution, lifecycle, adoption and README ownership direction survives. No production,
+schema, API, storage, content, web or protected-design byte changed.
+
+**What changed:** [[D2537]]–[[D2541]] record five blockers. The canonical parser accepts arbitrary
+digests and forbidden literal forms; repository node ordinals drift on out-of-graph declarations;
+the compiler package is pinned but its multi-project program is not; migration callbacks have no
+representable graph root; and canonical/TypeScript adapters omit exact projected identity, semantic,
+digest and lifecycle-head values.
+
+**Evidence/next:** `make shared-resource-bootstrap-fourth-fresh-review` passes 5/5 findings while
+the retained fourth author target remains green. A bounded fifth author repair must close these
+five authorities, followed by another genuinely fresh review before acceptance or implementation.

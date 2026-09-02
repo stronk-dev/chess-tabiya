@@ -13,3 +13,17 @@ staged/first-parent transition reader and resource-scoped diagnostics. `make
 shared-resource-bootstrap-second-author-repair` passes 8/8 and `make
 shared-register-reconciliation-author-repair` passes 6/6. No register engine or product bytes have
 landed; fresh independent review is next.
+
+## 2026-09-02 — Fourth fresh review returns five remaining projection authorities
+
+The fourth fresh buildability review retained the generic catalogue, lifecycle, adoption and
+check-not-generate direction, then reproduced [[D2537]]–[[D2541]]. The author parser accepts an
+arbitrary resource digest and forbidden literal forms; TypeScript graph ids drift when an unrelated
+declaration is inserted; no compiler-program construction is canonical across the web/runtime
+projects; anonymous migration callbacks cannot inhabit the graph's selector-string roots; and the
+canonical/TypeScript adapters do not define complete projected identity, semantic, digest and head
+values.
+
+`make shared-resource-bootstrap-fourth-fresh-review` passes 5/5 findings. No engine, catalogue,
+register, product or protected-design byte landed. A bounded fifth author repair and another fresh
+review are required before acceptance.
