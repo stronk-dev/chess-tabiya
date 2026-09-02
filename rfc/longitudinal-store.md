@@ -1,14 +1,13 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **RETURNED by the fourth fresh independent review 2026-09-02 on
-  [[D2514]], [[D2515]], [[D2516]] and [[D2517]].** The prior
-  revision/cut/isolation/provenance/failure repairs survive, but a
-  multi-run query still has only one failure/retry/unavailable scalar; a separate worker connection
-  cannot see `createApplication()`'s default `:memory:` database; the source digest has no canonical
-  byte image or shared constructor; and the shipped lifecycle/build neither exposes the named
-  start/stop/readiness behavior nor emits the separately addressed worker artifact. `make
-  longitudinal-store-fourth-fresh-review` reproduces 4/4. No migration, worker, reader or consumer
-  implementation is authorized before an author repair and another fresh review. The
+- **Status:** draft — **fifth author repair complete 2026-09-02 on [[D2514]], [[D2515]],
+  [[D2516]] and [[D2517]]; fresh independent review required.** Reads now retain one discriminated
+  outcome per cut; HTTP and worker share one required file-backed database identity; one
+  domain-separated RFC-8785 constructor owns source-digest bytes; and the real
+  `createApplication`/`close`/`healthz` lifecycle plus explicit worker build artifact are closed.
+  `make longitudinal-store-fifth-author-repair` retains the prior 32 author arms and adds 4 new
+  falsifiers plus strict TypeScript. No migration, worker, reader or consumer implementation is
+  authorized before another fresh review. The
   2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
   returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
@@ -359,8 +358,35 @@ zero observations, denominators, structure rows and jobs for both the deleted le
 
 Every persisted run mutation upserts only this cheap job watermark plus
 `requested_source_digest` in the **same transaction as the run bytes**; it does not enumerate legal
-alternatives. The digest is SHA-256 over the canonical contiguous event prefix plus the durable
-owner/authorship/import-mainline inputs consumed by §B.1. It is not a digest of mutable job state.
+alternatives. One exported server operation, `longitudinalSourceImageV1`, constructs the complete
+source authority after locking the run and its attribution records. Its exact image is:
+
+```ts
+interface LongitudinalSourceImageV1 {
+  readonly version: 1;
+  readonly runPrefix: DrillRun; // readBackReplay(events where seq <= requestedSeq).run
+  readonly ownerLearnerId: string;
+  readonly moveAuthorship: readonly MoveAuthorship[]; // eventSeq then nodeId; only prefix commits
+  readonly importedMainlinePlies: number | null;
+  readonly structureAttribution: "single_player" | "unattributable_shared";
+}
+```
+
+`runPrefix` is produced by the shipped `readBackReplay` authority, not by slicing the current
+snapshot's arrays. Construction requires contiguous events `1..requestedSeq`, exact replay equality
+for every prefix-derived run field, one authorship row for every prefix user commit, canonical sort
+and no duplicate `eventSeq`. The two attribution fields are the **resolved projector inputs**:
+irrelevant later journal entries or pause state do not churn the digest, while any change that
+alters owner authorship, imported-mainline membership or shared-structure eligibility changes the
+image. Raw journal/match rows are never hashed as an alternative authority.
+
+`longitudinalSourceDigestV1` is the sole digest constructor. It encodes the literal UTF-8 domain
+prefix `tabiya.longitudinal-source.v1\0`, followed immediately by the RFC-8785 bytes from the shipped
+`canonicalizeJson(image)`, then returns lower-case `sha256:<64 hex>`. The seven write operations,
+startup reconciliation, worker exact-prefix read and rebuild call that same constructor; no caller
+may supply a precomputed string. Equivalent object insertion order hashes identically; changing
+any image field changes the digest; job state, clock and claim fields cannot enter it. It is not a
+digest of mutable job state.
 An increased event head or changed source digest atomically moves any non-pending job to `pending`,
 clears its claim/failure schedule and increments `claim_generation`; byte-identical saves do not.
 An in-flight claim over the prior digest is invalid immediately rather than occupying its lease.
@@ -473,35 +499,45 @@ interface LongitudinalReadQuery {
     packIds?: readonly string[];
   };
 }
+type LongitudinalCompleteCut = {
+  kind: "complete"; runId: string; requestedSeq: number;
+  completedSeq: number; derivedRev: number;
+};
+type LongitudinalCutOutcome =
+  | LongitudinalCompleteCut
+  | { kind: "pending"; runId: string; requestedSeq: number;
+      completedSeq: number; derivedRev: number; retryAt?: string }
+  | { kind: "failed"; runId: string; requestedSeq: number;
+      completedSeq: number; derivedRev: number;
+      failureCode: LongitudinalFailureCode; attempts: number }
+  | { kind: "unavailable"; runId: string; requestedSeq: number;
+      reason: "not_requested" | "revision_mismatch" | "profile_suppressed"
+        | "cut_superseded" };
 type LongitudinalReadResult =
-  | { kind: "complete"; cuts: readonly LongitudinalCut[];
+  | { kind: "complete"; cuts: readonly LongitudinalCompleteCut[];
       denominators: readonly DenominatorRow[];
       observations: readonly ObservationRow[];
       structureStats: readonly StructureStatRow[] }
-  | { kind: "pending"; cuts: readonly LongitudinalCut[];
-      retryAt?: string }
-  | { kind: "failed"; cuts: readonly LongitudinalCut[];
-      failureCode: LongitudinalFailureCode; attempts: number }
-  | { kind: "unavailable";
-      reason: "not_requested" | "revision_mismatch" | "profile_suppressed"
-        | "cut_superseded";
-      runIds?: readonly string[] };
+  | { kind: "incomplete"; cuts: readonly LongitudinalCutOutcome[] };
 readLongitudinalSnapshot(
   actorLearnerId: string, query: LongitudinalReadQuery
 ): LongitudinalReadResult;
 ```
 
 The storage method requires `actorLearnerId === query.learnerId`; delegated/classroom access needs
-its own later operation and cannot reuse this one. The transaction first fixes a sorted cut vector
-`(runId,requestedSeq,completedSeq,derivedRev)`. A `runs` query is a current-cut assertion, not a
+its own later operation and cannot reuse this one. The transaction first fixes one outcome per
+requested or eligible run, sorted by `runId`; duplicate `runs.cuts[].runId` is invalid input. A
+`runs` query is a current-cut assertion, not a
 historical snapshot API: every caller-supplied `requestedSeq` must equal the job's current
-`requested_seq`. A lower or higher value returns `cut_superseded` with no data. The store retains
+`requested_seq`. A lower or higher value produces that run's `cut_superseded` outcome with no data.
+The store retains
 one replace-in-place row set and therefore never promises bytes for an older cut. Any requested
-run at another revision returns
-`revision_mismatch`; `account_deleted` returns `profile_suppressed`; missing jobs return
-`not_requested`; any quarantined cut returns `failed`; any retry-wait or incomplete cut returns
-`pending` with **no data rows** and only retry-wait includes `retryAt`. Only all-complete cuts at the
-requested revision and exact current cut return rows, sorted denominators by
+run at another revision receives `revision_mismatch`; `account_deleted` receives
+`profile_suppressed`; missing jobs receive `not_requested`; quarantined cuts retain their exact
+failure code/attempt count; and retry-wait cuts retain their own `retryAt`. If **any** cut is not
+complete, the operation returns `kind: "incomplete"`, the complete sorted outcome vector and **no
+data rows**. Only an all-complete vector at the requested revision and exact current cuts returns
+`kind: "complete"` and rows, sorted denominators by
 `(runId,phase,decisionClass)`, observations by
 `(runId,projectionId,version,semanticSign,sourceSign,phase,decisionClass)`, and structures by
 `(runId,rootKey)`. `all_complete` first fixes the authoritative eligible-run set in the same read
@@ -516,16 +552,30 @@ no M row can be returned under N ([[D2403]]). This makes a cross-game style/skil
 and complete ([[D2230]]).
 No consumer lands in this RFC.
 
-**Production worker lifecycle ([[D2069]]/[[D2404]]).** Implementation adds
+**Production worker lifecycle ([[D2069]]/[[D2404]]/[[D2515]]/[[D2517]]).** Implementation adds
 `apps/server/src/longitudinal-worker.ts` as the HTTP-process supervisor and
-`apps/server/src/longitudinal-worker-thread.ts` as the sole semantic executor. The supervisor uses
-`node:worker_threads` `new Worker(new URL("./longitudinal-worker-thread.js", import.meta.url))`;
-the thread opens its own SQLite connection and owns claim, exact-prefix read, synchronous semantic
-projection, progress-checkpoint renewal and publication. Neither a route callback nor the main
-event loop calls `legalAlternativeEdges`, `localSemanticEvents` or `projectObservations`.
-`createApplication` composes the supervisor once beside storage—not by a route and not by a
-provider. `application.start()` calls `startLongitudinalWorker`; `application.stop()` calls
-`stopLongitudinalWorker`. Defaults are
+`apps/server/src/longitudinal-worker-thread.ts` as the sole semantic executor. One constructor,
+`fileBackedDatabaseIdentity`, resolves an absolute non-URI path and is passed unchanged to both
+`SQLiteRunStorage` and Worker `workerData`. Production `createApplication` defaults to the durable
+`resolve(process.cwd(), "data", "chess-tabiya.sqlite")`; `main.ts` retains the environment override
+but no longer substitutes `:memory:`. A required worker with `:memory:` is a configuration error.
+Unit tests that need isolated memory use a test-only `createInMemoryTestApplication` composition
+which has no worker and reports longitudinal status `disabled_test`; that helper is absent from the
+production package export and cannot satisfy worker/readiness acceptance.
+
+The supervisor uses `node:worker_threads`
+`new Worker(new URL("./longitudinal-worker-thread.js", import.meta.url), { workerData: { databasePath:
+databaseIdentity.absolutePath, ...closedConfig } })`; the thread validates the closed message and
+opens that exact SQLite file as its own connection. It owns claim, exact-prefix read, synchronous
+semantic projection, progress-checkpoint renewal and publication. Neither a route callback nor the
+main event loop calls `legalAlternativeEdges`, `localSemanticEvents` or `projectObservations`.
+`createApplication` composes storage, runs reconciliation, starts one worker and awaits its ready
+message **before returning**; `main.ts` listens only after that promise resolves. There are no
+fictional `application.start()`/`.stop()` methods. The existing `close()` first marks readiness
+`draining`, closes the HTTP listener, tells the worker to drain and awaits its finite batch, then
+closes the worker connection, engine supervisor and HTTP-side storage in that order. An unexpected
+thread exit makes the application health `degraded` and never lets the main process renew its
+claims. Defaults are
 product-fixed operational bounds `{ workerBatchSize: 4, workerConcurrency: 1,
 workerPollMs: 1000, workerLeaseMs: 120000, workerHeartbeatMs: 10000 }`; configuration validates
 batch `1..32`, concurrency `1..batch`, poll `100..5000 ms`, lease `>=60000 ms`, heartbeat
@@ -539,6 +589,20 @@ abandons a newly claimed row merely because the HTTP listener closed. Unexpected
 readiness degraded and lease expiry is the durable recovery path; the supervisor does not renew a
 claim for a thread that may be dead.
 
+`/healthz` returns the closed projection
+`{ status: "ok" | "degraded", engineMode, longitudinal: { status: "ready" | "degraded" |
+"draining" | "disabled_test", reason?: "worker_start_failed" | "worker_exited" |
+"worker_protocol_invalid" } }`. A required worker is HTTP 200 only in `ready`; every degraded or
+draining required-worker state is HTTP 503. The test-only disabled composition may return HTTP 200
+but can never be constructed by `main.ts`, and its body explicitly says `disabled_test`.
+
+The server package build adds `src/longitudinal-worker-thread.ts` as an explicit esbuild entrypoint.
+Packaging verification requires `apps/server/dist/longitudinal-worker-thread.js`, scans the bundled
+main for the relative URL, and starts the built `dist/main.js` against a temporary file-backed
+database until `/healthz` reports the same worker `ready`. The container smoke repeats that probe
+from the copied `dist`; deleting/renaming the worker artifact or running it against another path is
+an able-to-fail negative. A source-level Vitest import cannot discharge this build boundary.
+
 The implementation acceptance instrument runs the real 80-ply fixed corpus arm in that worker
 thread while the main application answers a 20 Hz `/healthz` probe for at least 30 seconds. Main
 event-loop delay must remain p95 **<50 ms** and max **<250 ms**; no probe may exceed **500 ms**.
@@ -547,7 +611,7 @@ decision checkpoints and one final publication. A mutation that executes the sam
 the main process must fail the delay gate; a timer-only heartbeat inside the worker must fail the
 renewal fixture. These are responsiveness and lease-liveness proofs, not a shorter synthetic loop.
 
-Before the worker starts or API readiness is reported, `application.start()` runs
+Before the worker starts or `createApplication` resolves readiness, application composition runs
 `reconcileLongitudinalJobs()` in one transaction ([[D2231]]). It enumerates the same eligible-run
 authority as `all_complete`, reads each exact positive event head, creates missing jobs, advances a
 lower requested high-water, and replaces a wrong `derived_rev`; it performs no semantic work.
@@ -735,6 +799,26 @@ status/spec closure. The historical third-review target remains the receipt that
 it is not a post-repair green gate. Another fresh independent review remains mandatory before any
 production byte lands.
 
+## Fifth author repair (2026-09-02; pending fresh independent review)
+
+The fourth fresh return is repaired as one production snapshot service:
+
+- [[D2514]]: the read union carries a discriminated status per sorted run cut and returns rows only
+  when every outcome is complete; mixed failure, retry and unavailable truth cannot collapse.
+- [[D2515]]: production resolves one absolute file-backed database identity for HTTP and worker;
+  `:memory:` exists only behind a worker-free test helper that advertises `disabled_test`.
+- [[D2516]]: `longitudinalSourceImageV1` and `longitudinalSourceDigestV1` define the exact replayed
+  prefix, resolved attribution inputs, RFC-8785 bytes and UTF-8 domain separation used by all
+  writers, reconciliation, worker and rebuild.
+- [[D2517]]: `createApplication` reconciles and awaits worker-ready before `main.ts` listens;
+  `close()` drains before either database closes; `/healthz` exposes worker degradation; and the
+  explicit server build/container smoke requires the separately addressed worker artifact.
+
+`make longitudinal-store-fifth-author-repair` retains the earlier 24 + 8 author arms and adds four
+able-to-fail controls with strict TypeScript. The historical fourth fresh-review target remains the
+receipt that found these defects. Another genuinely fresh independent review remains mandatory
+before acceptance or production implementation.
+
 ### F. Acceptance criteria
 
 These are the only live acceptance criteria; the historical AC list below is non-normative.
@@ -788,15 +872,17 @@ These are the only live acceptance criteria; the historical AC list below is non
 12. **Revision pair.** Fixture-output and registry-artifact digests are paired with
     `OBSERVATION_DERIVATION_REV`; a zero-incidence registry addition changes the second digest and
     fails until an accepted RFC owns the bump/rebuild.
-13. **Read honesty ([[D2067]]/[[D2230]]/[[D2403]]).** The exact authenticated `readLongitudinalSnapshot` union returns
-    complete/pending/failed/unavailable over a transaction-fixed cut vector and all three sorted row
-    partitions. It refuses complete-history semantics unless every
+13. **Read honesty ([[D2067]]/[[D2230]]/[[D2403]]/[[D2514]]).** The exact authenticated
+    `readLongitudinalSnapshot` union returns one sorted status per transaction-fixed cut and all
+    three row partitions only for an all-complete vector. It refuses complete-history semantics
+    unless every
     `completed_seq === requested_seq` at the requested revision. A partial/failed job returns no
     partial data labelled complete; direct table readers fail the production census. `all_complete`
     left-joins from a transaction-fixed eligible-run set, and one eligible jobless run returns its
     exact id as `not_requested`. `runs` queries accept only the job's exact current requested cut;
     N-complete → M-pending → M-complete returns `cut_superseded` for N throughout and never serves M
-    rows under N.
+    rows under N. Distinct failure codes/attempt counts, retry deadlines and unavailable causes
+    remain attached to their own runs rather than collapsing into one top-level scalar.
 14. **Boundaries/privacy ([[D2065]]).** No learner renderer, rating, classroom, cohort, provider or
     LLM module reaches the store at landing. All four durable classes cascade on learner/run
     deletion and join export/deletion inventories. Delete → retained shared run → rebuild leaves
@@ -806,8 +892,9 @@ These are the only live acceptance criteria; the historical AC list below is non
     combined p95 overall, 902.7 ms middlegame; SQLite 0.128 ms). D1405's complete-prefix arms fail
     the 500 ms gate at every length and its 25-game rebuild takes 828.04 seconds. No result moves
     projection into a request without a later RFC and preregistered gate.
-16. **Worker reach ([[D2069]]/[[D2231]]/[[D2404]]).** The real provider-free application starts/stops one
-    `worker_threads` semantic executor supervised by `LongitudinalProjectionWorker`; all seven
+16. **Worker reach ([[D2069]]/[[D2231]]/[[D2404]]/[[D2515]]/[[D2517]]).** The real file-backed
+    provider-free application starts/stops one `worker_threads` semantic executor supervised by
+    `LongitudinalProjectionWorker`; all seven
     writers wake it after commit; polling recovers missed
     wakes/startup backlog; batches are bounded and oldest-first; crash/reclaim and clean shutdown
     pass. `make longitudinal-worker-once` reaches the same worker dependencies and is distinct from
@@ -847,6 +934,25 @@ These are the only live acceptance criteria; the historical AC list below is non
     `snapshot_invalid` quarantines on attempt one; derivation/publication budgets quarantine at
     3/5; quarantine survives polls and restart; byte-identical save does not reopen it; changed
     source digest, larger event head and accepted revision replacement each reopen exactly once.
+26. **Per-cut result grain ([[D2514]]).** One query crosses two different quarantines, two distinct
+    retry deadlines and four mixed unavailable causes. Every outcome retains its own run id and
+    fields in stable order; the aggregate returns `incomplete` with no data. Deleting the per-cut
+    discriminant or lifting any field to the top-level result fails TypeScript and runtime fixtures.
+27. **One database identity ([[D2515]]).** HTTP storage and the worker open the exact same canonical
+    file path and observe the same committed job. Required-worker `:memory:` and path disagreement
+    fail before readiness. The explicit in-memory test helper has no worker and reports
+    `disabled_test`; `main.ts` cannot import or construct it.
+28. **Source digest authority ([[D2516]]).** One exported constructor domain-separates and hashes
+    RFC-8785 bytes for the exact replayed prefix plus resolved owner/authorship/import/structure
+    inputs. Object insertion order is invariant; every consumed input mutation changes the digest;
+    journal/pause rows outside the resolved prefix and every job/clock/claim mutation do not. All
+    seven writers, reconciliation, worker and rebuild are set-equal callers of that symbol.
+29. **Built lifecycle ([[D2517]]).** `createApplication` reconciles and awaits worker-ready before
+    `main.ts` listens; unexpected exit makes the closed `/healthz` body/status degraded; `close()`
+    drains before closing either SQLite connection. The server build and image contain
+    `dist/longitudinal-worker-thread.js`; a built-dist and container smoke reach ready against a
+    temporary file DB. Missing artifact, wrong DB path, unconditional health or source-only worker
+    execution each makes the gate red.
 
 ## Motivation
 
@@ -1566,7 +1672,7 @@ head after that renumbering and **not yet written**:
   projection can block the HTTP event loop and its heartbeat; shared structure events have no
   learner attribution; and permanent failures retry without bound. Exact review:
   `planning/longitudinal-store/third-fresh-independent-buildability-review-2026-08-31.md`.
-- 2026-09-02: fourth author repair completed [[D2402]]–[[D2406]] at contract tier. Revision reset
+- 2026-09-02: fourth author repair complete 2026-09-02 for [[D2402]]–[[D2406]] at contract tier. Revision reset
   is atomic invalidation; current-cut reads match replace-in-place storage; synchronous derivation
   is isolated in a worker thread with in-loop renewal and explicit main-loop budgets; shared
   structure abstains without actor evidence; and retry/quarantine is bounded by source identity.

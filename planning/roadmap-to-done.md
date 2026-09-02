@@ -992,14 +992,13 @@ store/bot predecessors. Every link needs a typed reducer, immutable inputs, idem
 resume/rebuild, owner/actor identity, prior-release migration, account lifecycle, and a production
 API/client consumer.
 
-The longitudinal-store fourth fresh review returned the contract on [[D2514]], [[D2515]],
-[[D2516]] and [[D2517]]. Its prior
-revision, cut, worker-isolation, shared-provenance and bounded-failure repairs survive, but the
-multi-run reader cannot express mixed per-cut states; the worker cannot see the default in-memory
-application database; the CAS source digest has no canonical constructor; and lifecycle/readiness
-plus the emitted worker artifact stop short of the production build. `make
-longitudinal-store-fourth-fresh-review` reproduces all four. Author repair and another independent
-review still gate acceptance and migration. Player style, skills, opening
+The longitudinal-store fifth author repair closes [[D2514]], [[D2515]], [[D2516]] and [[D2517]] at
+contract tier: reads retain per-cut state; worker/HTTP share one file-backed database identity; one
+canonical domain-separated constructor owns source-digest bytes; and real application lifecycle,
+health and emitted-worker packaging are specified together. `make
+longitudinal-store-fifth-author-repair` retains the prior 32 arms and adds four falsifiers plus
+strict TypeScript. Another independent review still gates acceptance and migration. Player style,
+skills, opening
 performance, durable tips, bot history and campaign progression remain downstream of that
 accepted/persisted boundary rather than rebuilding their own stores.
 

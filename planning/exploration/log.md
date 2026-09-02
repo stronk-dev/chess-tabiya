@@ -14190,3 +14190,19 @@ worker `.js` artifact do not exist in the shipped lifecycle/build.
 RFC/application/package bytes and two actual SQLite connections. One author repair must close the
 read grain, database identity, canonical digest and production lifecycle/package as one service;
 another fresh independent review remains mandatory before migration or implementation.
+
+## 2026-09-02 — Longitudinal store fifth author repair closes the production snapshot contract
+
+**What landed:** repaired [[D2514]], [[D2515]], [[D2516]] and [[D2517]] at RFC tier only. The
+multi-run result has one status per cut; HTTP/worker share one file-backed identity; one exact
+replayed-prefix/attribution image owns source digest bytes; and startup, readiness, drain ordering
+and the emitted worker artifact are one production lifecycle.
+
+**What changed:** required-worker `:memory:` is now refused rather than silently isolated; the
+memory application is an explicit worker-free test posture. `/healthz` has a closed worker state and
+503 degradation instead of unconditional `ok`. Build acceptance now starts `dist/main.js` and the
+container with the separate worker artifact present.
+
+**Evidence/next:** `make longitudinal-store-fifth-author-repair` passes the retained 24 + 8 author
+arms, four new able-to-fail controls and strict TypeScript. This is author evidence; a genuinely
+fresh independent buildability review still gates migration and implementation.

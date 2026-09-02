@@ -289,7 +289,7 @@ longitudinal-store-fresh-review:
 longitudinal-store-second-fresh-review:
 	node --test tools/d2227-longitudinal-second-fresh-review/contract.test.mjs
 
-.PHONY: longitudinal-store-third-fresh-review longitudinal-store-fourth-author-repair longitudinal-store-fourth-fresh-review
+.PHONY: longitudinal-store-third-fresh-review longitudinal-store-fourth-author-repair longitudinal-store-fourth-fresh-review longitudinal-store-fifth-author-repair
 longitudinal-store-third-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2402-longitudinal-third-fresh-review/vitest.config.ts --reporter=verbose
 
@@ -299,6 +299,10 @@ longitudinal-store-fourth-author-repair: longitudinal-store-author-contract
 
 longitudinal-store-fourth-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2514-longitudinal-fourth-fresh-review/vitest.config.ts --reporter=verbose
+
+longitudinal-store-fifth-author-repair: longitudinal-store-fourth-author-repair
+	./node_modules/.bin/vitest run --config tools/d2514-longitudinal-fifth-author-repair/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc --noEmit --strict --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext tools/d2514-longitudinal-fifth-author-repair/contract.typecheck.ts
 
 .PHONY: bot-roster-fresh-review
 bot-roster-fresh-review:
