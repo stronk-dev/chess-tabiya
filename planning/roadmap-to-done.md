@@ -263,6 +263,14 @@ exact-operation compiler owns all 117 projection and 205 pair resolutions. Fresh
 review still gates acceptance and implementation. Receipt:
 `planning/learner-modules/seventh-author-repair-2026-09-02.md`.
 
+The 2026-09-02 fourth fresh promotion-collector review keeps the two held projections out of the
+foundation on [[D2521]], [[D2522]] and [[D2523]]. Its advertised closed request uses two undefined types, the
+injected Syzygy callable matches no provider operation and leaves normalized request bytes
+undetermined, and forgeable completed geometry can suppress every source on the zero-call path.
+The original twelve semantic collectors remain implemented; only the held pair is returned.
+Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fourth-fresh-independent-buildability-review-2026-09-02.md`.
+
 The 2026-08-28 shared-candidate packet author repair records the owner's foundation-first sequence
 without laundering verification into product reach: the provider-free complete population may
 land with zero product consumers, while Support/Review/bot discharges remain open. The draft now

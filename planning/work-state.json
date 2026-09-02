@@ -20054,6 +20054,30 @@
       "uxItems": [],
       "evidence": "planning/pack-capability-contract/eighth-author-repair-2026-09-02.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2521",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ec8be84e509717fe308db806782063b410d81f056359c961671146b338aa1ad1",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D2522",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:507e094bdc31be8800ba324960c4543511e3c9b2437d8bb3a2af486778af9e59",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D2523",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:37dd1b0d707ad24bf631c0ad39de5e8ef14647f119ea2efe66229df47631af5c",
+      "uxItems": [],
+      "owner": "evidence-foundation"
     }
   ]
 }

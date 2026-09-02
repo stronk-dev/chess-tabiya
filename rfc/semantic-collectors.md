@@ -1,8 +1,11 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
 - **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The held
-  promotion pair is author-repaired 2026-09-01 for [[D2469]]–[[D2472]] and awaits a fourth fresh
-  independent review.** Geometry and recorded tablebase inputs
+  promotion pair was RETURNED by fourth fresh independent review 2026-09-02 on
+  [[D2521]], [[D2522]] and [[D2523]].** The D2469–D2472 repairs survive, but the request still contains two
+  undefined types, its Syzygy callable matches neither provider ABI and leaves request identity
+  bytes unspecified, and forgeable completed geometry can bypass every source. A fourth author
+  repair and fifth fresh review are required before the pair can be accepted. Geometry and recorded tablebase inputs
   from the prior repair still require their exact value-authority
   factory receipts; the available outcome returns one sealed derivation receipt retaining geometry,
   legal moves and the selected source; no-race is distinct from input failure; and the duplicate
@@ -1035,6 +1038,12 @@ must now try to falsify that repair. Exact return:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-third-fresh-independent-buildability-review-2026-09-01.md`.
 Provider and value-authority acceptance/implementation remain separate landing dependencies.
 
+The 2026-09-02 fourth fresh review returned the third repair on [[D2521]]–[[D2523]]. Exact review:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fourth-fresh-independent-buildability-review-2026-09-02.md`.
+`make semantic-collectors-promotion-fourth-fresh-review` proves all three: missing request types,
+the nonexistent/incomplete provider boundary, and structurally forgeable completed geometry. No
+held projection may be implemented before another author repair and fifth fresh review.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1073,6 +1082,11 @@ is a spec change with a changelog line.
 | 14 | `derived.pawn.promotion_race_tablebase@1` | 3.7 | `derived.pawn` (2d) | event |
 
 ## Changelog
+
+- 2026-09-02: fourth fresh review returned the held promotion pair on [[D2521]]–[[D2523]]. The
+  prior four repairs survive, but two request types are undefined, the Syzygy dependency matches no
+  provider callable and has no exact request constructor, and completed geometry has no aggregate
+  authority before its zero-call path. The twelve implemented projections remain unchanged.
 
 - 2026-09-01: author-repaired [[D2469]]–[[D2472]]. The held pair now has one typed request and
   dependency signature, a sealed authoritative recorded-source resolution with fixed recorded-first

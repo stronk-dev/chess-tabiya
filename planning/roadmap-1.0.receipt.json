@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:e09cf00efac6b6aad01e89d68ee8e5f428cfa2cc97403c7057f6a5adb3fa2bbe",
+    "roadmap": "sha256:0669249a4baf77e538d44b20681ee1f6361b78f9cc5b1adc67d4a6dfcaa80985",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:62c131161881a52cb3a1b57c0940848a739b14a60d10fcf4761c7500cc8e4b1c",
-    "rfcRegister": "sha256:62377c11aa408d0b932592ba71bb14ad70b91a33c113de77b3e16b3db78b76d8",
+    "workState": "sha256:86ed913ac85b531a8319f27cd51f2d6b3c12975904cc3411a299dc77803ab3b9",
+    "rfcRegister": "sha256:be9da9f01ae4da64f3be0a6a7a9029c0aed53f38651f15ef6c13148a1a144775",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -30,7 +30,7 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 642,
+      "todo": 645,
       "doing": 0,
       "blocked": 864,
       "done": 760,
@@ -170,7 +170,7 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-02",
-        "summary": "F3's eighth author repair closes public HTML Story, queued provider operations and durable settlement at contract tier. Module registration's seventh repair preserves the real source ABIs, shipped eval/deflection semantics and one owner for every exact-operation hole; it remains requirements-only pending fresh review and upstream source/presentation dependencies.",
+        "summary": "F3 and module registration have repaired their latest contract returns. A fourth fresh review now keeps the two held promotion collectors out of the foundation: their request has undefined types, no real deterministic Syzygy operation, and a forgeable completed-absence bypass. The twelve implemented semantic collectors remain unchanged.",
         "impact": "advanced",
         "evidence": [
           "planning/pack-capability-contract/seventh-fresh-independent-review-2026-09-02.md",

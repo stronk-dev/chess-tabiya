@@ -14261,3 +14261,19 @@ the set-equal projection/pair resolution, and every unresolved row points to it.
 author contracts remain green. A genuinely fresh independent review must attack the declared ABI
 absence posture, selector ownership, alternative topology and set-equal resolution receipt before
 acceptance or implementation.
+
+## 2026-09-02 — Promotion collector fourth fresh review returns an authority bypass
+
+**What landed:** independently reviewed only the two held §3.7 promotion projections. The twelve
+implemented semantic collectors and all production/runtime bytes remain unchanged.
+
+**What changed:** [[D2521]] records two undefined request types; [[D2522]] records an injected
+Syzygy callable matching neither provider ABI plus unspecified request identity bytes; [[D2523]]
+records that an unsealed completed/no-race union can bypass recorded, legal-map and provider work.
+The earlier recorded-first, lazy-legal-map, invalid-versus-absence and completed-no-output repairs
+survive.
+
+**Evidence/next:** `make semantic-collectors-promotion-fourth-fresh-review` passes 3/3 plus strict
+TypeScript, including two forged/spliced geometry constructions that compile. A fourth author
+repair must bind the real types/provider operation and seal geometry completion before a fifth
+fresh review; the held pair remains unimplemented.
