@@ -219,16 +219,13 @@ valid no-race result is mislabeled unavailable. The original twelve collectors r
 Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-third-fresh-independent-buildability-review-2026-09-01.md`.
 
-The 2026-09-01 module-registration sixth repair closes the latest requirements-layer returns
-without claiming execution. Seven multi-edge tactics retain ordered windows and occurrence roles;
-candidate packets expose exact root/legal, child, edge and population views while refusing
-committed/root-projection impersonation; signed deltas retain ordered endpoints and equality joins;
-and all five pool boundaries name an owner callable. All 117 evidence requirements and 205 module
-pairs remain blocked on exact occurrence/timing/presentation operations. [[D2473]] is repaired:
-move quality's production manifest now declares recorded-pair OR live-pair, its operation rejects
-mixed instruments, and the regenerated requirements retain the exact ordered two-occurrence
-contract without claiming either consumer. Receipt:
-`planning/learner-modules/sixth-author-repair-2026-09-01.md`.
+The 2026-09-02 sixth fresh module-registration review returns that requirements layer on
+[[D2505]]–[[D2508]]. The move-quality `anyOf` and requirements-only refusal survive, but four source
+ABIs remain undeclared/mis-keyed; eval delta was changed from consecutive same-branch points to
+branch-A/B; deflection's check-induced positive arm was deleted; and all 205 null exact operations
+lack a named completion owner. Both the five-arm author target and four-arm return target are
+green. Receipt:
+`planning/learner-modules/sixth-fresh-independent-buildability-review-2026-09-02.md`.
 
 The 2026-08-28 shared-candidate packet author repair records the owner's foundation-first sequence
 without laundering verification into product reach: the provider-free complete population may

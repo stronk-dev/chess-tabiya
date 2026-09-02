@@ -19910,6 +19910,42 @@
       "uxItems": [],
       "evidence": "planning/exploration/log.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2505",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f3ea473c8930fbf3b506c1b23b010b23ba6e4a51b9cbb25c2d8e73f9e52a18b5",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2506",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:bb6d3e2ec9d8f2907da25ebdde4732f584f80552aa9d5cd48f33587808ad0ab4",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2507",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9eeb34a82e83d1610029d7b9b8330a1f718ec33103e9b7ca34413606675a8b9b",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2508",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b60099d12355350b687c454cf9a4758d23a3c84e9b22609dcac7677fbef2c85d",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:module-registration.md"
     }
   ]
 }

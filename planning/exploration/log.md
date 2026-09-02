@@ -14111,3 +14111,24 @@ design byte changed.
 Campaign implementation. Even after foundation acceptance, complete 1.0 still requires full-game
 bosses, catalogue progression, consequential durable variety, one authored campaign and the full
 home→map→prep→play→result→Review journey.
+
+## 2026-09-02 — Module registration sixth fresh review returns source and chess semantics
+
+**What landed:** independently joined the sixth author repair's 117 evidence requirements and 205
+module pairs to their cited source RFCs and shipped producer implementations. The requirements-only
+posture and [[D2473]] move-quality `anyOf` survive. `module-registration` is returned on
+[[D2505]]–[[D2508]].
+
+**What changed:** the five callable names did not close their complete ABI: recorded, Review and
+catalogue inputs/assertions/seals are undeclared, while provider admission loses its required
+operation and source factory. Two occurrence repairs change authoritative chess semantics:
+`derived.compare.eval_delta` is consecutive within one branch, not branch-A versus branch-B, and
+deflection accepts a check-induced non-capture reply that the generated capture-only window
+excludes. Finally, every one of 205 exact occurrence/timing operations is null and no Discharge
+owns the set-equal resolution.
+
+**Evidence/next:** `make module-registration-sixth-author-repair` remains green 5/5 and
+`make module-registration-sixth-fresh-review` reproduces the four new returns. A seventh author
+repair must preserve real producer meaning, specify complete importable source ABIs, and assign the
+117/205 exact-operation closure to one named owner before another independent review. No production,
+schema, API, content, UX, archive or protected-design byte changed.

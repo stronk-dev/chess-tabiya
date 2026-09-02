@@ -334,6 +334,10 @@ campaign-two-horizon-fourth-author-repair: campaign-two-horizon-author-contract
 campaign-boss-author-contract:
 	node --test tools/campaign-boss-author-contract/contract.test.mjs
 
+.PHONY: module-registration-sixth-fresh-review
+module-registration-sixth-fresh-review:
+	node --test tools/d2505-module-registration-sixth-fresh-review/contract.test.mjs
+
 .PHONY: campaign-second-fresh-review
 campaign-second-fresh-review:
 	node --test tools/d2244-campaign-second-fresh-review/contract.test.mjs

@@ -1,7 +1,12 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — sixth author repair complete on [[D2432]]–[[D2435]]; [[D2473]] upstream repair consumed;
-  another fresh independent review is required.** The fourth repair rejects the prior generator's
+- **Status:** **draft — RETURNED by sixth fresh independent review 2026-09-02 on
+  [[D2505]]–[[D2508]].** The sixth repair's requirements-only posture and move-quality `anyOf`
+  survive, but four source ABIs remain invented, eval delta is assigned the wrong subject,
+  deflection loses its check-induced arm, and all 205 null exact operations have no completion
+  owner. `make module-registration-sixth-fresh-review` passes 4/4. No implementation before a
+  seventh author repair, another fresh independent review and accepted dependencies. The fourth
+  repair rejects the prior generator's
   central premise: learner modules do not invoke 117 detector/provider functions. They consume
   projection-keyed sealed pools produced by the candidate packet, recorded semantic path, Review,
   catalogue and provider authorities. The generated artifacts are therefore digest-sealed
@@ -1880,6 +1885,20 @@ Sixth author repair (2026-09-01):
 `requirements_only`; another fresh independent review is required before acceptance or
 implementation.
 
+Sixth fresh independent return (2026-09-02):
+
+| row | returned requirement |
+|---|---|
+| [[D2505]] | bind complete real source ABIs: declared input/result/assertion/seal symbols, including the provider operation argument and operation-keyed source factory |
+| [[D2506]] | preserve `derived.compare.eval_delta` as the shipped consecutive same-branch transition, or introduce a different cross-branch projection |
+| [[D2507]] | encode deflection's bait-capture **or** check-induced alternatives and fixture both against the authoritative detector |
+| [[D2508]] | assign the 117 exact projection operations and 205 occurrence/timing resolutions to one named successor/owner with a set-equal receipt |
+
+`make module-registration-sixth-fresh-review` reproduces all four. Exact review:
+`planning/learner-modules/sixth-fresh-independent-buildability-review-2026-09-02.md`. The seventh
+author repair must keep every requirement blocked until the real operation exists; it may not make
+the review green by deleting the nulls or copying new private source authorities.
+
 | row | author repair; fresh review still required |
 |---|---|
 | [[D2343]] | **author-repaired:** D1865 imports the single explicit blocked-hint algebra; maintained targets pass 13/13 and 11/11 |
@@ -1958,6 +1977,13 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   input-equivalence clause inside the surface built to satisfy it.
 
 ## Changelog
+
+- 2026-09-02 (sixth fresh independent return): returned on [[D2505]]–[[D2508]]. Source contracts
+  still name undeclared input/parser/seal ABIs and mis-call provider admission; eval delta changes
+  from consecutive same-branch points to branch-A/B; deflection makes capture mandatory despite the
+  detector's check alternative; and all 205 null exact operations lack a completion owner.
+  `make module-registration-sixth-fresh-review` passes 4/4. Exact review:
+  `planning/learner-modules/sixth-fresh-independent-buildability-review-2026-09-02.md`.
 
 - 2026-08-31 (fifth fresh independent return): returned on [[D2432]]–[[D2435]]. The requirements
   collapse multi-edge tactics to one edge, do not distinguish candidate-packet root/child/selected
