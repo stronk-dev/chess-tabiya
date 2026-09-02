@@ -19077,57 +19077,57 @@
     },
     {
       "id": "D2412",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:dfef16af942d731561921d776bdeeceb7b986d2688310945a998309aa453c0b3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:07bcaa8374db452ff34132c42ad1b132792299b75a7b67a748dc763a20a915d5",
       "uxItems": [],
-      "owner": "release-engineering",
-      "blocker": "rfc:provider-health-degradation.md"
+      "evidence": "planning/provider-health-degradation/third-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2413",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:eb42eb4aa1b3c22bf0a34413055b4f39060b25477cd8e0e3bf5572e1f04b478d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:78550bb5733d977c0cfead3b40517bce59a7bb5f7bd7372b53007e5b27007458",
       "uxItems": [],
-      "owner": "release-engineering",
-      "blocker": "rfc:provider-health-degradation.md"
+      "evidence": "planning/provider-health-degradation/third-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2414",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:913a46a521a82d9251df5f67fb04db6bc5f9ced84489ffbf7db4fde7f9135306",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4376eefe9ec1a3f2ea31994e304c68d1cd2081e18cef742dbfe634e7f347644d",
       "uxItems": [],
-      "owner": "release-engineering",
-      "blocker": "rfc:provider-health-degradation.md"
+      "evidence": "planning/provider-health-degradation/third-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2415",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e1c805c8c8bda5ecfb009071fb04d81303ce1034a713d9fcb182d944ade259e6",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:02ef9f648c982fcef06d88a3a8f549fe5359cde47186cfc88ccc9047f88fd952",
       "uxItems": [],
-      "owner": "release-engineering",
-      "blocker": "rfc:provider-health-degradation.md"
+      "evidence": "planning/provider-health-degradation/third-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2416",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8455646dec7a84a61aba21665e1e0ea30d8605e5d9bad27ca257ae6909725ff9",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:29d38e9436762a593c5bf590e6bb4b322279d7d88efb7242e1e57a930a99b559",
       "uxItems": [],
-      "owner": "release-engineering",
-      "blocker": "rfc:provider-health-degradation.md"
+      "evidence": "planning/provider-health-degradation/third-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2417",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:fc7057b90aabfb10052af8491f0cfa0c48cdf72d013b5f6681db5e9908621b84",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e4fcba0f5731c4691f5305ce8d3eb6d93c4372821ce6b4b18d0ff078c3a86f1d",
       "uxItems": [],
-      "owner": "release-engineering",
-      "blocker": "rfc:provider-health-degradation.md"
+      "evidence": "planning/provider-health-degradation/third-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2418",

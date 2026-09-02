@@ -14072,3 +14072,21 @@ changed.
 operation before acceptance. The migration position remains behind `learner-rating`; style, skills,
 opening performance, grounded tips, bot history and Campaign remain downstream rather than growing
 private stores.
+
+## 2026-09-02 — Provider health third author repair closes six identity seams
+
+**What landed:** [[D2412]]–[[D2417]] are repaired at RFC/author-contract tier. One generated
+eight-operation/eleven-stage route now keys results, origins and exact cache records; recovery is a
+real state; production-local origin survives; TTS is a conditional stage; and shared-upstream
+backoff has an identity separate from provider health.
+
+**Evidence:** `make provider-health-third-author-repair` preserves the original eight author arms
+and passes nine new able-to-fail controls plus both strict TypeScript models. Crossed
+operation/stage/instance/origin receipts, cross-request cache hits, false local origins and
+cross-instance retry herds are executable negative cases. No production, schema, runtime, API,
+client, content, archive or protected-design byte changed.
+
+**Blocked/next:** fresh independent buildability review must reconstruct and falsify this repair
+before either the claim-free runtime-health checkpoint or lane-0.26 acquisition persistence is
+authorized. Bot policy remains downstream of the first checkpoint rather than inventing a private
+health projection.

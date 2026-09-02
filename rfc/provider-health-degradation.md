@@ -1,12 +1,12 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — **RETURNED by the second fresh independent review 2026-08-31 on
-  [[D2412]]–[[D2417]].** The D1910–D1915/D2362/D2364 repairs survive, but result identities are
-  uncorrelated; recovery overloads `unverified`; cache inventory has instance rather than
-  operation/request grain; production-local origin is unrecordable; nine operation ids have only
-  eight described executions; and shared-upstream backoff has no identity. `make
-  provider-health-second-fresh-review` passes 6/6. Author repair and another fresh independent
-  buildability review are required before acceptance or either implementation checkpoint
+- **Status:** draft — **third author repair complete 2026-09-02 on [[D2412]]–[[D2417]];
+  fresh independent review required.** One compiler-owned eight-operation/stage map now correlates
+  result, origin, cache and request identity; recovery is explicit state; cache inventory is exact
+  operation/stage/request grain; configured implementation survives every origin; conditional TTS
+  is a stage rather than a fake ninth operation; and shared upstream groups coordinate backoff
+  without merging instance health. `make provider-health-third-author-repair` passes 9/9 plus
+  strict TypeScript. Neither implementation checkpoint is authorized before fresh acceptance.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -130,8 +130,12 @@ type ProviderOperationId =
   | "evidence.explorer_query"
   | "render.voice"
   | "render.voice_compare"
-  | "render.voice_story"
-  | "render.tts";
+  | "render.voice_story";
+
+type ProviderBackoffGroupId =
+  | "lichess-api"
+  | "external-voice-api"
+  | "external-tts-api";
 
 type ProviderImplementation =
   | "uci_sidecar"
@@ -142,7 +146,9 @@ type ProviderImplementation =
 ```
 
 `PROVIDER_INSTANCE_DECLARATIONS` is one closed literal tuple of
-`{instanceId, familyId, allowedImplementations}` rows. The configured-instance value selects
+`{instanceId, familyId, allowedImplementations, backoffGroup}` rows. `backoffGroup` is null for
+process-local UCI instances, `lichess-api` for both remote Explorer and tablebase instances, and
+the corresponding external group for voice/TTS. The configured-instance value selects
 exactly one member and the generation digest binds that selection. `local_fixture` is admitted only
 by the test factory and the release compiler rejects it; `local_service` is the production-local
 member. This is the durable route for [[D2362]]. `stockfish-play` and `stockfish-analysis` are two
@@ -206,6 +212,17 @@ type ProviderHealthSnapshot =
   | ({
       readonly instanceId: ProviderInstanceId;
       readonly familyId: ProviderFamilyId;
+      readonly state: "recovering";
+      readonly implementation: ProviderImplementation;
+      readonly generation: string;
+      readonly priorReason: ProviderFailureReason;
+      readonly consecutiveSuccesses: 1;
+      readonly requiredSuccesses: 2;
+      readonly retryAfterMs: null;
+    } & ProviderTimes)
+  | ({
+      readonly instanceId: ProviderInstanceId;
+      readonly familyId: ProviderFamilyId;
       readonly state: "available";
       readonly implementation: ProviderImplementation;
       readonly generation: string;
@@ -247,7 +264,8 @@ The transitions are closed:
 - absent configuration → `not_configured`;
 - configured external HTTP provider with no real outcome → `unverified`;
 - successful live request, or a completed UCI startup handshake for the current supervised
-  generation → `available`;
+  generation → `available`, except the first success after the repeat-open threshold enters
+  `recovering`;
 - live failure with at least one valid exact-request cache entry → `degraded_cached_only`;
 - live failure with no valid exact-request cache entry → `unavailable`.
 
@@ -267,6 +285,12 @@ The instance-global state never claims that a cached entry applies to the curren
 operation separately resolves `live`, `cached_exact`, or unavailable. `degraded_cached_only` must
 always publish `cacheScope: "exact_request"`; clients may not turn it into a generally enabled
 feature.
+
+`recovering` is never used for clean start. It preserves the prior failure reason and full outcome
+times with `consecutiveSuccesses:1/requiredSuccesses:2`. A second consecutive live success for the
+same generation reaches `available`; an intervening failure returns to degraded/unavailable and
+zeros recovery; generation change returns to clean `unverified`; restart reconstructs clean-start
+state rather than claiming an old recovery streak. Cache hits never advance it.
 
 `checkedAt` exists only after a real outcome and changes only on a real handshake/request outcome. Reading `/capabilities`, reading a
 cache entry, rendering deterministic text, and a browser polling the server do not refresh it.
@@ -299,33 +323,38 @@ Every service/HTTP boundary returns one closed result. Acquisition receipts are 
 their discriminant makes contradictory source/reason combinations unrepresentable:
 
 ```ts
-interface ProviderReceiptBase {
-  readonly operationId: ProviderOperationId;
-  readonly instanceId: ProviderInstanceId;
+interface ProviderReceiptBase<R extends ProviderOperationStageRoute> {
+  readonly operationId: R["operationId"];
+  readonly stageId: R["stageId"];
+  readonly instanceId: R["instanceId"];
+  readonly implementation: ImplementationFor<R["instanceId"]>;
   readonly generation: string;
+  readonly requestDigest: string;
   readonly startedAt: string;
   readonly completedAt: string;
   readonly deadlineMs: number;
 }
 
-type ProviderOriginReceipt =
-  | (ProviderReceiptBase & { readonly source: "live" })
-  | (ProviderReceiptBase & { readonly source: "local_fixture" });
+type ProviderOriginReceipt<R extends ProviderOperationStageRoute> =
+  ProviderReceiptBase<R> & {
+    readonly source: "provider_live" | "local_service" | "local_fixture";
+  };
 
-type ProviderAcquisitionReceipt =
-  | ProviderOriginReceipt
-  | (ProviderReceiptBase & {
+type ProviderAcquisitionReceipt<R extends ProviderOperationStageRoute> =
+  | ProviderOriginReceipt<R>
+  | (ProviderReceiptBase<R> & {
       readonly source: "cached_exact";
-      readonly original: ProviderOriginReceipt;
+      readonly original: ProviderOriginReceipt<R>;
       readonly cacheKeyDigest: string;
       readonly cacheStoredAt: string;
     });
 
-interface ProviderFailureReceipt extends ProviderReceiptBase {
-  readonly source: "failed";
-  readonly reason: ProviderFailureReason;
-  readonly retryAfterMs: number | null;
-}
+type ProviderFailureReceipt<R extends ProviderOperationStageRoute> =
+  ProviderReceiptBase<R> & {
+    readonly source: "failed";
+    readonly reason: ProviderFailureReason;
+    readonly retryAfterMs: number | null;
+  };
 
 interface DeterministicFallbackReceipt {
   readonly source: "deterministic_fallback";
@@ -335,21 +364,42 @@ interface DeterministicFallbackReceipt {
   readonly deadlineMs: number;
 }
 
-type ProviderOperationResult<T> =
-  | { readonly kind: "success"; readonly value: T; readonly receipt: ProviderAcquisitionReceipt }
-  | {
-      readonly kind: "fallback";
-      readonly value: T;
-      readonly receipt: DeterministicFallbackReceipt;
-      readonly providerFailure: ProviderFailureReceipt;
-    }
-  | {
-      readonly kind: "unavailable";
-      readonly availability: Extract<ProviderOperationAvailability, { readonly state: "unavailable" | "cached_exact_only" }>;
-      readonly failure?: ProviderFailureReceipt;
-    }
-  | { readonly kind: "cancelled"; readonly reason: "caller" | "superseded" | "shutdown" };
+type ProviderOperationResult<K extends ProviderOperationId, T> =
+  RouteFor<K> extends infer R
+  ? R extends ProviderOperationStageRoute
+    ? | { readonly kind: "success"; readonly value: T;
+          readonly receipt: ProviderAcquisitionReceipt<R> }
+      | {
+          readonly kind: "fallback";
+          readonly value: T;
+          readonly receipt: DeterministicFallbackReceipt;
+          readonly providerFailure: ProviderFailureReceipt<R>;
+        }
+      | {
+          readonly kind: "unavailable";
+          readonly availability: Extract<ProviderOperationAvailability, { readonly state: "unavailable" | "cached_exact_only" }>;
+          readonly failure?: ProviderFailureReceipt<R>;
+        }
+      | { readonly kind: "cancelled"; readonly reason: "caller" | "superseded" | "shutdown" }
+    : never
+  : never;
 ```
+
+`ProviderOperationStageRoute`, `RouteFor` and `ImplementationFor` are generated from the literal
+`PROVIDER_OPERATION_EXECUTION` plus configured instance declarations; they are not parallel hand
+unions. Keeping operation, stage and instance in one discriminated route avoids the impossible
+intersection TypeScript produces when independently constrained generic unions are indexed. The
+unknown-input parser selects the operation declaration first, then verifies exact
+stage→instance and allowed implementation, current generation, normalized request digest and cache
+key. A `cached_exact` original must be byte-equal on operation, stage, instance, implementation,
+generation and request digest; only source/times/cache metadata differ. Any cross-operation,
+cross-stage, cross-instance, cross-generation or cross-request origin is rejected before the
+reducer sees it ([[D2412]]).
+
+Source and implementation are correlated too: `local_service` and `local_fixture` sources require
+the equal implementation; `provider_live` requires `uci_sidecar | lichess_http | external_http`.
+Switching remote→local changes generation, invalidates the old cache, and historical receipts keep
+their literal implementation ([[D2415]]).
 
 The receipt describes acquisition, not chess quality. It cannot say accurate, human, best,
 practical, insightful, or trustworthy. Existing evidence payload provenance remains intact; the
@@ -363,7 +413,8 @@ heals `voice`. Browser speech and authored/deterministic text remain their own n
 failure may offer browser speech where configured by the learner, but never report it as provider
 audio.
 
-The registry reducer consumes `ProviderOperationResult<unknown>` exhaustively. Live/local success
+The registry reducer consumes the mapped union of every `ProviderOperationResult<K, unknown>`
+exhaustively. Live/local success
 may establish availability; a failure receipt updates health/circuit state; cached success and
 deterministic fallback do not heal; caller/superseded cancellation does not damage health; shutdown
 cancellation neither heals nor opens a provider circuit. A failure without a receipt, a fallback
@@ -402,13 +453,16 @@ exit are not immediately retried.
 
 ### 6. Circuit opening, backoff and recovery
 
-The registry coordinates one circuit per provider-instance generation:
+The registry keeps health/circuit state per provider-instance generation and a separate
+`ProviderBackoffCoordinator` per non-null `ProviderBackoffGroupId`. Instance health never merges;
+only admission concurrency, `retryAfter` and backoff sequence are group-shared:
 
 - process exit, failed UCI handshake, authentication failure, or protocol-invalid output opens the
   circuit immediately;
 - timeout, network failure or overload opens it for new interactive work immediately after the
   failing operation; existing exact cache entries remain readable;
-- Lichess HTTP 429 opens the relevant upstream for at least 60 seconds. `Retry-After`, when valid and
+- Lichess HTTP 429 opens `lichess-api` for both `tablebase-primary` and `explorer-primary` for at
+  least 60 seconds. `Retry-After`, when valid and
   longer, wins. Only one request at a time is sent to that upstream;
 - other HTTP 5xx/network failures use 5 s, 15 s, then 60 s delays, capped at 60 s; successful live
   work resets the sequence;
@@ -419,10 +473,18 @@ While open, one request after `retryAfterMs` becomes the half-open real request.
 receive the typed current state or an exact cached answer; they do not form a retry herd. UCI
 supervisor recovery uses its actual restart handshake as the half-open operation.
 
-One successful half-open request changes `unavailable` to `available`. To avoid a green/red flicker
+The coordinator claim is `(backoffGroup,generationSet,claimToken,leaseExpiresAt)` and admits one
+live upstream request across every member instance. A 429 from Explorer therefore delays a new
+tablebase request, while the two instance snapshots retain their distinct last outcome and cache.
+Null-group UCI instances never share a coordinator. Group membership is compiled from
+`PROVIDER_INSTANCE_DECLARATIONS`; an undeclared string or second hand map fails closure
+([[D2417]]).
+
+One successful half-open request normally changes `unavailable` to `available`. To avoid a green/red flicker
 after repeated transient HTTP failures, a provider that has opened twice within five minutes
 requires two consecutive successful real requests before returning to `available`; between them it
-remains `unverified`. A failure resets that recovery count. Cache hits never count.
+is the explicit `recovering` state from §2. A failure resets that recovery count. Cache hits never
+count.
 
 ### 7. Cache contract
 
@@ -444,21 +506,39 @@ cached boolean copied at request time:
 ```ts
 interface ProviderCacheInventory {
   snapshot(nowMonotonicMs: number): readonly {
+    readonly operationId: ProviderOperationId;
+    readonly stageId: string;
     readonly instanceId: ProviderInstanceId;
     readonly generation: string;
-    readonly validExactEntries: number;
+    readonly cacheKeyDigest: string;
+    readonly requestDigest: string;
+    readonly expiresAtMonotonicMs: number;
+    readonly validExactEntries: 1;
     readonly revision: number;
   }[];
+  resolveExact<R extends ProviderOperationStageRoute>(input: {
+    readonly operationId: R["operationId"];
+    readonly stageId: R["stageId"];
+    readonly instanceId: R["instanceId"];
+    readonly generation: string;
+    readonly requestDigest: string;
+    readonly cacheKeyDigest: string;
+    readonly nowMonotonicMs: number;
+  }): ProviderAcquisitionReceipt<R> | null;
 }
 ```
 
-`snapshot` first expires TTL-invalid rows and counts only entries whose generation equals the
+`snapshot` first expires TTL-invalid rows and retains only entries whose generation equals the
 current instance generation. Insert, TTL expiry, LRU eviction, explicit invalidation and generation
 cleanup monotonically advance `revision`. `ProviderRegistry.snapshot()` joins its last real outcome
-with this current inventory on every read: a failed instance is `degraded_cached_only` iff the
-current valid count is positive, otherwise `unavailable`. The join is in-memory and cannot call a
-provider, refresh `checkedAt` or claim that any entry matches a future request. Thus removal of the
-last entry changes `/capabilities` even when no new provider outcome occurred.
+with this current inventory on every read. It may report conditional exact-cache service when any
+current row exists, but request admission calls `resolveExact` with all six identities; a count
+never enables a different operation or key. A failed instance is `degraded_cached_only` only as a
+global conditional capability; the exact operation result is `cached_exact_only` only after
+`resolveExact` succeeds. The join is in-memory and cannot call a provider or refresh `checkedAt`.
+Thus removal of the last entry changes `/capabilities` even when no new provider outcome occurred, and
+three voice operations sharing `external-voice` remain disjoint by operation/request digest
+([[D2414]]).
 
 The existing 512-entry Explorer/tablebase caches become registry-aware. Their present no-data,
 failure and successful-result TTLs may remain only if fixtures prove:
@@ -510,10 +590,31 @@ interface ProviderExecutionDeclaration {
 }
 ```
 
+The literal declaration contains exactly these eight operations; stage ids are unique within an
+operation and are part of every receipt/cache key:
+
+| operation | stages in order |
+|---|---|
+| `opponent.stockfish_play` | `select:stockfish-play` |
+| `opponent.maia_inference` | `select:maia-inference` |
+| `evidence.stockfish_analysis` | `analyse:stockfish-analysis` |
+| `evidence.tablebase_probe` | `probe:tablebase-primary` |
+| `evidence.explorer_query` | `query:explorer-primary` |
+| `render.voice` | `text:external-voice` → conditional `audio:external-tts` |
+| `render.voice_compare` | `text:external-voice` → conditional `audio:external-tts` |
+| `render.voice_story` | `text:external-voice` → conditional `audio:external-tts` |
+
+`render.tts` is removed from `ProviderOperationId`: no caller requests TTS independently of one of
+the three sealed voice results, and keeping it created an operation with no consumer, deadline or
+fallback. Audio remains fully tracked as the conditional `audio` stage of the parent operation,
+including its own instance health and receipt. The compiler derives the operation union from this
+tuple and proves exact set equality, so a ninth orphan or omitted declaration cannot recur
+([[D2416]]).
+
 `PROVIDER_OPERATION_EXECUTION` is a literal tuple compiled beside the F1 manifest and keyed by the
 operation ids supplied by the provider-protocol declaration. It contains the two independent
 Stockfish operations, Maia opponent inference, tablebase, Explorer and the three voice consumer
-operations. Each voice pipeline starts `external-voice`; conditional `external-tts` depends on that
+operations—eight total. Each voice pipeline starts `external-voice`; conditional `external-tts` depends on that
 stage and runs only for an audio request. Text fallback is declared on the voice stage; browser
 speech/text fallback is declared on the TTS stage. Every stage receives the remaining time from the
 one consumer-budget deadline and no fallback starts a new clock.
@@ -533,6 +634,8 @@ compiled `providerOff` behavior:
 - `available` provider → projection may be requested;
 - `unverified` → request may be attempted within its deadline, but a consumer is never advertised
   as already live;
+- `recovering` → request may be attempted one-at-a-time within its deadline, while the consumer is
+  labelled recovering rather than verified;
 - `degraded_cached_only` → only an exact-key lookup can be available; otherwise apply `providerOff`;
 - `not_configured` / `unavailable` → apply the consumer's existing `available`, `honest_empty`, or
   `unavailable` behavior.
@@ -637,6 +740,30 @@ buildability blockers. Exact evidence and executable controls are in
 the lane-0.26 persistence checkpoint may land until an author repair inverts these controls and
 another fresh review passes.
 
+## Third author repair (2026-09-02)
+
+The six returned seams are now one compiler-owned contract rather than six prose exceptions:
+
+1. **[[D2412]]:** `ProviderOperationStageRoute` is derived from the literal execution declaration.
+   Every result, origin and cached origin carries the same route, configured implementation,
+   generation and request digest; the unknown-input parser rejects any crossed identity.
+2. **[[D2413]]:** `recovering` is an explicit outcome-bearing state. It retains the prior reason,
+   first-success timestamps and `1/2` progress; only the second consecutive live success heals.
+3. **[[D2414]]:** cache inventory and lookup use exact
+   operation/stage/instance/generation/request/key identity. Global capability may say exact-cache
+   service exists, but only the operation lookup may say this request is served.
+4. **[[D2415]]:** origins preserve the configured implementation and distinguish
+   `provider_live`, `local_service` and test-only `local_fixture`; cached originals retain it.
+5. **[[D2416]]:** the registry contains eight operations and eleven execution stages. TTS is the
+   conditional `audio` stage of each of the three voice operations; orphan `render.tts` is deleted.
+6. **[[D2417]]:** instance declarations carry a separate `ProviderBackoffGroupId`. Explorer and
+   tablebase share `lichess-api` admission/backoff while retaining independent health/generation.
+
+`make provider-health-third-author-repair` preserves the original eight controls and passes nine
+new able-to-fail arms plus strict TypeScript over the complete route/result/recovery/cache/backoff
+model. This is author repair, not acceptance or implementation. Fresh independent review remains
+required.
+
 ## Implementation plan
 
 **Staged dependency rule ([[D2364]]).** This RFC may remain `implementing` across two checked
@@ -695,7 +822,7 @@ bot-private health projection.
 
 ## Acceptance criteria
 
-1. The registry has exactly six family ids, seven concrete instance ids and nine operation ids;
+1. The registry has exactly six family ids, seven concrete instance ids and eight operation ids;
    unknown/crossed family-instance-operation tuples fail rather than defaulting to available.
    Independent `stockfish-play` and `stockfish-analysis` death/restart fixtures never change the
    other's state or consumers.
@@ -705,6 +832,9 @@ bot-private health projection.
    handshake/request produces `available`. A clean external provider is
    `requestable_unverified`, makes its first real learner request without a probe, then reaches both
    success and failure fixtures.
+   Clean start and recovering are distinct arms: repeat-open → first live success produces
+   `recovering(1/2)` with times/prior reason, second success produces available, intervening failure
+   resets recovery, and generation change/restart returns clean unverified.
 3. The permanent R18 fixture warms one Maia selection, stops the sidecar, receives the same request
    as `cached_exact`, and receives a typed bounded unavailable result for a new position. The next
    `/capabilities` snapshot is `degraded_cached_only`, not available.
@@ -712,8 +842,9 @@ bot-private health projection.
    response, configured-off and recovery fixtures. Caller cancellation does not open a circuit.
 5. No provider operation or rendering pipeline, including queue, retry, conditional TTS and fallback, can exceed its compiled F1 consumer deadline.
    A source guard fails on Maia's old `60_000` timeout and on per-attempt voice deadline reset.
-6. Lichess 429 opens one upstream-wide circuit for at least 60 seconds, permits no concurrent retry
-   herd, and honors a longer valid `Retry-After`.
+6. Lichess 429 opens the shared `lichess-api` coordinator for Explorer and tablebase for at least
+   60 seconds, permits no concurrent cross-instance retry herd, and honors a longer valid
+   `Retry-After` without merging their health snapshots.
 7. All former `CapabilityProviders` presence branches are deleted or mechanically proven derived
    from `ProviderRegistrySnapshot`; the client has zero direct `providers.* !== "none"` feature
    gates.
@@ -721,6 +852,8 @@ bot-private health projection.
    `live.syzygy`→`tablebase-primary`, `human.maia`→`maia-inference`, and
    `human.explorer`→`explorer-primary`; opponent Stockfish maps only to `stockfish-play`. The three
    voice consumers each compile voice→conditional-TTS with one deadline and declared fallbacks.
+   The operation set is exactly eight; `render.tts` as an orphan operation fails while each
+   conditional audio stage remains present.
    Missing/duplicate/cyclic/reset-deadline declarations fail. Every provider-off consumer produces
    its declared state.
 9. Explorer `no_data_at_band` and tablebase out-of-range keep their providers healthy and render
@@ -750,11 +883,13 @@ bot-private health projection.
 18. `make verify`, `make test-browser`, provider fault-injection, release-container smoke,
     register/status/roadmap checks and the local/GitHub required CI commands are green on the exact
     committed bytes.
-19. `ProviderOperationResult<T>` compiles every legal success/fallback/unavailable/cancelled arm and
+19. Every generated `ProviderOperationResult<K,T>` compiles each legal
+    success/fallback/unavailable/cancelled arm and
     rejects cached+reason, local+failure, fallback without provider failure, failure with value,
     cached without original origin and unknown fields. The health reducer is exhaustive over this
     union; cached/fallback/caller-cancel arms cannot heal or damage health incorrectly.
-20. Cache inventory is live state authority. Removing the last valid entry by TTL expiry, LRU
+20. Cache inventory is live state authority at operation/stage/instance/generation/request/key
+    grain. Removing the last valid entry by TTL expiry, LRU
     eviction, explicit invalidation or generation cleanup changes the next snapshot from
     `degraded_cached_only` to `unavailable` with no provider call and no `checkedAt` change. Adding a
     current-generation exact entry permits cache-only; stale-generation entries never count.
@@ -764,13 +899,19 @@ bot-private health projection.
 22. Configured implementation is a checked member of the instance declaration's closed
     `allowedImplementations` set ([[D2362]]). Switching tablebase/Explorer remote→local changes the
     generation and invalidates old cache/health. Release compilation rejects `local_fixture`; a
-   local production service is labeled `local_service` and never impersonates Lichess.
+    local production service is labeled `local_service` in both configured implementation and
+    origin receipt and never impersonates Lichess. Cached originals preserve that implementation
+    and exact generation/request identity.
 23. The staged dependency receipt proves the claim-free runtime-authority checkpoint changes no
     run-schema byte and exports the exact snapshot/result/release types consumed by bot policy.
     Bot policy has zero parallel health state. Provider health remains implementing until lane 0.26
     makes every new opponent selection persist the acquisition receipt. *Fails if* either RFC
     claims the other fully implemented before its registered lane can land, or if lane 0.26 is
     renumbered to conceal the dependency.
+24. The compiler-generated operation map is the only identity authority. All eight operations and
+    every stage cross the strict unknown-input parser. Crossed operation/stage/instance,
+    implementation, generation, request digest or cached origin fails; a count-preserving swap of
+    two valid instances fails. No handwritten three-operation type image can satisfy this gate.
 
 ## Falsifiers and negative fixtures
 
@@ -831,7 +972,7 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 
 | finding | returned blocker | repaired contract |
 |---|---|---|
-| [[D1910]] | one Stockfish health key cannot represent play and analysis instances | six families, seven instances and nine exact operation bindings in §§1–3/8; criterion 1 |
+| [[D1910]] | one Stockfish health key cannot represent play and analysis instances | six families, seven instances and eight operations/eleven exact stages in §§1–3/8; criterion 1 |
 | [[D1911]] | not-configured/unverified states are not total across snapshot and mode API | state-specific snapshot union plus `requestable_unverified` in §§2/9; criteria 2/14 |
 | [[D1912]] | F1 has no rendering-provider dependency/pipeline contract for voice/TTS | compiled execution DAG with one consumer deadline in §§5/8; criteria 5/8/21 |
 | [[D1913]] | receipt permits contradictory success/failure/fallback combinations | closed result/acquisition/failure/fallback algebra in §4; criterion 19 |
@@ -839,6 +980,12 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 | [[D1915]] | cache-only global state has no cache-inventory transition | generation-valid inventory joined at snapshot time in §§2/7; criterion 20 |
 | [[D2362]] | one fixed implementation contradicts remote→local instance evolution | declared allowed set plus generation-bound configured member in §1; criterion 22 |
 | [[D2364]] | bot policy needs health before its lane 0.18 while health's durable field is lane 0.26 | claim-free runtime-authority checkpoint before bot 0.18; acquisition persistence remains the later lane-0.26 checkpoint; criterion 23 |
+| [[D2412]] | independent result fields allow crossed operation/origin identity | one generated operation-stage route keys every receipt and parser equality check in §4; criteria 19/24 |
+| [[D2413]] | `unverified` cannot retain first-success recovery evidence | explicit `recovering` state and two-success reducer in §2/6; criteria 2/24 |
+| [[D2414]] | instance-wide cache inventory cannot prove an exact operation/request hit | exact operation/stage/instance/generation/request/key inventory and lookup in §7; criteria 20/24 |
+| [[D2415]] | production-local service identity disappears from origins | configured implementation plus correlated live/local origin in §§1/4; criteria 22/24 |
+| [[D2416]] | orphan ninth `render.tts` operation has no execution | eight-operation set equality with TTS as three conditional audio stages in §§1/8; criteria 1/21/24 |
+| [[D2417]] | shared-upstream 429 policy has no coordination identity | separate backoff-group declaration and coordinator semantics in §§1/6; criteria 4/24 |
 
 `make provider-health-author-repair` executes one able-to-fail arm per row plus a TypeScript image
 for the total state/result/operation types. It is an author contract, not implementation or review.
@@ -862,6 +1009,12 @@ for the total state/result/operation types. It is an author contract, not implem
   correlated receipt identity, recovery state, operation/request cache grain, local-service
   provenance, the ninth operation and shared-upstream coordination remain unbuildable. Exact
   review: `planning/provider-health-degradation/second-fresh-independent-buildability-review-2026-08-31.md`.
+- 2026-09-02 — third author repair closed [[D2412]]–[[D2417]] at contract tier: one generated
+  operation-stage route correlates receipts and cache origins; `recovering` retains first-success
+  state; cache inventory is exact-request authority; production-local origins preserve configured
+  implementation; TTS is a conditional stage of the three voice operations; and shared backoff
+  groups coordinate upstream admission without merging health. The original eight controls and
+  nine new falsifiers pass with strict TypeScript. Fresh independent review remains required.
 - 2026-08-27 — independent buildability review returned the first draft on [[D1910]]–[[D1915]].
   Exact return: `planning/provider-health-degradation/independent-buildability-review-2026-08-27.md`.
 
