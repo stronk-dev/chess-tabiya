@@ -20057,27 +20057,30 @@
     },
     {
       "id": "D2521",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ec8be84e509717fe308db806782063b410d81f056359c961671146b338aa1ad1",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ed432b59a44ac67f4fdcd7ee07e2567a5797df8262a54e672042cb262302c9e6",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "planning/evidence-foundation-ux/semantic-collectors-promotion-fourth-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2522",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:507e094bdc31be8800ba324960c4543511e3c9b2437d8bb3a2af486778af9e59",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3837431fe94fe0159d88ee49751d3f8659dbceae74a15a99879c3fa4ef4ab7d8",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "planning/evidence-foundation-ux/semantic-collectors-promotion-fourth-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2523",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:37dd1b0d707ad24bf631c0ad39de5e8ef14647f119ea2efe66229df47631af5c",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:202db9f47c0ede54a2a5344829ae29a60a5e42d59d896101b8c16db93f2401c3",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "planning/evidence-foundation-ux/semantic-collectors-promotion-fourth-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -45,5 +45,5 @@ test("D2472: completed no-witness bypasses source and legal-map operations", () 
   assert.doesNotMatch(geometry, /kind: "unavailable";[\s\S]{0,100}reason: "no_opposing_passed_clear_paths"/u);
   const result = section("type PromotionRaceTablebaseResult", "Recorded normalization");
   assert.match(result, /kind: "completed";[\s\S]*kind: "no_evidence";[\s\S]*reason: "no_opposing_passed_clear_paths"/u);
-  assert.match(promotion, /calls neither `recordedLookup`, `resolveLegalMoves` nor `syzygyPosition`/u);
+  assert.match(promotion, /calls\s+neither `recordedLookup`, `resolveLegalMoves` nor `scheduler\.get`/u);
 });

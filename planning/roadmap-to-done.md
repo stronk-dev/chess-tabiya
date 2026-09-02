@@ -271,6 +271,13 @@ The original twelve semantic collectors remain implemented; only the held pair i
 Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-fourth-fresh-independent-buildability-review-2026-09-02.md`.
 
+The 2026-09-02 fourth author repair closes those three promotion returns at contract tier. The
+request now has a strict canonical-FEN parser and total recorded lookup; the live arm uses the
+actual shared scheduler and operation-keyed source factory over fixed Syzygy request bytes; and
+both the derivation receipt and aggregate completed geometry are sealed before the no-output fast
+path. Fifth fresh independent review still gates acceptance and implementation. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fourth-author-repair-2026-09-02.md`.
+
 The 2026-08-28 shared-candidate packet author repair records the owner's foundation-first sequence
 without laundering verification into product reach: the provider-free complete population may
 land with zero product consumers, while Support/Review/bot discharges remain open. The draft now

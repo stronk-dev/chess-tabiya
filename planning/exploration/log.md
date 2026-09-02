@@ -14277,3 +14277,19 @@ survive.
 TypeScript, including two forged/spliced geometry constructions that compile. A fourth author
 repair must bind the real types/provider operation and seal geometry completion before a fifth
 fresh review; the held pair remains unimplemented.
+
+## 2026-09-02 — Promotion collector fourth author repair closes request and aggregate authority
+
+**What landed:** repaired [[D2521]], [[D2522]] and [[D2523]] at RFC tier only. The twelve existing
+semantic collectors remain unchanged and the held promotion pair remains unimplemented.
+
+**What changed:** canonical full FEN and recorded lookup now have complete typed/failure boundaries;
+the live arm uses the actual shared scheduler and operation-keyed source factory over deterministic
+standard-chess Syzygy bytes; and both the derivation receipt and aggregate completed geometry are
+runtime sealed before the no-race zero-call path. The author pass caught and closed its own first
+attempt, where sealing only the retained receipt would still admit a spread clone of the completed
+aggregate.
+
+**Evidence/next:** `make semantic-collectors-promotion-fourth-author-repair` passes 3/3 plus strict
+TypeScript and the retained third-author target passes 4/4. A genuinely fresh fifth independent
+review still gates acceptance and implementation.

@@ -548,7 +548,7 @@ candidate-packet-fourth-author-repair:
 candidate-packet-fourth-fresh-review:
 	node --test tools/d2389-candidate-packet-fourth-fresh-review/contract.test.mjs
 
-.PHONY: candidate-packet-fifth-author-repair candidate-packet-fifth-fresh-review candidate-packet-d2428-measurement candidate-packet-sixth-author-repair semantic-collectors-promotion-third-fresh-review semantic-collectors-promotion-third-author-repair semantic-collectors-promotion-fourth-fresh-review
+.PHONY: candidate-packet-fifth-author-repair candidate-packet-fifth-fresh-review candidate-packet-d2428-measurement candidate-packet-sixth-author-repair semantic-collectors-promotion-third-fresh-review semantic-collectors-promotion-third-author-repair semantic-collectors-promotion-fourth-fresh-review semantic-collectors-promotion-fourth-author-repair
 candidate-packet-fifth-author-repair:
 	node --test tools/d2389-candidate-packet-fifth-author-repair/contract.test.mjs
 
@@ -568,6 +568,10 @@ semantic-collectors-promotion-third-fresh-review:
 semantic-collectors-promotion-fourth-fresh-review:
 	node --test tools/d2521-semantic-collectors-promotion-fourth-fresh-review/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2521-semantic-collectors-promotion-fourth-fresh-review/tsconfig.contract.json
+
+semantic-collectors-promotion-fourth-author-repair:
+	node --test tools/d2521-semantic-collectors-promotion-fourth-author-repair/contract.test.mjs
+	./node_modules/.bin/tsc -p tools/d2521-semantic-collectors-promotion-fourth-author-repair/tsconfig.contract.json
 
 semantic-collectors-promotion-third-author-repair:
 	node --test tools/d2469-semantic-collectors-promotion-third-author-repair/*.test.mjs

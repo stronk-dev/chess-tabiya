@@ -1,11 +1,11 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
 - **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The held
-  promotion pair was RETURNED by fourth fresh independent review 2026-09-02 on
-  [[D2521]], [[D2522]] and [[D2523]].** The D2469–D2472 repairs survive, but the request still contains two
-  undefined types, its Syzygy callable matches neither provider ABI and leaves request identity
-  bytes unspecified, and forgeable completed geometry can bypass every source. A fourth author
-  repair and fifth fresh review are required before the pair can be accepted. Geometry and recorded tablebase inputs
+  promotion pair completed its fourth author repair 2026-09-02 on [[D2521]], [[D2522]] and
+  [[D2523]]; a fifth fresh independent review still gates acceptance and implementation.** The
+  request now owns a canonical full-FEN parser and total recorded lookup, uses the actual shared
+  provider scheduler plus operation-keyed source factory with deterministic request bytes, and
+  requires a module-sealed aggregate geometry completion before its zero-call fast path. Geometry and recorded tablebase inputs
   from the prior repair still require their exact value-authority
   factory receipts; the available outcome returns one sealed derivation receipt retaining geometry,
   legal moves and the selected source; no-race is distinct from input failure; and the duplicate
@@ -498,6 +498,20 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
   type PawnContactsEvidence = DeclaredEvidence<PawnContactsReading>;
   type PromotionRaceGeometryEvidence = DeclaredEvidence<PromotionRaceGeometry>;
 
+  interface PromotionRaceGeometryDerivationReceipt {
+    readonly input: PawnContactsEvidence;
+    readonly output:
+      | Readonly<{ kind: "evidence"; item: PromotionRaceGeometryEvidence }>
+      | Readonly<{ kind: "no_evidence"; reason: "no_opposing_passed_clear_paths" }>;
+  }
+
+  declare const PROMOTION_RACE_GEOMETRY_RECEIPTS:
+    WeakSet<PromotionRaceGeometryDerivationReceipt>;
+
+  declare const PROMOTION_RACE_GEOMETRY_COMPLETIONS: WeakSet<
+    Extract<PromotionRaceGeometryResult, { readonly kind: "completed" }>
+  >;
+
   type PromotionRaceContactsInput =
     | Readonly<{ kind: "evidence"; evidence: PawnContactsEvidence }>
     | Readonly<{
@@ -513,6 +527,7 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
           input: PawnContactsEvidence;
           item: PromotionRaceGeometryEvidence;
         }>;
+        derivation: PromotionRaceGeometryDerivationReceipt;
       }>
     | Readonly<{
         kind: "completed";
@@ -521,6 +536,7 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
           reason: "no_opposing_passed_clear_paths";
           input: PawnContactsEvidence;
         }>;
+        derivation: PromotionRaceGeometryDerivationReceipt;
       }>
     | Readonly<{
         kind: "unavailable";
@@ -532,12 +548,23 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
   declare function derivePromotionRaceGeometry(
     input: PromotionRaceContactsInput,
   ): PromotionRaceGeometryResult;
+
+  declare function assertPromotionRaceGeometryCompletion(
+    value: unknown,
+  ): asserts value is Extract<PromotionRaceGeometryResult, { readonly kind: "completed" }>;
   ```
 
   The evidence arm retains the exact contacts object and its output's central derivation receipt
   retains that same input reference/digest. A valid position with no opposing passed clear-path
   population returns `completed/no_evidence/no_opposing_passed_clear_paths` and mints no geometry
-  value. Only the typed `PromotionRaceContactsInput.kind === "unavailable"` arm returns
+  value. Both completed arms carry one module-private `WeakSet`-sealed derivation receipt, and the
+  completed aggregate itself is sealed in a second module-private `WeakSet`. The assertion first
+  requires aggregate membership, then checks receipt membership,
+  `derivation.input === output.input`, the exact contacts
+  factory assertion, output-reference identity, and—on evidence—the specialized
+  `assertPromotionRaceGeometryEvidence` value receipt plus byte-equal canonical full FEN. A plain,
+  spread, cast, JSON-round-tripped or input/output-spliced completion fails before the tablebase
+  collector can branch on `output.kind`. Only the typed `PromotionRaceContactsInput.kind === "unavailable"` arm returns
   `input_abstained`. The evidence arm always calls `assertPawnContactsEvidence` first; assertion
   failure throws `EvidenceInvariantError` and is never caught or relabelled as absence. A generic `declareEvidence`
   wrapper carrying correct ids and false contacts, a value minted by another factory, an equal
@@ -589,8 +616,23 @@ type ExactLegalMovesEvidence = DeclaredEvidence<ExactLegalMoveMap>;
 type RecordedTablebaseEvidence = DeclaredEvidence<RecordedTablebaseReading>;
 
 declare function assertPawnContactsEvidence(value: unknown): asserts value is PawnContactsEvidence;
+declare function assertPromotionRaceGeometryEvidence(value: unknown): asserts value is PromotionRaceGeometryEvidence;
 declare function assertExactLegalMovesEvidence(value: unknown): asserts value is ExactLegalMovesEvidence;
 declare function assertRecordedTablebaseEvidence(value: unknown): asserts value is RecordedTablebaseEvidence;
+
+declare const canonicalFullFenBrand: unique symbol;
+type CanonicalFullFen = string & { readonly [canonicalFullFenBrand]: true };
+
+declare function parseCanonicalFullFen(value: string): CanonicalFullFen;
+
+type RecordedTablebaseEvidenceLookupResult =
+  | Readonly<{ kind: "found"; evidence: RecordedTablebaseEvidence }>
+  | Readonly<{ kind: "absent" }>
+  | Readonly<{ kind: "failed"; reason: "storage_unavailable" | "invalid_record" }>;
+
+interface RecordedTablebaseEvidenceLookup {
+  get(fen: CanonicalFullFen): RecordedTablebaseEvidenceLookupResult;
+}
 
 type PromotionRaceRecordedResolution =
   | Readonly<{
@@ -627,12 +669,15 @@ interface PromotionRaceTablebaseDependencies {
   readonly resolveLegalMoves: (
     fen: CanonicalFullFen,
   ) => PromotionRaceLegalMovesResolution;
-  readonly syzygyPosition: (
-    request: SyzygyPositionRequest,
-    scope: ProviderRequestScope,
-    signal: AbortSignal,
-  ) => Promise<ProviderEvidenceTraversalResult<"syzygy.position@1">>;
+  readonly scheduler: ProviderExchangeScheduler;
+  readonly sourceFactories: ProviderSourceFactories;
 }
+
+declare const PROMOTION_RACE_SYZYGY_TIMEOUT_CAP_MS: 500;
+declare function makePromotionRaceSyzygyRequest(
+  fen: CanonicalFullFen,
+  scope: ProviderRequestScope,
+): TypedProviderRequest<"syzygy.position@1">;
 
 type PromotionRaceTablebaseSource =
   | Readonly<{
@@ -721,12 +766,21 @@ arm synthesizes `sourceId`, retrieval time, occurrence or acquisition fields; th
 original sealed item. Crossed source kind, producer, occurrence, retrieval, acquisition,
 category or DTZ substitutions fail.
 
+`parseCanonicalFullFen` calls the shipped `positionFromFen`, re-renders through `canonicalFen`, and
+requires byte equality with the complete six-field input; it then returns only that branded
+primitive string. Invalid chess, a non-standard setup or an equal position encoded with noncanonical bytes
+throws `EvidenceInvariantError`. The recorded lookup returns exactly `found`, `absent` or `failed`.
+The sealed resolver asserts a found value before sealing `recorded`, seals literal absence itself,
+and turns either lookup failure into `RecordedEvidenceLookupError`; failure is never absence or
+permission for live fallback.
+
 `collectPromotionRaceTablebase(request, dependencies)` owns the invocation and source-selection
-algebra; callers cannot select recorded versus live. It first pattern-matches the closed geometry
-result. A completed `no_opposing_passed_clear_paths` returns the exact completed/no-output arm and
-calls neither `recordedLookup`, `resolveLegalMoves` nor `syzygyPosition`. A typed unavailable
-geometry returns `input_abstained`; a malformed or forged completed geometry fails its specialized
-assertion and throws `EvidenceInvariantError`.
+algebra; callers cannot select recorded versus live. It first handles the typed unavailable
+geometry arm as `input_abstained`. Every completed arm then crosses
+`assertPromotionRaceGeometryCompletion` **before** inspecting its output discriminator. A sealed
+completed `no_opposing_passed_clear_paths` returns the exact completed/no-output arm and calls
+neither `recordedLookup`, `resolveLegalMoves` nor `scheduler.get`. A malformed, forged, cloned or
+spliced completed geometry throws `EvidenceInvariantError` before the fast path.
 
 For an evidence geometry, the operation calls the sole sealed
 `resolvePromotionRaceRecordedSource(geometry.fen, recordedLookup)`. That resolver reads the
@@ -737,8 +791,15 @@ does not become `absent`. The collector asserts the resolution seal and FEN. An 
 wrong-FEN or value-mutated recorded resolution throws and **never falls back live**.
 
 A sealed recorded resolution takes member 1. Only sealed `absent` permits the operation to call the
-shared provider dependency for the exact geometry FEN. The provider's scheduler preflight occurs
-before the success-only legal-map resolver: a sealed success delivery takes member 2; the
+shared provider dependency for the exact geometry FEN. `makePromotionRaceSyzygyRequest` returns the
+literal operation arm `{operation:"syzygy.position@1",request:{rules:"chess",
+variant:"standard",fen,timeoutMs:Math.min(scope.budgetMs,500)}}`; it rejects non-positive/non-safe
+scope budgets, accepts no caller-supplied request fields and is the sole constructor used here. The
+operation calls `dependencies.scheduler.get(typedRequest, request.providerScope, request.signal)`.
+The scheduler preflight occurs before the success-only legal-map resolver: a
+success first crosses `assertProviderDelivery("syzygy.position@1", result.delivery)` and then
+`dependencies.sourceFactories["syzygy.position@1"].make(result.delivery)`; that exact declared
+evidence takes member 2. The
 scheduler-sealed local-domain result is first wrapped by
 `declareSyzygyTablebaseDomainEvidence` and takes member 3, and a scheduler failure returns
 `provider_unavailable` with operation/request digest and the exact provider failure reason but
@@ -746,7 +807,8 @@ emits no declared chess evidence. For member 3 the operation recomputes the norm
 request from the geometry FEN and requires its branded digest to equal the local-domain envelope;
 the domain item therefore cannot be crossed from another FEN even though its inner fact contains
 only piece count. Neither outside-domain nor provider-failure resolution calls
-`resolveLegalMoves`.
+`resolveLegalMoves`. A source-factory operation/projection mismatch throws; there is no operator
+capability traversal or pawn-private provider callable on this product path.
 
 Only after a recorded or live success is fixed does the operation call
 `resolveLegalMoves(geometry.fen)`. Its typed unavailable arm returns `input_abstained`; its evidence
@@ -1044,6 +1106,14 @@ The 2026-09-02 fourth fresh review returned the third repair on [[D2521]]–[[D2
 the nonexistent/incomplete provider boundary, and structurally forgeable completed geometry. No
 held projection may be implemented before another author repair and fifth fresh review.
 
+The fourth author repair closes those three returns at RFC tier. `CanonicalFullFen` now has one
+strict six-field parser; recorded lookup distinguishes found, absent and failure; live lookup uses
+the shared provider scheduler and operation-keyed source factory over one deterministic Syzygy
+request; and both the derivation receipt and aggregate completed geometry are runtime sealed before
+the no-output discriminator is read. `make semantic-collectors-promotion-fourth-author-repair`
+passes 3/3 plus strict TypeScript. This is author evidence only: the fifth fresh independent review
+still gates acceptance and implementation.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1058,6 +1128,9 @@ held projection may be implemented before another author repair and fifth fresh 
 | [[D2470]] | author-repaired: one request, dependency interface, sealed recorded resolver and exact collector signature fix source precedence |
 | [[D2471]] | author-repaired: specialized assertion failure throws `EvidenceInvariantError`; only typed unavailable inputs abstain, and invalid recorded bytes never permit live fallback |
 | [[D2472]] | author-repaired: valid no-race is `completed/no_evidence` and passes through the outcome operation without source or legal-map calls |
+| [[D2521]] | author-repaired: strict `CanonicalFullFen` construction and a total found/absent/failed recorded-evidence lookup close the request ABI |
+| [[D2522]] | author-repaired: the actual provider scheduler and operation-keyed source factory receive one deterministic standard-chess Syzygy request with a 500 ms maximum |
+| [[D2523]] | author-repaired: both the geometry derivation and aggregate completed result are module-sealed and asserted before the zero-call no-race fast path |
 
 ## Appendix A — registered projection ids
 
@@ -1083,6 +1156,10 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-02: author-repaired [[D2521]]–[[D2523]]. The held pair now defines its canonical-FEN and
+  recorded-lookup ABI, binds the real scheduler/source-factory path and exact Syzygy request bytes,
+  and seals the aggregate completed geometry before any no-output shortcut. A fifth fresh
+  independent review still gates the pair; the twelve implemented projections remain unchanged.
 - 2026-09-02: fourth fresh review returned the held promotion pair on [[D2521]]–[[D2523]]. The
   prior four repairs survive, but two request types are undefined, the Syzygy dependency matches no
   provider callable and has no exact request constructor, and completed geometry has no aggregate
