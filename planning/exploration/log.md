@@ -14132,3 +14132,24 @@ owns the set-equal resolution.
 repair must preserve real producer meaning, specify complete importable source ABIs, and assign the
 117/205 exact-operation closure to one named owner before another independent review. No production,
 schema, API, content, UX, archive or protected-design byte changed.
+
+## 2026-09-02 — Pack capability sixth fresh review returns the operation boundary
+
+**What landed:** independently joined F3's repaired source/public types and 32-route author table to
+the production REST dispatcher, run-creation paths, provider calls and provider-off vocabulary. The
+structured pack/position/imported source union, safe public availability field and all earlier
+schema/applicability/history authorities survive. `pack-capability-contract` is returned on
+[[D2509]]–[[D2512]].
+
+**What changed:** the table's Pack Studio registration path is fictional; its POST/PUT-only method
+algebra omits live rated/playtest/repertoire creation, provider-bearing GETs, story evidence enqueue
+and DELETE share mutation; flip/duplicate create sessions while declared `none`; and `run.group`
+calls Maia/Stockfish on two `/source` arms that the table also declares `none`. Separately, the
+contract correctly retains [[D1077]]'s two absence causes but incorrectly maps every transient miss
+to HTTP 503, erasing the compiled `honest_empty` effect used by current consumers.
+
+**Evidence/next:** `make pack-capability-author-contract` remains fully green and
+`make pack-capability-sixth-fresh-review` reproduces all four returns. A seventh author repair must
+derive the real bounded operation population, split group source semantics, and join reachability
+cause to consumer provider-off behavior before another fresh review. No production, schema, API,
+client, pack, content, archive or protected-design byte changed.

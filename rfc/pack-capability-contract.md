@@ -1,16 +1,13 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **sixth author repair complete for [[D2429]]–[[D2431]]; fresh independent review required.** The repair materializes the
-  92-row legacy authority, splits software/corpus gates, versions unconditional selectors, compiles
-  one lifecycle type, closes the server/web projection and derives operation requirements
-  internally. `make pack-capability-author-repair` and
-  `make pack-capability-sixth-author-repair` pass the cumulative artifact contract, the surviving
-  six-arm contract, three new source/operation/wire arms and strict TypeScript. Creation is now
-  discriminated as pack, position or imported; one generated method/route/body-branch table owns
-  every capability-sensitive first flight; and the public row carries the closed safe availability
-  class needed to validate transient reachability. Exact repair:
-  `planning/pack-capability-contract/sixth-author-repair-2026-09-01.md`. No schema,
-  registry, API, pack or digest implementation is authorised; the D560 hold stays whole.
+- **Status:** draft — **returned by sixth fresh independent review 2026-09-02 on
+  [[D2509]]–[[D2512]].** The sixth repair's source union and public availability field survive, but
+  its sole route table names a nonexistent registration route, excludes live creation/provider/
+  mutation operations, marks provider-bearing group arms as `none`, and collapses the shipped
+  `honest_empty` consumer behavior into blanket HTTP 503. Exact return:
+  `planning/pack-capability-contract/sixth-fresh-independent-review-2026-09-02.md` and
+  `make pack-capability-sixth-fresh-review`. No schema, registry, API, pack or digest implementation
+  is authorised; the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -1551,6 +1548,27 @@ negative TypeScript cases. `make pack-capability-author-repair` retains the cumu
 applicability and six surviving fifth-repair arms. This remains a draft: another fresh independent
 buildability review must attack the creation resolver, route-branch exhaustiveness and public-wire
 privacy/semantics before acceptance or implementation. [[D560]] still holds the 92-pack apply.
+
+## Sixth fresh independent return (2026-09-02)
+
+The structured creation-source union and safe public availability field survive, and every earlier
+author contract remains green. The fresh source join returns the operation boundary on
+[[D2509]]–[[D2512]]:
+
+1. `POST /studio/drafts/:draftId/register` is not a live route; Pack Studio registers at
+   `POST /packs/drafts/:draftId/register`.
+2. [[D2510]] — a POST/PUT-only, 32-route table cannot be the complete capability-sensitive operation
+   population while rated games, draft playtests, repertoire-gap runs, provider-bearing GETs,
+   story evidence enqueue and DELETE share revocation exist outside it; flip and duplicate also
+   create sessions while declared `none`.
+3. [[D2511]] — `run.group` is not provider-free: `human_replies` calls `select` and `engine_top_n` calls
+   `enumerate` before durable mutation, but `/source` is absent from the branch authority.
+4. [[D1077]] defines two absence causes, not one response. The proposed blanket transient 503
+   erases the shipped `honest_empty` arm and contradicts consumers such as branch decidedness.
+
+Exact evidence: `planning/pack-capability-contract/sixth-fresh-independent-review-2026-09-02.md`;
+`make pack-capability-sixth-fresh-review` passes 4/4. A seventh author repair and another fresh
+independent review are required before acceptance or implementation.
 
 ## Acceptance criteria
 

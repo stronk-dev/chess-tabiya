@@ -607,6 +607,10 @@ pack-capability-sixth-author-repair:
 	node --test tools/d2429-pack-capability-sixth-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2429-pack-capability-sixth-author-repair/tsconfig.contract.json --noEmit
 
+.PHONY: pack-capability-sixth-fresh-review
+pack-capability-sixth-fresh-review:
+	node --test tools/d2509-pack-capability-sixth-fresh-review/contract.test.mjs
+
 pack-capability-author-repair:
 	node tools/d2152-pack-capability-author-repair/contract.mjs
 	node --test tools/d2334-pack-capability-fifth-author-repair/contract.test.mjs

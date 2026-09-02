@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:071bb70c58b96bca19be75909df7e8917fd00f633809d3b8121e128ff2ed7585",
+    "roadmap": "sha256:c649e83260a43eb243c0e105fb3f8de5026cf2742769e4450d8899b4d49e96e9",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:05d3112c1e6dc82133e774df49318ac3bd4ee0d2b30b8727ef16a4621d813336",
-    "rfcRegister": "sha256:6a38a890e212185327ffd074b92f58012eac72e40bfd17f4a14c9959791f5ce1",
+    "workState": "sha256:fd0dad47db4cf1120c86c405668f9e693cd5527d1ac9b80b1fbaf09bc757bd99",
+    "rfcRegister": "sha256:11a86d1501200409454a2305b1dca6ed0f04b60db84d832831ef8efb41b666f8",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 642,
       "doing": 0,
-      "blocked": 863,
+      "blocked": 867,
       "done": 749,
       "refused": 3
     },
@@ -110,9 +110,11 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-02",
-        "summary": "Module registration's sixth fresh review returns four buildability boundaries: undeclared source ABIs, a cross-branch redefinition of same-branch eval delta, a deflection contract that deletes the detector's check-induced arm, and 205 null exact operations with no completion owner. The requirements-only refusal and move-quality anyOf survive. Campaign's fourth author repair remains green and review-gated; other returned foundations retain their named boundaries.",
+        "summary": "Pack capability's sixth fresh review returns four production-boundary defects: a nonexistent registration route, an operation census that cannot represent live GET/DELETE and creation paths, provider-backed group branches declared none, and blanket 503 erasing honest-empty semantics. Module registration's four independent returns and Campaign's repaired review gate remain unchanged.",
         "impact": "advanced",
         "evidence": [
+          "planning/pack-capability-contract/sixth-fresh-independent-review-2026-09-02.md",
+          "planning/learner-modules/sixth-fresh-independent-buildability-review-2026-09-02.md",
           "planning/shared-resource-register-bootstrap/fourth-author-repair-2026-09-01.md",
           "planning/shared-resource-register-bootstrap/cross-rfc-reconciliation-2026-09-01.md",
           "planning/shared-resource-register-bootstrap/second-author-repair-2026-09-01.md",
@@ -167,9 +169,12 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-02",
-        "summary": "Module registration remains requirements-only and is returned: its source ABI is not importable from four cited owners, eval delta and deflection disagree with authoritative producer semantics, and every one of 205 exact occurrence/timing operations remains null without an owner. The move-quality anyOf repair survives. No Support, Review or bot consumer receives module credit until a seventh repair assigns and preserves the real operations.",
+        "summary": "F3 remains draft after its operation closure failed a fresh source join: live capability-sensitive routes and provider-off effects are absent or misclassified. Claim semantic anchors and Feedback Stage 2 therefore remain correctly blocked behind a seventh F3 repair; module registration's source/occurrence returns remain independently open.",
         "impact": "advanced",
         "evidence": [
+          "planning/pack-capability-contract/sixth-fresh-independent-review-2026-09-02.md",
+          "rfc/pack-capability-contract.md",
+          "rfc/claim-semantic-anchors.md",
           "planning/learner-modules/sixth-fresh-independent-buildability-review-2026-09-02.md",
           "planning/learner-modules/sixth-author-repair-2026-09-01.md",
           "packages/runtime/src/evidence-catalog.ts",

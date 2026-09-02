@@ -195,6 +195,15 @@ pass. Fresh independent review still gates acceptance and implementation; [[D560
 92-pack apply. Receipt:
 `planning/pack-capability-contract/sixth-author-repair-2026-09-01.md`.
 
+The 2026-09-02 sixth fresh review preserves that source/public repair but returns the claimed
+operation closure on [[D2509]]–[[D2512]]. Its registration path is not the live Pack Studio route;
+the POST/PUT-only population excludes rated/playtest/repertoire creation, provider-bearing GETs,
+story evidence enqueue and DELETE share revocation; `run.group` hides two provider-backed body arms
+inside `none`; and blanket transient 503 erases the compiled `honest_empty` consumer effect. The
+next repair must derive the bounded population from the production router/service call graph rather
+than prove a hand-authored table total over itself. Receipt:
+`planning/pack-capability-contract/sixth-fresh-independent-review-2026-09-02.md`.
+
 The 2026-08-31 fifth fresh candidate-packet review preserves the repaired single retained legal-
 move value graph but returns its acceptance boundary on [[D2428]]: the RFC requires one
 `exactLegalMoveMap` call while the production declaration adapter necessarily recomputes the same
