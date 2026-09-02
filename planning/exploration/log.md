@@ -14206,3 +14206,20 @@ container with the separate worker artifact present.
 **Evidence/next:** `make longitudinal-store-fifth-author-repair` passes the retained 24 + 8 author
 arms, four new able-to-fail controls and strict TypeScript. This is author evidence; a genuinely
 fresh independent buildability review still gates migration and implementation.
+
+## 2026-09-02 — Pack capability seventh fresh review returns the asynchronous production boundary
+
+**What landed:** independently joined F3's seventh author image to both production public-Story
+routes and to the asynchronous evidence queue. The synchronous 36-action/48-run-branch repair,
+four group arms, Position/imported source and consumer-derived effects survive; no product, schema,
+API, pack or content implementation was attempted.
+
+**What changed:** [[D2518]] records the omitted `GET /shared/:token` Story route; [[D2519]] records
+Stockfish/Syzygy worker gateways outside the provider census; [[D2520]] records that analysis
+returns 202 before provider execution, so request-level 503/empty/fallback cannot describe queued
+settlement or restart recovery. F3 remains draft and returned rather than being accepted on an
+internally green author image.
+
+**Evidence/next:** `make pack-capability-seventh-fresh-review` passes 3/3. An eighth author repair
+must derive both Story routes, close the worker operation population and specify admitted versus
+settled job outcomes; another fresh independent review still gates acceptance and implementation.

@@ -1,10 +1,11 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **seventh author repair complete; fresh independent review required.**
-  [[D2509]]–[[D2513]] are repaired at the author boundary by a production-derived 58-operation
-  image, exact group/session discriminants and a compiled consumer-effect join. Exact prior return:
-  `planning/pack-capability-contract/sixth-fresh-independent-review-2026-09-02.md`; author control:
-  `make pack-capability-seventh-author-repair`. No schema, registry, API, pack or digest
+- **Status:** draft — **RETURNED by seventh fresh independent review 2026-09-02 on [[D2518]]–[[D2520]].**
+  The synchronous 58-operation repair survives, but the external route image omits the public HTML
+  Story route, the provider census stops above the asynchronous evidence worker, and request-level
+  503/empty/fallback effects cannot describe a provider job settling after HTTP 202. Exact return:
+  `planning/pack-capability-contract/seventh-fresh-independent-review-2026-09-02.md`; executable:
+  `make pack-capability-seventh-fresh-review`. No schema, registry, API, pack or digest
   implementation is authorised; the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
@@ -1642,6 +1643,27 @@ strict type controls are `make pack-capability-seventh-author-repair`. Earlier a
 remain cumulative. This is still draft authoring: another fresh independent review must attack the
 AST population boundary, nested creation discriminants and all three provider-off effects before
 acceptance or implementation.
+
+## Seventh fresh independent return (2026-09-02)
+
+The author repair's 36-action/48-run-branch synchronous image and its exact group/session fixes
+survive. Fresh production-boundary review returns the contract on three outer seams:
+
+1. [[D2518]] — `GET /shared/:token` calls the same `publicStory`/Story-evidence path as the declared
+   API route but is absent from the ten external branches, proving that population is still not
+   derived set-equal from the router.
+2. [[D2519]] — `EvidenceJobQueue` calls Stockfish through `EvidenceExecutor.execute` and Syzygy
+   through `TablebaseSource.probe`, yet the provider-call census contains no worker site despite
+   analysis, moves, imports and Story feeding it.
+3. [[D2520]] — analysis returns 202 after enqueue and records provider failure later inside the
+   worker; a request-synchronous `unavailable → 503/no write` effect cannot represent provider loss
+   after admission or job recovery in another process lifetime.
+
+Exact evidence:
+`planning/pack-capability-contract/seventh-fresh-independent-review-2026-09-02.md`;
+`make pack-capability-seventh-fresh-review` passes 3/3. An eighth author repair must derive both
+public Story branches, close queued provider operations and specify admitted versus settled job
+outcomes before another fresh independent review, acceptance or implementation.
 
 ## Acceptance criteria
 
