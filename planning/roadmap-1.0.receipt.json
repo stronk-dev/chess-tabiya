@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:36232840f0b3c4018d76cf0e5df255db04bd7c685eab2b60349668184f5ac322",
+    "roadmap": "sha256:3572f09adddd78f5cdbef307e5ff954c837fe53d0e80b00538469526baf424f5",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
     "workState": "sha256:f90f8fe1c4821419c307853447f03bc965bf2838aede5782de13490745c99dd5",
-    "rfcRegister": "sha256:6df54c24fb9524ba59354c4a7da7e6e7b83941dba05eec07f8ae07587b7010cd",
+    "rfcRegister": "sha256:2241a40cb3c196f7ad47b31caddd7739e2132a19ff3152e88d13e2108113bb57",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -110,7 +110,7 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-02",
-        "summary": "Pack capability's ninth author repair and module registration's eighth author repair close their latest returned defects at contract tier. Module registration now has exact provider/catalogue authorities, edge-grained eval delta, alternative deflection inputs, 205 joined keys and a sealed final receipt; its newly exposed check-evidence dependency remains blocked. Both contracts remain draft pending genuinely fresh review and implementation is unauthorized.",
+        "summary": "Pack capability's ninth and module registration's eighth repairs close their latest returns at contract tier. D2536 is now traced to semantic-collectors and author-repaired with exact alternative derivations and sealed edge-1 check authority. All three boundaries still await genuinely fresh review and implementation is unauthorized.",
         "impact": "held",
         "evidence": [
           "planning/learner-modules/seventh-fresh-independent-buildability-review-2026-09-02.md",
@@ -173,7 +173,7 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-02",
-        "summary": "Module registration's eighth author repair closes the six returned source, subject, dependency, key and seal defects while preserving its honest blocked posture and exposing one upstream deflection check-evidence dependency. Pack capability and promotion collectors are also author-repaired but await fresh review. No new producer-to-module binding is executable yet.",
+        "summary": "Module registration's eighth author repair closes its six returned authority defects, and semantic-collectors now has an executable D2536 author contract for the exposed deflection check-evidence dependency. Pack capability and promotion collectors are also author-repaired but await fresh review. No new producer-to-module binding is executable yet.",
         "impact": "held",
         "evidence": [
           "planning/learner-modules/seventh-fresh-independent-buildability-review-2026-09-02.md",

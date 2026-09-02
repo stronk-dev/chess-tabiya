@@ -14379,3 +14379,20 @@ production binding, schema, API, UX, content or protected-design byte changed.
 **Evidence/next:** `make module-registration-eighth-author-repair` passes 6/6 plus the retained
 11/11 author controls. Another genuinely fresh independent review is required before acceptance or
 implementation.
+
+## 2026-09-02 — Deflection check authority traced to its producer and author-repaired
+
+**What landed:** audited [[D2536]] from the check-induced detector predicate through the F1
+manifest, semantic-event emitter and both recorded-path compilers. The semantic-collectors RFC now
+specifies two exact derivation members, a runtime-sealed edge-1 check-event argument, deterministic
+bait-before-check selection and permanent missing/crossed/unnecessary check negatives.
+
+**What changed:** the module layer no longer owns an unexplained blocker. The production defect is
+precise: `deflectionObservedOperands` reads check from FEN, while the existing manifest and emitter
+cannot retain the corresponding check evidence. The disposable model selects only between
+validated facts and creates no chess judgement. No production, schema, API, UX, content or
+protected-design byte changed.
+
+**Evidence/next:** `make semantic-collectors-deflection-authority-author-contract` passes 4/4 plus
+strict TypeScript. Fresh independent review must attack derivation widening, stable identity,
+anchor equality and both call sites before production implementation.

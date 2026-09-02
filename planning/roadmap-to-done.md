@@ -298,6 +298,13 @@ cannot carry check evidence, so that arm remains honestly blocked on `semantic-c
 fresh independent review still gates acceptance and implementation. Receipt:
 `planning/learner-modules/eighth-author-repair-2026-09-02.md`.
 
+The same checkpoint traced [[D2536]] to the producer and authored its repair without changing
+production. `semantic-collectors` now requires two exact deflection derivation members, a sealed
+edge-1 check event only for the check-induced arm, deterministic bait-before-check selection and
+both recorded-path call sites. `make semantic-collectors-deflection-authority-author-contract`
+passes 4/4 plus strict TypeScript; fresh review still gates the existing projection change. Receipt:
+`planning/evidence-foundation-ux/deflection-check-authority-author-contract-2026-09-02.md`.
+
 The 2026-09-02 fourth fresh promotion-collector review keeps the two held projections out of the
 foundation on [[D2521]], [[D2522]] and [[D2523]]. Its advertised closed request uses two undefined types, the
 injected Syzygy callable matches no provider operation and leaves normalized request bytes

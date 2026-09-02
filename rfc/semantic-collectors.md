@@ -1,6 +1,11 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
-- **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The held
+- **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The D2536
+  deflection check-authority amendment is author-complete 2026-09-02 and awaits fresh independent
+  review before the existing projection changes.** It defines two exact derivation members,
+  deterministic bait-before-check selection, a sealed edge-1 check-event input and permanent
+  missing/crossed/unnecessary negatives; `make semantic-collectors-deflection-authority-author-contract`
+  passes 4/4 plus strict TypeScript. **The held
   promotion pair completed its fourth author repair 2026-09-02 on [[D2521]], [[D2522]] and
   [[D2523]]; a fifth fresh independent review still gates acceptance and implementation.** The
   request now owns a canonical full-FEN parser and total recorded lookup, uses the actual shared
@@ -327,6 +332,60 @@ of each identity, pinned below from the measured predicates
   **19.0%** of negative controls and is the permanent hard negative (the recall-only-gate
   lesson, stage-0 §9; the discriminating minor-piece fixture is wired in
   `semantic-splits.test.ts`, labeled from this review).
+
+#### 3.2.1 Deflection check-authority amendment — D2536
+
+The implemented deflection detector has two induction arms, but its sealed evidence declaration
+currently authorizes only the common bait/capture inputs. `deflectionObservedOperands` reads the
+check-induced arm from edge 1's resulting FEN; `deflectionObservedSemanticEvent` accepts no check
+evidence; and the manifest therefore cannot retain the exact fact that distinguished that arm.
+Module registration found the gap when it attempted to compile alternative-specific requirements.
+
+The projection keeps its id and operands, but its derivation becomes the exact two-member union:
+
+```ts
+derivation: { anyOf: [
+  [
+    ref("run.record.move"),
+    ref("rules.tactic.reading.defender_duty_set"),
+    ref("rules.transition.event.capture"),
+    ref("rules.exchange.predicate.legal_exchange"),
+  ],
+  [
+    ref("run.record.move"),
+    ref("rules.tactic.reading.defender_duty_set"),
+    ref("rules.transition.event.capture"),
+    ref("rules.exchange.predicate.legal_exchange"),
+    ref("rules.tactic.event.check"),
+  ],
+] }
+
+declare function deflectionObservedSemanticEvent(
+  payload: DeflectionObservedOperands,
+  moveEvidence: readonly DeclaredEvidence<unknown>[],
+  dutyEvidence: DeclaredEvidence<unknown>,
+  captureEvidence: readonly DeclaredEvidence<unknown>[],
+  exchangeEvidence: DeclaredEvidence<unknown>,
+  checkEvent?: SemanticEvidenceEvent<CheckEvent>,
+): SemanticEvidenceEvent<DeflectionObservedOperands>;
+```
+
+The emitter re-evaluates only the already-declared induction discriminator over the canonical
+three-edge payload; it does not introduce another detector. If edge 2 is the exact bait capture,
+the first derivation member is mandatory even when edge 1 also checked, and a supplied check event
+is an `unnecessary-check` refusal. Otherwise edge 1 must be check and the second member is mandatory.
+The emitter asserts the `SemanticEvidenceEvent` runtime seal, exact
+`rules.tactic.event.check@1` projection and byte-equal edge-1 before-FEN/UCI/after-FEN anchor before
+passing its declared evidence into F1. Missing evidence is `missing-check`; a valid check from any
+other edge or line is `crossed-edge-check`. Thus one observed payload has one derivation member and
+one evidence id; a line that happens to satisfy both arms cannot be minted twice.
+
+Both recorded-path sites pass the already-compiled edge-1 check event: the permanent sequence suite
+in `packages/runtime/src/semantic-tactic-sequences.test.ts`, the cost compiler in
+`tools/d1930-recorded-path-cost-harness/`, and the source-closure compiler in
+`tools/d1931-recorded-path-source-harness/`. The positive check-induced line remains the existing
+legal `Ra8+ Rg8 Rxe7` fixture; the bait-capture positive remains separate. Production bytes do not
+change until this amendment survives fresh independent review.
 
 #### 3.3 Observed line tactics
 
@@ -1024,6 +1083,14 @@ shipped around — no criterion here carries a pre-authorized fallback.
     forged/changed recorded resolution with no live fallback, bare and crossed domain facts, provider-failure-for-domain
     substitution, absence of `promotionWithCheck`, exact external check composition, and reproduces
     D909's geometric inversion.
+17. **C17 — Deflection derivation authority is alternative-specific** ([[D2536]]). The compiled
+    `derived.tactic.deflection_observed@1` declaration has exactly the two §3.2.1 derivation members.
+    The emitter deterministically chooses bait capture before check, accepts a runtime-sealed
+    edge-1 `rules.tactic.event.check@1` only for the check-induced member, and both recorded-path
+    compilers forward that exact event. The bait and `Ra8+ Rg8 Rxe7` positives emit one stable id
+    each; `missing-check`, `crossed-edge-check`, `unnecessary-check`, wrong projection, unsealed
+    event and duplicate-member fixtures fail before emission. The implementation diff changes no
+    projection id, operands, learner eligibility or content bytes.
 
 ## Discharges
 
