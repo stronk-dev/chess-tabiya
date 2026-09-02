@@ -20243,6 +20243,60 @@
       "uxItems": [],
       "evidence": "planning/shared-resource-register-bootstrap/fifth-author-repair-2026-09-02.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2542",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:cc793a723bba4fe88b25988ad1d83e53e2b82c584f0be92069d7647b961d352e",
+      "uxItems": [],
+      "owner": "content-and-theory",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2543",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e34d14d7914175818f60d471485bdae8a1b9437f44c536983bfc69a1a3723444",
+      "uxItems": [],
+      "owner": "content-and-theory",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2544",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ee65f2b2d6eb48bd1c7750113160aa4afd8819bfda5c2d9a007f8d4014756a2d",
+      "uxItems": [],
+      "owner": "content-and-theory",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2545",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1bc7b7eca4d0aa2bbe51866ba35933fc81628d8ea6eced6d07c623c276c55957",
+      "uxItems": [],
+      "owner": "content-and-theory",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2546",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:af971b849ba1e49fde3bd57f50a37a9f09000a33c1c2d4351f41c66e52e1c11e",
+      "uxItems": [],
+      "owner": "content-and-theory",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2547",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:22588902291b128223e7fad1863b05c90895d765b0430e1d66af3ea9c8e6b2dc",
+      "uxItems": [],
+      "owner": "content-and-theory",
+      "blocker": "rfc:pack-capability-contract.md"
     }
   ]
 }

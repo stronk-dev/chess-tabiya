@@ -668,6 +668,10 @@ pack-capability-ninth-author-repair:
 	node --test tools/d2524-pack-capability-ninth-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2524-pack-capability-ninth-author-repair/tsconfig.contract.json --noEmit
 
+.PHONY: pack-capability-ninth-fresh-review
+pack-capability-ninth-fresh-review:
+	node --test tools/d2542-pack-capability-ninth-fresh-review/contract.test.mjs
+
 pack-capability-author-repair:
 	node tools/d2152-pack-capability-author-repair/contract.mjs
 	node --test tools/d2334-pack-capability-fifth-author-repair/contract.test.mjs

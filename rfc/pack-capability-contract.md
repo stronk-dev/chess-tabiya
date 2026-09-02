@@ -1,12 +1,11 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **ninth author repair complete 2026-09-02 on [[D2524]]–[[D2529]]; another
-  fresh independent review is required.** The durable result now preserves the whole staged value;
-  provider unavailability retains exact availability with an optional real failure; every origin
-  has a persistent replay identity; and explicit batches, run enrichment, rewind cancellation,
-  settlement and consumption have named atomic boundaries. `make pack-capability-ninth-author-repair`
-  passes 6/6 plus strict TypeScript. This is author evidence, not acceptance; no schema, registry,
-  API, migration, storage, pack or digest implementation is authorised and the D560 hold stays whole.
+- **Status:** draft — **RETURNED by ninth fresh independent review 2026-09-02 on
+  [[D2542]]–[[D2547]].** The complete settlement, origin keys and joined run/job transaction
+  direction survive, but batch/child identity, lease fencing, request digest bytes, concurrent
+  first-flight admission, rewind state transitions and consumption receipts remain unbuildable.
+  `make pack-capability-ninth-fresh-review` passes 6/6 findings. No schema, registry, API, migration,
+  storage, pack or digest implementation is authorised and the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -1960,6 +1959,26 @@ expected unimplemented production orderings. No
 production, schema, migration, API, storage, content, pack or digest byte changed. Another genuinely
 fresh independent review must attack result completeness, optional-failure parsing, concurrent
 batch replay, internal-key stability and every transaction fault boundary before acceptance or
+implementation.
+
+## Ninth fresh independent return (2026-09-02)
+
+The complete settlement, optional real failure, origin-specific replay keys and joined run/job
+transaction direction survive. Fresh review returns six durable proof boundaries:
+
+1. [[D2542]] — child `run_id`/`origin` values are not relationally bound to their parent batch;
+2. [[D2543]] — stale-worker refusal names a lease generation the schema cannot store;
+3. [[D2544]] — batch/job request digests have no literal canonical preimage or byte authority;
+4. [[D2545]] — concurrent same-key admission and persisted batch UUID construction are prose-only;
+5. [[D2546]] — rewind cancels conceptual `pending/running/staged` states rather than the durable
+   state union; and
+6. [[D2547]] — consumed rows retain no run revision/event-range/digest receipt for applied events.
+
+Exact evidence:
+`planning/pack-capability-contract/ninth-fresh-independent-buildability-review-2026-09-02.md`;
+`make pack-capability-ninth-fresh-review` passes 6/6. A tenth author repair must close the composite
+batch identity, exact request image, lease fence, two-connection winner/loser protocol, durable
+rewind transition table and application receipt before another fresh review, acceptance or
 implementation.
 
 ## Acceptance criteria

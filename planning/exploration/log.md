@@ -14429,3 +14429,19 @@ production, schema, API, storage, content, web or protected-design byte changed.
 **Evidence/next:** `make shared-resource-bootstrap-fifth-author-repair` passes 5/5; retained author
 controls pass 4/4 + 8/8 + 8/8 + 6/6. Another genuinely fresh independent review is required before
 acceptance or implementation.
+
+## 2026-09-02 — Pack capability ninth fresh review returns six durable proof gaps
+
+**What landed:** independently reviewed the ninth author repair against its exact SQLite image,
+author admission authority and runtime job-state vocabulary. Complete settlements, optional real
+provider failures, origin-specific replay keys and joined run/job transaction ownership survive. No
+production, migration, API, schema, content, pack or protected-design byte changed.
+
+**What changed:** [[D2542]]–[[D2547]] record six blockers. Child jobs can cross their parent
+run/origin; stale-worker refusal has no lease fence; request digest bytes are undefined; concurrent
+same-key admission and batch UUIDs are prose-only; rewind names nonexistent durable states; and a
+consumed row cannot prove the exact run events it applied.
+
+**Evidence/next:** `make pack-capability-ninth-fresh-review` passes 6/6 findings while the retained
+ninth and eighth author targets remain green. A tenth author repair must close all six, followed by
+another genuinely fresh review before acceptance or implementation.
