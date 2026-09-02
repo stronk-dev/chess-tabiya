@@ -1,13 +1,11 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **returned by sixth fresh independent review 2026-09-02 on
-  [[D2509]]–[[D2512]].** The sixth repair's source union and public availability field survive, but
-  its sole route table names a nonexistent registration route, excludes live creation/provider/
-  mutation operations, marks provider-bearing group arms as `none`, and collapses the shipped
-  `honest_empty` consumer behavior into blanket HTTP 503. Exact return:
-  `planning/pack-capability-contract/sixth-fresh-independent-review-2026-09-02.md` and
-  `make pack-capability-sixth-fresh-review`. No schema, registry, API, pack or digest implementation
-  is authorised; the D560 hold stays whole.
+- **Status:** draft — **seventh author repair complete; fresh independent review required.**
+  [[D2509]]–[[D2513]] are repaired at the author boundary by a production-derived 58-operation
+  image, exact group/session discriminants and a compiled consumer-effect join. Exact prior return:
+  `planning/pack-capability-contract/sixth-fresh-independent-review-2026-09-02.md`; author control:
+  `make pack-capability-seventh-author-repair`. No schema, registry, API, pack or digest
+  implementation is authorised; the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -1152,16 +1150,24 @@ it does not collapse three creation sources into a fictional always-packed opera
 type CapabilityOperationId =
   | "pack.register"
   | "run.create.pack" | "run.create.position" | "run.create.imported"
-  | "opponent.select"
-  | "run.group_reply" | "run.branch_decidedness" | "run.analysis"
-  | "run.simulate" | "run.prediction" | "run.voice" | "run.speech"
-  | "run.reasoning_review"
+  | "run.create.rated" | "run.create.playtest" | "run.create.repertoire_gap"
+  | "run.create.flip" | "run.create.duplicate_pack" | "run.create.duplicate_position"
+  | "opponent.select" | "story.public"
+  | "run.graph" | "run.events" | "run.evidence.read" | "run.authored_feedback"
+  | "run.pgn" | "run.grants.read" | "run.reasoning.read" | "run.import_record"
+  | "run.story" | "run.share.list" | "run.derivations" | "run.marks.read"
+  | "run.human_split" | "run.corpus" | "run.group_reply"
+  | "run.branch_decidedness" | "run.analysis" | "run.prediction"
+  | "run.voice" | "run.speech" | "run.reasoning_review"
+  | "run.group.hand_picked" | "run.group.authored"
+  | "run.group.human_replies" | "run.group.engine_top_n"
   | "run.marks.replace" | "run.marks.rescope"
-  | "run.deletion_preview" | "run.delete" | "run.distill" | "run.share"
-  | "run.flip" | "run.lease" | "run.reveal" | "run.duplicate" | "run.schedule"
-  | "run.grant" | "run.revoke" | "run.group"
+  | "run.deletion_preview" | "run.delete" | "run.distill"
+  | "run.share.create" | "run.share.revoke"
+  | "run.lease" | "run.reveal" | "run.schedule"
+  | "run.grant" | "run.revoke"
   | "run.move.user" | "run.move.opponent_received"
-  | "run.rewind" | "run.fork" | "run.compare" | "run.simulate_enter"
+  | "run.rewind" | "run.fork" | "run.compare" | "run.simulate" | "run.simulate_enter"
   | "run.reasoning.record" | "run.evidence.apply";
 type CreateSessionCapabilitySource =
   | { readonly kind: "pack"; readonly packId: string; readonly packDigest: string }
@@ -1170,63 +1176,94 @@ type CreateSessionCapabilitySource =
 type OperationCapabilitySource =
   | { readonly kind: "session_create"; readonly sessionKind: CreateSessionCapabilitySource["kind"] }
   | { readonly kind: "registered_pack"; readonly phase: "static_admission" }
-  | { readonly kind: "registered_pack_operation" }
+  | { readonly kind: "run_session_operation" }
   | { readonly kind: "fixed_registry" }
   | { readonly kind: "none" };
+type CapabilityConsumerId = EvidenceConsumerId | OperationalCapabilityConsumerId;
 interface OperationCapabilityBinding {
   readonly operationId: CapabilityOperationId;
   readonly source: OperationCapabilitySource;
+  readonly consumer?: CapabilityConsumerId;
 }
+type CheckedOperationCapabilityBinding =
+  | { readonly operationId: CapabilityOperationId; readonly source: { readonly kind: "none" } }
+  | { readonly operationId: CapabilityOperationId; readonly source: Exclude<OperationCapabilitySource, { readonly kind: "none" }>; readonly consumer: CapabilityConsumerId };
 interface CapabilityRouteBranch {
   readonly operationId: CapabilityOperationId;
-  readonly method: "POST" | "PUT";
+  readonly method: "GET" | "POST" | "PUT" | "DELETE";
   readonly route:
-    | "/studio/drafts/:draftId/register" | "/runs" | "/runs/import" | "/select-move"
-    | "/runs/:runId/:action";
+    | "/packs/drafts/:draftId/register" | "/packs/drafts/:draftId/playtest"
+    | "/runs" | "/runs/import" | "/rated-games" | "/select-move"
+    | "/repertoires/:id/gaps/enter" | "/api/shared/:token/story"
+    | "/runs/:runId/share/:token" | "/runs/:runId/:action";
   readonly action?: string;
   readonly discriminant?:
     | { readonly path: "/session/kind"; readonly value: "pack" | "position" }
     | { readonly path: "/rescopeFrom"; readonly presence: "present" | "absent" }
     | { readonly path: "/op"; readonly value: "grant" | "revoke" }
-    | { readonly path: "/selection"; readonly presence: "present" | "absent" };
+    | { readonly path: "/selection"; readonly presence: "present" | "absent" }
+    | { readonly path: "/source"; readonly value: "hand_picked" | "authored" | "human_replies" | "engine_top_n" }
+    | { readonly loaded: "run.sessionKind"; readonly value: "pack" | "position" };
 }
 ```
 
-`CAPABILITY_ROUTE_BRANCHES` is one literal typed table and the sole authority for the operation
-union, REST branch resolver, provider/no-provider partition and census. A checked generator emits
-`CapabilityOperationId` and `CAPABILITY_OPERATION_BINDINGS` from it; neither is a hand-maintained
-parallel list. The live REST dispatcher calls `resolveCapabilityOperation({method, routeTemplate,
-action, parsedBody})` after closed body parsing and before its handler. An unrecognized or
-multiply-matched first-flight branch fails at module load/test generation, not by falling through
-to `none`. The exact 35-row image is:
+`OperationCapabilityBinding` is the generated read projection. Authoring accepts only
+`CheckedOperationCapabilityBinding`, so a non-`none` source without a consumer and a `none` source
+with a consumer are unrepresentable; no call site constructs the looser projection directly.
+
+The reviewed author post-image is
+`tools/d2509-pack-capability-seventh-author-repair/operation-authority.json`. It is not a second
+production registry: the implementation translates it into co-located typed branch declarations,
+then the author artifact is retired. `CapabilityOperationId`, `CAPABILITY_OPERATION_BINDINGS` and
+the HTTP resolver are generated from those declarations. A source census independently parses the
+live `parseRunRoute` action grammar, all method/action handler branches, every run-creation storage
+site and every call through the provider gateway; set inequality fails. Consequently a new route,
+creation site or provider call fails before anyone edits a hand-written expected list.
+
+The bounded population is syntactic and deliberately wider than “operations we currently think
+need a provider”: every supported method/action branch under `parseRunRoute`, every route that
+creates a run, Pack Studio registration, `/select-move`, public Story and share-token revocation.
+Account, classroom, shape-authoring and live-session APIs are outside this pack/run boundary by
+their distinct route parsers, and the census asserts those exclusions by parser identity. The
+author image contains **36/36 run actions, 48 run-route branches, 10 external-route branches and 58
+operation branches**. The following table is only the capability-bearing and split-branch excerpt;
+the JSON artifact is the complete reviewed image:
 
 | method + route | body branch | operation id | capability source |
 |---|---|---|---|
-| `POST /studio/drafts/:draftId/register` | — | `pack.register` | `registered_pack/static_admission` |
+| `POST /packs/drafts/:draftId/register` | — | `pack.register` | `registered_pack/static_admission` |
+| `POST /packs/drafts/:draftId/playtest` | — | `run.create.playtest` | `session_create/pack` |
 | `POST /runs` | `session.kind=pack` | `run.create.pack` | `session_create/pack` |
 | `POST /runs` | `session.kind=position` | `run.create.position` | `session_create/position` |
 | `POST /runs/import` | — | `run.create.imported` | `session_create/imported` |
+| `POST /rated-games` | — | `run.create.rated` | `session_create/position` |
+| `POST /repertoires/:id/gaps/enter` | — | `run.create.repertoire_gap` | `session_create/position` |
 | `POST /select-move` | — | `opponent.select` | `fixed_registry` |
-| `POST /runs/:runId/group-reply` | — | `run.group_reply` | `registered_pack_operation` |
-| `POST /runs/:runId/branch-decidedness` | — | `run.branch_decidedness` | `registered_pack_operation` |
-| `POST /runs/:runId/analysis` | — | `run.analysis` | `registered_pack_operation` |
-| `POST /runs/:runId/simulate` | — | `run.simulate` | `registered_pack_operation` |
-| `POST /runs/:runId/prediction` | — | `run.prediction` | `registered_pack_operation` |
-| `POST /runs/:runId/voice` | — | `run.voice` | `registered_pack_operation` |
-| `POST /runs/:runId/speech` | — | `run.speech` | `registered_pack_operation` |
-| `POST /runs/:runId/reasoning-review` | — | `run.reasoning_review` | `fixed_registry` |
+| `GET /runs/:runId/human-split` | — | `run.human_split` | `run_session_operation` |
+| `GET /runs/:runId/corpus` | — | `run.corpus` | `run_session_operation` |
+| `GET /runs/:runId/story` | — | `run.story` | `run_session_operation` |
+| `GET /api/shared/:token/story` | — | `story.public` | `run_session_operation` |
+| `POST /runs/:runId/group-reply` | — | `run.group_reply` | `run_session_operation` |
+| `POST /runs/:runId/branch-decidedness` | — | `run.branch_decidedness` | `run_session_operation` |
+| `POST /runs/:runId/analysis` | — | `run.analysis` | `run_session_operation` |
+| `POST /runs/:runId/prediction` | — | `run.prediction` | `run_session_operation` |
+| `POST /runs/:runId/voice` | — | `run.voice` | `run_session_operation` |
+| `POST /runs/:runId/speech` | — | `run.speech` | `run_session_operation` |
+| `POST /runs/:runId/reasoning-review` | — | `run.reasoning_review` | `run_session_operation` |
 | `PUT /runs/:runId/marks` | `rescopeFrom` absent / present | `run.marks.replace` / `run.marks.rescope` | `none` / `none` |
 | `POST /runs/:runId/deletion-preview` | — | `run.deletion_preview` | `none` |
 | `POST /runs/:runId/delete` | — | `run.delete` | `none` |
 | `POST /runs/:runId/distill` | — | `run.distill` | `none` |
-| `POST /runs/:runId/share` | — | `run.share` | `none` |
-| `POST /runs/:runId/flip` | — | `run.flip` | `none` |
+| `POST /runs/:runId/share` | — | `run.share.create` | `run_session_operation` |
+| `DELETE /runs/:runId/share/:token` | — | `run.share.revoke` | `none` |
+| `POST /runs/:runId/flip` | — | `run.create.flip` | `session_create/position` |
 | `POST /runs/:runId/lease` | — | `run.lease` | `none` |
 | `POST /runs/:runId/reveal` | — | `run.reveal` | `none` |
-| `POST /runs/:runId/duplicate` | — | `run.duplicate` | `none` |
+| `POST /runs/:runId/duplicate` | loaded `sessionKind=pack` / `position` | `run.create.duplicate_pack` / `run.create.duplicate_position` | `session_create/pack` / `session_create/position` |
 | `POST /runs/:runId/schedule` | — | `run.schedule` | `none` |
 | `POST /runs/:runId/grants` | `op=grant` / `op=revoke` | `run.grant` / `run.revoke` | `none` / `none` |
-| `POST /runs/:runId/group` | — | `run.group` | `none` |
+| `POST /runs/:runId/group` | `source=hand_picked` / `authored` | `run.group.hand_picked` / `run.group.authored` | `none` / `none` |
+| `POST /runs/:runId/group` | `source=human_replies` / `engine_top_n` | `run.group.human_replies` / `run.group.engine_top_n` | `run_session_operation` / `run_session_operation` |
 | `POST /runs/:runId/moves` | `selection` absent / present | `run.move.user` / `run.move.opponent_received` | `none` / `none` |
 | `POST /runs/:runId/rewind` | — | `run.rewind` | `none` |
 | `POST /runs/:runId/fork` | — | `run.fork` | `none` |
@@ -1235,52 +1272,63 @@ to `none`. The exact 35-row image is:
 | `POST /runs/:runId/reasoning` | — | `run.reasoning.record` | `none` |
 | `POST /runs/:runId/evidence` | — | `run.evidence.apply` | `none` |
 
-The table has 32 route rows and 35 operation branches because marks, grants and moves each split
-in two. Its route vocabulary is generated from the same parsed route/action union the dispatcher
-uses; a regex census over `rest.ts` is only an independent drift check, never the production
-authority. It deliberately covers the capability-sensitive creation/pack/opponent and mutating-run
-surface, not unrelated account, classroom, Studio authoring or live-session APIs. Adding or
-removing a branch in that bounded surface fails set equality until the single table and dispatcher
-change together.
+The excerpt omits the local read/mutation rows only for legibility; they remain literal in the
+58-branch author image. The implementation does not regex-generate a dispatcher from formatting.
+Instead, route declarations and provider-operation wrappers are production authority, while the
+AST census independently discovers their population and compares semantic identities. A call to a
+provider outside `executeCapabilityOperation`, a run-creation storage call outside a declared
+creation operation, an action in `parseRunRoute` without all of its supported methods, or an
+invented `/studio/drafts` prefix is a distinct failure.
 
-`run.create.pack` resolves the authenticated parsed pack identity and requires the complete
-canonical `pack.requires` set against configured support. `run.create.position` and
-`run.create.imported` cannot resolve or impersonate a pack: their sealed `CreateRunSession` source
+`run.create.pack` and Pack Studio playtest resolve authenticated pack identity and require the
+complete canonical `pack.requires` set against configured support. Position, imported, rated,
+repertoire-gap and flip creation cannot resolve or impersonate a pack: their sealed session source
 selects the exact opponent/runtime requirements through the same registry mappings that own those
-policy modes. A mode with no requirement yields an explicit empty derived set; absence is a
-registry fact, not a caller-supplied empty array. Crossed fixtures prove a position/imported source
-cannot select `registered_pack`, a pack source cannot select the non-pack fixed resolver, and a
-body/session-kind disagreement fails before admission. `pack.register` separately uses
-`registered_pack/static_admission` over the parsed draft pack.
+policy modes. Duplicate selects pack or position only from the already-authorized stored source
+run, never from a request discriminator. A mode with no requirement yields an explicit empty
+derived set; absence is a registry fact, not a caller-supplied empty array. Crossed fixtures prove a
+position/imported source cannot select `registered_pack`, a pack source cannot select the non-pack
+resolver, a duplicate request cannot change source kind, and a body/session-kind disagreement fails
+before admission. `pack.register` separately uses `registered_pack/static_admission` over the
+parsed draft pack.
 
-The remaining run/provider operations plus `opponent.select` use either
-`registered_pack_operation` or an exact fixed-registry provider capability. For a registered-pack
-operation the server loads the authenticated
-run, resolves its immutable registered pack identity, and computes
-`pack.requires ∩ {binding.capability | operationId ∈ binding.operationIds}` from the registry.
-Routes supply only `{operationId, runId/idempotencyKey when applicable}`; the operation id is the
-generated result of the closed route-branch resolver, not a caller field. They cannot add, omit or
-replace capability ids, a pack path or a requirement array.
+Provider operations plus `opponent.select` use either `run_session_operation` or an exact
+fixed-registry capability. A run-session resolver loads the authenticated immutable run and derives
+the union of (a) the operation consumer's fixed capability requirements, (b) the exact opponent
+policy requirements of that session, and (c) `pack.requires` only when the run actually has a pack.
+Position and imported sessions therefore remain first-class rather than failing a fictitious pack
+lookup. Routes supply only `{operationId, runId/idempotencyKey when applicable}`; the operation id
+is the generated result of the closed route-branch resolver, not a caller field. They cannot add,
+omit or replace capability ids, a pack path or a requirement array.
 
 Every `source:none` action still passes through the operation census but does not call transient
 capability enforcement; `run.move.opponent_received`
 commits an already admitted provider-delivery receipt, so provider death after delivery cannot
 invalidate the received move. Adding a mutating route fails the census until it is assigned to
-exactly one provider-bound or explicit-none source. Crossed fixtures move one operation between
-sets, omit a provider binding, add an extra caller id, make a discriminator overlap or gap, and
-place the check after the first write.
+exactly one provider-bound or explicit-none source. The four `group.source` arms are distinct
+operations: `hand_picked` and `authored` are local; `human_replies` and `engine_top_n` must pass the
+opponent consumer before `select`/`enumerate` and before the first branch or distribution write.
+Crossed fixtures move one operation between sets, omit a provider binding, add an extra caller id,
+make a discriminator overlap or gap, and place the check after the first write.
 
 Before a first-flight provider operation appends any run event or mutates run state,
-`requireCapabilities({operationId, runId})` derives the authoritative set above and reads the current
-deployment projection. Idempotent replay first returns the stored terminal operation receipt and
-does not re-decide historical provider reachability; a concurrent first flight shares one admitted
-operation. Recovery of a previously uncommitted request re-runs the pre-write check. A transient
-miss returns HTTP 503 with
-`{code:"PACK_CAPABILITY_TEMPORARILY_UNAVAILABLE", operationId, capabilities, retryable:true,
-retryAfterMs?}`. It appends no event, advances no cursor/revision and preserves the idempotency key,
-so retry after provider recovery continues the same run. Boot without a configured provider takes
-the static 422/listing-exclusion path instead. Criteria cover boot absence, death after
-registration, recovery in-process, and the impossible local/build-time transient.
+`executeCapabilityOperation({operationId, runId}, body)` derives the authoritative set above and
+reads the current deployment projection. It also resolves the operation's declared consumer and
+joins that consumer to its compiled `ProviderOffBehavior`; routes never pass either a behavior or a
+capability list. Idempotent replay first returns the stored terminal operation receipt and does not
+re-decide historical provider reachability; a concurrent first flight shares one admitted
+operation. Recovery of a previously uncommitted request re-runs the pre-write check.
+
+Reachability cause and consumer effect remain orthogonal. An `unavailable` consumer returns the
+retryable HTTP 503 envelope and writes nothing. An `honest_empty` consumer returns its typed empty
+or unresolved result—corpus empty, Story pending evidence, reasoning proposals `[]`, or per-branch
+`provider_unavailable`—without pretending the provider answered. An `available` consumer follows
+its declared deterministic/local fallback; voice, for example, renders the sealed deterministic
+sentences. These effects are derived from the compiled consumer registry and must equal
+`tools/d2509-pack-capability-seventh-author-repair/operation-authority.json`; copying
+`providerOff` into a route row is forbidden. Boot without a configured provider still takes the
+static 422/listing-exclusion path. Criteria cover boot absence, all three transient effects, death
+after registration, recovery in-process, and the impossible local/build-time transient.
 
 **Gate F clause 5 — what it now needs, stated because it was blocked on this question.** Clause 5
 (*"pack capabilities and deprecations have a compatibility policy"*) is **unblocked**: the policy is
@@ -1570,6 +1618,31 @@ Exact evidence: `planning/pack-capability-contract/sixth-fresh-independent-revie
 `make pack-capability-sixth-fresh-review` passes 4/4. A seventh author repair and another fresh
 independent review are required before acceptance or implementation.
 
+## Seventh author repair (2026-09-02)
+
+The sixth return is repaired without changing production/schema/API/client/corpus bytes.
+[[D2509]] uses the exact Pack Studio route and retains `/studio/drafts` as a negative. [[D2510]]
+replaces the self-defined 35-operation table with a checked 58-branch author image: all 36
+`parseRunRoute` actions and their 48 supported method/body branches, plus ten exact external
+creation/registration/provider/public/mutation routes. The implementation must derive that
+population from co-located production declarations and independently census the router, provider
+gateways and run-creation storage sites.
+
+[[D2511]] splits all four group sources, with only `human_replies` and `engine_top_n` entering the
+opponent consumer before any write. [[D2512]] separates the owner's two absence causes from the
+compiled consumer effect: `unavailable` returns retryable 503, `honest_empty` returns a typed empty
+or unresolved projection, and `available` uses its declared deterministic fallback. No route may
+copy this value. The trace also found [[D2513]]: provider operations are valid on Position and
+imported sessions, so `run_session_operation` derives fixed operation requirements, session policy
+requirements and pack requirements only when a pack exists.
+
+The exact author bytes are
+`tools/d2509-pack-capability-seventh-author-repair/operation-authority.json`; the executable and
+strict type controls are `make pack-capability-seventh-author-repair`. Earlier author controls
+remain cumulative. This is still draft authoring: another fresh independent review must attack the
+AST population boundary, nested creation discriminants and all three provider-off effects before
+acceptance or implementation.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -1669,26 +1742,33 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     field, stage migration and refusal code after F3 acceptance. *Wrong implementation from the
     returned draft:* one that implements a draft consumer while pretending to supply only a generic
     primitive, creating a circular acceptance dependency.
-16. **Unavailability resolves to exactly one of two states, by cause ([[D1077]], §5.1).** An
+16. **Unavailability resolves to exactly one of two states by cause and one compiled effect by
+    consumer ([[D1077]], §5.1).** An
     `unsupported` capability is **absent** from `/capabilities`' `packCapabilities` set (the
     [[D509]] rule), so a pack requiring it is refused at registration with
     `PACK_CAPABILITY_UNSUPPORTED` on the 422 arm and excluded from the listing **without failing
     the boot**; a `temporarily_unavailable` capability is present in the published set but
-    unreachable at request time, answers on the 503 arm, is **retryable**, and does not destroy the
-    run. Asserted asymmetry: for a capability whose `AvailabilityMode` is `local` or `build_time`,
+    unreachable at request time and does not destroy the run. Asserted asymmetry: for a capability
+    whose `AvailabilityMode` is `local` or `build_time`,
     `temporarily_unavailable` is **unreachable** — only `provider` capabilities can enter it.
     *Wrong implementation that passes criteria 1–15 and fails this:* one resolving both states at
     registration, which makes a pack permanently unavailable for the process lifetime because a
     provider was down for two minutes — the precise flexibility the ruling exists to preserve.
-    Routes never supply `requiredIds`: the generated operation id plus authenticated request/run
-    identity derives the exact set from `CAPABILITY_OPERATION_BINDINGS`. Pack, position and imported
-    creation select three non-interchangeable source arms; crossed source/session-kind fixtures
-    fail. The bounded 35-operation capability-sensitive surface is set-equal to the one
-    `CAPABILITY_ROUTE_BRANCHES` authority. Marks, grants and moves each prove two disjoint and total
-    body branches; an overlap, a gap, a second binding, or a new live route/action without one row
-    fails. Every operation resolves to exactly one registry-derived or explicit-`none` source, and
-    first-flight checks precede first write; replay returns the stored receipt without re-deciding
-    historical reachability.
+    Routes never supply `requiredIds` or `providerOff`: the generated operation id plus
+    authenticated request/run identity derives the exact set, and its compiled consumer derives the
+    effect. Three transient fixtures prove distinct outcomes: `unavailable` produces a retryable
+    503 envelope with no write, `honest_empty` produces the consumer's typed empty/unresolved
+    response, and `available` produces the declared deterministic fallback. Changing only the
+    consumer registry changes the operation effect; a stale copied route value fails. Pack,
+    Position, imported, rated, playtest, repertoire-gap, flip and duplicate creation select
+    non-interchangeable source arms; crossed source/session-kind fixtures fail. The bounded
+    **58-operation** image is set-equal to 36/36 parsed run actions, 48 supported run-route branches
+    and ten external branches. Marks, grants, moves, duplicate and group prove disjoint/total
+    discriminants; an overlap, gap, second binding, new provider gateway call, new run-creation
+    storage site, or new live route/action without a declaration fails independently. Every
+    operation resolves to exactly one registry-derived or explicit-`none` source, and first-flight
+    checks precede first write; replay returns the stored receipt without re-deciding historical
+    reachability.
 17. **Instruments stay green.** `make verify` passes with shape-only `migration-plan-check`,
     `capability-census` and `capability-check` wired in; CI invokes the same Make targets.
 18. **The staged schema transition is exact and temporary ([[D2070]]–[[D2074]], [[D2152]]).**

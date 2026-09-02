@@ -14153,3 +14153,22 @@ to HTTP 503, erasing the compiled `honest_empty` effect used by current consumer
 derive the real bounded operation population, split group source semantics, and join reachability
 cause to consumer provider-off behavior before another fresh review. No production, schema, API,
 client, pack, content, archive or protected-design byte changed.
+
+## 2026-09-02 — Pack capability seventh author repair closes the measured operation seams
+
+**What landed:** repaired F3's author contract on [[D2509]]–[[D2513]] without changing production,
+schema, API, client, pack or corpus bytes. The exact author image covers 36/36 `parseRunRoute`
+actions, 48 supported method/body branches, ten external branches and 58 unique operations;
+separate censuses cover every live provider call and run-creation site.
+
+**What changed:** Pack Studio uses the real `/packs/drafts` prefix; rated, playtest, repertoire,
+flip and both duplicate creation arms are explicit; the four group sources split into two local and
+two provider-backed operations; and transient reachability now joins the compiled consumer's
+`available`, `honest_empty` or `unavailable` effect rather than forcing 503. The trace found and
+repaired [[D2513]]: Position/imported operations use `run_session_operation`, not a fictitious pack.
+
+**Evidence/next:** `make pack-capability-seventh-author-repair` passes 6/6 plus strict TypeScript and
+the full cumulative `make pack-capability-author-contract` is green. A fresh independent review
+must now derive the router/AST population and attack the three effect arms before acceptance or
+implementation. [[D560]] remains held; claim semantic anchors and Feedback Stage 2 remain blocked
+only on that acceptance boundary.

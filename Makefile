@@ -611,6 +611,11 @@ pack-capability-sixth-author-repair:
 pack-capability-sixth-fresh-review:
 	node --test tools/d2509-pack-capability-sixth-fresh-review/contract.test.mjs
 
+.PHONY: pack-capability-seventh-author-repair
+pack-capability-seventh-author-repair:
+	node --test tools/d2509-pack-capability-seventh-author-repair/contract.test.mjs
+	./node_modules/.bin/tsc -p tools/d2509-pack-capability-seventh-author-repair/tsconfig.contract.json --noEmit
+
 pack-capability-author-repair:
 	node tools/d2152-pack-capability-author-repair/contract.mjs
 	node --test tools/d2334-pack-capability-fifth-author-repair/contract.test.mjs
@@ -653,7 +658,7 @@ module-registration-fourth-fresh-review:
 module-registration-fifth-author-repair:
 	node --test tools/d2398-module-registration-fifth-author-repair/*.test.mjs
 
-pack-capability-author-contract: pack-capability-closure pack-capability-repeat-review pack-capability-fresh-review pack-capability-second-fresh-review pack-capability-author-repair pack-capability-sixth-author-repair
+pack-capability-author-contract: pack-capability-closure pack-capability-repeat-review pack-capability-fresh-review pack-capability-second-fresh-review pack-capability-author-repair pack-capability-seventh-author-repair
 
 theory-drill-author-contract:
 	node --test tools/d1879-theory-drill-author-contract/*.test.mjs

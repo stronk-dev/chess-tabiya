@@ -1,0 +1,120 @@
+{
+  "schema": "tabiya.pack-capability.operation-authority.author.v1",
+  "boundedPopulation": {
+    "runRouteParser": "apps/server/src/rest.ts#parseRunRoute",
+    "externalRoutes": [
+      { "method": "POST", "route": "/packs/drafts/:draftId/register", "operation": "pack.register", "source": "registered_pack_static" },
+      { "method": "POST", "route": "/packs/drafts/:draftId/playtest", "operation": "run.create.playtest", "source": "session_create.pack", "consumer": "runtime.session_create" },
+      { "method": "POST", "route": "/runs", "branch": "session.kind=pack", "operation": "run.create.pack", "source": "session_create.pack", "consumer": "runtime.session_create" },
+      { "method": "POST", "route": "/runs", "branch": "session.kind=position", "operation": "run.create.position", "source": "session_create.position", "consumer": "runtime.session_create" },
+      { "method": "POST", "route": "/runs/import", "operation": "run.create.imported", "source": "session_create.imported", "consumer": "runtime.session_create" },
+      { "method": "POST", "route": "/rated-games", "operation": "run.create.rated", "source": "session_create.position", "consumer": "runtime.rated_session_create" },
+      { "method": "POST", "route": "/repertoires/:id/gaps/enter", "operation": "run.create.repertoire_gap", "source": "session_create.position", "consumer": "runtime.session_create" },
+      { "method": "POST", "route": "/select-move", "operation": "opponent.select", "source": "fixed_registry", "consumer": "opponent.selection" },
+      { "method": "GET", "route": "/api/shared/:token/story", "operation": "story.public", "source": "run_session_operation", "consumer": "review.story_evidence" },
+      { "method": "DELETE", "route": "/runs/:runId/share/:token", "operation": "run.share.revoke", "source": "none" }
+    ]
+  },
+  "runRouteActions": [
+    { "action": "moves", "branches": [
+      { "method": "POST", "branch": "selection absent", "operation": "run.move.user", "source": "none" },
+      { "method": "POST", "branch": "selection present", "operation": "run.move.opponent_received", "source": "none" }
+    ] },
+    { "action": "rewind", "branches": [{ "method": "POST", "operation": "run.rewind", "source": "none" }] },
+    { "action": "fork", "branches": [{ "method": "POST", "operation": "run.fork", "source": "none" }] },
+    { "action": "graph", "branches": [{ "method": "GET", "operation": "run.graph", "source": "none" }] },
+    { "action": "compare", "branches": [{ "method": "POST", "operation": "run.compare", "source": "none" }] },
+    { "action": "branch-decidedness", "branches": [{ "method": "POST", "operation": "run.branch_decidedness", "source": "run_session_operation", "consumer": "runtime.branch_decidedness" }] },
+    { "action": "events", "branches": [{ "method": "GET", "operation": "run.events", "source": "none" }] },
+    { "action": "evidence", "branches": [
+      { "method": "GET", "operation": "run.evidence.read", "source": "none" },
+      { "method": "POST", "operation": "run.evidence.apply", "source": "none" }
+    ] },
+    { "action": "authored-feedback", "branches": [{ "method": "GET", "operation": "run.authored_feedback", "source": "none" }] },
+    { "action": "pgn", "branches": [{ "method": "GET", "operation": "run.pgn", "source": "none" }] },
+    { "action": "grants", "branches": [
+      { "method": "GET", "operation": "run.grants.read", "source": "none" },
+      { "method": "POST", "branch": "op=grant", "operation": "run.grant", "source": "none" },
+      { "method": "POST", "branch": "op=revoke", "operation": "run.revoke", "source": "none" }
+    ] },
+    { "action": "lease", "branches": [{ "method": "POST", "operation": "run.lease", "source": "none" }] },
+    { "action": "reveal", "branches": [{ "method": "POST", "operation": "run.reveal", "source": "none" }] },
+    { "action": "duplicate", "branches": [
+      { "method": "POST", "branch": "loaded session.kind=pack", "operation": "run.create.duplicate_pack", "source": "session_create.pack", "consumer": "runtime.session_create" },
+      { "method": "POST", "branch": "loaded session.kind=position", "operation": "run.create.duplicate_position", "source": "session_create.position", "consumer": "runtime.session_create" }
+    ] },
+    { "action": "schedule", "branches": [{ "method": "POST", "operation": "run.schedule", "source": "none" }] },
+    { "action": "simulate", "branches": [{ "method": "POST", "operation": "run.simulate", "source": "none" }] },
+    { "action": "simulate-enter", "branches": [{ "method": "POST", "operation": "run.simulate_enter", "source": "none" }] },
+    { "action": "prediction", "branches": [{ "method": "POST", "operation": "run.prediction", "source": "run_session_operation", "consumer": "opponent.selection" }] },
+    { "action": "reasoning", "branches": [
+      { "method": "GET", "operation": "run.reasoning.read", "source": "none" },
+      { "method": "POST", "operation": "run.reasoning.record", "source": "none" }
+    ] },
+    { "action": "reasoning-review", "branches": [{ "method": "POST", "operation": "run.reasoning_review", "source": "run_session_operation", "consumer": "guidance.reasoning_review" }] },
+    { "action": "analysis", "branches": [{ "method": "POST", "operation": "run.analysis", "source": "run_session_operation", "consumer": "runtime.analysis" }] },
+    { "action": "human-split", "branches": [{ "method": "GET", "operation": "run.human_split", "source": "run_session_operation", "consumer": "inspector.human_split" }] },
+    { "action": "corpus", "branches": [{ "method": "GET", "operation": "run.corpus", "source": "run_session_operation", "consumer": "inspector.corpus" }] },
+    { "action": "voice", "branches": [{ "method": "POST", "operation": "run.voice", "source": "run_session_operation", "consumer": "guidance.voice" }] },
+    { "action": "speech", "branches": [{ "method": "POST", "operation": "run.speech", "source": "run_session_operation", "consumer": "guidance.speech" }] },
+    { "action": "group", "branches": [
+      { "method": "POST", "branch": "source=hand_picked", "operation": "run.group.hand_picked", "source": "none" },
+      { "method": "POST", "branch": "source=authored", "operation": "run.group.authored", "source": "none" },
+      { "method": "POST", "branch": "source=human_replies", "operation": "run.group.human_replies", "source": "run_session_operation", "consumer": "opponent.selection" },
+      { "method": "POST", "branch": "source=engine_top_n", "operation": "run.group.engine_top_n", "source": "run_session_operation", "consumer": "opponent.selection" }
+    ] },
+    { "action": "group-reply", "branches": [{ "method": "POST", "operation": "run.group_reply", "source": "run_session_operation", "consumer": "opponent.selection" }] },
+    { "action": "import", "branches": [{ "method": "GET", "operation": "run.import_record", "source": "none" }] },
+    { "action": "story", "branches": [{ "method": "GET", "operation": "run.story", "source": "run_session_operation", "consumer": "review.story_evidence" }] },
+    { "action": "share", "branches": [
+      { "method": "GET", "operation": "run.share.list", "source": "none" },
+      { "method": "POST", "operation": "run.share.create", "source": "run_session_operation", "consumer": "review.story_evidence" }
+    ] },
+    { "action": "flip", "branches": [{ "method": "POST", "operation": "run.create.flip", "source": "session_create.position", "consumer": "runtime.session_create" }] },
+    { "action": "derivations", "branches": [{ "method": "GET", "operation": "run.derivations", "source": "none" }] },
+    { "action": "distill", "branches": [{ "method": "POST", "operation": "run.distill", "source": "none" }] },
+    { "action": "marks", "branches": [
+      { "method": "GET", "operation": "run.marks.read", "source": "none" },
+      { "method": "PUT", "branch": "rescopeFrom absent", "operation": "run.marks.replace", "source": "none" },
+      { "method": "PUT", "branch": "rescopeFrom present", "operation": "run.marks.rescope", "source": "none" }
+    ] },
+    { "action": "deletion-preview", "branches": [{ "method": "POST", "operation": "run.deletion_preview", "source": "none" }] },
+    { "action": "delete", "branches": [{ "method": "POST", "operation": "run.delete", "source": "none" }] }
+  ],
+  "providerConsumers": {
+    "guidance.reasoning_review": "honest_empty",
+    "guidance.speech": "unavailable",
+    "guidance.voice": "available",
+    "inspector.corpus": "honest_empty",
+    "inspector.human_split": "unavailable",
+    "opponent.selection": "unavailable",
+    "review.story_evidence": "honest_empty",
+    "runtime.analysis": "unavailable",
+    "runtime.branch_decidedness": "honest_empty",
+    "runtime.rated_session_create": "unavailable",
+    "runtime.session_create": "unavailable"
+  },
+  "providerCallSites": [
+    { "file": "apps/server/src/rest.ts", "symbol": "createRestHandler:/select-move", "call": "selector.select", "operation": "opponent.select" },
+    { "file": "apps/server/src/rest.ts", "symbol": "createRestHandler:human-split", "call": "selector.select", "operation": "run.human_split" },
+    { "file": "apps/server/src/rest.ts", "symbol": "createRestHandler:corpus", "call": "corpusSource.stats", "operation": "run.corpus" },
+    { "file": "apps/server/src/rest.ts", "symbol": "createRestHandler:reasoning-review", "call": "reasoningReviewProvider.review", "operation": "run.reasoning_review" },
+    { "file": "apps/server/src/rest.ts", "symbol": "createRestHandler:speech", "call": "ttsProvider.synthesize", "operation": "run.speech" },
+    { "file": "apps/server/src/rest.ts", "symbol": "createRestHandler:prediction", "call": "selector.select", "operation": "run.prediction" },
+    { "file": "apps/server/src/guidance.ts", "symbol": "renderVoice", "call": "provider.render", "operation": "run.voice" },
+    { "file": "apps/server/src/service.ts", "symbol": "RunService.createGroup:human_replies", "call": "selector.select", "operation": "run.group.human_replies" },
+    { "file": "apps/server/src/service.ts", "symbol": "RunService.createGroup:engine_top_n", "call": "selector.enumerate", "operation": "run.group.engine_top_n" },
+    { "file": "apps/server/src/service.ts", "symbol": "RunService.groupReply", "call": "selector.select", "operation": "run.group_reply" },
+    { "file": "apps/server/src/service.ts", "symbol": "RunService.branchDecidedness", "call": "#tablebase.probe", "operation": "run.branch_decidedness" }
+  ],
+  "runCreationSites": [
+    { "file": "apps/server/src/rest.ts", "symbol": "createRestHandler:/runs", "call": "service.create", "operations": ["run.create.pack", "run.create.position"] },
+    { "file": "apps/server/src/rest.ts", "symbol": "createRestHandler:pack-playtest", "call": "service.create", "operations": ["run.create.playtest"] },
+    { "file": "apps/server/src/service.ts", "symbol": "RunService.create", "call": "createRun", "operations": ["run.create.pack", "run.create.position"] },
+    { "file": "apps/server/src/service.ts", "symbol": "RunService.createRatedGame", "call": "createRun", "operations": ["run.create.rated"] },
+    { "file": "apps/server/src/service.ts", "symbol": "RunService.importGame", "call": "createRun", "operations": ["run.create.imported"] },
+    { "file": "apps/server/src/service.ts", "symbol": "RunService.flip", "call": "createRun", "operations": ["run.create.flip"] },
+    { "file": "apps/server/src/service.ts", "symbol": "RunService.createRepertoireGapRun", "call": "createRun", "operations": ["run.create.repertoire_gap"] },
+    { "file": "apps/server/src/service.ts", "symbol": "RunService.duplicate", "call": "this.create", "operations": ["run.create.duplicate_pack", "run.create.duplicate_position"] }
+  ]
+}

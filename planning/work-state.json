@@ -19982,6 +19982,15 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2513",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:755867e5839ebfd57a3681281867078aaddd076cc3ecaa983b3f1488fef678ec",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:pack-capability-contract.md"
     }
   ]
 }

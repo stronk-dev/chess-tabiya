@@ -204,6 +204,15 @@ next repair must derive the bounded population from the production router/servic
 than prove a hand-authored table total over itself. Receipt:
 `planning/pack-capability-contract/sixth-fresh-independent-review-2026-09-02.md`.
 
+The 2026-09-02 seventh author repair closes those four return seams and the newly measured
+[[D2513]] session-source defect at contract tier. The reviewed image now set-equals 36/36 parsed
+run actions, 48 supported method/body branches and ten exact external branches; separately closes
+all provider and run-creation call sites; splits all four group sources; and derives
+`available`/`honest_empty`/`unavailable` from the compiled consumer rather than route copy. Position
+and imported runs use a first-class `run_session_operation` source. The cumulative author suite is
+green; another fresh independent review still gates acceptance and implementation. Receipt:
+`planning/pack-capability-contract/seventh-author-repair-2026-09-02.md`.
+
 The 2026-08-31 fifth fresh candidate-packet review preserves the repaired single retained legal-
 move value graph but returns its acceptance boundary on [[D2428]]: the RFC requires one
 `exactLegalMoveMap` call while the production declaration adapter necessarily recomputes the same
