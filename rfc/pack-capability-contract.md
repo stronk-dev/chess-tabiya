@@ -1,12 +1,12 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **RETURNED by the eighth fresh independent review 2026-09-02 on
-  [[D2524]]–[[D2529]].** The public-token and worker populations survive, but the proposed durable
-  row drops objective proposals, cannot represent provider unavailability without a fresh failure,
-  and lacks the transaction/idempotency boundaries for move enrichment, 1–16-job analysis batches
-  and rewind cancellation. `make pack-capability-eighth-fresh-review` passes 6/6. A ninth author
-  repair and another fresh review are required; no schema, registry, API, migration, storage, pack
-  or digest implementation is authorised and the D560 hold stays whole.
+- **Status:** draft — **ninth author repair complete 2026-09-02 on [[D2524]]–[[D2529]]; another
+  fresh independent review is required.** The durable result now preserves the whole staged value;
+  provider unavailability retains exact availability with an optional real failure; every origin
+  has a persistent replay identity; and explicit batches, run enrichment, rewind cancellation,
+  settlement and consumption have named atomic boundaries. `make pack-capability-ninth-author-repair`
+  passes 6/6 plus strict TypeScript. This is author evidence, not acceptance; no schema, registry,
+  API, migration, storage, pack or digest implementation is authorised and the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -22,7 +22,7 @@
 
 ```tabiya-claims
 pack-schema | lane 0.30 | requires (new, required array of capability requirement objects on the pack root); $defs/capabilityRequirement (new, closed object: id, version)
-migration | position behind longitudinal-store | evidence_jobs durable admission, lease, retry, settlement, staged result and consumption rows
+migration | position behind longitudinal-store | evidence_job_batches + evidence_jobs durable admission, lease, retry, settlement, staged result and consumption rows
 ```
 
 ## Summary
@@ -1391,12 +1391,27 @@ opponent plies and group creation reach exactly one of those three enqueue owner
 become extra worker gateways. The composed author artifact records the four concrete enqueue calls
 (`enqueue` on all three origins plus `enqueueProducer` for run-enrichment tablebase work).
 
-The durable authority is an additive `evidence_jobs` STRICT table in the application database,
-claimed at the migration position behind `longitudinal-store`. It owns at least these exact fields:
+The durable authority is an additive `evidence_job_batches` + `evidence_jobs` pair in the
+application database, claimed in one migration position behind `longitudinal-store`. A batch is the
+admission and replay boundary; a job is the lease and settlement boundary. The migration owns these
+exact fields:
 
 ```sql
+CREATE TABLE evidence_job_batches (
+  id TEXT PRIMARY KEY,
+  run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
+  origin TEXT NOT NULL CHECK (origin IN
+    ('explicit_analysis','story_completion','run_enrichment')),
+  idempotency_key TEXT NOT NULL,
+  request_digest TEXT NOT NULL,
+  admitted_at TEXT NOT NULL,
+  UNIQUE (run_id, origin, idempotency_key)
+) STRICT;
+
 CREATE TABLE evidence_jobs (
   id TEXT PRIMARY KEY,
+  batch_id TEXT NOT NULL REFERENCES evidence_job_batches(id) ON DELETE CASCADE,
+  batch_ordinal INTEGER NOT NULL CHECK (batch_ordinal >= 0 AND batch_ordinal < 16),
   run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
   node_id TEXT NOT NULL,
   origin TEXT NOT NULL CHECK (origin IN
@@ -1405,7 +1420,7 @@ CREATE TABLE evidence_jobs (
     ('runtime.analysis','review.story_evidence','runtime.background_evidence')),
   provider_operation_id TEXT NOT NULL CHECK (provider_operation_id IN
     ('evidence.stockfish_analysis','evidence.tablebase_probe')),
-  request_digest TEXT NOT NULL,
+  job_request_digest TEXT NOT NULL,
   request_json TEXT NOT NULL,
   state TEXT NOT NULL CHECK (state IN
     ('admitted','running','retry_wait','settled_success','settled_empty',
@@ -1415,56 +1430,129 @@ CREATE TABLE evidence_jobs (
   lease_owner TEXT,
   lease_expires_at TEXT,
   next_attempt_at TEXT,
+  retry_basis_json TEXT,
   settled_at TEXT,
   result_seq INTEGER,
-  payload_json TEXT,
-  acquisition_receipt_json TEXT,
-  failure_json TEXT,
-  empty_reason TEXT,
-  cancelled_reason TEXT,
+  settlement_json TEXT,
   consumed_at TEXT,
   CHECK (
     (origin='explicit_analysis' AND consumer_id='runtime.analysis') OR
     (origin='story_completion' AND consumer_id='review.story_evidence') OR
     (origin='run_enrichment' AND consumer_id='runtime.background_evidence')
   ),
+  UNIQUE (batch_id, batch_ordinal),
   UNIQUE (run_id, result_seq)
 ) STRICT;
 ```
 
 The production parser adds state-specific exact-key and presence checks that SQLite cannot express
-cleanly without duplicating the union: `running` alone requires both lease fields;
-`retry_wait` requires failure plus `next_attempt_at`; `settled_success` requires payload, result
-sequence and an acquisition receipt and forbids failure/empty/cancel fields; `settled_empty`
-requires an enumerated empty reason and no payload; `settled_unavailable` requires a provider
-failure and no payload; `cancelled` accepts only `caller|superseded`; and `consumed` retains the
-successful payload/receipt while adding `consumed_at`. Request bytes are parsed and their canonical
-digest rechecked before execution. Unknown state, origin, consumer, operation, payload kind,
+without duplicating the union. `running` alone requires both lease fields. `retry_wait` requires
+`next_attempt_at` plus one exact `retry_basis_json` arm: provider unavailable carries the exact
+`ProviderOperationAvailability` and its optional **real** `ProviderFailureReceipt`; shutdown carries
+no provider failure; expired lease may retain the last real failure. It never synthesizes a failure
+receipt. Settled states require one exact `settlement_json` arm and no retry basis:
+
+```ts
+type UnavailableProviderAvailability = Extract<
+  ProviderOperationAvailability,
+  { readonly state: "unavailable" | "cached_exact_only" }
+>;
+
+type DurableEvidenceSettlement =
+  | { readonly kind: "success";
+      readonly payload: EvidencePayload;
+      readonly objectiveProposal: ObjectiveEvidenceProposal | null;
+      readonly acquisition: ProviderAcquisitionReceipt }
+  | { readonly kind: "empty";
+      readonly reason: "capability_not_configured" | "not_applicable" }
+  | { readonly kind: "empty";
+      readonly reason: "provider_unavailable";
+      readonly availability: UnavailableProviderAvailability;
+      readonly failure?: ProviderFailureReceipt }
+  | { readonly kind: "unavailable";
+      readonly availability: UnavailableProviderAvailability;
+      readonly failure?: ProviderFailureReceipt }
+  | { readonly kind: "cancelled";
+      readonly reason: "caller" | "superseded" };
+```
+
+`settled_success` requires the success arm and `result_seq`; `settled_empty` requires an empty arm
+and no sequence; `settled_unavailable` requires the unavailable arm and no sequence; `cancelled`
+requires the cancelled arm; and `consumed` retains the byte-identical success arm and adds
+`consumed_at`. A success stores `objectiveProposal: null` when the upgrader produced none rather
+than omitting the member. Closing and reopening therefore applies the **same validated settled
+bytes**; it never reruns the upgrader. Request bytes are parsed and both canonical job and batch
+digests are rechecked. Unknown/crossed state, origin, consumer, operation, result kind, availability,
 receipt generation or extra field is corrupt storage, not a best-effort job.
 
-Admission is one database transaction. A configured capability inserts `admitted` before 202 or
-before its enclosing response reports pending work. If the capability is absent from the startup
-projection, explicit analysis returns typed unavailable without a row, while Story/run enrichment
-take their compiled honest-empty arm without pretending a job exists. Transient health never makes
-an admitted row disappear: it is observed by the worker through the provider operation result.
+#### Admission identity and replay
+
+The exact author authority is
+`tools/d2524-pack-capability-ninth-author-repair/admission-authority.json`. Job and batch ids are
+generated with `crypto.randomUUID()` on first admission and persisted. They never use a process
+counter and are never regenerated on replay. The uniqueness boundary is
+`(run_id, origin, idempotency_key)`; the key source is origin-specific:
+
+| origin | durable idempotency key | canonical batch request |
+|---|---|---|
+| `explicit_analysis` | caller's required, canonical UUID `Idempotency-Key` | caller-ordered 1–16 node/kind/search-bound requests |
+| `story_completion` | SHA-256 of canonical `{schema:"story_evidence@1",branchId,terminalNodeId}` | ordered Story evidence plan for that terminal node |
+| `run_enrichment` | `run_enrichment@1:<nodeId>` | ordered compiled enrichment plan for that immutable node |
+
+An existing key with the equal batch request digest returns the stored batch and job ids without a
+provider call. The same key with different bytes returns typed `IDEMPOTENCY_CONFLICT` and writes
+nothing. Versioning the internal key prefix is the explicit mechanism for a later plan revision;
+changing an implicit producer set under the same prefix fails the digest check. The public analysis
+client creates and retains one key across transport retry. The REST response names `batchId` plus
+the ordered stored jobs.
+
+Admission is atomic per batch. Explicit analysis validates every node and all 1–16 job requests,
+then inserts the batch and **all 1–16 jobs in one transaction** before returning 202. Validation,
+constraint, storage or injected failure at any ordinal leaves zero batch/job rows. A replay after
+response loss returns the committed batch; it cannot insert a prefix or duplicate it. If capability
+support is absent from the startup projection, explicit analysis returns typed unavailable before
+admission, while Story/run enrichment take their compiled honest-empty arm without pretending a
+job exists. Transient health never makes an admitted row disappear: the worker observes it through
+the provider operation result.
+
+#### The one run/job transaction owner
+
+The application-database storage adapter exposes the following closed mutation authority; service
+and worker code may not sequence the underlying writes themselves:
+
+| operation | one-transaction effects |
+|---|---|
+| `admitEvidenceBatch` | idempotency lookup/conflict plus one whole explicit/Story batch and every admitted job |
+| `commitRunMutationWithEvidence` | run lease/CAS, complete run event bytes, and zero-to-eight enrichment batches (one per new eligible node) with every job |
+| `commitRewindWithEvidenceCancellation` | run lease/CAS, rewind event, and cancellation of exactly the pruned-node pending/running/staged jobs |
+| `settleEvidenceJob` | lease/generation/request check, exact settlement, and unique per-run sequence where required |
+| `applyEvidenceAndConsumeJob` | run lease/CAS, events from the stored result, and transition of that same success row to consumed |
+
+Learner move, opponent ply and grouped seed creation derive the complete `run_enrichment` batch
+from the post-mutation immutable node(s) before calling `commitRunMutationWithEvidence`. There is no
+post-save enqueue loop. The pure runtime `rewind` result reports pruned node ids but performs no queue
+side effect; the service passes both run result and ids to `commitRewindWithEvidenceCancellation`.
+If either run CAS/save or any job write fails, both the old run and old job set remain. This removes
+the current observer-before-save ordering rather than trying to compensate after it.
 
 Workers claim with a compare-and-swap lease and increment `attempt_count`. Success atomically writes
-the validated payload, original acquisition receipt and per-run `result_seq` as
-`settled_success`; the existing evidence page reads unconsumed successful rows. Applying evidence
-appends the run event and changes that same row to `consumed` in one transaction, so neither side
-can commit alone. Provider unavailability/failure first enters `retry_wait` under the exact bounded
-operation policy. When the bound is exhausted, `runtime.analysis` becomes
+the complete success settlement and per-run `result_seq`; the existing evidence page reads
+unconsumed successful rows. Applying evidence derives every event, including an objective event,
+only from that stored settlement and marks the same row consumed in one transaction. Provider
+unavailability first enters `retry_wait` under the compiled operation policy with exact availability
+and any real failure retained. When the bound is exhausted, `runtime.analysis` becomes
 `settled_unavailable`; Story and run enrichment become `settled_empty` with reason
-`provider_unavailable`. No empty settlement mints evidence.
+`provider_unavailable`. Both retain availability and optional real failure for diagnostics. No empty
+settlement mints evidence.
 
 On process restart, `admitted` and `retry_wait` rows remain eligible, and an expired `running` lease
-returns to `retry_wait` with its attempt/failure history retained. Provider-result cancellation for
-shutdown also maps to `retry_wait`; shutdown is never terminal `cancelled`. Only a caller or a
-superseding run-graph change may terminally cancel. A late result whose lease, generation, request
-digest or node is stale is discarded and cannot heal the provider or settle the job. This is the
-before/after-202 distinction [[D2520]] required: provider loss before durable admission can still
-produce a synchronous refusal; provider loss after admission is a durable job outcome visible
-after restart.
+returns to `retry_wait` with its exact retry basis/history retained. Provider-result cancellation for
+shutdown also maps to a shutdown retry basis; shutdown is never terminal `cancelled`. Only a caller
+or one atomically committed superseding run-graph change may terminally cancel. A late result whose
+lease, generation, job request digest or node is stale is discarded and cannot heal the provider or
+settle the job. This is the before/after-202 distinction [[D2520]] required: provider loss before
+durable admission can still produce a synchronous refusal; provider loss after admission is a
+durable job outcome visible after restart.
 
 **Gate F clause 5 — what it now needs, stated because it was blocked on this question.** Clause 5
 (*"pack capabilities and deprecations have a compatibility policy"*) is **unblocked**: the policy is
@@ -1848,6 +1936,32 @@ Exact evidence:
 settled result, exact no-failure-unavailable arm, batch/idempotency identities, and atomic
 run↔job mutation boundaries before another review, acceptance or implementation.
 
+## Ninth author repair (2026-09-02)
+
+The six returned seams are repaired at contract tier only. [[D2524]] replaces disconnected payload
+columns with one exact settlement union whose success arm contains payload, acquisition and
+`objectiveProposal` value-or-null; apply consumes those stored bytes without rerunning the upgrader.
+[[D2525]] carries the complete upstream unavailable availability and optional real failure in retry,
+empty and unavailable arms, so the job layer has no reason or permission to manufacture a receipt.
+
+[[D2527]] and [[D2528]] add the batch authority and three origin-specific key sources. Explicit
+analysis atomically admits all 1–16 requests under a validated caller idempotency key; Story and
+enrichment use versioned identities derived from immutable branch/node facts. Persistent UUIDs are
+returned on equal replay, while an unequal digest under the same scope refuses. [[D2526]] and
+[[D2529]] put run mutation plus enrichment and rewind plus cancellation behind two closed storage
+operations; runtime rewind loses its queue side effect and no service call may save then enqueue.
+
+The exact author bytes are
+`tools/d2524-pack-capability-ninth-author-repair/admission-authority.json` and its strict protocol
+types. `make pack-capability-ninth-author-repair` passes six able-to-fail transaction/replay controls
+plus TypeScript negative cases; the eighth author controls remain green. The historical eighth
+fresh-review reproducer now rejects the four repaired contract absences and still observes the two
+expected unimplemented production orderings. No
+production, schema, migration, API, storage, content, pack or digest byte changed. Another genuinely
+fresh independent review must attack result completeness, optional-failure parsing, concurrent
+batch replay, internal-key stability and every transaction fault boundary before acceptance or
+implementation.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -2005,17 +2119,39 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     `explicit_analysis|story_completion|run_enrichment` origins, whose consumer/provider-off pairs
     are type-fixed. A route-supplied consumer, behavior or operation; a direct provider call; an
     unclassified kind; or an extra enqueue origin fails independently.
-22. **Admission survives asynchronous settlement and restart ([[D2520]]).** A configured explicit
-    analysis transaction commits one `admitted` job before returning 202. Fixtures kill the
-    provider (a) before that transaction and observe synchronous refusal/no row and (b) after 202
-    and observe a durable retry followed by `settled_unavailable`; the latter remains visible after
-    closing and reopening SQLite. Story and enrichment take the same failure to `settled_empty`
-    without evidence. Expired running leases recover; shutdown returns work to `retry_wait`; a late
-    stale generation/lease cannot settle. Success atomically persists payload plus acquisition
-    receipt and unique per-run sequence; apply atomically appends the event and marks `consumed`.
-    Crash fixtures between every pair of those boundaries yield either the complete earlier state
-    or complete later state, never a lost job, unattached consumed row, duplicate event or fake
-    empty payload. Unknown/crossed states and origin-consumer pairs fail the storage parser.
+22. **Admission survives asynchronous settlement and restart ([[D2520]], [[D2527]]).** A configured
+    explicit analysis request commits one batch plus all 1–16 `admitted` jobs before returning 202.
+    An injected refusal/fault at every ordinal leaves zero rows. Response loss followed by replay of
+    the equal idempotency key/digest returns the stored batch and ids; a crossed digest returns
+    `IDEMPOTENCY_CONFLICT` without writes. Fixtures kill the provider (a) before admission and
+    observe synchronous refusal/no row and (b) after 202 and observe a durable retry followed by
+    `settled_unavailable`; the latter remains visible after closing and reopening SQLite.
+23. **The durable settled value is complete ([[D2524]], [[D2525]]).** Success persists payload,
+    acquisition and `objectiveProposal` value-or-null as one parsed settlement. Close/reopen before
+    apply produces byte-identical evidence and objective events with zero upgrader calls. A lawful
+    `unavailable` provider result with `failure: undefined` reaches retry and terminal settlement
+    without a synthetic failure; real failure and exact availability survive. Crossed result kinds,
+    missing explicit proposal absence, invented failure, or unavailable-without-availability fail.
+24. **Every origin has one restart-stable replay identity ([[D2528]]).** Explicit analysis uses its
+    validated client key; Story and enrichment use their exact versioned derived keys. Job/batch ids
+    are persisted UUIDs, not process counters. Duplicate discovery, concurrent admission, restart
+    and response-loss retry produce one batch and one provider call per stored job. Equal key with
+    unequal canonical request refuses. Bumping an internal plan without its key version refuses.
+25. **Run mutation and automatic enrichment are one commit ([[D2526]]).** Learner move, opponent
+    ply and grouped seed creation each commit their run event plus the complete internal batch/jobs
+    through `commitRunMutationWithEvidence`. A fault before either side leaves the old run and zero
+    new jobs; a crash after commit exposes both. A source guard fails any save-then-enqueue call or
+    post-save job loop.
+26. **Rewind and cancellation are one commit ([[D2529]]).** Runtime rewind has no queue observer
+    side effect. `commitRewindWithEvidenceCancellation` commits the rewind event and cancellation
+    of exactly the pruned-node jobs together. Lease conflict/storage fault leaves the old run and
+    every old job unchanged; a late worker result cannot settle a cancelled generation.
+27. **Settlement and consumption remain exact.** Expired leases recover; shutdown returns work to
+    `retry_wait`; a stale generation/lease/request cannot settle. Success writes the complete
+    settlement plus unique per-run sequence atomically. Apply derives events solely from that stored
+    settlement and consumes the same row in one transaction. Crash fixtures yield only complete
+    earlier/later states—never lost work, duplicate evidence/objective events, unattached consumed
+    rows or fake empty payloads. Unknown/crossed states, extra keys and origin-consumer pairs fail.
 
 ## Discharges
 

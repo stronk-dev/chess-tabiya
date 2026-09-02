@@ -1,0 +1,40 @@
+{
+  "schema": "tabiya.pack-capability.evidence-admission-authority.v1",
+  "jobId": {
+    "constructor": "crypto.randomUUID",
+    "lifetime": "persisted_on_first_admission",
+    "replay": "return_stored_id"
+  },
+  "origins": [
+    {
+      "origin": "explicit_analysis",
+      "key": "validated canonical UUID Idempotency-Key",
+      "scope": ["runId", "origin", "key"],
+      "requestDigest": "canonical ordered 1-16 job request"
+    },
+    {
+      "origin": "story_completion",
+      "key": "sha256(canonicalJson({schema:'story_evidence@1',branchId,terminalNodeId}))",
+      "scope": ["runId", "origin", "key"],
+      "requestDigest": "canonical ordered story evidence request"
+    },
+    {
+      "origin": "run_enrichment",
+      "key": "run_enrichment@1:<nodeId>",
+      "scope": ["runId", "origin", "key"],
+      "requestDigest": "canonical ordered enrichment plan"
+    }
+  ],
+  "runMutationAdmission": {
+    "minimumBatches": 0,
+    "maximumBatches": 8,
+    "grain": "one run_enrichment batch per newly committed eligible node"
+  },
+  "transactions": [
+    "admit_evidence_batch",
+    "commit_run_and_admit_jobs",
+    "commit_rewind_and_cancel_jobs",
+    "settle_job",
+    "apply_result_and_consume_job"
+  ]
+}

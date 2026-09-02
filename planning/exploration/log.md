@@ -14327,3 +14327,20 @@ controls remain independently green. A ninth author repair must define complete 
 provider-result algebra, atomic run/job and rewind transactions, batch admission and origin-specific
 idempotency before another fresh review. F3 remains draft and all dependent implementation stays
 blocked.
+
+## 2026-09-02 — Pack capability ninth author repair closes six durable-job returns
+
+**What landed:** repaired [[D2524]]–[[D2529]] at RFC tier only. No production queue, application
+database, schema, migration, API, content, pack or digest byte changed; [[D560]] remains whole.
+
+**What changed:** success settlement now stores payload, acquisition and objective proposal
+value-or-null as one exact parsed result. Provider unavailability carries exact availability and
+only an optional real failure. A parent batch atomically admits explicit analysis's full 1–16 jobs;
+three origin-specific keys and persisted UUIDs make replay stable. One storage mutation authority
+joins run events to automatic enrichment and rewinds to exact pruned-job cancellation.
+
+**Evidence/next:** `make pack-capability-ninth-author-repair` passes six transaction/replay
+falsifiers plus strict TypeScript, and the prior author controls remain green. The historical return
+instrument now rejects the repaired contract absences while still observing the expected unbuilt
+production orderings. Another genuinely fresh review must attack result parsing, concurrent replay, plan-key
+stability and crash ordering before acceptance or implementation.

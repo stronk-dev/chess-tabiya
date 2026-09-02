@@ -232,6 +232,15 @@ settled-result, transaction, batch and dedupe boundaries before another fresh re
 storage, schema, API or content implementation is authorized. Receipt:
 `planning/pack-capability-contract/eighth-fresh-independent-buildability-review-2026-09-02.md`.
 
+The 2026-09-02 ninth author repair closes those six contract defects without implementing F3.
+Settled success now retains payload, acquisition and objective proposal value-or-null; provider
+unavailability retains exact availability plus only an optional real failure; explicit analysis is
+one atomic 1–16-job batch; all three origins have persistent replay identities; and named storage
+operations join move/enrichment and rewind/cancellation writes. `make
+pack-capability-ninth-author-repair` passes 6/6 plus strict TypeScript. Another genuinely fresh
+review still gates acceptance and every production byte. Receipt:
+`planning/pack-capability-contract/ninth-author-repair-2026-09-02.md`.
+
 The 2026-08-31 fifth fresh candidate-packet review preserves the repaired single retained legal-
 move value graph but returns its acceptance boundary on [[D2428]]: the RFC requires one
 `exactLegalMoveMap` call while the production declaration adapter necessarily recomputes the same
