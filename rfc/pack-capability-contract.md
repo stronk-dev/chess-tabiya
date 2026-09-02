@@ -1,11 +1,11 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **RETURNED by ninth fresh independent review 2026-09-02 on
-  [[D2542]]–[[D2547]].** The complete settlement, origin keys and joined run/job transaction
-  direction survive, but batch/child identity, lease fencing, request digest bytes, concurrent
-  first-flight admission, rewind state transitions and consumption receipts remain unbuildable.
-  `make pack-capability-ninth-fresh-review` passes 6/6 findings. No schema, registry, API, migration,
-  storage, pack or digest implementation is authorised and the D560 hold stays whole.
+- **Status:** draft — **tenth author repair complete 2026-09-02 for [[D2542]]–[[D2547]];
+  another genuinely fresh independent review is required.** Composite batch identity, monotone
+  lease fencing, exact request bytes, serialized first-flight admission, the total rewind table
+  and durable application receipts are specified and exercised by
+  `make pack-capability-tenth-author-repair` (6/6). No schema, registry, API, migration, storage,
+  pack or digest implementation is authorised and the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -1402,8 +1402,11 @@ CREATE TABLE evidence_job_batches (
   origin TEXT NOT NULL CHECK (origin IN
     ('explicit_analysis','story_completion','run_enrichment')),
   idempotency_key TEXT NOT NULL,
+  request_json TEXT NOT NULL,
   request_digest TEXT NOT NULL,
+  job_count INTEGER NOT NULL CHECK (job_count >= 1 AND job_count <= 16),
   admitted_at TEXT NOT NULL,
+  UNIQUE (id, run_id, origin),
   UNIQUE (run_id, origin, idempotency_key)
 ) STRICT;
 
@@ -1428,21 +1431,63 @@ CREATE TABLE evidence_jobs (
   admitted_at TEXT NOT NULL,
   lease_owner TEXT,
   lease_expires_at TEXT,
+  lease_generation INTEGER NOT NULL DEFAULT 0 CHECK (lease_generation >= 0),
   next_attempt_at TEXT,
   retry_basis_json TEXT,
   settled_at TEXT,
   result_seq INTEGER,
   settlement_json TEXT,
   consumed_at TEXT,
+  application_receipt_json TEXT,
   CHECK (
     (origin='explicit_analysis' AND consumer_id='runtime.analysis') OR
     (origin='story_completion' AND consumer_id='review.story_evidence') OR
     (origin='run_enrichment' AND consumer_id='runtime.background_evidence')
   ),
+  FOREIGN KEY (batch_id, run_id, origin)
+    REFERENCES evidence_job_batches(id, run_id, origin) ON DELETE CASCADE,
   UNIQUE (batch_id, batch_ordinal),
   UNIQUE (run_id, result_seq)
 ) STRICT;
 ```
+
+The composite foreign key is authoritative: a child cannot repeat a different run or origin from
+its batch. `request_json` parses as the exact `EvidenceBatchRequestV1` below; `job_count` equals its
+ordered `jobs.length`; child ordinals are exactly contiguous `0..job_count-1`; and each child's
+parsed request and digest equal that indexed batch member. Missing, extra, duplicated, crossed or
+reordered children are corrupt storage. Batch parsing never trusts the duplicated columns merely
+because each is independently well-formed ([[D2542]]).
+
+Request identity is one literal image, not “canonical JSON” left to the implementer:
+
+```ts
+interface EvidenceJobRequestV1 {
+  readonly schema: "evidence_job_request@1";
+  readonly runId: string;
+  readonly nodeId: string;
+  readonly fen: string;
+  readonly kind: EvidenceKind;
+  readonly depth: number | null;
+  readonly movetime: number | null;
+  readonly multiPv: number | null;
+  readonly timeoutMs: number | null;
+  readonly objectiveRequest: ObjectiveEvidenceRequest | null;
+}
+
+interface EvidenceBatchRequestV1 {
+  readonly schema: "evidence_batch_request@1";
+  readonly runId: string;
+  readonly origin: "explicit_analysis" | "story_completion" | "run_enrichment";
+  readonly jobs: readonly [EvidenceJobRequestV1, ...EvidenceJobRequestV1[]];
+}
+```
+
+Every optional input is normalized to an explicit `null`; unknown/extra keys fail. `fen` is the
+exact immutable node FEN, and a non-null objective request must repeat the same run/node/FEN. The
+implementation imports `canonicalizeJson` from `@chess-tabiya/schema/drill-pack`. A job digest is
+lowercase SHA-256 over UTF-8 `chess-tabiya/evidence-job-request/v1\0` plus those canonical bytes; a
+batch digest uses the distinct prefix `chess-tabiya/evidence-batch-request/v1\0` over its complete
+request. These two exported functions are the only writers and verifiers of the columns ([[D2544]]).
 
 The production parser adds state-specific exact-key and presence checks that SQLite cannot express
 without duplicating the union. `running` alone requires both lease fields. `retry_wait` requires
@@ -1484,11 +1529,20 @@ bytes**; it never reruns the upgrader. Request bytes are parsed and both canonic
 digests are rechecked. Unknown/crossed state, origin, consumer, operation, result kind, availability,
 receipt generation or extra field is corrupt storage, not a best-effort job.
 
+Every claim increments `lease_generation` in the same compare-and-swap that changes the row to
+`running` and returns a sealed
+`{jobId, leaseOwner, leaseGeneration, jobRequestDigest}` receipt. Reclaim after expiry increments it
+again even when the owner string is unchanged. Retry, cancellation and settlement require exact
+state plus all four receipt fields; settlement also requires the provider result's own exact
+operation/generation identity. A stale receipt affects zero rows and cannot settle, retry, heal or
+cancel the newer claim ([[D2543]]).
+
 #### Admission identity and replay
 
 The exact author authority is
 `tools/d2524-pack-capability-ninth-author-repair/admission-authority.json`. Job and batch ids are
-generated with `crypto.randomUUID()` on first admission and persisted. They never use a process
+generated with `crypto.randomUUID()` on first admission and persisted; the authority declares both
+constructors. They never use a process
 counter and are never regenerated on replay. The uniqueness boundary is
 `(run_id, origin, idempotency_key)`; the key source is origin-specific:
 
@@ -1504,6 +1558,17 @@ nothing. Versioning the internal key prefix is the explicit mechanism for a late
 changing an implicit producer set under the same prefix fails the digest check. The public analysis
 client creates and retains one key across transport retry. The REST response names `batchId` plus
 the ordered stored jobs.
+
+Standalone admission and every outer run mutation use the same
+`admitEvidenceBatchInTransaction` operation under `BEGIN IMMEDIATE` with the connection's existing
+5-second busy timeout. After the write lock is acquired it selects the unique key. Existing equal
+bytes return the stored batch/jobs; existing unequal bytes roll back with `IDEMPOTENCY_CONFLICT`.
+Only absence generates one candidate batch UUID plus job UUIDs and inserts the complete batch. A
+busy timeout returns the existing typed retryable storage error and writes nothing. Because the
+second writer cannot pass `BEGIN IMMEDIATE` until the winner commits or rolls back, response loss
+and simultaneous first flights have one observable winner; the loser re-reads rather than exposing
+a uniqueness error. The author gate uses two SQLite connections released from one barrier and
+requires the same stored batch id, one child population and one winner marker ([[D2545]]).
 
 Admission is atomic per batch. Explicit analysis validates every node and all 1–16 job requests,
 then inserts the batch and **all 1–16 jobs in one transaction** before returning 202. Validation,
@@ -1523,7 +1588,7 @@ and worker code may not sequence the underlying writes themselves:
 |---|---|
 | `admitEvidenceBatch` | idempotency lookup/conflict plus one whole explicit/Story batch and every admitted job |
 | `commitRunMutationWithEvidence` | run lease/CAS, complete run event bytes, and zero-to-eight enrichment batches (one per new eligible node) with every job |
-| `commitRewindWithEvidenceCancellation` | run lease/CAS, rewind event, and cancellation of exactly the pruned-node pending/running/staged jobs |
+| `commitRewindWithEvidenceCancellation` | run lease/CAS, rewind event, and the exact pruned-node durable-state transitions below |
 | `settleEvidenceJob` | lease/generation/request check, exact settlement, and unique per-run sequence where required |
 | `applyEvidenceAndConsumeJob` | run lease/CAS, events from the stored result, and transition of that same success row to consumed |
 
@@ -1534,10 +1599,42 @@ side effect; the service passes both run result and ids to `commitRewindWithEvid
 If either run CAS/save or any job write fails, both the old run and old job set remain. This removes
 the current observer-before-save ordering rather than trying to compensate after it.
 
+For a pruned node, rewind's transition table is total: `admitted`, `running`, `retry_wait` and
+`settled_success` transition to `cancelled` with reason `superseded`; a running transition increments
+the lease generation and clears its lease; `settled_empty`, `settled_unavailable`, `cancelled` and
+`consumed` are retained unchanged as terminal audit rows. The `settled_success` transition is the
+old in-memory “staged” case and cannot later apply. No durable `pending` or `staged` state exists.
+Cancellation uses the same exact lease receipt when a worker currently owns the row; a zero-row CAS
+forces the transaction to re-read/retry rather than committing the rewind against an unfenced
+worker ([[D2546]]).
+
 Workers claim with a compare-and-swap lease and increment `attempt_count`. Success atomically writes
 the complete success settlement and per-run `result_seq`; the existing evidence page reads
 unconsumed successful rows. Applying evidence derives every event, including an objective event,
-only from that stored settlement and marks the same row consumed in one transaction. Provider
+only from that stored settlement and marks the same row consumed in one transaction. That
+transaction stores this exact receipt in `application_receipt_json`:
+
+```ts
+interface EvidenceApplicationReceiptV1 {
+  readonly schema: "evidence_application_receipt@1";
+  readonly jobId: string;
+  readonly runId: string;
+  readonly nodeId: string;
+  readonly fromRevision: number;
+  readonly toRevision: number;
+  readonly firstEventSeq: number;
+  readonly lastEventSeq: number;
+  readonly eventDigest: `sha256:${string}`;
+}
+```
+
+The range is non-empty and contiguous; its canonical event-array digest uses UTF-8 prefix
+`chess-tabiya/evidence-application/v1\0`; every event is in the same run/revision transition and
+the evidence reference derived from `jobId` occurs in the attached event and any objective event.
+Only `consumed` has a receipt, and every consumed row validates its exact event range against the
+retained run. Replay after response loss returns the stored receipt without appending events; a
+missing, crossed or digest-mismatched range is corrupt storage, never permission to reapply
+([[D2547]]). Provider
 unavailability first enters `retry_wait` under the compiled operation policy with exact availability
 and any real failure retained. When the bound is exhausted, `runtime.analysis` becomes
 `settled_unavailable`; Story and run enrichment become `settled_empty` with reason
@@ -1981,6 +2078,27 @@ batch identity, exact request image, lease fence, two-connection winner/loser pr
 rewind transition table and application receipt before another fresh review, acceptance or
 implementation.
 
+## Tenth author repair (2026-09-02)
+
+The ninth return is repaired at contract tier only. [[D2542]] adds a composite batch identity and
+requires exact, contiguous child equality with the canonical ordered batch request. [[D2543]] adds
+a monotone lease generation to every claim receipt and requires the same four-field receipt at
+retry, cancellation and settlement. [[D2544]] closes the job and batch request types and their
+separate canonical digest domains.
+
+[[D2545]] gives both stored identities one UUID constructor and specifies `BEGIN IMMEDIATE` admission
+under the existing busy timeout: the second connection waits, then re-reads the committed winner.
+[[D2546]] replaces the conceptual rewind vocabulary with a total transition over all eight durable
+states. [[D2547]] binds consumption to one non-empty contiguous run-event range, revision pair and
+canonical event digest; response-loss replay returns that stored receipt.
+
+`make pack-capability-tenth-author-repair` exercises all six seams, including two real SQLite
+connections released from one barrier. The retained eighth and ninth author targets remain part of
+the buildability proof. No production, schema, migration, API, storage, content, pack or protected-
+design byte changed. Another genuinely fresh independent review must attack the exact SQL/parser
+join, concurrent loser behavior, lease rollover, every rewind source state and receipt reload before
+acceptance or implementation.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -2140,6 +2258,8 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     unclassified kind; or an extra enqueue origin fails independently.
 22. **Admission survives asynchronous settlement and restart ([[D2520]], [[D2527]]).** A configured
     explicit analysis request commits one batch plus all 1–16 `admitted` jobs before returning 202.
+    The composite `(batch_id,run_id,origin)` reference rejects crossed children; `job_count` and the
+    exact contiguous `0..job_count-1` child population equal the ordered canonical batch request.
     An injected refusal/fault at every ordinal leaves zero rows. Response loss followed by replay of
     the equal idempotency key/digest returns the stored batch and ids; a crossed digest returns
     `IDEMPOTENCY_CONFLICT` without writes. Fixtures kill the provider (a) before admission and
@@ -2153,9 +2273,13 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     missing explicit proposal absence, invented failure, or unavailable-without-availability fail.
 24. **Every origin has one restart-stable replay identity ([[D2528]]).** Explicit analysis uses its
     validated client key; Story and enrichment use their exact versioned derived keys. Job/batch ids
-    are persisted UUIDs, not process counters. Duplicate discovery, concurrent admission, restart
-    and response-loss retry produce one batch and one provider call per stored job. Equal key with
-    unequal canonical request refuses. Bumping an internal plan without its key version refuses.
+    are persisted UUIDs from the declared constructors, not process counters. Job and batch request
+    digests use the exact closed request types and separate `chess-tabiya/evidence-*-request/v1\0`
+    canonical domains. Duplicate discovery, restart and response-loss retry produce one batch and
+    one provider call per stored job. A two-connection `BEGIN IMMEDIATE` fixture releases both
+    writers from one barrier and observes one winner, one stored batch/child population and the same
+    stored batch id from the loser. Equal key with unequal canonical request refuses. Bumping an
+    internal plan without its key version refuses.
 25. **Run mutation and automatic enrichment are one commit ([[D2526]]).** Learner move, opponent
     ply and grouped seed creation each commit their run event plus the complete internal batch/jobs
     through `commitRunMutationWithEvidence`. A fault before either side leaves the old run and zero
@@ -2163,14 +2287,21 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     post-save job loop.
 26. **Rewind and cancellation are one commit ([[D2529]]).** Runtime rewind has no queue observer
     side effect. `commitRewindWithEvidenceCancellation` commits the rewind event and cancellation
-    of exactly the pruned-node jobs together. Lease conflict/storage fault leaves the old run and
-    every old job unchanged; a late worker result cannot settle a cancelled generation.
+    of exactly the pruned-node jobs together. A total fixture covers all eight durable source
+    states: admitted/running/retry-wait/settled-success cancel, while settled-empty,
+    settled-unavailable, cancelled and consumed remain terminal audit rows. Running cancellation
+    increments the lease generation and clears the lease. Lease conflict/storage fault leaves the
+    old run and every old job unchanged; a late worker result cannot settle a cancelled generation.
 27. **Settlement and consumption remain exact.** Expired leases recover; shutdown returns work to
-    `retry_wait`; a stale generation/lease/request cannot settle. Success writes the complete
+    `retry_wait`; every claim/reclaim increments the durable lease generation, and a stale
+    generation/owner/request receipt cannot retry, cancel or settle. Success writes the complete
     settlement plus unique per-run sequence atomically. Apply derives events solely from that stored
-    settlement and consumes the same row in one transaction. Crash fixtures yield only complete
-    earlier/later states—never lost work, duplicate evidence/objective events, unattached consumed
-    rows or fake empty payloads. Unknown/crossed states, extra keys and origin-consumer pairs fail.
+    settlement and consumes the same row in one transaction. The consumed row retains the exact
+    before/after revision, non-empty contiguous event range and canonical event-array digest;
+    close/reopen and response-loss replay return the stored receipt, while a missing, crossed or
+    digest-mismatched range fails as corrupt. Crash fixtures yield only complete earlier/later
+    states—never lost work, duplicate evidence/objective events, unattached consumed rows or fake
+    empty payloads. Unknown/crossed states, extra keys and origin-consumer pairs fail.
 
 ## Discharges
 

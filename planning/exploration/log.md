@@ -14445,3 +14445,20 @@ consumed row cannot prove the exact run events it applied.
 **Evidence/next:** `make pack-capability-ninth-fresh-review` passes 6/6 findings while the retained
 ninth and eighth author targets remain green. A tenth author repair must close all six, followed by
 another genuinely fresh review before acceptance or implementation.
+
+## 2026-09-02 — Pack capability tenth author repair closes the ninth return
+
+**What landed:** repaired [[D2542]]–[[D2547]] at RFC tier only. Batch and child rows now share a
+composite run/origin identity and exact ordered request population; claim/reclaim has a monotone
+lease fence; job and batch requests have closed canonical digest domains; admission has one
+serialized two-connection winner; rewind covers all eight durable states; and consumption retains
+one exact run revision/event-range/digest receipt.
+
+**What changed:** the author instrument now uses two real SQLite connections released from one
+barrier rather than a single-process map. It also proves same-owner lease rollover and rejects
+crossed children and non-contiguous application events. No production, migration, schema, API,
+storage, content, pack or protected-design byte changed.
+
+**Evidence/next:** `make pack-capability-tenth-author-repair` passes 6/6; the retained eighth and
+ninth author gates remain required. Another genuinely fresh independent review must pass before
+acceptance or implementation, and [[D560]] remains whole.

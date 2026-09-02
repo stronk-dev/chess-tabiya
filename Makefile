@@ -672,6 +672,10 @@ pack-capability-ninth-author-repair:
 pack-capability-ninth-fresh-review:
 	node --test tools/d2542-pack-capability-ninth-fresh-review/contract.test.mjs
 
+.PHONY: pack-capability-tenth-author-repair
+pack-capability-tenth-author-repair:
+	node --test tools/d2542-pack-capability-tenth-author-repair/contract.test.mjs
+
 pack-capability-author-repair:
 	node tools/d2152-pack-capability-author-repair/contract.mjs
 	node --test tools/d2334-pack-capability-fifth-author-repair/contract.test.mjs

@@ -5,6 +5,21 @@
     "lifetime": "persisted_on_first_admission",
     "replay": "return_stored_id"
   },
+  "batchId": {
+    "constructor": "crypto.randomUUID",
+    "lifetime": "persisted_on_first_admission",
+    "replay": "return_stored_id"
+  },
+  "requestDigests": {
+    "job": "sha256(utf8('chess-tabiya/evidence-job-request/v1\\0') || rfc8785(EvidenceJobRequestV1))",
+    "batch": "sha256(utf8('chess-tabiya/evidence-batch-request/v1\\0') || rfc8785(EvidenceBatchRequestV1))"
+  },
+  "concurrentAdmission": {
+    "transaction": "BEGIN IMMEDIATE",
+    "busyTimeoutMs": 5000,
+    "loser": "re-read winner after lock acquisition",
+    "winnerCount": 1
+  },
   "origins": [
     {
       "origin": "explicit_analysis",
