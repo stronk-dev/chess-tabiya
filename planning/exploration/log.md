@@ -14344,3 +14344,20 @@ falsifiers plus strict TypeScript, and the prior author controls remain green. T
 instrument now rejects the repaired contract absences while still observing the expected unbuilt
 production orderings. Another genuinely fresh review must attack result parsing, concurrent replay, plan-key
 stability and crash ordering before acceptance or implementation.
+
+## 2026-09-02 — Module registration seventh fresh review returns six outer authorities
+
+**What landed:** independently reviewed the seventh author repair against the provider ABI, both
+generated requirement artifacts and the final F1 receipt boundary. The honest blocked posture,
+Recorded/Review absence declarations and positive same-branch/deflection examples survive. No
+production, schema, API, UX, content or protected-design byte changed.
+
+**What changed:** [[D2530]]–[[D2535]] record six blockers. The provider pipeline invokes a mapped
+type instead of the injected registry value; catalogue position/applicability inputs have no exact
+evidence identities; eval delta's outer subject contradicts its repaired inner meaning; deflection's
+check projection is absent from dependency closure; all 205 timing pointers omit `module.`; and the
+sole final resolution receipt is structurally forgeable.
+
+**Evidence/next:** `make module-registration-seventh-fresh-review` passes 6/6. An eighth author
+repair must close all six while retaining every unresolved dependency as blocked, followed by
+another genuinely fresh review before acceptance or implementation.

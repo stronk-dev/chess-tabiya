@@ -281,6 +281,14 @@ exact-operation compiler owns all 117 projection and 205 pair resolutions. Fresh
 review still gates acceptance and implementation. Receipt:
 `planning/learner-modules/seventh-author-repair-2026-09-02.md`.
 
+The 2026-09-02 seventh fresh review preserves those inner repairs but returns module registration
+on [[D2530]]–[[D2535]]. The provider pipeline invokes a type, catalogue gate inputs have no exact
+evidence identities, eval delta's outer subject remains cross-branch, deflection's check evidence is
+outside its dependency closure, all 205 row pointers omit the `module.` key prefix, and the sole
+resolution receipt has no runtime seal. `make module-registration-seventh-fresh-review` passes 6/6;
+an eighth author repair and another fresh review gate acceptance and implementation. Receipt:
+`planning/learner-modules/seventh-fresh-independent-buildability-review-2026-09-02.md`.
+
 The 2026-09-02 fourth fresh promotion-collector review keeps the two held projections out of the
 foundation on [[D2521]], [[D2522]] and [[D2523]]. Its advertised closed request uses two undefined types, the
 injected Syzygy callable matches no provider operation and leaves normalized request bytes

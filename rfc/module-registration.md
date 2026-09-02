@@ -1,12 +1,12 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — seventh author repair complete 2026-09-02 on
-  [[D2505]]–[[D2508]]; another fresh independent review is required.** Source contracts now name
-  only declared ABIs and explicitly block on absent aggregate assertions; the provider arm retains
-  its operation argument and operation-keyed evidence factory; eval delta preserves consecutive
-  same-branch order; deflection retains bait-capture and check-induced alternatives; and one named
-  exact-operation compiler owns set-equal resolution of all 117 projections and 205 pairs. No
-  implementation is authorised before another fresh independent review and accepted dependencies.
+- **Status:** **draft — RETURNED by the seventh fresh independent review 2026-09-02 on
+  [[D2530]]–[[D2535]].** The prior inner repairs survive, but the provider pipeline calls a type,
+  catalogue gate inputs lack exact evidence identities, eval delta's outer subject remains
+  cross-branch, deflection's check input is outside its derivation closure, all 205 row pointers miss
+  the required pair keys, and the final resolution receipt is unsealed. `make
+  module-registration-seventh-fresh-review` passes 6/6. An eighth author repair and another fresh
+  review are required; no implementation is authorised.
   The fourth
   repair rejects the prior generator's
   central premise: learner modules do not invoke 117 detector/provider functions. They consume
@@ -2013,6 +2013,22 @@ Seventh author repair (2026-09-02):
 `make module-registration-seventh-author-repair` exercises the repair. Artifacts remain
 `requirements_only` and every pair remains dependency-blocked; another fresh independent review is
 required before acceptance or implementation.
+
+Seventh fresh independent return (2026-09-02):
+
+| row | returned requirement |
+|---|---|
+| [[D2530]] | replace the type-only `ProviderSourceFactories[...]` expression with the real injected `sourceFactories` value and preserve operation correlation |
+| [[D2531]] | declare exact producer/projection identities for both catalogue gate inputs and reject crossed sealed evidence |
+| [[D2532]] | make eval delta's outer subject/view/join agree with its consecutive same-branch meaning, or name a distinct cross-branch projection |
+| [[D2533]] | express check as an input of only the check-induced deflection alternative rather than leaving it outside closure or requiring it in both arms |
+| [[D2534]] | join every row pointer to the exact `module.<id>@1\0<projection>@1` required key |
+| [[D2535]] | runtime-seal the exact-operation resolution receipt and require its assertion at final F1 emission |
+
+`make module-registration-seventh-fresh-review` reproduces all six. Exact review:
+`planning/learner-modules/seventh-fresh-independent-buildability-review-2026-09-02.md`. The prior
+source-blocker honesty and positive semantic examples survive. An eighth author repair and another
+fresh independent review are required before acceptance or implementation.
 
 | row | author repair; fresh review still required |
 |---|---|

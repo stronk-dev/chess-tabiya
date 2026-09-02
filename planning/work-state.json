@@ -20135,6 +20135,60 @@
       "uxItems": [],
       "evidence": "planning/pack-capability-contract/ninth-author-repair-2026-09-02.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2530",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ddb8af9c592f4097567aa4f7db1a12065816f272f8647531d94aebdc46880020",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2531",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b1f493ee3696c97ef4f463a04854a865895066f48ca4cb631eb07254ef8b5900",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2532",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:04145c196885a0b23ac3fbcfc1ef4ee8588ce52708a2e237c09ea2b1e056b0f5",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2533",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:74e3d67af3b43512dd147759965569555269b6ab423cfaffc42a11c9429cb6cc",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2534",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a0fa63881631262c5d7d75a323379fa7076322afdb2f029dbc2227bc3682d53a",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:module-registration.md"
+    },
+    {
+      "id": "D2535",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:06ab830670a034675f8f6b7eedb29684ebd3b10efc9e74068aaac8b4f2874f84",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:module-registration.md"
     }
   ]
 }
