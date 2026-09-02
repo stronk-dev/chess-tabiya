@@ -791,12 +791,11 @@ owned cosmetic awards on browser-local catalogs, campaign-schema lane 2 is claim
 and generic durable skip-start/modifier/variant ids remain refused without a registry and consumer
 ([[D1698]]). The amended `campaign-core` specifies separate ownership/equipment/availability,
 universal later+boss opportunity, exact prestige, event-owned abandonment, idempotent portable
-awards and the complete Campaign home→map→prep→play→result→Review journey. The third fresh review
-returned it on [[D2420]]–[[D2427]]: active-run uniqueness and durable command replay are absent from
-the SQL; event revision does not type creation; theory/chronology/curriculum joins are incomplete;
-and account plus abandon/delete lifecycle exceed their accepted authorities. Its 34 author arms and
-eight return arms are both green; author repair, another fresh review and named dependencies still
-gate implementation.
+awards and the complete Campaign home→map→prep→play→result→Review journey. The fourth author repair
+closes [[D2420]]–[[D2427]] at the contract tier: a real partial unique index, discriminated event
+revision, durable result replay, exact theory/inventory event cuts, compiler-owned curriculum facts,
+truthful account/appliance scope and abandoned-history projection are exercised by the retained 34
+arms plus 9 new falsifiers. Another fresh review and named dependencies still gate implementation.
 The full-game successor is now explicit rather than hidden in a discharge: `campaign-boss-games`
 owns campaign-schema lane 3 and the complete Act-II position-game journey. It composes one exact
 calibrated human-like bot profile, rules-terminal result, clean rating versus explicit

@@ -14090,3 +14090,24 @@ client, content, archive or protected-design byte changed.
 before either the claim-free runtime-health checkpoint or lane-0.26 acquisition persistence is
 authorized. Bot policy remains downstream of the first checkpoint rather than inventing a private
 health projection.
+
+## 2026-09-02 — Campaign core fourth author repair closes eight durable-authority seams
+
+**What landed:** [[D2420]]–[[D2427]] are repaired at RFC/author-contract tier. Concurrent Campaign
+creation has a partial unique database constraint; creation and later events inhabit one
+discriminated revision rule; later commands retain immutable replay bytes; theory and inventory
+resolve at the exact encounter event cut; official curriculum claims compile from pinned node
+facts; account and appliance lifecycle stay distinct; and abandoned deletion has an honest history
+projection separate from corruption.
+
+**Evidence:** `make campaign-two-horizon-fourth-author-repair` passes the retained 34 Campaign
+author arms, 9 new able-to-fail controls and strict TypeScript. The controls include a real
+two-worker SQLite race, replay after aggregate advance, owned-but-inapplicable and too-direct
+theory, later-inventory exclusion, self-labelled/ghost curriculum negatives and all three missing
+run projections. No production, schema, migration, route, client, content, archive or protected
+design byte changed.
+
+**Blocked/next:** fresh independent buildability review and accepted dependencies still gate all
+Campaign implementation. Even after foundation acceptance, complete 1.0 still requires full-game
+bosses, catalogue progression, consequential durable variety, one authored campaign and the full
+home→map→prep→play→result→Review journey.

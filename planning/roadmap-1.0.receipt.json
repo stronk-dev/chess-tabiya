@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:31254db51fc2904f91f6996dafa5265726e21547f096df6724583de05314381f",
+    "roadmap": "sha256:34b46133679c986b485662c930b88b4a8a71a4971ff2e2055ac416213e8b5244",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:43c31f670a8a98d15d9db80add4a5913828533c9ccdce1364a89ead80a6bf5fd",
-    "rfcRegister": "sha256:1aa4133f7867d7ea9dd7f453a1da2a619a05952a1c0c3be2a4c1ffd7c1ebb796",
+    "workState": "sha256:8cc25375303b202f808422f6c00912e3be8d948eb63e818bb1eb5d67ade33f4a",
+    "rfcRegister": "sha256:615e68a58dc26d61d2277e97a46a53717f375c517fdf75e41e001208571d61f2",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 642,
       "doing": 0,
-      "blocked": 867,
-      "done": 741,
+      "blocked": 859,
+      "done": 749,
       "refused": 3
     },
     "workItems": {
@@ -109,8 +109,8 @@
       ],
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
-        "at": "2026-09-01",
-        "summary": "The shared-resource engine's fourth author repair now fits its real dependent profiles: both adopted assistance heads resolve, four process RFCs carry complete canonical descriptor candidates, TypeScript/migration graphs have literal node/edge/signature images and atomic resources are parsed without execution. All current author/reconciliation contracts are green; fresh independent review still gates implementation. Semantic validation's fifth repair remains blocked only on the explicit owner-authorised empty protected-store bootstrap. Candidate-packet, pack-capability, module-registration, evidence presentation, longitudinal store, bot policy, provider health and Campaign remain returned on their named production boundaries; foundation source identity remains dependency-blocked.",
+        "at": "2026-09-02",
+        "summary": "Campaign core's fourth author repair now closes its eight returned contract boundaries with database-enforced active-run uniqueness, durable event replay, exact encounter-time assistance cuts, compiler-owned curriculum facts and truthful lifecycle projections. Its retained 34 arms plus 9 new falsifiers are green; fresh independent review and accepted dependencies still gate implementation. Candidate-packet, pack-capability, module-registration, evidence presentation, bot policy and other returned foundations remain on their named production boundaries.",
         "impact": "advanced",
         "evidence": [
           "planning/shared-resource-register-bootstrap/fourth-author-repair-2026-09-01.md",
@@ -227,8 +227,8 @@
       ],
       "nextAction": "Land migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results; extend export, deletion, backup and rebuild with each object.",
       "latestCheckpoint": {
-        "at": "2026-08-31",
-        "summary": "Persistence contracts are specified or returned. Storage backup/recovery is returned on lock proof, cleanup state, durability ordering and receipt authority; longitudinal state and bot policy remain returned; Campaign is returned because its DDL, event revision and command replay do not yet form one durable authority; social durable state remains blocked on accepted foundations and registered migration order.",
+        "at": "2026-09-02",
+        "summary": "Campaign's draft persistence contract now forms one durable authority across active-run uniqueness, event revision, command replay and abandoned history, with executable negatives. Production persistence remains blocked on fresh acceptance and dependency order; storage backup/recovery, bot policy and social durable state retain their own returned or dependency-blocked boundaries.",
         "impact": "held",
         "evidence": [
           "rfc/storage-backup-recovery.md",

@@ -325,6 +325,11 @@ campaign-two-horizon-fresh-review:
 campaign-two-horizon-third-fresh-review:
 	node --test tools/d2420-campaign-third-fresh-review/contract.test.mjs
 
+.PHONY: campaign-two-horizon-fourth-author-repair
+campaign-two-horizon-fourth-author-repair: campaign-two-horizon-author-contract
+	./node_modules/.bin/vitest run --config tools/d2420-campaign-fourth-author-repair/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc -p tools/d2420-campaign-fourth-author-repair/tsconfig.json
+
 .PHONY: campaign-boss-author-contract
 campaign-boss-author-contract:
 	node --test tools/campaign-boss-author-contract/contract.test.mjs

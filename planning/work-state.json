@@ -19149,75 +19149,75 @@
     },
     {
       "id": "D2420",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:452f72a95e48e6d74d24f3bb047b72cb55d766dc9795f10e3228c6b4576349e3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2a741e9c5b11c8f7cdf3754840c416c0629492b3caefd961e5b09b347938b24a",
       "uxItems": [],
-      "owner": "campaign",
-      "blocker": "rfc:campaign-core.md"
+      "evidence": "planning/campaign/fourth-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2421",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:30bac33aa99e4240e398d1620222ffcd7edb1670a066d295b4e8b639f61b5aa1",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2572ae545f1f41a440c47fc880fdd6cf6db762ade7fd32d621a67b6a1bbfd7e8",
       "uxItems": [],
-      "owner": "campaign",
-      "blocker": "rfc:campaign-core.md"
+      "evidence": "planning/campaign/fourth-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2422",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0f3089297898510f03252ac9336208609b276237645401b6fc92f2da6d6988fb",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e6ff1337f1ea82641000579438733609accb263c044dad093bc84386cbe7cd74",
       "uxItems": [],
-      "owner": "campaign",
-      "blocker": "rfc:campaign-core.md"
+      "evidence": "planning/campaign/fourth-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2423",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:32b674211da036db79c4e5cc204fda98f998a5119a4629e66a0ccd9a7ff18040",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:04c8c18b4a7d41d6a70e724dddae24644496a46dd69d05cb72341c5e2b9375d4",
       "uxItems": [],
-      "owner": "campaign",
-      "blocker": "rfc:campaign-core.md"
+      "evidence": "planning/campaign/fourth-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2424",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0b6345c7f4e342381f9c493e835130f467e0072b83bafa8abfb9fcc76b59f31e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e78fc2901f1da88e4ba311cbc2d8412e5df5f4a124f404255641ba3eabe03fba",
       "uxItems": [],
-      "owner": "campaign",
-      "blocker": "rfc:campaign-core.md"
+      "evidence": "planning/campaign/fourth-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2425",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:288ee390058ef852aacc839409c35d5118500ac15c000ea42b39e6ffcf4e3fc4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1967a3a8f73005845f984b86c79b51c32576fc03dd07d6915969580a53611691",
       "uxItems": [],
-      "owner": "campaign",
-      "blocker": "rfc:campaign-core.md"
+      "evidence": "planning/campaign/fourth-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2426",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:af9c440a7cabd00eefc4cc5dda6f4a4e05770ce8219ba812653b64639e16f966",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:64c6b719362bd3b5df067d114c2b57875a530bf8d86e8f3149d0bdcb649be469",
       "uxItems": [],
-      "owner": "campaign",
-      "blocker": "rfc:campaign-core.md"
+      "evidence": "planning/campaign/fourth-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2427",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e835a75402774d575e4b1229e3bef86c6011821f9a905ad5148e4a86edfbaec5",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:24660fe140c7ff1dd2ad0a65ffb8f329cc3dfcd4b2ec1b6001769217aa76c866",
       "uxItems": [],
-      "owner": "campaign",
-      "blocker": "rfc:campaign-core.md"
+      "evidence": "planning/campaign/fourth-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2428",

@@ -1,15 +1,14 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
-- **Status:** draft — **RETURNED by third fresh independent review 2026-08-31 on
-  [[D2420]]–[[D2427]].** The prior learner-play, pre-run create identity, atomic-start, deletion,
-  assistance and official-metadata directions survive, but the normative SQL does not enforce
-  active-run uniqueness or store a replayable command envelope; emitted events cannot inhabit its
-  revision column; theory and sealed-history reads lose required gates/cuts; official curriculum
-  fields self-assert rather than join; and account/deletion lifecycle claims exceed their accepted
-  authorities. `make campaign-two-horizon-third-fresh-review` passes 8/8. This remains Campaign
-  foundation, not complete 1.0. This RFC is explicitly the Campaign foundation, not the whole 1.0.
+- **Status:** draft — **fourth author repair complete 2026-09-02 on
+  [[D2420]]–[[D2427]]; fresh independent review required.** The repaired contract gives concurrent
+  creation a database authority, stores one replayable event envelope, types creation revision,
+  freezes assistance at the encounter event cut, joins official curriculum claims to exact facts,
+  consumes only accepted account/appliance lifecycle operations and distinguishes abandoned
+  history from corruption. `make campaign-two-horizon-fourth-author-repair` passes the retained
+  34 arms plus 9 new falsifiers. This RFC is explicitly the Campaign foundation, not the whole 1.0.
   No campaign schema, migration, production route, official campaign or surface may resume before
-  author repair, another fresh independent review and accepted dependencies.
+  another fresh independent review and accepted dependencies.
   *(Prior line: [[D2077]]–[[D2086]] author repair complete 2026-08-30; fresh independent review
   required. Before that:
   implementing — 2026-08-23 authored-contract + registry + module-algebra checkpoints. Before
@@ -33,7 +32,9 @@
   rebuild discipline and the preceding migration position), `rfc/theory-knowledge-pipeline.md`
   (exact bundle/passage authority for `theory_unlock`; implementation dependency), the shared
   server-readable appearance catalog required by [[D1696]], and the portable-account-data
-  inventory/checker (award export, deletion and restore). **Consumer closure additionally serializes
+  inventory/checker (account export and hard deletion only). Whole-installation restore belongs to
+  the appliance backup contract; this RFC adds no account import, merge or rekey operation.
+  **Consumer closure additionally serializes
   behind accepted and implemented `rfc/pack-capability-contract.md`**, exporting
   `derivePackCapabilityRequirements`, and **accepted and implemented
   `rfc/theory-drill-current-joins.md`**, exporting `compileApplicabilityResult`; both are returned at
@@ -211,13 +212,20 @@ mechanical fixture lives under
 `tools/campaign-two-horizon-author-contract/fixtures/campaign-contract.json`; it exists only to
 falsify schema/fold/API invariants, uses `publication.channel: "community"`, and is never registered
 or rendered. An official registry entry uses `publication.channel: "official"`; schema lane 2 then
-requires the complete `CampaignCurriculumMetadata`, and `validateOfficialCampaign` checks its node
-sets against the exact document, resolves learner bracket, theory passage, evidence and provider-
-operation identities from their owning registries, requires all three phase sets and every declared
-encounter form to be non-empty, rejects inverted or zero time envelopes, and byte-joins the review
-receipt to the canonical document digest. The metadata declares and joins curriculum coverage; it
-never proves that a lesson is good or manufactures a chess claim. Unknown, copied, extra or
-unavailable dependencies fail with one path-addressed issue rather than being silently dropped.
+requires the complete `CampaignCurriculumMetadata`, and `validateOfficialCampaign` checks it
+against the exact document plus one compiler-owned `CampaignCurriculumNodeFact` per node. Each fact
+pins the encounter pack id/digest and its authored phase, encounter form, applicable theory
+passages and dependency requirements from the owning pack/theory/capability authorities.
+`phaseCoverage` and `formCoverage` must be set-equal projections of those facts; one single-phase
+pack cannot self-label all three phases. Every theory row must name an existing node and a passage
+in that node's exact applicability result. Every dependency row's `requiredAt` must be the complete
+non-empty set of document nodes whose compiled requirements name it. The validator also resolves
+learner bracket, evidence and provider-operation identities, requires all three phase sets and
+every present encounter form to be non-empty, rejects inverted or zero time envelopes, and
+byte-joins the review receipt to the canonical document digest. The metadata declares and joins
+curriculum coverage; it never proves that a lesson is good or manufactures a chess claim. Unknown
+nodes, copied phase claims, ghost theory joins, incomplete/extra dependency sets or unavailable
+dependencies fail with one path-addressed issue rather than being silently dropped ([[D2425]]).
 
 The 1.0 product requires at
 least one separate official document under `content/campaigns/`, authored and reviewed by the
@@ -614,8 +622,9 @@ Per `rfc/intent-presets.md` Discharge D3 (quoted whole in derivation §3.1), reg
 
    `POST /campaign-runs/:campaignRunId/nodes/:nodeId/start` constructs it server-side from the
    authenticated campaign state and pinned document snapshot; callers cannot supply it. It is
-   written in `run.started`, returned on resume, preserved by direct Review URL/refresh and account
-   export/import, and read by Review, longitudinal selectors and `deriveWorkflowContext`. Plain runs
+   written in `run.started`, returned on resume, preserved by direct Review URL/refresh, account
+   export and whole-appliance backup/restore, and read by Review, longitudinal selectors and
+   `deriveWorkflowContext`. Plain runs
    carry no origin and infer none. Deleting campaign history does not rewrite the play run: Review
    retains the origin and renders `campaign_history_unavailable`; restoring matching campaign rows
    reconnects only when run id/node/document digest all match. The campaign-side active pointer is
@@ -638,19 +647,28 @@ parallel hint endpoint. The accepted module-registration boundary is the owner:
 `RunService.queryModules` calls `compileAuthoritativeAssistance`, assembles registered module
 packets, and then calls `finalizeAssistanceEffects`. For a run whose verified origin is
 `campaign_encounter`, it first calls `campaignAssistanceAuthority` inside the same authenticated
-read snapshot. That join reads the current CampaignRun revision, pinned document digest, active or
-sealed node/run identity, module ownership and loadout, exact theory-passage ownership, node
-suppression, provider/source availability and the workflow/context/role ceiling. No client-sent
-inventory, revision, suppression or availability fact is accepted.
+read snapshot. That join resolves the exact `node_entered` event and uses its `seq` as the encounter
+inventory cut. For active play and sealed Review alike it folds module ownership/loadout and exact
+theory-passage ownership only through that cut; later rewards or loadout events can never widen an
+earlier encounter. It also reads the pinned document digest, active-or-historical node/run identity,
+node suppression, current provider/source availability and the workflow/context/role ceiling. For
+every owned theory passage it consumes the sealed `compileApplicabilityResult` for the encounter's
+exact pinned pack and the assistance compiler's exact passage-directness/context-disclosure result.
+No client-sent inventory, revision, event cut, suppression, applicability, disclosure or
+availability fact is accepted ([[D2423]], [[D2424]]).
 
-The returned `CampaignAssistanceAuthorityReceipt` contains exact campaign run/revision/node/run/
-document identities plus the family-specific effective module and authorized theory sets. It is an
+The returned `CampaignAssistanceAuthorityReceipt` contains exact campaign run/current revision,
+`inventoryEventSeq`, node/run/document identities, the digests of the applicability and disclosure
+receipts, plus the family-specific effective module and authorized theory sets. A theory passage is
+authorized only when the owned exact ref equals the applicability result, that result says
+applicable, its registered authorizing module is effective, directness is within the current
+disclosure ceiling and its attributed bytes are available. It is an
 input to `compileAuthoritativeAssistance`, not prose and not evidence. The ordinary compiler then
 intersects preset request, context ceiling, honesty/access, role and current source availability;
 `finalizeAssistanceEffects` emits only effects whose registered evidence dependencies were actually
 assembled. This keeps the existing rule that every term narrows. Wrong campaign, learner, node,
-play run or document digest refuses; a stale loadout is impossible because every query reads the
-current revision; boss suppression removes the module before rendering; provider absence returns
+play run or document digest refuses; a client-supplied loadout is ignored and canonical inventory
+is folded at `inventoryEventSeq`; boss suppression removes the module before rendering; provider absence returns
 the registered unavailable reason; and preset narrowing can hide an owned tool but never enable
 one. The §3.4 opportunity checker is discharged only by an integration fixture where an earlier
 reward appears in this exact operation at a later boss. A shelf card, map badge or raw inventory
@@ -678,6 +696,9 @@ CREATE TABLE campaign_runs (
 CREATE INDEX idx_campaign_runs_active_encounter ON campaign_runs(active_encounter_run_id)
   WHERE active_encounter_run_id IS NOT NULL;   -- §2.2's guard is one indexed lookup
 CREATE INDEX idx_campaign_runs_learner ON campaign_runs(learner_id, status);
+CREATE UNIQUE INDEX idx_campaign_runs_one_active
+  ON campaign_runs(learner_id, campaign_id)
+  WHERE status = 'active';
 
 CREATE TABLE campaign_run_creations (
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
@@ -698,9 +719,15 @@ CREATE TABLE campaign_events (
     ('campaign_created','node_entered','node_committed','loadout_changed','charge_spent',
      'campaign_abandoned')),
   command_id TEXT NOT NULL,
-  expected_revision INTEGER NOT NULL,
+  expected_revision INTEGER,
+  operands_digest TEXT NOT NULL,      -- digest of normalized command operands
+  result_payload TEXT NOT NULL,       -- canonical exact command result for response-loss replay
   payload TEXT NOT NULL,              -- canonical JSON per event kind (§4.1, §2)
   at TEXT NOT NULL,
+  CHECK (
+    (kind = 'campaign_created' AND expected_revision IS NULL) OR
+    (kind <> 'campaign_created' AND expected_revision IS NOT NULL AND expected_revision >= 0)
+  ),
   PRIMARY KEY (campaign_run_id, seq)
 ) STRICT;
 CREATE UNIQUE INDEX idx_campaign_events_command
@@ -729,7 +756,15 @@ CampaignRun per `campaign_id` (partial unique index in the migration; a second s
 typed `CAMPAIGN_RUN_ACTIVE_EXISTS`). Earned state is server-held by ruling (`06:237-239`,
 [[D945]]): none of this ever lives in `AssistanceConfig` or any localStorage key.
 
-**6.0 Definition pin and command identity.** Campaign creation validates a registry document and
+**6.0 Definition pin and command identity.** The partial unique
+`idx_campaign_runs_one_active` is the database authority for one active run per
+`(learner_id,campaign_id)`; the service lookup only selects its typed error. Two distinct
+connections racing different create commands serialize at SQLite's writer boundary: one insert
+commits and the other observes the unique constraint and returns `CAMPAIGN_RUN_ACTIVE_EXISTS`.
+The permanent author control uses two worker-owned connections to the same file and fails if both
+commit ([[D2420]]).
+
+Campaign creation validates a registry document and
 calls `createCampaignRunExactlyOnce`. One database transaction writes its RFC-8785 canonical bytes
 and digest into `campaign_runs`, appends `campaign_created`, and inserts the exact normalized
 operands/result into `campaign_run_creations`. The pre-run idempotency identity is
@@ -749,12 +784,21 @@ a newer release therefore makes it unavailable for **new** runs but does not mak
 unreplayable. Export/backup carries the canonical snapshot; restore refuses a digest mismatch and
 can replay it even when the current release no longer offers that version.
 
+Every event inhabits one discriminated revision rule: `campaign_created` is sequence/revision 1 and
+stores `expected_revision = NULL` because no aggregate revision existed before it; every other
+event stores the exact non-negative revision read before the command, and its committed `seq` is
+`expected_revision + 1`. No other kind may carry NULL and creation may not invent zero
+([[D2421]]).
+
 Every mutation has a validated `CampaignCommandId` and, after creation, an expected integer event
-revision. `campaign_run_creations` is the durable create authority; the unique event index is the
-durable authority for later mutations. Same command plus byte-identical normalized
-operands returns the stored result; same command with different operands returns
+revision. `campaign_run_creations` is the durable create authority; the unique event index plus
+`operands_digest` and canonical `result_payload` is the durable authority for every later command.
+The event row commits the response image in the same transaction as its semantic payload and any
+play-run/award effects. Replay reads that immutable row, never reconstructs a response from mutable
+`campaign_runs` or play-run state. Same command plus byte-identical normalized operands returns the
+stored result even after later play/events advance; same command with different operands returns
 `CAMPAIGN_COMMAND_REUSED`; an unmatched revision returns `CAMPAIGN_REVISION_STALE`. No mutation
-depends on a process-local idempotency map.
+depends on a process-local idempotency map ([[D2422]]).
 
 **6.1 Durable award issuance is part of the terminal transition.** Before appending a final
 `node_committed`, the service folds the proposed next state against the pinned document snapshot,
@@ -771,14 +815,16 @@ The learner's durable inventory is the distinct projection of award rows, never 
 authority.
 
 **6.2 Account and appliance lifecycle.** All four tables join the exhaustive account-data
-inventory in the landing commit. Export includes campaign run/create-receipt/event history, award
-history and the derived owned reward set. Hard deletion cascades all four. Restore imports canonical rows and
-replays award identity through the same uniqueness key; duplicates remain one award. Account merge
-cannot silently choose between colliding learner ids: it rekeys campaign runs/events and awards in
-the portable-account-data transaction before the source learner is deleted. Backup/restore and
-upgrade verification exercise the four tables through the normal appliance database receipt. A
-missing table from export, deletion, restore, merge or backup inventory fails the exhaustive guard;
-“private solo history” is a data classification, not permission to omit it.
+inventory in the landing commit. Account export includes campaign run/create-receipt/event history,
+award history and the derived owned reward set. Hard deletion cascades all four. The accepted
+portable-account contract intentionally supplies no account-import, restore, merge or rekey route;
+Campaign adds none and has no acceptance criterion that pretends otherwise. A future portable
+import/merge feature requires its own accepted successor before Campaign can consume it.
+Whole-installation backup/restore and upgrade verification exercise the four tables through the
+normal appliance database receipt and preserve SQLite uniqueness/digests as installation state,
+not account import. A missing table from account export, hard deletion or appliance backup
+inventory fails the relevant exhaustive guard; “private solo history” is a data classification,
+not permission to omit it ([[D2426]]).
 
 **6.3 Play-run deletion is campaign-aware.** The existing `deleteOwnedRun` transaction first
 performs the indexed `active_encounter_run_id` lookup. If the owned run is the active encounter of
@@ -796,6 +842,16 @@ projection but contains no deleted play-run bytes; restore does not resurrect th
 deletion followed by restore restores both and re-enables Review only when run id, node id and
 document digest all match. A missing run that is still named by an active pointer is corruption and
 refuses restore/startup reconciliation rather than being mislabeled a learner deletion.
+
+If `campaign_abandoned` names the active `{nodeId,runId}` before that node has a
+`node_committed`, the pair is a durable abandoned-unsealed attempt. The active pointer is cleared,
+the play run becomes deletable, and history projects either
+`{ kind:"abandoned"; reason:"campaign_encounter_abandoned"; runId; nodeId;
+campaignDocumentDigest }` while it exists or `{ kind:"unavailable";
+reason:"campaign_abandoned_run_deleted"; ... }` after learner deletion. Account export retains the
+events and whichever play-run bytes still exist; there is no account restore. Whole-appliance
+backup/restore preserves the same projection. A missing run with neither a matching seal nor a
+matching abandonment event is corruption, not abandonment ([[D2427]]).
 
 ### §7. Surfaces — where campaign chrome lives
 
@@ -1027,6 +1083,38 @@ No product implementation is authorized by this return. The next author pass mus
 full 1.0 closure map, repair these boundaries, keep both maintained targets green and request a new
 independent review.
 
+## Fourth author repair (2026-09-02)
+
+The eight returned boundaries are repaired as one durable-authority contract, without widening
+this foundation into complete Campaign or changing production bytes:
+
+1. **[[D2420]]:** `idx_campaign_runs_one_active` is a partial unique database constraint over
+   `(learner_id, campaign_id) WHERE status = 'active'`; the author falsifier races two independent
+   SQLite writers and requires exactly one active run.
+2. **[[D2421]]:** `campaign_created` alone carries `expected_revision = NULL` at sequence 1; every
+   later event carries a non-null expected revision and satisfies `seq = expected_revision + 1`.
+3. **[[D2422]]:** every later mutation durably stores its normalized operands digest and immutable
+   result payload on the event row, so a response-loss replay returns the original bytes even after
+   the aggregate advances.
+4. **[[D2423]]:** theory delivery requires exact pack applicability and the permitted disclosure
+   level in addition to ownership, equipment and source availability; each decision is recorded in
+   the encounter receipt.
+5. **[[D2424]]:** active play and sealed Review both resolve inventory from the exact
+   `node_entered` event-log cut. Later unlocks cannot widen an earlier encounter.
+6. **[[D2425]]:** official phase, encounter form, theory provenance and dependency coverage are
+   compiled from pinned node facts and must be set-equal. A node cannot self-label three phases and
+   a ghost node cannot satisfy provenance or dependency coverage.
+7. **[[D2426]]:** portable account scope is export and deletion only. Whole-appliance backup and
+   restore preserve the database image; account import, merge and rekey are neither dependencies nor
+   acceptance claims.
+8. **[[D2427]]:** a missing play run projects as sealed deletion only when a commit exists and as
+   abandoned deletion only when abandonment exists; neither event means corruption.
+
+The executable receipt is `planning/campaign/fourth-author-repair-2026-09-02.md`. The maintained
+author target retains all 34 earlier arms and adds nine able-to-fail tests plus a TypeScript gate.
+No product implementation is authorized until a new independent review accepts this exact text and
+all named dependencies are accepted.
+
 ## Campaign 1.0 closure map
 
 This RFC is the **foundation milestone**, not permission to mark the Campaign capability complete.
@@ -1112,8 +1200,9 @@ authority; neither artifact can stand in for the other.
 14. **Migration hygiene**: the migration is create-table/index only, `STRICT`, literal CHECKs,
    lands as `STORAGE_VERSION + 1` at its queue turn behind `bot-policy`, and the register row
    flips in the landing commit (C1–C8, P1–P7 green). It creates all four tables, pins canonical
-   document bytes/digest, provides the pre-run create receipt, event command-id unique index and
-   award identity in §6.
+   document bytes/digest, provides the pre-run create receipt, database-enforced one-active-run
+   partial unique index, event command-id unique index, discriminated creation revision and the
+   post-create operands/result envelope, plus award identity in §6.
 15. **`CAMPAIGN_PATH_WIDTH` is a discriminating warning** (§1, amendment 2026-08-23): a fixture
     document whose act-1 layers 1 and 2 each carry **one** choice emits the warning naming both
     layers and **does not** emit an error; the seed fixture (layers of width 3, layer 3 the
@@ -1150,11 +1239,11 @@ authority; neither artifact can stand in for the other.
     award bytes. Crash before commit leaves neither event nor award; crash after commit/retry sees
     both. Active/abandoned runs, wrong learner, snapshot/digest mismatch, wrong gate, unknown
     appearance id and absent document grant insert zero rows.
-22. **Account lifecycle is exhaustive**: the account-data guard fails if any of the four campaign tables or the
-    run-origin/document-snapshot fields are
-    absent from export, hard delete, restore or merge. An export→delete→restore round trip preserves
-    canonical run/events/award bytes and derived ownership; the appliance backup/restore journey
-    proves the same rows survive an upgrade.
+22. **Lifecycle scopes stay honest**: the account-data guard fails if any of the four campaign
+    tables or run-origin/document-snapshot fields are absent from account export or hard deletion.
+    Campaign exposes no account import/restore/merge/rekey route and a contract guard fails if one
+    is added without an accepted portable-import successor. The separate appliance backup/restore
+    journey proves the database rows survive an upgrade.
 23. **Campaign schema transition is serialized**: lane 2 changes only the declared reward,
     consumer and durable-grant shapes; the register digest changes in the landing commit. Editing
     schema v1, omitting the live claim, or landing `training-mode-variants` against v1 fails the
@@ -1171,32 +1260,44 @@ authority; neither artifact can stand in for the other.
     inspect/equip a reward, start and play an encounter, submit it, see the acquired reward, use it
     at a later boss, complete the run, receive idempotent durable awards, open Review and start a
    new run. Response-loss retries for create/start/submit/loadout return stored bytes; stale tab,
-   forbidden learner and terminal mutations render typed errors. Direct Review URL/refresh and
-   export/delete/restore preserve `RunOrigin`; a plain run remains originless. A parallel
+   forbidden learner and terminal mutations render typed errors. Direct Review URL/refresh,
+   account export and whole-appliance backup/restore preserve `RunOrigin`; a plain run remains
+   originless. A parallel
    abandonment journey reaches no completion/prestige award.
 25. **Board and access stability**: the campaign foundation journey passes desktop, narrow mobile, 200% zoom,
     reduced-motion, keyboard and semantic-grid projections with no horizontal page overflow, no
     post-hint/reward square-size change, no covered tappable square and no primitive settings wall.
 26. **Create replay exists before the run id**: same learner/campaign/command and version returns
     byte-identical run/event/result with one row per table; changed version refuses, another learner
-    is independent, and injected failure before each write leaves zero rows.
+    is independent, and injected failure before each write leaves zero rows. Two worker-owned
+    SQLite connections racing distinct create commands for one learner/campaign yield exactly one
+    active row and one unique-constraint-derived `CAMPAIGN_RUN_ACTIVE_EXISTS` result.
 27. **Encounter start is one cross-aggregate commit**: failure after play-run creation,
     `run.started`, `node_entered`, revision or active-pointer write leaves no effect. Response-loss
     retry returns the winner; concurrent identical/different commands produce replay/stale exactly
-    as §5.3 specifies, with no orphan or dangling pointer.
+    as §5.3 specifies, with no orphan or dangling pointer. Its `node_entered` event stores the
+    normalized operands digest and exact response payload; replay after the play run and campaign
+    revision advance returns those stored bytes. `campaign_created` alone stores NULL expected
+    revision; every later event stores the pre-command revision and `seq = expectedRevision + 1`.
 28. **Run deletion cannot corrupt Campaign**: active encounter deletion refuses without mutation;
-    sealed deletion keeps progression/rewards and returns the typed Review-unavailable projection;
-    plain deletion is unchanged. Export-before and export-after deletion restore their respective
-    states, and an active missing run is rejected as corruption.
+    sealed deletion keeps progression/rewards and returns the typed sealed-run Review-unavailable
+    projection; abandon-then-delete returns the distinct abandoned-unsealed unavailable projection;
+    plain deletion is unchanged. Account export retains the event distinction and appliance
+    backup/restore preserves it. A missing run with neither seal nor matching abandonment, or one
+    still named by an active pointer, is rejected as corruption.
 29. **Earned tools reach the real module query**: an earlier module and theory reward is delivered
     by `RunService.queryModules` at a later boss through `campaignAssistanceAuthority` and the
-    compiled assistance receipt. Wrong run/node/digest, stale client loadout, suppression, source
-    absence and preset narrowing each fail or narrow at their declared layer; a shelf-only fixture
-    does not satisfy the criterion.
-30. **Official metadata is able to fail**: missing phase, empty form, unknown bracket/passage/
-    evidence/provider operation, inverted envelope, wrong review digest, community-only fixture and
-    an extra copied dependency each trigger their exact validator issue. One official-shaped
-    control passes structural validation without claiming its chess curriculum is correct.
+    compiled assistance receipt. The receipt names the exact `node_entered` inventory cut and the
+    sealed applicability/disclosure digests. Owned-but-inapplicable and too-direct theory are
+    unavailable; a later reward cannot widen an earlier active or sealed encounter. Wrong
+    run/node/digest, stale client loadout, suppression, source absence and preset narrowing each
+    fail or narrow at their declared layer; a shelf-only fixture does not satisfy the criterion.
+30. **Official metadata is able to fail**: missing phase, empty form, same-node-three-phases,
+    ghost theory/dependency node, incomplete or extra compiled requirement, unknown
+    bracket/passage/evidence/provider operation, inverted envelope, wrong review digest,
+    community-only fixture and an extra copied dependency each trigger their exact validator issue.
+    One official-shaped control set-equals compiler-owned pinned pack/form/theory/dependency facts
+    without claiming its chess curriculum is correct.
 31. **Campaign 1.0 cannot close at the foundation**: the roadmap receipt fails complete while any
     §10 milestone lacks its end-to-end receipt. In particular, a pack-only boss, a progress page
     without the pack-card mark, or marks/cosmetics with no future-run effect cannot discharge the
@@ -1250,6 +1351,14 @@ set).
   persona.
 
 ## Changelog
+
+- 2026-09-02 (**fourth author repair**): repaired [[D2420]]–[[D2427]] without changing production
+  code. Database uniqueness, discriminated event revision, immutable replay bytes, encounter-time
+  theory/inventory cuts, compiler-owned curriculum facts, truthful account/appliance lifecycle and
+  abandoned-history projection now form one contract. `make
+  campaign-two-horizon-fourth-author-repair` passes the retained 34 arms plus 9 new falsifiers and
+  TypeScript. Exact receipt: `planning/campaign/fourth-author-repair-2026-09-02.md`. Fresh
+  independent review and accepted dependencies still gate implementation.
 
 - 2026-08-31 (**third fresh independent return**): returned the RFC on [[D2420]]–[[D2427]].
   The database lacks the promised active-run uniqueness and post-create command receipt; event
