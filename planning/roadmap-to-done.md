@@ -214,6 +214,15 @@ settling after HTTP 202 or restart. An eighth author repair and another fresh re
 acceptance and implementation. Receipt:
 `planning/pack-capability-contract/seventh-fresh-independent-review-2026-09-02.md`.
 
+The 2026-09-02 eighth author repair closes those three seams at contract tier. One token lookup now
+dispatches the two public HTML scopes in a 60-branch HTTP image; two queued provider ids close both
+worker gateways and three sealed enqueue origins; and a durable `evidence_jobs` lifecycle separates
+admission from leased execution, retry, consumer-specific settlement, restart recovery and atomic
+consumption. It claims a migration position behind `longitudinal-store` and consumes the existing
+provider-health receipt vocabulary. Fresh independent review still gates acceptance and every
+production/storage/schema/API byte. Receipt:
+`planning/pack-capability-contract/eighth-author-repair-2026-09-02.md`.
+
 The 2026-08-31 fifth fresh candidate-packet review preserves the repaired single retained legal-
 move value graph but returns its acceptance boundary on [[D2428]]: the RFC requires one
 `exactLegalMoveMap` call while the production declaration adapter necessarily recomputes the same

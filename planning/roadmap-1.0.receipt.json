@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:d2fff91ab7cafca4b2612cabcd76a18b6aa7cc6e27cea93457d81687220e080a",
+    "roadmap": "sha256:3512efab34f115a96bf57d32b39a23f836e335c8be651f4106fd94b158acdb02",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:812618321a0798cf5371d548f4cdf6111aee9b1adf0a4d8e770b4de0e23a3f6e",
-    "rfcRegister": "sha256:bd31934121cdf17b5d9cc4de2f1ca146ff6f43a0cc13e4a6979799feccb61cf5",
+    "workState": "sha256:f92cfebc8e94a3cc264354f6057a560ac7bff1b0b2fed5d0a2f169e7ea54d74a",
+    "rfcRegister": "sha256:2fe74baa4d757c2a1d53175c0928b9353bcddf81620d387d8b828cc570530d47",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 642,
       "doing": 0,
-      "blocked": 871,
-      "done": 753,
+      "blocked": 868,
+      "done": 756,
       "refused": 3
     },
     "workItems": {
@@ -110,8 +110,8 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-02",
-        "summary": "Pack capability's synchronous 58-operation repair survives, but seventh fresh review returns it on three production boundaries: the public HTML Story route is absent, the asynchronous Stockfish/Syzygy evidence worker is outside the provider census, and request-level effects cannot model jobs settling after HTTP 202 or restart. Module registration's independent returns and Campaign's repaired review gate remain unchanged.",
-        "impact": "held",
+        "summary": "Pack capability's eighth author repair closes the returned public HTML route, asynchronous Stockfish/Syzygy worker population and post-202/restart lifecycle at contract tier: 60 HTTP branches, two queued provider ids and one durable admitted-to-consumed job algebra. Fresh independent review still gates acceptance and implementation. Module registration's independent returns and Campaign's repaired review gate remain unchanged.",
+        "impact": "advanced",
         "evidence": [
           "planning/pack-capability-contract/seventh-fresh-independent-review-2026-09-02.md",
           "planning/pack-capability-contract/sixth-fresh-independent-review-2026-09-02.md",
@@ -170,8 +170,8 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-02",
-        "summary": "F3 remains returned after its seventh fresh review: synchronous route/session/group joins survive, but public HTML Story and asynchronous evidence-worker provider operations are outside the claimed closure, and queued settlement has no honest provider-off lifecycle. Claim semantic anchors and Feedback Stage 2 remain blocked on the repaired F3 acceptance boundary; module registration's source/occurrence returns remain independently open.",
-        "impact": "held",
+        "summary": "F3's eighth author repair now closes public HTML Story, both asynchronous evidence-worker operations and durable post-202/restart settlement at contract tier. Claim semantic anchors and Feedback Stage 2 remain blocked only on fresh F3 review/acceptance and its provider-health dependency; module registration's source/occurrence returns remain independently open.",
+        "impact": "advanced",
         "evidence": [
           "planning/pack-capability-contract/seventh-fresh-independent-review-2026-09-02.md",
           "planning/pack-capability-contract/sixth-fresh-independent-review-2026-09-02.md",

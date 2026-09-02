@@ -1,0 +1,80 @@
+{
+  "schema": "tabiya.pack-capability.operation-authority.author-amendment.v1",
+  "base": {
+    "path": "tools/d2509-pack-capability-seventh-author-repair/operation-authority.json",
+    "sha256": "861f8991cc619e3b3f15fe196f0b6c2d4373caa4f6b98c66c05faebf250b7a1f"
+  },
+  "externalRouteAdditions": [
+    {
+      "method": "GET",
+      "route": "/shared/:token",
+      "branch": "loaded publicToken.scope=story_read",
+      "operation": "story.public",
+      "source": "run_session_operation",
+      "consumer": "review.story_evidence"
+    },
+    {
+      "method": "GET",
+      "route": "/shared/:token",
+      "branch": "loaded publicToken.scope=session_join",
+      "operation": "shared.join_page",
+      "source": "none"
+    }
+  ],
+  "queuedProviderOperations": [
+    {
+      "operation": "evidence.stockfish_analysis",
+      "file": "apps/server/src/evidence-queue.ts",
+      "symbol": "EvidenceJobQueue.#execute",
+      "call": "#executor.execute",
+      "kinds": ["bestline", "eval", "wdl"]
+    },
+    {
+      "operation": "evidence.tablebase_probe",
+      "file": "apps/server/src/evidence-queue.ts",
+      "symbol": "EvidenceJobQueue.#tablebasePayload",
+      "call": "#tablebase.probe",
+      "kinds": ["tablebase"]
+    }
+  ],
+  "enqueueOrigins": [
+    {
+      "origin": "explicit_analysis",
+      "caller": "RunService.enqueueEvidence",
+      "queueMethod": "enqueue",
+      "consumer": "runtime.analysis",
+      "providerOff": "unavailable"
+    },
+    {
+      "origin": "story_completion",
+      "caller": "RunService.#ensureStoryEvidence",
+      "queueMethod": "enqueue",
+      "consumer": "review.story_evidence",
+      "providerOff": "honest_empty"
+    },
+    {
+      "origin": "run_enrichment",
+      "caller": "RunService.#enqueueMoveEvidence",
+      "queueMethod": "enqueue",
+      "consumer": "runtime.background_evidence",
+      "providerOff": "honest_empty"
+    },
+    {
+      "origin": "run_enrichment",
+      "caller": "RunService.#enqueueMoveEvidence",
+      "queueMethod": "enqueueProducer",
+      "consumer": "runtime.background_evidence",
+      "providerOff": "honest_empty"
+    }
+  ],
+  "durableStates": [
+    "admitted",
+    "running",
+    "retry_wait",
+    "settled_success",
+    "settled_empty",
+    "settled_unavailable",
+    "cancelled",
+    "consumed"
+  ]
+}

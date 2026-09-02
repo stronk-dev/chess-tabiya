@@ -19,7 +19,7 @@
 - **Planning:** `planning/concept-registry/rfc-derivation-2026-08-31.md`.
 
 ```tabiya-claims
-migration | position behind longitudinal-store | rewrite attempt_concepts pack-scoped keys to registered global concept identities and canonical labels; fail closed on unknown or colliding legacy rows
+migration | position behind pack-capability-contract | rewrite attempt_concepts pack-scoped keys to registered global concept identities and canonical labels; fail closed on unknown or colliding legacy rows
 ```
 
 **Proposed after the process prerequisite lands; not a live claim yet:**

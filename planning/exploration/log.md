@@ -14223,3 +14223,23 @@ internally green author image.
 **Evidence/next:** `make pack-capability-seventh-fresh-review` passes 3/3. An eighth author repair
 must derive both Story routes, close the worker operation population and specify admitted versus
 settled job outcomes; another fresh independent review still gates acceptance and implementation.
+
+## 2026-09-02 — Pack capability eighth author repair closes public and queued operation seams
+
+**What landed:** repaired [[D2518]]–[[D2520]] at RFC tier without changing production, storage,
+schema, API, client, pack, content or archive bytes. The digest-pinned composed image contains 48
+run-route plus 12 external HTTP branches, and separately closes the two evidence-worker provider
+operations and three enqueue origins.
+
+**What changed:** `/shared/:token` now resolves one stored token scope before dispatch instead of
+using Story failure as the join-page discriminator. HTTP 202 is admission only. The new
+`evidence_jobs` contract persists lease/retry/provider receipts and consumer-specific
+success/empty/unavailable settlement through restart, then consumes successful evidence atomically
+with its run event. The migration register inserts this position behind `longitudinal-store` and
+rebases the still-unlanded concept-registry claim behind F3.
+
+**Evidence/next:** `make pack-capability-eighth-author-repair` passes 3/3 plus strict TypeScript and
+is cumulative under `make pack-capability-author-contract`. This is author evidence; a genuinely
+fresh independent review must attack token dispatch, worker population, origin spoofing, lease
+recovery and cross-transaction crash states before acceptance or implementation. The provider-health
+RFC is now an explicit dependency because it owns the exact operation receipts.

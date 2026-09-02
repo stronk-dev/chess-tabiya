@@ -20030,30 +20030,30 @@
     },
     {
       "id": "D2518",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:82f45f84ad880ac78ce0a227be3965d02fbc27237603947cba52b72d2b849b9d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2ecc19475490241a4e93b152dd2157bd5ddf5f7007b9e4cdf3964bf2170f5c5b",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/eighth-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2519",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:6a6380dcdc9182eebfb2553b4bbd4d47428bedbfe2f6f94506ca353412e85ed5",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2d4e3156d5eafbd0b7ec7af3f00b1c78c523a4c5f3bd97c3211f6cddf54a4715",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/eighth-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2520",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b641659e1c1228d22a2d0542873ec128e48688476c09445cd1c658392c007724",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2755553007041969dd43eba926a85973d3b185951b23fabc404d82bce17e2608",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/eighth-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     }
   ]
 }

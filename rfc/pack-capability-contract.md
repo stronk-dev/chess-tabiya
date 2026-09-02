@@ -1,23 +1,28 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **RETURNED by seventh fresh independent review 2026-09-02 on [[D2518]]–[[D2520]].**
-  The synchronous 58-operation repair survives, but the external route image omits the public HTML
-  Story route, the provider census stops above the asynchronous evidence worker, and request-level
-  503/empty/fallback effects cannot describe a provider job settling after HTTP 202. Exact return:
-  `planning/pack-capability-contract/seventh-fresh-independent-review-2026-09-02.md`; executable:
-  `make pack-capability-seventh-fresh-review`. No schema, registry, API, pack or digest
-  implementation is authorised; the D560 hold stays whole.
+- **Status:** draft — **eighth author repair complete 2026-09-02 on [[D2518]]–[[D2520]]; fresh
+  independent review required.** The post-image now derives both `/shared/:token` token-scope
+  branches, closes the two asynchronous evidence-provider gateways and separates durable job
+  admission, lease, retry, settlement and consumption. `make pack-capability-eighth-author-repair`
+  passes 3/3 plus strict TypeScript; the cumulative author contract remains green. This is author
+  evidence, not acceptance. No schema, registry, API, migration, pack or digest implementation is
+  authorised; the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
 - **Exploration gate:** O6.1 approved as [[D995]] and O6.2 ruled as [[D996]]; `planning/platform-alignment/theory-drill/o5-o6-handoff.md:96` reads verbatim `O6.1 + O6.2 approved → F3 may draft` (line corrected from `:100`, a code fence, by cross-review 2026-08-23)
-- **Depends on:** `archive/evidence-contract-manifest.md` (F1 — the compiled manifest this versions), `rfc/graduation-clearance.md` (accepted — lane 0.28, the planner precedent in its §6.5). **Followed by, never imports:** draft `rfc/claim-semantic-anchors.md`, which may adopt F3's generic identity only after F3 is accepted.
+- **Depends on:** `archive/evidence-contract-manifest.md` (F1 — the compiled manifest this versions),
+  `rfc/graduation-clearance.md` (accepted — lane 0.28, the planner precedent in its §6.5), and
+  `rfc/provider-health-degradation.md` for the exact two evidence-provider operation results and
+  acquisition/failure receipts consumed by §5.2. **Followed by, never imports:** draft
+  `rfc/claim-semantic-anchors.md`, which may adopt F3's generic identity only after F3 is accepted.
 - **Parent / amends:** — (this is F3 in `planning/platform-alignment/rfc-graph.md:70`)
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/platform-alignment/` (`f3-derivation.md`)
 
 ```tabiya-claims
 pack-schema | lane 0.30 | requires (new, required array of capability requirement objects on the pack root); $defs/capabilityRequirement (new, closed object: id, version)
+migration | position behind longitudinal-store | evidence_jobs durable admission, lease, retry, settlement, staged result and consumption rows
 ```
 
 ## Summary
@@ -48,7 +53,8 @@ The one-line test this document must pass: **would it have caught [[D566]]?** Th
 repo had for noticing change reported "nothing changed". §2.3's semantics digest is the answer, and
 criterion 13 is that exact case as a regression test.
 
-Claims **pack-schema lane 0.30**, per owner ruling [[D1058]].
+Claims **pack-schema lane 0.30**, per owner ruling [[D1058]], plus one migration position behind
+`longitudinal-store` for the durable asynchronous evidence-job boundary found by [[D2520]].
 
 ## Motivation
 
@@ -1148,12 +1154,12 @@ The operation boundary is shared and typed. It never accepts a requirement list 
 it does not collapse three creation sources into a fictional always-packed operation:
 
 ```ts
-type CapabilityOperationId =
+type HttpCapabilityOperationId =
   | "pack.register"
   | "run.create.pack" | "run.create.position" | "run.create.imported"
   | "run.create.rated" | "run.create.playtest" | "run.create.repertoire_gap"
   | "run.create.flip" | "run.create.duplicate_pack" | "run.create.duplicate_position"
-  | "opponent.select" | "story.public"
+  | "opponent.select" | "story.public" | "shared.join_page"
   | "run.graph" | "run.events" | "run.evidence.read" | "run.authored_feedback"
   | "run.pgn" | "run.grants.read" | "run.reasoning.read" | "run.import_record"
   | "run.story" | "run.share.list" | "run.derivations" | "run.marks.read"
@@ -1170,6 +1176,10 @@ type CapabilityOperationId =
   | "run.move.user" | "run.move.opponent_received"
   | "run.rewind" | "run.fork" | "run.compare" | "run.simulate" | "run.simulate_enter"
   | "run.reasoning.record" | "run.evidence.apply";
+type QueuedProviderOperationId =
+  | "evidence.stockfish_analysis"
+  | "evidence.tablebase_probe";
+type CapabilityOperationId = HttpCapabilityOperationId | QueuedProviderOperationId;
 type CreateSessionCapabilitySource =
   | { readonly kind: "pack"; readonly packId: string; readonly packDigest: string }
   | { readonly kind: "position"; readonly opponentPolicy: PositionOpponentPolicy }
@@ -1190,12 +1200,12 @@ type CheckedOperationCapabilityBinding =
   | { readonly operationId: CapabilityOperationId; readonly source: { readonly kind: "none" } }
   | { readonly operationId: CapabilityOperationId; readonly source: Exclude<OperationCapabilitySource, { readonly kind: "none" }>; readonly consumer: CapabilityConsumerId };
 interface CapabilityRouteBranch {
-  readonly operationId: CapabilityOperationId;
+  readonly operationId: HttpCapabilityOperationId;
   readonly method: "GET" | "POST" | "PUT" | "DELETE";
   readonly route:
     | "/packs/drafts/:draftId/register" | "/packs/drafts/:draftId/playtest"
     | "/runs" | "/runs/import" | "/rated-games" | "/select-move"
-    | "/repertoires/:id/gaps/enter" | "/api/shared/:token/story"
+    | "/repertoires/:id/gaps/enter" | "/api/shared/:token/story" | "/shared/:token"
     | "/runs/:runId/share/:token" | "/runs/:runId/:action";
   readonly action?: string;
   readonly discriminant?:
@@ -1204,7 +1214,8 @@ interface CapabilityRouteBranch {
     | { readonly path: "/op"; readonly value: "grant" | "revoke" }
     | { readonly path: "/selection"; readonly presence: "present" | "absent" }
     | { readonly path: "/source"; readonly value: "hand_picked" | "authored" | "human_replies" | "engine_top_n" }
-    | { readonly loaded: "run.sessionKind"; readonly value: "pack" | "position" };
+    | { readonly loaded: "run.sessionKind"; readonly value: "pack" | "position" }
+    | { readonly loaded: "publicToken.scope"; readonly value: "story_read" | "session_join" };
 }
 ```
 
@@ -1212,23 +1223,29 @@ interface CapabilityRouteBranch {
 `CheckedOperationCapabilityBinding`, so a non-`none` source without a consumer and a `none` source
 with a consumer are unrepresentable; no call site constructs the looser projection directly.
 
-The reviewed author post-image is
-`tools/d2509-pack-capability-seventh-author-repair/operation-authority.json`. It is not a second
-production registry: the implementation translates it into co-located typed branch declarations,
-then the author artifact is retired. `CapabilityOperationId`, `CAPABILITY_OPERATION_BINDINGS` and
-the HTTP resolver are generated from those declarations. A source census independently parses the
-live `parseRunRoute` action grammar, all method/action handler branches, every run-creation storage
-site and every call through the provider gateway; set inequality fails. Consequently a new route,
-creation site or provider call fails before anyone edits a hand-written expected list.
+The reviewed seventh-author base image is
+`tools/d2509-pack-capability-seventh-author-repair/operation-authority.json`; the eighth-author
+post-image is its digest-pinned composition with
+`tools/d2518-pack-capability-eighth-author-repair/operation-amendment.json`. Neither is a second
+production registry: implementation translates the composed image into co-located typed route,
+worker and enqueue-origin declarations, then retires both author artifacts.
+`CapabilityOperationId`, `CAPABILITY_OPERATION_BINDINGS`, the HTTP resolver and the worker resolver
+are generated from those declarations. A source census independently parses the live
+`parseRunRoute` action grammar, all method/action handler branches, every run-creation storage site,
+both public-card branches, every enqueue origin and every call through either synchronous or queued
+provider gateway; set inequality fails. Consequently a new route, creation site, enqueue origin or
+provider call fails before anyone edits a hand-written expected list.
 
 The bounded population is syntactic and deliberately wider than “operations we currently think
 need a provider”: every supported method/action branch under `parseRunRoute`, every route that
 creates a run, Pack Studio registration, `/select-move`, public Story and share-token revocation.
-Account, classroom, shape-authoring and live-session APIs are outside this pack/run boundary by
-their distinct route parsers, and the census asserts those exclusions by parser identity. The
-author image contains **36/36 run actions, 48 run-route branches, 10 external-route branches and 58
-operation branches**. The following table is only the capability-bearing and split-branch excerpt;
-the JSON artifact is the complete reviewed image:
+Account, classroom, shape-authoring and authenticated live-session APIs are outside this pack/run
+boundary by their distinct route parsers, and the census asserts those exclusions by parser
+identity. The shared HTML route is inside because one of its token scopes renders Story evidence.
+The composed author image contains **36/36 run actions, 48 run-route branches, 12 external-route
+branches and 60 HTTP branches over 59 unique HTTP operation ids**, plus **2 queued provider
+operations** for **61 unique capability operation ids overall**. The following table is only the
+capability-bearing and split-branch excerpt; the composed artifacts are the complete author image:
 
 | method + route | body branch | operation id | capability source |
 |---|---|---|---|
@@ -1244,6 +1261,8 @@ the JSON artifact is the complete reviewed image:
 | `GET /runs/:runId/corpus` | — | `run.corpus` | `run_session_operation` |
 | `GET /runs/:runId/story` | — | `run.story` | `run_session_operation` |
 | `GET /api/shared/:token/story` | — | `story.public` | `run_session_operation` |
+| `GET /shared/:token` | loaded token scope `story_read` | `story.public` | `run_session_operation` |
+| `GET /shared/:token` | loaded token scope `session_join` | `shared.join_page` | `none` |
 | `POST /runs/:runId/group-reply` | — | `run.group_reply` | `run_session_operation` |
 | `POST /runs/:runId/branch-decidedness` | — | `run.branch_decidedness` | `run_session_operation` |
 | `POST /runs/:runId/analysis` | — | `run.analysis` | `run_session_operation` |
@@ -1273,8 +1292,13 @@ the JSON artifact is the complete reviewed image:
 | `POST /runs/:runId/reasoning` | — | `run.reasoning.record` | `none` |
 | `POST /runs/:runId/evidence` | — | `run.evidence.apply` | `none` |
 
+The shared HTML handler must resolve the token once by hash before dispatch: `story_read` enters
+`story.public`, while `session_join` enters the local `shared.join_page`. Trying Story and then
+catching every error as a join-page discriminator is forbidden: provider failure on a real Story
+token must not change token scope, and a join token must never enter Story capability enforcement.
+
 The excerpt omits the local read/mutation rows only for legibility; they remain literal in the
-58-branch author image. The implementation does not regex-generate a dispatcher from formatting.
+60-branch author image. The implementation does not regex-generate a dispatcher from formatting.
 Instead, route declarations and provider-operation wrappers are production authority, while the
 AST census independently discovers their population and compares semantic identities. A call to a
 provider outside `executeCapabilityOperation`, a run-creation storage call outside a declared
@@ -1318,18 +1342,129 @@ reads the current deployment projection. It also resolves the operation's declar
 joins that consumer to its compiled `ProviderOffBehavior`; routes never pass either a behavior or a
 capability list. Idempotent replay first returns the stored terminal operation receipt and does not
 re-decide historical provider reachability; a concurrent first flight shares one admitted
-operation. Recovery of a previously uncommitted request re-runs the pre-write check.
+operation. Recovery of a previously uncommitted request re-runs the pre-write check. This paragraph
+describes request-synchronous operations; queued evidence uses §5.2's durable admission boundary.
 
-Reachability cause and consumer effect remain orthogonal. An `unavailable` consumer returns the
-retryable HTTP 503 envelope and writes nothing. An `honest_empty` consumer returns its typed empty
+Reachability cause and consumer effect remain orthogonal. On request-synchronous operations, an
+`unavailable` consumer returns the retryable HTTP 503 envelope and writes nothing. An `honest_empty` consumer returns its typed empty
 or unresolved result—corpus empty, Story pending evidence, reasoning proposals `[]`, or per-branch
 `provider_unavailable`—without pretending the provider answered. An `available` consumer follows
 its declared deterministic/local fallback; voice, for example, renders the sealed deterministic
-sentences. These effects are derived from the compiled consumer registry and must equal
-`tools/d2509-pack-capability-seventh-author-repair/operation-authority.json`; copying
+sentences. These effects are derived from the compiled consumer registry and must equal the
+digest-pinned composed author image; copying
 `providerOff` into a route row is forbidden. Boot without a configured provider still takes the
 static 422/listing-exclusion path. Criteria cover boot absence, all three transient effects, death
 after registration, recovery in-process, and the impossible local/build-time transient.
+
+#### §5.2 Queued evidence is admission plus durable settlement, never a delayed HTTP fiction
+
+`POST /runs/:runId/analysis`, Story completion and automatic move enrichment do not execute their
+provider call inside the admitting request. The first returns 202; the latter two may enqueue while
+serving another response or after committing a move. Therefore the synchronous rule above cannot
+be applied after the response has left. **HTTP 202 means only that the durable `admitted` row
+committed.** It never means the provider succeeded, that evidence exists or that an unavailable
+result became a successful request.
+
+The queued operation population is closed separately from HTTP routes:
+
+| queued operation id | sole gateway | kinds |
+|---|---|---|
+| `evidence.stockfish_analysis` | `EvidenceJobQueue.#execute` → `EvidenceExecutor.execute` | `bestline`, `eval`, `wdl` |
+| `evidence.tablebase_probe` | `EvidenceJobQueue.#tablebasePayload` → `TablebaseSource.probe` | `tablebase` |
+
+These are the exact operation ids already owned by `provider-health-degradation.md`; F3 consumes
+its `ProviderOperationResult` and receipts rather than inventing another provider state or failure
+vocabulary. The worker census is set-equal over calls through both gateway interfaces. A third
+gateway, a direct engine/tablebase call, or a kind with no operation mapping fails. The queue input
+does not accept a consumer, behavior, capability list or operation id from a route. One sealed
+origin fixes them:
+
+| origin | production enqueue owner | compiled consumer | terminal provider-off effect |
+|---|---|---|---|
+| `explicit_analysis` | `RunService.enqueueEvidence` | `runtime.analysis` | `settled_unavailable` |
+| `story_completion` | `RunService.#ensureStoryEvidence` | `review.story_evidence` | `settled_empty` |
+| `run_enrichment` | `RunService.#enqueueMoveEvidence` | `runtime.background_evidence` | `settled_empty` |
+
+`runtime.background_evidence` is an operational consumer: no learner sentence is attributed to it,
+and absence creates no evidence payload. Upstream callers such as import, public Story, moves,
+opponent plies and group creation reach exactly one of those three enqueue owners; they do not
+become extra worker gateways. The composed author artifact records the four concrete enqueue calls
+(`enqueue` on all three origins plus `enqueueProducer` for run-enrichment tablebase work).
+
+The durable authority is an additive `evidence_jobs` STRICT table in the application database,
+claimed at the migration position behind `longitudinal-store`. It owns at least these exact fields:
+
+```sql
+CREATE TABLE evidence_jobs (
+  id TEXT PRIMARY KEY,
+  run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
+  node_id TEXT NOT NULL,
+  origin TEXT NOT NULL CHECK (origin IN
+    ('explicit_analysis','story_completion','run_enrichment')),
+  consumer_id TEXT NOT NULL CHECK (consumer_id IN
+    ('runtime.analysis','review.story_evidence','runtime.background_evidence')),
+  provider_operation_id TEXT NOT NULL CHECK (provider_operation_id IN
+    ('evidence.stockfish_analysis','evidence.tablebase_probe')),
+  request_digest TEXT NOT NULL,
+  request_json TEXT NOT NULL,
+  state TEXT NOT NULL CHECK (state IN
+    ('admitted','running','retry_wait','settled_success','settled_empty',
+     'settled_unavailable','cancelled','consumed')),
+  attempt_count INTEGER NOT NULL CHECK (attempt_count >= 0),
+  admitted_at TEXT NOT NULL,
+  lease_owner TEXT,
+  lease_expires_at TEXT,
+  next_attempt_at TEXT,
+  settled_at TEXT,
+  result_seq INTEGER,
+  payload_json TEXT,
+  acquisition_receipt_json TEXT,
+  failure_json TEXT,
+  empty_reason TEXT,
+  cancelled_reason TEXT,
+  consumed_at TEXT,
+  CHECK (
+    (origin='explicit_analysis' AND consumer_id='runtime.analysis') OR
+    (origin='story_completion' AND consumer_id='review.story_evidence') OR
+    (origin='run_enrichment' AND consumer_id='runtime.background_evidence')
+  ),
+  UNIQUE (run_id, result_seq)
+) STRICT;
+```
+
+The production parser adds state-specific exact-key and presence checks that SQLite cannot express
+cleanly without duplicating the union: `running` alone requires both lease fields;
+`retry_wait` requires failure plus `next_attempt_at`; `settled_success` requires payload, result
+sequence and an acquisition receipt and forbids failure/empty/cancel fields; `settled_empty`
+requires an enumerated empty reason and no payload; `settled_unavailable` requires a provider
+failure and no payload; `cancelled` accepts only `caller|superseded`; and `consumed` retains the
+successful payload/receipt while adding `consumed_at`. Request bytes are parsed and their canonical
+digest rechecked before execution. Unknown state, origin, consumer, operation, payload kind,
+receipt generation or extra field is corrupt storage, not a best-effort job.
+
+Admission is one database transaction. A configured capability inserts `admitted` before 202 or
+before its enclosing response reports pending work. If the capability is absent from the startup
+projection, explicit analysis returns typed unavailable without a row, while Story/run enrichment
+take their compiled honest-empty arm without pretending a job exists. Transient health never makes
+an admitted row disappear: it is observed by the worker through the provider operation result.
+
+Workers claim with a compare-and-swap lease and increment `attempt_count`. Success atomically writes
+the validated payload, original acquisition receipt and per-run `result_seq` as
+`settled_success`; the existing evidence page reads unconsumed successful rows. Applying evidence
+appends the run event and changes that same row to `consumed` in one transaction, so neither side
+can commit alone. Provider unavailability/failure first enters `retry_wait` under the exact bounded
+operation policy. When the bound is exhausted, `runtime.analysis` becomes
+`settled_unavailable`; Story and run enrichment become `settled_empty` with reason
+`provider_unavailable`. No empty settlement mints evidence.
+
+On process restart, `admitted` and `retry_wait` rows remain eligible, and an expired `running` lease
+returns to `retry_wait` with its attempt/failure history retained. Provider-result cancellation for
+shutdown also maps to `retry_wait`; shutdown is never terminal `cancelled`. Only a caller or a
+superseding run-graph change may terminally cancel. A late result whose lease, generation, request
+digest or node is stale is discarded and cannot heal the provider or settle the job. This is the
+before/after-202 distinction [[D2520]] required: provider loss before durable admission can still
+produce a synchronous refusal; provider loss after admission is a durable job outcome visible
+after restart.
 
 **Gate F clause 5 — what it now needs, stated because it was blocked on this question.** Clause 5
 (*"pack capabilities and deprecations have a compatibility policy"*) is **unblocked**: the policy is
@@ -1665,6 +1800,30 @@ Exact evidence:
 public Story branches, close queued provider operations and specify admitted versus settled job
 outcomes before another fresh independent review, acceptance or implementation.
 
+## Eighth author repair (2026-09-02)
+
+[[D2518]] is closed at contract tier by resolving a shared token once and declaring two disjoint
+HTML branches: `story_read` aliases the existing `story.public` operation and `session_join` is the
+local `shared.join_page` operation. The composed route image is now 48 run branches plus 12 external
+branches, 60 total over 59 unique HTTP operation ids.
+
+[[D2519]] is closed by a separate queued-operation population: exactly
+`evidence.stockfish_analysis` and `evidence.tablebase_probe`, joined to the only two worker gateway
+calls and three sealed enqueue origins. [[D2520]] is closed at contract tier by §5.2's durable
+`evidence_jobs` algebra. A request admits work; a leased worker settles it. Provider failure after
+202 is retained as retry/empty/unavailable, expired leases recover after restart, and shutdown
+cannot erase a job. Successful payload, acquisition receipt, staged sequence and consumption share
+one row and transactional boundary with event application.
+
+The exact amendment is
+`tools/d2518-pack-capability-eighth-author-repair/operation-amendment.json`, digest-pinned to the
+seventh-author base. `make pack-capability-eighth-author-repair` passes three able-to-fail author
+controls plus strict TypeScript, and the cumulative author contract includes it. This repair adds a
+migration position, not a migration number; no production/storage/schema/API/client/corpus byte
+changed. Another genuinely fresh independent review must attack token dispatch, worker population,
+origin spoofing, lease recovery and cross-transaction crash states before acceptance or
+implementation.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -1784,8 +1943,9 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     consumer registry changes the operation effect; a stale copied route value fails. Pack,
     Position, imported, rated, playtest, repertoire-gap, flip and duplicate creation select
     non-interchangeable source arms; crossed source/session-kind fixtures fail. The bounded
-    **58-operation** image is set-equal to 36/36 parsed run actions, 48 supported run-route branches
-    and ten external branches. Marks, grants, moves, duplicate and group prove disjoint/total
+    **60-branch HTTP** image is set-equal to 36/36 parsed run actions, 48 supported run-route branches
+    and twelve external branches over 59 unique HTTP operation ids. Marks, grants, moves, duplicate,
+    group and shared-token scope prove disjoint/total
     discriminants; an overlap, gap, second binding, new provider gateway call, new run-creation
     storage site, or new live route/action without a declaration fails independently. Every
     operation resolves to exactly one registry-derived or explicit-`none` source, and first-flight
@@ -1809,6 +1969,29 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     Every unconditional/dependency/constant site is `module#symbol` and resolves exactly once.
     Every external package reached by semantic AST closure contributes exact manifest pins and a
     lockfile-resolved version+integrity source; mutating the `chessops` version or integrity fails.
+20. **Both public-card scopes are derived, not exception-dispatched ([[D2518]]).** The API Story
+    route and HTML `story_read` branch both resolve `story.public`; the HTML `session_join` branch
+    alone resolves `shared.join_page`/`none`. Token lookup occurs once before capability dispatch.
+    A Story provider failure cannot fall through to join, and a join token never enters Story.
+    Removing either branch, restoring try-Story/catch-join, or adding a third token scope without a
+    branch fails the router census.
+21. **Queued providers are a closed operation population ([[D2519]]).** The two gateway interfaces
+    are set-equal to `evidence.stockfish_analysis` and `evidence.tablebase_probe`; kinds are total
+    and disjoint. The three production enqueue owners construct sealed
+    `explicit_analysis|story_completion|run_enrichment` origins, whose consumer/provider-off pairs
+    are type-fixed. A route-supplied consumer, behavior or operation; a direct provider call; an
+    unclassified kind; or an extra enqueue origin fails independently.
+22. **Admission survives asynchronous settlement and restart ([[D2520]]).** A configured explicit
+    analysis transaction commits one `admitted` job before returning 202. Fixtures kill the
+    provider (a) before that transaction and observe synchronous refusal/no row and (b) after 202
+    and observe a durable retry followed by `settled_unavailable`; the latter remains visible after
+    closing and reopening SQLite. Story and enrichment take the same failure to `settled_empty`
+    without evidence. Expired running leases recover; shutdown returns work to `retry_wait`; a late
+    stale generation/lease cannot settle. Success atomically persists payload plus acquisition
+    receipt and unique per-run sequence; apply atomically appends the event and marks `consumed`.
+    Crash fixtures between every pair of those boundaries yield either the complete earlier state
+    or complete later state, never a lost job, unattached consumed row, duplicate event or fake
+    empty payload. Unknown/crossed states and origin-consumer pairs fail the storage parser.
 
 ## Discharges
 
@@ -1883,6 +2066,16 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-09-02 (**[[D2518]]–[[D2520]] eighth author repair**): added both disjoint HTML shared-token
+  branches, the two queued evidence-provider operation ids, three sealed enqueue origins and one
+  durable admission/lease/retry/settlement/consumption algebra. Claims a migration position behind
+  `longitudinal-store`; consumes provider-health receipts instead of duplicating them. The composed
+  author image is 60 HTTP branches / 59 HTTP ids plus 2 worker ids. Author controls pass; fresh
+  independent review still gates acceptance and implementation.
+- 2026-09-02 (**seventh fresh independent return**): returned on [[D2518]]–[[D2520]] because the
+  public HTML Story branch and both worker provider gateways were outside the population, and the
+  synchronous effect model could not represent settlement after 202/restart. Exact report:
+  `planning/pack-capability-contract/seventh-fresh-independent-review-2026-09-02.md`.
 - 2026-09-01 (**[[D2429]]–[[D2431]] sixth author repair**): split creation into sealed pack,
   position and imported source arms; replaced the unjoined dotted/snake-case inventories with one
   generated 35-operation/32-route-row method+route+body-branch authority; and added the safe closed
