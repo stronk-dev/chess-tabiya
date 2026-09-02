@@ -20081,6 +20081,60 @@
       "uxItems": [],
       "evidence": "planning/evidence-foundation-ux/semantic-collectors-promotion-fourth-author-repair-2026-09-02.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2524",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:930224fdbb9db05cd0edc2b5e1689b26b1e28e2c9fbae1293ca5e5539e103d2d",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2525",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:cd17967ff95791f3f743072e7e83315bd7e36e9613eceb8a90638a4c05ee33ce",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2526",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f7205723a0a82bebd402c0856ddd721261fe91b0089c123126593c21245bd933",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2527",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9af7cc2fe7b7db6f8e82d9498a288cb7bb5f3ee622fa1c6d08678f7def10030d",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2528",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b46e9af61aa07511e0b88f6a3b74f97ba5be8cd306db8a75c0c8b43a85a51536",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2529",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:3dbaee07ca4bd4d37d9f23fe71adf361bf5fac93b9dd3a718b63b9d034b9e29e",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:pack-capability-contract.md"
     }
   ]
 }

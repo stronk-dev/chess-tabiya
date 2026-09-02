@@ -1,12 +1,12 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **eighth author repair complete 2026-09-02 on [[D2518]]–[[D2520]]; fresh
-  independent review required.** The post-image now derives both `/shared/:token` token-scope
-  branches, closes the two asynchronous evidence-provider gateways and separates durable job
-  admission, lease, retry, settlement and consumption. `make pack-capability-eighth-author-repair`
-  passes 3/3 plus strict TypeScript; the cumulative author contract remains green. This is author
-  evidence, not acceptance. No schema, registry, API, migration, pack or digest implementation is
-  authorised; the D560 hold stays whole.
+- **Status:** draft — **RETURNED by the eighth fresh independent review 2026-09-02 on
+  [[D2524]]–[[D2529]].** The public-token and worker populations survive, but the proposed durable
+  row drops objective proposals, cannot represent provider unavailability without a fresh failure,
+  and lacks the transaction/idempotency boundaries for move enrichment, 1–16-job analysis batches
+  and rewind cancellation. `make pack-capability-eighth-fresh-review` passes 6/6. A ninth author
+  repair and another fresh review are required; no schema, registry, API, migration, storage, pack
+  or digest implementation is authorised and the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -1823,6 +1823,30 @@ migration position, not a migration number; no production/storage/schema/API/cli
 changed. Another genuinely fresh independent review must attack token dispatch, worker population,
 origin spoofing, lease recovery and cross-transaction crash states before acceptance or
 implementation.
+
+## Eighth fresh independent return (2026-09-02)
+
+The token-scope and queued-provider populations survive. Fresh review returns the durable job
+contract on six deeper boundaries:
+
+1. [[D2524]] — `StagedEvidence.objectiveProposal` reaches `applyEvidence` but has no durable result
+   field, so restart loses or recomputes part of the settled result.
+2. [[D2525]] — provider-health permits an `unavailable` result without a fresh failure receipt,
+   while F3 requires failure data in every retry/unavailable state.
+3. [[D2526]] — automatic move enrichment is admitted after the run save, so a crash can commit the
+   node and lose its job.
+4. [[D2527]] — analysis is one 1–16-node HTTP batch but the contract admits and tests one row at a
+   time, allowing invisible prefixes.
+5. [[D2528]] — job id/request digest has no persistent origin-specific idempotency key or dedupe
+   grain, so response-loss/restart can duplicate provider calls and evidence.
+6. [[D2529]] — rewind cancels queue work before the rewind save; a storage fault cancels work for a
+   mutation that never committed.
+
+Exact evidence:
+`planning/pack-capability-contract/eighth-fresh-independent-buildability-review-2026-09-02.md`;
+`make pack-capability-eighth-fresh-review` passes 6/6. A ninth author repair must define the full
+settled result, exact no-failure-unavailable arm, batch/idempotency identities, and atomic
+run↔job mutation boundaries before another review, acceptance or implementation.
 
 ## Acceptance criteria
 

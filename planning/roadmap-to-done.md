@@ -223,6 +223,15 @@ provider-health receipt vocabulary. Fresh independent review still gates accepta
 production/storage/schema/API byte. Receipt:
 `planning/pack-capability-contract/eighth-author-repair-2026-09-02.md`.
 
+The 2026-09-02 eighth fresh independent review preserves those outer populations but returns F3 on
+[[D2524]]–[[D2529]]. The proposed durable row drops objective-upgrade output and cannot represent a
+legal no-fresh-failure provider result; automatic enrichment and rewind cancellation remain outside
+their run transactions; the 1–16-node analysis request has no atomic batch boundary; and none of the
+three enqueue origins has a restart-stable idempotency identity. A ninth author repair must close the
+settled-result, transaction, batch and dedupe boundaries before another fresh review. No production,
+storage, schema, API or content implementation is authorized. Receipt:
+`planning/pack-capability-contract/eighth-fresh-independent-buildability-review-2026-09-02.md`.
+
 The 2026-08-31 fifth fresh candidate-packet review preserves the repaired single retained legal-
 move value graph but returns its acceptance boundary on [[D2428]]: the RFC requires one
 `exactLegalMoveMap` call while the production declaration adapter necessarily recomputes the same

@@ -14308,3 +14308,22 @@ and success receipts derive exact tuples from sealed, operation-bound passed che
 new falsifiers plus strict TypeScript. Another genuinely fresh independent buildability review must
 attack kernel-lock proof, crash ordering, path parsing and receipt construction before acceptance or
 production implementation.
+
+## 2026-09-02 — Pack capability eighth fresh review returns the durable job boundary
+
+**What landed:** independently reviewed the eighth F3 author repair against the production staged
+result, provider result, run mutation and multi-node analysis paths. The repaired public token scope,
+two evidence-worker provider operations and three enqueue-origin population controls survive. No
+production, schema, storage, API, content or pack implementation was attempted.
+
+**What changed:** [[D2524]]–[[D2529]] record six blockers. The durable row drops the objective
+proposal half of `StagedEvidence` and cannot represent an unavailable provider result without a new
+failure receipt. Automatic enrichment can be lost after a committed move, analysis can persist only
+a prefix of its 1–16 jobs, no origin has a restart-stable dedupe identity, and rewind cancellation can
+commit before the rewind itself.
+
+**Evidence/next:** `make pack-capability-eighth-fresh-review` passes 6/6 while the eighth author
+controls remain independently green. A ninth author repair must define complete settled bytes,
+provider-result algebra, atomic run/job and rewind transactions, batch admission and origin-specific
+idempotency before another fresh review. F3 remains draft and all dependent implementation stays
+blocked.

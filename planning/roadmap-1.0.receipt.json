@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a8ffec82b272f5628acc10af5ffe29eb14b5a5cd29ba56a9dd2b70f0cb61d58f",
+    "roadmap": "sha256:59023d0f8ff614675c8e39f7823f373ac61d44235f0d07c1ad22391212ed64fa",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:fefecf0eaad09792c8c4a2ffc3258042cad307133024f18a138424df33a60f6b",
-    "rfcRegister": "sha256:746004bf498d23e7fb94a58984900ad7a2a0ff3179c773f2319a2afdac6147e8",
+    "workState": "sha256:878d81ab6bb4e7f72428a5ffa98f635989e56a931192269ae7e978fb0d6fc01f",
+    "rfcRegister": "sha256:69a5949c715f3ca8a90d034f73043661bd133502d8c49741fbea00c9c46a9949",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 642,
       "doing": 0,
-      "blocked": 859,
+      "blocked": 865,
       "done": 768,
       "refused": 3
     },
@@ -110,9 +110,10 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-02",
-        "summary": "Pack capability's eighth author repair closes the returned public HTML route, asynchronous Stockfish/Syzygy worker population and post-202/restart lifecycle at contract tier. Module registration's seventh author repair now closes its four returned source/occurrence/ownership defects with real-or-explicitly-absent ABIs and one set-equal 117-projection/205-pair successor. Fresh independent reviews still gate acceptance and implementation.",
-        "impact": "advanced",
+        "summary": "Pack capability's eighth fresh independent review preserves the repaired public HTML and asynchronous worker populations but returns F3 on six durable-result, provider-result, transaction, batch and idempotency boundaries. Module registration's seventh author repair still awaits its own fresh review. Pack capability remains draft and no dependent implementation is authorized.",
+        "impact": "held",
         "evidence": [
+          "planning/pack-capability-contract/eighth-fresh-independent-buildability-review-2026-09-02.md",
           "planning/pack-capability-contract/seventh-fresh-independent-review-2026-09-02.md",
           "planning/pack-capability-contract/sixth-fresh-independent-review-2026-09-02.md",
           "planning/learner-modules/sixth-fresh-independent-buildability-review-2026-09-02.md",
