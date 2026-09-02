@@ -135,7 +135,7 @@ export const AUTHOR_MODULE_POLICIES = Object.freeze({
 export const AUTHOR_PROJECTION_SUBJECT_OVERRIDES = Object.freeze({
   "derived.activity.event.open_file_occupancy": "edge",
   "derived.compare.engine_trajectory": "branch_pair",
-  "derived.compare.eval_delta": "branch_pair",
+  "derived.compare.eval_delta": "edge",
   "derived.compare.piece_route": "branch_pair",
   "derived.compare.structure_delta": "branch_pair",
   "derived.exchange.capture_class": "edge",

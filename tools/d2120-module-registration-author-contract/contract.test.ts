@@ -70,7 +70,7 @@ describe("module-registration sealed-pool author repair", () => {
     expect(derived.find((row:any) => row.projection.id === "derived.material.reading.role_signature").subjectKind).toBe("position");
     expect(derived.find((row:any) => row.projection.id === "derived.grade.move_quality").subjectKind).toBe("edge");
     expect(derived.find((row:any) => row.projection.id === "derived.story.rank").subjectKind).toBe("run_prefix");
-    expect(derived.find((row:any) => row.projection.id === "derived.compare.eval_delta").subjectKind).toBe("branch_pair");
+    expect(derived.find((row:any) => row.projection.id === "derived.compare.eval_delta").subjectKind).toBe("edge");
     for (const row of derived) {
       expect(row.derivation).not.toHaveProperty("sameSubject");
       expect(row.derivation.join.subjectKind).toBe(row.subjectKind);
@@ -88,7 +88,12 @@ describe("module-registration sealed-pool author repair", () => {
     ]);
     const rows = new Map(execution.rows.map((row:any) => [key(row.projection), row]));
     for (const row of execution.rows) {
-      const inputs = row.derivation?.inputs ?? row.derivation?.alternatives?.flat?.() ?? [];
+      const rawInputs = row.derivation?.inputs
+        ?? row.derivation?.alternatives?.flatMap?.((alternative:any) => alternative.inputs ?? alternative)
+        ?? [];
+      const inputs = row.derivation?.kind === "alternatives"
+        ? [...new Map(rawInputs.map((input:any) => [key(input), input])).values()]
+        : rawInputs;
       const bindings = row.derivation?.inputBindings ?? [];
       expect(bindings.map((binding:any) => key(binding.projection))).toEqual(inputs.map(key));
       for (const binding of bindings) {

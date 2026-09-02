@@ -61,7 +61,7 @@ describe("module-registration seventh author repair", () => {
     const provider = source("provider_evidence_packet@1");
     expect(provider.operation.successPipeline).toEqual([
       "assertProviderDelivery(request.operation, result.delivery)",
-      "ProviderSourceFactories[request.operation].make(result.delivery)",
+      "application.sourceFactories[request.operation].make(result.delivery)",
     ]);
     expect(provider.assertion.callable).toBe("assertProviderDelivery(request.operation, result.delivery)");
   });

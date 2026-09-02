@@ -289,6 +289,15 @@ resolution receipt has no runtime seal. `make module-registration-seventh-fresh-
 an eighth author repair and another fresh review gate acceptance and implementation. Receipt:
 `planning/learner-modules/seventh-fresh-independent-buildability-review-2026-09-02.md`.
 
+The 2026-09-02 eighth author repair closes those six outer authority defects at contract tier.
+Provider acquisition uses the injected application, catalogue inputs are exact and crossed-negative,
+eval delta is edge-grained, deflection has literal per-alternative inputs, all 205 row pointers join
+their required keys, and the final receipt is runtime-sealed. The repair also records [[D2536]]:
+the check-induced deflection detector reads check from FEN while its semantic declaration/emitter
+cannot carry check evidence, so that arm remains honestly blocked on `semantic-collectors`. Another
+fresh independent review still gates acceptance and implementation. Receipt:
+`planning/learner-modules/eighth-author-repair-2026-09-02.md`.
+
 The 2026-09-02 fourth fresh promotion-collector review keeps the two held projections out of the
 foundation on [[D2521]], [[D2522]] and [[D2523]]. Its advertised closed request uses two undefined types, the
 injected Syzygy callable matches no provider operation and leaves normalized request bytes

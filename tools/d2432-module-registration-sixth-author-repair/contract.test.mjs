@@ -74,13 +74,13 @@ test("D2435 source contracts name exact owner operations and no rejected view au
     "compileRecordedSemanticPath(input)",
     "compileReviewEvidence(input)",
     "compileCatalogueEvidencePool(input)",
-    "ProviderExchangeScheduler.get(request, scope, signal)",
+    "application.scheduler.get(request, scope, signal)",
   ]);
   assert.equal(execution.sourceContracts.find((row) => row.id === "recorded_semantic_path@1").assertion, null);
   assert.equal(execution.sourceContracts.find((row) => row.id === "review_evidence_packet@1").input, null);
   assert.deepEqual(execution.sourceContracts.find((row) => row.id === "provider_evidence_packet@1").operation.successPipeline, [
     "assertProviderDelivery(request.operation, result.delivery)",
-    "ProviderSourceFactories[request.operation].make(result.delivery)",
+    "application.sourceFactories[request.operation].make(result.delivery)",
   ]);
   assert.doesNotMatch(fixture, /AUTHOR_ADDITIONAL_SUBJECT_VIEWS/u);
   assert.match(rfc, /compileCatalogueEvidencePool/u);

@@ -146,6 +146,50 @@
       "id": "catalogue_evidence_packet@1",
       "authority": "module-registration",
       "input": "CatalogueEvidencePoolRequest",
+      "inputAuthorities": {
+        "position": {
+          "producer": {
+            "id": "run.record",
+            "version": 1
+          },
+          "projection": {
+            "id": "run.record.position",
+            "version": 1
+          }
+        },
+        "applicabilityByRequestedProjection": {
+          "pack.authored.claim@1": {
+            "producer": {
+              "id": "pack.authored",
+              "version": 1
+            },
+            "projection": {
+              "id": "pack.authored.claim_delivery",
+              "version": 1
+            }
+          },
+          "theory.opening.current_endpoint@1": {
+            "producer": {
+              "id": "theory.opening.runtime",
+              "version": 1
+            },
+            "projection": {
+              "id": "theory.opening.catalogue_membership",
+              "version": 1
+            }
+          },
+          "theory.shapes.firing@1": {
+            "producer": {
+              "id": "theory.shapes",
+              "version": 1
+            },
+            "projection": {
+              "id": "theory.shapes.firing",
+              "version": 1
+            }
+          }
+        }
+      },
       "result": "CatalogueEvidencePoolResult",
       "operation": {
         "owner": "rfc/module-registration.md",
@@ -190,10 +234,10 @@
       "result": "TypedProviderResult<K>",
       "operation": {
         "owner": "rfc/provider-exchange-and-execution.md",
-        "callable": "ProviderExchangeScheduler.get(request, scope, signal)",
+        "callable": "application.scheduler.get(request, scope, signal)",
         "successPipeline": [
           "assertProviderDelivery(request.operation, result.delivery)",
-          "ProviderSourceFactories[request.operation].make(result.delivery)"
+          "application.sourceFactories[request.operation].make(result.delivery)"
         ]
       },
       "extract": "one operation-keyed declared provider delivery",
@@ -787,11 +831,11 @@
         "version": 1
       },
       "stage": "derived_after_inputs",
-      "subjectKind": "branch_pair",
+      "subjectKind": "edge",
       "subjectAuthority": {
-        "subjectKind": "branch_pair",
+        "subjectKind": "edge",
         "acquisition": "review_evidence_packet@1",
-        "occurrenceView": "recorded_branch_pair",
+        "occurrenceView": "recorded_edge",
         "adapter": "identity"
       },
       "acquisition": "review_evidence_packet@1",
@@ -804,8 +848,8 @@
           }
         ],
         "join": {
-          "subjectKind": "branch_pair",
-          "rule": "declared_branch_pair"
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
         },
         "inputBindings": [
           {
@@ -829,6 +873,12 @@
                     "before",
                     "after"
                   ]
+                }
+              ],
+              "inputs": [
+                {
+                  "id": "live.stockfish.eval",
+                  "version": 1
                 }
               ]
             }
@@ -1345,6 +1395,12 @@
                     "after"
                   ]
                 }
+              ],
+              "inputs": [
+                {
+                  "id": "recorded.engine.eval",
+                  "version": 1
+                }
               ]
             },
             {
@@ -1356,6 +1412,12 @@
                     "before",
                     "after"
                   ]
+                }
+              ],
+              "inputs": [
+                {
+                  "id": "live.stockfish.eval",
+                  "version": 1
                 }
               ]
             }
@@ -2300,6 +2362,20 @@
                     "checking_consequence"
                   ]
                 }
+              ],
+              "inputs": [
+                {
+                  "id": "run.record.move",
+                  "version": 1
+                },
+                {
+                  "id": "rules.transition.event.capture",
+                  "version": 1
+                },
+                {
+                  "id": "rules.tactic.event.check",
+                  "version": 1
+                }
               ]
             },
             {
@@ -2335,6 +2411,16 @@
                     "heavy_piece_capture",
                     "heavy_piece_consequence"
                   ]
+                }
+              ],
+              "inputs": [
+                {
+                  "id": "run.record.move",
+                  "version": 1
+                },
+                {
+                  "id": "rules.transition.event.capture",
+                  "version": 1
                 }
               ]
             }
@@ -2492,6 +2578,24 @@
                     "positive_retained_recapture"
                   ]
                 }
+              ],
+              "inputs": [
+                {
+                  "id": "run.record.move",
+                  "version": 1
+                },
+                {
+                  "id": "rules.transition.event.capture",
+                  "version": 1
+                },
+                {
+                  "id": "rules.tactic.event.check",
+                  "version": 1
+                },
+                {
+                  "id": "rules.exchange.predicate.legal_exchange",
+                  "version": 1
+                }
               ]
             }
           ],
@@ -2597,25 +2701,7 @@
       },
       "acquisition": "recorded_semantic_path@1",
       "derivation": {
-        "kind": "all",
-        "inputs": [
-          {
-            "id": "run.record.move",
-            "version": 1
-          },
-          {
-            "id": "rules.tactic.reading.defender_duty_set",
-            "version": 1
-          },
-          {
-            "id": "rules.transition.event.capture",
-            "version": 1
-          },
-          {
-            "id": "rules.exchange.predicate.legal_exchange",
-            "version": 1
-          }
-        ],
+        "kind": "alternatives",
         "join": {
           "subjectKind": "edge",
           "rule": "same_edge_context"
@@ -2648,6 +2734,14 @@
           {
             "projection": {
               "id": "rules.exchange.predicate.legal_exchange",
+              "version": 1
+            },
+            "sourceSubjectKind": "edge",
+            "relation": "operation_owned_occurrences"
+          },
+          {
+            "projection": {
+              "id": "rules.tactic.event.check",
               "version": 1
             },
             "sourceSubjectKind": "edge",
@@ -2707,6 +2801,24 @@
                   "roles": [
                     "positive_target_capture"
                   ]
+                }
+              ],
+              "inputs": [
+                {
+                  "id": "run.record.move",
+                  "version": 1
+                },
+                {
+                  "id": "rules.tactic.reading.defender_duty_set",
+                  "version": 1
+                },
+                {
+                  "id": "rules.transition.event.capture",
+                  "version": 1
+                },
+                {
+                  "id": "rules.exchange.predicate.legal_exchange",
+                  "version": 1
                 }
               ]
             },
@@ -2769,6 +2881,28 @@
                     "positive_target_capture"
                   ]
                 }
+              ],
+              "inputs": [
+                {
+                  "id": "run.record.move",
+                  "version": 1
+                },
+                {
+                  "id": "rules.tactic.reading.defender_duty_set",
+                  "version": 1
+                },
+                {
+                  "id": "rules.tactic.event.check",
+                  "version": 1
+                },
+                {
+                  "id": "rules.transition.event.capture",
+                  "version": 1
+                },
+                {
+                  "id": "rules.exchange.predicate.legal_exchange",
+                  "version": 1
+                }
               ]
             }
           ],
@@ -2782,6 +2916,81 @@
           "owner": "rfc/semantic-collectors.md",
           "callable": "recordedSemanticPath(run, branchId)",
           "status": "awaiting_upstream_occurrence_receipt"
+        },
+        "commonInputs": [
+          {
+            "id": "run.record.move",
+            "version": 1
+          },
+          {
+            "id": "rules.tactic.reading.defender_duty_set",
+            "version": 1
+          },
+          {
+            "id": "rules.transition.event.capture",
+            "version": 1
+          },
+          {
+            "id": "rules.exchange.predicate.legal_exchange",
+            "version": 1
+          }
+        ],
+        "alternatives": [
+          {
+            "discriminator": "bait_capture",
+            "inputs": [
+              {
+                "id": "run.record.move",
+                "version": 1
+              },
+              {
+                "id": "rules.tactic.reading.defender_duty_set",
+                "version": 1
+              },
+              {
+                "id": "rules.transition.event.capture",
+                "version": 1
+              },
+              {
+                "id": "rules.exchange.predicate.legal_exchange",
+                "version": 1
+              }
+            ]
+          },
+          {
+            "discriminator": "check_induced",
+            "inputs": [
+              {
+                "id": "run.record.move",
+                "version": 1
+              },
+              {
+                "id": "rules.tactic.reading.defender_duty_set",
+                "version": 1
+              },
+              {
+                "id": "rules.tactic.event.check",
+                "version": 1
+              },
+              {
+                "id": "rules.transition.event.capture",
+                "version": 1
+              },
+              {
+                "id": "rules.exchange.predicate.legal_exchange",
+                "version": 1
+              }
+            ]
+          }
+        ],
+        "upstreamAuthority": {
+          "owner": "rfc/semantic-collectors.md",
+          "missingProjection": {
+            "id": "rules.tactic.event.check",
+            "version": 1
+          },
+          "requiredEmitter": "deflectionObservedSemanticEvent(..., checkEvidence?)",
+          "status": "blocked_upstream_derivation_authority"
         }
       },
       "requiredOutput": {
@@ -2960,6 +3169,20 @@
                     "positive_target_capture"
                   ]
                 }
+              ],
+              "inputs": [
+                {
+                  "id": "run.record.move",
+                  "version": 1
+                },
+                {
+                  "id": "rules.tactic.reading.defender_duty_set",
+                  "version": 1
+                },
+                {
+                  "id": "rules.exchange.predicate.legal_exchange",
+                  "version": 1
+                }
               ]
             }
           ],
@@ -3066,6 +3289,16 @@
                   "roles": [
                     "positive_slider_capture"
                   ]
+                }
+              ],
+              "inputs": [
+                {
+                  "id": "run.record.move",
+                  "version": 1
+                },
+                {
+                  "id": "rules.exchange.predicate.legal_exchange",
+                  "version": 1
                 }
               ]
             }
@@ -3221,6 +3454,24 @@
                   "roles": [
                     "positive_second_capture"
                   ]
+                }
+              ],
+              "inputs": [
+                {
+                  "id": "run.record.move",
+                  "version": 1
+                },
+                {
+                  "id": "rules.tactic.reading.defender_duty_set",
+                  "version": 1
+                },
+                {
+                  "id": "rules.transition.event.capture",
+                  "version": 1
+                },
+                {
+                  "id": "rules.exchange.predicate.legal_exchange",
+                  "version": 1
                 }
               ]
             }
@@ -3381,6 +3632,12 @@
                     "reply",
                     "quiet_slider_move"
                   ]
+                }
+              ],
+              "inputs": [
+                {
+                  "id": "run.record.move",
+                  "version": 1
                 }
               ]
             }
@@ -5787,5 +6044,5 @@
       "status": "awaiting_upstream_sealed_operation"
     }
   ],
-  "digest": "sha256:02685d15fe63bcf50ea259d1eddb05af3d2b9da7d3b7347757a55c9d6bdcf3f8"
+  "digest": "sha256:53467d5c4dc03464ace70e1481f44bc2c1ca117026c6950f9b02c16839325a1c"
 }

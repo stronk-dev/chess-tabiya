@@ -397,7 +397,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "blunder_prevention@1\u0000rules.tactic.consequence.mate_in_one@1"
+          "pair": "module.blunder_prevention@1\u0000rules.tactic.consequence.mate_in_one@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -483,7 +483,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "blunder_prevention@1\u0000rules.tactic.consequence.threat@1"
+          "pair": "module.blunder_prevention@1\u0000rules.tactic.consequence.threat@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -569,7 +569,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "blunder_prevention@1\u0000rules.tactic.reading.loose_piece@1"
+          "pair": "module.blunder_prevention@1\u0000rules.tactic.reading.loose_piece@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -659,7 +659,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "compare_coach@1\u0000derived.compare.engine_trajectory@1"
+          "pair": "module.compare_coach@1\u0000derived.compare.engine_trajectory@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -731,8 +731,8 @@
       },
       "occurrenceRequirement": {
         "source": "review_evidence_packet@1",
-        "view": "recorded_branch_pair",
-        "subjectKind": "branch_pair",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
         "selector": {
           "kind": "recorded_occurrence_identity",
           "suppliedBy": "sealed_run_path"
@@ -767,7 +767,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "compare_coach@1\u0000derived.compare.eval_delta@1"
+          "pair": "module.compare_coach@1\u0000derived.compare.eval_delta@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -875,7 +875,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "compare_coach@1\u0000derived.compare.piece_route@1"
+          "pair": "module.compare_coach@1\u0000derived.compare.piece_route@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -984,7 +984,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "compare_coach@1\u0000derived.compare.structure_delta@1"
+          "pair": "module.compare_coach@1\u0000derived.compare.structure_delta@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -1106,7 +1106,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "compare_coach@1\u0000run.record.checkpoint_hit@1"
+          "pair": "module.compare_coach@1\u0000run.record.checkpoint_hit@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -1225,7 +1225,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "compare_coach@1\u0000run.record.consequence@1"
+          "pair": "module.compare_coach@1\u0000run.record.consequence@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -1322,7 +1322,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "compare_coach@1\u0000run.record.fork@1"
+          "pair": "module.compare_coach@1\u0000run.record.fork@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -1432,7 +1432,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "compare_coach@1\u0000run.record.objective_transition@1"
+          "pair": "module.compare_coach@1\u0000run.record.objective_transition@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -1513,8 +1513,8 @@
       },
       "occurrenceRequirement": {
         "source": "review_evidence_packet@1",
-        "view": "recorded_branch_pair",
-        "subjectKind": "branch_pair",
+        "view": "recorded_edge",
+        "subjectKind": "edge",
         "selector": {
           "kind": "recorded_occurrence_identity",
           "suppliedBy": "sealed_run_path"
@@ -1547,7 +1547,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000derived.compare.eval_delta@1"
+          "pair": "module.full_inspector@1\u0000derived.compare.eval_delta@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -1649,7 +1649,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000derived.compare.structure_delta@1"
+          "pair": "module.full_inspector@1\u0000derived.compare.structure_delta@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -1763,7 +1763,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000derived.material.reading.role_signature@1"
+          "pair": "module.full_inspector@1\u0000derived.material.reading.role_signature@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -1858,7 +1858,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000derived.story.rank@1"
+          "pair": "module.full_inspector@1\u0000derived.story.rank@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -1949,7 +1949,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000derived.tactic.attraction_observed@1"
+          "pair": "module.full_inspector@1\u0000derived.tactic.attraction_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -2042,7 +2042,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000derived.tactic.check_zwischenzug_observed@1"
+          "pair": "module.full_inspector@1\u0000derived.tactic.check_zwischenzug_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -2135,7 +2135,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000derived.tactic.deflection_observed@1"
+          "pair": "module.full_inspector@1\u0000derived.tactic.deflection_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -2228,7 +2228,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000derived.tactic.discovered_executed@1"
+          "pair": "module.full_inspector@1\u0000derived.tactic.discovered_executed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -2323,7 +2323,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000derived.tactic.interference_observed@1"
+          "pair": "module.full_inspector@1\u0000derived.tactic.interference_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -2416,7 +2416,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000derived.tactic.line_blocker_clearance_observed@1"
+          "pair": "module.full_inspector@1\u0000derived.tactic.line_blocker_clearance_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -2509,7 +2509,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000derived.tactic.overload_exploitation_observed@1"
+          "pair": "module.full_inspector@1\u0000derived.tactic.overload_exploitation_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -2602,7 +2602,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000derived.tactic.promotion_pressure@1"
+          "pair": "module.full_inspector@1\u0000derived.tactic.promotion_pressure@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -2693,7 +2693,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000derived.tactic.square_clearance_observed@1"
+          "pair": "module.full_inspector@1\u0000derived.tactic.square_clearance_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -2786,7 +2786,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000human.explorer.population@1"
+          "pair": "module.full_inspector@1\u0000human.explorer.population@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -2888,7 +2888,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000human.maia.candidate_wdl@1"
+          "pair": "module.full_inspector@1\u0000human.maia.candidate_wdl@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -2977,7 +2977,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000human.maia.policy@1"
+          "pair": "module.full_inspector@1\u0000human.maia.policy@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -3078,7 +3078,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000live.stockfish.eval@1"
+          "pair": "module.full_inspector@1\u0000live.stockfish.eval@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -3178,7 +3178,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000live.stockfish.pv@1"
+          "pair": "module.full_inspector@1\u0000live.stockfish.pv@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -3280,7 +3280,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000live.stockfish.wdl@1"
+          "pair": "module.full_inspector@1\u0000live.stockfish.wdl@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -3380,7 +3380,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000live.syzygy.category@1"
+          "pair": "module.full_inspector@1\u0000live.syzygy.category@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -3470,7 +3470,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000live.syzygy.distance@1"
+          "pair": "module.full_inspector@1\u0000live.syzygy.distance@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -3560,7 +3560,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000live.syzygy.result@1"
+          "pair": "module.full_inspector@1\u0000live.syzygy.result@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -3661,7 +3661,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000recorded.engine.eval@1"
+          "pair": "module.full_inspector@1\u0000recorded.engine.eval@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -3763,7 +3763,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000recorded.tablebase.result@1"
+          "pair": "module.full_inspector@1\u0000recorded.tablebase.result@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -3867,7 +3867,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.castling.reading.legality@1"
+          "pair": "module.full_inspector@1\u0000rules.castling.reading.legality@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -3957,7 +3957,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.castling.reading.rights@1"
+          "pair": "module.full_inspector@1\u0000rules.castling.reading.rights@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -4047,7 +4047,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.king.reading.zone_state@1"
+          "pair": "module.full_inspector@1\u0000rules.king.reading.zone_state@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -4143,7 +4143,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.mobility.reading.piece_destinations@1"
+          "pair": "module.full_inspector@1\u0000rules.mobility.reading.piece_destinations@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -4239,7 +4239,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.pawn.reading.candidate_majority@1"
+          "pair": "module.full_inspector@1\u0000rules.pawn.reading.candidate_majority@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -4335,7 +4335,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.pawn.reading.contacts@1"
+          "pair": "module.full_inspector@1\u0000rules.pawn.reading.contacts@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -4431,7 +4431,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.phase.development@1"
+          "pair": "module.full_inspector@1\u0000rules.phase.development@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -4524,7 +4524,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.phase.reading@1"
+          "pair": "module.full_inspector@1\u0000rules.phase.reading@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -4642,7 +4642,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.pivotal.marker@1"
+          "pair": "module.full_inspector@1\u0000rules.pivotal.marker@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -4800,7 +4800,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.square.reading.control@1"
+          "pair": "module.full_inspector@1\u0000rules.square.reading.control@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -4896,7 +4896,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.structural.reading.pawn_connectivity@1"
+          "pair": "module.full_inspector@1\u0000rules.structural.reading.pawn_connectivity@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -4989,7 +4989,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.structural.reading.space@1"
+          "pair": "module.full_inspector@1\u0000rules.structural.reading.space@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -5082,7 +5082,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.tactic.consequence.mate_in_one@1"
+          "pair": "module.full_inspector@1\u0000rules.tactic.consequence.mate_in_one@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -5172,7 +5172,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.tactic.consequence.reply_breadth@1"
+          "pair": "module.full_inspector@1\u0000rules.tactic.consequence.reply_breadth@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -5262,7 +5262,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.tactic.consequence.threat@1"
+          "pair": "module.full_inspector@1\u0000rules.tactic.consequence.threat@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -5352,7 +5352,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.tactic.reading.back_rank@1"
+          "pair": "module.full_inspector@1\u0000rules.tactic.reading.back_rank@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -5449,7 +5449,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.tactic.reading.discovered_latency@1"
+          "pair": "module.full_inspector@1\u0000rules.tactic.reading.discovered_latency@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -5547,7 +5547,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.tactic.reading.loose_piece@1"
+          "pair": "module.full_inspector@1\u0000rules.tactic.reading.loose_piece@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -5638,7 +5638,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.tactic.reading.ray_classification@1"
+          "pair": "module.full_inspector@1\u0000rules.tactic.reading.ray_classification@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -5734,7 +5734,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.tactic.reading.rook_on_seventh@1"
+          "pair": "module.full_inspector@1\u0000rules.tactic.reading.rook_on_seventh@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -5829,7 +5829,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000rules.tactic.reading.trapped_piece@1"
+          "pair": "module.full_inspector@1\u0000rules.tactic.reading.trapped_piece@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -5925,7 +5925,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "full_inspector@1\u0000theory.shapes.firing@1"
+          "pair": "module.full_inspector@1\u0000theory.shapes.firing@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -6049,7 +6049,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.activity.event.open_file_occupancy@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.activity.event.open_file_occupancy@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -6147,7 +6147,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.exchange.capture_class@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.exchange.capture_class@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -6239,7 +6239,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.exchange.trade_completed@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.exchange.trade_completed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -6330,7 +6330,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.grade.move_quality@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.grade.move_quality@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -6422,7 +6422,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.king.captured_zone_defender@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.king.captured_zone_defender@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -6520,7 +6520,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.pawn.event.transitions@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.pawn.event.transitions@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -6618,7 +6618,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.semantic_avoidance.backward_pawn@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.backward_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -6710,7 +6710,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.semantic_avoidance.doubled_pawn@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.doubled_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -6802,7 +6802,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.semantic_avoidance.half_open_file@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.half_open_file@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -6894,7 +6894,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.semantic_avoidance.isolated_pawn@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.isolated_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -6986,7 +6986,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.semantic_avoidance.king_opposition@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.king_opposition@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -7078,7 +7078,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.semantic_avoidance.king_zone@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.king_zone@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -7170,7 +7170,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.semantic_avoidance.loose_piece@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.loose_piece@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -7262,7 +7262,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.semantic_avoidance.open_file@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.open_file@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -7354,7 +7354,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.semantic_avoidance.passed_pawn@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.passed_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -7446,7 +7446,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.semantic_avoidance.pawn_islands@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.semantic_avoidance.pawn_islands@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -7537,7 +7537,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.tactic.attraction_observed@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.tactic.attraction_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -7632,7 +7632,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.tactic.check_zwischenzug_observed@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.tactic.check_zwischenzug_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -7727,7 +7727,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.tactic.deflection_observed@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.tactic.deflection_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -7822,7 +7822,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.tactic.interference_observed@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.tactic.interference_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -7917,7 +7917,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.tactic.line_blocker_clearance_observed@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.tactic.line_blocker_clearance_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -8012,7 +8012,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.tactic.overload_exploitation_observed@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.tactic.overload_exploitation_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -8107,7 +8107,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000derived.tactic.square_clearance_observed@1"
+          "pair": "module.postcommit_nudge@1\u0000derived.tactic.square_clearance_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -8203,7 +8203,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.castling.event.rights_lost@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.castling.event.rights_lost@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -8295,7 +8295,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.king.event.zone_state@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.king.event.zone_state@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -8393,7 +8393,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.pawn.event.dynamics@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.pawn.event.dynamics@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -8491,7 +8491,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.structural.event.backward_pawn@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.structural.event.backward_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -8583,7 +8583,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.structural.event.doubled_pawn@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.structural.event.doubled_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -8675,7 +8675,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.structural.event.half_open_file@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.structural.event.half_open_file@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -8767,7 +8767,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.structural.event.isolated_pawn@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.structural.event.isolated_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -8859,7 +8859,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.structural.event.king_opposition@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.structural.event.king_opposition@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -8951,7 +8951,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.structural.event.king_zone@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.structural.event.king_zone@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -9043,7 +9043,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.structural.event.open_file@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.structural.event.open_file@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -9135,7 +9135,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.structural.event.passed_pawn@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.structural.event.passed_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -9227,7 +9227,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.structural.event.pawn_islands@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.structural.event.pawn_islands@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -9319,7 +9319,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.tactic.event.check@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.tactic.event.check@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -9411,7 +9411,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.tactic.event.double_attack@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.tactic.event.double_attack@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -9503,7 +9503,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.tactic.event.loose_piece@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.tactic.event.loose_piece@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -9596,7 +9596,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.transition.event.capture@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.transition.event.capture@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -9688,7 +9688,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.transition.event.castled@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.transition.event.castled@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -9780,7 +9780,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.transition.event.checkmate@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.transition.event.checkmate@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -9872,7 +9872,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.transition.event.defended_duty@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.transition.event.defended_duty@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -9964,7 +9964,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.transition.event.developed@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.transition.event.developed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -10056,7 +10056,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.transition.event.last_of_role@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.transition.event.last_of_role@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -10148,7 +10148,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.transition.event.occupied_attack@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.transition.event.occupied_attack@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -10240,7 +10240,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.transition.event.occupied_defence@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.transition.event.occupied_defence@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -10332,7 +10332,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.transition.event.pawn_contact@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.transition.event.pawn_contact@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -10424,7 +10424,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.transition.event.piece_escape@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.transition.event.piece_escape@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -10516,7 +10516,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.transition.event.promotion@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.transition.event.promotion@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -10608,7 +10608,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "postcommit_nudge@1\u0000rules.transition.event.slider_ray@1"
+          "pair": "module.postcommit_nudge@1\u0000rules.transition.event.slider_ray@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -10702,7 +10702,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.activity.event.open_file_occupancy@1"
+          "pair": "module.review_map@1\u0000derived.activity.event.open_file_occupancy@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -10803,7 +10803,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.exchange.capture_class@1"
+          "pair": "module.review_map@1\u0000derived.exchange.capture_class@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -10898,7 +10898,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.exchange.trade_completed@1"
+          "pair": "module.review_map@1\u0000derived.exchange.trade_completed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -10992,7 +10992,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.grade.move_quality@1"
+          "pair": "module.review_map@1\u0000derived.grade.move_quality@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -11087,7 +11087,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.king.captured_zone_defender@1"
+          "pair": "module.review_map@1\u0000derived.king.captured_zone_defender@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -11188,7 +11188,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.pawn.event.transitions@1"
+          "pair": "module.review_map@1\u0000derived.pawn.event.transitions@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -11289,7 +11289,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.semantic_avoidance.backward_pawn@1"
+          "pair": "module.review_map@1\u0000derived.semantic_avoidance.backward_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -11384,7 +11384,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.semantic_avoidance.doubled_pawn@1"
+          "pair": "module.review_map@1\u0000derived.semantic_avoidance.doubled_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -11479,7 +11479,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.semantic_avoidance.half_open_file@1"
+          "pair": "module.review_map@1\u0000derived.semantic_avoidance.half_open_file@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -11574,7 +11574,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.semantic_avoidance.isolated_pawn@1"
+          "pair": "module.review_map@1\u0000derived.semantic_avoidance.isolated_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -11669,7 +11669,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.semantic_avoidance.king_opposition@1"
+          "pair": "module.review_map@1\u0000derived.semantic_avoidance.king_opposition@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -11764,7 +11764,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.semantic_avoidance.king_zone@1"
+          "pair": "module.review_map@1\u0000derived.semantic_avoidance.king_zone@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -11859,7 +11859,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.semantic_avoidance.loose_piece@1"
+          "pair": "module.review_map@1\u0000derived.semantic_avoidance.loose_piece@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -11954,7 +11954,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.semantic_avoidance.open_file@1"
+          "pair": "module.review_map@1\u0000derived.semantic_avoidance.open_file@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -12049,7 +12049,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.semantic_avoidance.passed_pawn@1"
+          "pair": "module.review_map@1\u0000derived.semantic_avoidance.passed_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -12144,7 +12144,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.semantic_avoidance.pawn_islands@1"
+          "pair": "module.review_map@1\u0000derived.semantic_avoidance.pawn_islands@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -12238,7 +12238,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.tactic.attraction_observed@1"
+          "pair": "module.review_map@1\u0000derived.tactic.attraction_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -12336,7 +12336,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.tactic.check_zwischenzug_observed@1"
+          "pair": "module.review_map@1\u0000derived.tactic.check_zwischenzug_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -12434,7 +12434,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.tactic.deflection_observed@1"
+          "pair": "module.review_map@1\u0000derived.tactic.deflection_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -12532,7 +12532,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.tactic.interference_observed@1"
+          "pair": "module.review_map@1\u0000derived.tactic.interference_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -12630,7 +12630,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.tactic.line_blocker_clearance_observed@1"
+          "pair": "module.review_map@1\u0000derived.tactic.line_blocker_clearance_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -12728,7 +12728,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.tactic.overload_exploitation_observed@1"
+          "pair": "module.review_map@1\u0000derived.tactic.overload_exploitation_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -12826,7 +12826,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000derived.tactic.square_clearance_observed@1"
+          "pair": "module.review_map@1\u0000derived.tactic.square_clearance_observed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -12924,7 +12924,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000live.stockfish.eval@1"
+          "pair": "module.review_map@1\u0000live.stockfish.eval@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -13027,7 +13027,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000live.stockfish.wdl@1"
+          "pair": "module.review_map@1\u0000live.stockfish.wdl@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -13130,7 +13130,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000recorded.engine.eval@1"
+          "pair": "module.review_map@1\u0000recorded.engine.eval@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -13235,7 +13235,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000recorded.tablebase.result@1"
+          "pair": "module.review_map@1\u0000recorded.tablebase.result@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -13342,7 +13342,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.castling.event.rights_lost@1"
+          "pair": "module.review_map@1\u0000rules.castling.event.rights_lost@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -13437,7 +13437,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.endgame.reading@1"
+          "pair": "module.review_map@1\u0000rules.endgame.reading@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -13569,7 +13569,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.king.event.zone_state@1"
+          "pair": "module.review_map@1\u0000rules.king.event.zone_state@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -13670,7 +13670,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.pawn.event.dynamics@1"
+          "pair": "module.review_map@1\u0000rules.pawn.event.dynamics@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -13771,7 +13771,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.phase.reading@1"
+          "pair": "module.review_map@1\u0000rules.phase.reading@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -13892,7 +13892,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.pivotal.marker@1"
+          "pair": "module.review_map@1\u0000rules.pivotal.marker@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -14056,7 +14056,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.structural.event.backward_pawn@1"
+          "pair": "module.review_map@1\u0000rules.structural.event.backward_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -14151,7 +14151,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.structural.event.doubled_pawn@1"
+          "pair": "module.review_map@1\u0000rules.structural.event.doubled_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -14246,7 +14246,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.structural.event.half_open_file@1"
+          "pair": "module.review_map@1\u0000rules.structural.event.half_open_file@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -14341,7 +14341,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.structural.event.isolated_pawn@1"
+          "pair": "module.review_map@1\u0000rules.structural.event.isolated_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -14436,7 +14436,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.structural.event.king_opposition@1"
+          "pair": "module.review_map@1\u0000rules.structural.event.king_opposition@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -14531,7 +14531,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.structural.event.king_zone@1"
+          "pair": "module.review_map@1\u0000rules.structural.event.king_zone@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -14626,7 +14626,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.structural.event.open_file@1"
+          "pair": "module.review_map@1\u0000rules.structural.event.open_file@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -14721,7 +14721,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.structural.event.passed_pawn@1"
+          "pair": "module.review_map@1\u0000rules.structural.event.passed_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -14816,7 +14816,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.structural.event.pawn_islands@1"
+          "pair": "module.review_map@1\u0000rules.structural.event.pawn_islands@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -14911,7 +14911,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.tactic.event.check@1"
+          "pair": "module.review_map@1\u0000rules.tactic.event.check@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -15006,7 +15006,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.tactic.event.double_attack@1"
+          "pair": "module.review_map@1\u0000rules.tactic.event.double_attack@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -15101,7 +15101,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.tactic.event.loose_piece@1"
+          "pair": "module.review_map@1\u0000rules.tactic.event.loose_piece@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -15197,7 +15197,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.transition.event.capture@1"
+          "pair": "module.review_map@1\u0000rules.transition.event.capture@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -15292,7 +15292,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.transition.event.castled@1"
+          "pair": "module.review_map@1\u0000rules.transition.event.castled@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -15387,7 +15387,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.transition.event.checkmate@1"
+          "pair": "module.review_map@1\u0000rules.transition.event.checkmate@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -15482,7 +15482,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.transition.event.defended_duty@1"
+          "pair": "module.review_map@1\u0000rules.transition.event.defended_duty@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -15577,7 +15577,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.transition.event.developed@1"
+          "pair": "module.review_map@1\u0000rules.transition.event.developed@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -15672,7 +15672,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.transition.event.last_of_role@1"
+          "pair": "module.review_map@1\u0000rules.transition.event.last_of_role@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -15767,7 +15767,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.transition.event.occupied_attack@1"
+          "pair": "module.review_map@1\u0000rules.transition.event.occupied_attack@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -15862,7 +15862,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.transition.event.occupied_defence@1"
+          "pair": "module.review_map@1\u0000rules.transition.event.occupied_defence@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -15957,7 +15957,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.transition.event.pawn_contact@1"
+          "pair": "module.review_map@1\u0000rules.transition.event.pawn_contact@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -16052,7 +16052,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.transition.event.piece_escape@1"
+          "pair": "module.review_map@1\u0000rules.transition.event.piece_escape@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -16147,7 +16147,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.transition.event.promotion@1"
+          "pair": "module.review_map@1\u0000rules.transition.event.promotion@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -16242,7 +16242,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000rules.transition.event.slider_ray@1"
+          "pair": "module.review_map@1\u0000rules.transition.event.slider_ray@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -16336,7 +16336,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000run.record.consequence@1"
+          "pair": "module.review_map@1\u0000run.record.consequence@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -16432,7 +16432,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000run.record.imported_result@1"
+          "pair": "module.review_map@1\u0000run.record.imported_result@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -16547,7 +16547,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "review_map@1\u0000run.record.objective_transition@1"
+          "pair": "module.review_map@1\u0000run.record.objective_transition@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -16667,7 +16667,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.castling.reading.legality@1"
+          "pair": "module.sight_on_request@1\u0000rules.castling.reading.legality@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -16761,7 +16761,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.castling.reading.rights@1"
+          "pair": "module.sight_on_request@1\u0000rules.castling.reading.rights@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -16855,7 +16855,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.pawn.reading.contacts@1"
+          "pair": "module.sight_on_request@1\u0000rules.pawn.reading.contacts@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -16955,7 +16955,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.square.reading.control@1"
+          "pair": "module.sight_on_request@1\u0000rules.square.reading.control@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -17055,7 +17055,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.backward_pawn@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.backward_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -17177,7 +17177,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.bishop_on_shade@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.bishop_on_shade@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -17299,7 +17299,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.direct_attack_count@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.direct_attack_count@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -17421,7 +17421,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.doubled_pawn@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.doubled_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -17543,7 +17543,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.half_open_file@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.half_open_file@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -17665,7 +17665,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.isolated_pawn@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.isolated_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -17787,7 +17787,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.king_opposition@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.king_opposition@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -17909,7 +17909,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.king_zone@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.king_zone@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -18031,7 +18031,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.line_blockers@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.line_blockers@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -18153,7 +18153,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.named_structure@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.named_structure@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -18253,7 +18253,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.open_file@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.open_file@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -18375,7 +18375,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.outpost@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.outpost@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -18497,7 +18497,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.passed_pawn@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.passed_pawn@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -18619,7 +18619,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.pawn_safe_square@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.pawn_safe_square@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -18741,7 +18741,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.piece_count@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.piece_count@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -18863,7 +18863,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.piece_distance@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.piece_distance@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -18985,7 +18985,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.structural.reading.piece_reach_count@1"
+          "pair": "module.sight_on_request@1\u0000rules.structural.reading.piece_reach_count@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -19107,7 +19107,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "sight_on_request@1\u0000rules.tactic.reading.rook_on_seventh@1"
+          "pair": "module.sight_on_request@1\u0000rules.tactic.reading.rook_on_seventh@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -19204,7 +19204,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "structure_nudge@1\u0000rules.endgame.reading@1"
+          "pair": "module.structure_nudge@1\u0000rules.endgame.reading@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -19330,7 +19330,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "structure_nudge@1\u0000rules.phase.reading@1"
+          "pair": "module.structure_nudge@1\u0000rules.phase.reading@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -19445,7 +19445,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "structure_nudge@1\u0000rules.structural.reading.named_structure@1"
+          "pair": "module.structure_nudge@1\u0000rules.structural.reading.named_structure@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -19537,7 +19537,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "structure_nudge@1\u0000rules.structural.reading.pawn_connectivity@1"
+          "pair": "module.structure_nudge@1\u0000rules.structural.reading.pawn_connectivity@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -19630,7 +19630,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "structure_nudge@1\u0000rules.structural.reading.space@1"
+          "pair": "module.structure_nudge@1\u0000rules.structural.reading.space@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -19722,7 +19722,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "structure_nudge@1\u0000theory.shapes.firing@1"
+          "pair": "module.structure_nudge@1\u0000theory.shapes.firing@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -19847,7 +19847,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "theory_breadcrumb@1\u0000pack.authored.claim@1"
+          "pair": "module.theory_breadcrumb@1\u0000pack.authored.claim@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -19969,7 +19969,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "theory_breadcrumb@1\u0000theory.opening.current_endpoint@1"
+          "pair": "module.theory_breadcrumb@1\u0000theory.opening.current_endpoint@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -20063,7 +20063,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "theory_breadcrumb@1\u0000theory.shapes.firing@1"
+          "pair": "module.theory_breadcrumb@1\u0000theory.shapes.firing@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -20189,7 +20189,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "threat_radar@1\u0000derived.tactic.defender_exposure@1"
+          "pair": "module.threat_radar@1\u0000derived.tactic.defender_exposure@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -20287,7 +20287,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "threat_radar@1\u0000rules.tactic.consequence.mate_in_one@1"
+          "pair": "module.threat_radar@1\u0000rules.tactic.consequence.mate_in_one@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -20381,7 +20381,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "threat_radar@1\u0000rules.tactic.consequence.threat@1"
+          "pair": "module.threat_radar@1\u0000rules.tactic.consequence.threat@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -20475,7 +20475,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "threat_radar@1\u0000rules.tactic.reading.back_rank@1"
+          "pair": "module.threat_radar@1\u0000rules.tactic.reading.back_rank@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -20576,7 +20576,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "threat_radar@1\u0000rules.tactic.reading.loose_piece@1"
+          "pair": "module.threat_radar@1\u0000rules.tactic.reading.loose_piece@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -20671,7 +20671,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "threat_radar@1\u0000rules.tactic.reading.ray_classification@1"
+          "pair": "module.threat_radar@1\u0000rules.tactic.reading.ray_classification@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -20771,7 +20771,7 @@
           "operation": "compileModuleExactOperationResolution(input)",
           "receipt": "ModuleExactOperationResolutionReceipt",
           "status": "blocked_until_all_source_dependencies_land",
-          "pair": "threat_radar@1\u0000rules.tactic.reading.trapped_piece@1"
+          "pair": "module.threat_radar@1\u0000rules.tactic.reading.trapped_piece@1"
         },
         "status": "awaiting_upstream_exact_operation"
       },
@@ -20823,5 +20823,5 @@
       }
     }
   ],
-  "digest": "sha256:bee789d091dd1e8b0f2d83da761ba7b488d6209cb6924185dc060322f0e21884"
+  "digest": "sha256:a15e21f7a1f6c198f67e44628c96454a40bf24063080460af60310a283ad0652"
 }

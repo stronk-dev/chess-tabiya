@@ -30,12 +30,21 @@ const MODULE_VIEW_RESOLVER = Object.freeze({
   status: "blocked_until_all_source_dependencies_land",
 });
 
+const CATALOGUE_INPUT_AUTHORITIES = Object.freeze({
+  position: Object.freeze({ producer: ref("run.record"), projection: ref("run.record.position") }),
+  applicabilityByRequestedProjection: Object.freeze({
+    "pack.authored.claim@1": Object.freeze({ producer: ref("pack.authored"), projection: ref("pack.authored.claim_delivery") }),
+    "theory.opening.current_endpoint@1": Object.freeze({ producer: ref("theory.opening.runtime"), projection: ref("theory.opening.catalogue_membership") }),
+    "theory.shapes.firing@1": Object.freeze({ producer: ref("theory.shapes"), projection: ref("theory.shapes.firing") }),
+  }),
+});
+
 const SOURCE_CONTRACTS = Object.freeze([
   { id: "candidate_population@1", authority: "shared-candidate-evidence-packet", input: "CandidatePopulationRequest<S>", result: "CandidatePopulationResult<S>", operation: { owner: "rfc/shared-candidate-evidence-packet.md", callable: "CandidatePopulationService.get(request, signal)" }, extract: "candidate occurrence view only", views: ["root_legal_population", "candidate_child_position_by_uci", "candidate_edge_by_uci", "complete_candidate_population"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["committed_edge", "current_root_projection"], assertion: { callable: "assertCandidatePopulationReceipt(value)", appliesTo: "ready.receipt" }, abstain: "CandidatePopulationFailure | cancelled", seal: "CandidatePopulationReceipt", subjectKinds: ["position", "edge"], timings: ["precommit", "at_commit", "postcommit", "checkpoint", "attempt_end", "review", "analysis"], status: "awaiting_upstream_sealed_operation" },
   { id: "recorded_semantic_path@1", authority: "recorded-semantic-path", input: "Readonly<{ principal: Principal; runId: string; branchId: string }>", result: "RecordedSemanticPathResult", operation: { owner: "rfc/recorded-semantic-path.md", callable: "compileRecordedSemanticPath(input)" }, extract: "ordered projection-keyed path occurrences", views: ["recorded_position", "recorded_edge", "recorded_branch_pair", "frozen_run_prefix"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["hypothetical_candidate"], assertion: null, itemAssertion: "assertSemanticEvidenceEvent(value)", abstain: "RecordedPathRefusalReason", seal: "SemanticEvidenceEvent items only; the result has no declared aggregate runtime seal", subjectKinds: ["position", "edge", "branch_pair", "run_prefix"], timings: ["postcommit", "checkpoint", "attempt_end", "review", "analysis"], blocker: "recorded-semantic-path must publish an aggregate result assertion or exact module adapter before resolution", status: "blocked_upstream_missing_result_assertion" },
   { id: "review_evidence_packet@1", authority: "review-evidence-compiler", input: null, result: "ReviewEvidencePacket", operation: { owner: "rfc/review-evidence-compiler.md", callable: "compileReviewEvidence(input)" }, extract: "projection-keyed frozen-prefix occurrences", views: ["recorded_edge", "recorded_branch_pair", "frozen_run_prefix"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["current_root", "hypothetical_candidate"], assertion: null, itemAssertion: "assertDeclaredEvidence(value)", abstain: "ReviewFamilyState", seal: "DeclaredEvidence items plus packetDigest; the RFC declares neither a callable input type nor aggregate runtime seal", subjectKinds: ["edge", "branch_pair", "run_prefix"], timings: ["postcommit", "review", "analysis"], blocker: "review-evidence-compiler must publish its callable input and aggregate assertion or exact module adapter before resolution", status: "blocked_upstream_incomplete_callable_abi" },
-  { id: "catalogue_evidence_packet@1", authority: "module-registration", input: "CatalogueEvidencePoolRequest", result: "CatalogueEvidencePoolResult", operation: { owner: "rfc/module-registration.md", callable: "compileCatalogueEvidencePool(input)" }, extract: "exact cited pack/shape/theory declared items", views: ["applicable_catalogue_position"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["uncited_text", "whole_catalogue_search"], assertion: { callable: "assertCatalogueEvidencePoolReceipt(value)", appliesTo: "available.receipt" }, abstain: "CatalogueEvidencePoolAbsence", seal: "CatalogueEvidencePoolReceipt", subjectKinds: ["position"], timings: ["postcommit", "checkpoint", "attempt_end", "review", "analysis"], status: "awaiting_module_owned_adapter" },
-  { id: "provider_evidence_packet@1", authority: "provider-exchange-and-execution", input: "TypedProviderRequest<K>", result: "TypedProviderResult<K>", operation: { owner: "rfc/provider-exchange-and-execution.md", callable: "ProviderExchangeScheduler.get(request, scope, signal)", successPipeline: ["assertProviderDelivery(request.operation, result.delivery)", "ProviderSourceFactories[request.operation].make(result.delivery)"] }, extract: "one operation-keyed declared provider delivery", views: ["request_position", "request_edge", "frozen_run_prefix"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["generic_provider_pool"], assertion: { callable: "assertProviderDelivery(request.operation, result.delivery)", appliesTo: "success.delivery" }, abstain: "ProviderSourceFailure<K> | ProviderLocalDomainResult<K>", seal: "DeclaredEvidence<ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>> returned by ProviderSourceFactory<K>.make(delivery)", subjectKinds: ["position", "edge", "run_prefix"], timings: ["postcommit", "checkpoint", "attempt_end", "review", "analysis"], status: "awaiting_upstream_sealed_operation" },
+  { id: "catalogue_evidence_packet@1", authority: "module-registration", input: "CatalogueEvidencePoolRequest", inputAuthorities: CATALOGUE_INPUT_AUTHORITIES, result: "CatalogueEvidencePoolResult", operation: { owner: "rfc/module-registration.md", callable: "compileCatalogueEvidencePool(input)" }, extract: "exact cited pack/shape/theory declared items", views: ["applicable_catalogue_position"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["uncited_text", "whole_catalogue_search"], assertion: { callable: "assertCatalogueEvidencePoolReceipt(value)", appliesTo: "available.receipt" }, abstain: "CatalogueEvidencePoolAbsence", seal: "CatalogueEvidencePoolReceipt", subjectKinds: ["position"], timings: ["postcommit", "checkpoint", "attempt_end", "review", "analysis"], status: "awaiting_module_owned_adapter" },
+  { id: "provider_evidence_packet@1", authority: "provider-exchange-and-execution", input: "TypedProviderRequest<K>", result: "TypedProviderResult<K>", operation: { owner: "rfc/provider-exchange-and-execution.md", callable: "application.scheduler.get(request, scope, signal)", successPipeline: ["assertProviderDelivery(request.operation, result.delivery)", "application.sourceFactories[request.operation].make(result.delivery)"] }, extract: "one operation-keyed declared provider delivery", views: ["request_position", "request_edge", "frozen_run_prefix"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["generic_provider_pool"], assertion: { callable: "assertProviderDelivery(request.operation, result.delivery)", appliesTo: "success.delivery" }, abstain: "ProviderSourceFailure<K> | ProviderLocalDomainResult<K>", seal: "DeclaredEvidence<ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>> returned by ProviderSourceFactory<K>.make(delivery)", subjectKinds: ["position", "edge", "run_prefix"], timings: ["postcommit", "checkpoint", "attempt_end", "review", "analysis"], status: "awaiting_upstream_sealed_operation" },
 ] as const);
 const sourceContractById = new Map(SOURCE_CONTRACTS.map((source) => [source.id, source]));
 
@@ -192,8 +201,14 @@ const requirementRows = compiledIds.map((id) => {
 const requirementById = new Map(requirementRows.map((row) => [row.projection.id, row]));
 for (const row of requirementRows) {
   if (row.derivation === null) continue;
-  const inputs = row.derivation.kind === "all" ? row.derivation.inputs : row.derivation.alternatives.flat();
   const exactOccurrence = EXACT_OCCURRENCE_CONTRACTS[row.projection.id as keyof typeof EXACT_OCCURRENCE_CONTRACTS];
+  const occurrenceAlternatives = exactOccurrence?.alternatives.map((alternative) => Object.freeze({
+    ...alternative,
+    inputs: Object.freeze([...new Set(alternative.operands.map((operand) => operand.projection))].map((id) => ref(id))),
+  }));
+  const inputs = row.projection.id === "derived.tactic.deflection_observed" && occurrenceAlternatives !== undefined
+    ? [...new Map(occurrenceAlternatives.flatMap((alternative) => alternative.inputs).map((input) => [input.id, input])).values()]
+    : row.derivation.kind === "all" ? row.derivation.inputs : row.derivation.alternatives.flat();
   const inputBindings = inputs.map((input) => {
     const planned = requirementById.get(input.id);
     const external = SOURCE_INPUTS.find((source) => source.projection.id === input.id);
@@ -204,7 +219,7 @@ for (const row of requirementRows) {
   });
   Object.assign(row.derivation, exactOccurrence === undefined
     ? { inputBindings }
-    : { inputBindings, occurrenceContract: exactOccurrence,
+    : { inputBindings, occurrenceContract: occurrenceAlternatives === undefined ? exactOccurrence : { ...exactOccurrence, alternatives: occurrenceAlternatives },
       operationRequirement: {
         owner: row.producer.id === "derived.grade" ? "rfc/move-quality-grades.md"
           : row.producer.id === "derived.compare_narrative" ? "rfc/review-evidence-compiler.md"
@@ -214,6 +229,20 @@ for (const row of requirementRows) {
           : "recordedSemanticPath(run, branchId)",
         status: "awaiting_upstream_occurrence_receipt",
       } });
+  if (row.projection.id === "derived.tactic.deflection_observed" && occurrenceAlternatives !== undefined) {
+    Object.assign(row.derivation, {
+      kind: "alternatives",
+      commonInputs: occurrenceAlternatives[0]!.inputs,
+      alternatives: occurrenceAlternatives.map((alternative) => ({ discriminator: alternative.discriminator, inputs: alternative.inputs })),
+      upstreamAuthority: {
+        owner: "rfc/semantic-collectors.md",
+        missingProjection: ref("rules.tactic.event.check"),
+        requiredEmitter: "deflectionObservedSemanticEvent(..., checkEvidence?)",
+        status: "blocked_upstream_derivation_authority",
+      },
+    });
+    delete (row.derivation as { inputs?: unknown }).inputs;
+  }
   for (const input of inputs) {
     const planned = requirementById.get(input.id);
     const external = SOURCE_INPUTS.find((source) => source.projection.id === input.id);
@@ -257,7 +286,7 @@ const bindingRows = pairs.map(({ module, projection: projectionId }) => {
     },
     timingRequirement: { moduleRequested: policy.timings, sourceCeiling: sourceTimingCeiling,
       exactProjectionOperation: null,
-      resolutionOwner: { ...MODULE_VIEW_RESOLVER, pair: `${module}@1\u0000${projectionId}@${projection.version}` },
+      resolutionOwner: { ...MODULE_VIEW_RESOLVER, pair: `module.${module}@1\u0000${projectionId}@${projection.version}` },
       status: "awaiting_upstream_exact_operation" },
     roles: policy.roles, sessions, forms, answerContent: projection.answerContent,
     latency: { mode: producer.latency, maxMs: producer.latency === "sync" ? 50 : producer.latency === "interactive" ? 500 : null },

@@ -1,12 +1,12 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — RETURNED by the seventh fresh independent review 2026-09-02 on
-  [[D2530]]–[[D2535]].** The prior inner repairs survive, but the provider pipeline calls a type,
-  catalogue gate inputs lack exact evidence identities, eval delta's outer subject remains
-  cross-branch, deflection's check input is outside its derivation closure, all 205 row pointers miss
-  the required pair keys, and the final resolution receipt is unsealed. `make
-  module-registration-seventh-fresh-review` passes 6/6. An eighth author repair and another fresh
-  review are required; no implementation is authorised.
+- **Status:** **draft — eighth author repair complete 2026-09-02 on
+  [[D2530]]–[[D2535]]; another fresh independent review is required.** Provider acquisition now
+  uses the injected application value, catalogue gates carry exact identities, eval delta is
+  edge-grained, deflection has per-alternative input closure with its real upstream check-evidence
+  gap explicitly blocked, all 205 pointers join the receipt key set, and the final receipt is
+  runtime-sealed. `make module-registration-eighth-author-repair` passes 6/6 plus the retained
+  11/11 author controls. No implementation is authorised.
   The fourth
   repair rejects the prior generator's
   central premise: learner modules do not invoke 117 detector/provider functions. They consume
@@ -954,22 +954,40 @@ denominator and cannot stand for a selected or committed move. `committed_edge` 
 sources likewise publish their literal view lists in the artifact; a module pair names one view and
 one selector and still carries `exactProjectionOperation:null` until the owner lands it.
 
-Catalogue is the only module-owned source adapter:
+Catalogue is the only module-owned source adapter. Its inputs use exact producer/projection
+identities; payload shape and an F1 seal alone are not authority:
 
 ```ts
-interface CanonicalPositionIdentity {
-  readonly positionKey: string;
-}
+type ExactDeclaredEvidence<Producer extends string, Projection extends string, Payload> =
+  DeclaredEvidence<Payload> & Readonly<{
+    producer: { readonly id: Producer; readonly version: 1 };
+    projection: { readonly id: Projection; readonly version: 1 };
+  }>;
 
-interface TheoryApplicabilityIdentity {
-  readonly positionKey: string;
-  readonly source: VersionedEvidenceId;
-  readonly citation: string;
-}
+type CataloguePositionEvidence = ExactDeclaredEvidence<
+  "run.record", "run.record.position", RecordedPosition
+>;
+
+type CatalogueApplicabilityEvidence =
+  | ExactDeclaredEvidence<
+      "pack.authored", "pack.authored.claim_delivery", AuthoredFeedbackItem & { kind: "claim" }
+    >
+  | ExactDeclaredEvidence<"theory.shapes", "theory.shapes.firing", ShapeFiring>
+  | ExactDeclaredEvidence<
+      "theory.opening.runtime",
+      "theory.opening.catalogue_membership",
+      Extract<OpeningCatalogueMembership, { kind: "member" }>
+    >;
+
+const CATALOGUE_APPLICABILITY_AUTHORITY_BY_REQUESTED_PROJECTION = {
+  "pack.authored.claim@1": "pack.authored.claim_delivery@1",
+  "theory.shapes.firing@1": "theory.shapes.firing@1",
+  "theory.opening.current_endpoint@1": "theory.opening.catalogue_membership@1",
+} as const;
 
 interface CatalogueEvidencePoolRequest {
-  readonly position: DeclaredEvidence<CanonicalPositionIdentity>;
-  readonly applicability: DeclaredEvidence<TheoryApplicabilityIdentity>;
+  readonly position: CataloguePositionEvidence;
+  readonly applicability: readonly CatalogueApplicabilityEvidence[];
   readonly requested: readonly VersionedEvidenceId[];
 }
 
@@ -998,20 +1016,27 @@ declare function assertCatalogueEvidencePoolReceipt(
 ): asserts value is CatalogueEvidencePoolReceipt;
 ```
 
-It reads only already-declared cited pack/shape/theory items whose applicability identity equals the
-sealed position identity. It performs no text search, classifier inference or chess judgement;
-uncited text and whole-catalogue retrieval are typed refusals. Its receipt retains each exact input
-and output declaration. A module-private `WeakSet<CatalogueEvidencePoolReceipt>` is populated only
-by `compileCatalogueEvidencePool`; the exported assertion checks membership, frozen inputs, exact
-position-key equality, requested/output projection membership and the F1 seal of every item. A
-plain object, clone, cast or JSON round-trip fails. This adapter cannot land before the
-theory/provenance authorities it names.
+It reads only already-declared cited pack/shape/theory items. Every requested id must be one of the
+three literal keys above and must have exactly one matching applicability declaration: claim id and
+released run attribution match the authored claim; the current recorded node lies inside the shape
+firing's exact node interval; or the opening membership's `positionKey` equals the canonical key of
+the recorded position. Crossed gates, duplicate gates, a gate for a different requested projection,
+an absent/abstained membership, and a requested/output mismatch are refusals. It performs no text
+search, classifier inference or chess judgement; uncited text and whole-catalogue retrieval are
+typed refusals. Its receipt retains each exact input and output declaration. A module-private
+`WeakSet<CatalogueEvidencePoolReceipt>` is populated only by `compileCatalogueEvidencePool`; the
+exported assertion checks membership, frozen inputs, the exact producer/projection pairs above,
+their payload joins, requested/output projection membership and the F1 seal of every item. A plain
+object, crossed sealed declaration, clone, cast or JSON round-trip fails. This adapter cannot land
+before the theory/provenance authorities it names.
 
 The other four source rows do not invent aggregate seals that their owner RFCs lack. Candidate
-population names its complete published request/result/assertion ABI. Provider acquisition names
-the complete two-step success pipeline: `ProviderExchangeScheduler.get`, then
-`assertProviderDelivery(request.operation, result.delivery)`, then the matching
-`ProviderSourceFactories[request.operation].make(result.delivery)`. Recorded path has sealed
+population names its complete published request/result/assertion ABI. Provider acquisition takes
+one `ProviderTraversalApplication` value and preserves its generic operation arm through the
+complete success pipeline: `application.scheduler.get(request, scope, signal)`, then
+`assertProviderDelivery(request.operation, result.delivery)`, then
+`application.sourceFactories[request.operation].make(result.delivery)`. `ProviderSourceFactories`
+is a type only and is never invoked or re-created as a runtime registry. Recorded path has sealed
 `SemanticEvidenceEvent` members but no aggregate result assertion; Review has sealed
 `DeclaredEvidence` members and a packet digest but neither a declared callable input type nor an
 aggregate assertion. Those two rows therefore remain explicitly blocked on their owner RFCs. A
@@ -1043,7 +1068,10 @@ interface ModuleExactPairOperation {
   readonly presentationPair: string;
 }
 
+declare const MODULE_EXACT_OPERATION_RESOLUTION_RECEIPT: unique symbol;
+
 interface ModuleExactOperationResolutionReceipt {
+  readonly [MODULE_EXACT_OPERATION_RESOLUTION_RECEIPT]: true;
   readonly projections: readonly ModuleExactProjectionOperation[];
   readonly pairs: readonly ModuleExactPairOperation[];
   readonly sourceContractDigest: string;
@@ -1056,15 +1084,24 @@ declare function compileModuleExactOperationResolution(input: Readonly<{
   sourceContracts: ModuleSourceContractRegistry;
   presentationPairs: ModulePresentationPairRegistry;
 }>): ModuleExactOperationResolutionReceipt;
+
+declare function assertModuleExactOperationResolutionReceipt(
+  value: unknown,
+): asserts value is ModuleExactOperationResolutionReceipt;
 ```
 
 The compiler cannot run successfully until every source blocker and exact presentation-pair
 dependency is discharged. Its receipt must be set-equal to the generated artifact's
 `exactOperationResolution.requiredProjectionKeys` (**117 now**) and `requiredPairKeys` (**205
 now**), with exactly one non-null projection operation and exactly one non-empty occurrence/timing
-intersection for every key and no extras. The receipt is the sole legal input to final F1 binding
-emission. Dependency landing triggers regeneration and this compiler; no upstream RFC is expected
-to know module-specific occurrence-view names.
+intersection for every key and no extras. A module-private
+`WeakSet<ModuleExactOperationResolutionReceipt>` is populated only after those checks complete; the
+result and every nested collection are frozen. The assertion requires symbol identity, WeakSet
+membership, frozen nested bytes, matching source/module digests and set equality to the current
+generated requirements. Casts, spreads, clones and JSON round-trips fail. The final F1 emitter must
+call `assertModuleExactOperationResolutionReceipt` before reading any row; the asserted receipt is
+its sole legal resolution input. Dependency landing triggers regeneration and this compiler; no
+upstream RFC is expected to know module-specific occurrence-view names.
 
 #### 2.5.0 — Withdrawn direct-call draft (historical, non-normative)
 
@@ -1912,6 +1949,17 @@ deleting one disclosure id from the family×rung product fails;
     image, with no duplicates or extras. Deleting any one key, supplying one extra, resolving only
     an occurrence or only timing, or substituting an upstream-owned candidate view fails before a
     final F1 row is emitted. **RED now:** dependencies are deliberately unresolved.
+24. **A24 — Eighth-repair authority joins are executable and fail crossed inputs**
+    ([[D2530]]–[[D2535]]). The provider pipeline calls the injected application's scheduler and
+    operation-correlated factory; the catalogue adapter accepts only the exact position authority
+    and per-request applicability identities in §2.5; eval delta is edge-grained and joins two
+    consecutive same-branch points; deflection declares common inputs plus per-alternative inputs,
+    with its check arm remaining blocked until the semantic-event declaration and emitter carry the
+    check evidence; every one of 205 row pointers is a member of the receipt's exact pair-key set;
+    and forged, copied or serialized resolution receipts fail at final F1 emission. Wrong operation,
+    crossed catalogue input, branch-pair eval authority, missing/extra alternative input, unprefixed
+    pair key and unsealed receipt fixtures fail independently. **RED now:** the two upstream pool
+    blockers and deflection check-authority dependency remain deliberately unresolved.
 
 ## Discharges
 
@@ -2029,6 +2077,22 @@ Seventh fresh independent return (2026-09-02):
 `planning/learner-modules/seventh-fresh-independent-buildability-review-2026-09-02.md`. The prior
 source-blocker honesty and positive semantic examples survive. An eighth author repair and another
 fresh independent review are required before acceptance or implementation.
+
+Eighth author repair (2026-09-02):
+
+| row | author repair; fresh review still required |
+|---|---|
+| [[D2530]] | provider acquisition calls `application.scheduler` and the same injected application's operation-correlated `sourceFactories` value; the mapped type is never invoked |
+| [[D2531]] | catalogue position is exactly `run.record.position@1`; each of its three requested outputs maps to one exact applicability producer/projection and crossed declarations are refused |
+| [[D2532]] | the shipped eval delta is edge-grained through `review_evidence_packet@1/recorded_edge`, with consecutive points on one recorded branch; no cross-branch projection is invented |
+| [[D2533]] | deflection requirements are common inputs plus literal bait-capture/check-induced input sets; the latter remains blocked on the upstream semantic declaration/emitter carrying `rules.tactic.event.check@1` |
+| [[D2534]] | every row points to its exact `module.<id>@1\0<projection>@1` receipt key and the author gate joins all 205 pointers set-equal |
+| [[D2535]] | the resolution compiler creates a frozen runtime-sealed receipt; the final F1 emitter asserts constructor identity before consuming it |
+
+`make module-registration-eighth-author-repair` exercises all six boundaries. The generated
+artifacts remain `requirements_only`, every final binding remains dependency-blocked, and the
+deflection check-arm dependency is now stated rather than laundered as closure. Another genuinely
+fresh independent review is required before acceptance or implementation.
 
 | row | author repair; fresh review still required |
 |---|---|

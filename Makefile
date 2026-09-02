@@ -352,9 +352,12 @@ module-registration-sixth-fresh-review:
 module-registration-seventh-author-repair:
 	./node_modules/.bin/vitest run --config tools/d2505-module-registration-seventh-author-repair/vitest.config.ts --reporter=verbose
 
-.PHONY: module-registration-seventh-fresh-review
+.PHONY: module-registration-seventh-fresh-review module-registration-eighth-author-repair
 module-registration-seventh-fresh-review:
 	node --test tools/d2530-module-registration-seventh-fresh-review/contract.test.mjs
+
+module-registration-eighth-author-repair: module-registration-author-contract
+	node --test tools/d2530-module-registration-eighth-author-repair/contract.test.mjs
 
 .PHONY: campaign-second-fresh-review
 campaign-second-fresh-review:

@@ -14361,3 +14361,21 @@ sole final resolution receipt is structurally forgeable.
 **Evidence/next:** `make module-registration-seventh-fresh-review` passes 6/6. An eighth author
 repair must close all six while retaining every unresolved dependency as blocked, followed by
 another genuinely fresh review before acceptance or implementation.
+
+## 2026-09-02 — Module registration eighth author repair closes six returned boundaries
+
+**What landed:** repaired the draft contract and generated requirement artifacts on [[D2530]]–
+[[D2535]]. Provider acquisition now follows the injected application value; catalogue position and
+applicability declarations have exact producer/projection identities; eval delta is edge-grained;
+deflection carries common and per-alternative inputs; every one of 205 row pointers joins the exact
+receipt key set; and the final resolution receipt is runtime-sealed and asserted at F1 emission.
+
+**What changed:** the repair exposed [[D2536]] instead of hiding it. The check-induced deflection
+detector reads check directly from FEN, while its manifest declaration and sealed emitter cannot
+carry `rules.tactic.event.check@1`. The module requirement models the intended check-specific arm
+but remains blocked on the semantic-collector owner. All artifacts remain `requirements_only`; no
+production binding, schema, API, UX, content or protected-design byte changed.
+
+**Evidence/next:** `make module-registration-eighth-author-repair` passes 6/6 plus the retained
+11/11 author controls. Another genuinely fresh independent review is required before acceptance or
+implementation.
