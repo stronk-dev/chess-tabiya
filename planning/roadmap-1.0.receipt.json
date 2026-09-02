@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:611d327ae3e3ef0da84ed705af9c9bb547ec2ab57941986f4a9b1086c578f906",
+    "roadmap": "sha256:a8ffec82b272f5628acc10af5ffe29eb14b5a5cd29ba56a9dd2b70f0cb61d58f",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:e32345423b7fe45b067c31f8c739248d0b8ff4645b2858870e0664c2a3d14a07",
-    "rfcRegister": "sha256:e49204f64970ba2bb9e09692272bda9ea4c4cdeedb0bf3e8a0de7ae36e229587",
+    "workState": "sha256:fefecf0eaad09792c8c4a2ffc3258042cad307133024f18a138424df33a60f6b",
+    "rfcRegister": "sha256:746004bf498d23e7fb94a58984900ad7a2a0ff3179c773f2319a2afdac6147e8",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 642,
       "doing": 0,
-      "blocked": 864,
-      "done": 763,
+      "blocked": 859,
+      "done": 768,
       "refused": 3
     },
     "workItems": {
@@ -237,10 +237,11 @@
       "nextAction": "Land migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results; extend export, deletion, backup and rebuild with each object.",
       "latestCheckpoint": {
         "at": "2026-09-02",
-        "summary": "Campaign's draft persistence contract now forms one durable authority across active-run uniqueness, event revision, command replay and abandoned history, with executable negatives. Production persistence remains blocked on fresh acceptance and dependency order; storage backup/recovery, bot policy and social durable state retain their own returned or dependency-blocked boundaries.",
-        "impact": "held",
+        "summary": "Campaign's draft persistence authority remains repaired, and storage backup/recovery's second author repair now closes lock ownership, publication cleanup, replacement durability, parsed bundle identity and exact success-check receipts with executable negatives. Production persistence remains blocked on fresh acceptance and dependency order; bot policy and social durable state retain returned or dependency-blocked boundaries.",
+        "impact": "advanced",
         "evidence": [
           "rfc/storage-backup-recovery.md",
+          "planning/storage-backup-recovery/second-author-repair-2026-09-02.md",
           "planning/storage-backup-recovery/second-fresh-independent-buildability-review-2026-08-31.md",
           "rfc/longitudinal-store.md",
           "planning/longitudinal-store/third-fresh-independent-buildability-review-2026-08-31.md",

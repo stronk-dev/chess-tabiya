@@ -5,10 +5,11 @@ import test from "node:test";
 const rfc = readFileSync("rfc/storage-backup-recovery.md", "utf8");
 
 test("D2210: one supervisor owns one inherited open-file description", () => {
-  assert.match(rfc, /`storage-supervisor` is the only process allowed to open and acquire the storage lock/);
+  assert.match(rfc, /`storage-supervisor` is the only process allowed to acquire the storage lock/);
   assert.match(rfc, /opens[\s\S]*?`\/data\/\.tabiya-storage\.lock` as FD 3 without `O_CLOEXEC`/);
   assert.match(rfc, /same open-file description exists before inspection,[\s\S]*before HTTP open,[\s\S]*HTTP lifetime/);
-  assert.match(rfc, /`prepare-start` and `main\.js` validate the inherited descriptor\/inode but never acquire or release/);
+  assert.match(rfc, /independently opened same-inode FD[\s\S]*contends/);
+  assert.match(rfc, /Children never release or reacquire[\s\S]*the inherited lock/);
   assert.match(rfc, /normative ownership sequence is `exec 3>>lock-path`, `flock -n 3`/);
 });
 

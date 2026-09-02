@@ -373,9 +373,9 @@
         "nextAction": "Land migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results; extend export, deletion, backup and rebuild with each object.",
         "latestCheckpoint": {
           "at": "2026-09-02",
-          "summary": "Campaign's draft persistence contract now forms one durable authority across active-run uniqueness, event revision, command replay and abandoned history, with executable negatives. Production persistence remains blocked on fresh acceptance and dependency order; storage backup/recovery, bot policy and social durable state retain their own returned or dependency-blocked boundaries.",
-          "impact": "held",
-          "evidence": ["rfc/storage-backup-recovery.md", "planning/storage-backup-recovery/second-fresh-independent-buildability-review-2026-08-31.md", "rfc/longitudinal-store.md", "planning/longitudinal-store/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/campaign-core.md", "planning/campaign/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/social-play.md"]
+          "summary": "Campaign's draft persistence authority remains repaired, and storage backup/recovery's second author repair now closes lock ownership, publication cleanup, replacement durability, parsed bundle identity and exact success-check receipts with executable negatives. Production persistence remains blocked on fresh acceptance and dependency order; bot policy and social durable state retain returned or dependency-blocked boundaries.",
+          "impact": "advanced",
+          "evidence": ["rfc/storage-backup-recovery.md", "planning/storage-backup-recovery/second-author-repair-2026-09-02.md", "planning/storage-backup-recovery/second-fresh-independent-buildability-review-2026-08-31.md", "rfc/longitudinal-store.md", "planning/longitudinal-store/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/campaign-core.md", "planning/campaign/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/social-play.md"]
         },
         "exit": "Every workflow survives restart, retry, upgrade and projection rebuild with owner/actor identity, immutable inputs, idempotence, lifecycle coverage and no workstation-only state."
       },

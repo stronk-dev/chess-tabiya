@@ -1,10 +1,13 @@
 # RFC: Storage backup, restore, upgrade, and recovery
 
-- **Status:** **draft — RETURNED by second fresh independent review 2026-08-31 on
-  [[D2460]]–[[D2464]].** The repair direction survives, but inherited lock ownership is forgeable,
-  backup cleanup names a retired state, the keep-new phase precedes file durability, bundle ids are
-  unvalidated strings and success checks are arbitrary arrays. `make
-  storage-backup-second-fresh-review` reproduces 5/5. Implementation remains unauthorized.
+- **Status:** **draft — second author repair complete 2026-09-02 on
+  [[D2460]]–[[D2464]]; another fresh independent review is required.** Inherited lock authority now
+  requires an independent same-inode contention proof; cleanup is total over work, reserved and
+  published states; installed bytes become durable before the keep-new journal phase; bundle ids
+  come only from an exact runtime parser; and success receipts derive exact operation-specific
+  tuples from sealed passed checks. `make storage-backup-second-author-repair` retains the prior
+  8 controls and passes 15 new falsifiers plus strict TypeScript. Implementation remains
+  unauthorized.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
@@ -26,6 +29,33 @@ The D2210–D2213 repair direction survives. The fresh review returns five remai
 [[D2463]] bundle identity remains plain `string`; and [[D2464]] success receipts accept arbitrary
 check arrays. `make storage-backup-second-fresh-review` reproduces 5/5. Exact evidence:
 `planning/storage-backup-recovery/second-fresh-independent-buildability-review-2026-08-31.md`.
+
+## Second author repair (2026-09-02)
+
+The five returned seams are repaired as one authority chain, without production storage changes:
+
+1. **[[D2460]]:** descriptor/inode equality is necessary but insufficient. Every child independently
+   opens the configured inode and attempts a non-blocking exclusive lock; only `EWOULDBLOCK` proves
+   that the inherited open-file description already owns the lock. Acquiring the probe lock is a
+   forged/unlocked handoff and refuses before SQLite opens.
+2. **[[D2461]]:** failure cleanup is total over the actual three states. An operation-owned random
+   work directory may be removed; an exclusively reserved final directory with `.publishing` is
+   retained as an invalid abandoned reservation; a published bundle is immutable. The retired
+   `.partial` cleanup instruction is deleted.
+3. **[[D2462]]:** after verification closes SQLite, the installed main inode and live parent are
+   fsynced before `verified` is written and fsynced. Recovery may keep new bytes only from that
+   durable phase; every earlier phase rolls back to the quarantine.
+4. **[[D2463]]:** `BackupId` is a branded output of `parseBackupId(unknown)`. The parser enforces the
+   exact basic-UTC/lowercase-digest grammar and a real millisecond UTC instant by canonical
+   round-trip. Manifest, path and receipt parsers all revalidate unknown bytes before constructing
+   the brand.
+5. **[[D2464]]:** a success receipt has no caller-owned `StorageCheck[]`. One compiler consumes
+   runtime-sealed passed results bound to the operation id, rejects missing/extra/duplicate/forged
+   rows, and emits the exact ordered tuple for the operation and its migration/action arm.
+
+`make storage-backup-second-author-repair` preserves the first repair's 8/8 controls and passes 15
+new able-to-fail arms plus strict TypeScript. This is author evidence, not acceptance or production
+authorization; another genuinely fresh independent review remains mandatory.
 
 ## Summary
 
@@ -97,11 +127,11 @@ the maintenance container. The command refuses:
   either root.
 
 Manual backup and every restore require the HTTP server to be stopped. One image-owned
-`storage-supervisor` is the only process allowed to open and acquire the storage lock. It opens
+`storage-supervisor` is the only process allowed to acquire the storage lock. It opens
 `/data/.tabiya-storage.lock` as FD 3 without `O_CLOEXEC`, acquires non-blocking exclusive `flock`
-once, validates by `fstat` that FD 3 still names the configured lock inode, and exports
-`TABIYA_STORAGE_LOCK_FD=3`. The resulting kernel open-file description—not the pathname, PID,
-environment variable, or file contents—is the authority.
+once, and exports `TABIYA_STORAGE_LOCK_FD=3`. The resulting kernel open-file description—not the
+pathname, PID, environment variable, file contents, descriptor number or inode equality by
+itself—is the authority.
 
 The supervisor is a checked POSIX-shell entry point over the image's pinned util-linux `flock`; its
 normative ownership sequence is `exec 3>>lock-path`, `flock -n 3`, export the inherited-FD marker,
@@ -116,8 +146,17 @@ For `serve`, the supervisor retains FD 3 while it spawns
 then replaces itself with `node apps/server/dist/main.js` using `execve` while preserving FD 3.
 There is no unlock/relock boundary: the same open-file description exists before inspection,
 through migration, at the instant after migration and before HTTP open, and for the HTTP lifetime.
-`prepare-start` and `main.js` validate the inherited descriptor/inode but never acquire or release
-the lock. Production `main.js` refuses startup when the inherited descriptor contract is absent.
+`prepare-start`, every maintenance operation and `main.js` validate the inherited descriptor with
+**two independent checks before SQLite opens**. First, `fstat(3)` and a separately opened
+configured lock path must name the same regular-file inode. Second, the child opens that inode on a
+new open-file description and attempts a non-blocking exclusive contention probe. The probe must
+fail with `EWOULDBLOCK`; if it acquires the lock, FD 3 does not own the claimed lock and the child
+unlocks/closes the probe then refuses `LOCK_AUTHORITY_MISSING`. Any other probe error also refuses.
+Because Linux `flock` locks are attached to an open-file description, a duplicate/inherited FD of
+the supervisor's description shares its lock while an independently opened same-inode FD
+contends. The test image pins that Linux/util-linux behavior. Children never release or reacquire
+the inherited lock. Production `main.js` refuses startup when either inherited-descriptor check is
+absent or fails.
 If preflight fails, the supervisor exits and kernel close releases authority without starting HTTP.
 
 For maintenance, the supervisor acquires the same lock once and replaces itself with the requested
@@ -156,7 +195,7 @@ closed shape:
 interface StorageBackupManifestV1 {
   readonly format: "tabiya-storage-backup";
   readonly formatVersion: 1;
-  readonly backupId: string;             // UTC basic timestamp + 12 lowercase hex digest chars
+  readonly backupId: BackupId;           // parsed UTC basic timestamp + 12 lowercase hex digest chars
   readonly createdAt: string;            // UTC ISO-8601 with exactly millisecond precision
   readonly reservationNonce: string;     // 32 lowercase hex chars from 128 random bits
   readonly reason: "manual" | "pre_upgrade" | "pre_restore";
@@ -177,7 +216,20 @@ interface StorageBackupManifestV1 {
     readonly inventorySha256: string;              // canonical table-name array, not learner data
   };
 }
+
+declare const BACKUP_ID: unique symbol;
+type BackupId = string & { readonly [BACKUP_ID]: "BackupId" };
+
+function parseBackupId(value: unknown): BackupId;
 ```
+
+`parseBackupId` is the only constructor. It accepts exactly
+`YYYYMMDDTHHmmss.SSSZ-[0-9a-f]{12}`, parses the timestamp as a real UTC instant and requires
+canonical round-trip to the same millisecond basic form; impossible dates/times, alternate case,
+missing precision, traversal and suffix/prefix text refuse. A TypeScript brand prevents ordinary
+callers from supplying plain strings, while every manifest/path/receipt parser independently calls
+`parseBackupId` on unknown persisted or argv-derived bytes before serialization, so a cast, spread
+or deserialization cannot bypass runtime validation.
 
 Backup identity is derived only after the standalone snapshot and all manifest facts exist. Let
 `manifestWithoutBackupId` be the exact closed manifest above with `backupId` omitted, including
@@ -252,10 +304,21 @@ more restrictive umask.
 9. fsync both files and the reserved directory, atomically unlink `.publishing`, and fsync the
    backup-root directory before reporting success.
 
-No valid backup path exists before step 9. Failure closes handles, releases the lock, leaves the
-source untouched, and retains or removes only the explicitly named `.partial` directory. Verifiers
-always reject `.partial` paths, extra files, symlinks, non-canonical manifests, unknown keys, and
-unknown format versions.
+No valid backup path exists before step 9. Failure closes handles, releases the lock and leaves the
+source untouched. Cleanup is total over the actual publication state and checks the operation-id
+marker before changing anything:
+
+- before final reservation, remove only the exact random work directory whose owner marker matches
+  this operation;
+- after exclusive final reservation, retain the directory and its matching `.publishing` marker as
+  an invalid abandoned reservation for operator inspection; never remove, adopt or retry through
+  that path;
+- after the marker-removal validity commit, preserve the published bundle byte-for-byte.
+
+A missing/mismatched owner marker refuses cleanup. Legacy `.partial` paths remain collision inputs
+and verifier refusals only; no current cleanup path creates, removes or adopts one. Verifiers always
+reject `.partial` paths, extra files, symlinks, non-canonical manifests, unknown keys, and unknown
+format versions.
 
 Backup creation never runs migrations. A v24 source produces a v24 backup even when the command is
 provided by the v25 image.
@@ -333,12 +396,16 @@ It then performs this state machine:
    the live main path exclusively from the staged standalone inode, unlink the staged name, and
    fsync the live parent; an unsupported-hard-link filesystem is refused during preflight;
 3. `new_installed` — assert both sidecar paths are still absent, open and run the complete declared
-   version/integrity/foreign-key/inventory/migration-invariant checks, then close it;
-4. `verified` — fsync the installed main and live parent, retain the operation's verified backup as
-   the recovery artifact, remove the quarantined triplet/intent, and fsync the transaction parent.
+   version/integrity/foreign-key/inventory/migration-invariant checks, close every SQLite handle,
+   fsync the installed main inode and live parent, and only then atomically write and fsync the
+   `verified` phase;
+4. `verified` — the keep-new commit is now durable. Retain the operation's verified backup as the
+   recovery artifact, remove the quarantined triplet/intent, and fsync the transaction parent.
 
 Each phase is atomically rewritten and fsynced only after its preceding filesystem mutations and
-directory fsyncs complete. A normal failure in `prepared`, `old_quarantined`, or `new_installed`
+file/directory fsyncs complete. In particular, no `verified` byte may be persisted until both the
+installed main inode and live parent directory are durable. A normal failure in `prepared`,
+`old_quarantined`, or `new_installed`
 closes handles, moves any new live main into a failed-artifact location inside the transaction,
 restores every originally present main/WAL/SHM member by its recorded digest, fsyncs both
 directories, and only then removes the intent. The old triplet is therefore restored exactly; an
@@ -346,7 +413,9 @@ old sidecar is never left beside new main bytes.
 
 On supervisor startup, a transaction intent is recovered before any SQLite open. `prepared`,
 `old_quarantined`, and `new_installed` deterministically roll back using the recorded path/digest
-set; `verified` deterministically keeps the installed main and finishes quarantine cleanup. If the
+set—even if checks had passed but the installed inode or `verified` journal write had not become
+durable. Only persisted `verified` deterministically keeps the installed main and finishes
+quarantine cleanup. If the
 actual path/digest set matches neither the recorded old nor staged state, startup returns
 `REPLACEMENT_RECOVERY_REQUIRED` and touches nothing further. A fixture crashes at every rename,
 phase-write, and directory-fsync boundary, including an old source with committed rows resident in
@@ -467,10 +536,19 @@ type StorageAdminOperation =
 type StorageCheck =
   | "digest" | "integrity" | "foreign_keys" | "inventory" | "compatibility"
   | "migration_invariants" | "identity_retention" | "readiness";
+type BackupChecks = readonly ["digest", "integrity", "foreign_keys", "inventory", "compatibility"];
+type VerifyChecks = BackupChecks;
+type PrepareFreshChecks = readonly ["inventory", "compatibility", "readiness"];
+type PrepareCurrentChecks = readonly ["integrity", "foreign_keys", "inventory", "compatibility", "readiness"];
+type PrepareUpgradedChecks = readonly ["digest", "integrity", "foreign_keys", "inventory", "compatibility", "migration_invariants", "readiness"];
+type RestoreCurrentChecks = readonly ["digest", "integrity", "foreign_keys", "inventory", "compatibility", "identity_retention"];
+type RestoreUpgradedChecks = readonly ["digest", "integrity", "foreign_keys", "inventory", "compatibility", "migration_invariants", "identity_retention"];
+type RehearsalCurrentChecks = readonly ["digest", "integrity", "foreign_keys", "inventory", "compatibility", "identity_retention", "readiness"];
+type RehearsalUpgradedChecks = readonly ["digest", "integrity", "foreign_keys", "inventory", "compatibility", "migration_invariants", "identity_retention", "readiness"];
 type StoragePathRef =
   | { readonly role: "database"; readonly identity: "live" }
   | { readonly role: "backup_root"; readonly identity: "configured" }
-  | { readonly role: "bundle"; readonly identity: string } // validated backupId only
+  | { readonly role: "bundle"; readonly identity: BackupId }
   | { readonly role: "staging"; readonly identity: "internal" }
   | { readonly role: "volume"; readonly identity: "disposable_rehearsal" };
 type StorageCompatibilityDisposition =
@@ -487,25 +565,45 @@ interface StorageReceiptBaseV1 {
 
 type StorageAdminReceiptV1 = StorageReceiptBaseV1 & (
   | { readonly operation: "backup"; readonly result: "succeeded";
-      readonly backupId: string; readonly reason: "manual" | "pre_upgrade" | "pre_restore";
+      readonly backupId: BackupId; readonly reason: "manual" | "pre_upgrade" | "pre_restore";
       readonly sourceStorageVersion: number; readonly intendedStorageVersion: number;
-      readonly checks: readonly StorageCheck[] }
+      readonly checks: BackupChecks }
   | { readonly operation: "verify"; readonly result: "succeeded";
-      readonly backupId: string; readonly compatibility: "current" | "upgradeable";
+      readonly backupId: BackupId; readonly compatibility: "current" | "upgradeable";
       readonly sourceStorageVersion: number; readonly currentStorageVersion: number;
-      readonly checks: readonly StorageCheck[] }
+      readonly checks: VerifyChecks }
   | { readonly operation: "prepare_start"; readonly result: "succeeded";
-      readonly action: "fresh" | "current" | "upgraded";
-      readonly sourceStorageVersion: number | null; readonly targetStorageVersion: number;
-      readonly backupId: string | null; readonly checks: readonly StorageCheck[] }
+      readonly action: "fresh"; readonly sourceStorageVersion: null;
+      readonly targetStorageVersion: number; readonly backupId: null;
+      readonly checks: PrepareFreshChecks }
+  | { readonly operation: "prepare_start"; readonly result: "succeeded";
+      readonly action: "current"; readonly sourceStorageVersion: number;
+      readonly targetStorageVersion: number; readonly backupId: null;
+      readonly checks: PrepareCurrentChecks }
+  | { readonly operation: "prepare_start"; readonly result: "succeeded";
+      readonly action: "upgraded"; readonly sourceStorageVersion: number;
+      readonly targetStorageVersion: number; readonly backupId: BackupId;
+      readonly checks: PrepareUpgradedChecks }
   | { readonly operation: "restore"; readonly result: "succeeded";
-      readonly sourceBackupId: string; readonly preRestoreBackupId: string | null;
+      readonly migration: "not_required"; readonly sourceBackupId: BackupId;
+      readonly preRestoreBackupId: BackupId | null;
       readonly sourceStorageVersion: number; readonly targetStorageVersion: number;
-      readonly checks: readonly StorageCheck[] }
+      readonly checks: RestoreCurrentChecks }
+  | { readonly operation: "restore"; readonly result: "succeeded";
+      readonly migration: "applied"; readonly sourceBackupId: BackupId;
+      readonly preRestoreBackupId: BackupId | null;
+      readonly sourceStorageVersion: number; readonly targetStorageVersion: number;
+      readonly checks: RestoreUpgradedChecks }
   | { readonly operation: "rehearsal"; readonly result: "succeeded";
-      readonly sourceBackupId: string; readonly imageDigest: string;
+      readonly migration: "not_required"; readonly sourceBackupId: BackupId;
+      readonly imageDigest: string;
       readonly architecture: "linux/amd64" | "linux/arm64";
-      readonly checks: readonly StorageCheck[] }
+      readonly checks: RehearsalCurrentChecks }
+  | { readonly operation: "rehearsal"; readonly result: "succeeded";
+      readonly migration: "applied"; readonly sourceBackupId: BackupId;
+      readonly imageDigest: string;
+      readonly architecture: "linux/amd64" | "linux/arm64";
+      readonly checks: RehearsalUpgradedChecks }
   | { readonly operation: StorageAdminOperation; readonly result: "refused";
       readonly code: StorageRefusalCode;
       readonly compatibility?: "newer_than_application" | "unsupported_old" }
@@ -525,6 +623,19 @@ type StorageFailureCode =
   | "MIGRATION_FAILED" | "RESTORE_FAILED" | "REPLACEMENT_RECOVERY_REQUIRED"
   | "INTERNAL_ERROR";
 ```
+
+Success callers never supply `checks`. Each check operation returns a runtime-sealed
+`PassedStorageCheck { operationId, check, passed: true }`; only the storage-admin check runner can
+construct that seal. The success compiler chooses the required tuple from the exact operation plus
+`prepare_start.action` or restore/rehearsal `migration`, requires set equality, rejects an empty,
+missing, extra, duplicate, failed, forged or differently operation-bound result, and emits the
+tuple in the canonical order above. Receipt parsing repeats the exact tuple check. A result from a
+prior invocation therefore cannot be replayed into a new success receipt, and a readiness result
+cannot stand in for backup integrity.
+
+Every `BackupId` field and bundle path identity is reconstructed through `parseBackupId` while
+parsing unknown receipt bytes. Serializers accept the parsed receipt only; no raw argv or persisted
+string reaches the public path algebra.
 
 The success arms bind operation identity to operation-specific fields rather than exposing one bag
 of optional properties. `paths` uses logical identities only: it never copies an argv path, host
@@ -592,6 +703,13 @@ The 2026-08-31 author repair addresses the four returned seams without declaring
 `make storage-backup-author-repair` proves eight able-to-fail arms plus the proposed TypeScript
 algebra. Another fresh independent review is still required before acceptance.
 
+The 2026-09-02 second author repair closes [[D2460]]–[[D2464]].
+`make storage-backup-second-author-repair` retains those eight controls and adds 15 dynamic
+falsifiers plus strict TypeScript: unlocked same-inode FD; all three publication cleanup states and
+foreign ownership; pre-durability verified commit; malformed and impossible-date bundle ids;
+nine exact success shapes; and empty/missing/extra/duplicate/wrong-operation/forged check sets.
+Another genuinely fresh independent review is required before acceptance or implementation.
+
 1. A unit fixture keeps committed transactions in WAL, stops the writer, creates a backup through
    `node:sqlite.backup`, removes the source database/WAL/SHM, and restores all sentinel rows from the
    standalone snapshot.
@@ -631,8 +749,10 @@ algebra. Another fresh independent review is still required before acceptance.
     `STORAGE_VERSION`, version-specific table inventories, current account table inventory, or docs
     matrix drifts.
 15. A built-image mutual-exclusion fixture proves an HTTP process holding the storage lock refuses
-    maintenance, a maintenance process holding it refuses HTTP startup, and process death releases
-    authority even when the lock-file pathname remains.
+   maintenance, a maintenance process holding it refuses HTTP startup, and process death releases
+   authority even when the lock-file pathname remains. A direct child given a separately opened FD
+   for that same inode plus the expected environment marker is refused because its independent
+   contention probe acquires rather than returns `EWOULDBLOCK`.
 16. Canonical docs lead an operator through backup, offline copy/retention responsibility, restore
     to a fresh volume, upgrade rehearsal, failed-upgrade recovery, and explicit rollback without
     relying on source-tree knowledge.
@@ -654,6 +774,13 @@ algebra. Another fresh independent review is still required before acceptance.
 
 ## Changelog
 
+- 2026-09-02: second author repair completed [[D2460]]–[[D2464]]. Descriptor validation now proves
+  actual lock ownership by independent contention; cleanup is total over the real publication
+  states; durable installed bytes precede the keep-new journal phase; every bundle identity is a
+  runtime-parsed `BackupId`; and success receipts derive exact tuples from sealed operation-bound
+  checks. `make storage-backup-second-author-repair` retains 8 earlier controls and passes 15 new
+  falsifiers plus strict TypeScript. No production/storage/schema/workflow/content/archive or
+  protected-design byte changed; another fresh independent review remains required.
 - 2026-08-31: second fresh independent review returned the author repair on [[D2460]]–[[D2464]].
   Lock proof, cleanup states, durability phase ordering, validated bundle identity and
   operation-specific success checks require repair; no implementation is authorized.

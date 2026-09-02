@@ -14293,3 +14293,18 @@ aggregate.
 **Evidence/next:** `make semantic-collectors-promotion-fourth-author-repair` passes 3/3 plus strict
 TypeScript and the retained third-author target passes 4/4. A genuinely fresh fifth independent
 review still gates acceptance and implementation.
+
+## 2026-09-02 — Storage backup second author repair closes five recovery-authority seams
+
+**What landed:** repaired [[D2460]]–[[D2464]] at RFC tier only. No production storage, database,
+image, Compose, workflow, schema, content, archive or protected-design byte changed.
+
+**What changed:** inherited lock ownership now requires an independent same-inode contention proof;
+backup failure cleanup is total over work/reserved/published states; the installed main and parent
+become durable before the keep-new journal phase; bundle identities cross one exact runtime parser;
+and success receipts derive exact tuples from sealed, operation-bound passed checks.
+
+**Evidence/next:** `make storage-backup-second-author-repair` retains 8 prior controls and passes 15
+new falsifiers plus strict TypeScript. Another genuinely fresh independent buildability review must
+attack kernel-lock proof, crash ordering, path parsing and receipt construction before acceptance or
+production implementation.

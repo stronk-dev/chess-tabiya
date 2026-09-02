@@ -151,7 +151,7 @@ semantic-validation-author-contract:
 .PHONY: semantic-validation-third-author-repair semantic-validation-adversarial-audit semantic-validation-fourth-author-repair semantic-validation-fifth-fresh-review semantic-validation-fifth-author-repair
 .PHONY: assistance-register-sixth-fresh-review
 .PHONY: provider-protocol-fresh-review
-.PHONY: storage-backup-second-fresh-review
+.PHONY: storage-backup-second-fresh-review storage-backup-second-author-repair
 semantic-validation-author-repair:
 	node --test tools/d2194-semantic-validation-author-repair/contract.test.mjs
 
@@ -185,6 +185,10 @@ provider-protocol-fresh-review:
 
 storage-backup-second-fresh-review:
 	node --test tools/d2460-storage-backup-second-fresh-review/contract.test.mjs
+
+storage-backup-second-author-repair: storage-backup-author-repair
+	./node_modules/.bin/vitest run --config tools/d2460-storage-backup-second-author-repair/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc -p tools/d2460-storage-backup-second-author-repair/tsconfig.json
 
 module-evidence-assembly:
 	./node_modules/.bin/vitest run --config tools/d1865-evidence-assembly-harness/vitest.config.ts --reporter=verbose
