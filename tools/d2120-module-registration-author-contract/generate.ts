@@ -23,12 +23,19 @@ const ref = (id: string, version = 1) => ({ id, version });
 const canonical = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
 const digest = (value: unknown) => `sha256:${createHash("sha256").update(canonical(value)).digest("hex")}`;
 
+const MODULE_VIEW_RESOLVER = Object.freeze({
+  owner: "module-registration",
+  operation: "compileModuleExactOperationResolution(input)",
+  receipt: "ModuleExactOperationResolutionReceipt",
+  status: "blocked_until_all_source_dependencies_land",
+});
+
 const SOURCE_CONTRACTS = Object.freeze([
-  { id: "candidate_population@1", authority: "shared-candidate-evidence-packet", input: "CandidatePopulationRequest", operation: { owner: "rfc/shared-candidate-evidence-packet.md", callable: "CandidatePopulationService.get(request, signal)" }, extract: "candidate occurrence view only", views: ["root_legal_population", "candidate_child_position_by_uci", "candidate_edge_by_uci", "complete_candidate_population"], forbiddenViews: ["committed_edge", "current_root_projection"], parse: "assertCandidatePopulationReceipt", abstain: "CandidatePopulationFailure", seal: "CandidatePopulationReceipt", subjectKinds: ["position", "edge"], timings: ["precommit", "at_commit", "postcommit", "checkpoint", "attempt_end", "review", "analysis"], status: "awaiting_upstream_sealed_operation" },
-  { id: "recorded_semantic_path@1", authority: "recorded-semantic-path", input: "RecordedSemanticPathRequest", operation: { owner: "rfc/recorded-semantic-path.md", callable: "compileRecordedSemanticPath(input)" }, extract: "ordered projection-keyed path occurrences", views: ["recorded_position", "recorded_edge", "recorded_branch_pair", "frozen_run_prefix"], forbiddenViews: ["hypothetical_candidate"], parse: "assertRecordedSemanticPathResult", abstain: "RecordedPathRefusalReason", seal: "RecordedSemanticPathResult.available", subjectKinds: ["position", "edge", "branch_pair", "run_prefix"], timings: ["postcommit", "checkpoint", "attempt_end", "review", "analysis"], status: "awaiting_upstream_sealed_operation" },
-  { id: "review_evidence_packet@1", authority: "review-evidence-compiler", input: "ReviewEvidenceInput", operation: { owner: "rfc/review-evidence-compiler.md", callable: "compileReviewEvidence(input)" }, extract: "projection-keyed frozen-prefix occurrences", views: ["recorded_edge", "recorded_branch_pair", "frozen_run_prefix"], forbiddenViews: ["current_root", "hypothetical_candidate"], parse: "assertReviewEvidencePacket", abstain: "ReviewFamilyState", seal: "ReviewEvidencePacket", subjectKinds: ["edge", "branch_pair", "run_prefix"], timings: ["postcommit", "review", "analysis"], status: "awaiting_upstream_sealed_operation" },
-  { id: "catalogue_evidence_packet@1", authority: "module-registration", input: "CatalogueEvidencePoolRequest", operation: { owner: "rfc/module-registration.md", callable: "compileCatalogueEvidencePool(input)" }, extract: "exact cited pack/shape/theory declared items", views: ["applicable_catalogue_position"], forbiddenViews: ["uncited_text", "whole_catalogue_search"], parse: "assertCatalogueEvidencePool", abstain: "CatalogueEvidencePoolAbsence", seal: "CatalogueEvidencePoolReceipt", subjectKinds: ["position"], timings: ["postcommit", "checkpoint", "attempt_end", "review", "analysis"], status: "awaiting_module_owned_adapter" },
-  { id: "provider_evidence_packet@1", authority: "provider-exchange-and-execution", input: "TypedProviderRequest", operation: { owner: "rfc/provider-exchange-and-execution.md", callable: "ProviderExchangeScheduler.get(request, scope, signal)" }, extract: "one operation-keyed declared provider delivery", views: ["request_position", "request_edge", "frozen_run_prefix"], forbiddenViews: ["generic_provider_pool"], parse: "assertProviderDelivery", abstain: "TypedProviderResult.unavailable", seal: "DeclaredEvidence<ProviderEvidenceDelivery>", subjectKinds: ["position", "edge", "run_prefix"], timings: ["postcommit", "checkpoint", "attempt_end", "review", "analysis"], status: "awaiting_upstream_sealed_operation" },
+  { id: "candidate_population@1", authority: "shared-candidate-evidence-packet", input: "CandidatePopulationRequest<S>", result: "CandidatePopulationResult<S>", operation: { owner: "rfc/shared-candidate-evidence-packet.md", callable: "CandidatePopulationService.get(request, signal)" }, extract: "candidate occurrence view only", views: ["root_legal_population", "candidate_child_position_by_uci", "candidate_edge_by_uci", "complete_candidate_population"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["committed_edge", "current_root_projection"], assertion: { callable: "assertCandidatePopulationReceipt(value)", appliesTo: "ready.receipt" }, abstain: "CandidatePopulationFailure | cancelled", seal: "CandidatePopulationReceipt", subjectKinds: ["position", "edge"], timings: ["precommit", "at_commit", "postcommit", "checkpoint", "attempt_end", "review", "analysis"], status: "awaiting_upstream_sealed_operation" },
+  { id: "recorded_semantic_path@1", authority: "recorded-semantic-path", input: "Readonly<{ principal: Principal; runId: string; branchId: string }>", result: "RecordedSemanticPathResult", operation: { owner: "rfc/recorded-semantic-path.md", callable: "compileRecordedSemanticPath(input)" }, extract: "ordered projection-keyed path occurrences", views: ["recorded_position", "recorded_edge", "recorded_branch_pair", "frozen_run_prefix"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["hypothetical_candidate"], assertion: null, itemAssertion: "assertSemanticEvidenceEvent(value)", abstain: "RecordedPathRefusalReason", seal: "SemanticEvidenceEvent items only; the result has no declared aggregate runtime seal", subjectKinds: ["position", "edge", "branch_pair", "run_prefix"], timings: ["postcommit", "checkpoint", "attempt_end", "review", "analysis"], blocker: "recorded-semantic-path must publish an aggregate result assertion or exact module adapter before resolution", status: "blocked_upstream_missing_result_assertion" },
+  { id: "review_evidence_packet@1", authority: "review-evidence-compiler", input: null, result: "ReviewEvidencePacket", operation: { owner: "rfc/review-evidence-compiler.md", callable: "compileReviewEvidence(input)" }, extract: "projection-keyed frozen-prefix occurrences", views: ["recorded_edge", "recorded_branch_pair", "frozen_run_prefix"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["current_root", "hypothetical_candidate"], assertion: null, itemAssertion: "assertDeclaredEvidence(value)", abstain: "ReviewFamilyState", seal: "DeclaredEvidence items plus packetDigest; the RFC declares neither a callable input type nor aggregate runtime seal", subjectKinds: ["edge", "branch_pair", "run_prefix"], timings: ["postcommit", "review", "analysis"], blocker: "review-evidence-compiler must publish its callable input and aggregate assertion or exact module adapter before resolution", status: "blocked_upstream_incomplete_callable_abi" },
+  { id: "catalogue_evidence_packet@1", authority: "module-registration", input: "CatalogueEvidencePoolRequest", result: "CatalogueEvidencePoolResult", operation: { owner: "rfc/module-registration.md", callable: "compileCatalogueEvidencePool(input)" }, extract: "exact cited pack/shape/theory declared items", views: ["applicable_catalogue_position"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["uncited_text", "whole_catalogue_search"], assertion: { callable: "assertCatalogueEvidencePoolReceipt(value)", appliesTo: "available.receipt" }, abstain: "CatalogueEvidencePoolAbsence", seal: "CatalogueEvidencePoolReceipt", subjectKinds: ["position"], timings: ["postcommit", "checkpoint", "attempt_end", "review", "analysis"], status: "awaiting_module_owned_adapter" },
+  { id: "provider_evidence_packet@1", authority: "provider-exchange-and-execution", input: "TypedProviderRequest<K>", result: "TypedProviderResult<K>", operation: { owner: "rfc/provider-exchange-and-execution.md", callable: "ProviderExchangeScheduler.get(request, scope, signal)", successPipeline: ["assertProviderDelivery(request.operation, result.delivery)", "ProviderSourceFactories[request.operation].make(result.delivery)"] }, extract: "one operation-keyed declared provider delivery", views: ["request_position", "request_edge", "frozen_run_prefix"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["generic_provider_pool"], assertion: { callable: "assertProviderDelivery(request.operation, result.delivery)", appliesTo: "success.delivery" }, abstain: "ProviderSourceFailure<K> | ProviderLocalDomainResult<K>", seal: "DeclaredEvidence<ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>> returned by ProviderSourceFactory<K>.make(delivery)", subjectKinds: ["position", "edge", "run_prefix"], timings: ["postcommit", "checkpoint", "attempt_end", "review", "analysis"], status: "awaiting_upstream_sealed_operation" },
 ] as const);
 const sourceContractById = new Map(SOURCE_CONTRACTS.map((source) => [source.id, source]));
 
@@ -105,12 +112,21 @@ const inputRelation = (sourceSubjectKind: string, outputSubjectKind: string): st
 };
 
 const EXACT_OCCURRENCE_CONTRACTS = Object.freeze({
-  "derived.tactic.deflection_observed": { kind: "ordered_window", alternatives: [{ horizon: 3, outputEdgeOffset: 3, operands: [
-    { projection: "run.record.move", cardinality: 3, edgeOffsets: [1, 2, 3], roles: ["bait_move", "defender_reply", "target_capture"] },
-    { projection: "rules.tactic.reading.defender_duty_set", cardinality: 1, positionOffsets: [0], roles: ["duty_before"] },
-    { projection: "rules.transition.event.capture", cardinality: 2, edgeOffsets: [2, 3], roles: ["bait_capture", "target_capture"] },
-    { projection: "rules.exchange.predicate.legal_exchange", cardinality: 1, edgeOffsets: [3], roles: ["positive_target_capture"] },
-  ] }], equality: ["same_recorded_branch", "contiguous_node_fen", "retained_piece_identities"] },
+  "derived.tactic.deflection_observed": { kind: "ordered_window", alternatives: [
+    { discriminator: "bait_capture", horizon: 3, outputEdgeOffset: 3, operands: [
+      { projection: "run.record.move", cardinality: 3, edgeOffsets: [1, 2, 3], roles: ["bait_move", "defender_reply", "target_capture"] },
+      { projection: "rules.tactic.reading.defender_duty_set", cardinality: 1, positionOffsets: [0], roles: ["duty_before"] },
+      { projection: "rules.transition.event.capture", cardinality: 2, edgeOffsets: [2, 3], roles: ["bait_capture", "target_capture"] },
+      { projection: "rules.exchange.predicate.legal_exchange", cardinality: 1, edgeOffsets: [3], roles: ["positive_target_capture"] },
+    ] },
+    { discriminator: "check_induced", horizon: 3, outputEdgeOffset: 3, operands: [
+      { projection: "run.record.move", cardinality: 3, edgeOffsets: [1, 2, 3], roles: ["checking_bait_move", "defender_reply", "target_capture"] },
+      { projection: "rules.tactic.reading.defender_duty_set", cardinality: 1, positionOffsets: [0], roles: ["duty_before"] },
+      { projection: "rules.tactic.event.check", cardinality: 1, edgeOffsets: [1], roles: ["checking_bait_move"] },
+      { projection: "rules.transition.event.capture", cardinality: 1, edgeOffsets: [3], roles: ["target_capture"] },
+      { projection: "rules.exchange.predicate.legal_exchange", cardinality: 1, edgeOffsets: [3], roles: ["positive_target_capture"] },
+    ] },
+  ], equality: ["same_recorded_branch", "contiguous_node_fen", "retained_piece_identities"] },
   "derived.tactic.attraction_observed": { kind: "ordered_window", alternatives: [
     { horizon: 3, outputEdgeOffset: 3, operands: [
       { projection: "run.record.move", cardinality: 3, edgeOffsets: [1, 2, 3], roles: ["bait_move", "heavy_piece_capture", "checking_consequence"] },
@@ -147,8 +163,8 @@ const EXACT_OCCURRENCE_CONTRACTS = Object.freeze({
     { projection: "rules.exchange.predicate.legal_exchange", cardinality: 1, edgeOffsets: [3], roles: ["positive_second_capture"] },
   ] }], equality: ["same_recorded_branch", "contiguous_node_fen", "same_defender", "different_retained_target"] },
   "derived.compare.eval_delta": { kind: "ordered_endpoints", alternatives: [{ operands: [
-    { projection: "live.stockfish.eval", cardinality: 2, endpointRoles: ["branch_a", "branch_b"] },
-  ] }], equality: ["declared_branch_pair_order", "same_engine_id", "same_search_limit", "same_score_domain"] },
+    { projection: "live.stockfish.eval", cardinality: 2, endpointRoles: ["before", "after"] },
+  ] }], equality: ["same_recorded_branch", "consecutive_trail_order", "same_engine_id", "same_search_limit", "same_score_domain"], outputOperands: ["delta", "plyOffset"] },
   "derived.grade.move_quality": { kind: "ordered_endpoints", alternatives: [
     { operands: [{ projection: "recorded.engine.eval", cardinality: 2, endpointRoles: ["before", "after"] }] },
     { operands: [{ projection: "live.stockfish.eval", cardinality: 2, endpointRoles: ["before", "after"] }] },
@@ -236,10 +252,13 @@ const bindingRows = pairs.map(({ module, projection: projectionId }) => {
             ? { kind: "provider_request_subject", suppliedBy: "typed_provider_request" }
             : { kind: "applicability_identity", suppliedBy: "sealed_catalogue_adapter" },
       exactProjectionOperation: null,
+      resolutionOwner: { ...MODULE_VIEW_RESOLVER, projection: ref(projection.id, projection.version) },
       status: "awaiting_upstream_exact_occurrence_operation",
     },
     timingRequirement: { moduleRequested: policy.timings, sourceCeiling: sourceTimingCeiling,
-      exactProjectionOperation: null, status: "awaiting_upstream_exact_operation" },
+      exactProjectionOperation: null,
+      resolutionOwner: { ...MODULE_VIEW_RESOLVER, pair: `${module}@1\u0000${projectionId}@${projection.version}` },
+      status: "awaiting_upstream_exact_operation" },
     roles: policy.roles, sessions, forms, answerContent: projection.answerContent,
     latency: { mode: producer.latency, maxMs: producer.latency === "sync" ? 50 : producer.latency === "interactive" ? 500 : null },
     budget: { maxFacts: policy.maxFacts, maxForms: forms.length }, status: "blocked_dependencies",
@@ -247,8 +266,14 @@ const bindingRows = pairs.map(({ module, projection: projectionId }) => {
 }).sort((left, right) => `${left.consumer.id}\0${left.projection.id}`.localeCompare(`${right.consumer.id}\0${right.projection.id}`));
 
 for (const forms of Object.values(COMPONENT_FORM_CAPABILITIES)) if (forms.length === 0) throw new TypeError("empty presentation component capability");
-const execution = { schemaVersion: 2, kind: "module_evidence_requirements", completionClaim: "requirements_only", population: requirementRows.length, awaiting: [...awaiting].sort(), sourceContracts: SOURCE_CONTRACTS, sourceInputs: SOURCE_INPUTS, guidedHint: GUIDED_HINT_AUTHORITY, rows: requirementRows };
-const bindings = { schemaVersion: 2, kind: "module_binding_requirements", completionClaim: "requirements_only", population: bindingRows.length, guidedHint: GUIDED_HINT_AUTHORITY, rows: bindingRows };
+const exactOperationResolution = Object.freeze({
+  ...MODULE_VIEW_RESOLVER,
+  requiredProjectionKeys: requirementRows.map((row) => `${row.projection.id}@${row.projection.version}`).sort(),
+  requiredPairKeys: bindingRows.map((row) => `${row.consumer.id}@${row.consumer.version}\u0000${row.projection.id}@${row.projection.version}`).sort(),
+  completion: "set_equal_non_null_operations_and_timing_intersections",
+});
+const execution = { schemaVersion: 2, kind: "module_evidence_requirements", completionClaim: "requirements_only", population: requirementRows.length, awaiting: [...awaiting].sort(), sourceContracts: SOURCE_CONTRACTS, sourceInputs: SOURCE_INPUTS, guidedHint: GUIDED_HINT_AUTHORITY, exactOperationResolution, rows: requirementRows };
+const bindings = { schemaVersion: 2, kind: "module_binding_requirements", completionClaim: "requirements_only", population: bindingRows.length, guidedHint: GUIDED_HINT_AUTHORITY, exactOperationResolution, rows: bindingRows };
 writeFileSync("rfc/contracts/module-execution-plan-v1.json", canonical({ ...execution, digest: digest(execution) }));
 writeFileSync("rfc/contracts/module-binding-plan-v1.json", canonical({ ...bindings, digest: digest(bindings) }));
 console.log(`module-registration requirements: ${requirementRows.length} evidence rows / ${bindingRows.length} binding rows; final emission refused`);

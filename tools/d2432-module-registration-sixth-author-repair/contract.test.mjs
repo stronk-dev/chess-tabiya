@@ -15,7 +15,7 @@ const byId = new Map(execution.rows.map((row) => [row.projection.id, row]));
 
 test("D2432 seven multi-edge operations retain ordered roles, horizons and output anchors", () => {
   const expected = new Map([
-    ["derived.tactic.deflection_observed", [3]],
+    ["derived.tactic.deflection_observed", [3, 3]],
     ["derived.tactic.attraction_observed", [3, 5]],
     ["derived.tactic.line_blocker_clearance_observed", [3]],
     ["derived.tactic.square_clearance_observed", [3]],
@@ -38,6 +38,7 @@ test("D2432 seven multi-edge operations retain ordered roles, horizons and outpu
 test("D2433 candidate population publishes exact views and every binding names one locator", () => {
   const source = execution.sourceContracts.find((row) => row.id === "candidate_population@1");
   assert.deepEqual(source.views, ["root_legal_population", "candidate_child_position_by_uci", "candidate_edge_by_uci", "complete_candidate_population"]);
+  assert.equal(source.viewAuthority.owner, "module-registration");
   assert.deepEqual(source.forbiddenViews, ["committed_edge", "current_root_projection"]);
   assert.equal(source.operation.callable, "CandidatePopulationService.get(request, signal)");
   const rows = execution.rows.filter((row) => row.acquisition === source.id);
@@ -52,9 +53,9 @@ test("D2433 candidate population publishes exact views and every binding names o
 
 test("D2434 signed deltas require ordered endpoints and equality joins", () => {
   const compare = byId.get("derived.compare.eval_delta").derivation.occurrenceContract;
-  assert.deepEqual(compare.alternatives[0].operands[0].endpointRoles, ["branch_a", "branch_b"]);
+  assert.deepEqual(compare.alternatives[0].operands[0].endpointRoles, ["before", "after"]);
   assert.equal(compare.alternatives[0].operands[0].cardinality, 2);
-  assert.deepEqual(compare.equality, ["declared_branch_pair_order", "same_engine_id", "same_search_limit", "same_score_domain"]);
+  assert.deepEqual(compare.equality, ["same_recorded_branch", "consecutive_trail_order", "same_engine_id", "same_search_limit", "same_score_domain"]);
   const grade = byId.get("derived.grade.move_quality").derivation.occurrenceContract;
   assert.deepEqual(grade.alternatives.map((arm) => arm.operands[0].projection), ["recorded.engine.eval", "live.stockfish.eval"]);
   assert.ok(grade.alternatives.every((arm) => arm.operands[0].cardinality === 2));
@@ -74,6 +75,12 @@ test("D2435 source contracts name exact owner operations and no rejected view au
     "compileReviewEvidence(input)",
     "compileCatalogueEvidencePool(input)",
     "ProviderExchangeScheduler.get(request, scope, signal)",
+  ]);
+  assert.equal(execution.sourceContracts.find((row) => row.id === "recorded_semantic_path@1").assertion, null);
+  assert.equal(execution.sourceContracts.find((row) => row.id === "review_evidence_packet@1").input, null);
+  assert.deepEqual(execution.sourceContracts.find((row) => row.id === "provider_evidence_packet@1").operation.successPipeline, [
+    "assertProviderDelivery(request.operation, result.delivery)",
+    "ProviderSourceFactories[request.operation].make(result.delivery)",
   ]);
   assert.doesNotMatch(fixture, /AUTHOR_ADDITIONAL_SUBJECT_VIEWS/u);
   assert.match(rfc, /compileCatalogueEvidencePool/u);

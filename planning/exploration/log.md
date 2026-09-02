@@ -14243,3 +14243,21 @@ is cumulative under `make pack-capability-author-contract`. This is author evide
 fresh independent review must attack token dispatch, worker population, origin spoofing, lease
 recovery and cross-transaction crash states before acceptance or implementation. The provider-health
 RFC is now an explicit dependency because it owns the exact operation receipts.
+
+## 2026-09-02 — Module registration seventh author repair closes source, occurrence and ownership returns
+
+**What landed:** repaired [[D2505]]–[[D2508]] at RFC tier only. The 117-projection and 205-pair
+artifacts remain `requirements_only`; no runtime, API, schema, content, pack, provider or
+learner-visible implementation was attempted.
+
+**What changed:** source rows now name real declared ABIs or explicitly preserve the missing
+Recorded/Review aggregate assertions as blockers. Provider admission retains the operation argument
+and operation-keyed source factory. Eval delta is again consecutive and same-branch. Deflection
+retains both bait-capture and check-induced arms. One module-owned exact-operation compiler now owns
+the set-equal projection/pair resolution, and every unresolved row points to it.
+
+**Evidence/next:** `make module-registration-seventh-author-repair` passes 4/4, including a legal
+`Ra8+ Rg8 Rxe7` check-induced deflection fixture against the production detector. The cumulative
+author contracts remain green. A genuinely fresh independent review must attack the declared ABI
+absence posture, selector ownership, alternative topology and set-equal resolution receipt before
+acceptance or implementation.

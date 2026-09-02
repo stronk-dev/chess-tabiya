@@ -27,11 +27,15 @@ describe("module-registration sealed-pool author repair", () => {
       const policy = AUTHOR_MODULE_POLICIES[module as keyof typeof AUTHOR_MODULE_POLICIES];
       const requirement = requirementById.get(row.projection.id) as any;
       const source = sourceById.get(requirement.acquisition) as any;
-      expect(row.timingRequirement).toEqual({
+      expect(row.timingRequirement).toMatchObject({
         moduleRequested: policy.timings,
         sourceCeiling: policy.timings.filter((timing) => source.timings.includes(timing)),
         exactProjectionOperation: null,
         status: "awaiting_upstream_exact_operation",
+      });
+      expect(row.timingRequirement.resolutionOwner).toMatchObject({
+        owner: "module-registration",
+        receipt: "ModuleExactOperationResolutionReceipt",
       });
       expect(row.roles).toEqual(policy.roles);
       expect(row.budget.maxFacts).toBe(policy.maxFacts);
@@ -40,12 +44,19 @@ describe("module-registration sealed-pool author repair", () => {
   });
 
   it("D2165 publishes complete typed upstream source contracts and no direct detector operation", () => {
-    const required = ["input", "operation", "extract", "parse", "abstain", "seal", "status"];
+    const required = ["input", "result", "operation", "extract", "assertion", "abstain", "seal", "status"];
     expect(execution.sourceContracts.map((row:any) => row.id)).toEqual([
       "candidate_population@1", "recorded_semantic_path@1", "review_evidence_packet@1",
       "catalogue_evidence_packet@1", "provider_evidence_packet@1",
     ]);
-    for (const source of execution.sourceContracts) for (const field of required) expect(source[field]).toBeTruthy();
+    for (const source of execution.sourceContracts) {
+      for (const field of required) expect(source).toHaveProperty(field);
+      expect(source.operation.callable).toBeTruthy();
+      expect(source.extract).toBeTruthy();
+      expect(source.abstain).toBeTruthy();
+      expect(source.seal).toBeTruthy();
+      expect(source.status).toBeTruthy();
+    }
     for (const row of execution.rows) {
       expect(row).not.toHaveProperty("operation");
       expect(row.requiredOutput).toEqual({ kind: "sealed_projection_item", projection: row.projection });

@@ -1,11 +1,13 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — RETURNED by sixth fresh independent review 2026-09-02 on
-  [[D2505]]–[[D2508]].** The sixth repair's requirements-only posture and move-quality `anyOf`
-  survive, but four source ABIs remain invented, eval delta is assigned the wrong subject,
-  deflection loses its check-induced arm, and all 205 null exact operations have no completion
-  owner. `make module-registration-sixth-fresh-review` passes 4/4. No implementation before a
-  seventh author repair, another fresh independent review and accepted dependencies. The fourth
+- **Status:** **draft — seventh author repair complete 2026-09-02 on
+  [[D2505]]–[[D2508]]; another fresh independent review is required.** Source contracts now name
+  only declared ABIs and explicitly block on absent aggregate assertions; the provider arm retains
+  its operation argument and operation-keyed evidence factory; eval delta preserves consecutive
+  same-branch order; deflection retains bait-capture and check-induced alternatives; and one named
+  exact-operation compiler owns set-equal resolution of all 117 projections and 205 pairs. No
+  implementation is authorised before another fresh independent review and accepted dependencies.
+  The fourth
   repair rejects the prior generator's
   central premise: learner modules do not invoke 117 detector/provider functions. They consume
   projection-keyed sealed pools produced by the candidate packet, recorded semantic path, Review,
@@ -955,22 +957,114 @@ one selector and still carries `exactProjectionOperation:null` until the owner l
 Catalogue is the only module-owned source adapter:
 
 ```ts
+interface CanonicalPositionIdentity {
+  readonly positionKey: string;
+}
+
+interface TheoryApplicabilityIdentity {
+  readonly positionKey: string;
+  readonly source: VersionedEvidenceId;
+  readonly citation: string;
+}
+
+interface CatalogueEvidencePoolRequest {
+  readonly position: DeclaredEvidence<CanonicalPositionIdentity>;
+  readonly applicability: DeclaredEvidence<TheoryApplicabilityIdentity>;
+  readonly requested: readonly VersionedEvidenceId[];
+}
+
+interface CatalogueEvidencePoolReceipt {
+  readonly position: CatalogueEvidencePoolRequest["position"];
+  readonly applicability: CatalogueEvidencePoolRequest["applicability"];
+  readonly requested: CatalogueEvidencePoolRequest["requested"];
+  readonly items: readonly DeclaredEvidence<unknown>[];
+}
+
+type CatalogueEvidencePoolAbsence =
+  | "applicability_absent"
+  | "citation_absent"
+  | "source_unavailable";
+
 type CatalogueEvidencePoolResult =
   | { readonly kind: "available"; readonly receipt: CatalogueEvidencePoolReceipt }
-  | { readonly kind: "unavailable"; readonly reason:
-      | "applicability_absent" | "citation_absent" | "source_unavailable" };
+  | { readonly kind: "unavailable"; readonly reason: CatalogueEvidencePoolAbsence };
 
-declare function compileCatalogueEvidencePool(input: Readonly<{
-  position: DeclaredEvidence<CanonicalPositionIdentity>;
-  applicability: DeclaredEvidence<TheoryApplicabilityIdentity>;
-  requested: readonly VersionedEvidenceId[];
-}>): CatalogueEvidencePoolResult;
+declare function compileCatalogueEvidencePool(
+  input: Readonly<CatalogueEvidencePoolRequest>,
+): CatalogueEvidencePoolResult;
+
+declare function assertCatalogueEvidencePoolReceipt(
+  value: unknown,
+): asserts value is CatalogueEvidencePoolReceipt;
 ```
 
 It reads only already-declared cited pack/shape/theory items whose applicability identity equals the
 sealed position identity. It performs no text search, classifier inference or chess judgement;
 uncited text and whole-catalogue retrieval are typed refusals. Its receipt retains each exact input
-and output declaration. This adapter cannot land before the theory/provenance authorities it names.
+and output declaration. A module-private `WeakSet<CatalogueEvidencePoolReceipt>` is populated only
+by `compileCatalogueEvidencePool`; the exported assertion checks membership, frozen inputs, exact
+position-key equality, requested/output projection membership and the F1 seal of every item. A
+plain object, clone, cast or JSON round-trip fails. This adapter cannot land before the
+theory/provenance authorities it names.
+
+The other four source rows do not invent aggregate seals that their owner RFCs lack. Candidate
+population names its complete published request/result/assertion ABI. Provider acquisition names
+the complete two-step success pipeline: `ProviderExchangeScheduler.get`, then
+`assertProviderDelivery(request.operation, result.delivery)`, then the matching
+`ProviderSourceFactories[request.operation].make(result.delivery)`. Recorded path has sealed
+`SemanticEvidenceEvent` members but no aggregate result assertion; Review has sealed
+`DeclaredEvidence` members and a packet digest but neither a declared callable input type nor an
+aggregate assertion. Those two rows therefore remain explicitly blocked on their owner RFCs. A
+requirements artifact may name absence; it may not turn an undeclared assertion into an API.
+
+The four candidate occurrence-view names are module-owned selectors over an asserted
+`CandidatePopulationReceipt`, not exports claimed from the candidate RFC. The same rule applies to
+recorded, Review, catalogue and provider view names: they are resolved only by the operation
+compiler below, after its source ABI is present.
+
+#### 2.5.1 — Exact-operation resolution owner
+
+`module-registration` owns the successor that replaces every current null without weakening the
+blocked posture:
+
+```ts
+interface ModuleExactProjectionOperation {
+  readonly projection: VersionedEvidenceId;
+  readonly sourceContract: string;
+  readonly occurrenceView: string;
+  readonly operation: { readonly owner: string; readonly symbol: string };
+}
+
+interface ModuleExactPairOperation {
+  readonly pair: `${string}@${number}\u0000${string}@${number}`;
+  readonly projectionOperation: VersionedEvidenceId;
+  readonly occurrenceSelector: string;
+  readonly timing: readonly ModuleTiming[];
+  readonly presentationPair: string;
+}
+
+interface ModuleExactOperationResolutionReceipt {
+  readonly projections: readonly ModuleExactProjectionOperation[];
+  readonly pairs: readonly ModuleExactPairOperation[];
+  readonly sourceContractDigest: string;
+  readonly modulePlanDigest: string;
+}
+
+declare function compileModuleExactOperationResolution(input: Readonly<{
+  executionPlan: ModuleEvidenceRequirements;
+  bindingPlan: ModuleBindingRequirements;
+  sourceContracts: ModuleSourceContractRegistry;
+  presentationPairs: ModulePresentationPairRegistry;
+}>): ModuleExactOperationResolutionReceipt;
+```
+
+The compiler cannot run successfully until every source blocker and exact presentation-pair
+dependency is discharged. Its receipt must be set-equal to the generated artifact's
+`exactOperationResolution.requiredProjectionKeys` (**117 now**) and `requiredPairKeys` (**205
+now**), with exactly one non-null projection operation and exactly one non-empty occurrence/timing
+intersection for every key and no extras. The receipt is the sole legal input to final F1 binding
+emission. Dependency landing triggers regeneration and this compiler; no upstream RFC is expected
+to know module-specific occurrence-view names.
 
 #### 2.5.0 — Withdrawn direct-call draft (historical, non-normative)
 
@@ -1811,6 +1905,13 @@ deleting one disclosure id from the family×rung product fails;
     `planning/exploration/log.md` entry in the same commit, and writes its SHA into
     `move-quality-grades.md`'s D1 (which its Status line says blocks archival),
     `learner-modules.md`'s D1, and `play-composition.md`'s D2 where those are discharged.
+23. **A23 — Exact-operation successor is total and refuses partial closure** ([[D2508]]).
+    `compileModuleExactOperationResolution` accepts no null operation, empty timing intersection,
+    unresolved source blocker or missing presentation pair. Its projection keys are set-equal to
+    all 117 execution requirements and its pair keys to all 205 binding requirements at this
+    image, with no duplicates or extras. Deleting any one key, supplying one extra, resolving only
+    an occurrence or only timing, or substituting an upstream-owned candidate view fails before a
+    final F1 row is emitted. **RED now:** dependencies are deliberately unresolved.
 
 ## Discharges
 
@@ -1823,6 +1924,7 @@ deleting one disclosure id from the family×rung product fails;
 | D5 | Durable per-learner module-delivery records — §2.5's ephemeral receipt deliberately cannot reconstruct pre-/at-commit disclosure, earn novelty/hint/campaign credit or feed history; durable capture is `longitudinal-store`'s declared grain and becomes mandatory before any such consumer | longitudinal-store | the longitudinal-store commit adding a module-delivery projection | |
 | D6 | Per-timing role narrowing — `ModuleTimingDeclaration` carries timing and initiative only, so `compare_coach` takes the narrower role set across both its arms (§1.2). A spectator loses nothing reachable today, but the contract cannot express what it should | learner-modules | the learner-modules amendment commit | |
 | D7 | `HINT_HORIZON_PROJECTION_IDS`, `HINT_DISCLOSURE_PROJECTION_IDS` and the sealed rung compiler — one internal projection per measured family and one learner projection per family/rung, each retaining only its exact evidence inputs, relation polarity, answer image, abstention and scope. The module imports only the literal disclosure set and remains RED while either registry differs from the measured family×rung product | hint-distance | the accepted producer amendment and implementation commit | |
+| D8 | Exact source/view/timing/presentation resolution for the current 117 projections and 205 module pairs. `compileModuleExactOperationResolution` is the sole successor: it remains blocked while any source ABI/assertion or presentation pair is absent and emits one set-equal receipt before final F1 rows exist | module-registration | the implementation commit whose receipt key sets equal both generated `exactOperationResolution` sets | |
 
 ## Open questions
 
@@ -1898,6 +2000,19 @@ Sixth fresh independent return (2026-09-02):
 `planning/learner-modules/sixth-fresh-independent-buildability-review-2026-09-02.md`. The seventh
 author repair must keep every requirement blocked until the real operation exists; it may not make
 the review green by deleting the nulls or copying new private source authorities.
+
+Seventh author repair (2026-09-02):
+
+| row | author repair; fresh review still required |
+|---|---|
+| [[D2505]] | source rows name complete declared owner ABIs; missing Recorded/Review aggregate assertions are explicit blockers, catalogue declares and seals its own adapter, and provider success retains the operation argument plus operation-keyed source factory |
+| [[D2506]] | eval delta uses ordered `before`/`after` consecutive points on one recorded branch and retains the shipped `delta`/`plyOffset` operands |
+| [[D2507]] | deflection has literal bait-capture and check-induced alternatives; the check arm requires check on edge 1 and capture only on the positive target-capture edge 3 |
+| [[D2508]] | `compileModuleExactOperationResolution` and D8 own one set-equal 117-projection/205-pair receipt; every null row points to that owner and candidate view names are module-owned selectors |
+
+`make module-registration-seventh-author-repair` exercises the repair. Artifacts remain
+`requirements_only` and every pair remains dependency-blocked; another fresh independent review is
+required before acceptance or implementation.
 
 | row | author repair; fresh review still required |
 |---|---|
@@ -1977,6 +2092,12 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   input-equivalence clause inside the surface built to satisfy it.
 
 ## Changelog
+
+- 2026-09-02 (seventh author repair): repaired [[D2505]]–[[D2508]] without laundering missing
+  dependencies into callable APIs. The generated source contracts distinguish declared aggregate
+  assertions from item-only seals, preserve provider operation-keyed admission, restore shipped
+  eval-delta and both deflection arms, and name the sole set-equal exact-operation successor.
+  `make module-registration-seventh-author-repair` passes; fresh review remains required.
 
 - 2026-09-02 (sixth fresh independent return): returned on [[D2505]]–[[D2508]]. Source contracts
   still name undeclared input/parser/seal ABIs and mis-call provider admission; eval delta changes

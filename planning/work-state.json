@@ -19913,39 +19913,39 @@
     },
     {
       "id": "D2505",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f3ea473c8930fbf3b506c1b23b010b23ba6e4a51b9cbb25c2d8e73f9e52a18b5",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ff050e379a79e1277438c6e25f61227fcb9c7313a6afe026d0f960517385b495",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:module-registration.md"
+      "evidence": "planning/learner-modules/seventh-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2506",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:bb6d3e2ec9d8f2907da25ebdde4732f584f80552aa9d5cd48f33587808ad0ab4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a80238da1f409186922b11334508d2c5abee3c6ce9d61f904fd28ed66932ab6a",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:module-registration.md"
+      "evidence": "planning/learner-modules/seventh-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2507",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9eeb34a82e83d1610029d7b9b8330a1f718ec33103e9b7ca34413606675a8b9b",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:74529929e3f119468ea3b86215f7297a0740492afffe6d8317d72168c9a5fd33",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:module-registration.md"
+      "evidence": "planning/learner-modules/seventh-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2508",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b60099d12355350b687c454cf9a4758d23a3c84e9b22609dcac7677fbef2c85d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e0ffada6d8ce29cbc5a6226085704b3ed7f2a646047d8fb8375a3420d7f7df3a",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:module-registration.md"
+      "evidence": "planning/learner-modules/seventh-author-repair-2026-09-02.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2509",
