@@ -1,11 +1,10 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — RETURNED by fourth fresh independent review 2026-09-02 on
-  [[D2537]]–[[D2541]]. The catalogue/lifecycle/adoption direction and repaired live selectors
-  survive, but the canonical-resource receipt accepts forbidden images, TypeScript graph ids drift
-  on unrelated declarations, compiler-program authority is absent, migration callback roots are
-  unrepresentable, and two adapters omit their complete projected image. Author repair and another
-  fresh review are required; no implementation is authorized.
+- **Status:** draft — fifth author repair complete 2026-09-02 on [[D2537]]–[[D2541]]. Canonical
+  resources now validate exact digest/literal bytes; retained-only graph ids ignore unrelated
+  declarations; one explicit compiler program enters the graph; migration callbacks have typed
+  roots; and both sequential adapters return literal complete projections.
+  Another fresh independent review is required; no implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -127,6 +126,7 @@ type SharedResourceProjectionV1 =
       readonly adapter: "migration_sequence@1";
       readonly sequenceSelector: StructuralSelectorV1;
       readonly headSelector: StructuralSelectorV1;
+      readonly programConfig: "tsconfig.base.json";
     }
   | {
       readonly adapter: "literal_string_tuple@1";
@@ -143,6 +143,7 @@ type SharedResourceProjectionV1 =
   | {
       readonly adapter: "typescript_contract@1";
       readonly versionSelector: StructuralSelectorV1;
+      readonly programConfig: "tsconfig.base.json";
       readonly roots: readonly [StructuralSelectorV1, ...StructuralSelectorV1[]];
       readonly repositoryEdges: "transitive";
       readonly externalEdges: "resolved_signature";
@@ -263,7 +264,8 @@ The closed adapter set is:
    must be one literal string/positive safe integer equal to the parsed id component after canonical
    decimal/dotted-decimal spelling. No comments or non-JSON number forms exist in the input.
 2. `migration_sequence@1` — resolves one literal ordered migration array and one exported positive
-   safe-integer head; identity is the contiguous `1..head` sequence. Each array member must be the
+   safe-integer head under the descriptor's exact `programConfig: "tsconfig.base.json"`; identity is
+   the contiguous `1..head` sequence. Each array member must be the
    exact object `{ version, name, apply }`, where `version` is a literal positive safe integer,
    `name` a literal string and `apply` an arrow/function expression whose repository calls resolve
    under the TypeScript graph rules below. Semantic is the ordered array of
@@ -288,10 +290,17 @@ The closed adapter set is:
    are erased, the value has exact keys `{ id, version, payload, digest }`: `id` equals the
    descriptor id, `version` is a positive safe integer, `payload` is a canonical JSON object, and
    literal `digest` equals the shared-resource digest of `{ id, version, payload }`. Extra semantic
-   fields outside `payload` fail. This side-effect-free AST image is the required shape for source
-   attribution, provider protocol and assistance exchange ([[D2501]]).
+   fields outside `payload` fail. String values are string literals, never templates; numeric values
+   use canonical decimal JSON integer spelling, and hexadecimal, octal, binary, exponent, fractional
+   and negative-zero syntax fails before canonicalization. Its exact landed projection is
+   `{ identity:{ version }, semantic:payload, digest, resolvedSelectors:[rootSelector] }`; the
+   sequential lifecycle head is `identity.version`, and `digest` is the already-validated literal
+   digest rather than a second digest over the wrapper. This side-effect-free AST image is the
+   required shape for source attribution, provider protocol and assistance exchange ([[D2501]],
+   [[D2537]], [[D2541]]).
 6. `typescript_contract@1` — resolves a positive safe-integer literal version selector plus one or
-   more type/value roots using the repository-pinned TypeScript compiler. Starting from each root,
+   more type/value roots using the repository-pinned TypeScript compiler and the descriptor's exact
+   `programConfig: "tsconfig.base.json"`. Starting from each root,
    it follows every compiler-symbol reference in type positions, initializers, property access,
    call/new/tagged-template expressions and return/throw/control-flow expressions. It traverses
    repository declarations transitively, including re-export origins, generic declarations,
@@ -308,6 +317,26 @@ The closed adapter set is:
      readonly text: string | number | boolean | null;
      readonly children: readonly SyntaxTreeV1[];
    }
+
+   interface TypeScriptProgramIdentityV1 {
+     readonly compilerPackage: "typescript";
+     readonly compilerVersion: string;
+     readonly compilerIntegrity: string;
+     readonly configPath: "tsconfig.base.json";
+     readonly configDigest: `sha256:${string}`;
+     readonly rootNames: readonly string[];
+     readonly compilerOptions: CanonicalValue;
+   }
+
+   type ContractRootV1 =
+     | { readonly kind: "selector"; readonly selector: string; readonly node: string }
+     | {
+         readonly kind: "migration_apply";
+         readonly sequenceSelector: string;
+         readonly version: number;
+         readonly property: "apply";
+         readonly node: string;
+       };
 
    interface ContractNodeV1 {
      readonly id: string;
@@ -328,24 +357,52 @@ The closed adapter set is:
    }
 
    interface TypeScriptGraphV1 {
-     readonly roots: readonly string[];
+     readonly program: TypeScriptProgramIdentityV1;
+     readonly roots: readonly ContractRootV1[];
      readonly nodes: readonly ContractNodeV1[];
      readonly edges: readonly ContractEdgeV1[];
    }
    ```
 
+   Program construction is closed. The engine duplicate-key parses `tsconfig.base.json`; requires
+   exactly its repository-relative bytes and no `files`, `include`, `exclude`, `references` or
+   `extends`; converts its `compilerOptions` with the pinned compiler; forces `types: []`,
+   `noEmit: true`, `incremental: false` and `composite: false`; and rejects any unknown or
+   diagnostic option. `configDigest` is `sharedResourceDigest` over the duplicate-key-checked complete
+   parsed config value. `rootNames` is the ASCII-sorted unique set of TypeScript source paths named by
+   the descriptor's roots and version selector. One `ts.createProgram` is created at repository
+   root with the pinned compiler's standard host, case-sensitive real repository paths,
+   `preserveSymlinks: false`, no ambient automatic type acquisition and no generated/declaration
+   substitute for a workspace source. For `typescript_contract@1`, `rootNames` comes from the roots
+   and version selector; for `migration_sequence@1`, it comes from the sequence and head selectors.
+   Module resolution uses that exact program and importing source
+   path; workspace package exports resolve to repository source, while external packages resolve to
+   the unique importer-visible lockfile instance. Any source root absent from the program, compiler
+   diagnostic on an owned root/edge, ambiguous realpath/case, missing workspace source or multiple
+   importer-visible package identities fails. `program.compilerOptions` is the canonical converted
+   semantic options after the four forced values; its config/compiler/root identities make program
+   drift part of the graph ([[D2539]]).
+
    A repository node id is its resolved repository path plus the declaration's zero-based preorder
-   ordinal among AST declarations. An external node id is its origin, dependency identity and
-   public export path joined with NUL separators. `SyntaxTreeV1.children` retains compiler child
-   order; `text` is non-null only for identifiers, decoded literals and operator tokens, and is
-   otherwise null. Trivia, comments and source offsets do not enter the tree; binding/member names,
-   operators, statement/argument order and type structure do. Roots are ASCII-sorted unique
-   selector strings; nodes sort by `id`; edges sort by the canonical bytes of the complete edge and
-   exact duplicate edges collapse. Every edge endpoint must name a retained node. Repository edges
-   have `resolvedSignature: null` and empty overloads unless the edge is call/construct/tag; those
-   three retain the compiler-selected signature and the complete public overload set. This
-   deliberately treats a local/import alias rename as a semantic change—the adapter promises
-   deterministic complete coverage, not equivalence proving.
+   ordinal **among retained repository declarations in that path**, computed only after transitive
+   reachability closes. A declaration outside the retained graph cannot move an id. A newly retained
+   declaration can; so can a retained binding/member rename through its `SyntaxTreeV1`, which is
+   intentional. An external node id is its origin, dependency identity and public export path joined
+   with NUL separators. `SyntaxTreeV1.children` retains compiler child order; `text` is non-null only
+   for identifiers, decoded literals and operator tokens, and is otherwise null. Trivia, comments
+   and source offsets do not enter the tree; binding/member names, operators, statement/argument
+   order and type structure do. Selector roots are
+   `{kind:"selector", selector, node}`. Migration roots are
+   `{kind:"migration_apply", sequenceSelector, version, property:"apply", node}`; they are derived
+   from the already-resolved unique sequence member and never reconstructed as an undeclared
+   selector. Roots sort by canonical bytes and are unique; nodes sort by `id`;
+   edges sort by the canonical bytes of the complete edge and exact duplicate edges collapse. Every
+   root `node` must name a retained node. Every edge endpoint must name a retained node. Repository
+   edges have `resolvedSignature: null` and
+   empty overloads unless the edge is call/construct/tag; those three retain the compiler-selected
+   signature and the complete public overload set. This deliberately treats a local/import alias
+   rename as a semantic change—the adapter promises deterministic complete coverage, not equivalence
+   proving ([[D2538]], [[D2540]]).
 
    External boundaries are closed rather than ignored ([[D2491]]):
    - `node:` builtins use `origin: "node_builtin"`, the module/export path in `id`, the exported
@@ -364,7 +421,11 @@ The closed adapter set is:
    resolution, `eval`, dynamic `import()`, computed property names not reducible to one literal,
    broad index-signature lookup and missing/ambiguous lockfile identity fail. Re-exports resolve to
    origin while retaining the public export path. This is the complete before/after authority used
-   by adopted assistance resources; callers cannot supply a changed-symbol list.
+   by adopted assistance resources; callers cannot supply a changed-symbol list. Its exact landed
+   projection is
+   `{ identity:{ version }, semantic:graph, digest:sharedResourceDigest({ adapter:"typescript_contract@1", version, graph }), resolvedSelectors:[...roots, versionSelector] }`,
+   with selectors in descriptor order; the sequential lifecycle head is `identity.version`
+   ([[D2541]]).
 7. `versioned_declarations@1` — resolves one literal declaration array whose members contain a
    base id and canonical positive safe-integer version under the descriptor's literal field names.
    Every member must be a recursively canonical JSON object literal: no spread, shorthand,
@@ -549,7 +610,8 @@ The implementation—not pre-acceptance review—supplies executable fixtures fo
     through a separate sequential resource;
 11. lineage new-id/next-version/skipped/backward/same-base collision;
 12. TypeScript contract transitive type/call/property change, omitted root, unresolved dynamic edge,
-    formatting/comment/import-alias/local-binding-only control;
+    formatting/comment control, retained import-alias/local-binding rename, unrelated out-of-graph
+    declaration invariance, program-config mutation and crossed compiler/package identity;
 13. atomic root with version-only, payload-only or digest-only partial artifact;
 14. staged index-vs-HEAD, committed first-parent, missing parent, shallow range, hidden bad commit and
     second-parent-only prerequisite;
@@ -631,26 +693,31 @@ implementation while this RFC remains returned.
    the same union, and both adopted assistance version selectors resolve exactly once.
 3. `canonical_resource@1` statically seals every payload semantic field through the one named
    canonical byte authority without importing the target module; [[D2442]], [[D2444]] and
-   [[D2501]] fixtures fail before the repair and pass after it.
-4. Selector-level absence admits an export in an existing file, refuses duplicate selector
+   [[D2501]] fixtures fail before the repair and pass after it. Arbitrary digest, template,
+   non-decimal integer and negative-zero forms are permanent negatives ([[D2537]]).
+4. `typescript_contract@1` and `migration_sequence@1` use the descriptor-pinned canonical compiler
+   program; retained node ids ignore out-of-graph declarations; selector and migration roots are
+   disjoint values; and both TypeScript/canonical adapters return their exact complete projection and
+   sequential head ([[D2538]]–[[D2541]]).
+5. Selector-level absence admits an export in an existing file, refuses duplicate selector
    identity and refuses every partial artifact ([[D2443]], [[D2459]]).
-5. Adoption pins current product bytes without mutating them or inventing prior history; later
+6. Adoption pins current product bytes without mutating them or inventing prior history; later
    lanes begin above the adopted baseline ([[D2465]]).
-6. Lifecycle behavior is selected by descriptor data. Assistance/provider/semantic follow-ons can
+7. Lifecycle behavior is selected by descriptor data. Assistance/provider/semantic follow-ons can
    inhabit the closed profiles without adding C9/C10/C11 or Git readers ([[D2454]]–[[D2455]],
    [[D2466]]); the exact catalogue addition must equal the declaring RFC's checked descriptor file.
-7. One transition function validates staged and every committed first-parent image; CI/local
+8. One transition function validates staged and every committed first-parent image; CI/local
    preimages are explicit and fail closed.
-8. After implementation, all sixteen fixture families are able to fail for their named reason,
+9. After implementation, all sixteen fixture families are able to fail for their named reason,
    including a second synthetic resource for every adapter/lifecycle; pre-acceptance review instead
    executes the bounded author contract named in §8.
-9. Existing C1–C8 behavioral protections remain green through compatibility tests even though
+10. Existing C1–C8 behavioral protections remain green through compatibility tests even though
    implementation diagnostics move to resource-scoped codes.
-10. `make verify` invokes snapshot, staged and committed-history checks through normal targets; no
+11. `make verify` invokes snapshot, staged and committed-history checks through normal targets; no
     bespoke environment command is required from the user.
-11. No product/runtime/web/schema/storage/content/archive or protected-design bytes land in this
+12. No product/runtime/web/schema/storage/content/archive or protected-design bytes land in this
     process implementation.
-12. [[D2363]], [[D2370]], [[D2401]], [[D2442]]–[[D2444]], [[D2454]], [[D2455]] and
+13. [[D2363]], [[D2370]], [[D2401]], [[D2442]]–[[D2444]], [[D2454]], [[D2455]] and
     [[D2465]]–[[D2467]] close only after executable criteria pass; downstream resources remain unclaimable
     until their catalogue roots land.
 
@@ -672,6 +739,10 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-02: fifth author repair on [[D2537]]–[[D2541]]. Exact canonical literal/digest
+  validation, retained-only repository ids, descriptor-pinned compiler programs, typed migration
+  roots and complete canonical/TypeScript projected images now pass the bounded author contract.
+  Another fresh independent review remains required; implementation is unauthorized.
 - 2026-09-02: returned by fourth fresh independent buildability review on [[D2537]]–[[D2541]];
   receipt:
   `planning/shared-resource-register-bootstrap/fourth-fresh-independent-buildability-review-2026-09-02.md`.

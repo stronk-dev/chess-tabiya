@@ -7,6 +7,7 @@
       "projection": {
         "adapter": "typescript_contract@1",
         "versionSelector": "packages/runtime/src/assistance.ts#interface:AssistanceConfig/member:version/literal",
+        "programConfig": "tsconfig.base.json",
         "roots": [
           "packages/runtime/src/assistance.ts#interface:AssistanceConfig",
           "packages/runtime/src/assistance.ts#export:SILENT_ASSISTANCE",
@@ -63,6 +64,7 @@
       "projection": {
         "adapter": "typescript_contract@1",
         "versionSelector": "apps/web/src/lib/assistance-preference.ts#function:saveWorkflowPreset/object:version/literal",
+        "programConfig": "tsconfig.base.json",
         "roots": [
           "packages/runtime/src/presets.ts#export:PRESET_IDS",
           "packages/runtime/src/presets.ts#type:PresetId",

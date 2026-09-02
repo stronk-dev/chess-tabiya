@@ -4,6 +4,7 @@ import { basename } from "node:path";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { validateCatalogue } from "../d2488-shared-resource-bootstrap-third-author-repair/model.mjs";
+import { sharedResourceDigest } from "../d2442-shared-resource-bootstrap-second-author-repair/model.mjs";
 import { parseCanonicalResource, resolveStructuralSelector } from "./model.mjs";
 
 const read = (path) => readFileSync(path, "utf8");
@@ -61,14 +62,19 @@ test("D2500: TypeScript and migration graphs have one exact node/edge/signature 
 
 test("D2501: canonical resources are statically parsed and reject executable or open shapes", () => {
   assert.match(bootstrap, /never imports,\s+bundles or executes the target module/u);
-  const positive = `export const RESOURCE = Object.freeze({ id: "provider-protocol", version: 1, payload: Object.freeze({ rows: ["a"] }), digest: "sha256:abc" } as const);`;
+  const digest = sharedResourceDigest({ id: "provider-protocol", version: 1, payload: { rows: ["a"] } });
+  const positive = `export const RESOURCE = Object.freeze({ id: "provider-protocol", version: 1, payload: Object.freeze({ rows: ["a"] }), digest: "${digest}" } as const);`;
   assert.deepEqual(parseCanonicalResource(positive, "RESOURCE"), {
-    id: "provider-protocol", version: 1, payload: { rows: ["a"] }, digest: "sha256:abc",
+    id: "provider-protocol", version: 1, payload: { rows: ["a"] }, digest,
   });
   for (const source of [
     `export const RESOURCE = makeResource({ id: "x" });`,
     `export const RESOURCE = { id: "x", version: 1, payload: other, digest: "sha256:x" };`,
     `export const RESOURCE = { id: "x", version: 1, payload: { ...other }, digest: "sha256:x" };`,
     `export const RESOURCE = { id: "x", version: 1, get payload() { return {}; }, digest: "sha256:x" };`,
+    `export const RESOURCE = { id: \`x\`, version: 1, payload: {}, digest: "sha256:x" };`,
+    `export const RESOURCE = { id: "x", version: 0x1, payload: {}, digest: "sha256:x" };`,
+    `export const RESOURCE = { id: "x", version: 1, payload: { zero: -0 }, digest: "sha256:x" };`,
+    `export const RESOURCE = { id: "x", version: 1, payload: {}, digest: "sha256:x" };`,
   ]) assert.throws(() => parseCanonicalResource(source, "RESOURCE"));
 });

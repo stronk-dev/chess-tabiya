@@ -42,7 +42,8 @@
       "projection": {
         "adapter": "migration_sequence@1",
         "sequenceSelector": "apps/server/src/storage.ts#class:SQLiteRunStorage/private-method:migrate/local:migrations",
-        "headSelector": "apps/server/src/storage.ts#export:STORAGE_VERSION"
+        "headSelector": "apps/server/src/storage.ts#export:STORAGE_VERSION",
+        "programConfig": "tsconfig.base.json"
       },
       "claimMode": "prose",
       "introducedBy": "shared-resource-registers.md",

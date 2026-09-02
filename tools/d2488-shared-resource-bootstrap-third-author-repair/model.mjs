@@ -1,10 +1,10 @@
 const ADAPTER_KEYS = Object.freeze({
   "json_schema_id@1": ["adapter", "schemaSelector", "versionSelector"],
-  "migration_sequence@1": ["adapter", "headSelector", "sequenceSelector"],
+  "migration_sequence@1": ["adapter", "headSelector", "programConfig", "sequenceSelector"],
   "literal_string_tuple@1": ["adapter", "rootSelector"],
   "literal_string_union@1": ["adapter", "rootSelector"],
   "canonical_resource@1": ["adapter", "rootSelector"],
-  "typescript_contract@1": ["adapter", "externalEdges", "repositoryEdges", "roots", "versionSelector"],
+  "typescript_contract@1": ["adapter", "externalEdges", "programConfig", "repositoryEdges", "roots", "versionSelector"],
   "versioned_declarations@1": ["adapter", "idField", "rootSelector", "versionField"],
 });
 
@@ -84,7 +84,11 @@ export function validateDescriptor(descriptor) {
   if (!compatibility.claimModes.includes(descriptor.claimMode)) fail("incompatible claim mode");
   if (descriptor.projection.adapter === "typescript_contract@1") {
     if (!Array.isArray(descriptor.projection.roots) || descriptor.projection.roots.length === 0) fail("typescript roots required");
+    if (descriptor.projection.programConfig !== "tsconfig.base.json") fail("invalid TypeScript program config");
     if (descriptor.projection.repositoryEdges !== "transitive" || descriptor.projection.externalEdges !== "resolved_signature") fail("invalid graph policy");
+  }
+  if (descriptor.projection.adapter === "migration_sequence@1" && descriptor.projection.programConfig !== "tsconfig.base.json") {
+    fail("invalid migration program config");
   }
   if (descriptor.projection.adapter === "versioned_declarations@1" &&
       (descriptor.projection.idField !== "id" || descriptor.projection.versionField !== "version")) fail("invalid declaration fields");

@@ -1,4 +1,5 @@
 import ts from "typescript";
+import { assertCanonicalResource } from "../d2442-shared-resource-bootstrap-second-author-repair/model.mjs";
 
 function fail(message) {
   throw new TypeError(message);
@@ -20,8 +21,11 @@ function unwrap(node) {
 function literalValue(node) {
   const value = unwrap(node);
   if (ts.isLiteralTypeNode(value)) return literalValue(value.literal);
-  if (ts.isStringLiteral(value) || ts.isNoSubstitutionTemplateLiteral(value)) return value.text;
-  if (ts.isNumericLiteral(value)) return Number(value.text);
+  if (ts.isStringLiteral(value)) return value.text;
+  if (ts.isNumericLiteral(value)) {
+    if (!/^(?:0|[1-9][0-9]*)$/u.test(value.getText())) fail("non-JSON integer literal");
+    return Number(value.text);
+  }
   if (value.kind === ts.SyntaxKind.TrueKeyword) return true;
   if (value.kind === ts.SyntaxKind.FalseKeyword) return false;
   if (value.kind === ts.SyntaxKind.NullKeyword) return null;
@@ -80,13 +84,19 @@ function jsonLiteral(node) {
     if (!isFreeze || value.arguments.length !== 1) fail("only Object.freeze wrapper is admitted");
     value = unwrap(value.arguments[0]);
   }
-  if (ts.isStringLiteral(value) || ts.isNoSubstitutionTemplateLiteral(value)) return value.text;
-  if (ts.isNumericLiteral(value)) return Number(value.text);
+  if (ts.isStringLiteral(value)) return value.text;
+  if (ts.isNumericLiteral(value)) {
+    if (!/^(?:0|[1-9][0-9]*)$/u.test(value.getText())) fail("non-JSON integer literal");
+    return Number(value.text);
+  }
   if (value.kind === ts.SyntaxKind.TrueKeyword) return true;
   if (value.kind === ts.SyntaxKind.FalseKeyword) return false;
   if (value.kind === ts.SyntaxKind.NullKeyword) return null;
   if (ts.isPrefixUnaryExpression(value) && value.operator === ts.SyntaxKind.MinusToken && ts.isNumericLiteral(value.operand)) {
-    return -Number(value.operand.text);
+    if (!/^(?:0|[1-9][0-9]*)$/u.test(value.operand.getText())) fail("non-JSON integer literal");
+    const result = -Number(value.operand.text);
+    if (Object.is(result, -0)) fail("negative zero is forbidden");
+    return result;
   }
   if (ts.isArrayLiteralExpression(value)) {
     if (value.elements.some(ts.isOmittedExpression)) fail("array holes are forbidden");
@@ -117,5 +127,10 @@ export function parseCanonicalResource(sourceText, exportName) {
     }
   }
   if (declarations.length !== 1) fail(`resource export resolved ${declarations.length} times`);
-  return jsonLiteral(declarations[0].initializer);
+  const parsed = jsonLiteral(declarations[0].initializer);
+  if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed) || typeof parsed.id !== "string") {
+    fail("canonical resource object required");
+  }
+  assertCanonicalResource(parsed.id, parsed);
+  return parsed;
 }

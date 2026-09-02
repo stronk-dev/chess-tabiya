@@ -14413,3 +14413,19 @@ digest and lifecycle-head values.
 **Evidence/next:** `make shared-resource-bootstrap-fourth-fresh-review` passes 5/5 findings while
 the retained fourth author target remains green. A bounded fifth author repair must close these
 five authorities, followed by another genuinely fresh review before acceptance or implementation.
+
+## 2026-09-02 — Shared-resource bootstrap fifth author repair closes the fourth return
+
+**What landed:** repaired [[D2537]]–[[D2541]] at RFC tier only. Canonical-resource validation now
+checks real shared digest/literal bytes; retained-only repository ids ignore unrelated declarations;
+TypeScript and migration descriptors pin one program authority; migration callbacks have typed
+roots; and canonical/TypeScript adapters return exact complete projections.
+
+**What changed:** compiler configuration and root identity are now semantic graph bytes rather than
+implicit implementation choices. The migration adapter no longer invents a selector for an
+anonymous callback, and the atomic adapter no longer permits a second digest interpretation. No
+production, schema, API, storage, content, web or protected-design byte changed.
+
+**Evidence/next:** `make shared-resource-bootstrap-fifth-author-repair` passes 5/5; retained author
+controls pass 4/4 + 8/8 + 8/8 + 6/6. Another genuinely fresh independent review is required before
+acceptance or implementation.

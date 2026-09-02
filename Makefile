@@ -821,7 +821,7 @@ safe-deployment-author-repair:
 	node --test tools/d2214-safe-deployment-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2214-safe-deployment-author-repair/tsconfig.contract.json --noEmit
 
-.PHONY: shared-resource-bootstrap-author-contract shared-resource-bootstrap-fresh-review shared-resource-bootstrap-author-repair shared-resource-bootstrap-second-fresh-review shared-resource-bootstrap-second-author-repair shared-register-reconciliation-author-repair shared-resource-bootstrap-third-fresh-review shared-resource-bootstrap-third-author-repair shared-resource-bootstrap-fourth-author-repair shared-resource-bootstrap-fourth-fresh-review
+.PHONY: shared-resource-bootstrap-author-contract shared-resource-bootstrap-fresh-review shared-resource-bootstrap-author-repair shared-resource-bootstrap-second-fresh-review shared-resource-bootstrap-second-author-repair shared-register-reconciliation-author-repair shared-resource-bootstrap-third-fresh-review shared-resource-bootstrap-third-author-repair shared-resource-bootstrap-fourth-author-repair shared-resource-bootstrap-fourth-fresh-review shared-resource-bootstrap-fifth-author-repair
 shared-resource-bootstrap-author-contract:
 	node --test tools/d2363-shared-resource-bootstrap-author-contract/contract.test.mjs
 
@@ -851,6 +851,9 @@ shared-resource-bootstrap-fourth-author-repair:
 
 shared-resource-bootstrap-fourth-fresh-review:
 	node --test tools/d2537-shared-resource-bootstrap-fourth-fresh-review/contract.test.mjs
+
+shared-resource-bootstrap-fifth-author-repair:
+	node --test tools/d2537-shared-resource-bootstrap-fifth-author-repair/contract.test.mjs
 
 .PHONY: concept-registry-author-contract
 concept-registry-author-contract:

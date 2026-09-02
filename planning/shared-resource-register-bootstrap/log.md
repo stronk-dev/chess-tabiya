@@ -27,3 +27,15 @@ values.
 `make shared-resource-bootstrap-fourth-fresh-review` passes 5/5 findings. No engine, catalogue,
 register, product or protected-design byte landed. A bounded fifth author repair and another fresh
 review are required before acceptance.
+
+## 2026-09-02 — Fifth author repair closes five projection gaps
+
+Repaired [[D2537]]–[[D2541]] at contract tier. Canonical parsing validates one real digest and closed
+literal grammar. TypeScript repository ids are assigned only after reachability closes. TypeScript
+and migration descriptors pin one repository-root compiler program, migration callbacks have a
+typed root identity, and canonical/TypeScript adapters return complete literal projections with
+named sequential heads.
+
+`make shared-resource-bootstrap-fifth-author-repair` passes 5/5; the prior 4/4, 8/8, 8/8 and 6/6
+author controls remain green. No engine, catalogue, register or product byte landed. Another fresh
+independent review is required before acceptance.
