@@ -14005,3 +14005,53 @@ their maintained local Make targets are green again.
 **Blocked/next:** another fresh independent review still gates acceptance, and acceptance still
 gates the generic engine/ten-root implementation. No catalogue, README register, product authority,
 schema, API, storage, content or web bytes changed.
+
+## 2026-09-01 — Pack capability creation, operations and public reachability share exact identities
+
+**What landed:** the [[D2429]]–[[D2431]] sixth author repair to
+`rfc/pack-capability-contract.md`, its three-arm disposable author contract, strict TypeScript model
+and planning/register checkpoint. The cumulative three-stage/397-mapping and six-arm author
+contract remains green.
+
+**What changed:** creation is split into sealed pack, position and imported sources; non-pack runs
+derive policy/runtime requirements from registry facts instead of borrowing a pack or caller empty
+set. One generated 35-operation/32-route-row method+route+body-branch authority now owns the
+operation union, capability binding and dispatcher resolution, including disjoint marks, grants
+and moves branches. The safe `local|recorded|provider|build_time` availability class is present on
+the shared public row, so transient non-provider states are rejectable from wire bytes without a
+second deployment registry.
+
+**Blocked/next:** a fresh independent review must reconstruct and falsify the three repaired seams
+before acceptance or implementation. [[D560]] continues to hold the 92-pack apply. No production
+registry, schema, migration, API, client, pack, content, digest or protected-design byte changed.
+
+## 2026-09-02 — Content census returns to one real-corpus pass
+
+**What landed:** [[D2503]] removes three redundant full expression censuses and three whole-source
+mutation scans from `expression-census.test.ts` while preserving its production-boundary
+assertions.
+
+**What changed:** one real 92-pack census now supplies both the declaration report and its exact
+no-declarations projection. Live declaration namespaces, producer/refusal classification,
+transition denominators, content immutability and real-corpus coverage still read committed bytes.
+Algorithm determinism and declaration mutation derive on isolated representative pack/source
+fixtures, so they can fail without paying the whole-corpus cost. No timeout changed and no mutable
+state is shared across test files.
+
+**Evidence/next:** two pre-fix normal content runs timed out different tests after 24–36 minutes.
+The post-fix normal `make test-content` passes 16 files / 172 tests in 21.69 seconds. Full
+`make verify` remains required before the pack-capability author checkpoint commits.
+
+## 2026-09-02 — Pack-capability's named aggregate reaches the newest repair
+
+**What landed:** [[D2504]] rebases two stale maintained positive assertions and wires
+`pack-capability-sixth-author-repair` into `pack-capability-author-contract`.
+
+**What changed:** D2053 now selects the structured capability id and also pins its integer-v1 arm;
+D2075 now asserts declaration identity as `(subjectId,id.version)` plus the absence of a parallel
+top-level version. Exact objective/opponent sites, history/current/successor controls and every
+new D2429–D2431 arm remain intact.
+
+**Evidence/next:** `make pack-capability-author-contract` passes 7+11+6+7+6+3 executable arms and
+both strict TypeScript models. Fresh independent review—not a local aggregate failure—is again the
+only author-tier gate before pack-capability acceptance.

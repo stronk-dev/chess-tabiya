@@ -120,7 +120,8 @@ test("D2074: capability metadata is exactly excluded from its own applicability"
 
 test("D2075: histories retain old versions and resolve one acyclic current chain", () => {
   assert.match(rfc, /interface CapabilityHistory/u);
-  assert.match(rfc, /identity is `\(subjectId, version\)`/u);
+  assert.match(rfc, /identity is `\(subjectId, id\.version\)`/u);
+  assert.match(rfc, /there is no parallel top-level `version`\s+field/u);
   assert.match(rfc, /Exactly one declaration equals `current`; it must be `active`/u);
   assert.match(rfc, /1→2, 1→2→3, withdrawal with successor, lawful withdrawal without/u);
   assert.match(rfc, /duplicate current, cross-subject successor and cycle fixtures/u);

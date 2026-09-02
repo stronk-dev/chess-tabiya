@@ -186,6 +186,15 @@ operations and concrete route branches are not joined by one exhaustive identity
 shared public parser lacks the deployment-mode input needed for its transient-state rule. Receipt:
 `planning/pack-capability-contract/fifth-fresh-independent-review-2026-08-31.md`.
 
+The 2026-09-01 sixth author repair closes those three seams at contract tier. Pack, position and
+imported creation have non-interchangeable sealed sources; one generated 35-operation/32-route-row
+method+route+body-branch table owns the operation union, bindings and dispatcher join; and the
+public row carries the safe four-member availability class needed to validate transient
+reachability without exposing provider configuration. Both cumulative and new author contracts
+pass. Fresh independent review still gates acceptance and implementation; [[D560]] still holds the
+92-pack apply. Receipt:
+`planning/pack-capability-contract/sixth-author-repair-2026-09-01.md`.
+
 The 2026-08-31 fifth fresh candidate-packet review preserves the repaired single retained legal-
 move value graph but returns its acceptance boundary on [[D2428]]: the RFC requires one
 `exactLegalMoveMap` call while the production declaration adapter necessarily recomputes the same
@@ -906,6 +915,19 @@ operation/instance/origin identities are not correlated, recovery state is not r
 cache inventory cannot prove an operation/request hit, local-service provenance is absent, the
 ninth operation is orphaned and shared-upstream backoff has no key ([[D2412]]–[[D2417]]). Exact
 return: `planning/provider-health-degradation/second-fresh-independent-buildability-review-2026-08-31.md`.
+
+The 2026-09-02 [[D2503]] repair keeps real-content truth while removing repeated whole-corpus work
+from its own test file: one 92-pack census supplies both declarations and the no-declarations view;
+live-source, read-only and corpus assertions remain on that result; determinism and mutation
+falsifiers use isolated representative fixtures. No timeout rose and no mutable cross-file cache
+was introduced. The normal content tier moved from two 24–36 minute timeout failures to 16 files /
+172 tests green in 21.69 seconds.
+
+The same verification checkpoint closed [[D2504]]: the named pack-capability aggregate had two
+stale positive assertions from before structured capability/declaration identity and stopped before
+the newest repair. Both were rebased without weakening their sites, versions or no-parallel-field
+negatives, and the sixth repair is now an aggregate dependency. The complete
+`make pack-capability-author-contract` is green.
 
 **1.0 exit:** documented commands reproduce CI without hijacking normal commits/pushes; every gate
 has one named test tier and failure meaning; product contracts use synthetic fixtures, content

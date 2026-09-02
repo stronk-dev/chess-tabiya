@@ -190,15 +190,19 @@ test("D2052: the independent sidecar grammar is total and keeps schema validatio
 });
 
 test("D2053: every formerly prose evaluator constituent is an exact live symbol", () => {
-  const always = (artifact as any).always as readonly { readonly capability: string; readonly sites: readonly string[] }[];
-  assert.deepEqual(always.find((row) => row.capability === "objective.transition_legality")?.sites, [
+  const always = (artifact as any).always as readonly {
+    readonly capability: { readonly id: string; readonly version: { readonly kind: "integer"; readonly value: number } };
+    readonly sites: readonly string[];
+  }[];
+  assert.deepEqual(always.find((row) => row.capability.id === "objective.transition_legality")?.sites, [
     "packages/runtime/src/objective-state.ts#assertObjectiveTransition",
     "packages/runtime/src/objective-state.ts#ALLOWED_TRANSITIONS",
   ]);
-  assert.deepEqual(always.find((row) => row.capability === "opponent.selection")?.sites, [
+  assert.deepEqual(always.find((row) => row.capability.id === "opponent.selection")?.sites, [
     "apps/server/src/opponent-selector.ts#OpponentSelector",
     "apps/server/src/opponent-selector.ts#neutralTiebreakKey",
   ]);
+  assert.ok(always.every((row) => row.capability.version.kind === "integer" && row.capability.version.value === 1));
   assert.match(rfc, /Every site\s+must resolve to exactly one declaration/u);
 });
 

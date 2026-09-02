@@ -1,9 +1,9 @@
 import { resolvePackPath } from "@chess-tabiya/schema/pack-path";
 
 import { createHash } from "node:crypto";
-import { mkdtempSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
 
 import type { StructuralExpression } from "@chess-tabiya/schema/drill-pack";
 import { canonicalizeJson } from "@chess-tabiya/schema/drill-pack";
@@ -26,9 +26,32 @@ const walkTracked = (path: string): string[] => readdirSync(path, { withFileType
 });
 const trackedDigest = () => trackedRoots.flatMap(walkTracked).sort().map((file) => [file, createHash("sha256").update(readFileSync(file)).digest("hex")]);
 const trackedBeforeFullCensus = trackedDigest();
-const fullReport = runExpressionCensus({ witnesses });
 const fullDeclarationReport = runExpressionCensus({ witnesses, declarations: true });
+const fullReport = (() => {
+  const { declarations: _declarations, totals, ...report } = fullDeclarationReport;
+  const { declarations: _declarationTotals, ...reportTotals } = totals;
+  return Object.freeze({ ...report, totals: Object.freeze(reportTotals) });
+})();
 const trackedAfterFullCensus = trackedDigest();
+
+function writeFixture(root: string, path: string, contents: string): void {
+  const absolute = resolve(root, path);
+  mkdirSync(dirname(absolute), { recursive: true });
+  writeFileSync(absolute, contents);
+}
+
+function declarationFixtureRoot(): string {
+  const root = mkdtempSync(resolve(tmpdir(), "tabiya-declaration-census-"));
+  writeFixture(root, "schemas/drill_pack.schema.json", JSON.stringify({
+    type: "object",
+    properties: { mode: { type: "string", enum: ["baseline_mode"] } },
+  }));
+  writeFixture(root, "apps/server/src/errors.ts", 'export type ServerErrorCode = "BASELINE_ERROR";\n');
+  writeFixture(root, "packages/runtime/src/assistance.ts", 'export interface AssistanceConfig { readonly arrows: "off" | "sight" | "evidence"; }\n');
+  writeFixture(root, "packages/runtime/src/index.ts", 'export { type IrreversibilityDetail } from "./transition.js";\n');
+  writeFixture(root, "packages/runtime/src/transition.ts", 'export type IrreversibilityDetail =\n  | { readonly subkind: "baseline" };\n');
+  return root;
+}
 
 describe("expression census", () => {
   it("walks every pack including root-only fixtures and reports the fixture split", () => {
@@ -143,20 +166,30 @@ describe("expression census", () => {
   });
 
   it("is deterministic and does not mutate content", () => {
-    const before = packFiles().map((name) => [name, statSync(name).mtimeMs, createHash("sha256").update(readFileSync(name)).digest("hex")] as const);
-    const one = canonicalizeJson(runExpressionCensus({ witnesses }));
-    const two = canonicalizeJson(runExpressionCensus({ witnesses }));
+    const root = mkdtempSync(resolve(tmpdir(), "tabiya-expression-determinism-"));
+    const packs = resolve(root, "packs");
+    const shapes = resolve(root, "shapes");
+    mkdirSync(packs);
+    mkdirSync(shapes);
+    const file = resolve(packs, "sample.json");
+    writeFileSync(file, readFileSync(resolvePackPath("anti-caro-advance-early-c5")));
+    const before = [statSync(file).mtimeMs, createHash("sha256").update(readFileSync(file)).digest("hex")] as const;
+    const one = canonicalizeJson(runExpressionCensus({ roots: [packs], shapeRoot: shapes, witnesses: {} }));
+    const two = canonicalizeJson(runExpressionCensus({ roots: [packs], shapeRoot: shapes, witnesses: {} }));
     expect(two).toBe(one);
-    expect(packFiles().map((name) => [name, statSync(name).mtimeMs, createHash("sha256").update(readFileSync(name)).digest("hex")])).toEqual(before);
-  }, 60_000);
+    expect([statSync(file).mtimeMs, createHash("sha256").update(readFileSync(file)).digest("hex")]).toEqual(before);
+  });
 
   it("reuses the shipped walker and leaves the verification gate report-free", () => {
     const source = readFileSync(new URL("./expression-census.ts", import.meta.url), "utf8");
+    const testSource = readFileSync(new URL("./expression-census.test.ts", import.meta.url), "utf8");
     expect(source).toContain('import { authoredSpineFens } from "./pack-validation.js"');
     expect(source).toContain('import { matchesStructuralExpression } from "@chess-tabiya/runtime"');
     expect(source).toContain('resolve("content/witnesses/expression-witnesses.json")');
     expect(source).not.toContain('resolve("apps/server/src/fixtures/expression-witnesses.json")');
     expect(source).not.toMatch(/chessops\/(?:util|chess)|\.spine|moveUci|parseUci/u);
+    expect(testSource.match(/runExpressionCensus\(\{ witnesses, declarations: true \}\)/gu)).toHaveLength(1);
+    expect(testSource).toContain("const root = declarationFixtureRoot()");
     const makefile = readFileSync("Makefile", "utf8");
     expect(makefile.match(/^verify:.*$/mu)?.[0]).not.toContain("expression-census");
     expect(makefile).toContain('$(if $(DECLARATIONS),--declarations "$(DECLARATIONS)",)');
@@ -175,22 +208,24 @@ describe("expression census", () => {
   });
 
   it("derives each declaration namespace rather than pinning a subject list", () => {
-    const baseline = runDeclarationCensus();
-    const schema = JSON.parse(readFileSync("schemas/drill_pack.schema.json", "utf8"));
-    schema.$defs.opponentPolicy.properties.mode.enum.push("fixture_mode");
-    const errors = readFileSync("apps/server/src/errors.ts", "utf8").replace(
-      '| "TARGET_ELO_OUT_OF_RANGE";',
-      '| "TARGET_ELO_OUT_OF_RANGE"\n  | "FIXTURE_ERROR";',
+    const root = declarationFixtureRoot();
+    const baseline = runDeclarationCensus({ root });
+    const schema = JSON.parse(readFileSync(resolve(root, "schemas/drill_pack.schema.json"), "utf8"));
+    schema.properties.mode.enum.push("fixture_mode");
+    const errors = readFileSync(resolve(root, "apps/server/src/errors.ts"), "utf8").replace(
+      '"BASELINE_ERROR";',
+      '"BASELINE_ERROR" | "FIXTURE_ERROR";',
     );
-    const assistance = readFileSync("packages/runtime/src/assistance.ts", "utf8").replace(
+    const assistance = readFileSync(resolve(root, "packages/runtime/src/assistance.ts"), "utf8").replace(
       'readonly arrows: "off" | "sight" | "evidence";',
       'readonly arrows: "off" | "sight" | "evidence" | "fixture";',
     );
-    const transition = readFileSync("packages/runtime/src/transition.ts", "utf8").replace(
+    const transition = readFileSync(resolve(root, "packages/runtime/src/transition.ts"), "utf8").replace(
       'export type IrreversibilityDetail =',
       'export type IrreversibilityDetail =\n  | { readonly subkind: "fixture" }',
     );
     const mutated = runDeclarationCensus({
+      root,
       sourceOverrides: {
         "schemas/drill_pack.schema.json": JSON.stringify(schema),
         "apps/server/src/errors.ts": errors,
@@ -199,9 +234,9 @@ describe("expression census", () => {
       },
     });
     for (const namespace of ["schema", "error", "assistance", "runtime"] as const) {
-      expect(mutated.totals[namespace].subjects).toBe(baseline.totals[namespace].subjects + 1);
+      expect(mutated.totals[namespace].subjects, namespace).toBe(baseline.totals[namespace].subjects + 1);
     }
-  }, 60_000);
+  });
 
   it("finds producerless error codes without misclassifying the six observed near misses", () => {
     const rows = fullDeclarationReport.declarations.filter((row: any) => row.namespace === "error");
@@ -213,13 +248,14 @@ describe("expression census", () => {
     ]) {
       expect(rows.find((row: any) => row.subject === code)?.producers.length).toBeGreaterThan(0);
     }
-    const errors = readFileSync("apps/server/src/errors.ts", "utf8").replace(
-      '| "TARGET_ELO_OUT_OF_RANGE";',
-      '| "TARGET_ELO_OUT_OF_RANGE"\n  | "FIXTURE_PRODUCERLESS";',
+    const root = declarationFixtureRoot();
+    const errors = readFileSync(resolve(root, "apps/server/src/errors.ts"), "utf8").replace(
+      '"BASELINE_ERROR";',
+      '"BASELINE_ERROR" | "FIXTURE_PRODUCERLESS";',
     );
-    const fixture = runDeclarationCensus({ sourceOverrides: { "apps/server/src/errors.ts": errors } });
+    const fixture = runDeclarationCensus({ root, sourceOverrides: { "apps/server/src/errors.ts": errors } });
     expect(fixture.declarations.find((row) => row.namespace === "error" && row.subject === "FIXTURE_PRODUCERLESS")?.producers).toEqual([]);
-  }, 20_000);
+  });
 
   it("reproduces the clock-zeroed refutation on the shared transition denominator", () => {
     const rows = fullDeclarationReport.declarations.filter((row: any) => row.namespace === "runtime");

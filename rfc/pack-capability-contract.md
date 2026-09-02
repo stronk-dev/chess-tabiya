@@ -1,13 +1,15 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **returned by fifth fresh independent review on [[D2429]]–[[D2431]].** The repair materializes the
+- **Status:** draft — **sixth author repair complete for [[D2429]]–[[D2431]]; fresh independent review required.** The repair materializes the
   92-row legacy authority, splits software/corpus gates, versions unconditional selectors, compiles
   one lifecycle type, closes the server/web projection and derives operation requirements
-  internally. `make pack-capability-author-repair` passes the cumulative artifact contract, 6/6
-  repair arms and strict TypeScript. Those six repairs survive, but the operation layer cannot
-  represent pack-less creation, its route/action census has no one identity grammar, and the public
-  parser lacks the availability-mode fact one of its semantic rejections requires. Exact return:
-  `planning/pack-capability-contract/fifth-fresh-independent-review-2026-08-31.md`. No schema,
+  internally. `make pack-capability-author-repair` and
+  `make pack-capability-sixth-author-repair` pass the cumulative artifact contract, the surviving
+  six-arm contract, three new source/operation/wire arms and strict TypeScript. Creation is now
+  discriminated as pack, position or imported; one generated method/route/body-branch table owns
+  every capability-sensitive first flight; and the public row carries the closed safe availability
+  class needed to validate transient reachability. Exact repair:
+  `planning/pack-capability-contract/sixth-author-repair-2026-09-01.md`. No schema,
   registry, API, pack or digest implementation is authorised; the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
@@ -808,6 +810,7 @@ export type PublicCapabilityReachabilityV1 =
 export interface PackCapabilityPublicRowV1 {
   readonly capability: CapabilityId;
   readonly semanticDisposition: PublicCapabilitySemanticDispositionV1;
+  readonly availability: "local" | "recorded" | "provider" | "build_time";
   readonly reachability: PublicCapabilityReachabilityV1;
 }
 export interface PackCapabilitiesPublicProjectionV1 {
@@ -817,13 +820,21 @@ export interface PackCapabilitiesPublicProjectionV1 {
 }
 ```
 
-Rows sort by canonical `capabilityKey` and are unique by that key. Arbitrary semantic reasons,
-provider instance ids, endpoints, tokens and health diagnostics are not public; the closed reason
-codes and provider families above are the complete safe projection. `active`/`deprecated` never
-occupy `reachability`, and supported/temporarily-unavailable never occupy semantic disposition.
+Rows sort by canonical `capabilityKey` and are unique by that key. `availability` is the safe
+four-member deployment class already owned by `CapabilityDeploymentBinding`; it reveals no
+provider instance, endpoint, token, health diagnostic or operator configuration. Arbitrary
+semantic reasons and those private deployment facts are not public; the closed reason codes,
+availability modes and provider families above are the complete safe projection.
+`active`/`deprecated` never occupy `reachability`, and supported/temporarily-unavailable never
+occupy semantic disposition.
 `parsePackCapabilitiesPublicProjectionV1` rejects unknown/missing fields, versions, enum members,
 duplicates, non-canonical order, a transient local/build-time capability and any successor absent
-from the published configured declaration set.
+from the published configured declaration set. The transient rejection is structural rather than
+registry clairvoyance: `reachability.kind === "temporarily_unavailable"` requires
+`availability === "provider"`; `local`, `recorded` and `build_time` are rejected. A supported
+provider row and supported rows in all three non-provider modes remain lawful. The server derives
+`availability` from the same private deployment binding that produced reachability; neither the
+route nor the client may supply or repair it.
 
 `apps/server/src/capabilities.ts` imports the row/projector and is the sole producer.
 `apps/web/src/lib/api.ts` imports that exact parser and inferred result type before exposing the
@@ -1137,43 +1148,130 @@ right thing with no new field.
   wrongly unavailable for the process's lifetime. It is a per-request condition on the 503 arm,
   retryable, and the run survives it.
 
-The operation boundary is shared and typed. It never accepts a requirement list from a route:
+The operation boundary is shared and typed. It never accepts a requirement list from a route, and
+it does not collapse three creation sources into a fictional always-packed operation:
 
 ```ts
 type CapabilityOperationId =
-  | "pack.register" | "run.create" | "opponent.select"
+  | "pack.register"
+  | "run.create.pack" | "run.create.position" | "run.create.imported"
+  | "opponent.select"
   | "run.group_reply" | "run.branch_decidedness" | "run.analysis"
   | "run.simulate" | "run.prediction" | "run.voice" | "run.speech"
-  | "run.reasoning_review";
+  | "run.reasoning_review"
+  | "run.marks.replace" | "run.marks.rescope"
+  | "run.deletion_preview" | "run.delete" | "run.distill" | "run.share"
+  | "run.flip" | "run.lease" | "run.reveal" | "run.duplicate" | "run.schedule"
+  | "run.grant" | "run.revoke" | "run.group"
+  | "run.move.user" | "run.move.opponent_received"
+  | "run.rewind" | "run.fork" | "run.compare" | "run.simulate_enter"
+  | "run.reasoning.record" | "run.evidence.apply";
+type CreateSessionCapabilitySource =
+  | { readonly kind: "pack"; readonly packId: string; readonly packDigest: string }
+  | { readonly kind: "position"; readonly opponentPolicy: PositionOpponentPolicy }
+  | { readonly kind: "imported"; readonly opponentPolicy: PositionOpponentPolicy };
 type OperationCapabilitySource =
+  | { readonly kind: "session_create"; readonly sessionKind: CreateSessionCapabilitySource["kind"] }
   | { readonly kind: "registered_pack"; readonly phase: "static_admission" }
   | { readonly kind: "registered_pack_operation" }
-  | { readonly kind: "fixed"; readonly capabilities: readonly CapabilityId[] };
+  | { readonly kind: "fixed_registry" }
+  | { readonly kind: "none" };
 interface OperationCapabilityBinding {
   readonly operationId: CapabilityOperationId;
   readonly source: OperationCapabilitySource;
 }
+interface CapabilityRouteBranch {
+  readonly operationId: CapabilityOperationId;
+  readonly method: "POST" | "PUT";
+  readonly route:
+    | "/studio/drafts/:draftId/register" | "/runs" | "/runs/import" | "/select-move"
+    | "/runs/:runId/:action";
+  readonly action?: string;
+  readonly discriminant?:
+    | { readonly path: "/session/kind"; readonly value: "pack" | "position" }
+    | { readonly path: "/rescopeFrom"; readonly presence: "present" | "absent" }
+    | { readonly path: "/op"; readonly value: "grant" | "revoke" }
+    | { readonly path: "/selection"; readonly presence: "present" | "absent" };
+}
 ```
 
-`CAPABILITY_OPERATION_BINDINGS` is closed and unique by `operationId`. `pack.register` and
-`run.create` use `registered_pack/static_admission`, so they internally resolve the parsed/registered
-pack and require its complete canonical `requires` set against configured support. The eight
-run/provider operations plus `opponent.select` use either `registered_pack_operation` or an exact
-fixed provider capability. For a registered-pack operation the server loads the authenticated
+`CAPABILITY_ROUTE_BRANCHES` is one literal typed table and the sole authority for the operation
+union, REST branch resolver, provider/no-provider partition and census. A checked generator emits
+`CapabilityOperationId` and `CAPABILITY_OPERATION_BINDINGS` from it; neither is a hand-maintained
+parallel list. The live REST dispatcher calls `resolveCapabilityOperation({method, routeTemplate,
+action, parsedBody})` after closed body parsing and before its handler. An unrecognized or
+multiply-matched first-flight branch fails at module load/test generation, not by falling through
+to `none`. The exact 35-row image is:
+
+| method + route | body branch | operation id | capability source |
+|---|---|---|---|
+| `POST /studio/drafts/:draftId/register` | — | `pack.register` | `registered_pack/static_admission` |
+| `POST /runs` | `session.kind=pack` | `run.create.pack` | `session_create/pack` |
+| `POST /runs` | `session.kind=position` | `run.create.position` | `session_create/position` |
+| `POST /runs/import` | — | `run.create.imported` | `session_create/imported` |
+| `POST /select-move` | — | `opponent.select` | `fixed_registry` |
+| `POST /runs/:runId/group-reply` | — | `run.group_reply` | `registered_pack_operation` |
+| `POST /runs/:runId/branch-decidedness` | — | `run.branch_decidedness` | `registered_pack_operation` |
+| `POST /runs/:runId/analysis` | — | `run.analysis` | `registered_pack_operation` |
+| `POST /runs/:runId/simulate` | — | `run.simulate` | `registered_pack_operation` |
+| `POST /runs/:runId/prediction` | — | `run.prediction` | `registered_pack_operation` |
+| `POST /runs/:runId/voice` | — | `run.voice` | `registered_pack_operation` |
+| `POST /runs/:runId/speech` | — | `run.speech` | `registered_pack_operation` |
+| `POST /runs/:runId/reasoning-review` | — | `run.reasoning_review` | `fixed_registry` |
+| `PUT /runs/:runId/marks` | `rescopeFrom` absent / present | `run.marks.replace` / `run.marks.rescope` | `none` / `none` |
+| `POST /runs/:runId/deletion-preview` | — | `run.deletion_preview` | `none` |
+| `POST /runs/:runId/delete` | — | `run.delete` | `none` |
+| `POST /runs/:runId/distill` | — | `run.distill` | `none` |
+| `POST /runs/:runId/share` | — | `run.share` | `none` |
+| `POST /runs/:runId/flip` | — | `run.flip` | `none` |
+| `POST /runs/:runId/lease` | — | `run.lease` | `none` |
+| `POST /runs/:runId/reveal` | — | `run.reveal` | `none` |
+| `POST /runs/:runId/duplicate` | — | `run.duplicate` | `none` |
+| `POST /runs/:runId/schedule` | — | `run.schedule` | `none` |
+| `POST /runs/:runId/grants` | `op=grant` / `op=revoke` | `run.grant` / `run.revoke` | `none` / `none` |
+| `POST /runs/:runId/group` | — | `run.group` | `none` |
+| `POST /runs/:runId/moves` | `selection` absent / present | `run.move.user` / `run.move.opponent_received` | `none` / `none` |
+| `POST /runs/:runId/rewind` | — | `run.rewind` | `none` |
+| `POST /runs/:runId/fork` | — | `run.fork` | `none` |
+| `POST /runs/:runId/compare` | — | `run.compare` | `none` |
+| `POST /runs/:runId/simulate-enter` | — | `run.simulate_enter` | `none` |
+| `POST /runs/:runId/reasoning` | — | `run.reasoning.record` | `none` |
+| `POST /runs/:runId/evidence` | — | `run.evidence.apply` | `none` |
+
+The table has 32 route rows and 35 operation branches because marks, grants and moves each split
+in two. Its route vocabulary is generated from the same parsed route/action union the dispatcher
+uses; a regex census over `rest.ts` is only an independent drift check, never the production
+authority. It deliberately covers the capability-sensitive creation/pack/opponent and mutating-run
+surface, not unrelated account, classroom, Studio authoring or live-session APIs. Adding or
+removing a branch in that bounded surface fails set equality until the single table and dispatcher
+change together.
+
+`run.create.pack` resolves the authenticated parsed pack identity and requires the complete
+canonical `pack.requires` set against configured support. `run.create.position` and
+`run.create.imported` cannot resolve or impersonate a pack: their sealed `CreateRunSession` source
+selects the exact opponent/runtime requirements through the same registry mappings that own those
+policy modes. A mode with no requirement yields an explicit empty derived set; absence is a
+registry fact, not a caller-supplied empty array. Crossed fixtures prove a position/imported source
+cannot select `registered_pack`, a pack source cannot select the non-pack fixed resolver, and a
+body/session-kind disagreement fails before admission. `pack.register` separately uses
+`registered_pack/static_admission` over the parsed draft pack.
+
+The remaining run/provider operations plus `opponent.select` use either
+`registered_pack_operation` or an exact fixed-registry provider capability. For a registered-pack
+operation the server loads the authenticated
 run, resolves its immutable registered pack identity, and computes
 `pack.requires ∩ {binding.capability | operationId ∈ binding.operationIds}` from the registry.
-Routes supply only `{operationId, runId/idempotencyKey when applicable}`; they cannot add, omit or
+Routes supply only `{operationId, runId/idempotencyKey when applicable}`; the operation id is the
+generated result of the closed route-branch resolver, not a caller field. They cannot add, omit or
 replace capability ids, a pack path or a requirement array.
 
-Every other current mutating run action is mechanically set-equal to an explicit no-provider set:
-`marks_replace`, `marks_rescope`, `deletion_preview`, `delete`, `distill`, `share`, `flip`, `lease`,
-`reveal`, `duplicate`, `schedule`, `grant`, `revoke`, `group`, `move_user`, `move_opponent`,
-`rewind`, `fork`, `compare`, `simulate_enter`, `reasoning` and `evidence`. Those actions still pass
-through the operation census but do not call transient capability enforcement; `move_opponent`
+Every `source:none` action still passes through the operation census but does not call transient
+capability enforcement; `run.move.opponent_received`
 commits an already admitted provider-delivery receipt, so provider death after delivery cannot
 invalidate the received move. Adding a mutating route fails the census until it is assigned to
-exactly one provider-bound or explicit-no-provider set. Crossed fixtures move one operation between
-sets, omit a provider binding, add an extra caller id and place the check after the first write.
+exactly one provider-bound or explicit-none source. Crossed fixtures move one operation between
+sets, omit a provider binding, add an extra caller id, make a discriminator overlap or gap, and
+place the check after the first write.
 
 Before a first-flight provider operation appends any run event or mutates run state,
 `requireCapabilities({operationId, runId})` derives the authoritative set above and reads the current
@@ -1434,6 +1532,26 @@ semantic validation. Exact review and reproducer:
 `make pack-capability-fifth-fresh-review`. No implementation is authorized before another fresh
 review.
 
+## Sixth author repair (2026-09-01)
+
+The fifth return is repaired without changing production/schema/API/client/corpus bytes.
+[[D2429]] is closed at the author boundary by three distinct creation operations and one sealed
+`CreateSessionCapabilitySource`: pack creation derives the complete registered-pack set, while
+position and imported creation derive only their policy/runtime set from registry facts. Empty is a
+possible computed result, never a route default. [[D2430]] is closed by the 35-operation,
+32-route-row `CAPABILITY_ROUTE_BRANCHES` authority in §5.1: method, route template, action and the
+four closed body discriminants generate the operation union, binding table and live dispatcher
+resolution together. The snake-case side census is deleted rather than translated. [[D2431]] is
+closed by carrying the safe four-member `availability` class on the public row; the shared parser
+can now structurally reject a transient non-provider row without importing or duplicating the
+private deployment registry.
+
+`make pack-capability-sixth-author-repair` exercises the three repaired seams and strict positive /
+negative TypeScript cases. `make pack-capability-author-repair` retains the cumulative transition,
+applicability and six surviving fifth-repair arms. This remains a draft: another fresh independent
+buildability review must attack the creation resolver, route-branch exhaustiveness and public-wire
+privacy/semantics before acceptance or implementation. [[D560]] still holds the 92-pack apply.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -1492,9 +1610,11 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
    refused capability cannot be made supported by provider health. The format-row fixture also
    proves assistance, error and resolved-reference rows retain their actual subject kinds instead
    of being coerced to `vocabulary_arm`. The server serializes and the web parses the same
-   `PackCapabilitiesPublicProjectionV1` authority; every lawful semantic/reachability pair
-   round-trips, while an unknown field, unsafe reason/provider detail, duplicate row, bad order or
-   server-only member fails the shared parser.
+   `PackCapabilitiesPublicProjectionV1` authority; every lawful
+   semantic/availability/reachability triple round-trips. A transient `provider` row passes, while
+   the same bytes with `local`, `recorded` or `build_time` fail; an unknown field, unsafe
+   reason/provider detail, duplicate row, bad order or server-only member also fails the shared
+   parser.
 9. **Every history resolves.** Declarations are unique by subject+version; each history retains old
    rows and has exactly one active current declaration. Fixtures cross 1→2, 1→2→3, withdrawal with
    a successor, lawful `successor:null` plus typed refusal, bare/missing refusal, duplicate current,
@@ -1542,10 +1662,15 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     *Wrong implementation that passes criteria 1–15 and fails this:* one resolving both states at
     registration, which makes a pack permanently unavailable for the process lifetime because a
     provider was down for two minutes — the precise flexibility the ruling exists to preserve.
-    Routes never supply `requiredIds`: the operation id plus authenticated run/pack identity derives
-    the exact set from `CAPABILITY_OPERATION_BINDINGS`. Every current mutating route is set-equal to
-    one provider-bound or explicit-no-provider set, and first-flight checks precede first write;
-    replay returns the stored receipt without re-deciding historical reachability.
+    Routes never supply `requiredIds`: the generated operation id plus authenticated request/run
+    identity derives the exact set from `CAPABILITY_OPERATION_BINDINGS`. Pack, position and imported
+    creation select three non-interchangeable source arms; crossed source/session-kind fixtures
+    fail. The bounded 35-operation capability-sensitive surface is set-equal to the one
+    `CAPABILITY_ROUTE_BRANCHES` authority. Marks, grants and moves each prove two disjoint and total
+    body branches; an overlap, a gap, a second binding, or a new live route/action without one row
+    fails. Every operation resolves to exactly one registry-derived or explicit-`none` source, and
+    first-flight checks precede first write; replay returns the stored receipt without re-deciding
+    historical reachability.
 17. **Instruments stay green.** `make verify` passes with shape-only `migration-plan-check`,
     `capability-census` and `capability-check` wired in; CI invokes the same Make targets.
 18. **The staged schema transition is exact and temporary ([[D2070]]–[[D2074]], [[D2152]]).**
@@ -1638,6 +1763,13 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-09-01 (**[[D2429]]–[[D2431]] sixth author repair**): split creation into sealed pack,
+  position and imported source arms; replaced the unjoined dotted/snake-case inventories with one
+  generated 35-operation/32-route-row method+route+body-branch authority; and added the safe closed
+  availability class to the public row so transient reachability is structurally checkable.
+  `make pack-capability-sixth-author-repair` passes three executable arms and strict TypeScript;
+  the cumulative prior author contract remains green. No production/schema/API/client/corpus byte
+  changed; fresh independent review and [[D560]] remain.
 - 2026-08-31 (**fifth fresh independent return**): returned on [[D2429]]–[[D2431]]. Pack-less
   creation has no operation-binding arm; the closed operation union and no-provider route actions
   use unjoined identities; and the public parser lacks the deployment mode needed to reject an
