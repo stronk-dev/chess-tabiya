@@ -80,25 +80,34 @@ describe("D2064/D2068 literal SQLite authority", () => {
     return db;
   };
 
-  it("persists a claimed cut distinct from a newer requested high-water", () => {
+  it("invalidates a claimed cut when the source/head advances and publishes only the exact replacement", () => {
     const db = database();
+    const digest = `sha256:${"a".repeat(64)}`;
     db.prepare(`INSERT INTO learner_observation_jobs
-      (run_id,learner_id,requested_seq,completed_seq,derived_rev,state,claim_generation,claimed_requested_seq,claim_token,claimed_by,lease_expires_at,failure_code,updated_at)
-      VALUES (?,?,?,?,?,'running',?,?,?,?,?,NULL,?)`).run("run-1", "learner-1", 3, 0, 1, 1, 3, "token", "worker", "9999", "now");
-    db.prepare("UPDATE learner_observation_jobs SET requested_seq=4 WHERE run_id=?").run("run-1");
+      (run_id,learner_id,requested_seq,requested_source_digest,completed_seq,derived_rev,state,claim_generation,claimed_requested_seq,claimed_source_digest,claim_token,claimed_by,lease_expires_at,retry_count,next_attempt_at,failure_code,updated_at)
+      VALUES (?,?,?,?,?,?,'running',?,?,?,?,?,?,0,NULL,NULL,?)`).run("run-1", "learner-1", 3, digest, 0, 1, 1, 3, digest, "token", "worker", "9999", "now");
     const wrongRevision = db.prepare(`UPDATE learner_observation_jobs SET completed_seq=claimed_requested_seq
       WHERE run_id=? AND state='running' AND claimed_requested_seq=? AND derived_rev=? AND claim_generation=?`).run("run-1", 3, 2, 1);
     const wrongGeneration = db.prepare(`UPDATE learner_observation_jobs SET completed_seq=claimed_requested_seq
       WHERE run_id=? AND state='running' AND claimed_requested_seq=? AND derived_rev=? AND claim_generation=?`).run("run-1", 3, 1, 2);
     expect(wrongRevision.changes).toBe(0);
     expect(wrongGeneration.changes).toBe(0);
-    const changed = db.prepare(`UPDATE learner_observation_jobs SET completed_seq=claimed_requested_seq,state='pending',
-      claimed_requested_seq=NULL,claim_token=NULL,claimed_by=NULL,lease_expires_at=NULL
-      WHERE run_id=? AND state='running' AND requested_seq>=? AND claimed_requested_seq=? AND derived_rev=? AND claim_generation=? AND claim_token=? AND claimed_by=?`).run("run-1", 3, 3, 1, 1, "token", "worker");
-    expect(changed.changes).toBe(1);
-    expect(db.prepare("SELECT requested_seq,completed_seq,state FROM learner_observation_jobs").get()).toEqual({ requested_seq: 4, completed_seq: 3, state: "pending" });
-    const stale = db.prepare("UPDATE learner_observation_jobs SET completed_seq=4 WHERE run_id=? AND state='running' AND claim_generation=?").run("run-1", 1);
+    const nextDigest = `sha256:${"b".repeat(64)}`;
+    db.prepare(`UPDATE learner_observation_jobs SET requested_seq=4,requested_source_digest=?,state='pending',
+      claim_generation=claim_generation+1,claimed_requested_seq=NULL,claimed_source_digest=NULL,
+      claim_token=NULL,claimed_by=NULL,lease_expires_at=NULL WHERE run_id=?`).run(nextDigest, "run-1");
+    const stale = db.prepare("UPDATE learner_observation_jobs SET completed_seq=3 WHERE run_id=? AND state='running' AND claim_generation=?").run("run-1", 1);
     expect(stale.changes).toBe(0);
+    db.prepare(`UPDATE learner_observation_jobs SET state='running',claim_generation=3,
+      claimed_requested_seq=4,claimed_source_digest=?,claim_token='next',claimed_by='worker',lease_expires_at='9999'
+      WHERE run_id=?`).run(nextDigest, "run-1");
+    const changed = db.prepare(`UPDATE learner_observation_jobs SET completed_seq=4,state='complete',
+      claimed_requested_seq=NULL,claimed_source_digest=NULL,claim_token=NULL,claimed_by=NULL,lease_expires_at=NULL
+      WHERE run_id=? AND state='running' AND requested_seq=? AND claimed_requested_seq=?
+      AND requested_source_digest=? AND claimed_source_digest=? AND derived_rev=? AND claim_generation=?
+      AND claim_token=? AND claimed_by=?`).run("run-1", 4, 4, nextDigest, nextDigest, 1, 3, "next", "worker");
+    expect(changed.changes).toBe(1);
+    expect(db.prepare("SELECT requested_seq,completed_seq,state FROM learner_observation_jobs").get()).toEqual({ requested_seq: 4, completed_seq: 4, state: "complete" });
     db.close();
   });
 
@@ -204,15 +213,18 @@ describe("D1613/D1615 durable claim and exact snapshot cut", () => {
     expect(jobs.job.state).toBe("complete");
   });
 
-  it("pins N even when the current snapshot has advanced to M and reopens a newer request", () => {
+  it("invalidates N when the durable source advances to M and publishes only a fresh M claim", () => {
     const events = [1, 2, 3, 4].map((seq) => ({ seq, value: `e${seq}` }));
     const jobs = new DurableJobProtocol("run-2", 3, 1);
     const claim = jobs.claim("worker-a", 0, 20)!;
-    jobs.request(4);
+    jobs.request(4, `sha256:${"b".repeat(64)}`);
     expect(snapshotPrefix(events, claim.claimedRequestedSeq).map((event) => event.seq)).toEqual([1, 2, 3]);
-    expect(jobs.publish(claim, 3, 1)).toBe(true);
-    expect(jobs.job).toMatchObject({ completedSeq: 3, requestedSeq: 4, state: "pending" });
-    expect(jobs.publishedCut).toBe(3);
+    expect(jobs.publish(claim, 3, 1)).toBe(false);
+    expect(jobs.job).toMatchObject({ completedSeq: 0, requestedSeq: 4, state: "pending" });
+    const replacement = jobs.claim("worker-b", 2, 20)!;
+    expect(snapshotPrefix(events, replacement.claimedRequestedSeq).map((event) => event.seq)).toEqual([1, 2, 3, 4]);
+    expect(jobs.publish(replacement, 4, 3)).toBe(true);
+    expect(jobs.publishedCut).toBe(4);
   });
 
   it("recovers crash-before-publish, treats crash-after-publish as complete, and closes failure codes", () => {
@@ -230,7 +242,8 @@ describe("D1613/D1615 durable claim and exact snapshot cut", () => {
     const failedClaim = failed.claim("worker", 0, 5)!;
     expect(failed.fail(failedClaim, "derivation_failed", 1)).toBe(true);
     expect(failed.job.failureCode).toBe("derivation_failed");
-    expect(failed.claim("retry", 2, 5)).not.toBeNull();
+    expect(failed.claim("retry", 2, 5)).toBeNull();
+    expect(failed.claim("retry", 5_001, 5)).not.toBeNull();
     expect(failed.fail(failedClaim, "not_closed" as never, 2)).toBe(false);
   });
 
@@ -334,11 +347,11 @@ describe("D2227-D2232 third author repair", () => {
 
   it("derives all-complete from eligible runs and reconciles old jobs idempotently", () => {
     const runs = [
-      { id: "imported", ownerLearnerId: "a", shared: false, disposition: "profileable" as const, eventHead: 8 },
-      { id: "native", ownerLearnerId: "a", shared: false, disposition: "profileable" as const, eventHead: 4 },
-      { id: "shared", ownerLearnerId: "a", shared: true, disposition: "profileable" as const, eventHead: 6 },
-      { id: "suppressed", ownerLearnerId: "a", shared: true, disposition: "account_deleted" as const, eventHead: 7 },
-      { id: "empty", ownerLearnerId: "a", shared: false, disposition: "profileable" as const, eventHead: 0 },
+      { id: "imported", ownerLearnerId: "a", shared: false, disposition: "profileable" as const, eventHead: 8, sourceDigest: "imported-v1" },
+      { id: "native", ownerLearnerId: "a", shared: false, disposition: "profileable" as const, eventHead: 4, sourceDigest: "native-v1" },
+      { id: "shared", ownerLearnerId: "a", shared: true, disposition: "profileable" as const, eventHead: 6, sourceDigest: "shared-v1" },
+      { id: "suppressed", ownerLearnerId: "a", shared: true, disposition: "account_deleted" as const, eventHead: 7, sourceDigest: "suppressed-v1" },
+      { id: "empty", ownerLearnerId: "a", shared: false, disposition: "profileable" as const, eventHead: 0, sourceDigest: "empty-v1" },
     ];
     expect(eligibleRunCuts(runs, "a").map((run) => run.id)).toEqual(["imported", "native", "shared"]);
     expect(missingEligibleRunIds(runs, [], "a")).toEqual(["imported", "native", "shared"]);
@@ -355,13 +368,14 @@ describe("D2227-D2232 third author repair", () => {
     db.exec("PRAGMA foreign_keys=ON; CREATE TABLE learners(id TEXT PRIMARY KEY) STRICT; CREATE TABLE drill_runs(id TEXT PRIMARY KEY, owner_learner_id TEXT NOT NULL) STRICT;");
     db.exec(LONGITUDINAL_MIGRATION_SQL);
     db.exec("INSERT INTO learners VALUES ('a'),('b'); INSERT INTO drill_runs(id,owner_learner_id) VALUES ('run-a','a'),('run-b','b');");
-    const insertJob = db.prepare("INSERT INTO learner_observation_jobs(run_id,learner_id,requested_seq,completed_seq,derived_rev,state,claim_generation,updated_at) VALUES (?,?,1,0,1,'pending',0,'at')");
-    expect(() => insertJob.run("run-a", "b")).toThrow();
-    insertJob.run("run-a", "a");
+    const digest = `sha256:${"a".repeat(64)}`;
+    const insertJob = db.prepare("INSERT INTO learner_observation_jobs(run_id,learner_id,requested_seq,requested_source_digest,completed_seq,derived_rev,state,claim_generation,updated_at) VALUES (?,?,1,?,0,1,'pending',0,'at')");
+    expect(() => insertJob.run("run-a", "b", digest)).toThrow();
+    insertJob.run("run-a", "a", digest);
     expect(() => db.exec("UPDATE drill_runs SET owner_learner_id='b' WHERE id='run-a'")).toThrow();
     db.exec("DELETE FROM learner_observation_jobs WHERE run_id='run-a'; UPDATE drill_runs SET owner_learner_id='b' WHERE id='run-a';");
-    expect(() => insertJob.run("run-a", "a")).toThrow();
-    insertJob.run("run-a", "b");
+    expect(() => insertJob.run("run-a", "a", digest)).toThrow();
+    insertJob.run("run-a", "b", digest);
     db.close();
   });
 });

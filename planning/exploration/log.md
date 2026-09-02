@@ -14055,3 +14055,20 @@ new D2429–D2431 arm remain intact.
 **Evidence/next:** `make pack-capability-author-contract` passes 7+11+6+7+6+3 executable arms and
 both strict TypeScript models. Fresh independent review—not a local aggregate failure—is again the
 only author-tier gate before pack-capability acceptance.
+
+## 2026-09-02 — Longitudinal snapshot operation fourth author repair
+
+**What landed:** [[D2402]]–[[D2406]] are repaired at RFC/author-contract tier. Revision replacement
+is atomic invalidation; reads promise only the retained current cut; synchronous chess derivation is
+isolated in a Node worker thread with in-loop lease renewal; shared structure abstains without actor
+evidence; and failures use source-identified bounded retry/quarantine.
+
+**Evidence:** `make longitudinal-store-fourth-author-repair` passes the retained 24 author arms and
+8 new able-to-fail controls, including actual SQLite rollback/commit and a real runtime-created
+shared fork/rewind negative. No production migration, worker, reader, consumer or content byte
+changed.
+
+**Blocked/next:** a fresh independent buildability review must reconstruct and falsify the repaired
+operation before acceptance. The migration position remains behind `learner-rating`; style, skills,
+opening performance, grounded tips, bot history and Campaign remain downstream rather than growing
+private stores.

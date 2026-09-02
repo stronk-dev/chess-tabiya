@@ -90,7 +90,7 @@ export function projectDecisionPopulation(
   dependencies: PopulationDependencies = { alternatives: legalAlternativeEdges, events: localSemanticEvents },
 ): PopulationContribution {
   const row = input.constructor;
-  if (!row.signs.includes(input.semanticSign)) throw new TypeError("LONGITUDINAL_PROJECTION_SIGN_IMPOSSIBLE");
+  if (!(row.signs as readonly SemanticEventSign[]).includes(input.semanticSign)) throw new TypeError("LONGITUDINAL_PROJECTION_SIGN_IMPOSSIBLE");
   if (row.kind === "edge" && input.sourceSign !== input.semanticSign) throw new TypeError("LONGITUDINAL_SOURCE_SIGN_IMPOSSIBLE");
   if (row.kind === "population" && (input.semanticSign !== "avoided" || !row.baseSigns.includes(input.sourceSign))) throw new TypeError("LONGITUDINAL_SOURCE_SIGN_IMPOSSIBLE");
   const alternatives = dependencies.alternatives(input.beforeFen, input.moveUci);
@@ -126,19 +126,35 @@ export const LONGITUDINAL_FAILURE_CODES = Object.freeze([
   "snapshot_invalid", "derivation_failed", "publication_conflict",
 ] as const);
 export type LongitudinalFailureCode = (typeof LONGITUDINAL_FAILURE_CODES)[number];
+export type LongitudinalJobState = "pending" | "running" | "complete" | "retry_wait" | "quarantined";
+
+export const LONGITUDINAL_RETRY_LIMITS = Object.freeze({
+  snapshot_invalid: 1,
+  derivation_failed: 3,
+  publication_conflict: 5,
+} satisfies Readonly<Record<LongitudinalFailureCode, number>>);
+
+export function longitudinalRetryDelayMs(attempt: number): number {
+  if (!Number.isInteger(attempt) || attempt < 1) throw new TypeError("LONGITUDINAL_RETRY_ATTEMPT_INVALID");
+  return Math.min(300_000, 5_000 * (2 ** (attempt - 1)));
+}
 
 export interface ObservationJob {
   readonly runId: string;
   readonly learnerId: string;
   readonly requestedSeq: number;
+  readonly requestedSourceDigest: string;
   readonly completedSeq: number;
   readonly derivedRev: number;
-  readonly state: "pending" | "running" | "complete" | "failed";
+  readonly state: LongitudinalJobState;
   readonly claimGeneration: number;
   readonly claimedRequestedSeq: number | null;
+  readonly claimedSourceDigest: string | null;
   readonly claimToken: string | null;
   readonly claimedBy: string | null;
   readonly leaseExpiresAt: number | null;
+  readonly retryCount: number;
+  readonly nextAttemptAt: number | null;
   readonly failureCode: LongitudinalFailureCode | null;
 }
 
@@ -146,6 +162,7 @@ export interface JobClaim {
   readonly runId: string;
   readonly learnerId: string;
   readonly claimedRequestedSeq: number;
+  readonly claimedSourceDigest: string;
   readonly derivedRev: number;
   readonly generation: number;
   readonly token: string;
@@ -156,27 +173,48 @@ export interface JobClaim {
 export class DurableJobProtocol {
   #job: ObservationJob;
   #publishedCut = 0;
-  constructor(runId: string, requestedSeq: number, derivedRev: number, learnerId = "learner-1") {
-    this.#job = Object.freeze({ runId, learnerId, requestedSeq, completedSeq: 0, derivedRev, state: "pending", claimGeneration: 0, claimedRequestedSeq: null, claimToken: null, claimedBy: null, leaseExpiresAt: null, failureCode: null });
+  constructor(runId: string, requestedSeq: number, derivedRev: number, learnerId = "learner-1", requestedSourceDigest = `sha256:${"a".repeat(64)}`) {
+    this.#job = Object.freeze({ runId, learnerId, requestedSeq, requestedSourceDigest, completedSeq: 0, derivedRev, state: "pending", claimGeneration: 0, claimedRequestedSeq: null, claimedSourceDigest: null, claimToken: null, claimedBy: null, leaseExpiresAt: null, retryCount: 0, nextAttemptAt: null, failureCode: null });
   }
   get job(): ObservationJob { return this.#job; }
   get publishedCut(): number { return this.#publishedCut; }
-  request(seq: number): void {
+  request(seq: number, sourceDigest = this.#job.requestedSourceDigest): void {
     if (!Number.isSafeInteger(seq) || seq < this.#job.requestedSeq) throw new TypeError("LONGITUDINAL_REQUEST_REGRESSION");
-    this.#job = Object.freeze({ ...this.#job, requestedSeq: seq, state: this.#job.state === "complete" && seq > this.#job.completedSeq ? "pending" : this.#job.state });
+    const changed = seq > this.#job.requestedSeq || sourceDigest !== this.#job.requestedSourceDigest;
+    const reopen = changed;
+    this.#job = Object.freeze({ ...this.#job, requestedSeq: seq, requestedSourceDigest: sourceDigest,
+      state: reopen ? "pending" : this.#job.state,
+      claimGeneration: reopen ? this.#job.claimGeneration + 1 : this.#job.claimGeneration,
+      claimedRequestedSeq: reopen ? null : this.#job.claimedRequestedSeq,
+      claimedSourceDigest: reopen ? null : this.#job.claimedSourceDigest,
+      claimToken: reopen ? null : this.#job.claimToken,
+      claimedBy: reopen ? null : this.#job.claimedBy,
+      leaseExpiresAt: reopen ? null : this.#job.leaseExpiresAt,
+      retryCount: reopen ? 0 : this.#job.retryCount, nextAttemptAt: reopen ? null : this.#job.nextAttemptAt,
+      failureCode: reopen ? null : this.#job.failureCode });
+  }
+  replaceRevision(derivedRev: number, requestedSeq: number, requestedSourceDigest: string): void {
+    if (derivedRev === this.#job.derivedRev) return;
+    this.#publishedCut = 0;
+    this.#job = Object.freeze({ ...this.#job, requestedSeq, requestedSourceDigest, completedSeq: 0,
+      derivedRev, state: "pending", claimGeneration: this.#job.claimGeneration + 1,
+      claimedRequestedSeq: null, claimedSourceDigest: null, claimToken: null, claimedBy: null,
+      leaseExpiresAt: null, retryCount: 0, nextAttemptAt: null, failureCode: null });
   }
   claim(workerId: string, now: number, leaseMs: number): JobClaim | null {
     const reclaimable = this.#job.state === "running" && this.#job.leaseExpiresAt !== null && this.#job.leaseExpiresAt <= now;
-    if (this.#job.state !== "pending" && this.#job.state !== "failed" && !reclaimable) return null;
+    const retryable = this.#job.state === "retry_wait" && this.#job.nextAttemptAt !== null && this.#job.nextAttemptAt <= now;
+    if (this.#job.state !== "pending" && !retryable && !reclaimable) return null;
     const generation = this.#job.claimGeneration + 1;
     const token = `${this.#job.runId}:${generation}:${workerId}`;
     const leaseExpiresAt = now + leaseMs;
     const claimedRequestedSeq = this.#job.requestedSeq;
-    this.#job = Object.freeze({ ...this.#job, state: "running", claimGeneration: generation, claimedRequestedSeq, claimToken: token, claimedBy: workerId, leaseExpiresAt, failureCode: null });
-    return Object.freeze({ runId: this.#job.runId, learnerId: this.#job.learnerId, claimedRequestedSeq, derivedRev: this.#job.derivedRev, generation, token, workerId, leaseExpiresAt });
+    const claimedSourceDigest = this.#job.requestedSourceDigest;
+    this.#job = Object.freeze({ ...this.#job, state: "running", claimGeneration: generation, claimedRequestedSeq, claimedSourceDigest, claimToken: token, claimedBy: workerId, leaseExpiresAt, nextAttemptAt: null, failureCode: null });
+    return Object.freeze({ runId: this.#job.runId, learnerId: this.#job.learnerId, claimedRequestedSeq, claimedSourceDigest, derivedRev: this.#job.derivedRev, generation, token, workerId, leaseExpiresAt });
   }
   #owns(claim: JobClaim, now: number): boolean {
-    return this.#job.state === "running" && this.#job.learnerId === claim.learnerId && this.#job.claimGeneration === claim.generation && this.#job.claimedRequestedSeq === claim.claimedRequestedSeq && this.#job.requestedSeq >= claim.claimedRequestedSeq && this.#job.claimToken === claim.token && this.#job.claimedBy === claim.workerId && this.#job.leaseExpiresAt !== null && this.#job.leaseExpiresAt > now;
+    return this.#job.state === "running" && this.#job.learnerId === claim.learnerId && this.#job.claimGeneration === claim.generation && this.#job.claimedRequestedSeq === claim.claimedRequestedSeq && this.#job.claimedSourceDigest === claim.claimedSourceDigest && this.#job.requestedSourceDigest === claim.claimedSourceDigest && this.#job.requestedSeq === claim.claimedRequestedSeq && this.#job.claimToken === claim.token && this.#job.claimedBy === claim.workerId && this.#job.leaseExpiresAt !== null && this.#job.leaseExpiresAt > now;
   }
   renew(claim: JobClaim, now: number, leaseMs: number, currentOwner = this.#job.learnerId): JobClaim | null {
     if (!this.#owns(claim, now) || currentOwner !== claim.learnerId) return null;
@@ -187,13 +225,14 @@ export class DurableJobProtocol {
   publish(claim: JobClaim, snapshotSeq: number, now: number, currentOwner = this.#job.learnerId): boolean {
     if (!this.#owns(claim, now) || currentOwner !== claim.learnerId || snapshotSeq !== claim.claimedRequestedSeq || claim.derivedRev !== this.#job.derivedRev) return false;
     this.#publishedCut = snapshotSeq;
-    const newerRequest = this.#job.requestedSeq > snapshotSeq;
-    this.#job = Object.freeze({ ...this.#job, completedSeq: snapshotSeq, state: newerRequest ? "pending" : "complete", claimedRequestedSeq: null, claimToken: null, claimedBy: null, leaseExpiresAt: null, failureCode: null });
+    this.#job = Object.freeze({ ...this.#job, completedSeq: snapshotSeq, state: "complete", claimedRequestedSeq: null, claimedSourceDigest: null, claimToken: null, claimedBy: null, leaseExpiresAt: null, retryCount: 0, nextAttemptAt: null, failureCode: null });
     return true;
   }
   fail(claim: JobClaim, code: LongitudinalFailureCode, now: number): boolean {
     if (!LONGITUDINAL_FAILURE_CODES.includes(code) || !this.#owns(claim, now)) return false;
-    this.#job = Object.freeze({ ...this.#job, state: "failed", claimedRequestedSeq: null, claimToken: null, claimedBy: null, leaseExpiresAt: null, failureCode: code });
+    const retryCount = this.#job.retryCount + 1;
+    const exhausted = retryCount >= LONGITUDINAL_RETRY_LIMITS[code];
+    this.#job = Object.freeze({ ...this.#job, state: exhausted ? "quarantined" : "retry_wait", claimedRequestedSeq: null, claimedSourceDigest: null, claimToken: null, claimedBy: null, leaseExpiresAt: null, retryCount, nextAttemptAt: exhausted ? null : now + longitudinalRetryDelayMs(retryCount), failureCode: code });
     return true;
   }
 }
@@ -269,6 +308,8 @@ export function projectNormativeRun(input: {
     }
   }
   decisions.sort((left, right) => left.eventSeq - right.eventSeq || left.id.localeCompare(right.id));
+
+  if (input.shared) return Object.freeze({ decisions: Object.freeze(decisions), structureStats: Object.freeze([]) });
 
   const byRoot = new Map<string, { rootNodeId: string; branches: Set<string>; rewound: number; forked: number; group: number; outcome: number }>();
   const rootForBranch = (branchId: string) => {
@@ -378,19 +419,24 @@ CREATE TABLE learner_observation_jobs (
   run_id TEXT PRIMARY KEY,
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
   requested_seq INTEGER NOT NULL CHECK (requested_seq > 0),
+  requested_source_digest TEXT NOT NULL CHECK (length(requested_source_digest)=71 AND substr(requested_source_digest,1,7)='sha256:' AND substr(requested_source_digest,8) NOT GLOB '*[^0-9a-f]*'),
   completed_seq INTEGER NOT NULL DEFAULT 0 CHECK (completed_seq >= 0),
   derived_rev INTEGER NOT NULL CHECK (derived_rev > 0),
-  state TEXT NOT NULL CHECK (state IN ('pending','running','complete','failed')),
+  state TEXT NOT NULL CHECK (state IN ('pending','running','complete','retry_wait','quarantined')),
   claim_generation INTEGER NOT NULL DEFAULT 0 CHECK (claim_generation >= 0),
   claimed_requested_seq INTEGER CHECK (claimed_requested_seq > 0),
+  claimed_source_digest TEXT CHECK (claimed_source_digest IS NULL OR (length(claimed_source_digest)=71 AND substr(claimed_source_digest,1,7)='sha256:' AND substr(claimed_source_digest,8) NOT GLOB '*[^0-9a-f]*')),
   claim_token TEXT, claimed_by TEXT, lease_expires_at TEXT,
+  retry_count INTEGER NOT NULL DEFAULT 0 CHECK (retry_count >= 0),
+  next_attempt_at TEXT,
   failure_code TEXT CHECK (failure_code IS NULL OR failure_code IN ('snapshot_invalid','derivation_failed','publication_conflict')),
   updated_at TEXT NOT NULL,
   CHECK (completed_seq <= requested_seq),
   CHECK (claimed_requested_seq IS NULL OR requested_seq >= claimed_requested_seq),
-  CHECK ((state='failed') = (failure_code IS NOT NULL)),
-  CHECK ((state='running') = (claimed_requested_seq IS NOT NULL AND claim_token IS NOT NULL AND claimed_by IS NOT NULL AND lease_expires_at IS NOT NULL)),
-  CHECK (state='running' OR (claimed_requested_seq IS NULL AND claim_token IS NULL AND claimed_by IS NULL AND lease_expires_at IS NULL)),
+  CHECK ((state IN ('retry_wait','quarantined')) = (failure_code IS NOT NULL)),
+  CHECK ((state='retry_wait') = (next_attempt_at IS NOT NULL)),
+  CHECK ((state='running') = (claimed_requested_seq IS NOT NULL AND claimed_source_digest IS NOT NULL AND claim_token IS NOT NULL AND claimed_by IS NOT NULL AND lease_expires_at IS NOT NULL)),
+  CHECK (state='running' OR (claimed_requested_seq IS NULL AND claimed_source_digest IS NULL AND claim_token IS NULL AND claimed_by IS NULL AND lease_expires_at IS NULL)),
   CHECK (state<>'complete' OR completed_seq=requested_seq),
   FOREIGN KEY (run_id,learner_id) REFERENCES drill_runs(id,owner_learner_id) ON UPDATE RESTRICT ON DELETE CASCADE
 ) STRICT;
@@ -412,8 +458,19 @@ export function rebuildProfileOwner(run: ProfileRun): string | null {
   return run.disposition === "profileable" ? run.ownerLearnerId : null;
 }
 
-export interface EligibleRunCut extends ProfileRun { readonly eventHead: number }
-export interface ReconciliationJob { readonly runId: string; readonly learnerId: string; readonly requestedSeq: number; readonly derivedRev: number }
+export interface EligibleRunCut extends ProfileRun { readonly eventHead: number; readonly sourceDigest: string }
+export interface ReconciliationJob {
+  readonly runId: string;
+  readonly learnerId: string;
+  readonly requestedSeq: number;
+  readonly requestedSourceDigest: string;
+  readonly completedSeq: number;
+  readonly derivedRev: number;
+  readonly state: LongitudinalJobState;
+  readonly claimGeneration: number;
+  readonly failureCode: LongitudinalFailureCode | null;
+  readonly retryCount: number;
+}
 export interface LongitudinalReconciliationReceipt {
   readonly scanned: number;
   readonly created: number;
@@ -445,13 +502,28 @@ export function reconcileLongitudinalJobs(input: {
   for (const run of eligible) {
     const prior = existing.get(run.id);
     if (prior === undefined) {
-      existing.set(run.id, Object.freeze({ runId: run.id, learnerId: run.ownerLearnerId, requestedSeq: run.eventHead, derivedRev: input.derivedRev }));
+      existing.set(run.id, Object.freeze({ runId: run.id, learnerId: run.ownerLearnerId,
+        requestedSeq: run.eventHead, requestedSourceDigest: run.sourceDigest, completedSeq: 0,
+        derivedRev: input.derivedRev, state: "pending", claimGeneration: 0,
+        failureCode: null, retryCount: 0 }));
       created += 1;
       continue;
     }
-    const next = Object.freeze({ runId: run.id, learnerId: run.ownerLearnerId, requestedSeq: Math.max(prior.requestedSeq, run.eventHead), derivedRev: input.derivedRev });
+    const revisionChanged = prior.derivedRev !== input.derivedRev || prior.learnerId !== run.ownerLearnerId;
+    const sourceChanged = prior.requestedSourceDigest !== run.sourceDigest || run.eventHead > prior.requestedSeq;
+    const next = revisionChanged
+      ? Object.freeze({ runId: run.id, learnerId: run.ownerLearnerId, requestedSeq: run.eventHead,
+          requestedSourceDigest: run.sourceDigest, completedSeq: 0, derivedRev: input.derivedRev,
+          state: "pending" as const, claimGeneration: prior.claimGeneration + 1,
+          failureCode: null, retryCount: 0 })
+      : Object.freeze({ ...prior, requestedSeq: Math.max(prior.requestedSeq, run.eventHead),
+          requestedSourceDigest: run.sourceDigest,
+          state: sourceChanged ? "pending" as const : prior.state,
+          claimGeneration: sourceChanged ? prior.claimGeneration + 1 : prior.claimGeneration,
+          failureCode: sourceChanged ? null : prior.failureCode,
+          retryCount: sourceChanged ? 0 : prior.retryCount });
     if (next.requestedSeq !== prior.requestedSeq) advanced += 1;
-    if (next.derivedRev !== prior.derivedRev || next.learnerId !== prior.learnerId) revisionReset += 1;
+    if (revisionChanged) revisionReset += 1;
     existing.set(run.id, next);
   }
   const jobs = Object.freeze([...existing.values()].sort((left, right) => left.runId.localeCompare(right.runId)));
@@ -483,8 +555,16 @@ interface LongitudinalCut { readonly runId: string; readonly requestedSeq: numbe
 export type LongitudinalReadResult =
   | { readonly kind: "complete"; readonly cuts: readonly LongitudinalCut[]; readonly denominators: readonly unknown[]; readonly observations: readonly unknown[]; readonly structureStats: readonly unknown[] }
   | { readonly kind: "pending"; readonly cuts: readonly LongitudinalCut[] }
-  | { readonly kind: "failed"; readonly cuts: readonly LongitudinalCut[]; readonly failureCode: LongitudinalFailureCode }
-  | { readonly kind: "unavailable"; readonly reason: "not_requested" | "revision_mismatch" | "profile_suppressed"; readonly runIds?: readonly string[] };
+  | { readonly kind: "failed"; readonly cuts: readonly LongitudinalCut[]; readonly failureCode: LongitudinalFailureCode; readonly attempts: number }
+  | { readonly kind: "unavailable"; readonly reason: "not_requested" | "revision_mismatch" | "profile_suppressed" | "cut_superseded"; readonly runIds?: readonly string[] };
+
+export function classifyLongitudinalCut(requestedSeq: number, requestedRev: number, job: ObservationJob): LongitudinalReadResult["kind"] | "cut_superseded" | "revision_mismatch" {
+  if (requestedRev !== job.derivedRev) return "revision_mismatch";
+  if (requestedSeq !== job.requestedSeq) return "cut_superseded";
+  if (job.state === "complete" && job.completedSeq === job.requestedSeq) return "complete";
+  if (job.state === "quarantined") return "failed";
+  return "pending";
+}
 export interface LongitudinalReadStore {
   readLongitudinalSnapshot(actorLearnerId: string, query: LongitudinalReadQuery): LongitudinalReadResult;
   claimLongitudinalBatch(workerId: string, now: number, limit: number): readonly JobClaim[];
@@ -494,6 +574,18 @@ export interface LongitudinalReadStore {
 
 export const LONGITUDINAL_WORKER_DEFAULTS = Object.freeze({ workerBatchSize: 4, workerConcurrency: 1, workerPollMs: 1_000, workerLeaseMs: 120_000, workerHeartbeatMs: 10_000 });
 export const LONGITUDINAL_WORKER_ONCE_ENTRY = "apps/server/src/longitudinal-worker-once.ts";
+export const LONGITUDINAL_WORKER_THREAD_ENTRY = "apps/server/src/longitudinal-worker-thread.ts";
+export const LONGITUDINAL_EVENT_LOOP_BUDGET = Object.freeze({ probeHz: 20, p95Ms: 50, maxDelayMs: 250, maxProbeMs: 500 });
+export const LONGITUDINAL_EXECUTION_CONTRACT = Object.freeze({
+  executor: "node_worker_thread",
+  databaseOwner: "worker_thread",
+  renewal: "synchronous_decision_checkpoint",
+  payloadCrossing: "closed_progress_only",
+} as const);
+
+export function assertLongitudinalExecutionContract(value: typeof LONGITUDINAL_EXECUTION_CONTRACT): void {
+  if (value.executor !== "node_worker_thread" || value.databaseOwner !== "worker_thread" || value.renewal !== "synchronous_decision_checkpoint" || value.payloadCrossing !== "closed_progress_only") throw new TypeError("LONGITUDINAL_EXECUTION_CONTRACT_INVALID");
+}
 export class LongitudinalProjectionWorker {
   #state: "idle" | "running" | "stopping" | "stopped" = "idle";
   #inFlight = 0;

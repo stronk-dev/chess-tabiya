@@ -976,11 +976,13 @@ store/bot predecessors. Every link needs a typed reducer, immutable inputs, idem
 resume/rebuild, owner/actor identity, prior-release migration, account lifecycle, and a production
 API/client consumer.
 
-The six longitudinal-store returns now have one executable repair contract ([[D1612]]–[[D1617]]):
-a literal 67-row constructor registry, generation/token/lease claim and stale-publisher CAS, exact
-event-prefix cuts, family-independent denominators, the seven-operation run-write closure, and
-observed-only imports until a learner-asserted subject receipt exists. This unblocks the next
-author fold/re-review; it does not authorize the migration. Player style, skills, opening
+The longitudinal-store fourth author repair now closes its latest five operation seams
+([[D2402]]–[[D2406]]) while retaining the earlier executable contract: revision replacement is
+atomic invalidation; replace-in-place storage exposes only its current cut; synchronous semantic
+work is isolated in a worker thread with in-loop lease renewal; shared structure abstains without
+actor evidence; and source-identified failures have bounded retry/quarantine. The retained 24 arms
+and 8 new falsifiers pass. Fresh independent review still gates acceptance and migration. Player
+style, skills, opening
 performance, durable tips, bot history and campaign progression remain downstream of that
 accepted/persisted boundary rather than rebuilding their own stores.
 
