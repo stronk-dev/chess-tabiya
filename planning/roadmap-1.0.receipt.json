@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:3572f09adddd78f5cdbef307e5ff954c837fe53d0e80b00538469526baf424f5",
+    "roadmap": "sha256:063b3ef8417a2d9c625f9bf26be549d00c8ae4602793286ca423ade68503d0b0",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:f364aeeaf5ab1038cd6c5200e00f7d31d8c899ae802d1cd5a09f2ce521613901",
-    "rfcRegister": "sha256:513163007ffe745bfd8bca0d4622ee87877f7c5ef6f1468267190bff41f8782d",
+    "workState": "sha256:9c178854a922709e9636d3e59c2378a2bcad617fcade4757b2ef4070d45b8e0d",
+    "rfcRegister": "sha256:481a2bc44f88affa1bc78851322b6106e3848d52f1a230602252d803891c3a13",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -30,9 +30,9 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 642,
+      "todo": 639,
       "doing": 0,
-      "blocked": 860,
+      "blocked": 867,
       "done": 791,
       "refused": 3
     },
@@ -110,9 +110,11 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-02",
-        "summary": "Pack capability's ninth and module registration's eighth repairs close their latest returns at contract tier. D2536 is now traced to semantic-collectors and author-repaired with exact alternative derivations and sealed edge-1 check authority. All three boundaries still await genuinely fresh review and implementation is unauthorized.",
+        "summary": "Pack capability's tenth repair closes its latest durable-admission return at contract tier. Module registration's eighth and the D2536 deflection repair remain author-complete. Promotion's fifth fresh review found four final event-boundary gaps instead of accepting the held pair. These boundaries still require fresh review or author repair and implementation remains unauthorized.",
         "impact": "held",
         "evidence": [
+          "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md",
+          "planning/pack-capability-contract/tenth-author-repair-2026-09-02.md",
           "planning/learner-modules/seventh-fresh-independent-buildability-review-2026-09-02.md",
           "planning/pack-capability-contract/ninth-author-repair-2026-09-02.md",
           "planning/pack-capability-contract/eighth-fresh-independent-buildability-review-2026-09-02.md",
@@ -173,9 +175,11 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-02",
-        "summary": "Module registration's eighth author repair closes its six returned authority defects, and semantic-collectors now has an executable D2536 author contract for the exposed deflection check-evidence dependency. Pack capability and promotion collectors are also author-repaired but await fresh review. No new producer-to-module binding is executable yet.",
+        "summary": "Module registration's eighth and the D2536 deflection contract remain author-repaired. Pack capability's tenth repair closes its latest durable boundary, while promotion's fifth fresh review returns four exact output/event seams. No new producer-to-module binding is executable yet.",
         "impact": "held",
         "evidence": [
+          "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md",
+          "planning/pack-capability-contract/tenth-author-repair-2026-09-02.md",
           "planning/learner-modules/seventh-fresh-independent-buildability-review-2026-09-02.md",
           "planning/evidence-foundation-ux/semantic-collectors-promotion-fourth-author-repair-2026-09-02.md",
           "planning/pack-capability-contract/ninth-author-repair-2026-09-02.md",

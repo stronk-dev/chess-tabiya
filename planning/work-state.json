@@ -16656,11 +16656,12 @@
     },
     {
       "id": "D2141",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🛠",
       "sourceDigest": "sha256:116dee1e12357b8a97b572f20a94e7c2d1358239021f094df7fd4c4055bc7585",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
     },
     {
       "id": "D2142",
@@ -17011,11 +17012,12 @@
     },
     {
       "id": "D2181",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:2fc91fbfc89d822eadb5ca85b92d5161bdbd0c34058c82ea75a42a6964eca1e0",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
     },
     {
       "id": "D2182",
@@ -17027,11 +17029,12 @@
     },
     {
       "id": "D2183",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:a02c66ed49474a523d66a847c3c3232d37e6f7297b9d5fdad4a81dcf667e0546",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
     },
     {
       "id": "D2184",
@@ -20297,6 +20300,42 @@
       "uxItems": [],
       "evidence": "planning/pack-capability-contract/tenth-author-repair-2026-09-02.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2548",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a7a61c8dfcfe45630b15421ef335ac353494bab39277e0b1ef3099052084aaac",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2549",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:44c3fcea8ba1994a2b9eee7ebc2cae480119027357b27d982178ee2098cc70cf",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2550",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2b6e655a8023992818dee1f49e270aec60f78cf7afb0c3b02f33be59af78439f",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2551",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:410f3f8c0b8f5c3a844abae11c51fbc92d0b7ae72ce0fff96dad89b73de349d5",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
     }
   ]
 }

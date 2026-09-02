@@ -14462,3 +14462,18 @@ storage, content, pack or protected-design byte changed.
 **Evidence/next:** `make pack-capability-tenth-author-repair` passes 6/6; the retained eighth and
 ninth author gates remain required. Another genuinely fresh independent review must pass before
 acceptance or implementation, and [[D560]] remains whole.
+
+## 2026-09-02 — Promotion collectors fifth fresh review returns the event boundary
+
+**What landed:** independently reviewed the held promotion pair after its fourth author repair.
+Canonical FEN/recorded lookup, the real scheduler/source factory and aggregate geometry seals
+survive. No production, schema, API, content, pack or protected-design byte changed.
+
+**What changed:** [[D2548]]–[[D2551]] locate four remaining buildability gaps between valid source
+results and the registered semantic event: no request-digest constructor for the domain join; an
+undefined/collapsed output ABI; geometry/source missing from the sealed operand payload; and no
+authoritative event occurrence in the position-only collector request.
+
+**Evidence/next:** `make semantic-collectors-promotion-fifth-fresh-review` passes 4/4 while the
+retained third and fourth author targets stay required. A bounded fifth author repair and sixth
+fresh review gate only projections 13–14; the twelve implemented Wave-C projections remain intact.

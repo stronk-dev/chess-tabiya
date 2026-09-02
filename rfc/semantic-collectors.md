@@ -7,7 +7,10 @@
   missing/crossed/unnecessary negatives; `make semantic-collectors-deflection-authority-author-contract`
   passes 4/4 plus strict TypeScript. **The held
   promotion pair completed its fourth author repair 2026-09-02 on [[D2521]], [[D2522]] and
-  [[D2523]]; a fifth fresh independent review still gates acceptance and implementation.** The
+  [[D2523]], then was **RETURNED by fifth fresh independent review on [[D2548]]–[[D2551]].** The
+  source repair survives, but request-digest construction, the exact output/operand ABI and a real
+  semantic-event occurrence remain unbuildable. `make semantic-collectors-promotion-fifth-fresh-review`
+  passes 4/4 findings; a fifth author repair and sixth fresh review gate implementation. The
   request now owns a canonical full-FEN parser and total recorded lookup, uses the actual shared
   provider scheduler plus operation-keyed source factory with deterministic request bytes, and
   requires a module-sealed aggregate geometry completion before its zero-call fast path. Geometry and recorded tablebase inputs
@@ -1181,6 +1184,15 @@ the no-output discriminator is read. `make semantic-collectors-promotion-fourth-
 passes 3/3 plus strict TypeScript. This is author evidence only: the fifth fresh independent review
 still gates acceptance and implementation.
 
+The 2026-09-02 fifth fresh review preserves that source repair and returns the final projection
+boundary on [[D2548]], [[D2549]], [[D2550]], and [[D2551]]. The outside-domain same-FEN comparison has no digest-producing
+authority; `CanonicalUci` is undefined and the output silently collapses exact pawn identities;
+the sealed payload omits geometry/source operands required by the semantic compiler; and the
+position-only request has no edge occurrence with which to construct a semantic event. Exact
+review: `planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md`;
+`make semantic-collectors-promotion-fifth-fresh-review` passes 4/4. A fifth author repair must
+close all four before a sixth fresh review or implementation.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1223,6 +1235,10 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-02: fifth fresh independent review returned the held promotion pair on [[D2548]]–
+  [[D2551]]. The fourth source repair survives, but the domain digest, exact output operands and
+  semantic-event occurrence remain unbuildable. The twelve implemented projections remain
+  unchanged.
 - 2026-09-02: author-repaired [[D2521]]–[[D2523]]. The held pair now defines its canonical-FEN and
   recorded-lookup ABI, binds the real scheduler/source-factory path and exact Syzygy request bytes,
   and seals the aggregate completed geometry before any no-output shortcut. A fifth fresh

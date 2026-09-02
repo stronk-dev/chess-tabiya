@@ -241,6 +241,14 @@ pack-capability-ninth-author-repair` passes 6/6 plus strict TypeScript. Another 
 review still gates acceptance and every production byte. Receipt:
 `planning/pack-capability-contract/ninth-author-repair-2026-09-02.md`.
 
+The 2026-09-02 tenth author repair closes the ninth review's six durable-proof defects at contract
+tier. Batch/child identity is relational and population-exact; leases carry a monotone generation;
+job and batch requests have distinct canonical digest domains; a real two-connection SQLite gate
+proves one concurrent admission winner; rewind covers all eight durable states; and consumed jobs
+retain an exact revision/event-range/digest receipt. `make pack-capability-tenth-author-repair`
+passes 6/6, but another genuinely fresh review still gates acceptance and every production byte.
+Receipt: `planning/pack-capability-contract/tenth-author-repair-2026-09-02.md`.
+
 The 2026-08-31 fifth fresh candidate-packet review preserves the repaired single retained legal-
 move value graph but returns its acceptance boundary on [[D2428]]: the RFC requires one
 `exactLegalMoveMap` call while the production declaration adapter necessarily recomputes the same
@@ -319,6 +327,16 @@ actual shared scheduler and operation-keyed source factory over fixed Syzygy req
 both the derivation receipt and aggregate completed geometry are sealed before the no-output fast
 path. Fifth fresh independent review still gates acceptance and implementation. Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-fourth-author-repair-2026-09-02.md`.
+
+The 2026-09-02 fifth fresh promotion review preserves that source repair but returns the event
+boundary on [[D2548]]–[[D2551]]. The outside-domain same-FEN join cannot construct its promised
+request digest; the output ABI contains an undefined move type and collapses exact pawn identity;
+the sealed value omits geometry/source operands required by the runtime compiler; and the
+position-only request has no authoritative semantic-event occurrence. `make
+semantic-collectors-promotion-fifth-fresh-review` passes 4/4. The twelve implemented Wave-C
+projections remain unchanged; only the held pair awaits a fifth author repair and sixth review.
+Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md`.
 
 The 2026-08-28 shared-candidate packet author repair records the owner's foundation-first sequence
 without laundering verification into product reach: the provider-free complete population may
