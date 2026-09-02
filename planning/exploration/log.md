@@ -14172,3 +14172,21 @@ the full cumulative `make pack-capability-author-contract` is green. A fresh ind
 must now derive the router/AST population and attack the three effect arms before acceptance or
 implementation. [[D560]] remains held; claim semantic anchors and Feedback Stage 2 remain blocked
 only on that acceptance boundary.
+
+## 2026-09-02 — Longitudinal store fourth fresh review returns the production snapshot boundary
+
+**What landed:** independently joined the fourth-repair reader/worker contract to multi-run result
+cardinality, the real application database default and lifecycle, the source-digest authority and
+the emitted server build. The five earlier repairs survive; `longitudinal-store` is returned on
+[[D2514]], [[D2515]], [[D2516]] and [[D2517]] without changing production, schema, API, client,
+content or protected design.
+
+**What changed:** one top-level failure/retry/unavailable scalar cannot describe several cuts; an
+own-connection worker sees a different database from the default `:memory:` application; no shared
+constructor defines the CAS digest bytes; and the named start/stop/degraded-readiness behavior plus
+worker `.js` artifact do not exist in the shipped lifecycle/build.
+
+**Evidence/next:** `make longitudinal-store-fourth-fresh-review` reproduces 4/4 using the live
+RFC/application/package bytes and two actual SQLite connections. One author repair must close the
+read grain, database identity, canonical digest and production lifecycle/package as one service;
+another fresh independent review remains mandatory before migration or implementation.

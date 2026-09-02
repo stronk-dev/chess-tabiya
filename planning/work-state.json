@@ -19991,6 +19991,42 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2514",
+      "state": "blocked",
+      "owner": "learner-history",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:66e9bfb4f6bdece5925d8093eb30d5a9b0e829556f9387b2c104637d9e48e95f",
+      "uxItems": [],
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2515",
+      "state": "blocked",
+      "owner": "learner-history",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:66c50b520e2c22a20dcc43890dae7023f0fd55c18c95327de2d73512da08c031",
+      "uxItems": [],
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2516",
+      "state": "blocked",
+      "owner": "learner-history",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:42c335bf4992485437858e2744d64267ca80ec60e56285c63b1fd6911bf45865",
+      "uxItems": [],
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2517",
+      "state": "blocked",
+      "owner": "learner-history",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:94fe1cd4d63cf065710631cbe0b24df9ee1c94dac192f7cbd409f4b2ee104e76",
+      "uxItems": [],
+      "blocker": "rfc:longitudinal-store.md"
     }
   ]
 }

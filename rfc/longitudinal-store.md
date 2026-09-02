@@ -1,13 +1,14 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **fourth author repair complete 2026-09-02 on
-  [[D2402]]–[[D2406]]; fresh independent review required.** The repair makes revision replacement
-  one atomic invalidation transition, narrows reads to the one retained current cut, isolates the
-  synchronous projector in a Node worker thread with in-loop lease checkpoints, excludes
-  unattributable shared-run structure facts at revision 1, and gives failures bounded durable
-  retry/quarantine semantics. `make longitudinal-store-fourth-author-repair` passes 8/8 and the
-  prior 24-arm author contract remains green. No migration, worker, reader or consumer
-  implementation is authorized before another fresh acceptance review. The
+- **Status:** draft — **RETURNED by the fourth fresh independent review 2026-09-02 on
+  [[D2514]], [[D2515]], [[D2516]] and [[D2517]].** The prior
+  revision/cut/isolation/provenance/failure repairs survive, but a
+  multi-run query still has only one failure/retry/unavailable scalar; a separate worker connection
+  cannot see `createApplication()`'s default `:memory:` database; the source digest has no canonical
+  byte image or shared constructor; and the shipped lifecycle/build neither exposes the named
+  start/stop/readiness behavior nor emits the separately addressed worker artifact. `make
+  longitudinal-store-fourth-fresh-review` reproduces 4/4. No migration, worker, reader or consumer
+  implementation is authorized before an author repair and another fresh review. The
   2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
   returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
