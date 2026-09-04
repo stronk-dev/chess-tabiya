@@ -14921,3 +14921,22 @@ reproduces 3/3. Exact receipt:
 A bounded seventh author repair must consume the value factory without re-owning it, make shared
 collector facts scope-invariant and re-measure the complete retained production graph before
 another fresh review or implementation.
+
+## 2026-09-04 — Bounded target fourth fresh review returns protocol and operation reach
+
+**What landed:** A fresh protocol/call-graph review preserves the explicit semantic-reading roots,
+private factory posture and local/background target semantics, but returns
+`bounded-policy-targets` on [[D2628]]–[[D2630]]. No production runtime, server, API, provider,
+schema, content, UX, archive or protected-design byte changed.
+
+**What changed:** the imported proposed protocol drops most normative public types and fields; the
+background service has no allowed invocation path to factory callables whose sole non-test importer
+is the value registry; and `declareThreatEvidence` conflicts with the exact
+`createRulesTacticConsequenceThreatV1Evidence` route that the required dependency says must have no
+alias.
+
+**Evidence/next:** `make bounded-target-fourth-fresh-review` retains the fourth author controls and
+reproduces 3/3. Exact receipt:
+`planning/bounded-policy-targets/fourth-fresh-independent-buildability-review-2026-09-04.md`.
+A bounded fifth author repair must close all three seams before another fresh review or local-target
+implementation.

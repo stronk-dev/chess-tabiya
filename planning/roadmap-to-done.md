@@ -298,6 +298,14 @@ remains held before implementation rather than turning a cache-order-dependent p
 denominator for Support, Review and bots. Receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-sixth-fresh-independent-buildability-review-2026-09-04.md`.
 
+The 2026-09-04 fourth fresh bounded-target review preserves explicit reading validation and private
+factory containment, but returns [[D2628]]–[[D2630]] before implementation: its imported protocol
+image omits most of the normative API, its background service has no permitted call path to the
+registry-contained factories, and its threat constructor contradicts the exact no-alias route in
+the required value-authority migration. These local target facts therefore remain unavailable to
+Support, Review and bots until one complete protocol and call graph survive another review. Receipt:
+`planning/bounded-policy-targets/fourth-fresh-independent-buildability-review-2026-09-04.md`.
+
 The 2026-09-01 promotion-pair third fresh review also corrected the candidate repair's initially
 invented factory alias ([[D2468]]) and returned only the held semantic projections on
 [[D2469]]–[[D2472]]: their outside-domain arm depends on an undeclared legal map; their invocation

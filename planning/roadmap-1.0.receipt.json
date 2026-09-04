@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:e0e8f12cb6f7f89d0e5e2452450f8d696256bff9f0deb0618a0f5466401a8650",
+    "roadmap": "sha256:be67adfa04861cb30676eed7d646cf4e6cd2b85e6a00088bc3e84548d9852c60",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:4c8d443b2e2e25c302750f602178f984497b577bbff3bf898d963d71fc81c89d",
-    "rfcRegister": "sha256:04b4118774fea1babc2584a7c4eef081aeb794b34adce0e34eba10b0f34660c1",
+    "workState": "sha256:ca0c3c58a3e4de3e3f1ab127b7647bb577d4247e26188078df9361cddcc3e800",
+    "rfcRegister": "sha256:b4c9a5d42431f402e62c67c6b505061b3964cd49714cac2f81b6f72fac0ab71d",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 914,
+      "blocked": 917,
       "done": 820,
       "refused": 3
     },
@@ -183,9 +183,10 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Deflection check authority is live, while fresh reviews hold both the promotion pair and the shared candidate packet. The packet's one-map repair survives, but its dependency order targets a deleted adapter, collector scope can change facts under one id, and its cache weight omits retained receipt graphs. The evidence spine remains 12/14; recorded paths, provider/value authority and all module emissions remain unbuilt or held.",
+        "summary": "Deflection check authority is live, while fresh reviews hold the promotion pair, shared candidate packet and bounded-target layer. The packet has dependency/scope/weight gaps; bounded targets have a lossy protocol image, no service-to-factory call path and a conflicting threat-factory alias. The evidence spine remains 12/14; recorded paths, provider/value authority and all module emissions remain unbuilt or held.",
         "impact": "held",
         "evidence": [
+          "planning/bounded-policy-targets/fourth-fresh-independent-buildability-review-2026-09-04.md",
           "planning/evidence-foundation-ux/shared-candidate-packet-sixth-fresh-independent-buildability-review-2026-09-04.md",
           "planning/evidence-foundation-ux/semantic-collectors-promotion-sixth-fresh-independent-buildability-review-2026-09-04.md",
           "planning/learner-modules/ninth-author-repair-2026-09-04.md",

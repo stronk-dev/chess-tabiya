@@ -1,10 +1,14 @@
 # RFC: Convention-grounded bounded material targets
 
-- **Status:** **draft — AUTHOR-REPAIRED 2026-08-31 on [[D2340]]–[[D2342]]; fourth fresh review
-  required.** Semantic validation now admits two explicit reading roots without treating value
+- **Status:** **draft — fourth fresh independent review returned the D2340–D2342 repair on
+  [[D2628]]–[[D2630]]; fifth author repair and another fresh review required.** Semantic validation now admits two explicit reading roots without treating value
   receipts as semantic proof; the protocol fixture imports one exact proposed declaration module;
   and the three factories export only from an internal non-barrel module with one non-test importer.
-  `make bounded-target-fourth-author-repair` passes 3/3. Implementation remains unauthorised.
+  `make bounded-target-fourth-author-repair` remains 3/3. The fresh review finds the imported
+  protocol image is still lossy, the service has no permitted factory invocation path, and the
+  threat constructor conflicts with the exact value-authority route. Exact return:
+  `planning/bounded-policy-targets/fourth-fresh-independent-buildability-review-2026-09-04.md`;
+  `make bounded-target-fourth-fresh-review` reproduces 3/3. Implementation remains unauthorised.
 - **Author:** codex, preserving the D1023 research contract and applying `planning/bounded-policy-targets/author-repair-2026-08-26.md`
 - **Created:** 2026-08-23; narrowed 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; executable contract closure in `design/research/bounded-policy-target-contract-closure.md`
@@ -1193,8 +1197,31 @@ The 2026-08-31 author repair closes these obligations in the semantic root inven
 image and package-internal factory boundary. `make bounded-target-fourth-author-repair` executes all
 three; fresh review still owns acceptance.
 
+## Fourth fresh independent return (2026-09-04)
+
+The D2340–D2342 direction survives, but the repair remains unbuildable at three seams:
+
+1. [[D2628]] — the purported exact imported protocol omits most public types and normative fields,
+   including the batch request/service/options/factory results, target authority and complete
+   projection/identity shapes;
+2. [[D2629]] — the central route registry is required to be the factories' sole non-test importer,
+   while the background service must invoke those factories and no typed registry dispatch exists;
+3. [[D2630]] — `declareThreatEvidence` conflicts with the exact
+   `createRulesTacticConsequenceThreatV1Evidence` route in the required value-authority migration,
+   which expressly forbids compatibility aliases.
+
+Exact review and reproducer:
+`planning/bounded-policy-targets/fourth-fresh-independent-buildability-review-2026-09-04.md`;
+`make bounded-target-fourth-fresh-review`. A fifth author repair must close all three before another
+fresh review or implementation.
+
 ## Changelog
 
+- 2026-09-04 — fourth fresh independent review returned the D2340–D2342 repair on
+  [[D2628]]–[[D2630]]: the imported protocol is a reduced lookalike, containment leaves the service
+  no factory call path, and the threat constructor contradicts the required value-authority route.
+  `make bounded-target-fourth-fresh-review` retains the author target and reproduces 3/3. No
+  production/schema/content byte changed.
 - 2026-08-31 — author-repaired [[D2340]]–[[D2342]]. Registered two explicit reading-validation
   roots beside the event root, replaced the divergent fixture with an imported generated protocol
   image, and made factory exports internal with a sole non-test route-registry importer. `make
