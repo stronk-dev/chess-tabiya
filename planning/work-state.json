@@ -20498,6 +20498,38 @@
       "uxItems": [],
       "evidence": "planning/pack-capability-contract/eleventh-author-repair-2026-09-04.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2570",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:cdcfe20185bcb873c46c5fdcbe9c1cdce78eaffdbef53552fd7d9bfb6e773df0",
+      "uxItems": [],
+      "owner": "learner-history"
+    },
+    {
+      "id": "D2571",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f807740da8fea0865149caa7cfaa4c5a8f6c4799fa89e3d88565cb50ceabdbcf",
+      "uxItems": [],
+      "owner": "learner-history"
+    },
+    {
+      "id": "D2572",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:289eb2df19d7bb562ebea973efd01a6282c502eea5abc817e1afc0eb0f2a3f58",
+      "uxItems": [],
+      "owner": "learner-history"
+    },
+    {
+      "id": "D2573",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6f1fc500c3abf897c53655681903401d96f2270bdbf3ee13139c77f04079997a",
+      "uxItems": [],
+      "owner": "learner-history"
     }
   ]
 }

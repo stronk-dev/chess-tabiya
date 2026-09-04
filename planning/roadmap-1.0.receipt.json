@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:e8cc75987c98913c6d6dd6a1bf6591113e0342d09288cc6002332ee70c96e2e0",
+    "roadmap": "sha256:b871d4bd68f6f8031e617c9fb513732c5da53828af4e3b7cb1f8b3f61df8ca2f",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:db8867ad7115b59f925c18c25e605db5906f06224c2461fc88a6714b59162795",
-    "rfcRegister": "sha256:2290cae97341b5041ce9cc0a3efb0aaf6ce7be626f4cb42d191a571672c201a6",
+    "workState": "sha256:f23f6ded07bd992ce20a6f975a980902022496809363c8326ad4d4e496b14b4f",
+    "rfcRegister": "sha256:c75bc82eacee158c3d142830546d8125cb3ff2c5f1dd8966d5eb93aa6ae1c8f5",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -30,7 +30,7 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 639,
+      "todo": 643,
       "doing": 0,
       "blocked": 862,
       "done": 814,
@@ -110,8 +110,8 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Shared-resource bootstrap's sixth repair and pack capability's eleventh repair close eleven contract gaps across descriptor projections and durable evidence jobs; both still require genuinely fresh review before implementation. Module registration also awaits fresh review, and all held production remains dependency-blocked.",
-        "impact": "advanced",
+        "summary": "Longitudinal store's fifth fresh review returns four still-open boundaries: collaboration mutations can stale the source digest, consumer rows remain undefined, one criterion requires a deferred migration, and filter semantics are open. Shared-resource bootstrap and pack capability remain repaired but awaiting their own fresh reviews; held production stays dependency-blocked.",
+        "impact": "held",
         "evidence": [
           "planning/learner-modules/ninth-author-repair-2026-09-04.md",
           "planning/learner-modules/eighth-fresh-independent-buildability-review-2026-09-04.md",

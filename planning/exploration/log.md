@@ -14690,3 +14690,21 @@ changed.
 **Evidence/next:** `make pack-capability-eleventh-author-repair` passes six executable groups plus
 strict TypeScript, with earlier author controls retained. Another genuinely fresh independent
 review still gates acceptance and implementation; [[D560]] remains whole.
+
+## 2026-09-04 — Longitudinal-store fifth fresh review returns four consumer/source seams
+
+**What landed:** a genuinely fresh review reconstructed the fifth repair against live storage,
+collaboration and import symbols. [[D2570]]–[[D2573]] record four false-green boundaries; no
+production migration, worker, reader, consumer, API, client, content or protected-design byte
+changed.
+
+**What changed:** the canonical source image can change through live-session, match-seat and
+write-capable grant operations outside all seven scheduled run writers. The sole read boundary
+still returns undefined row names represented as `unknown[]` by both author models. Live criterion
+10 requires the import-subject state its own D2 discharge assigns to a future RFC. Five optional
+filter arrays have no parser or deterministic empty/duplicate/unknown/contradictory semantics.
+
+**Evidence/next:** `make longitudinal-store-fifth-fresh-review` reproduces 4/4. The fifth repair's
+per-cut status, shared file database, canonical digest constructor and built lifecycle survive. A
+bounded sixth author repair must close source-mutation scheduling, exact read rows, revision-1
+import truth and filter parsing, followed by another fresh independent review before implementation.

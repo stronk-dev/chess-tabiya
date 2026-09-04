@@ -1176,15 +1176,15 @@ store/bot predecessors. Every link needs a typed reducer, immutable inputs, idem
 resume/rebuild, owner/actor identity, prior-release migration, account lifecycle, and a production
 API/client consumer.
 
-The longitudinal-store fifth author repair closes [[D2514]], [[D2515]], [[D2516]] and [[D2517]] at
-contract tier: reads retain per-cut state; worker/HTTP share one file-backed database identity; one
-canonical domain-separated constructor owns source-digest bytes; and real application lifecycle,
-health and emitted-worker packaging are specified together. `make
-longitudinal-store-fifth-author-repair` retains the prior 32 arms and adds four falsifiers plus
-strict TypeScript. Another independent review still gates acceptance and migration. Player style,
-skills, opening
-performance, durable tips, bot history and campaign progression remain downstream of that
-accepted/persisted boundary rather than rebuilding their own stores.
+The longitudinal-store fifth fresh review returns the contract on [[D2570]]–[[D2573]]. Its per-cut
+state, shared file-backed database, canonical digest and real application lifecycle survive, but
+the source-mutation census omits collaboration/grant operations at unchanged event heads; the
+consumer rows are undefined placeholders; one live criterion requires the future import-subject
+migration; and read filters have no closed parser or empty/duplicate/unknown semantics. `make
+longitudinal-store-fifth-fresh-review` reproduces 4/4. A sixth author repair and another fresh review
+therefore still gate the migration. Player style, skills, opening performance, durable tips, bot
+history and campaign progression remain downstream of that accepted/persisted boundary rather than
+rebuilding their own stores.
 
 ### CI and deployment
 

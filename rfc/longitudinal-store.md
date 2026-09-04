@@ -1,13 +1,13 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **fifth author repair complete 2026-09-02 on [[D2514]], [[D2515]],
-  [[D2516]] and [[D2517]]; fresh independent review required.** Reads now retain one discriminated
-  outcome per cut; HTTP and worker share one required file-backed database identity; one
-  domain-separated RFC-8785 constructor owns source-digest bytes; and the real
-  `createApplication`/`close`/`healthz` lifecycle plus explicit worker build artifact are closed.
-  `make longitudinal-store-fifth-author-repair` retains the prior 32 author arms and adds 4 new
-  falsifiers plus strict TypeScript. No migration, worker, reader or consumer implementation is
-  authorized before another fresh review. The
+- **Status:** draft — **RETURNED by the fifth fresh independent review 2026-09-04 on [[D2570]],
+  [[D2571]], [[D2572]] and [[D2573]].** The fifth repair's per-cut result, shared file database,
+  canonical digest constructor and real application lifecycle survive, but source-changing
+  collaboration mutations lie outside the seven scheduled writers; the sole consumer API exposes
+  undefined row placeholders; one live acceptance criterion depends on the explicitly future
+  import-subject migration; and filter inputs have no closed parser/semantics. `make
+  longitudinal-store-fifth-fresh-review` reproduces 4/4. No migration, worker, reader or consumer
+  implementation is authorized before an author repair and another fresh review. The
   2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
   returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
@@ -818,6 +818,33 @@ The fourth fresh return is repaired as one production snapshot service:
 able-to-fail controls with strict TypeScript. The historical fourth fresh-review target remains the
 receipt that found these defects. Another genuinely fresh independent review remains mandatory
 before acceptance or production implementation.
+
+## Fifth fresh independent return (2026-09-04)
+
+The [[D2514]]–[[D2517]] repair survives at the four boundaries it names. Fresh application to the
+complete storage and collaboration lifecycle returns four further seams; exact evidence is in
+`planning/longitudinal-store/fifth-fresh-independent-buildability-review-2026-09-04.md`.
+
+1. **[[D2570]] — close every source-image mutation, not only run-snapshot writers.** Live-session,
+   match-seat and write-capable grant operations can change resolved attribution or structure
+   eligibility without advancing the event head, so the job remains falsely complete at an old
+   source digest. The closure must be set-equal over every mutation of a digest operand and must
+   update the watermark in that mutation's transaction.
+2. **[[D2571]] — define the rows returned by the sole consumer API.** `DenominatorRow`,
+   `ObservationRow` and `StructureStatRow` are undefined and both author models replace them with
+   `unknown[]`. Publish exact domain/wire types, parsed typed references, validation and forge
+   negatives before downstream consumers can compile.
+3. **[[D2572]] — make the import criterion buildable at this revision.** Criterion 10 requires the
+   three-way subject declaration that Discharge D2 explicitly assigns to a future RFC and that the
+   live import record cannot store. Revision 1 must prove observed-only behavior over fields that
+   exist now, or this RFC must own and serialize the subject migration.
+4. **[[D2573]] — close the read filter language.** Define one parser/normalizer tied to the exact
+   projection/sign registry and specify empty, duplicate, unknown and contradictory filter inputs;
+   otherwise conforming readers may return different history for one query.
+
+`make longitudinal-store-fifth-fresh-review` passes four blocker reproductions. No production
+implementation is authorized until a bounded sixth author repair inverts them and another
+genuinely fresh review passes.
 
 ### F. Acceptance criteria
 
@@ -1678,6 +1705,11 @@ head after that renumbering and **not yet written**:
   structure abstains without actor evidence; and retry/quarantine is bounded by source identity.
   `make longitudinal-store-fourth-author-repair` passes the retained 24 arms plus 8 new falsifiers.
   Fresh independent review still gates acceptance and implementation.
+- 2026-09-04: fifth fresh independent review returned the fifth repair on [[D2570]]–[[D2573]].
+  Source-changing collaboration operations are outside the scheduled writer closure; the only
+  consumer read has undefined row types; criterion 10 depends on its own future D2 migration; and
+  filter inputs have no parser or deterministic empty/duplicate/unknown semantics. Exact review:
+  `planning/longitudinal-store/fifth-fresh-independent-buildability-review-2026-09-04.md`.
 - 2026-08-22: adversarial cross-review (claude, independent of the author). Blockers
   fixed in place: (1) `decision_class ∈ {played, game, predicted}` added to the
   observation key with owner-only attribution derived from the durable session
