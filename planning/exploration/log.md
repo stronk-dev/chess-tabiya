@@ -15436,3 +15436,21 @@ recursively validated with canonical order and uniqueness.
 groups against real committed fixture repositories. Exact receipt:
 `planning/shared-resource-register-bootstrap/ninth-author-repair-2026-09-04.md`. Another genuinely
 fresh independent review still gates acceptance and every production bootstrap byte.
+
+## 2026-09-04 — Pack-capability twelfth fresh independent return
+
+**What landed:** an independent contract-tier review of the twelfth pack-capability author repair,
+five ledger findings [[D2673]]–[[D2677]], and maintained `make
+pack-capability-twelfth-fresh-review` coverage. No production pack, schema, storage, worker, API,
+content, archive or protected-design byte changed.
+
+**What changed:** the repaired nested objective parser and monotone sequence direction survive, but
+the composed transaction does not. Callers still choose guard output, job identity and incomplete
+success settlement values; the allocator ignores lease/generation/request authority; and replay
+returns persisted children without validating their bytes.
+
+**Evidence/next:** the target retains the full twelfth author chain and passes 6/6 new falsifiers,
+including a real SQLite replay after corrupting the stored child. Exact receipt:
+`planning/pack-capability-contract/twelfth-fresh-independent-buildability-review-2026-09-04.md`.
+A bounded author repair and another genuinely fresh review precede every pack/schema/storage byte;
+the [[D560]] content hold remains whole.

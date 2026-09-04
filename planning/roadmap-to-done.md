@@ -188,6 +188,14 @@ target and passes 6/6 new controls. Fresh independent review still precedes ever
 pack/schema/storage implementation. Receipt:
 `planning/pack-capability-contract/twelfth-author-repair-2026-09-04.md`.
 
+The twelfth fresh independent review returns that repair on [[D2673]]–[[D2677]]. Its application
+surface still brands caller-supplied guard events, jobs and incomplete success settlements; result
+allocation bypasses the required lease/generation/request CAS; and idempotent replay returns stored
+children without validating them. `make pack-capability-twelfth-fresh-review` retains the author
+chain and passes 6/6 new falsifiers. Pack schema 0.30, its migration and the held corpus remain
+unauthorized pending a bounded repair and another fresh review. Receipt:
+`planning/pack-capability-contract/twelfth-fresh-independent-buildability-review-2026-09-04.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

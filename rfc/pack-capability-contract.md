@@ -1,13 +1,12 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **twelfth author repair completed 2026-09-04 on
-  [[D2587]]–[[D2592]]; twelfth fresh independent review required.** One transaction-owned
-  before/after run result now derives the complete core/objective/recorded-guard suffix and its
-  receipt; objective requests are recursively exact and immutable; batch validation consumes a
-  parsed run snapshot; all three origins derive their only consumer; and a durable per-run counter
-  prevents result-sequence reuse across rewind and restart. `make
-  pack-capability-twelfth-author-repair` retains the complete eleventh target and passes 6/6 new
-  controls. No implementation is authorised and the D560 hold stays whole.
+- **Status:** draft — **RETURNED by the twelfth fresh independent review on
+  [[D2673]], [[D2674]], [[D2675]], [[D2676]] and [[D2677]].** The repaired objective parser and
+  monotone counter survive, but caller-made
+  guard output, jobs and incomplete settlements still enter application; settlement allocation
+  bypasses the lease receipt; and replay returns corrupt stored children without validation. `make
+  pack-capability-twelfth-fresh-review` retains the complete author chain and passes 6/6 new
+  falsifiers. No implementation is authorised and the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -2266,6 +2265,24 @@ settlements and observes 1 then 2.
 passes six new executable controls. No production, schema, migration, API, storage, pack, content
 or protected-design byte changed. A genuinely fresh twelfth independent review is required before
 acceptance or implementation, and [[D560]] remains whole.
+
+## Twelfth fresh independent return (2026-09-04)
+
+The next independent pass returned the repair on [[D2673]], [[D2674]], [[D2675]], [[D2676]] and
+[[D2677]]. Its new guard constructor
+brands caller-supplied emitted events instead of invoking `applyRecordedEngineGuard`; its apply
+operation accepts an unparsed caller job and can attach evidence to a node absent from the run; and
+both apply and settle accept an incomplete success payload/acquisition that the retained settlement
+parser would refuse. The allocator update also checks only job id/run/state, not the required lease
+owner, generation and request digest, leaving the completed lease fields attached.
+
+At admission replay, the worker checks the batch digest but returns the persisted child ids without
+running `validateStoredBatch`; corrupt child request bytes/digests therefore become a successful
+equal-key replay. `make pack-capability-twelfth-fresh-review` retains the full predecessor chain and
+passes 6/6 new falsifiers. Exact receipt:
+`planning/pack-capability-contract/twelfth-fresh-independent-buildability-review-2026-09-04.md`.
+One bounded author repair must compose these authorities before another fresh review or any
+pack/schema/storage implementation.
 
 ## Acceptance criteria
 

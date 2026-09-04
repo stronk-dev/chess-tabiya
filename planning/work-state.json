@@ -21425,6 +21425,51 @@
       "sourceDigest": "sha256:fa78bec902f43d56c618ddef2c293fb819ff78a4812e5893d595a5023ba89cd1",
       "uxItems": [],
       "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2673",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1a697307f0b2519e38fece0a2b53ed3e406af13c6708c8f72fa403a122316a9d",
+      "uxItems": [],
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2674",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6480aeea76b2dadf519388f24e4a16995f42ae93f0d24c425c2c54492185fd18",
+      "uxItems": [],
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2675",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2d6399b02440dcee80cffc24643336246eee55995171627a80a1a4bd21f7c526",
+      "uxItems": [],
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2676",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2dfa6b9753303ad96111ab8c05d9b13a065dec64a9ffec709116f73200dd50bd",
+      "uxItems": [],
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2677",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:374f192d4041fddb3c8f3b0f3d42095d01645bc64a6a017751ac8d2307b8dafe",
+      "uxItems": [],
+      "blocker": "rfc:pack-capability-contract.md"
     }
   ]
 }
