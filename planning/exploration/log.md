@@ -15017,3 +15017,22 @@ clone cases. Exact receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-seventh-author-repair-2026-09-04.md`.
 Another genuinely fresh independent review and the `evidence-value-authority` dependency still gate
 implementation and all Support/Review/bot/longitudinal consumer credit.
+
+## 2026-09-04 — Shared-resource bootstrap seventh author repair
+
+**What landed:** The bounded contract-tier repair for [[D2593]]–[[D2597]] plus the maintained
+`make shared-resource-bootstrap-seventh-author-repair` target. No catalogue engine, product
+authority, schema, API, storage, content, web, archive or protected-design byte changed.
+
+**What changed:** TypeScript projections are constructed from the pinned compiler and validated as
+complete reachable graphs rather than accepting caller bytes; one branded selector parser drives
+catalogue admission and JSON/TypeScript resolution; canonical freeze wrappers resolve to the global
+intrinsic; declaration retention follows exact compiler symbols; and projected semantic values are
+recursively canonical-copied/frozen before digesting the exact retained reference.
+
+**Evidence/next:** `make shared-resource-bootstrap-seventh-author-repair` passes the retained 4/4
+sixth controls and 5/5 new inversions across real seed/follow-on selectors, shadowed freeze,
+same-spelling symbols, invalid graphs and post-digest mutation. Exact receipt:
+`planning/shared-resource-register-bootstrap/seventh-author-repair-2026-09-04.md`. Another genuinely
+fresh independent review still gates acceptance and generic-engine implementation; convention and
+provider catalogue populations remain downstream.

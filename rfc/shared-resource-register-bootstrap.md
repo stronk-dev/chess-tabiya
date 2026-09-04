@@ -1,11 +1,12 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **RETURNED by the seventh fresh independent review 2026-09-04 on
-  [[D2593]]–[[D2597]].** The bounded descriptor/object/root/overload repairs survive, but the
-  TypeScript projector accepts an incomplete/dangling graph; selector admission and resolution are
-  incompatible; shadowed `Object.freeze` splits static and runtime authority; retained nodes remain
-  name-based; and semantic payloads mutate behind fixed digests. `make
-  shared-resource-bootstrap-seventh-fresh-review` reproduces 5/5. No implementation is authorized.
+- **Status:** draft — **seventh author repair closes the seventh fresh-review returns
+  [[D2593]]–[[D2597]]; another genuinely fresh independent review is required.** The complete
+  TypeScript graph is constructed from the pinned program rather than accepted from a caller; one
+  parsed selector grammar drives admission and resolution; `Object.freeze` resolves to the global
+  intrinsic; retained declarations follow compiler-symbol reachability; and every projected semantic
+  graph is a recursively immutable canonical copy. `make shared-resource-bootstrap-seventh-author-repair`
+  is positive author evidence only. No implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -158,18 +159,43 @@ type SharedResourceProjectionV1 =
 ```
 
 No adapter accepts an open `options` object. The exact keys above are the only configuration;
-missing or extra keys fail. `StructuralSelectorV1` is parsed, not merely type-checked as a string:
-the repository-relative POSIX path precedes `#`, and the suffix is exactly one of `$id`,
-`export:<name>`, `interface:<name>`, `type:<name>`, `function:<name>` or a `/`-separated descent of
-`class:<name>`, `private-method:<name>`, `method:<name>`, `local:<name>`, `member:<name>` and
-`object:<name>` and `literal`. Identifier components use ECMAScript IdentifierName spelling. A
-declaration segment resolves one compiler declaration; `member:<name>` resolves one named member
-directly owned by the current declaration; `object:<name>` resolves exactly one object-literal
-property assignment with that static identifier/string-literal key in the current node's subtree;
-and `literal` resolves that member/property's sole literal type or initializer after stripping
-parentheses, `as const` and `satisfies`. Zero or multiple matches fail. Segments are always separated
-by `/`; dotted pseudo-paths fail. A selector must resolve to exactly one JSON property or TypeScript
-compiler symbol/AST node. Text or regex matching is not resolution ([[D2498]]).
+missing or extra keys fail. `StructuralSelectorV1` is a branded output of one parser, never a string
+assertion. The parser returns this closed value:
+
+```ts
+type SelectorRootV1 =
+  | { readonly kind: "json_id" }
+  | { readonly kind: "export" | "interface" | "type" | "function" | "class"; readonly name: string };
+type SelectorDescentV1 =
+  | { readonly kind: "private_method" | "method" | "local" | "member" | "object"; readonly name: string }
+  | { readonly kind: "literal" };
+interface ParsedStructuralSelectorV1 {
+  readonly canonical: StructuralSelectorV1;
+  readonly path: string;
+  readonly root: SelectorRootV1;
+  readonly descent: readonly SelectorDescentV1[];
+}
+declare function parseStructuralSelector(value: unknown): ParsedStructuralSelectorV1;
+```
+
+The path is a non-empty normalized repository-relative POSIX path: ASCII `/`, no scheme, drive,
+backslash, leading slash, empty/`.`/`..` segment, glob, control byte, percent-encoded separator,
+query/fragment or symlink escape. `#` occurs exactly once. `$id` is terminal and admits no descent.
+Every other root is exactly `export:<IdentifierName>`, `interface:<IdentifierName>`,
+`type:<IdentifierName>`, `function:<IdentifierName>` or `class:<IdentifierName>`; descent segments
+are slash-separated `private-method:`, `method:`, `local:`, `member:`, `object:` or terminal
+`literal`. Empty names, root kinds in descent, descent kinds at root, `export:` below a root, dotted
+pseudo-paths, bytes after `literal` and grammatically impossible parent/child pairs fail in the
+parser.
+
+Catalogue admission stores only `parsed.canonical`, and every adapter receives the exact parsed
+object from that admission pass. `resolveStructuralSelector(program, parsed)` is the sole
+TypeScript resolver; `resolveJsonSelector(bytes, parsed)` is the sole JSON resolver. Neither reparses
+or switches on a raw string. Root export/interface/type/function/class symbols, class methods,
+locals, direct members, object-literal properties and terminal literals each have one compiler/AST
+resolution rule. Zero or multiple matches fail. The same parser/resolvers must represent every
+selector in the ten-row seed and all three follow-on descriptor files; a descriptor cannot validate
+if its selector form has no resolver branch ([[D2498]], [[D2594]]).
 
 `id` matches `^[a-z][a-z0-9-]*$`, is unique, and equals the README register marker. `introducedBy`
 is one active or archived process RFC basename. Catalogue entries are ASCII-sorted by `id`.
@@ -244,6 +270,17 @@ type ResourceResolutionV1 =
     };
 ```
 
+Every successful adapter passes its identity, semantic value and selector array through one private
+`deepSealCanonical` boundary **before** digesting or publishing them. It validates the closed
+canonical-value domain, recursively copies arrays/plain objects into new plain containers,
+sorts object keys by the canonical byte order, rejects cycles, aliases outside the parsed/compiler
+graph, accessors, symbols, functions, `undefined`, non-finite numbers, negative zero and non-plain
+prototypes, then recursively freezes the copy. The digest is computed from that exact sealed copy
+and `ProjectedResourceV1` retains that same reference. Resolution maps, diagnostics and transition
+operands are recursively sealed too. Post-projection mutation of any caller/parser/compiler input
+therefore cannot change semantic bytes, and mutation through the result throws or is inert; the
+digest always re-computes from the retained semantic reference ([[D2597]]).
+
 The engine first expands the descriptor's selector fields in their declared order. Zero resolved
 selectors is `absent`; a strict non-zero subset is `partial`; all selectors resolving but failing
 adapter grammar/digest/agreement is `invalid`; only a valid complete projection is `landed`.
@@ -281,9 +318,14 @@ The closed adapter set is:
    source order, whitespace and comments do not enter the image; every non-string-literal arm,
    duplicate or alias fails. It exists because adoption must describe the live
    `AssistancePermission` authority rather than rewriting it into a tuple ([[D2467]]).
-5. `canonical_resource@1` — statically resolves one exported `const` declaration; it never imports,
-   bundles or executes the target module. Its initializer may contain only parentheses, `as const`
-   or `satisfies` wrappers and optional `Object.freeze(...)` wrappers around a plain object literal.
+5. `canonical_resource@1` — statically resolves one exported `const` declaration through the same
+   pinned TypeScript program/checker; it never imports, bundles or executes the target module. Its
+   initializer may contain only parentheses, `as const` or `satisfies` wrappers and optional
+   `Object.freeze(...)` wrappers around a plain object literal. The receiver identifier and property
+   access are resolved, not compared as text: `Object` must be the global `ObjectConstructor` symbol
+   from the program's pinned TypeScript library and `freeze` must resolve to its exact intrinsic
+   signature. A local/imported/parameter value binding named `Object`, an alias of the intrinsic,
+   computed access or any shadowed `freeze` fails before literal projection ([[D2595]]).
    Object members are property assignments with static identifier or string-literal keys; values
    recurse only through JSON literals, arrays and plain object literals under the same wrappers.
    Spread, shorthand, computed keys, methods/accessors, identifier references, calls other than the
@@ -370,6 +412,19 @@ The closed adapter set is:
    }
    ```
 
+   The public adapter accepts only the validated descriptor and repository revision; it has **no
+   `graph`, node, edge, changed-symbol or compiler-program argument**. A private
+   `compileTypeScriptGraph(descriptor, repositoryRevision)` constructs the graph from selector
+   resolution and compiler-symbol traversal. A private `assertTypeScriptGraphV1` then validates the
+   complete constructed ABI before deep sealing: exact keys and canonical scalar domains for graph,
+   program, roots, nodes, syntax trees, edges and dependency identities; unique canonically ordered
+   roots/node ids/edges; exact descriptor-selector equality; unique node ids; root and edge endpoint
+   membership; legal origin/dependency combinations; repository reachability of every node from a
+   root; edge-kind/signature/overload relations; and program identity equality with the pinned
+   compiler invocation. An incomplete program, malformed syntax node, duplicate/orphan node,
+   dangling endpoint, invented edge kind, crossed signature or extra key fails before a digest
+   exists ([[D2593]]).
+
    Program construction is closed. The engine duplicate-key parses `tsconfig.base.json`; requires
    exactly its repository-relative bytes and no `files`, `include`, `exclude`, `references` or
    `extends`; converts its `compilerOptions` with the pinned compiler; forces `types: []`,
@@ -391,10 +446,15 @@ The closed adapter set is:
 
    A repository node id is its resolved repository path plus the declaration's zero-based preorder
    ordinal **among retained repository declarations in that path**, computed only after transitive
-   reachability closes. The retained image is an ordered declaration list, never a map keyed by
-   exported name: every retained declaration, including same-name overload signatures and their
-   implementation, receives its own ordinal and node. A declaration outside the retained graph
-   cannot move an id. A newly retained
+   reachability closes. Retention is an identity graph over exact compiler `ts.Symbol` and
+   declaration-node objects returned by the checker—not a set of identifier strings. Each resolved
+   root seeds its exact symbol/declarations; traversed type/value/call/property/re-export edges add
+   only the declarations of the exact resolved target symbol. All overload declarations belonging
+   to that symbol are retained together. The retained image is an ordered declaration list, never a
+   map keyed by exported name: every retained declaration, including same-name overload signatures
+   and their implementation, receives its own ordinal and node. An unrelated same-spelling
+   declaration in another lexical scope has another symbol and cannot enter or renumber the graph
+   ([[D2596]]). A declaration outside the retained graph cannot move an id. A newly retained
    declaration can; so can a retained binding/member rename through its `SyntaxTreeV1`, which is
    intentional. An external node id is its origin, dependency identity and public export path joined
    with NUL separators. `SyntaxTreeV1.children` retains compiler child order; `text` is non-null only
@@ -434,7 +494,9 @@ The closed adapter set is:
    projection is
    `{ identity:{ version }, semantic:graph, digest:sharedResourceDigest({ adapter:"typescript_contract@1", version, graph }), resolvedSelectors:[...roots, versionSelector] }`,
    with selectors in descriptor order; the sequential lifecycle head is `identity.version`
-   ([[D2541]]). **[[D2561]]:** before producing that image, the projector requires set equality
+   ([[D2541]]). The projector does not accept `graph` as an input; it constructs, validates and
+   recursively seals the exact graph above, then computes the digest over that retained reference.
+   **[[D2561]]:** before producing that image, the projector requires set equality
    between descriptor `roots` plus `versionSelector` and `graph.roots`' selector values; every root
    names one retained `ContractNodeV1`; and the unique source-path set of those selectors equals
    `program.rootNames`. Empty, extra, duplicate, crossed-node and crossed-program root images are
@@ -642,7 +704,7 @@ semantic product authority, API, storage, content, web or protected-design bytes
 
 Order:
 
-1. fresh independent buildability review executes the author-repair contract: parse and validate
+1. fresh independent buildability review executes the latest author-repair contract: parse and validate
    the literal ten-descriptor seed, projection union, compatibility matrix, four resolution states,
    adapter semantic-image rules, README ownership and the implementation-test boundary;
 2. only after acceptance, implement the generic catalogue/projection/lifecycle/transition engine,
@@ -734,6 +796,23 @@ authorities:
 seventh author repair and another fresh independent review; no engine/catalogue implementation is
 authorized while these seams remain open.
 
+The seventh author repair closes the five authorities without adding a resource-specific branch:
+
+- [[D2593]] removes caller-authored TypeScript graphs from the adapter API and validates every
+  constructed program/root/node/tree/edge field plus graph reachability before sealing;
+- [[D2594]] makes a branded parsed selector the only value catalogue admission and every resolver
+  consume, and crosses the ten seed plus three follow-on descriptor files through that one grammar;
+- [[D2595]] resolves `Object.freeze` through the pinned checker to the global intrinsic and rejects
+  local, imported, parameter and alias shadows;
+- [[D2596]] seeds and follows exact compiler symbols/declaration nodes, retaining overloads while an
+  unrelated same-spelling declaration cannot enter or renumber the graph; and
+- [[D2597]] recursively canonical-copies and freezes every published projection/resolution value
+  before digesting the exact retained reference.
+
+`make shared-resource-bootstrap-seventh-author-repair` retains the sixth 4/4 controls and executes
+the five inversions. It is positive author evidence only; another genuinely fresh independent
+review still gates acceptance and implementation.
+
 ## Acceptance criteria
 
 1. Catalogue and README register populations are set-equal; no `RESOURCE_NAMES`, `SCHEMA_SLUGS` or
@@ -770,6 +849,27 @@ authorized while these seams remain open.
 13. [[D2363]], [[D2370]], [[D2401]], [[D2442]]–[[D2444]], [[D2454]], [[D2455]] and
     [[D2465]]–[[D2467]] close only after executable criteria pass; downstream resources remain unclaimable
     until their catalogue roots land.
+14. [[D2593]] The exported TypeScript adapter has no graph/program/node/edge input. Its private
+    compiler emits the complete exact `TypeScriptGraphV1`; malformed program fields, duplicate or
+    orphan nodes, dangling endpoints, illegal edge kinds/signature arms, wrong ordering, extra keys
+    and descriptor/program crossings all fail before digest construction.
+15. [[D2594]] One selector parser admits and canonicalizes every selector in the ten initial and
+    three follow-on descriptor files; the exact parsed objects feed JSON/TypeScript resolvers. HTTPS,
+    drive/backslash/traversal/glob paths, root-only kinds in descent, unsupported legal-looking
+    segments and bytes after `literal` fail at catalogue admission. Every existing selected symbol
+    resolves once; intentionally absent roots report absence rather than “unsupported grammar.”
+16. [[D2595]] Canonical-resource fixtures resolve `Object.freeze` to the pinned global intrinsic.
+    A source-local const/function parameter/import alias named `Object`, computed `freeze`,
+    aliased intrinsic or arbitrary same-spelling method fails, while the unshadowed intrinsic yields
+    the same static semantic bytes/digest as the registered runtime constant.
+17. [[D2596]] Repository retention starts from exact root symbols and follows checker-resolved symbol
+    edges. All declarations of one overload symbol remain; an unrelated same-spelling nested/local
+    symbol neither enters nor renumbers the retained nodes. Anonymous/default/re-export roots have
+    representable identity without inventing an identifier name.
+18. [[D2597]] Mutating any parser/compiler input after projection cannot move the published semantic
+    value, and mutating the published projection at any depth fails. Recomputing the digest from the
+    exact retained semantic reference always equals the stored digest for canonical-resource and
+    TypeScript-contract adapters; alias/cycle/non-plain/accessor inputs fail deep sealing.
 
 ## Discharges
 
@@ -789,6 +889,12 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-04: [[D2593]]–[[D2597]] seventh author repair. TypeScript graphs are compiler-constructed
+  and fully validated; one parsed selector grammar feeds every adapter; canonical freeze wrappers
+  resolve to the global intrinsic; retained declarations follow exact compiler symbols; and every
+  projected semantic value is a recursively immutable canonical copy under its digest. `make
+  shared-resource-bootstrap-seventh-author-repair` is positive author evidence only; another fresh
+  independent review remains required.
 - 2026-09-04: returned by seventh fresh independent buildability review on [[D2593]]–[[D2597]].
   TypeScript graphs remain caller-controlled/incomplete, selector grammars disagree, shadowed
   `Object.freeze` splits static/runtime bytes, retained nodes are name-based and projected semantic

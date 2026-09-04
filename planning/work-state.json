@@ -20712,7 +20712,7 @@
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f86c07213d70216ddf35c8e64d1152f47bc63f653310d61679a032866b2dd8a7",
+      "sourceDigest": "sha256:bdf7605cf3764780626836eed9dcc2af1b7a479ec7756f5c8720600c233eac0a",
       "uxItems": []
     },
     {
@@ -20721,7 +20721,7 @@
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1fdbc4f25bae472d6b359dacf676387982f7150935912262ec76430d3fadb09a",
+      "sourceDigest": "sha256:482430e5f440909e02337e7d4d308677f65444a6a7b7096adb5f02477d7a93bf",
       "uxItems": []
     },
     {
@@ -20730,7 +20730,7 @@
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:06475213bb530e2cc460c69e0fa4d4436ca11670d9cc2bb72868cb063d27610f",
+      "sourceDigest": "sha256:bc72279a49ebd9cd3f05bafca74b1e4edaa9710750235c24477c3c2ace81d1f5",
       "uxItems": []
     },
     {
@@ -20739,7 +20739,7 @@
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ae02cb3a9a455064eda545fb06595a4ee0c2d80ddb895a3d62976b982886ecb7",
+      "sourceDigest": "sha256:0fa7da5a7609cabb13a8aa0e050295cb45443b8fa7ef0a67b472db6d23c5efec",
       "uxItems": []
     },
     {
@@ -20748,7 +20748,7 @@
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b132246e83b757abb755b5f95eb50eaeda62257100e75d5a6917745f9e552320",
+      "sourceDigest": "sha256:8fcdd59326742a93910e9427d14d744fc3d207eb7c51993834488e0cd5f34c09",
       "uxItems": []
     },
     {

@@ -128,6 +128,15 @@ splits static/runtime resource bytes; name matching replaces symbol reachability
 semantics mutate behind fixed digests. `make shared-resource-bootstrap-seventh-fresh-review`
 reproduces 5/5. A seventh author repair and another review precede catalogue implementation.
 
+The same-day seventh author repair closes those five seams at the contract boundary: the adapter
+constructs and validates its complete graph from the pinned compiler; one parsed selector grammar
+serves the ten seed and three follow-on descriptor files; canonical freeze resolves to the global
+intrinsic; exact compiler-symbol reach owns retained declarations; and every published semantic
+value is recursively copied/frozen before its digest. `make
+shared-resource-bootstrap-seventh-author-repair` passes the retained 4/4 plus 5/5 new controls.
+Fresh independent review still precedes acceptance and implementation. Receipt:
+`planning/shared-resource-register-bootstrap/seventh-author-repair-2026-09-04.md`.
+
 The same-day eleventh `pack-capability-contract` author repair closes its seven bounded predecessor
 defects ([[D2563]]–[[D2569]]), but the subsequent fresh review returns the durable foundation on
 [[D2587]]–[[D2592]]. Valid immediate-guard events are outside its receipt; nested objective requests
