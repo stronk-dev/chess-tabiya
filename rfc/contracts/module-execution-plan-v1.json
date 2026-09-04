@@ -2702,6 +2702,54 @@
       "acquisition": "recorded_semantic_path@1",
       "derivation": {
         "kind": "alternatives",
+        "alternatives": [
+          {
+            "discriminator": "bait_capture",
+            "inputs": [
+              {
+                "id": "run.record.move",
+                "version": 1
+              },
+              {
+                "id": "rules.tactic.reading.defender_duty_set",
+                "version": 1
+              },
+              {
+                "id": "rules.transition.event.capture",
+                "version": 1
+              },
+              {
+                "id": "rules.exchange.predicate.legal_exchange",
+                "version": 1
+              }
+            ]
+          },
+          {
+            "discriminator": "check_induced",
+            "inputs": [
+              {
+                "id": "run.record.move",
+                "version": 1
+              },
+              {
+                "id": "rules.tactic.reading.defender_duty_set",
+                "version": 1
+              },
+              {
+                "id": "rules.tactic.event.check",
+                "version": 1
+              },
+              {
+                "id": "rules.transition.event.capture",
+                "version": 1
+              },
+              {
+                "id": "rules.exchange.predicate.legal_exchange",
+                "version": 1
+              }
+            ]
+          }
+        ],
         "join": {
           "subjectKind": "edge",
           "rule": "same_edge_context"
@@ -2935,62 +2983,16 @@
             "version": 1
           }
         ],
-        "alternatives": [
-          {
-            "discriminator": "bait_capture",
-            "inputs": [
-              {
-                "id": "run.record.move",
-                "version": 1
-              },
-              {
-                "id": "rules.tactic.reading.defender_duty_set",
-                "version": 1
-              },
-              {
-                "id": "rules.transition.event.capture",
-                "version": 1
-              },
-              {
-                "id": "rules.exchange.predicate.legal_exchange",
-                "version": 1
-              }
-            ]
-          },
-          {
-            "discriminator": "check_induced",
-            "inputs": [
-              {
-                "id": "run.record.move",
-                "version": 1
-              },
-              {
-                "id": "rules.tactic.reading.defender_duty_set",
-                "version": 1
-              },
-              {
-                "id": "rules.tactic.event.check",
-                "version": 1
-              },
-              {
-                "id": "rules.transition.event.capture",
-                "version": 1
-              },
-              {
-                "id": "rules.exchange.predicate.legal_exchange",
-                "version": 1
-              }
-            ]
-          }
-        ],
         "upstreamAuthority": {
           "owner": "rfc/semantic-collectors.md",
-          "missingProjection": {
+          "projection": {
             "id": "rules.tactic.event.check",
             "version": 1
           },
+          "inductionSelector": "deflectionObservedInduction(anchors)",
+          "eventConstructor": "checkSemanticEvent(beforeFen, moveUci, afterFen)",
           "requiredEmitter": "deflectionObservedSemanticEvent(..., checkEvidence?)",
-          "status": "blocked_upstream_derivation_authority"
+          "status": "implemented_exact_derivation_authority"
         }
       },
       "requiredOutput": {
@@ -6044,5 +6046,5 @@
       "status": "awaiting_upstream_sealed_operation"
     }
   ],
-  "digest": "sha256:53467d5c4dc03464ace70e1481f44bc2c1ca117026c6950f9b02c16839325a1c"
+  "digest": "sha256:774b2ebfa9949d32c19592a3ed8a8fd3cc62995647d00dba5b29884bf83a07c1"
 }

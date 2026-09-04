@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2611219975e5aa937cdc1c1eed05b5b6f6d2c4c94ec5ed1d07c8444dc13e9ce3",
+    "roadmap": "sha256:3c4dfe6ec08703727cbb1dcfe21f1d76fc52ac371c563de887b07609c437bb81",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:fc899a63cc6aec5391e885fef0f1d7e274acf0b67f1a27f8fd80b6e3dbfa2e85",
-    "rfcRegister": "sha256:a65cfee9772171b8c241de19d1b0a2af1ff375bd91c7ee266a27b2fca4ce5bce",
+    "workState": "sha256:b14ed42e6b4ff82c864f0f02f63081a08eba4cde311a6beb12c9f0f9ce206f14",
+    "rfcRegister": "sha256:20595a73b22fb7768b510a222a3238ec04b96771cc25c2083bbb27bf1a7f2bc4",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 867,
-      "done": 797,
+      "blocked": 866,
+      "done": 798,
       "refused": 3
     },
     "workItems": {
@@ -110,9 +110,10 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "The deflection production seam is live, and module-registration's eighth fresh review preserved its six prior repairs but returned D2557: the generated plan still calls check evidence missing. A ninth repair must remove that false layer while preserving the real recorded-path occurrence hold; promotion and wider returned foundations remain separate blockers.",
+        "summary": "Module registration's ninth author repair now binds the live deflection check projection, selector, sealed constructor and emitter while preserving the genuinely absent recorded-path occurrence operation. All 205 bindings remain dependency-blocked; fresh review, promotion and wider returned foundations remain separate blockers.",
         "impact": "advanced",
         "evidence": [
+          "planning/learner-modules/ninth-author-repair-2026-09-04.md",
           "planning/learner-modules/eighth-fresh-independent-buildability-review-2026-09-04.md",
           "rfc/evidence-value-authority.md",
           "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md",
@@ -177,9 +178,10 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Deflection check authority is live and exact-source compilation is byte-identical below 500 ms through 80 plies. Its first downstream module review exposed a stale green missing-check blocker; the separate recorded-path occurrence source remains genuinely unbuilt, and promotion's four returned event-boundary gaps remain held.",
+        "summary": "Deflection check authority is live and its module requirement now names that exact authority instead of a stale missing-check blocker. The recorded-path occurrence source remains genuinely unbuilt, all module bindings remain held for fresh review, and promotion's four returned event-boundary gaps remain separate.",
         "impact": "advanced",
         "evidence": [
+          "planning/learner-modules/ninth-author-repair-2026-09-04.md",
           "planning/learner-modules/eighth-fresh-independent-buildability-review-2026-09-04.md",
           "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md",
           "planning/pack-capability-contract/tenth-author-repair-2026-09-02.md",

@@ -371,6 +371,14 @@ production recorded-path/module source is still unbuilt. A ninth bounded repair 
 the false missing-check layer, bind the live constructor/selector and face another fresh review.
 Receipt: `planning/learner-modules/eighth-fresh-independent-buildability-review-2026-09-04.md`.
 
+The ninth author repair closes [[D2557]] without laundering the wider dependency. The generated
+deflection row now names the live check projection, induction selector, sealed event constructor and
+emitter as implemented derivation authority. Its separate `recordedSemanticPath(run, branchId)`
+operation remains `awaiting_upstream_occurrence_receipt`, every binding remains dependency-blocked
+and final emission is still refused. `make module-registration-ninth-author-repair` passes retained
+11/11 + 6/6 + 2/2; another genuinely fresh review gates acceptance. Receipt:
+`planning/learner-modules/ninth-author-repair-2026-09-04.md`.
+
 The 2026-09-02 fourth fresh promotion-collector review keeps the two held projections out of the
 foundation on [[D2521]], [[D2522]] and [[D2523]]. Its advertised closed request uses two undefined types, the
 injected Syzygy callable matches no provider operation and leaves normalized request bytes

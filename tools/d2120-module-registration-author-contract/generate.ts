@@ -236,9 +236,11 @@ for (const row of requirementRows) {
       alternatives: occurrenceAlternatives.map((alternative) => ({ discriminator: alternative.discriminator, inputs: alternative.inputs })),
       upstreamAuthority: {
         owner: "rfc/semantic-collectors.md",
-        missingProjection: ref("rules.tactic.event.check"),
+        projection: ref("rules.tactic.event.check"),
+        inductionSelector: "deflectionObservedInduction(anchors)",
+        eventConstructor: "checkSemanticEvent(beforeFen, moveUci, afterFen)",
         requiredEmitter: "deflectionObservedSemanticEvent(..., checkEvidence?)",
-        status: "blocked_upstream_derivation_authority",
+        status: "implemented_exact_derivation_authority",
       },
     });
     delete (row.derivation as { inputs?: unknown }).inputs;

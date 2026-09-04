@@ -71,3 +71,14 @@ remains the next authority gate.
   `eighth-fresh-independent-buildability-review-2026-09-04.md`.
 - Ninth author repair and another fresh review gate acceptance; no module implementation is
   authorised.
+
+## 2026-09-04 — module-registration ninth author repair
+
+- [[D2557]] closes at author tier: the generator and regenerated execution image bind the live
+  check projection, induction selector, sealed constructor and deflection emitter.
+- The separate `recordedSemanticPath(run, branchId)` requirement remains
+  `awaiting_upstream_occurrence_receipt`; every binding stays dependency-blocked and final emission
+  remains refused.
+- `make module-registration-ninth-author-repair` passes retained 11/11 + 6/6 + 2/2.
+- Another genuinely fresh review still gates acceptance and implementation. Exact repair:
+  `ninth-author-repair-2026-09-04.md`.

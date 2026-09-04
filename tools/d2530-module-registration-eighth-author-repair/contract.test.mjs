@@ -69,7 +69,7 @@ test("D2532 gives eval delta one edge-grained same-branch transition authority",
   ]);
 });
 
-test("D2533 makes deflection alternatives set-equal and keeps the missing check authority blocked", () => {
+test("D2533 makes deflection alternatives set-equal and binds the live check authority", () => {
   const derivation = projection("derived.tactic.deflection_observed").derivation;
   assert.equal(derivation.kind, "alternatives");
   assert.deepEqual(derivation.commonInputs.map(key), [
@@ -81,8 +81,15 @@ test("D2533 makes deflection alternatives set-equal and keeps the missing check 
   const byArm = Object.fromEntries(derivation.alternatives.map((arm) => [arm.discriminator, arm.inputs.map(key)]));
   assert.deepEqual(byArm.bait_capture, derivation.commonInputs.map(key));
   assert.deepEqual(new Set(byArm.check_induced), new Set([...derivation.commonInputs.map(key), "rules.tactic.event.check@1"]));
-  assert.equal(derivation.upstreamAuthority.status, "blocked_upstream_derivation_authority");
-  assert.equal(derivation.upstreamAuthority.missingProjection.id, "rules.tactic.event.check");
+  assert.deepEqual(derivation.upstreamAuthority, {
+    owner: "rfc/semantic-collectors.md",
+    projection: { id: "rules.tactic.event.check", version: 1 },
+    inductionSelector: "deflectionObservedInduction(anchors)",
+    eventConstructor: "checkSemanticEvent(beforeFen, moveUci, afterFen)",
+    requiredEmitter: "deflectionObservedSemanticEvent(..., checkEvidence?)",
+    status: "implemented_exact_derivation_authority",
+  });
+  assert.equal(derivation.operationRequirement.status, "awaiting_upstream_occurrence_receipt");
   assert.deepEqual(new Set(derivation.inputBindings.map((binding) => key(binding.projection))), new Set(byArm.check_induced));
 });
 

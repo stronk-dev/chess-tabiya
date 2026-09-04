@@ -14589,3 +14589,18 @@ and honestly held.
 **Evidence/next:** `make module-registration-eighth-fresh-review` passes 7/7. Author a ninth bounded
 repair that removes only the dead check blocker, names the live authority and preserves the real
 occurrence hold; another fresh review still gates acceptance and all module implementation.
+
+## 2026-09-04 — module-registration ninth repair separates live authority from missing operation
+
+**What landed:** [[D2557]] is author-repaired in the generator, regenerated artifact and retained
+author contract. The deflection row now names the live check projection, shared induction selector,
+sealed check-event constructor and exact emitter.
+
+**What changed:** only the false `missingProjection`/`blocked_upstream_derivation_authority` layer is
+gone. The distinct `recordedSemanticPath(run, branchId)` source remains
+`awaiting_upstream_occurrence_receipt`; all 205 bindings remain dependency-blocked and final emission
+is still refused.
+
+**Evidence/next:** `make module-registration-ninth-author-repair` passes retained 11/11 + 6/6 +
+2/2. Another genuinely fresh review must reproduce the repaired boundary before acceptance or any
+module implementation.

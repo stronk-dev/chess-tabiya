@@ -1,13 +1,13 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — eighth fresh independent review 2026-09-04 preserves [[D2530]]–[[D2535]]
-  and RETURNS [[D2557]].** Provider acquisition, exact catalogue gates, edge-grained eval delta,
-  per-alternative deflection inputs, all 205 exact pointers and the final receipt seal survive.
-  The execution image and its green author test still require the former missing-check blocker,
-  although D2536 now supplies the exact sealed check constructor and induction selector. A ninth
-  author repair must remove that false layer while preserving the real
-  `awaiting_upstream_occurrence_receipt` hold, then face another fresh review. `make
-  module-registration-eighth-fresh-review` passes 7/7. No implementation is authorised.
+- **Status:** **draft — ninth author repair complete 2026-09-04 on [[D2557]]; another genuinely
+  fresh review is required.** Provider acquisition, exact catalogue gates, edge-grained eval delta,
+  per-alternative deflection inputs, all 205 exact pointers and the final receipt seal survive. The
+  regenerated execution image now binds the live check projection, induction selector, sealed event
+  constructor and emitter as implemented derivation authority, while retaining the real
+  `awaiting_upstream_occurrence_receipt` hold for the unbuilt recorded-path module source. `make
+  module-registration-ninth-author-repair` passes retained 11/11 + 6/6 + 2/2. No implementation is
+  authorised.
   The fourth
   repair rejects the prior generator's
   central premise: learner modules do not invoke 117 detector/provider functions. They consume
@@ -2105,6 +2105,18 @@ separate recorded-path occurrence operation remains upstream-held. A ninth repai
 false missing-check authority, name the live constructor/selector and leave the occurrence hold
 intact. `make module-registration-eighth-fresh-review` reproduces all seven boundaries. Exact
 review: `planning/learner-modules/eighth-fresh-independent-buildability-review-2026-09-04.md`.
+
+Ninth author repair (2026-09-04):
+
+[[D2557]] is repaired at the generator, artifact and author-contract layers. The deflection authority
+names `rules.tactic.event.check@1`, `deflectionObservedInduction(anchors)`,
+`checkSemanticEvent(beforeFen, moveUci, afterFen)` and the exact emitter, with status
+`implemented_exact_derivation_authority`. The independent `recordedSemanticPath(run, branchId)`
+requirement remains `awaiting_upstream_occurrence_receipt`; no requirement row becomes executable
+and final emission remains refused. `make module-registration-ninth-author-repair` passes retained
+11/11 + 6/6 + 2/2. Exact repair:
+`planning/learner-modules/ninth-author-repair-2026-09-04.md`. Another genuinely fresh review gates
+acceptance and implementation.
 
 | row | author repair; fresh review still required |
 |---|---|
