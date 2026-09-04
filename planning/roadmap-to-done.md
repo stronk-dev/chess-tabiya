@@ -363,6 +363,14 @@ This removes module-registration's upstream check-event blocker but does not acc
 next fresh review must exercise the join. Promotion remains held. Receipt:
 `planning/evidence-foundation-ux/deflection-check-authority-implementation-2026-09-04.md`.
 
+The 2026-09-04 eighth fresh module-registration review then exercised that join and returned the
+artifact on [[D2557]]. All six eighth-repair boundaries survive, but the execution image and its
+green author test still require `blocked_upstream_derivation_authority` for the check projection
+D2536 has now shipped. The remaining `awaiting_upstream_occurrence_receipt` is real and stays: the
+production recorded-path/module source is still unbuilt. A ninth bounded repair must remove only
+the false missing-check layer, bind the live constructor/selector and face another fresh review.
+Receipt: `planning/learner-modules/eighth-fresh-independent-buildability-review-2026-09-04.md`.
+
 The 2026-09-02 fourth fresh promotion-collector review keeps the two held projections out of the
 foundation on [[D2521]], [[D2522]] and [[D2523]]. Its advertised closed request uses two undefined types, the
 injected Syzygy callable matches no provider operation and leaves normalized request bytes

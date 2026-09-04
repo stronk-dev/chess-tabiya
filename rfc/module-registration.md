@@ -1,12 +1,13 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — eighth author repair complete 2026-09-02 on
-  [[D2530]]–[[D2535]]; another fresh independent review is required.** Provider acquisition now
-  uses the injected application value, catalogue gates carry exact identities, eval delta is
-  edge-grained, deflection has per-alternative input closure with its real upstream check-evidence
-  gap explicitly blocked, all 205 pointers join the receipt key set, and the final receipt is
-  runtime-sealed. `make module-registration-eighth-author-repair` passes 6/6 plus the retained
-  11/11 author controls. No implementation is authorised.
+- **Status:** **draft — eighth fresh independent review 2026-09-04 preserves [[D2530]]–[[D2535]]
+  and RETURNS [[D2557]].** Provider acquisition, exact catalogue gates, edge-grained eval delta,
+  per-alternative deflection inputs, all 205 exact pointers and the final receipt seal survive.
+  The execution image and its green author test still require the former missing-check blocker,
+  although D2536 now supplies the exact sealed check constructor and induction selector. A ninth
+  author repair must remove that false layer while preserving the real
+  `awaiting_upstream_occurrence_receipt` hold, then face another fresh review. `make
+  module-registration-eighth-fresh-review` passes 7/7. No implementation is authorised.
   The fourth
   repair rejects the prior generator's
   central premise: learner modules do not invoke 117 detector/provider functions. They consume
@@ -2093,6 +2094,17 @@ Eighth author repair (2026-09-02):
 artifacts remain `requirements_only`, every final binding remains dependency-blocked, and the
 deflection check-arm dependency is now stated rather than laundered as closure. Another genuinely
 fresh independent review is required before acceptance or implementation.
+
+Eighth fresh independent return (2026-09-04):
+
+The six named repairs survive, but [[D2557]] returns the execution image. Its deflection row still
+calls `rules.tactic.event.check@1` a missing upstream projection and the author contract requires
+that stale state. D2536 now provides the exact alternative derivation, shared induction selector
+and runtime-sealed `checkSemanticEvent`; broad and exact-source event identity is proven. Only the
+separate recorded-path occurrence operation remains upstream-held. A ninth repair must delete the
+false missing-check authority, name the live constructor/selector and leave the occurrence hold
+intact. `make module-registration-eighth-fresh-review` reproduces all seven boundaries. Exact
+review: `planning/learner-modules/eighth-fresh-independent-buildability-review-2026-09-04.md`.
 
 | row | author repair; fresh review still required |
 |---|---|

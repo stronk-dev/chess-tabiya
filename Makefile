@@ -359,6 +359,10 @@ module-registration-seventh-fresh-review:
 module-registration-eighth-author-repair: module-registration-author-contract
 	node --test tools/d2530-module-registration-eighth-author-repair/contract.test.mjs
 
+.PHONY: module-registration-eighth-fresh-review
+module-registration-eighth-fresh-review:
+	node --test tools/d2557-module-registration-eighth-fresh-review/contract.test.mjs
+
 .PHONY: semantic-collectors-deflection-authority-author-contract
 semantic-collectors-deflection-authority-author-contract:
 	./node_modules/.bin/vitest run --config tools/d2536-deflection-check-authority-author-contract/vitest.config.ts --reporter=verbose

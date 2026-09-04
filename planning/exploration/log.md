@@ -14574,3 +14574,18 @@ the eager-path refusal at 40/80 plies; D1931 produces byte-identical results in 
 74.3/144.4/245.2 ms p95 through 80 plies, below the 500 ms bound. Full-repository verification and
 tracker receipts close the checkpoint. Next after the requested break: fresh-review
 `module-registration` against the now-live deflection seam.
+
+## 2026-09-04 — module-registration fresh review returns a stale green blocker
+
+**What landed:** the eighth fresh buildability review independently reconstructed provider
+acquisition, catalogue identities, edge-grained eval delta, alternative deflection inputs, all 205
+pair pointers and the final resolution seal. [[D2530]]–[[D2535]] survive.
+
+**What changed:** [[D2557]] records that the execution image and its green author test still require
+`rules.tactic.event.check@1` to be missing. D2536 now supplies the exact sealed constructor and
+selector, so that layer is false. The distinct recorded-path occurrence operation remains unbuilt
+and honestly held.
+
+**Evidence/next:** `make module-registration-eighth-fresh-review` passes 7/7. Author a ninth bounded
+repair that removes only the dead check blocker, names the live authority and preserves the real
+occurrence hold; another fresh review still gates acceptance and all module implementation.

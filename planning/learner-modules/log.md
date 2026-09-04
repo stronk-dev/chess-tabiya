@@ -59,3 +59,15 @@ This correction does not claim the module registry. D1164 retains the stable rea
 residual, and this plan's draft `module-registration` RFC still owns the production declaration,
 205 consumer bindings, execution plan, reseal and delivery operation. Its fresh independent review
 remains the next authority gate.
+
+## 2026-09-04 — module-registration eighth fresh independent return
+
+- [[D2530]]–[[D2535]] survive independent reconstruction.
+- [[D2557]] returns the generated execution image and its author contract: both still require the
+  former missing-check blocker after D2536 shipped the exact sealed constructor and selector.
+- The separate recorded-path occurrence operation remains honestly unavailable and must not be
+  relabelled complete with the check seam.
+- `make module-registration-eighth-fresh-review` passes 7/7. Exact review:
+  `eighth-fresh-independent-buildability-review-2026-09-04.md`.
+- Ninth author repair and another fresh review gate acceptance; no module implementation is
+  authorised.

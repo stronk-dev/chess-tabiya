@@ -20381,6 +20381,15 @@
       "uxItems": [],
       "evidence": "planning/evidence-foundation-ux/deflection-check-authority-implementation-2026-09-04.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2557",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ca1973235bc90583b14683b7f77a6a2a497b93b06c538d8bc5cbccd87ebfc12b",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:module-registration.md"
     }
   ]
 }
