@@ -7,12 +7,13 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair was **RETURNED by its sixth fresh review 2026-09-04 on [[D2603]]–[[D2607]].** The
-  fifth repair's scheduler-owned digest, exact-operand direction and reading grain survive, but its
-  maintained target does not run the retained gates, the value has two constructor names, the total
-  result has no seal/assertion, and its type model omits the category/DTZ and exact legal-map joins
-  it claims to prove. `make semantic-collectors-promotion-sixth-fresh-review` reproduces 5/5; no
-  held projection implementation is authorized. The
+  promotion pair has a **sixth author repair 2026-09-04 on [[D2603]]–[[D2607]]; seventh fresh
+  review required.** One maintained target now runs all five retained generations plus five new
+  behavioral falsifiers; one registered value factory owns the reading; the total operation result
+  is module-sealed; category/DTZ/perspective project from the exact source; and dropped, added,
+  reordered, rebuilt or cross-FEN moves/pawns fail. `make
+  semantic-collectors-promotion-sixth-author-repair` passes 19 retained assertions, four strict
+  typechecks and 5/5 new behavioral arms; no held projection implementation is authorized. The
   request now owns a canonical full-FEN parser and total recorded lookup, uses the actual shared
   provider scheduler plus operation-keyed source factory with deterministic request bytes, and
   requires a module-sealed aggregate geometry completion before its zero-call fast path. Geometry and recorded tablebase inputs
@@ -867,8 +868,21 @@ type PromotionRaceTablebaseSource =
       invocation: PromotionRaceProviderInvocationReceipt;
     }>;
 
+interface PromotionRaceTablebaseSourcePosition {
+  readonly fen: CanonicalFullFen;
+  readonly perspective: "side_to_move";
+  readonly category: TablebaseCategory;
+  readonly dtz: number | null;
+  readonly preciseDtz: number | null;
+}
+
+declare function promotionRaceTablebaseSourcePosition(
+  source: PromotionRaceTablebaseSource,
+): PromotionRaceTablebaseSourcePosition;
+
 interface PromotionRaceTablebaseValue {
   readonly fen: CanonicalFullFen;
+  readonly perspective: "side_to_move";
   readonly geometry: PromotionRaceGeometry;
   readonly source: PromotionRaceTablebaseSource;
   readonly category: TablebaseCategory;
@@ -881,6 +895,7 @@ interface PromotionRaceTablebaseValue {
 type PromotionRaceTablebaseEvidence = DeclaredEvidence<PromotionRaceTablebaseValue>;
 
 interface PromotionRaceTablebaseDerivationReceipt {
+  readonly request: PromotionRaceTablebaseRequest;
   readonly geometry: PromotionRaceGeometryEvidence;
   readonly legalMoves: ExactLegalMovesEvidence;
   readonly source: PromotionRaceTablebaseSource;
@@ -888,6 +903,12 @@ interface PromotionRaceTablebaseDerivationReceipt {
 }
 
 declare const PROMOTION_RACE_TABLEBASE_RECEIPTS: WeakSet<PromotionRaceTablebaseDerivationReceipt>;
+declare function createDerivedPawnPromotionRaceTablebaseV1Evidence(input: Readonly<{
+  request: PromotionRaceTablebaseRequest;
+  geometry: PromotionRaceGeometryEvidence;
+  legalMoves: ExactLegalMovesEvidence;
+  source: PromotionRaceTablebaseSource;
+}>): PromotionRaceTablebaseDerivationReceipt;
 declare function assertPromotionRaceTablebaseDerivation(
   value: unknown,
 ): asserts value is PromotionRaceTablebaseDerivationReceipt;
@@ -895,12 +916,14 @@ declare function assertPromotionRaceTablebaseDerivation(
 type PromotionRaceTablebaseResult =
   | Readonly<{
       kind: "reading";
+      request: PromotionRaceTablebaseRequest;
       item: PromotionRaceTablebaseEvidence;
       derivation: PromotionRaceTablebaseDerivationReceipt;
     }>
   | Readonly<{
       kind: "unavailable";
       reason: "outside_tablebase_domain";
+      request: PromotionRaceTablebaseRequest;
       geometry: PromotionRaceGeometryEvidence;
       source: DeclaredEvidence<ProviderLocalDomainResult<"syzygy.position@1">>;
       requestDigest: ProviderRequestDigest;
@@ -909,6 +932,7 @@ type PromotionRaceTablebaseResult =
   | Readonly<{
       kind: "unavailable";
       reason: "provider_unavailable";
+      request: PromotionRaceTablebaseRequest;
       geometry: PromotionRaceGeometryEvidence;
       operation: "syzygy.position@1";
       requestDigest: ProviderRequestDigest;
@@ -917,6 +941,7 @@ type PromotionRaceTablebaseResult =
     }>
   | Readonly<{
       kind: "completed";
+      request: PromotionRaceTablebaseRequest;
       output: Readonly<{
         kind: "no_evidence";
         reason: "no_opposing_passed_clear_paths";
@@ -926,8 +951,14 @@ type PromotionRaceTablebaseResult =
   | Readonly<{
       kind: "unavailable";
       reason: "input_abstained";
+      request: PromotionRaceTablebaseRequest;
       missing: readonly ("geometry" | "legal_moves")[];
     }>;
+
+declare const PROMOTION_RACE_TABLEBASE_RESULTS: WeakSet<PromotionRaceTablebaseResult>;
+declare function assertPromotionRaceTablebaseResult(
+  value: unknown,
+): asserts value is PromotionRaceTablebaseResult;
 
 declare function collectPromotionRaceTablebase(
   request: PromotionRaceTablebaseRequest,
@@ -947,19 +978,24 @@ brand a caller-written hash. The local-domain arm additionally crosses
 receipt retain the exact `typedRequest`, expected digest and returned envelope; spreading,
 rebuilding, changing FEN or substituting another sealed result fails the request/result join.
 
-The successful output mapping is literal. `fen` is the byte-equal canonical geometry/legal/source
-FEN. `geometry` is `geometry.payload` by reference and `source` is the selected whole source by
-reference. `immediatePromotion` flattens the exact legal-map rows, keeps only entries whose
+The successful output mapping is literal. `promotionRaceTablebaseSourcePosition(source)` has two
+exhaustive arms: recorded reads `evidence.payload.values`, while live reads
+`evidence.payload.payload.position`; both retain the request FEN and literal
+`perspective: "side_to_move"`. `category`, `dtz` and `preciseDtz` are copied from that exact source
+position without reinterpretation, with only optional live `preciseDtz` normalized through
+`preciseDtz: sourcePosition.preciseDtz ?? null`, so zero remains zero. `fen` is the byte-equal canonical request/geometry/legal/source FEN. `geometry` is
+`geometry.payload` by reference and `source` is the selected whole source by reference.
+`immediatePromotion` flattens the exact legal-map rows, keeps only entries whose
 `promotion` field is present, sorts by the map's declared canonical UCI order and retains those
 `ExactLegalMove` objects—never caller strings or a new move brand. `promotionFirst` is exactly
 `geometry.payload.ordering[0]?.pawns ?? []`, preserving every tied `PawnIdentity`; it is never
-collapsed to a colour label. Recorded and live `preciseDtz` normalize only with
-`sourcePosition.preciseDtz ?? null`; `0` remains `0`. The source's category/DTZ fields are copied
-without reinterpretation. `declarePromotionRaceTablebaseEvidence(value)` is the sole adapter and
-requires these exact references before sealing the complete value; the derivation assertion checks
+collapsed to a colour label. The sole registered constructor is
+`createDerivedPawnPromotionRaceTablebaseV1Evidence({request, geometry, legalMoves, source})`; no
+parallel `declarePromotionRaceTablebaseEvidence` adapter exists. It requires the specialized
+input receipts and exact references before sealing the complete value; the derivation assertion checks
 `output.payload.geometry === geometry.payload`, `output.payload.source === source`, exact legal-move
 object membership for every promotion, exact pawn-object membership for every first-arrival
-participant, and byte-equal FEN. Rebuilt arrays, one dropped underpromotion, one added non-promotion,
+participant, and byte-equal FEN. Rebuilt arrays, one dropped underpromotion, one added promotion,
 a colour summary, `undefined` precise DTZ, crossed geometry/source or a payload/receipt splice fail.
 
 Recorded normalization calls `assertRecordedTablebaseEvidence`, whose value receipt names
@@ -1023,10 +1059,16 @@ capability traversal or pawn-private provider callable on this product path.
 
 Only after a recorded or live success is fixed does the operation call
 `resolveLegalMoves(geometry.fen)`. Its typed unavailable arm returns `input_abstained`; its evidence
-arm calls `assertExactLegalMovesEvidence` before reading a move, and invalid evidence throws. A
+arm calls `assertExactLegalMovesEvidence` before reading a move, and invalid evidence throws. That
+specialized assertion requires the central exact-legal-map factory receipt, byte-equal request FEN,
+canonical UCI order, complete row/object identity and the original immutable map. A dropped, added,
+reordered or rebuilt move array and a separately sealed cross-FEN map fail before filtering; the
+collector cannot accept a caller-written `readonly Move[]`. `assertPromotionRaceGeometryEvidence`
+likewise requires its exact geometry factory receipt, so `promotionFirst` retains every tied pawn
+object from the authoritative first ordering bucket rather than a reconstructed identity. A
 success is minted only by
-`createDerivedPawnPromotionRaceTablebaseV1Evidence({geometry, legalMoves, source})`; the central value receipt and
-the sealed returned `PromotionRaceTablebaseDerivationReceipt` retain the same exact three input
+`createDerivedPawnPromotionRaceTablebaseV1Evidence({request, geometry, legalMoves, source})`; the central value receipt and
+the sealed returned `PromotionRaceTablebaseDerivationReceipt` retain the same exact four input
 objects. The result assertion requires `derivation.output === item`, receipt-set membership and
 reference identity for every input. Replacing the legal map or source after construction, even with
 an equal separately sealed value, fails. All arms require byte-equal
@@ -1034,6 +1076,15 @@ canonical full FEN; precedence is completed/no-output, typed geometry absence, s
 resolution, live local-domain/provider result, success-only legal-map resolution, then derivation.
 Substituting provider failure for domain evidence, a bare domain payload for
 its sealed item, or a live success for a recorded member fails.
+
+Every arm is created through one module-private total-result constructor, inserted into
+`PROMOTION_RACE_TABLEBASE_RESULTS`, and crossed through `assertPromotionRaceTablebaseResult` at the
+operation boundary. The reading arm retains the exact request, item and derivation. Provider arms
+retain the same request and invocation objects plus their exact domain/source-failure object;
+completed/input-abstained arms retain the request and their sealed upstream completion or missing
+set. Plain objects, spread copies, JSON round-trips and an arm assembled from two otherwise genuine
+requests/invocations/sources/derivations all fail. The assertion is not a key-shape parser and no
+public constructor accepts a preassembled result arm.
 
 The geometry declaration may land after this amendment passes fresh review. The outcome declaration
 also requires the provider RFC's request/source-preserving compiled execution paths and shared Syzygy
@@ -1363,6 +1414,18 @@ Exact review:
 `make semantic-collectors-promotion-sixth-fresh-review` passes 5/5. A sixth author repair must close
 all five before a seventh genuinely fresh review or implementation.
 
+The sixth author repair closes all five at the bounded contract tier. The maintained target now
+executes every earlier positive generation before its five new behavioral arms. The only output
+factory is the registered `createDerivedPawnPromotionRaceTablebaseV1Evidence`; one module-private
+result constructor and WeakSet-backed assertion bind each discriminant to its exact request and
+applicable invocation/source/derivation objects. The strict model includes category, DTZ, precise
+DTZ, perspective and FEN as exhaustive recorded/live source projections. Executable controls reject
+dropped, added, reordered, rebuilt and cross-FEN exact legal maps while retaining all four
+underpromotions and both tied pawn objects by reference. `make
+semantic-collectors-promotion-sixth-author-repair` passes 19 retained assertions, four strict
+typechecks and 5/5 new behavioral controls. This is author evidence only; a seventh genuinely fresh
+review still gates both held projections.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1384,11 +1447,11 @@ all five before a seventh genuinely fresh review or implementation.
 | [[D2549]] | author-repaired: the output retains exact legal-move objects, tied pawn identities and a literal `preciseDtz ?? null` mapping |
 | [[D2550]] | author-repaired: the sealed public reading value and receipt both retain the same geometry and whole source by reference |
 | [[D2551]] | author-repaired: projection 14 is a position reading, absent from semantic-event declarations/selection; no edge is manufactured |
-| [[D2603]] | returned: make the maintained gate actually retain every earlier author generation or consolidate them truthfully |
-| [[D2604]] | returned: choose the one registered tablebase-value factory and remove the competing undeclared adapter |
-| [[D2605]] | returned: seal and assert the complete reading/unavailable operation result with exact cross-arm identity |
-| [[D2606]] | returned: make category, DTZ and precise-DTZ exact source projections in the executable type model |
-| [[D2607]] | returned: execute exact legal-map/FEN/order/object-identity and tied-pawn mutation negatives |
+| [[D2603]] | author-repaired: the maintained sixth target transitively executes all five prior author generations |
+| [[D2604]] | author-repaired: one registered tablebase-value factory owns request, inputs, receipt and output |
+| [[D2605]] | author-repaired: one private constructor plus runtime membership seals every total-result arm and rejects crossing/copying |
+| [[D2606]] | author-repaired: category, DTZ, precise DTZ, perspective and FEN are exact exhaustive source projections |
+| [[D2607]] | author-repaired: exact legal-map and tied-pawn inputs have executable drop/add/reorder/rebuild/cross-FEN negatives |
 
 ## Appendix A — registered projection ids
 
@@ -1414,6 +1477,13 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-04: sixth author repair closes [[D2603]]–[[D2607]] at RFC tier. One maintained
+  target retains all five earlier author generations; the registered value factory is unique; the
+  complete operation result is runtime-sealed; tablebase outcome fields and perspective project
+  from the exact recorded/live source; and legal-map plus tied-pawn mutation controls execute.
+  `make semantic-collectors-promotion-sixth-author-repair` passes 19 retained assertions, four
+  strict typechecks and 5/5 new behavioral controls. Seventh fresh review remains mandatory; no
+  held production id is authorized.
 - 2026-09-04: fifth author repair closes [[D2548]]–[[D2551]] at RFC tier. The shared scheduler now
   owns one operation-keyed normalized-request digest; outcome values retain exact legal-move and
   pawn participant objects plus geometry/source operands; optional provider `preciseDtz` maps only

@@ -186,6 +186,16 @@ plus lifecycle typecheck. Fresh review, the owner-tier component amendment and s
 still gate implementation. Receipt:
 `planning/platform-alignment/evidence-presentation/fifth-author-repair-2026-09-04.md`.
 
+The same-day sixth held-promotion author repair closes [[D2603]]–[[D2607]] at contract tier. One
+maintained target now retains every earlier source/FEN/provider gate; one registered factory and
+one sealed total result own the output; category, DTZ, precise DTZ, perspective and FEN come from
+the exact recorded/live tablebase source; and executable controls reject altered legal maps and
+pawn participants. `make semantic-collectors-promotion-sixth-author-repair` passes 19 retained
+assertions, four strict typechecks and 5/5 new controls. The spine remains **12/14**, not 14/14:
+seventh fresh review and provider/value dependency landing precede the held pair's production
+implementation. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-sixth-author-repair-2026-09-04.md`.
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded

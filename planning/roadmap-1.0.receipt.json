@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:d4671e8247c0bb6aeb9bb6df5a124a357ea2763230ecacdf690e19d8678841b4",
+    "roadmap": "sha256:d0f91c9ece0a56914efd480e4025994f74782a27a13e14af0047f61e79fe336b",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:50a6b622005b791ed5e4e26793aa68576dc9583e2c4a99544e2f275197769669",
-    "rfcRegister": "sha256:c6f8f8301416d0e2d563fcfed284542271f60c1d633b48488f1bd5ce6f8110a8",
+    "workState": "sha256:d614922708e67d86cc2ae067ae435b044ba1dd5694d8af9ac9099b3f9bcd1eb5",
+    "rfcRegister": "sha256:bb1fddce258e76d56b5efa20563a0d22949bd46a081c28a10ec3dca3ecf990b9",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -186,7 +186,7 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Deflection check authority is live, while fresh reviews hold the promotion pair and bounded-target layer. Shared candidate and bounded-target contracts have bounded author repairs. Review evidence now also has a second author repair: one recorded-prefix subject, registry-derived source plan and aggregate seal feed a total availability fold and sealed presentation receipts, while bounded pre-reserved attempt history survives branch churn. All three await genuinely fresh review and dependency landing. The evidence spine remains 12/14; recorded paths, provider/value authority and all module emissions remain unbuilt or held.",
+        "summary": "Deflection check authority is live, while the held promotion pair, shared candidate, bounded-target and Review evidence contracts now have bounded author repairs. Promotion outcome now has one retained gate, one registered factory, one sealed total result, exact source outcome fields and executable legal-map/pawn identity mutations. All await genuinely fresh review and dependency landing. The evidence spine remains 12/14; recorded paths, provider/value authority and all module emissions remain unbuilt or held.",
         "impact": "held",
         "evidence": [
           "planning/evidence-foundation-ux/review-evidence-compiler-second-author-repair-2026-09-04.md",

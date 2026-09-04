@@ -15109,3 +15109,22 @@ layers: 31 assertions plus lifecycle typecheck. Exact receipt:
 `planning/platform-alignment/evidence-presentation/fifth-author-repair-2026-09-04.md`. Another
 genuinely fresh independent review plus [[D1672]] and [[D2401]] still gate implementation; no
 learner-facing component or module credit is claimed.
+
+## 2026-09-04 — Held promotion collectors sixth author repair
+
+**What landed:** The bounded contract-tier repair for [[D2603]]–[[D2607]] plus the maintained
+`make semantic-collectors-promotion-sixth-author-repair` target. The two promotion projections
+remain held; no production runtime, server, provider, API, schema, content, UX, archive or
+protected-design byte changed.
+
+**What changed:** the maintained target now executes every earlier author generation; one
+registered value factory owns the reading; one private constructor and runtime membership seal the
+total result; tablebase category/DTZ/precise-DTZ/perspective/FEN project from the exact source; and
+specialized legal-map/geometry receipts make altered move and tied-pawn inputs fail behaviorally.
+
+**Evidence/next:** `make semantic-collectors-promotion-sixth-author-repair` passes 19 retained
+runtime assertions, four strict TypeScript contracts and 5/5 new behavioral controls. Exact
+receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-sixth-author-repair-2026-09-04.md`.
+A seventh genuinely fresh independent review plus provider-exchange and evidence-value-authority
+landing still gate production. The evidence spine honestly remains 12/14.
