@@ -176,6 +176,16 @@ question "which motif names are missing?" with the release path
 source→value→operation→validation→consumer. Receipt:
 `design/research/foundation-capability-closure-2026-08-31.md` ([[D2374]]).
 
+The 2026-09-04 fifth evidence-presentation author repair closes its six returned contract seams
+and the newly measured Explorer reason mismatch [[D2644]] without claiming product UX. The
+attribution digest now covers the whole semantic resource; citations require revision metadata;
+terminal absence is operation-derived instead of UI-padded; registered questions lose authority
+when copied; one predicate expression owns structure match and witness geometry; and canonical UCI
+owns Explorer move identity. `make evidence-presentation-fifth-author-repair` passes 31 assertions
+plus lifecycle typecheck. Fresh review, the owner-tier component amendment and shared-resource root
+still gate implementation. Receipt:
+`planning/platform-alignment/evidence-presentation/fifth-author-repair-2026-09-04.md`.
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded

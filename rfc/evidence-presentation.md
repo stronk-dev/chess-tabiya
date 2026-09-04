@@ -1,12 +1,13 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft — **RETURNED by fifth fresh independent review 2026-08-31 on
-  [[D2436]]–[[D2441]].** The post-P population survives, but the attribution digest omits resource
-  semantics; citation admits missing revision metadata; source-reason totality is local rather
-  than operation-derived; the question seal is copyable; structure witnesses remain a second
-  static table; and Explorer move identity mixes SAN with UCI. `make
-  evidence-presentation-fifth-fresh-review` reproduces 6/6. [[D1672]] and [[D2401]] remain
-  independent blockers. No implementation is authorised.
+- **Status:** draft — **FIFTH AUTHOR REPAIR 2026-09-04 on [[D2436]]–[[D2441]] and
+  [[D2644]]; fresh independent review required.** The repaired contract hashes the complete
+  attribution resource image, requires non-empty revision metadata, derives terminal absence
+  reasons from the owning operation, makes registered questions non-copyable at runtime, derives
+  named-structure witnesses from the same expression as the match, and uses canonical UCI as the
+  Explorer edge identity. `make evidence-presentation-fifth-author-repair` passes all five author
+  layers (31 assertions plus lifecycle typecheck). [[D1672]] and [[D2401]] remain independent
+  blockers. No implementation is authorised.
   Landing remains three checkpoints (§2.1): manifest truth, sealed current consumers, then
   module/hint seats.
   Prior amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
@@ -207,6 +208,42 @@ buildability blockers:
 repairs are in the fifth fresh review dossier. Production and protected design remain untouched;
 fifth author repair plus another fresh review are mandatory.
 
+## Fifth author repair (2026-09-04)
+
+The six returned seams and the operation mismatch they exposed now have one executable authority:
+
+1. `source-attribution-registry@1` hashes a canonical semantic image containing its id, version,
+   resolver, rows and missing-metadata policy. The resource and citation derivation carry that
+   digest, and the shared-resource check must recompute the same image; changing any semantic
+   field changes the digest.
+2. `CitationOperand.source.revision` is required and non-empty. The exact parser rejects missing,
+   empty and extra metadata, while an unresolved deployment receipt takes the registered
+   `source_attribution_absent` abstention before construction.
+3. An abstention row exists only when its owning projection operation has a terminal abstention
+   arm and the target component renders absence. Its source-reason set is compiled from that
+   operation's exported closed result discriminants; missing and extra reasons both fail. There is
+   no presentation-local generic padding. Checkpoint P exports the Explorer authority beside
+   `CorpusResult` and aligns `human.explorer.population@1` to the real
+   `no_data_at_band | source_unavailable` union, closing [[D2644]]. The learner-facing category may
+   map `no_data_at_band` to empty-population prose but the receipt retains the source reason.
+4. `RegisteredPresentationQuestion` has no enumerable brand. The registry retains the sole
+   canonical frozen object in a process-local `WeakSet`, and lifecycle admission checks both
+   membership and exact adapter/question identity. Spread, structured clone and JSON round-trip
+   all lose authority.
+5. Named-structure matching and witness geometry traverse the same exported
+   `STRUCTURE_PREDICATES` expression in `evaluateNamedStructureWithWitness`. There is no second
+   witness-row table; mutating either the position or expression changes match and witnesses in
+   one operation.
+6. Explorer operands accept `committedMoveUci`; canonical UCI is the unique candidate and edge
+   identity, while SAN is retained only as display notation. Duplicate UCI with different SAN,
+   malformed UCI and denominator inconsistency all refuse.
+
+The controlling Checkpoint-P image therefore contains **eight**, not seven, literal repairs. The
+new sixth-arm harness reads the real `CorpusResult` union from the server boundary so a future
+server/manifest mismatch fails independently of the plan's copy. This is author repair, not
+acceptance: another fresh independent review must attack all seven repaired seams and the exact
+eight-operation P boundary before implementation.
+
 ## Summary
 
 The product has an evidence contract with **37 producers, 193 projections, 25 consumers and 210
@@ -397,7 +434,7 @@ Deviation 1, and the design-tier amendment is owed to the owner (Discharge D1).
 `COMPONENT_DECLARATIONS` and the operand types land as
 `packages/runtime/src/presentation-contract.ts` — shared, frozen, testable without a DOM, and
 importable by the server-side renderers that already build sentences. The fourteen Svelte
-implementations land under `apps/web/src/lib/evidence/`. Checkpoint P owns only the seven exact
+implementations land under `apps/web/src/lib/evidence/`. Checkpoint P owns only the eight exact
 manifest/payload repairs enumerated below; `module-registration` continues to own module
 declarations and module bindings. After P, the component join is one-way and by type only: a
 component declares which `EvidenceForm` members it may serve and `evidence-catalog.ts` does not
@@ -408,14 +445,16 @@ import the component implementation. The corrected pin is recorded in `rfc/READM
 This RFC lands in three checkpoints without treating manifest cleanup or a registry as product
 completion:
 
-1. **Checkpoint P — manifest presentation repair predecessor.** Atomically land the seven operations in
+1. **Checkpoint P — manifest presentation repair predecessor.** Atomically land the eight operations in
    `MANIFEST_PRESENTATION_REPAIRS`: reclassify `opponent.selection@1` and
    `runtime.repertoire_scan@1` as machine-only operations; reclassify `derived.story.rank@1` as
    selection-only; retain registered named-structure identity and witness squares; replace the scalar pack-phase payload
    with `{phase}`; and replace consequence's partial payload with the discriminated
    `terminal:true+outcome | terminal:false+plies+objectiveState` union; and add the sealed
    `derived.citation.attribution@1` derivation plus exact `runtime.evidence_ref@1` binding over the
-   versioned source-attribution registry. The matching source adapters change in the same commit.
+   versioned source-attribution registry; and export the Explorer operation's exact
+   `no_data_at_band | source_unavailable` result-reason authority, replacing the projection's
+   incompatible `empty_population` spelling. The matching source adapters change in the same commit.
    Recompile F1 and require exactly 112 post-P presentation pairs,
    all with buildable operands. P changes no component, module, seat, content or schema.
 2. **A — sealed component foundation and current consumers.** Land the component schemas,
@@ -514,7 +553,7 @@ The authoring authority for the current population is
 removes the five internal-operation pairs from the presentation population, and therefore covers
 **112 pre-P presentation pairs: 100 immediately adaptable, eleven operand repairs and one
 selection-only binding removal**. Checkpoint P removes that selection binding, repairs the eleven
-pair occurrences and adds one source-bound citation pair through seven atomic source operations,
+pair occurrences and adds one source-bound citation pair through eight atomic source operations,
 yielding **exactly 112 post-P presentation pairs**, all adaptable. Adding, removing or changing a live form or reachability class fails set
 equality until this RFC is amended.
 
@@ -1018,12 +1057,13 @@ budget, and draws it. A component that queries anything is the defect the dossie
   ```
   `PRESENTATION_ABSTENTION_ROWS` is derived from exact adapters **and their component
   `emptyBehavior`**. `silent` produces no row. `stated_absence` and `unavailable_source` produce
-  one row carrying adapter key, question, projection, producer, empty behavior and a total
-  source-reason map. `PRESENTATION_QUESTIONS` is derived set-equal to those question ids and
-  supplies the learner label. `PRESENTATION_SOURCE_REASON_LABELS` is set-equal to the union of
-  literal projection abstention reasons plus shared source-result reasons; the receipt retains the
-  exact source reason and maps it to a learner absence category without erasing it. In particular,
-  `outside_tablebase_domain`, `empty_population`, `model_failure`, `input_abstained` and
+  one row only when the owning operation can terminally abstain, carrying adapter key, question,
+  projection, producer, empty behavior and a total source-reason map. A non-abstaining operation
+  creates no invented empty state. `PRESENTATION_QUESTIONS` is derived set-equal to those question
+  ids and supplies the learner label. `PRESENTATION_SOURCE_REASON_LABELS` is set-equal to the union
+  of exact exported operation-result reason authorities; the receipt retains the exact source
+  reason and maps it to a learner absence category without erasing it. Presentation code owns no
+  fallback or padded reason list. In particular, `outside_tablebase_domain`, `no_data_at_band`, `model_failure`, `input_abstained` and
   `no_recorded_trail` remain distinguishable. Pending is deliberately absent because it is
   lifecycle state, not a terminal reason. The compiler joins projection/provider result and module
   empty behavior to one admitted mapping; callers cannot add a string. `never_requested` is
@@ -1551,13 +1591,14 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     ids covered by the state matrix. *RED:* add a component without its five states. *Wrong
     impl:* a shared parameterised test that skips inapplicable states silently — the matrix
     asserts an explicit `not_applicable` declaration instead.
-18. **Scope fence and explicit predecessor.** Checkpoint P is set-equal to the seven literal
+18. **Scope fence and explicit predecessor.** Checkpoint P is set-equal to the eight literal
     `MANIFEST_PRESENTATION_REPAIRS` operations and edits only their named catalogue/source/payload
     seams. Checkpoints A/B add no `EvidenceForm` member, no `ModuleDeclaration` field, no seat id,
-    no `AnswerDistance` member and no further `evidence-catalog.ts` edit. *RED:* add an eighth or
+    no `AnswerDistance` member and no further `evidence-catalog.ts` edit. *RED:* add a ninth or
     otherwise unlisted catalogue edit, or omit one named preimage/postimage. The seventh is the
     versioned source-attribution registry plus `derived.citation.attribution@1`; it is not a generic
-    sibling lookup. *Wrong impl:* one that "helpfully" adds a
+    sibling lookup. The eighth is the exported Explorer operation-result reason authority and its
+    exact projection join; it is not a UI-local synonym table. *Wrong impl:* one that "helpfully" adds a
     `chart` form or module field, which would fork the design tier or collide with
     `module-registration`.
 19. **`register-check` is green with this RFC active.** During this author repair the claims block
@@ -1589,11 +1630,12 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
     boundary and digest independently and reject every stale response. *Wrong impl:* a component
     generation or node-revision counter parallel to the module/provider decision stamp. In
     addition, `PRESENTATION_ABSTENTION_ROWS` is set-equal to exactly the non-removal adapters whose
-    target components declare `stated_absence | unavailable_source`; `silent` adapters are
-    set-disjoint. Each row resolves one registered question, exact projection/producer identity
-    and a non-empty source-reason map set-equal to that projection's declared reasons plus shared
-    result states. Missing, extra, collapsed, wrong-provider and pending-as-terminal mappings fail.
-22. **Checkpoint closeout is honest.** Checkpoint P records exactly seven manifest/source repairs
+    owning operation can terminally abstain and whose target components declare
+    `stated_absence | unavailable_source`; `silent` and non-abstaining operations are set-disjoint.
+    Each row resolves one registered question, exact projection/producer identity and a non-empty
+    source-reason map set-equal to the owning operation's exported result-reason authority. Missing,
+    extra, collapsed, wrong-provider, presentation-local padding and pending-as-terminal mappings fail.
+22. **Checkpoint closeout is honest.** Checkpoint P records exactly eight manifest/source repairs
     and a 112-pair recensus. Checkpoint A records exactly which current presentation binding pairs
     migrated and leaves the RFC `implementing`; checkpoint B alone may close the module/hint/arrow
     rows and archive after its real module operation and seats pass. None counts an empty coverage
@@ -1605,7 +1647,7 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 |---|---|
 | [[D2135]] | exact pair/form targets; named compositions carry explicit member/form rows and union to the binding |
 | [[D2136]] | all 20 consumers have source+operation reachability anchors; two backend operations are not presentation |
-| [[D2137]] | superseded repair shape: seven-operation Checkpoint P; post-P census is 112 real pairs |
+| [[D2137]] | superseded repair shape: eight-operation Checkpoint P; post-P census is 112 real pairs |
 | [[D2138]] | exact-pair renderer ids, variants, operands, formatter maps, templates and output forms are set-equal to fact targets |
 | [[D2139]] | abstention population derives from component empty behavior and exact source reasons |
 | [[D2140]] | consequence is a discriminated terminal/outcome or nonterminal/plies/objectiveState payload |
@@ -1629,6 +1671,7 @@ class in this repo ([[D444]]/[[D984]]/[[D1274]]).
 | [[D2439]] | question authority uses non-copyable runtime membership checked at lifecycle admission |
 | [[D2440]] | matcher and witness traverse one exported registered expression, not parallel tables |
 | [[D2441]] | Explorer candidates and committed edges share unique canonical UCI identity |
+| [[D2644]] | Explorer operation and projection share the exported `no_data_at_band | source_unavailable` authority |
 
 ## Discharges
 
@@ -1703,6 +1746,12 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-09-04 — fifth author repair for [[D2436]]–[[D2441]] and [[D2644]]. Canonical
+  whole-resource hashing, mandatory citation revision, operation-derived terminal reasons,
+  WeakSet-backed question authority, single-expression structure witnesses and canonical Explorer
+  UCI identity now pass `make evidence-presentation-fifth-author-repair` (31 assertions plus
+  lifecycle typecheck). The P boundary is eight exact repairs. Fresh review remains mandatory; no
+  implementation is authorised.
 - 2026-08-31 — returned by fifth fresh independent buildability review on [[D2436]]–[[D2441]].
   Attribution resource identity, mandatory revision, operation-derived absence reasons,
   non-copyable question authority, atomic structure witnesses and canonical Explorer move identity

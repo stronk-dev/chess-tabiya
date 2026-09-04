@@ -15090,3 +15090,22 @@ controls and 5/5 new repair arms. Exact receipt:
 `planning/evidence-foundation-ux/review-evidence-compiler-second-author-repair-2026-09-04.md`.
 Another genuinely fresh independent review plus the recorded-path and evidence-presentation
 dependencies still gate implementation; Review and public-share product credit remain unchanged.
+
+## 2026-09-04 — Evidence presentation fifth author repair
+
+**What landed:** The bounded contract-tier repair for [[D2436]]–[[D2441]] plus newly measured
+[[D2644]] and the maintained `make evidence-presentation-fifth-author-repair` target. No production
+runtime, server behavior, API, schema, content, UX, archive or protected-design byte changed.
+
+**What changed:** the attribution digest covers one canonical semantic resource image; citations
+require non-empty revision metadata; terminal absence rows derive from actual operation result
+arms instead of presentation defaults; registered question authority is non-copyable; structure
+matching and witnesses traverse one expression; and Explorer candidate/committed identity is
+canonical UCI. The repair caught that `CorpusResult` and the manifest used different low-population
+reason ids, so Checkpoint P now has eight exact operations and an independent server-source check.
+
+**Evidence/next:** `make evidence-presentation-fifth-author-repair` passes all five retained author
+layers: 31 assertions plus lifecycle typecheck. Exact receipt:
+`planning/platform-alignment/evidence-presentation/fifth-author-repair-2026-09-04.md`. Another
+genuinely fresh independent review plus [[D1672]] and [[D2401]] still gate implementation; no
+learner-facing component or module credit is claimed.

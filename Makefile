@@ -817,6 +817,10 @@ evidence-presentation-fourth-fresh-review:
 evidence-presentation-fifth-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2436-evidence-presentation-fifth-fresh-review/vitest.config.ts --reporter=verbose
 
+.PHONY: evidence-presentation-fifth-author-repair
+evidence-presentation-fifth-author-repair: evidence-presentation-author-contract evidence-presentation-second-author-repair evidence-presentation-third-author-repair evidence-presentation-fourth-author-repair
+	./node_modules/.bin/vitest run --config tools/d2644-evidence-presentation-fifth-author-repair/vitest.config.ts --reporter=verbose
+
 module-registration-second-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2164-module-registration-second-fresh-review/vitest.config.ts
 

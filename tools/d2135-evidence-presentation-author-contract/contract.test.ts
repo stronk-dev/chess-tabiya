@@ -68,10 +68,10 @@ describe("evidence-presentation D2135-D2140 second author repair", () => {
   });
 
   it("D2137 publishes one predecessor for every catalogue/payload mutation", () => {
-    expect(MANIFEST_PRESENTATION_REPAIRS).toHaveLength(7);
-    expect(new Set(MANIFEST_PRESENTATION_REPAIRS.map((row) => row.id))).toHaveLength(7);
+    expect(MANIFEST_PRESENTATION_REPAIRS).toHaveLength(8);
+    expect(new Set(MANIFEST_PRESENTATION_REPAIRS.map((row) => row.id))).toHaveLength(8);
     expect(MANIFEST_PRESENTATION_REPAIRS.map((row) => row.id).sort()).toEqual([
-      "consequence-payload", "internal-opponent", "internal-repertoire", "internal-story-rank",
+      "consequence-payload", "explorer-absence-reason", "internal-opponent", "internal-repertoire", "internal-story-rank",
       "named-structure-geometry", "pack-phase-payload", "source-bound-citation",
     ]);
     expect(rfc).toMatch(/Checkpoint P — manifest presentation repair predecessor/u);
@@ -103,7 +103,7 @@ describe("evidence-presentation D2135-D2140 second author repair", () => {
     for (const row of PRESENTATION_ABSTENTION_ROWS) {
       expect(PRESENTATION_QUESTIONS[row.questionId]).toBe(row.questionLabel);
       expect(row.questionLabel).not.toMatch(/[a-z]+[._][a-z]+@\d/u);
-      expect(row.sourceReasonMap.length).toBeGreaterThan(0);
+      expect(row.sourceReasonMap.length, row.adapterKey).toBeGreaterThan(0);
       for (const reason of row.sourceReasonMap) expect(PRESENTATION_ABSENCE_REASONS[reason.learnerReason]).toBeTruthy();
       expect(row.requestPolicy).toBe("only_after_owning_workflow_requested_question");
     }

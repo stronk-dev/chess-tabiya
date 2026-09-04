@@ -19298,7 +19298,7 @@
       "id": "D2436",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:923d5369ceedc3278feda4bfc0f9d4cfad37eb446e3054407b1fbea5a264a45d",
+      "sourceDigest": "sha256:1d05baaf33c58d7e06b465e09dc4537815e2bf63506ffca36ab88df0305221bd",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
@@ -19307,7 +19307,7 @@
       "id": "D2437",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:551d5bc8480e133b7895074cc7aedeed89a7ea4eb117b53946e6aad7b91a70de",
+      "sourceDigest": "sha256:2909b4d6f399d041c295ed96e0fd29b5b1fec64a48cfa9c8342a2aebb63fbe2a",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
@@ -19316,7 +19316,7 @@
       "id": "D2438",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:fb736508bbb7bdbddaea866db56fb1f290370b0faf2c5871c31a6222a61550b7",
+      "sourceDigest": "sha256:c90739cd57ddc45e1cdee26b2e20162199ea48e3d92e06b34121fa2410ae6cc1",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
@@ -19325,7 +19325,7 @@
       "id": "D2439",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2bca9413d7fcf064e3f79db709de4aaa2527b7bc67c30d1e443f61c54bc7973f",
+      "sourceDigest": "sha256:d9e191e64902ea6e0a2595516c220af663f2780f50ef128ee4cfaabe03ab04b0",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
@@ -19334,7 +19334,7 @@
       "id": "D2440",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0fc16b68e923a8c0dea24b410d303810018fdc46877de778266703bdb2ee9848",
+      "sourceDigest": "sha256:2fd6969132569bcfe238b84da59d1cbe622d90018ff35b18eb76114aff9c3ee8",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
@@ -19343,7 +19343,7 @@
       "id": "D2441",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:87c663a9d7223740e167de96d1328c74a896f6d6fb858f8718f19814c671fcec",
+      "sourceDigest": "sha256:cf9dade65d7245d3c8f395d8cb5caa93ba4f613520958693a29d6ec15c96e9ba",
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
@@ -21164,6 +21164,15 @@
       "uxItems": [],
       "evidence": "planning/exploration/log.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2644",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8a5bc7f2494411582773980fde9854ec43b23005ebcb3e3559bf2da58274f10e",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md"
     }
   ]
 }

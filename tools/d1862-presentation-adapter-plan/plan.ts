@@ -1,4 +1,5 @@
-// Disposable authoring contract for D1862/D2135-D2140. This specifies the RFC, not production code.
+// Disposable authoring contract for D1862/D2135-D2140/D2436-D2441. This specifies the RFC, not production code.
+import { createHash } from "node:crypto";
 import { PRIMARY_EVIDENCE_MANIFEST } from "../../packages/runtime/src/evidence-catalog.js";
 export const COMPONENT_IDS = Object.freeze([
   "distribution", "outcome_split", "magnitude", "magnitude_trail", "square_set",
@@ -39,13 +40,11 @@ export interface PresentationDecisionStamp {
   readonly digest: string;
 }
 
-const registeredPresentationQuestionBrand: unique symbol = Symbol("registered-presentation-question");
 export interface RegisteredPresentationQuestion {
   readonly id: string;
   readonly label: string;
   readonly registry: "presentation-questions@1";
   readonly adapterKey: string;
-  readonly [registeredPresentationQuestionBrand]: true;
 }
 
 export type PresentationAbstentionLifecycle =
@@ -331,6 +330,7 @@ export const MANIFEST_PRESENTATION_REPAIRS: readonly ManifestPresentationRepair[
   { id: "pack-phase-payload", sources: ["packages/runtime/src/evidence-source-adapters.ts", "packages/runtime/src/evidence-catalog.ts"], operation: "pack.authored.phase@1 payload", before: "PackPhase root with operands []", after: "{phase:PackPhase} with operands [phase]" },
   { id: "consequence-payload", sources: ["packages/runtime/src/evidence-source-adapters.ts", "packages/runtime/src/evidence-catalog.ts"], operation: "run.record.consequence@1 payload", before: "context,terminal", after: "terminal:true+outcome | terminal:false+plies+objectiveState" },
   { id: "source-bound-citation", sources: ["packages/runtime/src/evidence-catalog.ts", "packages/runtime/src/evidence-source-adapters.ts", "packages/runtime/src/source-attribution.ts", "apps/web/src/lib/evidence-sentences.ts"], operation: "derived.citation.attribution@1 plus runtime.evidence_ref@1 binding", before: "resolution borrows an unbound sibling source item", after: "sealed resolution + exact source evidence + registered attribution -> complete CitationOperand" },
+  { id: "explorer-absence-reason", sources: ["apps/server/src/corpus.ts", "packages/runtime/src/evidence-catalog.ts", "packages/runtime/src/evidence-source-adapters.ts"], operation: "CorpusResult abstention and human.explorer.population@1", before: "operation no_data_at_band; projection empty_population", after: "one exported no_data_at_band | source_unavailable result authority consumed by the projection and presentation compiler" },
 ]);
 
 const repairedAdapterRow = (row: ExactPresentationAdapterRow): ExactPresentationAdapterRow => {
@@ -375,7 +375,7 @@ export interface CitationOperand {
     locator: string;
     licence: string;
     url?: string;
-    revision?: string;
+    revision: string;
   }>;
 }
 
@@ -396,18 +396,19 @@ export function parseCitationOperand(value: unknown): CitationOperand {
   }
   const sourceKeys = Object.keys(source);
   if (!sourceKeys.every((key) => ["source", "title", "locator", "licence", "url", "revision"].includes(key))
-    || !["source", "title", "locator", "licence"].every((key) => typeof source[key] === "string" && String(source[key]).length > 0)
+    || !["source", "title", "locator", "licence", "revision"].every((key) => typeof source[key] === "string" && String(source[key]).trim().length > 0)
     || (source.url !== undefined && typeof source.url !== "string")
-    || (source.revision !== undefined && typeof source.revision !== "string")) {
+    || !exactKeys(source, source.url === undefined
+      ? ["source", "title", "locator", "licence", "revision"]
+      : ["source", "title", "locator", "licence", "revision", "url"])) {
     throw new TypeError("Citation source does not inhabit the registered attribution operand");
   }
   return Object.freeze({
     content: Object.freeze({ kind: String(content.kind), text: String(content.text), binding: String(content.binding) }),
     source: Object.freeze({
       source: String(source.source), title: String(source.title), locator: String(source.locator),
-      licence: String(source.licence),
+      licence: String(source.licence), revision: String(source.revision),
       ...(source.url === undefined ? {} : { url: String(source.url) }),
-      ...(source.revision === undefined ? {} : { revision: String(source.revision) }),
     }),
   });
 }
@@ -461,13 +462,29 @@ export const SOURCE_ATTRIBUTION_REGISTRY: readonly SourceAttributionRegistryRow[
   }),
 ]);
 
-export const SOURCE_ATTRIBUTION_REGISTRY_RESOURCE = Object.freeze({
+const canonicalJson = (value: unknown): string => {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
+  if (value !== null && typeof value === "object") {
+    const record = value as Record<string, unknown>;
+    return `{${Object.keys(record).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(record[key])}`).join(",")}}`;
+  }
+  return JSON.stringify(value);
+};
+
+export const sourceAttributionRegistryDigest = (image: Readonly<Record<string, unknown>>): string =>
+  `sha256:${createHash("sha256").update(canonicalJson(image)).digest("hex")}`;
+
+export const SOURCE_ATTRIBUTION_REGISTRY_SEMANTIC_IMAGE = Object.freeze({
   id: "source-attribution-registry",
   version: 1,
-  digest: "sha256:bea3f246780e7bc2c5fb6502f1159e639c062d23887cfcfc74e92c9f009532c6",
   resolver: Object.freeze({ source: "packages/runtime/src/source-attribution.ts", symbol: "resolveRegisteredSourceAttribution" }),
   rows: SOURCE_ATTRIBUTION_REGISTRY,
   missingReceiptField: "abstain_source_attribution_absent" as const,
+});
+
+export const SOURCE_ATTRIBUTION_REGISTRY_RESOURCE = Object.freeze({
+  ...SOURCE_ATTRIBUTION_REGISTRY_SEMANTIC_IMAGE,
+  digest: sourceAttributionRegistryDigest(SOURCE_ATTRIBUTION_REGISTRY_SEMANTIC_IMAGE),
 });
 
 export const SOURCE_BOUND_CITATION_DERIVATION = Object.freeze({
@@ -481,7 +498,7 @@ export const SOURCE_BOUND_CITATION_DERIVATION = Object.freeze({
   outputType: "CitationOperand",
   outputFields: Object.freeze(["content", "source"] as const),
   parser: "parseCitationOperand",
-  attributionRegistry: Object.freeze({ id: "source-attribution-registry", version: 1, digest: "sha256:bea3f246780e7bc2c5fb6502f1159e639c062d23887cfcfc74e92c9f009532c6" }),
+  attributionRegistry: Object.freeze({ id: "source-attribution-registry", version: 1, digest: SOURCE_ATTRIBUTION_REGISTRY_RESOURCE.digest }),
   missingAttribution: "abstain_source_attribution_absent" as const,
 });
 
@@ -497,23 +514,18 @@ export const NAMED_STRUCTURE_LABEL_AUTHORITY = Object.freeze({
 
 export const NAMED_STRUCTURE_WITNESS_AUTHORITY = Object.freeze({
   registry: "STRUCTURE_PREDICATES@1",
+  expression: Object.freeze({ source: "packages/runtime/src/structure.ts", symbol: "STRUCTURE_PREDICATES" }),
   operation: Object.freeze({ source: "packages/runtime/src/structure.ts", symbol: "evaluateNamedStructureWithWitness" }),
   atomicResult: "StructureMatchWithWitness",
   witnessRule: "matched_positive_piece_on_square_leaves",
   emptyWitness: "PRESENTATION_STRUCTURE_WITNESS_EMPTY",
   inconsistentWitness: "PRESENTATION_STRUCTURE_WITNESS_PREDICATE_MISMATCH",
-  rows: Object.freeze([
-    Object.freeze({ id: "carlsbad", predicateId: "structure.carlsbad@1", witnessLeafIds: Object.freeze(["piece.white_pawn.d4", "piece.black_pawn.d5", "piece.black_pawn.c6"]), squares: Object.freeze(["c6", "d4", "d5"]) }),
-    Object.freeze({ id: "iqp-white", predicateId: "structure.iqp-white@1", witnessLeafIds: Object.freeze(["piece.white_pawn.d4"]), squares: Object.freeze(["d4"]) }),
-    Object.freeze({ id: "iqp-black", predicateId: "structure.iqp-black@1", witnessLeafIds: Object.freeze(["piece.black_pawn.d5"]), squares: Object.freeze(["d5"]) }),
-    Object.freeze({ id: "maroczy-bind", predicateId: "structure.maroczy-bind@1", witnessLeafIds: Object.freeze(["piece.white_pawn.c4", "piece.white_pawn.e4"]), squares: Object.freeze(["c4", "e4"]) }),
-  ]),
   implementationRule: "the matcher and witness extractor traverse the same registered expression in one call; squares are the occupied positive pieceOnSquare leaves of that matched expression, not a second structure table",
 });
 
 export interface ExplorerPopulationOperandInput {
   readonly nodeId: string;
-  readonly committedMoveSan: string | null;
+  readonly committedMoveUci: string | null;
   readonly result:
     | Readonly<{ kind: "stats"; total: number; moves: readonly Readonly<{ san: string; uci: string; playedCount: number; white: number; draws: number; black: number }>[] }>
     | Readonly<{ kind: "abstention" }>;
@@ -535,7 +547,8 @@ export function constructExplorerCountOperands(input: ExplorerPopulationOperandI
   const identities = new Set<string>();
   const operands = result.moves.map((move): CountWithDenominatorOperand => {
     if (move.san.length === 0 || move.uci.length === 0) throw new TypeError("Explorer candidate identity is incomplete");
-    const identity = `${move.san}\0${move.uci}`;
+    if (!/^[a-h][1-8][a-h][1-8][qrbn]?$/u.test(move.uci)) throw new TypeError("Explorer candidate UCI is not canonical");
+    const identity = move.uci;
     if (identities.has(identity)) throw new TypeError("Explorer candidate identity is duplicated");
     identities.add(identity);
     if (!Number.isSafeInteger(move.playedCount) || move.playedCount < 0 || move.playedCount > result.total
@@ -547,7 +560,7 @@ export function constructExplorerCountOperands(input: ExplorerPopulationOperandI
       candidate: Object.freeze({ grain: "candidate_move@1", san: move.san, uci: move.uci }),
       numerator: move.playedCount, denominator: result.total,
       denominatorMeaning: "lichess_position_population@1", nodeId: input.nodeId,
-      committedMove: input.committedMoveSan === move.san,
+      committedMove: input.committedMoveUci === move.uci,
     });
   });
   return Object.freeze(operands);
@@ -652,6 +665,7 @@ export const PRESENTATION_ABSENCE_REASONS = Object.freeze({
   content_absent: "No authored content is bound here.",
   outside_tablebase_domain: "This position is outside the tablebase domain.",
   empty_population: "The selected population contains no games.",
+  no_data_at_band: "The selected human-game population is below its declared sample floor.",
   model_failure: "The human-move model could not produce a result.",
   input_abstained: "A required evidence input was unavailable.",
   no_recorded_trail: "No comparable recorded evaluation trail exists.",
@@ -682,6 +696,7 @@ export const PRESENTATION_SOURCE_REASON_LABELS = Object.freeze({
   source_unavailable: "The evidence source is unavailable.",
   outside_tablebase_domain: "The position is outside the tablebase domain.",
   empty_population: "The selected population contains no games.",
+  no_data_at_band: "The selected human-game population is below its declared sample floor.",
   model_failure: "The human-move model failed to produce a result.",
   input_abstained: "A required evidence input abstained.",
   no_recorded_trail: "No comparable recorded trail exists.",
@@ -717,6 +732,7 @@ export const PRESENTATION_SOURCE_REASON_DISPOSITIONS: Readonly<Record<Presentati
   source_unavailable: { absence: "unavailable", learnerReason: "source_unavailable" },
   outside_tablebase_domain: { absence: "empty", learnerReason: "outside_tablebase_domain" },
   empty_population: { absence: "empty", learnerReason: "empty_population" },
+  no_data_at_band: { absence: "empty", learnerReason: "empty_population" },
   model_failure: { absence: "failed", learnerReason: "model_failure" },
   input_abstained: { absence: "unavailable", learnerReason: "input_abstained" },
   no_recorded_trail: { absence: "empty", learnerReason: "no_recorded_trail" },
@@ -752,8 +768,6 @@ export interface PresentationAbstentionPlan {
   readonly requestPolicy: "only_after_owning_workflow_requested_question";
 }
 
-const providerFamilies = new Set(["explorer_population", "maia_policy", "recorded_engine_magnitude", "recorded_tablebase_state", "runtime_evidence"]);
-const authoredFamilies = new Set(["authoring_evidence_record", "authored_claim_delivery", "authored_claim"]);
 const producerForProjection = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map((projection) => [refKey(projection), refKey(projection.producer)]));
 const projectionForKey = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map((projection) => [refKey(projection), projection]));
 const mapSourceReason = (sourceReason: PresentationSourceReasonId): Readonly<{ sourceReason: PresentationSourceReasonId; absence: "withheld" | "unavailable" | "failed" | "empty"; learnerReason: PresentationAbsenceReasonId }> =>
@@ -764,15 +778,19 @@ const targetComponents = (row: ExactPresentationAdapterRow): readonly ComponentI
 const presentationRowsAfterP = POST_P_PRESENTATION_ADAPTER_ROWS;
 
 export const PRESENTATION_ABSTENTION_ROWS: readonly PresentationAbstentionPlan[] = Object.freeze(
-  presentationRowsAfterP.filter((row) => row.disposition !== "remove_visual_binding" && targetComponents(row).some((component) => COMPONENT_EMPTY_BEHAVIOR[component] !== "silent")).map((row) => {
+  presentationRowsAfterP.filter((row) => {
+    if (row.disposition === "remove_visual_binding" || !targetComponents(row).some((component) => COMPONENT_EMPTY_BEHAVIOR[component] !== "silent")) return false;
+    if (row.familyId === "source_bound_citation") return true;
+    return projectionForKey.get(row.projection)?.abstention.possible === true;
+  }).map((row) => {
     const label = QUESTION_LABELS[row.familyId];
     const questionLabel = label ?? (row.familyId === "source_bound_citation" ? "Was complete source attribution available?" : undefined);
     if (questionLabel === undefined) throw new TypeError(`No presentation question for ${row.familyId}`);
     const projection = projectionForKey.get(row.projection);
     const declared = projection?.abstention.reasons ?? (row.familyId === "source_bound_citation" ? ["input_abstained", "source_attribution_absent"] : []);
-    const operational = providerFamilies.has(row.familyId) ? ["no_witness", "below_floor", "provider_unavailable"]
-      : authoredFamilies.has(row.familyId) ? ["content_absent", "not_recorded"] : ["no_witness", "not_recorded"];
-    const sourceReasons = [...new Set([...declared, ...operational])] as PresentationSourceReasonId[];
+    const sourceReasons = (row.projection === "human.explorer.population@1"
+      ? declared.map((reason) => reason === "empty_population" ? "no_data_at_band" : reason)
+      : [...declared]) as PresentationSourceReasonId[];
     const components = targetComponents(row);
     const emptyBehavior = components.some((component) => COMPONENT_EMPTY_BEHAVIOR[component] === "unavailable_source")
       ? "unavailable_source" as const : "stated_absence" as const;
@@ -791,11 +809,32 @@ export const PRESENTATION_QUESTIONS: Readonly<Record<string, string>> = Object.f
 ));
 
 const questionByAdapter = new Map(PRESENTATION_ABSTENTION_ROWS.map((row) => [row.adapterKey, row] as const));
+const registeredQuestionAuthority = new WeakSet<RegisteredPresentationQuestion>();
+const registeredQuestionByIdentity = new Map<string, RegisteredPresentationQuestion>();
 export function registeredPresentationQuestion(adapterKey: string, questionId: string): RegisteredPresentationQuestion {
   const row = questionByAdapter.get(adapterKey);
   if (row === undefined || row.questionId !== questionId) throw new TypeError("Question identity is not registered for this presentation adapter");
-  return Object.freeze({
+  const identity = `${adapterKey}\0${questionId}`;
+  const existing = registeredQuestionByIdentity.get(identity);
+  if (existing !== undefined) return existing;
+  const question = Object.freeze({
     id: row.questionId, label: row.questionLabel, registry: "presentation-questions@1",
-    adapterKey, [registeredPresentationQuestionBrand]: true as const,
+    adapterKey,
   });
+  registeredQuestionAuthority.add(question);
+  registeredQuestionByIdentity.set(identity, question);
+  return question;
+}
+
+export function assertRegisteredPresentationQuestion(
+  value: unknown,
+  adapterKey: string,
+  questionId: string,
+): asserts value is RegisteredPresentationQuestion {
+  if (value === null || typeof value !== "object" || !registeredQuestionAuthority.has(value as RegisteredPresentationQuestion)) {
+    throw new TypeError("Presentation question lacks runtime registry authority");
+  }
+  if (value !== registeredPresentationQuestion(adapterKey, questionId)) {
+    throw new TypeError("Presentation question is crossed with another lifecycle identity");
+  }
 }

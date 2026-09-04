@@ -31,7 +31,9 @@ test("D2157: named structure identity, label and witness geometry move atomicall
   ]));
   assert.equal(NAMED_STRUCTURE_LABEL_AUTHORITY.registry, "STRUCTURE_METADATA");
   assert.equal(NAMED_STRUCTURE_LABEL_AUTHORITY.witnessField, "squares");
-  assert.equal(NAMED_STRUCTURE_WITNESS_AUTHORITY.rows.length, 4);
+  assert.equal(NAMED_STRUCTURE_WITNESS_AUTHORITY.expression.symbol, "STRUCTURE_PREDICATES");
+  assert.equal(NAMED_STRUCTURE_WITNESS_AUTHORITY.operation.symbol, "evaluateNamedStructureWithWitness");
+  assert.equal("rows" in NAMED_STRUCTURE_WITNESS_AUTHORITY, false);
 });
 
 test("D2158: citation is a sealed multi-input derivation with complete attribution", () => {
@@ -78,7 +80,7 @@ test("D2161: abstention rows preserve exact authority and source reasons", () =>
     for (const mapping of row.sourceReasonMap) assert.ok(PRESENTATION_SOURCE_REASON_LABELS[mapping.sourceReason], mapping.sourceReason);
   }
   const reasons = new Set(PRESENTATION_ABSTENTION_ROWS.flatMap((row) => row.sourceReasonMap.map((mapping) => mapping.sourceReason)));
-  for (const required of ["outside_tablebase_domain", "empty_population", "model_failure", "input_abstained", "no_recorded_trail"]) {
+  for (const required of ["outside_tablebase_domain", "no_data_at_band", "model_failure", "input_abstained", "no_recorded_trail"]) {
     assert.ok(reasons.has(required), required);
   }
 });
