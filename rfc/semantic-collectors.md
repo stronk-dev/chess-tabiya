@@ -1,11 +1,11 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
 - **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The D2536
-  deflection check-authority amendment passed fresh independent review 2026-09-04 and is authorized
-  for implementation.** The review exercised the real sealed check event, exact edge-one anchor,
-  copied/crossed refusals, existing two-member derivation machinery, module-generator precedence
-  and all three production-facing call sites; `make semantic-collectors-deflection-authority-fresh-review`
-  passes 5/5 plus strict TypeScript. **The held
+  deflection check-authority amendment passed fresh review, then implementation returned its caller
+  selection gap on [[D2552]]; the bounded author repair is complete 2026-09-04 and requires another
+  fresh review before production changes.** One exported induction selector now owns bait-before-check
+  choice for the detector, emitter and all three call sites, including the real both-facts-hold arm;
+  `make semantic-collectors-deflection-source-author-repair` passes 4/4 plus strict TypeScript. **The held
   promotion pair completed its fourth author repair 2026-09-02 on [[D2521]], [[D2522]] and
   [[D2523]], then was **RETURNED by fifth fresh independent review on [[D2548]]–[[D2551]].** The
   source repair survives, but request-digest construction, the exact output/operand ABI and a real
@@ -398,6 +398,38 @@ two-member union; and module generation consumes `derivation.anyOf` before its `
 fallback. The existing cost/source compilers retain the exact edge context needed for the bounded
 call-site change. No blocker remains. Production bytes did not change in the author or review
 checkpoint; C17 now authorizes the existing projection repair.
+
+Implementation rehearsal then found the remaining caller seam ([[D2552]]). The emitter's direct
+API must reject `unnecessary-check`, but a generic recorded-path compiler cannot decide whether to
+supply its already-compiled first-edge check event without knowing the same bait-vs-check arm. It
+must not duplicate private chess logic, pass the event blindly and reject a valid dual-arm line, or
+catch `missing-check` and retry.
+
+The repair publishes the selection as one shared rules-only operation:
+
+```ts
+export type DeflectionObservedInduction = "bait_capture" | "check_induced";
+
+export function deflectionObservedInduction(
+  anchors: readonly RecordedMoveAnchor[],
+): DeflectionObservedInduction | undefined;
+```
+
+`deflectionObservedOperands` calls this helper before constructing any event and emits nothing on
+`undefined`. `deflectionObservedSemanticEvent` calls the same helper over `payload.anchors` before
+validating its optional check event. Each of `semantic-tactic-sequences.test.ts`,
+`d1930-recorded-path-cost-harness` and `d1931-recorded-path-source-harness` calls the helper over the
+same payload anchors and passes its sealed first-edge check event only for `check_induced`. The
+helper owns the exact existing discriminator: bait capture wins; otherwise edge one must check.
+It returns identity only, never a chess explanation or grade.
+
+The permanent dual-arm fixture has an edge-one bait capture that also checks, followed by the
+defender's bait capture and the retained target capture. The helper returns `bait_capture`, the
+generic caller passes no check event, and the emitter produces one event. Direct callers still get
+`unnecessary-check` when they supply one. Missing/crossed/unsealed/wrong-projection checks on the
+check-induced arm remain unchanged. This is an additive helper/export inside the existing seven-site
+production census; it changes no projection identity, operand, eligibility, schema or content byte.
+Another fresh review must exercise that real dual-arm line before implementation is authorized.
 
 #### 3.3 Observed line tactics
 
@@ -1244,6 +1276,11 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-04: author-repaired [[D2552]] after implementation rehearsal exposed a caller-selection
+  gap in the accepted D2536 amendment. One exported `deflectionObservedInduction` operation now
+  owns bait-before-check choice across detector, emitter and all three call sites; a real dual-arm
+  line passes no unnecessary check evidence. The 4/4 author target plus strict TypeScript is not
+  acceptance; another fresh review gates production.
 - 2026-09-04: the fresh independent D2536 review accepted the deflection check-authority amendment
   for implementation. A live sealed check event, exact edge-one anchor, copy/cross refusals,
   two-member manifest machinery and module-generator precedence pass 5/5 plus strict TypeScript.

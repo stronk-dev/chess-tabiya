@@ -685,6 +685,11 @@ semantic-collectors-deflection-authority-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2536-deflection-check-authority-fresh-review/vitest.config.ts
 	./node_modules/.bin/tsc -p tools/d2536-deflection-check-authority-fresh-review/tsconfig.json --noEmit
 
+.PHONY: semantic-collectors-deflection-source-author-repair
+semantic-collectors-deflection-source-author-repair:
+	./node_modules/.bin/vitest run --config tools/d2552-deflection-check-source-author-repair/vitest.config.ts
+	./node_modules/.bin/tsc -p tools/d2552-deflection-check-source-author-repair/tsconfig.json --noEmit
+
 pack-capability-author-repair:
 	node tools/d2152-pack-capability-author-repair/contract.mjs
 	node --test tools/d2334-pack-capability-fifth-author-repair/contract.test.mjs

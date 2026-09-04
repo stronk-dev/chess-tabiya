@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:01a0bec0148ad87a907edd306a9feae6878ba5faf48a0d6df712d6ec0eae107c",
+    "roadmap": "sha256:9a022763d5513a34b5336d3e0517526c8f6c9c96b4605a1c99ef97d847bfb6ed",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:4ab2eb3e0bfbb31a6b179bf32f60ba07040b1c956be7a2079682a7be22408a99",
-    "rfcRegister": "sha256:5e8ec60ba5f28687ac8e9bdf51e1c1e1b5bf445527005d6e34674af9e09dd4b6",
+    "workState": "sha256:d4c6e9485bc6b18a828734aaaf9abf0f1ddae1c1c1fd772cfc0b784105f6044f",
+    "rfcRegister": "sha256:d530fbe26957ed0b05b3c50abe361b6005e4fb72dd8fd6d5daf38dc597a45b0b",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -30,9 +30,9 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 640,
+      "todo": 639,
       "doing": 0,
-      "blocked": 866,
+      "blocked": 868,
       "done": 791,
       "refused": 3
     },
@@ -110,8 +110,8 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "The D2536 deflection check-authority amendment passed fresh independent review against the live runtime seal, exact edge anchor, derivation union and module-generator precedence. That bounded projection repair is now implementation-authorized; the held promotion pair and wider returned foundations remain separate blockers.",
-        "impact": "advanced",
+        "summary": "The D2536 deflection amendment passed fresh review, then implementation rehearsal exposed D2552: generic path callers could not select optional check evidence without duplicating the detector. A bounded shared-induction-selector repair is author-complete and production is re-held for fresh review; promotion and wider returned foundations remain separate blockers.",
+        "impact": "held",
         "evidence": [
           "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md",
           "planning/pack-capability-contract/tenth-author-repair-2026-09-02.md",
@@ -175,8 +175,8 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "The D2536 deflection producer-to-module seam passed fresh independent review: the check-induced arm has an exact sealed first-edge authority and the module generator consumes its derivation union. Implementation is executable; promotion's four returned event-boundary gaps remain held.",
-        "impact": "advanced",
+        "summary": "Implementation rehearsal returned the newly accepted D2536 seam on D2552 because generic callers lacked one authoritative bait-vs-check selector. The author repair now shares that selector across detector, emitter and callers, but another fresh review gates implementation; promotion's four returned event-boundary gaps remain held.",
+        "impact": "held",
         "evidence": [
           "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md",
           "planning/pack-capability-contract/tenth-author-repair-2026-09-02.md",

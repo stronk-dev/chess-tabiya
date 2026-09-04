@@ -14492,3 +14492,20 @@ all three call sites retain the exact context needed to forward one sealed check
 **Evidence/next:** `make semantic-collectors-deflection-authority-fresh-review` passes 5/5 plus
 strict TypeScript, while the retained author contract passes 4/4. Implement C17, rerun both gates,
 then return D2536 to module registration without changing the independently held promotion pair.
+
+## 2026-09-04 — Deflection implementation rehearsal returns caller selection and author-repairs it
+
+**What landed:** implementation rehearsal of the accepted D2536 seam exposed [[D2552]] before any
+production byte changed. The emitter correctly refuses unnecessary check evidence on bait-capture
+lines, but generic recorded-path callers had no authoritative way to choose whether to supply the
+already-compiled first-edge check event.
+
+**What changed:** the bounded RFC repair publishes one `deflectionObservedInduction` selector for
+the detector, emitter and all three call sites. Bait capture wins when both arms hold; a permanent
+dual-arm fixture requires callers to omit the check event, while direct unnecessary-check refusal
+remains. Schema, projection identities, operands, eligibility, persistence, API and content are
+unchanged.
+
+**Evidence/next:** `make semantic-collectors-deflection-source-author-repair` passes 4/4 plus
+strict TypeScript. D2536 and D2552 are held on `rfc/semantic-collectors.md` until another genuinely
+fresh review exercises the real dual-arm chess line and runtime seal; production remains untouched.

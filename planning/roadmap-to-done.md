@@ -322,6 +322,15 @@ production byte changed in the review checkpoint; the held promotion pair remain
 returned. Receipt:
 `planning/evidence-foundation-ux/deflection-check-authority-fresh-independent-review-2026-09-04.md`.
 
+Implementation rehearsal immediately returned that acceptance on [[D2552]]: the emitter rejects
+unnecessary check evidence, but generic path compilers had no shared way to know whether the
+payload selected bait-capture or check-induced authority. The bounded author repair publishes one
+`deflectionObservedInduction` selector used by detector, emitter and all three call sites, and pins
+a real dual-arm line to bait-capture with no supplied check event. `make
+semantic-collectors-deflection-source-author-repair` passes 4/4 plus strict TypeScript. Production
+is re-held until another fresh review. Receipt:
+`planning/evidence-foundation-ux/deflection-check-source-selection-author-repair-2026-09-04.md`.
+
 The 2026-09-02 fourth fresh promotion-collector review keeps the two held projections out of the
 foundation on [[D2521]], [[D2522]] and [[D2523]]. Its advertised closed request uses two undefined types, the
 injected Syzygy callable matches no provider operation and leaves normalized request bytes
