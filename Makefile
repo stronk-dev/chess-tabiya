@@ -969,7 +969,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 
@@ -1059,6 +1059,10 @@ concept-registry-author-contract:
 .PHONY: concept-registry-fresh-review
 concept-registry-fresh-review:
 	node --test tools/d2661-concept-registry-fresh-review/contract.test.mjs
+
+.PHONY: concept-registry-author-repair
+concept-registry-author-repair: concept-registry-author-contract
+	node --test tools/d2661-concept-registry-author-repair/contract.test.mjs
 
 .PHONY: campaign-catalogue-author-contract
 campaign-catalogue-author-contract:

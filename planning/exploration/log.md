@@ -15381,3 +15381,22 @@ portable-data dependency explicitly excludes the restore arm this RFC requires.
 `planning/concept-registry/fresh-independent-buildability-review-2026-09-04.md`. A bounded author
 repair and another fresh review remain required before the shared-resource bootstrap can authorize
 production implementation.
+
+## 2026-09-04 — Concept registry first author repair
+
+**What landed:** the bounded requirements repair for [[D2661]]–[[D2666]], a maintained executable
+revision/migration/consumer model and GitHub governance enrollment. No production registry, schema,
+migration, content, application, API, client, Campaign, Skills, archive or protected-design byte
+changed.
+
+**What changed:** immutable digest-addressed history makes exact old refs resolvable across label
+rename and retirement. A sealed attempt/run occurrence and compiled exact pack artifact are required
+before a legacy row becomes registered; every unverifiable row goes to a lossless non-grounding
+quarantine. Six landing consumers close separately from Campaign/Skills successor discharges, and
+the account boundary now says export/delete rather than claiming a restore operation that does not
+exist.
+
+**Evidence/next:** `make concept-registry-author-repair` retains 7/7 baseline controls and passes
+6/6 repair groups; it is included by `verify-governance`, the local/GitHub owner for RFC contracts.
+Exact receipt: `planning/concept-registry/first-author-repair-2026-09-04.md`. Another genuinely fresh
+review and the shared-resource bootstrap still gate production implementation.

@@ -1,10 +1,11 @@
 # RFC: Concept registry — one cross-pack identity authority
 
-- **Status:** draft — RETURNED by fresh independent review 2026-09-04 on [[D2661]]–[[D2666]]. The
-  global identity boundary survives, but the maintained target is red and unenrolled; mutable
-  labels have no historical registry revision; legacy migration cannot prove pack occurrence; two
-  of eight consumers are future RFCs; and the named portable-data dependency explicitly excludes
-  restore. No implementation before author repair, another fresh review and the process dependency.
+- **Status:** draft — first author repair completed 2026-09-04 on [[D2661]]–[[D2666]]; another
+  genuinely fresh independent review is required. Append-only digest-addressed revisions preserve
+  historical labels; exact pack occurrences separate registered migrations from quarantined legacy
+  attribution; six landing consumers close independently of two successor discharges; account
+  scope is export/delete only; and the repaired maintained target joins GitHub governance. No
+  implementation before fresh review and the process dependency.
 - **Author:** codex, factored from `rfc/skills.md` §4 and the D300/D700 measurements.
 - **Created:** 2026-08-31
 - **Design refs:** `design/01-training-model.md` §§60–65 (registry belongs to authoring);
@@ -15,7 +16,8 @@
   made a global vocabulary a ruled Campaign prerequisite; [[D2370]] identifies the missing shared
   resource authority.
 - **Depends on:** accepted and implemented `shared-resource-register-bootstrap.md`; accepted
-  evidence value/manifest authority for the authored-reference projection; portable account data.
+  evidence value/manifest authority for the authored-reference projection; implemented portable
+  account-data export/deletion inventory. Account import is explicitly not a dependency.
 - **Parent / amends:** `skills.md` §4 (ownership transfers here), progress concept resolver and
   related-attempt query; no protected design byte.
 - **Planning:** `planning/concept-registry/rfc-derivation-2026-08-31.md`.
@@ -51,7 +53,13 @@ export const CONCEPT_REGISTRY_SCHEMA_VERSION = 1 as const;
 
 interface ConceptRegistryDocument {
   readonly schemaVersion: 1;
+  readonly previousDigest: `sha256:${string}` | null;
   readonly entries: readonly ConceptRegistryEntry[];
+}
+
+interface ConceptRegistryHead {
+  readonly schemaVersion: 1;
+  readonly digest: `sha256:${string}`;
 }
 
 interface ConceptRegistryEntry {
@@ -64,10 +72,13 @@ interface ConceptRegistryEntry {
 `ConceptId` is a branded lower-case slug matching `^[a-z0-9]+(?:-[a-z0-9]+)*$`, 1–80 bytes.
 Labels are trimmed 1–100-byte authored display strings. IDs and case-folded labels are unique.
 Entries sort by `id`; unknown keys fail; JSON duplicate keys, invalid Unicode and non-canonical
-ordering fail. `content/concepts/registry.json` is validated against
-`schemas/concept_registry.schema.json`, compiled to a deeply frozen `ConceptRegistry`, and sealed by
-the canonical source-byte SHA-256 digest. Server, Pack Studio and web wire consume the compiled
-artifact or a typed projection from it, never read/parse the file independently.
+ordering fail. Immutable revision bytes live at
+`content/concepts/revisions/<sha256-hex>.json`; the filename must equal the canonical source-byte
+SHA-256 digest. `content/concepts/current.json` is a closed `ConceptRegistryHead`, not a second copy.
+The compiler walks `previousDigest` to `null`, refuses missing/cyclic/misnamed revisions, removed or
+re-used IDs and retired-to-active transitions, then returns a deeply frozen current
+`ConceptRegistry` plus exact historical resolver. Server, Pack Studio and web wire consume that
+compiled catalogue or a typed projection from it, never read/parse either file independently.
 
 The initial entry ID set is exactly the set referenced by all official and community pack documents
 at the implementation commit. Counts are printed by the generator but not hard-coded in the RFC.
@@ -77,38 +88,46 @@ definition, category, valence or teaching advice is generated.
 
 ### 1.1 Lifecycle
 
-An active ID may become `retired`; it is never deleted or re-used and its label remains available
-for historical rows. Retirement prevents new official pack references but preserves old pack/run/
-export rendering. Renaming a label does not change identity. Changing an ID means adding a new ID
+An active ID may become `retired` only in a new revision; it is never deleted, re-used or
+reactivated. Retirement prevents new official pack references. Renaming a label likewise publishes
+a new revision and does not change the stable ID. An exact historical `ConceptRef` always renders
+the label/status from its named revision; an explicitly typed current-catalogue projection may show
+the current label alongside it but may not overwrite history. Changing an ID means adding a new ID
 and an explicit separately reviewed content migration; aliases and silent normalization are absent
-in v1. Unknown legacy IDs fail migration rather than becoming ad-hoc retired entries.
+in v1. Unknown or unverifiable legacy IDs never become ad-hoc retired entries.
 
 ## 2. One compiler and consumer closure
 
-`compileConceptRegistry(sourceBytes)` is the only mint. It returns the schema version, digest,
-ordered entries, `required(id)`, `has(id)` and active/retired projections. No fallback resolver and
-no `pack:<id>#<raw>` constructor remain in production.
+`compileConceptRegistry(headBytes, revisionFiles)` is the only mint. It returns the schema version,
+current digest, ordered current entries, exact revision lookup, `required(id)`, `has(id)` and
+active/retired projections. No fallback resolver and no `pack:<id>#<raw>` constructor remain in
+production registered-concept paths.
 
-The checked consumer set is:
+The checked landing-consumer set is exactly six:
 
 1. pack lint and publication validation;
 2. Pack Studio concept picker/validation;
 3. progress `ConceptResolver` and `attempt_concepts` write path;
 4. related-attempt cross-pack query;
-5. Campaign catalogue projection;
-6. Skills taxonomy/credit join;
-7. account export/restore validation;
-8. web/API parsers that render concept labels.
+5. account export validation;
+6. web/API parsers that render concept labels.
+
+Two successor discharges are declared separately and must be absent at this landing:
+
+7. Campaign catalogue projection, owned by `campaign-catalogue-progression.md`;
+8. Skills taxonomy/credit join, owned by `skills.md`.
 
 The compiler test scans imports and fails a second ID/label map, direct JSON parser, local fallback,
-unregistered display transform or consumer absent from this list. Callers carry `ConceptRef`:
+unregistered display transform, a missing/extra landing consumer or either successor importing a
+local registry. Successor contracts later replace their discharge with an import of this exact
+public projection; they do not widen the first landing's consumer count. Callers carry `ConceptRef`:
 
 There is no second ID/label map: the compiled registry is the only identity-and-label authority.
 
 ```ts
 interface ConceptRef {
   readonly id: ConceptId;
-  readonly registryVersion: 1;
+  readonly registrySchemaVersion: 1;
   readonly registryDigest: `sha256:${string}`;
 }
 ```
@@ -157,20 +176,30 @@ resolve(packId, raw) {
 six packs produces one key and six exact pack occurrences, while two different IDs with equal-
 looking substrings never merge.
 
-The claimed migration runs in one transaction:
+The claimed migration runs in one transaction. It creates a registered table and a separate
+`attempt_concept_legacy` quarantine; only the former is a `ConceptRef` source:
 
 1. validates the exact concept registry artifact/digest expected by the application build;
-2. reads every `attempt_concepts` row in canonical primary-key order;
-3. parses only the exact legacy `pack:<packId>#<rawId>` grammar and verifies stored `pack_id`;
-4. resolves `rawId`, writes `concept:<id>@1` plus canonical label;
-5. refuses malformed, unknown, retired-without-existing-reference, digest-mismatched or colliding
-   rows and rolls back all changes;
-6. writes the migration/version receipt only after set-equality over pre/post row identities.
+2. reads every `attempt_concepts` row joined to its exact attempt and parsed run snapshot in
+   canonical primary-key order, retaining run, branch, pack ID and pack digest;
+3. resolves that digest through the immutable built-in/registered-pack artifact inventory and
+   parses only the exact legacy `pack:<packId>#<rawId>` grammar;
+4. writes `concept:<id>@1`, exact `ConceptRef`, occurrence pack digest and revision-time label only
+   when the exact historical pack document contains `rawId`;
+5. moves malformed, unknown, mismatched, unavailable-artifact or concept-absent rows to
+   `attempt_concept_legacy` with raw key/label and a closed reason. Quarantine rows render as
+   unverified history but are excluded from related attempts, Campaign and Skills;
+6. refuses key collisions or injected write failures and rolls back all changes;
+7. writes the migration/version receipt only after set-equality over every input row versus the
+   disjoint registered-plus-quarantine output and exact foreign-key occurrences.
 
-Fresh databases write only global keys. Mixed-version reads are forbidden; the application refuses
-startup if storage version and registry/migration receipt disagree. Export writes typed concept refs,
-pack/run occurrence and registry digest. Restore resolves all refs or refuses before inserting any
-row. Account/run deletion retains existing FK behavior and removes no registry entry.
+Fresh databases write only registered global keys. Mixed-version reads are forbidden; the
+application refuses startup if storage version and registry/migration receipt disagree. Account
+export writes typed concept refs with pack/run occurrence and exact revision digest, and separately
+exports quarantined legacy rows without promoting them. Account/run deletion retains existing FK
+behavior and removes no registry revision. A future portable-account-import RFC must resolve every
+exact revision before insertion and preserve quarantine; this RFC adds and claims no restore
+operation.
 
 The related-attempt query becomes `same_concept` and removes `a.pack_id = ?`; it still filters by
 learner, countable attempts and exact concept key. API/client union changes in the same commit, with
@@ -193,11 +222,13 @@ is enforced in types and dependency tests, not only prose.
 
 ## 6. UX and availability
 
-Ordinary learners never configure the registry. Pack cards and Campaign receive label/id/digest
-through their typed projections. Advanced authoring shows ID, status, registry digest and validation
-errors. If the artifact is missing, invalid or digest-mismatched, pack publication and dependent
-Campaign/Skills projections abstain with a typed reason; existing historical rows render their
-stored canonical label plus “registry unavailable” and never disappear.
+Ordinary learners never configure the registry. Pack cards and later Campaign receive label/id/
+digest through typed projections. Advanced authoring shows ID, status, registry digest and
+validation errors. If the current artifact is missing, invalid or digest-mismatched, pack
+publication and dependent projections abstain with a typed reason. An exact historical ref resolves
+from its immutable named revision; if that revision is absent, it renders its stored occurrence-time
+label plus “registry revision unavailable” and never silently substitutes the current label or
+disappears.
 
 ## 7. Refusals
 
@@ -208,6 +239,8 @@ stored canonical label plus “registry unavailable” and never disappear.
 - no deletion/re-use of retired IDs;
 - no fuzzy merge, alias guess or LLM taxonomy;
 - no migration that partially rewrites rows;
+- no use of a quarantined legacy attribution as registered evidence;
+- no account-import claim hidden inside export validation;
 - no claim that registry membership establishes chess truth or learner ability.
 
 ## Fresh independent review return — 2026-09-04
@@ -222,9 +255,10 @@ criterion also requires draft Campaign/Skills consumers before their own RFCs la
 dependency explicitly excludes the restore operation criterion 10 requires. Exact receipt:
 `planning/concept-registry/fresh-independent-buildability-review-2026-09-04.md`.
 
-An author repair must close all six findings without broadening identity into chess meaning. The
+The first author repair closes all six findings without broadening identity into chess meaning. The
 current 50-pack/199-reference/168-ID corpus census is grammar-clean and is retained as reach
-evidence, not used to hide the contract defects.
+evidence, not used to hide the contract defects. `make concept-registry-author-repair` retains the
+corrected baseline and executes six repair groups; another genuinely fresh review is required.
 
 | Finding | Exact author-repair owner |
 |---|---|
@@ -232,37 +266,42 @@ evidence, not used to hide the contract defects.
 | [[D2662]] | immutable registry revisions and historical/current label authority |
 | [[D2663]] | occurrence-backed legacy migration or explicitly unverified attribution |
 | [[D2664]] | present consumer closure plus successor discharge protocol |
-| [[D2665]] | repaired target enrollment in the standard local/GitHub software gate |
+| [[D2665]] | repaired target enrollment in the standard local/GitHub governance gate |
 | [[D2666]] | exact account-restore ownership or an honest export-only boundary |
 
 ## Acceptance criteria
 
 1. The process prerequisite's absent root exists before this RFC declares `first lane 1`; first
-   implementation atomically creates schema, exported version, registry artifact, register landed
-   row/digest and removes the live claim.
+   implementation atomically creates schema, exported version, head plus initial immutable revision,
+   register landed row/digest and removes the live claim.
 2. Schema/compiler crosses malformed IDs, duplicates, label collisions, ordering, extra keys,
-   invalid Unicode, active/retired and canonical digest controls.
+   invalid Unicode, active/retired, canonical digest, missing/cyclic history, ID deletion/re-use and
+   retired reactivation controls. Label rename and retirement retain exact old-ref rendering.
 3. Current pack references and registry active/retired IDs are set-equal under the declared legacy
    policy; unknown pack refs fail lint and publication.
-4. Import census proves exactly one compiler and the eight declared consumer families; a copied map,
-   JSON parser or fallback fixture fails.
+4. Import census proves exactly one compiler and the six landing consumers; a copied map, JSON
+   parser, fallback, missing/extra live consumer or premature Campaign/Skills implementation fails.
 5. `pack.authored.concept_reference@1` retains pack/digest/concept registry identity and rejects
    caller objects, wrong digests and claims beyond identity.
 6. The same concept across multiple packs stores one key with distinct occurrence rows; different
    IDs never merge.
-7. Migration success, malformed legacy, unknown ID, pack mismatch, key collision, injected failure,
-   restart and mixed-version startup fixtures are atomic and deterministic.
+7. Migration success, globally-valid-but-pack-absent ID, unavailable historical pack, malformed
+   legacy, unknown ID, pack mismatch, key collision, injected failure, restart and mixed-version
+   startup fixtures are atomic and deterministic. Registered plus quarantined outputs are a
+   lossless partition, and quarantine never enters registered consumers.
 8. `same_concept` returns cross-pack rows and the old `same_concept_in_pack` wire token is rejected
    across runtime/server/client fixtures.
 9. Pack Studio picker, keyboard/screen-reader operation, retired display and publication errors use
    the compiled registry and never allow an arbitrary string.
-10. Export/delete/restore round trips exact refs and historical retired labels; unavailable registry
-    produces typed abstention without erasing rows.
-11. Campaign and Skills compile against the same `ConceptRef`; dependency tests fail either local
-    registry and prove sighting is not credit.
-12. `make verify` plus the focused author/implementation contract runs in local and GitHub software
-    gates; no real corpus assertion enters the generic software tier except the separate content
-    set-equality check.
+10. Export/delete round trips exact refs, quarantined legacy rows and historical retired labels;
+    unavailable historical revision produces typed abstention without erasing rows. No account
+    import/restore route or claim is added by this RFC.
+11. Campaign and Skills remain explicit successor discharges; dependency tests fail either local
+    registry now and, when their accepted RFCs land, require the same `ConceptRef` while proving
+    sighting is not credit.
+12. `make verify` plus the focused author/implementation contract runs in the local and GitHub
+    governance gate; no real corpus assertion enters the generic software tier except the separate
+    content set-equality check.
 
 ## Discharges
 

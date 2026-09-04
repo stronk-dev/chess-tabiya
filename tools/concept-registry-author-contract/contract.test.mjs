@@ -17,8 +17,8 @@ test("schema first claim remains gated on the absent-root process", () => {
   assert.match(backlog, /D2370/);
 });
 
-test("one compiler owns eight exact consumer families", () => {
-  has("compileConceptRegistry(sourceBytes)", "The checked consumer set is", "no second ID/label map");
+test("one compiler owns six landing consumers plus two successor discharges", () => {
+  has("compileConceptRegistry(headBytes, revisionFiles)", "checked landing-consumer set is exactly six", "Two successor discharges", "no second ID/label map");
 });
 
 test("pack references have an exact identity-only evidence projection", () => {
@@ -26,14 +26,14 @@ test("pack references have an exact identity-only evidence projection", () => {
 });
 
 test("legacy migration is total, atomic and cross-pack", () => {
-  has("position behind longitudinal-store", "parses only the exact legacy", "rolls back all changes", "same_concept_in_pack");
+  has("position behind pack-capability-contract", "parses only the exact legacy", "same_concept_in_pack");
 });
 
 test("lifecycle and account behavior preserve historical identity", () => {
-  has("never deleted or re-used", "Export writes typed concept refs", "Restore resolves all refs");
+  has("never deleted, re-used or", "export writes typed concept refs", "future portable-account-import RFC");
 });
 
 test("active register and roadmap own the draft", () => {
   assert.match(readme, /`concept-registry\.md`/);
-  assert.match(readme, /position behind longitudinal-store[^\n]*`concept-registry\.md`/);
+  assert.match(readme, /position behind pack-capability-contract[^\n]*`concept-registry\.md`/);
 });
