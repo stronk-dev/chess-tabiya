@@ -1,12 +1,11 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **sixth author repair complete 2026-09-04 on [[D2570]]–[[D2574]]; another
-  genuinely fresh independent review is required.** Source mutation is closed over collaboration
-  state with monotone legacy/shared attribution; the sole consumer API now has exact parsed row
-  types; revision-1 imports test observed-only truth without inventing D2 fields; and one branded
-  parser closes the filter language. `make longitudinal-store-sixth-author-repair` retains the
-  prior 36 author arms and passes 7 new falsifiers plus strict TypeScript. No migration, worker,
-  reader or consumer implementation is authorized before another fresh review. The
+- **Status:** draft — **RETURNED by the sixth fresh independent review 2026-09-04 on
+  [[D2598]]–[[D2602]].** The bounded [[D2570]]–[[D2574]] repair survives, but aggregate algebra,
+  registry authority, source-image construction, production mutation closure and full-state
+  same-head invalidation remain unbuildable. `make longitudinal-store-sixth-fresh-review`
+  reproduces 5/5 plus strict TypeScript; no migration, worker, reader, consumer, API or client
+  implementation is authorized. The
   2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
   returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
@@ -922,6 +921,34 @@ The fifth return is repaired as one typed source/snapshot authority:
 seven able-to-fail runtime controls and runs strict TypeScript. This is author evidence only;
 another genuinely fresh independent review still gates acceptance and production implementation.
 
+## Sixth fresh independent return (2026-09-04)
+
+The [[D2570]]–[[D2574]] repair survives at the bounded properties it names. Fresh application to
+the rate algebra, registry boundary, source-image constructor, production mutation population and
+durable job lifecycle returns five further seams; exact evidence is in
+`planning/longitudinal-store/sixth-fresh-independent-buildability-review-2026-09-04.md`.
+
+1. **[[D2598]] — enforce the denominator ordering.** An observation with one decision and two
+   opportunities currently passes both the proposed DDL and parser. Require
+   `0 < opportunities <= decisions` at SQL, parser and projector-equality boundaries.
+2. **[[D2599]] — remove caller-writable admission.** Both row and query parsers accept an arbitrary
+   projection/sign registry argument, so invented families become valid. Bind them to the compiled
+   literal ingest authority.
+3. **[[D2600]] — construct and seal source images.** `runPrefix: unknown` plus unparsed mutable
+   authorship/import/structure operands lets malformed caller bytes receive—and later change—an
+   authoritative digest. Parse exact replay/storage truth, canonicalize, deep-freeze and brand it
+   before hashing.
+4. **[[D2601]] — make the mutation census genuinely set-equal.** The hand-written tuple is tested
+   for two members only and includes a label with no production symbol. Derive the operation set
+   from exact production transactions and reject both omissions and surplus classifications.
+5. **[[D2602]] — reset the real durable state union.** The same-head invalidation model represents
+   only pending and complete, while the RFC promises claim/failure cleanup for running, retry-wait
+   and quarantined too. Reuse the exact job/CAS type and cross every state.
+
+`make longitudinal-store-sixth-fresh-review` passes five blocker reproductions and strict
+TypeScript. No production implementation is authorized until a bounded seventh author repair
+inverts them and another genuinely fresh review passes.
+
 ### F. Acceptance criteria
 
 These are the only live acceptance criteria; the historical AC list below is non-normative.
@@ -1810,6 +1837,11 @@ head after that renumbering and **not yet written**:
   branded parser closes filter semantics. `make longitudinal-store-sixth-author-repair` retains 36
   prior author arms and passes seven new controls plus strict TypeScript. Fresh review still gates
   acceptance and implementation.
+- 2026-09-04: sixth fresh independent review returned the sixth repair on [[D2598]]–[[D2602]].
+  Opportunities may exceed decisions; callers may widen the projection registry; the source image
+  is unparsed and mutable; the mutation tuple is not production-set-equal; and same-head
+  invalidation models only two durable states. Exact review:
+  `planning/longitudinal-store/sixth-fresh-independent-buildability-review-2026-09-04.md`.
 - 2026-08-22: adversarial cross-review (claude, independent of the author). Blockers
   fixed in place: (1) `decision_class ∈ {played, game, predicted}` added to the
   observation key with owner-only attribution derived from the durable session

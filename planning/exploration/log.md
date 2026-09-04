@@ -14797,3 +14797,21 @@ receipt:
 `planning/shared-resource-register-bootstrap/seventh-fresh-independent-buildability-review-2026-09-04.md`.
 A bounded seventh author repair must close the graph, selector, intrinsic, symbol and immutability
 authorities before another fresh review or implementation.
+
+## 2026-09-04 — Longitudinal-store sixth fresh review returns durable history truth
+
+**What landed:** A fresh rate/source/lifecycle review preserves the bounded [[D2570]]–[[D2574]]
+repair and returns `longitudinal-store` on [[D2598]]–[[D2602]]. No migration, worker, reader,
+consumer, API, client, content or protected-design byte changed.
+
+**What changed:** observation rows can claim more opportunities than owner decisions; both row and
+query parsers let callers invent the admitted projection/sign registry; the sole source digest
+accepts unparsed mutable caller images; its claimed set-equal mutation population is a hand-written
+tuple with no production census; and collaboration-only invalidation models only pending/complete,
+not running/retry/quarantined claim and failure state.
+
+**Evidence/next:** `make longitudinal-store-sixth-fresh-review` reproduces 5/5 plus strict
+TypeScript. Exact receipt:
+`planning/longitudinal-store/sixth-fresh-independent-buildability-review-2026-09-04.md`. A bounded
+seventh author repair must close the aggregate, registry, source-construction, production-operation
+and full-state CAS authorities before another fresh review or implementation.
