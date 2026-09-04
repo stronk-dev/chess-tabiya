@@ -1,10 +1,11 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — fifth author repair complete 2026-09-02 on [[D2537]]–[[D2541]]. Canonical
-  resources now validate exact digest/literal bytes; retained-only graph ids ignore unrelated
-  declarations; one explicit compiler program enters the graph; migration callbacks have typed
-  roots; and both sequential adapters return literal complete projections.
-  Another fresh independent review is required; no implementation is authorized.
+- **Status:** draft — returned by sixth fresh independent review 2026-09-04 on
+  [[D2559]]–[[D2562]]. The fifth repair's digest/literal, unrelated-declaration, compiler-program
+  and typed-root direction survives, but canonical resources are not descriptor-bound and admit
+  non-object payloads, TypeScript projected selectors are not joined to graph roots, and same-name
+  overload declarations collapse in the author model. Another bounded author repair is required.
+  A fresh independent review is then required; no implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -684,6 +685,20 @@ The fourth fresh review returns five remaining generic-image obligations to this
 They require a bounded fifth author repair and another fresh independent review. None authorizes
 implementation while this RFC remains returned.
 
+The sixth fresh review preserves those repairs and returns four remaining exact-image obligations:
+
+- [[D2559]] binds a canonical resource's literal `id` to its catalogue descriptor instead of
+  validating the parsed id against itself;
+- [[D2560]] enforces the adapter's canonical JSON **object** payload without narrowing the shared
+  canonicalizer's wider value domain;
+- [[D2561]] joins every TypeScript descriptor selector to one exact graph root and retained node,
+  refusing the current green empty-graph projection; and
+- [[D2562]] preserves every retained overload declaration instead of overwriting same-name entries
+  in an object map.
+
+They require a bounded sixth author repair and another fresh independent review. No implementation
+is authorized while any of these four boundaries remains open.
+
 ## Acceptance criteria
 
 1. Catalogue and README register populations are set-equal; no `RESOURCE_NAMES`, `SCHEMA_SLUGS` or
@@ -739,6 +754,9 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-04: returned by sixth fresh independent buildability review on
+  [[D2559]]–[[D2562]]; receipt:
+  `planning/shared-resource-register-bootstrap/sixth-fresh-independent-buildability-review-2026-09-04.md`.
 - 2026-09-02: fifth author repair on [[D2537]]–[[D2541]]. Exact canonical literal/digest
   validation, retained-only repository ids, descriptor-pinned compiler programs, typed migration
   roots and complete canonical/TypeScript projected images now pass the bounded author contract.

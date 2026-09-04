@@ -14621,3 +14621,19 @@ corrected wording/event grain without losing their underlying invariants.
 pass. This is not acceptance: a sixth genuinely fresh review must reconstruct the repair, and the
 provider/value-authority dependencies remain separate holds before either promotion projection can
 enter production.
+
+## 2026-09-04 — Shared-resource bootstrap sixth fresh review returns four exact-image gaps
+
+**What landed:** independently reviewed the fifth bootstrap author repair against its canonical
+resource and TypeScript graph models. The digest/literal, compiler-program, typed-root and
+unrelated-declaration repairs survive. No catalogue engine, product authority, schema, API,
+storage, content, web or protected-design byte changed.
+
+**What changed:** [[D2559]]–[[D2562]] record four false-green boundaries. Canonical resources bind
+their id to themselves rather than the descriptor and admit array/scalar/null payloads; TypeScript
+selectors can be projected beside a graph with no roots; and a name-keyed retained-node map
+collapses every overload declaration into one entry.
+
+**Evidence/next:** `make shared-resource-bootstrap-sixth-fresh-review` reproduces all four findings,
+and every retained author generation remains green. A bounded sixth author repair followed by a
+genuinely fresh review still gates acceptance and implementation.
