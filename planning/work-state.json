@@ -21092,6 +21092,69 @@
       "uxItems": [],
       "owner": "review-and-return",
       "blocker": "rfc:review-evidence-compiler.md"
+    },
+    {
+      "id": "D2636",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:db08f1b42557e654f5ca4cf193cf7cc2ae2369a7f6f7bbadd69b4654cdcae98e",
+      "uxItems": [],
+      "blocker": "rfc:phase-source-composition.md"
+    },
+    {
+      "id": "D2637",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:645c2395f5712e72b470ecf81730bf857e31305555320ef1be2b3e8b574e2ca8",
+      "uxItems": [],
+      "blocker": "rfc:phase-source-composition.md"
+    },
+    {
+      "id": "D2638",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f74ea5341f2ec477f3751fb8ae5a6f8f5ba3ebc943f8e85decf26f1123bd0d85",
+      "uxItems": [],
+      "blocker": "rfc:phase-source-composition.md"
+    },
+    {
+      "id": "D2639",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8e6c7d1887e62041ccb1187becb573dbae1dc564c1063e21afde972e39d3c943",
+      "uxItems": [],
+      "blocker": "rfc:phase-source-composition.md"
+    },
+    {
+      "id": "D2640",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d557ef606a700df0ea62fa3cd5dd5973ab5d19c8d089da5723513c3dbf859422",
+      "uxItems": [],
+      "blocker": "rfc:phase-source-composition.md"
+    },
+    {
+      "id": "D2641",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e1a58a7ab108a4fea231c4edf2b853b7939633880082576eca7414e6a989f1de",
+      "uxItems": [],
+      "blocker": "rfc:phase-source-composition.md"
+    },
+    {
+      "id": "D2642",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:06f3d7c05b4273bbc6e6fbc15f6eedfe193b2333486464feca7c3c87f242ec9c",
+      "uxItems": [],
+      "blocker": "rfc:phase-source-composition.md"
     }
   ]
 }

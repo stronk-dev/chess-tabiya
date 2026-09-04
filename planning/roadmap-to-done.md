@@ -306,6 +306,15 @@ the required value-authority migration. These local target facts therefore remai
 Support, Review and bots until one complete protocol and call graph survive another review. Receipt:
 `planning/bounded-policy-targets/fourth-fresh-independent-buildability-review-2026-09-04.md`.
 
+The 2026-09-04 fresh phase-source-composition review preserves independent opening/phase/endgame/
+tablebase slots but returns their shared point/arc on [[D2636]]–[[D2642]]. The draft contradicts
+its own root-field guard, cannot prove its full-FEN opening join, bypasses the recorded-path
+authority, cannot represent the provider's local outside-domain arm, treats recorded absence as a
+caller digest, names no lawful inspector projection and uses a circular endgame-applicability
+control. Support, Review, bots and longitudinal analysis therefore still lack one trustworthy
+source-retaining phase object. Receipt:
+`planning/phase-source-composition/fresh-independent-buildability-review-2026-09-04.md`.
+
 The 2026-09-01 promotion-pair third fresh review also corrected the candidate repair's initially
 invented factory alias ([[D2468]]) and returned only the held semantic projections on
 [[D2469]]–[[D2472]]: their outside-domain arm depends on an undeclared legal map; their invocation

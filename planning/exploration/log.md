@@ -14960,3 +14960,23 @@ reproduces 5/5. Exact receipt:
 `planning/evidence-foundation-ux/review-evidence-compiler-fresh-independent-buildability-review-2026-09-04.md`.
 A bounded author repair must close these five seams, consume the presentation contract instead of
 forking it, and survive another independent review before Review implementation starts.
+
+## 2026-09-04 — Phase source composition fresh review returns seven authority seams
+
+**What landed:** A fresh type, source-subject, path, tablebase, presentation and falsifier review
+preserves the independent-source vector but returns `phase-source-composition` on
+[[D2636]]–[[D2642]]. No production runtime, server, provider, API, schema, content, UX, archive or
+protected-design byte changed.
+
+**What changed:** the required `opening` root fails the RFC's own forbidden-name guard; opening
+results expose a transpose key rather than the promised full FEN; the arc accepts caller paths
+instead of the recorded path authority; outside-domain and recorded-absence tablebase states have
+no compatible provider/snapshot authority; the mandatory inspector handoff crosses an undeclared
+server→web boundary; and the corpus applicability invariant compares a classifier to a reader that
+calls the same classifier, so it cannot fail.
+
+**Evidence/next:** `make phase-source-composition-fresh-review` retains all eight author controls
+and reproduces 7/7. Exact receipt:
+`planning/phase-source-composition/fresh-independent-buildability-review-2026-09-04.md`. A bounded
+author repair must close the seven joins and survive another genuinely fresh review before the
+composer can become the shared Support/Review/bot/longitudinal foundation.

@@ -1,7 +1,7 @@
 # RFC: Source-retaining phase composition
 
-- **Status:** draft — first author pass 2026-09-01 on [[D2485]]/[[D2487]]; dependency acceptance
-  and fresh independent buildability review required before implementation
+- **Status:** draft — fresh independent review returned 2026-09-04 on [[D2636]]–[[D2642]];
+  bounded author repair, dependency acceptance and another fresh review required before implementation
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-09-01
 - **Design refs:** `design/03-product-breadth.md` B2/B4/B10 and evidence architecture;
@@ -270,6 +270,26 @@ None in intent. This RFC qualifies B10's “attributed phase classification” w
 producers exist, but their reusable source-retaining composition does not. It preserves the
 design's evidence planes and module/preset separation.
 
+## Fresh independent review return (2026-09-04)
+
+The source-vector direction survives, but implementation is returned on seven buildability defects:
+
+- [[D2636]]: the required top-level `opening` namespace is also forbidden by the property-name guard;
+- [[D2637]]: opening endpoint/membership bind a four-field transpose key, not the promised full FEN;
+- [[D2638]]: `compilePhaseArc(path, inputs)` bypasses the sole recorded-path authority;
+- [[D2639]]: the live union cannot carry the provider's typed local outside-domain result and the
+  composer duplicates its domain authority;
+- [[D2640]]: recorded absence is a bare caller digest with no bounded snapshot/query receipt;
+- [[D2641]]: the server-private exemption conflicts with a mandatory, unspecified web-inspector
+  handoff; and
+- [[D2642]]: the corpus applicability invariant is green by construction because
+  `endgameReading` calls the same phase classifier it is compared against.
+
+Exact receipt and executable falsifier:
+`planning/phase-source-composition/fresh-independent-buildability-review-2026-09-04.md` and
+`make phase-source-composition-fresh-review`. The author must close all seven while retaining the
+eight original controls before another review.
+
 ## Acceptance criteria
 
 1. `make phase-source-composition-census` reproduces 50 packs, 804 positions, 100 paths, 1,069
@@ -340,5 +360,7 @@ product choices.
 
 ## Changelog
 
+- 2026-09-04: fresh independent review returned implementation on [[D2636]]–[[D2642]]; records the
+  exact subject/path/tablebase/presentation authorities and replaces one circular corpus invariant.
 - 2026-09-01: created from [[D2485]] and the complete 804-position/100-path source-composition
   reading; records [[D2487]] as an explicit technique-withholding boundary.
