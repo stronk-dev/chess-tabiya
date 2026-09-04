@@ -346,6 +346,13 @@ semantic-collectors-deflection-seal-author-repair` passes 4/4 plus strict TypeSc
 remains held until a fresh review proves narrow/broad event identity and both recorded-path modes.
 Receipt: `planning/evidence-foundation-ux/deflection-check-seal-author-repair-2026-09-04.md`.
 
+Fresh review then reproduced that constructor directly from the live manifest/compiler and found its
+event id, anchor and operands byte-identical to broad/local tactical compilation on both the `Ra8+`
+check-only and `Bxa7+` dual-arm lines. Quiet absence and crossed after-FEN refusal also pass. `make
+semantic-collectors-deflection-seal-fresh-review` passes 4/4 plus strict TypeScript. The bounded
+D2536/D2552/D2553 implementation is authorized; promotion remains independently held. Receipt:
+`planning/evidence-foundation-ux/deflection-check-seal-fresh-independent-review-2026-09-04.md`.
+
 The 2026-09-02 fourth fresh promotion-collector review keeps the two held projections out of the
 foundation on [[D2521]], [[D2522]] and [[D2523]]. Its advertised closed request uses two undefined types, the
 injected Syzygy callable matches no provider operation and leaves normalized request bytes

@@ -700,6 +700,11 @@ semantic-collectors-deflection-seal-author-repair:
 	./node_modules/.bin/vitest run --config tools/d2553-deflection-check-seal-author-repair/vitest.config.ts
 	./node_modules/.bin/tsc -p tools/d2553-deflection-check-seal-author-repair/tsconfig.json --noEmit
 
+.PHONY: semantic-collectors-deflection-seal-fresh-review
+semantic-collectors-deflection-seal-fresh-review:
+	./node_modules/.bin/vitest run --config tools/d2553-deflection-check-seal-fresh-review/vitest.config.ts
+	./node_modules/.bin/tsc -p tools/d2553-deflection-check-seal-fresh-review/tsconfig.json --noEmit
+
 pack-capability-author-repair:
 	node tools/d2152-pack-capability-author-repair/contract.mjs
 	node --test tools/d2334-pack-capability-fifth-author-repair/contract.test.mjs

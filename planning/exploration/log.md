@@ -14538,3 +14538,17 @@ casts, mismatched after-FEN and non-checking moves remain explicit negative/abse
 **Evidence/next:** `make semantic-collectors-deflection-seal-author-repair` passes 4/4 plus strict
 TypeScript. Another fresh review must prove narrow/broad event identity, eager/exact-source parity,
 and both check-only and dual-arm lines before production implementation.
+
+## 2026-09-04 — Deflection exact-source seal passes fresh review
+
+**What landed:** fresh review reconstructed the narrow check constructor from the live manifest and
+compiler, without importing the author model. Check-only and dual-arm edges produce the exact broad
+collector event id, anchor and operands; quiet and crossed-FEN cases refuse correctly.
+
+**What changed:** [[D2536]], [[D2552]] and [[D2553]] are accepted for one bounded production pass.
+The selector, runtime seal and exact-source boundary now have executable coverage. The independently
+held promotion projections remain untouched.
+
+**Evidence/next:** `make semantic-collectors-deflection-seal-fresh-review` passes 4/4 plus strict
+TypeScript. Implement the constructor, tactical delegation, three deflection call sites and permanent
+fixtures; rerun all retained deflection gates plus full repository verification.

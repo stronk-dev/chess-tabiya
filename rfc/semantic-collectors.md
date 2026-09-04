@@ -3,10 +3,10 @@
 - **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The D2536
   deflection check-authority amendment passed fresh review, then implementation returned [[D2552]];
   its bounded selector repair survived fresh review 2026-09-04, but that review returned the
-  exact-source event authority on [[D2553]], now boundedly author-repaired 2026-09-04.** One narrow
-  sealed check-event constructor is shared by tactical and exact-source compilation; the latter
-  retains the event without widening into reply breadth or double attack. The author target passes
-  4/4 plus strict TypeScript; production remains held pending another fresh review. **The held
+  exact-source event authority on [[D2553]], repaired and accepted by fresh review 2026-09-04.** The
+  shared induction selector and narrow sealed check-event constructor now pass the real check-only
+  and dual-arm lines with byte-identical broad/narrow event ids, plus absence and crossed-FEN
+  refusals. The bounded D2536/D2552/D2553 production implementation is authorized. **The held
   promotion pair completed its fourth author repair 2026-09-02 on [[D2521]], [[D2522]] and
   [[D2523]], then was **RETURNED by fifth fresh independent review on [[D2548]]–[[D2551]].** The
   source repair survives, but request-digest construction, the exact output/operand ABI and a real
@@ -474,6 +474,13 @@ check evidence cast back to an event to fail the runtime seal, and a non-checkin
 line supplies the exact constructor result. `make semantic-collectors-deflection-seal-author-repair`
 passes 4/4 plus strict TypeScript. This is author evidence only; another fresh review must compare
 the narrow constructor with the broad tactical collector and exercise both recorded-path modes.
+
+The 2026-09-04 fresh review did so without importing the author model. Reconstructing the narrow
+operation from the live manifest/compiler produced the exact same sealed event id, canonical anchor
+and operands as `tacticalSemanticEvents` and `localSemanticEvents` on both `Ra8+` check-only and
+`Bxa7+` dual-arm edges. Quiet edges return `undefined`; crossed after-FENs fail before minting. The
+exact-source path can therefore retain the event without broad tactical work. D2536, D2552 and D2553
+are accepted for their bounded implementation; the held promotion pair remains untouched.
 
 #### 3.3 Observed line tactics
 
@@ -1320,6 +1327,9 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-04: fresh review accepted the combined [[D2536]]/[[D2552]]/[[D2553]] bounded production
+  repair. The narrow constructor is event-identical to broad/local tactical compilation on check-only
+  and dual-arm lines; absence and crossed-FEN refusals pass. Production implementation is authorized.
 - 2026-09-04: author-repaired [[D2553]] with one narrow `checkSemanticEvent` constructor shared by
   the broad tactical collector and exact-source path. Exact-source edges retain the sealed event;
   deflection consumes the event and attraction projects its evidence. The 4/4 author target plus

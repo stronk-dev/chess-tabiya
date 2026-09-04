@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2c7eae38225c07770844fe263aac03a5e85fd07eda9bf06a7cb9181399b98eb3",
+    "roadmap": "sha256:1e0f75a873c934f5c897d240855ca560ae802398d88a83d06455d0b1aaef10bb",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:8b5c691cda7a89e7c87275c543f3ab22e62423baa9f0ce235bbbeca684fe6fed",
-    "rfcRegister": "sha256:d01006f66f864d6aa52fe33a239d6132525dcd8d9396201453beffc55c6826e9",
+    "workState": "sha256:a89ee3e2c3eb0d033728fb39440e82ead91460e0ce767b27339700a9c076aaea",
+    "rfcRegister": "sha256:b7db9fdbe8cae92726cf32e1e4301c5b3db8cdf5b2e734c59b45acbb06ae2782",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -31,8 +31,8 @@
     "workState": {
       "untriaged": 0,
       "todo": 639,
-      "doing": 0,
-      "blocked": 869,
+      "doing": 3,
+      "blocked": 866,
       "done": 791,
       "refused": 3
     },
@@ -110,8 +110,8 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "D2553's exact-source seal return is author-repaired with one narrow sealed check-event constructor shared by tactical and exact-source compilation. Another fresh review still holds production; promotion and wider returned foundations remain separate blockers.",
-        "impact": "held",
+        "summary": "The combined D2536/D2552/D2553 deflection repair passed fresh review against the live manifest/compiler: narrow and broad check constructors produce identical sealed events on check-only and dual-arm lines. Its bounded implementation is authorized; promotion and wider returned foundations remain separate blockers.",
+        "impact": "advanced",
         "evidence": [
           "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md",
           "planning/pack-capability-contract/tenth-author-repair-2026-09-02.md",
@@ -175,8 +175,8 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "D2552's selector and D2553's narrow sealed check constructor are author-complete after two implementation-boundary returns. Production waits on fresh proof of narrow/broad event identity and eager/exact-source parity; promotion's four returned event-boundary gaps remain held.",
-        "impact": "held",
+        "summary": "Fresh review proved the D2552 selector and D2553 narrow check constructor against real check-only and dual-arm edges, including byte-identical broad/narrow event identity and negative boundaries. The bounded implementation is executable; promotion's four returned event-boundary gaps remain held.",
+        "impact": "advanced",
         "evidence": [
           "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md",
           "planning/pack-capability-contract/tenth-author-repair-2026-09-02.md",
