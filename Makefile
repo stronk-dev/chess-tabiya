@@ -779,7 +779,7 @@ shared-resource-bootstrap-eighth-fresh-review: shared-resource-bootstrap-seventh
 shared-resource-bootstrap-eighth-author-repair: shared-resource-bootstrap-eighth-fresh-review
 	node --test tools/d2645-shared-resource-bootstrap-eighth-author-repair/contract.test.mjs
 
-.PHONY: semantic-collectors-promotion-fifth-fresh-review semantic-collectors-promotion-fifth-author-repair semantic-collectors-promotion-sixth-fresh-review semantic-collectors-promotion-sixth-author-repair
+.PHONY: semantic-collectors-promotion-fifth-fresh-review semantic-collectors-promotion-fifth-author-repair semantic-collectors-promotion-sixth-fresh-review semantic-collectors-promotion-sixth-author-repair semantic-collectors-promotion-seventh-fresh-review
 semantic-collectors-promotion-fifth-fresh-review:
 	node --test tools/d2548-semantic-collectors-promotion-fifth-fresh-review/contract.test.mjs
 
@@ -792,6 +792,9 @@ semantic-collectors-promotion-sixth-fresh-review:
 
 semantic-collectors-promotion-sixth-author-repair: semantic-collectors-promotion-fifth-author-repair
 	./node_modules/.bin/vitest run --config tools/d2603-semantic-collectors-promotion-sixth-author-repair/vitest.config.ts --reporter=verbose
+
+semantic-collectors-promotion-seventh-fresh-review:
+	./node_modules/.bin/vitest run --config tools/d2650-semantic-collectors-promotion-seventh-fresh-review/vitest.config.ts --reporter=verbose
 
 .PHONY: semantic-collectors-deflection-authority-fresh-review
 semantic-collectors-deflection-authority-fresh-review:

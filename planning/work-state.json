@@ -21218,6 +21218,51 @@
       "sourceDigest": "sha256:19d7ad47078bf747ef26f711a181848c0b6f59e0997abe66783c5fb6f4d1635e",
       "uxItems": [],
       "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2650",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d5bced4db434b5682fa47e10afc88a23ae432beea12fc4643d3d885305dee1e2",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2651",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:eb13225238e6ac9208d7d651c5c0f85f1137afa04b87904caf32bd0906a16f03",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2652",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9c343a265f9f1c3f15e757b668e5bf26a0ea604ab9db259140cb99ca7696bd55",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2653",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b028fb324363fb513b0595da369dbebc7d937bfd4f4f9d0c465f3161135e3e46",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2654",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9aff6e945e6e59075e7c86827f0b14228fe05074bf2ea081b81830ec1f49b2a3",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
     }
   ]
 }

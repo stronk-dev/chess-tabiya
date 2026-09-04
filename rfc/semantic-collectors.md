@@ -7,8 +7,12 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair has a **sixth author repair 2026-09-04 on [[D2603]]–[[D2607]]; seventh fresh
-  review required.** One maintained target now runs all five retained generations plus five new
+  promotion pair was **returned by its seventh fresh review 2026-09-04 on [[D2650]]–[[D2654]];
+  seventh author repair required.** The sixth author target runs all five retained generations,
+  but its new result/source/factory model is not yet the exact operation promised here: mutable
+  nested result arms remain accepted, caller-minted receipts can certify invented inputs, the
+  tablebase vocabulary/parser and request ABI differ from production, and the advertised output is
+  not declared evidence. One maintained target currently runs all five retained generations plus five new
   behavioral falsifiers; one registered value factory owns the reading; the total operation result
   is module-sealed; category/DTZ/perspective project from the exact source; and dropped, added,
   reordered, rebuilt or cross-FEN moves/pawns fail. `make
@@ -1426,6 +1430,17 @@ semantic-collectors-promotion-sixth-author-repair` passes 19 retained assertions
 typechecks and 5/5 new behavioral controls. This is author evidence only; a seventh genuinely fresh
 review still gates both held projections.
 
+The 2026-09-04 seventh fresh independent review returns that repair on [[D2650]]–[[D2654]]. Its
+total-result constructors retain caller-owned mutable objects; its public helper functions mint
+specialized receipts directly from caller arrays; its tablebase source accepts unparsed values and
+models four categories where the live authority has ten; its request/provider model omits the
+RFC's geometry, provider-scope, abort and typed-delivery boundary; and its advertised F1 output is
+only `{payload}`, without declared producer/projection identity or the central value-authority
+receipt. `make semantic-collectors-promotion-seventh-fresh-review` reproduces 5/5. A seventh author
+repair must exercise the exact production/RFC input and result types, independently asserted
+immutable operands and declared-evidence output before another genuinely fresh review. The held
+pair remains unauthorized and the implemented twelve projections remain unchanged.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1436,6 +1451,11 @@ review still gates both held projections.
 | [[D2181]] | author-repaired: one sealed available derivation receipt retains geometry, legal map, selected whole source and output by reference |
 | [[D2182]] | author-repaired: no-race/no-witness is a typed no-output arm distinct from `input_abstained` |
 | [[D2183]] | author-repaired: `promotionWithCheck` is removed; the existing exact check event composes by before-FEN and move UCI |
+| [[D2650]] | seventh author repair: make every total-result arm retain only exact asserted, recursively immutable source/completion values and revalidate them |
+| [[D2651]] | seventh author repair: consume independently minted central legal-map and geometry receipts; never certify caller arrays locally |
+| [[D2652]] | seventh author repair: bind recorded/live sources through the production parser and exhaustively project its closed category/number domain |
+| [[D2653]] | seventh author repair: exercise the exact RFC request, provider invocation, typed result and delivery ABI |
+| [[D2654]] | seventh author repair: emit the exact declared producer/projection evidence with its central value-authority receipt |
 | [[D2469]] | author-repaired: provider preflight/domain and provider-failure arms execute before the lazy success-only legal-map resolver |
 | [[D2470]] | author-repaired: one request, dependency interface, sealed recorded resolver and exact collector signature fix source precedence |
 | [[D2471]] | author-repaired: specialized assertion failure throws `EvidenceInvariantError`; only typed unavailable inputs abstain, and invalid recorded bytes never permit live fallback |
@@ -1477,6 +1497,13 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-04: seventh fresh independent review returned the held promotion pair on [[D2650]]–
+  [[D2654]]. The sixth author model accepts mutable nested result arms and circular caller-minted
+  receipts, bypasses the live tablebase parser/category domain, exercises a shadow request/provider
+  ABI and emits no declared-evidence identity or value-authority receipt. Exact review:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-seventh-fresh-independent-buildability-review-2026-09-04.md`;
+  `make semantic-collectors-promotion-seventh-fresh-review` passes 5/5. A seventh author repair and
+  another genuinely fresh review remain mandatory; no held production id is authorized.
 - 2026-09-04: sixth author repair closes [[D2603]]–[[D2607]] at RFC tier. One maintained
   target retains all five earlier author generations; the registered value factory is unique; the
   complete operation result is runtime-sealed; tablebase outcome fields and perspective project

@@ -15288,3 +15288,22 @@ independently.
 tests pass 181 files / 1110 tests. Exact receipt:
 `planning/learner-modules/tenth-author-repair-2026-09-04.md`. Artifacts remain requirements-only;
 another genuinely fresh independent review still gates RFC acceptance and module implementation.
+
+## 2026-09-04 — Held promotion collectors seventh fresh independent review
+
+**What landed:** a genuinely fresh contract-tier review of the sixth held-promotion author repair,
+five ledgered findings [[D2650]]–[[D2654]], and the maintained disposable
+`make semantic-collectors-promotion-seventh-fresh-review` falsifier. No production collector,
+provider, catalogue, schema, migration, client, content, archive or protected-design byte changed.
+
+**What changed:** the RFC remains at 12/14 rather than accepting a green shadow model. The total
+result retains mutable caller objects; caller-created receipts can certify incomplete legal moves
+and invented geometry; source values bypass the live tablebase parser and category domain; the
+executable request/provider ABI differs from the RFC operation; and the named output is not F1
+declared evidence or centrally value-authorized.
+
+**Evidence/next:** `make semantic-collectors-promotion-seventh-fresh-review` reproduces 5/5. Exact
+receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-seventh-fresh-independent-buildability-review-2026-09-04.md`.
+A seventh bounded author repair and another genuinely fresh independent review still gate both held
+projections; the twelve implemented collectors remain unchanged.

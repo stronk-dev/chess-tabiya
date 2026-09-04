@@ -215,6 +215,15 @@ seventh fresh review and provider/value dependency landing precede the held pair
 implementation. Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-sixth-author-repair-2026-09-04.md`.
 
+The 2026-09-04 seventh fresh held-promotion review returns that contract on [[D2650]]–[[D2654]].
+Its total-result seal accepts mutable nested caller objects; its legal-map and geometry receipts are
+minted from the same untrusted arrays they purport to certify; its source bypasses the live parser
+and ten-category domain; its executable request/provider ABI is not the RFC ABI; and its advertised
+F1 output has no declared-evidence identity or central value receipt. `make
+semantic-collectors-promotion-seventh-fresh-review` passes 5/5. The spine remains **12/14** until a
+seventh bounded author repair, another fresh review and provider/value dependency landing. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-seventh-fresh-independent-buildability-review-2026-09-04.md`.
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded
@@ -689,6 +698,11 @@ names compete for one value; the total operation result is unsealed; and the exe
 category/DTZ and exact legal-map/FEN/participant joins. `make
 semantic-collectors-promotion-sixth-fresh-review` reproduces 5/5. The evidence spine remains 12/14
 until one bounded repair, another fresh review and the provider/value dependencies all clear.
+The 2026-09-04 seventh fresh review then returns the sixth author repair on [[D2650]]–[[D2654]]:
+mutable nested result sources, circular caller-minted receipts, unparsed and incomplete tablebase
+values, a shadow request/provider ABI and a plain `{payload}` output leave the promised exact
+operation unexercised. `make semantic-collectors-promotion-seventh-fresh-review` reproduces 5/5;
+12/14 remains the honest production count.
 The manifest-wide follow-up makes that F1 amendment exact. The current 46 derived projections carry
 96 direct derivation members expanding to 99 executable paths. Eight outputs falsely advertise
 local/sync over Stockfish, ten bindings bypass provider-off validation through local wrappers, and
