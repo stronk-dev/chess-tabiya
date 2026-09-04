@@ -14815,3 +14815,21 @@ TypeScript. Exact receipt:
 `planning/longitudinal-store/sixth-fresh-independent-buildability-review-2026-09-04.md`. A bounded
 seventh author repair must close the aggregate, registry, source-construction, production-operation
 and full-state CAS authorities before another fresh review or implementation.
+
+## 2026-09-04 — Held promotion collectors sixth fresh review returns executable authority
+
+**What landed:** A fresh gate/constructor/result/operand review preserves the fifth repair's
+scheduler-owned digest and reading-grain direction, but returns the two held promotion projections
+on [[D2603]]–[[D2607]]. The twelve implemented Wave-C projections and the deflection implementation
+remain untouched.
+
+**What changed:** the maintained author target does not execute the four earlier generations it
+claims to retain; two differently named “sole” constructors own the same value; the total result
+has no seal/assertion; and the strict type model omits category/DTZ plus exact legal-map/FEN/pawn
+identity joins, with prose matches standing in for mutation tests.
+
+**Evidence/next:** `make semantic-collectors-promotion-sixth-fresh-review` reproduces 5/5. Exact
+receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-sixth-fresh-independent-buildability-review-2026-09-04.md`.
+A bounded sixth author repair must unify the maintained gate, constructor, sealed result and exact
+source/operand mapping before a seventh fresh review; provider/value dependencies remain separate.

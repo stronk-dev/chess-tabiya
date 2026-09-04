@@ -7,13 +7,12 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair completed its **fifth author repair 2026-09-04 on [[D2548]]–[[D2551]]** after the
-  fifth fresh review returned its projection boundary. The repair adds one shared normalized-request
-  digest authority, preserves exact legal moves and pawn participants, seals the complete public
-  reading value, and reclassifies the position-only tablebase result from an event to a reading
-  instead of manufacturing a move occurrence. `make semantic-collectors-promotion-fifth-author-repair`
-  passes the retained author gates plus the new four-arm contract; a sixth genuinely fresh review
-  still gates implementation. The
+  promotion pair was **RETURNED by its sixth fresh review 2026-09-04 on [[D2603]]–[[D2607]].** The
+  fifth repair's scheduler-owned digest, exact-operand direction and reading grain survive, but its
+  maintained target does not run the retained gates, the value has two constructor names, the total
+  result has no seal/assertion, and its type model omits the category/DTZ and exact legal-map joins
+  it claims to prove. `make semantic-collectors-promotion-sixth-fresh-review` reproduces 5/5; no
+  held projection implementation is authorized. The
   request now owns a canonical full-FEN parser and total recorded lookup, uses the actual shared
   provider scheduler plus operation-keyed source factory with deterministic request bytes, and
   requires a module-sealed aggregate geometry completion before its zero-call fast path. Geometry and recorded tablebase inputs
@@ -1353,6 +1352,17 @@ it has no run edge and cannot enter semantic selection. `make
 semantic-collectors-promotion-fifth-author-repair` is author evidence only; a sixth genuinely fresh
 review still gates acceptance and implementation.
 
+The 2026-09-04 sixth fresh review preserves that direction and returns the executable contract on
+[[D2603]]–[[D2607]]. The maintained fifth target does not run any earlier author generation despite
+claiming it does; `declarePromotionRaceTablebaseEvidence` and
+`createDerivedPawnPromotionRaceTablebaseV1Evidence` both claim sole constructor authority; no
+sealed/asserted `PromotionRaceTablebaseResult` exists; the strict type model omits category and
+DTZ; and exact legal-map/FEN/participant claims are prose matches rather than mutated operations.
+Exact review:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-sixth-fresh-independent-buildability-review-2026-09-04.md`;
+`make semantic-collectors-promotion-sixth-fresh-review` passes 5/5. A sixth author repair must close
+all five before a seventh genuinely fresh review or implementation.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1374,6 +1384,11 @@ review still gates acceptance and implementation.
 | [[D2549]] | author-repaired: the output retains exact legal-move objects, tied pawn identities and a literal `preciseDtz ?? null` mapping |
 | [[D2550]] | author-repaired: the sealed public reading value and receipt both retain the same geometry and whole source by reference |
 | [[D2551]] | author-repaired: projection 14 is a position reading, absent from semantic-event declarations/selection; no edge is manufactured |
+| [[D2603]] | returned: make the maintained gate actually retain every earlier author generation or consolidate them truthfully |
+| [[D2604]] | returned: choose the one registered tablebase-value factory and remove the competing undeclared adapter |
+| [[D2605]] | returned: seal and assert the complete reading/unavailable operation result with exact cross-arm identity |
+| [[D2606]] | returned: make category, DTZ and precise-DTZ exact source projections in the executable type model |
+| [[D2607]] | returned: execute exact legal-map/FEN/order/object-identity and tied-pawn mutation negatives |
 
 ## Appendix A — registered projection ids
 
@@ -1405,6 +1420,11 @@ is a spec change with a changelog line.
   through nullish normalization; and the tablebase result is correctly a position reading rather
   than an event with a fabricated occurrence. The retained author contracts and new four-arm
   falsifier must pass before a sixth genuinely fresh review; no held production id is authorized.
+- 2026-09-04: sixth fresh independent review returned the held promotion pair on [[D2603]]–
+  [[D2607]]. The fifth target does not actually retain earlier gates; two constructor names compete;
+  the total result has no seal/assertion; and category/DTZ plus exact move/pawn joins are absent from
+  the executable model. Exact review:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-sixth-fresh-independent-buildability-review-2026-09-04.md`.
 - 2026-09-04: implemented the bounded [[D2536]]/[[D2552]]/[[D2553]] deflection amendment. The live
   catalogue has two exact derivation members; detector, emitter and both recorded-path modes share
   one induction selector; broad and exact-source paths share one sealed check-event constructor.

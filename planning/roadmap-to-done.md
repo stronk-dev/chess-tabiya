@@ -571,6 +571,12 @@ producer-wide metadata cannot describe a producer mixing local geometry with opt
 outcome, so F1 must compile availability/latency per projection and derivation member. Six Node-24
 arms pass; the semantic RFC needs author amendment/review and the provider dependency before it can
 truthfully move 12/14 to 14/14.
+The 2026-09-04 sixth fresh review returns the latest held-promotion author repair on
+[[D2603]]–[[D2607]]. Its Make target does not run the retained generations it claims; two factory
+names compete for one value; the total operation result is unsealed; and the executable model omits
+category/DTZ and exact legal-map/FEN/participant joins. `make
+semantic-collectors-promotion-sixth-fresh-review` reproduces 5/5. The evidence spine remains 12/14
+until one bounded repair, another fresh review and the provider/value dependencies all clear.
 The manifest-wide follow-up makes that F1 amendment exact. The current 46 derived projections carry
 96 direct derivation members expanding to 99 executable paths. Eight outputs falsely advertise
 local/sync over Stockfish, ten bindings bypass provider-off validation through local wrappers, and
