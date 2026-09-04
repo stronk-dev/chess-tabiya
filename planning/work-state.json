@@ -21047,6 +21047,51 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:bounded-policy-targets.md"
+    },
+    {
+      "id": "D2631",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8080f8c815c6f0c94effdbccdfb3e0f1c98b09e7e5997a2204ac751960909820",
+      "uxItems": [],
+      "owner": "review-and-return",
+      "blocker": "rfc:review-evidence-compiler.md"
+    },
+    {
+      "id": "D2632",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:48698347a9874fda3197c73787e2348e92f0a42f1ab9e8c496b7be9fa72955e3",
+      "uxItems": [],
+      "owner": "review-and-return",
+      "blocker": "rfc:review-evidence-compiler.md"
+    },
+    {
+      "id": "D2633",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ef3c4da6423eb88e38d1ef1fdcca9beffef66e064e4168248f3c4e7b4e649e94",
+      "uxItems": [],
+      "owner": "review-and-return",
+      "blocker": "rfc:review-evidence-compiler.md"
+    },
+    {
+      "id": "D2634",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7b63a6ec1ff2caf3415b334daf25c9d5f8ef6104e6614a8f8d58a9f5a3d954ac",
+      "uxItems": [],
+      "owner": "review-and-return",
+      "blocker": "rfc:review-evidence-compiler.md"
+    },
+    {
+      "id": "D2635",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e48e00fbdad8f94fb90a770116412e245baa79ae2a9b7175959b72ed758389e9",
+      "uxItems": [],
+      "owner": "review-and-return",
+      "blocker": "rfc:review-evidence-compiler.md"
     }
   ]
 }

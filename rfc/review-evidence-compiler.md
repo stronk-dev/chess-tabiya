@@ -1,11 +1,13 @@
 # RFC: Review evidence compiler
 
-- **Status:** draft — author-amended 2026-08-28 for [[D1644]]–[[D1651]] and [[D1969]]; awaiting a
-  fresh independent buildability review. The amendment binds Review to the shared same-exchange
-  provider delivery, adds node-free WDL normalization and exact recorded occurrences, refuses
-  unanchored mate proofs, replaces both queue paths with one bounded coordinator, terminates the F1
-  packet in a closed server-rendered wire receipt, preserves learner perspective and inherits
-  weakest-input confidence. No implementation is authorised before that review.
+- **Status:** draft — **RETURNED by fresh independent review 2026-09-04 on
+  [[D2631]]–[[D2635]].** The 2026-08-28 WDL/proof/learner-perspective repairs survive, but the
+  compiler still has no callable input or aggregate assertion; completion cannot represent mixed
+  progress plus degradation; its raw sentence receipt bypasses the sealed presentation contract;
+  packet and story context share no authorized prefix authority; and retry-exhaustion truth has no
+  bounded owner across coordinator eviction. `make review-evidence-fresh-review` retains the six
+  author checks and reproduces 5/5 returns. No implementation is authorised before repair and
+  another fresh review.
 - **Author:** codex, on the D717 evidence-foundation routing and the completed Wave-C C4 research
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` Review/Analyze surfaces;
@@ -515,6 +517,29 @@ not evidence for the final Review Map policy.
     Move-quality labels and Story's separately declared compatibility title remain their own
     projections/consumers rather than being smuggled into source renderers.
 
+## Fresh independent review return (2026-09-04)
+
+The 2026-08-28 value corrections survive, but this document is not yet a single buildable Review
+boundary:
+
+1. [[D2635]] — `compileReviewEvidence(input)` has no published input, source/absence union,
+   constructor authority or aggregate assertion. The module-registration [[D2505]] repair records
+   that absence honestly; it does not supply the missing upstream ABI.
+2. [[D2631]] — the exclusive completion union cannot encode simultaneous progressive work and
+   terminal degradation, and no deterministic algebra folds mixed node-family states into the
+   receipt's one run-level `ReviewFamilyState`.
+3. [[D2632]] — raw `sentences[]` plus `sourceLabels[]` reopen a wire/rendering authority that
+   `evidence-presentation` explicitly replaces with sealed components and an equivalent sentence
+   derived from the same retained operand.
+4. [[D2633]] — packet rows and the untyped context that supplies side/outcome/title share no sealed
+   event-head or immutable-prefix authority, so otherwise valid bytes can be crossed.
+5. [[D2634]] — the provider retains no failures, while evictable branch coordinators are the only
+   named home for terminal attempt outcomes. Retry exhaustion is therefore either lost on LRU churn
+   or kept in an unbounded second store.
+
+`make review-evidence-fresh-review` retains the six author controls and reproduces all five returns.
+An author repair and another fresh independent review are required before implementation.
+
 ## 8. Acceptance criteria
 
 1. **Typed shared delivery:** White/Black cp and mate fixtures compile into the one
@@ -615,6 +640,14 @@ The existing Story order is preserved only as a labelled compatibility conventio
 
 ## Changelog
 
+- 2026-09-04 fresh independent review: returned on [[D2631]]–[[D2635]].
+  The public compiler still omits its exact input and aggregate runtime assertion; the receipt's
+  exclusive completion union cannot tell simultaneous progress and degradation and has no
+  node-to-run family fold; `sentences[]`/`sourceLabels[]` conflicts with the later sealed-component
+  presentation authority; packet/context bytes share no event-head or prefix authority; and
+  non-retained provider failures plus evictable coordinators leave exhausted attempts either
+  retryable again or stored outside the declared bounds. Exact receipt:
+  `planning/evidence-foundation-ux/review-evidence-compiler-fresh-independent-buildability-review-2026-09-04.md`.
 - 2026-08-28 author amendment ([[D1644]]–[[D1651]], [[D1969]]): WDL now travels on the one shared
   same-exchange position-evaluation delivery and normalizes node-free before an exact recorded
   occurrence join; forced-mate v2 declares exact position endpoints and links only through

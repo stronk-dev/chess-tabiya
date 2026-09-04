@@ -632,6 +632,10 @@ semantic-collectors-promotion-third-author-repair:
 review-evidence-author-contract:
 	node --test tools/d1969-review-evidence-author-harness/*.test.mts
 
+.PHONY: review-evidence-fresh-review
+review-evidence-fresh-review: review-evidence-author-contract
+	node --test tools/d2631-review-evidence-fresh-review/contract.test.mjs
+
 bot-policy-independent-review:
 	node --test tools/d1970-bot-policy-independent-review/*.test.mts
 

@@ -14940,3 +14940,23 @@ reproduces 3/3. Exact receipt:
 `planning/bounded-policy-targets/fourth-fresh-independent-buildability-review-2026-09-04.md`.
 A bounded fifth author repair must close all three seams before another fresh review or local-target
 implementation.
+
+## 2026-09-04 — Review evidence compiler fresh review returns the packet-to-UX boundary
+
+**What landed:** A fresh ABI, availability, presentation, subject and retry-state review preserves
+the 2026-08-28 node-free WDL, typed cp/mate, exact-proof and progressive-coordinator direction, but
+returns `review-evidence-compiler` on [[D2631]]–[[D2635]]. No production
+runtime, server, provider, API, schema, content, UX, archive or protected-design byte changed.
+
+**What changed:** the named compiler still has no callable input or aggregate assertion; the wire
+cannot express progress and terminal degradation simultaneously or derive one family state from
+mixed nodes; raw `sentences[]`/`sourceLabels[]` bypass the sealed presentation-component authority;
+the evidence packet and learner-side Story context share no authorized event-head/prefix receipt;
+and retry exhaustion is either lost on coordinator eviction or retained outside every declared
+bound because the shared scheduler deliberately does not retain failures.
+
+**Evidence/next:** `make review-evidence-fresh-review` retains all six author controls and
+reproduces 5/5. Exact receipt:
+`planning/evidence-foundation-ux/review-evidence-compiler-fresh-independent-buildability-review-2026-09-04.md`.
+A bounded author repair must close these five seams, consume the presentation contract instead of
+forking it, and survive another independent review before Review implementation starts.

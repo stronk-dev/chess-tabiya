@@ -916,6 +916,15 @@ derived engine item remains measured/reported. The amended compiler and its prov
 still require fresh independent review and implementation, so this is contract progress rather
 than a completed Review claim.
 
+The 2026-09-04 fresh review preserves those evidence corrections but returns the compiler before
+implementation on [[D2631]]–[[D2635]]. There is still no callable input or
+aggregate packet assertion; mixed progressive/degraded availability is unrepresentable and has no
+node-to-prefix fold; the proposed raw-sentence wire conflicts with the sealed component authority;
+packet evidence and learner-side story context share no authorized prefix receipt; and exhausted
+provider attempts have no bounded owner across LRU eviction. Full Review therefore remains behind
+an authority/availability/presentation repair, not merely an implementation queue. Receipt:
+`planning/evidence-foundation-ux/review-evidence-compiler-fresh-independent-buildability-review-2026-09-04.md`.
+
 **1.0 exit:** native, bot, imported, social and campaign games compile to one Review Map: opening
 and phase arc; navigable move timeline; bounded grounded moments; separate grade, human rarity,
 theory, semantic change and exact endgame facts; correct learner-side result; decided-position
