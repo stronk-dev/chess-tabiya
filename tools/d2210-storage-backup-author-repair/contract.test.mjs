@@ -8,8 +8,9 @@ test("D2210: one supervisor owns one inherited open-file description", () => {
   assert.match(rfc, /`storage-supervisor` is the only process allowed to acquire the storage lock/);
   assert.match(rfc, /opens[\s\S]*?`\/data\/\.tabiya-storage\.lock` as FD 3 without `O_CLOEXEC`/);
   assert.match(rfc, /same open-file description exists before inspection,[\s\S]*before HTTP open,[\s\S]*HTTP lifetime/);
-  assert.match(rfc, /independently opened same-inode FD[\s\S]*contends/);
-  assert.match(rfc, /Children never release or reacquire[\s\S]*the inherited lock/);
+  assert.match(rfc, /child performs non-blocking exclusive `flock\(3\)` on[\s\S]*\*\*FD 3 itself\*\*/);
+  assert.match(rfc, /child keeps FD 3 open and never unlocks it/);
+  assert.match(rfc, /`EWOULDBLOCK`[\s\S]*foreign open-file description owns the lock/);
   assert.match(rfc, /normative ownership sequence is `exec 3>>lock-path`, `flock -n 3`/);
 });
 
@@ -25,9 +26,10 @@ test("D2211: upgrade and restore share the exact SQLite-triplet installer", () =
 });
 
 test("D2211: crash recovery refuses mixed main WAL and SHM generations", () => {
-  assert.match(rfc, /crashes at every rename,[\s\S]*directory-fsync boundary/);
-  assert.match(rfc, /committed rows resident in[\s\S]*WAL and a pre-existing SHM/);
-  assert.match(rfc, /exact old triplet or the fully verified[\s\S]*new standalone database, never a mixed set/);
+  assert.match(rfc, /crashes immediately before[\s\S]*every rename\/link\/unlink,[\s\S]*directory fsync/);
+  assert.match(rfc, /rollback_restore_old[\s\S]*restores exactly the next originally present[\s\S]*member in canonical order/);
+  assert.match(rfc, /Restart reconciles the journal with the exact path\/digest image/);
+  assert.match(rfc, /exact old triplet or fully verified new standalone database, never a mixed main\/WAL\/SHM set/);
 });
 
 test("D2212: backup identity has one domain-separated recomputable image", () => {

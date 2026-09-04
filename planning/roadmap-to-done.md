@@ -1285,14 +1285,14 @@ F12-A/D607/D1846/D1847, `provider-health-degradation` for F12-D/D609/D1848, and
 final F3/F4 runtime-content join. [[D1448]], the remaining F12 children, packaging checks, workflows
 and deploy artifacts own the other residuals.
 
-The 2026-09-04 third fresh storage-backup review returns the second repair on
-[[D2608]]–[[D2613]]. The appliance direction survives, but the inherited-lock probe cannot attribute
-its owner; marker-removal durability fsyncs the parent rather than the changed bundle directory;
-prepare success certifies readiness before HTTP exists; generic check seals and operation ids are
-caller-mintable; and rollback has no durable in-progress states despite an every-mutation crash
-promise. `make storage-backup-third-fresh-review` retains both author generations and reproduces all
-six. Backup/restore implementation and D608 remain held for repair and another fresh review;
-receipt: `planning/storage-backup-recovery/third-fresh-independent-buildability-review-2026-09-04.md`.
+The 2026-09-04 third storage-backup author repair closes the draft seams in
+[[D2608]]–[[D2613]] without claiming implementation. Inherited FD 3 now establishes its own lock
+authority; publication durably commits marker removal; prepare and readiness checks have truthful
+lifetimes; exact check operations and canonical UUID identities are non-forgeable; and replacement
+recovery journals forward and rollback progress per member. `make
+storage-backup-third-author-repair` retains 23 prior controls and passes 6/6 new behavioral groups
+plus strict TypeScript. Backup/restore implementation and D608 remain held for another genuinely
+fresh review; receipt: `planning/storage-backup-recovery/third-author-repair-2026-09-04.md`.
 
 The 2026-09-04 second fresh safe-deployment review returns its author repair on
 [[D2614]]–[[D2618]]. The topology survives, but one compiled config cannot cross the container

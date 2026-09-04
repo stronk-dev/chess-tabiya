@@ -15183,3 +15183,20 @@ behavioral groups plus strict TypeScript. Exact receipt:
 `planning/provider-health-degradation/fourth-author-repair-2026-09-04.md`. Another genuinely fresh
 independent review and the provider-protocol/exchange prerequisites still gate both implementation
 checkpoints; bots, Support, Review and campaign receive no premature availability credit.
+
+## 2026-09-04 — Storage backup/recovery third author repair
+
+**What landed:** The bounded contract-tier repair for [[D2608]]–[[D2613]] and the maintained
+`make storage-backup-third-author-repair` target. No production storage, server, API, schema,
+client, content, deployment, archive or protected-design byte changed.
+
+**What changed:** inherited FD 3 now establishes its own attributable lock authority; marker
+removal is durable in the changed bundle directory; prepare and readiness checks have exact
+lifetimes; semantic checks and operation UUIDs cannot be caller-minted; and replacement recovery
+tracks and reconciles forward and rollback progress per SQLite-triplet member.
+
+**Evidence/next:** the maintained target retains 23 prior controls and passes 6/6 new behavioral
+groups plus strict TypeScript. Exact receipt:
+`planning/storage-backup-recovery/third-author-repair-2026-09-04.md`. Another genuinely fresh
+independent review still gates acceptance and production implementation; D608 and appliance
+recovery credit remain held.

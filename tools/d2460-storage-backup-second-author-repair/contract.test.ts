@@ -84,11 +84,13 @@ describe("D2460-D2464 storage backup second author repair", () => {
     expect(() => compileSuccessChecks(operationId, shape, forged)).toThrow("UNSEALED_OR_WRONG_OPERATION_CHECK");
   });
 
-  it("binds the repaired model to the normative RFC and keeps implementation gated", () => {
-    expect(rfc).toMatch(/independently opened same-inode FD[\s\S]*contends/u);
-    expect(rfc).toMatch(/no `verified` byte may be persisted until both the[\s\S]*installed main inode and live parent directory are durable/iu);
+  it("binds the retained model and the stronger current lock contract to the normative RFC", () => {
+    expect(rfc).toMatch(/child performs non-blocking exclusive `flock\(3\)` on[\s\S]*\*\*FD 3 itself\*\*/u);
+    expect(rfc).toMatch(/`EWOULDBLOCK`[\s\S]*foreign open-file description owns the lock/u);
+    expect(rfc).toMatch(/`forward_verify`[\s\S]*fsyncs installed main and live[\s\S]*parent, then commits `verified` only when all pass/iu);
     expect(rfc).toMatch(/function parseBackupId\(value: unknown\): BackupId/u);
-    expect(rfc).toMatch(/runtime-sealed[\s\S]*rejects an empty,[\s\S]*duplicate,[\s\S]*differently operation-bound result/u);
+    expect(rfc).toMatch(/module-private[\s\S]*constructor[\s\S]*exact operation validates its real operands/u);
+    expect(rfc).toMatch(/rejects an[\s\S]*empty, missing, extra, duplicate, failed, forged or differently operation-bound result/u);
     expect(rfc).toMatch(/another genuinely fresh independent review remains mandatory/u);
   });
 });

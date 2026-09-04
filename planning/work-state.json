@@ -20845,7 +20845,7 @@
       "id": "D2608",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1993fac812909ecd7f4b03bc95bd1081c3adf04186c524936ff3234227e5468b",
+      "sourceDigest": "sha256:8eed582bbf09d3f219640150ac210bb29d1f2c46c6b9e88d41299ce4050b4e8d",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"
@@ -20854,7 +20854,7 @@
       "id": "D2609",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:435bbabf53446ca2a0ec5deec84a497a69c3ef34fca339a2d30e7771c2d73d55",
+      "sourceDigest": "sha256:a1db69a898ea967b6091dac6a15b647c004bb60dee663fd2e1c5a94b0c49a66c",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"
@@ -20863,7 +20863,7 @@
       "id": "D2610",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:52c1db79939fc94eeb2dad2be20f560492c8e4626e2e5ff27be02c495507e71e",
+      "sourceDigest": "sha256:b27b738628a6336211b4c5637a605fe55357fda2f1b812585608ea8c4aa5b5e6",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"
@@ -20872,7 +20872,7 @@
       "id": "D2611",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:383093f30232c14fd2ee8ddb759c7036387a0689c37ec639c772e8d0d7d54f9f",
+      "sourceDigest": "sha256:65c361c33b7dc90a97fe6521e85c60f91432d77df67d06938e82742c1cbf23aa",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"
@@ -20881,7 +20881,7 @@
       "id": "D2612",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f1aa604db912c42955d8a99a5cf89358f80f677d10f54f5b87d749f68321e96a",
+      "sourceDigest": "sha256:91f3a8b04921c8b017597a836877fd2b90cc4639cb88d6b2b3170059991b928f",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"
@@ -20890,7 +20890,7 @@
       "id": "D2613",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f38be418bd975bd53ac1339da42be505e95db21824431fc19165a5be6cdf30c3",
+      "sourceDigest": "sha256:07281b6347a4cc9f43ffa4667ae389dd3421d79ed9ceb59da290ed9d30a49d46",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"
