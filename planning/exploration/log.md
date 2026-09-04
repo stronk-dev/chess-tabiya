@@ -15036,3 +15036,36 @@ same-spelling symbols, invalid graphs and post-digest mutation. Exact receipt:
 `planning/shared-resource-register-bootstrap/seventh-author-repair-2026-09-04.md`. Another genuinely
 fresh independent review still gates acceptance and generic-engine implementation; convention and
 provider catalogue populations remain downstream.
+
+## 2026-09-04 — Bounded targets fifth author repair
+
+**What landed:** The bounded contract-tier repair for [[D2628]]–[[D2630]] plus the maintained
+`make bounded-target-fifth-author-repair` target. No runtime, server, provider, API, schema,
+storage, content, UX, archive or protected-design byte changed.
+
+**What changed:** the disposable public protocol is now complete and its exported names, fields and
+discriminated arms are structurally set-equal to the RFC TypeScript model; one generated
+package-internal `invokeEvidenceValueRoute` gives production operations an exact executable route
+while preserving the central registry as every factory's sole importer; and threat construction
+uses only `createRulesTacticConsequenceThreatV1Evidence`, rejecting the retired adapter alias.
+
+**Evidence/next:** `make bounded-target-fifth-author-repair` passes the retained 3/3 fourth author
+controls, compiles the complete protocol and passes 5/5 new repair checks. Exact receipt:
+`planning/bounded-policy-targets/fifth-author-repair-2026-09-04.md`. Another genuinely fresh
+independent review and the value/semantic authority dependencies still gate implementation and all
+Support, Review and bot consumer credit.
+
+## 2026-09-04 — Staged append-only checker repository-growth repair
+
+**What landed:** [[D2643]] repairs the pre-commit/process-contract checker after the live
+exploration log exceeded Node's default synchronous child-output buffer. No product runtime,
+schema, API, content, UX, archive or protected-design byte changed.
+
+**What changed:** Git inspection now has an explicit 64 MiB output envelope. A permanent regression
+commits a log larger than 1 MiB, stages a valid append and proves the checker accepts it; the
+existing insertion and deletion negatives remain distinct. `ENOBUFS` can no longer be swallowed by
+the missing-object branch and falsely reported as “log deleted.”
+
+**Evidence/next:** `make staged-process-contracts-test` passes 8/8, including the new large-log
+case. The full repository gate must be rerun after this tool change before the interrupted bounded-
+target checkpoint can commit.

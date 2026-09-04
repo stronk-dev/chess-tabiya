@@ -121,6 +121,17 @@ The factory registry is a literal package-internal table keyed by exact projecti
 entry names one of the following implementation shapes. These names are documentation vocabulary,
 not a new exported shared enum.
 
+The same registry module generates package-internal `EvidenceValueRouteInputs` and
+`EvidenceValueRouteResults` maps and exports one `invokeEvidenceValueRoute<Route>()` operation from
+`packages/runtime/src/internal/evidence-value-routes.ts`. The literal route parameter indexes both
+maps, and runtime admission rejects unknown routes, missing/extra input keys and inputs that fail
+the selected factory's authority validator before invocation. This is not a generic mint API: it
+accepts no projection payload, output, receipt, factory name or caller-selected ancestry, and it is
+absent from every barrel and package export. Production operations import this invoker; only the
+central registry module imports projection factories. Route/profile/input/result sets are equal,
+so a metadata-only registry, uncallable factory, second dispatcher, direct consumer-to-factory
+edge or crossed route/input/result fails the permanent gate.
+
 #### 2.1 Computed
 
 A computed factory accepts only authority inputs required to run the named deterministic operation:
@@ -482,7 +493,8 @@ A permanent `make evidence-value-authority` target runs:
    outside tests;
 2. package-export checks proving the local mint helper and all old adapters/routers are unavailable;
 3. set equality among all non-retired final catalogue projections, factory rows and authority
-   profiles, with bindings a checked subset;
+   profiles, with bindings a checked subset; the same gate additionally requires the factory rows,
+   generated route input/result maps and invoker arms to be set-equal;
 4. exact current-route migration equality against the re-derived 191-route / 187-projection
    baseline, including the four duplicate paths and six no-route declarations;
 5. the §3 9/6/2/3 reviewed grounding table;
@@ -570,6 +582,12 @@ planes, optional LLM renderer and assistance ceilings.
     coherence without claiming to reconstruct discarded inputs.
 19. `evidenceForConsumer`, semantic selection, module reducers, deterministic renderers and voice
     provider requests reject identity-sealed/value-unverified fixtures.
+19a. Every used factory is reachable only through the package-internal central
+    `invokeEvidenceValueRoute`; the registry is its factories' sole non-test importer and its
+    generated route/input/result maps are set-equal. Unknown routes, missing/extra input keys,
+    crossed inputs/results, a metadata-only row, second dispatcher or direct production factory
+    import fail. The operation remains absent from public/package exports and accepts no result
+    payload or caller ancestry.
 20. No ordinary module binding, preset, relevance rule, wording or content file changes in this
     implementation.
 21. `make evidence-value-authority`, `make verify`, `make test-browser`, CI parity, package build and
@@ -605,6 +623,12 @@ None for the owner. Author review must settle exact successor symbol spelling an
 191-route migration table before acceptance; those are buildability obligations, not product choices.
 
 ## Changelog
+
+- 2026-09-04: [[D2629]] makes the registry executable without widening mint authority. One
+  package-internal generated `invokeEvidenceValueRoute` correlates every literal route to its exact
+  authority inputs/result; production operations import it, while the central registry remains the
+  sole factory importer. Runtime exact-key validation prevents TypeScript erasure from becoming a
+  payload bypass.
 
 - 2026-09-01: [[D2497]] closes the scoped proof algebra without adding a reachability projection.
   `proved_true`, `proved_false`, `unknown_horizon` and `unknown_provider` are distinct; finite claim

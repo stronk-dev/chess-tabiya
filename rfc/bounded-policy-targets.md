@@ -1,14 +1,12 @@
 # RFC: Convention-grounded bounded material targets
 
-- **Status:** **draft — fourth fresh independent review returned the D2340–D2342 repair on
-  [[D2628]]–[[D2630]]; fifth author repair and another fresh review required.** Semantic validation now admits two explicit reading roots without treating value
-  receipts as semantic proof; the protocol fixture imports one exact proposed declaration module;
-  and the three factories export only from an internal non-barrel module with one non-test importer.
-  `make bounded-target-fourth-author-repair` remains 3/3. The fresh review finds the imported
-  protocol image is still lossy, the service has no permitted factory invocation path, and the
-  threat constructor conflicts with the exact value-authority route. Exact return:
-  `planning/bounded-policy-targets/fourth-fresh-independent-buildability-review-2026-09-04.md`;
-  `make bounded-target-fourth-fresh-review` reproduces 3/3. Implementation remains unauthorised.
+- **Status:** **draft — fifth author repair completed 2026-09-04 on [[D2628]]–[[D2630]];
+  another fresh independent review is required.** The complete normative protocol declaration is
+  set-equal to the RFC's public names, fields and discriminated arms; the package-internal central
+  value-route invoker is the service's sole construction path; and the threat source consumes the
+  exact registered `createRulesTacticConsequenceThreatV1Evidence` route with no alias. `make
+  bounded-target-fifth-author-repair` retains the previous author controls and executes the three
+  new inversions. Implementation remains unauthorised until fresh acceptance and dependency landing.
 - **Author:** codex, preserving the D1023 research contract and applying `planning/bounded-policy-targets/author-repair-2026-08-26.md`
 - **Created:** 2026-08-23; narrowed 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; executable contract closure in `design/research/bounded-policy-target-contract-closure.md`
@@ -66,16 +64,17 @@ That check is an internal semantic dependency and does not mint a second source 
 preserves the D1657 correction: one source projection identity has one authority, and a derived item
 retains the exact source items from which it was computed.
 
-`declareThreatEvidence(sourceFen)` is the sole threat constructor. It canonicalizes the FEN, calls
+`createRulesTacticConsequenceThreatV1Evidence({ fen: sourceFen })` is the sole threat factory. It canonicalizes the FEN, calls
 `threats(sourceFen)` itself, declares the unchanged `threat@1` payload, and records the exact
 `ThreatPassAnchorResult` in a module-private
 `WeakMap<DeclaredEvidence<ThreatResult>, ThreatPassAnchorResult>`.
 It accepts no caller payload. `threatEvidencePassAnchor(item)` succeeds only for the exact object
-minted by that constructor; spread, JSON, cast and a separately sealed equal payload fail. This is
+minted by that factory; spread, JSON, cast and a separately sealed equal payload fail. This is
 source authority attached to the existing process-local evidence seal, not a new projection or a
-payload-version change. All current constructor call sites migrate from
-`declareThreatEvidence(threats(fen))` to `declareThreatEvidence(fen)` in the same implementation
-commit. The named-target constructor requires its source-position FEN to equal the retained private
+payload-version change. All current constructor call sites migrate from the retired
+`declareThreatEvidence(...)` adapter to the exact central value-route invocation for
+`rules.tactic.consequence.threat@1` in the same implementation commit. The named-target constructor
+requires its source-position FEN to equal the retained private
 anchor before inspecting any threat row. A foreign source with byte-identical threats therefore
 still refuses ([[D2105]]).
 
@@ -155,7 +154,6 @@ export type SourceBoundThreatEvidence = ProjectionEvidence<
 > & {
   readonly [THREAT_SOURCE_BOUND]: true;
 };
-export function declareThreatEvidence(sourceFen: string): SourceBoundThreatEvidence;
 export function threatEvidencePassAnchor(
   evidence: SourceBoundThreatEvidence,
 ): ThreatPassAnchorResult;
@@ -211,7 +209,8 @@ position, flips side to move, clears en-passant, canonicalizes the passed positi
 frozen anchor to the private `THREAT_PASS_ANCHORS` set. `threats(sourceFen)` consumes that same
 result and never reimplements the transform. `assertThreatPassAnchor` requires set membership and re-derives both canonical FENs under
 the literal convention; a plain/spread/JSON/double-cast value and a separately constructed equal
-object fail. `declareThreatEvidence(sourceFen)` stores the same result/anchor reference; a batch
+object fail. `createRulesTacticConsequenceThreatV1Evidence({ fen: sourceFen })` stores the same
+result/anchor reference; a batch
 receiving the unavailable arm returns `input_abstained`, while target admission requires an
 available result and reference identity with `threatEvidencePassAnchor(threat).anchor` before inspecting
 payload rows. Wrong convention, noncanonical source, mismatched passed FEN and equal rebuilds are
@@ -514,13 +513,44 @@ export declare function makeBoundedTargetReturnEvidence(input: Readonly<{
   traversal: BoundedTargetTraversalAuthority;
 }>): Promise<ReturnDerivation>;
 
-declare function assertNamedMaterialTargetEvidence(
+interface BoundedTargetValueRouteInputs {
+  readonly "derived.bounded_target.named_material_target@1": Readonly<{
+    threat: ThreatEvidence;
+    exchange: LegalExchangeEvidence;
+    sourcePosition: SourceLegalMovesEvidence;
+  }>;
+  readonly "derived.bounded_target.immediate@1": Readonly<{
+    target: NamedMaterialTargetEvidence;
+    candidate: ExactLegalMove;
+  }>;
+  readonly "derived.bounded_target.bounded_return@1": Readonly<{
+    immediate: BoundedTargetImmediateEvidence<
+      Extract<ImmediateTargetOutcome, { readonly result: "removed" }>
+    >;
+    traversal: BoundedTargetTraversalAuthority;
+  }>;
+}
+
+interface BoundedTargetValueRouteResults {
+  readonly "derived.bounded_target.named_material_target@1": NamedMaterialTargetFactoryResult;
+  readonly "derived.bounded_target.immediate@1": BoundedTargetImmediateFactoryResult;
+  readonly "derived.bounded_target.bounded_return@1": Promise<ReturnDerivation>;
+}
+
+type BoundedTargetValueRoute = keyof BoundedTargetValueRouteInputs;
+
+export declare function invokeEvidenceValueRoute<Route extends BoundedTargetValueRoute>(
+  route: Route,
+  input: BoundedTargetValueRouteInputs[Route],
+): BoundedTargetValueRouteResults[Route];
+
+export declare function assertNamedMaterialTargetEvidence(
   value: unknown,
 ): asserts value is NamedMaterialTargetEvidence;
-declare function assertBoundedTargetImmediateEvidence(
+export declare function assertBoundedTargetImmediateEvidence(
   value: unknown,
 ): asserts value is BoundedTargetImmediateEvidence;
-declare function assertBoundedTargetReturnEvidence(
+export declare function assertBoundedTargetReturnEvidence(
   value: unknown,
 ): asserts value is BoundedTargetReturnEvidence;
 
@@ -672,11 +702,22 @@ export declare function createBoundedTargetBackgroundService(
 
 The three callable factories above are exported from
 `packages/runtime/src/internal/bounded-target-factories.ts` only so the package-internal
-`evidence-value-authority` route registry can import them. They are absent from the runtime barrel,
+`evidence-value-routes.ts` central registry can import them. They are absent from the runtime barrel,
 every `package.json` export/subpath and every application import graph. A static import census
 requires the central route registry to be their sole non-test importer; tests may import the
 internal source path only. Application consumers receive the background service and specialized
 assertions, never a mint function.
+
+`invokeEvidenceValueRoute` is exported only from that package-internal central registry module; it
+is absent from the runtime barrel and package exports. Its generated input/result maps are set-equal
+to the registry and correlate each literal route with exactly one authority-input object and result
+type. The implementation performs the same literal-route and exact-key validation at runtime before
+calling the registered factory: TypeScript erasure or a double cast cannot add an output payload,
+cause, witness, visited count or foreign authority input. `bounded-target.ts` imports only this
+invoker and calls the three routes above. It never imports a bounded-target factory. The central
+registry module is therefore the sole non-test factory importer while the service retains one named,
+executable construction path; a second dispatcher, a direct service-to-factory edge, an unknown
+route, extra input key or crossed route/input/result fails the static and runtime fixtures.
 
 `evidence-value-authority` registers exactly three bounded-target routes, keyed by the three
 projection refs and the literal factory symbols `makeNamedMaterialTargetEvidence`,
@@ -769,7 +810,7 @@ though the computation is provider-free.
 The production service is therefore background-only. A Support gesture, board hover, move commit
 or HTTP request may consume a completed item but may not call the traversal helpers inline. One
 service instance admits **one active and eight queued** source-position jobs; the ninth queued job
-returns `queue_full`. `BoundedTargetBackgroundService.create()` and the named exported factory
+returns `queue_full`. `BoundedTargetBackgroundService.create()` and the named exported service factory
 accept only numeric `Partial<BoundedTargetServiceLimits>`. They fix `PRIMARY_EVIDENCE_MANIFEST`,
 `messageChannelMacrotaskYield`, the exact legal/tracking functions, value-authority factories,
 result constructors and producer registry by import. Options are strictly validated: an unknown
@@ -970,7 +1011,8 @@ temporary binding state, not the 1.0 user experience.
 | `packages/runtime/src/cooperative-yield.ts` | shared dependency-free `messageChannelMacrotaskYield` authority used by this RFC and `shared-candidate-evidence-packet` ([[D2029]]) |
 | `packages/runtime/src/evidence-contract.ts`, `packages/runtime/src/evidence-producer-operations.ts` | explicit availability/latency validation plus producer-operation type, constructor, set-equality assertion and exact bounded service binding |
 | `packages/runtime/src/evidence-catalog.ts` | explicit latency argument on every existing producer with byte preservation; one new producer and three literal projection declarations/dispositions |
-| `packages/runtime/src/evidence-factories.ts` | add the three exact computed/derived factory routes through the sole value-receipt mint; replace caller-payload threat construction with the accepted FEN-owned source factory and retain its pass-anchor result |
+| `packages/runtime/src/evidence-factories.ts` | add the three exact computed/derived factory routes through the sole value-receipt mint; replace caller-payload threat construction with exact `createRulesTacticConsequenceThreatV1Evidence` and retain its pass-anchor result |
+| `packages/runtime/src/internal/evidence-value-routes.ts` | generate the route-correlated input/result maps and package-internal `invokeEvidenceValueRoute`; import every exact factory here and nowhere else |
 | `packages/runtime/src/index.ts` | export the complete request/result/payload/outcome/options/assertion family; keep mint factories and traversal authorities private |
 | `tools/d1023-bounded-policy-harness/exact-target.test.ts` | permanent control/census instrument, rewritten at implementation to import production symbols |
 | `Makefile` | stable `bounded-target-contract` and `bounded-target-census` targets |
@@ -1008,7 +1050,7 @@ undergo another fresh independent review before implementation.
    the legal availability/latency matrix passes and every crossed pair fails. The new row is exactly
    `local/background`, never an implicit `sync` fallback.
 3. Named-target positives retain the original sealed threat, exchange and exact source-position
-   items. `declareThreatEvidence(sourceFen)` is the only threat constructor, accepts no payload,
+   items. `createRulesTacticConsequenceThreatV1Evidence({ fen })` is the only threat factory, accepts no payload,
    and binds the exact `threatPassAnchor()` in a private WeakMap read by target admission. A generic
    declaration, equal-payload foreign position, spread/JSON/cast, cross-attacker, cross-victim or
    cross-capture substitution fails; all current constructor call sites use the FEN-owned form.
@@ -1112,8 +1154,21 @@ undergo another fresh independent review before implementation.
     module and declares no local protocol copy. Preserved/removed causes, nested evidence and every
     top-level result compile from those bytes; changing either side alone fails.
 28. **Internal export, public refusal ([[D2342]]).** The three factories export from one internal
-    module, are absent from barrel/subpath/package exports and have exactly one non-test importer:
-    the central value-route registry. An application import or second registry fails the census.
+   module, are absent from barrel/subpath/package exports and have exactly one non-test importer:
+   the central value-route registry. `bounded-target.ts` imports only the registry's generated
+   `invokeEvidenceValueRoute`, whose route/input/result maps are set-equal and runtime-key checked.
+   An application import, direct service-to-factory edge, second dispatcher/registry, unknown route,
+   extra input member or crossed route/input/result fails the census or runtime fixture.
+29. **The complete protocol is one source ([[D2628]]).** The normative declaration module contains
+   every public name from §§2 and 4, and the consumer typecheck imports only that module. An AST
+   comparison is set-equal over exported names, interface fields, projection objects and every
+   discriminated-union arm. Removing `TargetDerivation.target`, any request/service/options/factory
+   result, evidence ancestry, identity input or nested projection member fails before TypeScript's
+   positive consumer fixture runs.
+30. **The threat route has one exact symbol ([[D2630]]).** The cross-RFC route fixture requires
+   `rules.tactic.consequence.threat@1` to resolve only to
+   `createRulesTacticConsequenceThreatV1Evidence`; `declareThreatEvidence`, any compatibility alias,
+   second route or old caller-payload adapter fails the route/import census.
 
 ## Discharges
 
@@ -1215,7 +1270,21 @@ Exact review and reproducer:
 `make bounded-target-fourth-fresh-review`. A fifth author repair must close all three before another
 fresh review or implementation.
 
+The 2026-09-04 fifth author repair closes the three bounded seams without implementing product
+bytes. The complete imported protocol is checked structurally against the RFC model rather than
+sampled by regex; one
+central package-internal invoker preserves the registry as sole factory importer while giving the
+background service an exact route; and the threat authority uses the already-registered factory
+symbol only. `make bounded-target-fifth-author-repair` is positive author evidence; a fresh reviewer
+still owns acceptance.
+
 ## Changelog
+
+- 2026-09-04 — author-repaired [[D2628]]–[[D2630]]. Replaced the reduced protocol illustration
+  with a complete normative declaration and structural RFC/module set-equality checks, defined the closed
+  service→central-route-invoker→factory call graph, and removed the conflicting threat alias in
+  favour of `createRulesTacticConsequenceThreatV1Evidence`. Fresh independent review remains
+  required; no production/schema/content/UX byte changed.
 
 - 2026-09-04 — fourth fresh independent review returned the D2340–D2342 repair on
   [[D2628]]–[[D2630]]: the imported protocol is a reduced lookalike, containment leaves the service

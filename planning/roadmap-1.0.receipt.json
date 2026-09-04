@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:860eeac970640d7fe45bf56ee2fe4c1af284a5d93babf5f417f204041eaa95f6",
+    "roadmap": "sha256:d0d1d6558b11f2342483895d21f51a6278a99999469d74002cf5807e2b11b63a",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:455354eddb77823fc4c32145dd324715ec9388f867667048a0b6e269a0a8f765",
-    "rfcRegister": "sha256:5186229dc09d9a14649322a0721ad9a6cc228196bfde1b3e3fc00932c8f900f2",
+    "workState": "sha256:62decf2d27aaccc49a9300b4cd5a0d0a945ffa263f02ff346fe18c9a0a871456",
+    "rfcRegister": "sha256:c96f7ad1686a9fe06ba1f8813f2832b838c75d2527e11a4777df50aebdff9750",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -33,7 +33,7 @@
       "todo": 639,
       "doing": 0,
       "blocked": 929,
-      "done": 820,
+      "done": 821,
       "refused": 3
     },
     "workItems": {
@@ -75,10 +75,12 @@
       "dependsOn": [],
       "nextAction": "Keep every new live row assigned at creation, maintain the separately named verification tiers, and refresh the source-sealed receipt whenever a joined authority changes.",
       "latestCheckpoint": {
-        "at": "2026-08-31",
-        "summary": "The progress receipt now seals the complete ledger execution store, prints its current six-state census directly and excludes RFC-0000 from product lifecycle counts. Post-zero additions must enter work-state in the same checkpoint, preserving the zero ceiling.",
+        "at": "2026-09-04",
+        "summary": "The progress receipt still seals every live row with a zero-untriaged ceiling, and staged append-only enforcement now survives repository growth: Git-object reads use an explicit 64 MiB envelope and a permanent >1 MiB log regression distinguishes valid append, mutation and deletion instead of misreporting ENOBUFS.",
         "impact": "advanced",
         "evidence": [
+          "tools/staged-process-contracts.mjs",
+          "tools/staged-process-contracts.test.mjs",
           "rfc/archive/work-state.md",
           "planning/work-state.json",
           "tools/work-state.mjs",
@@ -184,9 +186,10 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Deflection check authority is live, while fresh reviews hold the promotion pair and bounded-target layer. The shared candidate packet's dependency, scope and cache-envelope returns now have a bounded seventh author repair: one predecessor-owned factory, scope-invariant collector truth and complete retained-graph limits. It still awaits genuinely fresh review and dependency landing. The evidence spine remains 12/14; recorded paths, provider/value authority and all module emissions remain unbuilt or held.",
+        "summary": "Deflection check authority is live, while fresh reviews hold the promotion pair and bounded-target layer. The shared candidate packet has a bounded seventh author repair, and bounded targets now have a fifth author repair: their complete public protocol is structurally checked, one central typed route invoker makes factory execution reachable without widening mint authority, and the threat source uses the exact registered factory. Both still await genuinely fresh review and dependency landing. The evidence spine remains 12/14; recorded paths, provider/value authority and all module emissions remain unbuilt or held.",
         "impact": "held",
         "evidence": [
+          "planning/bounded-policy-targets/fifth-author-repair-2026-09-04.md",
           "planning/evidence-foundation-ux/shared-candidate-packet-seventh-author-repair-2026-09-04.md",
           "planning/bounded-policy-targets/fourth-fresh-independent-buildability-review-2026-09-04.md",
           "planning/evidence-foundation-ux/shared-candidate-packet-sixth-fresh-independent-buildability-review-2026-09-04.md",
@@ -196,7 +199,6 @@
           "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md",
           "planning/pack-capability-contract/tenth-author-repair-2026-09-02.md",
           "planning/learner-modules/seventh-fresh-independent-buildability-review-2026-09-02.md",
-          "planning/evidence-foundation-ux/semantic-collectors-promotion-fourth-author-repair-2026-09-02.md",
           "planning/pack-capability-contract/ninth-author-repair-2026-09-02.md",
           "planning/pack-capability-contract/seventh-fresh-independent-review-2026-09-02.md",
           "planning/pack-capability-contract/sixth-fresh-independent-review-2026-09-02.md",

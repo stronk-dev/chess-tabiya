@@ -60,6 +60,18 @@ test("accepts a staged append after the previous committed EOF", (context) => {
   assert.deepEqual(assertStagedLogsAppendOnly(root), ["planning/exploration/log.md"]);
 });
 
+test("accepts an append when committed and staged log bytes exceed Node's default child buffer", (context) => {
+  const { root, log } = committedRepository(context);
+  const committed = `# Log\n\n${"foundation evidence\n".repeat(70_000)}`;
+  writeFileSync(log, committed);
+  execFileSync("git", ["add", "planning/exploration/log.md"], { cwd: root });
+  execFileSync("git", ["commit", "--quiet", "-m", "large baseline"], { cwd: root });
+  writeFileSync(log, `${committed}\nnext checkpoint\n`);
+  execFileSync("git", ["add", "planning/exploration/log.md"], { cwd: root });
+  assert.ok(Buffer.byteLength(committed) > 1024 * 1024);
+  assert.deepEqual(assertStagedLogsAppendOnly(root), ["planning/exploration/log.md"]);
+});
+
 test("refuses a staged insertion before the previous committed EOF", (context) => {
   const { root, log } = committedRepository(context);
   writeFileSync(log, "# Log\n\ninserted\n\nfirst\n");

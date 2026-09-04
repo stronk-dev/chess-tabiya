@@ -865,7 +865,7 @@ bounded-target-third-author-repair:
 	./node_modules/.bin/tsc -p tools/d2202-bounded-target-third-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: bounded-target-third-fresh-review
-.PHONY: bounded-target-fourth-author-repair bounded-target-fourth-fresh-review
+.PHONY: bounded-target-fourth-author-repair bounded-target-fourth-fresh-review bounded-target-fifth-author-repair
 bounded-target-third-fresh-review:
 	node --test tools/d2340-bounded-target-third-fresh-review/*.test.mjs
 
@@ -875,6 +875,10 @@ bounded-target-fourth-author-repair:
 
 bounded-target-fourth-fresh-review: bounded-target-fourth-author-repair
 	node --test tools/d2628-bounded-target-fourth-fresh-review/contract.test.mjs
+
+bounded-target-fifth-author-repair: bounded-target-fourth-author-repair
+	node --test tools/d2628-bounded-target-fifth-author-repair/contract.test.mjs
+	./node_modules/.bin/tsc -p tools/d2202-bounded-target-third-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: professional-closure-audit
 professional-closure-audit:

@@ -110,6 +110,12 @@ planning queue, work order, decision record and defect-triage row to its real ca
 The one-way ceiling is now zero: a new ownerless live row fails the gate instead of disappearing
 into a generic queue.
 
+The 2026-09-04 staged-index regression closes a repository-growth hole in that gate. Once the
+append-only exploration log exceeded Node's default 1 MiB child-output buffer, a valid staged append
+raised `ENOBUFS` and was falsely reported as a deleted log. Git-object inspection now has an explicit
+64 MiB envelope and a permanent committed-plus-staged >1 MiB regression, so the hook distinguishes
+real deletion from tool-capacity failure instead of blocking every future checkpoint ([[D2643]]).
+
 **1.0 exit:** coverage stays green; every new live row is assigned at creation; RFC, content,
 research and release closeout flows into its register, log, docs, intent proposal, and this rollup;
 measurement records retain inputs, revisions, failures and reproducible commands.
@@ -322,6 +328,14 @@ registry-contained factories, and its threat constructor contradicts the exact n
 the required value-authority migration. These local target facts therefore remain unavailable to
 Support, Review and bots until one complete protocol and call graph survive another review. Receipt:
 `planning/bounded-policy-targets/fourth-fresh-independent-buildability-review-2026-09-04.md`.
+
+The same-day fifth author repair closes those three contract seams without prematurely shipping
+the collector. The imported protocol module is complete and structurally set-equal to the RFC's
+exported names, fields and discriminated arms; one generated package-internal route invoker gives
+the background service an executable path while the central registry remains the factories' sole
+importer; and the threat source uses only the value-authority route's exact factory symbol. The
+local target facts remain held for fresh review and dependency landing. Receipt:
+`planning/bounded-policy-targets/fifth-author-repair-2026-09-04.md`.
 
 The 2026-09-04 fresh phase-source-composition review preserves independent opening/phase/endgame/
 tablebase slots but returns their shared point/arc on [[D2636]]–[[D2642]]. The draft contradicts

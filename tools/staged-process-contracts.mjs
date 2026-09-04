@@ -7,6 +7,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseActiveRfcRows } from "./register-check.mjs";
 
+const GIT_OUTPUT_MAX_BYTES = 64 * 1024 * 1024;
+
 export const PROCESS_CONTRACT_TARGETS = Object.freeze([
   "register-check",
   "status-parity",
@@ -17,7 +19,12 @@ export const PROCESS_CONTRACT_TARGETS = Object.freeze([
 ]);
 
 function git(root, args) {
-  return execFileSync("git", args, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+  return execFileSync("git", args, {
+    cwd: root,
+    encoding: "utf8",
+    maxBuffer: GIT_OUTPUT_MAX_BYTES,
+    stdio: ["ignore", "pipe", "pipe"],
+  });
 }
 
 function gitObject(root, object) {
