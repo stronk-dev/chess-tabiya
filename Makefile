@@ -762,12 +762,15 @@ pack-capability-eleventh-fresh-review:
 pack-capability-twelfth-author-repair: pack-capability-eleventh-author-repair
 	node --test tools/d2587-pack-capability-twelfth-author-repair/contract.test.mjs
 
-.PHONY: shared-resource-bootstrap-seventh-fresh-review shared-resource-bootstrap-seventh-author-repair
+.PHONY: shared-resource-bootstrap-seventh-fresh-review shared-resource-bootstrap-seventh-author-repair shared-resource-bootstrap-eighth-fresh-review
 shared-resource-bootstrap-seventh-fresh-review:
 	node --test tools/d2593-shared-resource-bootstrap-seventh-fresh-review/contract.test.mjs
 
 shared-resource-bootstrap-seventh-author-repair: shared-resource-bootstrap-sixth-author-repair
 	node --test tools/d2593-shared-resource-bootstrap-seventh-author-repair/contract.test.mjs
+
+shared-resource-bootstrap-eighth-fresh-review: shared-resource-bootstrap-seventh-author-repair
+	node --test tools/d2645-shared-resource-bootstrap-eighth-fresh-review/contract.test.mjs
 
 .PHONY: semantic-collectors-promotion-fifth-fresh-review semantic-collectors-promotion-fifth-author-repair semantic-collectors-promotion-sixth-fresh-review semantic-collectors-promotion-sixth-author-repair
 semantic-collectors-promotion-fifth-fresh-review:

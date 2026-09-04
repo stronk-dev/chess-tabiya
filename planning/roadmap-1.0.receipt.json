@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1bf403ea2b08f4d55b33ff5b31526986887a19872b071fd9d59b4b7d5d0b73a7",
+    "roadmap": "sha256:b0d2a3ccc313845d788575ddd3301948a964b0a39c47d08cc986b7902cbdd463",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:4f4ba875a0ace8bc0119699a2c235977d69093dc67be7e713160a1963de43d2c",
-    "rfcRegister": "sha256:3be5cbe5b93088b6c5d90ac119210ed0d0ee4117bf20adfdd7770006ac41bdda",
+    "workState": "sha256:04ffc3b8ce1bd8a4fdfb1c06a0343fa6286a00d187a8beb1c5c8b0c0278bed4a",
+    "rfcRegister": "sha256:4dff5911c1b591efed9e81e6bc135ec16faaaca9beb3da7a31132ada1129a484",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 930,
+      "blocked": 935,
       "done": 821,
       "refused": 3
     },
@@ -112,7 +112,7 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Pack capability, longitudinal history and provider health now have bounded author repairs: evidence jobs use a transaction-owned receipt and restart-stable allocator; personal history has exact denominators, literal admission, sealed replay identity and full invalidation; and ten provider-backed application operations now join one exchange authority with total failure/recovery semantics. All retain earlier gates and await genuinely fresh review; shared-resource, Campaign and presentation contracts remain held.",
+        "summary": "Pack capability, longitudinal history and provider health have bounded author repairs, while the eighth fresh shared-resource review reproduced five deeper blockers: no transitive compiler graph, fabricated program identity over caller source, incomplete alias reach, a non-canonical scalar domain and unrepresentable overload roots. Foundation implementation remains held pending bounded repair and another fresh review.",
         "impact": "held",
         "evidence": [
           "planning/shared-resource-register-bootstrap/seventh-author-repair-2026-09-04.md",

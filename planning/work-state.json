@@ -21173,6 +21173,51 @@
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D2645",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9fc8353b9db2736b35910b0df882781966f15e8d24f8160b4b83324775374591",
+      "uxItems": [],
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2646",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7fc14025c36bfa26fb2fb705999905f56086da01cc78d4383e45683c5ab02192",
+      "uxItems": [],
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2647",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:12707b1efbe145ae990df83cec338f0a69b153e5f9bdd5f262f1c7819fecec90",
+      "uxItems": [],
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2648",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7b305cfa2e65e9dbc7afeaf893893615a4a473ae5c8cab42076f5a59b4809fb9",
+      "uxItems": [],
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2649",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:806fe5e97a84459b28b39e6f92e3541ca4bfdd63638ef4f8044e944d53933078",
+      "uxItems": [],
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
     }
   ]
 }

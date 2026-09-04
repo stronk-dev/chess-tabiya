@@ -1,12 +1,11 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **seventh author repair closes the seventh fresh-review returns
-  [[D2593]]–[[D2597]]; another genuinely fresh independent review is required.** The complete
-  TypeScript graph is constructed from the pinned program rather than accepted from a caller; one
-  parsed selector grammar drives admission and resolution; `Object.freeze` resolves to the global
-  intrinsic; retained declarations follow compiler-symbol reachability; and every projected semantic
-  graph is a recursively immutable canonical copy. `make shared-resource-bootstrap-seventh-author-repair`
-  is positive author evidence only. No implementation is authorized.
+- **Status:** draft — **RETURNED by the eighth fresh independent buildability review on
+  [[D2645]]–[[D2649]].** The seventh repair still projects only selected AST nodes with no edges,
+  accepts arbitrary caller source under fabricated compiler/config identity, stops re-export reach
+  at the alias declaration, admits non-canonical scalars, and cannot resolve overload-set roots.
+  `make shared-resource-bootstrap-eighth-fresh-review` retains nine earlier controls and reproduces
+  all five new blockers. No implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -813,6 +812,26 @@ The seventh author repair closes the five authorities without adding a resource-
 the five inversions. It is positive author evidence only; another genuinely fresh independent
 review still gates acceptance and implementation.
 
+### Eighth fresh independent return (2026-09-04)
+
+The next independent pass executed the author model beyond its named fixtures and returned it on
+[[D2645]]–[[D2649]]. The alleged complete graph contains only explicit selector nodes and no edges;
+its program is arbitrary caller source stamped with fixture compiler/config identity; aliased
+re-exports retain only the alias declaration; recursive sealing accepts fractions, unsafe integers
+and unpaired surrogates outside the canonical domain; and an ordinary overload set cannot resolve
+as a root at all. The singular contract root also lacks a deterministic declaration rule.
+
+The repair owns each obligation separately: [[D2645]] complete transitive graph construction,
+[[D2646]] pinned repository-program identity, [[D2647]] alias/re-export target reach, [[D2648]] exact
+canonical scalar admission and [[D2649]] overload-root identity.
+
+`make shared-resource-bootstrap-eighth-fresh-review` retains the prior 4 + 5 controls and reproduces
+the five new contradictions. Green means the falsifiers fire. A bounded eighth author repair must
+construct a real pinned repository program, traverse its complete declared compiler-symbol graph,
+resolve aliases, enforce the exact scalar domain and define overload-root identity. Another fresh
+review still gates acceptance and every production byte. Receipt:
+`planning/shared-resource-register-bootstrap/eighth-fresh-independent-buildability-review-2026-09-04.md`.
+
 ## Acceptance criteria
 
 1. Catalogue and README register populations are set-equal; no `RESOURCE_NAMES`, `SCHEMA_SLUGS` or
@@ -889,6 +908,12 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-04: returned by eighth fresh independent buildability review on [[D2645]]–[[D2649]].
+  The seventh author model has no transitive graph, uses caller source plus fabricated program
+  identity, stops at re-export aliases, accepts forbidden canonical scalars and rejects overload
+  roots. `make shared-resource-bootstrap-eighth-fresh-review` retains nine prior controls and
+  reproduces 5/5 new blockers; receipt:
+  `planning/shared-resource-register-bootstrap/eighth-fresh-independent-buildability-review-2026-09-04.md`.
 - 2026-09-04: [[D2593]]–[[D2597]] seventh author repair. TypeScript graphs are compiler-constructed
   and fully validated; one parsed selector grammar feeds every adapter; canonical freeze wrappers
   resolve to the global intrinsic; retained declarations follow exact compiler symbols; and every

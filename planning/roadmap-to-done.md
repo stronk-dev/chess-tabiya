@@ -143,6 +143,15 @@ shared-resource-bootstrap-seventh-author-repair` passes the retained 4/4 plus 5/
 Fresh independent review still precedes acceptance and implementation. Receipt:
 `planning/shared-resource-register-bootstrap/seventh-author-repair-2026-09-04.md`.
 
+That review has now run and returned the bootstrap again on [[D2645]]–[[D2649]]. The author model
+still emits selected nodes with no transitive edges, accepts caller source under fabricated
+compiler/config identity, stops at re-export aliases, seals values outside the canonical scalar
+domain and cannot represent overload-set roots. `make
+shared-resource-bootstrap-eighth-fresh-review` retains nine prior controls and reproduces 5/5 new
+blockers. The critical path therefore remains contract repair, not catalogue implementation.
+Receipt:
+`planning/shared-resource-register-bootstrap/eighth-fresh-independent-buildability-review-2026-09-04.md`.
+
 The same-day twelfth `pack-capability-contract` author repair closes [[D2587]]–[[D2592]] at contract
 tier without claiming production. One transaction-owned before/after run result derives the exact
 core/objective/recorded-guard journal suffix and receipt; the complete nested objective request is

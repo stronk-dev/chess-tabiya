@@ -15235,3 +15235,21 @@ behavioral groups plus strict TypeScript. Exact receipt:
 and accepted dependencies still gate production implementation; full-game bosses, catalogue
 progression, durable variety and official human-authored content receive no premature completion
 credit.
+
+## 2026-09-04 — Shared-resource bootstrap eighth fresh independent review
+
+**What landed:** A genuinely fresh contract-tier review of the seventh bootstrap author repair,
+five ledgered findings [[D2645]]–[[D2649]], and the maintained disposable
+`make shared-resource-bootstrap-eighth-fresh-review` falsifier. No production register, catalogue,
+schema, migration, runtime, server, client, content, archive or protected-design byte changed.
+
+**What changed:** the RFC is returned rather than accepted. Its author model has no transitive
+TypeScript graph, certifies arbitrary caller source under fabricated compiler/config identity,
+stops re-export reach at the alias, accepts scalars outside the canonical byte domain and cannot
+resolve ordinary overload roots.
+
+**Evidence/next:** the maintained target retains the earlier 4 + 5 controls and reproduces all five
+new blockers. Exact receipt:
+`planning/shared-resource-register-bootstrap/eighth-fresh-independent-buildability-review-2026-09-04.md`.
+A bounded repository-program/graph/scalar/overload author repair and another fresh independent
+review still gate acceptance and every production implementation.
