@@ -14708,3 +14708,20 @@ filter arrays have no parser or deterministic empty/duplicate/unknown/contradict
 per-cut status, shared file database, canonical digest constructor and built lifecycle survive. A
 bounded sixth author repair must close source-mutation scheduling, exact read rows, revision-1
 import truth and filter parsing, followed by another fresh independent review before implementation.
+
+## 2026-09-04 — Longitudinal-store sixth repair closes the typed source/snapshot authority
+
+**What landed:** [[D2570]]–[[D2574]] are repaired at author tier. A complete source-mutation census
+joins the seven run writers to collaboration, owner/deletion and startup classification paths. A
+monotone durable structure disposition distinguishes new private, shared and unknowable legacy
+history. Three exact parsed row families and one branded query parser now form the consumer edge.
+
+**What changed:** same-head collaboration changes invalidate a completed job rather than leaving an
+old digest labelled current. Revocation and absent journals cannot upgrade uncertain structure
+history. Revision-1 imported mainlines test only `game`/observed-only truth; D2 retains its future
+subject schema. Empty, duplicate, unknown and contradictory filters now fail instead of receiving
+implementation-defined meanings.
+
+**Evidence/next:** `make longitudinal-store-sixth-author-repair` retains 36 earlier author arms and
+passes seven new controls plus strict TypeScript. Another genuinely fresh independent review still
+gates acceptance and all migration/worker/reader/consumer implementation.

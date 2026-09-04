@@ -1,13 +1,12 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **RETURNED by the fifth fresh independent review 2026-09-04 on [[D2570]],
-  [[D2571]], [[D2572]] and [[D2573]].** The fifth repair's per-cut result, shared file database,
-  canonical digest constructor and real application lifecycle survive, but source-changing
-  collaboration mutations lie outside the seven scheduled writers; the sole consumer API exposes
-  undefined row placeholders; one live acceptance criterion depends on the explicitly future
-  import-subject migration; and filter inputs have no closed parser/semantics. `make
-  longitudinal-store-fifth-fresh-review` reproduces 4/4. No migration, worker, reader or consumer
-  implementation is authorized before an author repair and another fresh review. The
+- **Status:** draft — **sixth author repair complete 2026-09-04 on [[D2570]]–[[D2574]]; another
+  genuinely fresh independent review is required.** Source mutation is closed over collaboration
+  state with monotone legacy/shared attribution; the sole consumer API now has exact parsed row
+  types; revision-1 imports test observed-only truth without inventing D2 fields; and one branded
+  parser closes the filter language. `make longitudinal-store-sixth-author-repair` retains the
+  prior 36 author arms and passes 7 new falsifiers plus strict TypeScript. No migration, worker,
+  reader or consumer implementation is authorized before another fresh review. The
   2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
   returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
@@ -43,7 +42,7 @@
 - **Planning:** `planning/longitudinal-store/` (once implementing)
 
 ```tabiya-claims
-migration | position behind learner-rating | drill_runs.longitudinal_profile_disposition; learner_observation_denominators; learner_observations; learner_structure_stats; learner_observation_jobs
+migration | position behind learner-rating | drill_runs.longitudinal_profile_disposition; drill_runs.longitudinal_structure_attribution; learner_observation_denominators; learner_observations; learner_structure_stats; learner_observation_jobs
 ```
 
 ## Summary
@@ -183,12 +182,17 @@ durable run owner, per-commit session/match authorship, and the imported record'
    collection and floating-point accumulation follow that same ascending event order.
 
 Structure projection is equally closed and is **single-player only at derivation revision 1**.
-When the durable run/session authority says a run is shared, live, classroom-controlled or has
-more than one possible writer, `projectObservations` emits no `learner_structure_stats` rows. The
-current rewind/fork/group/outcome events do not carry durable actor identity, so attributing any of
-them to the run owner would manufacture learner behaviour. A later event revision may admit shared
-structure only after every counted event carries an actor and the projector applies the same
-owner-authorship rule as decisions. For an attributable single-player run, a branch resolves its
+Its sole authority is the durable, monotone `drill_runs.longitudinal_structure_attribution` value.
+Every new private run is inserted explicitly as `single_player`. Creating any live/classroom/match
+session or granting any non-owner a write-capable role changes it to `unattributable_shared` before
+that collaboration can write; revocation or session close never changes it back. Pre-migration runs
+default to `unattributable_legacy`, because current grants and the absence of a session journal
+cannot prove a write grant was never issued and later revoked ([[D2574]]). Both unattributable arms
+emit no `learner_structure_stats` rows. The current rewind/fork/group/outcome events do not carry
+durable actor identity, so attributing any of them to the run owner would manufacture learner
+behaviour. A later event revision may admit shared or legacy structure only after every counted
+event carries an actor and the projector applies the same owner-authorship rule as decisions. For
+an attributable single-player run, a branch resolves its
 root through `branch.forkNodeId`;
 the row key is `rootKey(run.sessionKind, run.packId, root.transposeKey)`. `branch_count` is the
 number of distinct run branches resolving to that key. Event counters map through exactly these
@@ -210,6 +214,10 @@ are normalized so a late first opportunity cannot lose earlier decisions ([[D161
 ALTER TABLE drill_runs ADD COLUMN longitudinal_profile_disposition TEXT NOT NULL
   DEFAULT 'profileable'
   CHECK (longitudinal_profile_disposition IN ('profileable','account_deleted'));
+ALTER TABLE drill_runs ADD COLUMN longitudinal_structure_attribution TEXT NOT NULL
+  DEFAULT 'unattributable_legacy'
+  CHECK (longitudinal_structure_attribution IN
+    ('single_player','unattributable_shared','unattributable_legacy'));
 CREATE UNIQUE INDEX drill_runs_longitudinal_owner
   ON drill_runs(id, owner_learner_id);
 
@@ -346,8 +354,9 @@ cross-learner direct insert, owner reassignment and stale old-owner publisher al
 The two JSON ref columns contain schema-validated, canonically sorted `DecisionRef[]` from §B.
 `observed_at` is always the immutable `run.started.at`; `updated_at` exists only on the job and is
 never an observation/window timestamp. All four private classes join account export/deletion
-coverage. The additive run disposition is not private profile data; it is the durable rebuild
-suppression that makes deletion final ([[D2065]]). In the same account-deletion transaction, every
+coverage. The two additive run dispositions are not private profile data: one is the durable rebuild
+suppression that makes deletion final, and one prevents uncertain collaboration history from
+becoming learner behavior ([[D2065]]/[[D2574]]). In the same account-deletion transaction, every
 retained shared run owned by the departing learner changes to `account_deleted` before owner
 reassignment to `__legacy`, and the four private classes cascade/delete.
 `longitudinal-rebuild` selects only `longitudinal_profile_disposition='profileable'`; it never
@@ -358,17 +367,18 @@ zero observations, denominators, structure rows and jobs for both the deleted le
 
 Every persisted run mutation upserts only this cheap job watermark plus
 `requested_source_digest` in the **same transaction as the run bytes**; it does not enumerate legal
-alternatives. One exported server operation, `longitudinalSourceImageV1`, constructs the complete
+alternatives. One exported server operation, `longitudinalSourceImageV2`, constructs the complete
 source authority after locking the run and its attribution records. Its exact image is:
 
 ```ts
-interface LongitudinalSourceImageV1 {
-  readonly version: 1;
+interface LongitudinalSourceImageV2 {
+  readonly version: 2;
   readonly runPrefix: DrillRun; // readBackReplay(events where seq <= requestedSeq).run
   readonly ownerLearnerId: string;
   readonly moveAuthorship: readonly MoveAuthorship[]; // eventSeq then nodeId; only prefix commits
   readonly importedMainlinePlies: number | null;
-  readonly structureAttribution: "single_player" | "unattributable_shared";
+  readonly structureAttribution:
+    | "single_player" | "unattributable_shared" | "unattributable_legacy";
 }
 ```
 
@@ -380,23 +390,29 @@ irrelevant later journal entries or pause state do not churn the digest, while a
 alters owner authorship, imported-mainline membership or shared-structure eligibility changes the
 image. Raw journal/match rows are never hashed as an alternative authority.
 
-`longitudinalSourceDigestV1` is the sole digest constructor. It encodes the literal UTF-8 domain
-prefix `tabiya.longitudinal-source.v1\0`, followed immediately by the RFC-8785 bytes from the shipped
-`canonicalizeJson(image)`, then returns lower-case `sha256:<64 hex>`. The seven write operations,
-startup reconciliation, worker exact-prefix read and rebuild call that same constructor; no caller
-may supply a precomputed string. Equivalent object insertion order hashes identically; changing
-any image field changes the digest; job state, clock and claim fields cannot enter it. It is not a
-digest of mutable job state.
+`longitudinalSourceDigestV2` is the sole digest constructor. It encodes the literal UTF-8 domain
+prefix `tabiya.longitudinal-source.v2\0`, followed immediately by the RFC-8785 bytes from the shipped
+`canonicalizeJson(image)`, then returns lower-case `sha256:<64 hex>`. The seven run writers, the two
+collaboration source mutations, startup reconciliation, worker exact-prefix read and rebuild call
+that same constructor; no caller may supply a precomputed string. Equivalent object insertion order
+hashes identically; changing any image field changes the digest; job state, clock and claim fields
+cannot enter it. It is not a digest of mutable job state.
 An increased event head or changed source digest atomically moves any non-pending job to `pending`,
 clears its claim/failure schedule and increments `claim_generation`; byte-identical saves do not.
 An in-flight claim over the prior digest is invalid immediately rather than occupying its lease.
-The
-owned production closure is exactly
-`create`, `createRatedRun`, `createImportedRun`, `createDerivedRun`,
-`createRepertoireGapRun`, `save`, and `saveArenaImport`. One private transaction primitive or a
-checked set-equal registry must be called by all seven; a later `RunService.#project` call cannot
+The run-snapshot production closure remains exactly `create`, `createRatedRun`,
+`createImportedRun`, `createDerivedRun`, `createRepertoireGapRun`, `save`, and `saveArenaImport`.
+The complete **source-mutation** closure additionally includes `createLiveSession` and
+write-capable `grantRole`; `deleteOwnedRun`/`deleteLearner` own suppression/owner change, and startup
+owns `unattributable_legacy` classification. A checked operation registry distinguishes mutations
+that always change an operand from conditional ones. `createLiveSession` atomically writes
+`unattributable_shared` and refreshes the same-head source digest/job. `grantRole` does so exactly
+when a non-owner first receives `host` or `participant`; revocation cannot untaint it. Match-seat
+redemption and `claimLease` occur only after the live/grant transaction has already tainted the run
+and do not alter existing-prefix resolved authorship. One private transaction primitive or checked
+set-equal registry is called by every admitted operation; a later `RunService.#project` call cannot
 satisfy atomic scheduling. Migration-only snapshot rewrites explicitly enqueue rebuilds
-([[D1616]]).
+([[D1616]]/[[D2570]]).
 
 A worker claims bounded batches using one atomic transition from `pending`, an eligible
 `retry_wait`, or an expired `running` row. `quarantined` is never claimable. Claim increments
@@ -499,6 +515,24 @@ interface LongitudinalReadQuery {
     packIds?: readonly string[];
   };
 }
+interface LongitudinalDenominatorRow {
+  learnerId: string; runId: string; phase: DetectedPhase;
+  decisionClass: "played" | "game" | "predicted";
+  decisions: number; observedAt: string; derivedRev: number;
+}
+interface LongitudinalObservationRow extends LongitudinalDenominatorRow {
+  projectionId: string; projectionVersion: number;
+  semanticSign: SemanticEventSign; sourceSign: SemanticEventSign;
+  sessionKind: "pack" | "position" | "imported"; packId: string | null;
+  opportunities: number; occurred: number; alternativeShareSum: number;
+  occurredRefs: readonly DecisionRef[]; opportunityRefs: readonly DecisionRef[];
+}
+interface LongitudinalStructureStatRow {
+  learnerId: string; runId: string; rootKey: string; rootNodeId: string;
+  sessionKind: "pack" | "position" | "imported"; packId: string | null;
+  branchCount: number; rewoundCount: number; forkedCount: number;
+  groupCount: number; outcomeCount: number; observedAt: string; derivedRev: number;
+}
 type LongitudinalCompleteCut = {
   kind: "complete"; runId: string; requestedSeq: number;
   completedSeq: number; derivedRev: number;
@@ -515,14 +549,30 @@ type LongitudinalCutOutcome =
         | "cut_superseded" };
 type LongitudinalReadResult =
   | { kind: "complete"; cuts: readonly LongitudinalCompleteCut[];
-      denominators: readonly DenominatorRow[];
-      observations: readonly ObservationRow[];
-      structureStats: readonly StructureStatRow[] }
+      denominators: readonly LongitudinalDenominatorRow[];
+      observations: readonly LongitudinalObservationRow[];
+      structureStats: readonly LongitudinalStructureStatRow[] }
   | { kind: "incomplete"; cuts: readonly LongitudinalCutOutcome[] };
 readLongitudinalSnapshot(
-  actorLearnerId: string, query: LongitudinalReadQuery
+  actorLearnerId: string, query: ParsedLongitudinalReadQuery
 ): LongitudinalReadResult;
 ```
+
+`parseLongitudinalReadQuery(unknown)` is the only constructor of the brand-sealed
+`ParsedLongitudinalReadQuery`. Root, `through`, cut, filter and projection objects reject extra or
+missing keys. Omitted filter members mean all; a present array must be non-empty and duplicate-free.
+Projection/version/sign tuples must match the literal ingest registry. `packIds` with an explicit
+`sessionKinds` that excludes `pack` is contradictory and fails. All accepted arrays and cuts are
+returned in bytewise stable order; unknown enum/projection/sign values fail rather than reading an
+honest-looking empty history ([[D2573]]).
+
+The SQL adapter constructs the three public camel-case row families above only through
+`parseLongitudinalDenominatorRow`, `parseLongitudinalObservationRow` and
+`parseLongitudinalStructureStatRow`. They reject extra keys, invalid enum/registry pairs, non-finite
+or crossed counts, invalid pack provenance, non-canonical instants and malformed/unsorted/duplicate
+refs. Observation ref cardinality equals its count columns and occurred refs are a subset of
+opportunity refs. The parsed arrays are immutable. Raw SQL rows, raw JSON strings and an `unknown[]`
+projection are not members of the consumer contract ([[D2571]]).
 
 The storage method requires `actorLearnerId === query.learnerId`; delegated/classroom access needs
 its own later operation and cannot reuse this one. The transaction first fixes one outcome per
@@ -846,13 +896,40 @@ complete storage and collaboration lifecycle returns four further seams; exact e
 implementation is authorized until a bounded sixth author repair inverts them and another
 genuinely fresh review passes.
 
+## Sixth author repair (2026-09-04; pending fresh independent review)
+
+The fifth return is repaired as one typed source/snapshot authority:
+
+- [[D2570]]: a second set-equal operation registry covers every persisted operand mutation, not
+  only the seven snapshot writers. Live-session creation and a non-owner write-capable grant taint
+  structure attribution and invalidate the same-head job atomically; owner/deletion and startup
+  paths retain their existing suppression/reconciliation responsibilities.
+- [[D2574]]: `drill_runs.longitudinal_structure_attribution` is monotone. New private runs enter
+  `single_player`; collaboration enters `unattributable_shared`; pre-migration history is
+  `unattributable_legacy`. Neither absence can be upgraded into learner behavior by revocation or
+  by the absence of a journal.
+- [[D2571]]: the three public row families are exact camel-case immutable types constructed through
+  closed parsers. Registry/sign, count/share, pack provenance, instant and typed-ref invariants are
+  enforced before any consumer receives a row; `unknown[]` is removed from the superseding model.
+- [[D2572]]: revision 1 tests only the state it owns: imported mainline decisions are `game` and
+  observed-only. The three future subject declarations and their personal-play admission fixture
+  remain wholly with Discharge D2.
+- [[D2573]]: one branded query parser makes omission mean all, rejects present-empty and duplicate
+  arrays, validates projection/sign tuples, rejects contradictory pack/session filters and returns
+  bytewise-stable cuts/filters.
+
+`make longitudinal-store-sixth-author-repair` retains the 24 + 8 + 4 earlier author arms, adds
+seven able-to-fail runtime controls and runs strict TypeScript. This is author evidence only;
+another genuinely fresh independent review still gates acceptance and production implementation.
+
 ### F. Acceptance criteria
 
 These are the only live acceptance criteria; the historical AC list below is non-normative.
 
 1. **Additive migration.** Reflection shows exactly the four folded tables, six named indexes and
-   one `drill_runs.longitudinal_profile_disposition` column were added; no pre-existing row changes.
-   Any other pre-existing schema mutation makes the fixture red.
+   the two `drill_runs` disposition columns were added. New runs explicitly enter
+   `single_player`; pre-migration runs read `unattributable_legacy` without a manufactured
+   backfill. Any other pre-existing schema mutation makes the fixture red.
 2. **Literal registry closure ([[D1612]]/[[D2063]]).** The 67-row and sign-subset artifacts are
    set-equal and row-equal to the runtime registry at their pinned digests: 46 edge, 13 population,
    8 deferred path. Missing, duplicate, ghost, impossible sign, count-preserving wrong-base and
@@ -868,11 +945,14 @@ These are the only live acceptance criteria; the historical AC list below is non
 5. **Owner attribution.** Owner, grant-holder and seated-opponent moves separate from durable
    records. A shared-run prediction with no actor produces no row; the same event in a non-shared
    run does. The identical fork/rewind/group/outcome history emits structure rows only in the
-   provably single-player arm; the shared/unattributable arm emits none.
-6. **Cheap complete write closure ([[D1616]]).** Each of the seven real production storage methods
+   explicitly new `single_player` arm; monotone shared and legacy-unattributable arms emit none.
+6. **Cheap complete write closure ([[D1616]]/[[D2570]]).** Each of the seven real production storage methods
    commits run bytes and the job watermark together and rolls both back together. Omitting any
-   operation fails a set-equality census. No semantic constructor or legal enumerator is reachable
-   before the response.
+   operation fails a set-equality census. The separate source-mutation census also covers
+   `createLiveSession`, a non-owner write-capable `grantRole`, account/owner suppression and startup
+   legacy classification. A same-head private→shared transition changes the digest and invalidates
+   a complete job in the same transaction; revocation cannot untaint it. No semantic constructor or
+   legal enumerator is reachable before the response.
 7. **Exclusive/recoverable claim ([[D1613]]/[[D2229]]).** Two simultaneous claimers yield one claim; expiry
    increments generation and permits reclaim; the old token cannot fail/publish; crash-before-
    publish recovers, crash-after-publish observes atomic state, retryable failure backs off, and an
@@ -890,10 +970,13 @@ These are the only live acceptance criteria; the historical AC list below is non
 9. **Family-independent denominators ([[D1614]]).** A family first appearing on decision 2 reads
    decisions=2; a later decision with no opportunity advances it to 3; phase and class remain
    independent; retrying one interval is idempotent; incremental output equals full-prefix rebuild.
-10. **Observed import boundary ([[D1617]]).** The same PGN imported as
-    `learner_asserted`, `observed_other` and legacy `unknown` enters personal-play aggregates only
-    in the first arm with non-empty asserted identity. Revision-1 source-mainline rows remain
-    observed-only until Discharge D2 lands.
+10. **Observed import boundary ([[D1617]]/[[D2572]]).** At revision 1, imported source-mainline
+    decisions always persist as `decision_class='game'` and are returned only through an explicit
+    `game` filter; the identical bytes never enter `played`, skill/style/credit or any other
+    personal-play path. No revision-1 type, table, fixture or consumer invents the future
+    `learner_asserted | observed_other | unknown` fields. Discharge D2 owns that three-way schema,
+    migration and its admission fixture before any personal-play consumer can admit source-game
+    rows.
 11. **Authoritative equality.** Count tamper, typed-ref-element tamper and missing-run rows each make
     `longitudinal-rebuild` name the exact run/row; repair restores equality.
 12. **Revision pair.** Fixture-output and registry-artifact digests are paired with
@@ -909,7 +992,10 @@ These are the only live acceptance criteria; the historical AC list below is non
     exact id as `not_requested`. `runs` queries accept only the job's exact current requested cut;
     N-complete → M-pending → M-complete returns `cut_superseded` for N throughout and never serves M
     rows under N. Distinct failure codes/attempt counts, retry deadlines and unavailable causes
-    remain attached to their own runs rather than collapsing into one top-level scalar.
+    remain attached to their own runs rather than collapsing into one top-level scalar. The three
+    exact parsed row families contain no `unknown`; JSON/process forges, count/ref mismatches and
+    invalid registry pairs fail. The branded query parser rejects empty/duplicate/unknown or
+    contradictory filters and produces stable bytewise ordering.
 14. **Boundaries/privacy ([[D2065]]).** No learner renderer, rating, classroom, cohort, provider or
     LLM module reaches the store at landing. All four durable classes cascade on learner/run
     deletion and join export/deletion inventories. Delete → retained shared run → rebuild leaves
@@ -950,9 +1036,11 @@ These are the only live acceptance criteria; the historical AC list below is non
 22. **Upgrade population ([[D2231]]).** An old database containing untouched native, imported and
     active shared runs produces exact jobs/cuts and a receipt. Rerun and rollback/restart are
     idempotent; suppressed/empty runs remain absent; no semantic adapter runs during reconciliation.
-23. **Run-owner provenance ([[D2232]]).** Two valid learners/runs reject every crossed child row;
+23. **Run-owner provenance ([[D2232]]/[[D2574]]).** Two valid learners/runs reject every crossed child row;
     a shared non-owner writer cannot choose the learner; owner update is restricted until old rows
-    are removed; and an old-owner claim cannot renew or publish after reassignment.
+    are removed; and an old-owner claim cannot renew or publish after reassignment. A pre-migration
+    journal-less run and a new private run remain distinguishable; only the latter may emit
+    structure rows.
 24. **Revision replacement ([[D2402]]).** Complete, running, retry-wait and quarantined jobs each
     cross the one atomic old-revision-row deletion/current-head pending reset. Crash before commit
     leaves the old revision readable; crash after commit leaves no old rows and one pending current
@@ -969,17 +1057,23 @@ These are the only live acceptance criteria; the historical AC list below is non
     file path and observe the same committed job. Required-worker `:memory:` and path disagreement
     fail before readiness. The explicit in-memory test helper has no worker and reports
     `disabled_test`; `main.ts` cannot import or construct it.
-28. **Source digest authority ([[D2516]]).** One exported constructor domain-separates and hashes
+28. **Source digest authority ([[D2516]]/[[D2570]]).** One exported v2 constructor domain-separates and hashes
     RFC-8785 bytes for the exact replayed prefix plus resolved owner/authorship/import/structure
-    inputs. Object insertion order is invariant; every consumed input mutation changes the digest;
-    journal/pause rows outside the resolved prefix and every job/clock/claim mutation do not. All
-    seven writers, reconciliation, worker and rebuild are set-equal callers of that symbol.
+    inputs, including the three-member durable structure disposition. Object insertion order is
+    invariant; every consumed input mutation changes the digest; journal/pause rows outside the
+    resolved prefix and every job/clock/claim mutation do not. All run writers, source-changing
+    collaboration operations, reconciliation, worker and rebuild are set-equal callers.
 29. **Built lifecycle ([[D2517]]).** `createApplication` reconciles and awaits worker-ready before
     `main.ts` listens; unexpected exit makes the closed `/healthz` body/status degraded; `close()`
     drains before closing either SQLite connection. The server build and image contain
     `dist/longitudinal-worker-thread.js`; a built-dist and container smoke reach ready against a
     temporary file DB. Missing artifact, wrong DB path, unconditional health or source-only worker
     execution each makes the gate red.
+30. **Five-return author falsifier ([[D2570]]–[[D2574]]).** `make
+    longitudinal-store-sixth-author-repair` retains the prior 36 author arms and crosses same-head
+    collaboration invalidation, monotone shared/legacy attribution, exact parsed row families,
+    revision-1 observed-only imports and the branded filter parser. Every negative mutates a
+    passing positive and strict TypeScript refuses an unparsed query.
 
 ## Motivation
 
@@ -1710,6 +1804,12 @@ head after that renumbering and **not yet written**:
   consumer read has undefined row types; criterion 10 depends on its own future D2 migration; and
   filter inputs have no parser or deterministic empty/duplicate/unknown semantics. Exact review:
   `planning/longitudinal-store/fifth-fresh-independent-buildability-review-2026-09-04.md`.
+- 2026-09-04: sixth author repair completed [[D2570]]–[[D2574]]. A monotone persisted structure
+  disposition and complete source-mutation census close same-head collaboration invalidation;
+  exact parsed row families replace `unknown[]`; revision-1 imports test observed-only truth; and a
+  branded parser closes filter semantics. `make longitudinal-store-sixth-author-repair` retains 36
+  prior author arms and passes seven new controls plus strict TypeScript. Fresh review still gates
+  acceptance and implementation.
 - 2026-08-22: adversarial cross-review (claude, independent of the author). Blockers
   fixed in place: (1) `decision_class ∈ {played, game, predicted}` added to the
   observation key with owner-only attribution derived from the durable session

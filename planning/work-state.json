@@ -20501,35 +20501,48 @@
     },
     {
       "id": "D2570",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:cdcfe20185bcb873c46c5fdcbe9c1cdce78eaffdbef53552fd7d9bfb6e773df0",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d36e9909e6121478e9084593ea79689444fd029fd6bdbfab6e0557bf3805e7ef",
       "uxItems": [],
-      "owner": "learner-history"
+      "evidence": "planning/longitudinal-store/sixth-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2571",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f807740da8fea0865149caa7cfaa4c5a8f6c4799fa89e3d88565cb50ceabdbcf",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c0eba5caa9ffe7ae1fd9d3b5deea3be602fc4bee950aa1a83686541d67760e35",
       "uxItems": [],
-      "owner": "learner-history"
+      "evidence": "planning/longitudinal-store/sixth-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2572",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:289eb2df19d7bb562ebea973efd01a6282c502eea5abc817e1afc0eb0f2a3f58",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d8e0506b06a2ea847953c4af031d5f8d5b03468211c29c9966c8e102c5ae54a2",
       "uxItems": [],
-      "owner": "learner-history"
+      "evidence": "planning/longitudinal-store/sixth-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2573",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:6f1fc500c3abf897c53655681903401d96f2270bdbf3ee13139c77f04079997a",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e963dd7fe3ce19ec89ff9634bd6cbe8f293cd213b5f13ea257c00cfdcd555d9d",
       "uxItems": [],
-      "owner": "learner-history"
+      "evidence": "planning/longitudinal-store/sixth-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2574",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cd50c2203e22de241d34232331cc28f4fb2d5e5d1625d3dc853c0908c0d8d2d3",
+      "uxItems": [],
+      "evidence": "planning/longitudinal-store/sixth-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     }
   ]
 }
