@@ -103,7 +103,7 @@
     {
       "id": "review_evidence_packet@1",
       "authority": "review-evidence-compiler",
-      "input": null,
+      "input": "ReviewEvidenceInput",
       "result": "ReviewEvidencePacket",
       "operation": {
         "owner": "rfc/review-evidence-compiler.md",
@@ -125,10 +125,13 @@
         "current_root",
         "hypothetical_candidate"
       ],
-      "assertion": null,
+      "assertion": {
+        "callable": "assertReviewEvidencePacket(value)",
+        "appliesTo": "ReviewEvidencePacket"
+      },
       "itemAssertion": "assertDeclaredEvidence(value)",
-      "abstain": "ReviewFamilyState",
-      "seal": "DeclaredEvidence items plus packetDigest; the RFC declares neither a callable input type nor aggregate runtime seal",
+      "abstain": "ReviewNodeFamilyState",
+      "seal": "createReviewEvidencePacket private aggregate authority over one ReviewRecordedPrefixReceipt and registry-derived sealed source inputs",
       "subjectKinds": [
         "edge",
         "branch_pair",
@@ -139,8 +142,8 @@
         "review",
         "analysis"
       ],
-      "blocker": "review-evidence-compiler must publish its callable input and aggregate assertion or exact module adapter before resolution",
-      "status": "blocked_upstream_incomplete_callable_abi"
+      "blocker": "review-evidence-compiler awaits fresh independent buildability review and implementation",
+      "status": "blocked_upstream_rfc_review"
     },
     {
       "id": "catalogue_evidence_packet@1",

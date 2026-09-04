@@ -15069,3 +15069,24 @@ the missing-object branch and falsely reported as “log deleted.”
 **Evidence/next:** `make staged-process-contracts-test` passes 8/8, including the new large-log
 case. The full repository gate must be rerun after this tool change before the interrupted bounded-
 target checkpoint can commit.
+
+## 2026-09-04 — Review evidence compiler second author repair
+
+**What landed:** The bounded contract-tier repair for [[D2631]]–[[D2635]], the exact
+`review_evidence_packet@1` module input/assertion update and the maintained
+`make review-evidence-second-author-repair` target. No production runtime, server, provider, API,
+schema, storage, content, UX, archive or protected-design byte changed.
+
+**What changed:** one compiler-derived recorded-prefix receipt owns head, path, learner side and
+outcome; a registry-derived invocation plan admits only exact sealed source results; one aggregate
+packet constructor/assertion owns the trust boundary; node states fold totally into independent
+progress and degradation; Story, title and public share terminate through the existing sealed
+presentation receipt rather than raw sentences; and a fixed-capacity attempt store reserves an
+identity before provider work and survives branch-coordinator LRU without forgetting exhaustion.
+The behavioral model caught and corrected an initial post-call capacity check before this entry.
+
+**Evidence/next:** `make review-evidence-second-author-repair` passes the retained 6/6 author
+controls and 5/5 new repair arms. Exact receipt:
+`planning/evidence-foundation-ux/review-evidence-compiler-second-author-repair-2026-09-04.md`.
+Another genuinely fresh independent review plus the recorded-path and evidence-presentation
+dependencies still gate implementation; Review and public-share product credit remain unchanged.

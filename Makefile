@@ -645,6 +645,10 @@ review-evidence-author-contract:
 review-evidence-fresh-review: review-evidence-author-contract
 	node --test tools/d2631-review-evidence-fresh-review/contract.test.mjs
 
+.PHONY: review-evidence-second-author-repair
+review-evidence-second-author-repair: review-evidence-author-contract
+	node --test tools/d2631-review-evidence-second-author-repair/contract.test.mjs
+
 bot-policy-independent-review:
 	node --test tools/d1970-bot-policy-independent-review/*.test.mts
 

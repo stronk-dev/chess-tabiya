@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:d0d1d6558b11f2342483895d21f51a6278a99999469d74002cf5807e2b11b63a",
+    "roadmap": "sha256:8b7af023d5c84d5e246ecbbf9613ab30e4c63acf2b79947106061aff099296b6",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:62decf2d27aaccc49a9300b4cd5a0d0a945ffa263f02ff346fe18c9a0a871456",
-    "rfcRegister": "sha256:c96f7ad1686a9fe06ba1f8813f2832b838c75d2527e11a4777df50aebdff9750",
+    "workState": "sha256:5118561169adbfacfb74a9b3aa82c262cdafa348dcf5d9ec72eee0ff55a77448",
+    "rfcRegister": "sha256:4120c1781f18cfd7ce9aa3f24f2216ebfdd4234cd1bfd6d5214924dbdee591b3",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -186,9 +186,11 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Deflection check authority is live, while fresh reviews hold the promotion pair and bounded-target layer. The shared candidate packet has a bounded seventh author repair, and bounded targets now have a fifth author repair: their complete public protocol is structurally checked, one central typed route invoker makes factory execution reachable without widening mint authority, and the threat source uses the exact registered factory. Both still await genuinely fresh review and dependency landing. The evidence spine remains 12/14; recorded paths, provider/value authority and all module emissions remain unbuilt or held.",
+        "summary": "Deflection check authority is live, while fresh reviews hold the promotion pair and bounded-target layer. Shared candidate and bounded-target contracts have bounded author repairs. Review evidence now also has a second author repair: one recorded-prefix subject, registry-derived source plan and aggregate seal feed a total availability fold and sealed presentation receipts, while bounded pre-reserved attempt history survives branch churn. All three await genuinely fresh review and dependency landing. The evidence spine remains 12/14; recorded paths, provider/value authority and all module emissions remain unbuilt or held.",
         "impact": "held",
         "evidence": [
+          "planning/evidence-foundation-ux/review-evidence-compiler-second-author-repair-2026-09-04.md",
+          "rfc/review-evidence-compiler.md",
           "planning/bounded-policy-targets/fifth-author-repair-2026-09-04.md",
           "planning/evidence-foundation-ux/shared-candidate-packet-seventh-author-repair-2026-09-04.md",
           "planning/bounded-policy-targets/fourth-fresh-independent-buildability-review-2026-09-04.md",

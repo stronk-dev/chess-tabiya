@@ -1,13 +1,11 @@
 # RFC: Review evidence compiler
 
-- **Status:** draft — **RETURNED by fresh independent review 2026-09-04 on
-  [[D2631]]–[[D2635]].** The 2026-08-28 WDL/proof/learner-perspective repairs survive, but the
-  compiler still has no callable input or aggregate assertion; completion cannot represent mixed
-  progress plus degradation; its raw sentence receipt bypasses the sealed presentation contract;
-  packet and story context share no authorized prefix authority; and retry-exhaustion truth has no
-  bounded owner across coordinator eviction. `make review-evidence-fresh-review` retains the six
-  author checks and reproduces 5/5 returns. No implementation is authorised before repair and
-  another fresh review.
+- **Status:** draft — second author repair 2026-09-04 for [[D2631]]–[[D2635]]; awaits another
+  fresh independent buildability review. The callable input/aggregate seal, orthogonal
+  progress/degradation fold, sealed presentation termination, recorded-prefix subject authority
+  and bounded non-evicting attempt-history owner are now specified and exercised by
+  `make review-evidence-second-author-repair`. No implementation is authorised before the fresh
+  review.
 - **Author:** codex, on the D717 evidence-foundation routing and the completed Wave-C C4 research
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` Review/Analyze surfaces;
@@ -15,13 +13,16 @@
 - **Exploration gate:** complete in `design/research/basic-semantic-tactics-stage-0.md` §§12, 15
   and `tools/d872-semantic-tactics-harness/` C4; the fixed population contains 658 transitions
   across eight imported games
-- **Depends on:** implemented F1 evidence manifest; accepted and implemented
+- **Depends on:** implemented F1 evidence manifest; draft
   `rfc/provider-exchange-and-execution.md` including [[D1969]]'s WDL-bearing
-  `live.stockfish.position_eval@1`; accepted and implemented `rfc/recorded-semantic-path.md` for
+  `live.stockfish.position_eval@1`; draft `rfc/recorded-semantic-path.md` for
   `run.record.edge@1`; the implemented `rules.tactic.consequence.forced_mate_after_move@1` plus the
   v2 exact-occurrence projection specified here; the D921 learner-module/Wave-C amendment for
-  literal Review input eligibility before acceptance; `rfc/shared-candidate-evidence-packet.md`
-  §8.3 for the one position-evaluation authority
+  literal Review input eligibility before acceptance; draft `rfc/shared-candidate-evidence-packet.md`
+  §8.3 for the one position-evaluation authority; and draft `rfc/evidence-presentation.md`
+  checkpoint A for `PresentedEvidenceItem`, `PresentationReceipt`, its serializers/parsers and
+  exact component ownership. This RFC cannot be accepted or implemented before those draft
+  contracts are accepted and their named operations land
 - **Parent / amends:** replaces Story's untyped engine scalar and supplies
   `rfc/semantic-collectors.md` Discharge D2; it does not choose the final Review Map module policy
 - **Supersedes / superseded by:** —
@@ -270,35 +271,96 @@ type ReviewSourceFamily =
   | "engine_eval" | "engine_wdl" | "tablebase" | "semantic"
   | "opening" | "human_model" | "human_corpus" | "authored" | "recorded";
 
-type ReviewFamilyState =
+type ReviewNodeFamilyState =
   | { readonly kind: "available"; readonly itemCount: number }
   | { readonly kind: "honest_empty"; readonly reason: "no_observation" | "outside_domain" }
   | { readonly kind: "not_requested" }
-  | { readonly kind: "not_yet_scheduled"; readonly remainingNodeCount: number }
+  | { readonly kind: "not_yet_scheduled" }
   | { readonly kind: "pending"; readonly jobCount: number; readonly retrying: number }
   | { readonly kind: "unavailable"; readonly reason:
       "provider_off" | "provider_failed" | "retry_exhausted" |
-      "legacy_provenance_missing" | "input_abstained" };
+      "legacy_provenance_missing" | "input_abstained" |
+      "attempt_history_capacity" };
+
+interface ReviewRunFamilyState {
+  readonly nodeCount: number;
+  readonly availableNodeCount: number;
+  readonly itemCount: number;
+  readonly honestEmptyNodeCount: number;
+  readonly notRequestedNodeCount: number;
+  readonly progress: {
+    readonly notYetScheduledNodeCount: number;
+    readonly pendingNodeCount: number;
+    readonly pendingJobCount: number;
+    readonly retryingJobCount: number;
+  };
+  readonly unavailable: readonly {
+    readonly reason: Extract<ReviewNodeFamilyState, { readonly kind: "unavailable" }>["reason"];
+    readonly nodeCount: number;
+  }[];
+}
 
 interface ReviewNodePacket {
   readonly nodeId: string;
   readonly ply: number;
   readonly positionKey: string;
   readonly incomingMove: { readonly uci: string; readonly san: string | null } | null;
-  readonly items: readonly DeclaredEvidence<unknown>[];
+  readonly items: readonly ReviewPacketDeclaredEvidence[];
   readonly links: readonly {
     readonly kind: "engine_mate_to_exact_proof";
     readonly transitionEvidenceDigest: string;
     readonly proofEvidenceDigest: string;
   }[];
-  readonly families: Readonly<Record<ReviewSourceFamily, ReviewFamilyState>>;
+  readonly families: Readonly<Record<ReviewSourceFamily, ReviewNodeFamilyState>>;
+}
+
+type ReviewOutcomeReceipt =
+  | { readonly kind: "board_terminal"; readonly eventSeq: number;
+      readonly nodeId: string; readonly result: RunOutcome }
+  | { readonly kind: "recorded_result"; readonly sourceDigest: string;
+      readonly result: "1-0" | "0-1" | "1/2-1/2" }
+  | { readonly kind: "unfinished" };
+
+interface ReviewRecordedPrefixReceipt {
+  readonly protocol: "review-recorded-prefix@1";
+  readonly runId: string;
+  readonly branchId: string;
+  readonly eventHead: { readonly seq: number; readonly digest: string };
+  readonly tipNodeId: string;
+  readonly pathNodeIds: readonly string[];
+  readonly prefixDigest: string;
+  readonly learnerSide: "white" | "black";
+  readonly outcome: ReviewOutcomeReceipt;
+  readonly subjectDigest: string;
+}
+
+type ReviewPacketDeclaredEvidence = {
+  readonly [P in keyof ReviewPacketPayloadByProjection]:
+    DeclaredEvidence<ReviewPacketPayloadByProjection[P]> & {
+      readonly projection: ReviewPacketProjectionRef<P>;
+    }
+}[keyof ReviewPacketPayloadByProjection];
+
+type ReviewPacketSourceInput = {
+  readonly [A in ReviewPacketSourceAdapterId]: ReviewPacketSourceAdapterResult<A>
+}[ReviewPacketSourceAdapterId];
+
+interface ReviewEvidenceInput {
+  readonly subject: ReviewRecordedPrefixReceipt;
+  readonly sources: readonly ReviewPacketSourceInput[];
+}
+
+interface ReviewPrefixAuthorizationInput {
+  readonly run: DrillRun;
+  readonly branchId: string;
+  readonly importedRecord: ImportedGameRecord | null;
 }
 
 interface ReviewEvidencePacket {
-  readonly runId: string;
-  readonly branchId: string;
+  readonly subject: ReviewRecordedPrefixReceipt;
   readonly manifestDigest: string;
   readonly nodes: readonly ReviewNodePacket[];
+  readonly families: Readonly<Record<ReviewSourceFamily, ReviewRunFamilyState>>;
   readonly packetDigest: string;
 }
 
@@ -307,40 +369,85 @@ type ReviewScoreReceipt =
   | { readonly kind: "mate"; readonly side: "white" | "black";
       readonly distance: number; readonly unit: "moves" };
 
-interface ReviewStoryMomentReceipt {
+interface ReviewStoryMoment {
   readonly nodeId: string;
   readonly entryNodeId: string;
   readonly ply: number;
   readonly san: string | null;
   readonly fen: string;
   readonly kinds: readonly StoryMomentKind[];
-  readonly sentences: readonly string[];
-  readonly sourceLabels: readonly string[];
+  readonly components: readonly PresentedEvidenceItem[];
   readonly evaluation: null | {
     readonly before: ReviewScoreReceipt;
     readonly after: ReviewScoreReceipt;
   };
 }
 
+interface ReviewStoryMomentReceipt extends Omit<ReviewStoryMoment, "components"> {
+  readonly presentation: PresentationReceipt;
+}
+
+type ReviewProgress =
+  | { readonly kind: "settled" }
+  | { readonly kind: "progressive"; readonly pendingNodeCount: number;
+      readonly pendingJobCount: number; readonly retryingJobCount: number;
+      readonly notYetScheduledNodeCount: number };
+
+type ReviewDegradation =
+  | { readonly kind: "healthy" }
+  | { readonly kind: "degraded"; readonly unavailableFamilies: readonly {
+      readonly family: ReviewSourceFamily;
+      readonly reasons: readonly {
+        readonly reason: Extract<ReviewNodeFamilyState, { readonly kind: "unavailable" }>["reason"];
+        readonly nodeCount: number;
+      }[];
+    }[] };
+
 interface ReviewStoryReceipt {
   readonly protocol: "review-story@1";
-  readonly runId: string;
-  readonly branchId: string;
+  readonly subject: ReviewRecordedPrefixReceipt;
   readonly manifestDigest: string;
   readonly packetDigest: string;
-  readonly completion:
-    | { readonly kind: "complete" }
-    | { readonly kind: "progressive"; readonly pending: number;
-        readonly retrying: number; readonly notYetScheduled: number }
-    | { readonly kind: "degraded"; readonly unavailableFamilies: readonly ReviewSourceFamily[] };
-  readonly families: Readonly<Record<ReviewSourceFamily, ReviewFamilyState>>;
-  readonly side: "white" | "black";
-  readonly outcome: StoryTitleInput["outcome"];
-  readonly title: string;
+  readonly progress: ReviewProgress;
+  readonly degradation: ReviewDegradation;
+  readonly families: Readonly<Record<ReviewSourceFamily, ReviewRunFamilyState>>;
+  readonly title: PresentationReceipt;
   readonly moments: readonly ReviewStoryMomentReceipt[];
   readonly rank: readonly string[];
 }
 ```
+
+`ReviewPacketPayloadByProjection`, `ReviewPacketProjectionRef`,
+`ReviewPacketSourceAdapterId` and `ReviewPacketSourceAdapterResult` are generated from the one
+literal `REVIEW_PACKET_SOURCE_ADAPTERS` registry in §4.2. Each result is a private-sealed exact
+adapter output: either one projection-typed `ReviewPacketDeclaredEvidence` or one typed node-family
+absence. Callers cannot put an arbitrary `DeclaredEvidence<unknown>`, prose, family string or
+absence assertion into `ReviewEvidenceInput`.
+
+`authorizeReviewRecordedPrefix(input: ReviewPrefixAuthorizationInput)` is the sole constructor for
+`ReviewRecordedPrefixReceipt`. It invokes the exact `recordedSemanticPath` authority, takes the
+event head from the highest contiguous event sequence, hashes the canonical event prefix and
+ordered path, derives `learnerSide` from `run.start.side`, and derives the outcome from the exact
+on-path `outcome.reached` event or the storage-owned `ImportedGameRecord`. It rejects a record whose
+`runId` differs, whose result disagrees with the parsed source authority, or which is supplied for a
+non-imported run. A caller supplies none of the receipt fields.
+`assertReviewRecordedPrefixReceipt` replays that derivation; same run/branch ids with a
+different head, path, learner side, imported-result digest or outcome fail.
+
+`compileReviewEvidence(input: ReviewEvidenceInput): ReviewEvidencePacket` accepts only a live
+prefix receipt and private-sealed adapter results owned by that same subject. It returns an
+aggregate-sealed packet constructed by `createReviewEvidencePacket`; only that constructor may add
+`packetDigest` and register the result in the private packet authority. The exported
+`assertReviewEvidencePacket(value)` validates exact keys, subject and adapter seals, occurrence
+joins, ordering, family folds, links and canonical digest. A spread, JSON round-trip, crossed
+subject or individually valid but unowned item fails before any consumer receives it.
+
+The source-input population is not caller-selected. From the subject path and
+`REVIEW_PACKET_SOURCE_ADAPTERS`, `reviewPacketSourcePlan(subject)` derives the exact adapter × node
+or adapter × declared-window invocations. `sources` must be set-equal to that plan by invocation id;
+missing, duplicate, extra, wrong-node, wrong-window and wrong-subject results fail. An adapter's
+honest absence therefore occupies the same required slot as its evidence result and cannot be
+omitted to make a family look quiet.
 
 `positionKey` is exactly `Node.transposeKey` (`packages/runtime/src/types.ts:114`), produced by
 `transposeKey(fen)` (`packages/runtime/src/chess.ts:16`) — **not** a locally re-derived FEN prefix.
@@ -350,10 +457,11 @@ The repo already carries at least two other position keys under the same word
 "position identity" would join on whichever one the implementer reached for, and criterion 14's
 determinism test would pass under any of them. The name is pinned here for that reason.
 
-`compileReviewEvidence` accepts the authorized recorded branch plus declared source items. It never
-accepts raw sentences. It validates each item's F1 runtime seal, joins only on literal node/edge/
-position/candidate identities, sorts nodes by ply then node id, sorts items by projection id/version
-then evidence digest, and hashes the canonical packet excluding `packetDigest`.
+`compileReviewEvidence` accepts the exact `ReviewEvidenceInput` above, never an authorized branch
+described only in prose. It never accepts raw sentences. It validates every source adapter seal and
+each item's F1 runtime seal, joins only on literal node/edge/position/candidate identities, sorts
+nodes by ply then node id, sorts items by projection id/version then evidence digest, and hashes the
+canonical packet excluding `packetDigest`.
 
 `links` are non-renderable packet indices over two evidence digests already present in `items`, not
 new chess claims. A link with either target missing, duplicated or anchor-mismatched fails packet
@@ -366,15 +474,43 @@ strictly positive and equals that family's items at the node;
 zero successful items is `honest_empty`, never `available: 0`. One unavailable family never makes
 the packet unavailable.
 
+`foldReviewFamilyState(nodes)` is the only node-to-prefix aggregation. For each family it counts
+each node exactly once into `available`, `honest_empty`, `not_requested`, `not_yet_scheduled`,
+`pending` or `unavailable`; the six node counts must sum to `nodeCount`. `itemCount` is the sum of
+positive available item counts. `pendingJobCount` is the sum of positive pending job counts and
+`retryingJobCount` is a non-negative subset of it. Unavailable reasons are grouped by literal
+reason and sorted lexically; every reason count is positive. Shuffled nodes produce identical
+bytes. Any zero/negative/non-safe count, a retry count above pending jobs, an available node with
+no matching item, an unavailable entry with zero nodes, or a total mismatch fails packet
+construction.
+
+`foldReviewCompletion(families)` produces two independent fields. `progress` is `settled` exactly
+when all four progress counts are zero, otherwise `progressive` with their positive aggregate
+counts. `degradation` is `healthy` exactly when every family has an empty `unavailable` list,
+otherwise `degraded` with only unavailable families and their already canonical reason groups.
+Consequently one receipt can truthfully be progressive and degraded at the same time; neither arm
+can erase the other.
+
 The F1 packet terminates inside `RunService.story()` at one named server-only consumer:
-`renderReviewStoryReceipt(packet, context)`. That function admits packet items through the literal
-`review.story@1` bindings and registered renderers, applies the compatibility selection, and emits
-the closed `ReviewStoryReceipt`. `GET /runs/:id/story` returns only that receipt. The web
+`renderReviewStoryReceipt(packet)`. That function first asserts the aggregate packet, admits packet
+items through the literal `review.story@1` bindings, constructs private-sealed
+`PresentedEvidenceItem`s through the registered presentation adapters, applies the compatibility
+selection, and serializes each moment and title through `serializePresentedEvidence`. Learner side,
+outcome and title operands come only from `packet.subject`; there is no caller-owned story context.
+It emits the closed `ReviewStoryReceipt`, and `GET /runs/:id/story` returns only that receipt. The web
 `parseReviewStoryReceipt` recursively validates exact keys, literal discriminants, safe numbers,
-canonical FENs and node/rank references; it never calls `declareEvidence`, asserts a seal or accepts
-`DeclaredEvidence` in JSON. Unknown keys fail instead of becoming an accidental evidence channel.
-The public-share renderer consumes the same already-selected server items and emits its narrower
-closed public receipt; it never serializes packet rows, family internals or provider deliveries.
+canonical FENs, the complete nested `PresentationReceipt`s, subject digest and node/rank references;
+it never calls `declareEvidence`, asserts a process seal or accepts `DeclaredEvidence` in JSON.
+Unknown keys fail instead of becoming an accidental evidence channel.
+
+`ReviewStoryMoment` is server-only and carries the exact sealed components. Its wire counterpart
+contains the closed presentation receipt produced from those same components, never a parallel
+sentence or source-label array. The title is likewise the `derived.story.title@1` component receipt,
+not a free string. `projectPublicReviewStory(receipt)` may drop family/progress/provider metadata and
+component kinds that the public policy does not admit, but each retained component is copied from
+the same already-selected `PresentationReceipt` with its evidence reference, adapter identity and
+component digest unchanged. The public parser accepts that narrower closed projection only; neither
+wire contains packet rows, provider deliveries, raw F1 objects or caller-authored prose.
 
 ### 4.1 Enrichment policy
 
@@ -384,8 +520,9 @@ and `RunService.story()` call its single `ensureBranch(runId, branchId, eventHea
 Neither calls `EvidenceQueue.enqueue`, `enqueueProducer` nor a private Stockfish executor.
 
 The coordinator constructor requires explicit positive `windowNodes`, `maxOutstandingPerRun`,
-`maxTrackedRuns` and `maxAttemptsPerRequest`; the application supplies the 1.0 profile values and no
-implicit unbounded defaults exist. For each authorized branch it:
+`maxTrackedRuns`, `maxAttemptsPerRequest` and `maxTerminalAttemptOutcomes`; the application supplies
+the 1.0 profile values and no implicit unbounded defaults exist. It also receives the one
+application-lifetime `ReviewAttemptOutcomeStore` described below. For each authorized branch it:
 
 1. derives the ordered recorded path and exact event head;
 2. compiles local recorded, authored, semantic and opening items immediately when their producers
@@ -405,12 +542,32 @@ implicit unbounded defaults exist. For each authorized branch it:
    subscriber occupying the same per-run bound; exhausted work becomes `retry_exhausted` and never
    loops on repeated reads;
 8. evicts least-recently-used *idle* branch coordinators above `maxTrackedRuns`. Active subscribers
-   are cancelled before eviction and can be reconstructed from durable evidence plus the current
-   process's typed terminal outcomes;
+   are cancelled before eviction and can be reconstructed from durable evidence plus the separate
+   bounded application-lifetime terminal-outcome store;
    no partial F1 item or stale cursor is published.
 
+`ReviewAttemptOutcomeStore` owns only fixed-size scalar receipts, never provider payloads or prose.
+Its key is the canonical provider request digest plus requested provider/version/bound; the value is
+one of `reserved`, `retryable_failure`, `non_retryable_failure`, `retry_exhausted` or
+`succeeded_delivery_digest`, with attempt count, terminal timestamp and actual provider generation
+when a completed exchange supplies it. `reserve(requestKey)` runs synchronously **before**
+`ProviderExchangeScheduler.get`: an existing identity returns its retained state, an unseen
+identity claims one slot, and a full store returns `attempt_history_capacity` without a provider
+call. A cancelled reservation with zero started attempts may be released; a started cancellation or
+retryable failure retains its attempt count and may resume only within `maxAttemptsPerRequest`.
+Success retains its delivery digest until the durable evidence attachment commits, then releases
+the slot because that durable delivery becomes the reconstruction authority. Non-retryable failure
+and retry exhaustion remain terminal and retained.
+
+The store has exactly `maxTerminalAttemptOutcomes` slots for its application lifetime and **does
+not evict or expire individual terminal entries**. It never forgets an exhausted identity in order
+to make room. `size` is always at most the configured maximum and every retained value has a fixed
+byte bound. Application restart explicitly starts a new attempt-history lifetime and may retry
+failures; an operator can therefore recover from capacity pressure by restart rather than receiving
+a silently unbounded map or retry loop.
+
 The cursor is a consequence of the exact branch/event head plus durable admitted deliveries and
-current process outcomes, not an independent truth store. A process restart may retry a previously
+the bounded attempt store, not an independent truth store. A process restart may retry a previously
 failed source within the same per-process attempt bound, but can never relabel or duplicate an
 already admitted delivery. A branch-head
 change invalidates only the suffix after the common exact node/FEN prefix. Concurrent equal
@@ -423,11 +580,12 @@ Tablebase is requested only inside its declared material domain. Maia, Explorer 
 `not_requested` in the baseline pass; explicit Review/Analyze modules may request them later and
 recompile the packet. No source request blocks already complete facts.
 
-The closed receipt replaces Story's ambiguous `ready/pendingEvidence`. `progressive` distinguishes
-pending, retrying and not-yet-scheduled counts; `complete` means every baseline requested position
-has a terminal admitted or honest failure state; `degraded` names terminal unavailable families.
-It never means every optional provider exists. The old fields may survive for one compatibility
-release only as generated summaries and are forbidden inputs to the web UI.
+The closed receipt replaces Story's ambiguous `ready/pendingEvidence`. Its orthogonal `progress`
+and `degradation` fields distinguish pending, retrying and not-yet-scheduled counts from terminal
+unavailable families. `settled` means every baseline requested position has a terminal admitted or
+honest failure state; it never means every optional provider exists or that the run is healthy. The
+old fields may survive for one compatibility release only as generated summaries and are forbidden
+inputs to the web UI.
 
 ### 4.2 Source-adapter closure
 
@@ -517,28 +675,32 @@ not evidence for the final Review Map policy.
     Move-quality labels and Story's separately declared compatibility title remain their own
     projections/consumers rather than being smuggled into source renderers.
 
-## Fresh independent review return (2026-09-04)
+## Second author repair (2026-09-04)
 
-The 2026-08-28 value corrections survive, but this document is not yet a single buildable Review
-boundary:
+The fresh return is closed in the specification, not waived:
 
-1. [[D2635]] — `compileReviewEvidence(input)` has no published input, source/absence union,
-   constructor authority or aggregate assertion. The module-registration [[D2505]] repair records
-   that absence honestly; it does not supply the missing upstream ABI.
-2. [[D2631]] — the exclusive completion union cannot encode simultaneous progressive work and
-   terminal degradation, and no deterministic algebra folds mixed node-family states into the
-   receipt's one run-level `ReviewFamilyState`.
-3. [[D2632]] — raw `sentences[]` plus `sourceLabels[]` reopen a wire/rendering authority that
-   `evidence-presentation` explicitly replaces with sealed components and an equivalent sentence
-   derived from the same retained operand.
-4. [[D2633]] — packet rows and the untyped context that supplies side/outcome/title share no sealed
-   event-head or immutable-prefix authority, so otherwise valid bytes can be crossed.
-5. [[D2634]] — the provider retains no failures, while evictable branch coordinators are the only
-   named home for terminal attempt outcomes. Retry exhaustion is therefore either lost on LRU churn
-   or kept in an unbounded second store.
+1. [[D2635]] — `ReviewEvidenceInput` now contains one sealed recorded-prefix subject and only the
+   exact registry-derived source-input union. `createReviewEvidencePacket` owns the aggregate seal
+   and `assertReviewEvidencePacket` is the callable trust boundary; the module execution contract
+   names all three.
+2. [[D2631]] — node state and run aggregate are separate types. One total, order-independent fold
+   accounts for every node exactly once, while orthogonal `progress` and `degradation` fields retain
+   expected mixed states.
+3. [[D2632]] — Review depends on evidence-presentation checkpoint A. Server moments contain sealed
+   `PresentedEvidenceItem`s; both story and title wire bytes are `PresentationReceipt`s; the public
+   story is a strict projection of those same receipts. The parallel sentence/source-label arrays
+   no longer exist.
+4. [[D2633]] — `authorizeReviewRecordedPrefix` derives event head, path/prefix digest, side and
+   outcome from the run/path/import authorities. The packet retains that receipt and the renderer
+   accepts no independent context.
+5. [[D2634]] — one application-lifetime `ReviewAttemptOutcomeStore` retains fixed-size terminal
+   receipts under an explicit hard capacity and never evicts individual identities. Branch LRU
+   therefore cannot restart exhaustion; capacity refuses unseen provider work explicitly, and
+   restart is the only automatic reset boundary.
 
-`make review-evidence-fresh-review` retains the six author controls and reproduces all five returns.
-An author repair and another fresh independent review are required before implementation.
+`make review-evidence-second-author-repair` retains all six original author controls and exercises
+five able-to-fail repair arms. Another fresh independent review is still required before
+implementation.
 
 ## 8. Acceptance criteria
 
@@ -575,21 +737,29 @@ An author repair and another fresh independent review are required before implem
     move or after authority, v1 substitution, repeated-position substitution, refuted,
     budget-exhausted and horizon-ineligible proofs do not link. The v2 exact adapter drops every
     undeclared payload key.
-11. **Partial packet:** every family-state discriminant, including `not_yet_scheduled`, retrying and
-    retry-exhausted, has a positive fixture. Provider-off plus successful local/eval evidence still
-    renders available items while retaining the unavailable family.
+11. **Partial packet and total fold:** every node-family discriminant, including
+    `not_yet_scheduled`, retrying, retry-exhausted and attempt-history-capacity, has a positive
+    fixture. The node counts sum exactly to the path population, available item totals match packet
+    items, unavailable reasons are canonical and shuffled input produces identical aggregates.
+    Provider-off plus successful local/eval evidence still renders available items while retaining
+    the unavailable family.
 12. **Production idempotence:** import completion and repeated actual `RunService.story()` calls
     reach only `ReviewEvidenceCoordinator.ensureBranch` and `ProviderExchangeScheduler.get`.
     Concurrent identical requests coalesce; different FEN, engine version, bound or command digest
     creates distinct work. A census fails if either service path calls `EvidenceQueue.enqueue`,
     `enqueueProducer` or a private Stockfish executor.
-13. **Bounded progressive completion:** a synthetic legal long game never exceeds configured
-    per-run outstanding, window, attempt or tracked-run bounds; queued/active eviction cancellation
-    publishes no partial item. Completion callbacks eventually cover every node without another
-    page read. Restart recomputes from admitted deliveries, and branch-head changes reuse only the
-    exact common prefix.
+13. **Bounded progressive completion and attempt truth:** a synthetic legal long game never exceeds
+    configured per-run outstanding, window, attempt, tracked-run or terminal-outcome bounds;
+    queued/active eviction cancellation publishes no partial item. Completion callbacks eventually
+    cover every node without another page read. Exhaust one request, churn more branches than
+    `maxTrackedRuns`, reread the first branch and prove zero new provider calls plus the same
+    `retry_exhausted` result and bounded store size. Fill the terminal store, prove an unseen request
+    returns `attempt_history_capacity` without provider work, then prove a new application instance
+    may retry. Branch-head changes reuse only the exact common prefix.
 14. **Completion truth:** pending, retrying, not-yet-scheduled, honest-empty, not-requested and each
-    terminal unavailability remain distinct in packet and receipt. Deprecated `ready` and
+    terminal unavailability remain distinct in packet and receipt. A mixed provider-failed plus
+    still-pending fixture is simultaneously `progressive` and `degraded`; shuffled fold order is
+    byte-identical and every impossible count combination fails. Deprecated `ready` and
     `pendingEvidence`, while temporarily present, are generated summaries and changing them cannot
     alter web rendering or re-entry eligibility.
 15. **Determinism:** shuffled events, items and provider completion order produce byte-identical
@@ -600,14 +770,17 @@ An author repair and another fresh independent review are required before implem
     `reported` and never more exact than `measured`; changing one to `confidence: exact` fails the
     real `EVIDENCE_DERIVATION_WIDENS` guard. Packet ids, adapters and bindings are non-empty
     set-equal, and raw eval/WDL cannot become Review prose.
-17. **Closed process/wire termination:** `compileReviewEvidence` is consumed by
-    `renderReviewStoryReceipt` on the production `story()` route. JSON round-trip through
-    `parseReviewStoryReceipt` preserves the closed receipt without constructing/asserting F1 seals;
-    unknown keys, `DeclaredEvidence`, provider delivery sentinels, invalid rank references and
-    process-only symbols fail. Public share is a strict narrower projection of the same selected
-    server items.
+17. **Closed process/wire termination:** `ReviewEvidenceInput`, registry-derived source inputs,
+    `createReviewEvidencePacket` and `assertReviewEvidencePacket` are typechecked as the only public
+    compiler ABI. `compileReviewEvidence` is consumed by `renderReviewStoryReceipt(packet)` on the
+    production `story()` route with no independent context. JSON round-trip through
+    `parseReviewStoryReceipt` preserves nested presentation receipts without constructing/asserting
+    F1 seals; unknown keys, raw sentence/source-label arrays, `DeclaredEvidence`, provider delivery
+    sentinels, crossed subject heads/sides/outcomes, invalid rank references and process-only symbols
+    fail. Public share is a strict narrower projection of the same selected component receipts.
 18. **Story compatibility:** cp pivot, mate transition, learner-relative last-level and public
-    share render without raw UCI, provider ids as prose, duplicate facts or cross-type arithmetic.
+    share render through sealed components without raw UCI, provider ids as prose, duplicate facts,
+    caller-owned strings or cross-type arithmetic.
     Sign-mirrored White/Black learner scores give the same last-level result. `phase_change` still
     precedes `endgame_entry`, and mate-typed moments use ply/node order rather than a fake magnitude.
 19. **Performance:** compiling and server-rendering 661 fixed positions is below 50 ms p95 on the CI
@@ -640,6 +813,14 @@ The existing Story order is preserved only as a labelled compatibility conventio
 
 ## Changelog
 
+- 2026-09-04 second author repair ([[D2631]]–[[D2635]]): publishes the exact compiler input,
+  registry-derived source plan, recorded-prefix authority and aggregate packet seal; separates node
+  and run availability with a total fold and orthogonal progress/degradation; replaces raw Story
+  prose arrays with sealed presentation receipts; and gives attempt history a fixed-capacity slot
+  reserved before provider work, surviving branch LRU without forgetting terminal failures. The
+  module execution contract now names the exact input/assertion. Retained author controls 6/6 plus
+  new behavioral controls 5/5 pass; fresh independent review is still required. Exact receipt:
+  `planning/evidence-foundation-ux/review-evidence-compiler-second-author-repair-2026-09-04.md`.
 - 2026-09-04 fresh independent review: returned on [[D2631]]–[[D2635]].
   The public compiler still omits its exact input and aggregate runtime assertion; the receipt's
   exclusive completion union cannot tell simultaneous progress and degradation and has no

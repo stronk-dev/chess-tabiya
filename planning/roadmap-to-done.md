@@ -973,6 +973,16 @@ provider attempts have no bounded owner across LRU eviction. Full Review therefo
 an authority/availability/presentation repair, not merely an implementation queue. Receipt:
 `planning/evidence-foundation-ux/review-evidence-compiler-fresh-independent-buildability-review-2026-09-04.md`.
 
+The 2026-09-04 second author repair closes those five specification holes without claiming product
+progress. `ReviewEvidenceInput` now binds a compiler-derived recorded-prefix subject to the exact
+adapter invocation set; packet construction/assertion owns the aggregate trust boundary; one total
+node-to-prefix fold feeds orthogonal progress and degradation; Story/title/public share consume
+sealed presentation receipts rather than raw prose; and a fixed-capacity pre-reserved attempt store
+survives branch LRU without becoming unbounded. The retained 6/6 controls plus 5/5 new behavioral
+falsifiers pass under `make review-evidence-second-author-repair`. Full Review still waits on a fresh
+review, dependency implementation and then production code. Receipt:
+`planning/evidence-foundation-ux/review-evidence-compiler-second-author-repair-2026-09-04.md`.
+
 **1.0 exit:** native, bot, imported, social and campaign games compile to one Review Map: opening
 and phase arc; navigable move timeline; bounded grounded moments; separate grade, human rarity,
 theory, semantic change and exact endgame facts; correct learner-side result; decided-position
