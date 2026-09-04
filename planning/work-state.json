@@ -20543,6 +20543,87 @@
       "uxItems": [],
       "evidence": "planning/longitudinal-store/sixth-author-repair-2026-09-04.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2575",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9a503716994b4b495581de05edf0e61e7d2faeba810c8f5acb763cf50b7f0575",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2576",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5db452cf74b9c874a39943683e4495734de6b311d504b3eaf22a0c799908c2cd",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2577",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6f5f8f36f4df297862f9d6839d1cb421acbb6b0cfd5ebc586819c68c6c1693b5",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2578",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:fe51fe2185ca12ddec639a912a1cf1357c1277afb5f4cbf6afc57d3091aa3c9f",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2579",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0863a0a75f4e27aac14b8dad789c86986fa43cf4ef4c36446d3b980c4385dae5",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2580",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9e781710ba291a555593b9f540b7df32fe75c2f35c3e1b94b9691cbfa8ffd8fd",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2581",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:3285d5b4956825ebcb5244f3661a0532165fa108bc2ea019b48e81045e44d322",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2582",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:00a8a6222d24e7cf4da99900494b8417ef63c03726b68b1c039eacef317d867a",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2583",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:3fe929d6f4863d9cbec0016cb1695b3ac4f3b8f1321831791a5fe97e7578e6e0",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
     }
   ]
 }

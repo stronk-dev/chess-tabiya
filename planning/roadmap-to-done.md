@@ -1108,13 +1108,14 @@ migration, live degradation health, safe profiles, runtime content allow-list, b
 update/rollback, SBOM/notices/signatures, model/runtime rights, and complete multi-architecture
 proof.
 
-The 2026-09-02 provider-health third author repair closes [[D2412]]–[[D2417]] at contract tier:
-one generated operation-stage route correlates result/origin/cache identity; recovery is explicit;
-cache inventory resolves exact requests; production-local provenance survives; TTS is a
-conditional voice stage; and declared backoff groups coordinate shared upstreams without merging
-health. The retained eight arms, nine new falsifiers and strict TypeScript are green. Live
-degradation remains in foundation state pending fresh independent review and implementation;
-receipt: `planning/provider-health-degradation/third-author-repair-2026-09-02.md`.
+The 2026-09-04 fourth fresh provider-health review returns the third repair on [[D2575]]–[[D2583]].
+The instance/local/recovery/backoff direction survives, but the eight-operation census omits live
+reasoning-review egress; its voice→TTS graph contradicts `/speech`; provider exchange and health
+publish incompatible operation/receipt authorities; and timed recovery, tokenized group leases,
+atomic cache hits, multi-stage settlement and the learner's opponent-recovery journey are not yet
+buildable. `make provider-health-fourth-fresh-review` retains 17 prior author arms and reproduces all
+nine blockers. Both implementation checkpoints remain held for author repair and another review;
+receipt: `planning/provider-health-degradation/fourth-fresh-independent-buildability-review-2026-09-04.md`.
 
 The 2026-09-02 [[D2503]] repair keeps real-content truth while removing repeated whole-corpus work
 from its own test file: one 92-pack census supplies both declarations and the no-declarations view;

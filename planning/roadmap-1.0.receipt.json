@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:240631734a930e4e722a4b51e26a16a62c697985f08b72003bcd5cf50279ff8b",
+    "roadmap": "sha256:0259355eb770552fa898c20fd325d60206a6d0d8fca3a00ea7b84009c522d001",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:51701df49c189a8ef3db442c867980cdf39736e2d23fe376b8be2736328474f9",
-    "rfcRegister": "sha256:44f7a86ff804159fa3c89e11d056287a636f26fa717d0bc08ac2aff3b9f47cae",
+    "workState": "sha256:2d8cce9f6b6ae2fa65926eab1226283ecdc99fce68bd514348dd5a77bc3dbd55",
+    "rfcRegister": "sha256:b4150703572c06c20c268e987d7dd47b249139390151a7aa29526a16e07be186",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 862,
+      "blocked": 871,
       "done": 819,
       "refused": 3
     },
@@ -110,9 +110,11 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Longitudinal store's sixth author repair closes five contract gaps with same-head collaboration invalidation, monotone legacy/shared structure truth, exact parsed rows, observed-only revision-1 imports and a branded filter parser. It joins shared-resource bootstrap and pack capability in awaiting genuinely fresh review; held production remains dependency-blocked.",
-        "impact": "advanced",
+        "summary": "Longitudinal store advanced to fresh-review readiness, while provider health's fourth fresh review returned nine operation, authority, recovery, cache and learner-journey blockers. Foundation implementation remains held until provider health joins the existing exchange protocol and its real voice, reasoning, TTS and opponent paths.",
+        "impact": "held",
         "evidence": [
+          "planning/provider-health-degradation/fourth-fresh-independent-buildability-review-2026-09-04.md",
+          "planning/longitudinal-store/sixth-author-repair-2026-09-04.md",
           "planning/learner-modules/ninth-author-repair-2026-09-04.md",
           "planning/learner-modules/eighth-fresh-independent-buildability-review-2026-09-04.md",
           "rfc/evidence-value-authority.md",

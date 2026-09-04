@@ -1,12 +1,12 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — **third author repair complete 2026-09-02 on [[D2412]]–[[D2417]];
-  fresh independent review required.** One compiler-owned eight-operation/stage map now correlates
-  result, origin, cache and request identity; recovery is explicit state; cache inventory is exact
-  operation/stage/request grain; configured implementation survives every origin; conditional TTS
-  is a stage rather than a fake ninth operation; and shared upstream groups coordinate backoff
-  without merging instance health. `make provider-health-third-author-repair` passes 9/9 plus
-  strict TypeScript. Neither implementation checkpoint is authorized before fresh acceptance.
+- **Status:** draft — **RETURNED by the fourth fresh independent review 2026-09-04 on [[D2575]]–
+  [[D2583]].** The prior instance split, explicit recovery label, local-service provenance and
+  shared-backoff identity survive, but the operation census omits reasoning review; the voice/TTS
+  graph contradicts production; provider-exchange authority is redeclared rather than joined;
+  recovery, leases, exact cache hits and multi-stage results remain incomplete; and opponent
+  recovery is untyped. `make provider-health-fourth-fresh-review` reproduces 9/9 blockers. Neither
+  implementation checkpoint is authorized before author repair and another fresh review.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -763,6 +763,28 @@ The six returned seams are now one compiler-owned contract rather than six prose
 new able-to-fail arms plus strict TypeScript over the complete route/result/recovery/cache/backoff
 model. This is author repair, not acceptance or implementation. Fresh independent review remains
 required.
+
+## Fourth fresh independent return (2026-09-04)
+
+The D2412–D2417 repair decisions survive at their stated seams. A fresh join against production
+provider call sites and the provider-exchange RFC returns nine blockers:
+
+1. [[D2575]] — the live reasoning-review external call is absent from the operation census;
+2. [[D2576]] — independently requested `/speech` contradicts the declared voice→TTS graph;
+3. [[D2577]] — the author closure passes count-preserving operation replacement and omits the
+   proposed compiler fields;
+4. [[D2578]] — provider health redeclares provider-exchange operation/receipt authority with
+   incompatible identities and no stage→exchange mapping;
+5. [[D2579]] — the five-minute recovery rule has no timed reducer operands;
+6. [[D2580]] — shared backoff names a lease but implements/specifies no tokenized lifecycle;
+7. [[D2581]] — exact cache lookup returns provenance without the cached value;
+8. [[D2582]] — Retry/Change opponent has no typed route, state or resume semantics; and
+9. [[D2583]] — a union of single-stage results cannot settle a multi-stage voice/audio pipeline.
+
+Exact evidence and required repair are recorded in
+`planning/provider-health-degradation/fourth-fresh-independent-buildability-review-2026-09-04.md`.
+Neither implementation checkpoint is authorized until one bounded author repair inverts these
+controls and another genuinely fresh review passes.
 
 ## Implementation plan
 

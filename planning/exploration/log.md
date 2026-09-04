@@ -14725,3 +14725,22 @@ implementation-defined meanings.
 **Evidence/next:** `make longitudinal-store-sixth-author-repair` retains 36 earlier author arms and
 passes seven new controls plus strict TypeScript. Another genuinely fresh independent review still
 gates acceptance and all migration/worker/reader/consumer implementation.
+
+## 2026-09-04 — Provider-health fourth fresh review returns the operation authority
+
+**What landed:** A fresh production-call and cross-RFC join returned `provider-health-degradation`
+on [[D2575]]–[[D2583]]. `make provider-health-fourth-fresh-review` retains the prior 17 author checks
+and reproduces nine new blockers.
+
+**What changed:** the proposed eight-operation map omits reasoning review and does not match the
+independently requested speech route. It also redeclares provider-exchange operation/acquisition
+types instead of compiling application stages onto them. The author closure admits a
+count-preserving side door; recovery has no five-minute operands; shared backoff has no tokenized
+lease; exact cache lookup separates provenance from value; multi-stage results cannot retain mixed
+voice/TTS outcomes; and Retry/Change opponent remains copy without a typed resume journey.
+
+**Evidence/next:**
+`planning/provider-health-degradation/fourth-fresh-independent-buildability-review-2026-09-04.md`.
+One bounded author repair must join the existing provider exchange, derive the real call graph and
+totalize recovery/cache/pipeline/learner settlement. Neither provider-health implementation
+checkpoint is authorized before another genuinely fresh review.
