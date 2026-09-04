@@ -14509,3 +14509,18 @@ unchanged.
 **Evidence/next:** `make semantic-collectors-deflection-source-author-repair` passes 4/4 plus
 strict TypeScript. D2536 and D2552 are held on `rfc/semantic-collectors.md` until another genuinely
 fresh review exercises the real dual-arm chess line and runtime seal; production remains untouched.
+
+## 2026-09-04 — Deflection source-selection fresh review returns exact-source seal authority
+
+**What landed:** a fresh review exercised the legal `Bxa7+ Nxa7 Rxe7` dual-arm line against the live
+deflection detector, tactical collector and runtime event seal. The shared bait-before-check selector
+survives; no production byte changed.
+
+**What changed:** [[D2553]] records that the exact-source path stores only `DeclaredEvidence` from a
+raw check payload, while D2536 requires the constructor-sealed `SemanticEvidenceEvent`. Evidence-only
+reconstruction fails the seal. The eager path retains the event; the whole tactical collector is too
+broad for the exact-source contract.
+
+**Evidence/next:** `make semantic-collectors-deflection-source-fresh-review` passes 4/4 plus strict
+TypeScript. Specify one narrow sealed check-event constructor shared by the tactical collector and
+exact-source compiler, then require another fresh review before production implementation.

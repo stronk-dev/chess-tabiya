@@ -20341,7 +20341,16 @@
       "id": "D2552",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:42a01eadbb1aaa0c65c39c64cd63f4b234ab3743c2751a5a5f0886e7e0595f9d",
+      "sourceDigest": "sha256:9f17e6f0796891e78f537bdcf86b486c2b8b6ef899a86c47de4ef40af9d16cb1",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2553",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a704dfc3c8c547bfbea393cbf49f369b4ce0ab46dc2d0b45c9726f5fe6f467fb",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-collectors.md"

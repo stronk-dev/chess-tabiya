@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:9a022763d5513a34b5336d3e0517526c8f6c9c96b4605a1c99ef97d847bfb6ed",
+    "roadmap": "sha256:5de7d1eb5679349fb1472eb40c1f8ead0cdef6499288f05971a0b74a5b7e3c64",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:d4c6e9485bc6b18a828734aaaf9abf0f1ddae1c1c1fd772cfc0b784105f6044f",
-    "rfcRegister": "sha256:d530fbe26957ed0b05b3c50abe361b6005e4fb72dd8fd6d5daf38dc597a45b0b",
+    "workState": "sha256:2f4b780c8bfff7b7c6a4ce5e910d501dc6086809a81f2f1e25fe92d50ab0e371",
+    "rfcRegister": "sha256:3a81893e5dfde14961acf841670afb12459d9d7e9af621a79ca625c380a67b4d",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 868,
+      "blocked": 869,
       "done": 791,
       "refused": 3
     },
@@ -110,7 +110,7 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "The D2536 deflection amendment passed fresh review, then implementation rehearsal exposed D2552: generic path callers could not select optional check evidence without duplicating the detector. A bounded shared-induction-selector repair is author-complete and production is re-held for fresh review; promotion and wider returned foundations remain separate blockers.",
+        "summary": "D2552's shared deflection induction selector survived a real dual-arm fresh review, which returned D2553: the exact-source compiler discards the sealed check event and retains only declared evidence. A narrow sealed constructor and another review now hold production; promotion and wider returned foundations remain separate blockers.",
         "impact": "held",
         "evidence": [
           "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md",
@@ -175,7 +175,7 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Implementation rehearsal returned the newly accepted D2536 seam on D2552 because generic callers lacked one authoritative bait-vs-check selector. The author repair now shares that selector across detector, emitter and callers, but another fresh review gates implementation; promotion's four returned event-boundary gaps remain held.",
+        "summary": "The D2552 selector survived fresh review on a legal dual-arm line, but D2553 returned the exact-source call boundary because it discards the sealed check event. Production now waits on a narrow sealed constructor and another review; promotion's four returned event-boundary gaps remain held.",
         "impact": "held",
         "evidence": [
           "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md",

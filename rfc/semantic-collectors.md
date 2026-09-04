@@ -1,11 +1,11 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
 - **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The D2536
-  deflection check-authority amendment passed fresh review, then implementation returned its caller
-  selection gap on [[D2552]]; the bounded author repair is complete 2026-09-04 and requires another
-  fresh review before production changes.** One exported induction selector now owns bait-before-check
-  choice for the detector, emitter and all three call sites, including the real both-facts-hold arm;
-  `make semantic-collectors-deflection-source-author-repair` passes 4/4 plus strict TypeScript. **The held
+  deflection check-authority amendment passed fresh review, then implementation returned [[D2552]];
+  its bounded selector repair survived fresh review 2026-09-04, but that review returned the
+  exact-source event authority on [[D2553]].** The legal dual-arm line and runtime seal pass 4/4 plus
+  strict TypeScript; the third call site retains only declared evidence rather than the sealed event,
+  so production remains held pending bounded repair and another fresh review. **The held
   promotion pair completed its fourth author repair 2026-09-02 on [[D2521]], [[D2522]] and
   [[D2523]], then was **RETURNED by fifth fresh independent review on [[D2548]]–[[D2551]].** The
   source repair survives, but request-digest construction, the exact output/operand ABI and a real
@@ -430,6 +430,17 @@ generic caller passes no check event, and the emitter produces one event. Direct
 check-induced arm remain unchanged. This is an additive helper/export inside the existing seven-site
 production census; it changes no projection identity, operand, eligibility, schema or content byte.
 Another fresh review must exercise that real dual-arm line before implementation is authorized.
+
+The 2026-09-04 fresh review exercised that line against the live detector and runtime seal. The
+selector boundary survives, but the promised exact-source call site does not: its `Edge.check`
+stores `DeclaredEvidence<unknown>`, and its raw `checkEvent` result is wrapped by
+`declareCheckEventEvidence` without ever becoming a constructor-sealed `SemanticEvidenceEvent`.
+Casting the declared evidence back fails `assertSemanticEvidenceEvent`. The eager compiler retains
+the sealed event, while using the whole `tacticalSemanticEvents` collector in exact-source mode would
+also compile reply breadth and double-attack evidence and thereby widen the measured source boundary.
+[[D2553]] therefore returns production until one narrow sealed check-event constructor is specified,
+shared by `tacticalSemanticEvents` and the exact-source compiler, and reviewed on both check-only and
+dual-arm lines.
 
 #### 3.3 Observed line tactics
 
@@ -1276,6 +1287,10 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-04: fresh review retained [[D2552]]'s shared induction selector but returned production on
+  [[D2553]]. The real dual-arm line and edge-one seal work; the exact-source compiler retains only
+  declared check evidence, which cannot satisfy the required runtime event seal. A narrow sealed
+  constructor and another fresh review are required.
 - 2026-09-04: author-repaired [[D2552]] after implementation rehearsal exposed a caller-selection
   gap in the accepted D2536 amendment. One exported `deflectionObservedInduction` operation now
   owns bait-before-check choice across detector, emitter and all three call sites; a real dual-arm

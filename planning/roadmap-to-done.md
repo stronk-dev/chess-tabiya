@@ -331,6 +331,14 @@ semantic-collectors-deflection-source-author-repair` passes 4/4 plus strict Type
 is re-held until another fresh review. Receipt:
 `planning/evidence-foundation-ux/deflection-check-source-selection-author-repair-2026-09-04.md`.
 
+The next fresh review kept that selector but returned the exact-source authority on [[D2553]]. The
+real `Bxa7+ Nxa7 Rxe7` dual-arm line and live event seal work; the exact-source compiler stores only
+declared check evidence, which cannot pass the event seal, while invoking the whole tactical
+collector would widen its source/cost contract. `make semantic-collectors-deflection-source-fresh-review`
+passes 4/4 plus strict TypeScript. A narrow sealed check-event constructor and another fresh review
+now gate production. Receipt:
+`planning/evidence-foundation-ux/deflection-check-source-fresh-independent-review-2026-09-04.md`.
+
 The 2026-09-02 fourth fresh promotion-collector review keeps the two held projections out of the
 foundation on [[D2521]], [[D2522]] and [[D2523]]. Its advertised closed request uses two undefined types, the
 injected Syzygy callable matches no provider operation and leaves normalized request bytes
