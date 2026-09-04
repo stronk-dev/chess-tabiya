@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:e44019a5ac0812a75188ecde43687fb6dd80ff9d4e9e815ef4bcb9e32cb68dea",
+    "roadmap": "sha256:e0e8f12cb6f7f89d0e5e2452450f8d696256bff9f0deb0618a0f5466401a8650",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:f95b6835a1654fe99248648b0c4a4339ade859a463e91d3914db2b69a2f6214b",
-    "rfcRegister": "sha256:214ae6cfaddd81356e39c728877856e70996a2d07f07f60b4f405bb5fdbfbcb0",
+    "workState": "sha256:4c8d443b2e2e25c302750f602178f984497b577bbff3bf898d963d71fc81c89d",
+    "rfcRegister": "sha256:04b4118774fea1babc2584a7c4eef081aeb794b34adce0e34eba10b0f34660c1",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 911,
+      "blocked": 914,
       "done": 820,
       "refused": 3
     },
@@ -183,9 +183,10 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Deflection check authority is live, while the held promotion pair's sixth fresh review returned its false-green retained gate, competing constructor names, unsealed total result and missing executable outcome/legal-map joins. The evidence spine remains 12/14; recorded paths, provider/value authority and all module emissions remain unbuilt or held.",
-        "impact": "advanced",
+        "summary": "Deflection check authority is live, while fresh reviews hold both the promotion pair and the shared candidate packet. The packet's one-map repair survives, but its dependency order targets a deleted adapter, collector scope can change facts under one id, and its cache weight omits retained receipt graphs. The evidence spine remains 12/14; recorded paths, provider/value authority and all module emissions remain unbuilt or held.",
+        "impact": "held",
         "evidence": [
+          "planning/evidence-foundation-ux/shared-candidate-packet-sixth-fresh-independent-buildability-review-2026-09-04.md",
           "planning/evidence-foundation-ux/semantic-collectors-promotion-sixth-fresh-independent-buildability-review-2026-09-04.md",
           "planning/learner-modules/ninth-author-repair-2026-09-04.md",
           "planning/learner-modules/eighth-fresh-independent-buildability-review-2026-09-04.md",

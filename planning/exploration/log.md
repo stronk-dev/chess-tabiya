@@ -14902,3 +14902,22 @@ reproduces 5/5. Exact receipt:
 `planning/campaign/fourth-fresh-independent-buildability-review-2026-09-04.md`. One bounded fifth
 author repair must close the five authorities before another fresh review; the full 1.0 successors
 and official human-authored campaign remain independently required.
+
+## 2026-09-04 — Shared candidate packet sixth fresh review returns three identity/envelope seams
+
+**What landed:** A fresh dependency, scope and retained-graph review preserves the D2428/D2468
+one-factory/one-map repair but returns `shared-candidate-evidence-packet` on [[D2625]]–[[D2627]]. No
+production runtime, server, API, schema, content, UX, archive or protected-design byte changed.
+
+**What changed:** the required value-authority predecessor deletes the adapter file the packet's
+implementation table still claims; collector context exposes request scope, so direct narrow and
+wide-projected packets may carry different facts under one target id; and the cache weight ignores
+legal-map, row, abstention and collector-outcome graphs kept alive by the repaired receipt while its
+cited measurement covers only the older visible packet.
+
+**Evidence/next:** `make candidate-packet-sixth-fresh-review` retains the sixth author controls and
+reproduces 3/3. Exact receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-sixth-fresh-independent-buildability-review-2026-09-04.md`.
+A bounded seventh author repair must consume the value factory without re-owning it, make shared
+collector facts scope-invariant and re-measure the complete retained production graph before
+another fresh review or implementation.

@@ -20993,6 +20993,33 @@
       "uxItems": [],
       "owner": "campaign",
       "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2625",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c27a76ffc6eca255b957092bfcd347d445e392ddc448c9b7fd342b9f59ddfc42",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
+    },
+    {
+      "id": "D2626",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0e5f84e7f1efdce583439f6119ff53f01e2fb793818871566fd46eff755a1381",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
+    },
+    {
+      "id": "D2627",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:319158db50444b76403e1ea291b04e09a78921e5105e28b9337b1dbbd6c3c1dc",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
     }
   ]
 }

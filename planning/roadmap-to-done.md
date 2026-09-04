@@ -289,6 +289,15 @@ single-authority floor (2.724×). Fresh review still gates implementation and do
 credit. Receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-sixth-author-repair-2026-09-01.md`.
 
+The 2026-09-04 sixth fresh candidate-packet review preserves that one-factory/one-map repair and
+returns the build on [[D2625]]–[[D2627]]: its required value-authority predecessor deletes the
+adapter file the packet still claims; request scope can change collector facts while direct and
+projected packets share identity; and the retained-weight formula omits legal-map, row, abstention
+and collector-outcome graphs introduced by the repaired receipt. The evidence foundation therefore
+remains held before implementation rather than turning a cache-order-dependent packet into the
+denominator for Support, Review and bots. Receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-sixth-fresh-independent-buildability-review-2026-09-04.md`.
+
 The 2026-09-01 promotion-pair third fresh review also corrected the candidate repair's initially
 invented factory alias ([[D2468]]) and returned only the held semantic projections on
 [[D2469]]–[[D2472]]: their outside-domain arm depends on an undeclared legal map; their invocation

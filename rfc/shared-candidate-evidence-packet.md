@@ -1,7 +1,7 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — sixth author repair corrected on [[D2468]] after the promotion-pair third
-  fresh review; another fresh independent review is required.**
+- **Status:** **draft — sixth fresh independent review returned the D2428/D2468 repair on
+  [[D2625]]–[[D2627]]; a seventh author repair and another fresh independent review are required.**
   The D2198–D2201 author repair remains present: the product factory fixes the primary manifest authority; every collector
   result is projection-addressed; thirteen exact context adapters satisfy the executable registry;
   and memo, service-stat and receipt-reference protocols are closed. The historical return remains
@@ -24,7 +24,12 @@
   sole `exactLegalMoveMap` call, accepts no caller payload, and returns the one object graph the
   packet flattens by reference. The measured current two-computation path costs 2.724× the single-
   authority floor across six positions. `make candidate-packet-sixth-author-repair` is the positive
-  contract. Implementation remains unauthorized pending another fresh review.
+  contract and remains green. The sixth fresh review preserves that repair but finds that its
+  prerequisite deletes a file §12 still claims, request scope can alter collector truth while a
+  projected and direct packet share identity, and the retained-weight formula omits repaired receipt
+  categories. Exact return:
+  `planning/evidence-foundation-ux/shared-candidate-packet-sixth-fresh-independent-buildability-review-2026-09-04.md`.
+  `make candidate-packet-sixth-fresh-review` reproduces 3/3. Implementation remains unauthorized.
   [[D1580]] remains separate numeric appliance-tier debt. *(Prior state: D1977–D1981
   author-repaired after D1958–D1961, D1900–D1903 and D1945–D1947.)*
 - **Author:** claude (initial draft); codex (2026-08-29 operation-boundary author repair). Drafted
@@ -1950,6 +1955,27 @@ graph. The acceptance model includes malformed/non-string/caller-map inputs, a m
 authority call, an equal map rebuild and a copied packet move. §12 explicitly owns the adapter
 signature correction. `make candidate-packet-sixth-author-repair` is positive author evidence only;
 another fresh independent review is required before implementation.
+
+## Sixth fresh independent return (2026-09-04)
+
+The D2428/D2468 source-authority repair survives: one registered FEN factory still owns one exact
+map computation and one retained value graph. The fresh review returns three different seams.
+
+1. [[D2625]] — required predecessor `evidence-value-authority` deletes
+   `evidence-source-adapters.ts` and moves the sole mint boundary to `evidence-factories.ts`, while
+   §12 still assigns the later factory correction to the deleted file.
+2. [[D2626]] — every collector receives request `scope`, allowing direct narrow compilation and a
+   wide-to-narrow projection to emit different factual values under the same target packet id;
+   criterion 4 checks move equality but not value equivalence across those paths.
+3. [[D2627]] — the weighted cache counts visible events/readings only, while the repaired receipt
+   retains legal-map/move graphs, rows, abstentions and public/private collector outcomes. The cited
+   Node-24 harness measured the older visible packet and cannot calibrate that graph.
+
+Exact review and reproducer:
+`planning/evidence-foundation-ux/shared-candidate-packet-sixth-fresh-independent-buildability-review-2026-09-04.md`;
+`make candidate-packet-sixth-fresh-review`. A bounded seventh author repair must retain the sixth
+author controls, consume rather than re-own the value factory, make collection scope-invariant and
+re-measure a complete retained receipt graph before another fresh review.
 
 ## Discharges
 
