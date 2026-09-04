@@ -1,8 +1,13 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — eighth author repair closes [[D2655]], [[D2656]], [[D2657]], [[D2658]],
-  [[D2659]] and [[D2660]] at the contract tier; another genuinely fresh independent review is
-  required before acceptance.**
+- **Status:** **draft — RETURNED by ninth fresh independent review on [[D2678]], [[D2679]],
+  [[D2680]], [[D2681]], [[D2682]], [[D2683]] and [[D2684]].**
+  The eighth author repair closes its bounded [[D2655]]–[[D2660]] inputs, but the composed author
+  surface still accepts an open request, emits an incomplete packet identity, retains different
+  private graphs for direct/projected packets sharing that identity, trusts caller cache keys and
+  crossed result wrappers, permits mutation behind a frozen envelope, and executes placeholder
+  collectors rather than the exact registered operations. Another author repair and genuinely
+  fresh review are required before acceptance.
   The D2198–D2201 author repair remains present: the product factory fixes the primary manifest authority; every collector
   result is projection-addressed; thirteen exact context adapters satisfy the executable registry;
   and memo, service-stat and receipt-reference protocols are closed. The historical return remains
@@ -2174,6 +2179,27 @@ entry eviction, byte oversize and object oversize independently.
 then passes seven composed repair controls. This is positive author evidence only. Another
 genuinely fresh independent review and dependency landing still gate production implementation.
 
+## Ninth fresh independent return (2026-09-04)
+
+The six bounded eighth-repair controls survive. The fresh review returns the composition on
+[[D2678]], [[D2679]], [[D2680]], [[D2681]], [[D2682]], [[D2683]] and [[D2684]]. The compiler does
+not parse the exact three-field request; packet identity is
+the raw FEN/scope pair rather than the required seven-term digest; and a direct readings packet and
+wide→readings projection share that id while retaining five versus thirteen private execution
+outcomes. Cache admission then trusts a caller string, measures only `compiled.references` while
+publishing an unchecked crossed outer wrapper, and never asserts one private receipt authority.
+
+The graph is not immutable under its seal: the predecessor envelope is shallow-frozen and the
+repair's recursive freezer stops at any already-frozen parent, so a nested legal move can mutate
+after compilation. Finally, the thirteen-row registry is still local simulation—two placeholder
+collectors behind thirteen names—not the exact registered semantic/F1 adapter graph criterion 32
+requires.
+
+Exact review and reproducer:
+`planning/evidence-foundation-ux/shared-candidate-packet-ninth-fresh-independent-buildability-review-2026-09-04.md`;
+`make candidate-packet-ninth-fresh-review`. One bounded author repair must close all seven before
+another genuinely fresh review. No production packet, cache or consumer is authorized.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -2316,6 +2342,13 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-09-04 — ninth fresh independent review returned the eighth repair on [[D2678]]–[[D2684]].
+  The bounded graph controls survive, but request, factual identity, projected private closure,
+  cache key/result authority, deep immutability and exact collector execution do not compose.
+  `make candidate-packet-ninth-fresh-review` retains the complete earlier chain and passes 7/7 new
+  falsifiers. Exact return:
+  `planning/evidence-foundation-ux/shared-candidate-packet-ninth-fresh-independent-buildability-review-2026-09-04.md`.
+  No production packet, cache or consumer is authorized.
 - 2026-09-04 — [[D2655]]–[[D2660]] eighth author repair. One executable operation now consumes the
   predecessor legal-evidence author surface, runs all three exact collector plans, measures one
   descriptor-closed private graph fail-closed and admits it through an entry/byte/object bounded

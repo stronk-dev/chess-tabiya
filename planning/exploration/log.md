@@ -15471,3 +15471,21 @@ Batch and application replay validate retained bytes before returning.
 chain and passes 6/6 repair groups. Exact receipt:
 `planning/pack-capability-contract/thirteenth-author-repair-2026-09-04.md`. Another genuinely fresh
 review remains mandatory before acceptance or implementation; [[D560]] remains whole.
+
+## 2026-09-04 — Shared candidate packet ninth fresh independent return
+
+**What landed:** a fresh contract-tier review of the eighth shared-candidate-packet author repair,
+seven ledger findings [[D2678]]–[[D2684]], and maintained `make
+candidate-packet-ninth-fresh-review` coverage. No production collector, packet, cache, API, schema,
+content, archive or protected-design byte changed.
+
+**What changed:** the six bounded graph repairs survive, but the composition does not. Request and
+packet identity are not closed; direct and projected receipts retain different private evidence
+under one id; the cache trusts caller key/result authority; nested legal values can mutate behind a
+frozen envelope; and the thirteen executed collectors are local placeholders rather than the exact
+registered operations.
+
+**Evidence/next:** the target retains the complete eighth-author chain and passes 7/7 new
+falsifiers. Exact receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-ninth-fresh-independent-buildability-review-2026-09-04.md`.
+One bounded author repair and another genuinely fresh review precede production or consumer work.

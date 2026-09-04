@@ -766,6 +766,14 @@ at one descriptor-closed private aggregate and feeds the resulting byte/object r
 an entry/byte/object bounded LRU admission operation. `make candidate-packet-eighth-author-repair`
 retains every earlier control and passes seven composed arms. Production remains held for another
 genuinely fresh review and dependency landing.
+The ninth fresh candidate-packet review preserves those bounded controls but returns the composed
+surface on [[D2678]]–[[D2684]]. The request is open, packet identity omits five required factual
+terms, direct/projected narrow receipts retain different private graphs under one id, cache key and
+published wrapper remain caller authority, nested legal values can mutate after admission, and the
+thirteen collector rows execute two local placeholders rather than the exact registered adapters.
+`make candidate-packet-ninth-fresh-review` retains the complete earlier chain and passes 7/7 new
+falsifiers. The packet remains foundation-blocking pending one bounded repair, another fresh review
+and dependency landing.
 The manifest-wide follow-up makes that F1 amendment exact. The current 46 derived projections carry
 96 direct derivation members expanding to 99 executable paths. Eight outputs falsely advertise
 local/sync over Stockfish, ten bindings bypass provider-off validation through local wrappers, and
