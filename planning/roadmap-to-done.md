@@ -718,6 +718,13 @@ arms, shipped central legal/contact authorities, the production tablebase parser
 literal request/result ABI and one declared-evidence value receipt. Its maintained target passes
 all retained gates plus 5/5 new groups and strict TypeScript. This is still contract evidence:
 12/14 remains the honest production count pending eighth fresh review and dependencies.
+The same-day eighth fresh candidate-packet review returns its seventh author repair on
+[[D2655]]–[[D2660]]. Factory ownership is still asserted against prose rather than the predecessor
+source graph; the scope check executes no real dependency-closed plan; retained measurement omits
+private wrappers, containers and forbidden own-property shapes; category closure is tautological;
+and no bounded cache operation consumes the receipt. `make candidate-packet-eighth-fresh-review`
+retains 3/3 + 4/4 earlier controls and passes 6/6 new falsifiers. No packet, cache or consumer is
+authorized until one bounded repair closes all six and another genuinely fresh review accepts it.
 The manifest-wide follow-up makes that F1 amendment exact. The current 46 derived projections carry
 96 direct derivation members expanding to 99 executable paths. Eight outputs falsely advertise
 local/sync over Stockfish, ten bindings bypass provider-off validation through local wrappers, and

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:4ac4a01acb4d2b18bc8905cacef107a79d36c202d5e689188d8e69abedfefa20",
+    "roadmap": "sha256:496c062214ae38a30ca761c30555590c62ab8d5ac229981cba3fc4af7d3bd127",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:5a6654dfcda4c5000c0c4f11959c77185b28ef633a5cceaae07ffea2c842e2ae",
-    "rfcRegister": "sha256:935d020bc1e5be67ed639fe40f4d29d6e0705bc32b1ae8574b8c2edcc78efd49",
+    "workState": "sha256:d90e8eeda7aa0975a97fa28fbe2cc9b924dd0c3f9121e40dd0bf6c09fc5e0bf0",
+    "rfcRegister": "sha256:9f6feb9068553e95ca1a06608c35f247a25d9658fe178a134d5039e9655f2665",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 937,
+      "blocked": 943,
       "done": 824,
       "refused": 3
     },
@@ -186,9 +186,10 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "The seventh promotion author repair replaces five shadow-model seams with exact sealed result arms, shipped FEN-derived legal/contact authorities, the production tablebase parser and ten-category domain, the literal RFC/provider ABI and one declared-evidence value receipt. The evidence spine remains 12/14; eighth fresh review and provider/value dependency landing still gate implementation.",
+        "summary": "The eighth fresh candidate-packet review returns its seventh repair on six executable seams: factory ownership remains prose-only; no real dependency-closed scope plan runs; retained graph measurement omits wrappers, containers and forbidden property shapes; category closure is tautological; and no bounded cache consumes the receipt. The production evidence spine remains 12/14 and no packet consumer is authorized.",
         "impact": "held",
         "evidence": [
+          "planning/evidence-foundation-ux/shared-candidate-packet-eighth-fresh-independent-buildability-review-2026-09-04.md",
           "planning/evidence-foundation-ux/review-evidence-compiler-second-author-repair-2026-09-04.md",
           "rfc/review-evidence-compiler.md",
           "planning/bounded-policy-targets/fifth-author-repair-2026-09-04.md",

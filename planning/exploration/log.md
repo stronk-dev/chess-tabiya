@@ -15325,3 +15325,23 @@ new behavioral groups and strict TypeScript. Exact receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-seventh-author-repair-2026-09-04.md`.
 An eighth genuinely fresh independent review plus provider/value dependency landing still gate the
 held pair; the production evidence spine remains 12/14.
+
+## 2026-09-04 — Shared candidate packet eighth fresh independent return
+
+**What landed:** a genuinely fresh contract-tier review of the seventh candidate-packet author
+repair, six ledgered findings [[D2655]]–[[D2660]], and the maintained disposable
+`make candidate-packet-eighth-fresh-review` falsifier. No production packet, cache, collector,
+provider, selector, module, bot, Review, schema, content, archive or protected-design byte changed.
+
+**What changed:** the direction of the seventh repair survives, but its controls stop before the
+operation they claim. Factory ownership is checked only by reading RFC prose; scope equivalence
+executes no real dependency-closed plan or hidden outcome; retained measurement omits private
+wrapper/container roots and forbidden property shapes; category closure compares a constant back
+to itself; and the cache never consumes the byte/object receipt for admission, oversize or
+independent eviction.
+
+**Evidence/next:** `make candidate-packet-eighth-fresh-review` retains the earlier 3/3 + 4/4 and
+passes 6/6 new falsifiers. Exact receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-eighth-fresh-independent-buildability-review-2026-09-04.md`.
+One bounded eighth author repair must close all six, then another genuinely fresh independent
+review must accept it before any production packet or consumer is authorized.

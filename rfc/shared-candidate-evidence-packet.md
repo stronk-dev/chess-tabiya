@@ -1,7 +1,8 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — seventh author repair closes the sixth fresh-review returns
-  [[D2625]]–[[D2627]]; another genuinely fresh independent review is required before acceptance.**
+- **Status:** **draft — eighth fresh independent review returns the seventh author repair on
+  [[D2655]], [[D2656]], [[D2657]], [[D2658]], [[D2659]] and [[D2660]]; an eighth author repair and
+  another genuinely fresh review are required before acceptance.**
   The D2198–D2201 author repair remains present: the product factory fixes the primary manifest authority; every collector
   result is projection-addressed; thirteen exact context adapters satisfy the executable registry;
   and memo, service-stat and receipt-reference protocols are closed. The historical return remains
@@ -33,7 +34,10 @@
   `planning/evidence-foundation-ux/shared-candidate-packet-sixth-fresh-independent-buildability-review-2026-09-04.md`.
   `make candidate-packet-sixth-fresh-review` names the historical 3/3 return;
   `make candidate-packet-seventh-author-repair` inverts those seams and is the positive repair contract. Implementation
-  remains unauthorized.
+  remains unauthorized. `make candidate-packet-eighth-fresh-review` now proves the repair still
+  checks factory ownership against prose, simulates no real scope plan, omits retained wrapper
+  objects and forbidden property shapes from its graph, uses a tautological category guard and
+  never connects its measurement to cache admission.
   [[D1580]] remains separate numeric appliance-tier debt. *(Prior state: D1977–D1981
   author-repaired after D1958–D1961, D1900–D1903 and D1945–D1947.)*
 - **Author:** claude (initial draft); codex (2026-08-29 operation-boundary author repair). Drafted
@@ -1577,6 +1581,12 @@ rather than aspirational — criterion 14.
 | [[D2104]] | receipt omitted unavailable collector-result authority | §3.1/§5.3 | criteria 25/29: exact sealed outcomes retained and bijective to abstentions |
 | [[D2329]] | the proposed projection union widens to arbitrary `string` and mixes bare ids, `@1` keys and `{id, version}` values | §3.1/§5.3 | repaired: one manifest-derived generated `id@version` map types outputs/results/abstentions/value joins; the real production-type negative is criterion 34 |
 | [[D2330]] | readings-only filters out the event collectors required by its reading dependencies | §3.4/§5.3 | repaired: one dependency-closed plan separates hidden execution from retained output; all three exact plans and side-channel negatives are criteria 4/35 |
+| [[D2655]] | seventh repair checks factory ownership only by regexing RFC prose | §4.1/§12 | eighth author repair must execute the predecessor factory/import graph and exact retained value identity |
+| [[D2656]] | scope equivalence exercises one toy collector with an empty memo, not the three dependency-closed plans | §3.4/§5.3 | eighth author repair must execute every plan, hidden dependency and exact per-collector memo projection |
+| [[D2657]] | retained graph skips private candidate-input wrappers and array containers held by the WeakMap | §3.1/§6.3 | eighth author repair must traverse the exact private reference aggregate, excluding only the named singleton manifest |
+| [[D2658]] | graph walk silently ignores forbidden non-enumerable accessors and symbol-keyed values | §3.1/§6.3 | eighth author repair must inspect complete own descriptors/keys and refuse every unsupported shape |
+| [[D2659]] | category closure compares a constant-derived map back to the same constant | §3.1/§6.3 | eighth author repair must derive root/category closure once and fail on any uncategorized retained root |
+| [[D2660]] | retained-graph receipt has no cache admission, oversize or eviction consumer | §6.0/§6.3 | eighth author repair must compose the measured receipt into one independently bounded cache operation |
 
 ## Deviations from design
 
@@ -2093,6 +2103,29 @@ failure, not a gate expected to stay green after its predicates are inverted. Th
 evidence only. Another genuinely fresh independent review still gates acceptance and all production
 implementation.
 
+## Eighth fresh independent return (2026-09-04)
+
+The seventh repair's direction survives, but its executable evidence stops before the claimed
+operation. [[D2655]] finds that factory ownership is checked only against RFC prose: the author model
+never imports or calls the predecessor factory. [[D2656]] finds that scope equivalence runs one toy
+collector over an empty memo and aliases its result, exercising none of the three dependency-closed
+plans, hidden outcomes or real candidate rows.
+
+The retained-graph model is incomplete. [[D2657]] demonstrates that the private candidate-input
+wrapper objects and their array containers—strongly retained by the declared WeakMap—are skipped;
+a 100 KB strong reference added there costs zero. [[D2658]] demonstrates that non-enumerable
+accessors and symbol-keyed values are silently ignored despite the RFC's fail-closed rule. [[D2659]]
+shows the category check constructs both sides from one constant, so a new retained root is neither
+categorized nor traversed and the check stays green. [[D2660]] closes the composition finding: no
+cache consumes the new measure, and no byte/object limit, oversize result or eviction path exists in
+the author model.
+
+Exact review:
+`planning/evidence-foundation-ux/shared-candidate-packet-eighth-fresh-independent-buildability-review-2026-09-04.md`;
+`make candidate-packet-eighth-fresh-review` retains the prior 3/3 + 4/4 and passes 6/6 new
+falsifiers. An eighth author repair must close all six before another genuinely fresh review. No
+production packet, consumer or cache implementation is authorized.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -2235,6 +2268,12 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-09-04 — eighth fresh independent review returned the seventh repair on [[D2655]]–
+  [[D2660]]. Factory and scope controls do not execute their claimed graphs; retained measurement
+  skips private wrapper/container and forbidden-property shapes; category closure is tautological;
+  and no cache consumes the measurement. Exact review:
+  `planning/evidence-foundation-ux/shared-candidate-packet-eighth-fresh-independent-buildability-review-2026-09-04.md`.
+  `make candidate-packet-eighth-fresh-review` passes 6/6; implementation remains unauthorized.
 - 2026-09-04 — [[D2625]]–[[D2627]] seventh author repair. The packet now consumes the predecessor's
   exact factory without claiming its file; collector truth inputs contain no request scope and
   direct/projected shared values must agree; and cache admission measures every retained receipt

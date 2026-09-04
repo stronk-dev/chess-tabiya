@@ -623,7 +623,7 @@ candidate-packet-fourth-author-repair:
 candidate-packet-fourth-fresh-review:
 	node --test tools/d2389-candidate-packet-fourth-fresh-review/contract.test.mjs
 
-.PHONY: candidate-packet-fifth-author-repair candidate-packet-fifth-fresh-review candidate-packet-d2428-measurement candidate-packet-sixth-author-repair candidate-packet-sixth-fresh-review candidate-packet-seventh-author-repair semantic-collectors-promotion-third-fresh-review semantic-collectors-promotion-third-author-repair semantic-collectors-promotion-fourth-fresh-review semantic-collectors-promotion-fourth-author-repair
+.PHONY: candidate-packet-fifth-author-repair candidate-packet-fifth-fresh-review candidate-packet-d2428-measurement candidate-packet-sixth-author-repair candidate-packet-sixth-fresh-review candidate-packet-seventh-author-repair candidate-packet-eighth-fresh-review semantic-collectors-promotion-third-fresh-review semantic-collectors-promotion-third-author-repair semantic-collectors-promotion-fourth-fresh-review semantic-collectors-promotion-fourth-author-repair
 candidate-packet-fifth-author-repair:
 	node --test tools/d2389-candidate-packet-fifth-author-repair/contract.test.mjs
 
@@ -642,6 +642,9 @@ candidate-packet-sixth-fresh-review: candidate-packet-sixth-author-repair
 
 candidate-packet-seventh-author-repair: candidate-packet-sixth-author-repair
 	node --test tools/d2625-candidate-packet-seventh-author-repair/contract.test.mjs
+
+candidate-packet-eighth-fresh-review: candidate-packet-seventh-author-repair
+	node --test tools/d2655-candidate-packet-eighth-fresh-review/contract.test.mjs
 
 semantic-collectors-promotion-third-fresh-review:
 	node --test tools/d2468-semantic-collectors-promotion-third-fresh-review/*.test.mjs
