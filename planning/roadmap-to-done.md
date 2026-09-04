@@ -224,6 +224,16 @@ semantic-collectors-promotion-seventh-fresh-review` passes 5/5. The spine remain
 seventh bounded author repair, another fresh review and provider/value dependency landing. Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-seventh-fresh-independent-buildability-review-2026-09-04.md`.
 
+The same-day seventh author repair closes those five seams at contract tier. Exact provider and
+geometry-completion arms replace arbitrary result objects; shipped FEN-derived legal/contact
+authorities replace caller receipts; the production parser and complete ten-category vocabulary
+own tablebase values; the request/invocation match the RFC/provider ABI; and the sole output is
+declared F1 evidence with one factory-specific value receipt. `make
+semantic-collectors-promotion-seventh-author-repair` retains every earlier gate, passes 5/5 new
+groups and strict TypeScript. The spine is still **12/14**: eighth fresh review and dependency
+landing precede implementation. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-seventh-author-repair-2026-09-04.md`.
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded
@@ -703,6 +713,11 @@ mutable nested result sources, circular caller-minted receipts, unparsed and inc
 values, a shadow request/provider ABI and a plain `{payload}` output leave the promised exact
 operation unexercised. `make semantic-collectors-promotion-seventh-fresh-review` reproduces 5/5;
 12/14 remains the honest production count.
+The seventh author repair then replaces those five shadow seams with exact sealed source/completion
+arms, shipped central legal/contact authorities, the production tablebase parser/domain, the
+literal request/result ABI and one declared-evidence value receipt. Its maintained target passes
+all retained gates plus 5/5 new groups and strict TypeScript. This is still contract evidence:
+12/14 remains the honest production count pending eighth fresh review and dependencies.
 The manifest-wide follow-up makes that F1 amendment exact. The current 46 derived projections carry
 96 direct derivation members expanding to 99 executable paths. Eight outputs falsely advertise
 local/sync over Stockfish, ten bindings bypass provider-off validation through local wrappers, and

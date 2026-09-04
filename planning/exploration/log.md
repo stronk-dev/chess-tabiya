@@ -15307,3 +15307,21 @@ receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-seventh-fresh-independent-buildability-review-2026-09-04.md`.
 A seventh bounded author repair and another genuinely fresh independent review still gate both held
 projections; the twelve implemented collectors remain unchanged.
+
+## 2026-09-04 — Held promotion collectors seventh author repair
+
+**What landed:** the bounded contract-tier repair for [[D2650]]–[[D2654]] and maintained
+`make semantic-collectors-promotion-seventh-author-repair` target. No production collector,
+provider, catalogue, schema, migration, client, content, archive or protected-design byte changed.
+
+**What changed:** exact provider/local-domain/failure and geometry-completion arms replace arbitrary
+objects; legal moves and pawn contacts come from shipped FEN-derived authorities; recorded/live
+tablebase values cross the shipped parser and complete ten-category vocabulary; the executable
+request and invocation retain the RFC geometry/scope/signal and typed provider result/delivery; and
+the sole promotion outcome is declared F1 evidence with one factory-specific value receipt.
+
+**Evidence/next:** the maintained target retains every earlier author and review gate, passes 5/5
+new behavioral groups and strict TypeScript. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-seventh-author-repair-2026-09-04.md`.
+An eighth genuinely fresh independent review plus provider/value dependency landing still gate the
+held pair; the production evidence spine remains 12/14.
