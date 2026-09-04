@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:496c062214ae38a30ca761c30555590c62ab8d5ac229981cba3fc4af7d3bd127",
+    "roadmap": "sha256:5839c056dee0bd0a4c7a4cc2d39066aa3c230fb4b01154d90162e4ebecad0aa0",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:d90e8eeda7aa0975a97fa28fbe2cc9b924dd0c3f9121e40dd0bf6c09fc5e0bf0",
-    "rfcRegister": "sha256:9f6feb9068553e95ca1a06608c35f247a25d9658fe178a134d5039e9655f2665",
+    "workState": "sha256:c1ec048fd367f28971a99fd0e50322015dee53e66a1c9fa769a7900ace39f3d4",
+    "rfcRegister": "sha256:df233ead1b3b1b36ef66405635d176c938d64f747b75afd23d6addf0a459ae9b",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -186,7 +186,7 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "The eighth fresh candidate-packet review returns its seventh repair on six executable seams: factory ownership remains prose-only; no real dependency-closed scope plan runs; retained graph measurement omits wrappers, containers and forbidden property shapes; category closure is tautological; and no bounded cache consumes the receipt. The production evidence spine remains 12/14 and no packet consumer is authorized.",
+        "summary": "The eighth candidate-packet author repair closes six returned seams in one executable composition: the predecessor legal-evidence surface supplies exact values; all three dependency plans run; one fail-closed descriptor measures the complete private aggregate; and entry/byte/object bounded cache admission consumes the receipt. Production remains held for fresh review and dependency landing; the evidence spine remains 12/14.",
         "impact": "held",
         "evidence": [
           "planning/evidence-foundation-ux/shared-candidate-packet-eighth-fresh-independent-buildability-review-2026-09-04.md",

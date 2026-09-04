@@ -1,8 +1,8 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — eighth fresh independent review returns the seventh author repair on
-  [[D2655]], [[D2656]], [[D2657]], [[D2658]], [[D2659]] and [[D2660]]; an eighth author repair and
-  another genuinely fresh review are required before acceptance.**
+- **Status:** **draft — eighth author repair closes [[D2655]], [[D2656]], [[D2657]], [[D2658]],
+  [[D2659]] and [[D2660]] at the contract tier; another genuinely fresh independent review is
+  required before acceptance.**
   The D2198–D2201 author repair remains present: the product factory fixes the primary manifest authority; every collector
   result is projection-addressed; thirteen exact context adapters satisfy the executable registry;
   and memo, service-stat and receipt-reference protocols are closed. The historical return remains
@@ -34,10 +34,12 @@
   `planning/evidence-foundation-ux/shared-candidate-packet-sixth-fresh-independent-buildability-review-2026-09-04.md`.
   `make candidate-packet-sixth-fresh-review` names the historical 3/3 return;
   `make candidate-packet-seventh-author-repair` inverts those seams and is the positive repair contract. Implementation
-  remains unauthorized. `make candidate-packet-eighth-fresh-review` now proves the repair still
+  remains unauthorized. `make candidate-packet-eighth-fresh-review` proves the seventh repair still
   checks factory ownership against prose, simulates no real scope plan, omits retained wrapper
   objects and forbidden property shapes from its graph, uses a tautological category guard and
-  never connects its measurement to cache admission.
+  never connects its measurement to cache admission. `make candidate-packet-eighth-author-repair`
+  retains that falsifier and passes seven repair controls over the executable predecessor factory,
+  all three plans, the exact private graph and bounded cache admission.
   [[D1580]] remains separate numeric appliance-tier debt. *(Prior state: D1977–D1981
   author-repaired after D1958–D1961, D1900–D1903 and D1945–D1947.)*
 - **Author:** claude (initial draft); codex (2026-08-29 operation-boundary author repair). Drafted
@@ -616,6 +618,17 @@ objects count twice; a shared reference counts once. The category census is an i
 root check, not a replacement for traversal. These are deterministic logical graph bounds—not a
 claim about V8 heap/RSS—and criterion 12 requires production Node-24 calibration before numeric
 defaults may be published.
+
+One retained-root descriptor owns both closure and categorization ([[D2657]]–[[D2659]]). It names
+the three measured top-level fields (`packet`, `legalMovesInput`, `candidateInputs`), deliberately
+excludes only the process-wide `manifest`, and derives every category selector from those same
+rows. Measurement starts at the constructed private aggregate itself, so the candidate-input array,
+each private wrapper and all nested outcome/value arrays are reachable objects rather than flattened
+away. `Reflect.ownKeys` plus complete own-property descriptors reject symbol keys, accessors,
+non-enumerable data, undeclared keys, functions, bigint, non-finite numbers and unsupported
+prototypes before a receipt can reach the cache. An added reference field therefore fails root-set
+closure until it is categorized and traversed; category keys are never compared back to a second
+copy of their own constant.
 
 `projectCandidatePopulationReceipt` first asserts the source receipt and then checks the literal
 partial order `events_and_readings → {events_and_readings, events, readings}`, `events → events`,
@@ -1255,6 +1268,13 @@ when an equal clone replaces a shared value. A quiet position with zero visible 
 a readings-only position whose event dependencies are hidden both have non-zero retained measures.
 No public-packet serialization or visible event/reading coefficient is an admissible substitute.
 
+The cache insertion operation calls that measurement itself; callers cannot submit a byte/object
+claim. It compares the returned receipt against `maxRetainedLogicalBytes` and
+`maxRetainedObjects`, returns and counts `oversize_not_cached` when either one-entry bound fails,
+and otherwise evicts LRU settled entries until entry, byte and object gauges all fit. The maintained
+author target exercises each dimension independently, so the graph walker and cache cannot pass as
+two disconnected components ([[D2660]]).
+
 The historical Node-24 record remains useful evidence that equal visible-item weights fail: 37,804
 events added 52.28 MB heap, while adding 6,629 readings raised the old eight-entry packet cache to
 91.78 MB. It is **not calibration for this graph** because it predates receipt references and hidden
@@ -1683,6 +1703,10 @@ arms, and undergo another fresh independent review before acceptance.
    narrow have set-equal `(moveUci, projection, value digest, abstention/outcome)` tuples. A cached
    wide projection additionally preserves exact value/outcome references. A malicious collector
    that branches on scope cannot type-check, and cache request order cannot change packet bytes.
+   The maintained author contract executes all three literal plans across complete candidate rows,
+   inspects the exact memo-key set for every invocation, distinguishes five execution outcomes from
+   three retained outcomes in readings-only, and compares direct versus projected value,
+   abstention and outcome tuples. A toy one-collector projection cannot satisfy this arm.
 5. **One packet serves both the played row and the alternative denominator — compared on `(moveUci,
    afterFen)` pairs, not on cardinality.** The cardinality arm alone **cannot fail**:
    `alternatives = candidates.filter(row => row.moveUci !== playedUci)` makes
@@ -1774,7 +1798,7 @@ arms, and undergo another fresh independent review before acceptance.
     measurement.* The Node-24 receipt at
     `planning/evidence-foundation-ux/d1579-candidate-packet-node24-envelope.json` is retained as the
     historical negative: its visible-item formula can report equal or zero weight for materially
-    different retained graphs. It cannot supply a default. The implementation rerun uses the exact
+different retained graphs. It cannot supply a default. The implementation rerun uses the exact
     production `CandidatePopulationReceiptReferences` graph and records, per root and scope, every
     closed category count, logical UTF-8 bytes, unique object count, structural bytes, heap/RSS delta
     and cache admission. Required controls are a quiet root with zero visible facts, readings-only
@@ -1801,6 +1825,8 @@ arms, and undergo another fresh independent review before acceptance.
     retained limit fails before cache insertion. Projection hits do no chess work and carry their
     own scope/id. *Fails against an unbounded, entry-count-only, visible-item-only or untyped-item
     `Map`.*
+    The author contract invokes cache admission with the graph receipt rather than matching these
+    field names in prose, and separately crosses entry eviction, byte oversize and object oversize.
 14. **The claims decision stays true at implementation time, and C8 is named because it is the check
     a `none` claim needs.** `register-check` **C1–C8** green with this RFC's claims block reading
     `none`, **and** an assertion that the implementation touched no file under `schemas/` or
@@ -1977,6 +2003,9 @@ arms, and undergo another fresh independent review before acceptance.
     contains no recreated `evidence-source-adapters.ts`, same-purpose wrapper/alias or packet-side
     factory definition, and contains no `exactLegalMoveMap`/`exactLegalMoves` import below that
     boundary. This is an executable source-graph negative, not a comment convention.
+    The maintained author contract imports and executes the predecessor author model's
+    `compileLegalPopulation` path, observes one authority call and exact payload/move references,
+    and rejects a local duplicate definition; reading this criterion as text is not sufficient.
 
 ## Fourth fresh independent return (2026-08-31)
 
@@ -2126,6 +2155,25 @@ Exact review:
 falsifiers. An eighth author repair must close all six before another genuinely fresh review. No
 production packet, consumer or cache implementation is authorized.
 
+## Eighth author repair (2026-09-04)
+
+The repair composes the six returned seams into one operation rather than adding six prose checks.
+[[D2655]] now imports and executes the predecessor author surface, observing one legal-authority
+call and the exact map/move references. [[D2656]] runs the ten-row event, five-row dependency-closed
+reading and thirteen-row wide plans over complete candidate rows; every invocation sees exactly its
+declared memo keys, readings-only retains three outcomes while privately preserving five, and
+direct/projected tuples agree with reference identity inside the wide projection.
+
+[[D2657]]–[[D2659]] share one retained-root descriptor. Measurement begins at the exact private
+aggregate after explicitly removing only the manifest singleton, visits its arrays and wrappers,
+uses complete own-property descriptors, and fails on hidden/symbol/accessor/unsupported values or
+an uncategorized new root. [[D2660]] feeds that receipt directly to cache admission and crosses
+entry eviction, byte oversize and object oversize independently.
+
+`make candidate-packet-eighth-author-repair` retains the earlier 3/3 + 4/4 and the 6/6 return,
+then passes seven composed repair controls. This is positive author evidence only. Another
+genuinely fresh independent review and dependency landing still gate production implementation.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -2268,6 +2316,11 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-09-04 — [[D2655]]–[[D2660]] eighth author repair. One executable operation now consumes the
+  predecessor legal-evidence author surface, runs all three exact collector plans, measures one
+  descriptor-closed private graph fail-closed and admits it through an entry/byte/object bounded
+  LRU cache. `make candidate-packet-eighth-author-repair` retains every prior control and passes
+  seven new composed arms. Fresh independent review remains required.
 - 2026-09-04 — eighth fresh independent review returned the seventh repair on [[D2655]]–
   [[D2660]]. Factory and scope controls do not execute their claimed graphs; retained measurement
   skips private wrapper/container and forbidden-property shapes; category closure is tautological;

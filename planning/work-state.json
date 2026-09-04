@@ -21268,7 +21268,7 @@
       "id": "D2655",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:928d6c3f8a62ff9dfea9a4e1593572a413995de3d6278a27ae5767f8dc9f4908",
+      "sourceDigest": "sha256:36bd0de17093571c0410375632f4fa6c95c74fc346916f8f98ceb94c18454b1a",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:shared-candidate-evidence-packet.md"
@@ -21277,7 +21277,7 @@
       "id": "D2656",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2c5e0927b71128ed4756658a0a7e75f84ef4b42a7c33d5c35a5d8ddabf091768",
+      "sourceDigest": "sha256:3444be14f393836025e856a5d2ce29742fb1939344387f29b391d79507819d9f",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:shared-candidate-evidence-packet.md"
@@ -21286,7 +21286,7 @@
       "id": "D2657",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7230e90fd0b1dc746dd1dbdbe08f31e2d8b0eec4f997a13abaefcb9df312a219",
+      "sourceDigest": "sha256:e5e410f4fee5ddfe0e463cfd08e3595ff466d3aad2f9e3a2b40c03f2ed75fb4b",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:shared-candidate-evidence-packet.md"
@@ -21295,7 +21295,7 @@
       "id": "D2658",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:eb968a3f6c728d249652ada306199e354b07acae632615553694e780372e5582",
+      "sourceDigest": "sha256:585c5352827619181401ec810a874a07ded08c88f94cdf1755bc550b83f7d892",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:shared-candidate-evidence-packet.md"
@@ -21304,7 +21304,7 @@
       "id": "D2659",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b33c769e9993118850da6eb5a221ff146462453075443f63ebd0247bea838acc",
+      "sourceDigest": "sha256:39ccbaa81c819203abef860bce634bbee640ea897b21891447d1f62d15bf5e4b",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:shared-candidate-evidence-packet.md"
@@ -21313,7 +21313,7 @@
       "id": "D2660",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9bfae6a707287f6072c8a1ed1611b4ac5772a4b7af81819acf0396eff1444f38",
+      "sourceDigest": "sha256:4fd1ecac4026da946d23739f3aacfa5d1e3f33d3c542f88f465170441102dffb",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:shared-candidate-evidence-packet.md"

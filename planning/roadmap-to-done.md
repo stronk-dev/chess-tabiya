@@ -725,6 +725,12 @@ private wrappers, containers and forbidden own-property shapes; category closure
 and no bounded cache operation consumes the receipt. `make candidate-packet-eighth-fresh-review`
 retains 3/3 + 4/4 earlier controls and passes 6/6 new falsifiers. No packet, cache or consumer is
 authorized until one bounded repair closes all six and another genuinely fresh review accepts it.
+The bounded eighth author repair now closes those six seams at contract tier. One executable model
+imports the predecessor legal-evidence surface, runs all three dependency plans, starts measurement
+at one descriptor-closed private aggregate and feeds the resulting byte/object receipt directly to
+an entry/byte/object bounded LRU admission operation. `make candidate-packet-eighth-author-repair`
+retains every earlier control and passes seven composed arms. Production remains held for another
+genuinely fresh review and dependency landing.
 The manifest-wide follow-up makes that F1 amendment exact. The current 46 derived projections carry
 96 direct derivation members expanding to 99 executable paths. Eight outputs falsely advertise
 local/sync over Stockfish, ten bindings bypass provider-off validation through local wrappers, and

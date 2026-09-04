@@ -15345,3 +15345,21 @@ passes 6/6 new falsifiers. Exact receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-eighth-fresh-independent-buildability-review-2026-09-04.md`.
 One bounded eighth author repair must close all six, then another genuinely fresh independent
 review must accept it before any production packet or consumer is authorized.
+
+## 2026-09-04 — Shared candidate packet eighth author repair
+
+**What landed:** the bounded contract-tier repair for [[D2655]]–[[D2660]] and maintained
+`make candidate-packet-eighth-author-repair` target. No production packet, cache, runtime, server,
+API, selector, module, bot, Review, schema, content, archive or protected-design byte changed.
+
+**What changed:** one executable operation now imports the predecessor legal-evidence author
+surface and retains its exact map/move objects; executes the ten/five/thirteen collector plans with
+exact memo, hidden and retained outcomes; measures the exact private aggregate through one
+root/category descriptor with fail-closed own-property handling; and feeds that measure directly to
+entry, byte and object bounded LRU cache admission.
+
+**Evidence/next:** `make candidate-packet-eighth-author-repair` retains 3/3 + 4/4 + 6/6 earlier
+controls and passes seven composed repair arms. Exact receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-eighth-author-repair-2026-09-04.md`.
+Another genuinely fresh independent review and the evidence-value-authority dependency still gate
+production packet/cache implementation and every consumer.
