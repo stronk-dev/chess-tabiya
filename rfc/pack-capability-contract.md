@@ -1,12 +1,13 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **RETURNED by the eleventh fresh independent review 2026-09-04 on
-  [[D2587]]–[[D2592]].** The bounded [[D2563]]–[[D2569]] repairs survive, but the application receipt
-  excludes valid immediate-guard events and is not joined to a retained run transition; nested
-  objective requests escape exact parsing/immutability; the node/FEN lookup is not run-scoped; both
-  internal origins fail the executable admission transaction; and result sequences can be reused
-  after rewind/restart. `make pack-capability-eleventh-fresh-review` reproduces 6/6. No
-  implementation is authorised and the D560 hold stays whole.
+- **Status:** draft — **twelfth author repair completed 2026-09-04 on
+  [[D2587]]–[[D2592]]; twelfth fresh independent review required.** One transaction-owned
+  before/after run result now derives the complete core/objective/recorded-guard suffix and its
+  receipt; objective requests are recursively exact and immutable; batch validation consumes a
+  parsed run snapshot; all three origins derive their only consumer; and a durable per-run counter
+  prevents result-sequence reuse across rewind and restart. `make
+  pack-capability-twelfth-author-repair` retains the complete eleventh target and passes 6/6 new
+  controls. No implementation is authorised and the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -22,7 +23,7 @@
 
 ```tabiya-claims
 pack-schema | lane 0.30 | requires (new, required array of capability requirement objects on the pack root); $defs/capabilityRequirement (new, closed object: id, version)
-migration | position behind longitudinal-store | evidence_job_batches + evidence_jobs durable admission, lease, retry, settlement, staged result and consumption rows
+migration | position behind longitudinal-store | evidence_job_batches + evidence_jobs durable admission, lease, retry, settlement, staged result and consumption rows + evidence_result_sequences never-reused per-run allocator
 ```
 
 ## Summary
@@ -1391,7 +1392,8 @@ opponent plies and group creation reach exactly one of those three enqueue owner
 become extra worker gateways. The composed author artifact records the four concrete enqueue calls
 (`enqueue` on all three origins plus `enqueueProducer` for run-enrichment tablebase work).
 
-The durable authority is an additive `evidence_job_batches` + `evidence_jobs` pair in the
+The durable authority is an additive `evidence_job_batches` + `evidence_jobs` pair plus one
+`evidence_result_sequences` allocator in the
 application database, claimed in one migration position behind `longitudinal-store`. A batch is the
 admission and replay boundary; a job is the lease and settlement boundary. The migration owns these
 exact fields:
@@ -1409,6 +1411,11 @@ CREATE TABLE evidence_job_batches (
   admitted_at TEXT NOT NULL,
   UNIQUE (id, run_id, origin),
   UNIQUE (run_id, origin, idempotency_key)
+) STRICT;
+
+CREATE TABLE evidence_result_sequences (
+  run_id TEXT PRIMARY KEY REFERENCES drill_runs(id) ON DELETE CASCADE,
+  next_result_seq INTEGER NOT NULL CHECK (next_result_seq >= 1)
 ) STRICT;
 
 CREATE TABLE evidence_jobs (
@@ -1459,12 +1466,14 @@ parsed request and digest equal that indexed batch member. Missing, extra, dupli
 reordered children are corrupt storage. Batch parsing never trusts the duplicated columns merely
 because each is independently well-formed ([[D2542]]).
 
-**[[D2566]]:** the parser join is literal and bidirectional. `batchRow.run_id`/`origin` equal the
-parsed batch request; every contiguous child row equals its indexed parsed member on batch id,
-ordinal, run, origin, consumer, provider operation, request bytes/digest and node id; and the
-request FEN equals that immutable node's FEN in the same run snapshot. A self-consistent batch/job
-request for run B stored beneath run-A columns is corrupt even when both digests and the composite
-foreign key are valid.
+**[[D2566]]/[[D2590]]:** the parser join is literal and bidirectional. `validateStoredBatch`
+accepts one parsed, recursively immutable run snapshot rather than a bare node/FEN map. Its run id
+equals the parsed batch request; `batchRow.run_id`/`origin` equal that request; every contiguous
+child row equals its indexed parsed member on batch id, ordinal, run, origin, compiled consumer,
+provider operation, request bytes/digest and node id; and the request FEN equals that immutable
+node's FEN in the same snapshot. A self-consistent batch/job request for run B stored beneath run-A
+columns, or an equal run-B node map supplied for run A, is corrupt even when both digests and the
+composite foreign key are valid. A copied/spread snapshot loses its parser authority.
 
 Request identity is one literal image, not “canonical JSON” left to the implementer:
 
@@ -1503,6 +1512,14 @@ bounds and a crossed non-null objective identity. The batch parser rejects missi
 anything outside 1–16 jobs and any job whose `runId` differs from the batch. Hashing an arbitrary
 JSON-shaped object is not an overload. Parser, digest writer and digest verifier share these exact
 functions.
+
+**[[D2588]]:** `ObjectiveEvidenceRequest` is not an opaque nested object. Its exact key set is
+`runId`, `packId`, `packDigest`, `nodeId`, `fen`, `objectiveState`, `evidenceRefs`, `policyConfig`.
+The parser validates the closed six-member objective-state union; the closed `seedMode`; the closed
+`locus` keys and execution locus; and every exact `{id,version}` engine/model member. It recursively
+copies and freezes every object and array before branding the outer job. Missing/extra nested keys,
+invalid union members and crossed run/node/FEN fail. Mutating any caller-owned nested array or
+policy object after parsing cannot move the accepted digest.
 
 The production parser adds state-specific exact-key and presence checks that SQLite cannot express
 without duplicating the union. `running` alone requires both lease fields. `retry_wait` requires
@@ -1574,6 +1591,13 @@ job. The concurrent winner reports those constructions; the loser/replay reports
 the stored UUIDs. Fixed candidate ids and a separately asserted constructor name do not satisfy the
 contract.
 
+**[[D2591]]:** that same lock-held worker derives `consumer_id` from the parsed sealed origin with
+one exhaustive function: explicit analysis → `runtime.analysis`, Story completion →
+`review.story_evidence`, run enrichment → `runtime.background_evidence`. Neither a caller nor a
+constant at the insert site supplies it. The concurrency gate runs two simultaneous first flights
+for each origin and proves one winning UUID population, one zero-construction replay, the exact
+stored consumer and no SQL-check failure in all three arms.
+
 | origin | durable idempotency key | canonical batch request |
 |---|---|---|
 | `explicit_analysis` | caller's required, canonical UUID `Idempotency-Key` | caller-ordered 1–16 node/kind/search-bound requests |
@@ -1617,8 +1641,8 @@ and worker code may not sequence the underlying writes themselves:
 | `admitEvidenceBatch` | idempotency lookup/conflict plus one whole explicit/Story batch and every admitted job |
 | `commitRunMutationWithEvidence` | run lease/CAS, complete run event bytes, and zero-to-eight enrichment batches (one per new eligible node) with every job |
 | `commitRewindWithEvidenceCancellation` | run lease/CAS, rewind event, and the exact pruned-node durable-state transitions below |
-| `settleEvidenceJob` | lease/generation/request check, exact settlement, and unique per-run sequence where required |
-| `applyEvidenceAndConsumeJob` | run lease/CAS, events from the stored result, and transition of that same success row to consumed |
+| `settleEvidenceJob` | lease/generation/request check, exact settlement, and allocation/increment of the durable per-run result counter where required |
+| `applyEvidenceAndConsumeJob` | parsed before-run + run lease/CAS, internally derived core/objective/recorded-guard suffix, parsed after-run + retained journal, receipt, and transition of that same success row to consumed |
 
 Learner move, opponent ply and grouped seed creation derive the complete `run_enrichment` batch
 from the post-mutation immutable node(s) before calling `commitRunMutationWithEvidence`. There is no
@@ -1636,11 +1660,16 @@ Cancellation uses the same exact lease receipt when a worker currently owns the 
 forces the transaction to re-read/retry rather than committing the rewind against an unfenced
 worker ([[D2546]]).
 
-**[[D2567]]:** this is a row transition, not a state-label lookup. Each cancellable row writes the
+**[[D2567]]/[[D2592]]:** this is a row transition, not a state-label lookup. Each cancellable row writes the
 `{kind:"cancelled",reason:"superseded"}` settlement, clears lease/retry/application fields and
 `result_seq`, and a running row additionally increments `lease_generation`. Each retained terminal
 row is returned byte-identically. Tests compare every changed or preserved field; projecting only
-the destination state cannot satisfy criterion 26.
+the destination state cannot satisfy criterion 26. Clearing a visible `result_seq` never rewinds
+`evidence_result_sequences.next_result_seq`: `settleEvidenceJob` initializes that row at 1, reads
+and increments it under the same `BEGIN IMMEDIATE` transaction as the job CAS, and assigns the
+pre-increment value. The allocator row is retained until its run is deleted. Neither
+`MAX(result_seq)` nor a process counter is permitted. The permanent sequence fixture closes and
+reopens SQLite between settle → rewind → settle and requires `1 → 2`.
 
 Workers claim with a compare-and-swap lease and increment `attempt_count`. Success atomically writes
 the complete success settlement and per-run `result_seq`; the existing evidence page reads
@@ -1675,13 +1704,18 @@ and any real failure retained. When the bound is exhausted, `runtime.analysis` b
 `provider_unavailable`. Both retain availability and optional real failure for diagnostics. No empty
 settlement mints evidence.
 
-**[[D2568]]:** the receipt constructor consumes the parsed job, its exact stored success settlement,
-the one-step forward run revision and the complete newly appended event array. Its first event is
-the exact `evidence.attached` payload for `engineEvidenceRef(jobId)` or
-`tablebaseEvidenceRef(jobId)`; a non-null stored objective proposal requires exactly one following
-`objective.state_changed` event with the same node and evidence reference, while null permits no
-second event. Backward/equal revisions, another node/ref/payload, a missing objective event or any
-extra event fail before the receipt is stored.
+**[[D2568]]/[[D2587]]/[[D2589]]:** there is no public receipt constructor accepting revisions or
+events. `applyEvidenceAndConsumeJob` alone receives the parsed CAS-owned before-run, stored job and
+stored success. It constructs `evidence.attached`; constructs the exact
+`objective.state_changed` event only for a non-null stored proposal; invokes the registered
+`applyRecordedEngineGuard` authority when the before-run policy is `immediate_guard`; appends that
+authority's complete zero-or-more `feedback.generated` result; saves the one-revision after-run;
+then derives the exact appended journal suffix and receipt from those two retained snapshots. An
+`immediate_guard` application cannot omit even an honestly empty guard outcome. The after-run must
+retain the entire before-run journal byte-for-byte, and each new sequence begins exactly after its
+tail. Another run, node, ref, payload, proposal, guard invocation, revision or journal prefix fails
+inside the transaction. Replay returns the stored sealed result; a spread/copy cannot satisfy the
+transaction-result assertion.
 
 On process restart, `admitted` and `retry_wait` rows remain eligible, and an expired `running` lease
 returns to `retry_wait` with its exact retry basis/history retained. Provider-result cancellation for
@@ -2212,6 +2246,27 @@ Exact evidence:
 every earlier control while joining complete run effects, nested request identity, actual run
 snapshots/transitions, all origins and restart-stable result ordering before another review.
 
+## Twelfth author repair (2026-09-04)
+
+[[D2587]] and [[D2589]] are closed by removing the free receipt constructor. One transaction-owned
+operation consumes a parsed CAS before-run and the stored success, constructs attached/objective
+events, composes the registered guard's complete result for `immediate_guard`, constructs the
+after-run and only then digests the retained appended suffix. [[D2588]] is closed by exact recursive
+parsing and immutable copying of the complete live `ObjectiveEvidenceRequest` including policy
+locus and versioned engine/model members. [[D2590]] replaces the bare node map with one parsed,
+run-identified immutable snapshot.
+
+[[D2591]] derives the child consumer from the sealed origin inside the lock-held winner and races
+first flight/replay for all three origins. [[D2592]] adds `evidence_result_sequences`: allocation
+and increment happen in the settlement transaction, while rewind may clear the visible job
+sequence but cannot erase the allocator. The fixture closes/reopens SQLite between the two
+settlements and observes 1 then 2.
+
+`make pack-capability-twelfth-author-repair` first runs the complete eleventh-author target, then
+passes six new executable controls. No production, schema, migration, API, storage, pack, content
+or protected-design byte changed. A genuinely fresh twelfth independent review is required before
+acceptance or implementation, and [[D560]] remains whole.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -2392,7 +2447,9 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     one provider call per stored job. A two-connection `BEGIN IMMEDIATE` fixture releases both
     writers from one barrier and observes one winner, one stored batch/child population and the same
     stored batch id from the loser. Equal key with unequal canonical request refuses. Bumping an
-    internal plan without its key version refuses.
+    internal plan without its key version refuses. The same concurrent fixture runs all three
+    origins and joins their stored children to the exact origin-derived consumer; no insert-site
+    constant or caller-supplied consumer is accepted ([[D2591]]).
 25. **Run mutation and automatic enrichment are one commit ([[D2526]]).** Learner move, opponent
     ply and grouped seed creation each commit their run event plus the complete internal batch/jobs
     through `commitRunMutationWithEvidence`. A fault before either side leaves the old run and zero
@@ -2408,13 +2465,18 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
 27. **Settlement and consumption remain exact.** Expired leases recover; shutdown returns work to
     `retry_wait`; every claim/reclaim increments the durable lease generation, and a stale
     generation/owner/request receipt cannot retry, cancel or settle. Success writes the complete
-    settlement plus unique per-run sequence atomically. Apply derives events solely from that stored
-    settlement and consumes the same row in one transaction. The consumed row retains the exact
+    settlement plus a sequence allocated/incremented by the durable per-run counter in that same
+    transaction; settle→rewind→restart→settle is strictly increasing ([[D2592]]). Apply derives its
+    core/objective events solely from the stored settlement, composes the registered guard result
+    when the policy requires it, derives before/after and appended suffix from retained run snapshots,
+    and consumes the same row in one transaction. The consumed row retains the exact
     before/after revision, non-empty contiguous event range and canonical event-array digest;
     close/reopen and response-loss replay return the stored receipt, while a missing, crossed or
     digest-mismatched range fails as corrupt. Crash fixtures yield only complete earlier/later
     states—never lost work, duplicate evidence/objective events, unattached consumed rows or fake
-    empty payloads. Unknown/crossed states, extra keys and origin-consumer pairs fail.
+    empty payloads. Valid immediate-guard feedback remains inside the same receipt ([[D2587]]);
+    caller-supplied revisions/events, copied snapshots, mutable nested requests, unknown/crossed
+    states, extra keys and origin-consumer pairs fail ([[D2588]]–[[D2590]]).
 
 ## Discharges
 
@@ -2489,6 +2551,11 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-09-04 (**[[D2587]]–[[D2592]] twelfth author repair**): replaced the caller-mintable receipt
+  with one sealed before/after run transaction; recursively parsed/froze objective requests; bound
+  stored jobs to a parsed run snapshot; derived all three consumers from origin; and added a
+  restart-stable per-run result allocator. `make pack-capability-twelfth-author-repair` retains the
+  complete eleventh target and passes 6/6 new controls. Fresh review still gates implementation.
 - 2026-09-04 (**eleventh fresh independent return**): returned on [[D2587]]–[[D2592]]. Valid guarded
   run effects are outside the receipt; nested objective values remain mutable/unparsed; receipts and
   node maps lack their run authority; both internal origins fail exact SQL; and result ordering can

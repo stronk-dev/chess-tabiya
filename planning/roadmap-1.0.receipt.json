@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:d0f91c9ece0a56914efd480e4025994f74782a27a13e14af0047f61e79fe336b",
+    "roadmap": "sha256:b20ce01bf1a335ef3d31fa30b0dc1e55fa4e0bb879cba7f50d97e8a3da6f8e28",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:d614922708e67d86cc2ae067ae435b044ba1dd5694d8af9ac9099b3f9bcd1eb5",
-    "rfcRegister": "sha256:bb1fddce258e76d56b5efa20563a0d22949bd46a081c28a10ec3dca3ecf990b9",
+    "workState": "sha256:59219804a2f756bd5df7b78a5917ba730c35b6dae02e55bcc661da653e113332",
+    "rfcRegister": "sha256:ae272736989f449f05eec2068e18ef536ba99d408e699cb16e18158e0339ab8e",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -112,7 +112,7 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Fresh reviews returned critical authority seams across longitudinal history, pack capability, shared-resource bootstrap, Campaign and presentation. The phase composer and generic shared-resource bootstrap have bounded author repairs, and evidence presentation now has its fifth: whole-resource hashing, mandatory revision, operation-derived absence, non-copyable questions, single-expression witnesses and canonical Explorer UCI identity pass 31 assertions plus lifecycle typecheck. Foundation implementation remains held until genuinely fresh reviews accept these repaired contracts.",
+        "summary": "Fresh reviews returned critical authority seams across longitudinal history, shared-resource bootstrap, Campaign and presentation. Pack capability now has its twelfth bounded author repair: one transaction-owned run/application receipt, recursively exact objective requests, parsed run snapshots, all-origin admission and a restart-stable result allocator pass the complete retained gate plus 6/6 new controls. Foundation implementation remains held until genuinely fresh reviews accept these repaired contracts.",
         "impact": "held",
         "evidence": [
           "planning/shared-resource-register-bootstrap/seventh-author-repair-2026-09-04.md",

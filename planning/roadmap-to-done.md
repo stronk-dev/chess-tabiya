@@ -143,13 +143,15 @@ shared-resource-bootstrap-seventh-author-repair` passes the retained 4/4 plus 5/
 Fresh independent review still precedes acceptance and implementation. Receipt:
 `planning/shared-resource-register-bootstrap/seventh-author-repair-2026-09-04.md`.
 
-The same-day eleventh `pack-capability-contract` author repair closes its seven bounded predecessor
-defects ([[D2563]]–[[D2569]]), but the subsequent fresh review returns the durable foundation on
-[[D2587]]–[[D2592]]. Valid immediate-guard events are outside its receipt; nested objective requests
-can mutate after branding; receipts and node maps lack their actual run transition/snapshot; both
-internal origins violate the exact SQL consumer check; and clearing `result_seq` permits reuse after
-rewind. `make pack-capability-eleventh-fresh-review` reproduces 6/6. A twelfth repair and another
-fresh review precede every pack/schema/storage implementation.
+The same-day twelfth `pack-capability-contract` author repair closes [[D2587]]–[[D2592]] at contract
+tier without claiming production. One transaction-owned before/after run result derives the exact
+core/objective/recorded-guard journal suffix and receipt; the complete nested objective request is
+parsed and recursively immutable; stored batches join a parsed run snapshot; all three origins
+derive their consumer inside admission; and `evidence_result_sequences` prevents allocation reuse
+after rewind/restart. `make pack-capability-twelfth-author-repair` retains the complete eleventh
+target and passes 6/6 new controls. Fresh independent review still precedes every
+pack/schema/storage implementation. Receipt:
+`planning/pack-capability-contract/twelfth-author-repair-2026-09-04.md`.
 
 ### 2. Evidence collection, semantic events, selection, and grounding
 

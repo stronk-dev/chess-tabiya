@@ -3,16 +3,16 @@
 - **RFC:** `rfc/pack-capability-contract.md`
 - **Reviewer:** codex
 - **Started:** 2026-08-26; latest review completed 2026-09-04
-- **State:** eleventh fresh independent review **returned** the RFC on [[D2587]]–[[D2592]];
-  twelfth author repair and another fresh review required; no implementation authorised
+- **State:** twelfth author repair **complete** on [[D2587]]–[[D2592]]; another genuinely fresh
+  independent review required; no implementation authorised
 
 ## Current objective
 
-Repair [[D2587]]–[[D2592]] without weakening the retained durable-job gains: complete guarded run
-effects, recursively exact objective requests, actual run transition/snapshot operands, all three
-origin mappings and never-reused durable result order. Exact return:
-`eleventh-fresh-independent-buildability-review-2026-09-04.md`; executable falsifier:
-`make pack-capability-eleventh-fresh-review`. This remains specification work, not lane-0.30
+Submit the [[D2587]]–[[D2592]] repair to genuinely fresh review without weakening the retained
+durable-job gains. The repair now carries complete guarded run effects, recursively exact objective
+requests, actual run transition/snapshot operands, all three origin mappings and never-reused
+durable result order. Exact receipt: `twelfth-author-repair-2026-09-04.md`; executable author gate:
+`make pack-capability-twelfth-author-repair`. This remains specification work, not lane-0.30
 implementation or a corpus wave.
 
 ## Author-repair order
@@ -34,7 +34,7 @@ implementation or a corpus wave.
 9. ✅ Repair [[D2070]]–[[D2076]] with a sealed two-schema transition, split plan/readiness gates,
    author-owned post-image, complete source closure, metadata exclusions, retained histories and
    ordinal-free identities; preserve all 24 earlier arms and request fresh review.
-10. ⏳ Repair [[D2587]]–[[D2592]] with one transaction-owned run/application receipt, recursively
+10. ✅ Repair [[D2587]]–[[D2592]] with one transaction-owned run/application receipt, recursively
     exact objective parsing, run-branded node lookup, origin-derived consumer mapping and a durable
     monotone result allocator; retain every earlier gate and request another fresh review.
 

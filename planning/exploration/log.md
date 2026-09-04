@@ -15128,3 +15128,22 @@ receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-sixth-author-repair-2026-09-04.md`.
 A seventh genuinely fresh independent review plus provider-exchange and evidence-value-authority
 landing still gate production. The evidence spine honestly remains 12/14.
+
+## 2026-09-04 — Pack capability twelfth author repair
+
+**What landed:** The bounded contract-tier repair for [[D2587]]–[[D2592]] and the maintained
+`make pack-capability-twelfth-author-repair` target. No production runtime, server, API, storage,
+schema, content, UX, archive or protected-design byte changed; pack lane 0.30 and [[D560]] remain
+held.
+
+**What changed:** one application transaction now constructs and receipts its exact retained
+before/after run suffix, including registered immediate-guard output; objective requests parse and
+freeze their complete recursive live shape; stored batches consume a run-identified parsed
+snapshot; admission derives all three origin/consumer pairs; and a persistent per-run counter makes
+result allocation monotone across rewind and restart. Building the gate itself caught and fixed a
+child-brand-erasing recursive copy and a worker-cleanup race.
+
+**Evidence/next:** `make pack-capability-twelfth-author-repair` passes the complete retained
+eleventh-author target plus 6/6 new controls. Exact receipt:
+`planning/pack-capability-contract/twelfth-author-repair-2026-09-04.md`. Another genuinely fresh
+independent review still gates acceptance and implementation.

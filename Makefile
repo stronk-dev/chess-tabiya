@@ -742,6 +742,10 @@ pack-capability-eleventh-author-repair:
 pack-capability-eleventh-fresh-review:
 	node --test tools/d2587-pack-capability-eleventh-fresh-review/contract.test.mjs
 
+.PHONY: pack-capability-twelfth-author-repair
+pack-capability-twelfth-author-repair: pack-capability-eleventh-author-repair
+	node --test tools/d2587-pack-capability-twelfth-author-repair/contract.test.mjs
+
 .PHONY: shared-resource-bootstrap-seventh-fresh-review shared-resource-bootstrap-seventh-author-repair
 shared-resource-bootstrap-seventh-fresh-review:
 	node --test tools/d2593-shared-resource-bootstrap-seventh-fresh-review/contract.test.mjs
