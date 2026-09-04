@@ -20948,6 +20948,51 @@
       "uxItems": [],
       "evidence": "planning/exploration/log.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2620",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a093780161d47d73467711df32ade9e8f08324b38b37169862250c6d41e95d35",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2621",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c0e4722a0e149255771b008c292aef80435b535fd6c36430e0c5d549176f5a56",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2622",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:83784ca02762aeffa84c0a8713bff462bc7bbb8b98acf88a28739f7b63fb4cbe",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2623",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:197392bd74ea0506a598249bba92c8595776398efdbd492a70a22a08b6c3840c",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2624",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:863ae42522a5e7c98a1a9525ca796ca6ae042b4aeecb9cd5aef65ca7bdf65725",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
     }
   ]
 }

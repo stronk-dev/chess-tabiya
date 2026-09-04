@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:b58fc94018028c82e6f300fb222b58b9d2500eeff96ac6d5567480dfb484ae9a",
+    "roadmap": "sha256:e44019a5ac0812a75188ecde43687fb6dd80ff9d4e9e815ef4bcb9e32cb68dea",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:1709719d4cf993cc754bab42f039d3370c80eacc7f9252a29060acd40b353cc2",
-    "rfcRegister": "sha256:0c8e5e4fc45cbc77bb556cb5e4bad8e665687c2bb8364414a117ef2286b2d9d5",
+    "workState": "sha256:f95b6835a1654fe99248648b0c4a4339ade859a463e91d3914db2b69a2f6214b",
+    "rfcRegister": "sha256:214ae6cfaddd81356e39c728877856e70996a2d07f07f60b4f405bb5fdbfbcb0",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 906,
+      "blocked": 911,
       "done": 820,
       "refused": 3
     },
@@ -110,7 +110,7 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Fresh reviews returned three critical foundations: longitudinal history on aggregate, registry, source-image, operation-census and full-state CAS authority; pack capability on durable application identity; and shared-resource bootstrap on projection closure. Foundation implementation remains held until those exact contracts are repaired and freshly accepted.",
+        "summary": "Fresh reviews returned four critical foundations: longitudinal history on aggregate, registry, source-image, operation-census and full-state CAS authority; pack capability on durable application identity; shared-resource bootstrap on projection closure; and Campaign on charged-command, crossed-subject, relational, event and curriculum authority. Foundation implementation remains held until those exact contracts are repaired and freshly accepted.",
         "impact": "held",
         "evidence": [
           "planning/longitudinal-store/sixth-fresh-independent-buildability-review-2026-09-04.md",
@@ -257,7 +257,7 @@
       "nextAction": "Land migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results; extend export, deletion, backup and rebuild with each object.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Storage backup/recovery's third fresh review returned lock attribution, publication durability, operation/check lifetime and identity, and crash-during-rollback authority. Campaign persistence remains repaired, while production persistence stays blocked on fresh acceptance and dependency order; bot policy and social durable state retain returned or dependency-blocked boundaries.",
+        "summary": "Storage backup/recovery remains returned, and Campaign core's fourth fresh review now returns charged-command replay, crossed assistance subjects, relational ownership, sealed event semantics and complete curriculum authority. Production persistence stays blocked on bounded repairs, fresh acceptance and dependency order; bot policy and social durable state retain returned or dependency-blocked boundaries.",
         "impact": "held",
         "evidence": [
           "rfc/storage-backup-recovery.md",

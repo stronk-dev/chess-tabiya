@@ -1018,7 +1018,12 @@ awards and the complete Campaign home→map→prep→play→result→Review jour
 closes [[D2420]]–[[D2427]] at the contract tier: a real partial unique index, discriminated event
 revision, durable result replay, exact theory/inventory event cuts, compiler-owned curriculum facts,
 truthful account/appliance scope and abandoned-history projection are exercised by the retained 34
-arms plus 9 new falsifiers. Another fresh review and named dependencies still gate implementation.
+arms plus 9 new falsifiers. The fourth fresh review returns that repair on [[D2620]]–[[D2624]]:
+charged live mutations have no replayable command identity, assistance receipts cross pack/context
+subjects, duplicated SQL ownership can disagree, event semantics remain mutable/unparsed and the
+official-curriculum model omits most of criterion 30. `make
+campaign-two-horizon-fourth-fresh-review` retains all 43 author checks and reproduces 5/5. A bounded
+repair, another fresh review and named dependencies still gate implementation.
 The full-game successor is now explicit rather than hidden in a discharge: `campaign-boss-games`
 owns campaign-schema lane 3 and the complete Act-II position-game journey. It composes one exact
 calibrated human-like bot profile, rules-terminal result, clean rating versus explicit

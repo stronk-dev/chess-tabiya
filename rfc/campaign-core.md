@@ -1,14 +1,15 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
-- **Status:** draft — **fourth author repair complete 2026-09-02 on
-  [[D2420]]–[[D2427]]; fresh independent review required.** The repaired contract gives concurrent
-  creation a database authority, stores one replayable event envelope, types creation revision,
-  freezes assistance at the encounter event cut, joins official curriculum claims to exact facts,
-  consumes only accepted account/appliance lifecycle operations and distinguishes abandoned
-  history from corruption. `make campaign-two-horizon-fourth-author-repair` passes the retained
-  34 arms plus 9 new falsifiers. This RFC is explicitly the Campaign foundation, not the whole 1.0.
-  No campaign schema, migration, production route, official campaign or surface may resume before
-  another fresh independent review and accepted dependencies.
+- **Status:** draft — **RETURNED by the fourth fresh independent review 2026-09-04 on
+  [[D2620]]–[[D2624]].** The prior repair's concurrent-creation, revision, historical-cut and
+  account-lifecycle direction survives, but charged live mutations have no idempotent command
+  envelope; assistance receipts are cross-pack/context reusable; durable duplicate identities can
+  disagree; campaign events are neither semantically parsed nor recursively immutable; and the
+  official-curriculum falsifier omits most of the authority it claims to prove. `make
+  campaign-two-horizon-fourth-fresh-review` retains all 43 author checks and reproduces 5/5. This
+  RFC remains the Campaign foundation, not the whole 1.0. No campaign schema, migration,
+  production route, official campaign or surface may resume before author repair, another fresh
+  independent review and accepted dependencies.
   *(Prior line: [[D2077]]–[[D2086]] author repair complete 2026-08-30; fresh independent review
   required. Before that:
   implementing — 2026-08-23 authored-contract + registry + module-algebra checkpoints. Before
@@ -1115,6 +1116,32 @@ author target retains all 34 earlier arms and adds nine able-to-fail tests plus 
 No product implementation is authorized until a new independent review accepts this exact text and
 all named dependencies are accepted.
 
+## Fourth fresh independent return (2026-09-04)
+
+The campaign shape and the earlier repaired directions remain useful, and all 43 retained author
+checks still pass. The next author pass owns these five exact authority repairs:
+
+1. **[[D2620]]:** give rewind, fork, group creation and simulation entry one durable cross-aggregate
+   command id, expected Campaign revision and stored result so `charge_spent` and the play-run
+   mutation commit/replay exactly once, including asynchronous provider failure.
+2. **[[D2621]]:** bind Campaign assistance applicability and disclosure receipts to the exact pinned
+   pack, node, workflow context, event head/cut and source identity; otherwise-valid receipts from
+   another subject must fail.
+3. **[[D2622]]:** make creation receipts, campaign runs, award rows and active play-run pointers
+   share one relational learner/campaign/version/run authority; crossed identities and duplicate
+   active pointers must fail insertion or reconciliation.
+4. **[[D2623]]:** parse every event-specific payload/result as a closed discriminated member and
+   recursively seal canonical bytes; empty, extra, wrong-kind and post-admission mutation cases
+   must fail.
+5. **[[D2624]]:** compile official curriculum facts from the complete pinned CampaignDocument and
+   sealed registries, require exactly one fact per document node and implement every target,
+   envelope, evidence, dependency-action, availability and review-receipt negative in criterion 30.
+
+Exact review: `planning/campaign/fourth-fresh-independent-buildability-review-2026-09-04.md`.
+`make campaign-two-horizon-fourth-fresh-review` retains the author controls and reproduces 5/5.
+No schema, migration, API, client or official-content implementation is authorized before a
+bounded repair, another fresh acceptance and the already named dependency acceptances.
+
 ## Campaign 1.0 closure map
 
 This RFC is the **foundation milestone**, not permission to mark the Campaign capability complete.
@@ -1351,6 +1378,17 @@ set).
   persona.
 
 ## Changelog
+
+- 2026-09-04 (**fourth fresh independent return**): returned the RFC on [[D2620]]–[[D2624]].
+  The live rewind/fork/group/simulation-entry operations cannot supply the mutation command and
+  campaign revision the charge ledger requires; the assistance model accepts crossed pack/context
+  receipts; SQL admits crossed learner/campaign/run identities and duplicate active play-run
+  pointers; the event parser accepts empty semantics and mutable nested payloads; and the
+  curriculum model validates conflicting node facts while omitting the target, envelope,
+  evidence, dependency-action and review authorities. `make
+  campaign-two-horizon-fourth-fresh-review` retains the 34+9 author controls and reproduces all
+  five findings. Exact review:
+  `planning/campaign/fourth-fresh-independent-buildability-review-2026-09-04.md`.
 
 - 2026-09-02 (**fourth author repair**): repaired [[D2420]]–[[D2427]] without changing production
   code. Database uniqueness, discriminated event revision, immutable replay bytes, encounter-time

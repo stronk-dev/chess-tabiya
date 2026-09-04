@@ -14883,3 +14883,22 @@ tests green; content is 17 files/173 tests green.
 
 **Evidence/next:** `make test-tier-check`, `make test-software`, and `make test-content` are green.
 The safe-deployment checkpoint now returns to the complete `make verify` gate.
+
+## 2026-09-04 — Campaign core fourth fresh review returns five foundation authorities
+
+**What landed:** A fresh cross-operation/storage/evidence/content review preserves Campaign's
+three-act, play-not-win, earned-resource, boss-suppression and complete-foundation-journey direction,
+but returns `campaign-core` on [[D2620]]–[[D2624]]. No production Campaign schema, migration,
+endpoint, client route, official content, archive or protected-design byte changed.
+
+**What changed:** the four charged live run mutations expose no idempotent campaign command image;
+otherwise-valid applicability/disclosure receipts cross pack and context subjects; SQL permits
+creation/award ownership to disagree with the referenced run and duplicate active play pointers;
+the event parser accepts empty semantics plus mutable nested payloads; and the curriculum model
+omits most of the official-publication contract while accepting conflicting node facts.
+
+**Evidence/next:** `make campaign-two-horizon-fourth-fresh-review` retains all 43 author checks and
+reproduces 5/5. Exact receipt:
+`planning/campaign/fourth-fresh-independent-buildability-review-2026-09-04.md`. One bounded fifth
+author repair must close the five authorities before another fresh review; the full 1.0 successors
+and official human-authored campaign remain independently required.
