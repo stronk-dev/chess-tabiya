@@ -21377,7 +21377,7 @@
       "state": "blocked",
       "owner": "coordinator",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:82cac6c33907c7a29f09d25dd3cac1ff9b743eed9fee06776327b6eb9c5e07fb",
+      "sourceDigest": "sha256:66067acecbb3d3d29e17a0addb1bc4d46972cf2890f456225ff08eac97a0e5e3",
       "uxItems": [],
       "blocker": "rfc:shared-resource-register-bootstrap.md"
     },
@@ -21386,7 +21386,7 @@
       "state": "blocked",
       "owner": "coordinator",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:615d2abfeeaa800da8ca0d76711755ee69c937b634fd70f10b6172bf73ad6096",
+      "sourceDigest": "sha256:1cc0e3d0680981ed45d1552a0d7417f3a17306095291e446cf2425252742d525",
       "uxItems": [],
       "blocker": "rfc:shared-resource-register-bootstrap.md"
     },
@@ -21395,7 +21395,7 @@
       "state": "blocked",
       "owner": "coordinator",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:093cc72b80647242f1c5edb9ff602647ff316b6397a4f1bd28469bf3c26dfe2a",
+      "sourceDigest": "sha256:139a11fdc6a94da0de981e5aaf3eb488ed9914d7d969509e5987f01d4c242834",
       "uxItems": [],
       "blocker": "rfc:shared-resource-register-bootstrap.md"
     },
@@ -21404,7 +21404,7 @@
       "state": "blocked",
       "owner": "coordinator",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:400f18038d297efc5badb0378f002c651a0f81f40d0f2ecfbc1b194ab1dea16c",
+      "sourceDigest": "sha256:949536867a171fe579a9035a49e3a2cb5b7cc5d0591c3dc8374fd7f2d6818192",
       "uxItems": [],
       "blocker": "rfc:shared-resource-register-bootstrap.md"
     },
@@ -21413,7 +21413,7 @@
       "state": "blocked",
       "owner": "coordinator",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4bdc5a91cc755870c2e9da20988a8f181a7e14d8b69a754709c146b7553abbbd",
+      "sourceDigest": "sha256:499738c6fe06a362cf0d8647fca1148d1959a2800a2505e2686fb42bc79caecb",
       "uxItems": [],
       "blocker": "rfc:shared-resource-register-bootstrap.md"
     },
@@ -21422,7 +21422,7 @@
       "state": "blocked",
       "owner": "coordinator",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:bcb036268ea8bff0363a84111cdff877047a651f08f43d64b2e86c415164af30",
+      "sourceDigest": "sha256:fa78bec902f43d56c618ddef2c293fb819ff78a4812e5893d595a5023ba89cd1",
       "uxItems": [],
       "blocker": "rfc:shared-resource-register-bootstrap.md"
     }

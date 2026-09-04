@@ -15419,3 +15419,20 @@ Exact receipt:
 `planning/shared-resource-register-bootstrap/ninth-fresh-independent-buildability-review-2026-09-04.md`.
 One bounded author repair must close all six before another genuinely fresh review can accept the
 RFC or authorize production bootstrap implementation.
+
+## 2026-09-04 — Shared-resource bootstrap ninth author repair
+
+**What landed:** the bounded contract-tier repair for [[D2667]]–[[D2672]] and maintained `make
+shared-resource-bootstrap-ninth-author-repair` target. No production catalogue, register, checker,
+schema, content, application, API, archive or protected-design byte changed.
+
+**What changed:** repository lookup is closed over the selected commit in both positive and negative
+arms. Installed packages are classified before containment and require a unique committed
+package/version/integrity identity. External IDs are portable; every retained merged declaration
+and property receiver has reach; and graph program/root/node/tree/edge/dependency values are
+recursively validated with canonical order and uniqueness.
+
+**Evidence/next:** the maintained target retains twenty-six earlier controls and passes 7/7 repair
+groups against real committed fixture repositories. Exact receipt:
+`planning/shared-resource-register-bootstrap/ninth-author-repair-2026-09-04.md`. Another genuinely
+fresh independent review still gates acceptance and every production bootstrap byte.

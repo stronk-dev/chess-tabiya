@@ -169,6 +169,15 @@ falsifiers. The critical path remains one bounded author repair and another genu
 no production catalogue/register implementation is authorized. Receipt:
 `planning/shared-resource-register-bootstrap/ninth-fresh-independent-buildability-review-2026-09-04.md`.
 
+The same-day ninth author repair closes those six boundaries at contract tier. The program host now
+refuses repository paths absent from the selected commit, classifies installed packages before
+containment and binds them to one committed pnpm-lock identity. External IDs are normalized;
+merged declarations and property receivers remain reachable; and the complete nested graph ABI is
+recursively asserted. `make shared-resource-bootstrap-ninth-author-repair` retains twenty-six
+earlier controls and passes 7/7 repair groups. Another genuinely fresh review still gates
+acceptance and production. Receipt:
+`planning/shared-resource-register-bootstrap/ninth-author-repair-2026-09-04.md`.
+
 The same-day twelfth `pack-capability-contract` author repair closes [[D2587]]–[[D2592]] at contract
 tier without claiming production. One transaction-owned before/after run result derives the exact
 core/objective/recorded-guard journal suffix and receipt; the complete nested objective request is

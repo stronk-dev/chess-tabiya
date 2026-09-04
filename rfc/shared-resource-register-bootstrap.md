@@ -1,11 +1,11 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **RETURNED by the ninth fresh independent review on [[D2667]]–[[D2672]].** The
-  eighth repair survives, but the pinned host admits untracked repository/package bytes; external
-  IDs are machine-absolute; merged library symbols orphan themselves; property receivers disappear;
-  and the graph assertion accepts malformed nested ABI fields. `make
-  shared-resource-bootstrap-ninth-fresh-review` retains nineteen controls and passes 7/7 new
-  falsifiers. Author repair and another fresh review precede implementation.
+- **Status:** draft — **ninth author repair completed on [[D2667]]–[[D2672]]; another genuinely fresh
+  independent review is required.** The program host is commit-closed; packages carry exact
+  lockfile identity; external node IDs are portable; merged declarations and property receivers
+  remain reachable; and graph validation is recursively fail-closed. `make
+  shared-resource-bootstrap-ninth-author-repair` retains twenty-six earlier controls and passes 7/7
+  repair groups. No implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -878,6 +878,23 @@ validated.
 passes 7/7 new falsifiers. Exact receipt:
 `planning/shared-resource-register-bootstrap/ninth-fresh-independent-buildability-review-2026-09-04.md`.
 No production implementation is authorized until all six are repaired and freshly reviewed.
+
+### Ninth author repair (2026-09-04)
+
+The bounded author repair closes [[D2667]]–[[D2672]] at contract tier. Repository paths resolve only
+from the selected Git tree, including negative lookups, while installed packages are classified
+before repository containment and require one unique package/version/integrity entry from the
+committed pnpm lockfile. Portable external node IDs contain normalized library or package/subpath
+identity rather than checkout or installation prefixes.
+
+The graph now emits reach to every retained declaration of a merged compiler symbol, treats a
+property-access receiver as an independent value reference, and recursively validates the exact
+program/root/node/syntax-tree/edge/dependency ABI plus canonical ordering and uniqueness. `make
+shared-resource-bootstrap-ninth-author-repair` retains all twenty-six prior controls and passes 7/7
+new repair groups against committed temporary repositories, a lock-backed package, standard
+TypeScript library symbols, merged `Promise` declarations and crossed nested values. This is author
+evidence only; another genuinely fresh independent review still gates acceptance and production.
+Receipt: `planning/shared-resource-register-bootstrap/ninth-author-repair-2026-09-04.md`.
 
 ## Acceptance criteria
 
