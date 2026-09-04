@@ -21098,7 +21098,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:db08f1b42557e654f5ca4cf193cf7cc2ae2369a7f6f7bbadd69b4654cdcae98e",
+      "sourceDigest": "sha256:cad50f99f2e4b63b39fefe72036e38ced8000df680993c5bad134d2a3d4a369f",
       "uxItems": [],
       "blocker": "rfc:phase-source-composition.md"
     },
@@ -21107,7 +21107,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:645c2395f5712e72b470ecf81730bf857e31305555320ef1be2b3e8b574e2ca8",
+      "sourceDigest": "sha256:2705cff27db1cf8bd7d30eeb26fd536f378dce4e5da738185bc3d77601e81b62",
       "uxItems": [],
       "blocker": "rfc:phase-source-composition.md"
     },
@@ -21116,7 +21116,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f74ea5341f2ec477f3751fb8ae5a6f8f5ba3ebc943f8e85decf26f1123bd0d85",
+      "sourceDigest": "sha256:cce4cd2a3ffa4b51057cfee71ee1818ca61be45ebc5483bdc3f2a39de8c7fa76",
       "uxItems": [],
       "blocker": "rfc:phase-source-composition.md"
     },
@@ -21125,7 +21125,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8e6c7d1887e62041ccb1187becb573dbae1dc564c1063e21afde972e39d3c943",
+      "sourceDigest": "sha256:ec90a01b15213860fb75b74608da6e5fcf53219ad17f86310d369fb711eca8ce",
       "uxItems": [],
       "blocker": "rfc:phase-source-composition.md"
     },
@@ -21134,7 +21134,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d557ef606a700df0ea62fa3cd5dd5973ab5d19c8d089da5723513c3dbf859422",
+      "sourceDigest": "sha256:641e3c73bc0adabeee674a4264756d6b7cef82e0fb83bc7209782f1c8e21687e",
       "uxItems": [],
       "blocker": "rfc:phase-source-composition.md"
     },
@@ -21143,7 +21143,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e1a58a7ab108a4fea231c4edf2b853b7939633880082576eca7414e6a989f1de",
+      "sourceDigest": "sha256:2af605d85902f1933675016f62e6cc7e0c1151d220239c45565cdf83709e920a",
       "uxItems": [],
       "blocker": "rfc:phase-source-composition.md"
     },
@@ -21152,7 +21152,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:06f3d7c05b4273bbc6e6fbc15f6eedfe193b2333486464feca7c3c87f242ec9c",
+      "sourceDigest": "sha256:b2462b0f30f14d35c9dc34a158268974ac16c34c7ceef2d0f3628581a87e92f8",
       "uxItems": [],
       "blocker": "rfc:phase-source-composition.md"
     }

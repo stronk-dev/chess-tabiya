@@ -14980,3 +14980,21 @@ and reproduces 7/7. Exact receipt:
 `planning/phase-source-composition/fresh-independent-buildability-review-2026-09-04.md`. A bounded
 author repair must close the seven joins and survive another genuinely fresh review before the
 composer can become the shared Support/Review/bot/longitudinal foundation.
+
+## 2026-09-04 — Phase source composition bounded author repair
+
+**What landed:** The contract-tier repair for [[D2636]]–[[D2642]] plus the maintained
+`make phase-source-composition-author-repair` target. No production runtime, server, provider, API,
+schema, content, UX, archive or protected-design byte changed.
+
+**What changed:** the namespace no longer fails its own guard; opening resolution is derived from
+the retained exact occurrence; arc input is run+branch through the recorded-path authority; live
+tablebase uses provider result arms; recorded absence uses a sealed digest-matched full-FEN
+inventory; Inspector is downstream presentation work rather than a raw private-view handoff; and
+phase/endgame compatibility is tested from independent declared results rather than a circular
+classifier call.
+
+**Evidence/next:** `make phase-source-composition-author-repair` passes the retained 8/8 baseline
+and 7/7 repair arms. Exact receipt:
+`planning/phase-source-composition/author-repair-2026-09-04.md`. Dependency acceptance and a fresh
+independent review still gate implementation.

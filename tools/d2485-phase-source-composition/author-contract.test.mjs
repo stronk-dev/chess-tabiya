@@ -61,21 +61,22 @@ test("history keeps reversible source-local changes and refuses a canonical tran
   assert.match(arc, /does\s+not emit `opening_to_middlegame`/u);
 });
 
-test("tablebase domain, recorded state and live execution are separate closed arms", () => {
-  const tablebase = section("#### 2.2 Tablebase slots", "#### 2.3 Forbidden aggregate fields");
-  for (const arm of ["recorded", "not_recorded", "not_requested", "available", "unavailable"]) {
+test("recorded state and provider-owned live execution remain separate closed arms", () => {
+  const tablebase = section("#### 2.2 Recorded and live tablebase slots", "#### 2.3 Forbidden aggregate fields");
+  for (const arm of ["recorded", "absent", "source_unavailable", "not_requested", "success", "local_domain_result", "source_failure"]) {
     assert.match(tablebase, new RegExp(`"${arm}"`, "u"));
   }
   assert.match(tablebase, /Recorded and live success remain side by side/u);
   assert.match(tablebase, /performs no provider\s+request/u);
 });
 
-test("the production handoff is five operation families, not five file mentions", () => {
+test("the production handoff is four operation families, not file mentions", () => {
   const handoff = section("### 5. Production handoffs", "### 6. Availability and failure behavior");
-  const rows = handoff.split("\n").filter((line) => /^\| (Support module assembly|Review evidence compiler|bot policy|longitudinal store|advanced inspector) \|/u.test(line));
-  assert.equal(rows.length, 5);
+  const rows = handoff.split("\n").filter((line) => /^\| (Support module assembly|Review evidence compiler|bot policy|longitudinal store) \|/u.test(line));
+  assert.equal(rows.length, 4);
   assert.match(handoff, /Support and Review operations are mandatory implementation call sites/u);
   assert.match(handoff, /unused compiler/u);
+  assert.match(handoff, /advanced inspector is deliberately \*\*not\*\* a fifth handoff/u);
 });
 
 test("material classification cannot launder endgame technique names", () => {
@@ -89,7 +90,7 @@ test("material classification cannot launder endgame technique names", () => {
 
 test("completion requires real consumers, normal gates and fresh review", () => {
   const criteria = section("## Acceptance criteria", "## Discharges");
-  assert.match(criteria, /five-row production-handoff table is set-equal/u);
+  assert.match(criteria, /four-row production-handoff table is set-equal/u);
   assert.match(criteria, /Support and Review\s+invoke the compiled operation/u);
   assert.match(criteria, /make verify/u);
   assert.match(criteria, /make test-browser/u);

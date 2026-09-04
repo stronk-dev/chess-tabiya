@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:be67adfa04861cb30676eed7d646cf4e6cd2b85e6a00088bc3e84548d9852c60",
+    "roadmap": "sha256:d968d085d9e6e1d17aa7e77763b26708a3d9eb346d6774582d5519ce157624ba",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:f65936065bc5e61882138256c9ea623e55df4425c302b75d8654927c94dc9824",
-    "rfcRegister": "sha256:0c53ec9279fda8d3db1aa0eebe1de350879469111f0f894bb5297064bfdd5d8e",
+    "workState": "sha256:81f818e786a31ef360c49437659f91c19925f18950cde86f0605b2cc5b584f18",
+    "rfcRegister": "sha256:b2bc94ac86731e6bc72af8ccf0cb2fba609c80d8637816ed496f11dea95b1c3d",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -110,7 +110,7 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Fresh reviews returned four critical foundations: longitudinal history on aggregate, registry, source-image, operation-census and full-state CAS authority; pack capability on durable application identity; shared-resource bootstrap on projection closure; and Campaign on charged-command, crossed-subject, relational, event and curriculum authority. Foundation implementation remains held until those exact contracts are repaired and freshly accepted.",
+        "summary": "Fresh reviews returned critical authority seams across longitudinal history, pack capability, shared-resource bootstrap, Campaign and phase-source composition. The phase composer now has a bounded author repair: opening resolves from an exact occurrence, arcs invoke the recorded path, tablebase state retains provider/snapshot authority, Inspector remains presentation-owned and circular applicability was removed. Foundation implementation remains held until dependencies and genuinely fresh reviews accept the repaired contracts.",
         "impact": "held",
         "evidence": [
           "planning/longitudinal-store/sixth-fresh-independent-buildability-review-2026-09-04.md",

@@ -315,6 +315,14 @@ control. Support, Review, bots and longitudinal analysis therefore still lack on
 source-retaining phase object. Receipt:
 `planning/phase-source-composition/fresh-independent-buildability-review-2026-09-04.md`.
 
+The same-day bounded author repair closes those seven defects at contract tier without pretending
+the composer ships. Opening is derived from one retained run occurrence; the arc invokes the sole
+run+branch path operation; live tablebase retains the provider's exact union; recorded absence
+comes only from a sealed pack/ledger snapshot; the private view no longer claims a web Inspector
+handoff; and applicability uses independent declared inputs. Dependency acceptance and another
+fresh review still gate implementation. Receipt:
+`planning/phase-source-composition/author-repair-2026-09-04.md`.
+
 The 2026-09-01 promotion-pair third fresh review also corrected the candidate repair's initially
 invented factory alias ([[D2468]]) and returned only the held semantic projections on
 [[D2469]]–[[D2472]]: their outside-domain arm depends on an undeclared legal map; their invocation

@@ -1,7 +1,7 @@
 # RFC: Source-retaining phase composition
 
-- **Status:** draft — fresh independent review returned 2026-09-04 on [[D2636]]–[[D2642]];
-  bounded author repair, dependency acceptance and another fresh review required before implementation
+- **Status:** draft — bounded author repair complete 2026-09-04 on [[D2636]]–[[D2642]];
+  dependency acceptance and another fresh independent review required before implementation
 - **Author:** codex (agent), for Marco
 - **Created:** 2026-09-01
 - **Design refs:** `design/03-product-breadth.md` B2/B4/B10 and evidence architecture;
@@ -12,8 +12,10 @@
 - **Depends on:** implemented `rfc/runtime-opening-identity.md`; draft
   `rfc/evidence-value-authority.md` for `rules.phase.reading@2`,
   `rules.endgame.classification@1` and value-authorized factories; draft
-  `rfc/provider-exchange-and-execution.md` for recorded/live tablebase receipts; draft
-  `rfc/semantic-convention-provenance.md` for convention closure
+  `rfc/provider-exchange-and-execution.md` for live tablebase result arms; draft
+  `rfc/semantic-convention-provenance.md` for convention closure; draft
+  `rfc/recorded-semantic-path.md` for the sole run-path operation; draft
+  `rfc/evidence-presentation.md` only as the downstream inspector boundary
 - **Parent / amends:** composes existing source producers; follow-up to
   `rfc/archive/evidence-contract-manifest.md`
 - **Supersedes / superseded by:** —
@@ -67,10 +69,12 @@ applicability.
 
 ### 1. Authority boundary
 
-`apps/server/src/phase-source-composition.ts` is the sole production composer. It accepts
-value-authorized `DeclaredEvidence` items or typed absence/availability results emitted by the
-named source operations. It never accepts a caller-written source payload, phase label, opening
-name, endgame type, tablebase category, confidence, relevance or advice.
+`apps/server/src/phase-source-composition.ts` is the sole production composer. A point accepts one
+asserted `run.record.position@1` item plus source-operation results that bind to that position. An
+arc accepts only `run`, `branchId` and source dependencies; it calls `recordedSemanticPath(run,
+branchId)` and the same point compiler itself. It never accepts a caller-written path, source
+payload, phase label, opening name, endgame type, tablebase category, confidence, relevance or
+advice.
 
 The module owns a runtime-private brand and `WeakSet`, following the existing compiled consumer
 view pattern. `compilePhaseSourcePoint` and `compilePhaseArc` are the only constructors. Every
@@ -89,15 +93,14 @@ The normative shape is conceptually:
 ```ts
 interface PhaseSourcePoint {
   readonly position: DeclaredEvidence<RecordedPosition>; // run.record.position@1
-  readonly opening: {
+  readonly openingSources: {
     readonly currentEndpoint: SourceResult<CurrentOpeningEndpoint>;
     readonly catalogueMembership: SourceResult<OpeningCatalogueMembership>;
   };
   readonly rulesPhase: SourceResult<PhaseBandReadingV2>;
   readonly rulesEndgame: SourceResult<EndgameClassification>;
   readonly tablebase: {
-    readonly domain: { readonly kind: "inside" | "outside"; readonly pieceCount: number };
-    readonly recorded: TablebaseRecordedSlot;
+    readonly recorded: RecordedTablebaseResolution;
     readonly live: TablebaseLiveSlot;
   };
 }
@@ -110,44 +113,78 @@ dependency types and preserves their declared evidence wrappers/receipts.
 arms. The composer does not replace those arms with `T | null`, a Boolean, a generic string or an
 aggregate availability flag. A local source remains available when another source abstains.
 
-#### 2.1 Exact-position join
+#### 2.1 Exact-position and opening-operation join
 
-The recorded position is the join key. The compiler canonicalizes its full six-field FEN once and
-requires every position-bound successful input and receipt to bind that same FEN. It also requires
-the recorded `nodeId` and `ply`; transposition-key equality alone cannot cross two run occurrences.
-A tablebase record for the same board with different side-to-move, castling, en-passant or clock
-fields is not the same source input and fails.
+The recorded position is the join authority. The compiler asserts the declared item, canonicalizes
+its full six-field FEN once and retains its `nodeId` and `ply`. Every source that owns a full-FEN or
+occurrence operand must bind those bytes exactly. A tablebase result for the same board with
+different side-to-move, castling, en-passant or clock fields is not the same source input and fails.
+The compiler never imposes an operand a source does not own.
 
-The opening endpoint and membership results come from one lookup operation and one catalogue
-identity. A matched endpoint without membership, two different catalogue digests, or two different
-observed plies fail. If the catalogue is unavailable, both slots retain the same exact typed source
-reason; the rules slots still compile.
+Opening is the deliberate source-specific join. Callers supply `OpeningCatalogueAvailability`, not
+endpoint or membership payloads. `resolveOpeningSources(position, availability)` is the only
+operation: it asserts the recorded position, calls the implemented paired
+`openingIdentityAt(availability, position.payload.fen, position.payload.ply)` once, recomputes
+`transposeKey(position.payload.fen)`, and seals a private receipt retaining the exact position item
+and both returned payloads by reference. Each successful/absent result must carry that key and ply;
+both must carry one catalogue identity. A matched endpoint without membership, changed return,
+different catalogue digest or different observed ply fails. The four-field catalogue key is not
+relabeled as a full-FEN claim: exact occurrence authority comes from the enclosing retained
+position item. If the catalogue is unavailable, both slots retain the same typed source reason and
+the rules slots still compile.
 
 `rules.phase.reading@2` must bind the exact FEN and retain its five-arm D2484 decision. The composer
 does not translate margin into probability or uncertainty. `rules.endgame.classification@1` is
 `not_applicable` exactly when the phase convention is not in its declared endgame applicability
 arm; within that arm, typed and untyped are both honest outputs.
 
-#### 2.2 Tablebase slots
+#### 2.2 Recorded and live tablebase slots
 
 Tablebase state is three fields, not one nullable result:
 
 ```ts
-type TablebaseRecordedSlot =
-  | { readonly kind: "recorded"; readonly item: DeclaredEvidence<TablebaseReading> }
-  | { readonly kind: "not_recorded"; readonly snapshotDigest: string };
+interface RecordedEvidenceSnapshotReceipt {
+  readonly packId: string;
+  readonly packDigest: string;
+  readonly ledgerDigest: string;
+  readonly tablebaseFens: readonly CanonicalFullFen[];
+}
+
+type RecordedTablebaseResolution =
+  | { readonly kind: "recorded"; readonly fen: CanonicalFullFen;
+      readonly item: RecordedTablebaseEvidence; readonly snapshot: RecordedEvidenceSnapshotReceipt }
+  | { readonly kind: "absent"; readonly fen: CanonicalFullFen;
+      readonly snapshot: RecordedEvidenceSnapshotReceipt }
+  | { readonly kind: "source_unavailable";
+      readonly reason: "no_pack_source" | "ledger_unverified" | "ledger_invalid" };
 
 type TablebaseLiveSlot =
   | { readonly kind: "not_requested" }
-  | { readonly kind: "available"; readonly item: DeclaredEvidence<TablebaseResult> }
-  | { readonly kind: "unavailable"; readonly receipt: ProviderAbsenceReceipt };
+  | { readonly kind: "success";
+      readonly result: ProviderSuccess<"syzygy.position@1">;
+      readonly item: DeclaredEvidence<ProviderEvidenceDelivery<LiveSyzygyPosition, "syzygy.position@1">> }
+  | { readonly kind: "local_domain_result";
+      readonly result: ProviderLocalDomainResult<"syzygy.position@1">;
+      readonly item: DeclaredEvidence<ProviderLocalDomainResult<"syzygy.position@1">> }
+  | { readonly kind: "source_failure";
+      readonly result: ProviderSourceFailure<"syzygy.position@1"> };
 ```
 
-`domain` is locally computed from the exact FEN under the provider contract's declared Syzygy
-piece-count rule. Outside domain forces `recorded:not_recorded` and `live:not_requested` or an exact
-`outside_tablebase_domain` receipt; it never becomes `provider_unavailable`. Inside-domain recorded
-absence requires the queried recorded-evidence snapshot digest. It is not evidence that the
-position is a draw, unknown or unimportant.
+`compileRecordedEvidenceSnapshot(packRecord)` is the sole private snapshot constructor. It accepts
+the pack registry's digest-matched, validated evidence ledger and its exact compiled position index;
+derives the sorted unique canonical full-FEN tablebase inventory; records pack, ledger and source
+digests; and seals the receipt in a `WeakSet`. Non-pack, unverified and invalid-ledger states are
+typed source-unavailable inputs, not empty snapshots. `resolveRecordedTablebase(position,
+snapshot)` asserts both authorities and returns a sealed same-FEN `recorded` or `absent` result.
+Store/read/validation failure never becomes absence. A caller digest, map, item or Boolean is not an
+accepted input.
+
+The composer does not compute tablebase domain. It retains the provider exchange's exact result
+arms. Outside domain is the sealed `ProviderLocalDomainResult<"syzygy.position@1">` and its exact
+`rules.endgame.tablebase_domain@1` declared item; it is neither provider failure nor a locally
+recomputed field. Success and source failure likewise retain their operation/request digest and
+must bind the point's canonical FEN. `not_requested` is the only state with no provider operation.
+The recorded snapshot and live provider exchange remain independent.
 
 Recorded and live success remain side by side. The compiler never silently prefers live over
 recorded, recorded over live, or success over a second source's failure. It performs no provider
@@ -156,18 +193,22 @@ carry the resulting receipt.
 
 #### 2.3 Forbidden aggregate fields
 
-The point type and runtime value have no top-level `phase`, `stage`, `inBook`, `opening`,
+The point type and runtime value have no top-level `phase`, `stage`, `inBook`,
 `endgameTechnique`, `confidence`, `priority`, `rank`, `significance`, `relevance`, `hint`, `advice`
-or selected-source field. `opening` above is a namespace containing two attributed source slots,
-not a phase label. A property-name guard fails the build if a forbidden aggregate appears at the
-point or arc root.
+or selected-source field. `openingSources` is an attributed namespace, not a phase label. A literal
+root-key guard is generated from the normative point/arc declarations and fails the build if a
+forbidden aggregate appears at either root; a negative fixture adds every forbidden key one at a
+time.
 
 ### 3. Ordered arc
 
-`compilePhaseArc(path, inputs)` accepts one explicit root-to-leaf run path. The path supplies the
-ordered node identities; the compiler never sorts a branch union by ply and never infers a path
-from FENs. It produces one branded point per path occurrence and retains repeated positions as
-distinct nodes.
+`compilePhaseArc(run, branchId, sourceDependencies)` calls
+`recordedSemanticPath(run, branchId)` and returns its exact refusal unchanged before source
+composition. On success it resolves the ordered nodes from that authority and compiles one point per
+occurrence. No overload accepts nodes, FENs, a path array, semantic events or evidence. The compiler
+never sorts a branch union by ply and retains repeated positions as distinct nodes. Same-id/
+different-event-head, truncated, reordered, foreign-run and stale-source maps fail before an arc is
+branded.
 
 For each adjacent pair it emits source-local structural changes:
 
@@ -209,7 +250,7 @@ inferred from that slot.
 
 ### 5. Production handoffs
 
-Unit: one consuming operation family. Total: **5**. The author and implementation receipts are
+Unit: one consuming operation family. Total: **4**. The author and implementation receipts are
 set-equal to these rows; mentioning a file or projection without calling the compiled view does not
 count.
 
@@ -219,12 +260,18 @@ count.
 | Review evidence compiler | exact selected run/branch-path compilation | one ordered `PhaseArc` | no branch union sorted by ply and no canonical phase transition |
 | bot policy | policy input construction | current point; policy profile names every slot it reads | no generic `phase` feature and no implicit move weight |
 | longitudinal store | source-observation/opportunity publication | source-specific point/change observations | no single phase habit, style label or denominator-free rate |
-| advanced inspector | explicitly opened diagnostic inventory | attributed current slots and typed absence | no ordinary Play card and no unlabelled evidence sentence |
 
 The Support and Review operations are mandatory implementation call sites, not future prose
 handoffs. This RFC cannot move to implemented with an unused compiler. Bot, longitudinal and
-inspector integration may be held as named discharges if their owning RFC is not yet accepted, but
+integration may be held as named discharges if their owning RFC is not yet accepted, but
 the source types and negative fixtures must already be consumable without adapters.
+
+The advanced inspector is deliberately **not** a fifth handoff. The raw branded point stays inside
+the server package. `module-registration` plus `evidence-presentation` own any future
+`module.full_inspector@1` binding: each shown success becomes its registered sealed presentation
+component, and each shown source state requires an operation-derived typed absence component. No
+phase-source object, source-result union or private brand is serialized. Adding a dedicated phase
+inventory wire later first owes the registered resource this RFC's claims exemption requires.
 
 The composer supplies no selection score. Support module eligibility and preset ceilings remain
 `learner-modules.md`/`module-registration.md`/`intent-presets.md`; Review moment selection remains
@@ -244,7 +291,8 @@ The closed operational failures are:
 - `PHASE_SOURCE_CATALOGUE_MISMATCH` — opening slots disagree on catalogue identity/ply;
 - `PHASE_SOURCE_OPENING_INVARIANT` — named endpoint without membership;
 - `PHASE_SOURCE_ENDGAME_INVARIANT` — endgame applicability contradicts the rules convention;
-- `PHASE_SOURCE_TABLEBASE_DOMAIN` — recorded/live result contradicts exact local domain/FEN; and
+- `PHASE_SOURCE_RECORDED_SNAPSHOT` — unsealed/crossed snapshot or invalid recorded absence;
+- `PHASE_SOURCE_TABLEBASE_RESULT` — live result/item/request contradicts provider authority or FEN; and
 - `PHASE_SOURCE_PATH_INVALID` — unordered, duplicate-node or non-ancestral arc input.
 
 These failures are bugs or corrupt inputs. They are never rendered to a learner as “no evidence.”
@@ -252,12 +300,15 @@ Typed dependency abstentions and provider receipts remain ordinary source states
 
 ### 7. Implementation order
 
-1. Accept the value-authority, convention-provenance and provider-receipt dependencies with the
-   exact types consumed here.
-2. Land the private branded point compiler and its crossed-source negative fixtures.
-3. Land the ordered path compiler, reversible source-local changes and corpus compatibility gate.
+1. Accept the value-authority, convention-provenance, recorded-path and provider-result dependencies
+   with the exact types consumed here.
+2. Land the private recorded-snapshot/opening-resolution operations and branded point compiler with
+   crossed-source negative fixtures.
+3. Land the run+branch arc compiler, reversible source-local changes and independent compatibility
+   controls.
 4. Replace Support and Review ad-hoc phase/opening/endgame joins with the compiled operations.
-5. Add the typed bot/longitudinal/inspector handoffs without adding policy or presentation.
+5. Add typed bot/longitudinal handoffs without adding policy or presentation; leave inspector
+   projection to its owning presentation/module RFCs.
 6. Run software, content, browser, packaging and CI-parity gates; update canonical docs and close
    the ledger/log in the archival commit.
 
@@ -272,29 +323,29 @@ design's evidence planes and module/preset separation.
 
 ## Fresh independent review return (2026-09-04)
 
-The source-vector direction survives, but implementation is returned on seven buildability defects:
+The source-vector direction survived a seven-defect return. The bounded author repair resolves the
+contract tier as follows:
 
-- [[D2636]]: the required top-level `opening` namespace is also forbidden by the property-name guard;
-- [[D2637]]: opening endpoint/membership bind a four-field transpose key, not the promised full FEN;
-- [[D2638]]: `compilePhaseArc(path, inputs)` bypasses the sole recorded-path authority;
-- [[D2639]]: the live union cannot carry the provider's typed local outside-domain result and the
-  composer duplicates its domain authority;
-- [[D2640]]: recorded absence is a bare caller digest with no bounded snapshot/query receipt;
-- [[D2641]]: the server-private exemption conflicts with a mandatory, unspecified web-inspector
-  handoff; and
-- [[D2642]]: the corpus applicability invariant is green by construction because
-  `endgameReading` calls the same phase classifier it is compared against.
+- [[D2636]]: `openingSources` is admitted while the literal guard retains only actual aggregate keys;
+- [[D2637]]: one private opening operation derives both results from the retained exact occurrence;
+- [[D2638]]: arc compilation accepts run+branch and invokes the sole recorded-path operation itself;
+- [[D2639]]: the provider's success/local-domain/failure union is retained without recomputation;
+- [[D2640]]: one sealed digest-matched evidence snapshot and resolver own recorded absence;
+- [[D2641]]: inspector is removed from the private-view handoff and remains presentation-owned; and
+- [[D2642]]: applicability is crossed from independently supplied declared results, while the
+  circular corpus counter is demoted to telemetry.
 
 Exact receipt and executable falsifier:
 `planning/phase-source-composition/fresh-independent-buildability-review-2026-09-04.md` and
-`make phase-source-composition-fresh-review`. The author must close all seven while retaining the
-eight original controls before another review.
+`make phase-source-composition-fresh-review`. `make phase-source-composition-author-repair` retains
+the eight original controls and proves the seven repaired obligations. Another genuinely fresh
+review still gates acceptance.
 
 ## Acceptance criteria
 
 1. `make phase-source-composition-census` reproduces 50 packs, 804 positions, 100 paths, 1,069
-   path-position occurrences and the committed result digest; all four impossible joins remain
-   zero.
+   path-position occurrences and the committed result digest. Its historic applicability counter
+   is reach telemetry only and is never cited as an independent invariant.
 2. Source reach reproduces 132 exact endpoints, 204 memberships, 153/122/233/296 rules
    opening/unclear/middlegame/endgame, 109 typed endgames, 187 untyped endgames, 241 recorded
    tablebase positions and 563 outside-domain positions.
@@ -303,30 +354,36 @@ eight original controls before another review.
 4. The 100-path receipt reproduces 49 membership exits and 14 re-entries. A synthetic
    member→absent→member path retains all three points and both changes; no sticky label survives.
 5. A source-unavailable opening fixture retains two exact opening abstentions while rules phase and
-   local endgame applicability remain available.
-6. Same-transposition/different-full-FEN, same-FEN/different-node occurrence, crossed catalogue
-   digest and crossed tablebase receipt fixtures fail before a view is branded.
-7. Inside-domain recorded absence, provider not requested, provider unavailable, outside-domain
-   and recorded/live successes remain distinct arms. A provider request is never triggered by the
-   composer.
+   local endgame applicability remain available. A caller cannot supply either opening result;
+   changing the retained position, paired return, key, ply or catalogue identity fails.
+6. Same-transposition/different-full-FEN for full-FEN sources, same-FEN/different-node occurrence,
+   crossed catalogue digest and crossed provider-result fixtures fail before a view is branded;
+   opening's four-field key remains explicitly source-local.
+7. Recorded success, sealed snapshot absence, no recorded source, provider not requested, provider
+   success, provider source failure and provider local-domain result remain distinct arms. A bare
+   snapshot digest/map, typed result without its declared item, local recomputation and a provider
+   request triggered by the composer all fail.
 8. The D2484 five-arm rules result is retained byte-for-byte as a declared input; the composer
    cannot accept or derive a probability, accuracy estimate or move-distance claim.
 9. Endgame applicability is set-equal to the declared rules-phase arm. Typed and untyped endgames
-   compile; an applicability contradiction fails.
+   compile; independently supplied declared phase/endgame results exercise both valid arms and at
+   least two crossed contradictions. No control compares `classifyPhase` to a reader that calls
+   `classifyPhase` internally.
 10. Across all 31 measured KRPvKR positions the point and arc contain zero Lucena/Philidor/Vancura
     fields or bytes. A material-only technique fixture fails the production boundary.
-11. Point and arc roots contain none of §2.3's forbidden aggregate fields. A fixture adding each
-    property fails independently.
+11. Point and arc roots contain none of §2.3's forbidden aggregate fields. The generated guard
+    accepts the exact normative `openingSources` shape and rejects each added forbidden property.
 12. Forged structural clones, JSON round trips and double assertions fail the runtime brand check.
-13. The five-row production-handoff table is set-equal to a checked receipt. Support and Review
+13. The four-row production-handoff table is set-equal to a checked receipt. Support and Review
     invoke the compiled operation; a symbol/file-only census does not pass.
 14. Support receives only the current point. Review receives only its requested exact path. Bot
     policy fails if a profile reads a slot it did not declare. Longitudinal publication fails
     without source-specific opportunity identity.
 15. No ordinary learner renderer, module rank, preset, bot weight, style label, campaign reward,
     pack content or LLM prompt changes under this RFC.
-16. The advanced inspector labels every shown slot by source and exact availability; the default
-    Play composition contains no new inspector row or raw source list.
+16. No phase-source view or union crosses the server package. Any advanced-inspector use is a
+    downstream `evidence-presentation` component binding; a direct JSON/wire export and an ordinary
+    Play raw source list both fail.
 17. `make phase-source-composition-author-contract`, focused composer tests, `make verify`,
     `make test-browser`, package build and CI parity pass on committed bytes through normal Make
     targets before status changes.
@@ -348,7 +405,7 @@ eight original controls before another review.
 | D3 | Support and Review replace their ad-hoc joins with the branded compiler | phase-source-composition | implementation receipt naming both actual call sites | |
 | D4 | Bot policy consumes only explicitly declared source slots | bot-policy | operation-level integration fixture | |
 | D5 | Longitudinal publication carries source-specific observations and opportunities | longitudinal-store | exact storage/publication receipt | |
-| D6 | Advanced inspector exposes attributed slots without widening ordinary Play | module-registration | composed browser fixture | |
+| D6 | Any advanced-inspector presentation is owned downstream and never serializes the private view | module-registration + evidence-presentation | exact component binding or explicit honest-empty state | |
 | D7 | Fresh independent buildability review after D1/D2 | codex | review record with findings closed or routed | |
 
 ## Open questions
@@ -362,5 +419,7 @@ product choices.
 
 - 2026-09-04: fresh independent review returned implementation on [[D2636]]–[[D2642]]; records the
   exact subject/path/tablebase/presentation authorities and replaces one circular corpus invariant.
+- 2026-09-04: bounded author repair closes [[D2636]]–[[D2642]] at contract tier; no production or
+  registered-resource bytes changed and another independent review remains required.
 - 2026-09-01: created from [[D2485]] and the complete 804-position/100-path source-composition
   reading; records [[D2487]] as an explicit technique-withholding boundary.
