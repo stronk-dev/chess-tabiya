@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:0259355eb770552fa898c20fd325d60206a6d0d8fca3a00ea7b84009c522d001",
+    "roadmap": "sha256:f94e593153cfaf1481f4fd6fec9e79988a45b7bf67d1a9adaaf35436b92f92ee",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
     "workState": "sha256:bc53cc5609e1749c9fbb067b67eb68d3910df42b6f648f1f79d56487e7784479",
     "rfcRegister": "sha256:2ae33bf2510fc5f849bccfeb49779c7a025781f18b97e955bc4b66f98eb88cd4",
@@ -110,9 +110,12 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Longitudinal store advanced to fresh-review readiness, while provider health's fourth fresh review returned nine operation, authority, recovery, cache and learner-journey blockers. Foundation implementation remains held until provider health joins the existing exchange protocol and its real voice, reasoning, TTS and opponent paths.",
+        "summary": "Fresh reviews returned three critical foundations: longitudinal history on aggregate, registry, source-image, operation-census and full-state CAS authority; pack capability on durable application identity; and shared-resource bootstrap on projection closure. Foundation implementation remains held until those exact contracts are repaired and freshly accepted.",
         "impact": "held",
         "evidence": [
+          "planning/longitudinal-store/sixth-fresh-independent-buildability-review-2026-09-04.md",
+          "planning/pack-capability-contract/eleventh-fresh-independent-buildability-review-2026-09-04.md",
+          "planning/shared-resource-register-bootstrap/seventh-fresh-independent-buildability-review-2026-09-04.md",
           "planning/provider-health-degradation/fourth-fresh-independent-buildability-review-2026-09-04.md",
           "planning/longitudinal-store/sixth-author-repair-2026-09-04.md",
           "planning/learner-modules/ninth-author-repair-2026-09-04.md",
