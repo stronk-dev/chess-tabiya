@@ -56,7 +56,7 @@ test("D2428/D2468 RFC consumes the registered production route and measured boun
   assert.match(rfc, /draft `rfc\/evidence-value-authority\.md`/u);
   assert.doesNotMatch(rfc, /The public adapter signature changes from/u);
   assert.match(rfc, /imports neither `exactLegalMoveMap` nor `exactLegalMoves`/u);
-  assert.match(rfc, /\| 1b \| `packages\/runtime\/src\/evidence-source-adapters\.ts`/u);
+  assert.match(rfc, /createRulesMobilityReadingLegalMovesV1Evidence/u);
   assert.match(rfc, /\*\*2\.724×\*\*/u);
   assert.match(rfc, /another fresh independent review is required before implementation/u);
 });

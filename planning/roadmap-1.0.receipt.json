@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:d968d085d9e6e1d17aa7e77763b26708a3d9eb346d6774582d5519ce157624ba",
+    "roadmap": "sha256:d4ebd2f76fb709c129e1a2847805033a9215c451faac742740a5e105cb026e30",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:81f818e786a31ef360c49437659f91c19925f18950cde86f0605b2cc5b584f18",
-    "rfcRegister": "sha256:b2bc94ac86731e6bc72af8ccf0cb2fba609c80d8637816ed496f11dea95b1c3d",
+    "workState": "sha256:3192958891cd71e7a8ea5e0c71a199b88f21706e622f5728c0c9187d3523c39e",
+    "rfcRegister": "sha256:a3dfa52b6e944545cf5ca7bbfb654c9f76350d480e1d88668c58b4b153387a16",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -183,9 +183,10 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Deflection check authority is live, while fresh reviews hold the promotion pair, shared candidate packet and bounded-target layer. The packet has dependency/scope/weight gaps; bounded targets have a lossy protocol image, no service-to-factory call path and a conflicting threat-factory alias. The evidence spine remains 12/14; recorded paths, provider/value authority and all module emissions remain unbuilt or held.",
+        "summary": "Deflection check authority is live, while fresh reviews hold the promotion pair and bounded-target layer. The shared candidate packet's dependency, scope and cache-envelope returns now have a bounded seventh author repair: one predecessor-owned factory, scope-invariant collector truth and complete retained-graph limits. It still awaits genuinely fresh review and dependency landing. The evidence spine remains 12/14; recorded paths, provider/value authority and all module emissions remain unbuilt or held.",
         "impact": "held",
         "evidence": [
+          "planning/evidence-foundation-ux/shared-candidate-packet-seventh-author-repair-2026-09-04.md",
           "planning/bounded-policy-targets/fourth-fresh-independent-buildability-review-2026-09-04.md",
           "planning/evidence-foundation-ux/shared-candidate-packet-sixth-fresh-independent-buildability-review-2026-09-04.md",
           "planning/evidence-foundation-ux/semantic-collectors-promotion-sixth-fresh-independent-buildability-review-2026-09-04.md",

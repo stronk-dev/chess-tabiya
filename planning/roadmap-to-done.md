@@ -298,6 +298,14 @@ remains held before implementation rather than turning a cache-order-dependent p
 denominator for Support, Review and bots. Receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-sixth-fresh-independent-buildability-review-2026-09-04.md`.
 
+The 2026-09-04 seventh author repair closes those three seams without claiming consumer reach.
+`evidence-value-authority` remains the sole factory owner; collector contexts no longer receive
+request scope and direct/projected shared evidence must agree; and cache admission now measures the
+complete private retained graph with explicit logical-byte and object-count limits. The obsolete
+visible-item coefficient supplies historical negative evidence only. Support, Review and bots remain
+held until a fresh review accepts this packet and its predecessor lands. Receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-seventh-author-repair-2026-09-04.md`.
+
 The 2026-09-04 fourth fresh bounded-target review preserves explicit reading validation and private
 factory containment, but returns [[D2628]]–[[D2630]] before implementation: its imported protocol
 image omits most of the normative API, its background service has no permitted call path to the

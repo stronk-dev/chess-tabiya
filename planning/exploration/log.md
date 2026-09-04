@@ -14998,3 +14998,22 @@ classifier call.
 and 7/7 repair arms. Exact receipt:
 `planning/phase-source-composition/author-repair-2026-09-04.md`. Dependency acceptance and a fresh
 independent review still gate implementation.
+
+## 2026-09-04 — Shared candidate packet seventh author repair
+
+**What landed:** The bounded contract-tier repair for [[D2625]]–[[D2627]] plus the maintained
+`make candidate-packet-seventh-author-repair` target. No production runtime, server, provider, API,
+schema, content, UX, archive or protected-design byte changed.
+
+**What changed:** the packet consumes the exact predecessor-owned legal-evidence factory without
+claiming or recreating its file; request scope is removed from collector truth inputs and
+direct/projected retained evidence must agree; and cache admission now measures the complete private
+retained graph by canonical logical bytes and unique object identity. The obsolete visible-item
+coefficient and inherited memory defaults are historical negative evidence, not new calibration.
+
+**Evidence/next:** `make candidate-packet-seventh-author-repair` passes the retained 3/3 sixth
+controls and 4/4 new repair arms, including quiet, hidden-dependency, shared-reference and equal-
+clone cases. Exact receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-seventh-author-repair-2026-09-04.md`.
+Another genuinely fresh independent review and the `evidence-value-authority` dependency still gate
+implementation and all Support/Review/bot/longitudinal consumer credit.

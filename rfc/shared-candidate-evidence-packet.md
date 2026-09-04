@@ -1,7 +1,7 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — sixth fresh independent review returned the D2428/D2468 repair on
-  [[D2625]]–[[D2627]]; a seventh author repair and another fresh independent review are required.**
+- **Status:** **draft — seventh author repair closes the sixth fresh-review returns
+  [[D2625]]–[[D2627]]; another genuinely fresh independent review is required before acceptance.**
   The D2198–D2201 author repair remains present: the product factory fixes the primary manifest authority; every collector
   result is projection-addressed; thirteen exact context adapters satisfy the executable registry;
   and memo, service-stat and receipt-reference protocols are closed. The historical return remains
@@ -27,9 +27,13 @@
   contract and remains green. The sixth fresh review preserves that repair but finds that its
   prerequisite deletes a file §12 still claims, request scope can alter collector truth while a
   projected and direct packet share identity, and the retained-weight formula omits repaired receipt
-  categories. Exact return:
+  categories. The seventh repair consumes the predecessor factory without owning its file, removes
+  scope from collector truth inputs, and replaces the obsolete coefficient with complete retained-
+  graph byte/object receipts and explicit injected limits. Exact return:
   `planning/evidence-foundation-ux/shared-candidate-packet-sixth-fresh-independent-buildability-review-2026-09-04.md`.
-  `make candidate-packet-sixth-fresh-review` reproduces 3/3. Implementation remains unauthorized.
+  `make candidate-packet-sixth-fresh-review` names the historical 3/3 return;
+  `make candidate-packet-seventh-author-repair` inverts those seams and is the positive repair contract. Implementation
+  remains unauthorized.
   [[D1580]] remains separate numeric appliance-tier debt. *(Prior state: D1977–D1981
   author-repaired after D1958–D1961, D1900–D1903 and D1945–D1947.)*
 - **Author:** claude (initial draft); codex (2026-08-29 operation-boundary author repair). Drafted
@@ -40,7 +44,7 @@
 - **Design refs:** `design/05-in-run-experience.md` §5 (*"detection is cheap, significance is not"* — the split this RFC executes in code: one factual population, separate opinionated derivations) and §3b-i (*"The LLM is the voice, never the source"*); `design/03-product-breadth.md` §Play (opponent selection) and §Intelligence and explanation
 - **Exploration gate:** [[D1071]] 📊 and [[D1072]] 🐞 — research complete 2026-08-23, dossier `design/research/shared-candidate-evidence-packet.md`, executable falsifier `tools/d1071-candidate-packet-harness/` under `rfc/0000-rfc-process.md` §Exploration gate. [[D1330]]'s per-dossier classification of all 118 research artifacts ranked this **live debt rank 6**: the population finding was partially adopted by `evidence-move-selector.md`, *"but the packet itself is that RFC's Discharge D2, unbuilt"*
 - **Depends on:** **accepted** `rfc/exact-legal-mobility.md` — it ships the single actual-turn move authority (`exactLegalMoves`/`exactLegalMoveMap`), `MOVE_IDENTITY_CONVENTION`, `MOVE_DESTINATION_CONVENTION` and the `rules.mobility.reading.legal_moves@1` projection, which is this packet's legal-convention field rather than a new one (§4.2); **draft `rfc/evidence-value-authority.md`**, whose exact route `createRulesMobilityReadingLegalMovesV1Evidence` must land first; implemented F1 evidence contract (`rfc/archive/evidence-contract-manifest.md`, `rfc/archive/semantic-evidence-selection.md`) and the compiled catalogue at HEAD. The provider RFC is a dependency of held Discharge D10, not of this provider-free landing
-- **Parent / amends:** amends the `SemanticSelectionInput` contract in `packages/runtime/src/semantic-evidence.ts` (§3 — the caller-supplied alternative population becomes a compiled packet) and, on acceptance, amends `exact-legal-mobility.md` only at the exact evidence adapter's input boundary: FEN in, one authority-owned map out; projection, operands and move semantics do not change. It supplies the complete-population input and one-root score-source correction to `evidence-move-selector.md`/bot Discharge D10 without implementing a dormant candidate vector here. Review's separate node-free position evaluation stays owned by `provider-exchange-and-execution` plus `review-evidence-compiler`; this RFC does not turn it into N child searches. **Discharges rebuilt `rfc/hint-distance.md` D2 on landing**; that row is its author's to flip
+- **Parent / amends:** amends the `SemanticSelectionInput` contract in `packages/runtime/src/semantic-evidence.ts` (§3 — the caller-supplied alternative population becomes a compiled packet). It consumes, and does not amend or co-own, `evidence-value-authority`'s exact FEN→legal-evidence factory; projection, operands and move semantics do not change here. It supplies the complete-population input and one-root score-source correction to `evidence-move-selector.md`/bot Discharge D10 without implementing a dormant candidate vector here. Review's separate node-free position evaluation stays owned by `provider-exchange-and-execution` plus `review-evidence-compiler`; this RFC does not turn it into N child searches. **Discharges rebuilt `rfc/hint-distance.md` D2 on landing**; that row is its author's to flip
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/evidence-foundation-ux/` (once implementing)
 
@@ -508,11 +512,35 @@ interface CandidatePopulationReceiptReferences {
   }[];
 }
 
+type CandidatePopulationRetainedCategory =
+  | "packet"
+  | "legal_moves_input"
+  | "legal_move"
+  | "candidate_row"
+  | "event"
+  | "reading"
+  | "abstention"
+  | "retained_collector_outcome"
+  | "execution_collector_outcome";
+
+interface CandidatePopulationRetainedGraphReceipt {
+  /** Canonical UTF-8 key/scalar bytes in the complete retained plain-object graph. */
+  readonly logicalUtf8Bytes: number;
+  /** Unique reachable arrays and plain objects, deduplicated by reference identity. */
+  readonly uniqueObjects: number;
+  /** Complete closed census; keys are set-equal to CandidatePopulationRetainedCategory. */
+  readonly categoryCounts: Readonly<Record<CandidatePopulationRetainedCategory, number>>;
+}
+
 const CANDIDATE_POPULATION_RECEIPTS = new WeakMap<
   CandidatePopulationReceipt,
   CandidatePopulationReceiptReferences
 >();
 const CANDIDATE_COLLECTOR_OUTCOMES = new WeakSet<SealedCandidateCollectorOutcome>();
+
+function measureCandidatePopulationRetainedGraph(
+  references: CandidatePopulationReceiptReferences,
+): CandidatePopulationRetainedGraphReceipt;
 
 function compileCandidatePopulationReceipt(
   packet: CandidateEventPopulation,
@@ -570,6 +598,20 @@ generated literal-key set, and is the sole assertion from broad `VersionedEviden
 `CandidateCollectorProjection`; an arbitrary string never enters the public type. Empty results cannot be copied between two
 outputs because the sealed result itself retains the literal projection. A forged object, equal rebuild, copy-spread, removed
 row or substituted equal-valued input fails at runtime even after a double type assertion.
+
+Before cache admission, the same private reference row is the sole input to
+`measureCandidatePopulationRetainedGraph`. Its root list is explicit and set-equal to the receipt
+reference fields: packet, legal declaration/map, legal moves, candidate rows, visible events and
+readings, abstentions, retained outcomes and dependency-only execution outcomes. The primary
+manifest is deliberately excluded from per-entry weight because the service retains that one
+singleton whether the cache has zero or eight entries. Traversal follows every reachable array and
+plain object from those roots, sorts object keys, counts canonical UTF-8 key/scalar bytes, and counts
+each object identity once through a `WeakSet`; functions, symbols, bigint values, accessors and
+non-plain prototypes fail receipt measurement rather than receiving an invented size. Equal cloned
+objects count twice; a shared reference counts once. The category census is an independent closed
+root check, not a replacement for traversal. These are deterministic logical graph bounds—not a
+claim about V8 heap/RSS—and criterion 12 requires production Node-24 calibration before numeric
+defaults may be published.
 
 `projectCandidatePopulationReceipt` first asserts the source receipt and then checks the literal
 partial order `events_and_readings → {events_and_readings, events, readings}`, `events → events`,
@@ -639,6 +681,16 @@ copied into `row.events`, `row.readings`, public abstentions or the retained-out
 reading still carries its own exact declared-evidence authority; executing an event dependency does
 not turn that event into a packet output.
 
+Scope is **not** a semantic collector input. Every collector receives only the root, candidate,
+derived child and its declared dependency memo. For the same root and compiler/manifest versions,
+an output executed in more than one plan therefore has the same canonical projection identity and
+evidence payload. Within one service compilation the executor memoizes each
+`(root packet identity, moveUci, collectorId)` result, so a cached wide-to-narrow projection retains
+the exact sealed result/value references. Direct narrow and wide compilations in separate fresh
+services cannot share process references; criterion 4 therefore compares their canonical evidence
+payload digests and abstention/outcome identities as well as their values. Request order may change
+cache hits, never factual bytes.
+
 The candidate set is always complete. Scope is part of the cache identity (§6.1) so a narrow packet
 is never served to a consumer that needs the wide one. A cached wide packet may satisfy a narrow request only by a
 deterministic no-chess projection that returns a **new frozen packet with the narrow scope and its
@@ -655,7 +707,9 @@ collectors; readings retains the three reading collectors and additionally execu
 For every scope, plan ids are set-equal to requested ids plus their transitive dependencies, every
 dependency precedes its reader, retained projection keys are set-equal to the requested family, and
 the opposite family is absent. Unknown, cyclic, late, duplicated or gratuitous dependencies fail
-before the first candidate is evaluated.
+before the first candidate is evaluated. A source/AST contract rejects `scope` (or the complete
+request) in every `CandidateCollectorContext`, collector function parameter and memo value; only
+the planner, service and retention projector may read it.
 
 ### §4 — The legal-move authority, and the dialect that has already bitten twice
 
@@ -777,7 +831,6 @@ export interface CandidateCollectorContext<D extends readonly string[]> {
   readonly beforeFen: string;
   readonly moveUci: string;
   readonly afterFen: string;
-  readonly scope: CandidatePacketScope;
   /** Exactly the dependencies declared by this collector; no index signature. */
   readonly memo: CandidateCollectorMemo<D>;
 }
@@ -879,10 +932,13 @@ The production constant uses imported callable symbols, not an `operation` strin
 requires unique ids, an acyclic dependency graph, dependencies earlier than consumers, output ids
 set-equal to the callable family's exported projection constant, and exactly one invocation per
 candidate. Shared transition/tactical/reading outputs live in the private memo so a dependent
-collector consumes the exact sealed predecessor outcomes rather than recomputing them. Scope is
-applied only to the retention set; `planCandidateCollectors` expands its dependency closure before
-grouping and marks closure-only rows hidden. It never changes the candidate set or exposes hidden
-dependency values through the packet row.
+collector consumes the exact sealed predecessor outcomes rather than recomputing them. **No
+collector context contains request scope.** Scope is visible only to `planCandidateCollectors` and
+the executor's retention step; the immutable chess inputs presented to a given collector are
+therefore byte- and reference-identical for direct-narrow and wide compilation of the same root.
+`planCandidateCollectors` expands its dependency closure before grouping and marks closure-only
+rows hidden. It never changes the candidate set, collector truth or exposed values, and it never
+copies hidden dependency values into the packet row.
 
 The thirteen `collectCandidate*` symbols are real runtime adapters, not aliases or prose names.
 Each accepts only one immutable context, calls its existing positional chess function at most once,
@@ -989,8 +1045,9 @@ closed algebra; normal control flow never depends on a thrown string:
 
 ```ts
 export interface CandidatePopulationServiceLimits {
-  readonly maxEntries: number;              // default 8; positive safe integer
-  readonly maxRetainedWeight: number;       // default 56_000; positive safe integer
+  readonly maxEntries: number;              // positive safe integer
+  readonly maxRetainedLogicalBytes: number; // required, positive safe integer
+  readonly maxRetainedObjects: number;      // required, positive safe integer
   readonly maxCollectorsPerGroup: number;   // default 4; closed range 1..8
   readonly maxConcurrent: number;           // default 1; closed range 1..4
   readonly maxPending: number;              // default 16; closed range 0..128
@@ -1002,7 +1059,8 @@ export interface CandidatePopulationServiceStats {
   readonly activeUniqueJobs: number;
   readonly queuedUniqueJobs: number;
   readonly cacheEntries: number;
-  readonly retainedWeight: number;
+  readonly retainedLogicalBytes: number;
+  readonly retainedObjects: number;
   readonly hits: number;
   readonly projectionHits: number;
   readonly misses: number;
@@ -1017,7 +1075,8 @@ export interface CandidatePopulationServiceStats {
 }
 
 export interface CandidatePopulationServiceOptions {
-  readonly limits?: Partial<CandidatePopulationServiceLimits>;
+  /** No memory-limit defaults exist before the production-graph calibration in criterion 12. */
+  readonly limits: CandidatePopulationServiceLimits;
 }
 
 export interface CandidatePopulationService {
@@ -1030,7 +1089,7 @@ export interface CandidatePopulationService {
 }
 
 export function createCandidatePopulationService(
-  options?: CandidatePopulationServiceOptions,
+  options: CandidatePopulationServiceOptions,
 ): CandidatePopulationService;
 ```
 
@@ -1176,37 +1235,39 @@ lookup therefore cannot precede provider identity unless a retained exact provid
 that receipt. The future final cache keeps single-flight, entry/weight bounds and rejection
 deletion; a packet hit never implies a provider or selection hit.
 
-**§6.3 — Single-flight and a measured dual bound.** Packet construction is single-flight per key —
-the in-flight promise is stored, and deleted on rejection so a failure is not memoised. The cache is
-an LRU bounded by both **entry count** and deterministic **typed retained weight**. The initial
-configurable defaults are `maxEntries: 8` and `maxRetainedWeight: 56_000`, with
-`packetWeight = eventCount + 5 × readingCount`. Both are constructor options injected at §6.0's
-composition root. Event and reading counts are reported separately in stats so the coefficient is
-observable rather than hidden inside one integer.
+**§6.3 — Single-flight and complete retained-graph bounds.** Packet construction is single-flight
+per key: the in-flight promise is stored, and deleted on rejection so a failure is not memoised. The
+cache is an LRU bounded independently by **entry count**, **complete retained logical UTF-8 bytes**
+and **unique retained object count**. All three are explicit composition-root inputs. There are no
+memory defaults in this draft: `8 / 56,000` described the obsolete visible packet, not the repaired
+receipt graph, and carrying either value forward would turn an old measurement into a new claim.
 
-The event-only fixed population measured p95 5,482 and max 5,803 events; eight maximum packets are
-46,424 events and about 63 MB of structural JSON before V8 overhead. The first Node-24 full-scope
-trial proves equal weight is wrong: 37,804 events add 52.28 MB heap, while adding 6,629 readings
-raises the same eight-entry cache to 91.78 MB. The incremental reading/event heap-per-item ratio is
-4.31 (structural JSON independently reads 2.00×), so the corrected trial rounds up to 5. It retains
-six stress roots at 52,975 weight, 51.22 MB structural JSON and 67.17 MB heap; event-only retains
-eight at 37,804 weight and 52.28 MB heap. `[V]`
-`planning/evidence-foundation-ux/d1579-candidate-packet-node24-envelope.json`; [[D1579]]. The
-equal-item arm remains a mandatory negative control.
+The private retained-graph receipt in §3.1 is the admission authority. It traverses every strong
+reference kept alive by the cached receipt, including the exact legal-map/move graph, candidate rows,
+abstentions, retained collector outcomes and dependency-only execution outcomes held only by the
+private `WeakMap`. Its category keys are closed and set-equal to the private reference roots. The
+logical-byte and unique-object totals deduplicate shared references by identity and therefore change
+when an equal clone replaces a shared value. A quiet position with zero visible events/readings and
+a readings-only position whose event dependencies are hidden both have non-zero retained measures.
+No public-packet serialization or visible event/reading coefficient is an admissible substitute.
 
-These are **initial mechanism defaults, not a release-tier clearance**. O13/F12 name `core`, `cpu`
-and `accelerated` but provide no numeric heap/RSS ceiling, so “the envelope is exceeded” has no
-testable predicate today. [[D1580]] requires F12 to supply that release predicate; this RFC keeps
-the cache bounded/configurable and criterion 12 records the measured bytes without manufacturing a
-pass threshold.
+The historical Node-24 record remains useful evidence that equal visible-item weights fail: 37,804
+events added 52.28 MB heap, while adding 6,629 readings raised the old eight-entry packet cache to
+91.78 MB. It is **not calibration for this graph** because it predates receipt references and hidden
+outcomes. Before implementation acceptance, criterion 12 reruns the exact production receipt graph
+under Node 24 and records per-root logical bytes, unique objects, category counts, structural bytes,
+heap/RSS deltas and cache decisions. Only that result may propose appliance defaults. O13/F12 still
+owes numeric release-tier heap/RSS ceilings ([[D1580]]); deterministic cache bounds are necessary but
+do not manufacture release clearance.
 
-Insertion evicts least-recently-used settled entries until **both** bounds hold. Admitted active
+Insertion evicts least-recently-used settled entries until **all three** bounds hold. Admitted active
 entries are never evicted mid-compilation, but their count and the FIFO pending population are
-bounded by §6.0; if settlement would exceed a cache bound by itself, the packet is returned but
-not cached and the introspection record states `oversize_not_cached`. `cacheStats()` reports entry
-count, retained weight, hit/miss/projection-hit/eviction/oversize counts, never FENs or learner data.
-Criterion 13 asserts eviction actually happens at each bound and that two concurrent requests for
-one key compile once.
+bounded by §6.0; if one settled receipt exceeds either retained-graph bound by itself, the packet is
+returned but not cached and the result states `oversize_not_cached`. `cacheStats()` reports entry,
+logical-byte and unique-object gauges plus hit/miss/projection-hit/eviction/oversize counters, never
+FENs, graph contents or learner data. Criterion 13 asserts eviction independently at each bound,
+shared-reference deduplication, cloned-object growth and one compilation for concurrent same-key
+requests.
 
 **§6.4 — Invalidation is by key, never by mutation.** A change to the manifest digest, the legal
 convention, the move-identity convention or the compiler version produces a **new key**; the old
@@ -1368,7 +1429,8 @@ projection; the legal-authority and dialect rules; original sealed-event retenti
 **code-derived** event and 20+2 reading closures plus a separate prevalence/cost census and `make
 candidate-closure-census`; the closed `CandidatePopulationRequest`; process-sealed factual receipt;
 the injected per-process `CandidatePopulationService`; the
-full-FEN key, single-flight, dual-bound weighted LRU, statistics and invalidation rules; the concrete
+full-FEN key, single-flight, entry/logical-byte/object-count bounded LRU, complete retained-graph
+receipt, statistics and invalidation rules; the concrete
 cooperative compilation/cancellation topology; the Maia-leak repair; the `selectSemanticEvidence`
 input repair and the `evaluatedAlternatives` fix, exercised as a verification contract only; the
 narrow-closure repair; and the operator-only and LLM boundaries. The shipped foundation has zero
@@ -1440,10 +1502,9 @@ listed symbol moved exactly once rather than rewarding a hand count.
 
 | # | file | change |
 |---|---|---|
-| 1 | `packages/runtime/src/cooperative-yield.ts` (new), `packages/runtime/src/candidate-population.ts` (new) | one dependency-free `messageChannelMacrotaskYield`; compiler, legal-authority read, closed collector results, code-derived bounded groups, the **moved** one-authority `candidateChildReadings`, set equality, terminal/scope rules, typed abstentions and private `WeakMap` receipt authority (§3–§5/§6.0) |
+| 1 | `packages/runtime/src/cooperative-yield.ts` (new), `packages/runtime/src/candidate-population.ts` (new) | one dependency-free `messageChannelMacrotaskYield`; compiler consuming `createRulesMobilityReadingLegalMovesV1Evidence` from the implemented predecessor without re-owning it; closed scope-free collector contexts/results; code-derived bounded groups; the **moved** one-authority `candidateChildReadings`; set equality; terminal/scope rules; typed abstentions; private `WeakMap` receipt authority and complete retained-graph measurement (§3–§5/§6.0) |
 | 1a | `packages/runtime/src/candidate-population-projections.generated.ts` (new) | one generated frozen `as const` collector→versioned-key map plus projection→reason map; public identity/result/abstention unions derive from these literal bytes |
-| 1b | `packages/runtime/src/evidence-source-adapters.ts` | change only the exact-legal adapter from caller-payload validation to the sole FEN→`DeclaredEvidence<ExactLegalMoveMap>` factory; one internal authority call, no caller map, same projection/operands/output |
-| 2 | `packages/runtime/src/candidate-population-cache.ts` (new) | exported generic service/factory, closed result/failure/limits, typed+runtime scope projector, neutral receipt, standard-only key, waiter-aware cancellation, bounded FIFO admission, idempotent shutdown, single-flight, dual-bound LRU, stats and invalidation (§3.1/§6) |
+| 2 | `packages/runtime/src/candidate-population-cache.ts` (new) | exported generic service/factory, closed result/failure/explicit limits, typed+runtime scope projector, neutral receipt, standard-only key, waiter-aware cancellation, bounded FIFO admission, idempotent shutdown, single-flight, entry/logical-byte/object-count LRU, stats and invalidation (§3.1/§6) |
 | 3 | `packages/runtime/src/semantic-evidence.ts` | selection accepts and runtime-asserts a packet receipt instead of a callback; both enumerators consume one code-derived closure; counts become measurements (§1.2–§1.5, §5.4) |
 | 4 | `packages/runtime/src/index.ts` | public packet/service/scope/readings contracts; no consumer deep-imports source files |
 | — | `tools/candidate-closure-census.mjs` (new; governance tool, **not production**) | code-derived schema arm plus prevalence/cost arm (§5.3) |
@@ -1457,6 +1518,14 @@ assertion), `packages/runtime/src/semantic-evidence.test.ts`,
 `packages/runtime/src/evidence-catalog.test.ts`, `apps/server/src/evidence-manifest.test.ts`,
 `apps/server/src/semantic-evidence-check.ts`, `docs/evidence-contract.md`,
 `docs/semantic-evidence.md`, and `Makefile`.
+
+`packages/runtime/src/evidence-factories.ts` is a **read-only dependency**, not an implementation
+surface: `evidence-value-authority` lands and owns
+`createRulesMobilityReadingLegalMovesV1Evidence` before this RFC. The packet imports that exact
+barrel-exported symbol. Its implementation diff must not touch the factory file, recreate deleted
+`evidence-source-adapters.ts`, add a same-purpose wrapper/alias, or import either legal enumerator
+below the factory. Criterion 36 checks the source graph and changed-file set rather than trusting
+this statement.
 
 **No `schemas/` or `packages/schema/` file changes**, which is what makes the `none` claim failable
 rather than aspirational — criterion 14.
@@ -1598,7 +1667,12 @@ arms, and undergo another fresh independent review before acceptance.
    each scope it also asserts the exact dependency-closed collector plan, topological order,
    `retain` flags, retained projection-key set and excluded projection-key set. Readings-only must
    execute hidden `event.transition` and `event.tactical` exactly once while retaining zero event
-   values or event abstentions; deleting either hidden row makes the reading plan invalid.
+   values or event abstentions; deleting either hidden row makes the reading plan invalid. The
+   collector context type and production AST contain no request `scope`. For every family retained
+   by both paths, direct events/readings compilation and a separately compiled wide packet projected
+   narrow have set-equal `(moveUci, projection, value digest, abstention/outcome)` tuples. A cached
+   wide projection additionally preserves exact value/outcome references. A malicious collector
+   that branches on scope cannot type-check, and cache request order cannot change packet bytes.
 5. **One packet serves both the played row and the alternative denominator — compared on `(moveUci,
    afterFen)` pairs, not on cardinality.** The cardinality arm alone **cannot fail**:
    `alternatives = candidates.filter(row => row.moveUci !== playedUci)` makes
@@ -1688,12 +1762,16 @@ arms, and undergo another fresh independent review before acceptance.
     did by timing `horizonSelection` and `moduleSelection` as if they were one. Second RED: an
     artifact with figures and no procedure — a number with no way to reproduce it is not a
     measurement.* The Node-24 receipt at
-    `planning/evidence-foundation-ux/d1579-candidate-packet-node24-envelope.json` records event-only,
-    equal-item negative-control and corrected event+reading arms: typed retained weight, separate
-    event/reading counts, structural bytes, heap/RSS delta and cache stats under the initial
-    8/56,000 dual bound. It must reproduce the equal-item arm retaining materially more heap while
-    still passing that bad bound, and the corrected `events + 5×readings` arm staying within weight.
-    The implementation rerun additionally records collector-group count, yield count, accumulated
+    `planning/evidence-foundation-ux/d1579-candidate-packet-node24-envelope.json` is retained as the
+    historical negative: its visible-item formula can report equal or zero weight for materially
+    different retained graphs. It cannot supply a default. The implementation rerun uses the exact
+    production `CandidatePopulationReceiptReferences` graph and records, per root and scope, every
+    closed category count, logical UTF-8 bytes, unique object count, structural bytes, heap/RSS delta
+    and cache admission. Required controls are a quiet root with zero visible facts, readings-only
+    with hidden event outcomes, one shared-reference graph, and an equal cloned graph; each must
+    change only the measures its retained identity predicts. The artifact proposes explicit
+    `maxRetainedLogicalBytes` and `maxRetainedObjects` defaults only after those arms exist and
+    demonstrates each default evicting on its own dimension. The implementation rerun additionally records collector-group count, yield count, accumulated
     `messageChannelMacrotaskYield` overhead and total operation time, and crosses an independently
     scheduled timer abort. Replacing the adapter with a resolved Promise must starve that timer
     until compilation ends; yielding after every individual collector instead of the declared
@@ -1701,15 +1779,18 @@ arms, and undergo another fresh independent review before acceptance.
     F12 names a numeric resource-tier predicate. This splits a buildable bounded mechanism from an
     unavailable release threshold instead of inventing one.
 13. **Single-flight and all bounds work.** Two concurrent requests for one key compile **once**; a
-    rejected compilation is not memoised; exceeding either 8 entries or 56,000 retained weight
-    evicts least-recently-used settled entries until both hold; in-flight entries survive; one
+    rejected compilation is not memoised; exceeding the configured entry, retained-logical-byte or
+    retained-object bound independently evicts least-recently-used settled entries until all hold;
+    in-flight entries survive; one
     oversize packet is served uncached and counted. More unique keys than `maxConcurrent` enter
     strict FIFO only through `maxPending`; the next returns `overloaded`, queue/compile deadlines
     are absolute and non-refreshing, same-key waiters consume no new slot, last-waiter cancellation
     removes queued work, and idempotent close settles queued/active jobs and prevents publication.
-    Deleting the reading coefficient (or changing
-    it to 1) fails the Node-24 negative control. Projection hits do no chess work and carry their
-    own scope/id. *Fails against an unbounded, entry-count-only or untyped-item `Map`.*
+    A category-set mismatch, hidden execution outcome omitted from traversal, shared reference
+    counted twice, equal clone deduplicated, accessor/non-plain object, or zero/missing explicit
+    retained limit fails before cache insertion. Projection hits do no chess work and carry their
+    own scope/id. *Fails against an unbounded, entry-count-only, visible-item-only or untyped-item
+    `Map`.*
 14. **The claims decision stays true at implementation time, and C8 is named because it is the check
     a `none` claim needs.** `register-check` **C1–C8** green with this RFC's claims block reading
     `none`, **and** an assertion that the implementation touched no file under `schemas/` or
@@ -1851,7 +1932,7 @@ arms, and undergo another fresh independent review before acceptance.
 33. **Public support types are closed ([[D2201]]).** Compile-time fixtures exercise exact declared-
     dependency memo access and reject undeclared reads. Runtime fixtures omit/cross the primary
     manifest, packet, legal input, row, event, reading and collector-outcome references one at a
-    time and fail receipt assertion. Service stats are frozen, contain only the fifteen declared
+    time and fail receipt assertion. Service stats are frozen, contain only the sixteen declared
     non-negative safe-integer fields, keep gauges within configured bounds and reject overflow or
     hidden learner/FEN/receipt data.
 34. **Projection identity is one literal dialect ([[D2329]]).** The generated map is derived from
@@ -1865,7 +1946,11 @@ arms, and undergo another fresh independent review before acceptance.
     their readers, invokes all five planned declarations once, retains only the three reading
     declarations, and exposes no event value, outcome or abstention. Omitting either dependency,
     retaining it publicly, adding an unrelated event collector or executing a dependency after its
-    reader fails.
+    reader fails. The same registry is scope-semantic-invariant: no collector callable receives
+    scope, and direct-narrow versus projected-wide retained tuples are exactly equal for every
+    shared projection. A hidden dependency's canonical bytes/digest are identical whether it was
+    requested for retention elsewhere or executed only to satisfy the reading plan; exact reference
+    identity is required only when narrowing one already-compiled wide receipt.
 36. **One sealed exact-map object owns the flat population ([[D2389]], [[D2428]]).** Instrument the
     projection-specific factory and assert one `createRulesMobilityReadingLegalMovesV1Evidence(beforeFen)` call and
     exactly one internal `exactLegalMoveMap(beforeFen)` call. Assert the adapter retains that exact
@@ -1877,6 +1962,11 @@ arms, and undergo another fresh independent review before acceptance.
     equal, but receipt compilation returns `invariant_failed: "receipt"`. A second negative calls an
     independently instrumented enumerator with equal output and is rejected for the same reason.
     These negatives must fail by source boundary or identity, not by order, fields or cardinality.
+    The implementation changed-file set excludes predecessor-owned `evidence-factories.ts`; the
+    production import graph contains exactly one packet import of its exact registered factory,
+    contains no recreated `evidence-source-adapters.ts`, same-purpose wrapper/alias or packet-side
+    factory definition, and contains no `exactLegalMoveMap`/`exactLegalMoves` import below that
+    boundary. This is an executable source-graph negative, not a comment convention.
 
 ## Fourth fresh independent return (2026-08-31)
 
@@ -1952,9 +2042,10 @@ trust path is measurable work even before candidate collectors run. Reproducer:
 
 Criterion 36 now binds one factory call to one internal authority call and the same declared object
 graph. The acceptance model includes malformed/non-string/caller-map inputs, a mocked second
-authority call, an equal map rebuild and a copied packet move. §12 explicitly owns the adapter
-signature correction. `make candidate-packet-sixth-author-repair` is positive author evidence only;
-another fresh independent review is required before implementation.
+authority call, an equal map rebuild and a copied packet move. The sixth repair assigned the adapter
+signature correction to §12; the seventh repair supersedes that file ownership after the dependency
+order proved the adapter is deleted. `make candidate-packet-sixth-author-repair` is positive author
+evidence only; another fresh independent review is required before implementation.
 
 ## Sixth fresh independent return (2026-09-04)
 
@@ -1977,12 +2068,37 @@ Exact review and reproducer:
 author controls, consume rather than re-own the value factory, make collection scope-invariant and
 re-measure a complete retained receipt graph before another fresh review.
 
+## Seventh author repair (2026-09-04)
+
+The three returns are repaired at their authority boundaries:
+
+1. [[D2625]] — §12 no longer claims the deleted adapter or any byte in the predecessor-owned factory
+   file. The packet imports the exact registered factory after `evidence-value-authority` lands, and
+   criterion 36 rejects file recreation, wrapper aliases, co-ownership and lower legal-enumerator
+   imports.
+2. [[D2626]] — `CandidateCollectorContext` has no request scope. Scope chooses the execution plan and
+   retention only; it cannot alter chess truth. Criterion 4 compares direct-narrow and projected-
+   wide value/digest/outcome tuples for every shared family, plus reference identity when projection
+   occurs inside one service.
+3. [[D2627]] — the visible `events + 5×readings` coefficient and its inherited defaults are removed.
+   A private complete-graph receipt traverses every strong reference kept alive by the cached
+   `WeakMap`, deduplicates by object identity, and returns logical UTF-8 bytes, unique-object count
+   and a closed category census. Both retained limits are explicit until the production Node-24
+   graph is re-measured. Quiet, hidden-dependency, shared-reference and equal-clone controls make
+   omissions and false deduplication fail.
+
+`make candidate-packet-seventh-author-repair` retains the sixth author controls and demonstrates the
+three inversions. The historical fresh-review target remains named evidence of the pre-repair
+failure, not a gate expected to stay green after its predicates are inverted. This is positive author
+evidence only. Another genuinely fresh independent review still gates acceptance and all production
+implementation.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | D1 | Repair the shipped `OpponentSelector` cache as the bounded third-layer policy cache: retain the complete Maia/provider receipt (including history/model/generation), then join packet id plus every compiled policy input; never substitute packet identity for provider identity (§6.2) | codex | `planning/evidence-foundation-ux/` | |
-| D2 | Measure end-to-end cold and warm latency on one computation and record it beside the D1071 baseline as a distinct measurement; measure both cache scopes and preserve the equal-item falsifier (§0.4, criterion 12) | codex | `planning/evidence-foundation-ux/d1579-candidate-packet-node24-envelope.json` | discharged 2026-08-26 for the pre-implementation envelope; implementation re-runs the same receipt on production symbols |
+| D2 | Measure end-to-end cold and warm latency on one computation and record it beside the D1071 baseline as a distinct measurement; on implementation re-run the exact private retained graph for every scope with quiet, hidden-dependency, shared-reference and equal-clone controls before proposing memory defaults (§0.4, §6.3, criterion 12) | codex | `planning/evidence-foundation-ux/d1579-candidate-packet-node24-envelope.json` plus the implementation graph receipt | historical pre-implementation envelope discharged 2026-08-26; complete-graph calibration remains open until production symbols exist |
 | D3 | Register a production hint selection policy; only `research.r2_candidate@1` exists and it is `disposition: "experimental"` (§10 hold 3) | claude | `rfc/hint-distance.md` | |
 | D4 | Correct the returned `hint-distance.md:593` [[D1330]] rank citation (§0.6) | codex | rebuilt `rfc/hint-distance.md` | discharged 2026-08-26 |
 | D5 | Fold the packet's population into `review-evidence-compiler.md`'s opportunity/avoidance denominator when that RFC implements (§2.5) | claude | `planning/evidence-foundation-ux/` | |
@@ -2119,6 +2235,12 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-09-04 — [[D2625]]–[[D2627]] seventh author repair. The packet now consumes the predecessor's
+  exact factory without claiming its file; collector truth inputs contain no request scope and
+  direct/projected shared values must agree; and cache admission measures every retained receipt
+  reference through logical-byte and unique-object bounds instead of the obsolete visible-item
+  coefficient. `make candidate-packet-seventh-author-repair` is positive author evidence only;
+  another fresh independent review remains required.
 - 2026-09-01 — [[D2428]] sixth author repair. The exact evidence adapter becomes the sole
   FEN-to-declared-evidence factory, removing caller payloads and the second legality computation.
   Current production symbols measure 0.029465 ms/position for one authority computation versus
