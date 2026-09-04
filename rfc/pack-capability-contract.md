@@ -1,12 +1,12 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **RETURNED by the twelfth fresh independent review on
-  [[D2673]], [[D2674]], [[D2675]], [[D2676]] and [[D2677]].** The repaired objective parser and
-  monotone counter survive, but caller-made
-  guard output, jobs and incomplete settlements still enter application; settlement allocation
-  bypasses the lease receipt; and replay returns corrupt stored children without validation. `make
-  pack-capability-twelfth-fresh-review` retains the complete author chain and passes 6/6 new
-  falsifiers. No implementation is authorised and the D560 hold stays whole.
+- **Status:** draft — **thirteenth author repair completed on [[D2673]], [[D2674]], [[D2675]],
+  [[D2676]] and [[D2677]]; another genuinely fresh independent review is required.** One
+  SQLite-backed authority now loads the stored job/success/run, enforces run and job CAS receipts,
+  invokes the registered guard internally, atomically consumes with the run mutation, and validates
+  batch/application replay. `make pack-capability-thirteenth-author-repair` retains the complete
+  predecessor chain and passes 6/6 repair groups. No implementation is authorised and D560 stays
+  whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -2283,6 +2283,23 @@ passes 6/6 new falsifiers. Exact receipt:
 `planning/pack-capability-contract/twelfth-fresh-independent-buildability-review-2026-09-04.md`.
 One bounded author repair must compose these authorities before another fresh review or any
 pack/schema/storage implementation.
+
+## Thirteenth author repair (2026-09-04)
+
+The bounded repair closes [[D2673]], [[D2674]], [[D2675]], [[D2676]] and [[D2677]] at contract tier.
+Application no longer accepts emitted events, caller jobs or caller success shapes. One
+SQLite-backed operation loads the settled job and run image, joins the stored request's run/node/FEN,
+parses the stored success, invokes the registered immediate guard internally, derives the journal
+suffix, advances the run CAS, marks the same row consumed and stores the receipt in one transaction.
+
+Settlement now requires the branded job lease's owner, generation and request digest, validates the
+exact success before allocating, and clears the completed lease under the same CAS/counter
+transaction. Admission replay loads every child and runs the complete stored-batch/run validator;
+application replay re-joins its receipt to the retained journal before returning it. `make
+pack-capability-thirteenth-author-repair` retains the complete earlier chain and passes 6/6 repair
+groups. Exact receipt:
+`planning/pack-capability-contract/thirteenth-author-repair-2026-09-04.md`. This remains author
+evidence; another genuinely fresh review gates acceptance and implementation.
 
 ## Acceptance criteria
 

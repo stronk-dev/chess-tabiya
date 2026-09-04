@@ -196,6 +196,15 @@ chain and passes 6/6 new falsifiers. Pack schema 0.30, its migration and the hel
 unauthorized pending a bounded repair and another fresh review. Receipt:
 `planning/pack-capability-contract/twelfth-fresh-independent-buildability-review-2026-09-04.md`.
 
+The same-day thirteenth author repair closes those five transaction seams at contract tier. A
+SQLite-backed operation now loads stored job/success/run authority, joins run/node/FEN, invokes the
+registered guard internally and commits the run mutation, consumption and receipt atomically.
+Settlement composes exact success parsing, lease owner/generation/request CAS, monotone allocation
+and lease clearing; both batch and application replay validate persisted bytes before returning.
+`make pack-capability-thirteenth-author-repair` retains the full chain and passes 6/6 repair groups.
+Another genuinely fresh review still gates acceptance and production. Receipt:
+`planning/pack-capability-contract/thirteenth-author-repair-2026-09-04.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

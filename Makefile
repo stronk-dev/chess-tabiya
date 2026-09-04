@@ -768,12 +768,15 @@ pack-capability-eleventh-author-repair:
 pack-capability-eleventh-fresh-review:
 	node --test tools/d2587-pack-capability-eleventh-fresh-review/contract.test.mjs
 
-.PHONY: pack-capability-twelfth-author-repair pack-capability-twelfth-fresh-review
+.PHONY: pack-capability-twelfth-author-repair pack-capability-twelfth-fresh-review pack-capability-thirteenth-author-repair
 pack-capability-twelfth-author-repair: pack-capability-eleventh-author-repair
 	node --test tools/d2587-pack-capability-twelfth-author-repair/contract.test.mjs
 
 pack-capability-twelfth-fresh-review: pack-capability-twelfth-author-repair
 	node --test tools/d2673-pack-capability-twelfth-fresh-review/contract.test.mjs
+
+pack-capability-thirteenth-author-repair: pack-capability-twelfth-fresh-review
+	node --test tools/d2673-pack-capability-thirteenth-author-repair/contract.test.mjs
 
 .PHONY: shared-resource-bootstrap-seventh-fresh-review shared-resource-bootstrap-seventh-author-repair shared-resource-bootstrap-eighth-fresh-review shared-resource-bootstrap-eighth-author-repair shared-resource-bootstrap-ninth-fresh-review shared-resource-bootstrap-ninth-author-repair
 shared-resource-bootstrap-seventh-fresh-review:

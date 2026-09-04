@@ -15454,3 +15454,20 @@ including a real SQLite replay after corrupting the stored child. Exact receipt:
 `planning/pack-capability-contract/twelfth-fresh-independent-buildability-review-2026-09-04.md`.
 A bounded author repair and another genuinely fresh review precede every pack/schema/storage byte;
 the [[D560]] content hold remains whole.
+
+## 2026-09-04 — Pack-capability thirteenth author repair
+
+**What landed:** the bounded contract-tier repair for [[D2673]]–[[D2677]] and maintained `make
+pack-capability-thirteenth-author-repair` target. No production pack, schema, storage, worker, API,
+content, archive or protected-design byte changed.
+
+**What changed:** apply now obtains job, success and run authority from SQLite rather than caller
+objects; joins run/node/FEN under a run CAS; invokes the registered guard internally; and stores the
+run, consumed state and receipt atomically. Settlement requires the branded lease's owner,
+generation and request digest, validates success, allocates monotonically and clears the lease.
+Batch and application replay validate retained bytes before returning.
+
+**Evidence/next:** `make pack-capability-thirteenth-author-repair` retains the entire predecessor
+chain and passes 6/6 repair groups. Exact receipt:
+`planning/pack-capability-contract/thirteenth-author-repair-2026-09-04.md`. Another genuinely fresh
+review remains mandatory before acceptance or implementation; [[D560]] remains whole.

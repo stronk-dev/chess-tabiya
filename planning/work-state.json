@@ -21431,7 +21431,7 @@
       "state": "blocked",
       "owner": "coordinator",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1a697307f0b2519e38fece0a2b53ed3e406af13c6708c8f72fa403a122316a9d",
+      "sourceDigest": "sha256:45fa269a30558007caf9bc2b11fa246da3b2b9cdf8555d3311d692d759881617",
       "uxItems": [],
       "blocker": "rfc:pack-capability-contract.md"
     },
@@ -21440,7 +21440,7 @@
       "state": "blocked",
       "owner": "coordinator",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:6480aeea76b2dadf519388f24e4a16995f42ae93f0d24c425c2c54492185fd18",
+      "sourceDigest": "sha256:045805b52b9f2d1f35cd1d24740864ad9b1c4fa173f97db025d6629b6db7d858",
       "uxItems": [],
       "blocker": "rfc:pack-capability-contract.md"
     },
@@ -21449,7 +21449,7 @@
       "state": "blocked",
       "owner": "coordinator",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2d6399b02440dcee80cffc24643336246eee55995171627a80a1a4bd21f7c526",
+      "sourceDigest": "sha256:f4f844b6d1f860c873d7d81b4586691a7e05e9bfe1f561cd6ba8ad881e1a19a4",
       "uxItems": [],
       "blocker": "rfc:pack-capability-contract.md"
     },
@@ -21458,7 +21458,7 @@
       "state": "blocked",
       "owner": "coordinator",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2dfa6b9753303ad96111ab8c05d9b13a065dec64a9ffec709116f73200dd50bd",
+      "sourceDigest": "sha256:3ccdc48cecc53092af613b6c306f8c2a778f5f32724742414ef27d1f155018a1",
       "uxItems": [],
       "blocker": "rfc:pack-capability-contract.md"
     },
@@ -21467,7 +21467,7 @@
       "state": "blocked",
       "owner": "coordinator",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:374f192d4041fddb3c8f3b0f3d42095d01645bc64a6a017751ac8d2307b8dafe",
+      "sourceDigest": "sha256:923b69e2f494edc36f88bd78121e7634a2d2a644b6e54ffca8d23acbab3c5782",
       "uxItems": [],
       "blocker": "rfc:pack-capability-contract.md"
     }
