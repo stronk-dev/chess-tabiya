@@ -1336,14 +1336,15 @@ store/bot predecessors. Every link needs a typed reducer, immutable inputs, idem
 resume/rebuild, owner/actor identity, prior-release migration, account lifecycle, and a production
 API/client consumer.
 
-The longitudinal-store sixth fresh review returns the otherwise bounded [[D2570]]–[[D2574]] repair
-on [[D2598]]–[[D2602]]. The proposed store still permits opportunities above decisions, accepts a
-caller-provided projection/sign registry, hashes unparsed mutable source images, calls an unchecked
-hand-written operation list set-equal, and tests same-head invalidation against only two of five
-durable job states. `make longitudinal-store-sixth-fresh-review` reproduces 5/5 plus strict
-TypeScript. Player style, skills, opening performance, durable tips, bot history and campaign
-progression remain downstream of a repaired, freshly accepted and persisted boundary rather than
-rebuilding or trusting this incomplete store.
+The longitudinal-store seventh author repair closes [[D2598]]–[[D2602]] at contract tier.
+Opportunity ordering is shared by SQL/parser/projector; row/query parsers close over the literal
+ingest registry; source identity is parsed, replay-joined, immutable and sealed; exact transaction
+markers replace the hand-written operation claim; and all five durable job states share one reset
+and stale-claim authority. `make longitudinal-store-seventh-author-repair` retains 43 prior controls
+and passes 5/5 new controls plus strict TypeScript. Player style, skills, opening performance,
+durable tips, bot history and campaign progression still require fresh acceptance and production
+persistence; no downstream feature credit is claimed. Receipt:
+`planning/longitudinal-store/seventh-author-repair-2026-09-04.md`.
 
 ### CI and deployment
 

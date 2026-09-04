@@ -296,7 +296,7 @@ longitudinal-store-fresh-review:
 longitudinal-store-second-fresh-review:
 	node --test tools/d2227-longitudinal-second-fresh-review/contract.test.mjs
 
-.PHONY: longitudinal-store-third-fresh-review longitudinal-store-fourth-author-repair longitudinal-store-fourth-fresh-review longitudinal-store-fifth-author-repair longitudinal-store-fifth-fresh-review longitudinal-store-sixth-author-repair longitudinal-store-sixth-fresh-review
+.PHONY: longitudinal-store-third-fresh-review longitudinal-store-fourth-author-repair longitudinal-store-fourth-fresh-review longitudinal-store-fifth-author-repair longitudinal-store-fifth-fresh-review longitudinal-store-sixth-author-repair longitudinal-store-sixth-fresh-review longitudinal-store-seventh-author-repair
 longitudinal-store-third-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2402-longitudinal-third-fresh-review/vitest.config.ts --reporter=verbose
 
@@ -321,6 +321,10 @@ longitudinal-store-sixth-author-repair: longitudinal-store-fifth-author-repair
 longitudinal-store-sixth-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2598-longitudinal-sixth-fresh-review/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/tsc -p tools/d2598-longitudinal-sixth-fresh-review/tsconfig.json
+
+longitudinal-store-seventh-author-repair: longitudinal-store-sixth-author-repair
+	./node_modules/.bin/vitest run --config tools/d2598-longitudinal-seventh-author-repair/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc -p tools/d2598-longitudinal-seventh-author-repair/tsconfig.json
 
 .PHONY: bot-roster-fresh-review
 bot-roster-fresh-review:

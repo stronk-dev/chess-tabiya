@@ -15147,3 +15147,21 @@ child-brand-erasing recursive copy and a worker-cleanup race.
 eleventh-author target plus 6/6 new controls. Exact receipt:
 `planning/pack-capability-contract/twelfth-author-repair-2026-09-04.md`. Another genuinely fresh
 independent review still gates acceptance and implementation.
+
+## 2026-09-04 — Longitudinal store seventh author repair
+
+**What landed:** The bounded contract-tier repair for [[D2598]]–[[D2602]] and the maintained
+`make longitudinal-store-seventh-author-repair` target. No migration, worker, reader, consumer,
+API, client, content, archive or protected-design byte changed.
+
+**What changed:** SQL, parsing and projection now share the opportunity≤decision invariant; stored
+rows and read filters close over the immutable literal ingest authority; one replay-joined v3
+constructor recursively seals source truth; co-located transaction descriptors compile the exact
+11-operation mutation set; and source changes reset the complete five-state job lifecycle while
+invalidating every old claim action.
+
+**Evidence/next:** the maintained target retains 43 prior author controls and passes 5/5 new
+behavioral controls plus strict TypeScript. Exact receipt:
+`planning/longitudinal-store/seventh-author-repair-2026-09-04.md`. Another genuinely fresh
+independent review still gates acceptance and production implementation; player style, skills,
+opening performance, durable tips and campaign progression receive no premature completion credit.

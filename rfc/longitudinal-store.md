@@ -1,11 +1,13 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **RETURNED by the sixth fresh independent review 2026-09-04 on
-  [[D2598]]–[[D2602]].** The bounded [[D2570]]–[[D2574]] repair survives, but aggregate algebra,
-  registry authority, source-image construction, production mutation closure and full-state
-  same-head invalidation remain unbuildable. `make longitudinal-store-sixth-fresh-review`
-  reproduces 5/5 plus strict TypeScript; no migration, worker, reader, consumer, API or client
-  implementation is authorized. The
+- **Status:** draft — **seventh author repair completed 2026-09-04 on
+  [[D2598]]–[[D2602]]; seventh fresh independent review required.** Denominator order is enforced
+  in SQL/parser/projector; row/query parsers close over the literal immutable ingest registry; one
+  replay-joined source constructor recursively seals every digest operand; co-located transaction
+  markers compile the exact source-mutation population; and all five durable job states share one
+  reset/CAS authority. `make longitudinal-store-seventh-author-repair` retains all 43 prior author
+  controls and passes 5/5 new controls plus strict TypeScript; no migration, worker, reader,
+  consumer, API or client implementation is authorized. The
   2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
   returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
@@ -246,7 +248,7 @@ CREATE TABLE learner_observations (
   decision_class TEXT NOT NULL CHECK (decision_class IN ('played','game','predicted')),
   session_kind TEXT NOT NULL CHECK (session_kind IN ('pack','position','imported')),
   pack_id TEXT,
-  opportunities INTEGER NOT NULL CHECK (opportunities > 0),
+  opportunities INTEGER NOT NULL CHECK (opportunities > 0 AND opportunities <= decisions),
   occurred INTEGER NOT NULL CHECK (occurred >= 0 AND occurred <= opportunities),
   alternative_share_sum REAL NOT NULL
     CHECK (alternative_share_sum >= 0.0 AND alternative_share_sum <= opportunities),
@@ -366,13 +368,13 @@ zero observations, denominators, structure rows and jobs for both the deleted le
 
 Every persisted run mutation upserts only this cheap job watermark plus
 `requested_source_digest` in the **same transaction as the run bytes**; it does not enumerate legal
-alternatives. One exported server operation, `longitudinalSourceImageV2`, constructs the complete
+alternatives. One exported server operation, `longitudinalSourceImageV3`, constructs the complete
 source authority after locking the run and its attribution records. Its exact image is:
 
 ```ts
-interface LongitudinalSourceImageV2 {
-  readonly version: 2;
-  readonly runPrefix: DrillRun; // readBackReplay(events where seq <= requestedSeq).run
+interface LongitudinalSourceImageV3 {
+  readonly version: 3;
+  readonly runPrefix: ParsedRunPrefix; // branded result of exact readBackReplay authority
   readonly ownerLearnerId: string;
   readonly moveAuthorship: readonly MoveAuthorship[]; // eventSeq then nodeId; only prefix commits
   readonly importedMainlinePlies: number | null;
@@ -381,17 +383,22 @@ interface LongitudinalSourceImageV2 {
 }
 ```
 
-`runPrefix` is produced by the shipped `readBackReplay` authority, not by slicing the current
+`runPrefix` is parsed as the exact closed `{runId,ownerLearnerId,requestedSeq,events}` result of the
+shipped `readBackReplay` authority, not by slicing the current
 snapshot's arrays. Construction requires contiguous events `1..requestedSeq`, exact replay equality
 for every prefix-derived run field, one authorship row for every prefix user commit, canonical sort
-and no duplicate `eventSeq`. The two attribution fields are the **resolved projector inputs**:
+and no duplicate `eventSeq`; every authorship event/node must join the corresponding committed move
+in that prefix. Owner identity, imported length and the monotone structure disposition are parsed
+exactly. The two attribution fields are the **resolved projector inputs**:
 irrelevant later journal entries or pause state do not churn the digest, while any change that
 alters owner authorship, imported-mainline membership or shared-structure eligibility changes the
 image. Raw journal/match rows are never hashed as an alternative authority.
 
-`longitudinalSourceDigestV2` is the sole digest constructor. It encodes the literal UTF-8 domain
-prefix `tabiya.longitudinal-source.v2\0`, followed immediately by the RFC-8785 bytes from the shipped
-`canonicalizeJson(image)`, then returns lower-case `sha256:<64 hex>`. The seven run writers, the two
+`longitudinalSourceDigestV3` is the sole digest constructor and accepts only the WeakSet-sealed,
+recursively copied/immutable value returned by `longitudinalSourceImageV3`. It encodes the literal
+UTF-8 domain prefix `tabiya.longitudinal-source.v3\0`, followed immediately by the RFC-8785 bytes
+from the shipped `canonicalizeJson(image)`, then returns lower-case `sha256:<64 hex>`. A raw, spread,
+cross-run, duplicate, unsorted or post-construction-mutated object has no digest authority. The seven run writers, the two
 collaboration source mutations, startup reconciliation, worker exact-prefix read and rebuild call
 that same constructor; no caller may supply a precomputed string. Equivalent object insertion order
 hashes identically; changing any image field changes the digest; job state, clock and claim fields
@@ -403,8 +410,13 @@ The run-snapshot production closure remains exactly `create`, `createRatedRun`,
 `createImportedRun`, `createDerivedRun`, `createRepertoireGapRun`, `save`, and `saveArenaImport`.
 The complete **source-mutation** closure additionally includes `createLiveSession` and
 write-capable `grantRole`; `deleteOwnedRun`/`deleteLearner` own suppression/owner change, and startup
-owns `unattributable_legacy` classification. A checked operation registry distinguishes mutations
-that always change an operand from conditional ones. `createLiveSession` atomically writes
+classification is the migration default, not a fictional runtime operation. Each exact
+`SQLiteRunStorage#method` transaction contains one co-located `longitudinalSourceMutation`
+descriptor classified `always | conditional | suppression | reconciliation`; the compiler derives
+the register from those calls and compares it bidirectionally with the normative 11-row authority.
+Missing, surplus, duplicate, renamed and wrong-effect rows fail, and the descriptor calls the
+watermark update inside the same database transaction rather than merely sharing a label. A checked
+operation registry distinguishes mutations that always change an operand from conditional ones. `createLiveSession` atomically writes
 `unattributable_shared` and refreshes the same-head source digest/job. `grantRole` does so exactly
 when a non-owner first receives `host` or `participant`; revocation cannot untaint it. Match-seat
 redemption and `claimLease` occur only after the live/grant transaction has already tainted the run
@@ -412,6 +424,20 @@ and do not alter existing-prefix resolved authorship. One private transaction pr
 set-equal registry is called by every admitted operation; a later `RunService.#project` call cannot
 satisfy atomic scheduling. Migration-only snapshot rewrites explicitly enqueue rebuilds
 ([[D1616]]/[[D2570]]).
+
+The row and query parsers import their projection/sign admission from the compiled immutable
+67-row ingest and sign-subset artifacts; neither function accepts an admission parameter. The
+59 admitted edge/population rows compile exact `(id,version,semanticSign,sourceSign)` pairs while
+the eight deferred paths remain unqueryable at revision 1. The observation parser, projector and
+SQL all enforce `0 < opportunities <= decisions`, exact reference cardinalities and occurred as a
+subset of opportunity. A process/JSON caller can narrow a query but cannot widen valid identities.
+
+Source/head invalidation consumes the exact five-state durable job union. Unchanged `pending`
+returns byte-identically. Any changed digest resets `complete`, `running`, `retry_wait` and
+`quarantined` to the one pending image: `completed_seq=0`, current requested head/digest,
+generation incremented, retry count zero, and every claimed-seq/digest/token/worker/lease,
+next-attempt and failure field cleared. Renew, fail and publish all check the complete old claim
+tuple, so every pre-reset token affects zero rows ([[D2602]]).
 
 A worker claims bounded batches using one atomic transition from `pending`, an eligible
 `retry_wait`, or an expired `running` row. `quarantined` is never claimable. Claim increments
@@ -949,6 +975,27 @@ durable job lifecycle returns five further seams; exact evidence is in
 TypeScript. No production implementation is authorized until a bounded seventh author repair
 inverts them and another genuinely fresh review passes.
 
+## Seventh author repair (2026-09-04)
+
+[[D2598]] is closed across all three authorities: SQL, the stored-row parser and the projector
+enforce `0 < opportunities <= decisions` plus exact ref cardinality. [[D2599]] removes the
+admission operand from both public parser signatures; their private frozen authority compiles the
+literal 67-row ingest/sign artifacts into 59 admitted edge/population identities while retaining
+eight deferred paths as unavailable.
+
+[[D2600]] replaces the raw v2 digest input with a v3 source value constructed only from an exact
+parsed replay prefix and joined owner/authorship/import/structure inputs, recursively copied and
+sealed before hashing. [[D2601]] removes `startupLegacyClassification` from the runtime population
+and defines co-located transaction descriptors whose compiled set must equal the 11 exact live
+mutation symbols and effects. [[D2602]] reuses the full pending/running/complete/retry-wait/
+quarantined union; changed truth clears every claim/failure/schedule field and invalidates the old
+claim tuple across renew, fail and publish.
+
+`make longitudinal-store-seventh-author-repair` retains 24 + 8 + 4 + 7 prior controls, passes 5/5
+new behavioral controls and strict TypeScript. No production migration, worker, reader, consumer,
+API, client or content byte changed. Another genuinely fresh independent review remains mandatory
+before acceptance or implementation.
+
 ### F. Acceptance criteria
 
 These are the only live acceptance criteria; the historical AC list below is non-normative.
@@ -960,12 +1007,15 @@ These are the only live acceptance criteria; the historical AC list below is non
 2. **Literal registry closure ([[D1612]]/[[D2063]]).** The 67-row and sign-subset artifacts are
    set-equal and row-equal to the runtime registry at their pinned digests: 46 edge, 13 population,
    8 deferred path. Missing, duplicate, ghost, impossible sign, count-preserving wrong-base and
-   wrong-base-sign mutations fail; the loose-piece exception is a mandatory positive.
+   wrong-base-sign mutations fail; the loose-piece exception is a mandatory positive. Row and query
+   parsers close over that immutable compiled authority and expose no caller admission operand;
+   invented projection/version/sign pairs fail both boundaries ([[D2599]]).
 3. **Declinable population ([[D2066]]).** Played-exhibits, played-avoids, all-exhibit,
    none-exhibit, duplicate-operand, forced-move and unavailable fixtures pass through the real
    legal-edge/event boundary. Only complete mixed populations create opportunities;
    `alternative_share_sum` follows the exact source-family direction; denominator-free rows remain
-   impossible.
+   impossible. SQL, parsed row and projector output all enforce
+   `0 < opportunities <= decisions`, exact ref cardinality and occurred-ref subset ([[D2598]]).
 4. **Exact references/time.** Two prediction checkpoints on one node persist distinct typed refs;
    invalid/unsorted refs fail. A later-clock rebuild preserves `observed_at` and every data byte;
    no observation window reads job `updated_at`.
@@ -975,15 +1025,19 @@ These are the only live acceptance criteria; the historical AC list below is non
    explicitly new `single_player` arm; monotone shared and legacy-unattributable arms emit none.
 6. **Cheap complete write closure ([[D1616]]/[[D2570]]).** Each of the seven real production storage methods
    commits run bytes and the job watermark together and rolls both back together. Omitting any
-   operation fails a set-equality census. The separate source-mutation census also covers
-   `createLiveSession`, a non-owner write-capable `grantRole`, account/owner suppression and startup
-   legacy classification. A same-head private→shared transition changes the digest and invalidates
+   operation fails a set-equality census. The separate source-mutation compiler derives co-located
+   transaction descriptors for `createLiveSession`, a non-owner write-capable `grantRole`, and
+   account/owner suppression. Startup legacy classification remains a migration default, not a
+   runtime operation. Missing, surplus,
+   duplicate, renamed and wrong-effect descriptors fail bidirectional equality. A same-head private→shared transition changes the digest and invalidates
    a complete job in the same transaction; revocation cannot untaint it. No semantic constructor or
    legal enumerator is reachable before the response.
 7. **Exclusive/recoverable claim ([[D1613]]/[[D2229]]).** Two simultaneous claimers yield one claim; expiry
    increments generation and permits reclaim; the old token cannot fail/publish; crash-before-
    publish recovers, crash-after-publish observes atomic state, retryable failure backs off, and an
-   unknown failure code fails schema and TypeScript fixtures. Work exceeding 30 seconds renews by
+   unknown failure code fails schema and TypeScript fixtures. A source change resets complete,
+   running, retry-wait and quarantined rows through one exact field-for-field pending transition;
+   old claim tuples cannot renew, fail or publish ([[D2602]]). Work exceeding 30 seconds renews by
    the full ownership/source-digest CAS; a four-row scan claims only the one immediately executable
    slot. `snapshot_invalid` quarantines once; retry budgets exhaust; polling/restart never reopens a
    quarantine; changed source bytes or accepted revision replacement do.
@@ -1023,6 +1077,9 @@ These are the only live acceptance criteria; the historical AC list below is non
     exact parsed row families contain no `unknown`; JSON/process forges, count/ref mismatches and
     invalid registry pairs fail. The branded query parser rejects empty/duplicate/unknown or
     contradictory filters and produces stable bytewise ordering.
+    Source digests likewise accept only a recursively immutable sealed image constructed from the
+    exact replay prefix and joined owner/authorship/import/structure operands; raw/spread/crossed
+    or mutated objects fail ([[D2600]]).
 14. **Boundaries/privacy ([[D2065]]).** No learner renderer, rating, classroom, cohort, provider or
     LLM module reaches the store at landing. All four durable classes cascade on learner/run
     deletion and join export/deletion inventories. Delete → retained shared run → rebuild leaves
@@ -1043,7 +1100,8 @@ These are the only live acceptance criteria; the historical AC list below is non
     arm, 20 Hz health probes hold event-loop delay p95 <50 ms/max <250 ms, no probe exceeds 500 ms,
     and at least three in-loop full-CAS renewals precede publication. Main-thread execution and a
     timer-only worker heartbeat are able-to-fail negatives.
-17. **Seven-return author falsifier.** `make longitudinal-store-author-contract` crosses both
+17. **Eight-return author falsifier.** `make longitudinal-store-seventh-author-repair` retains the
+    complete earlier author chain and crosses both
     literal registries/signs, complete-population algebra, actual SQLite claim/index/constraint
     negatives, deletion/rebuild suppression, worker lifecycle, claim race/expiry/stale publisher,
     exact prefix/newer request, denominator equality, seven-operation closure and import-subject
@@ -1803,6 +1861,13 @@ head after that renumbering and **not yet written**:
   corruption the store exists to prevent.
 
 ## Changelog
+
+- 2026-09-04: seventh author repair completed [[D2598]]–[[D2602]]. Denominator ordering now spans
+  SQL/parser/projector; parser admission is private and literal; source identity is parsed,
+  replay-joined, recursively immutable and sealed; mutation descriptors compile from exact
+  transaction sites; and all five job states share reset/stale-claim behavior. `make
+  longitudinal-store-seventh-author-repair` retains 43 prior controls and passes 5/5 new controls
+  plus strict TypeScript. Fresh review still gates acceptance and implementation.
 
 - 2026-08-22: created.
 - 2026-08-30: second fresh independent review returned the repaired fold on [[D2227]]–[[D2232]]:
