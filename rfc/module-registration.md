@@ -1,8 +1,11 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — tenth fresh review returned the requirements/runtime join on
-  [[D2584]], [[D2585]] and [[D2586]]; a bounded tenth author repair and another fresh review are
-  required.** The
+- **Status:** **draft — tenth author repair completed on [[D2584]], [[D2585]] and [[D2586]];
+  another genuinely fresh review is required.** Exact-window inputs now retain their literal
+  position/edge offsets, each module moment selects candidate or recorded occurrence authority,
+  and the live observed-tactic emitters reject independently crossed move, duty, capture and
+  exchange evidence. `make module-registration-tenth-author-repair` passes 3/3 plus the maintained
+  11/11 contract. No module becomes executable and no implementation is authorised. The
   ninth [[D2557]] repair survives: the live check projection, selector and constructor remain
   correctly separated from the unbuilt recorded-path occurrence operation. The new review proves
   that exact tactic windows relabel a position duty reading as edge evidence, postcommit/review
@@ -1963,12 +1966,21 @@ deleting one disclosure id from the family×rung product fails;
     operation-correlated factory; the catalogue adapter accepts only the exact position authority
     and per-request applicability identities in §2.5; eval delta is edge-grained and joins two
     consecutive same-branch points; deflection declares common inputs plus per-alternative inputs,
-    with its check arm remaining blocked until the semantic-event declaration and emitter carry the
-    check evidence; every one of 205 row pointers is a member of the receipt's exact pair-key set;
+    with its check arm using the implemented sealed check authority while the recorded-path
+    occurrence source remains blocked; every one of 205 row pointers is a member of the receipt's exact pair-key set;
     and forged, copied or serialized resolution receipts fail at final F1 emission. Wrong operation,
     crossed catalogue input, branch-pair eval authority, missing/extra alternative input, unprefixed
-    pair key and unsealed receipt fixtures fail independently. **RED now:** the two upstream pool
-    blockers and deflection check-authority dependency remain deliberately unresolved.
+    pair key and unsealed receipt fixtures fail independently. **RED now:** the upstream pool
+    operations and exact resolution receipt remain deliberately unresolved.
+25. **A25 — Moment/source and observed-window joins are exact** ([[D2584]]–[[D2586]]).
+    Position readings retain literal position offsets inside ordered windows; edge inputs retain
+    literal edge offsets and roles. Candidate views are legal only at `precommit`/`at_commit` and
+    keep `committedEdgeForbidden`; every committed moment uses a recorded occurrence identity.
+    Runtime observed-tactic emitters join each recorded move to all five anchor bytes plus offset,
+    each duty reading to position zero, each capture/exchange to an exact window edge, and the
+    named exchange payload to the event operand. Independently crossing any one valid sealed input
+    fails. **RED now:** the plan remains requirements-only until its recorded source operation
+    lands; the joins themselves pass the bounded author falsifier.
 
 ## Discharges
 
@@ -2139,6 +2151,19 @@ splice. Exact review:
 `planning/learner-modules/tenth-fresh-independent-buildability-review-2026-09-04.md`. A bounded
 tenth author repair and another fresh independent review are required before acceptance or
 implementation.
+
+Tenth author repair (2026-09-04):
+
+| row | author repair; fresh review still required |
+|---|---|
+| [[D2584]] | `defender_duty_set` is position-grained and every exact input binding retains its literal alternative, cardinality, position/edge offsets and roles under `ordered_window_operand` |
+| [[D2585]] | every binding carries a closed `byMoment` source/view/selector image: candidates only before commitment, recorded occurrence identity after commitment |
+| [[D2586]] | observed-tactic runtime joins validate exact recorded anchor bytes, position-zero duty FEN, capture/exchange edge identity and named exchange payload; four independent crossed-input negatives fail |
+
+`make module-registration-tenth-author-repair` passes the maintained 11/11 contract and 3/3 new
+controls. Exact receipt: `planning/learner-modules/tenth-author-repair-2026-09-04.md`. The generated
+artifacts remain `requirements_only`, all final operations remain unresolved, and another genuinely
+fresh independent review gates acceptance and implementation.
 
 | row | author repair; fresh review still required |
 |---|---|

@@ -15270,3 +15270,21 @@ representable without an arbitrary privileged node.
 then passes 5/5 new repair controls against a committed temporary repository. Exact receipt:
 `planning/shared-resource-register-bootstrap/eighth-author-repair-2026-09-04.md`. Another genuinely
 fresh independent review still gates acceptance and every production implementation.
+
+## 2026-09-04 — Module registration tenth author repair closes exact occurrence joins
+
+**What landed:** bounded contract/runtime repair for [[D2584]]–[[D2586]], regenerated 117-row
+execution and 205-row binding requirement images, and `make module-registration-tenth-author-repair`.
+No module, route, seat, final F1 binding, protected design, archive, content or versioned resource
+was added.
+
+**What changed:** ordered tactic inputs retain literal position/edge operands rather than a generic
+relation; module timings select candidate occurrences only before commitment and recorded
+occurrences afterward. Live observed-tactic emitters now join recorded moves, duty readings,
+captures and exchanges to the exact event window and named payload, rejecting each crossed source
+independently.
+
+**Evidence/next:** the maintained 11/11 module contract and 3/3 new author controls pass; software
+tests pass 181 files / 1110 tests. Exact receipt:
+`planning/learner-modules/tenth-author-repair-2026-09-04.md`. Artifacts remain requirements-only;
+another genuinely fresh independent review still gates RFC acceptance and module implementation.

@@ -20,16 +20,12 @@ describe("module-registration sealed-pool author repair", () => {
     expect(sealed).toBe(digest(body));
     expect(bindings.schemaVersion).toBe(2);
     expect(bindings.population).toBe(205);
-    const requirementById = new Map(execution.rows.map((row:any) => [row.projection.id, row]));
-    const sourceById = new Map(execution.sourceContracts.map((row:any) => [row.id, row]));
     for (const row of bindings.rows) {
       const module = row.consumer.id.slice("module.".length);
       const policy = AUTHOR_MODULE_POLICIES[module as keyof typeof AUTHOR_MODULE_POLICIES];
-      const requirement = requirementById.get(row.projection.id) as any;
-      const source = sourceById.get(requirement.acquisition) as any;
       expect(row.timingRequirement).toMatchObject({
         moduleRequested: policy.timings,
-        sourceCeiling: policy.timings.filter((timing) => source.timings.includes(timing)),
+        sourceCeiling: row.occurrenceRequirement.byMoment.map((occurrence:any) => occurrence.timing),
         exactProjectionOperation: null,
         status: "awaiting_upstream_exact_operation",
       });
@@ -84,7 +80,7 @@ describe("module-registration sealed-pool author repair", () => {
       "rules.exchange.predicate.legal_exchange@1:edge", "rules.square.event.control@1:edge",
       "rules.structural.predicate.direct_attack_count@1:edge",
       "rules.structural.predicate.line_blockers@1:edge", "rules.structural.predicate.passed_pawn@1:edge",
-      "rules.tactic.reading.defender_duty_set@1:edge", "run.record.move@1:edge",
+      "rules.tactic.reading.defender_duty_set@1:position", "run.record.move@1:edge",
     ]);
     const rows = new Map(execution.rows.map((row:any) => [key(row.projection), row]));
     for (const row of execution.rows) {
@@ -100,7 +96,7 @@ describe("module-registration sealed-pool author repair", () => {
         const planned = rows.get(key(binding.projection)) as any;
         const external = execution.sourceInputs.find((source:any) => key(source.projection) === key(binding.projection));
         expect(binding.sourceSubjectKind).toBe(planned?.subjectKind ?? external?.subjectKind);
-        expect(binding.relation).toMatch(/^(same_|edge_position_endpoints|branch_pair_|prefix_|operation_owned_occurrences)/u);
+        expect(binding.relation).toMatch(/^(same_|edge_position_endpoints|branch_pair_|prefix_|ordered_window_operand)/u);
       }
     }
   });

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:78b97350991b65a16b3aafd341a992013b27b3e01abd9dfc4ac86bc18227db73",
+    "roadmap": "sha256:b57ca1a7eb240281cb94325521f465bd39b3c6695a2b00038dd04110896bb0e7",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:862f31775ca7e7a8a1cec1fc0b598ffc241190dcb7e0e693e8b34f369a7e7999",
-    "rfcRegister": "sha256:d0e8e04a85fab30c43f278a8aa3887f6ad8df7ea35ac974983558bdaff1b80f1",
+    "workState": "sha256:95b50830b1d919b9d0b5dc0610f3905ec77672215afc2597d35debd7b140d0c1",
+    "rfcRegister": "sha256:405696f2f943b33ba04998bb3c969bf6c3718ce180bf1a36e8e33c6c98b2731c",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 935,
-      "done": 821,
+      "blocked": 932,
+      "done": 824,
       "refused": 3
     },
     "workItems": {
@@ -186,7 +186,7 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Deflection check authority is live, while the held promotion pair, shared candidate, bounded-target and Review evidence contracts now have bounded author repairs. Promotion outcome now has one retained gate, one registered factory, one sealed total result, exact source outcome fields and executable legal-map/pawn identity mutations. All await genuinely fresh review and dependency landing. The evidence spine remains 12/14; recorded paths, provider/value authority and all module emissions remain unbuilt or held.",
+        "summary": "Module registration's tenth author repair now preserves exact position/edge operands, chooses candidate versus recorded sources by interaction moment, and rejects crossed recorded tactic evidence at runtime. The generated 117/205 images remain requirements-only and all final operations remain held for fresh review and dependency landing. The evidence spine remains 12/14; recorded paths, provider/value authority and all module emissions remain unbuilt or held.",
         "impact": "held",
         "evidence": [
           "planning/evidence-foundation-ux/review-evidence-compiler-second-author-repair-2026-09-04.md",

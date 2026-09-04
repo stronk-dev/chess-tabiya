@@ -117,7 +117,7 @@ function compile(rows: readonly ResearchRow[]): CompileMeasurement {
     return Object.freeze({
       anchor,
       moveEvidence: declareRunRecordEvidence("move", {
-        context: { beforeNodeId: anchor.beforeNodeId, afterNodeId: anchor.afterNodeId },
+        context: { ...anchor },
         offset,
         moveSan: anchor.moveUci,
       }),
@@ -191,8 +191,7 @@ function compile(rows: readonly ResearchRow[]): CompileMeasurement {
       }
     } else {
       for (const payload of overloadExploitationObservedOperands(windowAnchors)) {
-        const firstTwoCaptures = [capture(window[0]), capture(window[1])].filter((value): value is SemanticEvidenceEvent => value !== undefined);
-        emitted.push(overloadExploitationSemanticEvent(payload, moves, getDuty(), firstTwoCaptures.map((value) => value.evidence), declareLegalExchangeEvidence(payload.secondTargetCapture)));
+        emitted.push(overloadExploitationSemanticEvent(payload, moves, getDuty(), captures.map((value) => value.evidence), declareLegalExchangeEvidence(payload.secondTargetCapture)));
       }
     }
     for (const event of emitted) eventIds.add(event.id);

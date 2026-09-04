@@ -872,15 +872,48 @@ export function defenderConsequenceSemanticEvent(payload: DefenderConsequenceOpe
   return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareDefenderConsequenceEvidence(payload), derivationInputs: moveEvidence, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
 }
 
-function exactSequenceInputs(moveEvidence: readonly DeclaredEvidence<unknown>[], expectedMoves: number, otherEvidence: readonly DeclaredEvidence<unknown>[], requiredOther: readonly string[]): readonly DeclaredEvidence<unknown>[] {
-  if (moveEvidence.length !== expectedMoves || moveEvidence.some((value) => refKey(value.projection) !== "run.record.move@1")) throw new TypeError(`Observed semantic sequence requires ${expectedMoves} run.record.move evidence items`);
+function exactRecordedMoveContext(value: unknown, anchor: RecordedMoveAnchor): boolean {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const context = value as Readonly<Record<string, unknown>>;
+  return context.beforeNodeId === anchor.beforeNodeId
+    && context.afterNodeId === anchor.afterNodeId
+    && context.beforeFen === anchor.beforeFen
+    && context.moveUci === anchor.moveUci
+    && context.afterFen === anchor.afterFen;
+}
+
+function assertOccurrenceEvidence(anchors: readonly RecordedMoveAnchor[], value: DeclaredEvidence<unknown>): void {
+  const payload = value.payload;
+  if (typeof payload !== "object" || payload === null || Array.isArray(payload)) throw new TypeError(`Observed semantic sequence has non-object ${refKey(value.projection)} evidence`);
+  const record = payload as Readonly<Record<string, unknown>>;
+  const projection = refKey(value.projection);
+  if (projection === "rules.tactic.reading.defender_duty_set@1" && record.fen !== anchors[0]?.beforeFen) throw new TypeError("Observed semantic sequence has crossed position-duty evidence");
+  if (projection === "rules.transition.event.capture@1" && !anchors.some((anchor) => record.before_fen === anchor.beforeFen && record.move_uci === anchor.moveUci && record.after_fen === anchor.afterFen)) throw new TypeError("Observed semantic sequence has crossed capture evidence");
+  if (projection === "rules.exchange.predicate.legal_exchange@1" && !anchors.some((anchor) => record.beforeFen === anchor.beforeFen && record.captureUci === anchor.moveUci)) throw new TypeError("Observed semantic sequence has crossed exchange evidence");
+  if (projection === "rules.tactic.event.check@1" && !anchors.some((anchor) => record.triggeringMove === anchor.moveUci)) throw new TypeError("Observed semantic sequence has crossed check evidence");
+}
+
+function assertExactPayload(value: DeclaredEvidence<unknown>, expected: unknown, label: string): void {
+  if (evidenceDigest(value.payload) !== evidenceDigest(expected)) throw new TypeError(`Observed semantic sequence has crossed ${label} evidence`);
+}
+
+function exactSequenceInputs(anchors: readonly RecordedMoveAnchor[], moveEvidence: readonly DeclaredEvidence<unknown>[], expectedMoves: number, otherEvidence: readonly DeclaredEvidence<unknown>[], requiredOther: readonly string[]): readonly DeclaredEvidence<unknown>[] {
+  if (anchors.length !== expectedMoves || moveEvidence.length !== expectedMoves || moveEvidence.some((value) => refKey(value.projection) !== "run.record.move@1")) throw new TypeError(`Observed semantic sequence requires ${expectedMoves} run.record.move evidence items`);
+  for (const [index, value] of moveEvidence.entries()) {
+    const payload = value.payload;
+    if (typeof payload !== "object" || payload === null || Array.isArray(payload)) throw new TypeError("Observed semantic sequence has malformed recorded-move evidence");
+    const record = payload as Readonly<Record<string, unknown>>;
+    if (record.offset !== index || record.moveSan !== anchors[index]!.moveUci || !exactRecordedMoveContext(record.context, anchors[index]!)) throw new TypeError("Observed semantic sequence has crossed recorded-move evidence");
+  }
   const actual = otherEvidence.map((value) => refKey(value.projection));
   for (const required of requiredOther) if (!actual.includes(`${required}@1`)) throw new TypeError(`Observed semantic sequence is missing ${required}@1 evidence`);
+  for (const value of otherEvidence) assertOccurrenceEvidence(anchors, value);
   return Object.freeze([...moveEvidence, ...otherEvidence]);
 }
 
 export function lineBlockerClearanceSemanticEvent(payload: LineBlockerClearanceObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[], exchangeEvidence: DeclaredEvidence<unknown>): SemanticEvidenceEvent<LineBlockerClearanceObservedOperands> {
-  const inputs = exactSequenceInputs(moveEvidence, 3, [exchangeEvidence], ["rules.exchange.predicate.legal_exchange"]);
+  assertExactPayload(exchangeEvidence, payload.targetCapture, "target-exchange");
+  const inputs = exactSequenceInputs(payload.anchors, moveEvidence, 3, [exchangeEvidence], ["rules.exchange.predicate.legal_exchange"]);
   return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareLineBlockerClearanceEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
 }
 
@@ -898,7 +931,8 @@ export function deflectionObservedSemanticEvent(payload: DeflectionObservedOpera
   }
   const optionalCheck = checkEvidence === undefined ? [] : [checkEvidence.evidence];
   const required = ["rules.tactic.reading.defender_duty_set", "rules.transition.event.capture", "rules.exchange.predicate.legal_exchange", ...(induction === "check_induced" ? ["rules.tactic.event.check"] : [])];
-  const inputs = exactSequenceInputs(moveEvidence, 3, [dutyEvidence, ...captureEvidence, exchangeEvidence, ...optionalCheck], required);
+  assertExactPayload(exchangeEvidence, payload.targetCapture, "target-exchange");
+  const inputs = exactSequenceInputs(payload.anchors, moveEvidence, 3, [dutyEvidence, ...captureEvidence, exchangeEvidence, ...optionalCheck], required);
   return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareDeflectionObservedEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
 }
 
@@ -906,28 +940,31 @@ export function attractionObservedSemanticEvent(payload: AttractionObservedOpera
   if (captureEvidence.length === 0 || captureEvidence.some((value) => refKey(value.projection) !== "rules.transition.event.capture@1")) throw new TypeError("Observed attraction requires exact capture evidence");
   const isCheck = payload.checkOrCaptureConsequence.kind === "check";
   if (isCheck !== (checkEvidence !== undefined) || checkEvidence !== undefined && refKey(checkEvidence.projection) !== "rules.tactic.event.check@1") throw new TypeError("Observed attraction check authority disagrees with its consequence kind");
-  const inputs = exactSequenceInputs(moveEvidence, payload.horizon, [...captureEvidence, ...(checkEvidence === undefined ? [] : [checkEvidence])], ["rules.transition.event.capture", ...(isCheck ? ["rules.tactic.event.check"] : [])]);
+  const inputs = exactSequenceInputs(payload.anchors, moveEvidence, payload.horizon, [...captureEvidence, ...(checkEvidence === undefined ? [] : [checkEvidence])], ["rules.transition.event.capture", ...(isCheck ? ["rules.tactic.event.check"] : [])]);
   return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareAttractionObservedEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
 }
 
 export function squareClearanceSemanticEvent(payload: SquareClearanceObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[]): SemanticEvidenceEvent<SquareClearanceObservedOperands> {
-  const inputs = exactSequenceInputs(moveEvidence, 3, [], []);
+  const inputs = exactSequenceInputs(payload.anchors, moveEvidence, 3, [], []);
   return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareSquareClearanceEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
 }
 
 export function interferenceSemanticEvent(payload: InterferenceObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[], dutyEvidence: DeclaredEvidence<unknown>, exchangeEvidence: DeclaredEvidence<unknown>): SemanticEvidenceEvent<InterferenceObservedOperands> {
-  const inputs = exactSequenceInputs(moveEvidence, 3, [dutyEvidence, exchangeEvidence], ["rules.tactic.reading.defender_duty_set", "rules.exchange.predicate.legal_exchange"]);
+  assertExactPayload(exchangeEvidence, payload.targetCapture, "target-exchange");
+  const inputs = exactSequenceInputs(payload.anchors, moveEvidence, 3, [dutyEvidence, exchangeEvidence], ["rules.tactic.reading.defender_duty_set", "rules.exchange.predicate.legal_exchange"]);
   return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareInterferenceEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
 }
 
 export function checkZwischenzugSemanticEvent(payload: CheckZwischenzugObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[], captureEvidence: DeclaredEvidence<unknown>, checkEvidence: DeclaredEvidence<unknown>, exchangeEvidence: DeclaredEvidence<unknown>): SemanticEvidenceEvent<CheckZwischenzugObservedOperands> {
-  const inputs = exactSequenceInputs(moveEvidence, 4, [captureEvidence, checkEvidence, exchangeEvidence], ["rules.transition.event.capture", "rules.tactic.event.check", "rules.exchange.predicate.legal_exchange"]);
+  assertExactPayload(exchangeEvidence, payload.retainedRecapture, "retained-exchange");
+  const inputs = exactSequenceInputs(payload.anchors, moveEvidence, 4, [captureEvidence, checkEvidence, exchangeEvidence], ["rules.transition.event.capture", "rules.tactic.event.check", "rules.exchange.predicate.legal_exchange"]);
   return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareCheckZwischenzugEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
 }
 
 export function overloadExploitationSemanticEvent(payload: OverloadExploitationObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[], dutyEvidence: DeclaredEvidence<unknown>, captureEvidence: readonly DeclaredEvidence<unknown>[], exchangeEvidence: DeclaredEvidence<unknown>): SemanticEvidenceEvent<OverloadExploitationObservedOperands> {
-  if (captureEvidence.length !== 2 || captureEvidence.some((value) => refKey(value.projection) !== "rules.transition.event.capture@1")) throw new TypeError("Observed overload exploitation requires two exact capture evidence items");
-  const inputs = exactSequenceInputs(moveEvidence, 3, [dutyEvidence, ...captureEvidence, exchangeEvidence], ["rules.tactic.reading.defender_duty_set", "rules.transition.event.capture", "rules.exchange.predicate.legal_exchange"]);
+  if (captureEvidence.length !== 3 || captureEvidence.some((value) => refKey(value.projection) !== "rules.transition.event.capture@1")) throw new TypeError("Observed overload exploitation requires three exact capture evidence items");
+  assertExactPayload(exchangeEvidence, payload.secondTargetCapture, "second-target-exchange");
+  const inputs = exactSequenceInputs(payload.anchors, moveEvidence, 3, [dutyEvidence, ...captureEvidence, exchangeEvidence], ["rules.tactic.reading.defender_duty_set", "rules.transition.event.capture", "rules.exchange.predicate.legal_exchange"]);
   return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareOverloadExploitationEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
 }
 

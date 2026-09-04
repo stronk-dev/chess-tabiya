@@ -401,6 +401,10 @@ module-registration-ninth-author-repair: module-registration-eighth-author-repai
 module-registration-tenth-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2584-module-registration-tenth-fresh-review/vitest.config.ts --reporter=verbose
 
+.PHONY: module-registration-tenth-author-repair
+module-registration-tenth-author-repair: module-registration-author-contract
+	./node_modules/.bin/vitest run --config tools/d2584-module-registration-tenth-author-repair/vitest.config.ts --reporter=verbose
+
 .PHONY: semantic-collectors-deflection-authority-author-contract
 semantic-collectors-deflection-authority-author-contract:
 	./node_modules/.bin/vitest run --config tools/d2536-deflection-check-authority-author-contract/vitest.config.ts --reporter=verbose

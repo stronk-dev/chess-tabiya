@@ -42,7 +42,7 @@ function anchors(fen: string, moves: readonly string[]): readonly RecordedMoveAn
 }
 
 function moveEvidence(path: readonly RecordedMoveAnchor[]) {
-  return path.map((anchor, offset) => declareRunRecordEvidence("move", { context: "recorded semantic fixture", offset, moveSan: anchor.moveUci }));
+  return path.map((anchor, offset) => declareRunRecordEvidence("move", { context: { ...anchor }, offset, moveSan: anchor.moveUci }));
 }
 
 function captureEvidence(anchor: RecordedMoveAnchor) {
@@ -143,7 +143,7 @@ describe("observed semantic tactic sequences", () => {
     const positive = anchors("1B5k/r3q3/2n5/8/8/8/8/4R1K1 w - - 0 1", ["b8a7", "c6a7", "e1e7"]);
     const event = overloadExploitationObservedOperands(positive)[0]!;
     expect(event).toEqual(expect.objectContaining({ dutySet: expect.arrayContaining([expect.objectContaining({ target: expect.objectContaining({ square: "a7" }) }), expect.objectContaining({ target: expect.objectContaining({ square: "e7" }) })]) }));
-    expect(overloadExploitationSemanticEvent(event, moveEvidence(positive), declareDefenderDutyEvidence(defenderDutyReading(positive[0]!.beforeFen)), [captureEvidence(positive[0]!), captureEvidence(positive[1]!)], declareLegalExchangeEvidence(event.secondTargetCapture))).toMatchObject({ projection: { id: "derived.tactic.overload_exploitation_observed" }, operands: event });
+    expect(overloadExploitationSemanticEvent(event, moveEvidence(positive), declareDefenderDutyEvidence(defenderDutyReading(positive[0]!.beforeFen)), positive.map(captureEvidence), declareLegalExchangeEvidence(event.secondTargetCapture))).toMatchObject({ projection: { id: "derived.tactic.overload_exploitation_observed" }, operands: event });
     const oneDuty = anchors("1B5k/r3q3/1n6/8/8/8/8/4R1K1 w - - 0 1", ["b8a7", "b6a8", "e1e7"]);
     expect(overloadExploitationObservedOperands(oneDuty)).toEqual([]);
   });

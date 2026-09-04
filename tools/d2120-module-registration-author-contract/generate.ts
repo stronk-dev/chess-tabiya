@@ -40,7 +40,7 @@ const CATALOGUE_INPUT_AUTHORITIES = Object.freeze({
 });
 
 const SOURCE_CONTRACTS = Object.freeze([
-  { id: "candidate_population@1", authority: "shared-candidate-evidence-packet", input: "CandidatePopulationRequest<S>", result: "CandidatePopulationResult<S>", operation: { owner: "rfc/shared-candidate-evidence-packet.md", callable: "CandidatePopulationService.get(request, signal)" }, extract: "candidate occurrence view only", views: ["root_legal_population", "candidate_child_position_by_uci", "candidate_edge_by_uci", "complete_candidate_population"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["committed_edge", "current_root_projection"], assertion: { callable: "assertCandidatePopulationReceipt(value)", appliesTo: "ready.receipt" }, abstain: "CandidatePopulationFailure | cancelled", seal: "CandidatePopulationReceipt", subjectKinds: ["position", "edge"], timings: ["precommit", "at_commit", "postcommit", "checkpoint", "attempt_end", "review", "analysis"], status: "awaiting_upstream_sealed_operation" },
+  { id: "candidate_population@1", authority: "shared-candidate-evidence-packet", input: "CandidatePopulationRequest<S>", result: "CandidatePopulationResult<S>", operation: { owner: "rfc/shared-candidate-evidence-packet.md", callable: "CandidatePopulationService.get(request, signal)" }, extract: "candidate occurrence view only", views: ["root_legal_population", "candidate_child_position_by_uci", "candidate_edge_by_uci", "complete_candidate_population"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["committed_edge", "current_root_projection"], assertion: { callable: "assertCandidatePopulationReceipt(value)", appliesTo: "ready.receipt" }, abstain: "CandidatePopulationFailure | cancelled", seal: "CandidatePopulationReceipt", subjectKinds: ["position", "edge"], timings: ["precommit", "at_commit"], status: "awaiting_upstream_sealed_operation" },
   { id: "recorded_semantic_path@1", authority: "recorded-semantic-path", input: "Readonly<{ principal: Principal; runId: string; branchId: string }>", result: "RecordedSemanticPathResult", operation: { owner: "rfc/recorded-semantic-path.md", callable: "compileRecordedSemanticPath(input)" }, extract: "ordered projection-keyed path occurrences", views: ["recorded_position", "recorded_edge", "recorded_branch_pair", "frozen_run_prefix"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["hypothetical_candidate"], assertion: null, itemAssertion: "assertSemanticEvidenceEvent(value)", abstain: "RecordedPathRefusalReason", seal: "SemanticEvidenceEvent items only; the result has no declared aggregate runtime seal", subjectKinds: ["position", "edge", "branch_pair", "run_prefix"], timings: ["postcommit", "checkpoint", "attempt_end", "review", "analysis"], blocker: "recorded-semantic-path must publish an aggregate result assertion or exact module adapter before resolution", status: "blocked_upstream_missing_result_assertion" },
   { id: "review_evidence_packet@1", authority: "review-evidence-compiler", input: null, result: "ReviewEvidencePacket", operation: { owner: "rfc/review-evidence-compiler.md", callable: "compileReviewEvidence(input)" }, extract: "projection-keyed frozen-prefix occurrences", views: ["recorded_edge", "recorded_branch_pair", "frozen_run_prefix"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["current_root", "hypothetical_candidate"], assertion: null, itemAssertion: "assertDeclaredEvidence(value)", abstain: "ReviewFamilyState", seal: "DeclaredEvidence items plus packetDigest; the RFC declares neither a callable input type nor aggregate runtime seal", subjectKinds: ["edge", "branch_pair", "run_prefix"], timings: ["postcommit", "review", "analysis"], blocker: "review-evidence-compiler must publish its callable input and aggregate assertion or exact module adapter before resolution", status: "blocked_upstream_incomplete_callable_abi" },
   { id: "catalogue_evidence_packet@1", authority: "module-registration", input: "CatalogueEvidencePoolRequest", inputAuthorities: CATALOGUE_INPUT_AUTHORITIES, result: "CatalogueEvidencePoolResult", operation: { owner: "rfc/module-registration.md", callable: "compileCatalogueEvidencePool(input)" }, extract: "exact cited pack/shape/theory declared items", views: ["applicable_catalogue_position"], viewAuthority: MODULE_VIEW_RESOLVER, forbiddenViews: ["uncited_text", "whole_catalogue_search"], assertion: { callable: "assertCatalogueEvidencePoolReceipt(value)", appliesTo: "available.receipt" }, abstain: "CatalogueEvidencePoolAbsence", seal: "CatalogueEvidencePoolReceipt", subjectKinds: ["position"], timings: ["postcommit", "checkpoint", "attempt_end", "review", "analysis"], status: "awaiting_module_owned_adapter" },
@@ -56,7 +56,7 @@ const SOURCE_INPUTS = Object.freeze([
   ["rules.structural.predicate.direct_attack_count", "edge", "candidate_population@1"],
   ["rules.structural.predicate.line_blockers", "edge", "candidate_population@1"],
   ["rules.structural.predicate.passed_pawn", "edge", "candidate_population@1"],
-  ["rules.tactic.reading.defender_duty_set", "edge", "candidate_population@1"],
+  ["rules.tactic.reading.defender_duty_set", "position", "candidate_population@1"],
   ["run.record.move", "edge", "recorded_semantic_path@1"],
 ].map(([id, subjectKind, acquisition]) => Object.freeze({ projection: ref(id!), subjectKind, acquisition, status: "awaiting_upstream_sealed_operation" })));
 
@@ -214,8 +214,13 @@ for (const row of requirementRows) {
     const external = SOURCE_INPUTS.find((source) => source.projection.id === input.id);
     const sourceSubjectKind = planned?.subjectKind ?? external?.subjectKind;
     if (sourceSubjectKind === undefined) throw new TypeError(`missing derivation input: ${row.projection.id} needs ${input.id}`);
+    const occurrenceOperands = exactOccurrence?.alternatives.map((alternative) => Object.freeze({
+      ...(alternative.discriminator === undefined ? {} : { discriminator: alternative.discriminator }),
+      operands: Object.freeze(alternative.operands.filter((operand) => operand.projection === input.id)),
+    })).filter((alternative) => alternative.operands.length > 0);
     return { projection: input, sourceSubjectKind,
-      relation: exactOccurrence === undefined ? inputRelation(sourceSubjectKind, row.subjectKind) : "operation_owned_occurrences" };
+      relation: exactOccurrence === undefined ? inputRelation(sourceSubjectKind, row.subjectKind) : "ordered_window_operand",
+      ...(occurrenceOperands === undefined ? {} : { occurrenceOperands }) };
   });
   Object.assign(row.derivation, exactOccurrence === undefined
     ? { inputBindings }
@@ -254,6 +259,27 @@ for (const row of requirementRows) {
 
 const presentationByProjection = new Map([...new Set(PRESENTATION_ADAPTER_ROWS.map((row) => row.projection))]
   .map((projection) => [projection, PRESENTATION_ADAPTER_ROWS.filter((row) => row.projection === projection)] as const));
+const CANDIDATE_MOMENTS = new Set(["precommit", "at_commit"]);
+const occurrenceSourceForMoment = (requirement: (typeof requirementRows)[number], timing: string) => {
+  const sourceId = requirement.acquisition === "candidate_population@1" && !CANDIDATE_MOMENTS.has(timing)
+    ? "recorded_semantic_path@1"
+    : requirement.acquisition;
+  const source = sourceContractById.get(sourceId);
+  if (source === undefined || !source.timings.includes(timing as never) || !source.subjectKinds.includes(requirement.subjectKind as never)) return undefined;
+  return Object.freeze({
+    timing,
+    source: source.id,
+    view: occurrenceViewFor(source.id, requirement.subjectKind),
+    subjectKind: requirement.subjectKind,
+    selector: source.id === "candidate_population@1"
+      ? { kind: "canonical_candidate_uci", suppliedBy: "authoritative_module_moment", committedEdgeForbidden: true }
+      : source.id === "recorded_semantic_path@1" || source.id === "review_evidence_packet@1"
+        ? { kind: "recorded_occurrence_identity", suppliedBy: "sealed_run_path" }
+        : source.id === "provider_evidence_packet@1"
+          ? { kind: "provider_request_subject", suppliedBy: "typed_provider_request" }
+          : { kind: "applicability_identity", suppliedBy: "sealed_catalogue_adapter" },
+  });
+};
 const bindingRows = pairs.map(({ module, projection: projectionId }) => {
   const projection = projectionById.get(projectionId)!;
   const producer = producerById.get(projection.producer.id)!;
@@ -263,25 +289,19 @@ const bindingRows = pairs.map(({ module, projection: projectionId }) => {
   const moduleForms = [...new Set(policy.forms.flatMap((form) => MODULE_FORM_IMAGE[form]))];
   const forms = projection.forms.filter((form) => moduleForms.includes(form));
   const requirement = requirementById.get(projectionId)!;
-  const source = sourceContractById.get(requirement.acquisition)!;
-  const sourceTimingCeiling = policy.timings.filter((value) => source.timings.includes(value as never));
-  if (sessions.length === 0 || forms.length === 0 || sourceTimingCeiling.length === 0) throw new TypeError(`empty policy intersection: ${module}/${projectionId}`);
+  const occurrenceByMoment = policy.timings.flatMap((timing) => {
+    const occurrence = occurrenceSourceForMoment(requirement, timing);
+    return occurrence === undefined ? [] : [occurrence];
+  });
+  const sourceTimingCeiling = occurrenceByMoment.map((value) => value.timing);
+  if (sessions.length === 0 || forms.length === 0 || occurrenceByMoment.length === 0) throw new TypeError(`empty policy intersection: ${module}/${projectionId}`);
   const baseAdapters = (presentationByProjection.get(`${projectionId}@${projection.version}`) ?? [])
     .filter((row) => row.disposition === "adapt")
     .map((row) => ({ key: row.key, consumer: row.consumer, familyId: row.familyId, forms: row.forms }));
   const knownForms = [...new Set(baseAdapters.flatMap((row) => row.forms).filter((form) => forms.includes(form as never)))];
   return { producer: projection.producer, projection: ref(projection.id, projection.version), consumer: ref(`module.${module}`),
     occurrenceRequirement: {
-      source: source.id,
-      view: requirement.subjectAuthority.occurrenceView,
-      subjectKind: requirement.subjectKind,
-      selector: source.id === "candidate_population@1"
-        ? { kind: "canonical_candidate_uci", suppliedBy: "authoritative_module_moment", committedEdgeForbidden: true }
-        : source.id === "recorded_semantic_path@1" || source.id === "review_evidence_packet@1"
-          ? { kind: "recorded_occurrence_identity", suppliedBy: "sealed_run_path" }
-          : source.id === "provider_evidence_packet@1"
-            ? { kind: "provider_request_subject", suppliedBy: "typed_provider_request" }
-            : { kind: "applicability_identity", suppliedBy: "sealed_catalogue_adapter" },
+      byMoment: occurrenceByMoment,
       exactProjectionOperation: null,
       resolutionOwner: { ...MODULE_VIEW_RESOLVER, projection: ref(projection.id, projection.version) },
       status: "awaiting_upstream_exact_occurrence_operation",

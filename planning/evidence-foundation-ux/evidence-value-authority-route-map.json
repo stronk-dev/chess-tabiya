@@ -462,7 +462,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:1063"
+        "packages/runtime/src/semantic-evidence.ts:1100"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
@@ -490,7 +490,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:1063"
+        "packages/runtime/src/semantic-evidence.ts:1100"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
@@ -518,7 +518,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:1063"
+        "packages/runtime/src/semantic-evidence.ts:1100"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
@@ -546,7 +546,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:1063"
+        "packages/runtime/src/semantic-evidence.ts:1100"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
@@ -574,7 +574,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:1063"
+        "packages/runtime/src/semantic-evidence.ts:1100"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
@@ -602,7 +602,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:1063"
+        "packages/runtime/src/semantic-evidence.ts:1100"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
@@ -630,7 +630,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:1063"
+        "packages/runtime/src/semantic-evidence.ts:1100"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
@@ -658,7 +658,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:1063"
+        "packages/runtime/src/semantic-evidence.ts:1100"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
@@ -686,7 +686,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:1063"
+        "packages/runtime/src/semantic-evidence.ts:1100"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
@@ -714,7 +714,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:1063"
+        "packages/runtime/src/semantic-evidence.ts:1100"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
@@ -742,7 +742,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:1063"
+        "packages/runtime/src/semantic-evidence.ts:1100"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
@@ -770,7 +770,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:1063"
+        "packages/runtime/src/semantic-evidence.ts:1100"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
@@ -798,7 +798,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:1063"
+        "packages/runtime/src/semantic-evidence.ts:1100"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#selectSemanticEvidence"
@@ -949,7 +949,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:910"
+        "packages/runtime/src/semantic-evidence.ts:944"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#attractionObservedSemanticEvent"
@@ -977,7 +977,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:925"
+        "packages/runtime/src/semantic-evidence.ts:961"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#checkZwischenzugSemanticEvent"
@@ -1033,7 +1033,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:902"
+        "packages/runtime/src/semantic-evidence.ts:936"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#deflectionObservedSemanticEvent"
@@ -1115,7 +1115,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:920"
+        "packages/runtime/src/semantic-evidence.ts:955"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#interferenceSemanticEvent"
@@ -1143,7 +1143,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:884"
+        "packages/runtime/src/semantic-evidence.ts:917"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#lineBlockerClearanceSemanticEvent"
@@ -1171,7 +1171,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:931"
+        "packages/runtime/src/semantic-evidence.ts:968"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#overloadExploitationSemanticEvent"
@@ -1275,7 +1275,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:915"
+        "packages/runtime/src/semantic-evidence.ts:949"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#squareClearanceSemanticEvent"
@@ -4042,7 +4042,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:939"
+        "packages/runtime/src/semantic-evidence.ts:976"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#semanticDutyEvents"
@@ -4070,7 +4070,7 @@
       ],
       "currentProductionUseCount": 1,
       "currentProductionUseSites": [
-        "packages/runtime/src/semantic-evidence.ts:938"
+        "packages/runtime/src/semantic-evidence.ts:975"
       ],
       "currentProducerOperations": [
         "packages/runtime/src/semantic-evidence.ts#semanticDutyEvents"
@@ -5456,6 +5456,6 @@
       "rules.tactic.reading.defender_duty_set@1"
     ],
     "boundProjectionsWithoutProductionUses": [],
-    "receiptDigest": "sha256:bed8aee548681a0fe858deaa0e2e8c53b01b9fdc7485a1c851e516fa22c5d28f"
+    "receiptDigest": "sha256:f8e6a9e0c34e6cbffb76d5754ed102a94601d13217b57a773a46e0195bc61376"
   }
 }

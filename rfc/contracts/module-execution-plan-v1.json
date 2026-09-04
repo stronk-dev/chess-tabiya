@@ -46,12 +46,7 @@
       ],
       "timings": [
         "precommit",
-        "at_commit",
-        "postcommit",
-        "checkpoint",
-        "attempt_end",
-        "review",
-        "analysis"
+        "at_commit"
       ],
       "status": "awaiting_upstream_sealed_operation"
     },
@@ -103,7 +98,7 @@
     {
       "id": "review_evidence_packet@1",
       "authority": "review-evidence-compiler",
-      "input": "ReviewEvidenceInput",
+      "input": null,
       "result": "ReviewEvidencePacket",
       "operation": {
         "owner": "rfc/review-evidence-compiler.md",
@@ -125,13 +120,10 @@
         "current_root",
         "hypothetical_candidate"
       ],
-      "assertion": {
-        "callable": "assertReviewEvidencePacket(value)",
-        "appliesTo": "ReviewEvidencePacket"
-      },
+      "assertion": null,
       "itemAssertion": "assertDeclaredEvidence(value)",
-      "abstain": "ReviewNodeFamilyState",
-      "seal": "createReviewEvidencePacket private aggregate authority over one ReviewRecordedPrefixReceipt and registry-derived sealed source inputs",
+      "abstain": "ReviewFamilyState",
+      "seal": "DeclaredEvidence items plus packetDigest; the RFC declares neither a callable input type nor aggregate runtime seal",
       "subjectKinds": [
         "edge",
         "branch_pair",
@@ -142,8 +134,8 @@
         "review",
         "analysis"
       ],
-      "blocker": "review-evidence-compiler awaits fresh independent buildability review and implementation",
-      "status": "blocked_upstream_rfc_review"
+      "blocker": "review-evidence-compiler must publish its callable input and aggregate assertion or exact module adapter before resolution",
+      "status": "blocked_upstream_incomplete_callable_abi"
     },
     {
       "id": "catalogue_evidence_packet@1",
@@ -348,7 +340,7 @@
         "id": "rules.tactic.reading.defender_duty_set",
         "version": 1
       },
-      "subjectKind": "edge",
+      "subjectKind": "position",
       "acquisition": "candidate_population@1",
       "status": "awaiting_upstream_sealed_operation"
     },
@@ -861,7 +853,21 @@
               "version": 1
             },
             "sourceSubjectKind": "position",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "live.stockfish.eval",
+                    "cardinality": 2,
+                    "endpointRoles": [
+                      "before",
+                      "after"
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ],
         "occurrenceContract": {
@@ -1374,7 +1380,21 @@
               "version": 1
             },
             "sourceSubjectKind": "position",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "recorded.engine.eval",
+                    "cardinality": 2,
+                    "endpointRoles": [
+                      "before",
+                      "after"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -1382,7 +1402,21 @@
               "version": 1
             },
             "sourceSubjectKind": "position",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "live.stockfish.eval",
+                    "cardinality": 2,
+                    "endpointRoles": [
+                      "before",
+                      "after"
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ],
         "occurrenceContract": {
@@ -2289,7 +2323,49 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "run.record.move",
+                    "cardinality": 3,
+                    "edgeOffsets": [
+                      1,
+                      2,
+                      3
+                    ],
+                    "roles": [
+                      "bait_move",
+                      "heavy_piece_capture",
+                      "checking_consequence"
+                    ]
+                  }
+                ]
+              },
+              {
+                "operands": [
+                  {
+                    "projection": "run.record.move",
+                    "cardinality": 5,
+                    "edgeOffsets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ],
+                    "roles": [
+                      "bait_move",
+                      "heavy_piece_capture",
+                      "attack_arrival",
+                      "reply",
+                      "heavy_piece_consequence"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -2297,7 +2373,39 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "rules.transition.event.capture",
+                    "cardinality": 1,
+                    "edgeOffsets": [
+                      2
+                    ],
+                    "roles": [
+                      "heavy_piece_capture"
+                    ]
+                  }
+                ]
+              },
+              {
+                "operands": [
+                  {
+                    "projection": "rules.transition.event.capture",
+                    "cardinality": 2,
+                    "edgeOffsets": [
+                      2,
+                      5
+                    ],
+                    "roles": [
+                      "heavy_piece_capture",
+                      "heavy_piece_consequence"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -2305,7 +2413,23 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "rules.tactic.event.check",
+                    "cardinality": 1,
+                    "edgeOffsets": [
+                      3
+                    ],
+                    "roles": [
+                      "checking_consequence"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -2313,7 +2437,49 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "run.record.move",
+                    "cardinality": 3,
+                    "edgeOffsets": [
+                      1,
+                      2,
+                      3
+                    ],
+                    "roles": [
+                      "bait_move",
+                      "heavy_piece_capture",
+                      "checking_consequence"
+                    ]
+                  }
+                ]
+              },
+              {
+                "operands": [
+                  {
+                    "projection": "run.record.move",
+                    "cardinality": 5,
+                    "edgeOffsets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ],
+                    "roles": [
+                      "bait_move",
+                      "heavy_piece_capture",
+                      "attack_arrival",
+                      "reply",
+                      "heavy_piece_consequence"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -2321,7 +2487,39 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "rules.transition.event.capture",
+                    "cardinality": 1,
+                    "edgeOffsets": [
+                      2
+                    ],
+                    "roles": [
+                      "heavy_piece_capture"
+                    ]
+                  }
+                ]
+              },
+              {
+                "operands": [
+                  {
+                    "projection": "rules.transition.event.capture",
+                    "cardinality": 2,
+                    "edgeOffsets": [
+                      2,
+                      5
+                    ],
+                    "roles": [
+                      "heavy_piece_capture",
+                      "heavy_piece_consequence"
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ],
         "occurrenceContract": {
@@ -2499,7 +2697,29 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "run.record.move",
+                    "cardinality": 4,
+                    "edgeOffsets": [
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "roles": [
+                      "initial_capture",
+                      "intermediate_check",
+                      "check_reply",
+                      "retained_recapture"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -2507,7 +2727,25 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "rules.transition.event.capture",
+                    "cardinality": 2,
+                    "edgeOffsets": [
+                      1,
+                      4
+                    ],
+                    "roles": [
+                      "initial_capture",
+                      "retained_recapture"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -2515,7 +2753,23 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "rules.tactic.event.check",
+                    "cardinality": 1,
+                    "edgeOffsets": [
+                      2
+                    ],
+                    "roles": [
+                      "intermediate_check"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -2523,7 +2777,23 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "rules.exchange.predicate.legal_exchange",
+                    "cardinality": 1,
+                    "edgeOffsets": [
+                      4
+                    ],
+                    "roles": [
+                      "positive_retained_recapture"
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ],
         "occurrenceContract": {
@@ -2764,15 +3034,87 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "discriminator": "bait_capture",
+                "operands": [
+                  {
+                    "projection": "run.record.move",
+                    "cardinality": 3,
+                    "edgeOffsets": [
+                      1,
+                      2,
+                      3
+                    ],
+                    "roles": [
+                      "bait_move",
+                      "defender_reply",
+                      "target_capture"
+                    ]
+                  }
+                ]
+              },
+              {
+                "discriminator": "check_induced",
+                "operands": [
+                  {
+                    "projection": "run.record.move",
+                    "cardinality": 3,
+                    "edgeOffsets": [
+                      1,
+                      2,
+                      3
+                    ],
+                    "roles": [
+                      "checking_bait_move",
+                      "defender_reply",
+                      "target_capture"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
               "id": "rules.tactic.reading.defender_duty_set",
               "version": 1
             },
-            "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "sourceSubjectKind": "position",
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "discriminator": "bait_capture",
+                "operands": [
+                  {
+                    "projection": "rules.tactic.reading.defender_duty_set",
+                    "cardinality": 1,
+                    "positionOffsets": [
+                      0
+                    ],
+                    "roles": [
+                      "duty_before"
+                    ]
+                  }
+                ]
+              },
+              {
+                "discriminator": "check_induced",
+                "operands": [
+                  {
+                    "projection": "rules.tactic.reading.defender_duty_set",
+                    "cardinality": 1,
+                    "positionOffsets": [
+                      0
+                    ],
+                    "roles": [
+                      "duty_before"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -2780,7 +3122,41 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "discriminator": "bait_capture",
+                "operands": [
+                  {
+                    "projection": "rules.transition.event.capture",
+                    "cardinality": 2,
+                    "edgeOffsets": [
+                      2,
+                      3
+                    ],
+                    "roles": [
+                      "bait_capture",
+                      "target_capture"
+                    ]
+                  }
+                ]
+              },
+              {
+                "discriminator": "check_induced",
+                "operands": [
+                  {
+                    "projection": "rules.transition.event.capture",
+                    "cardinality": 1,
+                    "edgeOffsets": [
+                      3
+                    ],
+                    "roles": [
+                      "target_capture"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -2788,7 +3164,39 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "discriminator": "bait_capture",
+                "operands": [
+                  {
+                    "projection": "rules.exchange.predicate.legal_exchange",
+                    "cardinality": 1,
+                    "edgeOffsets": [
+                      3
+                    ],
+                    "roles": [
+                      "positive_target_capture"
+                    ]
+                  }
+                ]
+              },
+              {
+                "discriminator": "check_induced",
+                "operands": [
+                  {
+                    "projection": "rules.exchange.predicate.legal_exchange",
+                    "cardinality": 1,
+                    "edgeOffsets": [
+                      3
+                    ],
+                    "roles": [
+                      "positive_target_capture"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -2796,7 +3204,24 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "discriminator": "check_induced",
+                "operands": [
+                  {
+                    "projection": "rules.tactic.event.check",
+                    "cardinality": 1,
+                    "edgeOffsets": [
+                      1
+                    ],
+                    "roles": [
+                      "checking_bait_move"
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ],
         "occurrenceContract": {
@@ -3114,15 +3539,51 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "run.record.move",
+                    "cardinality": 3,
+                    "edgeOffsets": [
+                      1,
+                      2,
+                      3
+                    ],
+                    "roles": [
+                      "interposition",
+                      "reply",
+                      "target_capture"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
               "id": "rules.tactic.reading.defender_duty_set",
               "version": 1
             },
-            "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "sourceSubjectKind": "position",
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "rules.tactic.reading.defender_duty_set",
+                    "cardinality": 1,
+                    "positionOffsets": [
+                      0
+                    ],
+                    "roles": [
+                      "duty_before"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -3130,7 +3591,23 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "rules.exchange.predicate.legal_exchange",
+                    "cardinality": 1,
+                    "edgeOffsets": [
+                      3
+                    ],
+                    "roles": [
+                      "positive_target_capture"
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ],
         "occurrenceContract": {
@@ -3253,7 +3730,27 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "run.record.move",
+                    "cardinality": 3,
+                    "edgeOffsets": [
+                      1,
+                      2,
+                      3
+                    ],
+                    "roles": [
+                      "blocker_vacates",
+                      "reply",
+                      "slider_capture"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -3261,7 +3758,23 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "rules.exchange.predicate.legal_exchange",
+                    "cardinality": 1,
+                    "edgeOffsets": [
+                      3
+                    ],
+                    "roles": [
+                      "positive_slider_capture"
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ],
         "occurrenceContract": {
@@ -3378,15 +3891,51 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "run.record.move",
+                    "cardinality": 3,
+                    "edgeOffsets": [
+                      1,
+                      2,
+                      3
+                    ],
+                    "roles": [
+                      "first_target_capture",
+                      "defender_recapture",
+                      "second_target_capture"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
               "id": "rules.tactic.reading.defender_duty_set",
               "version": 1
             },
-            "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "sourceSubjectKind": "position",
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "rules.tactic.reading.defender_duty_set",
+                    "cardinality": 1,
+                    "positionOffsets": [
+                      0
+                    ],
+                    "roles": [
+                      "multi_duty_before"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -3394,7 +3943,27 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "rules.transition.event.capture",
+                    "cardinality": 3,
+                    "edgeOffsets": [
+                      1,
+                      2,
+                      3
+                    ],
+                    "roles": [
+                      "first_target_capture",
+                      "defender_recapture",
+                      "second_target_capture"
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "projection": {
@@ -3402,7 +3971,23 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "rules.exchange.predicate.legal_exchange",
+                    "cardinality": 1,
+                    "edgeOffsets": [
+                      3
+                    ],
+                    "roles": [
+                      "positive_second_capture"
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ],
         "occurrenceContract": {
@@ -3614,7 +4199,27 @@
               "version": 1
             },
             "sourceSubjectKind": "edge",
-            "relation": "operation_owned_occurrences"
+            "relation": "ordered_window_operand",
+            "occurrenceOperands": [
+              {
+                "operands": [
+                  {
+                    "projection": "run.record.move",
+                    "cardinality": 3,
+                    "edgeOffsets": [
+                      1,
+                      2,
+                      3
+                    ],
+                    "roles": [
+                      "square_vacated",
+                      "reply",
+                      "quiet_slider_move"
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ],
         "occurrenceContract": {
@@ -6049,5 +6654,5 @@
       "status": "awaiting_upstream_sealed_operation"
     }
   ],
-  "digest": "sha256:774b2ebfa9949d32c19592a3ed8a8fd3cc62995647d00dba5b29884bf83a07c1"
+  "digest": "sha256:723d79cc5271cdaf28c259cb394171d27c1661487f0574ac380324804d64a96c"
 }

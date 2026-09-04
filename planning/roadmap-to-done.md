@@ -516,6 +516,14 @@ module-registration-tenth-fresh-review` reproduces all three, including the runt
 bounded tenth author repair and another fresh review still precede acceptance or implementation.
 Receipt: `planning/learner-modules/tenth-fresh-independent-buildability-review-2026-09-04.md`.
 
+The bounded tenth author repair closes [[D2584]]–[[D2586]] without activating a module. Exact
+ordered-window bindings now retain position/edge offsets and roles; each module timing chooses a
+candidate occurrence before commitment or a recorded occurrence afterward; and the live observed
+tactic emitters reject each independently crossed move, duty, capture and exchange input. `make
+module-registration-tenth-author-repair` passes the maintained 11/11 contract plus 3/3 new
+controls. The 117/205 images remain requirements-only and another genuinely fresh review still
+gates acceptance. Receipt: `planning/learner-modules/tenth-author-repair-2026-09-04.md`.
+
 The 2026-09-02 fourth fresh promotion-collector review keeps the two held projections out of the
 foundation on [[D2521]], [[D2522]] and [[D2523]]. Its advertised closed request uses two undefined types, the
 injected Syzygy callable matches no provider operation and leaves normalized request bytes
