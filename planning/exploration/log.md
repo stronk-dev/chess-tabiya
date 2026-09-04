@@ -14637,3 +14637,21 @@ collapses every overload declaration into one entry.
 **Evidence/next:** `make shared-resource-bootstrap-sixth-fresh-review` reproduces all four findings,
 and every retained author generation remains green. A bounded sixth author repair followed by a
 genuinely fresh review still gates acceptance and implementation.
+
+## 2026-09-04 — Shared-resource bootstrap sixth author repair closes exact descriptor projections
+
+**What landed:** [[D2559]]–[[D2562]] are repaired in the bootstrap contract and disposable author
+model. Canonical resources receive their catalogue descriptor, reject a mismatched id before
+projection and require a non-null non-array object payload. TypeScript projections now require
+set-equality across descriptor selectors, graph roots, retained nodes and program roots. Retained
+declarations are an ordered list, preserving every same-name overload signature and implementation.
+
+**What changed:** the four fresh-review defects are closed at the authoring tier without creating a
+catalogue engine or changing a product authority, schema, API, storage, content, web or protected
+design byte. Empty, extra, crossed-node and crossed-program roots; array, scalar and null payloads;
+self-consistent crossed resource ids; and overload collapse all fail in the maintained author gate.
+
+**Evidence/next:** `make shared-resource-bootstrap-sixth-author-repair` passes 4/4; the fifth,
+fourth, third, second and reconciliation author controls remain green. The RFC is still draft and
+implementation remains unauthorized until another genuinely fresh independent review reconstructs
+the repair.

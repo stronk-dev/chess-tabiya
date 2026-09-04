@@ -115,7 +115,8 @@ function jsonLiteral(node) {
   fail(`non-literal canonical resource node ${ts.SyntaxKind[value.kind]}`);
 }
 
-export function parseCanonicalResource(sourceText, exportName) {
+export function parseCanonicalResource(sourceText, exportName, descriptorId) {
+  if (typeof descriptorId !== "string" || descriptorId.length === 0) fail("descriptor id required");
   const file = ts.createSourceFile("resource.ts", sourceText, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
   const declarations = [];
   for (const statement of file.statements) {
@@ -131,6 +132,9 @@ export function parseCanonicalResource(sourceText, exportName) {
   if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed) || typeof parsed.id !== "string") {
     fail("canonical resource object required");
   }
-  assertCanonicalResource(parsed.id, parsed);
+  if (parsed.payload === null || typeof parsed.payload !== "object" || Array.isArray(parsed.payload)) {
+    fail("canonical resource payload object required");
+  }
+  assertCanonicalResource(descriptorId, parsed);
   return parsed;
 }

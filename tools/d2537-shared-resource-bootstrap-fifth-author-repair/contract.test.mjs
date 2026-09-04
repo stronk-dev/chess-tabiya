@@ -22,14 +22,14 @@ test("D2537: canonical resources validate their exact digest and closed literal 
   const digest = sharedResourceDigest(value);
   assert.deepEqual(parseCanonicalResource(
     `export const RESOURCE = { id: "provider-protocol", version: 1, payload: { rows: ["a"] }, digest: "${digest}" };`,
-    "RESOURCE",
+    "RESOURCE", "provider-protocol",
   ), { ...value, digest });
   for (const source of [
     `export const RESOURCE = { id: "provider-protocol", version: 1, payload: {}, digest: "sha256:${"0".repeat(64)}" };`,
     "export const RESOURCE = { id: `provider-protocol`, version: 1, payload: {}, digest: `sha256:x` };",
     `export const RESOURCE = { id: "provider-protocol", version: 0x1, payload: {}, digest: "sha256:x" };`,
     `export const RESOURCE = { id: "provider-protocol", version: 1, payload: { zero: -0 }, digest: "sha256:x" };`,
-  ]) assert.throws(() => parseCanonicalResource(source, "RESOURCE"));
+  ]) assert.throws(() => parseCanonicalResource(source, "RESOURCE", "provider-protocol"));
 });
 
 test("D2538: retained-only ordinals ignore unrelated declarations but retained changes remain visible", () => {
@@ -77,16 +77,23 @@ test("D2540: selector and migration callback roots are distinct complete values"
 test("D2541: canonical and TypeScript adapters produce exact complete projections", () => {
   const resource = { id: "provider-protocol", version: 1, payload: { rows: ["a"] } };
   const digest = sharedResourceDigest(resource);
-  assert.deepEqual(projectCanonicalResource("resource.ts#export:RESOURCE", { ...resource, digest }), {
+  assert.deepEqual(projectCanonicalResource("provider-protocol", "resource.ts#export:RESOURCE", { ...resource, digest }), {
     identity: { version: 1 }, semantic: { rows: ["a"] }, digest,
     resolvedSelectors: ["resource.ts#export:RESOURCE"],
   });
-  const graph = { program: { configPath: "tsconfig.base.json" }, roots: [], nodes: [], edges: [] };
+  const selector = "assistance.ts#interface:AssistanceConfig";
+  const versionSelector = "assistance.ts#interface:AssistanceConfig/member:version/literal";
+  const graph = {
+    program: { configPath: "tsconfig.base.json", rootNames: ["assistance.ts"] },
+    roots: [selectorRoot(selector, "assistance.ts\u00000"), selectorRoot(versionSelector, "assistance.ts\u00001")],
+    nodes: [{ id: "assistance.ts\u00000" }, { id: "assistance.ts\u00001" }],
+    edges: [],
+  };
   const projected = projectTypeScriptContract({
     version: 4,
     graph,
-    roots: ["assistance.ts#interface:AssistanceConfig"],
-    versionSelector: "assistance.ts#interface:AssistanceConfig/member:version/literal",
+    roots: [selector],
+    versionSelector,
   });
   assert.deepEqual(projected.identity, { version: 4 });
   assert.equal(projected.semantic, graph);

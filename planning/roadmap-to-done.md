@@ -120,12 +120,13 @@ Primary RFCs: `measurement-records`, `shared-resource-register-bootstrap`, `work
 bootstrap RFC owns the product-byte-free absent-root protocol needed before a new versioned shared
 resource can be claimed.
 
-The 2026-09-04 sixth fresh bootstrap review keeps that protocol in draft on four exact false-green
-boundaries: atomic resources are not bound to their descriptor id and admit non-object payloads;
-TypeScript selectors can accompany an empty graph; and overload declarations collapse by name.
-[[D2559]]–[[D2562]] are assigned to the bootstrap RFC, with an executable 4/4 return receipt. This
-prevents the generic register engine from landing with a resource-crossing or graph-empty authority
-while leaving the already-implemented register checks intact.
+The 2026-09-04 sixth bootstrap author repair closes the four exact false-green boundaries returned
+by fresh review: atomic resources now bind to their descriptor id and require an object payload;
+TypeScript selectors, graph roots, retained nodes and program roots form one exact join; and every
+same-name overload declaration retains its own ordered identity. [[D2559]]–[[D2562]] are closed at
+the authoring tier with an executable 4/4 repair receipt and all prior author controls retained.
+The RFC remains draft: another genuinely fresh independent review must reconstruct those repairs
+before the generic catalogue engine or any product authority may be implemented.
 
 ### 2. Evidence collection, semantic events, selection, and grounding
 

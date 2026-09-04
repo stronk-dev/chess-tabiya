@@ -18,7 +18,10 @@ export function retainedRepositoryNodeIds(path, sourceText, retainedNames) {
     node.forEachChild(visit);
   };
   visit(source);
-  return Object.freeze(Object.fromEntries(declarations.map((node, ordinal) => [declarationName(node), `${path}\0${ordinal}`])));
+  return Object.freeze(declarations.map((node, ordinal) => Object.freeze({
+    name: declarationName(node),
+    id: `${path}\0${ordinal}`,
+  })));
 }
 
 export function buildProgramIdentity({ configText, rootNames, compilerVersion, compilerIntegrity }) {
@@ -62,7 +65,11 @@ export function migrationApplyRoot(sequenceSelector, version, node) {
   return Object.freeze({ kind: "migration_apply", sequenceSelector, version, property: "apply", node });
 }
 
-export function projectCanonicalResource(rootSelector, resource) {
+export function projectCanonicalResource(descriptorId, rootSelector, resource) {
+  if (resource.id !== descriptorId) fail("resource id does not match descriptor");
+  if (resource.payload === null || typeof resource.payload !== "object" || Array.isArray(resource.payload)) {
+    fail("canonical resource payload object required");
+  }
   const expected = sharedResourceDigest({ id: resource.id, version: resource.version, payload: resource.payload });
   if (resource.digest !== expected) fail("resource digest mismatch");
   return Object.freeze({
@@ -75,10 +82,31 @@ export function projectCanonicalResource(rootSelector, resource) {
 
 export function projectTypeScriptContract({ version, graph, roots, versionSelector }) {
   if (!Number.isSafeInteger(version) || version < 1) fail("invalid contract version");
+  if (graph === null || typeof graph !== "object" || !Array.isArray(graph.roots) || !Array.isArray(graph.nodes) ||
+      graph.program === null || typeof graph.program !== "object" || !Array.isArray(graph.program.rootNames)) {
+    fail("invalid TypeScript graph");
+  }
+  const selectors = [...roots, versionSelector];
+  const selectorRoots = graph.roots.filter((root) => root?.kind === "selector");
+  if (selectorRoots.length !== graph.roots.length || selectorRoots.length !== selectors.length ||
+      new Set(selectorRoots.map((root) => root.selector)).size !== selectorRoots.length ||
+      selectors.some((selector) => !selectorRoots.some((root) => root.selector === selector)) ||
+      selectorRoots.some((root) => !selectors.includes(root.selector))) {
+    fail("TypeScript graph roots do not match descriptor selectors");
+  }
+  const nodeIds = new Set(graph.nodes.map((node) => node?.id));
+  if (selectorRoots.some((root) => typeof root.node !== "string" || !nodeIds.has(root.node))) {
+    fail("TypeScript graph root does not name a retained node");
+  }
+  const sourcePaths = new Set(selectors.map((selector) => selector.slice(0, selector.indexOf("#"))));
+  if (sourcePaths.size === 0 || [...sourcePaths].some((path) => !graph.program.rootNames.includes(path)) ||
+      graph.program.rootNames.some((path) => !sourcePaths.has(path))) {
+    fail("TypeScript program roots do not match descriptor selectors");
+  }
   return Object.freeze({
     identity: Object.freeze({ version }),
     semantic: graph,
     digest: sharedResourceDigest({ adapter: "typescript_contract@1", version, graph }),
-    resolvedSelectors: Object.freeze([...roots, versionSelector]),
+    resolvedSelectors: Object.freeze(selectors),
   });
 }

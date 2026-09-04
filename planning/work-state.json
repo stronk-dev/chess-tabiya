@@ -20402,39 +20402,39 @@
     },
     {
       "id": "D2559",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:6ed8633c8c9afc32006708f6720e45feab788be35aefcaa25306d99842bebd15",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:11904da506dda5ac34b57b59ff12d88c3edf49ca8cd4c09ff97e6ddc6d3adc1f",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:shared-resource-register-bootstrap.md"
+      "evidence": "planning/shared-resource-register-bootstrap/sixth-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2560",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:69f00f402e7232dd1091e891aeb65b8a04cade479945e60e1117be99a40c9bfc",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d16a42399caf93b84f68ebc9cb905f278a78d96cb8cfa541aef0b47c98a19418",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:shared-resource-register-bootstrap.md"
+      "evidence": "planning/shared-resource-register-bootstrap/sixth-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2561",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ab1db9b0ff471c6e0c5ccd94e873c4899cf01ac8b78fab7aa75ed0a976406ee6",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a251a2d63d4994e9eb8ca54638ce86f09654048ee342f335069a859a0a596f02",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:shared-resource-register-bootstrap.md"
+      "evidence": "planning/shared-resource-register-bootstrap/sixth-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2562",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5d29211f811bb8add7eac3063a831e19ebe562104fb17f1239f80c3a6ab352e4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:88a4a2e023ca089d4105d61fb3986284bd2b477d80e52f8db7b238243b5a9a16",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:shared-resource-register-bootstrap.md"
+      "evidence": "planning/shared-resource-register-bootstrap/sixth-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     }
   ]
 }

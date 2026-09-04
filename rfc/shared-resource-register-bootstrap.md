@@ -1,11 +1,9 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — returned by sixth fresh independent review 2026-09-04 on
-  [[D2559]]–[[D2562]]. The fifth repair's digest/literal, unrelated-declaration, compiler-program
-  and typed-root direction survives, but canonical resources are not descriptor-bound and admit
-  non-object payloads, TypeScript projected selectors are not joined to graph roots, and same-name
-  overload declarations collapse in the author model. Another bounded author repair is required.
-  A fresh independent review is then required; no implementation is authorized.
+- **Status:** draft — sixth author repair complete 2026-09-04 on [[D2559]]–[[D2562]]. Canonical
+  resources now bind id and object payload to their descriptor; TypeScript projections require an
+  exact selector/root/node/program join; and retained declaration identity preserves every
+  same-name overload. A fresh independent review is required; no implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -299,6 +297,11 @@ The closed adapter set is:
    digest rather than a second digest over the wrapper. This side-effect-free AST image is the
    required shape for source attribution, provider protocol and assistance exchange ([[D2501]],
    [[D2537]], [[D2541]]).
+   **[[D2559]]–[[D2560]]:** the parser and projector both receive the complete descriptor, not only
+   its selector. They require the parsed `id` to equal `descriptor.id` before digest agreement and
+   require `payload` to be a non-null, non-array plain JSON object. Passing the parsed id back as the
+   expected id is forbidden. The wider canonical-byte function still admits every value in §2.1;
+   the object restriction belongs to this adapter alone.
 6. `typescript_contract@1` — resolves a positive safe-integer literal version selector plus one or
    more type/value roots using the repository-pinned TypeScript compiler and the descriptor's exact
    `programConfig: "tsconfig.base.json"`. Starting from each root,
@@ -386,7 +389,10 @@ The closed adapter set is:
 
    A repository node id is its resolved repository path plus the declaration's zero-based preorder
    ordinal **among retained repository declarations in that path**, computed only after transitive
-   reachability closes. A declaration outside the retained graph cannot move an id. A newly retained
+   reachability closes. The retained image is an ordered declaration list, never a map keyed by
+   exported name: every retained declaration, including same-name overload signatures and their
+   implementation, receives its own ordinal and node. A declaration outside the retained graph
+   cannot move an id. A newly retained
    declaration can; so can a retained binding/member rename through its `SyntaxTreeV1`, which is
    intentional. An external node id is its origin, dependency identity and public export path joined
    with NUL separators. `SyntaxTreeV1.children` retains compiler child order; `text` is non-null only
@@ -426,7 +432,11 @@ The closed adapter set is:
    projection is
    `{ identity:{ version }, semantic:graph, digest:sharedResourceDigest({ adapter:"typescript_contract@1", version, graph }), resolvedSelectors:[...roots, versionSelector] }`,
    with selectors in descriptor order; the sequential lifecycle head is `identity.version`
-   ([[D2541]]).
+   ([[D2541]]). **[[D2561]]:** before producing that image, the projector requires set equality
+   between descriptor `roots` plus `versionSelector` and `graph.roots`' selector values; every root
+   names one retained `ContractNodeV1`; and the unique source-path set of those selectors equals
+   `program.rootNames`. Empty, extra, duplicate, crossed-node and crossed-program root images are
+   invalid, never landed.
 7. `versioned_declarations@1` — resolves one literal declaration array whose members contain a
    base id and canonical positive safe-integer version under the descriptor's literal field names.
    Every member must be a recursively canonical JSON object literal: no spread, shorthand,
@@ -699,6 +709,12 @@ The sixth fresh review preserves those repairs and returns four remaining exact-
 They require a bounded sixth author repair and another fresh independent review. No implementation
 is authorized while any of these four boundaries remains open.
 
+The sixth author repair closes those four contract images: descriptor id and adapter payload are
+validated before projection; descriptor selectors, graph roots, retained nodes and program roots
+form one exact join; and retained declarations are an ordered list that preserves overloads. The
+new 4/4 author contract retains empty/extra/crossed graph negatives and all three non-object payload
+negatives. Another genuinely fresh review still gates acceptance and implementation.
+
 ## Acceptance criteria
 
 1. Catalogue and README register populations are set-equal; no `RESOURCE_NAMES`, `SCHEMA_SLUGS` or
@@ -754,6 +770,10 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-04: sixth author repair on [[D2559]]–[[D2562]]. Canonical descriptor/payload binding,
+  exact TypeScript root closure and overload-safe retained declaration identity now pass
+  `make shared-resource-bootstrap-sixth-author-repair` 4/4. Another fresh independent review is
+  required; implementation remains unauthorized.
 - 2026-09-04: returned by sixth fresh independent buildability review on
   [[D2559]]–[[D2562]]; receipt:
   `planning/shared-resource-register-bootstrap/sixth-fresh-independent-buildability-review-2026-09-04.md`.

@@ -64,7 +64,7 @@ test("D2501: canonical resources are statically parsed and reject executable or 
   assert.match(bootstrap, /never imports,\s+bundles or executes the target module/u);
   const digest = sharedResourceDigest({ id: "provider-protocol", version: 1, payload: { rows: ["a"] } });
   const positive = `export const RESOURCE = Object.freeze({ id: "provider-protocol", version: 1, payload: Object.freeze({ rows: ["a"] }), digest: "${digest}" } as const);`;
-  assert.deepEqual(parseCanonicalResource(positive, "RESOURCE"), {
+  assert.deepEqual(parseCanonicalResource(positive, "RESOURCE", "provider-protocol"), {
     id: "provider-protocol", version: 1, payload: { rows: ["a"] }, digest,
   });
   for (const source of [
@@ -76,5 +76,5 @@ test("D2501: canonical resources are statically parsed and reject executable or 
     `export const RESOURCE = { id: "x", version: 0x1, payload: {}, digest: "sha256:x" };`,
     `export const RESOURCE = { id: "x", version: 1, payload: { zero: -0 }, digest: "sha256:x" };`,
     `export const RESOURCE = { id: "x", version: 1, payload: {}, digest: "sha256:x" };`,
-  ]) assert.throws(() => parseCanonicalResource(source, "RESOURCE"));
+  ]) assert.throws(() => parseCanonicalResource(source, "RESOURCE", "provider-protocol"));
 });

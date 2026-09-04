@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:70ad8272984b1a0b7c61665e0b6be3f65d6b9debb1c9df27b17693853dac6435",
+    "roadmap": "sha256:7cee82f4077d781079fd2e7abaf42b331539f727247176517263df08db49d54c",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:d722379ae83eab508e9083fa00f40109407ffd9c822f22a184354d9b6ef99bdf",
-    "rfcRegister": "sha256:0c41fbb57c5ad1fd2dde8c87bfc180d7ea29b9fd24c9c54f80106af34c82f264",
+    "workState": "sha256:56bfc3f5dcd09deb720f4eef42b05d6dfd61cb57c92f433c015a6c5c9783aff3",
+    "rfcRegister": "sha256:88b4c93199b65d9a7c8c7f4a580bd86a04e2578a4986470eee17baea91cecef5",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 866,
-      "done": 803,
+      "blocked": 862,
+      "done": 807,
       "refused": 3
     },
     "workItems": {
@@ -110,7 +110,7 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "The held promotion pair now has a fifth author repair. The shared-resource bootstrap's sixth fresh review also returned four exact false-green boundaries: descriptor identity, object-only payloads, selector-to-graph-root closure and overload retention. Module registration still awaits fresh review, and all held production remains dependency-blocked.",
+        "summary": "The held promotion pair now has a fifth author repair. The shared-resource bootstrap's sixth author repair closes descriptor identity, object-only payload, selector-to-graph-root closure and overload-retention gaps at the contract tier; another fresh review still gates implementation. Module registration also awaits fresh review, and all held production remains dependency-blocked.",
         "impact": "advanced",
         "evidence": [
           "planning/learner-modules/ninth-author-repair-2026-09-04.md",
