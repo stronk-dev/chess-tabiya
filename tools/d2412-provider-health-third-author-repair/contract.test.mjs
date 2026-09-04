@@ -79,7 +79,8 @@ test("D2417 shares Lichess backoff without sharing instance identity", () => {
 test("the repaired RFC closes every returned vocabulary and remains implementation-gated", () => {
   for (const token of ["ProviderBackoffGroupId", 'state: "recovering"', "requestDigest", "resolveExact", "local_service", "render.tts", "eight operations"]) assert.match(rfc, new RegExp(token.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&"), "u"));
   assert.match(rfc, /## Third author repair \(2026-09-02\)/u);
-  assert.match(rfc, /RETURNED by the fourth fresh independent review 2026-09-04/u);
+  assert.match(rfc, /## Fourth fresh independent return \(2026-09-04\)/u);
+  assert.match(rfc, /## Fourth author repair \(2026-09-04\)/u);
   assert.match(rfc, /Neither implementation checkpoint is authorized/u);
 });
 

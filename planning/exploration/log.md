@@ -15165,3 +15165,21 @@ behavioral controls plus strict TypeScript. Exact receipt:
 `planning/longitudinal-store/seventh-author-repair-2026-09-04.md`. Another genuinely fresh
 independent review still gates acceptance and production implementation; player style, skills,
 opening performance, durable tips and campaign progression receive no premature completion credit.
+
+## 2026-09-04 — Provider health fourth author repair
+
+**What landed:** The bounded contract-tier repair for [[D2575]]–[[D2583]] and the maintained
+`make provider-health-fourth-author-repair` target. No production runtime, provider, API, storage,
+schema, client, content, deployment, archive or protected-design byte changed.
+
+**What changed:** ten application operations now compile onto eight provider-exchange operations;
+reasoning review and first-class sealed-text speech close the live egress census; monotonic recovery
+and tokenized shared leases make time/crash races explicit; exact cache hits atomically retain value
+and origin; opponent failure/retry/change becomes a durable post-learner-ply journey; and ordered
+stage settlement preserves mixed provider outcomes.
+
+**Evidence/next:** the maintained target retains 17 prior author controls and passes 6/6 new
+behavioral groups plus strict TypeScript. Exact receipt:
+`planning/provider-health-degradation/fourth-author-repair-2026-09-04.md`. Another genuinely fresh
+independent review and the provider-protocol/exchange prerequisites still gate both implementation
+checkpoints; bots, Support, Review and campaign receive no premature availability credit.

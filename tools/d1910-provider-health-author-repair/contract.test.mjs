@@ -43,24 +43,25 @@ test("D1912 compiles rendering dependencies under one deadline", () => {
   const execution = section("interface ProviderExecutionStage", "Producer availability preserves");
   assert.match(execution, /readonly dependsOn: readonly string\[\]/u);
   assert.match(execution, /readonly deadline: "consumer_budget"/u);
-  assert.match(execution, /conditional `external-tts` depends on that\s+stage/u);
+  assert.match(execution, /`render\.speech` \| `audio:external-tts` → `external_tts\.synthesize@1`/u);
+  assert.match(execution, /never calls\s+external voice again/u);
   assert.match(execution, /missing or duplicate operation,[\s\S]*cycle,[\s\S]*absent total-deadline source/u);
 });
 
 test("D1913 closes provider operation results", () => {
-  const result = section("interface ProviderReceiptBase", "### 5. Operation deadlines and cancellation");
-  for (const arm of ['kind: "success"', 'kind: "fallback"', 'kind: "unavailable"', 'kind: "cancelled"']) {
+  const result = section("type ProviderStageSettlement", "### 5. Operation deadlines and cancellation");
+  for (const arm of ['kind: "success"', 'kind: "fallback"', 'kind: "unavailable"', 'kind: "cancelled"', 'kind: "failed"']) {
     assert.match(result, new RegExp(arm.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&"), "u"));
   }
-  assert.match(result, /source: "cached_exact";[\s\S]*original: ProviderOriginReceipt/u);
-  assert.match(result, /source: "failed";[\s\S]*reason: ProviderFailureReason/u);
-  assert.match(rfc, /cached success and\s+deterministic fallback do not heal/u);
+  assert.match(result, /delivery: ProviderDelivery/u);
+  assert.match(result, /readonly settlements: readonly ProviderStageSettlement/u);
+  assert.match(rfc, /Cancellation retains completed earlier stages but never heals or damages provider health/u);
 });
 
 test("D1914 claims and specifies durable opponent acquisition", () => {
   assert.match(rfc, /run-schema \| lane 0\.26 \|/u);
   const rollout = section("## Rollout and compatibility", "## Discharges");
-  assert.match(rollout, /every newly appended\s+`opponent\.move_selected` event must carry the field/u);
+  assert.match(rollout, /every\s+newly appended `opponent\.move_selected` event must carry it/u);
   assert.match(rollout, /legacy_unrecorded/u);
   assert.match(rollout, /Save→reload→Review\/export/u);
 });

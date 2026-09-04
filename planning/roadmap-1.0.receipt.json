@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:d6215ae7899a046656dcdf9240f1b45da4b918db8713c7f0447895c3eba86b05",
+    "roadmap": "sha256:93841125e41a02a2648e5ad04e446601190067bea80ceb613223503eebb16e00",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:d349fde6c199c5c78b9299f2eaaa1bc0b4f159a8cc7a3e84b8cee19bdf265097",
-    "rfcRegister": "sha256:dc8ba1d0accbdf0291cda1be842d1fd9f70f84f25eef0bfbf08c57de055fde1a",
+    "workState": "sha256:e73567698be3d93a08a15e5a876986146f6a45d05a46afcd70899b4368d8bcaf",
+    "rfcRegister": "sha256:d127223eefa38ac967e21f9f2d59f87be010040cda4dd8324253dfc39ce6e940",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -112,7 +112,7 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Pack capability and longitudinal history now have bounded author repairs: durable evidence jobs use a transaction-owned receipt and restart-stable allocator, while personal history has exact denominator algebra, literal parser admission, sealed replay identity, compiled mutation ownership and full five-state invalidation. Both retain their earlier gates and await genuinely fresh review; shared-resource, Campaign and presentation contracts remain held.",
+        "summary": "Pack capability, longitudinal history and provider health now have bounded author repairs: evidence jobs use a transaction-owned receipt and restart-stable allocator; personal history has exact denominators, literal admission, sealed replay identity and full invalidation; and ten provider-backed application operations now join one exchange authority with total failure/recovery semantics. All retain earlier gates and await genuinely fresh review; shared-resource, Campaign and presentation contracts remain held.",
         "impact": "held",
         "evidence": [
           "planning/shared-resource-register-bootstrap/seventh-author-repair-2026-09-04.md",

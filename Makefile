@@ -560,13 +560,17 @@ provider-health-author-repair:
 provider-health-second-fresh-review:
 	node --test tools/d2412-provider-health-second-fresh-review/contract.test.mjs
 
-.PHONY: provider-health-third-author-repair provider-health-fourth-fresh-review
+.PHONY: provider-health-third-author-repair provider-health-fourth-fresh-review provider-health-fourth-author-repair
 provider-health-third-author-repair: provider-health-author-repair
 	node --test tools/d2412-provider-health-third-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d2412-provider-health-third-author-repair/tsconfig.json
 
 provider-health-fourth-fresh-review: provider-health-third-author-repair
 	node --test tools/d2575-provider-health-fourth-fresh-review/contract.test.mjs
+
+provider-health-fourth-author-repair: provider-health-third-author-repair
+	./node_modules/.bin/vitest run --config tools/d2575-provider-health-fourth-author-repair/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc -p tools/d2575-provider-health-fourth-author-repair/tsconfig.json
 
 candidate-packet-contract:
 	node --test tools/d1900-candidate-packet-amendment-harness/*.test.mts

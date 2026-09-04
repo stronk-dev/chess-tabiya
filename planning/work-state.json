@@ -20548,7 +20548,7 @@
       "id": "D2575",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9a503716994b4b495581de05edf0e61e7d2faeba810c8f5acb763cf50b7f0575",
+      "sourceDigest": "sha256:85cbdae5341ecbc705dd92417d4ae35776ad359ff7f67a14412fde1c0f341620",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -20557,7 +20557,7 @@
       "id": "D2576",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5db452cf74b9c874a39943683e4495734de6b311d504b3eaf22a0c799908c2cd",
+      "sourceDigest": "sha256:570fec0a928577f682ce787045b1eac513324468afe533578ebeafbbe3cfcb02",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -20566,7 +20566,7 @@
       "id": "D2577",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:6f5f8f36f4df297862f9d6839d1cb421acbb6b0cfd5ebc586819c68c6c1693b5",
+      "sourceDigest": "sha256:04089bed7edfd5ea25b43068299a9a3aa907db345a1c128731af4d63af94737a",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -20575,7 +20575,7 @@
       "id": "D2578",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:fe51fe2185ca12ddec639a912a1cf1357c1277afb5f4cbf6afc57d3091aa3c9f",
+      "sourceDigest": "sha256:713a1fd83ae34d2bca3ee932e0f9b33802a240bd7af562ce02fde4830ea55dfe",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -20584,7 +20584,7 @@
       "id": "D2579",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0863a0a75f4e27aac14b8dad789c86986fa43cf4ef4c36446d3b980c4385dae5",
+      "sourceDigest": "sha256:b1c9a7451c3ad9804032dd371e3725890165ed5ec562fb4bed4d475f7e34a641",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -20593,7 +20593,7 @@
       "id": "D2580",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9e781710ba291a555593b9f540b7df32fe75c2f35c3e1b94b9691cbfa8ffd8fd",
+      "sourceDigest": "sha256:15a49b890fb24a1f7ca73e07657ac298748ff65fd18cf55f607af8fc08262e29",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -20602,7 +20602,7 @@
       "id": "D2581",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3285d5b4956825ebcb5244f3661a0532165fa108bc2ea019b48e81045e44d322",
+      "sourceDigest": "sha256:67d5eac2a5c9c1c17f3a95d11f329eafd8f7628467507ea6d07dbdcac581463d",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -20611,7 +20611,7 @@
       "id": "D2582",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:00a8a6222d24e7cf4da99900494b8417ef63c03726b68b1c039eacef317d867a",
+      "sourceDigest": "sha256:a646c8c73b9730a51a792e7e20539b8d77d21fcbf669dd042fc272a2854a2e9d",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -20620,7 +20620,7 @@
       "id": "D2583",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3fe929d6f4863d9cbec0016cb1695b3ac4f3b8f1321831791a5fe97e7578e6e0",
+      "sourceDigest": "sha256:b778137ca0dc009f96972497787b06b47a91f08a41740066633e1e8d61b627c9",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"

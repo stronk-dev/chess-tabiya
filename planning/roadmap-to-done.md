@@ -1243,14 +1243,14 @@ migration, live degradation health, safe profiles, runtime content allow-list, b
 update/rollback, SBOM/notices/signatures, model/runtime rights, and complete multi-architecture
 proof.
 
-The 2026-09-04 fourth fresh provider-health review returns the third repair on [[D2575]]–[[D2583]].
-The instance/local/recovery/backoff direction survives, but the eight-operation census omits live
-reasoning-review egress; its voice→TTS graph contradicts `/speech`; provider exchange and health
-publish incompatible operation/receipt authorities; and timed recovery, tokenized group leases,
-atomic cache hits, multi-stage settlement and the learner's opponent-recovery journey are not yet
-buildable. `make provider-health-fourth-fresh-review` retains 17 prior author arms and reproduces all
-nine blockers. Both implementation checkpoints remain held for author repair and another review;
-receipt: `planning/provider-health-degradation/fourth-fresh-independent-buildability-review-2026-09-04.md`.
+The 2026-09-04 fourth provider-health author repair closes [[D2575]]–[[D2583]] at contract tier.
+Ten application operations compile onto eight provider-exchange identities; reasoning review and
+sealed-text speech now match the real route graph; monotonic recovery, tokenized group leases,
+atomic cache hits, durable opponent recovery and ordered multi-stage settlement are executable.
+`make provider-health-fourth-author-repair` retains 17 prior author controls and passes 6/6 new
+behavioral groups plus strict TypeScript. Both implementation checkpoints remain held for another
+genuinely fresh review and the provider-protocol/exchange prerequisites; receipt:
+`planning/provider-health-degradation/fourth-author-repair-2026-09-04.md`.
 
 The 2026-09-02 [[D2503]] repair keeps real-content truth while removing repeated whole-corpus work
 from its own test file: one 92-pack census supplies both declarations and the no-declarations view;
