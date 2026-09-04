@@ -14852,3 +14852,34 @@ reproduces 6/6. Exact receipt:
 `planning/storage-backup-recovery/third-fresh-independent-buildability-review-2026-09-04.md`.
 One bounded third author repair must close all six authorities before another fresh review or any
 production backup/restore implementation.
+
+## 2026-09-04 — Safe deployment second fresh review returns cross-process authority
+
+**What landed:** A fresh config/receipt/lifecycle review preserves the local/appliance/hosted
+topology, LAN-DNS journey, proxy graph and request-budget direction, but returns
+`safe-deployment-profiles` on [[D2614]]–[[D2618]]. No production server, Compose, Caddy, workflow,
+release, content, archive or protected-design byte changed.
+
+**What changed:** the claimed sole compiled config becomes unrelated environment strings at the app
+container; the executable model contains no runtime compiler; hosted success typechecks with empty
+checks/services and malformed identities; TLS byte rotation changes no artifact identity; and
+profile-switch refusal has no durable state or transition semantics.
+
+**Evidence/next:** `make safe-deployment-second-fresh-review` retains the author gate and reproduces
+5/5. Exact receipt:
+`planning/safe-deployment-profiles/second-fresh-independent-buildability-review-2026-09-04.md`.
+One bounded repair must close all five authorities before another fresh review or production
+deployment implementation.
+
+## 2026-09-04 — Whole-corpus reach census moved to its truthful CI tier
+
+**What landed:** [[D2619]] is closed. The construct reach census moved from
+`vocabulary-wiring.test.ts` to a declared real-content test, while its five synthetic wiring tests
+remain in the software tier. The tier checker now rejects an unlisted `constructReachReport()` test.
+
+**What changed:** normal `make verify` had timed the census out at the software tier's 5000 ms
+deadlock ceiling. The repair changes ownership, not the timeout: focused software is 181 files/1110
+tests green; content is 17 files/173 tests green.
+
+**Evidence/next:** `make test-tier-check`, `make test-software`, and `make test-content` are green.
+The safe-deployment checkpoint now returns to the complete `make verify` gate.

@@ -1,11 +1,10 @@
 # RFC: Safe deployment profiles and reverse proxy
 
-- **Status:** **draft — author-repaired 2026-08-31 after the fresh independent return on
-  [[D2214]]–[[D2218]]; another fresh independent buildability review is required.** The repair
-  publishes one typed config, literal LAN-DNS workflow, closed proxy network, exact route-operation
-  budget join, digest-pinned Caddy probe and versioned deployment receipt. `make
-  safe-deployment-author-repair` passes 8/8 plus the proposed TypeScript algebra. Implementation
-  remains unauthorized.
+- **Status:** **draft — RETURNED by the second fresh independent review 2026-09-04 on
+  [[D2614]]–[[D2618]].** The three-profile/network/budget direction survives, but cross-process config
+  authority, executable parsing, exact sealed receipts, TLS artifact identity and profile-switch
+  lifecycle remain unbuildable. `make safe-deployment-second-fresh-review` retains the author gate
+  and reproduces 5/5. Implementation remains unauthorized.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
@@ -741,6 +740,17 @@ positive/negative cases. This records author repair only: production, Compose, p
 workflow and release bytes remain untouched, and another independent review is mandatory before
 acceptance or implementation.
 
+### Second fresh independent return (2026-09-04)
+
+The repair is returned on five exact rows. [[D2614]] records that its sole compiled config cannot
+cross Compose into the app without an undeclared environment projection/parser. [[D2615]] records
+that the executable model implements no runtime config compiler. [[D2616]] records success receipts
+accepting empty/profile-impossible arrays and unparsed identities. [[D2617]] records TLS secret
+rotation changing no artifact identity. [[D2618]] records `PROFILE_SWITCH_REFUSED` having no durable
+state or transition rule. Exact evidence:
+`planning/safe-deployment-profiles/second-fresh-independent-buildability-review-2026-09-04.md`.
+`make safe-deployment-second-fresh-review` retains the prior 8/8 plus TypeScript and reproduces 5/5.
+
 ## Acceptance criteria
 
 1. The local profile starts from clean checkout with no config, reports the exact loopback URL,
@@ -807,6 +817,9 @@ implementation detail.
 
 ## Changelog
 
+- 2026-09-04: second fresh independent review returned the repair on [[D2614]]–[[D2618]];
+  cross-process config, runtime parsing, receipt, TLS identity and profile-transition authorities
+  require repair and another review before implementation.
 - 2026-08-31: author-repaired [[D2214]]–[[D2218]] with one typed configuration authority,
   operator-DNS appliance journey, three-edge proxy graph, exact route/budget join, Caddy capability
   pin/probe and closed deployment receipt. `make safe-deployment-author-repair` passes 8/8 plus

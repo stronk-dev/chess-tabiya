@@ -20894,6 +20894,60 @@
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"
+    },
+    {
+      "id": "D2614",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:939fefd2d2bdf9f105e144d03c5ba593d015f1bbcd4693d523ff1dabd7ca6a46",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D2615",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7bbe6ecdf58e3de21b9ce7d4846d3a50bf5b00befb9b04773d7c3784013608e2",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D2616",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1a0c1ff7877dfea073fa1654347fcf8175632b46aa19f35f22575e26a128efd8",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D2617",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4a057e6b12de9a3351a54f93772d50fa86b262f6b327ee30ff51dd3465abc4aa",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D2618",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f376aa5a5f0efec27439de9fc3dde6948a94d7b0e33785b6601d2d0270fc64cc",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D2619",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9bd2c6bdff8cc5f64d2a1b7e711d2eee1bc4efa9485f4f89e50670ef7482c679",
+      "uxItems": [],
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     }
   ]
 }

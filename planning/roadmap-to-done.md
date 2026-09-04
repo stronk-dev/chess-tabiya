@@ -1154,6 +1154,12 @@ the newest repair. Both were rebased without weakening their sites, versions or 
 negatives, and the sixth repair is now an aggregate dependency. The complete
 `make pack-capability-author-contract` is green.
 
+The 2026-09-04 [[D2619]] repair moves the whole-corpus construct reach census out of the 5-second
+parallel software unit tier into the declared real-content tier and extends `test-tier-check` to
+refuse future unlisted `constructReachReport()` consumers. The focused result is 181 software files /
+1110 tests and 17 content files / 173 tests green; no timeout was raised and the synthetic vocabulary
+tests remain fast software contracts.
+
 **1.0 exit:** documented commands reproduce CI without hijacking normal commits/pushes; every gate
 has one named test tier and failure meaning; product contracts use synthetic fixtures, content
 acceptance owns real-pack assertions, browser smoke uses stable semantic roles rather than mutable
@@ -1176,6 +1182,15 @@ caller-mintable; and rollback has no durable in-progress states despite an every
 promise. `make storage-backup-third-fresh-review` retains both author generations and reproduces all
 six. Backup/restore implementation and D608 remain held for repair and another fresh review;
 receipt: `planning/storage-backup-recovery/third-fresh-independent-buildability-review-2026-09-04.md`.
+
+The 2026-09-04 second fresh safe-deployment review returns its author repair on
+[[D2614]]–[[D2618]]. The topology survives, but one compiled config cannot cross the container
+boundary through unrelated environment strings; the proposed algebra has no runtime compiler;
+success proof admits empty/profile-impossible receipts; TLS rotation is absent from artifact
+identity; and profile switching has no durable state or transition rule. `make
+safe-deployment-second-fresh-review` retains the author gate and reproduces 5/5. Production profile
+implementation remains held for repair and another review; receipt:
+`planning/safe-deployment-profiles/second-fresh-independent-buildability-review-2026-09-04.md`.
 
 ## Production surface inventory
 

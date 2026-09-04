@@ -27,3 +27,14 @@ test("a named performance test cannot silently enter the generic software pool",
     "performance test is not assigned to the performance tier: apps/example/lookup-performance.test.ts",
   ]);
 });
+
+test("a whole-corpus census cannot silently enter the software tier", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "tabiya-test-tier-"));
+  t.after(() => rmSync(root, { recursive: true }));
+  mkdirSync(join(root, "apps/example"), { recursive: true });
+  mkdirSync(join(root, "packages/example"), { recursive: true });
+  writeFileSync(join(root, "apps/example/reach.test.ts"), "await constructReachReport()\n");
+  assert.deepEqual(validateTestTiers(root).filter((error) => error.includes("reach.test.ts")), [
+    "real-content test is not assigned to the content tier: apps/example/reach.test.ts",
+  ]);
+});

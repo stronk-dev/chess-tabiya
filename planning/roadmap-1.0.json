@@ -432,10 +432,10 @@
         "dependsOn": ["official-content"],
         "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
-          "at": "2026-08-31",
-          "summary": "Release proof remains blocked on official content and complete learner journeys; CI tier separation exists but is not release-candidate evidence.",
+          "at": "2026-09-04",
+          "summary": "Safe deployment's second fresh review returned cross-process config, runtime compiler, receipt, TLS identity and profile-transition authority. Release proof remains blocked on official content, complete learner journeys and repaired production deployment contracts.",
           "impact": "held",
-          "evidence": ["planning/roadmap-to-done.md", "deploy/compose.release.template.yaml"]
+          "evidence": ["rfc/safe-deployment-profiles.md", "planning/safe-deployment-profiles/second-fresh-independent-buildability-review-2026-09-04.md", "planning/roadmap-to-done.md", "deploy/compose.release.template.yaml"]
         },
         "exit": "Every core and breadth capability proves all applicable completion dimensions or has an explicit owner-approved descope; the owner can use the release without interpreting implementation vocabulary."
       }

@@ -14,6 +14,7 @@ export const CONTENT_CONTRACT_TESTS = Object.freeze([
   "apps/server/src/sourcing/explorer.test.ts",
   "apps/server/src/sourcing/graduation-clear.test.ts",
   "apps/server/src/validator-integrity.test.ts",
+  "apps/server/src/vocabulary-reach-content.test.ts",
   "packages/schema/src/drill-pack.test.ts",
 ]);
 

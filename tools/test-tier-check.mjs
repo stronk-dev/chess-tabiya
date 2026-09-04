@@ -8,6 +8,7 @@ import { CONTENT_CONTRACT_TESTS, PERFORMANCE_CONTRACT_TESTS } from "./test-tiers
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_PATH = /content\/(?:drafts|packs|candidates)\//u;
+const CONTENT_CENSUS = /\bconstructReachReport\s*\(/u;
 const PERFORMANCE_FILE = /-performance\.test\.ts$/u;
 
 function walk(directory) {
@@ -32,7 +33,7 @@ export function validateTestTiers(root = ROOT) {
     for (const absolute of walk(path.join(root, tier))) {
       const relative = path.relative(root, absolute);
       const source = fs.readFileSync(absolute, "utf8");
-      if (CONTENT_PATH.test(source) && !declared.has(relative)) {
+      if ((CONTENT_PATH.test(source) || CONTENT_CENSUS.test(source)) && !declared.has(relative)) {
         errors.push(`real-content test is not assigned to the content tier: ${relative}`);
       }
       if (PERFORMANCE_FILE.test(relative) && !performance.has(relative)) {
