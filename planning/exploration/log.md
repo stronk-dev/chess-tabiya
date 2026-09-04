@@ -15489,3 +15489,20 @@ registered operations.
 falsifiers. Exact receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-ninth-fresh-independent-buildability-review-2026-09-04.md`.
 One bounded author repair and another genuinely fresh review precede production or consumer work.
+
+## 2026-09-04 — Review evidence compiler second fresh independent return
+
+**What landed:** a fresh contract-tier review of the second Review compiler author repair, eight
+ledger findings [[D2685]]–[[D2692]], and maintained `make review-evidence-second-fresh-review`
+coverage. No production Review compiler, provider, route, UI, schema, content, archive or protected-
+design byte changed.
+
+**What changed:** the intended prose chain survives, but the executable author evidence does not
+compose its authorities. Packet/prefix seals are forgeable or mutable; folds lack exact node/family
+populations; concurrent reservation has no terminal-result handoff; source and presentation joins
+are regex-only; and the advertised second-author target is red at HEAD yet absent from `make verify`.
+
+**Evidence/next:** the maintained fresh target retains the original 6/6 and passes 8/8 falsifiers.
+Exact receipt:
+`planning/evidence-foundation-ux/review-evidence-compiler-second-fresh-independent-buildability-review-2026-09-04.md`.
+One bounded author repair and another fresh review precede production Review work.

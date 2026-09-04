@@ -678,6 +678,10 @@ review-evidence-fresh-review: review-evidence-author-contract
 review-evidence-second-author-repair: review-evidence-author-contract
 	node --test tools/d2631-review-evidence-second-author-repair/contract.test.mjs
 
+.PHONY: review-evidence-second-fresh-review
+review-evidence-second-fresh-review: review-evidence-author-contract
+	node --test tools/d2685-review-evidence-second-fresh-review/contract.test.mjs
+
 bot-policy-independent-review:
 	node --test tools/d1970-bot-policy-independent-review/*.test.mts
 

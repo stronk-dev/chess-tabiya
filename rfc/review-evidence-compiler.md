@@ -1,11 +1,12 @@
 # RFC: Review evidence compiler
 
-- **Status:** draft — second author repair 2026-09-04 for [[D2631]]–[[D2635]]; awaits another
-  fresh independent buildability review. The callable input/aggregate seal, orthogonal
-  progress/degradation fold, sealed presentation termination, recorded-prefix subject authority
-  and bounded non-evicting attempt-history owner are now specified and exercised by
-  `make review-evidence-second-author-repair`. No implementation is authorised before the fresh
-  review.
+- **Status:** draft — RETURNED by second fresh independent review on [[D2685]], [[D2686]],
+  [[D2687]], [[D2688]], [[D2689]], [[D2690]], [[D2691]] and [[D2692]]. The revised prose names the
+  intended authority chain, but the author model leaves aggregate/prefix seals forgeable or
+  mutable, folds no exact node/family populations, exposes reservation state without a concurrent
+  completion path, and regexes source/presentation integration. Its advertised target is red at
+  HEAD and absent from `make verify`. No implementation is authorised before repair and another
+  fresh review.
 - **Author:** codex, on the D717 evidence-foundation routing and the completed Wave-C C4 research
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` Review/Analyze surfaces;
@@ -702,6 +703,25 @@ The fresh return is closed in the specification, not waived:
 five able-to-fail repair arms. Another fresh independent review is still required before
 implementation.
 
+## Second fresh independent return (2026-09-04)
+
+The prose-level repair direction survives, but its executable evidence does not establish the
+composition. [[D2685]] and [[D2686]] show that an equal packet wrapper passes and a nested event
+head mutates behind the shallow subject seal. [[D2687]] and [[D2688]] show that anonymous node
+states and an arbitrary family object cannot prove exact path/family coverage: duplicates pass and
+an empty record is healthy/settled. [[D2689]] exposes an internal reservation to a concurrent
+reader without any waiter or shared completion path.
+
+[[D2690]] and [[D2691]] show that presentation and source-plan integration are regex assertions,
+not invoked constructors/serializers/parsers. [[D2692]] additionally reproduces the advertised
+second-author target red at HEAD: the live execution contract retains null input/assertion and an
+absent-seal blocker, while ordinary `make verify` does not execute that target.
+
+Exact review and reproducer:
+`planning/evidence-foundation-ux/review-evidence-compiler-second-fresh-independent-buildability-review-2026-09-04.md`;
+`make review-evidence-second-fresh-review`. A bounded author repair and another genuinely fresh
+review precede production.
+
 ## 8. Acceptance criteria
 
 1. **Typed shared delivery:** White/Black cp and mate fixtures compile into the one
@@ -813,6 +833,13 @@ The existing Story order is preserved only as a labelled compatibility conventio
 
 ## Changelog
 
+- 2026-09-04 second fresh independent review: returned on [[D2685]], [[D2686]], [[D2687]],
+  [[D2688]], [[D2689]], [[D2690]], [[D2691]] and [[D2692]]. Aggregate/prefix authority, exact fold
+  populations, concurrent attempt settlement and real source/presentation execution remain
+  unproven; the advertised author target is itself red and unenrolled. `make
+  review-evidence-second-fresh-review` retains the original 6/6 and passes 8/8 falsifiers. Exact
+  receipt:
+  `planning/evidence-foundation-ux/review-evidence-compiler-second-fresh-independent-buildability-review-2026-09-04.md`.
 - 2026-09-04 second author repair ([[D2631]]–[[D2635]]): publishes the exact compiler input,
   registry-derived source plan, recorded-prefix authority and aggregate packet seal; separates node
   and run availability with a total fold and orthogonal progress/degradation; replaces raw Story

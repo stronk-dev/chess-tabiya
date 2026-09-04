@@ -1115,6 +1115,14 @@ falsifiers pass under `make review-evidence-second-author-repair`. Full Review s
 review, dependency implementation and then production code. Receipt:
 `planning/evidence-foundation-ux/review-evidence-compiler-second-author-repair-2026-09-04.md`.
 
+The second fresh review returns that repair on [[D2685]]–[[D2692]]. Its aggregate and recorded-
+prefix seals are forgeable/mutable in the executable model; anonymous folds cannot prove exact
+path-node or closed-family coverage; attempt reservation has no concurrent terminal-result path;
+and source-plan/presentation integration is asserted only by matching prose. The review also finds
+the advertised second-author target red 4/5 against the live module contract and absent from
+ordinary verification. `make review-evidence-second-fresh-review` retains the original six controls
+and passes 8/8 new falsifiers. Full Review remains contract-blocked rather than implementation-ready.
+
 **1.0 exit:** native, bot, imported, social and campaign games compile to one Review Map: opening
 and phase arc; navigable move timeline; bounded grounded moments; separate grade, human rarity,
 theory, semantic change and exact endgame facts; correct learner-side result; decided-position
