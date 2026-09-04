@@ -980,6 +980,11 @@ safe-deployment-author-repair:
 safe-deployment-second-fresh-review: safe-deployment-author-repair
 	node --test tools/d2614-safe-deployment-second-fresh-review/contract.test.mjs
 
+.PHONY: safe-deployment-second-author-repair
+safe-deployment-second-author-repair: safe-deployment-author-repair
+	./node_modules/.bin/vitest run --config tools/d2614-safe-deployment-second-author-repair/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc -p tools/d2614-safe-deployment-second-author-repair/tsconfig.json
+
 .PHONY: shared-resource-bootstrap-author-contract shared-resource-bootstrap-fresh-review shared-resource-bootstrap-author-repair shared-resource-bootstrap-second-fresh-review shared-resource-bootstrap-second-author-repair shared-register-reconciliation-author-repair shared-resource-bootstrap-third-fresh-review shared-resource-bootstrap-third-author-repair shared-resource-bootstrap-fourth-author-repair shared-resource-bootstrap-fourth-fresh-review shared-resource-bootstrap-fifth-author-repair shared-resource-bootstrap-sixth-fresh-review shared-resource-bootstrap-sixth-author-repair
 shared-resource-bootstrap-author-contract:
 	node --test tools/d2363-shared-resource-bootstrap-author-contract/contract.test.mjs

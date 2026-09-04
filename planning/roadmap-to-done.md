@@ -1294,14 +1294,14 @@ storage-backup-third-author-repair` retains 23 prior controls and passes 6/6 new
 plus strict TypeScript. Backup/restore implementation and D608 remain held for another genuinely
 fresh review; receipt: `planning/storage-backup-recovery/third-author-repair-2026-09-04.md`.
 
-The 2026-09-04 second fresh safe-deployment review returns its author repair on
-[[D2614]]–[[D2618]]. The topology survives, but one compiled config cannot cross the container
-boundary through unrelated environment strings; the proposed algebra has no runtime compiler;
-success proof admits empty/profile-impossible receipts; TLS rotation is absent from artifact
-identity; and profile switching has no durable state or transition rule. `make
-safe-deployment-second-fresh-review` retains the author gate and reproduces 5/5. Production profile
-implementation remains held for repair and another review; receipt:
-`planning/safe-deployment-profiles/second-fresh-independent-buildability-review-2026-09-04.md`.
+The 2026-09-04 second safe-deployment author repair closes [[D2614]]–[[D2618]] at the draft tier.
+One mounted canonical image crosses into and is attested by the app; runtime config compilation and
+exact profile/operation proof are executable; live TLS identity records chain/SPKI/leaf changes; and
+durable explicit migration distinguishes initialization/restart/profile change while invalidating
+sessions and public tokens before new ingress. `make safe-deployment-second-author-repair` retains
+8/8 prior controls and passes 5/5 new behavioral groups plus strict TypeScript. Production profile
+implementation remains held for another genuinely fresh review; receipt:
+`planning/safe-deployment-profiles/second-author-repair-2026-09-04.md`.
 
 ## Production surface inventory
 

@@ -15200,3 +15200,20 @@ groups plus strict TypeScript. Exact receipt:
 `planning/storage-backup-recovery/third-author-repair-2026-09-04.md`. Another genuinely fresh
 independent review still gates acceptance and production implementation; D608 and appliance
 recovery credit remain held.
+
+## 2026-09-04 — Safe deployment profiles second author repair
+
+**What landed:** The bounded contract-tier repair for [[D2614]]–[[D2618]] and maintained
+`make safe-deployment-second-author-repair` target. No production server, config, Compose, Caddy,
+workflow, release, storage, schema, client, content, archive or protected-design byte changed.
+
+**What changed:** one canonical compiled image crosses and is attested inside the app process; an
+unknown-input runtime compiler closes config/file/secret input; exact success tuples derive from
+sealed live results; proxied start/probe bind safe TLS chain/SPKI/leaf identities; and durable
+explicit profile/origin migration invalidates sessions and public tokens before target ingress.
+
+**Evidence/next:** the maintained target retains 8/8 prior controls and passes 5/5 new behavioral
+groups plus strict TypeScript. Exact receipt:
+`planning/safe-deployment-profiles/second-author-repair-2026-09-04.md`. Another genuinely fresh
+independent review still gates acceptance and production implementation; F12-A, D607, D1846 and
+D1847 receive no premature completion credit.

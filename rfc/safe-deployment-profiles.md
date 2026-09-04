@@ -1,10 +1,11 @@
 # RFC: Safe deployment profiles and reverse proxy
 
-- **Status:** **draft — RETURNED by the second fresh independent review 2026-09-04 on
-  [[D2614]]–[[D2618]].** The three-profile/network/budget direction survives, but cross-process config
-  authority, executable parsing, exact sealed receipts, TLS artifact identity and profile-switch
-  lifecycle remain unbuildable. `make safe-deployment-second-fresh-review` retains the author gate
-  and reproduces 5/5. Implementation remains unauthorized.
+- **Status:** **draft — second author repair completed 2026-09-04 on [[D2614]]–[[D2618]]; another
+  genuinely fresh independent review is required.** One canonical compiled image crosses the
+  container boundary; runtime parsing, exact sealed receipts, TLS identity and durable profile
+  transitions are executable. `make safe-deployment-second-author-repair` retains the prior 8/8
+  author controls and passes 5/5 new behavioral groups plus strict TypeScript. Implementation
+  remains unauthorized.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
@@ -17,6 +18,32 @@
 ```tabiya-claims
 none
 ```
+
+## Second author repair (2026-09-04)
+
+The five returned seams are repaired as one cross-process deployment authority:
+
+1. **[[D2614]]:** the compiler emits one RFC-8785-canonical, read-only
+   `/run/tabiya/deployment.json`. Compose, Caddy rendering, the application and receipts consume or
+   attest that exact image and its digest; profile/origin/listen/cookie environment strings are
+   deleted as authorities.
+2. **[[D2615]]:** `compileDeploymentConfig` parses UTF-8 JSON with duplicate-key rejection, closes
+   each union arm, validates the config and secret-file inode/permission observations, applies
+   defaults and emits canonical config/image digests or a typed refusal.
+3. **[[D2616]]:** operation ids, SHA-256 identities, origins and elapsed time are runtime parsed.
+   Check/start/probe have exact profile-specific check and service tuples compiled from privately
+   sealed live results; empty, forged, reordered or profile-impossible success cannot be emitted.
+4. **[[D2617]]:** successful proxied start/probe receipts carry the observed leaf, SPKI and chain
+   SHA-256 identities plus exact SAN hostname and validity interval. Rotation changes the live
+   artifact identity without exposing private-key bytes.
+5. **[[D2618]]:** `/data/.tabiya-deployment-state.json` distinguishes empty-database initialization,
+   same-origin restart and explicit origin/profile migration. Migration is journalled and invalidates
+   authenticated sessions then public tokens before the target may bind public traffic.
+
+`make safe-deployment-second-author-repair` retains 8/8 prior author controls and passes 5/5 new
+behavioral groups plus strict TypeScript. Exact receipt:
+`planning/safe-deployment-profiles/second-author-repair-2026-09-04.md`. This is author evidence, not
+acceptance or implementation; another genuinely fresh independent review remains required.
 
 ## Summary
 
@@ -98,6 +125,14 @@ interface DeploymentBoundary {
   readonly behindBundledProxy: boolean;
   readonly secureCookie: boolean;
 }
+declare const compiledDeploymentConfigBrand: unique symbol;
+type CompiledDeploymentConfig = {
+  readonly [compiledDeploymentConfigBrand]: true;
+  readonly config: DeploymentConfigV1;
+  readonly boundary: DeploymentBoundary;
+  readonly configDigest: Sha256;
+};
+type Sha256 = string & { readonly __sha256: unique symbol };
 ```
 
 Operator input is one UTF-8 JSON document with no duplicate keys and this closed union:
@@ -129,7 +164,21 @@ type DeploymentConfigError =
   | "PROFILE_HYBRID_REFUSED" | "PORT_INVALID" | "HOSTNAME_INVALID"
   | "RESOLUTION_INVALID" | "SECRET_PATH_INVALID" | "SECRET_NOT_REGULAR"
   | "SECRET_SYMLINK_REFUSED" | "SECRET_PERMISSIONS_REFUSED" | "SECRET_COLLISION";
+
+function compileDeploymentConfig(
+  bytes: Uint8Array,
+  configFile: OpenRegularFileAuthority,
+  secretResolver: SecretFileResolver,
+): DeploymentConfigResult;
 ```
+
+This is an executable `unknown`-input compiler, not a structural cast. Its JSON tokenizer refuses a
+duplicate key before `JSON.parse` output can collapse it; the runtime parser closes the root and
+nested key sets for the selected discriminant. File authority carries the no-follow `lstat`/`fstat`
+inode and mode observations, and file-certificate compilation executes the distinct-inode,
+permission, parse, key-match and SAN checks. Hostname/address/port/email validation, local-port
+defaulting, address deduplication/sorting, canonicalization and digesting all occur before the
+private brand is constructed. Every refusal arm has an altered-input fixture ([[D2615]]).
 
 The parser rejects unknown/missing keys per union arm. The config path is absolute, opened with
 no-follow semantics, and must remain the same regular inode from `lstat` through `fstat`; it must not
@@ -149,21 +198,89 @@ The compiler alone derives `publicOrigin`: `http://127.0.0.1:<port>` for local a
 proxy trust, certificate mode outside the selected arm, or rendered environment variables.
 
 Canonical config digest is RFC-8785 SHA-256 over the parsed union after defaulting local port and
-normalizing/sorting appliance addresses. The same compiled `DeploymentConfigResult` is the sole
-input to server environment, Compose/Caddy rendering, validation, start and receipts; those
-consumers never reparse environment folklore. The config/receipt implementation is server-owned and
-unpersisted: callers invoke its parser/verifier rather than copy the union. It therefore claims no
-shared schema lane; a second independent writer/parser or persisted config format must register it.
+normalizing/sorting appliance addresses. The compiler then emits exactly one non-secret
+cross-process image:
+
+```ts
+interface CompiledDeploymentImageV1 {
+  readonly format: "tabiya-compiled-deployment";
+  readonly version: 1;
+  readonly configDigest: Sha256;
+  readonly boundary: DeploymentBoundary;
+}
+```
+
+Its canonical bytes are written into an operation-owned directory, fsynced, mounted read-only at
+the fixed path `/run/tabiya/deployment.json`, and covered by `compiledConfigImageDigest`. The
+renderer and Caddy generator consume the branded in-memory source; the separate application process
+reparses the mounted canonical image, recomputes its digest, validates every profile/origin/listen/
+cookie relation, and refuses before opening storage or HTTP on mismatch. Its internal readiness
+attestation returns that image digest to `deployment-admin`; Caddy strips the attestation from public
+responses. Compose labels, start/probe receipts and the attestation must all equal the renderer's
+image digest. A changed mount therefore cannot produce success or receive public traffic
+([[D2614]]).
+
+No `TABIYA_DEPLOYMENT_PROFILE`, `TABIYA_PUBLIC_ORIGIN`, `TABIYA_LISTEN_HOST`,
+`TABIYA_COOKIE_SECURE` or equivalent value remains an application authority. The only deployment
+selector inside the app container is the fixed mounted image path. Operator source config remains
+unpersisted; only the narrow install/transition state in §1.1 is durable. The config/receipt/state
+implementation is owned by one server module, so it claims no shared schema lane; a second
+independent writer/parser must first register the resource.
 
 Development tests may construct this value directly. A production process may not infer profile
 from `NODE_ENV`, `TABIYA_COOKIE_SECURE`, forwarded headers, or whether a Caddy container happens to
 be reachable. `NODE_ENV` continues to govern development-only code; it is not a deployment safety
 switch.
 
-The profile vocabulary is local to the server/deployment contract, not a shared-resource register
-claim. It is not persisted, exported in a schema, or independently writable by another RFC. The
-public `/capabilities` response may report the active profile as deployment metadata only after the
-same server value is compiled into that response; it may not accept or change it.
+The profile vocabulary is local to the one server/deployment module, not a shared-resource register
+claim. That module alone parses the operator source, compiled image and durable install state; none
+is exported as a product schema or independently writable by another RFC. The public
+`/capabilities` response may report the active profile as deployment metadata only after the same
+server value is compiled into that response; it may not accept or change it.
+
+### 1.1 Durable install and profile-transition state
+
+`deployment-admin` is the sole reader/writer of canonical
+`/data/.tabiya-deployment-state.json`, under the storage supervisor's inherited FD-3 lock. The file
+is a versioned operational state, written by exclusive temporary file, file fsync, rename and parent
+fsync. The app does not parse it; it consumes only the compiled mounted image after preflight.
+
+An absent state is a clean install only when storage inspection proves the database is absent/empty.
+Initialization durably records generation 1 before the app may listen; failed startup leaves that
+same intended generation for an idempotent retry. An existing database with no state refuses
+`DEPLOYMENT_STATE_MISSING`; a database restored into a fresh volume must use the explicit
+adoption journey below, so missing state cannot silently bless restored sessions or links under a
+new origin. The deployment state is deliberately not part of a SQLite backup.
+
+The active arm records generation, profile, canonical public origin, config digest and compiled-
+image digest. A restart may replace config/TLS bytes only when profile and public origin are equal;
+its next successful receipt atomically advances the active digests. Certificate rotation is
+therefore an ordinary same-origin restart but changes the TLS identity in §13.1. A profile change,
+scheme/hostname/port change or absent-state/existing-database combination is refused by ordinary
+`start` with `PROFILE_SWITCH_REFUSED` or `DEPLOYMENT_STATE_MISSING`.
+
+Intentional change uses `deployment-migrate-profile` (or `deployment-adopt-profile` after a restore)
+with the exact current config digest and literal old/new origins as confirmations. The durable
+transition arm records one parsed operation id, consecutive generation, complete from/to active
+images and exactly these fsynced phases:
+
+1. `prepared` — target config/artifacts validate but no target public socket exists;
+2. `sessions_invalidated` — one SQLite transaction deletes every `learner_sessions` row;
+3. `tokens_revoked` — a following idempotent transaction marks every live `public_tokens` row
+   revoked;
+4. `target_ready` — the new app/proxy is internally ready and its compiled-image/TLS identities
+   match the intended target, but ingress is not yet bound; and
+5. `active` — public ingress is switched, the next generation is committed and the journal is
+   removed only after file/parent fsync.
+
+Session invalidation and token revocation both commit before `target_ready`; the separate journal
+labels make restart reconciliation explicit rather than replaying a guessed half-effect. A
+crash resumes the earliest incomplete phase after checking the recorded database effect and
+artifact digests. It never rolls back to valid old sessions after invalidation. Old LAN DNS, client
+trust and certificate removal remain operator effects shown before confirmation; the command cannot
+claim those external effects. A fixture crashes before/after every database transaction, state
+write, bind and fsync and reaches either the old active generation before invalidation or the new
+active generation with all old sessions/tokens invalid ([[D2618]]).
 
 ### 2. Profile matrix
 
@@ -186,13 +303,14 @@ and operational trust only. Core journeys never require `hosted` or an external 
 port. Documentation opens exactly the configured `127.0.0.1` origin rather than alternating with
 `localhost`, because origin equality includes host and port.
 
-The server receives:
+The local container receives the same fixed read-only compiled image as every other profile. Its
+validated boundary contains:
 
 ```text
-TABIYA_DEPLOYMENT_PROFILE=local
-TABIYA_PUBLIC_ORIGIN=http://127.0.0.1:<published-port>
-TABIYA_LISTEN_HOST=0.0.0.0   # inside its private container namespace only
-TABIYA_COOKIE_SECURE=false
+profile=local
+publicOrigin=http://127.0.0.1:<published-port>
+listenHost=0.0.0.0           # inside its private container namespace only
+secureCookie=false
 ```
 
 The external loopback constraint is enforced in the rendered Compose/packaging boundary, because a
@@ -267,7 +385,7 @@ generic default for a public client-IP authority.
 
 ### 6. Public origin and proxy trust
 
-`TABIYA_PUBLIC_ORIGIN` parses as one canonical origin with:
+The mounted compiled image's `publicOrigin` parses as one canonical origin with:
 
 - `http` only for `local`, `https` only otherwise;
 - no username/password, path other than `/`, query, fragment, wildcard, trailing dot, or default
@@ -526,6 +644,28 @@ explicit service restart unless the owning provider contract specifies hot reloa
 effect per secret. Caddy manages its own ACME/internal keys in its private volume; only the public
 root/certificate chain may be exported by the appliance trust command.
 
+Secret bytes remain excluded from `configDigest`, but successful proxied `start` and `probe`
+observe the served certificate through the literal public hostname and parse one `TlsIdentityV1`:
+
+```ts
+interface TlsIdentityV1 {
+  readonly leafSha256: Sha256;
+  readonly spkiSha256: Sha256;
+  readonly chainSha256: Sha256;
+  readonly subjectAltName: readonly [string]; // exact configured hostname
+  readonly notBefore: string;                 // canonical UTC instant
+  readonly notAfter: string;
+}
+```
+
+The leaf, DER SubjectPublicKeyInfo and complete ordered DER chain have separate SHA-256 domains.
+The certificate must be valid at the probe's wall-clock instant, the chain must validate under the
+profile's declared trust root and SAN must be exactly the configured hostname. Private-key bytes,
+serial-number prose and issuer display strings never enter a receipt. A same-path certificate
+rotation changes at least the leaf/chain identity; a key rotation changes SPKI. A proxied live
+success without this identity, or a local success carrying one, is profile-impossible and refused
+([[D2617]]).
+
 ### 12. Health, readiness, and failure behavior
 
 - `/healthz` is liveness: the HTTP event loop responds with no provider or database mutation.
@@ -550,41 +690,69 @@ reconstruct success from container logs. The operation vocabulary is closed:
 
 ```ts
 type DeploymentAdminOperation = "command" | "check" | "start" | "probe";
+type DeploymentOperationId = string & { readonly __deploymentOperationId: unique symbol };
 type DeploymentCheckId =
   | "config" | "hostname_resolution" | "certificate" | "compose"
   | "proxy_config" | "image_pins" | "network_graph" | "origin"
   | "cookie" | "request_budgets" | "streaming" | "readiness" | "core_journey";
-type DeploymentArtifactIdentityV1 = {
+type DeploymentArtifactCommonV1 = {
   readonly deploymentRevision: string;
-  readonly serverImageDigest: `sha256:${string}`;
-  readonly caddyImageDigest: `sha256:${string}` | null;
-  readonly composeDigest: `sha256:${string}`;
-  readonly caddyConfigDigest: `sha256:${string}` | null;
-  readonly routeBudgetManifestDigest: `sha256:${string}`;
+  readonly serverImageDigest: Sha256;
+  readonly composeDigest: Sha256;
+  readonly routeBudgetManifestDigest: Sha256;
+  readonly compiledConfigImageDigest: Sha256;
 };
+type LocalArtifactIdentityV1 = DeploymentArtifactCommonV1 & {
+  readonly caddyImageDigest: null; readonly caddyConfigDigest: null; readonly tlsIdentity: null;
+};
+type ProxyStaticArtifactIdentityV1 = DeploymentArtifactCommonV1 & {
+  readonly caddyImageDigest: Sha256; readonly caddyConfigDigest: Sha256; readonly tlsIdentity: null;
+};
+type ProxyLiveArtifactIdentityV1 = DeploymentArtifactCommonV1 & {
+  readonly caddyImageDigest: Sha256; readonly caddyConfigDigest: Sha256;
+  readonly tlsIdentity: TlsIdentityV1;
+};
+type DeploymentArtifactIdentityV1 =
+  | LocalArtifactIdentityV1 | ProxyStaticArtifactIdentityV1 | ProxyLiveArtifactIdentityV1;
+type LocalCheckChecks = readonly ["config", "compose", "image_pins", "network_graph"];
+type ProxyCheckChecks = readonly ["config", "hostname_resolution", "compose", "proxy_config",
+  "image_pins", "network_graph"];
+type LocalStartChecks = readonly ["config", "compose", "image_pins", "network_graph", "readiness"];
+type ProxyStartChecks = readonly ["config", "hostname_resolution", "certificate", "compose",
+  "proxy_config", "image_pins", "network_graph", "readiness"];
+type LocalProbeChecks = readonly ["config", "compose", "image_pins", "network_graph", "origin",
+  "cookie", "request_budgets", "streaming", "readiness", "core_journey"];
+type ProxyProbeChecks = readonly ["config", "hostname_resolution", "certificate", "compose",
+  "proxy_config", "image_pins", "network_graph", "origin", "cookie", "request_budgets",
+  "streaming", "readiness", "core_journey"];
 interface DeploymentReceiptBaseV1 {
   readonly protocol: "tabiya-deployment-admin-receipt";
   readonly protocolVersion: 1;
-  readonly operationId: string; // canonical UUID generated once at process entry
+  readonly operationId: DeploymentOperationId; // parsed/generated canonical UUID v4
   readonly operation: DeploymentAdminOperation;
   readonly profile: DeploymentProfile;
-  readonly configDigest: `sha256:${string}`;
+  readonly configDigest: Sha256;
+  readonly compiledConfigImageDigest: Sha256;
   readonly publicUrl: string;   // exactly the compiler-derived canonical publicOrigin
   readonly elapsedMs: number;  // non-negative integer from a monotonic clock
 }
 type DeploymentAdminReceiptV1 = DeploymentReceiptBaseV1 & (
+  | { readonly operation: "check"; readonly profile: "local"; readonly result: "succeeded";
+      readonly artifacts: LocalArtifactIdentityV1; readonly checks: LocalCheckChecks }
   | { readonly operation: "check"; readonly result: "succeeded";
-      readonly artifacts: DeploymentArtifactIdentityV1;
-      readonly checks: readonly ("config" | "hostname_resolution" | "certificate"
-        | "compose" | "proxy_config" | "image_pins" | "network_graph")[] }
+      readonly profile: "appliance" | "hosted"; readonly artifacts: ProxyStaticArtifactIdentityV1;
+      readonly checks: ProxyCheckChecks }
+  | { readonly operation: "start"; readonly result: "succeeded"; readonly profile: "local";
+      readonly artifacts: LocalArtifactIdentityV1; readonly services: readonly ["app"];
+      readonly checks: LocalStartChecks }
   | { readonly operation: "start"; readonly result: "succeeded";
-      readonly artifacts: DeploymentArtifactIdentityV1;
-      readonly services: readonly ("app" | "caddy")[];
-      readonly checks: readonly ("config" | "compose" | "proxy_config"
-        | "image_pins" | "network_graph" | "readiness")[] }
+      readonly profile: "appliance" | "hosted"; readonly artifacts: ProxyLiveArtifactIdentityV1;
+      readonly services: readonly ["app", "caddy"]; readonly checks: ProxyStartChecks }
+  | { readonly operation: "probe"; readonly result: "succeeded"; readonly profile: "local";
+      readonly artifacts: LocalArtifactIdentityV1; readonly checks: LocalProbeChecks }
   | { readonly operation: "probe"; readonly result: "succeeded";
-      readonly artifacts: DeploymentArtifactIdentityV1;
-      readonly checks: readonly DeploymentCheckId[] }
+      readonly profile: "appliance" | "hosted"; readonly artifacts: ProxyLiveArtifactIdentityV1;
+      readonly checks: ProxyProbeChecks }
   | { readonly result: "refused"; readonly code: DeploymentRefusalCode }
   | { readonly result: "failed"; readonly code: DeploymentFailureCode;
       readonly failedCheck: DeploymentCheckId | null }
@@ -594,7 +762,7 @@ type DeploymentAdminReceiptV1 = DeploymentReceiptBaseV1 & (
 type DeploymentRefusalCode =
   | "USAGE_ERROR" | "CONFIG_REFUSED" | "PROFILE_HYBRID_REFUSED"
   | "SECRET_REFUSED" | "HOSTNAME_RESOLUTION_REFUSED"
-  | "ARTIFACT_IDENTITY_REFUSED" | "PROFILE_SWITCH_REFUSED";
+  | "ARTIFACT_IDENTITY_REFUSED" | "PROFILE_SWITCH_REFUSED" | "DEPLOYMENT_STATE_MISSING";
 type DeploymentFailureCode =
   | "COMPOSE_VALIDATION_FAILED" | "PROXY_VALIDATION_FAILED"
   | "IMAGE_PIN_MISMATCH" | "NETWORK_GRAPH_FAILED" | "START_FAILED"
@@ -604,13 +772,17 @@ type DeploymentFailureCode =
 ```
 
 Successful `check` means the exact rendered artifacts and pins validate without starting learner
-traffic. Successful `start` means those same artifact digests were started and readiness passed;
-`services` is exactly `["app"]` for local and `["app", "caddy"]` for appliance/hosted. Successful
-`probe` means the running deployment with those same identities passed the complete profile-
-applicable check set: local omits hostname/certificate/proxy checks, while appliance/hosted require
-them. Check lists are canonical, duplicate-free and sorted by the enum order above. A receipt cannot
-substitute an omitted check with prose. `probe` refuses if the live container/image/config identity
-does not equal the preceding start/check identity.
+traffic, so certificate is not falsely claimed for an as-yet unstarted ACME/internal deployment.
+Successful `start` means the exact live profile tuple above passed; `services` is structurally
+`["app"]` for local and `["app", "caddy"]` for appliance/hosted. Successful `probe` uses the complete
+profile tuple. The compiler selects the tuple from operation and parsed profile, accepts only
+privately sealed results returned by exact live operations, and rejects empty, missing, extra,
+duplicate, reordered, failed, forged or differently operation-bound results. A public enum/boolean
+pass factory does not exist. Local artifacts require all Caddy/TLS fields null; proxy check requires
+static Caddy identity and no invented live certificate; proxy start/probe require the observed TLS
+identity. `probe` refuses unless live container/image/config identities equal the preceding start
+identity, with a deliberate certificate-rotation transition recorded as a new start identity
+([[D2616]]).
 
 Every invocation writes exactly one RFC-8785-canonical JSON value followed by one newline and no
 other stdout bytes. Diagnostics and progress use stderr only. Unknown fields or versions,
@@ -622,14 +794,18 @@ validation, uses a monotonic clock and is never a performance gate.
 
 `configDigest` is the canonical digest from §1, including the synthesized default-local config.
 Artifact digests cover the exact bytes consumed by Docker/Caddy; image identities are registry
-digests, never mutable tags. `publicUrl` is the compiler output, not a request-derived URL. Receipts
+digests, never mutable tags. SHA-256 values use one exact 64-lower-hex parser; operation id uses one
+UUID-v4 parser/generator; `publicUrl` reparses and must equal the compiler output; and `elapsedMs` is
+a non-negative safe integer from a monotonic clock. `compiledConfigImageDigest` is equal in the
+base, artifacts, Compose label and application attestation. Receipts
 contain logical operation/profile/check identities only: no host secret paths, certificate bytes,
 container environment, credentials, learner data or arbitrary logs.
 
-This remains one server-owned, non-persisted CLI protocol: the implementation exports one parser,
+This remains one server-owned CLI protocol: the implementation exports one parser,
 verifier and serializer, and every TypeScript/Make/CI/F12-H consumer invokes or imports those exact
 symbols. F12-H may retain the canonical receipt bytes as release evidence but does not implement a
-second parser or writer. A persisted product schema, a non-server writer, or an independently
+second parser or writer. Only the §1.1 operational install state is persisted by this same module;
+receipts and operator source config are not. A persisted product schema, a non-server writer, or an independently
 implemented parser is a second authority and must first enter the shared-resource register.
 
 The release publishes:
@@ -652,6 +828,8 @@ make up-appliance CONFIG=<file>
 make appliance-ca-export OUT=<absolute-file>
 make up-hosted CONFIG=<file>
 make deployment-check PROFILE=<local|appliance|hosted> CONFIG=<file-if-required>
+make deployment-migrate-profile CONFIG=<new-file> FROM_DIGEST=<sha256> OLD_ORIGIN=<url> NEW_ORIGIN=<url>
+make deployment-adopt-profile CONFIG=<file> RESTORED_DATABASE=yes NEW_ORIGIN=<url>
 ```
 
 Wrappers validate configuration, render Compose, run `caddy validate`, print the exact public URL,
@@ -663,7 +841,7 @@ customization is explicitly unsupported rather than exposed as dozens of learner
 
 ### 14. Code-site inventory
 
-The unit is a production or verification boundary consuming the profile. Total **15**; acceptance
+The unit is a production or verification boundary consuming the profile. Total **16**; acceptance
 criterion 15 derives and checks the same set.
 
 | # | Boundary | Required change |
@@ -683,6 +861,7 @@ criterion 15 derives and checks the same set.
 | 13 | `tools/verify-packaging.mjs` | image/profile/config/secret/public-port static assertions |
 | 14 | `.github/workflows/verify.yml` and release workflow | direct + proxy production-boundary jobs and rendered artifacts |
 | 15 | `docs/deployment.md` | one canonical guided topology/diagnostic/security contract |
+| 16 | `apps/server/src/deployment-admin.ts` | sole config/image/state/receipt compiler, durable transition orchestration and exact success proof |
 
 ## Deviations from design
 
@@ -786,9 +965,10 @@ state or transition rule. Exact evidence:
 13. `/readyz` stays unavailable until storage/application/static-shell readiness, exposes no
     sensitive details, and is what Caddy checks. Optional Maia/provider loss does not conflate core
     readiness with F12-D capability health.
-14. `caddy validate`, `docker compose config`, cold start, restart, certificate-state persistence,
-    server/proxy failure, and profile-switch refusal pass on the built release artifacts.
-15. A derived census is set-equal to all 15 code-site boundaries in §14 and fails on an unclassified
+14. `caddy validate`, `docker compose config`, cold start, same-origin restart, certificate-state
+    persistence, server/proxy failure, implicit profile/origin-switch refusal and explicit profile
+    migration pass on the built release artifacts.
+15. A derived census is set-equal to all 16 code-site boundaries in §14 and fails on an unclassified
     public port, mutable/unpinned proxy image, new unsafe route without a body budget, or direct use
     of request Host/forwarded headers as absolute-URL authority.
 16. Browser smoke exercises local plus both proxied profiles at desktop and phone widths; it uses
@@ -797,8 +977,25 @@ state or transition rule. Exact evidence:
     named production-boundary tier with retained diagnostics and no latency micro-thresholds.
 18. Canonical docs make the safe default and supported topology obvious, include CA trust removal,
     secret rotation, backup/recovery interaction, and an explicit unsupported-proxy message.
-19. D607, D1846, and D1847 close only when criteria 1–18 pass and the implementation commit updates
+19. D607, D1846, and D1847 close only when criteria 1–24 pass and the implementation commit updates
     the ledger plus append-only exploration log.
+20. Config compiler negatives cover invalid JSON, duplicate/unknown/missing keys, every wrong union
+    arm, noncanonical hostname/address/port, symlink/inode/permission changes, secret collision,
+    certificate/key mismatch, defaulting and canonical digest drift. No structural cast can create
+    the private compiled brand.
+21. The rendered canonical image is mounted read-only at the fixed path and reparsed by the built
+    app. Changed profile/origin/listen/cookie bytes, image digest, Compose label or internal readiness
+    attestation refuse before public traffic; no profile/origin/cookie environment value is read.
+22. Check/start/probe compile the exact local/proxied tuples in §13.1. Empty, missing, extra,
+    duplicate, reordered, forged, cross-operation and profile-impossible checks/services/artifacts
+    fail; every successful proxied start/probe carries a currently valid chain/SPKI/leaf identity.
+23. TLS fixtures rotate certificate only, key only and full chain at unchanged secret paths. Each
+    changes the applicable safe fingerprint, and wrong SAN, expired/not-yet-valid, untrusted chain,
+    missing TLS on a proxied live receipt and non-null TLS on local all fail.
+24. Clean empty storage initializes once; existing storage with missing state refuses; same-origin
+    config/TLS restart advances digests; implicit profile/origin change refuses. Explicit migration
+    crash-tests every journal/database/bind/fsync boundary and cannot serve the target until all
+    learner sessions and public tokens are invalidated.
 
 ## Discharges
 
@@ -817,6 +1014,13 @@ implementation detail.
 
 ## Changelog
 
+- 2026-09-04: second author repair completed [[D2614]]–[[D2618]]. One canonical mounted
+  image crosses into the app; the runtime compiler closes unknown input; operation/profile success
+  tuples derive from sealed live results; proxied live receipts bind TLS chain/SPKI/leaf identity;
+  and durable explicit transitions distinguish initialization, restart and origin/profile migration.
+  `make safe-deployment-second-author-repair` retains 8/8 prior controls and passes 5/5 new groups
+  plus strict TypeScript. No production/deployment/workflow/release byte changed; another genuinely
+  fresh independent review remains required.
 - 2026-09-04: second fresh independent review returned the repair on [[D2614]]–[[D2618]];
   cross-process config, runtime parsing, receipt, TLS identity and profile-transition authorities
   require repair and another review before implementation.

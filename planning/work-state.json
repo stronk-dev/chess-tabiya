@@ -20899,7 +20899,7 @@
       "id": "D2614",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:939fefd2d2bdf9f105e144d03c5ba593d015f1bbcd4693d523ff1dabd7ca6a46",
+      "sourceDigest": "sha256:7c56a2cef7d6e3f2f14f8a9b14ce336bf494a4fe27f8d0b963dd2e275f29bfb5",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:safe-deployment-profiles.md"
@@ -20908,7 +20908,7 @@
       "id": "D2615",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7bbe6ecdf58e3de21b9ce7d4846d3a50bf5b00befb9b04773d7c3784013608e2",
+      "sourceDigest": "sha256:dda7423113421ae9e4039080a32c9ce34d2f3f835dae3f9cb80a5176cef806f3",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:safe-deployment-profiles.md"
@@ -20917,7 +20917,7 @@
       "id": "D2616",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1a0c1ff7877dfea073fa1654347fcf8175632b46aa19f35f22575e26a128efd8",
+      "sourceDigest": "sha256:04080357db2a5944b0bb615388c00d252701bb51d5ec6b27779708200284d8d1",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:safe-deployment-profiles.md"
@@ -20926,7 +20926,7 @@
       "id": "D2617",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4a057e6b12de9a3351a54f93772d50fa86b262f6b327ee30ff51dd3465abc4aa",
+      "sourceDigest": "sha256:9ecfeeeabc85cd337efbdecb2ab354023df056727edd05ab3ab246e0e2c37d7f",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:safe-deployment-profiles.md"
@@ -20935,7 +20935,7 @@
       "id": "D2618",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f376aa5a5f0efec27439de9fc3dde6948a94d7b0e33785b6601d2d0270fc64cc",
+      "sourceDigest": "sha256:1e299a00aa298aeed5e98e60f33b9401afd5ffef5ae8e37cec65162e1246423f",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:safe-deployment-profiles.md"

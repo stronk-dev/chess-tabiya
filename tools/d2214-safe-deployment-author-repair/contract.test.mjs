@@ -85,7 +85,7 @@ test("D2218: one discriminated receipt binds check, start and probe to artifact 
   for (const identity of ["serverImageDigest", "caddyImageDigest", "composeDigest", "caddyConfigDigest", "routeBudgetManifestDigest"]) {
     assert.ok(receipt.includes(identity), `missing artifact identity ${identity}`);
   }
-  assert.match(receipt, /live container\/image\/config identity[\s\S]*?preceding start\/check identity/);
+  assert.match(receipt, /live container\/image\/config identities equal the preceding start[\s\S]*?identity/);
 });
 
 test("D2218: stdout grammar, exit map and ownership are closed", () => {
@@ -93,6 +93,7 @@ test("D2218: stdout grammar, exit map and ownership are closed", () => {
   assert.match(receipt, /exactly one RFC-8785-canonical JSON value followed by one newline and no[\s\S]*?other stdout bytes/);
   assert.match(receipt, /Exit status is `0` only for `succeeded`, `2` for `refused`, `3`/);
   assert.match(receipt, /`4` only for `INTERNAL_ERROR`/);
-  assert.match(receipt, /one server-owned, non-persisted CLI protocol/);
+  assert.match(receipt, /one server-owned CLI protocol/);
+  assert.match(receipt, /receipts and operator source config are not/);
   assert.match(receipt, /persisted product schema, a non-server writer, or an independently[\s\S]*?shared-resource register/);
 });
