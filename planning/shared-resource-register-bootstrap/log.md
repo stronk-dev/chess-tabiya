@@ -39,3 +39,16 @@ named sequential heads.
 `make shared-resource-bootstrap-fifth-author-repair` passes 5/5; the prior 4/4, 8/8, 8/8 and 6/6
 author controls remain green. No engine, catalogue, register or product byte landed. Another fresh
 independent review is required before acceptance.
+
+## 2026-09-04 — Seventh fresh review returns the projection authority
+
+The sixth repair closes its bounded descriptor-id, object-payload, root-membership and overload
+defects, but a fresh pass reproduced [[D2593]]–[[D2597]]. TypeScript graph bytes are not parsed or
+constructed from their declared ABI; selector validation admits invalid paths/forms while the
+resolver cannot handle a valid seed export; `Object.freeze` is recognized by text despite local
+shadowing; retained declarations are selected by name rather than symbol reachability; and both
+canonical and TypeScript semantics mutate after their digest is fixed.
+
+`make shared-resource-bootstrap-seventh-fresh-review` passes 5/5. No engine, catalogue, register,
+product or protected-design byte landed. A bounded seventh author repair and another genuinely
+fresh review are required before acceptance.

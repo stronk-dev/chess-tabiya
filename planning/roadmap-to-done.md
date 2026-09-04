@@ -120,13 +120,13 @@ Primary RFCs: `measurement-records`, `shared-resource-register-bootstrap`, `work
 bootstrap RFC owns the product-byte-free absent-root protocol needed before a new versioned shared
 resource can be claimed.
 
-The 2026-09-04 sixth bootstrap author repair closes the four exact false-green boundaries returned
-by fresh review: atomic resources now bind to their descriptor id and require an object payload;
-TypeScript selectors, graph roots, retained nodes and program roots form one exact join; and every
-same-name overload declaration retains its own ordered identity. [[D2559]]–[[D2562]] are closed at
-the authoring tier with an executable 4/4 repair receipt and all prior author controls retained.
-The RFC remains draft: another genuinely fresh independent review must reconstruct those repairs
-before the generic catalogue engine or any product authority may be implemented.
+The 2026-09-04 sixth bootstrap author repair closes its four bounded predecessor defects, but the
+seventh fresh review returns the generic projection engine on [[D2593]]–[[D2597]]. The TypeScript
+projector accepts incomplete programs, duplicate nodes and dangling edges; selector admission
+accepts invalid paths it cannot resolve while rejecting a valid seed root; shadowed `Object.freeze`
+splits static/runtime resource bytes; name matching replaces symbol reachability; and nested
+semantics mutate behind fixed digests. `make shared-resource-bootstrap-seventh-fresh-review`
+reproduces 5/5. A seventh author repair and another review precede catalogue implementation.
 
 The same-day eleventh `pack-capability-contract` author repair closes its seven bounded predecessor
 defects ([[D2563]]–[[D2569]]), but the subsequent fresh review returns the durable foundation on

@@ -1,9 +1,11 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — sixth author repair complete 2026-09-04 on [[D2559]]–[[D2562]]. Canonical
-  resources now bind id and object payload to their descriptor; TypeScript projections require an
-  exact selector/root/node/program join; and retained declaration identity preserves every
-  same-name overload. A fresh independent review is required; no implementation is authorized.
+- **Status:** draft — **RETURNED by the seventh fresh independent review 2026-09-04 on
+  [[D2593]]–[[D2597]].** The bounded descriptor/object/root/overload repairs survive, but the
+  TypeScript projector accepts an incomplete/dangling graph; selector admission and resolution are
+  incompatible; shadowed `Object.freeze` splits static and runtime authority; retained nodes remain
+  name-based; and semantic payloads mutate behind fixed digests. `make
+  shared-resource-bootstrap-seventh-fresh-review` reproduces 5/5. No implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -715,6 +717,23 @@ form one exact join; and retained declarations are an ordered list that preserve
 new 4/4 author contract retains empty/extra/crossed graph negatives and all three non-object payload
 negatives. Another genuinely fresh review still gates acceptance and implementation.
 
+The seventh fresh review preserves those bounded repairs and returns five deeper projection
+authorities:
+
+- [[D2593]] requires the complete `TypeScriptGraphV1` program/node/edge ABI rather than root-only
+  membership around arbitrary caller bytes;
+- [[D2594]] unifies normalized repository selector admission with the resolver that must implement
+  every seed and follow-on root/descent form;
+- [[D2595]] binds the admitted `Object.freeze` wrapper to the global intrinsic so static and runtime
+  resource bytes cannot diverge;
+- [[D2596]] derives retained declarations from compiler-symbol reachability rather than identifier
+  spelling; and
+- [[D2597]] makes projected semantic payloads recursively immutable under their digest.
+
+`make shared-resource-bootstrap-seventh-fresh-review` reproduces all five. They require a bounded
+seventh author repair and another fresh independent review; no engine/catalogue implementation is
+authorized while these seams remain open.
+
 ## Acceptance criteria
 
 1. Catalogue and README register populations are set-equal; no `RESOURCE_NAMES`, `SCHEMA_SLUGS` or
@@ -770,6 +789,12 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-04: returned by seventh fresh independent buildability review on [[D2593]]–[[D2597]].
+  TypeScript graphs remain caller-controlled/incomplete, selector grammars disagree, shadowed
+  `Object.freeze` splits static/runtime bytes, retained nodes are name-based and projected semantic
+  values remain mutable. `make shared-resource-bootstrap-seventh-fresh-review` reproduces 5/5;
+  receipt:
+  `planning/shared-resource-register-bootstrap/seventh-fresh-independent-buildability-review-2026-09-04.md`.
 - 2026-09-04: sixth author repair on [[D2559]]–[[D2562]]. Canonical descriptor/payload binding,
   exact TypeScript root closure and overload-safe retained declaration identity now pass
   `make shared-resource-bootstrap-sixth-author-repair` 4/4. Another fresh independent review is

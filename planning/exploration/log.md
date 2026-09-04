@@ -14779,3 +14779,21 @@ rewind/restart.
 A bounded twelfth author repair must retain every earlier control while joining complete run
 effects, recursive request identity, actual snapshots/transitions, all origins and a durable
 monotone result allocator before another fresh review or implementation.
+
+## 2026-09-04 — Shared-resource bootstrap seventh fresh review returns projection closure
+
+**What landed:** A fresh projection-model review preserves the bounded [[D2559]]–[[D2562]] repair
+and returns `shared-resource-register-bootstrap` on [[D2593]]–[[D2597]]. No catalogue engine,
+register, product, schema, API, storage, content, web or protected-design byte changed.
+
+**What changed:** the TypeScript projector can digest an incomplete program, duplicate node ids and
+dangling invented edges. Selector admission accepts URL/backslash/illegal segment paths while its
+resolver cannot handle a valid seed export. A shadowed local `Object.freeze` creates different
+certified and runtime resources; same-name declarations enter without symbol reachability; and
+nested semantic values mutate behind fixed digests.
+
+**Evidence/next:** `make shared-resource-bootstrap-seventh-fresh-review` reproduces 5/5. Exact
+receipt:
+`planning/shared-resource-register-bootstrap/seventh-fresh-independent-buildability-review-2026-09-04.md`.
+A bounded seventh author repair must close the graph, selector, intrinsic, symbol and immutability
+authorities before another fresh review or implementation.

@@ -711,6 +711,10 @@ pack-capability-eleventh-author-repair:
 pack-capability-eleventh-fresh-review:
 	node --test tools/d2587-pack-capability-eleventh-fresh-review/contract.test.mjs
 
+.PHONY: shared-resource-bootstrap-seventh-fresh-review
+shared-resource-bootstrap-seventh-fresh-review:
+	node --test tools/d2593-shared-resource-bootstrap-seventh-fresh-review/contract.test.mjs
+
 .PHONY: semantic-collectors-promotion-fifth-fresh-review semantic-collectors-promotion-fifth-author-repair
 semantic-collectors-promotion-fifth-fresh-review:
 	node --test tools/d2548-semantic-collectors-promotion-fifth-fresh-review/contract.test.mjs
