@@ -160,6 +160,15 @@ shared-resource-bootstrap-eighth-author-repair` retains fourteen earlier control
 new repairs. Another genuinely fresh review still precedes acceptance and implementation. Receipt:
 `planning/shared-resource-register-bootstrap/eighth-author-repair-2026-09-04.md`.
 
+The ninth fresh independent review returned that repair on [[D2667]]–[[D2672]]. The selected-commit
+host still falls back to untracked working-tree bytes, treats mutable `node_modules` as repository
+source without a lock identity, embeds machine-absolute TypeScript-library paths, orphans retained
+merged declarations, drops property receivers and accepts malformed nested graph ABI. `make
+shared-resource-bootstrap-ninth-fresh-review` retains nineteen prior controls and passes 7/7 new
+falsifiers. The critical path remains one bounded author repair and another genuinely fresh review;
+no production catalogue/register implementation is authorized. Receipt:
+`planning/shared-resource-register-bootstrap/ninth-fresh-independent-buildability-review-2026-09-04.md`.
+
 The same-day twelfth `pack-capability-contract` author repair closes [[D2587]]–[[D2592]] at contract
 tier without claiming production. One transaction-owned before/after run result derives the exact
 core/objective/recorded-guard journal suffix and receipt; the complete nested objective request is

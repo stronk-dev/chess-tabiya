@@ -15400,3 +15400,22 @@ exist.
 6/6 repair groups; it is included by `verify-governance`, the local/GitHub owner for RFC contracts.
 Exact receipt: `planning/concept-registry/first-author-repair-2026-09-04.md`. Another genuinely fresh
 review and the shared-resource bootstrap still gate production implementation.
+
+## 2026-09-04 — Shared-resource bootstrap ninth fresh independent return
+
+**What landed:** a genuinely fresh contract-tier review of the eighth shared-resource bootstrap
+author repair, six ledgered findings [[D2667]]–[[D2672]], and maintained `make
+shared-resource-bootstrap-ninth-fresh-review` coverage. No production catalogue, register,
+checker, schema, content, application, API, archive or protected-design byte changed.
+
+**What changed:** exact-commit projection is still not closed over the commit or portable across
+machines. Repository host fallback admits untracked source; dependency classification admits
+mutable `node_modules` without lock identity; TypeScript library IDs expose absolute installation
+paths; merged declarations can orphan; property receivers disappear; and nested graph values are
+not recursively asserted.
+
+**Evidence/next:** the target retains nineteen earlier controls and passes 7/7 new falsifiers.
+Exact receipt:
+`planning/shared-resource-register-bootstrap/ninth-fresh-independent-buildability-review-2026-09-04.md`.
+One bounded author repair must close all six before another genuinely fresh review can accept the
+RFC or authorize production bootstrap implementation.

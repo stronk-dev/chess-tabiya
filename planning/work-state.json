@@ -21371,6 +21371,60 @@
       "sourceDigest": "sha256:d38311f9b026b3880e3dc2176346f823f43687f8564eb71f40e97f45a311ecb9",
       "uxItems": [],
       "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2667",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:82cac6c33907c7a29f09d25dd3cac1ff9b743eed9fee06776327b6eb9c5e07fb",
+      "uxItems": [],
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2668",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:615d2abfeeaa800da8ca0d76711755ee69c937b634fd70f10b6172bf73ad6096",
+      "uxItems": [],
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2669",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:093cc72b80647242f1c5edb9ff602647ff316b6397a4f1bd28469bf3c26dfe2a",
+      "uxItems": [],
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2670",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:400f18038d297efc5badb0378f002c651a0f81f40d0f2ecfbc1b194ab1dea16c",
+      "uxItems": [],
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2671",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4bdc5a91cc755870c2e9da20988a8f181a7e14d8b69a754709c146b7553abbbd",
+      "uxItems": [],
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2672",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:bcb036268ea8bff0363a84111cdff877047a651f08f43d64b2e86c415164af30",
+      "uxItems": [],
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
     }
   ]
 }

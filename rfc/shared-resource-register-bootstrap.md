@@ -1,11 +1,11 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **eighth author repair completed on [[D2645]]–[[D2649]]; another genuinely
-  fresh independent review is required.** The projector now reads an exact Git commit under actual
-  compiler/config identity, traverses typed compiler-symbol edges, resolves re-export targets,
-  enforces the canonical scalar domain and maps roots to complete declaration sets so overloads are
-  representable. `make shared-resource-bootstrap-eighth-author-repair` retains fourteen earlier
-  controls and passes five new repair controls. No implementation is authorized.
+- **Status:** draft — **RETURNED by the ninth fresh independent review on [[D2667]]–[[D2672]].** The
+  eighth repair survives, but the pinned host admits untracked repository/package bytes; external
+  IDs are machine-absolute; merged library symbols orphan themselves; property receivers disappear;
+  and the graph assertion accepts malformed nested ABI fields. `make
+  shared-resource-bootstrap-ninth-fresh-review` retains nineteen controls and passes 7/7 new
+  falsifiers. Author repair and another fresh review precede implementation.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -864,6 +864,20 @@ zero numbers and unpaired surrogates in values or keys before a digest exists ([
 evidence only. Another genuinely fresh independent review still gates acceptance and every
 production implementation. Receipt:
 `planning/shared-resource-register-bootstrap/eighth-author-repair-2026-09-04.md`.
+
+### Ninth fresh independent return (2026-09-04)
+
+The next independent pass returned the projector on [[D2667]], [[D2668]], [[D2669]], [[D2670]],
+[[D2671]] and [[D2672]]. Standard-host fallback admits untracked repository and `node_modules`
+bytes outside the selected Git tree; installed package declarations can be misclassified as
+repository nodes; external IDs embed absolute paths; merged library symbols retain unreachable
+declarations; property-access receivers are skipped; and the nested graph ABI is not recursively
+validated.
+
+`make shared-resource-bootstrap-ninth-fresh-review` retains all nineteen predecessor controls and
+passes 7/7 new falsifiers. Exact receipt:
+`planning/shared-resource-register-bootstrap/ninth-fresh-independent-buildability-review-2026-09-04.md`.
+No production implementation is authorized until all six are repaired and freshly reviewed.
 
 ## Acceptance criteria
 
