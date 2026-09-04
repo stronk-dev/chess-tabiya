@@ -14833,3 +14833,22 @@ receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-sixth-fresh-independent-buildability-review-2026-09-04.md`.
 A bounded sixth author repair must unify the maintained gate, constructor, sealed result and exact
 source/operand mapping before a seventh fresh review; provider/value dependencies remain separate.
+
+## 2026-09-04 — Storage backup/recovery third fresh review returns appliance safety authority
+
+**What landed:** A fresh lock/publication/operation/crash review preserves the stopped-service,
+online-snapshot, immutable-bundle and staged replacement direction, but returns
+`storage-backup-recovery` on [[D2608]]–[[D2613]]. No production storage, image, Compose, workflow,
+schema, migration, operator-doc, content, archive or protected-design byte changed.
+
+**What changed:** the independent contention probe cannot distinguish inherited ownership from a
+foreign lock holder; publication omits the bundle-directory fsync after removing its validity
+marker; prepare success requires readiness before `main.js` exists; any caller can mint a sealed
+semantic pass; the owning operation id accepts arbitrary strings; and rollback has no durable
+substate for a crash partway through restoring main/WAL/SHM.
+
+**Evidence/next:** `make storage-backup-third-fresh-review` retains both author generations and
+reproduces 6/6. Exact receipt:
+`planning/storage-backup-recovery/third-fresh-independent-buildability-review-2026-09-04.md`.
+One bounded third author repair must close all six authorities before another fresh review or any
+production backup/restore implementation.

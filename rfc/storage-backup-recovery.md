@@ -1,13 +1,11 @@
 # RFC: Storage backup, restore, upgrade, and recovery
 
-- **Status:** **draft — second author repair complete 2026-09-02 on
-  [[D2460]]–[[D2464]]; another fresh independent review is required.** Inherited lock authority now
-  requires an independent same-inode contention proof; cleanup is total over work, reserved and
-  published states; installed bytes become durable before the keep-new journal phase; bundle ids
-  come only from an exact runtime parser; and success receipts derive exact operation-specific
-  tuples from sealed passed checks. `make storage-backup-second-author-repair` retains the prior
-  8 controls and passes 15 new falsifiers plus strict TypeScript. Implementation remains
-  unauthorized.
+- **Status:** **draft — RETURNED by the third fresh independent review 2026-09-04 on
+  [[D2608]]–[[D2613]].** The second repair's stopped-service/snapshot/bundle direction survives, but
+  lock attribution, marker-removal durability, prepare/readiness lifetime, semantic check authority,
+  operation identity and crash-during-rollback recovery remain unbuildable.
+  `make storage-backup-third-fresh-review` retains both author generations and reproduces 6/6.
+  Implementation remains unauthorized.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
@@ -56,6 +54,22 @@ The five returned seams are repaired as one authority chain, without production 
 `make storage-backup-second-author-repair` preserves the first repair's 8/8 controls and passes 15
 new able-to-fail arms plus strict TypeScript. This is author evidence, not acceptance or production
 authorization; another genuinely fresh independent review remains mandatory.
+
+## Third fresh independent return (2026-09-04)
+
+The second repair is returned on six remaining authority/crash seams. [[D2608]] shows that
+same-inode plus an independently blocked probe cannot attribute the lock to inherited FD 3 when a
+foreign process may be the actual owner. [[D2609]] catches the publication commit fsyncing the
+backup root rather than the bundle directory whose `.publishing` entry was removed. [[D2610]]
+separates prepare-time storage checks from readiness that can exist only after `main.js` starts.
+[[D2611]] shows the exported generic check factory can mint every semantic pass without executing a
+check. [[D2612]] requires the operation id to become a parsed/generated identity rather than a
+commented plain string. [[D2613]] requires durable rollback-in-progress subphases so a second crash
+during multi-file restoration does not become the mixed state the RFC refuses.
+
+`make storage-backup-third-fresh-review` retains 8 first-repair controls, 15 second-repair
+falsifiers, both strict TypeScript checks and reproduces the six new findings. Exact evidence:
+`planning/storage-backup-recovery/third-fresh-independent-buildability-review-2026-09-04.md`.
 
 ## Summary
 
@@ -774,6 +788,12 @@ Another genuinely fresh independent review is required before acceptance or impl
 
 ## Changelog
 
+- 2026-09-04: third fresh independent review returned the second repair on [[D2608]]–[[D2613]].
+  Lock contention cannot identify the inherited owner; publication omits the post-unlink bundle-dir
+  fsync; prepare success claims pre-HTTP readiness; semantic checks and operation ids remain
+  caller-mintable; and rollback has no crash-recoverable substate. The retained author gates and
+  six new falsifiers pass under `make storage-backup-third-fresh-review`; implementation remains
+  unauthorized pending repair and another review.
 - 2026-09-02: second author repair completed [[D2460]]–[[D2464]]. Descriptor validation now proves
   actual lock ownership by independent contention; cleanup is total over the real publication
   states; durable installed bytes precede the keep-new journal phase; every bundle identity is a
