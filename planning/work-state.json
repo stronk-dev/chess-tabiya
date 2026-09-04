@@ -20303,39 +20303,39 @@
     },
     {
       "id": "D2548",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a7a61c8dfcfe45630b15421ef335ac353494bab39277e0b1ef3099052084aaac",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:684455b158f939058987074da0605d1f4c5a562a00776bf4d652dbe890046822",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "evidence": "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2549",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:44c3fcea8ba1994a2b9eee7ebc2cae480119027357b27d982178ee2098cc70cf",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:85522c038b182f2bf97c42c8468f053ba20deeaf0f8a268e67d019edb379cb4a",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "evidence": "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2550",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2b6e655a8023992818dee1f49e270aec60f78cf7afb0c3b02f33be59af78439f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:67ea39818e168552f009ccb5d141952767a76326fb0d1b046da66739f8d1d90a",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "evidence": "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2551",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:410f3f8c0b8f5c3a844abae11c51fbc92d0b7ae72ce0fff96dad89b73de349d5",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5ca43951d681717813f6fddd6893a2a29f01bf5da381d7fa04b946d64f34821b",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "evidence": "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2552",
@@ -20389,6 +20389,15 @@
       "sourceDigest": "sha256:ba412205fe96caa8d437ca8ad309ddb6b63a7a02b8581ce9a3d3744a1bdb4875",
       "uxItems": [],
       "evidence": "planning/learner-modules/ninth-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2558",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f9b83aa6213261995a0cfdefd42935c84aeb3121efb8d36dc199a5b31d4e3651",
+      "uxItems": [],
+      "evidence": "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-author-repair-2026-09-04.md",
       "evidenceKind": "path"
     }
   ]

@@ -16,7 +16,7 @@ test("D2141: geometry requires and retains the exact sealed pawn authority", () 
   assert.match(promotion, /type PawnContactsEvidence = DeclaredEvidence<PawnContactsReading>/u);
   assert.match(promotion, /type PromotionRaceGeometryEvidence = DeclaredEvidence<PromotionRaceGeometry>/u);
   assert.match(promotion, /input: PawnContactsEvidence/u);
-  assert.match(promotion, /output: PromotionRaceGeometryEvidence/u);
+  assert.match(promotion, /kind: "evidence"; item: PromotionRaceGeometryEvidence/u);
   for (const negative of ["unsealed lookalike", "wrong producer/id/version", "mutations of `passed`, blocker"]) {
     assert.match(promotion, new RegExp(negative.replaceAll("/", "\\/"), "u"));
   }
@@ -47,8 +47,10 @@ test("D2143: outside-domain is a third literal grounded path in a total result a
   }
   assert.match(promotion, /source: DeclaredEvidence<ProviderLocalDomainResult<"syzygy\.position@1">>/u);
   assert.match(promotion, /collectPromotionRaceTablebase/u);
-  assert.match(promotion, /provider scheduler itself for the exact geometry FEN/u);
-  assert.match(promotion, /requires its branded digest to equal the local-domain envelope/u);
-  assert.match(promotion, /Callers[\s\S]*cannot pass a structural `ProviderSourceFailure`/u);
+  assert.match(promotion, /scheduler's operation-keyed digest authority\s+binds the one exact geometry-FEN request to the local-domain envelope/u);
+  assert.match(promotion, /dependencies\.scheduler\.normalizedRequestDigest\(typedRequest\)/u);
+  const request = promotion.slice(promotion.indexOf("interface PromotionRaceTablebaseRequest"), promotion.indexOf("interface PromotionRaceTablebaseDependencies"));
+  assert.doesNotMatch(request, /ProviderSourceFailure/u);
+  assert.match(promotion, /providerReason: ProviderSourceFailure<"syzygy\.position@1">\["reason"\]/u);
   assert.match(promotion, /Substituting provider failure for domain evidence/u);
 });

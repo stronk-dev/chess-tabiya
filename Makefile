@@ -684,9 +684,13 @@ pack-capability-ninth-fresh-review:
 pack-capability-tenth-author-repair:
 	node --test tools/d2542-pack-capability-tenth-author-repair/contract.test.mjs
 
-.PHONY: semantic-collectors-promotion-fifth-fresh-review
+.PHONY: semantic-collectors-promotion-fifth-fresh-review semantic-collectors-promotion-fifth-author-repair
 semantic-collectors-promotion-fifth-fresh-review:
 	node --test tools/d2548-semantic-collectors-promotion-fifth-fresh-review/contract.test.mjs
+
+semantic-collectors-promotion-fifth-author-repair:
+	node --test tools/d2548-semantic-collectors-promotion-fifth-author-repair/contract.test.mjs
+	./node_modules/.bin/tsc -p tools/d2548-semantic-collectors-promotion-fifth-author-repair/tsconfig.contract.json --noEmit
 
 .PHONY: semantic-collectors-deflection-authority-fresh-review
 semantic-collectors-deflection-authority-fresh-review:

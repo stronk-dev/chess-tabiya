@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:3c4dfe6ec08703727cbb1dcfe21f1d76fc52ac371c563de887b07609c437bb81",
+    "roadmap": "sha256:836552ab07e948d3e3a0b0540457aaef5572ca474660a072bd32705dfdd5c2c0",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:b14ed42e6b4ff82c864f0f02f63081a08eba4cde311a6beb12c9f0f9ce206f14",
-    "rfcRegister": "sha256:20595a73b22fb7768b510a222a3238ec04b96771cc25c2083bbb27bf1a7f2bc4",
+    "workState": "sha256:eb3e33b297115e86c323d7ed7992abade1597dff173377f91e2827035b14e4ad",
+    "rfcRegister": "sha256:6fb8d3b558480b058a2168a382c0b050a9f354cf06c1dd941681cbe01e1b6271",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 866,
-      "done": 798,
+      "blocked": 862,
+      "done": 803,
       "refused": 3
     },
     "workItems": {
@@ -110,7 +110,7 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Module registration's ninth author repair now binds the live deflection check projection, selector, sealed constructor and emitter while preserving the genuinely absent recorded-path occurrence operation. All 205 bindings remain dependency-blocked; fresh review, promotion and wider returned foundations remain separate blockers.",
+        "summary": "The held promotion pair now has a fifth author repair: one scheduler-owned normalized request digest, exact move/pawn/source operands, and the correct position-reading grain. Module registration still awaits fresh review, and all held production remains dependency-blocked.",
         "impact": "advanced",
         "evidence": [
           "planning/learner-modules/ninth-author-repair-2026-09-04.md",
@@ -178,7 +178,7 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Deflection check authority is live and its module requirement now names that exact authority instead of a stale missing-check blocker. The recorded-path occurrence source remains genuinely unbuilt, all module bindings remain held for fresh review, and promotion's four returned event-boundary gaps remain separate.",
+        "summary": "Deflection check authority is live, and promotion's four returned boundary gaps are author-repaired with an exact provider join and position-reading ABI. The recorded-path operation, fresh reviews, provider/value authority and all module emissions remain genuinely unbuilt or held.",
         "impact": "advanced",
         "evidence": [
           "planning/learner-modules/ninth-author-repair-2026-09-04.md",

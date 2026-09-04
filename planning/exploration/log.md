@@ -14604,3 +14604,20 @@ is still refused.
 **Evidence/next:** `make module-registration-ninth-author-repair` passes retained 11/11 + 6/6 +
 2/2. Another genuinely fresh review must reproduce the repaired boundary before acceptance or any
 module implementation.
+
+## 2026-09-04 — held promotion pair receives a fifth bounded author repair
+
+**What landed:** [[D2548]]–[[D2551]] are author-repaired across `semantic-collectors` and its shared
+provider dependency. The provider now owns the closed operation-keyed request digest; the promotion
+value retains exact move, pawn, geometry and source operands; and the position-only tablebase result
+is a reading rather than an event with a manufactured edge.
+
+**What changed:** optional precise DTZ has one `?? null` mapping; underpromotions and tied first
+pawns remain exact objects; every provider arm correlates its sealed result to the scheduler's
+normalized request digest. [[D2558]] records and repairs earlier positive gates that went red on
+corrected wording/event grain without losing their underlying invariants.
+
+**Evidence/next:** all five retained author generations plus the new 4/4 and strict TypeScript gate
+pass. This is not acceptance: a sixth genuinely fresh review must reconstruct the repair, and the
+provider/value-authority dependencies remain separate holds before either promotion projection can
+enter production.

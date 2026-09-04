@@ -36,7 +36,7 @@ test("D2181: an available outcome has one sealed receipt retaining every exact i
     assert.match(types, new RegExp(`readonly ${field}:`, "u"));
   }
   assert.match(types, /WeakSet<PromotionRaceTablebaseDerivationReceipt>/u);
-  assert.match(types, /kind: "evidence";[\s\S]*item: PromotionRaceTablebaseEvidence;[\s\S]*derivation: PromotionRaceTablebaseDerivationReceipt/u);
+  assert.match(types, /kind: "reading";[\s\S]*item: PromotionRaceTablebaseEvidence;[\s\S]*derivation: PromotionRaceTablebaseDerivationReceipt/u);
   assert.match(promotion, /derivation\.output === item/u);
   assert.match(promotion, /Replacing the legal map or source after construction[\s\S]{0,100}fails/u);
 });

@@ -7,11 +7,13 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair completed its fourth author repair 2026-09-02 on [[D2521]], [[D2522]] and
-  [[D2523]], then was **RETURNED by fifth fresh independent review on [[D2548]]–[[D2551]].** The
-  source repair survives, but request-digest construction, the exact output/operand ABI and a real
-  semantic-event occurrence remain unbuildable. `make semantic-collectors-promotion-fifth-fresh-review`
-  passes 4/4 findings; a fifth author repair and sixth fresh review gate implementation. The
+  promotion pair completed its **fifth author repair 2026-09-04 on [[D2548]]–[[D2551]]** after the
+  fifth fresh review returned its projection boundary. The repair adds one shared normalized-request
+  digest authority, preserves exact legal moves and pawn participants, seals the complete public
+  reading value, and reclassifies the position-only tablebase result from an event to a reading
+  instead of manufacturing a move occurrence. `make semantic-collectors-promotion-fifth-author-repair`
+  passes the retained author gates plus the new four-arm contract; a sixth genuinely fresh review
+  still gates implementation. The
   request now owns a canonical full-FEN parser and total recorded lookup, uses the actual shared
   provider scheduler plus operation-keyed source factory with deterministic request bytes, and
   requires a module-sealed aggregate geometry completion before its zero-call fast path. Geometry and recorded tablebase inputs
@@ -724,7 +726,7 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
   wrapper carrying correct ids and false contacts, a value minted by another factory, an equal
   rebuilt input, unsealed lookalike, wrong producer/id/version, and mutations of `passed`, blocker,
   pawn identity or FEN all fail before geometry calculation.
-- `derived.pawn.promotion_race_tablebase@1` — *derived event* with exactly three literal
+- `derived.pawn.promotion_race_tablebase@1` — *derived reading* with exactly three literal
   `derivation.anyOf` members, in this order:
 
   1. geometry + `rules.mobility.reading.legal_moves@1` +
@@ -745,9 +747,17 @@ Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
   The live projection is the receipt-bearing in-domain result from
   `provider-exchange-and-execution` §7. Its separate local
   `rules.endgame.tablebase_domain@1` fact is accepted only by member 3 and grounds an unavailable
-  result; it is never an outcome substitute. The event
-  retains `category`, `dtz`, `preciseDtz`, `immediatePromotion` and `promotionFirst`; its sealed
-  derivation receipt retains `geometry`, the exact legal map and the selected whole source.
+  result; it is never an outcome substitute. The reading is anchored to the geometry's canonical
+  full FEN and retains `geometry`, the selected whole `source`, `category`, `dtz`, normalized
+  `preciseDtz`, the exact legal-move objects in `immediatePromotion`, and the exact `PawnIdentity`
+  participants in `promotionFirst`; its sealed derivation receipt retains that same geometry,
+  exact legal map and selected whole source by reference. It is deliberately **not** a semantic
+  event: no move caused the tablebase category, and the position-only operation has no authoritative
+  before-FEN / triggering-UCI / after-FEN edge. It therefore declares
+  `disposition: "inspector_only"` and enters position evidence packets through the ordinary F1
+  reading path; it is absent from `SEMANTIC_EVENT_DECLARATIONS` and
+  `research.semantic_selection@1`. A future before/after race transition must be a separately
+  declared derived event over two exact readings and a real run edge.
   `promotionWithCheck` is deliberately absent. The existing
   `rules.tactic.event.check@1` exact factory remains the sole check authority; candidate-packet or
   consumer composition joins its exact before-FEN/triggering-move identity to an immediate
@@ -833,6 +843,18 @@ declare function makePromotionRaceSyzygyRequest(
   scope: ProviderRequestScope,
 ): TypedProviderRequest<"syzygy.position@1">;
 
+interface PromotionRaceProviderInvocationReceipt {
+  readonly request: TypedProviderRequest<"syzygy.position@1">;
+  readonly requestDigest: ProviderRequestDigest;
+  readonly result: TypedProviderResult<"syzygy.position@1">;
+}
+
+declare const PROMOTION_RACE_PROVIDER_INVOCATIONS:
+  WeakSet<PromotionRaceProviderInvocationReceipt>;
+declare function assertPromotionRaceProviderInvocation(
+  value: unknown,
+): asserts value is PromotionRaceProviderInvocationReceipt;
+
 type PromotionRaceTablebaseSource =
   | Readonly<{
       kind: "recorded";
@@ -843,14 +865,18 @@ type PromotionRaceTablebaseSource =
       evidence: DeclaredEvidence<
         ProviderEvidenceDelivery<LiveSyzygyPosition, "syzygy.position@1">
       >;
+      invocation: PromotionRaceProviderInvocationReceipt;
     }>;
 
 interface PromotionRaceTablebaseValue {
+  readonly fen: CanonicalFullFen;
+  readonly geometry: PromotionRaceGeometry;
+  readonly source: PromotionRaceTablebaseSource;
   readonly category: TablebaseCategory;
   readonly dtz: number | null;
   readonly preciseDtz: number | null;
-  readonly immediatePromotion: readonly CanonicalUci[];
-  readonly promotionFirst: "white" | "black" | "same_ply";
+  readonly immediatePromotion: readonly ExactLegalMove[];
+  readonly promotionFirst: readonly PawnIdentity[];
 }
 
 type PromotionRaceTablebaseEvidence = DeclaredEvidence<PromotionRaceTablebaseValue>;
@@ -869,7 +895,7 @@ declare function assertPromotionRaceTablebaseDerivation(
 
 type PromotionRaceTablebaseResult =
   | Readonly<{
-      kind: "evidence";
+      kind: "reading";
       item: PromotionRaceTablebaseEvidence;
       derivation: PromotionRaceTablebaseDerivationReceipt;
     }>
@@ -878,6 +904,8 @@ type PromotionRaceTablebaseResult =
       reason: "outside_tablebase_domain";
       geometry: PromotionRaceGeometryEvidence;
       source: DeclaredEvidence<ProviderLocalDomainResult<"syzygy.position@1">>;
+      requestDigest: ProviderRequestDigest;
+      invocation: PromotionRaceProviderInvocationReceipt;
     }>
   | Readonly<{
       kind: "unavailable";
@@ -886,6 +914,7 @@ type PromotionRaceTablebaseResult =
       operation: "syzygy.position@1";
       requestDigest: ProviderRequestDigest;
       providerReason: ProviderSourceFailure<"syzygy.position@1">["reason"];
+      invocation: PromotionRaceProviderInvocationReceipt;
     }>
   | Readonly<{
       kind: "completed";
@@ -906,6 +935,33 @@ declare function collectPromotionRaceTablebase(
   dependencies: PromotionRaceTablebaseDependencies,
 ): Promise<PromotionRaceTablebaseResult>;
 ```
+
+For live or outside-domain resolution the collector constructs `typedRequest` once, then computes
+`requestDigest = dependencies.scheduler.normalizedRequestDigest(typedRequest)` and calls
+`dependencies.scheduler.get(typedRequest, request.providerScope, request.signal)`. Every returned
+arm must carry that exact digest; inequality throws `EvidenceInvariantError` before source
+adaptation, fallback, legal-map resolution or output. The scheduler owns both normalization and the
+closed digest image, so the collector cannot choose a provider, normalize Syzygy bytes privately or
+brand a caller-written hash. The local-domain arm additionally crosses
+`assertProviderLocalDomainResult("syzygy.position@1", result)` before
+`declareSyzygyTablebaseDomainEvidence(result)`. The source item and a module-sealed invocation
+receipt retain the exact `typedRequest`, expected digest and returned envelope; spreading,
+rebuilding, changing FEN or substituting another sealed result fails the request/result join.
+
+The successful output mapping is literal. `fen` is the byte-equal canonical geometry/legal/source
+FEN. `geometry` is `geometry.payload` by reference and `source` is the selected whole source by
+reference. `immediatePromotion` flattens the exact legal-map rows, keeps only entries whose
+`promotion` field is present, sorts by the map's declared canonical UCI order and retains those
+`ExactLegalMove` objects—never caller strings or a new move brand. `promotionFirst` is exactly
+`geometry.payload.ordering[0]?.pawns ?? []`, preserving every tied `PawnIdentity`; it is never
+collapsed to a colour label. Recorded and live `preciseDtz` normalize only with
+`sourcePosition.preciseDtz ?? null`; `0` remains `0`. The source's category/DTZ fields are copied
+without reinterpretation. `declarePromotionRaceTablebaseEvidence(value)` is the sole adapter and
+requires these exact references before sealing the complete value; the derivation assertion checks
+`output.payload.geometry === geometry.payload`, `output.payload.source === source`, exact legal-move
+object membership for every promotion, exact pawn-object membership for every first-arrival
+participant, and byte-equal FEN. Rebuilt arrays, one dropped underpromotion, one added non-promotion,
+a colour summary, `undefined` precise DTZ, crossed geometry/source or a payload/receipt splice fail.
 
 Recorded normalization calls `assertRecordedTablebaseEvidence`, whose value receipt names
 `createRecordedTablebaseResultV1Evidence`, the canonical FEN input and the exact validated
@@ -949,7 +1005,9 @@ shared provider dependency for the exact geometry FEN. `makePromotionRaceSyzygyR
 literal operation arm `{operation:"syzygy.position@1",request:{rules:"chess",
 variant:"standard",fen,timeoutMs:Math.min(scope.budgetMs,500)}}`; it rejects non-positive/non-safe
 scope budgets, accepts no caller-supplied request fields and is the sole constructor used here. The
-operation calls `dependencies.scheduler.get(typedRequest, request.providerScope, request.signal)`.
+operation calls `dependencies.scheduler.normalizedRequestDigest(typedRequest)` and then
+`dependencies.scheduler.get(typedRequest, request.providerScope, request.signal)`; every result's
+digest must match before its discriminator is read.
 The scheduler preflight occurs before the success-only legal-map resolver: a
 success first crosses `assertProviderDelivery("syzygy.position@1", result.delivery)` and then
 `dependencies.sourceFactories["syzygy.position@1"].make(result.delivery)`; that exact declared
@@ -957,10 +1015,10 @@ evidence takes member 2. The
 scheduler-sealed local-domain result is first wrapped by
 `declareSyzygyTablebaseDomainEvidence` and takes member 3, and a scheduler failure returns
 `provider_unavailable` with operation/request digest and the exact provider failure reason but
-emits no declared chess evidence. For member 3 the operation recomputes the normalized Syzygy
-request from the geometry FEN and requires its branded digest to equal the local-domain envelope;
-the domain item therefore cannot be crossed from another FEN even though its inner fact contains
-only piece count. Neither outside-domain nor provider-failure resolution calls
+emits no declared chess evidence. For member 3 the scheduler's operation-keyed digest authority
+binds the one exact geometry-FEN request to the local-domain envelope; the domain item therefore
+cannot be crossed from another FEN even though its inner fact contains only piece count. Neither
+outside-domain nor provider-failure resolution calls
 `resolveLegalMoves`. A source-factory operation/projection mismatch throws; there is no operator
 capability traversal or pawn-private provider callable on this product path.
 
@@ -979,7 +1037,7 @@ Substituting provider failure for domain evidence, a bare domain payload for
 its sealed item, or a live success for a recorded member fails.
 
 The geometry declaration may land after this amendment passes fresh review. The outcome declaration
-also requires the provider RFC's occurrence-preserving compiled execution paths and shared Syzygy
+also requires the provider RFC's request/source-preserving compiled execution paths and shared Syzygy
 operation to land; no pawn-specific provider adapter or hand-authored execution row is permitted.
 
 ### §4 — Adjudication of the 20 matrix identities
@@ -1079,7 +1137,7 @@ shipped around — no criterion here carries a pre-authorized fallback.
    resolves the authoritative recorded index before live execution and resolves the legal map only
    after recorded/live source success. A typed unavailable legal map abstains; a generic-sealed
    contacts item, invalid recorded resolution, cross-FEN source, crossed recorded/live source kind
-   or piece-count-only match throws before an event is emitted and cannot trigger live fallback.
+   or piece-count-only match throws before a reading is sealed and cannot trigger live fallback.
 3. **C3 — Convention pinning.** The §2 convention texts (values included: the four
    overload clauses, 250,000 nodes, 1–4 attacker moves, the heavy-piece set K/Q/R, the
    race-arrival clauses) appear verbatim in the declarations' semantics/limitations.
@@ -1136,8 +1194,8 @@ shipped around — no criterion here carries a pre-authorized fallback.
    with `input_abstained` present wherever an input abstains — and the same check *forbids*
    `declared_convention` on a single-grounding derived row, which is why
    `square_clearance_observed@1` declares `recorded_run`); the promotion outcome's compiled source
-   graph is set-equal to §3.7's three alternatives and preserves recorded/live/domain source identity,
-   effective latency and occurrence; no registered clause clones a
+   graph is set-equal to §3.7's three alternatives and preserves recorded/live/domain request and
+   source identity plus effective latency; no registered clause clones a
    turn (§1.4), so no `invalid_turn_clone` reason is declared anywhere in this wave and a
    declaration carrying one is a C9 failure.
 10. **C10 — Non-vacuity, honestly split.** Canonical fixture censuses strict-interior for
@@ -1195,7 +1253,7 @@ shipped around — no criterion here carries a pre-authorized fallback.
 | D2 | The engine-Review lane: matrix rows `derived.review.eval_delta@1` / `derived.review.mate_transition@1` (typed C4 contract, stage-0 §12.2), the Story mate-type repair (D917, `story.ts:33/:104`) and the multi-source post-game compiler (D918) — codex's order items 3–4, cited here and absorbed by nothing in this RFC; `mate_transition` joins §3.6's proof by node/candidate identity when it lands | `planning/evidence-foundation-ux/plan.md` | the Review-successor RFC's drafting/landing commits | |
 | D3 | The runtime opening-identity trio: matrix rows `theory.opening.current_endpoint@1`, `theory.opening.catalogue_membership@1`, `derived.opening.deepest_reached@1` (D894/D902 evidence; the C3/F4/F7 handoff) — assigned to the runtime opening RFC exactly as `tactical-collectors.md` §3.15 split the same lane | `planning/evidence-foundation-ux/plan.md` | `44637013` — runtime opening compiler, artifact, projections, API and image boundary | ✅ 2026-08-24 |
 | D4 | Authored-corpus semantic-tactic witnesses: the authored spine holds zero observed-sequence witnesses for every §3.2–§3.5 family and zero overload conflicts — the learner copy of these families cannot be validated until a content wave authors or imports cited canonical lines (a content wave carrying the content-era closeout) | `planning/evidence-foundation-ux/plan.md` | the content wave's shipping commit | |
-| D5 | Promotion outcome provider execution: `live.syzygy.position_result@1`, exact occurrence/source identity, same-exchange receipt and projection-effective latency come from one shared provider operation; this RFC must not create a pawn-local source or flatten recorded/live alternatives | `provider-exchange-and-execution` | accepted provider implementation commit + provider F1 census | |
+| D5 | Promotion outcome provider execution: `live.syzygy.position_result@1`, exact request/source identity, same-exchange receipt and projection-effective latency come from one shared provider operation; this RFC must not create a pawn-local source or flatten recorded/live alternatives | `provider-exchange-and-execution` | accepted provider implementation commit + provider F1 census | |
 | D6 | Exact promotion input/value authority: pawn contacts, exact legal moves, recorded tablebase values and the derived promotion outcome require their named central factory receipts; generic declared-evidence sealing never satisfies them | `evidence-value-authority` | accepted implementation plus set-equal route/profile fixture | |
 
 ## Open questions
@@ -1285,6 +1343,16 @@ review: `planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fre
 `make semantic-collectors-promotion-fifth-fresh-review` passes 4/4. A fifth author repair must
 close all four before a sixth fresh review or implementation.
 
+The fifth author repair closes those four boundaries without inventing an edge. The provider RFC
+now defines the closed request-digest image and one scheduler-owned operation that computes the
+same normalized digest used by `get`; the collector retains and compares that digest for every
+provider result. The successful reading keeps exact `ExactLegalMove` and `PawnIdentity` objects,
+normalizes optional precise DTZ with `?? null`, and seals geometry/source inside the public value as
+well as its derivation receipt. Finally, projection 14 is a position reading, not a semantic event:
+it has no run edge and cannot enter semantic selection. `make
+semantic-collectors-promotion-fifth-author-repair` is author evidence only; a sixth genuinely fresh
+review still gates acceptance and implementation.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1302,6 +1370,10 @@ close all four before a sixth fresh review or implementation.
 | [[D2521]] | author-repaired: strict `CanonicalFullFen` construction and a total found/absent/failed recorded-evidence lookup close the request ABI |
 | [[D2522]] | author-repaired: the actual provider scheduler and operation-keyed source factory receive one deterministic standard-chess Syzygy request with a 500 ms maximum |
 | [[D2523]] | author-repaired: both the geometry derivation and aggregate completed result are module-sealed and asserted before the zero-call no-race fast path |
+| [[D2548]] | author-repaired: one scheduler-owned normalized-request digest authority closes the exact request/result and same-FEN join |
+| [[D2549]] | author-repaired: the output retains exact legal-move objects, tied pawn identities and a literal `preciseDtz ?? null` mapping |
+| [[D2550]] | author-repaired: the sealed public reading value and receipt both retain the same geometry and whole source by reference |
+| [[D2551]] | author-repaired: projection 14 is a position reading, absent from semantic-event declarations/selection; no edge is manufactured |
 
 ## Appendix A — registered projection ids
 
@@ -1323,10 +1395,16 @@ is a spec change with a changelog line.
 | 11 | `derived.tactic.overload_exploitation_observed@1` | 3.5 | `derived.tactic` | event |
 | 12 | `rules.tactic.consequence.forced_mate_after_move@1` | 3.6 | `rules.tactic` | predicate |
 | 13 | `derived.pawn.promotion_race_geometry@1` | 3.7 | `derived.pawn` (2d) | reading |
-| 14 | `derived.pawn.promotion_race_tablebase@1` | 3.7 | `derived.pawn` (2d) | event |
+| 14 | `derived.pawn.promotion_race_tablebase@1` | 3.7 | `derived.pawn` (2d) | reading |
 
 ## Changelog
 
+- 2026-09-04: fifth author repair closes [[D2548]]–[[D2551]] at RFC tier. The shared scheduler now
+  owns one operation-keyed normalized-request digest; outcome values retain exact legal-move and
+  pawn participant objects plus geometry/source operands; optional provider `preciseDtz` maps only
+  through nullish normalization; and the tablebase result is correctly a position reading rather
+  than an event with a fabricated occurrence. The retained author contracts and new four-arm
+  falsifier must pass before a sixth genuinely fresh review; no held production id is authorized.
 - 2026-09-04: implemented the bounded [[D2536]]/[[D2552]]/[[D2553]] deflection amendment. The live
   catalogue has two exact derivation members; detector, emitter and both recorded-path modes share
   one induction selector; broad and exact-source paths share one sealed check-event constructor.

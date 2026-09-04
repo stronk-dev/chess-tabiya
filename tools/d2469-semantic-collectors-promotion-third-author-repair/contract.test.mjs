@@ -19,7 +19,7 @@ test("D2469: domain and provider resolution precede success-only legal moves", (
   assert.doesNotMatch(request, /readonly legalMoves:/u);
   assert.match(request, /readonly resolveLegalMoves:/u);
   assert.match(promotion, /scheduler preflight occurs\s+before the success-only legal-map resolver/u);
-  assert.match(promotion, /Neither outside-domain nor provider-failure resolution calls\s+`resolveLegalMoves`/u);
+  assert.match(promotion, /Neither\s+outside-domain nor provider-failure resolution calls\s+`resolveLegalMoves`/u);
 });
 
 test("D2470: one closed request and sealed recorded-first resolution own source selection", () => {

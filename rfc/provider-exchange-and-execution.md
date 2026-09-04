@@ -1,6 +1,7 @@
 # RFC: Provider exchange and projection execution
 
-- **Status:** draft — author-repaired 2026-08-30 on [[D2184]]–[[D2188]]; [[D2189]] is routed to
+- **Status:** draft — request-digest dependency author-repaired 2026-09-04 on [[D2548]] atop the
+  2026-08-30 [[D2184]]–[[D2188]] repair; [[D2189]] is routed to
   draft prerequisite `provider-protocol-register.md`. Runtime subjects now close node/edge/prefix
   grains; engine digests have launched-byte/handshake authorities; operation-keyed parsers bind
   payloads and HTTP metadata to captured bytes; and all five traversals end at sole evidence
@@ -687,7 +688,15 @@ function digestEngineBinary(bytes: Uint8Array): EngineBinaryDigest;
 function digestEngineOptionImage(image: EngineOptionImage): EngineOptionImageDigest;
 function digestEngineContainer(image: EngineContainerImage): EngineContainerDigest;
 function digestProviderCommands(commands: readonly string[]): ProviderCommandsDigest;
-function digestProviderRequest(image: ProviderRequestDigestImage): ProviderRequestDigest;
+interface ProviderRequestDigestImage<K extends ProviderOperationId = ProviderOperationId> {
+  readonly operation: K;
+  readonly provider: ProviderOperationProviderMap[K];
+  readonly requestedIdentity: ProviderRequestedIdentityMap[K];
+}
+
+function digestProviderRequest<K extends ProviderOperationId>(
+  image: ProviderRequestDigestImage<K>,
+): ProviderRequestDigest;
 function digestProviderPending(image: ProviderPendingIdentity): ProviderPendingDigest;
 function digestProviderActual<K extends ProviderOperationId>(
   operation: K,
@@ -915,6 +924,9 @@ type ProviderOperationDescriptors = {
 };
 
 interface ProviderExchangeScheduler {
+  normalizedRequestDigest<K extends ProviderOperationId>(
+    request: TypedProviderRequest<K>,
+  ): ProviderRequestDigest;
   get<K extends ProviderOperationId>(
     request: TypedProviderRequest<K>,
     scope: ProviderRequestScope,
@@ -927,6 +939,17 @@ function assertProviderLocalDomainResult<K extends ProviderOperationId>(
   value: unknown,
 ): asserts value is ProviderLocalDomainResult<K>;
 ```
+
+`normalizedRequestDigest(request)` is the only caller-visible operation-keyed request-digest
+authority. It selects the scheduler's exact descriptor and provider for `request.operation`, calls
+that descriptor's `normalizeRequest`, constructs the closed `ProviderRequestDigestImage<K>` above
+and delegates to `digestProviderRequest`. Callers cannot provide a provider, requested identity or
+digest image. `get` uses the same method before preflight, retained lookup or queue admission and
+every returned `normalizedRequestDigest` is byte-equal to it. A count-preserving operation swap,
+changed normalized request member, caller-written digest image, structural scheduler or returned
+result carrying a different digest fails. This operation exists so a downstream same-position join
+can correlate a sealed local-domain/source-failure result to the exact request without reimplementing
+normalization or treating a branded digest as proof of chess identity.
 
 The scheduler constructor accepts one `ProviderOperationDescriptors` and one
 `ProviderResponseParsers` exact mapped set—one of each for every `ProviderOperationId`, with no
@@ -1961,6 +1984,12 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-09-04: closed [[D2548]]'s shared request-identity dependency. The previously referenced but
+  undefined `ProviderRequestDigestImage` is now a closed operation-keyed type, and the scheduler
+  exposes one `normalizedRequestDigest(request)` operation backed by the same descriptor/provider
+  normalization used by `get`. Promotion and other same-position joins can compare the returned
+  sealed result to exact request bytes without inventing a private hash or widening the scheduler
+  result.
 - 2026-08-30: author-repaired [[D2184]]–[[D2188]] and routed [[D2189]] to the new process-only
   `provider-protocol-register` prerequisite. Runtime subjects now carry exact prefix/node/edge
   identity; engine identities come from launched bytes/container and same-generation UCI option

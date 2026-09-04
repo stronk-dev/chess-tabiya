@@ -404,6 +404,16 @@ projections remain unchanged; only the held pair awaits a fifth author repair an
 Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md`.
 
+The 2026-09-04 fifth author repair closes [[D2548]]–[[D2551]] at contract tier without fabricating
+a move occurrence. One scheduler-owned operation computes the exact normalized request digest used
+by provider results; the promotion value preserves exact legal-move underpromotions, tied pawn
+identities, geometry and whole source; and the tablebase result is correctly a position reading,
+not an event. [[D2558]] refreshes earlier positive gates that had coupled themselves to obsolete
+wording and the old event discriminator. All five author generations pass together, but projections
+13–14 remain unimplemented until a sixth genuinely fresh review and their provider/value-authority
+dependencies land. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-author-repair-2026-09-04.md`.
+
 The 2026-08-28 shared-candidate packet author repair records the owner's foundation-first sequence
 without laundering verification into product reach: the provider-free complete population may
 land with zero product consumers, while Support/Review/bot discharges remain open. The draft now
