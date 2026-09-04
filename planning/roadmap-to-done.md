@@ -1106,6 +1106,13 @@ Owner ruling [[D1563]] funds the authoring board, community-author workflow, Kno
 principle provenance and official-content review instrument. The four-door chooser must not ship as
 a boardless placeholder; it is now implementation work rather than an owner fork.
 
+The 2026-09-04 concept-registry review confirms that the 199 references across 50 concept-bearing
+packs already fit the proposed 168-ID grammar, but returns the shared identity contract on
+[[D2661]]–[[D2666]]. Exact historical registry revisions, occurrence-backed legacy migration,
+current-versus-future consumer closure, real account-restore ownership and CI enrollment are not yet
+specified consistently. Campaign, Skills, related attempts and pack authoring therefore remain
+behind one identity repair rather than being allowed to copy pack-local strings.
+
 ### 7. Human-like bots, personalities, roster, and bot events
 
 <!-- roadmap-capability: bots -->

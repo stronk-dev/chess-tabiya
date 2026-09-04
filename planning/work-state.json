@@ -21317,6 +21317,60 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:shared-candidate-evidence-packet.md"
+    },
+    {
+      "id": "D2661",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:81c6f58b8d39449cc92d422ae47397f4470416e5d2a4c9d040c5dd7feee316a8",
+      "uxItems": [],
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2662",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9aa4592e029992c3453d0fe32fdcf8a1355c8399b015216130e41dd416f6a0c1",
+      "uxItems": [],
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2663",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8769840310d6844acd1aab1680073254fa171d8616b7930784fa7e9f329c89b9",
+      "uxItems": [],
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2664",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:319cce14b0339b2f56b945b73afea74b497b6f9f32f38137716c7427d43894fe",
+      "uxItems": [],
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2665",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5634ea2e59f809589bc1e6c9381597dedf0722e44c529b5a8ad35c027cc8003c",
+      "uxItems": [],
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2666",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7a72b9b6b517fce907fbf15b423e8f4dc95408b62e24406d406cb236b70a673c",
+      "uxItems": [],
+      "blocker": "rfc:concept-registry.md"
     }
   ]
 }

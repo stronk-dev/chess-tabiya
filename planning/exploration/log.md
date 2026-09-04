@@ -15363,3 +15363,21 @@ controls and passes seven composed repair arms. Exact receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-eighth-author-repair-2026-09-04.md`.
 Another genuinely fresh independent review and the evidence-value-authority dependency still gate
 production packet/cache implementation and every consumer.
+
+## 2026-09-04 — Concept registry fresh independent return
+
+**What landed:** a fresh contract-tier review of the first concept-registry author pass, six
+ledgered findings [[D2661]]–[[D2666]], and maintained `make concept-registry-fresh-review` coverage.
+No registry, compiler, schema, migration, content, API, client, Campaign, Skills, archive or
+protected-design byte changed.
+
+**What changed:** the global identity direction survives and the current 50-pack/199-reference/
+168-ID corpus is grammar-clean. The author target is nevertheless red and absent from CI; exact
+digest refs have no historical registry revision across label/status edits; legacy rows cannot
+prove pack occurrence; the eight-consumer closure counts draft successors as live; and the named
+portable-data dependency explicitly excludes the restore arm this RFC requires.
+
+**Evidence/next:** `make concept-registry-fresh-review` passes 6/6. Exact receipt:
+`planning/concept-registry/fresh-independent-buildability-review-2026-09-04.md`. A bounded author
+repair and another fresh review remain required before the shared-resource bootstrap can authorize
+production implementation.

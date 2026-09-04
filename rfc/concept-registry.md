@@ -1,8 +1,10 @@
 # RFC: Concept registry — one cross-pack identity authority
 
-- **Status:** draft 2026-08-31 — first author pass on [[D300]], [[D700]] and [[D2370]]. The product
-  schema claim remains intentionally absent until `shared-resource-register-bootstrap.md` lands the
-  absent root. No implementation before fresh independent review and accepted process dependency.
+- **Status:** draft — RETURNED by fresh independent review 2026-09-04 on [[D2661]]–[[D2666]]. The
+  global identity boundary survives, but the maintained target is red and unenrolled; mutable
+  labels have no historical registry revision; legacy migration cannot prove pack occurrence; two
+  of eight consumers are future RFCs; and the named portable-data dependency explicitly excludes
+  restore. No implementation before author repair, another fresh review and the process dependency.
 - **Author:** codex, factored from `rfc/skills.md` §4 and the D300/D700 measurements.
 - **Created:** 2026-08-31
 - **Design refs:** `design/01-training-model.md` §§60–65 (registry belongs to authoring);
@@ -207,6 +209,31 @@ stored canonical label plus “registry unavailable” and never disappear.
 - no fuzzy merge, alias guess or LLM taxonomy;
 - no migration that partially rewrites rows;
 - no claim that registry membership establishes chess truth or learner ability.
+
+## Fresh independent review return — 2026-09-04
+
+The first author pass is returned on [[D2661]]–[[D2666]]. Its migration-order target still asserts
+the superseded register position and currently fails 2/7 while the index says it passes; criterion
+12 does not enroll that target in either local or GitHub verification. Exact-digest refs cannot
+survive allowed label/status edits without immutable registry revision bytes and a label-authority
+rule. The legacy row contains no historical pack digest/version/concept snapshot, so matching its
+two pack-id strings cannot prove that the pack referenced the concept. The exact eight-consumer
+criterion also requires draft Campaign/Skills consumers before their own RFCs land, and the account
+dependency explicitly excludes the restore operation criterion 10 requires. Exact receipt:
+`planning/concept-registry/fresh-independent-buildability-review-2026-09-04.md`.
+
+An author repair must close all six findings without broadening identity into chess meaning. The
+current 50-pack/199-reference/168-ID corpus census is grammar-clean and is retained as reach
+evidence, not used to hide the contract defects.
+
+| Finding | Exact author-repair owner |
+|---|---|
+| [[D2661]] | maintained author target and live migration-order assertion |
+| [[D2662]] | immutable registry revisions and historical/current label authority |
+| [[D2663]] | occurrence-backed legacy migration or explicitly unverified attribution |
+| [[D2664]] | present consumer closure plus successor discharge protocol |
+| [[D2665]] | repaired target enrollment in the standard local/GitHub software gate |
+| [[D2666]] | exact account-restore ownership or an honest export-only boundary |
 
 ## Acceptance criteria
 

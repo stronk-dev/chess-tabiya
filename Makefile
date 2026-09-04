@@ -1056,6 +1056,10 @@ shared-resource-bootstrap-sixth-author-repair:
 concept-registry-author-contract:
 	node --test tools/concept-registry-author-contract/contract.test.mjs
 
+.PHONY: concept-registry-fresh-review
+concept-registry-fresh-review:
+	node --test tools/d2661-concept-registry-fresh-review/contract.test.mjs
+
 .PHONY: campaign-catalogue-author-contract
 campaign-catalogue-author-contract:
 	node --test tools/campaign-catalogue-author-contract/contract.test.mjs
