@@ -20438,66 +20438,66 @@
     },
     {
       "id": "D2563",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:46a6f19c1b9b93d7c3d393b8016d356f9e03a46882aa67d49027796d30d37d22",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:062b00335e542c8983ebb8c953935a2e1d09aed5ddde91a284c1a03ad4697026",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/eleventh-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2564",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d357bde536e3a80f54193a30af45423bc8c8fd014c229e18b5e15d3cd56239f1",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:162eb2144f5113b77e46ef8fb38d1308df81d98d2d2b95e834cb031fdd8ef244",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/eleventh-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2565",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3ca77f65ada4472e121537e6c9ab5e5c1a5f0908b3d2e7a6248d4ec3b8602bd0",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e8293102ec7a2ffbbf508a3787de4ac03c4b975235e4aece512d22b91b7bc8ef",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/eleventh-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2566",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1e99d56e48f259b73ac069f031af9219fb8bd6abd0abb4ccf56108e4675d224e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5a97b38da7f0b582903e47fb739bbfab1b715b6ca3f6ff6cc612232ed0d9b30c",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/eleventh-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2567",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:98834c7eb924de8249794ed47d692b78845515d70824fb606a33bc65fc91746a",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d95c42b6c7f841c6766ad84be28f5f2d9bb7c467f1002d7e78112144688ef4e8",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/eleventh-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2568",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:eeda427fd0a1d3c0770573e55ee9661d862ece2ed46c9d844da2fef0f959a4ec",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a3bc8b6bc60f451c0baf325aa2bfe420325080fe8232eb3066c40ff2c5706d75",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/eleventh-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2569",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f17b26cd5bc7320bfb70e79e6b6750eceadc4602df71f8001ac02d20d26f28c3",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:70c8fed999cd0347aae031772ef47a08babb85285f3e43eb5378a4b39a3cc6c5",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "evidence": "planning/pack-capability-contract/eleventh-author-repair-2026-09-04.md",
+      "evidenceKind": "path"
     }
   ]
 }

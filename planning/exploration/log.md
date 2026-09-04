@@ -14673,3 +14673,20 @@ events; and the concurrent gate uses fixed ids while merely asserting UUID const
 eighth and cumulative author gates remain green. A bounded eleventh author repair must make the
 retained typed protocol, parsers and transaction models the same authority as the prose, followed
 by another genuinely fresh independent review. [[D560]] remains whole.
+
+## 2026-09-04 — Pack-capability eleventh repair joins durable evidence-job authority
+
+**What landed:** [[D2563]]–[[D2569]] are repaired at author tier. One strict state protocol now
+requires generation-bound running leases and consumed application receipts. Branded closed request
+parsers own both digest directions and a complete batch/child/node join. Rewind mutates full rows,
+application receipts bind stored success to exact forward events, and concurrent UUID construction
+occurs only in the winner's lock-held absence branch.
+
+**What changed:** the seven false-green values from the tenth fresh review now fail. The repair
+supersedes, rather than silently editing, the historical protocol/model that reproduces the return.
+No production, schema, migration, API, storage, pack, content, digest or protected-design byte
+changed.
+
+**Evidence/next:** `make pack-capability-eleventh-author-repair` passes six executable groups plus
+strict TypeScript, with earlier author controls retained. Another genuinely fresh independent
+review still gates acceptance and implementation; [[D560]] remains whole.

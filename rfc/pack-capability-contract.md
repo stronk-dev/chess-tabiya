@@ -1,12 +1,11 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **RETURNED by the tenth fresh independent review 2026-09-04 on
-  [[D2563]]–[[D2569]].** The SQL/prose repairs preserve their intended direction, but the retained
-  protocol omits generation and application receipts; request digests lack a closed parser and
-  column/value join; rewind and receipt models prove only subsets; and the concurrency test does
-  not exercise UUID construction. `make pack-capability-tenth-fresh-review` reproduces 7/7 while
-  every retained author gate stays green. No implementation is authorised and the D560 hold stays
-  whole.
+- **Status:** draft — **eleventh author repair complete 2026-09-04 on [[D2563]]–[[D2569]];
+  another genuinely fresh independent review is required.** One strict durable-state protocol,
+  branded closed request parser/digest authority, complete storage/value join, row-level rewind,
+  stored-success event receipt and winner-only UUID construction now pass
+  `make pack-capability-eleventh-author-repair` (6 groups plus strict TypeScript). No implementation
+  is authorised and the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -1459,6 +1458,13 @@ parsed request and digest equal that indexed batch member. Missing, extra, dupli
 reordered children are corrupt storage. Batch parsing never trusts the duplicated columns merely
 because each is independently well-formed ([[D2542]]).
 
+**[[D2566]]:** the parser join is literal and bidirectional. `batchRow.run_id`/`origin` equal the
+parsed batch request; every contiguous child row equals its indexed parsed member on batch id,
+ordinal, run, origin, consumer, provider operation, request bytes/digest and node id; and the
+request FEN equals that immutable node's FEN in the same run snapshot. A self-consistent batch/job
+request for run B stored beneath run-A columns is corrupt even when both digests and the composite
+foreign key are valid.
+
 Request identity is one literal image, not “canonical JSON” left to the implementer:
 
 ```ts
@@ -1489,6 +1495,13 @@ implementation imports `canonicalizeJson` from `@chess-tabiya/schema/drill-pack`
 lowercase SHA-256 over UTF-8 `chess-tabiya/evidence-job-request/v1\0` plus those canonical bytes; a
 batch digest uses the distinct prefix `chess-tabiya/evidence-batch-request/v1\0` over its complete
 request. These two exported functions are the only writers and verifiers of the columns ([[D2544]]).
+
+**[[D2565]]:** both functions accept only the brand returned by the corresponding exact v1 parser.
+The job parser rejects missing/extra keys, a wrong schema literal, an unknown kind, invalid search
+bounds and a crossed non-null objective identity. The batch parser rejects missing/extra keys,
+anything outside 1–16 jobs and any job whose `runId` differs from the batch. Hashing an arbitrary
+JSON-shaped object is not an overload. Parser, digest writer and digest verifier share these exact
+functions.
 
 The production parser adds state-specific exact-key and presence checks that SQLite cannot express
 without duplicating the union. `running` alone requires both lease fields. `retry_wait` requires
@@ -1530,6 +1543,13 @@ bytes**; it never reruns the upgrader. Request bytes are parsed and both canonic
 digests are rechecked. Unknown/crossed state, origin, consumer, operation, result kind, availability,
 receipt generation or extra field is corrupt storage, not a best-effort job.
 
+The strict durable-state protocol is the eleventh-repair authority at
+`tools/d2563-pack-capability-eleventh-author-repair/protocol.typecheck.ts`, superseding the narrower
+ninth-author shape. A `running` arm contains the complete `{jobId, leaseOwner, leaseGeneration,
+jobRequestDigest}` receipt plus expiry ([[D2563]]). A `consumed` arm contains the complete
+`EvidenceApplicationReceiptV1`; no other arm may carry one ([[D2564]]). Missing receipt fields and
+application receipts on admitted rows are compile-time negatives.
+
 Every claim increments `lease_generation` in the same compare-and-swap that changes the row to
 `running` and returns a sealed
 `{jobId, leaseOwner, leaseGeneration, jobRequestDigest}` receipt. Reclaim after expiry increments it
@@ -1546,6 +1566,12 @@ generated with `crypto.randomUUID()` on first admission and persisted; the autho
 constructors. They never use a process
 counter and are never regenerated on replay. The uniqueness boundary is
 `(run_id, origin, idempotency_key)`; the key source is origin-specific:
+
+The eleventh author model makes that constructor executable ([[D2569]]): UUID construction occurs
+inside the `BEGIN IMMEDIATE` absence arm, after the unique-key read, once for the batch and once per
+job. The concurrent winner reports those constructions; the loser/replay reports zero and returns
+the stored UUIDs. Fixed candidate ids and a separately asserted constructor name do not satisfy the
+contract.
 
 | origin | durable idempotency key | canonical batch request |
 |---|---|---|
@@ -1609,6 +1635,12 @@ Cancellation uses the same exact lease receipt when a worker currently owns the 
 forces the transaction to re-read/retry rather than committing the rewind against an unfenced
 worker ([[D2546]]).
 
+**[[D2567]]:** this is a row transition, not a state-label lookup. Each cancellable row writes the
+`{kind:"cancelled",reason:"superseded"}` settlement, clears lease/retry/application fields and
+`result_seq`, and a running row additionally increments `lease_generation`. Each retained terminal
+row is returned byte-identically. Tests compare every changed or preserved field; projecting only
+the destination state cannot satisfy criterion 26.
+
 Workers claim with a compare-and-swap lease and increment `attempt_count`. Success atomically writes
 the complete success settlement and per-run `result_seq`; the existing evidence page reads
 unconsumed successful rows. Applying evidence derives every event, including an objective event,
@@ -1641,6 +1673,14 @@ and any real failure retained. When the bound is exhausted, `runtime.analysis` b
 `settled_unavailable`; Story and run enrichment become `settled_empty` with reason
 `provider_unavailable`. Both retain availability and optional real failure for diagnostics. No empty
 settlement mints evidence.
+
+**[[D2568]]:** the receipt constructor consumes the parsed job, its exact stored success settlement,
+the one-step forward run revision and the complete newly appended event array. Its first event is
+the exact `evidence.attached` payload for `engineEvidenceRef(jobId)` or
+`tablebaseEvidenceRef(jobId)`; a non-null stored objective proposal requires exactly one following
+`objective.state_changed` event with the same node and evidence reference, while null permits no
+second event. Backward/equal revisions, another node/ref/payload, a missing objective event or any
+extra event fail before the receipt is stored.
 
 On process restart, `admitted` and `retry_wait` rows remain eligible, and an expired `running` lease
 returns to `retry_wait` with its exact retry basis/history retained. Provider-result cancellation for
@@ -2127,6 +2167,26 @@ Exact evidence:
 retained protocol, parsers and transaction models the same authority as the prose before another
 fresh review, acceptance or implementation.
 
+## Eleventh author repair (2026-09-04)
+
+[[D2563]] and [[D2564]] are closed by one superseding strict durable-state protocol: a running row
+cannot compile without its full generation-bound lease receipt, and a consumed row cannot compile
+without its exact application receipt; no other state admits that receipt. [[D2565]] and [[D2566]]
+are closed by branded exact job/batch parsers shared by digest writer and verifier, plus a complete
+batch-row → batch-request → indexed child-row/request → immutable node/FEN join.
+
+[[D2567]] replaces the label-only rewind model with complete row transitions, including running
+generation fencing, lease/retry/result cleanup, the exact superseded settlement and byte-identical
+terminal preservation. [[D2568]] makes receipt construction consume the stored success and exact
+forward run event array, using the shipped engine/tablebase evidence-reference constructors.
+[[D2569]] moves UUID calls inside the lock-held absence branch and makes the concurrent winner/loser
+fixture observe two winner constructions versus zero loser constructions for a one-job batch.
+
+`make pack-capability-eleventh-author-repair` passes six executable groups plus strict TypeScript;
+every prior author control remains required. No production, schema, migration, API, storage, pack,
+content or protected-design byte changed. Another genuinely fresh independent review must attack
+the joined model before acceptance or implementation, and [[D560]] remains whole.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -2404,6 +2464,11 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-09-04 (**[[D2563]]–[[D2569]] eleventh author repair**): superseded the incomplete strict
+  protocol; added branded request parsers plus full storage/value joins, row-level rewind and
+  stored-success event receipts; and exercised UUID construction inside the concurrent winner.
+  `make pack-capability-eleventh-author-repair` passes six groups plus strict TypeScript. Another
+  fresh independent review still gates acceptance and implementation.
 - 2026-09-04 (**tenth fresh independent return**): returned on [[D2563]]–[[D2569]]. The retained
   protocol omits the new lease/application receipts; arbitrary request objects can be digested;
   canonical request values are not joined to storage columns; rewind and application models prove

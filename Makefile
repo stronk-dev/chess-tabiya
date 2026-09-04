@@ -688,6 +688,11 @@ pack-capability-tenth-author-repair:
 pack-capability-tenth-fresh-review:
 	node --test tools/d2563-pack-capability-tenth-fresh-review/contract.test.mjs
 
+.PHONY: pack-capability-eleventh-author-repair
+pack-capability-eleventh-author-repair:
+	node --test tools/d2563-pack-capability-eleventh-author-repair/contract.test.mjs
+	./node_modules/.bin/tsc -p tools/d2563-pack-capability-eleventh-author-repair/tsconfig.contract.json --noEmit
+
 .PHONY: semantic-collectors-promotion-fifth-fresh-review semantic-collectors-promotion-fifth-author-repair
 semantic-collectors-promotion-fifth-fresh-review:
 	node --test tools/d2548-semantic-collectors-promotion-fifth-fresh-review/contract.test.mjs
