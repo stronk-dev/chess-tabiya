@@ -1,15 +1,14 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
-- **Status:** draft — **RETURNED by the fourth fresh independent review 2026-09-04 on
-  [[D2620]]–[[D2624]].** The prior repair's concurrent-creation, revision, historical-cut and
-  account-lifecycle direction survives, but charged live mutations have no idempotent command
-  envelope; assistance receipts are cross-pack/context reusable; durable duplicate identities can
-  disagree; campaign events are neither semantically parsed nor recursively immutable; and the
-  official-curriculum falsifier omits most of the authority it claims to prove. `make
-  campaign-two-horizon-fourth-fresh-review` retains all 43 author checks and reproduces 5/5. This
-  RFC remains the Campaign foundation, not the whole 1.0. No campaign schema, migration,
-  production route, official campaign or surface may resume before author repair, another fresh
-  independent review and accepted dependencies.
+- **Status:** draft — **fifth author repair complete 2026-09-04 for [[D2620]]–[[D2624]]; fresh
+  independent review required.** Charged live mutations now share one durable cross-aggregate
+  command/result image; assistance receipts bind the complete encounter subject; relational keys
+  make the campaign run the sole ownership authority; campaign events are closed semantic values;
+  and official curriculum is compiled from the pinned document plus sealed registries. `make
+  campaign-two-horizon-fifth-author-repair` retains the earlier author contract and adds five
+  able-to-fail boundary groups. This RFC is explicitly the Campaign foundation, not the whole 1.0.
+  No campaign schema, migration, production route, official campaign or surface may resume before
+  another fresh independent review and accepted dependencies.
   *(Prior line: [[D2077]]–[[D2086]] author repair complete 2026-08-30; fresh independent review
   required. Before that:
   implementing — 2026-08-23 authored-contract + registry + module-algebra checkpoints. Before
@@ -213,20 +212,30 @@ mechanical fixture lives under
 `tools/campaign-two-horizon-author-contract/fixtures/campaign-contract.json`; it exists only to
 falsify schema/fold/API invariants, uses `publication.channel: "community"`, and is never registered
 or rendered. An official registry entry uses `publication.channel: "official"`; schema lane 2 then
-requires the complete `CampaignCurriculumMetadata`, and `validateOfficialCampaign` checks it
-against the exact document plus one compiler-owned `CampaignCurriculumNodeFact` per node. Each fact
-pins the encounter pack id/digest and its authored phase, encounter form, applicable theory
-passages and dependency requirements from the owning pack/theory/capability authorities.
+requires the complete `CampaignCurriculumMetadata`. `compileOfficialCampaignCurriculum` accepts
+only the parsed canonical `CampaignDocument`, its canonical digest, the pinned pack registry,
+target-bracket registry, theory/evidence registries, dependency operation/fallback/availability
+registry and a human review receipt. It accepts **no caller-supplied node facts or coverage
+arrays**. It walks the exact document node set once and emits exactly one
+`CampaignCurriculumNodeFact` per node; duplicate, absent or extra node identity refuses. Each fact
+pins the encounter pack id/digest and derives its authored phase, encounter form, applicable theory
+passages, evidence references and complete dependency requirements from those sealed owning
+authorities ([[D2624]]).
 `phaseCoverage` and `formCoverage` must be set-equal projections of those facts; one single-phase
 pack cannot self-label all three phases. Every theory row must name an existing node and a passage
 in that node's exact applicability result. Every dependency row's `requiredAt` must be the complete
-non-empty set of document nodes whose compiled requirements name it. The validator also resolves
-learner bracket, evidence and provider-operation identities, requires all three phase sets and
-every present encounter form to be non-empty, rejects inverted or zero time envelopes, and
-byte-joins the review receipt to the canonical document digest. The metadata declares and joins
+non-empty set of document nodes whose compiled requirements name it. The compiler also resolves
+the target learner bracket and prerequisites, evidence and provider-operation identities, requires
+all three phase sets and every present encounter form to be non-empty, rejects inverted or zero
+time envelopes, requires every dependency to name its unavailable action and exact fallback
+operation/source-availability fact, and byte-joins the review receipt to the canonical document
+digest. The receipt is `{authority:"owner_human_chess_review",documentDigest,reviewedAt}`; a caller
+cannot substitute the projection digest or review a different byte image. The metadata declares and joins
 curriculum coverage; it never proves that a lesson is good or manufactures a chess claim. Unknown
 nodes, copied phase claims, ghost theory joins, incomplete/extra dependency sets or unavailable
 dependencies fail with one path-addressed issue rather than being silently dropped ([[D2425]]).
+`validateOfficialCampaign` is the thin schema/reporting wrapper around that compiler; it never
+validates metadata against facts or metadata supplied by the same caller.
 
 The 1.0 product requires at
 least one separate official document under `content/campaigns/`, authored and reviewed by the
@@ -292,6 +301,37 @@ projection is the balance's only home — no balance column exists to drift) —
 with the new typed error **`CAMPAIGN_REWIND_EXHAUSTED`** (HTTP 409, typed body like
 `INVALID_REQUEST`'s) when the balance is zero. A non-campaign run passes the guard untouched.
 The lookup is one indexed query; §6 pins the index.
+
+**One charged-command image ([[D2620]]).** The four REST bodies, client methods, service methods
+and storage command use this exact server-validated envelope; no entry point may synthesize an id
+after it has crossed another aggregate:
+
+```ts
+interface CampaignMutationCommand {
+  readonly campaignRunId: CampaignRunId;
+  readonly playRunId: RunId;
+  readonly mutationCommandId: CampaignCommandId;
+  readonly expectedCampaignRevision: number;
+  readonly operation: "rewind" | "fork" | "group" | "simulate_enter";
+  readonly operandsDigest: `sha256:${string}`;
+}
+type CampaignMutationResult =
+  | { kind: "committed"; campaignRevision: number; playRevision: number;
+      chargeBalance: number; operationResult: CanonicalJson }
+  | { kind: "provider_failed"; code: ProviderFailureCode };
+```
+
+The application transaction owns both aggregate writes: it compares the campaign revision, locks
+the active campaign/play-run relation, performs the play mutation, appends the matching
+`charge_spent`, advances both projections and stores the canonical result—or commits none of
+them. Same command plus byte-identical normalized operands replays that stored result after any
+later state change. Reuse with different operands refuses `CAMPAIGN_COMMAND_REUSED`; distinct
+commands at the same expected revision serialize so only one can spend. For asynchronous group
+creation, provider settlement is inside the command state machine: a provider failure stores the
+terminal `provider_failed` result without a play mutation, charge or revision advance, and a retry
+replays it instead of contacting the provider or spending. Process-local request ids, a campaign
+event appended after the play transaction, or reconstruction from current state are explicitly
+invalid implementations.
 
 **2.3 The numbers are candidates.** `startingCharges` and `actGrants` are authored parameters
 behind the owner-use validation gate — the same `validation: "candidate"` device intent-presets
@@ -660,10 +700,29 @@ availability fact is accepted ([[D2423]], [[D2424]]).
 
 The returned `CampaignAssistanceAuthorityReceipt` contains exact campaign run/current revision,
 `inventoryEventSeq`, node/run/document identities, the digests of the applicability and disclosure
-receipts, plus the family-specific effective module and authorized theory sets. A theory passage is
-authorized only when the owned exact ref equals the applicability result, that result says
-applicable, its registered authorizing module is effective, directness is within the current
-disclosure ceiling and its attributed bytes are available. It is an
+receipts, plus the family-specific effective module and authorized theory sets. Its non-reusable
+subject is exactly:
+
+```ts
+interface CampaignAssistanceSubject {
+  readonly campaignRunId: CampaignRunId;
+  readonly nodeId: NodeId;
+  readonly playRunId: RunId;
+  readonly packDigest: `sha256:${string}`;
+  readonly workflowContext: "campaign";
+  readonly disclosureCeiling: DisclosureCeilingId;
+  readonly inventoryEventSeq: number;
+  readonly nodeEnteredEventDigest: `sha256:${string}`;
+}
+```
+
+The authority receipt, applicability receipt, disclosure receipt and every attributed source
+receipt each carry this exact subject; authorization begins by requiring structural equality of
+all copies ([[D2621]]). A receipt valid for another pack, node, play run, ceiling, context or event
+cut is `subject_mismatch`, never reusable evidence. A theory passage is authorized only when the
+owned exact ref equals the applicability result, that result says applicable, its registered
+authorizing module is effective, directness is within the current disclosure ceiling and its
+attributed bytes are available. It is an
 input to `compileAuthoritativeAssistance`, not prose and not evidence. The ordinary compiler then
 intersects preset request, context ceiling, honesty/access, role and current source availability;
 `finalizeAssistanceEffects` emits only effects whose registered evidence dependencies were actually
@@ -683,6 +742,9 @@ the moving queue. The migration number is taken at landing as `STORAGE_VERSION +
 register rule and the body uses frozen literals.
 
 ```sql
+CREATE UNIQUE INDEX idx_drill_runs_owner_identity
+  ON drill_runs(id, owner_learner_id);
+
 CREATE TABLE campaign_runs (
   id TEXT PRIMARY KEY,
   learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
@@ -691,8 +753,11 @@ CREATE TABLE campaign_runs (
   campaign_document_digest TEXT NOT NULL, -- RFC-8785 SHA-256 of canonical snapshot
   campaign_document TEXT NOT NULL,    -- canonical immutable bytes used for all replay/restore
   status TEXT NOT NULL CHECK (status IN ('active','completed','abandoned')),
-  active_encounter_run_id TEXT,       -- NULL between encounters; §6.3 refuses deletion while active
-  created_at TEXT NOT NULL
+  active_encounter_run_id TEXT UNIQUE, -- NULL between encounters; one play run belongs to one active campaign
+  created_at TEXT NOT NULL,
+  UNIQUE (id, learner_id, campaign_id, campaign_version),
+  FOREIGN KEY (active_encounter_run_id, learner_id)
+    REFERENCES drill_runs(id, owner_learner_id) ON DELETE RESTRICT
 ) STRICT;
 CREATE INDEX idx_campaign_runs_active_encounter ON campaign_runs(active_encounter_run_id)
   WHERE active_encounter_run_id IS NOT NULL;   -- §2.2's guard is one indexed lookup
@@ -707,10 +772,12 @@ CREATE TABLE campaign_run_creations (
   command_id TEXT NOT NULL,
   campaign_version INTEGER NOT NULL,
   operands_digest TEXT NOT NULL,
-  campaign_run_id TEXT NOT NULL UNIQUE REFERENCES campaign_runs(id) ON DELETE CASCADE,
+  campaign_run_id TEXT NOT NULL UNIQUE,
   result_payload TEXT NOT NULL,       -- canonical exact create result returned on response-loss replay
   created_at TEXT NOT NULL,
-  PRIMARY KEY (learner_id, campaign_id, command_id)
+  PRIMARY KEY (learner_id, campaign_id, command_id),
+  FOREIGN KEY (campaign_run_id, learner_id, campaign_id, campaign_version)
+    REFERENCES campaign_runs(id, learner_id, campaign_id, campaign_version) ON DELETE CASCADE
 ) STRICT;
 
 CREATE TABLE campaign_events (
@@ -735,19 +802,14 @@ CREATE UNIQUE INDEX idx_campaign_events_command
   ON campaign_events(campaign_run_id, command_id);
 
 CREATE TABLE campaign_reward_awards (
-  learner_id TEXT NOT NULL REFERENCES learners(id) ON DELETE CASCADE,
-  campaign_id TEXT NOT NULL,
-  campaign_version INTEGER NOT NULL,
   campaign_run_id TEXT NOT NULL REFERENCES campaign_runs(id) ON DELETE CASCADE,
   durable_reward_id TEXT NOT NULL,    -- canonical identity compiled from §3.6's closed union
   reward_payload TEXT NOT NULL,       -- canonical JSON of that exact union member
   awarded_at TEXT NOT NULL,
-  PRIMARY KEY (
-    learner_id, campaign_id, campaign_version, campaign_run_id, durable_reward_id
-  )
+  PRIMARY KEY (campaign_run_id, durable_reward_id)
 ) STRICT;
 CREATE INDEX idx_campaign_reward_awards_owned
-  ON campaign_reward_awards(learner_id, durable_reward_id);
+  ON campaign_reward_awards(durable_reward_id, campaign_run_id);
 ```
 
 Discipline inherited by name: `STRICT` + literal CHECK strings (the migration-9 freeze lesson,
@@ -764,6 +826,17 @@ connections racing different create commands serialize at SQLite's writer bounda
 commits and the other observes the unique constraint and returns `CAMPAIGN_RUN_ACTIVE_EXISTS`.
 The permanent author control uses two worker-owned connections to the same file and fails if both
 commit ([[D2420]]).
+
+`campaign_runs` is the one relational ownership authority ([[D2622]]). Its composite unique key
+binds learner, campaign and version to the run id. `campaign_run_creations` references that whole
+key, so a receipt cannot describe Alice/campaign A while pointing at Bob/campaign B. Durable award
+rows store only `campaign_run_id`; owned-award queries join through `campaign_runs` rather than
+trusting repeated learner/campaign/version columns. The active play-run pointer is both unique and
+a composite foreign key to `(drill_runs.id,drill_runs.owner_learner_id)`, backed by the named
+parent index: a play run cannot be shared by two campaigns or attached across owners. Restore and
+startup reconciliation run `foreign_key_check`, then re-derive every materialized status and
+active pointer from canonical events. Crossed creation, award, owner and active-pointer fixtures
+must fail at insertion or reconciliation, never merely disappear from an owned query.
 
 Campaign creation validates a registry document and
 calls `createCampaignRunExactlyOnce`. One database transaction writes its RFC-8785 canonical bytes
@@ -791,6 +864,26 @@ event stores the exact non-negative revision read before the command, and its co
 `expected_revision + 1`. No other kind may carry NULL and creation may not invent zero
 ([[D2421]]).
 
+**Closed semantic event image ([[D2623]]).** Storage text is parsed into a discriminated
+`CampaignEvent` before folding or replay. The parser requires the common envelope exactly and the
+payload key set below exactly; missing or extra keys, a result kind that does not correspond to the
+event kind, a result revision other than `seq`, or a digest not covering
+`{result.kind,result.campaignRevision,payload}` refuses admission:
+
+| kind | exact payload members | exact result kind |
+|---|---|---|
+| `campaign_created` | `campaignId,campaignVersion,documentDigest,startingCharges` | `campaign_created` |
+| `node_entered` | `nodeId,playRunId,inventoryEventSeq,packDigest` | `encounter_started` |
+| `node_committed` | `nodeId,playRunId,branchId,verdict,participation,actIncome,reward,terminal` | `node_committed` |
+| `loadout_changed` | `equippedModuleIds` | `loadout_changed` |
+| `charge_spent` | `playRunId,mutationCommandId,operation,amount` | `mutation_committed` |
+| `campaign_abandoned` | `activeNodeId,activePlayRunId` | `campaign_abandoned` |
+
+Each nested member is parsed through its closed schema, canonicalized, copied away from caller
+ownership and recursively frozen. The fold receives only this sealed value; it never receives
+`Record<string,unknown>` or a shallow-frozen parsed object. Empty `node_committed`, wrong-kind
+results, unknown nested reward members and post-parse mutation all have explicit failing controls.
+
 Every mutation has a validated `CampaignCommandId` and, after creation, an expected integer event
 revision. `campaign_run_creations` is the durable create authority; the unique event index plus
 `operands_digest` and canonical `result_payload` is the durable authority for every later command.
@@ -806,7 +899,8 @@ depends on a process-local idempotency map ([[D2422]]).
 compiles completion/prestige eligibility and exact `DurableRewardGrant` rows, and validates every
 cosmetic against the shared appearance catalog. The one database transaction appends the event,
 updates materialized status/pointer, and inserts all eligible award rows. Its award idempotency
-identity remains `(learnerId, campaignId, campaignVersion, campaignRunId, durableRewardId)`.
+identity is `(campaignRunId,durableRewardId)`; learner, campaign and version are derived through
+the run authority rather than duplicated.
 Duplicate submit delivery returns the existing event/result/award bytes. Active, abandoned, wrong
 learner, campaign snapshot/digest mismatch, wrong gate, unknown appearance id or reward absent from
 the snapshot inserts neither event nor award. There is no uncalled award command, volatile hook or
@@ -1142,6 +1236,30 @@ Exact review: `planning/campaign/fourth-fresh-independent-buildability-review-20
 No schema, migration, API, client or official-content implementation is authorized before a
 bounded repair, another fresh acceptance and the already named dependency acceptances.
 
+## Fifth author repair (2026-09-04)
+
+The bounded repair above is complete without changing production code or campaign content:
+
+1. **[[D2620]]:** all four charged gestures carry the same cross-aggregate command, expected
+   Campaign revision, normalized operands digest and stored terminal result. Provider failure is
+   replayable and spends nothing.
+2. **[[D2621]]:** applicability, disclosure and attributed-source receipts must equal the full
+   `CampaignAssistanceSubject`; pack-, node-, context-, ceiling- and event-cut crossing refuses.
+3. **[[D2622]]:** one composite campaign-run identity owns creation and awards, while the unique
+   composite play-run pointer enforces same-owner active encounter membership.
+4. **[[D2623]]:** every event/result kind has an exact recursive parser, canonical digest and
+   immutable admitted value; a generic JSON object is not a campaign event.
+5. **[[D2624]]:** the official-curriculum compiler starts from the complete pinned document and
+   sealed registries, emits one fact per exact node and owns the target, envelope, evidence,
+   dependency action/fallback/availability and review joins.
+
+The disposable executable receipt is
+`tools/d2620-campaign-fifth-author-repair/`; `make
+campaign-two-horizon-fifth-author-repair` retains the prior author target and adds five boundary
+groups plus strict TypeScript. This is an author/buildability checkpoint only. No product
+implementation is authorized until a new independent review accepts these repaired authorities and
+the named dependencies are accepted.
+
 ## Campaign 1.0 closure map
 
 This RFC is the **foundation milestone**, not permission to mark the Campaign capability complete.
@@ -1329,6 +1447,35 @@ authority; neither artifact can stand in for the other.
     §10 milestone lacks its end-to-end receipt. In particular, a pack-only boss, a progress page
     without the pack-card mark, or marks/cosmetics with no future-run effect cannot discharge the
     corresponding milestone.
+32. **Charged commands are exactly once across both aggregates**: rewind, fork, group and
+    simulation entry carry the same command envelope through REST/client/service/storage. Same
+    command/same operands replays exact bytes after later state advances; changed operands refuse;
+    concurrent different commands at one expected revision yield one commit and one stale result.
+    Fault injection between every play/event/projection write leaves no mutation or charge.
+    Asynchronous provider failure is stored once, spends no charge, advances neither revision and
+    replays without another provider call.
+33. **Assistance receipts cannot cross subjects**: one authorized control uses equal campaign,
+    node, play run, pack digest, `campaign` context, disclosure ceiling, inventory-event sequence
+    and `node_entered` digest across authority/applicability/disclosure/source receipts. Changing
+    each field independently yields `subject_mismatch`; changing only applicability or disclosure
+    truth yields its narrower declared unavailable reason.
+34. **Relational ownership is not a query convention**: foreign keys enabled, a crossed
+    creation/run identity, crossed active play-run owner and second campaign pointing at one play
+    run all fail insertion. Awards store no duplicated learner/campaign/version authority and the
+    owned projection joins through `campaign_runs`. Restore/reconciliation rejects every crossed
+    fixture and `foreign_key_check` is empty for the control.
+35. **Events are semantic closed values**: all six exact payload/result members round-trip through
+    canonical storage and the fold; missing/extra keys, empty `node_committed`, wrong result kind or
+    revision, unknown nested union member and wrong digest fail. Mutating every nested caller input
+    after parsing cannot change the admitted event, and attempting to mutate the admitted event
+    fails because the complete value is recursively frozen.
+36. **Official curriculum has one compiler authority**: the compiler receives the parsed pinned
+    document and sealed registries, and emits exactly one fact for each and only each document
+    node. Independent negatives cover duplicate/ghost/missing nodes, unknown target bracket,
+    inverted/zero envelope, unknown passage/evidence/requirement/provider operation, missing
+    unavailable action/fallback/source availability, phase/form emptiness, set inequality and a
+    review receipt for different bytes. It may establish provenance and completeness, never chess
+    correctness.
 
 ## Discharges
 
@@ -1378,6 +1525,15 @@ set).
   persona.
 
 ## Changelog
+
+- 2026-09-04 (**fifth author repair**): repaired [[D2620]]–[[D2624]] without production changes.
+  All charged gestures now use one replayable cross-aggregate command; assistance gates share an
+  exact encounter subject; composite foreign keys and derived award ownership remove relational
+  aliases; the event log admits only closed, recursively sealed semantic values; and the complete
+  official-curriculum projection is compiled from the pinned document and sealed registries.
+  `make campaign-two-horizon-fifth-author-repair` retains the prior author controls and adds five
+  boundary groups plus strict TypeScript. Fresh independent review and accepted dependencies still
+  gate implementation. Exact receipt: `planning/campaign/fifth-author-repair-2026-09-04.md`.
 
 - 2026-09-04 (**fourth fresh independent return**): returned the RFC on [[D2620]]–[[D2624]].
   The live rewind/fork/group/simulation-entry operations cannot supply the mutation command and

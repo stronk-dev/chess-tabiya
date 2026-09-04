@@ -15217,3 +15217,21 @@ groups plus strict TypeScript. Exact receipt:
 `planning/safe-deployment-profiles/second-author-repair-2026-09-04.md`. Another genuinely fresh
 independent review still gates acceptance and production implementation; F12-A, D607, D1846 and
 D1847 receive no premature completion credit.
+
+## 2026-09-04 — Campaign core fifth author repair
+
+**What landed:** The bounded contract-tier repair for [[D2620]]–[[D2624]] and the maintained
+`make campaign-two-horizon-fifth-author-repair` target. No production campaign schema, migration,
+storage, API, client, content, archive or protected-design byte changed.
+
+**What changed:** one replayable command now owns every charged play/campaign mutation; assistance
+receipts bind the complete encounter subject; composite relational keys remove crossed ownership;
+events are closed recursively sealed semantic values; and official curriculum compiles from the
+pinned document plus sealed registries rather than caller-supplied facts.
+
+**Evidence/next:** the maintained target retains 43 prior author controls and passes 5/5 new
+behavioral groups plus strict TypeScript. Exact receipt:
+`planning/campaign/fifth-author-repair-2026-09-04.md`. Another genuinely fresh independent review
+and accepted dependencies still gate production implementation; full-game bosses, catalogue
+progression, durable variety and official human-authored content receive no premature completion
+credit.

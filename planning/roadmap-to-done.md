@@ -1129,7 +1129,11 @@ charged live mutations have no replayable command identity, assistance receipts 
 subjects, duplicated SQL ownership can disagree, event semantics remain mutable/unparsed and the
 official-curriculum model omits most of criterion 30. `make
 campaign-two-horizon-fourth-fresh-review` retains all 43 author checks and reproduces 5/5. A bounded
-repair, another fresh review and named dependencies still gate implementation.
+fifth author repair now closes those contract seams: one charged cross-aggregate command/result,
+exact assistance-subject equality, composite relational ownership, closed recursive events and a
+pinned-document curriculum compiler. `make campaign-two-horizon-fifth-author-repair` retains the
+43 controls and passes five new boundary groups plus strict TypeScript. Another fresh review and
+named dependencies still gate implementation.
 The full-game successor is now explicit rather than hidden in a discharge: `campaign-boss-games`
 owns campaign-schema lane 3 and the complete Act-II position-game journey. It composes one exact
 calibrated human-like bot profile, rules-terminal result, clean rating versus explicit

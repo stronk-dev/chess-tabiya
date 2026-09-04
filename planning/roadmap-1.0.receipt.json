@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:7e4a0ac5bd2aa53d8389b8b44c8fa3e484df1c9bb311e3f41bc69b41d5e45af7",
+    "roadmap": "sha256:1bf403ea2b08f4d55b33ff5b31526986887a19872b071fd9d59b4b7d5d0b73a7",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:0669697da5d5dc45513c6fa6b291c3ca2cd6077c6e2c035baf826d9078b6d4cf",
-    "rfcRegister": "sha256:f44c380068d978c7812878f29bb8cc5180576021a6c105e05f782fd1e694e80a",
+    "workState": "sha256:4f4ba875a0ace8bc0119699a2c235977d69093dc67be7e713160a1963de43d2c",
+    "rfcRegister": "sha256:3be5cbe5b93088b6c5d90ac119210ed0d0ee4117bf20adfdd7770006ac41bdda",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -265,18 +265,21 @@
       "nextAction": "Land migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results; extend export, deletion, backup and rebuild with each object.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Longitudinal persistence and storage backup/recovery now have bounded author repairs over source authority and crash-safe appliance state, but production remains unauthorized pending fresh reviews. Campaign core remains returned; bot policy and social durable state retain returned or dependency-blocked boundaries.",
+        "summary": "Longitudinal persistence, storage backup/recovery, safe deployment and Campaign core now have bounded author repairs over source authority, crash-safe appliance state and relational/replayable campaign state, but production remains unauthorized pending fresh reviews. Bot policy and social durable state retain returned or dependency-blocked boundaries.",
         "impact": "held",
         "evidence": [
           "rfc/storage-backup-recovery.md",
           "planning/storage-backup-recovery/third-author-repair-2026-09-04.md",
           "planning/storage-backup-recovery/third-fresh-independent-buildability-review-2026-09-04.md",
+          "rfc/safe-deployment-profiles.md",
+          "planning/safe-deployment-profiles/second-author-repair-2026-09-04.md",
           "rfc/longitudinal-store.md",
           "planning/longitudinal-store/seventh-author-repair-2026-09-04.md",
           "rfc/bot-policy.md",
           "planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md",
           "rfc/campaign-core.md",
-          "planning/campaign/third-fresh-independent-buildability-review-2026-08-31.md",
+          "planning/campaign/fifth-author-repair-2026-09-04.md",
+          "planning/campaign/fourth-fresh-independent-buildability-review-2026-09-04.md",
           "rfc/social-play.md"
         ]
       },

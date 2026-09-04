@@ -20953,7 +20953,7 @@
       "id": "D2620",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a093780161d47d73467711df32ade9e8f08324b38b37169862250c6d41e95d35",
+      "sourceDigest": "sha256:2f03bcd71284ca5b7abcd5efe67b52995c5dacd08fe2073c72f32f397ba508c9",
       "uxItems": [],
       "owner": "campaign",
       "blocker": "rfc:campaign-core.md"
@@ -20962,7 +20962,7 @@
       "id": "D2621",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c0e4722a0e149255771b008c292aef80435b535fd6c36430e0c5d549176f5a56",
+      "sourceDigest": "sha256:042d5bbe02ab1d82d5dd5efc296b6b6149a8e86616df01f900c1c5c4f4d8a9dd",
       "uxItems": [],
       "owner": "campaign",
       "blocker": "rfc:campaign-core.md"
@@ -20971,7 +20971,7 @@
       "id": "D2622",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:83784ca02762aeffa84c0a8713bff462bc7bbb8b98acf88a28739f7b63fb4cbe",
+      "sourceDigest": "sha256:ff10e8ec288a020a4d5efad0ebbd72e3fb6dde35a3cdc3a1ca18fd96246d595c",
       "uxItems": [],
       "owner": "campaign",
       "blocker": "rfc:campaign-core.md"
@@ -20980,7 +20980,7 @@
       "id": "D2623",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:197392bd74ea0506a598249bba92c8595776398efdbd492a70a22a08b6c3840c",
+      "sourceDigest": "sha256:1d6914a061e4da8ed079cf95db36768a1f62ad834ba4cbfeafbbcd0aaa712edc",
       "uxItems": [],
       "owner": "campaign",
       "blocker": "rfc:campaign-core.md"
@@ -20989,7 +20989,7 @@
       "id": "D2624",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:863ae42522a5e7c98a1a9525ca796ca6ae042b4aeecb9cd5aef65ca7bdf65725",
+      "sourceDigest": "sha256:0d892e48a2d32401a1b5968b10c2ccf62468ede937180dc3dad4f5bfeaa2d051",
       "uxItems": [],
       "owner": "campaign",
       "blocker": "rfc:campaign-core.md"

@@ -38,7 +38,7 @@ describe("D2420-D2427 Campaign fourth author repair", () => {
     const filename = join(directory, "campaign.sqlite");
     try {
       const database = new DatabaseSync(filename);
-      database.exec("PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; CREATE TABLE learners (id TEXT PRIMARY KEY) STRICT; INSERT INTO learners VALUES ('learner');");
+      database.exec("PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; CREATE TABLE learners (id TEXT PRIMARY KEY) STRICT; CREATE TABLE drill_runs (id TEXT PRIMARY KEY, owner_learner_id TEXT NOT NULL) STRICT; INSERT INTO learners VALUES ('learner');");
       database.exec(sql);
       database.close();
       const gate = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 2);
