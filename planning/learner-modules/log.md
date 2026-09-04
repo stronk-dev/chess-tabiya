@@ -82,3 +82,16 @@ remains the next authority gate.
 - `make module-registration-ninth-author-repair` passes retained 11/11 + 6/6 + 2/2.
 - Another genuinely fresh review still gates acceptance and implementation. Exact repair:
   `ninth-author-repair-2026-09-04.md`.
+
+## 2026-09-04 — module-registration tenth fresh independent return
+
+- The bounded [[D2557]] check-authority repair survives and does not activate any module.
+- [[D2584]] records the generated position-duty-to-edge relabel hidden by
+  `operation_owned_occurrences`.
+- [[D2585]] records Postcommit/Review bindings pointed at a hypothetical-candidate selector that
+  explicitly forbids committed edges.
+- [[D2586]] records the production emitter accepting sealed move/duty/capture/exchange evidence
+  crossed from a second legal line.
+- `make module-registration-tenth-fresh-review` reproduces 3/3. Exact review:
+  `tenth-fresh-independent-buildability-review-2026-09-04.md`.
+- A bounded tenth author repair and another fresh review gate acceptance and implementation.

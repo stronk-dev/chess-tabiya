@@ -14744,3 +14744,19 @@ voice/TTS outcomes; and Retry/Change opponent remains copy without a typed resum
 One bounded author repair must join the existing provider exchange, derive the real call graph and
 totalize recovery/cache/pipeline/learner settlement. Neither provider-health implementation
 checkpoint is authorized before another genuinely fresh review.
+
+## 2026-09-04 — Module-registration tenth fresh review returns crossed evidence authority
+
+**What landed:** A fresh generated-plan and runtime review preserves the ninth check-authority
+repair and returns `module-registration` on [[D2584]]–[[D2586]]. No product module, route, UI,
+schema, content or protected-design byte changed.
+
+**What changed:** exact tactic windows disagree with their own input grain; committed Postcommit
+and Review moments still name a hypothetical candidate selector that forbids committed edges; and
+the observed deflection emitter accepts correctly sealed move/duty/capture/exchange evidence from
+a different legal line because it checks projection names rather than occurrence identity.
+
+**Evidence/next:** `make module-registration-tenth-fresh-review` reproduces 3/3. Exact receipt:
+`planning/learner-modules/tenth-fresh-independent-buildability-review-2026-09-04.md`. A bounded
+tenth author repair must preserve intrinsic offsets, compile moment-to-source eligibility and bind
+every derivation input to the emitted event before another fresh review or implementation.

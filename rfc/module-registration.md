@@ -1,7 +1,15 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — ninth author repair complete 2026-09-04 on [[D2557]]; another genuinely
-  fresh review is required.** Provider acquisition, exact catalogue gates, edge-grained eval delta,
+- **Status:** **draft — tenth fresh review returned the requirements/runtime join on
+  [[D2584]], [[D2585]] and [[D2586]]; a bounded tenth author repair and another fresh review are
+  required.** The
+  ninth [[D2557]] repair survives: the live check projection, selector and constructor remain
+  correctly separated from the unbuilt recorded-path occurrence operation. The new review proves
+  that exact tactic windows relabel a position duty reading as edge evidence, postcommit/review
+  rows point at a hypothetical-candidate view that forbids committed edges, and the live observed
+  tactic emitters accept sealed but crossed move/duty/capture/exchange evidence. `make
+  module-registration-tenth-fresh-review` reproduces all three. No implementation is authorised.
+  Provider acquisition, exact catalogue gates, edge-grained eval delta,
   per-alternative deflection inputs, all 205 exact pointers and the final receipt seal survive. The
   regenerated execution image now binds the live check projection, induction selector, sealed event
   constructor and emitter as implemented derivation authority, while retaining the real
@@ -2117,6 +2125,20 @@ and final emission remains refused. `make module-registration-ninth-author-repai
 11/11 + 6/6 + 2/2. Exact repair:
 `planning/learner-modules/ninth-author-repair-2026-09-04.md`. Another genuinely fresh review gates
 acceptance and implementation.
+
+Tenth fresh independent return (2026-09-04):
+
+| row | returned requirement |
+|---|---|
+| [[D2584]] | retain `defender_duty_set` as a position-zero reading in every exact tactic window; do not relabel it edge-grained behind a generic operation relation |
+| [[D2585]] | compile a closed module-moment-to-source relation so Postcommit and Review consume recorded edges rather than candidate views that forbid committed edges |
+| [[D2586]] | bind every sealed move/duty/capture/exchange derivation input to the exact event anchors, offsets and retained identities; crossed valid evidence must fail |
+
+`make module-registration-tenth-fresh-review` reproduces all three, including a runtime crossed-line
+splice. Exact review:
+`planning/learner-modules/tenth-fresh-independent-buildability-review-2026-09-04.md`. A bounded
+tenth author repair and another fresh independent review are required before acceptance or
+implementation.
 
 | row | author repair; fresh review still required |
 |---|---|

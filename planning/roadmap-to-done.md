@@ -394,6 +394,15 @@ and final emission is still refused. `make module-registration-ninth-author-repa
 11/11 + 6/6 + 2/2; another genuinely fresh review gates acceptance. Receipt:
 `planning/learner-modules/ninth-author-repair-2026-09-04.md`.
 
+The tenth fresh module-registration review preserves that bounded check repair and returns the
+wider evidence join on [[D2584]]–[[D2586]]. Three exact tactic windows call a position-zero duty
+reading edge-grained; Postcommit Nudge and Review Map point committed moments at a candidate view
+whose selector forbids committed edges; and the live observed-tactic emitter accepts correctly
+sealed move/duty/capture/exchange inputs crossed from another legal line. `make
+module-registration-tenth-fresh-review` reproduces all three, including the runtime splice. A
+bounded tenth author repair and another fresh review still precede acceptance or implementation.
+Receipt: `planning/learner-modules/tenth-fresh-independent-buildability-review-2026-09-04.md`.
+
 The 2026-09-02 fourth fresh promotion-collector review keeps the two held projections out of the
 foundation on [[D2521]], [[D2522]] and [[D2523]]. Its advertised closed request uses two undefined types, the
 injected Syzygy callable matches no provider operation and leaves normalized request bytes

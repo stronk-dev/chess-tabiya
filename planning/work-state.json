@@ -20624,6 +20624,33 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2584",
+      "state": "blocked",
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:module-registration.md",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6b1d03a7bb7779a2dccf7104e0b49d3b939f886671d6d5fe12eee3b261529dc6",
+      "uxItems": []
+    },
+    {
+      "id": "D2585",
+      "state": "blocked",
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:module-registration.md",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:22c288a60d4a266f2549effdfaabbd72976c071494f41891a26f6c3b665a037e",
+      "uxItems": []
+    },
+    {
+      "id": "D2586",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "blocker": "rfc:module-registration.md",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:949e63e3ae4dbdebead668db52986cd82253c4cef839e37e08e91d4e7afef836",
+      "uxItems": []
     }
   ]
 }
