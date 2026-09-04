@@ -20435,6 +20435,69 @@
       "uxItems": [],
       "evidence": "planning/shared-resource-register-bootstrap/sixth-author-repair-2026-09-04.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2563",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:46a6f19c1b9b93d7c3d393b8016d356f9e03a46882aa67d49027796d30d37d22",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2564",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d357bde536e3a80f54193a30af45423bc8c8fd014c229e18b5e15d3cd56239f1",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2565",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:3ca77f65ada4472e121537e6c9ab5e5c1a5f0908b3d2e7a6248d4ec3b8602bd0",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2566",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1e99d56e48f259b73ac069f031af9219fb8bd6abd0abb4ccf56108e4675d224e",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2567",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:98834c7eb924de8249794ed47d692b78845515d70824fb606a33bc65fc91746a",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2568",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:eeda427fd0a1d3c0770573e55ee9661d862ece2ed46c9d844da2fef0f959a4ec",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2569",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f17b26cd5bc7320bfb70e79e6b6750eceadc4602df71f8001ac02d20d26f28c3",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:pack-capability-contract.md"
     }
   ]
 }

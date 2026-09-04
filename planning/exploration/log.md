@@ -14655,3 +14655,21 @@ self-consistent crossed resource ids; and overload collapse all fail in the main
 fourth, third, second and reconciliation author controls remain green. The RFC is still draft and
 implementation remains unauthorized until another genuinely fresh independent review reconstructs
 the repair.
+
+## 2026-09-04 — Pack-capability tenth fresh review returns seven durable-job joins
+
+**What landed:** a fresh review reconstructed the tenth repair's SQL, strict protocol, request
+digests, two-connection admission, rewind and application-receipt images. [[D2563]]–[[D2569]]
+record seven false-green boundaries; no production, schema, migration, storage, API, pack, content
+or protected-design byte changed.
+
+**What changed:** the retained protocol still omits the lease generation/request digest and
+application receipt it now promises. Arbitrary extra-key/wrong-schema objects receive authoritative
+digests; SQL accepts canonical request bytes for a different run/origin than their columns; rewind
+models only a destination string; application receipts accept backwards revisions and unrelated
+events; and the concurrent gate uses fixed ids while merely asserting UUID construction in JSON.
+
+**Evidence/next:** `make pack-capability-tenth-fresh-review` reproduces 7/7 while the tenth, ninth,
+eighth and cumulative author gates remain green. A bounded eleventh author repair must make the
+retained typed protocol, parsers and transaction models the same authority as the prose, followed
+by another genuinely fresh independent review. [[D560]] remains whole.

@@ -128,6 +128,15 @@ the authoring tier with an executable 4/4 repair receipt and all prior author co
 The RFC remains draft: another genuinely fresh independent review must reconstruct those repairs
 before the generic catalogue engine or any product authority may be implemented.
 
+The same-day tenth fresh review of `pack-capability-contract` returns its durable evidence-job
+boundary on seven executable joins ([[D2563]]–[[D2569]]): the strict protocol omits the new lease
+and application receipts; request digests accept open values; canonical request bytes are not
+joined to their storage columns; rewind and application receipts prove only partial state; and the
+concurrency fixture bypasses UUID construction. The prior SQL/digest/concurrency directions remain
+valid, but an eleventh author repair and another independent review now precede acceptance. This is
+foundation work, not content churn: no pack or schema byte is authorized while the contract is
+returned.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

@@ -1,11 +1,12 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **tenth author repair complete 2026-09-02 for [[D2542]]–[[D2547]];
-  another genuinely fresh independent review is required.** Composite batch identity, monotone
-  lease fencing, exact request bytes, serialized first-flight admission, the total rewind table
-  and durable application receipts are specified and exercised by
-  `make pack-capability-tenth-author-repair` (6/6). No schema, registry, API, migration, storage,
-  pack or digest implementation is authorised and the D560 hold stays whole.
+- **Status:** draft — **RETURNED by the tenth fresh independent review 2026-09-04 on
+  [[D2563]]–[[D2569]].** The SQL/prose repairs preserve their intended direction, but the retained
+  protocol omits generation and application receipts; request digests lack a closed parser and
+  column/value join; rewind and receipt models prove only subsets; and the concurrency test does
+  not exercise UUID construction. `make pack-capability-tenth-fresh-review` reproduces 7/7 while
+  every retained author gate stays green. No implementation is authorised and the D560 hold stays
+  whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -2099,6 +2100,33 @@ design byte changed. Another genuinely fresh independent review must attack the 
 join, concurrent loser behavior, lease rollover, every rewind source state and receipt reload before
 acceptance or implementation.
 
+## Tenth fresh independent return (2026-09-04)
+
+The tenth repair's column-level composite foreign key, durable SQL lease counter, separate digest
+domains, two-connection lock ordering, eight-state vocabulary and contiguous event-range check all
+survive. Fresh review returns seven deeper executable boundaries:
+
+1. [[D2563]] — the retained strict `running` protocol still omits lease generation and request
+   digest, so code can compile without the four-field lease receipt;
+2. [[D2564]] — its `consumed` arm still omits the application receipt entirely;
+3. [[D2565]] — request digests accept arbitrary objects because the author image has no closed v1
+   parser and still types batch jobs as `unknown`;
+4. [[D2566]] — the composite foreign key binds duplicated columns but the demonstrated image does
+   not join batch columns to batch request values, child columns, indexed job request or immutable
+   node/FEN;
+5. [[D2567]] — rewind is modeled as string-to-string state mapping and cannot observe lease clear,
+   generation increment, cancellation settlement or preserved terminal bytes;
+6. [[D2568]] — application receipts validate only a non-empty contiguous sequence, accepting
+   reversed revisions and events unrelated to the claimed run/node/job; and
+7. [[D2569]] — the concurrent gate supplies fixed batch/job ids, so its adjacent declaration of
+   `crypto.randomUUID()` is never executed.
+
+Exact evidence:
+`planning/pack-capability-contract/tenth-fresh-independent-buildability-review-2026-09-04.md`;
+`make pack-capability-tenth-fresh-review` passes 7/7. A bounded eleventh author repair must make the
+retained protocol, parsers and transaction models the same authority as the prose before another
+fresh review, acceptance or implementation.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -2376,6 +2404,12 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-09-04 (**tenth fresh independent return**): returned on [[D2563]]–[[D2569]]. The retained
+  protocol omits the new lease/application receipts; arbitrary request objects can be digested;
+  canonical request values are not joined to storage columns; rewind and application models prove
+  only partial transitions; and fixed ids bypass the declared UUID authority. Exact report:
+  `planning/pack-capability-contract/tenth-fresh-independent-buildability-review-2026-09-04.md`.
+  `make pack-capability-tenth-fresh-review` passes 7/7; implementation remains unauthorized.
 - 2026-09-02 (**[[D2518]]–[[D2520]] eighth author repair**): added both disjoint HTML shared-token
   branches, the two queued evidence-provider operation ids, three sealed enqueue origins and one
   durable admission/lease/retry/settlement/consumption algebra. Claims a migration position behind
