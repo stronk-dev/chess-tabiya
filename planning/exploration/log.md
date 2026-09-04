@@ -14552,3 +14552,25 @@ held promotion projections remain untouched.
 **Evidence/next:** `make semantic-collectors-deflection-seal-fresh-review` passes 4/4 plus strict
 TypeScript. Implement the constructor, tactical delegation, three deflection call sites and permanent
 fixtures; rerun all retained deflection gates plus full repository verification.
+
+## 2026-09-04 — Deflection check authority lands at the production boundary
+
+**What landed:** [[D2536]], [[D2552]] and [[D2553]] are implemented. Deflection has exact
+bait-capture and check-induced derivation members; one shared induction selector serves detector,
+emitter and both recorded-path modes; one narrow sealed check-event constructor serves broad and
+exact-source compilation. Permanent legal fixtures cover check-only and dual-arm lines and the
+missing, unnecessary, copied, crossed-edge and wrong-projection refusals.
+
+**What changed:** module-registration's upstream deflection dependency is now buildable, but that
+RFC remains draft until its next fresh review exercises the join. The two held promotion projections
+are untouched. [[D2554]] closes the stale canonical evidence docs and [[D2555]] adds maintained Make
+targets for both recorded-path instruments. The full gate then found [[D2556]]: value-authority's
+generated route receipt correctly added `checkSemanticEvent`, while its prose/author contract still
+hard-coded 45 operations. The current census is 184 used routes to 46 exact operations and the
+contract names the new constructor explicitly.
+
+**Evidence/next:** all six retained deflection gates and 1,111 software tests pass. D1930 preserves
+the eager-path refusal at 40/80 plies; D1931 produces byte-identical results in exact-source mode at
+74.3/144.4/245.2 ms p95 through 80 plies, below the 500 ms bound. Full-repository verification and
+tracker receipts close the checkpoint. Next after the requested break: fresh-review
+`module-registration` against the now-live deflection seam.

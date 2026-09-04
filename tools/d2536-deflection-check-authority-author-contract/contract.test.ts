@@ -10,16 +10,15 @@ const edge: RecordedEdgeIdentity = Object.freeze({ beforeFen: "before", moveUci:
 const check = Object.freeze({ projection: "rules.tactic.event.check@1" as const, anchor: edge });
 
 describe("D2536 deflection check authority author contract", () => {
-  it("reproduces the current manifest and emitter gap at HEAD", () => {
+  it("guards the implemented manifest union and emitter authority", () => {
     const projection = PRIMARY_EVIDENCE_MANIFEST.projections.find((row) => row.id === "derived.tactic.deflection_observed")!;
-    expect(projection.derivation).toEqual({ inputs: [
-      { id: "run.record.move", version: 1 },
-      { id: "rules.tactic.reading.defender_duty_set", version: 1 },
-      { id: "rules.transition.event.capture", version: 1 },
-      { id: "rules.exchange.predicate.legal_exchange", version: 1 },
-    ] });
+    const common = [
+      { id: "run.record.move", version: 1 }, { id: "rules.tactic.reading.defender_duty_set", version: 1 },
+      { id: "rules.transition.event.capture", version: 1 }, { id: "rules.exchange.predicate.legal_exchange", version: 1 },
+    ];
+    expect(projection.derivation).toEqual({ anyOf: [common, [...common, { id: "rules.tactic.event.check", version: 1 }]] });
     const signature = source.slice(source.indexOf("export function deflectionObservedSemanticEvent"), source.indexOf("export function attractionObservedSemanticEvent"));
-    expect(signature).not.toMatch(/checkEvidence/u);
+    expect(signature).toMatch(/checkEvidence\?: SemanticEvidenceEvent<CheckEvent>/u);
   });
 
   it("selects one deterministic alternative and refuses unnecessary authority", () => {

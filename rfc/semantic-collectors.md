@@ -1,12 +1,12 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
-- **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The D2536
-  deflection check-authority amendment passed fresh review, then implementation returned [[D2552]];
-  its bounded selector repair survived fresh review 2026-09-04, but that review returned the
-  exact-source event authority on [[D2553]], repaired and accepted by fresh review 2026-09-04.** The
-  shared induction selector and narrow sealed check-event constructor now pass the real check-only
-  and dual-arm lines with byte-identical broad/narrow event ids, plus absence and crossed-FEN
-  refusals. The bounded D2536/D2552/D2553 production implementation is authorized. **The held
+- **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The bounded
+  [[D2536]]/[[D2552]]/[[D2553]] deflection check-authority amendment was implemented 2026-09-04.**
+  One shared induction selector chooses bait-capture before check-induced authority, one narrow
+  sealed check-event constructor serves broad and exact-source compilation, and the emitter requires
+  that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
+  unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
+  retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
   promotion pair completed its fourth author repair 2026-09-02 on [[D2521]], [[D2522]] and
   [[D2523]], then was **RETURNED by fifth fresh independent review on [[D2548]]–[[D2551]].** The
   source repair survives, but request-digest construction, the exact output/operand ABI and a real
@@ -1327,6 +1327,13 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-04: implemented the bounded [[D2536]]/[[D2552]]/[[D2553]] deflection amendment. The live
+  catalogue has two exact derivation members; detector, emitter and both recorded-path modes share
+  one induction selector; broad and exact-source paths share one sealed check-event constructor.
+  Permanent fixtures cover check-only and dual-arm lines plus missing, unnecessary, copied,
+  crossed-edge and wrong-projection refusals. D1930 still refuses the eager full path beyond 20
+  plies; D1931 proves the exact-source path byte-equal and below 500 ms through 80 plies. The two
+  held promotion projections remain untouched.
 - 2026-09-04: fresh review accepted the combined [[D2536]]/[[D2552]]/[[D2553]] bounded production
   repair. The narrow constructor is event-identical to broad/local tactical compilation on check-only
   and dual-arm lines; absence and crossed-FEN refusals pass. Production implementation is authorized.

@@ -6,16 +6,16 @@ import { performance } from "node:perf_hooks";
 import {
   attractionObservedOperands,
   attractionObservedSemanticEvent,
-  checkEvent,
+  checkSemanticEvent,
   checkZwischenzugObservedOperands,
   checkZwischenzugSemanticEvent,
-  declareCheckEventEvidence,
   declareDefenderDutyEvidence,
   declareLegalExchangeEvidence,
   declareRunRecordEvidence,
   defenderConsequenceOperands,
   defenderConsequenceSemanticEvent,
   defenderDutyReading,
+  deflectionObservedInduction,
   deflectionObservedOperands,
   deflectionObservedSemanticEvent,
   harassmentPressureSemanticEvent,
@@ -34,6 +34,7 @@ import {
   tradeCompletedSemanticEvent,
   transitionSemanticEvents,
   type DeclaredEvidence,
+  type CheckEvent,
   type RecordedMoveAnchor,
   type SemanticEvidenceEvent,
 } from "@chess-tabiya/runtime";
@@ -67,7 +68,7 @@ interface Edge {
   readonly anchor: RecordedMoveAnchor;
   readonly moveEvidence: DeclaredEvidence<unknown>;
   readonly capture?: SemanticEvidenceEvent;
-  readonly check?: DeclaredEvidence<unknown>;
+  readonly check?: SemanticEvidenceEvent<CheckEvent>;
 }
 interface Result {
   readonly mode: Mode;
@@ -115,11 +116,10 @@ function compile(rows: readonly ResearchRow[], mode: Mode): Result {
       ? (eagerCalls += 1, localSemanticEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen))
       : (transitionCalls += 1, transitionSemanticEvents(anchor.beforeFen, anchor.moveUci, anchor.afterFen));
     const capture = values.find((event) => key(event) === "rules.transition.event.capture@1");
-    let checkEvidence = values.find((event) => key(event) === "rules.tactic.event.check@1")?.evidence;
+    let checkEvidence = values.find((event): event is SemanticEvidenceEvent<CheckEvent> => key(event) === "rules.tactic.event.check@1");
     if (mode === "exact_source") {
       checkProbes += 1;
-      const value = checkEvent(anchor.beforeFen, anchor.moveUci);
-      checkEvidence = value === undefined ? undefined : declareCheckEventEvidence(value);
+      checkEvidence = checkSemanticEvent(anchor.beforeFen, anchor.moveUci, anchor.afterFen);
     }
     return Object.freeze({
       anchor,
@@ -164,9 +164,10 @@ function compile(rows: readonly ResearchRow[], mode: Mode): Result {
     } else if (declaration.projection === "derived.tactic.sequence.defender_consequence@1") {
       for (const value of defenderConsequenceOperands(pathAnchors)) emitted.push(defenderConsequenceSemanticEvent(value, moves));
     } else if (declaration.projection === "derived.tactic.deflection_observed@1") {
-      for (const value of deflectionObservedOperands(pathAnchors)) emitted.push(deflectionObservedSemanticEvent(value, moves, getDuty(), captures.map((capture) => capture.evidence), declareLegalExchangeEvidence(value.targetCapture)));
+      const checkEvidence = deflectionObservedInduction(pathAnchors) === "check_induced" ? window[0]!.check : undefined;
+      for (const value of deflectionObservedOperands(pathAnchors)) emitted.push(deflectionObservedSemanticEvent(value, moves, getDuty(), captures.map((capture) => capture.evidence), declareLegalExchangeEvidence(value.targetCapture), checkEvidence));
     } else if (declaration.projection === "derived.tactic.attraction_observed@1") {
-      for (const value of attractionObservedOperands(pathAnchors)) emitted.push(attractionObservedSemanticEvent(value, moves, captures.map((capture) => capture.evidence), value.checkOrCaptureConsequence.kind === "check" ? window[2]!.check : undefined));
+      for (const value of attractionObservedOperands(pathAnchors)) emitted.push(attractionObservedSemanticEvent(value, moves, captures.map((capture) => capture.evidence), value.checkOrCaptureConsequence.kind === "check" ? window[2]!.check?.evidence : undefined));
     } else if (declaration.projection === "derived.tactic.line_blocker_clearance_observed@1") {
       for (const value of lineBlockerClearanceObservedOperands(pathAnchors)) emitted.push(lineBlockerClearanceSemanticEvent(value, moves, declareLegalExchangeEvidence(value.targetCapture)));
     } else if (declaration.projection === "derived.tactic.square_clearance_observed@1") {
@@ -176,7 +177,7 @@ function compile(rows: readonly ResearchRow[], mode: Mode): Result {
     } else if (declaration.projection === "derived.tactic.check_zwischenzug_observed@1") {
       for (const value of checkZwischenzugObservedOperands(pathAnchors)) {
         if (window[0]!.capture === undefined || window[1]!.check === undefined) throw new TypeError("Zwischenzug lost exact source evidence");
-        emitted.push(checkZwischenzugSemanticEvent(value, moves, window[0]!.capture.evidence, window[1]!.check, declareLegalExchangeEvidence(value.retainedRecapture)));
+        emitted.push(checkZwischenzugSemanticEvent(value, moves, window[0]!.capture.evidence, window[1]!.check.evidence, declareLegalExchangeEvidence(value.retainedRecapture)));
       }
     } else {
       for (const value of overloadExploitationObservedOperands(pathAnchors)) {

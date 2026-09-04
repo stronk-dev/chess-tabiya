@@ -25,6 +25,7 @@ import { EvidenceManifestError } from "./evidence-contract.js";
 
 const ROOT = new URL("../../../", import.meta.url);
 const EXPECTED_PRODUCERS = Object.freeze(["rules.structural", "rules.transition", "rules.castling", "rules.exchange", "rules.tactic", "rules.square", "rules.mobility", "rules.pawn", "rules.king", "rules.phase", "rules.pivotal", "rules.endgame", "theory.shapes", "authored.structural_condition", "pack.authored", "recorded.engine", "recorded.tablebase", "live.stockfish", "live.syzygy", "human.maia", "human.explorer", "theory.opening_identity", "theory.opening.runtime", "run.record", "derived.compare_narrative", "derived.story", "derived.opening", "derived.grade", "derived.exchange", "derived.tactic", "derived.pawn", "derived.material", "derived.king", "derived.activity", "derived.opponent", "sourcing.ledger", "derived.semantic_avoidance"]);
+const ref = (id: string) => ({ id, version: 1 } as const);
 
 function jsonFiles(url: URL): readonly URL[] {
   return readdirSync(url, { withFileTypes: true }).flatMap((entry) => {
@@ -130,6 +131,12 @@ describe("primary evidence catalogue", () => {
     const projections = new Set(EVIDENCE_PRODUCERS.flatMap((producer) => producer.outputs.map((output) => output.id)));
     expect(["derived.pawn.promotion_race_geometry", "derived.pawn.promotion_race_tablebase"].every((id) => !projections.has(id))).toBe(true);
     expect(projections.has("rules.tactic.consequence.forced_mate_after_move")).toBe(true);
+    const deflection = EVIDENCE_PRODUCERS.find((item) => item.id === "derived.tactic")?.outputs
+      .find((item) => item.id === "derived.tactic.deflection_observed");
+    expect(deflection?.derivation).toEqual({ anyOf: [
+      [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")],
+      [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange"), ref("rules.tactic.event.check")],
+    ] });
   });
 
   it("separates all structural predicate and reading identities and pins the emission exception", () => {

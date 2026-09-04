@@ -157,15 +157,13 @@ is an engine grade, inferred plan, safety verdict, or recommendation. The perman
 `breadth-collector-measurement` instrument evaluates authored and sealed-imported populations
 separately and retains zeroes.
 
-One typed-contract limitation remains open as D956: the current derivation declaration supports
-only a conjunction, while open-file occupancy consumes an `open_file | half_open_file` source.
-Exact open-file events compile today; half-open payloads remain uncompiled rather than receiving a
-forged source. Breadth closeout waits for the accepted RFC/evidence contract to gain a closed
-disjunctive derivation form.
+Closed, non-empty derivation alternatives are implemented and each member is independently checked.
+Open/half-open occupancy, attraction and deflection therefore seal the one exact source member
+actually supplied. Deflection's check-induced member consumes a runtime-sealed edge-one check event;
+its bait-capture member rejects unnecessary check evidence, and bait capture wins when both facts
+hold. The broad tactical collector and exact-source path share one narrow check-event constructor.
 
-The same limitation is now exercised by Wave-C (D963): deflection, attraction, and the tablebase
-race each have honest alternative source paths. They remain absent from the compiled catalogue
-until a closed disjunction can validate the exact branch actually supplied. The bounded-mate
-projection is likewise held until its promised re-derivable proof digest has an explicit retained
-certificate contract. Nine independently buildable Wave-C projections are registered meanwhile;
-seven events remain research-only and add no learner surface, preset, renderer, or raw setting.
+D956 is closed. D963 now holds only the two promotion-race projections: their remaining blockers are
+exact input/value/source and occurrence authority, not alternative-derivation support. Twelve
+Wave-C projections compile; their events remain research-only and add no learner surface, preset,
+renderer or raw setting.

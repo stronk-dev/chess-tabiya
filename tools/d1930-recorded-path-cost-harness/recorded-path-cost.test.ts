@@ -14,6 +14,7 @@ import {
   defenderConsequenceOperands,
   defenderConsequenceSemanticEvent,
   defenderDutyReading,
+  deflectionObservedInduction,
   deflectionObservedOperands,
   deflectionObservedSemanticEvent,
   harassmentPressureSemanticEvent,
@@ -168,7 +169,8 @@ function compile(rows: readonly ResearchRow[]): CompileMeasurement {
     } else if (row.projection === "derived.tactic.sequence.defender_consequence@1") {
       for (const payload of defenderConsequenceOperands(windowAnchors)) emitted.push(defenderConsequenceSemanticEvent(payload, moves));
     } else if (row.projection === "derived.tactic.deflection_observed@1") {
-      for (const payload of deflectionObservedOperands(windowAnchors)) emitted.push(deflectionObservedSemanticEvent(payload, moves, getDuty(), captures.map((value) => value.evidence), declareLegalExchangeEvidence(payload.targetCapture)));
+      const checkEvidence = deflectionObservedInduction(windowAnchors) === "check_induced" ? check(window[0]!) : undefined;
+      for (const payload of deflectionObservedOperands(windowAnchors)) emitted.push(deflectionObservedSemanticEvent(payload, moves, getDuty(), captures.map((value) => value.evidence), declareLegalExchangeEvidence(payload.targetCapture), checkEvidence));
     } else if (row.projection === "derived.tactic.attraction_observed@1") {
       for (const payload of attractionObservedOperands(windowAnchors)) {
         const checkEvidence = payload.checkOrCaptureConsequence.kind === "check" ? check(window[2]!)?.evidence : undefined;

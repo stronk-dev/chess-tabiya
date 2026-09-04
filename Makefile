@@ -705,6 +705,14 @@ semantic-collectors-deflection-seal-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2553-deflection-check-seal-fresh-review/vitest.config.ts
 	./node_modules/.bin/tsc -p tools/d2553-deflection-check-seal-fresh-review/tsconfig.json --noEmit
 
+.PHONY: recorded-semantic-path-cost
+recorded-semantic-path-cost:
+	./node_modules/.bin/vitest run --config tools/d1930-recorded-path-cost-harness/vitest.config.ts
+
+.PHONY: recorded-semantic-path-source
+recorded-semantic-path-source:
+	./node_modules/.bin/vitest run --config tools/d1931-recorded-path-source-harness/vitest.config.ts
+
 pack-capability-author-repair:
 	node tools/d2152-pack-capability-author-repair/contract.mjs
 	node --test tools/d2334-pack-capability-fifth-author-repair/contract.test.mjs

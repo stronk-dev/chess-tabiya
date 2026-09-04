@@ -25,7 +25,11 @@ removal/relocation events, the four-clause overload-response predicate, a bounde
 and seven observed tactic events: deflection, attraction, line-blocker clearance, square clearance,
 interference, checking zwischenzug, and overload exploitation. Alternative causal authorities are
 closed manifest members rather than optional prose: attraction seals either its check consequence or
-its retained heavy-piece capture, never their union. The observed events retain their complete recorded windows in the sealed payload even
+its retained heavy-piece capture, never their union. Deflection likewise seals its common
+bait-capture member or its common-plus-check member; bait capture wins if both facts hold. One narrow
+sealed check-event constructor is shared by the broad tactical collector and exact-source path, so
+the latter does not compute reply breadth or double attack merely to retain check authority. The
+observed events retain their complete recorded windows in the sealed payload even
 though their manifest operands name only the motif-specific identities. They remain evidence facts,
 not claims that a move was intended, forced, best, or good.
 
@@ -62,7 +66,7 @@ structured projection. The exact 14-file migration census is executable in
 
 ## Compiled closure and provider behavior
 
-The primary manifest contains 34 producers, 187 projections, 25 consumers and 209 bindings, plus
+The primary manifest contains 37 producers, 193 projections, 25 consumers and 210 bindings, plus
 67 semantic events, 67 eligibility rows, 15 reasons and one selection policy. All collections
 contribute to one canonical digest. `/capabilities` reports this tuple and the same digest used at
 startup and by `make semantic-evidence-check`.

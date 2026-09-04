@@ -2085,7 +2085,7 @@ Eighth author repair (2026-09-02):
 | [[D2530]] | provider acquisition calls `application.scheduler` and the same injected application's operation-correlated `sourceFactories` value; the mapped type is never invoked |
 | [[D2531]] | catalogue position is exactly `run.record.position@1`; each of its three requested outputs maps to one exact applicability producer/projection and crossed declarations are refused |
 | [[D2532]] | the shipped eval delta is edge-grained through `review_evidence_packet@1/recorded_edge`, with consecutive points on one recorded branch; no cross-branch projection is invented |
-| [[D2533]] | deflection requirements are common inputs plus literal bait-capture/check-induced input sets; the latter remains blocked on the upstream semantic declaration/emitter carrying `rules.tactic.event.check@1` |
+| [[D2533]] | deflection requirements are common inputs plus literal bait-capture/check-induced input sets. The upstream `semantic-collectors` seam now carries the sealed `rules.tactic.event.check@1` event on the check-induced arm; the next fresh module-registration review must exercise the now-buildable join rather than treating it as dependency-blocked |
 | [[D2534]] | every row points to its exact `module.<id>@1\0<projection>@1` receipt key and the author gate joins all 205 pointers set-equal |
 | [[D2535]] | the resolution compiler creates a frozen runtime-sealed receipt; the final F1 emitter asserts constructor identity before consuming it |
 

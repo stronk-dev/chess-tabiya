@@ -6,7 +6,9 @@ import { canonicalFen, positionFromFen } from "./chess.js";
 import {
   attractionObservedSemanticEvent,
   attractionObservedOperands,
+  checkSemanticEvent,
   checkZwischenzugObservedOperands,
+  deflectionObservedInduction,
   deflectionObservedOperands,
   deflectionObservedSemanticEvent,
   interferenceObservedOperands,
@@ -17,10 +19,12 @@ import {
   overloadExploitationSemanticEvent,
   squareClearanceObservedOperands,
   squareClearanceSemanticEvent,
+  transitionSemanticEvents,
+  type SemanticEvidenceEvent,
 } from "./semantic-evidence.js";
 import { declareCheckEventEvidence, declareDefenderDutyEvidence, declareLegalExchangeEvidence, declareRunRecordEvidence, declareTransitionSemanticSourceEvidence } from "./evidence-source-adapters.js";
 import type { RecordedMoveAnchor } from "./pawn-dynamics.js";
-import { checkEvent, defenderDutyReading } from "./tactics.js";
+import { checkEvent, defenderDutyReading, type CheckEvent } from "./tactics.js";
 import { transitionSemanticFacts } from "./transition.js";
 
 function anchors(fen: string, moves: readonly string[]): readonly RecordedMoveAnchor[] {
@@ -47,6 +51,15 @@ function captureEvidence(anchor: RecordedMoveAnchor) {
   return declareTransitionSemanticSourceEvidence("capture", { ...capture, before_fen: anchor.beforeFen, move_uci: anchor.moveUci, after_fen: anchor.afterFen });
 }
 
+function captureEvidenceForPath(path: readonly RecordedMoveAnchor[]) {
+  return path.flatMap((anchor) => {
+    const capture = transitionSemanticFacts(anchor.beforeFen, anchor.moveUci, anchor.afterFen).find((fact) => fact.family === "capture");
+    return capture?.family === "capture"
+      ? [declareTransitionSemanticSourceEvidence("capture", { ...capture, before_fen: anchor.beforeFen, move_uci: anchor.moveUci, after_fen: anchor.afterFen })]
+      : [];
+  });
+}
+
 describe("observed semantic tactic sequences", () => {
   it("requires defender displacement and a later positive target capture", () => {
     const positive = anchors("1B5k/r3q3/2n5/8/8/8/8/4R1K1 w - - 0 1", ["b8a7", "c6a7", "e1e7"]);
@@ -59,6 +72,31 @@ describe("observed semantic tactic sequences", () => {
     expect(deflectionObservedSemanticEvent(event, moveEvidence(positive), declareDefenderDutyEvidence(defenderDutyReading(positive[0]!.beforeFen)), positive.map(captureEvidence), declareLegalExchangeEvidence(event.targetCapture))).toMatchObject({ projection: { id: "derived.tactic.deflection_observed" }, operands: event });
     const noCapture = anchors("1B5k/r7/2n1q3/8/8/8/8/4R1K1 w - - 0 1", ["b8a7", "c6a7", "e1e6"]);
     expect(deflectionObservedOperands(noCapture)).toEqual([]);
+  });
+
+  it("seals check-induced deflection and gives dual-arm bait capture one authority", () => {
+    const checkOnly = anchors("7k/4q1r1/8/8/8/8/8/R1K1R3 w - - 0 1", ["a1a8", "g7g8", "e1e7"]);
+    const checkPayload = deflectionObservedOperands(checkOnly)[0]!;
+    const sealedCheck = checkSemanticEvent(checkOnly[0]!.beforeFen, checkOnly[0]!.moveUci, checkOnly[0]!.afterFen)!;
+    const duty = declareDefenderDutyEvidence(defenderDutyReading(checkOnly[0]!.beforeFen));
+    const captures = captureEvidenceForPath(checkOnly);
+
+    expect(deflectionObservedInduction(checkOnly)).toBe("check_induced");
+    expect(deflectionObservedSemanticEvent(checkPayload, moveEvidence(checkOnly), duty, captures, declareLegalExchangeEvidence(checkPayload.targetCapture), sealedCheck)).toMatchObject({ projection: { id: "derived.tactic.deflection_observed" } });
+    expect(() => deflectionObservedSemanticEvent(checkPayload, moveEvidence(checkOnly), duty, captures, declareLegalExchangeEvidence(checkPayload.targetCapture))).toThrow(/missing-check/u);
+    expect(() => deflectionObservedSemanticEvent(checkPayload, moveEvidence(checkOnly), duty, captures, declareLegalExchangeEvidence(checkPayload.targetCapture), { ...sealedCheck })).toThrow(/not constructed/u);
+
+    const dual = anchors("1B6/r3q3/1kn5/8/8/8/8/4R1K1 w - - 0 1", ["b8a7", "c6a7", "e1e7"]);
+    const dualPayload = deflectionObservedOperands(dual)[0]!;
+    const dualCheck = checkSemanticEvent(dual[0]!.beforeFen, dual[0]!.moveUci, dual[0]!.afterFen)!;
+    expect(deflectionObservedInduction(dual)).toBe("bait_capture");
+    expect(deflectionObservedSemanticEvent(dualPayload, moveEvidence(dual), declareDefenderDutyEvidence(defenderDutyReading(dual[0]!.beforeFen)), captureEvidenceForPath(dual), declareLegalExchangeEvidence(dualPayload.targetCapture))).toMatchObject({ projection: { id: "derived.tactic.deflection_observed" } });
+    expect(() => deflectionObservedSemanticEvent(dualPayload, moveEvidence(dual), declareDefenderDutyEvidence(defenderDutyReading(dual[0]!.beforeFen)), captureEvidenceForPath(dual), declareLegalExchangeEvidence(dualPayload.targetCapture), dualCheck)).toThrow(/unnecessary-check/u);
+    expect(() => deflectionObservedSemanticEvent(checkPayload, moveEvidence(checkOnly), duty, captures, declareLegalExchangeEvidence(checkPayload.targetCapture), dualCheck)).toThrow(/crossed-edge-check/u);
+
+    const wrongProjection = transitionSemanticEvents(checkOnly[2]!.beforeFen, checkOnly[2]!.moveUci, checkOnly[2]!.afterFen)
+      .find((event) => event.operands.family === "capture") as unknown as SemanticEvidenceEvent<CheckEvent>;
+    expect(() => deflectionObservedSemanticEvent(checkPayload, moveEvidence(checkOnly), duty, captures, declareLegalExchangeEvidence(checkPayload.targetCapture), wrongProjection)).toThrow(/wrong-projection/u);
   });
 
   it("restricts attraction to the retained king/queen/rook consequence", () => {

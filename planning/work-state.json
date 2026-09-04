@@ -20195,12 +20195,12 @@
     },
     {
       "id": "D2536",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e9c71e3a9e929c5db0af9b501720eb24e8e3616390495d33514c346c526861e2",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:49aaaee4dc01aafe6752616cb84c8b70d6ad5a04672b583923c2c058fe43db15",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-09-04"
+      "evidence": "planning/evidence-foundation-ux/deflection-check-authority-implementation-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2537",
@@ -20339,21 +20339,48 @@
     },
     {
       "id": "D2552",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5b73e94ef3aab6910fc1830c39924be37e6ab669eb3531a2b73c6aa2d786f0ad",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c57c8d60ad098bb077c7eee1b7d9058ffd42380713f6d2bcf3d9ab20341da2bd",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-09-04"
+      "evidence": "planning/evidence-foundation-ux/deflection-check-authority-implementation-2026-09-04.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2553",
-      "state": "doing",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4034d2363fd2e89c332717a6c8d783df64887ef0ac4e1239c55300b97f9a4a78",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:013f5d07da3710f785885bc803f4e1d0a2eaf5632b4e60594d929684a88addac",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "since": "2026-09-04"
+      "evidence": "planning/evidence-foundation-ux/deflection-check-authority-implementation-2026-09-04.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2554",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:467b75a1207a3ccd6f4f153b8ce5f8d8f079232d7b514f2a6d56d42be2574639",
+      "uxItems": [],
+      "evidence": "planning/evidence-foundation-ux/deflection-check-authority-implementation-2026-09-04.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2555",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:301c127b66d031bda611339fd62bb9fccfde4af2558beaa92754d136b4f595d0",
+      "uxItems": [],
+      "evidence": "planning/evidence-foundation-ux/deflection-check-authority-implementation-2026-09-04.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2556",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d31d9959ff21bac2d9b7f12ca558efd56b5e7916e48ff0f6de540f3d239d856b",
+      "uxItems": [],
+      "evidence": "planning/evidence-foundation-ux/deflection-check-authority-implementation-2026-09-04.md",
+      "evidenceKind": "path"
     }
   ]
 }

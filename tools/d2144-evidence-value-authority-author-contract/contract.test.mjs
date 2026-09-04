@@ -188,10 +188,16 @@ test("recorded runtime readings derive from their exact sourcing-ledger evidence
 
 test("every used route names an exact callable producer operation", () => {
   assert.equal(routeReceipt.summary.rowsWithResolvedProducerOperations, 184);
-  assert.equal(routeReceipt.summary.distinctCurrentProducerOperations, 45);
+  assert.equal(routeReceipt.summary.distinctCurrentProducerOperations, 46);
   assert.deepEqual(routeReceipt.summary.usedRowsMissingProducerOperations, []);
   assert.deepEqual(routeReceipt.summary.exportOnlyRowsWithProducerOperations, []);
   assert.deepEqual(routeReceipt.summary.moduleOwnedProducerOperations, []);
+  assert.ok(
+    routeReceipt.routes.some((route) => route.currentProducerOperations.includes(
+      "packages/runtime/src/semantic-evidence.ts#checkSemanticEvent",
+    )),
+    "the narrow check constructor must remain an exact production operation",
+  );
 
   for (const route of routeReceipt.routes) {
     assert.equal(route.currentProductionUseSites.length, route.currentProductionUseCount, route.currentProjection);
@@ -205,6 +211,6 @@ test("every used route names an exact callable producer operation", () => {
       assert.doesNotMatch(operation, /#<module>$/u);
     }
   }
-  assert.match(rfc, /184 used routes to 45 exact enclosing callable operations/u);
+  assert.match(rfc, /184 used routes to 46 exact enclosing callable operations/u);
   assert.match(rfc, /seven export-only[\s\S]*?carry no current operation/u);
 });

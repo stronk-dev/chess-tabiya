@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1e0f75a873c934f5c897d240855ca560ae802398d88a83d06455d0b1aaef10bb",
+    "roadmap": "sha256:5b5a9bdd246f3c1e3f05b8849b7d7eac88c2fb83c640097683d0ce9a27c211b6",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:a89ee3e2c3eb0d033728fb39440e82ead91460e0ce767b27339700a9c076aaea",
-    "rfcRegister": "sha256:b7db9fdbe8cae92726cf32e1e4301c5b3db8cdf5b2e734c59b45acbb06ae2782",
+    "workState": "sha256:00b23ccb9794f9bf0bf33ddd588f89dd354a5d4eb66794db649d20dbc230262c",
+    "rfcRegister": "sha256:220d336389a84accce18cea778277fa322828be787255a58c9da89b4671b351b",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -31,9 +31,9 @@
     "workState": {
       "untriaged": 0,
       "todo": 639,
-      "doing": 3,
+      "doing": 0,
       "blocked": 866,
-      "done": 791,
+      "done": 797,
       "refused": 3
     },
     "workItems": {
@@ -110,9 +110,10 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "The combined D2536/D2552/D2553 deflection repair passed fresh review against the live manifest/compiler: narrow and broad check constructors produce identical sealed events on check-only and dual-arm lines. Its bounded implementation is authorized; promotion and wider returned foundations remain separate blockers.",
+        "summary": "The D2536/D2552/D2553 deflection repair is implemented at the production boundary: exact alternative derivations, one shared induction selector, and one narrow sealed check-event constructor now serve broad and exact-source compilation. The downstream module-registration join is unblocked for fresh review; promotion and wider returned foundations remain separate blockers.",
         "impact": "advanced",
         "evidence": [
+          "rfc/evidence-value-authority.md",
           "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md",
           "planning/pack-capability-contract/tenth-author-repair-2026-09-02.md",
           "planning/learner-modules/seventh-fresh-independent-buildability-review-2026-09-02.md",
@@ -175,7 +176,7 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "Fresh review proved the D2552 selector and D2553 narrow check constructor against real check-only and dual-arm edges, including byte-identical broad/narrow event identity and negative boundaries. The bounded implementation is executable; promotion's four returned event-boundary gaps remain held.",
+        "summary": "The deflection check-authority seam is live: exact alternative derivations and sealed check events pass permanent check-only, dual-arm and negative fixtures, while exact-source compilation is byte-identical and remains below 500 ms through 80 plies. Promotion's four returned event-boundary gaps remain held.",
         "impact": "advanced",
         "evidence": [
           "planning/evidence-foundation-ux/semantic-collectors-promotion-fifth-fresh-independent-buildability-review-2026-09-02.md",

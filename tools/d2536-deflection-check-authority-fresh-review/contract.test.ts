@@ -85,7 +85,8 @@ describe("D2536 deflection check-authority fresh review", () => {
     expect(rfc).toMatch(/d1930-recorded-path-cost-harness/u);
     expect(rfc).toMatch(/d1931-recorded-path-source-harness/u);
     expect(costCompiler).toMatch(/function check\(edge: PreparedEdge\): SemanticEvidenceEvent \| undefined/u);
-    expect(sourceCompiler).toMatch(/checkEvent\(anchor\.beforeFen, anchor\.moveUci\)/u);
+    expect(sourceCompiler).toMatch(/checkSemanticEvent\(anchor\.beforeFen, anchor\.moveUci, anchor\.afterFen\)/u);
+    expect(sourceCompiler).toMatch(/readonly check\?: SemanticEvidenceEvent<CheckEvent>/u);
   });
 
   it("the disposable author model is not mistaken for proof of the runtime seal", () => {

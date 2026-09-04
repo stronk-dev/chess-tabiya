@@ -498,8 +498,11 @@ const derivedTacticOutputs = [
     operands: ["baitMove", "defenderBefore", "defenderAfter", "lostDuty", "targetCapture"], signs: ["state"], grounding: "declared_convention", exactness: "convention",
     answerContent: ["fact"], forms: ["list", "panel", "lit_squares", "arrows", "machine_condition"],
     abstention: { possible: true, reasons: ["continuation_too_short", "input_abstained"] },
-    dependsOn: [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")],
-    derivation: { inputs: [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")] },
+    dependsOn: [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange"), ref("rules.tactic.event.check")],
+    derivation: { anyOf: [
+      [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange")],
+      [ref("run.record.move"), ref("rules.tactic.reading.defender_duty_set"), ref("rules.transition.event.capture"), ref("rules.exchange.predicate.legal_exchange"), ref("rules.tactic.event.check")],
+    ] },
     limitations: ["Relocation without the retained positive target capture is a hard negative; recorded order proves neither force, intent nor move quality."],
   }),
   projection("derived.tactic", "derived.tactic.attraction_observed", "derived", {

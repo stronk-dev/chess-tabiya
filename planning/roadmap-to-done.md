@@ -353,6 +353,16 @@ semantic-collectors-deflection-seal-fresh-review` passes 4/4 plus strict TypeScr
 D2536/D2552/D2553 implementation is authorized; promotion remains independently held. Receipt:
 `planning/evidence-foundation-ux/deflection-check-seal-fresh-independent-review-2026-09-04.md`.
 
+The bounded implementation landed on 2026-09-04. The live catalogue now declares two exact
+deflection derivation members; detector, emitter and both recorded-path compilers share one
+bait-before-check selector; broad and exact-source compilation share one narrow sealed check-event
+constructor. Permanent fixtures exercise check-only and dual-arm lines plus missing, unnecessary,
+copied, crossed-edge and wrong-projection refusals. The eager D1930 path still refuses 40/80 plies,
+while D1931 proves byte-identical exact-source results at 74.3/144.4/245.2 ms p95 through 80 plies.
+This removes module-registration's upstream check-event blocker but does not accept that draft; its
+next fresh review must exercise the join. Promotion remains held. Receipt:
+`planning/evidence-foundation-ux/deflection-check-authority-implementation-2026-09-04.md`.
+
 The 2026-09-02 fourth fresh promotion-collector review keeps the two held projections out of the
 foundation on [[D2521]], [[D2522]] and [[D2523]]. Its advertised closed request uses two undefined types, the
 injected Syzygy callable matches no provider operation and leaves normalized request bytes

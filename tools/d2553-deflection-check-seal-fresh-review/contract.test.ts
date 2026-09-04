@@ -79,7 +79,8 @@ describe("D2553 deflection check-seal fresh review", () => {
     expect(rfc).toContain("readonly check?: SemanticEvidenceEvent<CheckEvent>");
     expect(rfc).toContain("does not call `replyBreadth`");
     expect(rfc).toContain("Eager and exact-source modes therefore retain byte-identical check-event ids");
-    expect(sourceCompiler).toContain("readonly check?: DeclaredEvidence<unknown>");
+    expect(sourceCompiler).toContain("readonly check?: SemanticEvidenceEvent<CheckEvent>");
+    expect(sourceCompiler).toContain("checkSemanticEvent(anchor.beforeFen, anchor.moveUci, anchor.afterFen)");
     expect(sourceCompiler).not.toContain("tacticalSemanticEvents(");
   });
 });

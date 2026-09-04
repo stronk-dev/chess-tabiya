@@ -71,21 +71,22 @@ describe("D2552 deflection check-source fresh review", () => {
     expect(firstCheck.evidence.payload).toBe(firstCheck.operands);
   });
 
-  it("declared check evidence alone cannot satisfy the required runtime event seal", () => {
+  it("declared evidence alone remains unsealed while exact-source retains the event", () => {
     const raw = checkEvent(path[0]!.beforeFen, path[0]!.moveUci)!;
     const evidenceOnly = declareCheckEventEvidence(raw) as unknown as SemanticEvidenceEvent<CheckEvent>;
     expect(() => assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, evidenceOnly)).toThrow();
-    expect(sourceCompiler).toMatch(/readonly check\?: DeclaredEvidence<unknown>/u);
-    expect(sourceCompiler).toMatch(/checkEvidence = value === undefined \? undefined : declareCheckEventEvidence\(value\)/u);
-    expect(sourceCompiler).not.toMatch(/readonly check\?: SemanticEvidenceEvent/u);
+    expect(sourceCompiler).toMatch(/readonly check\?: SemanticEvidenceEvent<CheckEvent>/u);
+    expect(sourceCompiler).toMatch(/checkEvidence = checkSemanticEvent\(anchor\.beforeFen, anchor\.moveUci, anchor\.afterFen\)/u);
+    expect(sourceCompiler).not.toMatch(/checkEvidence = value === undefined \? undefined : declareCheckEventEvidence\(value\)/u);
   });
 
-  it("only the eager compiler retains an event; the exact-source path needs a narrow sealed constructor", () => {
+  it("both compilers retain an event without widening exact-source collection", () => {
     expect(costCompiler).toMatch(/function check\(edge: PreparedEdge\): SemanticEvidenceEvent \| undefined/u);
     const tactical = tacticalSemanticEvents(path[0]!.beforeFen, path[0]!.moveUci, path[0]!.afterFen);
     expect(tactical.map(key)).toContain("rules.tactic.event.check@1");
     expect(tactical.map(key)).toContain("rules.tactic.consequence.reply_breadth@1");
     expect(rfc).toContain("all three call sites");
     expect(rfc).toContain("sealed first-edge check event");
+    expect(sourceCompiler).not.toContain("tacticalSemanticEvents(");
   });
 });

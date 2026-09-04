@@ -363,7 +363,7 @@ The checked-in author receipt at
 table, not a prose census. Its syntax-aware use pass records 184 used routes, seven export-only
 routes and zero bound projections without a production use. The earlier direct-call-only probe that
 reported 25 export-only / 19 bound rows is rejected by [[D2147]] because it missed callback use.
-The 2026-08-31 author pass resolves those 184 used routes to 45 exact enclosing callable operations;
+The current route receipt resolves those 184 used routes to 46 exact enclosing callable operations;
 no used route lacks an operation and no route resolves only to module scope. The seven export-only
 routes deliberately carry no current operation. `producerImplementation` remains copied manifest
 provenance and is never accepted as a factory's callable authority.
@@ -524,7 +524,7 @@ planes, optional LLM renderer and assistance ceilings.
    and receipt types consumed here; this RFC does not restate them.
 4. The checked-in literal 191-row migration receipt names every old route, target factory symbol,
    shape, authority input, dependency and production use; its syntax-aware author pass resolves all
-   184 used rows to 45 exact callable operations and leaves only seven export-only rows operationless.
+   184 used rows to 46 exact callable operations and leaves only seven export-only rows operationless.
    The four duplicates must
    collapse and duplicate/missing/wildcard rows fail.
 5. Only the package-private mint boundary calls `declareEvidence`; mint internals and old adapters

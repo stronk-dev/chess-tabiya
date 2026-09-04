@@ -225,6 +225,8 @@ export interface DeflectionObservedOperands extends ObservedSequenceBase {
   readonly targetCapture: LegalExchangeResult;
 }
 
+export type DeflectionObservedInduction = "bait_capture" | "check_induced";
+
 export interface AttractionObservedOperands extends ObservedSequenceBase {
   readonly horizon: 3 | 5;
   readonly baitMove: RecordedMoveAnchor;
@@ -366,14 +368,21 @@ export function transitionSemanticEvents(beforeFen: string, moveUci: string, aft
   }));
 }
 
+export function checkSemanticEvent(beforeFen: string, moveUci: string, afterFen: string): SemanticEvidenceEvent<CheckEvent> | undefined {
+  const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
+  const check = checkEvent(anchor.beforeFen, anchor.moveUci);
+  if (check === undefined) return undefined;
+  return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareCheckEventEvidence(check), anchor, sign: "state", operands: check });
+}
+
 export function tacticalSemanticEvents(beforeFen: string, moveUci: string, afterFen: string): readonly SemanticEvidenceEvent<TacticalSemanticEventOperands>[] {
   const anchor = canonicalAnchor({ beforeFen, moveUci, afterFen, side: positionFromFen(beforeFen).turn });
   const events: SemanticEvidenceEvent<TacticalSemanticEventOperands>[] = [];
   const breadth = replyBreadth(anchor.beforeFen, anchor.moveUci);
   if (breadth.afterFen !== anchor.afterFen) throw new TypeError(`Reply-breadth after FEN does not match ${anchor.moveUci}`);
   events.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareReplyBreadthEvidence(breadth), anchor, sign: "state", operands: breadth }));
-  const check = checkEvent(anchor.beforeFen, anchor.moveUci);
-  if (check !== undefined) events.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareCheckEventEvidence(check), anchor, sign: "state", operands: check }));
+  const check = checkSemanticEvent(anchor.beforeFen, anchor.moveUci, anchor.afterFen);
+  if (check !== undefined) events.push(check);
   const fork = doubleAttackEvent(anchor.beforeFen, anchor.moveUci);
   if (fork !== undefined) events.push(compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareDoubleAttackEvidence(fork), anchor, sign: "gained", operands: fork }));
   return Object.freeze(events.sort((left, right) => refKey(left.projection).localeCompare(refKey(right.projection))));
@@ -616,17 +625,24 @@ function observed<T extends { readonly anchors: readonly RecordedMoveAnchor[] }>
   return immutable({ ...payload, nodes: recordNodes(payload.anchors), conventionId: "observed-window@1" as const }) as unknown as T;
 }
 
+/** Selects the exact observed induction arm, preferring bait capture when both facts hold. */
+export function deflectionObservedInduction(values: readonly RecordedMoveAnchor[]): DeflectionObservedInduction | undefined {
+  const anchors = canonicalRecordedPath(values, 3);
+  const first = anchorMove(anchors[0]!);
+  const reply = anchorMove(anchors[1]!);
+  const baitCapture = captureFact(anchors[1]!);
+  if (reply.move.to === first.move.to && baitCapture?.family === "capture" && baitCapture.captured.color === first.position.turn) return "bait_capture";
+  return positionFromFen(anchors[0]!.afterFen).isCheck() ? "check_induced" : undefined;
+}
+
 /** Exact three-edge defender displacement followed by a positive capture of the retained target. */
 export function deflectionObservedOperands(values: readonly RecordedMoveAnchor[]): readonly DeflectionObservedOperands[] {
   const anchors = canonicalRecordedPath(values, 3);
+  if (deflectionObservedInduction(anchors) === undefined) return Object.freeze([]);
   const first = anchorMove(anchors[0]!);
   const reply = anchorMove(anchors[1]!);
   const targetCapture = positiveCapture(anchors[2]!);
   if (targetCapture === undefined) return Object.freeze([]);
-  const baitCapture = captureFact(anchors[1]!);
-  const inducedByBait = reply.move.to === first.move.to && baitCapture?.family === "capture" && baitCapture.captured.color === first.position.turn;
-  const inducedByCheck = positionFromFen(anchors[0]!.afterFen).isCheck();
-  if (!inducedByBait && !inducedByCheck) return Object.freeze([]);
   const defendedColor = opposite(first.position.turn);
   const afterReply = positionFromFen(anchors[1]!.afterFen);
   const afterReplyEdges = new Set(defenseEdges(anchors[1]!.afterFen, defendedColor).map(defenseKey));
@@ -868,9 +884,21 @@ export function lineBlockerClearanceSemanticEvent(payload: LineBlockerClearanceO
   return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareLineBlockerClearanceEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
 }
 
-export function deflectionObservedSemanticEvent(payload: DeflectionObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[], dutyEvidence: DeclaredEvidence<unknown>, captureEvidence: readonly DeclaredEvidence<unknown>[], exchangeEvidence: DeclaredEvidence<unknown>): SemanticEvidenceEvent<DeflectionObservedOperands> {
+export function deflectionObservedSemanticEvent(payload: DeflectionObservedOperands, moveEvidence: readonly DeclaredEvidence<unknown>[], dutyEvidence: DeclaredEvidence<unknown>, captureEvidence: readonly DeclaredEvidence<unknown>[], exchangeEvidence: DeclaredEvidence<unknown>, checkEvidence?: SemanticEvidenceEvent<CheckEvent>): SemanticEvidenceEvent<DeflectionObservedOperands> {
   if (captureEvidence.length === 0 || captureEvidence.some((value) => refKey(value.projection) !== "rules.transition.event.capture@1")) throw new TypeError("Observed deflection requires exact capture evidence");
-  const inputs = exactSequenceInputs(moveEvidence, 3, [dutyEvidence, ...captureEvidence, exchangeEvidence], ["rules.tactic.reading.defender_duty_set", "rules.transition.event.capture", "rules.exchange.predicate.legal_exchange"]);
+  const induction = deflectionObservedInduction(payload.anchors);
+  if (induction === undefined) throw new TypeError("Observed deflection payload has no induction authority");
+  if (induction === "bait_capture" && checkEvidence !== undefined) throw new TypeError("unnecessary-check");
+  if (induction === "check_induced") {
+    if (checkEvidence === undefined) throw new TypeError("missing-check");
+    assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, checkEvidence);
+    if (refKey(checkEvidence.projection) !== "rules.tactic.event.check@1") throw new TypeError("wrong-projection");
+    const first = payload.anchors[0]!;
+    if (checkEvidence.anchor.beforeFen !== first.beforeFen || checkEvidence.anchor.moveUci !== first.moveUci || checkEvidence.anchor.afterFen !== first.afterFen) throw new TypeError("crossed-edge-check");
+  }
+  const optionalCheck = checkEvidence === undefined ? [] : [checkEvidence.evidence];
+  const required = ["rules.tactic.reading.defender_duty_set", "rules.transition.event.capture", "rules.exchange.predicate.legal_exchange", ...(induction === "check_induced" ? ["rules.tactic.event.check"] : [])];
+  const inputs = exactSequenceInputs(moveEvidence, 3, [dutyEvidence, ...captureEvidence, exchangeEvidence, ...optionalCheck], required);
   return compileSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, { evidence: declareDeflectionObservedEvidence(payload), derivationInputs: inputs, anchor: sequenceAnchor(payload), sign: "state", operands: payload });
 }
 
