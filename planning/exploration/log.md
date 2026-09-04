@@ -14524,3 +14524,17 @@ broad for the exact-source contract.
 **Evidence/next:** `make semantic-collectors-deflection-source-fresh-review` passes 4/4 plus strict
 TypeScript. Specify one narrow sealed check-event constructor shared by the tactical collector and
 exact-source compiler, then require another fresh review before production implementation.
+
+## 2026-09-04 — Deflection exact-source seal is boundedly author-repaired
+
+**What landed:** the RFC now specifies one narrow `checkSemanticEvent` constructor for the existing
+check projection. Tactical compilation delegates to it; exact-source compilation retains its sealed
+event and does not widen into reply breadth or double attack. No production byte changed.
+
+**What changed:** [[D2553]] is author-repaired. Deflection consumes the whole event only on the
+check-induced arm selected by [[D2552]]; attraction consumes its declared evidence. Evidence-only
+casts, mismatched after-FEN and non-checking moves remain explicit negative/absence cases.
+
+**Evidence/next:** `make semantic-collectors-deflection-seal-author-repair` passes 4/4 plus strict
+TypeScript. Another fresh review must prove narrow/broad event identity, eager/exact-source parity,
+and both check-only and dual-arm lines before production implementation.

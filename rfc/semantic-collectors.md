@@ -3,9 +3,10 @@
 - **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The D2536
   deflection check-authority amendment passed fresh review, then implementation returned [[D2552]];
   its bounded selector repair survived fresh review 2026-09-04, but that review returned the
-  exact-source event authority on [[D2553]].** The legal dual-arm line and runtime seal pass 4/4 plus
-  strict TypeScript; the third call site retains only declared evidence rather than the sealed event,
-  so production remains held pending bounded repair and another fresh review. **The held
+  exact-source event authority on [[D2553]], now boundedly author-repaired 2026-09-04.** One narrow
+  sealed check-event constructor is shared by tactical and exact-source compilation; the latter
+  retains the event without widening into reply breadth or double attack. The author target passes
+  4/4 plus strict TypeScript; production remains held pending another fresh review. **The held
   promotion pair completed its fourth author repair 2026-09-02 on [[D2521]], [[D2522]] and
   [[D2523]], then was **RETURNED by fifth fresh independent review on [[D2548]]–[[D2551]].** The
   source repair survives, but request-digest construction, the exact output/operand ABI and a real
@@ -441,6 +442,38 @@ also compile reply breadth and double-attack evidence and thereby widen the meas
 [[D2553]] therefore returns production until one narrow sealed check-event constructor is specified,
 shared by `tacticalSemanticEvents` and the exact-source compiler, and reviewed on both check-only and
 dual-arm lines.
+
+The bounded author repair adds no producer or projection. It publishes the existing check event's
+single production constructor:
+
+```ts
+export function checkSemanticEvent(
+  beforeFen: string,
+  moveUci: string,
+  afterFen: string,
+): SemanticEvidenceEvent<CheckEvent> | undefined;
+```
+
+The operation canonicalizes and validates the full edge, calls the existing rules-only `checkEvent`,
+returns `undefined` when it has no check fact, and otherwise calls `compileSemanticEvidenceEvent`
+with `declareCheckEventEvidence(fact)`, the canonical edge anchor, `sign: "state"`, and that exact
+fact object as both evidence payload and operands. It does not call `replyBreadth`,
+`doubleAttackEvent` or `tacticalSemanticEvents`.
+
+`tacticalSemanticEvents` calls `checkSemanticEvent` and appends its result when present rather than
+minting the same event inline. The exact-source compiler calls the same constructor and changes its
+edge field to `readonly check?: SemanticEvidenceEvent<CheckEvent>`. Its deflection path selects by
+`deflectionObservedInduction(payload.anchors)` and passes the whole sealed event only for
+`check_induced`; its attraction path remains evidence-based and passes `edge.check.evidence`.
+Eager and exact-source modes therefore retain byte-identical check-event ids without forcing the
+exact-source path to compile reply breadth or double attacks.
+
+Permanent negatives require mismatched `afterFen` to fail before an event is minted, declared
+check evidence cast back to an event to fail the runtime seal, and a non-checking edge to return
+`undefined`. The dual-arm line still selects bait-capture and supplies no check event; the check-only
+line supplies the exact constructor result. `make semantic-collectors-deflection-seal-author-repair`
+passes 4/4 plus strict TypeScript. This is author evidence only; another fresh review must compare
+the narrow constructor with the broad tactical collector and exercise both recorded-path modes.
 
 #### 3.3 Observed line tactics
 
@@ -1287,6 +1320,10 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-04: author-repaired [[D2553]] with one narrow `checkSemanticEvent` constructor shared by
+  the broad tactical collector and exact-source path. Exact-source edges retain the sealed event;
+  deflection consumes the event and attraction projects its evidence. The 4/4 author target plus
+  strict TypeScript is not acceptance; another fresh review gates production.
 - 2026-09-04: fresh review retained [[D2552]]'s shared induction selector but returned production on
   [[D2553]]. The real dual-arm line and edge-one seal work; the exact-source compiler retains only
   declared check evidence, which cannot satisfy the required runtime event seal. A narrow sealed

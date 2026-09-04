@@ -339,6 +339,13 @@ passes 4/4 plus strict TypeScript. A narrow sealed check-event constructor and a
 now gate production. Receipt:
 `planning/evidence-foundation-ux/deflection-check-source-fresh-independent-review-2026-09-04.md`.
 
+The bounded D2553 author repair now specifies one narrow sealed `checkSemanticEvent` constructor
+shared by tactical and exact-source compilation. Exact-source retains the event for deflection and
+projects its evidence for attraction without computing reply breadth or double attacks. `make
+semantic-collectors-deflection-seal-author-repair` passes 4/4 plus strict TypeScript. Production
+remains held until a fresh review proves narrow/broad event identity and both recorded-path modes.
+Receipt: `planning/evidence-foundation-ux/deflection-check-seal-author-repair-2026-09-04.md`.
+
 The 2026-09-02 fourth fresh promotion-collector review keeps the two held projections out of the
 foundation on [[D2521]], [[D2522]] and [[D2523]]. Its advertised closed request uses two undefined types, the
 injected Syzygy callable matches no provider operation and leaves normalized request bytes

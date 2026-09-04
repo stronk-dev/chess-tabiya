@@ -20197,7 +20197,7 @@
       "id": "D2536",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ee0fb87a4134de5e99561095800fe71300e52dc0988f366b34f922a7e65b23a0",
+      "sourceDigest": "sha256:8ff4fe2199c0af6eb6494e5b5b3aa9bc712a71b7cf860744e1117b24c304b243",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-collectors.md"
@@ -20341,7 +20341,7 @@
       "id": "D2552",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9f17e6f0796891e78f537bdcf86b486c2b8b6ef899a86c47de4ef40af9d16cb1",
+      "sourceDigest": "sha256:c28f93b6f1b933a2c40d98ecce0ff73f10cfb9c8ec4c16219185c44609ad8ca5",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-collectors.md"
@@ -20350,7 +20350,7 @@
       "id": "D2553",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a704dfc3c8c547bfbea393cbf49f369b4ce0ab46dc2d0b45c9726f5fe6f467fb",
+      "sourceDigest": "sha256:37ef5c1cf0e00e0c90b6a279ca4bdd899c752e72fff8487fac2d30027bcf97cf",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-collectors.md"
