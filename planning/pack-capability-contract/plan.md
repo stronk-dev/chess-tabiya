@@ -2,18 +2,18 @@
 
 - **RFC:** `rfc/pack-capability-contract.md`
 - **Reviewer:** codex
-- **Started:** 2026-08-26; latest author repair completed 2026-08-30
-- **State:** [[D2070]]–[[D2076]] repaired at authoring tier; fresh independent review required;
-  no implementation authorised
+- **Started:** 2026-08-26; latest review completed 2026-09-04
+- **State:** eleventh fresh independent review **returned** the RFC on [[D2587]]–[[D2592]];
+  twelfth author repair and another fresh review required; no implementation authorised
 
 ## Current objective
 
-**Completed 2026-08-30.** The second fresh return is repaired without weakening the prior
-[[D1620]]–[[D1626]], [[D1982]]–[[D1992]] or [[D2050]]–[[D2055]] gains. The exact review is
-`second-fresh-independent-review-2026-08-30.md`; its seven-arm reproduction is now a positive
-author contract under `make pack-capability-second-fresh-review`. Exact receipt:
-`third-author-repair-2026-08-30.md`. This remains specification work, not lane-0.30 implementation
-or a corpus wave.
+Repair [[D2587]]–[[D2592]] without weakening the retained durable-job gains: complete guarded run
+effects, recursively exact objective requests, actual run transition/snapshot operands, all three
+origin mappings and never-reused durable result order. Exact return:
+`eleventh-fresh-independent-buildability-review-2026-09-04.md`; executable falsifier:
+`make pack-capability-eleventh-fresh-review`. This remains specification work, not lane-0.30
+implementation or a corpus wave.
 
 ## Author-repair order
 
@@ -34,10 +34,12 @@ or a corpus wave.
 9. ✅ Repair [[D2070]]–[[D2076]] with a sealed two-schema transition, split plan/readiness gates,
    author-owned post-image, complete source closure, metadata exclusions, retained histories and
    ordinal-free identities; preserve all 24 earlier arms and request fresh review.
+10. ⏳ Repair [[D2587]]–[[D2592]] with one transaction-owned run/application receipt, recursively
+    exact objective parsing, run-branded node lookup, origin-derived consumer mapping and a durable
+    monotone result allocator; retain every earlier gate and request another fresh review.
 
 ## Exit
 
-The RFC may return to acceptance review only after [[D1982]]–[[D1992]] are repaired in the contract
-and an independent pass can construct the same public types, registry, requirements, digests,
-schema compiler and migration results without consulting author intent. The D560 corpus hold stays
-whole after acceptance.
+The RFC may return to acceptance review only after [[D2587]]–[[D2592]] are repaired and an
+independent pass can reconstruct the complete durable request/admission/lease/settlement/
+application/replay behavior from one authority. The D560 corpus hold stays whole after acceptance.

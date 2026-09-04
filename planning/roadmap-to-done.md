@@ -128,12 +128,13 @@ the authoring tier with an executable 4/4 repair receipt and all prior author co
 The RFC remains draft: another genuinely fresh independent review must reconstruct those repairs
 before the generic catalogue engine or any product authority may be implemented.
 
-The same-day eleventh `pack-capability-contract` author repair closes seven deeper durable-job joins
-([[D2563]]–[[D2569]]) at contract tier: strict lease/application receipts, branded closed request
-parsing, canonical request-to-storage identity, row-level rewind, stored-success event receipts and
-winner-only UUID construction now share one executable authority. Six groups plus strict
-TypeScript pass. Another genuinely fresh review still precedes acceptance; no pack or schema byte
-is authorized while that review remains outstanding.
+The same-day eleventh `pack-capability-contract` author repair closes its seven bounded predecessor
+defects ([[D2563]]–[[D2569]]), but the subsequent fresh review returns the durable foundation on
+[[D2587]]–[[D2592]]. Valid immediate-guard events are outside its receipt; nested objective requests
+can mutate after branding; receipts and node maps lack their actual run transition/snapshot; both
+internal origins violate the exact SQL consumer check; and clearing `result_seq` permits reuse after
+rewind. `make pack-capability-eleventh-fresh-review` reproduces 6/6. A twelfth repair and another
+fresh review precede every pack/schema/storage implementation.
 
 ### 2. Evidence collection, semantic events, selection, and grounding
 
@@ -263,6 +264,14 @@ proves one concurrent admission winner; rewind covers all eight durable states; 
 retain an exact revision/event-range/digest receipt. `make pack-capability-tenth-author-repair`
 passes 6/6, but another genuinely fresh review still gates acceptance and every production byte.
 Receipt: `planning/pack-capability-contract/tenth-author-repair-2026-09-02.md`.
+
+The 2026-09-04 eleventh fresh review preserves the strict state union, outer parser, relational
+batch join, complete row rewind and winner-only UUID construction, but returns F3 on
+[[D2587]]–[[D2592]]. Its executable model rejects valid `immediate_guard` feedback, accepts mutable
+and incomplete nested objective requests, can mint a receipt absent from any run journal, accepts a
+foreign-run node map, fails both internal origins in real SQLite and permits result-sequence reuse
+after rewind. `make pack-capability-eleventh-fresh-review` passes 6/6. Receipt:
+`planning/pack-capability-contract/eleventh-fresh-independent-buildability-review-2026-09-04.md`.
 
 The 2026-08-31 fifth fresh candidate-packet review preserves the repaired single retained legal-
 move value graph but returns its acceptance boundary on [[D2428]]: the RFC requires one

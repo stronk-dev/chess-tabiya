@@ -14760,3 +14760,22 @@ a different legal line because it checks projection names rather than occurrence
 `planning/learner-modules/tenth-fresh-independent-buildability-review-2026-09-04.md`. A bounded
 tenth author repair must preserve intrinsic offsets, compile moment-to-source eligibility and bind
 every derivation input to the emitted event before another fresh review or implementation.
+
+## 2026-09-04 — Pack-capability eleventh fresh review returns durable application identity
+
+**What landed:** A fresh live-runtime and SQLite review preserves the bounded [[D2563]]–[[D2569]]
+repairs and returns `pack-capability-contract` on [[D2587]]–[[D2592]]. No production, schema,
+migration, API, pack, content or protected-design byte changed.
+
+**What changed:** the application receipt rejects valid `immediate_guard` feedback and can also be
+minted from invented revision/event bytes because it receives no retained run transition. The
+nested objective request remains inexact and mutable after branding; the node/FEN map carries no
+run identity; the executable transaction hard-codes the explicit-analysis consumer so both
+internal origins fail exact SQL; and clearing a settled result's only sequence permits reuse after
+rewind/restart.
+
+**Evidence/next:** `make pack-capability-eleventh-fresh-review` reproduces 6/6. Exact receipt:
+`planning/pack-capability-contract/eleventh-fresh-independent-buildability-review-2026-09-04.md`.
+A bounded twelfth author repair must retain every earlier control while joining complete run
+effects, recursive request identity, actual snapshots/transitions, all origins and a durable
+monotone result allocator before another fresh review or implementation.

@@ -1,11 +1,12 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **eleventh author repair complete 2026-09-04 on [[D2563]]–[[D2569]];
-  another genuinely fresh independent review is required.** One strict durable-state protocol,
-  branded closed request parser/digest authority, complete storage/value join, row-level rewind,
-  stored-success event receipt and winner-only UUID construction now pass
-  `make pack-capability-eleventh-author-repair` (6 groups plus strict TypeScript). No implementation
-  is authorised and the D560 hold stays whole.
+- **Status:** draft — **RETURNED by the eleventh fresh independent review 2026-09-04 on
+  [[D2587]]–[[D2592]].** The bounded [[D2563]]–[[D2569]] repairs survive, but the application receipt
+  excludes valid immediate-guard events and is not joined to a retained run transition; nested
+  objective requests escape exact parsing/immutability; the node/FEN lookup is not run-scoped; both
+  internal origins fail the executable admission transaction; and result sequences can be reused
+  after rewind/restart. `make pack-capability-eleventh-fresh-review` reproduces 6/6. No
+  implementation is authorised and the D560 hold stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -2187,6 +2188,30 @@ every prior author control remains required. No production, schema, migration, A
 content or protected-design byte changed. Another genuinely fresh independent review must attack
 the joined model before acceptance or implementation, and [[D560]] remains whole.
 
+## Eleventh fresh independent return (2026-09-04)
+
+The eleventh repair's strict lease/consumption union, outer request-key closure, batch/child request
+joins, row-level rewind and winner-only UUID construction survive. Fresh production-boundary and
+SQLite review returns six deeper seams:
+
+1. [[D2587]] — valid `immediate_guard` application can append `feedback.generated`, which the exact
+   one/two-event receipt rejects;
+2. [[D2588]] — `objectiveRequest` is neither parsed exactly nor recursively immutable, so one
+   branded request can change digest after admission;
+3. [[D2589]] — caller-supplied revisions/events can mint a receipt without an actual retained run
+   transition or journal suffix;
+4. [[D2590]] — a bare node/FEN map carries no run identity and accepts an equal foreign snapshot;
+5. [[D2591]] — the executable admission worker hard-codes `runtime.analysis`, so Story and
+   enrichment violate the exact origin/consumer SQL check; and
+6. [[D2592]] — rewind clears the only stored result sequence, permitting reuse because no durable
+   monotone allocator exists.
+
+Exact evidence:
+`planning/pack-capability-contract/eleventh-fresh-independent-buildability-review-2026-09-04.md`;
+`make pack-capability-eleventh-fresh-review` passes 6/6. A bounded twelfth author repair must retain
+every earlier control while joining complete run effects, nested request identity, actual run
+snapshots/transitions, all origins and restart-stable result ordering before another review.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -2464,6 +2489,11 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-09-04 (**eleventh fresh independent return**): returned on [[D2587]]–[[D2592]]. Valid guarded
+  run effects are outside the receipt; nested objective values remain mutable/unparsed; receipts and
+  node maps lack their run authority; both internal origins fail exact SQL; and result ordering can
+  reuse a cleared sequence. `make pack-capability-eleventh-fresh-review` reproduces 6/6. Exact
+  report: `planning/pack-capability-contract/eleventh-fresh-independent-buildability-review-2026-09-04.md`.
 - 2026-09-04 (**[[D2563]]–[[D2569]] eleventh author repair**): superseded the incomplete strict
   protocol; added branded request parsers plus full storage/value joins, row-level rewind and
   stored-success event receipts; and exercised UUID construction inside the concurrent winner.
