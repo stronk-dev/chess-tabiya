@@ -14477,3 +14477,18 @@ authoritative event occurrence in the position-only collector request.
 **Evidence/next:** `make semantic-collectors-promotion-fifth-fresh-review` passes 4/4 while the
 retained third and fourth author targets stay required. A bounded fifth author repair and sixth
 fresh review gate only projections 13–14; the twelve implemented Wave-C projections remain intact.
+
+## 2026-09-04 — Deflection check authority passes fresh independent review
+
+**What landed:** independently exercised the D2536 amendment against the real semantic-event seal,
+legal `Ra8+ Rg8 Rxe7` check-induced line, exact first-edge anchor, manifest union machinery and
+module-generation precedence. No production, schema, API, content, pack or protected-design byte
+changed.
+
+**What changed:** the bounded amendment is accepted for implementation. Copied and crossed check
+events fail; the author model's plain interface is explicitly not treated as seal evidence; and
+all three call sites retain the exact context needed to forward one sealed check event.
+
+**Evidence/next:** `make semantic-collectors-deflection-authority-fresh-review` passes 5/5 plus
+strict TypeScript, while the retained author contract passes 4/4. Implement C17, rerun both gates,
+then return D2536 to module registration without changing the independently held promotion pair.

@@ -20195,12 +20195,11 @@
     },
     {
       "id": "D2536",
-      "state": "blocked",
-      "owner": "evidence-foundation",
+      "state": "todo",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:cfdb81a67024e740906e694f1bbae260da62bcf339d54768133bfd36a4c296ab",
+      "sourceDigest": "sha256:dd4fd7be4a124ac8d07a5efa85fc1034f5de2feda97e771cf7a5dfa156370c2a",
       "uxItems": [],
-      "blocker": "rfc:semantic-collectors.md"
+      "owner": "evidence-foundation"
     },
     {
       "id": "D2537",

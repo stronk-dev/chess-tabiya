@@ -680,6 +680,11 @@ pack-capability-tenth-author-repair:
 semantic-collectors-promotion-fifth-fresh-review:
 	node --test tools/d2548-semantic-collectors-promotion-fifth-fresh-review/contract.test.mjs
 
+.PHONY: semantic-collectors-deflection-authority-fresh-review
+semantic-collectors-deflection-authority-fresh-review:
+	./node_modules/.bin/vitest run --config tools/d2536-deflection-check-authority-fresh-review/vitest.config.ts
+	./node_modules/.bin/tsc -p tools/d2536-deflection-check-authority-fresh-review/tsconfig.json --noEmit
+
 pack-capability-author-repair:
 	node tools/d2152-pack-capability-author-repair/contract.mjs
 	node --test tools/d2334-pack-capability-fifth-author-repair/contract.test.mjs

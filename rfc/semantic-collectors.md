@@ -1,11 +1,11 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
 - **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The D2536
-  deflection check-authority amendment is author-complete 2026-09-02 and awaits fresh independent
-  review before the existing projection changes.** It defines two exact derivation members,
-  deterministic bait-before-check selection, a sealed edge-1 check-event input and permanent
-  missing/crossed/unnecessary negatives; `make semantic-collectors-deflection-authority-author-contract`
-  passes 4/4 plus strict TypeScript. **The held
+  deflection check-authority amendment passed fresh independent review 2026-09-04 and is authorized
+  for implementation.** The review exercised the real sealed check event, exact edge-one anchor,
+  copied/crossed refusals, existing two-member derivation machinery, module-generator precedence
+  and all three production-facing call sites; `make semantic-collectors-deflection-authority-fresh-review`
+  passes 5/5 plus strict TypeScript. **The held
   promotion pair completed its fourth author repair 2026-09-02 on [[D2521]], [[D2522]] and
   [[D2523]], then was **RETURNED by fifth fresh independent review on [[D2548]]–[[D2551]].** The
   source repair survives, but request-digest construction, the exact output/operand ABI and a real
@@ -388,7 +388,16 @@ in `packages/runtime/src/semantic-tactic-sequences.test.ts`, the cost compiler i
 `tools/d1930-recorded-path-cost-harness/`, and the source-closure compiler in
 `tools/d1931-recorded-path-source-harness/`. The positive check-induced line remains the existing
 legal `Ra8+ Rg8 Rxe7` fixture; the bait-capture positive remains separate. Production bytes do not
-change until this amendment survives fresh independent review.
+change in the author checkpoint.
+
+The 2026-09-04 fresh independent review exercised the real runtime authority rather than treating
+the disposable author's `SealedCheckEventIdentity` interface as a seal. The legal check-induced
+fixture produces one runtime-sealed `rules.tactic.event.check@1` event with the exact edge-one
+anchor; copied and crossed events fail; the compiled manifest already supports the required exact
+two-member union; and module generation consumes `derivation.anyOf` before its `dependsOn`
+fallback. The existing cost/source compilers retain the exact edge context needed for the bounded
+call-site change. No blocker remains. Production bytes did not change in the author or review
+checkpoint; C17 now authorizes the existing projection repair.
 
 #### 3.3 Observed line tactics
 
@@ -1235,6 +1244,10 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-04: the fresh independent D2536 review accepted the deflection check-authority amendment
+  for implementation. A live sealed check event, exact edge-one anchor, copy/cross refusals,
+  two-member manifest machinery and module-generator precedence pass 5/5 plus strict TypeScript.
+  No production projection changed in the review checkpoint.
 - 2026-09-02: fifth fresh independent review returned the held promotion pair on [[D2548]]–
   [[D2551]]. The fourth source repair survives, but the domain digest, exact output operands and
   semantic-event occurrence remain unbuildable. The twelve implemented projections remain

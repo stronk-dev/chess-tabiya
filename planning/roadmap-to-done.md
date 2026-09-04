@@ -313,6 +313,15 @@ both recorded-path call sites. `make semantic-collectors-deflection-authority-au
 passes 4/4 plus strict TypeScript; fresh review still gates the existing projection change. Receipt:
 `planning/evidence-foundation-ux/deflection-check-authority-author-contract-2026-09-02.md`.
 
+The 2026-09-04 fresh independent review accepts that bounded D2536 amendment for implementation.
+It exercised the real runtime-sealed check event and exact edge-one anchor, rejected copied and
+crossed values, verified the existing two-member manifest machinery and proved module generation
+prefers `derivation.anyOf` over its dependency fallback. `make
+semantic-collectors-deflection-authority-fresh-review` passes 5/5 plus strict TypeScript. No
+production byte changed in the review checkpoint; the held promotion pair remains independently
+returned. Receipt:
+`planning/evidence-foundation-ux/deflection-check-authority-fresh-independent-review-2026-09-04.md`.
+
 The 2026-09-02 fourth fresh promotion-collector review keeps the two held projections out of the
 foundation on [[D2521]], [[D2522]] and [[D2523]]. Its advertised closed request uses two undefined types, the
 injected Syzygy callable matches no provider operation and leaves normalized request bytes
