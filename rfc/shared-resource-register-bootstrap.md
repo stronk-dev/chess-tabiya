@@ -1,11 +1,11 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **RETURNED by the eighth fresh independent buildability review on
-  [[D2645]]–[[D2649]].** The seventh repair still projects only selected AST nodes with no edges,
-  accepts arbitrary caller source under fabricated compiler/config identity, stops re-export reach
-  at the alias declaration, admits non-canonical scalars, and cannot resolve overload-set roots.
-  `make shared-resource-bootstrap-eighth-fresh-review` retains nine earlier controls and reproduces
-  all five new blockers. No implementation is authorized.
+- **Status:** draft — **eighth author repair completed on [[D2645]]–[[D2649]]; another genuinely
+  fresh independent review is required.** The projector now reads an exact Git commit under actual
+  compiler/config identity, traverses typed compiler-symbol edges, resolves re-export targets,
+  enforces the canonical scalar domain and maps roots to complete declaration sets so overloads are
+  representable. `make shared-resource-bootstrap-eighth-author-repair` retains fourteen earlier
+  controls and passes five new repair controls. No implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -369,6 +369,7 @@ The closed adapter set is:
      readonly compilerPackage: "typescript";
      readonly compilerVersion: string;
      readonly compilerIntegrity: string;
+     readonly repositoryCommit: string;
      readonly configPath: "tsconfig.base.json";
      readonly configDigest: `sha256:${string}`;
      readonly rootNames: readonly string[];
@@ -376,13 +377,17 @@ The closed adapter set is:
    }
 
    type ContractRootV1 =
-     | { readonly kind: "selector"; readonly selector: string; readonly node: string }
+     | {
+         readonly kind: "selector";
+         readonly selector: string;
+         readonly nodes: readonly [string, ...string[]];
+       }
      | {
          readonly kind: "migration_apply";
          readonly sequenceSelector: string;
          readonly version: number;
          readonly property: "apply";
-         readonly node: string;
+         readonly nodes: readonly [string, ...string[]];
        };
 
    interface ContractNodeV1 {
@@ -420,7 +425,7 @@ The closed adapter set is:
    roots/node ids/edges; exact descriptor-selector equality; unique node ids; root and edge endpoint
    membership; legal origin/dependency combinations; repository reachability of every node from a
    root; edge-kind/signature/overload relations; and program identity equality with the pinned
-   compiler invocation. An incomplete program, malformed syntax node, duplicate/orphan node,
+   compiler invocation and resolved Git commit. An incomplete program, malformed syntax node, duplicate/orphan node,
    dangling endpoint, invented edge kind, crossed signature or extra key fails before a digest
    exists ([[D2593]]).
 
@@ -441,7 +446,10 @@ The closed adapter set is:
    diagnostic on an owned root/edge, ambiguous realpath/case, missing workspace source or multiple
    importer-visible package identities fails. `program.compilerOptions` is the canonical converted
    semantic options after the four forced values; its config/compiler/root identities make program
-   drift part of the graph ([[D2539]]).
+   drift part of the graph ([[D2539]]). `repositoryCommit` is the fully resolved 40-hex commit read
+   by the program host; repository paths are read from that Git tree, never from caller text or a
+   mutable working tree. `compilerIntegrity` is the SHA-512 of the exact installed pinned compiler
+   package metadata plus executable compiler image, never a label supplied by the adapter caller.
 
    A repository node id is its resolved repository path plus the declaration's zero-based preorder
    ordinal **among retained repository declarations in that path**, computed only after transitive
@@ -459,13 +467,16 @@ The closed adapter set is:
    with NUL separators. `SyntaxTreeV1.children` retains compiler child order; `text` is non-null only
    for identifiers, decoded literals and operator tokens, and is otherwise null. Trivia, comments
    and source offsets do not enter the tree; binding/member names, operators, statement/argument
-   order and type structure do. Selector roots are
-   `{kind:"selector", selector, node}`. Migration roots are
-   `{kind:"migration_apply", sequenceSelector, version, property:"apply", node}`; they are derived
-   from the already-resolved unique sequence member and never reconstructed as an undeclared
-   selector. Roots sort by canonical bytes and are unique; nodes sort by `id`;
+   order and type structure do. A selector resolves to one exact compiler symbol; its root stores
+   the canonically ordered non-empty `nodes` set of every declaration owned by that symbol. This
+   makes overloads and declaration merging explicit in the ABI instead of choosing a privileged
+   declaration. Alias roots include the public alias declaration and the exact aliased target
+   declarations, with a `re_export` edge to the target. Migration roots likewise store their exact
+   non-empty `nodes` set, derived from the already-resolved unique sequence member and never
+   reconstructed as an undeclared selector. Roots sort by canonical bytes and are unique; nodes sort by `id`;
    edges sort by the canonical bytes of the complete edge and exact duplicate edges collapse. Every
-   root `node` must name a retained node. Every edge endpoint must name a retained node. Repository
+   root `nodes` member must name a retained node, and every retained declaration of the resolved root
+   symbol must appear exactly once. Every edge endpoint must name a retained node. Repository
    edges have `resolvedSignature: null` and
    empty overloads unless the edge is call/construct/tag; those three retain the compiler-selected
    signature and the complete public overload set. This deliberately treats a local/import alias
@@ -497,7 +508,7 @@ The closed adapter set is:
    recursively seals the exact graph above, then computes the digest over that retained reference.
    **[[D2561]]:** before producing that image, the projector requires set equality
    between descriptor `roots` plus `versionSelector` and `graph.roots`' selector values; every root
-   names one retained `ContractNodeV1`; and the unique source-path set of those selectors equals
+   names its complete non-empty retained `ContractNodeV1` declaration set; and the unique source-path set of those selectors equals
    `program.rootNames`. Empty, extra, duplicate, crossed-node and crossed-program root images are
    invalid, never landed.
 7. `versioned_declarations@1` — resolves one literal declaration array whose members contain a
@@ -832,6 +843,28 @@ resolve aliases, enforce the exact scalar domain and define overload-root identi
 review still gates acceptance and every production byte. Receipt:
 `planning/shared-resource-register-bootstrap/eighth-fresh-independent-buildability-review-2026-09-04.md`.
 
+### Eighth author repair (2026-09-04)
+
+The bounded repair replaces the caller-source projector with a repository-bound projector whose
+only request operands are the complete descriptor and a Git revision. The host resolves that
+revision to one commit, reads every repository source/config path from that tree, records the commit,
+digests the committed config and hashes the actual installed compiler image. Working-tree changes
+cannot move a projection of the same commit ([[D2646]]).
+
+Starting from the resolved roots, the model retains exact declaration objects, walks compiler-
+resolved type/value/property/call/construct/tag/heritage/import/re-export relations and recursively
+adds repository targets ([[D2645]]). A public alias retains both its own declaration and the aliased
+target with an exact `re_export` edge ([[D2647]]). Root ABI now carries a canonical non-empty `nodes`
+set, so one overload symbol retains every signature plus implementation without inventing a
+privileged declaration ([[D2649]]). The shared sealing boundary rejects fractional/unsafe/negative-
+zero numbers and unpaired surrogates in values or keys before a digest exists ([[D2648]]).
+
+`make shared-resource-bootstrap-eighth-author-repair` retains 4 + 5 + 5 earlier controls and passes
+5/5 new repair controls against an actual committed temporary Git repository. It is positive author
+evidence only. Another genuinely fresh independent review still gates acceptance and every
+production implementation. Receipt:
+`planning/shared-resource-register-bootstrap/eighth-author-repair-2026-09-04.md`.
+
 ## Acceptance criteria
 
 1. Catalogue and README register populations are set-equal; no `RESOURCE_NAMES`, `SCHEMA_SLUGS` or
@@ -889,6 +922,21 @@ review still gates acceptance and every production byte. Receipt:
     value, and mutating the published projection at any depth fails. Recomputing the digest from the
     exact retained semantic reference always equals the stored digest for canonical-resource and
     TypeScript-contract adapters; alias/cycle/non-plain/accessor inputs fail deep sealing.
+19. [[D2645]] A committed two-file contract whose exported interface refers to a second repository
+    declaration retains that declaration and a typed transitive edge. Removing the dependency node
+    or edge from the constructed image fails exact compiler-graph agreement.
+20. [[D2646]] The adapter accepts descriptor plus repository revision, never path/source/program
+    bytes. Its graph records the resolved commit, actual compiler-image integrity, parsed-config
+    digest, converted options and exact roots; mutating the working tree after the commit cannot move
+    the projection, while an unknown revision and a caller `sourceText` field fail.
+21. [[D2647]] An exported alias roots both its public declaration and exact aliased target and emits
+    one `re_export` edge. Removing or crossing either endpoint fails the compiled graph.
+22. [[D2648]] Both TypeScript and canonical-resource sealing reject fractions, unsafe integers,
+    negative zero and unpaired surrogates in values or keys before a digest exists; a valid surrogate
+    pair and both safe-integer boundaries remain admitted.
+23. [[D2649]] A three-declaration overload set resolves as one symbol and its root contains all three
+    canonically ordered declaration node ids. Adding an unrelated same-spelling declaration cannot
+    enter or renumber that set; no singular privileged overload node exists in the ABI.
 
 ## Discharges
 
@@ -908,6 +956,12 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-04: [[D2645]]–[[D2649]] eighth author repair. Exact committed repository bytes and actual
+  compiler/config identity feed a transitive typed symbol graph; re-export targets are retained;
+  canonical scalar admission is exact; and overload roots carry every declaration. `make
+  shared-resource-bootstrap-eighth-author-repair` retains fourteen earlier controls and passes 5/5
+  new repair controls. Another fresh review remains required; receipt:
+  `planning/shared-resource-register-bootstrap/eighth-author-repair-2026-09-04.md`.
 - 2026-09-04: returned by eighth fresh independent buildability review on [[D2645]]–[[D2649]].
   The seventh author model has no transitive graph, uses caller source plus fabricated program
   identity, stops at re-export aliases, accepts forbidden canonical scalars and rejects overload

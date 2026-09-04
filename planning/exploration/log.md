@@ -15253,3 +15253,20 @@ new blockers. Exact receipt:
 `planning/shared-resource-register-bootstrap/eighth-fresh-independent-buildability-review-2026-09-04.md`.
 A bounded repository-program/graph/scalar/overload author repair and another fresh independent
 review still gate acceptance and every production implementation.
+
+## 2026-09-04 — Shared-resource bootstrap eighth author repair
+
+**What landed:** The bounded contract-tier repair for [[D2645]]–[[D2649]] and maintained
+`make shared-resource-bootstrap-eighth-author-repair` target. No production register, catalogue,
+schema, migration, runtime, server, client, content, archive or protected-design byte changed.
+
+**What changed:** descriptor plus exact Git revision replaces caller source; repository paths are
+read from the resolved commit and the graph records real compiler/config identity. Exact compiler-
+symbol traversal retains referenced declarations and re-export targets, canonical sealing rejects
+the full unsupported scalar domain, and roots now carry complete declaration sets so overloads are
+representable without an arbitrary privileged node.
+
+**Evidence/next:** the target retains 4 sixth-author, 5 seventh-author and 5 eighth-review controls,
+then passes 5/5 new repair controls against a committed temporary repository. Exact receipt:
+`planning/shared-resource-register-bootstrap/eighth-author-repair-2026-09-04.md`. Another genuinely
+fresh independent review still gates acceptance and every production implementation.

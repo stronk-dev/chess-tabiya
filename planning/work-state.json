@@ -21179,7 +21179,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9fc8353b9db2736b35910b0df882781966f15e8d24f8160b4b83324775374591",
+      "sourceDigest": "sha256:eebbb08fb04db707d22283907d90bf91189b4ad776713e4b9136a46c57c473a7",
       "uxItems": [],
       "blocker": "rfc:shared-resource-register-bootstrap.md"
     },
@@ -21188,7 +21188,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7fc14025c36bfa26fb2fb705999905f56086da01cc78d4383e45683c5ab02192",
+      "sourceDigest": "sha256:6bcae4d27d5cce4ae99cd06b0574e18a077c34e4d7231d61cae056e9a174b052",
       "uxItems": [],
       "blocker": "rfc:shared-resource-register-bootstrap.md"
     },
@@ -21197,7 +21197,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:12707b1efbe145ae990df83cec338f0a69b153e5f9bdd5f262f1c7819fecec90",
+      "sourceDigest": "sha256:10ff0b14f5d64d4e5c220465d50cb25e05b5566336a2747d11e3935842e85356",
       "uxItems": [],
       "blocker": "rfc:shared-resource-register-bootstrap.md"
     },
@@ -21206,7 +21206,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7b305cfa2e65e9dbc7afeaf893893615a4a473ae5c8cab42076f5a59b4809fb9",
+      "sourceDigest": "sha256:6680bb69667a2724cb9356625337404f76c3cb141ac61772c17084b36b36ede4",
       "uxItems": [],
       "blocker": "rfc:shared-resource-register-bootstrap.md"
     },
@@ -21215,7 +21215,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:806fe5e97a84459b28b39e6f92e3541ca4bfdd63638ef4f8044e944d53933078",
+      "sourceDigest": "sha256:19d7ad47078bf747ef26f711a181848c0b6f59e0997abe66783c5fb6f4d1635e",
       "uxItems": [],
       "blocker": "rfc:shared-resource-register-bootstrap.md"
     }

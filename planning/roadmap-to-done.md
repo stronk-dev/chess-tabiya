@@ -152,6 +152,14 @@ blockers. The critical path therefore remains contract repair, not catalogue imp
 Receipt:
 `planning/shared-resource-register-bootstrap/eighth-fresh-independent-buildability-review-2026-09-04.md`.
 
+The same-day eighth author repair closes those five bounded seams without claiming production.
+Projection now reads exact committed repository bytes, records the resolved commit plus actual
+compiler/config identity, follows typed compiler-symbol edges and aliases, enforces the canonical
+scalar domain, and represents overload roots as complete ordered declaration sets. `make
+shared-resource-bootstrap-eighth-author-repair` retains fourteen earlier controls and passes 5/5
+new repairs. Another genuinely fresh review still precedes acceptance and implementation. Receipt:
+`planning/shared-resource-register-bootstrap/eighth-author-repair-2026-09-04.md`.
+
 The same-day twelfth `pack-capability-contract` author repair closes [[D2587]]–[[D2592]] at contract
 tier without claiming production. One transaction-owned before/after run result derives the exact
 core/objective/recorded-guard journal suffix and receipt; the complete nested objective request is
