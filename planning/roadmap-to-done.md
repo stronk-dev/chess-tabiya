@@ -485,6 +485,16 @@ and strict TypeScript. The spine remains **12/14** pending a twelfth fresh revie
 dependency landing. Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-eleventh-author-repair-2026-09-05.md`.
 
+The same-day twelfth fresh independent review returns that repair on [[D2835]]–[[D2839]]. The
+installation inventory remains caller-created rather than application-owned; the generation
+grammar admits undeclared fields; duplicate and orphan legal-map rows are ignored; empty supports
+pass by vacuity; and duplicate ledger subjects select truth by array order. `make
+semantic-collectors-promotion-twelfth-fresh-review` retains the complete chain and passes 5/5 new
+falsifiers plus strict TypeScript. The spine remains **12/14** pending a closed installed-inventory
+authority, complete unique declaration/record populations, author repair, another fresh review and
+provider/value dependency landing. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-twelfth-fresh-independent-buildability-review-2026-09-05.md`.
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded

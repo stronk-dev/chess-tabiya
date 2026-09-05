@@ -16163,3 +16163,20 @@ predecessor chain and passes 10/10 repair/self-audit groups. Exact receipt:
 `planning/shared-resource-register-bootstrap/twelfth-author-repair-2026-09-05.md`. Another genuinely
 fresh independent review still gates acceptance and production, after which provider protocol can
 complete against this generic engine.
+
+## 2026-09-05 — semantic collectors promotion twelfth fresh independent review
+
+**What landed:** returned the eleventh held-promotion author repair on [[D2835]]–[[D2839]] with
+five executable attacks. No production collector, provider, runtime, schema, content or protected
+design byte changed.
+
+**What changed:** the installed authority is still bootstrapped from an arbitrary caller path; the
+generation grammar accepts undeclared fields; legal rows are neither complete nor unique; support
+validation passes an empty population; and duplicate durable record subjects choose truth by array
+order.
+
+**Evidence/next:** `make semantic-collectors-promotion-twelfth-fresh-review` retains the complete
+predecessor chain and passes 5/5 fresh falsifiers plus strict TypeScript. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-twelfth-fresh-independent-buildability-review-2026-09-05.md`.
+Next is a bounded author repair, another genuinely fresh review and the separately tracked
+provider/value dependency landing; the production evidence spine remains 12/14.

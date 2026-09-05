@@ -7,12 +7,13 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair was **author-repaired for [[D2789]]–[[D2794]] on 2026-09-05 after the eleventh
-  fresh return.** One installed inventory owns immutable generations; complete production
-  pack/strict-sourcing checks precede admission; exact pack, support, retained Syzygy response,
-  FEN-derived legal-map and current result receipts now execute. The maintained target retains the
-  entire chain and passes 7/7 new groups plus strict TypeScript. A twelfth genuinely fresh review
-  and provider/value dependency landing still gate both held projections; no held projection
+  promotion pair was **returned by its twelfth fresh review on [[D2835]]–[[D2839]] on
+  2026-09-05.** The eleventh repair moved self-registration to a caller-created inventory; its
+  generation grammar is open; legal-map declarations are neither unique nor complete; empty
+  supports pass; and duplicate recorded subjects choose their first array member. `make
+  semantic-collectors-promotion-twelfth-fresh-review` retains the entire predecessor chain and
+  passes 5/5 fresh falsifiers plus strict TypeScript. An author repair, another genuinely fresh
+  review and provider/value dependency landing still gate both held projections; no held projection
   implementation is authorized. The preceding author model claimed one
   asynchronous transaction owned recorded-first lookup, the exact
   scheduler digest and invocation, cancellation/domain/failure outcomes, success-only legal move
@@ -1571,6 +1572,11 @@ current result seal, another fresh review and provider/value dependency landing.
 | [[D2792]] | returned: source digest/length metadata is never checked against retained response bytes |
 | [[D2793]] | returned: a status token stands in for an exact legal-map operation and malformed bytes become absence |
 | [[D2794]] | returned: predecessor recorded results bypass the current durable receipt at assertion |
+| [[D2835]] | returned: the installed inventory is still bootstrapped from an arbitrary caller-selected path |
+| [[D2836]] | returned: generation and nested declaration objects accept undeclared fields and incomplete shapes |
+| [[D2837]] | returned: duplicate and orphan legal-map declarations are ignored rather than refused |
+| [[D2838]] | returned: an empty support population vacuously passes and grounds a recorded reading |
+| [[D2839]] | returned: duplicate durable record subjects are admitted and first-row order chooses truth |
 | [[D2469]] | author-repaired: provider preflight/domain and provider-failure arms execute before the lazy success-only legal-map resolver |
 | [[D2470]] | author-repaired: one request, dependency interface, sealed recorded resolver and exact collector signature fix source precedence |
 | [[D2471]] | author-repaired: specialized assertion failure throws `EvidenceInvariantError`; only typed unavailable inputs abstain, and invalid recorded bytes never permit live fallback |
@@ -1618,6 +1624,13 @@ is a spec change with a changelog line.
   `make semantic-collectors-promotion-eleventh-author-repair` retains the chain, passes 7/7 new
   groups and strict TypeScript. Exact receipt:
   `planning/evidence-foundation-ux/semantic-collectors-promotion-eleventh-author-repair-2026-09-05.md`.
+- 2026-09-05: twelfth fresh independent review returned the held promotion pair on
+  [[D2835]]–[[D2839]]. The inventory remains caller-bootstrapped; generation and nested declaration
+  grammars are open; duplicate/orphan legal rows are ignored; empty supports pass vacuously; and
+  duplicate durable subjects select their first array member. `make
+  semantic-collectors-promotion-twelfth-fresh-review` retains the complete predecessor chain and
+  passes 5/5 fresh falsifiers plus strict TypeScript. Exact receipt:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-twelfth-fresh-independent-buildability-review-2026-09-05.md`.
   Twelfth fresh review and provider/value dependency landing remain mandatory; no held production
   id is authorized.
 - 2026-09-05: eleventh fresh independent review returned the tenth held-promotion repair on
