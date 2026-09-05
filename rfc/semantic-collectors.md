@@ -7,17 +7,16 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair has a **seventh author repair 2026-09-04 on [[D2650]]–[[D2654]]; eighth fresh
-  review required.** Exact sealed result arms replace arbitrary objects; FEN-derived legal/contact
-  authorities reject caller-minted same-position values; the shipped tablebase parser and complete
-  ten-category vocabulary own outcomes; the model uses the RFC geometry/scope/signal request and
-  complete provider result/delivery; and the sole output is declared F1 evidence with one exact
-  value receipt. One maintained target currently runs all five retained generations plus five new
+  promotion pair is **RETURNED by its eighth fresh review 2026-09-05 on [[D2693]]–[[D2700]].** The
+  seventh model repairs its leaf constructors but omits the total collector transaction, trusts
+  caller request digests, crosses provider result arms, mints recorded truth from caller JSON,
+  accepts unvalidated provider moves, leaves input abstention unreachable and creates a second
+  local live-source adapter. One maintained target runs all retained generations plus eight new
   behavioral falsifiers; one registered value factory owns the reading; the total operation result
   is module-sealed; category/DTZ/perspective project from the exact source; and dropped, added,
   reordered, rebuilt or cross-FEN moves/pawns fail. `make
-  semantic-collectors-promotion-sixth-author-repair` passes 19 retained assertions, four strict
-  typechecks and 5/5 new behavioral arms; no held projection implementation is authorized. The
+  semantic-collectors-promotion-eighth-fresh-review` passes the retained chain and 8/8 fresh
+  falsifiers; no held projection implementation is authorized. The
   request now owns a canonical full-FEN parser and total recorded lookup, uses the actual shared
   provider scheduler plus operation-keyed source factory with deterministic request bytes, and
   requires a module-sealed aggregate geometry completion before its zero-call fast path. Geometry and recorded tablebase inputs
@@ -1455,6 +1454,17 @@ semantic-collectors-promotion-seventh-author-repair` retains every prior author/
 5/5 new behavioral controls and strict TypeScript. This remains author evidence only; an eighth
 genuinely fresh review still gates both held projections.
 
+The 2026-09-05 eighth fresh independent review returns that repair on [[D2693]]–[[D2700]]. The
+executable model has no `collectPromotionRaceTablebase` transaction or its recorded-first/provider/
+legal dependency order. It accepts caller-written request digests; crosses local-domain and failure
+results between positions and success between equal-FEN/different-timeout requests; mints recorded
+truth from caller JSON; admits tablebase moves not legal in the request FEN; cannot legitimately
+construct its declared input-abstained arm; and mints live evidence through a local generic adapter
+instead of the exact shared source factory. `make semantic-collectors-promotion-eighth-fresh-review`
+retains the complete predecessor chain and passes 8/8 falsifiers. An eighth bounded author repair
+and another fresh review precede either held production projection. Exact routed returns:
+[[D2693]], [[D2694]], [[D2695]], [[D2696]], [[D2697]], [[D2698]], [[D2699]], [[D2700]].
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1470,6 +1480,7 @@ genuinely fresh review still gates both held projections.
 | [[D2652]] | author-repaired: recorded/live sources cross the shipped parser and all ten production tablebase categories |
 | [[D2653]] | author-repaired: the executable model uses the exact geometry/scope/signal request and complete typed result/delivery ABI |
 | [[D2654]] | author-repaired: the sole output is declared producer/projection evidence with one exact value-authority receipt |
+| [[D2693]]–[[D2700]] | returned by eighth fresh review: total orchestration, scheduler-owned request identity, exact recorded/live source authority, legal provider moves and input-abstention construction remain unproven |
 | [[D2469]] | author-repaired: provider preflight/domain and provider-failure arms execute before the lazy success-only legal-map resolver |
 | [[D2470]] | author-repaired: one request, dependency interface, sealed recorded resolver and exact collector signature fix source precedence |
 | [[D2471]] | author-repaired: specialized assertion failure throws `EvidenceInvariantError`; only typed unavailable inputs abstain, and invalid recorded bytes never permit live fallback |
@@ -1511,6 +1522,13 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-05: eighth fresh independent review returned the held promotion pair on [[D2693]]–
+  [[D2700]]. The leaf repairs pass, but the collector transaction is absent and its substitute
+  provider/value boundaries accept caller or crossed authority. `make
+  semantic-collectors-promotion-eighth-fresh-review` retains the full chain and passes 8/8 fresh
+  falsifiers. Exact receipt:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-eighth-fresh-independent-buildability-review-2026-09-05.md`.
+  Another author repair and fresh review remain mandatory; no held production id is authorized.
 - 2026-09-04: seventh author repair closes [[D2650]]–[[D2654]] at RFC tier. Exact sealed result
   arms, shipped FEN-derived legal/contact authorities, the production tablebase parser and complete
   category domain, the literal RFC/provider ABI and one declared-evidence value receipt replace the

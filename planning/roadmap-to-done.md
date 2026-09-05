@@ -269,6 +269,16 @@ groups and strict TypeScript. The spine is still **12/14**: eighth fresh review 
 landing precede implementation. Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-seventh-author-repair-2026-09-04.md`.
 
+The 2026-09-05 eighth fresh held-promotion review returns that repair on [[D2693]]–[[D2700]]. The
+leaf constructors pass, but the executable model omits the total collector transaction and its
+recorded-first/provider/legal ordering. Caller-written digests become invocation identity;
+provider arms cross request positions or timeouts; recorded truth is caller JSON; provider moves
+are not legal-FEN validated; input abstention has no legitimate path; and live evidence uses a local
+adapter instead of the shared source factory. `make semantic-collectors-promotion-eighth-fresh-review`
+retains the full chain and passes 8/8. The spine remains **12/14** pending bounded author repair,
+another fresh review and provider/value dependency landing. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-eighth-fresh-independent-buildability-review-2026-09-05.md`.
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded

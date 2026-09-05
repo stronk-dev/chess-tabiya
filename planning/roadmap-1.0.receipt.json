@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:5839c056dee0bd0a4c7a4cc2d39066aa3c230fb4b01154d90162e4ebecad0aa0",
+    "roadmap": "sha256:6fb236385df2746e596bc73125e3e9f10fea7a0d74b1fab822bc520c49f76f84",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:1fc29301d3fa43e133fb0a95baa13a2fa17d5fa3f83bdf4c7f4a16276c772df0",
-    "rfcRegister": "sha256:27d38d6e7ec5a8b0e513a87222b6844333a41dcc70adecb214561403d258b068",
+    "workState": "sha256:965f5005b64458c37e53da1ec4c4f8ea6f7bdbdfa431f95f1d0045859010f209",
+    "rfcRegister": "sha256:9f664dd9feaef69d4e6afcb6e751799d091991f65088405ab30e0d92d7907cc3",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 975,
+      "blocked": 983,
       "done": 824,
       "refused": 3
     },
@@ -185,8 +185,8 @@
       ],
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
-        "at": "2026-09-04",
-        "summary": "The eighth candidate-packet author repair closes six returned seams in one executable composition: the predecessor legal-evidence surface supplies exact values; all three dependency plans run; one fail-closed descriptor measures the complete private aggregate; and entry/byte/object bounded cache admission consumes the receipt. Production remains held for fresh review and dependency landing; the evidence spine remains 12/14.",
+        "at": "2026-09-05",
+        "summary": "The eighth fresh held-promotion review returns the seventh leaf repair on eight executable seams: the total collector transaction is absent; request digests and recorded/live sources bypass exact shared authorities; provider results cross; provider moves lack legal-FEN validation; and input abstention is unreachable. The evidence spine remains 12/14 pending repair, fresh review and dependency landing.",
         "impact": "held",
         "evidence": [
           "planning/evidence-foundation-ux/shared-candidate-packet-eighth-fresh-independent-buildability-review-2026-09-04.md",

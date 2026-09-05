@@ -15506,3 +15506,21 @@ are regex-only; and the advertised second-author target is red at HEAD yet absen
 Exact receipt:
 `planning/evidence-foundation-ux/review-evidence-compiler-second-fresh-independent-buildability-review-2026-09-04.md`.
 One bounded author repair and another fresh review precede production Review work.
+
+## 2026-09-05 — Held promotion collectors eighth fresh independent return
+
+**What landed:** a fresh contract-tier review of the seventh author repair for the two held
+promotion collectors, eight ledger findings [[D2693]]–[[D2700]], and maintained `make
+semantic-collectors-promotion-eighth-fresh-review` coverage. No production collector, provider,
+packet, API, schema, content, archive or protected-design byte changed.
+
+**What changed:** the repaired leaf constructors survive, but the claimed composition does not.
+The total collector transaction is absent; caller digests and crossed results can become authority;
+recorded and live sources bypass their exact shared factories; tablebase moves lack legal-position
+validation; and the declared input-abstained state has no legitimate constructor or output path.
+
+**Evidence/next:** the target retains all predecessor author/review generations and passes 8/8
+fresh falsifiers. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-eighth-fresh-independent-buildability-review-2026-09-05.md`.
+One bounded author repair and another genuinely fresh review precede production; the evidence spine
+remains 12/14.
