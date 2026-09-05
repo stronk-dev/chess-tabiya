@@ -438,6 +438,15 @@ complete chain and passes 5/5 reproductions. Both implementation checkpoints rem
 coherent author repair, another fresh review and provider protocol/exchange. Receipt:
 `planning/provider-health-degradation/ninth-fresh-independent-buildability-review-2026-09-06.md`.
 
+The same day's third fresh provider-protocol review returns its second repair on
+[[D2874]]–[[D2877]]. The process contract asks a one-selector resource for an unreachable partial
+state, names no lawful reader for the prior accepted obligation preimage, closes product-only defects
+at process time, and leaves structured endpoint identity without a canonical resource mapping.
+`make provider-protocol-third-fresh-review` retains the chain and passes 4/4 reproductions. The
+protocol population remains blocked on one coherent author repair, another fresh review, and the
+generic bootstrap dependency. Receipt:
+`planning/provider-protocol-register/third-fresh-independent-buildability-review-2026-09-06.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

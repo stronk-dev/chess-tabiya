@@ -1,10 +1,11 @@
 # RFC: Provider-protocol shared-resource catalogue population
 
-- **Status:** draft — **second author repair completed on [[D2809]]–[[D2814]]; another genuinely
-  fresh independent review is required.** Historical reviews are revision-pinned; README ownership,
-  type relations and routing now match the generic parent; and product validation has one explicit
-  future owner instead of an invented generic hook. `make provider-protocol-second-author-repair`
-  retains both returns and passes 5/5 repair groups. Implementation is unauthorized.
+- **Status:** draft — **returned by third fresh independent review on [[D2874]]–[[D2877]].** The
+  one-selector resource cannot produce the promised partial state; the accepted obligation
+  preimage has no lawful reader; process closeout claims product-only repairs; and the string
+  endpoint field has no canonical mapping from the structured product authority. `make
+  provider-protocol-third-fresh-review` retains the complete chain and passes 4/4 reproductions.
+  Author repair and another genuinely fresh review are required. Implementation is unauthorized.
 - **Author:** Codex
 - **Created:** 2026-08-30
 - **Design refs:** none. This is repository process and changes no provider behavior or learner UX.
@@ -294,6 +295,25 @@ review and the generic bootstrap dependency still gate acceptance and implementa
 | D3 | Absent descriptor/register lands with full verification | codex | implementation SHA plus green `make verify` | |
 | D4 | Product RFC publishes accepted obligations, claims lane 1 and later lands the atomic image | provider-exchange-and-execution | accepted preimage plus product SHA | |
 
+## Third fresh independent return (2026-09-06)
+
+The second repair closes its five named issues but leaves four buildability failures:
+
+1. [[D2874]] — the descriptor owns one atomic selector, so a malformed version-only, payload-only
+   or digest-only root is `invalid`, not the repeatedly promised `partial` state;
+2. [[D2875]] — the product validator must read a prior accepted obligation preimage, but is forbidden
+   from reading Git, receives no such preimage through the generic API, and has no descriptor hook;
+3. [[D2876]] — acceptance criterion 10 closes [[D2456]]/[[D2457]] on process criteria even though
+   their runtime type relation, obligation authority and independent validator are deferred to the
+   later product D4; and
+4. [[D2877]] — the canonical row requires `endpoint: string`, while the normative product authority
+   is a structured UCI-or-HTTPS object and no lossless endpoint identifier or encoding is defined.
+
+`make provider-protocol-third-fresh-review` retains both historical returns and the second repair,
+then passes 4/4 executable falsifiers. Exact evidence:
+`planning/provider-protocol-register/third-fresh-independent-buildability-review-2026-09-06.md`.
+The RFC remains draft and implementation remains unauthorized.
+
 ## Open questions
 
 None for the owner. The five operations, providers and ten digest domains are existing product-RFC
@@ -301,6 +321,10 @@ semantics, not choices made by this process document.
 
 ## Changelog
 
+- 2026-09-06: third fresh independent review returned the second repair on [[D2874]]–[[D2877]]:
+  unreachable partial-state semantics, an unreadable accepted obligation preimage, premature
+  product-defect closeout and an undefined structured-endpoint-to-string mapping. `make
+  provider-protocol-third-fresh-review` passes 4/4 reproductions.
 - 2026-09-05: second author repair on [[D2809]]–[[D2814]]. Revision-pinned historical reviews,
   restored README ownership, compilable mapped relations, honest process/product validation scope
   and descriptor-equal routing now execute under the maintained Make target.

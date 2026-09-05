@@ -16532,3 +16532,20 @@ chain and passes 5/5 falsifiers. Exact receipt:
 `planning/provider-health-degradation/ninth-fresh-independent-buildability-review-2026-09-06.md`.
 The next author repair must close all five in one composed authority; another genuinely fresh review
 and provider protocol/exchange still precede production implementation.
+
+## 2026-09-06 — provider-protocol third fresh independent return
+
+**What landed:** independently reviewed the second provider-protocol process repair and returned it
+on [[D2874]]–[[D2877]]. The maintained fresh-review target retains both historical returns and the
+repair. No catalogue/register/provider/schema/storage/content/web/archive/protected-design product
+byte changed.
+
+**What changed:** the review proved that malformed single-root resources are `invalid`, never
+`partial`; the prior accepted obligation preimage has no lawful reader; two product-only defects are
+scheduled to close during process implementation; and the resource's string endpoint field has no
+canonical mapping from the product's structured endpoint authority.
+
+**Evidence/next:** `make provider-protocol-third-fresh-review` passes 4/4 reproductions. Exact
+receipt: `planning/provider-protocol-register/third-fresh-independent-buildability-review-2026-09-06.md`.
+One author repair must close all four, then another genuinely fresh review and the generic bootstrap
+dependency still precede process implementation.

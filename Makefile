@@ -191,6 +191,10 @@ provider-protocol-second-fresh-review:
 provider-protocol-second-author-repair: provider-protocol-fresh-review provider-protocol-second-fresh-review
 	node --test tools/d2809-provider-protocol-second-author-repair/contract.test.mjs
 
+.PHONY: provider-protocol-third-fresh-review
+provider-protocol-third-fresh-review: provider-protocol-second-author-repair
+	node --test tools/d2874-provider-protocol-third-fresh-review/review.test.mjs
+
 .PHONY: provider-health-sixth-fresh-review
 provider-health-sixth-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2815-provider-health-sixth-fresh-review/vitest.config.ts --reporter=verbose
@@ -1180,7 +1184,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-ninth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-sixteenth-author-repair candidate-packet-eleventh-author-repair semantic-collectors-promotion-thirteenth-author-repair provider-health-ninth-fresh-review shared-resource-bootstrap-fifteenth-fresh-review provider-protocol-second-author-repair review-evidence-third-author-repair bot-policy-fourth-author-repair test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-ninth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-sixteenth-author-repair candidate-packet-eleventh-author-repair semantic-collectors-promotion-thirteenth-author-repair provider-health-ninth-fresh-review shared-resource-bootstrap-fifteenth-fresh-review provider-protocol-second-author-repair provider-protocol-third-fresh-review review-evidence-third-author-repair bot-policy-fourth-author-repair test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 

@@ -326,14 +326,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; author-repair provider-health D2869-D2873 and freshly review it while advancing provider protocol/exchange, pack-capability and longitudinal-store review lanes.",
+        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; author-repair provider-health D2869-D2873 and provider-protocol D2874-D2877, freshly review both, then advance provider exchange, pack-capability and longitudinal-store lanes.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Provider-health's ninth fresh review reproduced five remaining concurrency and authority failures after the eighth repair; the contract is returned before either runtime or durable checkpoint can reach production.",
+          "summary": "Provider-protocol's third fresh review reproduced four remaining lifecycle, preimage, closeout and endpoint-identity failures; the process resource remains returned before provider exchange can claim its first lane.",
           "impact": "held",
-          "evidence": ["planning/provider-health-degradation/ninth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2869-provider-health-ninth-fresh-review/review.test.ts", "rfc/provider-health-degradation.md", "rfc/README.md"],
+          "evidence": ["planning/provider-protocol-register/third-fresh-independent-buildability-review-2026-09-06.md", "tools/d2874-provider-protocol-third-fresh-review/review.test.mjs", "rfc/provider-protocol-register.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "provider-health-degradation.md", "digest": "sha256:a7b819beb9d5c7015ebe58db138adc650232e287033103c949a06006f15f39f6"}
+            {"kind": "rfc", "id": "provider-protocol-register.md", "digest": "sha256:5ead0fb3cbe2fa112b4004c3f61b6379a0a5f261cda40a7200fd14d71dd61062"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
