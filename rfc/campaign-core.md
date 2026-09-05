@@ -1,13 +1,15 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
-- **Status:** draft — **fifth fresh independent review returned the fifth author repair on
-  [[D2736]]–[[D2741]].** Provider failure has no durable command-result home; charged commands are
-  detached from campaign/play state; assistance omits/forges subject authority; event integrity
-  covers only payload; official curriculum compiles a smaller caller-authored object; and three
-  returned dependencies are advertised as accepted. `make campaign-two-horizon-fifth-fresh-review`
-  retains the full author chain and reproduces 6/6. This RFC is explicitly the Campaign foundation, not the whole 1.0.
-  No campaign schema, migration, production route, official campaign or surface may resume before
-  another fresh independent review and accepted dependencies.
+- **Status:** draft — **sixth author repair complete for [[D2736]]–[[D2741]]; another genuinely
+  fresh independent review is required.** Provider failure is durable; charged commands bind both
+  aggregate identities and revisions; assistance receipts carry sealed complete subjects; event
+  integrity covers canonical whole envelopes; official curriculum compiles the full projection
+  from sealed nested authorities; and dependency states match the live register. `make
+  campaign-two-horizon-sixth-author-repair` retains the full chain and passes 6/6 new groups. This
+  RFC is explicitly the Campaign foundation, not the whole 1.0. No campaign
+  schema, migration, production route, official
+  campaign or surface may resume before another fresh independent
+  review and accepted dependencies.
   *(Prior line: [[D2077]]–[[D2086]] author repair complete 2026-08-30; fresh independent review
   required. Before that:
   implementing — 2026-08-23 authored-contract + registry + module-algebra checkpoints. Before
@@ -23,28 +25,29 @@
   [[D953]], annotated at `planning/campaign-research-queue.md:7-10`. R7/R8 remain open and
   experiential; this RFC's play-derived amendments are their landing site (the presets pattern,
   chosen with the Gate F tension stated in the ruling record).
-- **Depends on:** `rfc/intent-presets.md` (accepted — the `ContextContract` registry this RFC
-  registers into; its Discharge D3 names this registration), `rfc/learner-modules.md` (accepted —
-  the closed 11-module union, campaign named as consumer at `:125-126`), `rfc/bot-policy.md`
-  (author-repaired, fresh review required — opponent selection and the preceding migration
-  position), `rfc/longitudinal-store.md` (author-repaired, fresh review required — projection/
-  rebuild discipline and the preceding migration position), `rfc/theory-knowledge-pipeline.md`
-  (exact bundle/passage authority for `theory_unlock`; implementation dependency), the shared
+- **Depends on:** `rfc/intent-presets.md` **(draft; third author repair, dependency-blocked before
+  fresh review — the future `ContextContract` registry this RFC registers into)**,
+  `rfc/learner-modules.md` (accepted/implementing — the closed 11-module union, campaign named as
+  consumer at `:125-126`), `rfc/bot-policy.md` (draft/returned — opponent selection and the
+  preceding migration position), `rfc/longitudinal-store.md` (draft; eighth author repair, fresh
+  review required — projection/rebuild discipline and the preceding migration position),
+  `rfc/theory-knowledge-pipeline.md` (draft/returned — exact bundle/passage authority for
+  `theory_unlock`; implementation dependency), the shared
   server-readable appearance catalog required by [[D1696]], and the portable-account-data
   inventory/checker (account export and hard deletion only). Whole-installation restore belongs to
   the appliance backup contract; this RFC adds no account import, merge or rekey operation.
-  **Consumer closure additionally serializes
-  behind accepted and implemented `rfc/pack-capability-contract.md`**, exporting
-  `derivePackCapabilityRequirements`, and **accepted and implemented
-  `rfc/theory-drill-current-joins.md`**, exporting `compileApplicabilityResult`; both are returned at
-  this author checkpoint, so Campaign implementation cannot begin by substituting miniature local
-  graphs.
+  **Consumer closure additionally serializes behind `rfc/pack-capability-contract.md` **(draft;
+  fourteenth author repair, fresh review required)**, which proposes
+  `derivePackCapabilityRequirements`, and `rfc/theory-drill-current-joins.md` **(draft; author
+  repair plus owner progression ruling and fresh review required)**, which proposes
+  `compileApplicabilityResult`. Campaign implementation cannot begin by borrowing either name from
+  unaccepted prose or substituting a miniature local graph.
 - **Parent / amends:** — (first campaign RFC; `design/06-campaign.md` is the intent authority)
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/campaign/`
 
 ```tabiya-claims
-migration | position behind bot-policy | campaign_runs; campaign_run_creations; campaign_events; campaign_reward_awards
+migration | position behind bot-policy | campaign_runs; campaign_run_creations; campaign_events; campaign_mutation_commands; campaign_reward_awards
 campaign-schema | lane 2 | reward becomes a closed three-member run-reward union; nodes declare exact reward consumers; durable cosmetic awards reference the shared appearance catalog; official publication carries checked curriculum metadata
 run-schema | lane 0.25 | RunSession.origin gains optional exact campaign encounter identity (campaignRunId, nodeId, campaignDocumentDigest); run.started persists it for Review/export/restore
 ```
@@ -59,8 +62,8 @@ difficulty pressure is the **suppressor boss** (capability suppression, never ch
 and whose economy is the owner's D945 ruling made mechanism: **rewind and
 proactive branching inside campaign encounters are an earned resource** — charges earned by
 sealing nodes, spendable in any encounter including the boss, scaling by act so lower acts are
-more forgiving. The campaign registers as the **eighth `WorkflowContextId`** in the accepted
-intent-presets registry (discharging that RFC's D3), holds run state **server-side** in
+more forgiving. The campaign will register as the **eighth `WorkflowContextId`** after the draft
+intent-presets registry is accepted and implemented (then discharging that RFC's D3), and holds run state **server-side** in
 `campaign_runs` and `campaign_events`, and records durable cross-run marks/cosmetics in the
 append-only `campaign_reward_awards` authority in the same migration position behind `bot-policy`.
 It seals nodes by the submitted branch through the shipped `reveal` verb, but only after that branch
@@ -163,7 +166,7 @@ interface CampaignCurriculumMetadata {
     readonly passage: ExactTheoryPassageRef; readonly evidenceRefs: readonly EvidenceRef[] }[];
   readonly dependencyAvailability: readonly { readonly requirement: CampaignDependencyRequirementId;
     readonly requiredAt: readonly NodeId[]; readonly unavailableAction: "refuse_start" | "honest_degradation";
-    readonly fallbackOperation?: ProviderOperationId }[];
+    readonly fallbackOperation?: ProviderOperationId; readonly sourceAvailable: boolean }[];
   readonly reviewReceipt: { readonly authority: "owner_human_chess_review";
     readonly documentDigest: `sha256:${string}`; readonly reviewedAt: string };
 }
@@ -311,6 +314,7 @@ interface CampaignMutationCommand {
   readonly playRunId: RunId;
   readonly mutationCommandId: CampaignCommandId;
   readonly expectedCampaignRevision: number;
+  readonly expectedPlayRevision: number;
   readonly operation: "rewind" | "fork" | "group" | "simulate_enter";
   readonly operandsDigest: `sha256:${string}`;
 }
@@ -320,8 +324,8 @@ type CampaignMutationResult =
   | { kind: "provider_failed"; code: ProviderFailureCode };
 ```
 
-The application transaction owns both aggregate writes: it compares the campaign revision, locks
-the active campaign/play-run relation, performs the play mutation, appends the matching
+The application transaction owns both aggregate writes: it compares both expected revisions, locks
+the exact learner/campaign/document/play-run relation, performs the play mutation, appends the matching
 `charge_spent`, advances both projections and stores the canonical result—or commits none of
 them. Same command plus byte-identical normalized operands replays that stored result after any
 later state change. Reuse with different operands refuses `CAMPAIGN_COMMAND_REUSED`; distinct
@@ -442,10 +446,10 @@ from the same runtime registries used during play:
 - the rewind resource resolves only when the campaign mutation controller exposes at least one of
   the four charge-consuming gestures for that encounter.
 
-The compiler imports, rather than restates, two predecessor views. Module reach starts from
-`derivePackCapabilityRequirements(pack)` in accepted/implemented `pack-capability-contract` and
-joins only through the compiled learner-module registry. Theory reach starts from
-`compileApplicabilityResult({ pack, passage })` in accepted/implemented
+The compiler imports, rather than restates, two predecessor views only after they are accepted and
+implemented. Module reach starts from the future `derivePackCapabilityRequirements(pack)` export in
+draft `pack-capability-contract` and joins only through the compiled learner-module registry.
+Theory reach starts from the future `compileApplicabilityResult({ pack, passage })` export in draft
 `theory-drill-current-joins` and additionally retains the exact registered theory-consumer module
 and disclosure/directness ceiling. Until either returned predecessor is accepted and implemented,
 Campaign validation returns typed `CAMPAIGN_CONSUMER_AUTHORITY_UNAVAILABLE`; it never substitutes a
@@ -683,7 +687,8 @@ Per `rfc/intent-presets.md` Discharge D3 (quoted whole in derivation §3.1), reg
    narrowing inside the contract, exactly the algebra's shape.
 
 **5.1 Earned inventory reaches one production assistance operation.** Campaign does not add a
-parallel hint endpoint. The accepted module-registration boundary is the owner:
+parallel hint endpoint. The draft module-registration boundary becomes the owner only after
+acceptance and implementation:
 `RunService.queryModules` calls `compileAuthoritativeAssistance`, assembles registered module
 packets, and then calls `finalizeAssistanceEffects`. For a run whose verified origin is
 `campaign_encounter`, it first calls `campaignAssistanceAuthority` inside the same authenticated
@@ -704,7 +709,10 @@ subject is exactly:
 
 ```ts
 interface CampaignAssistanceSubject {
+  readonly learnerId: LearnerId;
   readonly campaignRunId: CampaignRunId;
+  readonly campaignDocumentDigest: `sha256:${string}`;
+  readonly campaignRevision: number;
   readonly nodeId: NodeId;
   readonly playRunId: RunId;
   readonly packDigest: `sha256:${string}`;
@@ -716,9 +724,11 @@ interface CampaignAssistanceSubject {
 ```
 
 The authority receipt, applicability receipt, disclosure receipt and every attributed source
-receipt each carry this exact subject; authorization begins by requiring structural equality of
-all copies ([[D2621]]). A receipt valid for another pack, node, play run, ceiling, context or event
-cut is `subject_mismatch`, never reusable evidence. A theory passage is authorized only when the
+receipt each carry this exact subject; each receipt is issued by its named predecessor authority,
+is non-structurally forgeable, and authorization requires both valid seals and exact subject
+equality ([[D2621]], [[D2738]]). A receipt valid for another learner, document, Campaign revision,
+pack, node, play run, ceiling, context or event cut is `subject_mismatch`, never reusable evidence.
+A theory passage is authorized only when the
 owned exact ref equals the applicability result, that result says applicable, its registered
 authorizing module is effective, directness is within the current disclosure ceiling and its
 attributed bytes are available. It is an
@@ -799,6 +809,20 @@ CREATE TABLE campaign_events (
 ) STRICT;
 CREATE UNIQUE INDEX idx_campaign_events_command
   ON campaign_events(campaign_run_id, command_id);
+
+CREATE TABLE campaign_mutation_commands (
+  campaign_run_id TEXT NOT NULL REFERENCES campaign_runs(id) ON DELETE CASCADE,
+  command_id TEXT NOT NULL,
+  play_run_id TEXT NOT NULL,
+  expected_campaign_revision INTEGER NOT NULL,
+  expected_play_revision INTEGER NOT NULL,
+  operation TEXT NOT NULL CHECK (operation IN ('rewind','fork','group','simulate_enter')),
+  operands_digest TEXT NOT NULL,
+  result_payload TEXT NOT NULL,       -- canonical terminal success or no-event provider failure
+  settled_at TEXT NOT NULL,
+  PRIMARY KEY (campaign_run_id, command_id),
+  FOREIGN KEY (play_run_id) REFERENCES drill_runs(id) ON DELETE RESTRICT
+) STRICT;
 
 CREATE TABLE campaign_reward_awards (
   campaign_run_id TEXT NOT NULL REFERENCES campaign_runs(id) ON DELETE CASCADE,
@@ -885,13 +909,22 @@ results, unknown nested reward members and post-parse mutation all have explicit
 
 Every mutation has a validated `CampaignCommandId` and, after creation, an expected integer event
 revision. `campaign_run_creations` is the durable create authority; the unique event index plus
-`operands_digest` and canonical `result_payload` is the durable authority for every later command.
+`campaign_mutation_commands` is the durable authority for every charged command, including a
+terminal provider failure that intentionally appends no event. Successful event-producing commands
+also join the unique event index; both stores carry the same canonical operands/result identity.
 The event row commits the response image in the same transaction as its semantic payload and any
 play-run/award effects. Replay reads that immutable row, never reconstructs a response from mutable
 `campaign_runs` or play-run state. Same command plus byte-identical normalized operands returns the
 stored result even after later play/events advance; same command with different operands returns
 `CAMPAIGN_COMMAND_REUSED`; an unmatched revision returns `CAMPAIGN_REVISION_STALE`. No mutation
 depends on a process-local idempotency map ([[D2422]]).
+
+Event storage accepts RFC-8785 canonical bytes only: a non-canonical image, including any duplicate
+JSON key, refuses before semantic parsing. The event result digest covers the complete immutable
+envelope—campaign run, sequence, event kind, command, expected revision, operands digest, exact
+payload, result kind/revision and timestamp—with only the digest field omitted from its own
+preimage. A valid payload/result pair therefore cannot transplant across a campaign, command,
+operand image or instant ([[D2739]]).
 
 **6.1 Durable award issuance is part of the terminal transition.** Before appending a final
 `node_committed`, the service folds the proposed next state against the pinned document snapshot,
@@ -908,13 +941,13 @@ transaction. Crash/fault injection before commit leaves neither; after commit, r
 The learner's durable inventory is the distinct projection of award rows, never a second writable
 authority.
 
-**6.2 Account and appliance lifecycle.** All four tables join the exhaustive account-data
+**6.2 Account and appliance lifecycle.** All five tables join the exhaustive account-data
 inventory in the landing commit. Account export includes campaign run/create-receipt/event history,
-award history and the derived owned reward set. Hard deletion cascades all four. The accepted
+charged-command history, award history and the derived owned reward set. Hard deletion cascades all five. The accepted
 portable-account contract intentionally supplies no account-import, restore, merge or rekey route;
 Campaign adds none and has no acceptance criterion that pretends otherwise. A future portable
 import/merge feature requires its own accepted successor before Campaign can consume it.
-Whole-installation backup/restore and upgrade verification exercise the four tables through the
+Whole-installation backup/restore and upgrade verification exercise the five tables through the
 normal appliance database receipt and preserve SQLite uniqueness/digests as installation state,
 not account import. A missing table from account export, hard deletion or appliance backup
 inventory fails the relevant exhaustive guard; “private solo history” is a data classification,
@@ -1272,6 +1305,36 @@ the full official metadata schema. [[D2741]] shows three dependencies called acc
 are draft/returned in the live register. Exact receipt:
 `planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md`.
 
+## Sixth author repair (2026-09-05)
+
+The bounded repair closes [[D2736]]–[[D2741]] at contract tier without claiming production or
+complete Campaign 1.0:
+
+1. **[[D2736]]:** `campaign_mutation_commands` durably stores every charged command's canonical
+   terminal result, including a provider failure that emits no event and advances neither aggregate.
+   Close/reopen replay returns that row without contacting the provider again.
+2. **[[D2737]]:** the command carries both expected revisions. One write transaction loads and
+   locks the exact learner/campaign/document/play relation, compares Campaign and play revisions,
+   and commits both aggregate transitions plus command/event result or none.
+3. **[[D2738]]:** the assistance subject now includes learner, document digest and Campaign
+   revision. The operation loads it from durable authority and consumes non-forgeable applicability,
+   disclosure and source receipts; structural look-alikes and every crossed subject refuse.
+4. **[[D2739]]:** only canonical JSON bytes enter the event parser, so duplicate keys refuse. One
+   digest covers the complete immutable campaign/command/revision/operands/payload/result/time
+   envelope rather than a transplantable payload fragment.
+5. **[[D2740]]:** the official compiler accepts the parsed three-act/nine-layer document and sealed
+   registries/review receipt, then emits target prerequisites, time envelope, phase/form coverage,
+   theory provenance and aggregate dependency availability from the exact nested node population.
+6. **[[D2741]]:** every dependency statement now reflects the live register. Draft predecessors
+   remain explicit implementation gates; proposed exports cannot be borrowed from their prose.
+
+`make campaign-two-horizon-sixth-author-repair` retains all prior author contracts and passes 6/6
+new repair groups plus strict TypeScript. The dated fifth-review target remains the executable
+receipt of the pre-repair return; it is deliberately not a prerequisite that asserts current prose
+must remain broken. Exact receipt: `planning/campaign/sixth-author-repair-2026-09-05.md`. Another
+genuinely fresh independent review and accepted dependencies still gate every schema, migration,
+route, client, official-content and production implementation.
+
 ## Campaign 1.0 closure map
 
 This RFC is the **foundation milestone**, not permission to mark the Campaign capability complete.
@@ -1356,7 +1419,7 @@ authority; neither artifact can stand in for the other.
     packet — vacuously green at landing, red the day someone wires it (the D302 guard).
 14. **Migration hygiene**: the migration is create-table/index only, `STRICT`, literal CHECKs,
    lands as `STORAGE_VERSION + 1` at its queue turn behind `bot-policy`, and the register row
-   flips in the landing commit (C1–C8, P1–P7 green). It creates all four tables, pins canonical
+   flips in the landing commit (C1–C8, P1–P7 green). It creates all five tables, pins canonical
    document bytes/digest, provides the pre-run create receipt, database-enforced one-active-run
    partial unique index, event command-id unique index, discriminated creation revision and the
    post-create operands/result envelope, plus award identity in §6.
@@ -1541,6 +1604,13 @@ set).
   persona.
 
 ## Changelog
+
+- 2026-09-05 (**[[D2736]]–[[D2741]] sixth author repair**): persisted terminal no-event provider
+  outcomes; bound charged commands to both aggregates and revisions; completed and sealed Campaign
+  assistance subjects; digested canonical whole event envelopes; compiled the full official
+  curriculum projection from sealed nested inputs; and corrected dependency lifecycle claims.
+  `make campaign-two-horizon-sixth-author-repair` retains the author chain and passes 6/6 new
+  controls plus strict TypeScript. Fresh review and accepted dependencies still gate implementation.
 
 - 2026-09-05 (**fifth fresh independent return**): returned the fifth repair on
   [[D2736]]–[[D2741]]. Six executable controls show provider failure is process-local, aggregate

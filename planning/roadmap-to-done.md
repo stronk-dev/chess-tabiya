@@ -1361,6 +1361,15 @@ campaign-two-horizon-fifth-fresh-review` retains the complete author chain and r
 Campaign schema/migration/routes/content stay held for a sixth repair and fresh review, after which
 the separate boss, catalogue, durable-variety and full-journey milestones still remain. Receipt:
 `planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md`.
+
+The same-day sixth Campaign author repair closes [[D2736]]–[[D2741]] at contract tier. Durable
+no-event command settlement, exact two-aggregate revision authority, storage-derived sealed
+assistance subjects, canonical whole-event integrity, full sealed curriculum compilation and live
+dependency-state parity execute under `make campaign-two-horizon-sixth-author-repair`; the retained
+author chain and 6/6 new groups pass with strict TypeScript. Campaign schema/migration/routes/content
+remain held for another genuinely fresh review and accepted dependencies. The boss, catalogue,
+durable-variety, full-journey and official-content milestones remain independently open. Receipt:
+`planning/campaign/sixth-author-repair-2026-09-05.md`.
 The full-game successor is now explicit rather than hidden in a discharge: `campaign-boss-games`
 owns campaign-schema lane 3 and the complete Act-II position-game journey. It composes one exact
 calibrated human-like bot profile, rules-terminal result, clean rating versus explicit

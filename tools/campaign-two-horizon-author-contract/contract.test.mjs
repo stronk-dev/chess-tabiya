@@ -15,7 +15,7 @@ test("D2077-D2086 repair remains draft and implementation-refused", () => {
 test("all three versioned claims are registered once", () => {
   assert.equal((rfc.match(/campaign-schema \| lane 2 \|/gu) ?? []).length, 1);
   assert.equal((rfc.match(/run-schema \| lane 0\.25 \|/gu) ?? []).length, 1);
-  assert.match(rfc, /migration \| position behind bot-policy \| campaign_runs; campaign_run_creations; campaign_events; campaign_reward_awards/u);
+  assert.match(rfc, /migration \| position behind bot-policy \| campaign_runs; campaign_run_creations; campaign_events; campaign_mutation_commands; campaign_reward_awards/u);
   assert.match(register, /\| lane 2 \| `campaign-core\.md` \|/u);
 });
 

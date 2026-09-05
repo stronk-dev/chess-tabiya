@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:89dcdca140579674923a23ea30af0d934327c516a4c4fd2ee23b44ecb392bba8",
+    "roadmap": "sha256:14d1b5922f37233cc38f5a2226f7579d88b21873d86e634978391ec26899a988",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:2bed1336977aa4455fa7974e07ef4c360d2d447adfa8cd5d87f2a5b4df19db54",
-    "rfcRegister": "sha256:1ffd8a28e8dfaebc5fd50b89248275bfc208afbcdf1845c7624a2d3cde2709d8",
+    "workState": "sha256:9034a4586bc9cae5755a57af084247c3d8ece11adeb54aef6c397ed1452fb316",
+    "rfcRegister": "sha256:2cfa5cad341b492b4100681bc8aa2b575d7c083c4f3d88a96cafa72c03441e86",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -224,17 +224,18 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Repair safe-deployment D2730-D2735 and Campaign D2736-D2741 against their storage/receipt authorities while fresh-reviewing storage independently; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
+      "nextAction": "Repair safe-deployment D2730-D2735; fresh-review Campaign's sixth and storage recovery's fourth author repairs independently; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "Fresh reviews now hold both release deployment and Campaign persistence on executable authority gaps. Safe deployment admits impossible mounted tuples, detached checks, incomplete receipts and non-durable migration. Campaign loses provider-failure idempotency at restart, detaches charged mutations from campaign/play identity, permits transplantable events and compiles partial curriculum metadata. Storage recovery's fourth author repair remains separately pending fresh review; none can falsely graduate another.",
-        "impact": "held",
+        "summary": "Campaign's sixth author repair now makes no-event provider settlement restart-stable, locks both aggregate revisions, seals assistance/event subjects and compiles complete official metadata; fresh review still gates it. Safe deployment remains returned on impossible mounted tuples, detached checks, incomplete receipts and non-durable migration, while storage recovery separately awaits fresh review.",
+        "impact": "advanced",
         "evidence": [
+          "planning/campaign/sixth-author-repair-2026-09-05.md",
+          "tools/d2736-campaign-sixth-author-repair/contract.test.ts",
           "planning/safe-deployment-profiles/third-fresh-independent-buildability-review-2026-09-05.md",
           "tools/d2730-safe-deployment-third-fresh-review/review.test.ts",
           "rfc/safe-deployment-profiles.md",
           "planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md",
-          "tools/d2736-campaign-fifth-fresh-review/review.test.ts",
           "rfc/campaign-core.md",
           "planning/storage-backup-recovery/fourth-author-repair-2026-09-05.md",
           "rfc/storage-backup-recovery.md",
@@ -884,7 +885,7 @@
         ],
         "state": [
           "partial",
-          "Contract prototypes exist, but the foundation remains returned: provider failure is not durable, charged mutations lack one campaign/play subject and play revision, event envelopes are transplantable, and no campaign migration has landed."
+          "The sixth contract repair makes provider failure durable, binds charged mutations to both aggregates/revisions, seals assistance and event authority, and compiles full curriculum metadata; fresh review and the campaign migration remain."
         ],
         "api": [
           "missing",
@@ -904,7 +905,7 @@
         ],
         "verification": [
           "blocked",
-          "The fifth fresh review reproduces six foundation blockers; state-fold, persistence, crash/retry, reward conservation, failure consequence, accessibility, campaign-to-review, and full-run browser tests must still pass after repair."
+          "The sixth repair passes six new authority controls plus the retained author chain; a fresh independent review and state-fold, persistence, crash/retry, reward conservation, failure consequence, accessibility, campaign-to-review, and full-run browser tests remain."
         ],
         "release": [
           "blocked",

@@ -15788,3 +15788,23 @@ independent buildability review.
 
 **Next:** fresh-review the fourteenth repair across database, provider-result, objective-result and
 replay authority before accepting the RFC or authorizing production work.
+
+## 2026-09-05 — Campaign core sixth author repair
+
+**What landed:** a bounded contract-tier repair for [[D2736]]–[[D2741]] and maintained `make
+campaign-two-horizon-sixth-author-repair` coverage. No production route, client, schema, migration,
+Campaign document, pack, content, archive or protected-design byte changed.
+
+**What changed:** charged-command provider failure now has a durable no-event result; both Campaign
+and play identities/revisions gate the same transaction; assistance loads a complete storage-derived
+subject and sealed predecessor receipts; canonical whole-event digests refuse transplant and
+duplicate JSON keys; official curriculum compiles the full metadata projection from nested sealed
+authorities; and dependency claims match the live RFC register. The target retains the prior author
+chain and passes 6/6 new groups plus strict TypeScript.
+
+**What is blocked:** Campaign foundation remains draft pending another genuinely fresh review and
+accepted dependencies. Campaign 1.0 separately retains boss games, catalogue progression, durable
+variety, full UX and one human-authored official campaign.
+
+**Next:** fresh-review the sixth repair, keep every successor milestone open, and authorize no
+campaign schema/migration/API/client/content work before foundation acceptance.
