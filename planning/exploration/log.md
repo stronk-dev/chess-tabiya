@@ -15717,3 +15717,20 @@ progression, durable variety, full UX and one human-authored official campaign r
 
 **Next:** repair [[D2736]]–[[D2741]], fresh-review the result, and keep the complete Campaign 1.0
 closure map live rather than treating the foundation RFC as capability completion.
+
+## 2026-09-05 — Pack capability thirteenth fresh independent return
+
+**What landed:** [[D2742]]–[[D2747]] and `make pack-capability-thirteenth-fresh-review`. The complete
+predecessor chain remains green, while six new controls cross database-lease, provider-result,
+objective-result, consumed-replay, receipt-revision and batch-run authority boundaries.
+
+**What changed:** `pack-capability-contract` remains draft. Its SQLite model is not yet one
+authority: brands cross databases, settlement accepts evidence unrelated to its leased request,
+the non-null objective arm is absent, and both replay paths trust partial or caller-supplied state.
+
+**What is blocked:** pack schema 0.30, the evidence-job migration, implementation and the held
+92-pack application remain unauthorized. This protects the evidence foundation consumed by packs,
+Support, bots, Review and Campaign from landing on a replayable but ungrounded result path.
+
+**Next:** repair [[D2742]]–[[D2747]] as one storage/provider/result authority, then require another
+genuinely fresh review before acceptance or production work.

@@ -223,6 +223,16 @@ and lease clearing; both batch and application replay validate persisted bytes b
 Another genuinely fresh review still gates acceptance and production. Receipt:
 `planning/pack-capability-contract/thirteenth-author-repair-2026-09-04.md`.
 
+The same-day thirteenth fresh independent review returns that repair on [[D2742]]–[[D2747]]. The
+transaction model's lease brands cross application databases; settlement accepts a provider result
+unrelated to its leased job and cannot represent non-null objective results; consumed replay skips
+the canonical request/result; receipt revisions do not bind the retained transition; and batch
+replay trusts a caller snapshot instead of durable run truth. `make
+pack-capability-thirteenth-fresh-review` retains the full chain and passes 6/6 falsifiers. Pack
+schema 0.30, evidence-job migration and the held corpus remain unauthorized pending repair and
+another fresh review. Receipt:
+`planning/pack-capability-contract/thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

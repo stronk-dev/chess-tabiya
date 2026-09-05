@@ -325,12 +325,12 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Fresh-review the longitudinal eighth author repair; complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, bot roster/route source, social play and casting; do not implement a draft contract early.",
+        "nextAction": "Repair D2742-D2747 in pack capability, then fresh-review it; fresh-review the longitudinal eighth author repair; complete independent review and acceptance for claim anchors, module registration/presentation, review compiler/map, bot roster/route source, social play and casting; do not implement a draft contract early.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "Longitudinal-store completed its eighth author repair over six source/claim blockers. Source v4 now replays actual runtime events, resolves exact authorship, derives the imported boundary from the immutable primary branch, compiles real in-transaction watermark calls, checks the complete claim currentness tuple and refuses crossed job/source subjects. Player-history implementation remains correctly blocked on a genuinely fresh review rather than building style, skills, bots or campaign state on unproven data.",
-          "impact": "advanced",
-          "evidence": ["planning/longitudinal-store/eighth-author-repair-2026-09-05.md", "tools/d2718-longitudinal-eighth-author-repair/contract.test.ts", "rfc/longitudinal-store.md", "planning/shared-resource-register-bootstrap/tenth-author-repair-2026-09-05.md", "planning/concept-registry/second-author-repair-2026-09-05.md", "rfc/README.md"]
+          "summary": "Pack capability's thirteenth fresh review returned six storage/result authority gaps: leases cross databases, provider output is not joined to the job, objective success is partial, and consumed/batch replay do not load their complete durable subjects. The retained chain passes, but pack schema 0.30 and evidence-job storage remain correctly blocked instead of becoming a false foundation for packs, Support, bots and Review.",
+          "impact": "held",
+          "evidence": ["planning/pack-capability-contract/thirteenth-fresh-independent-buildability-review-2026-09-05.md", "tools/d2742-pack-capability-thirteenth-fresh-review/review.test.mjs", "rfc/pack-capability-contract.md", "planning/longitudinal-store/eighth-author-repair-2026-09-05.md", "rfc/README.md"]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
       },

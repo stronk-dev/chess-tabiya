@@ -1,12 +1,11 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **thirteenth author repair completed on [[D2673]], [[D2674]], [[D2675]],
-  [[D2676]] and [[D2677]]; another genuinely fresh independent review is required.** One
-  SQLite-backed authority now loads the stored job/success/run, enforces run and job CAS receipts,
-  invokes the registered guard internally, atomically consumes with the run mutation, and validates
-  batch/application replay. `make pack-capability-thirteenth-author-repair` retains the complete
-  predecessor chain and passes 6/6 repair groups. No implementation is authorised and D560 stays
-  whole.
+- **Status:** draft — **thirteenth fresh independent review returned the thirteenth author repair
+  on [[D2742]]–[[D2747]].** Leases cross database authorities; settlement does not bind provider
+  output to the job; non-null objective results are unrepresentable; consumed replay skips stored
+  request/result validation; receipt revisions float free of the retained transition; and batch
+  replay trusts a caller snapshot. `make pack-capability-thirteenth-fresh-review` retains the full
+  chain and reproduces 6/6. No implementation is authorised and D560 stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -2301,6 +2300,26 @@ groups. Exact receipt:
 `planning/pack-capability-contract/thirteenth-author-repair-2026-09-04.md`. This remains author
 evidence; another genuinely fresh review gates acceptance and implementation.
 
+## Thirteenth fresh independent return (2026-09-05)
+
+The fresh pass returns the repair on [[D2742]], [[D2743]], [[D2744]], [[D2745]], [[D2746]] and
+[[D2747]]. The branded run/job leases are
+module-global object identities rather than capabilities issued by one exact application database,
+so a lease from database A mutates database B when rows happen to match. Settlement parses a
+success in isolation: an eval request accepts a tablebase payload, crossed acquisition generation
+and request digest, empty provider identities/endpoint and invalid instants. The same parser rejects
+every non-null objective proposal despite criteria 23 and 27 requiring that arm.
+
+Two replay paths remain partial. A consumed job returns successfully after its canonical request
+and settlement columns are corrupted, and its receipt accepts arbitrary from/to revisions because
+only their difference and event range are checked. Batch replay accepts a caller-supplied parsed
+snapshot even after the durable run image has removed the referenced node. `make
+pack-capability-thirteenth-fresh-review` retains the complete predecessor chain and passes 6/6
+falsifiers. Exact receipt:
+`planning/pack-capability-contract/thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
+One bounded author repair must compose these storage, provider, result and replay authorities before
+another fresh review or any pack/schema/storage implementation.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -2511,6 +2530,15 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     empty payloads. Valid immediate-guard feedback remains inside the same receipt ([[D2587]]);
     caller-supplied revisions/events, copied snapshots, mutable nested requests, unknown/crossed
     states, extra keys and origin-consumer pairs fail ([[D2588]]–[[D2590]]).
+28. **Storage, provider result and replay share one authority ([[D2742]]–[[D2747]]).** Run/job
+    leases are issued for and usable only with one exact application database/transaction subject.
+    Settlement reparses the complete provider receipt and joins operation, evidence kind,
+    generation and normalized request identity to the stored leased job before sequence allocation;
+    both null and non-null objective proposals are representable and exact. Consumed replay
+    reparses/rejoins request, settlement and receipt to the retained before/after transition, and
+    batch replay loads its authoritative run image internally. Cross-database leases, crossed
+    eval/tablebase results, malformed acquisition identity/time, corrupted consumed columns,
+    floating receipt revisions and caller-supplied snapshots each fail independently.
 
 ## Discharges
 
@@ -2585,6 +2613,12 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-09-05 (**thirteenth fresh independent return**): returned on [[D2742]]–[[D2747]]. Lease
+  brands are not database-bound; provider settlement is not joined to the leased request; the
+  objective-result success arm is missing; consumed replay skips canonical stored values; receipt
+  revisions are unbound; and batch replay trusts a caller snapshot. `make
+  pack-capability-thirteenth-fresh-review` retains the full chain and reproduces 6/6. No production
+  or content byte changed.
 - 2026-09-04 (**[[D2587]]–[[D2592]] twelfth author repair**): replaced the caller-mintable receipt
   with one sealed before/after run transaction; recursively parsed/froze objective requests; bound
   stored jobs to a parsed run snapshot; derived all three consumers from origin; and added a
