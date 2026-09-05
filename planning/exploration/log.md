@@ -15645,3 +15645,23 @@ begin/commit bodies; claim currentness includes cut, revision, sealed source, ow
 repair groups plus strict TypeScript. Exact receipt:
 `planning/longitudinal-store/eighth-author-repair-2026-09-05.md`. Another genuinely fresh review
 precedes acceptance and implementation.
+
+## 2026-09-05 — storage backup/recovery fourth fresh independent return
+
+**What landed:** [[D2724]]–[[D2729]] and `make storage-backup-fourth-fresh-review` as an
+executable review of the third author repair. The retained author chain stays green, while six new
+controls prove the complete contract still lacks digest-bearing replacement recovery, one
+subject/operation-bound check authority, crash-durable journal publication/discovery, v4-only
+operation reconstruction, the real `/readyz` application boundary, and parsed immutable release
+revision.
+
+**What changed:** `storage-backup-recovery` remains draft and production implementation stays
+unauthorized. The roadmap's durable-state checkpoint now names the actual repair boundary rather
+than reporting the author repair as pending review. The six findings are assigned immediately to
+release engineering, preserving the zero-untriaged 1.0 register.
+
+**What is blocked:** [[D608]], backup/restore implementation and dependent safe-deployment release
+proof remain blocked on one bounded author repair and another genuinely fresh independent review.
+
+**Next:** repair the six storage authorities while independent review capacity advances another
+author's foundation contract; then accept and implement only after a fresh buildability pass.

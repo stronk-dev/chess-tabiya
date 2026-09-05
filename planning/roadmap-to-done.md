@@ -1479,6 +1479,15 @@ storage-backup-third-author-repair` retains 23 prior controls and passes 6/6 new
 plus strict TypeScript. Backup/restore implementation and D608 remain held for another genuinely
 fresh review; receipt: `planning/storage-backup-recovery/third-author-repair-2026-09-04.md`.
 
+The 2026-09-05 fourth fresh storage-backup review returned that repair on
+[[D2724]]–[[D2729]]. The state machine still cannot observe recorded byte digests; privately sealed
+checks cross database subjects and operation shapes; journal rewrites/discovery are not a durable
+protocol; v1/v5 UUIDs re-enter a v4-only authority; the real `/readyz` route is absent from both the
+app and consumer census; and mutable application revisions remain representable. `make
+storage-backup-fourth-fresh-review` retains the complete author chain and reproduces 6/6. This keeps
+backup/restore correctly held before data-loss and false-readiness seams reach production; receipt:
+`planning/storage-backup-recovery/fourth-fresh-independent-buildability-review-2026-09-05.md`.
+
 The 2026-09-04 second safe-deployment author repair closes [[D2614]]–[[D2618]] at the draft tier.
 One mounted canonical image crosses into and is attested by the app; runtime config compilation and
 exact profile/operation proof are executable; live TLS identity records chain/SPKI/leaf changes; and

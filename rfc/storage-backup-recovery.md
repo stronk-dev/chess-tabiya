@@ -1,11 +1,12 @@
 # RFC: Storage backup, restore, upgrade, and recovery
 
-- **Status:** draft — third author repair completed 2026-09-04 on [[D2608]]–[[D2613]]; another
-  genuinely fresh independent review is required. Lock authority is established on inherited FD 3;
-  publication durably commits marker removal; prepare/readiness lifetimes are truthful; semantic
-  checks and operation identities have exact constructors; and per-member rollback recovery is
-  executable. `make storage-backup-third-author-repair` retains 23 prior controls and passes 6/6
-  new behavioral controls plus strict TypeScript. Implementation remains unauthorized.
+- **Status:** draft — fourth fresh independent review returned the third author repair on
+  [[D2724]]–[[D2729]]. Replacement recovery cannot observe its promised digests; check seals do
+  not bind one storage subject or operation shape; journal publication/discovery is not crash
+  executable; the UUID parser admits non-v4 identities; the readiness route is missing from the
+  consumer census; and application revision remains caller-mintable. `make
+  storage-backup-fourth-fresh-review` retains the complete author chain and reproduces 6/6.
+  Implementation remains unauthorized.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
@@ -96,6 +97,21 @@ The six returned seams are repaired as one attributable operation/durability cha
 passes 6/6 new behavioral controls plus strict TypeScript. Exact receipt:
 `planning/storage-backup-recovery/third-author-repair-2026-09-04.md`. This is author evidence, not
 acceptance or implementation; another genuinely fresh independent review remains required.
+
+## Fourth fresh independent return (2026-09-05)
+
+The third repair closes the six seams it names, but the complete contract still has six false-green
+authority boundaries. [[D2724]] shows the recovery model advances from member names and booleans
+without representing any recorded old/staged/live digest. [[D2725]] shows privately sealed checks
+from unrelated storage subjects—and a fresh/null compatibility check—compile into a successful
+backup tuple because neither subject nor operation shape is sealed. [[D2726]] shows state names do
+not define atomic journal publication, post-crash discovery, or multiple-intent refusal.
+[[D2727]] shows the runtime parser accepts UUID versions 1–5 although only v4 is generated and
+authorized. [[D2728]] shows `/readyz` is absent from both the live route owner and the 13-boundary
+census while the model validates a non-shipped plain-text body. [[D2729]] shows the manifest and
+receipt still accept any `applicationRevision: string`, including the mutable identities §2
+explicitly forbids. Exact receipt:
+`planning/storage-backup-recovery/fourth-fresh-independent-buildability-review-2026-09-05.md`.
 
 ## Summary
 
@@ -845,6 +861,10 @@ Another genuinely fresh independent review is required before acceptance or impl
     bytes; no recoverable partial rollback returns `REPLACEMENT_RECOVERY_REQUIRED`.
 23. `make storage-backup-third-author-repair` retains all 23 earlier controls, passes the six new
     behavioral groups and strict TypeScript; another fresh independent review still gates acceptance.
+24. A fourth author repair retains the complete chain and adds able-to-fail controls for exact
+    digest reconciliation, one sealed storage subject/operation shape, atomic discoverable journal
+    publication, v4-only operation parsing, the real `/readyz` route/response boundary, and parsed
+    immutable application revision. Another fresh independent review still gates acceptance.
 
 ## Discharges
 
@@ -861,6 +881,12 @@ Another genuinely fresh independent review is required before acceptance or impl
 
 ## Changelog
 
+- 2026-09-05: fourth fresh independent review returned the third repair on
+  [[D2724]]–[[D2729]]. Six local author controls pass, but digest recovery, subject-bound checks,
+  durable journal authority, v4-only identity, readiness-route closure and release-revision parsing
+  remain unbuildable. `make storage-backup-fourth-fresh-review` retains the complete author chain
+  and reproduces 6/6; no production/storage/schema/workflow/content/archive or protected-design
+  byte changed.
 - 2026-09-04: third author repair completed [[D2608]]–[[D2613]]. Lock authority is
   established on inherited FD 3 itself; publication persists marker removal in the changed bundle
   directory; prepare/readiness lifetimes are exact; semantic checks and canonical operation ids
