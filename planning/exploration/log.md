@@ -16568,3 +16568,20 @@ passes 7/7 falsifiers. Exact receipt:
 `planning/concept-registry/third-fresh-independent-buildability-review-2026-09-06.md`. One coherent
 author repair, another genuinely fresh review and the shared-resource bootstrap dependency still
 precede implementation.
+
+## 2026-09-06 — shared candidate packet twelfth fresh review returns service authority
+
+**What landed:** a genuinely fresh review of the eleventh shared-candidate-packet repair returned
+the draft on [[D2885]]–[[D2891]]. Seven executable controls reproduce a crossed request receipt, a
+queue timer that survives into active compilation, unreachable collector/non-terminal failure
+arms, predecessor-only cache measurement, projection hits that do not refresh LRU recency and a
+second loose-piece computation used to reconstruct the registry outcome.
+
+**What changed:** the composed collector graph and prior repairs remain valid, but the current
+service cannot yet be the one neutral candidate-population authority for bots, hints, Review and
+pack tooling. `make candidate-packet-twelfth-fresh-review` retains the predecessor chain and passes
+7/7 new falsifiers plus strict TypeScript. No production implementation was made or authorized.
+
+**Blocked/next:** bounded author repair, then another genuinely fresh independent review. The
+separate `evidence-value-authority` dependency still must land before implementation. Exact receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-twelfth-fresh-independent-buildability-review-2026-09-06.md`.

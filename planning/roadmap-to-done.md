@@ -2066,3 +2066,13 @@ checkmate/stalemate terminals survive into the receipt. The new gate also proves
 cannot populate the cache after its deadline. This advances the active evidence spine but does not
 accept or implement it: a genuinely fresh review, the value-authority dependency and the returned
 promotion installation boundary remain next.
+
+### 2026-09-06 evidence-spine checkpoint — candidate packet returned on service truth
+
+The twelfth fresh review keeps the composed collector graph but proves the service is not yet a
+safe shared foundation. It accepts a genuine receipt for another request; lets a queue deadline
+terminate active work; cannot emit two declared failure classes; measures a smaller graph than it
+caches; does not refresh projected-hit LRU recency; and re-runs loose-piece chess logic to rebuild a
+result the registry execution should preserve. Seven executable falsifiers pass under `make
+candidate-packet-twelfth-fresh-review`. The evidence spine remains active at contract repair: bots,
+hints, Review and packs must not build separate candidate populations around these defects.

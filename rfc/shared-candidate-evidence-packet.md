@@ -1,12 +1,13 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — eleventh author repair completed 2026-09-06 on [[D2860]]–[[D2863]];
-  another genuinely fresh independent review and the value-authority dependency remain.** The
-  current composed checkpoint restores the public asynchronous result/service/cache lifecycle,
-  candidate-local cooperative collector groups, exact packet identity fields,
-  projection-addressed total outcomes and abstentions, and explicit checkmate/stalemate terminal
-  states. It also prevents an over-deadline compilation from publishing a late cache value and
-  turns scheduler rejection into its exact typed failure. The maintained operation
+- **Status:** **draft — returned by twelfth fresh independent review on [[D2885]]–[[D2891]].** The
+  eleventh repair's composition is real, but the service accepts a crossed request receipt, carries
+  queue deadlines into active work, exposes unreachable collector/non-terminal failures, measures
+  a smaller predecessor graph than the cached receipt, fails to refresh projected-hit recency and
+  re-executes loose-piece chess logic to reconstruct total outcomes. `make
+  candidate-packet-twelfth-fresh-review` retains the predecessor chain and passes 7/7
+  reproductions. Author repair, another genuinely fresh review and the value-authority dependency
+  precede implementation. The maintained operation
   parses the closed request, derives the complete seven-term factual identity, gives direct and
   projected narrow receipts the same dependency-closed graph, derives cache identity internally,
   admits only one privately asserted whole receipt, seals below already-frozen ancestors and
@@ -2290,6 +2291,36 @@ non-publication, scheduler failure, close and exact yield accounting. This is po
 evidence, not acceptance: another genuinely fresh independent review and the named
 `evidence-value-authority` dependency still precede production implementation.
 
+## Twelfth fresh independent return (2026-09-06)
+
+The eleventh checkpoint composes its promised service and collector graph, but a fresh executable
+review returns it on seven authority and lifecycle seams:
+
+1. [[D2885]] — the service asserts only a compiled receipt's self-consistency, not equality to the
+   active job request; a genuine `readings` receipt resolves an `events` caller and is cached under
+   the crossed receipt id;
+2. [[D2886]] — queue admission does not clear the queue timer, so that timer can finish an already
+   active compile as `deadline_exceeded:queue` and the same compile can later finish again;
+3. [[D2887]] — an exception from compilation or a collector maps to `invariant_failed:receipt`;
+   nothing constructs the declared move/projection-addressed `collector_failed` arm;
+4. [[D2888]] — `terminal()` labels every zero-candidate non-checkmate root as stalemate, making the
+   subsequent `NON_TERMINAL_EMPTY` condition false by construction and unable to detect an
+   incomplete legal population;
+5. [[D2889]] — cache admission measures the private predecessor graph but retains the larger
+   enriched receipt, under-reporting both logical bytes and unique objects behind supposedly hard
+   bounds;
+6. [[D2890]] — a direct hit refreshes Map insertion order while a projection hit does not, so the
+   advertised LRU evicts a recently used wide packet under a two-entry control; and
+7. [[D2891]] — `currentOutcomes` invokes `loosePieceEvents` a second time while iterating the
+   predecessor execution record, so the claimed total outcome is reconstructed by another chess
+   computation rather than preserved from the one registry invocation.
+
+`make candidate-packet-twelfth-fresh-review` retains every predecessor review/repair, passes 7/7
+new behavioral falsifiers and strict TypeScript. The RFC remains draft and implementation stays
+unauthorized pending a bounded author repair, another genuinely fresh independent review and the
+named `evidence-value-authority` dependency. Exact receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-twelfth-fresh-independent-buildability-review-2026-09-06.md`.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -2432,6 +2463,11 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-09-06 — twelfth fresh independent review returned the eleventh repair on [[D2885]]–[[D2891]].
+  Crossed receipts, stale queue timers, unreachable failures, vacuous terminal guarding, incomplete
+  retained-graph accounting, non-LRU projection hits and a second loose-piece execution reproduce
+  under `make candidate-packet-twelfth-fresh-review` (7/7 plus strict TypeScript). Implementation
+  remains unauthorized.
 - 2026-09-06 — [[D2860]]–[[D2863]] eleventh author repair. One current checkpoint composes the
   production-backed compiler with cooperative group scheduling and the public bounded service,
   retains all packet identity and total collector-result authorities, and distinguishes checkmate

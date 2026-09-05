@@ -344,14 +344,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Fresh-review the recomposed candidate packet and promotion installation-authority repair; land the evidence-value-authority/provider dependencies, then finish selectors, grades, Review and learner modules.",
+        "nextAction": "Author-repair candidate-packet D2885-D2891, freshly review the promotion installation boundary, then land the evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Promotion installation authority now forms one application-owned immutable inventory-byte chain through registry, cached store, recorded receipt and collector result; empty generations fail. Fresh review, candidate-packet fresh review and provider/value dependencies remain; the spine stays 12/14.",
-          "impact": "advanced",
-          "evidence": ["planning/evidence-foundation-ux/semantic-collectors-promotion-thirteenth-author-repair-2026-09-06.md", "tools/d2864-semantic-collectors-promotion-thirteenth-author-repair/contract.test.ts", "rfc/semantic-collectors.md", "rfc/README.md"],
+          "summary": "The candidate packet's twelfth fresh review reproduced seven request, lifecycle, failure, memory, eviction and duplicate-execution defects in the shared service; the evidence spine remains at contract repair before bots, hints, Review or packs consume it.",
+          "impact": "held",
+          "evidence": ["planning/evidence-foundation-ux/shared-candidate-packet-twelfth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2885-candidate-packet-twelfth-fresh-review/review.test.ts", "rfc/shared-candidate-evidence-packet.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "semantic-collectors.md", "digest": "sha256:a79190b73867967926cbcfc21708fe6e4b118b89b81ca7f8199c4516ad98eaa2"}
+            {"kind": "rfc", "id": "shared-candidate-evidence-packet.md", "digest": "sha256:5016ef6bfa3edea8386d86ad9911310991dccfd9f78cc7191a35b1c42df98c26"}
           ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."

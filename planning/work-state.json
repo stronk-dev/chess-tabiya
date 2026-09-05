@@ -23325,6 +23325,69 @@
       "sourceDigest": "sha256:eed2d96536d9e5abd6debaa45d14af4d4554087b04a2423422c96dcaa2003671",
       "uxItems": [],
       "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2885",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2681736cc5fa4d979ad3a5d08fea6209fabac77cacec0d4291bf797d3c9e7c7a",
+      "uxItems": [],
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
+    },
+    {
+      "id": "D2886",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9a8b8bc360922550eac09c979bee838146f06fb8c10efc3c046e37ba6919ed95",
+      "uxItems": [],
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
+    },
+    {
+      "id": "D2887",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5e55c88c508a1e23f005f3b5df7c98f36e298c485cd87db0a70e029b0505b148",
+      "uxItems": [],
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
+    },
+    {
+      "id": "D2888",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:180504983514edcdfec9e647e27767a4a7b54fcd350d779933144a9d60563810",
+      "uxItems": [],
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
+    },
+    {
+      "id": "D2889",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c60c2272e20b0b228c1248339f15f1f42af9adbf09eda835b267d2f80d211085",
+      "uxItems": [],
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
+    },
+    {
+      "id": "D2890",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d5b968d4e4277af7425151ff9c74915c6093a8ec691c5d00ebf0e6964b234835",
+      "uxItems": [],
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
+    },
+    {
+      "id": "D2891",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2810a9e43cb03ce662a6013e6fd82378b036b5c299288d4a96c476f2048ae2c0",
+      "uxItems": [],
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
     }
   ]
 }
