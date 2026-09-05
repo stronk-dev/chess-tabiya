@@ -1203,6 +1203,14 @@ export-only account scope and a GitHub-enrolled governance target. This is contr
 landed registry: another fresh review and shared-resource bootstrap still gate Campaign, Skills,
 related attempts and pack authoring from consuming one global identity.
 
+The 2026-09-05 second fresh review returns that repair on [[D2709]]–[[D2716]]. Revision bytes and
+refs remain noncanonical or mutable; arbitrary caller pack JSON and matching plain attempt/run
+objects mint the two historical authorities; migration is a row mapper with no atomic lossless
+population receipt; and consumer closure trusts a deduplicated string list rather than imports.
+`make concept-registry-second-fresh-review` retains 13 prior controls and passes 8/8 new falsifiers.
+The global identity foundation remains at contract repair, not implementation. Receipt:
+`planning/concept-registry/second-fresh-independent-buildability-review-2026-09-05.md`.
+
 ### 7. Human-like bots, personalities, roster, and bot events
 
 <!-- roadmap-capability: bots -->

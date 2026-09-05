@@ -15572,3 +15572,17 @@ unresolved calls, dynamic imports and broad index lookups fail before publicatio
 **Evidence/next:** the target retains forty-one predecessor controls and passes 8/8 new repair
 groups. Exact receipt: `planning/shared-resource-register-bootstrap/tenth-author-repair-2026-09-05.md`.
 Another genuinely fresh independent review still precedes acceptance and implementation.
+
+## 2026-09-05 — Concept registry second fresh independent return
+
+**What landed:** a fresh contract-tier review of the first concept-registry repair, eight ledger
+findings [[D2709]]–[[D2716]], and maintained `make concept-registry-second-fresh-review` coverage.
+No schema, registry, migration, product, content, archive or protected-design byte changed.
+
+**What changed:** ambiguous revision bytes and mutable refs pass; historical pack and occurrence
+authority is caller-minted; migration has no atomic population/partition receipt; and consumer
+closure is a caller string list rather than an import census.
+
+**Evidence/next:** the target retains 13 predecessor controls and passes 8/8 new falsifiers. Exact
+receipt: `planning/concept-registry/second-fresh-independent-buildability-review-2026-09-05.md`.
+One bounded author repair and another genuinely fresh review precede production.

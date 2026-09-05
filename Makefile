@@ -1096,6 +1096,11 @@ concept-registry-fresh-review:
 concept-registry-author-repair: concept-registry-author-contract
 	node --test tools/d2661-concept-registry-author-repair/contract.test.mjs
 
+.PHONY: concept-registry-second-fresh-review
+concept-registry-second-fresh-review: concept-registry-author-repair
+	node --test tools/d2661-concept-registry-fresh-review/contract.test.mjs
+	node --test tools/d2709-concept-registry-second-fresh-review/contract.test.mjs
+
 .PHONY: campaign-catalogue-author-contract
 campaign-catalogue-author-contract:
 	node --test tools/campaign-catalogue-author-contract/contract.test.mjs

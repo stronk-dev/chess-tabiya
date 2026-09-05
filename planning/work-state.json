@@ -21749,6 +21749,78 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2709",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:240ae4dcdb8c35542307d5a7a0bfb507ac6b7ff4ce108201242e3b94928d7bba",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2710",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:cfb0bd91bebbfb049912d569d49f7eef32dc6759c934d4ec106577eda0262b85",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2711",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:eeecf960e7cc85a2ca43891bc5ca6cdee5009fca6091a850f1e7d8ea87de4f72",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2712",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2a0d4fbf9abe7a422dcb35203b7d95f4486831fd123e81360484abd7383dee2e",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2713",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7addfbbdfa979b9172432b9ffafc85d8fbf4dbfe70d2dbdb8f774d86d6a5d580",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2714",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a72035988a4a68151f62efbf1143be413312cce592e0225277fb5cb3d488ec8f",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2715",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c735bf64f8571fc66342a8d7e358068ca6f6d2c5e900d87e269a35d4143c6c14",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2716",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1aae44badeb0cef9e15ead5cd816ef2faf632080a14d153452840af6c0de3965",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:concept-registry.md"
     }
   ]
 }

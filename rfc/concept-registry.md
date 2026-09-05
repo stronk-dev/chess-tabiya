@@ -1,11 +1,12 @@
 # RFC: Concept registry — one cross-pack identity authority
 
-- **Status:** draft — first author repair completed 2026-09-04 on [[D2661]]–[[D2666]]; another
-  genuinely fresh independent review is required. Append-only digest-addressed revisions preserve
-  historical labels; exact pack occurrences separate registered migrations from quarantined legacy
-  attribution; six landing consumers close independently of two successor discharges; account
-  scope is export/delete only; and the repaired maintained target joins GitHub governance. No
-  implementation before fresh review and the process dependency.
+- **Status:** draft — **RETURNED by second fresh independent review 2026-09-05 on [[D2709]]–
+  [[D2716]].** The first repair's intent survives, but revision/ref parsing is noncanonical and
+  mutable, historical pack/occurrence authorities remain caller-minted, migration is a one-row
+  mapper rather than an atomic population transaction, and consumer closure trusts caller strings
+  rather than imports. `make concept-registry-second-fresh-review` retains 13 prior controls and
+  passes 8/8 new falsifiers. No implementation before repair, fresh review and the process
+  dependency.
 - **Author:** codex, factored from `rfc/skills.md` §4 and the D300/D700 measurements.
 - **Created:** 2026-08-31
 - **Design refs:** `design/01-training-model.md` §§60–65 (registry belongs to authoring);
@@ -268,6 +269,21 @@ corrected baseline and executes six repair groups; another genuinely fresh revie
 | [[D2664]] | present consumer closure plus successor discharge protocol |
 | [[D2665]] | repaired target enrollment in the standard local/GitHub governance gate |
 | [[D2666]] | exact account-restore ownership or an honest export-only boundary |
+
+## Second fresh independent review return — 2026-09-05
+
+The first repair is returned on [[D2709]], [[D2710]], [[D2711]], [[D2712]], [[D2713]], [[D2714]],
+[[D2715]] and [[D2716]]. Publication accepts ambiguous/noncanonical revision bytes and invalid
+entry values; resolved refs remain mutable. Arbitrary caller pack JSON and matching plain
+attempt/run objects mint the two authorities migration trusts. The migration operates one row at a
+time without an atomic lossless population receipt, and the consumer “census” is a deduplicated
+caller string array rather than a repository import graph.
+
+`make concept-registry-second-fresh-review` retains all 13 predecessor controls and passes 8/8 new
+falsifiers. Exact receipt:
+`planning/concept-registry/second-fresh-independent-buildability-review-2026-09-05.md`. A bounded
+author repair and another genuinely fresh review remain mandatory; no production schema,
+registry, migration or consumer work is authorized.
 
 ## Acceptance criteria
 
