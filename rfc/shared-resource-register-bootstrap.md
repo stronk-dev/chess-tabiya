@@ -1,11 +1,12 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **ninth author repair completed on [[D2667]]–[[D2672]]; another genuinely fresh
-  independent review is required.** The program host is commit-closed; packages carry exact
-  lockfile identity; external node IDs are portable; merged declarations and property receivers
-  remain reachable; and graph validation is recursively fail-closed. `make
-  shared-resource-bootstrap-ninth-author-repair` retains twenty-six earlier controls and passes 7/7
-  repair groups. No implementation is authorized.
+- **Status:** draft — **RETURNED by tenth fresh independent review on [[D2701]]–[[D2708]].** The
+  ninth repair's repository closure and traversal fixes survive, but compiler config permits
+  duplicate keys, mutable installed declarations can move a same-commit projection under an
+  unchanged lock identity, graph invariants remain under-validated, and the explicit `any`, dynamic
+  import and broad-index refusals do not execute. `make
+  shared-resource-bootstrap-tenth-fresh-review` retains thirty-three earlier controls and passes
+  8/8 new falsifiers. No implementation is authorized before repair and another fresh review.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -896,6 +897,21 @@ TypeScript library symbols, merged `Promise` declarations and crossed nested val
 evidence only; another genuinely fresh independent review still gates acceptance and production.
 Receipt: `planning/shared-resource-register-bootstrap/ninth-author-repair-2026-09-04.md`.
 
+### Tenth fresh independent return (2026-09-05)
+
+The next independent pass returns the projector on [[D2701]]–[[D2708]]. Its config parser silently
+accepts duplicate keys; mutable installed declaration bytes move a same-commit graph while retaining
+the same lock identity; origin/dependency combinations, root uniqueness and relation-specific edge
+arms remain unenforced; and `any` calls, dynamic imports and broad index-signature calls survive
+despite explicit RFC refusals.
+
+`make shared-resource-bootstrap-tenth-fresh-review` retains all thirty-three predecessor controls
+and passes 8/8 new falsifiers. Exact receipt:
+`planning/shared-resource-register-bootstrap/tenth-fresh-independent-buildability-review-2026-09-05.md`.
+No production implementation is authorized until all eight are repaired and freshly reviewed.
+Exact routed returns: [[D2701]], [[D2702]], [[D2703]], [[D2704]], [[D2705]], [[D2706]],
+[[D2707]], [[D2708]].
+
 ## Acceptance criteria
 
 1. Catalogue and README register populations are set-equal; no `RESOURCE_NAMES`, `SCHEMA_SLUGS` or
@@ -987,6 +1003,13 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-05: returned by tenth fresh independent buildability review on [[D2701]]–[[D2708]].
+  Duplicate config keys and mutable dependency bytes violate the pinned program; graph origin/root/
+  relation invariants remain incomplete; and the three explicit unresolved-resolution refusals do
+  not execute. `make shared-resource-bootstrap-tenth-fresh-review` retains thirty-three earlier
+  controls and passes 8/8 new falsifiers. Receipt:
+  `planning/shared-resource-register-bootstrap/tenth-fresh-independent-buildability-review-2026-09-05.md`.
+  Another author repair and fresh review remain mandatory; no implementation is authorized.
 - 2026-09-04: [[D2645]]–[[D2649]] eighth author repair. Exact committed repository bytes and actual
   compiler/config identity feed a transitive typed symbol graph; re-export targets are retained;
   canonical scalar admission is exact; and overload roots carry every declaration. `make

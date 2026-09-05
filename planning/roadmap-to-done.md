@@ -178,6 +178,16 @@ earlier controls and passes 7/7 repair groups. Another genuinely fresh review st
 acceptance and production. Receipt:
 `planning/shared-resource-register-bootstrap/ninth-author-repair-2026-09-04.md`.
 
+The 2026-09-05 tenth fresh independent review returns that repair on [[D2701]]–[[D2708]]. The
+repository-byte closure survives, but committed config still permits duplicate keys and mutable
+installed package declarations can move a same-commit projection under an unchanged lock identity.
+Graph origin/dependency combinations, unique roots and relation-specific signature arms remain
+under-validated; explicit refusals for `any` calls, dynamic imports and broad index lookups do not
+execute. `make shared-resource-bootstrap-tenth-fresh-review` retains thirty-three predecessor
+controls and passes 8/8 new falsifiers. The foundation critical path remains bounded author repair
+and another genuinely fresh review; no catalogue/register implementation is authorized. Receipt:
+`planning/shared-resource-register-bootstrap/tenth-fresh-independent-buildability-review-2026-09-05.md`.
+
 The same-day twelfth `pack-capability-contract` author repair closes [[D2587]]–[[D2592]] at contract
 tier without claiming production. One transaction-owned before/after run result derives the exact
 core/objective/recorded-guard journal suffix and receipt; the complete nested objective request is

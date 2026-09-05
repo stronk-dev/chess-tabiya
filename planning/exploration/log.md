@@ -15541,3 +15541,20 @@ groups plus strict TypeScript. Exact receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-eighth-author-repair-2026-09-05.md`.
 A ninth genuinely fresh independent review and provider/value dependency landing still precede
 production; the evidence spine remains 12/14.
+
+## 2026-09-05 — Shared-resource bootstrap tenth fresh independent return
+
+**What landed:** an independent contract-tier review of the ninth bootstrap repair, eight ledger
+findings [[D2701]]–[[D2708]], and maintained `make
+shared-resource-bootstrap-tenth-fresh-review` coverage. No catalogue, checker, register, schema,
+product, content, archive or protected-design byte changed.
+
+**What changed:** repository closure survives, but the pinned compiler image remains incomplete:
+duplicate config keys pass; mutable installed declaration bytes move a same-commit projection under
+the same lock identity; graph origin/root/edge invariants are under-validated; and `any`, dynamic
+import and broad-index resolution survive their explicit refusal clauses.
+
+**Evidence/next:** the target retains thirty-three predecessor controls and passes 8/8 new
+falsifiers. Exact receipt:
+`planning/shared-resource-register-bootstrap/tenth-fresh-independent-buildability-review-2026-09-05.md`.
+One bounded author repair and another genuinely fresh review precede implementation.

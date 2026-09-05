@@ -785,7 +785,7 @@ pack-capability-twelfth-fresh-review: pack-capability-twelfth-author-repair
 pack-capability-thirteenth-author-repair: pack-capability-twelfth-fresh-review
 	node --test tools/d2673-pack-capability-thirteenth-author-repair/contract.test.mjs
 
-.PHONY: shared-resource-bootstrap-seventh-fresh-review shared-resource-bootstrap-seventh-author-repair shared-resource-bootstrap-eighth-fresh-review shared-resource-bootstrap-eighth-author-repair shared-resource-bootstrap-ninth-fresh-review shared-resource-bootstrap-ninth-author-repair
+.PHONY: shared-resource-bootstrap-seventh-fresh-review shared-resource-bootstrap-seventh-author-repair shared-resource-bootstrap-eighth-fresh-review shared-resource-bootstrap-eighth-author-repair shared-resource-bootstrap-ninth-fresh-review shared-resource-bootstrap-ninth-author-repair shared-resource-bootstrap-tenth-fresh-review
 shared-resource-bootstrap-seventh-fresh-review:
 	node --test tools/d2593-shared-resource-bootstrap-seventh-fresh-review/contract.test.mjs
 
@@ -803,6 +803,9 @@ shared-resource-bootstrap-ninth-fresh-review: shared-resource-bootstrap-eighth-a
 
 shared-resource-bootstrap-ninth-author-repair: shared-resource-bootstrap-ninth-fresh-review
 	node --test tools/d2667-shared-resource-bootstrap-ninth-author-repair/contract.test.mjs
+
+shared-resource-bootstrap-tenth-fresh-review: shared-resource-bootstrap-ninth-author-repair
+	node --test tools/d2701-shared-resource-bootstrap-tenth-fresh-review/contract.test.mjs
 
 .PHONY: semantic-collectors-promotion-fifth-fresh-review semantic-collectors-promotion-fifth-author-repair semantic-collectors-promotion-sixth-fresh-review semantic-collectors-promotion-sixth-author-repair semantic-collectors-promotion-seventh-fresh-review semantic-collectors-promotion-seventh-author-repair semantic-collectors-promotion-eighth-fresh-review semantic-collectors-promotion-eighth-author-repair
 semantic-collectors-promotion-fifth-fresh-review:
