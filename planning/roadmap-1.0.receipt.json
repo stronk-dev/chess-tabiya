@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:4e3ab3e9dda6488922b932046f266a2e45d482947ebc88e3b488e8b9cc5a5a7d",
+    "roadmap": "sha256:34eaf0080ad133b5c9d3a2e84e5e6a0cbeac3fd9808ae663beac797f7e6a1438",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:ee854caf91f982017a2bfd089887de69ebf664b5d4561785f7629db83ea1f8c6",
-    "rfcRegister": "sha256:30af82d5d3899714e3dc0b48a4f920597db6833e71a999a9fbc4fc1cd73d92fe",
+    "workState": "sha256:9da4a8f5b464c0f630f59a58ebdfea8cbeeabc8724629660cf627f45234c6092",
+    "rfcRegister": "sha256:006dfb5562106cb49ea6934a33c3ffcc06b07ef744f860dc3dcd28eb776a9e1e",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 1017,
+      "blocked": 1023,
       "done": 825,
       "refused": 3
     },
@@ -220,23 +220,24 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Repair safe-deployment D2730-D2735 against the storage journal/readiness/revision authority while fresh-reviewing storage independently; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
+      "nextAction": "Repair safe-deployment D2730-D2735 and Campaign D2736-D2741 against their storage/receipt authorities while fresh-reviewing storage independently; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "A third fresh safe-deployment review returned six authority seams after the local author gate: canonical mounted images admit impossible profile tuples, sealed checks do not share the deployment subject, the result is not the full receipt protocol, TLS and readiness lack their claimed live authorities, and profile migration is not crash durable. Storage recovery's fourth author repair remains separately pending fresh review; neither release boundary can now falsely graduate the other.",
+        "summary": "Fresh reviews now hold both release deployment and Campaign persistence on executable authority gaps. Safe deployment admits impossible mounted tuples, detached checks, incomplete receipts and non-durable migration. Campaign loses provider-failure idempotency at restart, detaches charged mutations from campaign/play identity, permits transplantable events and compiles partial curriculum metadata. Storage recovery's fourth author repair remains separately pending fresh review; none can falsely graduate another.",
         "impact": "held",
         "evidence": [
           "planning/safe-deployment-profiles/third-fresh-independent-buildability-review-2026-09-05.md",
           "tools/d2730-safe-deployment-third-fresh-review/review.test.ts",
           "rfc/safe-deployment-profiles.md",
+          "planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md",
+          "tools/d2736-campaign-fifth-fresh-review/review.test.ts",
+          "rfc/campaign-core.md",
           "planning/storage-backup-recovery/fourth-author-repair-2026-09-05.md",
           "rfc/storage-backup-recovery.md",
           "rfc/longitudinal-store.md",
           "planning/longitudinal-store/eighth-author-repair-2026-09-05.md",
           "rfc/bot-policy.md",
           "planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md",
-          "rfc/campaign-core.md",
-          "planning/campaign/fifth-author-repair-2026-09-04.md",
           "rfc/social-play.md"
         ]
       },
@@ -879,7 +880,7 @@
         ],
         "state": [
           "partial",
-          "Schema, registry, and deterministic fold exist; persistence, abandoned-run rebuild, failure economy, and versioned authored campaigns do not."
+          "Contract prototypes exist, but the foundation remains returned: provider failure is not durable, charged mutations lack one campaign/play subject and play revision, event envelopes are transplantable, and no campaign migration has landed."
         ],
         "api": [
           "missing",
@@ -899,7 +900,7 @@
         ],
         "verification": [
           "blocked",
-          "State-fold, persistence, crash/retry, reward conservation, failure consequence, accessibility, campaign-to-review, and full-run browser tests pass."
+          "The fifth fresh review reproduces six foundation blockers; state-fold, persistence, crash/retry, reward conservation, failure consequence, accessibility, campaign-to-review, and full-run browser tests must still pass after repair."
         ],
         "release": [
           "blocked",

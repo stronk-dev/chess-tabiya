@@ -1,12 +1,11 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
-- **Status:** draft — **fifth author repair complete 2026-09-04 for [[D2620]]–[[D2624]]; fresh
-  independent review required.** Charged live mutations now share one durable cross-aggregate
-  command/result image; assistance receipts bind the complete encounter subject; relational keys
-  make the campaign run the sole ownership authority; campaign events are closed semantic values;
-  and official curriculum is compiled from the pinned document plus sealed registries. `make
-  campaign-two-horizon-fifth-author-repair` retains the earlier author contract and adds five
-  able-to-fail boundary groups. This RFC is explicitly the Campaign foundation, not the whole 1.0.
+- **Status:** draft — **fifth fresh independent review returned the fifth author repair on
+  [[D2736]]–[[D2741]].** Provider failure has no durable command-result home; charged commands are
+  detached from campaign/play state; assistance omits/forges subject authority; event integrity
+  covers only payload; official curriculum compiles a smaller caller-authored object; and three
+  returned dependencies are advertised as accepted. `make campaign-two-horizon-fifth-fresh-review`
+  retains the full author chain and reproduces 6/6. This RFC is explicitly the Campaign foundation, not the whole 1.0.
   No campaign schema, migration, production route, official campaign or surface may resume before
   another fresh independent review and accepted dependencies.
   *(Prior line: [[D2077]]–[[D2086]] author repair complete 2026-08-30; fresh independent review
@@ -1260,6 +1259,19 @@ groups plus strict TypeScript. This is an author/buildability checkpoint only. N
 implementation is authorized until a new independent review accepts these repaired authorities and
 the named dependencies are accepted.
 
+## Fifth fresh independent return (2026-09-05)
+
+The fifth repair closes the local counterexamples it names, but the complete buildability pass
+returned six authority boundaries. [[D2736]] shows its terminal provider result exists only in a
+process-local map and has no SQL row. [[D2737]] shows a charged command for unrelated aggregate ids
+spends state and carries no expected play revision. [[D2738]] shows the assistance subject omits
+learner/document/revision identity and accepts caller-authored receipts. [[D2739]] shows event/result
+integrity can transplant unchanged across campaign, command and operands while duplicate JSON keys
+collapse. [[D2740]] shows the curriculum compiler neither consumes sealed complete inputs nor emits
+the full official metadata schema. [[D2741]] shows three dependencies called accepted/implemented
+are draft/returned in the live register. Exact receipt:
+`planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md`.
+
 ## Campaign 1.0 closure map
 
 This RFC is the **foundation milestone**, not permission to mark the Campaign capability complete.
@@ -1476,6 +1488,10 @@ authority; neither artifact can stand in for the other.
     unavailable action/fallback/source availability, phase/form emptiness, set inequality and a
     review receipt for different bytes. It may establish provenance and completeness, never chess
     correctness.
+37. A sixth author repair retains the complete chain and adds able-to-fail controls for durable
+    no-event command settlement, one locked campaign/play subject with both revisions, sealed
+    assistance authority, canonical whole-envelope event integrity, complete official-curriculum
+    compilation and live dependency-state parity. Another fresh review still gates acceptance.
 
 ## Discharges
 
@@ -1525,6 +1541,13 @@ set).
   persona.
 
 ## Changelog
+
+- 2026-09-05 (**fifth fresh independent return**): returned the fifth repair on
+  [[D2736]]–[[D2741]]. Six executable controls show provider failure is process-local, aggregate
+  identity/revision is incomplete, assistance receipts remain forgeable, event digests transplant,
+  official metadata is partial and dependency statuses are false. `make
+  campaign-two-horizon-fifth-fresh-review` retains the author chain and reproduces 6/6. No campaign
+  schema/migration/route/client/content/archive or protected-design byte changed.
 
 - 2026-09-04 (**fifth author repair**): repaired [[D2620]]–[[D2624]] without production changes.
   All charged gestures now use one replayable cross-aggregate command; assistance gates share an

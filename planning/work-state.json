@@ -21992,6 +21992,60 @@
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D2736",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:3eaf03b9d3a17d477fa808ea7ca932c0c57db5575ca13498d0cca87d1088e614",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2737",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:354447183605fcb9c5e0590126ebe3a8e2365c7f8d3ecc44f703e9bdff24c168",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2738",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b6762fb1b70ad67d9eafdc34ac57130726f4751a23ec187693ec69d49d3a3fb5",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2739",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b93b74f74cda0b7d4332e07a608edae3fe39d0e6914fd9c99d440935e102c48b",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2740",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1e49551ea3fb58c18ac0ffeae502da946f05a85e17e170c40a3a92a0ef8c24c6",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2741",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:07f1bb8a3e5dabdebf6982fcfc86e39fcd982baa3ca0a2fda0593ab2281bc894",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
     }
   ]
 }

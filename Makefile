@@ -385,6 +385,10 @@ campaign-two-horizon-fifth-author-repair: campaign-two-horizon-fourth-author-rep
 	./node_modules/.bin/vitest run --config tools/d2620-campaign-fifth-author-repair/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/tsc -p tools/d2620-campaign-fifth-author-repair/tsconfig.json
 
+.PHONY: campaign-two-horizon-fifth-fresh-review
+campaign-two-horizon-fifth-fresh-review: campaign-two-horizon-fifth-author-repair
+	./node_modules/.bin/vitest run --config tools/d2736-campaign-fifth-fresh-review/vitest.config.ts --reporter=verbose
+
 .PHONY: campaign-boss-author-contract
 campaign-boss-author-contract:
 	node --test tools/campaign-boss-author-contract/contract.test.mjs
@@ -1015,7 +1019,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-eighth-author-repair storage-backup-fourth-author-repair safe-deployment-third-fresh-review test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-eighth-author-repair storage-backup-fourth-author-repair safe-deployment-third-fresh-review campaign-two-horizon-fifth-fresh-review test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 

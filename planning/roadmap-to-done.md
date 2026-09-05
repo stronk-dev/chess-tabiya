@@ -1315,6 +1315,16 @@ exact assistance-subject equality, composite relational ownership, closed recurs
 pinned-document curriculum compiler. `make campaign-two-horizon-fifth-author-repair` retains the
 43 controls and passes five new boundary groups plus strict TypeScript. Another fresh review and
 named dependencies still gate implementation.
+
+The 2026-09-05 fifth fresh Campaign review returned that repair on [[D2736]]–[[D2741]]. A
+provider-failed command has no durable row; charged commands are detached from campaign/play
+identity and play revision; assistance receipts omit and can invent authority; event digests do not
+cover their command envelope; the official-curriculum compiler accepts and emits a smaller object;
+and three draft/returned dependencies are called accepted. `make
+campaign-two-horizon-fifth-fresh-review` retains the complete author chain and reproduces 6/6.
+Campaign schema/migration/routes/content stay held for a sixth repair and fresh review, after which
+the separate boss, catalogue, durable-variety and full-journey milestones still remain. Receipt:
+`planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md`.
 The full-game successor is now explicit rather than hidden in a discharge: `campaign-boss-games`
 owns campaign-schema lane 3 and the complete Act-II position-game journey. It composes one exact
 calibrated human-like bot profile, rules-terminal result, clean rating versus explicit

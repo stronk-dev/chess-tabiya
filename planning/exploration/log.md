@@ -15699,3 +15699,21 @@ repair must compose, rather than copy, storage recovery's revision/readiness/jou
 
 **Next:** author [[D2730]]–[[D2735]] as one deployment authority, then require another genuinely
 fresh buildability review before production server, Compose, Caddy, workflow or release work.
+
+## 2026-09-05 — Campaign core fifth fresh independent return
+
+**What landed:** [[D2736]]–[[D2741]] and `make campaign-two-horizon-fifth-fresh-review`. The full
+retained Campaign author chain stays green, while six new controls cross restart, aggregate
+identity, assistance provenance, event-envelope, curriculum and dependency boundaries.
+
+**What changed:** the Campaign foundation remains draft. Provider failure has no durable result
+row; charged commands are not bound to campaign/play state or the current play revision;
+assistance accepts structural incomplete subjects; event digests cover too little; official
+curriculum is a partial caller-authored projection; and the RFC overstates three dependencies.
+
+**What is blocked:** campaign schema/migration/routes/client/content remain unauthorized. Even a
+future accepted foundation is only one of four Campaign 1.0 milestones; boss games, catalogue
+progression, durable variety, full UX and one human-authored official campaign remain required.
+
+**Next:** repair [[D2736]]–[[D2741]], fresh-review the result, and keep the complete Campaign 1.0
+closure map live rather than treating the foundation RFC as capability completion.
