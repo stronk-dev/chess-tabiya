@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:354c69debfaaaf9aaaf9e7f2ae56933f987325b90c9983773adc9d2b6eb6d269",
+    "roadmap": "sha256:35aa6dd16e63cb44d424f59727e4012cbefa3fc7b46d6f6dd396c8b02a342dc0",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:bba1443c78cf77f6b8bdeac428c8f8c865db3c3807272c1abc4aac8a15e19259",
-    "rfcRegister": "sha256:f9ae815a41c87cc7d859d588ed66b00050d5acc4caea8b7124c6e80778c46173",
+    "workState": "sha256:4e74283a3c63df8f3c5ef33ed4f62f5f012b6fbb2e56006956a382ad82ed2099",
+    "rfcRegister": "sha256:bb64ca4e684b95dfe2710156af7a771de4278ccc3d1123c9deb4475067ff0d85",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 648,
       "doing": 0,
-      "blocked": 1133,
+      "blocked": 1138,
       "done": 833,
       "refused": 3
     },
@@ -115,22 +115,22 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; genuinely fresh-review provider-health eighth repair and advance provider protocol/exchange while continuing pack-capability and longitudinal-store review lanes.",
+      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; author-repair provider-health D2869-D2873 and freshly review it while advancing provider protocol/exchange, pack-capability and longitudinal-store review lanes.",
       "latestCheckpoint": {
-        "at": "2026-09-05",
-        "summary": "The shared-resource bootstrap fourteenth repair passed a fifteenth fresh executable review: both real assistance/workflow descriptors and checked/open/finite/optional-call boundaries hold. It is ready for owner acceptance; production remains unauthorized.",
-        "impact": "advanced",
+        "at": "2026-09-06",
+        "summary": "Provider-health's ninth fresh review reproduced five remaining concurrency and authority failures after the eighth repair; the contract is returned before either runtime or durable checkpoint can reach production.",
+        "impact": "held",
         "evidence": [
-          "planning/shared-resource-register-bootstrap/fifteenth-fresh-independent-buildability-review-2026-09-05.md",
-          "tools/shared-resource-bootstrap-fifteenth-fresh-review/review.test.mjs",
-          "rfc/shared-resource-register-bootstrap.md",
+          "planning/provider-health-degradation/ninth-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d2869-provider-health-ninth-fresh-review/review.test.ts",
+          "rfc/provider-health-degradation.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "shared-resource-register-bootstrap.md",
-            "digest": "sha256:36678457dd952ac50cc9b110617249259822b97192dfdd02f3e79d6b7d1a4ecb"
+            "id": "provider-health-degradation.md",
+            "digest": "sha256:a7b819beb9d5c7015ebe58db138adc650232e287033103c949a06006f15f39f6"
           }
         ]
       },

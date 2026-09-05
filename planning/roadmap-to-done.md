@@ -430,6 +430,14 @@ TypeScript. Production remains held for another genuinely fresh review and provi
 exchange. Receipt:
 `planning/provider-health-degradation/eighth-author-repair-2026-09-05.md`.
 
+The 2026-09-06 ninth fresh review returns that repair on [[D2869]]–[[D2873]]. Two equal read-only
+snapshots cannot coexist; cache application grain is forgeable; unrelated cache traffic invalidates
+a live Lichess lease; application settlements bypass the exact parser; and a remote→local change can
+reuse a generation and predecessor claim. `make provider-health-ninth-fresh-review` retains the
+complete chain and passes 5/5 reproductions. Both implementation checkpoints remain held for one
+coherent author repair, another fresh review and provider protocol/exchange. Receipt:
+`planning/provider-health-degradation/ninth-fresh-independent-buildability-review-2026-09-06.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

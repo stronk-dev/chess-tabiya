@@ -1,12 +1,13 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — **eighth author repair complete on [[D2857]]–[[D2859]].** Read-only
-  generation validation now preserves the operation snapshot; exact settlement parsing precedes
-  every claim/backoff mutation; and provider payloads are defensively copied, recursively sealed and
-  bound to a canonical payload digest. `make provider-health-eighth-author-repair` retains the
-  complete chain and passes 9/9 repair groups plus strict TypeScript. Neither implementation
-  checkpoint is authorized before another genuinely fresh review and the provider-protocol/
-  exchange prerequisites.
+- **Status:** draft — **returned by ninth fresh independent review on [[D2869]]–[[D2873]].** The
+  eighth repair closes its three named seams, but concurrent read-only snapshots revoke one another,
+  cache application grain is caller-mintable, unrelated cache traffic invalidates live group
+  leases, application settlements bypass the promised exact parser, and implementation changes can
+  reuse a generation while retaining predecessor claims. `make provider-health-ninth-fresh-review`
+  retains the complete chain and passes 5/5 reproductions. Author repair and another genuinely fresh
+  review remain mandatory; neither implementation checkpoint is authorized before acceptance and
+  the provider-protocol/exchange prerequisites.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -1013,6 +1014,26 @@ attacks, passes 9/9 composed repair groups and strict TypeScript. Exact receipt:
 evidence, not acceptance or production implementation. Another genuinely fresh review plus the
 provider-protocol/exchange prerequisites still gate both implementation checkpoints.
 
+## Ninth fresh independent return (2026-09-06)
+
+The eighth repair pays its three immediate debts but leaves five composition failures:
+
+1. [[D2869]] — a second `snapshot()` at the same revision and state replaces the sole current
+   snapshot object and revokes the first without any transition;
+2. [[D2870]] — `CacheKey` is unsealed and `put` ignores its application/stage grain, permitting a
+   valid provider delivery to be relabelled under an unrelated application operation;
+3. [[D2871]] — generation-set validity is coupled to global registry revision, so unrelated
+   provider/cache traffic prevents an already-acquired group claim from settling;
+4. [[D2872]] — `settleOperation` accepts extra fields and caller-authored `local_domain` values
+   instead of parsing the exact arms and requiring provider-exchange authority; and
+5. [[D2873]] — `changeGeneration` accepts a changed implementation with the same generation string,
+   preserving the old group digest and claim across the configuration change.
+
+`make provider-health-ninth-fresh-review` retains the full chain and passes 5/5 executable
+falsifiers. Exact evidence:
+`planning/provider-health-degradation/ninth-fresh-independent-buildability-review-2026-09-06.md`.
+The RFC remains returned; production implementation is unauthorized.
+
 ## Implementation plan
 
 **Staged dependency rule ([[D2364]]).** This RFC may remain `implementing` across two checked
@@ -1308,6 +1329,11 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 | [[D2849]] | exact cache loses application grain and service receipt | full-grain key plus atomic value/original/current service receipt; criteria 20/27/33 |
 | [[D2850]] | unused pipeline grammar is vacuously green | dead DAG axes deleted; ten exact one-stage operations retain independent speech; criteria 8/19/29/34 |
 | [[D2851]] | replacement drops prior public authorities | one composed snapshot/outcome/selector/release/settlement checkpoint; criterion 35 |
+| [[D2869]] | read-only snapshots revoke equal concurrent snapshots | return: single-object currentness is not revision/state authority |
+| [[D2870]] | cache application/stage grain is caller-mintable | return: cache keys are unsealed and insertion validates only provider grain |
+| [[D2871]] | unrelated cache traffic invalidates a live group lease | return: group authority is coupled to global registry revision |
+| [[D2872]] | structural and caller-authored settlements bypass strict parsing | return: no exact settlement parser/provider local-domain authority guards `settleOperation` |
+| [[D2873]] | implementation change reuses generation and predecessor claim | return: configuration change does not require a distinct generation identity |
 
 `make provider-health-fourth-author-repair` retains the previous 17 author controls, executes 6/6
 new able-to-fail behavioral groups plus strict TypeScript, and remains an author contract rather
@@ -1315,6 +1341,12 @@ than implementation or review.
 
 ## Changelog
 
+- 2026-09-06 — returned by ninth fresh independent buildability review on [[D2869]]–[[D2873]].
+  Equal read-only snapshots revoke one another; cache keys admit forged application grain; unrelated
+  cache traffic invalidates group leases; application settlements bypass exact parsing; and an
+  implementation change can reuse a generation and predecessor claim. `make
+  provider-health-ninth-fresh-review` passes 5/5 reproductions; author repair and another fresh
+  review are required.
 - 2026-09-05 — eighth author repair closed [[D2857]]–[[D2859]] at contract tier. Generation-set
   validation is read-only, backoff settlement is parsed before claim mutation, and retained payloads
   are copied, recursively sealed and payload-digest bound. `make

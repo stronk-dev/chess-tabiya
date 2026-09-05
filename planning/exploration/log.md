@@ -16515,3 +16515,20 @@ predecessor and return chain, passes 5/5 current repair groups and strict TypeSc
 `planning/evidence-foundation-ux/semantic-collectors-promotion-thirteenth-author-repair-2026-09-06.md`.
 Another genuinely fresh independent review and provider/value dependency landing precede either
 held projection; the evidence spine remains 12/14.
+
+## 2026-09-06 — provider-health ninth fresh independent return
+
+**What landed:** independently reviewed the eighth provider-health author repair and returned the
+RFC on [[D2869]]–[[D2873]]. The fresh-review target is enrolled as the ordinary governance tip. No
+production provider, API, schema, migration, content, archive or protected-design byte changed.
+
+**What changed:** five consumer-shaped failures reproduce: equal read-only snapshots revoke one
+another; cache application/stage grain is caller-mintable; unrelated cache traffic invalidates an
+already-acquired Lichess lease; stage settlements bypass exact parsing and local-domain authority;
+and an implementation change can reuse a generation while retaining a predecessor group claim.
+
+**Evidence/next:** `make provider-health-ninth-fresh-review` retains the full predecessor/repair
+chain and passes 5/5 falsifiers. Exact receipt:
+`planning/provider-health-degradation/ninth-fresh-independent-buildability-review-2026-09-06.md`.
+The next author repair must close all five in one composed authority; another genuinely fresh review
+and provider protocol/exchange still precede production implementation.

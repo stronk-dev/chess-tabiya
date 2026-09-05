@@ -23181,6 +23181,51 @@
       "sourceDigest": "sha256:cfd9e13345a8aa221d742309f76636e1557427223a0d501d2247718c983fc06d",
       "uxItems": [],
       "owner": "evidence-foundation"
+    },
+    {
+      "id": "D2869",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:361911e42b6bc90784a5750b005a13fedd37471a084d2a37d670a9ed72a45603",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2870",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:bc4acced12c0a4e781835b4cd09588fa112a407719628e7aabf606854415fbfd",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2871",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b0f126b0299a87af0739a8a17b35dea059f9f9ddf038e335cea988f25b76c921",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2872",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:44f86466704c1c0c2b900181a134fe2ac7f46bcdd2181e6cf89f65e603ed6501",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2873",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:cb2ce9a213601bf84ec134477c1cd11ff1ad65579c7557665005e0448b632174",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
     }
   ]
 }
