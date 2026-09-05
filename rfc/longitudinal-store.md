@@ -1,12 +1,13 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **RETURNED by the eighth fresh independent review on 2026-09-05 on
-  [[D2779]]–[[D2784]].** The v4 model repairs the six prior internal seams, but its “storage-owned”
-  authority is a caller-created in-memory map; caller values choose owner/journal absence, job,
-  receipt and clock; synthetic unreachable AST calls satisfy the transaction census; invalidation
-  is a pure object rewrite; and equal images cross independent store authorities. `make
-  longitudinal-store-eighth-fresh-review` retains the complete chain and passes five executable
-  blocker groups plus strict TypeScript. No migration, worker, reader, consumer, API or client
+- **Status:** draft — **ninth author repair completed 2026-09-05 on [[D2779]]–[[D2788]];
+  ninth fresh independent review required.** A file-backed SQLite contract now owns exact replayed
+  source/owner/journal/authorship truth, the five-state job parser, database clock, claim capability,
+  current-source acquisition/validation and transactional invalidation. The eleven mutation
+  symbols execute with durable commit/rollback receipts rather than compiling caller source text.
+  `make longitudinal-store-ninth-author-repair` retains the complete chain and passes eight new
+  groups plus strict TypeScript. No production migration, `SQLiteRunStorage` method, worker, reader,
+  consumer, API or client
   implementation is authorized. The
   2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
@@ -1079,6 +1080,34 @@ SQLite store, internally resolve owner/authorship/clock/current job, execute the
 population and perform transactional invalidation. Another genuinely fresh review still gates
 acceptance and production implementation.
 
+## Ninth author repair (2026-09-05)
+
+The returned durable-authority seams and two author self-audits are repaired in one file-backed
+SQLite contract:
+
+- [[D2779]]/[[D2780]]: the store loads and replays exact source bytes and resolves owner,
+  collaboration-journal presence, complete authorship and structure disposition internally. The
+  public read accepts only run id and cut.
+- [[D2787]]: journal-backed `single_player` attribution remains set-equal to user commits and
+  requires every exact author to equal the durable owner; replacing the authority does not weaken
+  the prior consistency invariant.
+- [[D2781]]: every closed mutation symbol executes a real transaction with a durable internally
+  timed receipt; missing subjects and rollback leave no receipt. Production method composition
+  remains an explicit implementation criterion, not a claim of this disposable model.
+- [[D2782]]/[[D2785]]: one exact sixteen-column parser and mirrored SQLite constraints close all
+  five job states, including distinct retry-wait and quarantined requirements.
+- [[D2786]]/[[D2788]]: acquisition and validation reload current source truth under the issuing
+  database, SQLite owns time, and the complete lease expiry joins the sealed claim.
+- [[D2783]]: source invalidation is an old-cut/digest/generation/state SQL compare-and-swap whose
+  committed result survives restart, retries idempotently and fences the old claim.
+- [[D2784]]: source and claim capabilities belong to exactly one store; equal content across two
+  databases retains equal digest without crossing authority.
+
+`make longitudinal-store-ninth-author-repair` retains the complete predecessor/review chain,
+passes eight new behavioral groups and strict TypeScript. Exact receipt:
+`planning/longitudinal-store/ninth-author-repair-2026-09-05.md`. No production byte changed. Another
+genuinely fresh independent review remains mandatory before acceptance or implementation.
+
 ### F. Acceptance criteria
 
 These are the only live acceptance criteria; the historical AC list below is non-normative.
@@ -1189,7 +1218,7 @@ These are the only live acceptance criteria; the historical AC list below is non
     arm, 20 Hz health probes hold event-loop delay p95 <50 ms/max <250 ms, no probe exceeds 500 ms,
     and at least three in-loop full-CAS renewals precede publication. Main-thread execution and a
     timer-only worker heartbeat are able-to-fail negatives.
-17. **Nine-return author falsifier.** `make longitudinal-store-eighth-fresh-review` retains the
+17. **Nine-return author falsifier.** `make longitudinal-store-ninth-author-repair` retains the
     complete earlier author chain and crosses both
     literal registries/signs, complete-population algebra, actual SQLite claim/index/constraint
     negatives, deletion/rebuild suppression, worker lifecycle, claim race/expiry/stale publisher,
@@ -1250,7 +1279,7 @@ These are the only live acceptance criteria; the historical AC list below is non
     collaboration invalidation, monotone shared/legacy attribution, exact parsed row families,
     revision-1 observed-only imports and the branded filter parser. Every negative mutates a
     passing positive and strict TypeScript refuses an unparsed query.
-31. **Durable source/claim authority ([[D2779]]–[[D2784]]).** The production-composed storage
+31. **Durable source/claim authority ([[D2779]]–[[D2788]]).** The production-composed storage
     operation loads exact run/event, owner, journal/seating, structure and complete job rows under
     one database identity and transaction clock. Caller records, null-authorship testimony,
     structural job/receipt objects, historical clocks, cross-database images, unreachable
@@ -1959,6 +1988,11 @@ head after that renumbering and **not yet written**:
 
 ## Changelog
 
+- 2026-09-05: ninth author repair completed [[D2779]]–[[D2788]]. A file-backed SQLite contract now
+  owns replayed source/owner/journal/authorship truth, all five job states, clock, exact claim and
+  invalidation CAS; committed mutation receipts replace caller source text; restart/idempotence and
+  cross-database negatives execute. `make longitudinal-store-ninth-author-repair` passes eight new
+  groups plus strict TypeScript. Fresh review still gates acceptance and implementation.
 - 2026-09-05: eighth fresh independent review returned the repair on [[D2779]]–[[D2784]]. The
   claimed storage authority is caller-created; authorship absence, job, receipt and clock remain
   caller values; unreachable synthetic AST calls pass while production contains no integration;

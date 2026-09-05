@@ -15958,3 +15958,24 @@ SQLite-owned ninth repair, another genuinely fresh review and acceptance.
 **Next:** compose a real disposable SQLite authority that internally loads owner/authorship/source,
 job and clock truth; execute actual storage paths and transactional invalidation with restart,
 idempotence and stale-writer negatives; then commission a fresh review.
+
+## 2026-09-05 — Longitudinal store ninth author repair
+
+**What landed:** a bounded file-backed SQLite contract repair for [[D2779]]–[[D2788]]. No
+production storage, migration, worker, route, client, content, archive or protected-design byte
+changed.
+
+**What changed:** exact replayed source/owner/journal/authorship truth, the five-state job parser,
+database clock, store-scoped source/claim capabilities, current-source acquisition/validation and
+transactional invalidation now share one issuing database. Invalidation survives restart, retries
+idempotently and fences the old claim. Eleven mutation symbols produce committed receipts and
+rollback produces none. Author self-audit caught and repaired retry-wait exclusion, lost
+single-player consistency, stale source validation and old-source acquisition before checkpoint.
+
+**What is blocked:** the RFC remains draft. Longitudinal production storage and every downstream
+style/skills/opening-history/personalized-Review/campaign-history consumer remain unauthorized
+before another genuinely fresh review and acceptance.
+
+**Next:** independently attack exact row constraints, fixture/production seams, transaction clocks,
+source mutation races, restart/reclaim behavior, capability transfer and actual production
+composition; only then consider acceptance.

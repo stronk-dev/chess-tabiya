@@ -22433,6 +22433,42 @@
       "uxItems": [],
       "owner": "learner-history",
       "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2785",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:007bc664d61c2361bb76b18f0b23de7b75edd0f3e1756ac472e9ccb442566186",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2786",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:72c74fbad19f2415778d36beb57f0ea5c96a9d0b4409b96f792c3a1bb7133467",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2787",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1d8b066357d728dc10f51607761e13c127a6af0b4041a52aabf6d6364024dbdd",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2788",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:66f8ab3bfa21b873b304725d4e05958bb0c332c98108536c508bc16ff18f6b47",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
     }
   ]
 }

@@ -1651,16 +1651,16 @@ store/bot predecessors. Every link needs a typed reducer, immutable inputs, idem
 resume/rebuild, owner/actor identity, prior-release migration, account lifecycle, and a production
 API/client consumer.
 
-The longitudinal-store eighth fresh independent review returns the latest repair on [[D2779]]–
-[[D2784]]. Its replay/authorship algebra survives, but the claimed storage reader is a caller-built
-map; null journal state, owner, job, receipt and clock remain caller values; unreachable operations
-in synthetic source satisfy the AST census while production storage contains none of them;
-invalidation is a pure object rewrite; and equal images cross independent stores. `make
-longitudinal-store-eighth-fresh-review` retains the full chain and passes five executable blocker
-groups plus strict TypeScript. Player style, skills, opening performance, durable tips, bot history
-and campaign progression remain blocked on a SQLite-owned ninth repair, another fresh review,
-acceptance and production persistence; no downstream feature credit is claimed. Receipt:
-`planning/longitudinal-store/eighth-fresh-independent-buildability-review-2026-09-05.md`.
+The longitudinal-store ninth author repair closes [[D2779]]–[[D2788]] at contract tier. One
+file-backed SQLite authority loads replayed source/owner/journal/authorship truth, parses all five
+job states, owns clock and claim capabilities, reloads current source at acquisition/validation and
+invalidates by restart-stable idempotent stale-writer-fenced CAS. Eleven mutation symbols now
+execute committed/rolled-back receipts rather than compiling caller source text. `make
+longitudinal-store-ninth-author-repair` retains the full chain and passes eight new groups plus
+strict TypeScript. Player style, skills, opening performance, durable tips, bot history and
+campaign progression remain blocked on fresh review, acceptance and production persistence; no
+downstream feature credit is claimed. Receipt:
+`planning/longitudinal-store/ninth-author-repair-2026-09-05.md`.
 
 ### CI and deployment
 

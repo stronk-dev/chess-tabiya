@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:7a8258252713d674828bc2cd38a88d05df7b3043c5d7da7e1e713ef53b21bc29",
+    "roadmap": "sha256:266d8ee58686292fd9b026881717244becc1d6d4128aac840361b6f372879b99",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:ba77c5bcbb7c01060e4a717c3749e751cd1727bcd64e7e6f423c09f69d667cc6",
-    "rfcRegister": "sha256:9a03bcfd5ac21c4c6f3979ffe9cb65c1764fd95b1af2b0c4763a9c0195815a66",
+    "workState": "sha256:8fea2dde904c5e3642cd8b1ff92a345ffdd2c1a881382113c7194733819b8450",
+    "rfcRegister": "sha256:e6ad6940a3cb897de673978af5dc8dc7593ea55f95eb9640e6ab3d1f7fd95cf8",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 1065,
+      "blocked": 1069,
       "done": 826,
       "refused": 3
     },
@@ -109,15 +109,15 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Repair the longitudinal store against one real SQLite authority, then fresh-review it again; fresh-review pack capability's fifteenth repair; complete independent review and acceptance for claim anchors, module registration/presentation, review compiler/map, bot roster/route source, social play and casting; do not implement a draft contract early.",
+      "nextAction": "Fresh-review the longitudinal store's SQLite-owned ninth repair and pack capability's fifteenth repair; complete independent review and acceptance for claim anchors, module registration/presentation, review compiler/map, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "Longitudinal storage's eighth fresh review returns six durable-authority gaps: the source reader is caller-built, owner/journal/job/receipt/clock values are caller-authored, the AST census accepts unreachable synthetic operations absent from production, invalidation is not durable and equal images cross store authorities. The retained review chain passes five blocker groups; production persistence remains held for a SQLite-owned ninth repair and another fresh review.",
-        "impact": "held",
+        "summary": "Longitudinal storage's ninth author repair replaces caller authority with a file-backed SQLite contract: exact source/owner/journal/authorship, all five job states, database clock, store-scoped claim capabilities, current-source acquisition/validation and durable restart-stable invalidation pass eight groups. Production remains held for a genuinely fresh review and acceptance.",
+        "impact": "advanced",
         "evidence": [
+          "planning/longitudinal-store/ninth-author-repair-2026-09-05.md",
+          "tools/d2779-longitudinal-ninth-author-repair/contract.test.ts",
           "planning/longitudinal-store/eighth-fresh-independent-buildability-review-2026-09-05.md",
-          "tools/d2779-longitudinal-eighth-fresh-review/review.test.ts",
-          "planning/longitudinal-store/eighth-author-repair-2026-09-05.md",
           "rfc/longitudinal-store.md",
           "rfc/README.md"
         ]
