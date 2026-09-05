@@ -7,12 +7,12 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair was **returned by its twelfth fresh review on [[D2835]]–[[D2839]] on
-  2026-09-05.** The eleventh repair moved self-registration to a caller-created inventory; its
-  generation grammar is open; legal-map declarations are neither unique nor complete; empty
-  supports pass; and duplicate recorded subjects choose their first array member. `make
-  semantic-collectors-promotion-twelfth-fresh-review` retains the entire predecessor chain and
-  passes 5/5 fresh falsifiers plus strict TypeScript. An author repair, another genuinely fresh
+  promotion pair's **twelfth author repair closes [[D2835]]–[[D2839]] at contract tier on
+  2026-09-05.** Registry opening now consumes an application-issued installed-inventory authority;
+  generation and nested declarations are exact; response/legal populations are unique and
+  set-equal; every response has one exact `/start/fen` support; and every response subject has one
+  durable record. `make semantic-collectors-promotion-twelfth-author-repair` retains the entire
+  predecessor chain and passes 5/5 repair groups plus strict TypeScript. Another genuinely fresh
   review and provider/value dependency landing still gate both held projections; no held projection
   implementation is authorized. The preceding author model claimed one
   asynchronous transaction owned recorded-first lookup, the exact
@@ -1302,6 +1302,15 @@ shipped around — no criterion here carries a pre-authorized fallback.
     each; `missing-check`, `crossed-edge-check`, `unnecessary-check`, wrong projection, unsealed
     event and duplicate-member fixtures fail before emission. The implementation diff changes no
     projection id, operands, learner eligibility or content bytes.
+18. **C18 — Installed promotion generations are closed and non-vacuous** ([[D2835]]–[[D2839]]).
+    Registry opening consumes only the application-issued installed-inventory authority; a raw,
+    copied or caller-path value fails. Inventory/generation/file/response/legal objects reject extra
+    or missing keys. Response and legal-map FEN populations are unique and set-equal, and every
+    declared available artifact is validated rather than ignored. Each response has exactly one
+    durable record at the same `(fen, sourceId, retrievedAt)` subject; the durable tablebase-record
+    population is set-equal to the declared response population, and each record supports the
+    exact singleton `/start/fen` whose pack value equals the response FEN. Empty/multiple supports,
+    duplicate records, duplicate declarations and orphan declarations fail before evidence exists.
 
 ## Discharges
 
@@ -1539,6 +1548,22 @@ full chain and passes 6/6 fresh falsifiers plus strict TypeScript. The spine rem
 an installed-generation artifact authority, exact document/support/response/legal joins, a closed
 current result seal, another fresh review and provider/value dependency landing.
 
+The same-day twelfth author repair closes [[D2835]]–[[D2839]] without widening the two held
+projections. The product registry no longer accepts a path: application composition issues an
+opaque installed-inventory authority, while the disposable harness has an explicitly test-only
+issuer. Before the predecessor registry can open a generation, the repair exact-parses the
+inventory, generation root, file references, response rows and legal-map rows; requires unique,
+set-equal response/legal FEN populations; verifies every referenced file; requires the exact
+singleton `/start/fen` support whose pack value equals the response FEN; and requires exactly one
+durable tablebase record for each `(fen, sourceId, retrievedAt)` response subject with no orphan
+tablebase records outside that declared population.
+
+`make semantic-collectors-promotion-twelfth-author-repair` retains every predecessor and the 5/5
+twelfth-review attacks, then passes 5/5 repair groups and strict TypeScript. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-twelfth-author-repair-2026-09-05.md`.
+This is author contract evidence only; another genuinely fresh review and the provider/value
+dependencies remain mandatory before 12/14 can become 14/14.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1572,11 +1597,11 @@ current result seal, another fresh review and provider/value dependency landing.
 | [[D2792]] | returned: source digest/length metadata is never checked against retained response bytes |
 | [[D2793]] | returned: a status token stands in for an exact legal-map operation and malformed bytes become absence |
 | [[D2794]] | returned: predecessor recorded results bypass the current durable receipt at assertion |
-| [[D2835]] | returned: the installed inventory is still bootstrapped from an arbitrary caller-selected path |
-| [[D2836]] | returned: generation and nested declaration objects accept undeclared fields and incomplete shapes |
-| [[D2837]] | returned: duplicate and orphan legal-map declarations are ignored rather than refused |
-| [[D2838]] | returned: an empty support population vacuously passes and grounds a recorded reading |
-| [[D2839]] | returned: duplicate durable record subjects are admitted and first-row order chooses truth |
+| [[D2835]] | author-repaired: only an application-issued opaque installed-inventory authority opens the registry; raw/copy paths fail |
+| [[D2836]] | author-repaired: generation, file-reference, response and legal declarations have exact parsers |
+| [[D2837]] | author-repaired: response/legal populations are unique, set-equal and completely file-validated |
+| [[D2838]] | author-repaired: each response requires exactly one `/start/fen` support with byte-equal pack value |
+| [[D2839]] | author-repaired: each response subject resolves to exactly one durable tablebase record |
 | [[D2469]] | author-repaired: provider preflight/domain and provider-failure arms execute before the lazy success-only legal-map resolver |
 | [[D2470]] | author-repaired: one request, dependency interface, sealed recorded resolver and exact collector signature fix source precedence |
 | [[D2471]] | author-repaired: specialized assertion failure throws `EvidenceInvariantError`; only typed unavailable inputs abstain, and invalid recorded bytes never permit live fallback |
@@ -1618,6 +1643,13 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-05: twelfth author repair closes [[D2835]]–[[D2839]] at contract tier. One
+  application-issued installation authority, closed generation grammar, response/legal set
+  equality, exact non-vacuous start-FEN support and unique durable subjects execute. `make
+  semantic-collectors-promotion-twelfth-author-repair` retains the chain and passes 5/5 repair
+  groups plus strict TypeScript. Exact receipt:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-twelfth-author-repair-2026-09-05.md`.
+  Fresh review and provider/value dependency landing remain required.
 - 2026-09-05: eleventh author repair closes [[D2789]]–[[D2794]] at RFC tier. One installed
   inventory owns immutable named generations; complete production pack/strict-sourcing checks,
   exact pack/support/response-byte/legal-map joins and a current-only result receipt execute.

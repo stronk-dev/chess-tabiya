@@ -340,12 +340,12 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Fresh-review the production-backed candidate-packet tenth repair while landing its evidence-value-authority dependency; separately repair the twelfth held promotion pair against shared recorded-evidence authority, then finish selectors, grades, Review and learner modules.",
+        "nextAction": "Fresh-review the production-backed candidate-packet tenth repair while landing its evidence-value-authority dependency; fresh-review the twelfth promotion repair, then land its provider/value dependencies and finish selectors, grades, Review and learner modules.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "The shared candidate packet's tenth author repair now closes its request, seven-term identity, scope-private graph, cache authority and deep sealing against thirteen production-backed semantic/F1 adapter paths. Nine composed controls plus strict TypeScript pass; fresh review and value-authority landing still gate production, while the promotion pair remains 12/14 and separately held.",
+          "summary": "The promotion pair's twelfth author repair now closes installed-inventory authority, exact artifact grammar, complete response/legal populations, non-vacuous pack support and unique durable subjects. Five repair groups pass; the spine remains 12/14 until fresh review and provider/value dependencies land, alongside the separately held candidate packet.",
           "impact": "advanced",
-          "evidence": ["planning/evidence-foundation-ux/shared-candidate-packet-tenth-author-repair-2026-09-05.md", "tools/d2678-candidate-packet-tenth-author-repair/contract.test.ts", "rfc/shared-candidate-evidence-packet.md", "rfc/README.md"]
+          "evidence": ["planning/evidence-foundation-ux/semantic-collectors-promotion-twelfth-author-repair-2026-09-05.md", "tools/d2835-semantic-collectors-promotion-twelfth-author-repair/contract.test.ts", "rfc/semantic-collectors.md", "planning/evidence-foundation-ux/shared-candidate-packet-tenth-author-repair-2026-09-05.md", "rfc/shared-candidate-evidence-packet.md", "rfc/README.md"]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."
       },

@@ -16281,3 +16281,20 @@ release coexist with durable recovery. The unused dependency/condition DAG was d
 6/6 seventh-review attacks, passes 6/6 composed repair groups and strict TypeScript. Exact receipt:
 `planning/provider-health-degradation/seventh-author-repair-2026-09-05.md`. Another genuinely fresh
 review and provider protocol/exchange still gate both production checkpoints.
+
+## 2026-09-05 — semantic collectors promotion twelfth author repair
+
+**What landed:** repaired [[D2835]]–[[D2839]] at contract tier while keeping the production
+evidence spine at its honest 12/14 state. No production projection, provider, schema, pack, content,
+archive or protected-design byte changed.
+
+**What changed:** registry opening consumes application-issued installation authority; inventory,
+generation and nested declarations are exact; response/legal FEN sets are unique and equal; every
+available artifact is validated; `/start/fen` support is an exact non-empty singleton with equal
+pack value; and durable tablebase subjects are unique and set-equal to response subjects.
+
+**Evidence/next:** `make semantic-collectors-promotion-twelfth-author-repair` retains every
+predecessor and the 5/5 twelfth-review attacks, passes 5/5 repair groups and strict TypeScript.
+Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-twelfth-author-repair-2026-09-05.md`.
+Another genuinely fresh review and provider/value dependencies still gate 12/14→14/14.
