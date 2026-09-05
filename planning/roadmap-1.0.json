@@ -344,14 +344,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Compose-repair the candidate packet's public service, identity, total outcomes and terminal state while landing its evidence-value-authority dependency; fresh-review the twelfth promotion repair, then finish selectors, grades, Review and learner modules.",
+        "nextAction": "Compose-repair the candidate packet's public service, identity, total outcomes and terminal state; repair promotion's issuer-to-result authority as one immutable snapshot; land the evidence-value-authority/provider dependencies, then finish selectors, grades, Review and learner modules.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "The candidate-packet tenth repair was returned: its focused fixes survive, but the current checkpoint drops the public service/result/cache lifecycle, four retained identity fields, total outcomes/abstentions and terminal distinction. The spine cannot build from separate historical models.",
+          "summary": "The promotion twelfth repair was returned: its leaf fixes survive, but the public caller-path issuer binds no immutable inventory, two reads can tear, predecessor stores/results lose application authority, and empty generations pass. The spine remains 12/14.",
           "impact": "regressed",
-          "evidence": ["planning/evidence-foundation-ux/shared-candidate-packet-eleventh-fresh-independent-buildability-review-2026-09-05.md", "tools/d2860-candidate-packet-eleventh-fresh-review/review.test.ts", "rfc/shared-candidate-evidence-packet.md", "rfc/README.md"],
+          "evidence": ["planning/evidence-foundation-ux/semantic-collectors-promotion-thirteenth-fresh-independent-buildability-review-2026-09-05.md", "tools/d2864-semantic-collectors-promotion-thirteenth-fresh-review/review.test.ts", "rfc/semantic-collectors.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "shared-candidate-evidence-packet.md", "digest": "sha256:18757817c63d199aabf8ecbdfe9002e361ba7bb5c976182bed393a59e3ea8bff"}
+            {"kind": "rfc", "id": "semantic-collectors.md", "digest": "sha256:854706a4501e65048816ad3dc3e08ba26db2bcbed6f04d6d6331ce936fa919e0"}
           ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."

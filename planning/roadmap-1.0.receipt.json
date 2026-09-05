@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:8dab6cf848d31e16163b79799869cc1095e1feb6ad132daaea466af0f1b90342",
+    "roadmap": "sha256:2b7b0dd5c0acade3ed90b318e429110f08df769b5c3eee08a4fdbd791fa4e9ee",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:21850dee0624e02d59c6d193ffcc9f12a125ea89a888b3e1de74afc2062fb45a",
-    "rfcRegister": "sha256:5e7c927fd2c95a8086c53e25eaddecdb3db8468efa30f80a533fb8c0b06485de",
+    "workState": "sha256:c0870c7a3ece327a7f1db4250ecd6dde0de00a79569b1cc5c92a49a41094f515",
+    "rfcRegister": "sha256:90b463258906ee9cd1822e24634e18060ec400a9bdf900bde8e5c7c4fd93fe27",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -30,7 +30,7 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 643,
+      "todo": 648,
       "doing": 0,
       "blocked": 1133,
       "done": 833,
@@ -151,22 +151,22 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Compose-repair the candidate packet's public service, identity, total outcomes and terminal state while landing its evidence-value-authority dependency; fresh-review the twelfth promotion repair, then finish selectors, grades, Review and learner modules.",
+      "nextAction": "Compose-repair the candidate packet's public service, identity, total outcomes and terminal state; repair promotion's issuer-to-result authority as one immutable snapshot; land the evidence-value-authority/provider dependencies, then finish selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "The candidate-packet tenth repair was returned: its focused fixes survive, but the current checkpoint drops the public service/result/cache lifecycle, four retained identity fields, total outcomes/abstentions and terminal distinction. The spine cannot build from separate historical models.",
+        "summary": "The promotion twelfth repair was returned: its leaf fixes survive, but the public caller-path issuer binds no immutable inventory, two reads can tear, predecessor stores/results lose application authority, and empty generations pass. The spine remains 12/14.",
         "impact": "regressed",
         "evidence": [
-          "planning/evidence-foundation-ux/shared-candidate-packet-eleventh-fresh-independent-buildability-review-2026-09-05.md",
-          "tools/d2860-candidate-packet-eleventh-fresh-review/review.test.ts",
-          "rfc/shared-candidate-evidence-packet.md",
+          "planning/evidence-foundation-ux/semantic-collectors-promotion-thirteenth-fresh-independent-buildability-review-2026-09-05.md",
+          "tools/d2864-semantic-collectors-promotion-thirteenth-fresh-review/review.test.ts",
+          "rfc/semantic-collectors.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "shared-candidate-evidence-packet.md",
-            "digest": "sha256:18757817c63d199aabf8ecbdfe9002e361ba7bb5c976182bed393a59e3ea8bff"
+            "id": "semantic-collectors.md",
+            "digest": "sha256:854706a4501e65048816ad3dc3e08ba26db2bcbed6f04d6d6331ce936fa919e0"
           }
         ]
       },

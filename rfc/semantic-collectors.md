@@ -7,12 +7,13 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair's **twelfth author repair closes [[D2835]]–[[D2839]] at contract tier on
-  2026-09-05.** Registry opening now consumes an application-issued installed-inventory authority;
-  generation and nested declarations are exact; response/legal populations are unique and
-  set-equal; every response has one exact `/start/fen` support; and every response subject has one
-  durable record. `make semantic-collectors-promotion-twelfth-author-repair` retains the entire
-  predecessor chain and passes 5/5 repair groups plus strict TypeScript. Another genuinely fresh
+  promotion pair's **twelfth author repair was returned by a thirteenth fresh review on
+  [[D2864]]–[[D2868]] on 2026-09-05.** Its leaf grammar and population fixes hold, but the public
+  test issuer still converts a caller path into installation authority; that authority binds no
+  inventory bytes; registry construction joins two inventory reads; and the returned store,
+  collector and receipt remain predecessor authorities. Empty installed generations also pass the
+  parser. `make semantic-collectors-promotion-thirteenth-fresh-review` retains the entire
+  predecessor chain and passes 5/5 independent falsifiers. A bounded author repair, another fresh
   review and provider/value dependency landing still gate both held projections; no held projection
   implementation is authorized. The preceding author model claimed one
   asynchronous transaction owned recorded-first lookup, the exact
@@ -1564,6 +1565,17 @@ twelfth-review attacks, then passes 5/5 repair groups and strict TypeScript. Exa
 This is author contract evidence only; another genuinely fresh review and the provider/value
 dependencies remain mandatory before 12/14 can become 14/14.
 
+The same-day thirteenth fresh independent review returns the held pair on [[D2864]]–[[D2868]]. The
+same public module exports a caller-path issuer for the supposedly application-only authority, and
+the authority retains no expected inventory digest or bytes. Registry opening derives entries from
+one read, then publishes the predecessor registry's second-read digest and returns its store without
+an equality join. Collection and recorded-receipt lookup are the predecessor operations by identity,
+so the application registry disappears before evidence is asserted. Finally, set-equal empty
+response/legal populations pass the parser despite C18's non-vacuity promise. `make
+semantic-collectors-promotion-thirteenth-fresh-review` retains the complete predecessor chain and
+passes 5/5 fresh falsifiers. One current issuer→snapshot→store→receipt→result authority, another
+fresh review and the existing provider/value dependencies remain mandatory; the spine stays 12/14.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1602,6 +1614,11 @@ dependencies remain mandatory before 12/14 can become 14/14.
 | [[D2837]] | author-repaired: response/legal populations are unique, set-equal and completely file-validated |
 | [[D2838]] | author-repaired: each response requires exactly one `/start/fen` support with byte-equal pack value |
 | [[D2839]] | author-repaired: each response subject resolves to exactly one durable tablebase record |
+| [[D2864]] | returned: the public test issuer still converts any caller-selected path into accepted installation authority |
+| [[D2865]] | returned: the issued authority binds a path but no exact inventory digest, bytes or installed-generation identity |
+| [[D2866]] | returned: registry construction combines first-read entries with a second-read predecessor digest and store |
+| [[D2867]] | returned: the returned store, collector and receipt remain predecessor authorities and retain no application registry |
+| [[D2868]] | returned: an empty response/legal population satisfies the nominally non-vacuous installed-generation parser |
 | [[D2469]] | author-repaired: provider preflight/domain and provider-failure arms execute before the lazy success-only legal-map resolver |
 | [[D2470]] | author-repaired: one request, dependency interface, sealed recorded resolver and exact collector signature fix source precedence |
 | [[D2471]] | author-repaired: specialized assertion failure throws `EvidenceInvariantError`; only typed unavailable inputs abstain, and invalid recorded bytes never permit live fallback |
@@ -1643,6 +1660,15 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-05: thirteenth fresh independent review returned the held promotion pair on
+  [[D2864]]–[[D2868]]. The application-only issuer remains a public raw-path test helper; its
+  authority binds no inventory bytes; registry construction tears across two reads; the store and
+  result authority fall back to the predecessor; and an empty installed generation passes. `make
+  semantic-collectors-promotion-thirteenth-fresh-review` retains the complete chain and passes 5/5
+  fresh falsifiers. Exact receipt:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
+  A bounded author repair, another fresh review and provider/value dependency landing remain
+  mandatory; no held production id is authorized.
 - 2026-09-05: twelfth author repair closes [[D2835]]–[[D2839]] at contract tier. One
   application-issued installation authority, closed generation grammar, response/legal set
   equality, exact non-vacuous start-FEN support and unique durable subjects execute. `make

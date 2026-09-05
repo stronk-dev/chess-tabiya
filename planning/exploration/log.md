@@ -16460,3 +16460,21 @@ passes 4/4 falsifiers. Exact receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-eleventh-fresh-independent-buildability-review-2026-09-05.md`.
 One composed author repair, the value-authority factory dependency and another fresh review precede
 acceptance.
+
+## 2026-09-05 — semantic collectors promotion thirteenth fresh independent review
+
+**What landed:** returned the twelfth held-promotion repair on [[D2864]]–[[D2868]] with five
+executable attacks. No production collector, schema, pack, content, archive or protected-design
+byte changed.
+
+**What changed:** the five leaf grammar/population repairs survive, but application installation
+authority does not. A public helper converts a caller path into the accepted authority, the
+authority binds no inventory bytes, registry construction combines two inventory reads, and the
+returned store plus collector/receipt operations remain predecessor authorities. The nominally
+non-vacuous generation parser also admits empty response/legal populations.
+
+**Evidence/next:** `make semantic-collectors-promotion-thirteenth-fresh-review` retains the full
+chain and passes 5/5 falsifiers. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
+One current application issuer→immutable snapshot→store→receipt→result repair, another fresh review
+and the existing provider/value dependencies precede either held projection.
