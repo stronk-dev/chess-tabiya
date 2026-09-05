@@ -1,13 +1,12 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — fifth fresh independent review returned the fourth author repair on
-  [[D2753]]–[[D2761]] (2026-09-05). The promised claim-free checkpoint exports are incomplete; the
-  application census is local rather than derived from live consumers; caller-authored text,
-  delivery, circuit, lease and recovery objects can mint authority; the exact cache is unbounded;
-  and the cited gate was absent from ordinary verification. `make
-  provider-health-fifth-fresh-review` retains the full author chain and executes all nine returns.
-  Neither implementation checkpoint is authorized before another repair, fresh review and the
-  provider-protocol/exchange prerequisites.
+- **Status:** draft — fifth author repair completed 2026-09-05 on [[D2753]]–[[D2760]] and
+  self-audit [[D2762]]–[[D2764]]; fresh independent review required. Exact named checkpoint exports,
+  separate consumer declarations, renderer/exchange/registry seals, bounded exact cache, sealed
+  generation leases and durable opponent recovery execute under `make
+  provider-health-fifth-author-repair`, which retains the full prior chain. [[D2761]] is closed by
+  enrolling that current target in ordinary verification. Neither implementation checkpoint is
+  authorized before fresh review and the provider-protocol/exchange prerequisites.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -828,6 +827,34 @@ behavioral controls plus strict TypeScript. Exact receipt:
 `planning/provider-health-degradation/fourth-author-repair-2026-09-04.md`. This is author repair,
 not acceptance or implementation; another genuinely fresh independent review remains required.
 
+### Fifth author repair — exact checkpoint authority
+
+The 2026-09-05 repair makes the claim-free checkpoint one executable boundary rather than a list of
+promised names. It exports exact `ProviderRegistrySnapshot`, `ApplicationProviderOutcome`,
+`selectProfileAvailability` and `ProviderReleaseReceipt` authorities. Application operations compile
+with no caller population from a separate exact consumer declaration module; production replaces
+that author fixture with declarations imported by the live consumers, never a second obligations
+list. Every stage carries the provider-exchange request and sealed delivery/failure, and settlement
+joins operation, instance, generation and normalized request before deriving an outcome.
+
+Displayed speech text now begins at a registered F1 renderer and gains its identity only when the
+same item is recorded as displayed. The exact cache stores the sealed delivery as both value and
+origin, enforces same-subject keys, TTL, generation invalidation and a 512-entry LRU. Health state is
+registry-private and changes only from a sealed current-generation exchange result at safe
+monotonic time. Shared backoff consumes a sealed generation set derived from a registry snapshot;
+caller strings cannot clear an upstream block.
+
+Opponent recovery crosses a real SQLite transaction: failure resolves the already-committed learner
+ply, appends the failure event and recovery image atomically, and retry/change reload after restart.
+Idempotent replay joins run, action and operands rather than treating global key existence as
+success. Self-audit also binds release receipts to the issuing registry's exact current snapshot;
+stale and cross-registry snapshots fail.
+
+`make provider-health-fifth-author-repair` retains all previous author and fresh-review controls,
+passes 8/8 new behavioral groups plus strict TypeScript, and is enrolled in `verify-governance`.
+Exact receipt: `planning/provider-health-degradation/fifth-author-repair-2026-09-05.md`. This remains
+author contract work, not acceptance or implementation.
+
 ## Implementation plan
 
 **Staged dependency rule ([[D2364]]).** This RFC may remain `implementing` across two checked
@@ -1095,6 +1122,9 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 | [[D2759]] | old-generation group lease blocks a new generation | return: generation change and parsed lease authority are incomplete |
 | [[D2760]] | JSON-round-tripped opponent state authorizes recovery | return: no storage/event/committed-ply authority participates |
 | [[D2761]] | cited author gate is absent from ordinary verification | repaired in review: the independent review target is now enrolled in `verify-governance` |
+| [[D2762]] | stale/cross-registry snapshot mints a release receipt | current issuing registry revision/generation image is required |
+| [[D2763]] | caller generation string clears shared backoff | coordinator consumes only a registry-snapshot-derived sealed generation set |
+| [[D2764]] | cross-run idempotency key skips opponent recovery | durable replay joins exact run/action/operands before returning success |
 
 `make provider-health-fourth-author-repair` retains the previous 17 author controls, executes 6/6
 new able-to-fail behavioral groups plus strict TypeScript, and remains an author contract rather
@@ -1137,6 +1167,11 @@ than implementation or review.
   health, lease and opponent-recovery authority; the cache is unbounded; and its cited target was
   outside ordinary verification. Exact review:
   `planning/provider-health-degradation/fifth-fresh-independent-buildability-review-2026-09-05.md`.
+- 2026-09-05 — fifth author repair closed [[D2753]]–[[D2760]] and self-audit [[D2762]]–[[D2764]]
+  at contract tier. The exact named checkpoint exports are present; separate consumer declarations,
+  sealed exchange/render/health/generation subjects, a 512-entry exact LRU and restart-stable
+  opponent recovery execute. Release receipt and recovery idempotency cross-subject bypasses found
+  during the repair are negative fixtures rather than deferred debt. Fresh review remains required.
 - 2026-08-27 — independent buildability review returned the first draft on [[D1910]]–[[D1915]].
   Exact return: `planning/provider-health-degradation/independent-buildability-review-2026-08-27.md`.
 

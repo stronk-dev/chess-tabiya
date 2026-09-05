@@ -1483,16 +1483,15 @@ migration, live degradation health, safe profiles, runtime content allow-list, b
 update/rollback, SBOM/notices/signatures, model/runtime rights, and complete multi-architecture
 proof.
 
-The 2026-09-05 fifth fresh provider-health review returned the fourth repair on
-[[D2753]]–[[D2761]]. The claim-free checkpoint does not export its promised exact snapshot,
-outcome, selector and release authorities; its application closure is two local lists rather than
-a live consumer join; structural callers mint displayed text, provider success, health, lease and
-opponent-recovery authority; and the exact cache has no 512-entry LRU. `make
-provider-health-fifth-fresh-review` retains the author chain and executes all nine reproductions.
-The review also closes the CI visibility defect by enrolling its current target in ordinary
-governance verification. Both implementation checkpoints remain held for an author repair, fresh
-review and the provider-protocol/exchange prerequisites; receipt:
-`planning/provider-health-degradation/fifth-fresh-independent-buildability-review-2026-09-05.md`.
+The 2026-09-05 fifth provider-health author repair closes [[D2753]]–[[D2760]] and self-audit
+[[D2762]]–[[D2764]] at contract tier. Exact named checkpoint exports, separate consumer
+declarations, sealed renderer/exchange/registry/generation authorities, a 512-entry exact cache and
+SQLite opponent recovery now execute. The repair caught stale/cross-registry release receipts,
+caller-cleared backoff and cross-run idempotency reuse before publication. `make
+provider-health-fifth-author-repair` retains the complete chain, passes 8/8 new groups plus strict
+TypeScript, and remains enrolled in ordinary verification via [[D2761]]. Both implementation
+checkpoints remain held for fresh review and the provider-protocol/exchange prerequisites; receipt:
+`planning/provider-health-degradation/fifth-author-repair-2026-09-05.md`.
 
 The 2026-09-02 [[D2503]] repair keeps real-content truth while removing repeated whole-corpus work
 from its own test file: one 92-pack census supplies both declarations and the no-declarations view;

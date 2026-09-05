@@ -15846,3 +15846,22 @@ outcome, selector and release symbols exist.
 
 **Next:** repair [[D2753]]–[[D2760]] at contract tier, rerun a genuinely fresh review, then let bot
 policy consume the shared production symbols rather than a private projection.
+
+## 2026-09-05 — Provider health fifth author repair
+
+**What landed:** a bounded contract repair for [[D2753]]–[[D2760]] plus self-audit [[D2762]]–
+[[D2764]]. No production provider, route, client, storage, run-schema, migration, content, archive or
+protected-design byte changed.
+
+**What changed:** exact named checkpoint exports now share sealed registry authority; separate
+consumer declarations feed the application compiler; exchange/render subjects cannot be recreated
+structurally; cache and shared-backoff bounds execute; and opponent recovery resolves the committed
+learner ply inside a restart-stable SQLite transaction. Stale release snapshots, caller-cleared
+backoff and cross-run idempotency were found and closed during the repair.
+
+**What is blocked:** the RFC remains draft and neither production checkpoint is authorized before a
+genuinely fresh review and the provider-protocol/exchange prerequisites.
+
+**Next:** independently attack the fifth repair's separate declaration authority, registry/release
+ownership, cache eviction, generation transitions and SQLite replay; only then unblock bot-policy's
+shared-health dependency.
