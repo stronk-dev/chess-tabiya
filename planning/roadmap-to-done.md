@@ -1405,6 +1405,16 @@ the advertised second-author target red 4/5 against the live module contract and
 ordinary verification. `make review-evidence-second-fresh-review` retains the original six controls
 and passes 8/8 new falsifiers. Full Review remains contract-blocked rather than implementation-ready.
 
+The 2026-09-05 third author repair closes those eight executable seams without claiming a Review
+surface. Deep prefix and packet authorities reject equal-byte forgeries; exact path-node and closed
+nine-family populations drive the folds; concurrent readers share one terminal-result promise;
+and the complete source-plan/compiler/assertion plus component→wire→parser→public presentation path
+execute with their crossings. The live module execution image carries the callable ABI, and
+`verify-governance` retains `make review-evidence-third-author-repair`, so the repaired contract
+cannot silently become red outside CI again. Fresh independent review and the named foundation
+dependencies still precede acceptance and production. Receipt:
+`planning/evidence-foundation-ux/review-evidence-compiler-third-author-repair-2026-09-05.md`.
+
 **1.0 exit:** native, bot, imported, social and campaign games compile to one Review Map: opening
 and phase arc; navigable move timeline; bounded grounded moments; separate grade, human rarity,
 theory, semantic change and exact endgame facts; correct learner-side result; decided-position

@@ -1,12 +1,12 @@
 # RFC: Review evidence compiler
 
-- **Status:** draft — RETURNED by second fresh independent review on [[D2685]], [[D2686]],
-  [[D2687]], [[D2688]], [[D2689]], [[D2690]], [[D2691]] and [[D2692]]. The revised prose names the
-  intended authority chain, but the author model leaves aggregate/prefix seals forgeable or
-  mutable, folds no exact node/family populations, exposes reservation state without a concurrent
-  completion path, and regexes source/presentation integration. Its advertised target is red at
-  HEAD and absent from `make verify`. No implementation is authorised before repair and another
-  fresh review.
+- **Status:** draft — **third author repair completed 2026-09-05 on [[D2685]]–[[D2692]];
+  another genuinely fresh independent review is required.** One executable model now exercises
+  deeply sealed prefix and packet authorities, exact path/family populations, coalesced attempt
+  settlement, the complete source plan/compiler/assertion boundary and sealed presentation wire
+  termination. The live module execution image carries the callable ABI and ordinary verification
+  retains the repair target. No production implementation is authorised before fresh review and
+  the declared dependencies land.
 - **Author:** codex, on the D717 evidence-foundation routing and the completed Wave-C C4 research
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` Review/Analyze surfaces;
@@ -549,13 +549,17 @@ application-lifetime `ReviewAttemptOutcomeStore` described below. For each autho
 
 `ReviewAttemptOutcomeStore` owns only fixed-size scalar receipts, never provider payloads or prose.
 Its key is the canonical provider request digest plus requested provider/version/bound; the value is
-one of `reserved`, `retryable_failure`, `non_retryable_failure`, `retry_exhausted` or
+one of `retryable_failure`, `non_retryable_failure`, `retry_exhausted` or
 `succeeded_delivery_digest`, with attempt count, terminal timestamp and actual provider generation
-when a completed exchange supplies it. `reserve(requestKey)` runs synchronously **before**
-`ProviderExchangeScheduler.get`: an existing identity returns its retained state, an unseen
-identity claims one slot, and a full store returns `attempt_history_capacity` without a provider
-call. A cancelled reservation with zero started attempts may be released; a started cancellation or
-retryable failure retains its attempt count and may resume only within `maxAttemptsPerRequest`.
+when a completed exchange supplies it. `acquire(requestKey)` runs synchronously **before**
+`ProviderExchangeScheduler.get` and returns exactly one of: an owner handle with the private
+one-shot `settle(outcome)` operation and a completion promise; a subscriber handle carrying that
+same promise for an already-pending identity; an existing handle whose promise resolves to the
+retained terminal outcome; or `attempt_history_capacity` for an unseen identity when the store is
+full. Pending reservation state is private to the store and is never returned as an outcome. Only
+the owner calls the provider and settles; every concurrent caller observes the same sealed terminal
+result. A cancelled reservation with zero started attempts may be released; a started cancellation
+or retryable failure retains its attempt count and may resume only within `maxAttemptsPerRequest`.
 Success retains its delivery digest until the durable evidence attachment commits, then releases
 the slot because that durable delivery becomes the reconstruction authority. Non-retryable failure
 and retry exhaustion remain terminal and retained.
@@ -722,6 +726,43 @@ Exact review and reproducer:
 `make review-evidence-second-fresh-review`. A bounded author repair and another genuinely fresh
 review precede production.
 
+## Third author repair (2026-09-05)
+
+The eight returned seams now execute together under one maintained contract target:
+
+1. [[D2685]]/[[D2686]] — `authorizeReviewRecordedPrefix` copies and recursively freezes every
+   retained field; its assertion rechecks the private issuer, exact keys, digest and deep
+   immutability. `createReviewEvidencePacket` retains that exact subject under a separate private
+   aggregate authority. Literal, spread and JSON-rebuilt subjects or packets fail even when their
+   visible bytes and digests are equal.
+2. [[D2687]]/[[D2688]] — family folding consumes the authorized prefix's exact unique path-node
+   population, rejects missing/duplicate/foreign nodes, and completion consumes a set-equal record
+   of all nine `ReviewSourceFamily` members. Empty and partial family records cannot report settled
+   or healthy.
+3. [[D2689]] — attempt acquisition returns an owner or a subscriber sharing the same completion
+   promise. Only the owner settles it; concurrent readers receive the same terminal outcome,
+   retained terminals remain idempotent, and capacity refuses new work without exposing an
+   internal `reserved` value. The predecessor's `reserve(requestKey)` did run before provider work,
+   but that ordering never gave its second caller a completion path; `acquire` replaces it rather
+   than treating the old check as sufficient.
+4. [[D2690]] — the target invokes an adapter-owned component constructor, process-seal assertion,
+   serializer, closed receipt parser, story parser and public projection. Spread components,
+   unknown receipt keys, component substitution, crossed node receipts and unparsed public input
+   all fail.
+5. [[D2691]] — `reviewPacketSourcePlan`, every private-sealed adapter result,
+   `compileReviewEvidence` and `assertReviewEvidencePacket` execute. Missing, duplicate, extra,
+   foreign-node and equal-byte/wrong-authority source results fail set equality.
+6. [[D2692]] — `review_evidence_packet@1` in the module execution image now publishes
+   `ReviewEvidenceInput`, `compileReviewEvidence(input)`,
+   `assertReviewEvidencePacket(value)` and the private aggregate seal while retaining its honest
+   dependency block. `make verify` includes `review-evidence-third-author-repair`, so the contract
+   cannot silently drift red again.
+
+`make review-evidence-third-author-repair` retains the original and second-author controls and
+passes all six composed repair groups. Exact receipt:
+`planning/evidence-foundation-ux/review-evidence-compiler-third-author-repair-2026-09-05.md`.
+Another genuinely fresh review must attack this composition before acceptance or production.
+
 ## 8. Acceptance criteria
 
 1. **Typed shared delivery:** White/Black cp and mate fixtures compile into the one
@@ -833,6 +874,11 @@ The existing Story order is preserved only as a labelled compatibility conventio
 
 ## Changelog
 
+- 2026-09-05 third author repair ([[D2685]]–[[D2692]]): executable deep prefix/packet authority,
+  exact node/family folds, single-flight terminal settlement, source-plan compilation and sealed
+  presentation termination replace the prior prose/shallow models. The live module contract is
+  reconciled and the maintained target is enrolled in ordinary verification. Exact receipt:
+  `planning/evidence-foundation-ux/review-evidence-compiler-third-author-repair-2026-09-05.md`.
 - 2026-09-04 second fresh independent review: returned on [[D2685]], [[D2686]], [[D2687]],
   [[D2688]], [[D2689]], [[D2690]], [[D2691]] and [[D2692]]. Aggregate/prefix authority, exact fold
   populations, concurrent attempt settlement and real source/presentation execution remain

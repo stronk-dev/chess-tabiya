@@ -16318,3 +16318,23 @@ cannot begin before Gate F.
 drift. The recommended owner ruling permits foundation/schema migration before Gate F while holding
 all authored and claim-binding content waves; until that boundary is ruled, the content hold stays
 intact and other foundation work continues.
+
+## 2026-09-05 — Review evidence compiler third author repair
+
+**What landed:** repaired [[D2685]]–[[D2692]] at contract tier. The executable author model now
+constructs and asserts deeply sealed recorded-prefix and aggregate packet authorities; folds exact
+path-node and nine-family populations; coalesces concurrent attempt completion; executes the exact
+source plan/compiler/assertion; and terminates through the sealed component, wire, parser and public
+projection path. No production Review, Story, provider, client, schema, migration or content byte
+changed.
+
+**What changed:** `review_evidence_packet@1` now carries its callable input/assertion and honest
+private aggregate seal in the live module execution image while remaining dependency-blocked.
+`review-evidence-third-author-repair` is enrolled in `verify-governance`, so ordinary verification
+can no longer pass while this maintained contract is red.
+
+**Evidence/next:** `make review-evidence-third-author-repair` passes 6/6 original, 5/5 retained and
+6/6 composed repair groups. Exact receipt:
+`planning/evidence-foundation-ux/review-evidence-compiler-third-author-repair-2026-09-05.md`.
+Another genuinely fresh independent review plus the declared recorded-path, provider, value,
+presentation and module dependencies still gate acceptance and production.

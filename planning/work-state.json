@@ -21538,7 +21538,7 @@
       "id": "D2685",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1dc49853296d032e3185566841c9683521de1ddb563c85e74308ef4595f682b8",
+      "sourceDigest": "sha256:e7ade759fffcf95c88843ed4201ffb98b3c7efbac20cb8a5e4123470741ff8dc",
       "uxItems": [],
       "owner": "review-and-return",
       "blocker": "rfc:review-evidence-compiler.md"
@@ -21547,7 +21547,7 @@
       "id": "D2686",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a610abf45eed57db29f03e1e9c3e6a23d8c5587e6e131d3d1aaba6ac68745fd1",
+      "sourceDigest": "sha256:ab2ad44d7f3fa1bba7ef0b2ee43367200ccb4a8c93117654966187c1afb39d97",
       "uxItems": [],
       "owner": "review-and-return",
       "blocker": "rfc:review-evidence-compiler.md"
@@ -21556,7 +21556,7 @@
       "id": "D2687",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2691832a89bcf5d7707f816b5ecc25adc815b1db70ce323bb1b7fa9909510653",
+      "sourceDigest": "sha256:5779d3d2693ee46dae1c080d036e447116df13c6abb6068c43b208732d369c56",
       "uxItems": [],
       "owner": "review-and-return",
       "blocker": "rfc:review-evidence-compiler.md"
@@ -21565,7 +21565,7 @@
       "id": "D2688",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:db206219129553907dbb26dd4d4a71dc0353363011855dc251f9a8cb98728ccb",
+      "sourceDigest": "sha256:d9c0692126c6da6bc2a29b9d04ee0564cff4a9b808d6ebfaa2a646b814cc7675",
       "uxItems": [],
       "owner": "review-and-return",
       "blocker": "rfc:review-evidence-compiler.md"
@@ -21574,7 +21574,7 @@
       "id": "D2689",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ec987b01b5ccc81c018edfa12776b2c093b402b740407a9d423a97ca21edb84c",
+      "sourceDigest": "sha256:1046a93da53da0865229915f60e7e9444d619652499dcfb70a73cfd54b0a9760",
       "uxItems": [],
       "owner": "review-and-return",
       "blocker": "rfc:review-evidence-compiler.md"
@@ -21583,7 +21583,7 @@
       "id": "D2690",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e5e535fdf99ec868f856ef99c973f6d01d16b9776894611b23789a8830c14279",
+      "sourceDigest": "sha256:088418ee622ab92bf0205dcf06e22ae45c31e64b0a49772b800040139ae3bde9",
       "uxItems": [],
       "owner": "review-and-return",
       "blocker": "rfc:review-evidence-compiler.md"
@@ -21592,7 +21592,7 @@
       "id": "D2691",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:81eec6c8e4dd44ab1f935411fcac58661013abb340700fad93273746b5e0ab14",
+      "sourceDigest": "sha256:f998dfad2bd4e82fc6f321c9635382e6005fe335e28e70189d4bfcd67140932c",
       "uxItems": [],
       "owner": "review-and-return",
       "blocker": "rfc:review-evidence-compiler.md"
@@ -21601,7 +21601,7 @@
       "id": "D2692",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:6a09f0ebd60cb0c8b911d2e20221478ce738ed54a4a01fc9ee36b7ca431a997c",
+      "sourceDigest": "sha256:9830e13260b9c8f53cca97467be9e6e1abd26001d1586a4cb8856829880e89cb",
       "uxItems": [],
       "owner": "review-and-return",
       "blocker": "rfc:review-evidence-compiler.md"
