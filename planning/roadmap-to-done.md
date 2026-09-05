@@ -241,6 +241,15 @@ groups. Pack schema 0.30, evidence-job storage and the held corpus remain unauth
 another genuinely fresh review. Receipt:
 `planning/pack-capability-contract/fourteenth-author-repair-2026-09-05.md`.
 
+The same-day fifteenth fresh independent review returns that repair on [[D2771]]–[[D2777]]. No
+complete state-specific durable-row parser exists; expired leases settle; structural caller values
+and crossed objective proposals become evidence; consumed replay ignores impossible row residue;
+the current run plus receipt can be rewritten together; and terminal clocks are the literal `now`.
+`make pack-capability-fifteenth-fresh-review` retains the entire chain and passes 6/6 falsifier
+groups. Pack schema 0.30, evidence-job storage and the held corpus remain unauthorized pending a
+bounded repair and another fresh review. Receipt:
+`planning/pack-capability-contract/fifteenth-fresh-independent-buildability-review-2026-09-05.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

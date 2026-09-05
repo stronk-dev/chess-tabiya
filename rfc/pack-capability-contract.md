@@ -1,11 +1,11 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **fourteenth author repair complete for [[D2742]]–[[D2747]]; another genuinely
-  fresh independent review is required.** One database authority now issues every lease; settlement
-  joins the complete provider result to the exact leased request; objective success is total; and
-  consumed/batch replay reload and validate their complete durable subjects. `make
-  pack-capability-fourteenth-author-repair` retains the full chain and passes 6/6 new groups. This
-  is author evidence only: no implementation is authorised and D560 stays whole.
+- **Status:** draft — **RETURNED by the fifteenth fresh independent review on [[D2771]]–[[D2777]].**
+  The durable row has no exhaustive state parser; expired leases settle; structural provider values
+  and crossed objective transitions apply; replay ignores state residue and accepts a coordinated
+  history rewrite; terminal clocks persist the literal `now`. `make
+  pack-capability-fifteenth-fresh-review` retains the full chain and reproduces 6/6 groups. No
+  implementation is authorised and D560 stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -2337,6 +2337,30 @@ and passes 6/6 new repair groups. Exact receipt:
 `planning/pack-capability-contract/fourteenth-author-repair-2026-09-05.md`. This remains author
 evidence; another genuinely fresh review gates acceptance, implementation and the held corpus plan.
 
+## Fifteenth fresh independent return (2026-09-05)
+
+The fresh pass returns the repair on [[D2771]], [[D2772]], [[D2773]], [[D2774]], [[D2775]],
+[[D2776]] and [[D2777]]. Every operation selects a different
+hand-picked subset of `evidence_jobs`; no closed state-specific parser proves which lease, retry,
+result, clock and receipt fields are required or forbidden. A consumed row therefore replays after
+its result sequence and terminal clocks are erased and a lease is resurrected. A lease expired in
+2000 also loads and settles because expiry is never selected or compared with an observed clock.
+
+The claimed complete provider result remains a structural caller object. Arbitrary `values`, a
+crossed actual identity, attacker endpoint and unrelated response digest settle as
+`engine_validated`; the digest is not tied to response bytes or a sealed provider delivery. An
+objective request from `active` accepts a `failed`→`achieved` proposal plus an unrelated evidence
+reference because the join checks only that the expected reference occurs somewhere in the list.
+
+Finally, the receipt is joined only to the mutable current image: rewriting both the run revision
+and receipt from 4→5 to 899→900 passes replay without a retained before-image. Settlement and
+consumption persist the literal word `now`, so their clocks establish no ordering or lease
+validity. `make pack-capability-fifteenth-fresh-review` retains the complete predecessor chain and
+passes 6/6 executable falsifier groups. Exact receipt:
+`planning/pack-capability-contract/fifteenth-fresh-independent-buildability-review-2026-09-05.md`.
+One bounded author repair must compose the real provider-exchange authority, an exhaustive durable
+row parser, internally observed clock and immutable transition journal before another fresh review.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -2556,6 +2580,18 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     batch replay loads its authoritative run image internally. Cross-database leases, crossed
     eval/tablebase results, malformed acquisition identity/time, corrupted consumed columns,
     floating receipt revisions and caller-supplied snapshots each fail independently.
+29. **Every durable transition is complete, live and source-authenticated ([[D2771]], [[D2772]],
+    [[D2773]], [[D2774]], [[D2775]], [[D2776]], [[D2777]]).**
+    One exhaustive state-specific parser owns every `evidence_jobs` read and rejects missing or
+    forbidden lease/retry/result/clock/receipt columns. Lease acquisition and settlement compare a
+    canonical internally observed transaction instant with the stored expiry. Success consumes an
+    exact sealed provider delivery through its kind-specific value parser and binds response bytes,
+    provider identity, endpoint, request and generation; objective proposals equal the requested
+    from-state and authorized evidence set exactly. Application writes an immutable before/after
+    transition record whose digest cannot be preserved by jointly rewriting current image and
+    receipt. Terminal clocks are observed canonical instants, never placeholders. Independent
+    fixtures fail expired leases, invented values, crossed identities/objectives, partial terminal
+    rows, coordinated revision rewrites and literal clocks.
 
 ## Discharges
 
@@ -2630,6 +2666,11 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-09-05 (**fifteenth fresh independent return**): returned on [[D2771]]–[[D2777]]. The durable
+  row parser is partial; expired leases settle; provider and objective evidence can be forged or
+  crossed; consumed replay ignores impossible residue; current image plus receipt can be rewritten
+  together; and terminal clocks are literal placeholders. `make
+  pack-capability-fifteenth-fresh-review` retains the full chain and reproduces 6/6 groups.
 - 2026-09-05 (**[[D2742]]–[[D2747]] fourteenth author repair**): bound run/job leases to one exact
   application database; joined complete provider settlement to the stored leased request; made the
   objective-result arm total; and made consumed/batch replay reload and validate their complete

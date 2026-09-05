@@ -804,7 +804,7 @@ pack-capability-eleventh-author-repair:
 pack-capability-eleventh-fresh-review:
 	node --test tools/d2587-pack-capability-eleventh-fresh-review/contract.test.mjs
 
-.PHONY: pack-capability-twelfth-author-repair pack-capability-twelfth-fresh-review pack-capability-thirteenth-author-repair pack-capability-thirteenth-fresh-review pack-capability-fourteenth-author-repair
+.PHONY: pack-capability-twelfth-author-repair pack-capability-twelfth-fresh-review pack-capability-thirteenth-author-repair pack-capability-thirteenth-fresh-review pack-capability-fourteenth-author-repair pack-capability-fifteenth-fresh-review
 pack-capability-twelfth-author-repair: pack-capability-eleventh-author-repair
 	node --test tools/d2587-pack-capability-twelfth-author-repair/contract.test.mjs
 
@@ -819,6 +819,9 @@ pack-capability-thirteenth-fresh-review: pack-capability-thirteenth-author-repai
 
 pack-capability-fourteenth-author-repair: pack-capability-thirteenth-fresh-review
 	node --test tools/d2742-pack-capability-fourteenth-author-repair/contract.test.mjs
+
+pack-capability-fifteenth-fresh-review: pack-capability-fourteenth-author-repair
+	node --test tools/d2771-pack-capability-fifteenth-fresh-review/review.test.mjs
 
 .PHONY: shared-resource-bootstrap-seventh-fresh-review shared-resource-bootstrap-seventh-author-repair shared-resource-bootstrap-eighth-fresh-review shared-resource-bootstrap-eighth-author-repair shared-resource-bootstrap-ninth-fresh-review shared-resource-bootstrap-ninth-author-repair shared-resource-bootstrap-tenth-fresh-review shared-resource-bootstrap-tenth-author-repair
 shared-resource-bootstrap-seventh-fresh-review:
@@ -1050,7 +1053,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-eighth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-fourteenth-author-repair semantic-collectors-promotion-tenth-author-repair provider-health-fifth-author-repair test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-eighth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-fifteenth-fresh-review semantic-collectors-promotion-tenth-author-repair provider-health-fifth-author-repair test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 
