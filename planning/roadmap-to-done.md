@@ -214,6 +214,24 @@ shared-resource-bootstrap-eleventh-author-repair` retains fifty-six predecessor 
 7/7 new repair groups. Another genuinely fresh review still gates acceptance and production.
 Receipt: `planning/shared-resource-register-bootstrap/eleventh-author-repair-2026-09-05.md`.
 
+The twelfth fresh independent review returns that repair on [[D2828]]–[[D2834]]. Relation checks
+identify only a containing declaration and spelling, allowing one valid property edge to mask an
+unresolved sibling site and an alias to hide global `eval`. Construct-signature interfaces lose
+overloads while nested constructors are attached to the wrong call; incompatible caller descriptors
+are sealed; and locale collation enters both graph and dependency-artifact identity. `make
+shared-resource-bootstrap-twelfth-fresh-review` retains the predecessor chain and passes seven new
+falsifiers plus one direct unresolved-call control. The foundation critical path remains a bounded
+site-identity repair and another fresh review; implementation is unauthorized. Receipt:
+`planning/shared-resource-register-bootstrap/twelfth-fresh-independent-buildability-review-2026-09-05.md`.
+
+The same-day twelfth author repair closes those seven bounded seams. Compiler relations retain
+exact syntax-site paths; global `eval` is refused through value/signature authority; construct
+overloads come from the exact call kind; only catalogue-issued descriptors enter projection; and a
+single canonical byte comparator owns graph and artifact ordering. `make
+shared-resource-bootstrap-twelfth-author-repair` retains the predecessor chain and passes 10/10
+repair/self-audit groups. Another genuinely fresh review still gates acceptance and production.
+Receipt: `planning/shared-resource-register-bootstrap/twelfth-author-repair-2026-09-05.md`.
+
 The same-day twelfth `pack-capability-contract` author repair closes [[D2587]]–[[D2592]] at contract
 tier without claiming production. One transaction-owned before/after run result derives the exact
 core/objective/recorded-guard journal suffix and receipt; the complete nested objective request is

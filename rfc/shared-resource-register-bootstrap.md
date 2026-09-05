@@ -1,10 +1,10 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **eleventh author repair completed on [[D2795]]–[[D2801]]; another genuinely
-  fresh independent review is required.** Exact declaration-artifact identity, fail-closed
-  member/`eval` resolution, constructor/local-call representation and compiler-issued sealed graph
-  authority now execute. `make shared-resource-bootstrap-eleventh-author-repair` retains fifty-six
-  earlier controls and passes 7/7 new repair groups. No implementation is authorized.
+- **Status:** draft — **twelfth author repair completed on [[D2828]]–[[D2834]]; another genuinely
+  fresh independent review is required.** Exact compiler syntax sites, alias-safe `eval` refusal,
+  compiler-selected construct overloads, catalogue-issued descriptor authority and canonical byte
+  ordering now execute. `make shared-resource-bootstrap-twelfth-author-repair` retains the complete
+  predecessor chain and passes 10/10 repair/self-audit groups. No implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -405,6 +405,7 @@ The closed adapter set is:
    interface ContractEdgeV1 {
      readonly from: string;
      readonly to: string;
+     readonly sitePath: readonly number[];
      readonly kind: "type_reference" | "value_reference" | "property_reference" | "call" |
        "construct" | "tag" | "extends" | "implements" | "import" | "re_export";
      readonly exportPath: readonly string[];
@@ -479,12 +480,19 @@ The closed adapter set is:
    declarations, with a `re_export` edge to the target. Migration roots likewise store their exact
    non-empty `nodes` set, derived from the already-resolved unique sequence member and never
    reconstructed as an undeclared selector. Roots sort by canonical bytes and are unique; nodes sort by `id`;
-   edges sort by the canonical bytes of the complete edge and exact duplicate edges collapse. Every
+   `sitePath` is the zero-based child-index path from the retained declaration root to the exact
+   compiler relation node, using the same trivia-free child order as `SyntaxTreeV1`. It is
+   non-empty for expression relations and distinguishes repeated equal-looking accesses; no edge
+   at another site, declaration or spelling can discharge it. Edges sort by the canonical bytes of
+   the complete edge and only exact same-site duplicates collapse. Every
    root `nodes` member must name a retained node, and every retained declaration of the resolved root
    symbol must appear exactly once. Every edge endpoint must name a retained node. Repository
    edges have `resolvedSignature: null` and
    empty overloads unless the edge is call/construct/tag; those three retain the compiler-selected
-   signature and the complete public overload set. This deliberately treats a local/import alias
+   signature and the complete public overload set selected with `SignatureKind.Call` or
+   `SignatureKind.Construct` as appropriate. Global `eval` is refused when either the exact value
+   relation or selected signature reaches the TypeScript-library intrinsic, including aliases and
+   `.call`; a repository-local method with the same spelling remains legal. This deliberately treats a local/import alias
    rename as a semantic change—the adapter promises deterministic complete coverage, not equivalence
    proving ([[D2538]], [[D2540]]).
 
@@ -948,6 +956,23 @@ and passes 7/7 new falsifiers. Exact receipt:
 `planning/shared-resource-register-bootstrap/eleventh-fresh-independent-buildability-review-2026-09-05.md`.
 No production implementation is authorized until all seven are repaired and freshly reviewed.
 
+### Twelfth author repair (2026-09-05)
+
+The bounded repair closes all seven returns at contract tier. Every retained relation now carries
+the exact trivia-free compiler syntax path that produced it; repeated equal-looking accesses remain
+distinct and an unresolved site cannot borrow another edge. The compiler-selected signature and
+value relations refuse direct, aliased and `.call` uses of global `eval`, while a local same-name
+method remains representable. Call and construct overloads use their exact signature kinds, so
+interface construct signatures remain complete and nested class constructors cannot cross.
+
+The projector accepts only the exact descriptor object issued by the validated catalogue compiler;
+plain, spread and incompatible descriptors fail. One UTF-8 byte comparator orders graph edges,
+declaration-artifact paths and other canonical string sets. `make
+shared-resource-bootstrap-twelfth-author-repair` retains the complete predecessor chain and passes
+all seven repairs plus three direct/self-audit controls (10/10). This remains author evidence only;
+another genuinely fresh independent review still gates acceptance and production. Receipt:
+`planning/shared-resource-register-bootstrap/twelfth-author-repair-2026-09-05.md`.
+
 ### Eleventh author repair (2026-09-05)
 
 The bounded repair closes all seven returns at contract tier. Every non-repository declaration is
@@ -964,6 +989,22 @@ shared-resource-bootstrap-eleventh-author-repair` retains all fifty-six predeces
 passes 7/7 new repair groups. This remains author evidence only; another genuinely fresh review
 still gates acceptance and production. Receipt:
 `planning/shared-resource-register-bootstrap/eleventh-author-repair-2026-09-05.md`.
+
+### Twelfth fresh independent return (2026-09-05)
+
+The next independent pass returns the projector on [[D2828]]–[[D2834]]. Property resolution is
+bound only to a containing declaration and member spelling, so one legitimate edge masks a separate
+unresolved `any` site. Aliasing the global `eval` intrinsic also bypasses the direct target check.
+Constructor recovery collapses interface construct overloads to one selected signature and sweeps
+nested class constructors into an unrelated outer call.
+
+The public projector accepts an incompatible unvalidated descriptor, while both final edge order
+and dependency-artifact order use locale collation instead of the declared canonical byte order.
+`make shared-resource-bootstrap-twelfth-fresh-review` retains the complete predecessor chain and
+passes seven new falsifiers plus the positive control proving a direct unresolved `any` call remains
+closed. Exact receipt:
+`planning/shared-resource-register-bootstrap/twelfth-fresh-independent-buildability-review-2026-09-05.md`.
+No production implementation is authorized until all seven are repaired and freshly reviewed.
 
 ## Acceptance criteria
 
@@ -1065,6 +1106,19 @@ still gates acceptance and production. Receipt:
     assertion.
 38. [[D2801]] Final enriched and compatibility graph images are independently canonicalized, and
     an ordinary repository-local call remains representable.
+39. [[D2828]] Every relation edge carries its exact compiler syntax-site path; two equal-looking
+    occurrences remain distinct and no resolved sibling can mask an unresolved `any` member.
+40. [[D2829]] Direct, aliased and `.call` access to the compiler-resolved global `eval` intrinsic
+    fails, while a repository-local method with the same spelling remains representable.
+41. [[D2830]] Construct edges use the exact target type's complete construct-signature set; a
+    two-overload construct interface retains both arms.
+42. [[D2831]] The public projector accepts only an exact descriptor issued by complete catalogue
+    validation; literals, spreads, copies and incompatible descriptors fail.
+43. [[D2832]] Case-distinct valid call graphs sort by the one canonical byte comparator and remain
+    representable.
+44. [[D2833]] Nested class constructors never enter the overload set of an outer construction.
+45. [[D2834]] Dependency-artifact paths are ordered by the same canonical UTF-8 byte comparator
+    before their source digest is computed.
 
 ## Discharges
 
@@ -1084,6 +1138,19 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-05: [[D2828]]–[[D2834]] twelfth author repair. Compiler relations retain exact syntax
+  sites; global `eval` is alias-safe; construct overloads come from the exact signature kind;
+  catalogue-issued descriptor authority is mandatory; and one canonical byte comparator owns graph
+  and artifact order. `make shared-resource-bootstrap-twelfth-author-repair` retains the predecessor
+  chain and passes 10/10 repair/self-audit groups. Another fresh review remains mandatory; receipt:
+  `planning/shared-resource-register-bootstrap/twelfth-author-repair-2026-09-05.md`.
+- 2026-09-05: returned by twelfth fresh independent buildability review on
+  [[D2828]]–[[D2834]]. Relation validation lacks exact syntax-site identity; aliased `eval`, crossed
+  constructor overloads, unvalidated descriptors and locale-dependent ordering survive. `make
+  shared-resource-bootstrap-twelfth-fresh-review` retains the predecessor chain and passes seven
+  new falsifiers plus one direct-call control. Another author repair and fresh review remain
+  mandatory; no implementation is authorized. Receipt:
+  `planning/shared-resource-register-bootstrap/twelfth-fresh-independent-buildability-review-2026-09-05.md`.
 - 2026-09-05: [[D2701]]–[[D2708]] tenth author repair. Duplicate config keys fail; external
   declarations carry exact syntax identity; origin/root/edge invariants are discriminator-exact;
   and unresolved calls, dynamic imports and broad index lookups fail closed. `make

@@ -16129,3 +16129,37 @@ Change parses policy and derives both resulting digests; callers cannot write th
 fresh attacks, then passes 13/13 repair groups plus strict TypeScript. Exact receipt:
 `planning/provider-health-degradation/sixth-author-repair-2026-09-05.md`. Another genuinely fresh
 review and provider protocol/exchange still gate both implementation checkpoints.
+
+## 2026-09-05 — shared-resource bootstrap twelfth fresh independent review
+
+**What landed:** returned the eleventh shared-resource bootstrap author repair on
+[[D2828]]–[[D2834]] with seven executable attacks plus one retained direct-call control. No
+catalogue, checker, register, provider, runtime, schema, product, content or protected-design byte
+changed.
+
+**What changed:** relation validation is declaration/name-bound rather than syntax-site-bound;
+aliased global `eval` survives; interface construct overloads collapse while nested constructors
+cross; incompatible caller descriptors receive authority; and locale collation enters graph and
+dependency-artifact identities.
+
+**Evidence/next:** `make shared-resource-bootstrap-twelfth-fresh-review` retains the predecessor
+chain and passes all eight new cases. Exact receipt:
+`planning/shared-resource-register-bootstrap/twelfth-fresh-independent-buildability-review-2026-09-05.md`.
+Next is a bounded site-identity/compiler-authority repair and another genuinely fresh review; the
+generic catalogue and every dependent provider register remain unauthorized.
+
+## 2026-09-05 — shared-resource bootstrap twelfth author repair
+
+**What landed:** bounded author evidence for [[D2828]]–[[D2834]]. No production catalogue,
+checker, register, provider, schema, runtime, product, content or protected-design byte changed.
+
+**What changed:** compiler relations now carry exact syntax-site paths; global `eval` is refused by
+value/signature authority through aliases and `.call`; construct overloads use the exact compiler
+signature kind; only catalogue-issued descriptors enter projection; and one canonical byte
+comparator owns graph and dependency-artifact ordering.
+
+**Evidence/next:** `make shared-resource-bootstrap-twelfth-author-repair` retains the complete
+predecessor chain and passes 10/10 repair/self-audit groups. Exact receipt:
+`planning/shared-resource-register-bootstrap/twelfth-author-repair-2026-09-05.md`. Another genuinely
+fresh independent review still gates acceptance and production, after which provider protocol can
+complete against this generic engine.
