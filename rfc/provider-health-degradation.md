@@ -1,11 +1,10 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — fifth author repair completed 2026-09-05 on [[D2753]]–[[D2760]] and
-  self-audit [[D2762]]–[[D2764]]; fresh independent review required. Exact named checkpoint exports,
-  separate consumer declarations, renderer/exchange/registry seals, bounded exact cache, sealed
-  generation leases and durable opponent recovery execute under `make
-  provider-health-fifth-author-repair`, which retains the full prior chain. [[D2761]] is closed by
-  enrolling that current target in ordinary verification. Neither implementation checkpoint is
+- **Status:** draft — **sixth author repair completed on [[D2815]]–[[D2822]] plus self-audit
+  [[D2823]]–[[D2827]]; another genuinely fresh review is required.** One replacement checkpoint now
+  owns full state/cache derivation, immutable compiled declarations, renewable generation leases and
+  current-run recovery commands. `make provider-health-sixth-author-repair` retains every prior
+  attack and passes 13/13 repair groups plus strict TypeScript. Neither implementation checkpoint is
   authorized before fresh review and the provider-protocol/exchange prerequisites.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
@@ -854,6 +853,62 @@ stale and cross-registry snapshots fail.
 passes 8/8 new behavioral groups plus strict TypeScript, and is enrolled in `verify-governance`.
 Exact receipt: `planning/provider-health-degradation/fifth-author-repair-2026-09-05.md`. This remains
 author contract work, not acceptance or implementation.
+
+## Sixth fresh independent return (2026-09-05)
+
+The newest checkpoint is not one executable refinement of the prior contract. Eight independent
+attacks return it on [[D2815]]–[[D2822]]:
+
+1. the exported snapshot omits three normative states and heals after the first success following
+   repeated opens instead of entering `recovering(1/2)`;
+2. shallow-mutable consumer rows admit arbitrary consumer, stage and fallback semantics into the
+   branded compiled image;
+3. the compiler forces every operation into one unconditional stage, making its dependency,
+   conditional-stage and multi-stage criteria unrepresentable;
+4. the group coordinator has no `renew` operation despite the required lease lifecycle;
+5. exact cache state never joins the health snapshot and survives generation change;
+6. a provider failure can attach to an old learner ply even after a newer ply is committed;
+7. retry omits failure-sequence and request identity, so an old idempotency key succeeds against a
+   newer failure; and
+8. change accepts caller-written policy/request digests instead of deriving both from a parsed
+   policy and current run state.
+
+`make provider-health-sixth-fresh-review` passes 8/8 falsifiers and remains in ordinary verification.
+Exact evidence:
+`planning/provider-health-degradation/sixth-fresh-independent-buildability-review-2026-09-05.md`.
+A bounded repair must produce one current authority rather than leaving the fourth and fifth models
+to disagree. Implementation remains unauthorized.
+
+## Sixth author repair (2026-09-05)
+
+One replacement checkpoint closes [[D2815]]–[[D2822]] rather than treating the fifth model as a
+parallel authority. The exported reducer represents all six state arms and joins exact current
+cache inventory before projecting degraded versus unavailable. Consumer declarations are deeply
+immutable and compared by complete semantics; the compiler executes dependency/condition grammar
+before accepting the exact ten-member image. Generation leases now acquire, renew, settle and
+expire. Durable failure/retry/change commands execute against the current run tail inside one
+immediate transaction; retry crosses failure and request identity, while change parses policy and
+derives both policy and next-request digests server-side.
+
+The executable closure is explicit: [[D2815]] state arms and recovery; [[D2816]] immutable semantic
+declarations; [[D2817]] dependency grammar; [[D2818]] renewable leases; [[D2819]] cache/health
+joining; [[D2820]] current-tail failure; [[D2821]] exact retry identity; and [[D2822]] server-derived
+change identity.
+
+The repair self-audit found and closed [[D2823]]–[[D2827]] before publication: only an
+authority-issued snapshot can produce a generation set; recovery preimages are read after the write
+lock; late old-generation deliveries cannot repopulate cache; hits update real LRU order; and a
+generation change releases an old live group claim.
+
+Those self-audit controls are individually owned here: [[D2823]] sealed snapshots, [[D2824]] locked
+preimages, [[D2825]] stale-insertion refusal, [[D2826]] recency-on-hit and [[D2827]] generation-bound
+claim release.
+
+`make provider-health-sixth-author-repair` retains every predecessor and the 8/8 fresh attacks,
+passes 13/13 repair groups and strict TypeScript, and is the sole verify-owned current target. Exact
+receipt: `planning/provider-health-degradation/sixth-author-repair-2026-09-05.md`. This is author
+contract evidence, not acceptance or implementation; another genuinely fresh review remains
+required.
 
 ## Implementation plan
 

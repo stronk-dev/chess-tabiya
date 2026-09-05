@@ -325,12 +325,12 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Fresh-review the shared-resource bootstrap repair, then genuinely fresh-review the provider-protocol repair against that generic parent; independently review pack capability and longitudinal storage; do not implement a draft contract early.",
+        "nextAction": "Genuinely fresh-review the provider-health sixth repair; fresh-review the shared-resource bootstrap and then provider-protocol; independently review pack capability and longitudinal storage; do not implement a draft contract early.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "The provider-protocol prerequisite is author-repaired at contract tier: historical returns remain reproducible, the maintained gate is verify-owned, README/type/routing semantics match the generic parent, and product obligation/consumer validation has one exact owner. Another fresh review and the shared-resource bootstrap still gate acceptance and all provider product implementation.",
+          "summary": "Provider health is author-repaired as one replacement checkpoint: full state/cache derivation, immutable exact application semantics, dependency validation, renewable generation leases, real LRU behavior and current-run recovery commands pass thirteen able-to-fail groups. Fresh review and provider protocol/exchange still gate implementation.",
           "impact": "held",
-          "evidence": ["planning/provider-protocol-register/second-author-repair-2026-09-05.md", "tools/d2809-provider-protocol-second-author-repair/contract.test.mjs", "tools/d2809-provider-protocol-second-fresh-review/review.test.mjs", "rfc/provider-protocol-register.md", "rfc/README.md"]
+          "evidence": ["planning/provider-health-degradation/sixth-author-repair-2026-09-05.md", "tools/d2815-provider-health-sixth-author-repair/contract.test.ts", "tools/d2815-provider-health-sixth-fresh-review/review.test.ts", "rfc/provider-health-degradation.md", "rfc/README.md"]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
       },

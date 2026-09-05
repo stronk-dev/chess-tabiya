@@ -22703,6 +22703,123 @@
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2815",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:910c9bd925d1d283cc7e810b5abfab62a5cc04bb93b54335e93c6eaf3824609e",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2816",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d5479088fdf325cb367215afcb920b2d1970d91df141c45e7f3fc93c22e1f03e",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2817",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9dab12e086442f4345f1dfffa021da58a07c9ce51bc92ed16d32b9ca2f57481a",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2818",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e678ff8abffe884b8b230337e5988fd0042fc31e63d7ba80a6073fdc727a6c30",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2819",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:3edc8e8a9377e8e2c4cc6f28eab00740453273f0c63b05439cfa155078bdb659",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2820",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2a6eaa79e0f8baebf678e18dc1496e79ad0b84e453d13f5fe45539bb1e2e6dc1",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2821",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:71fc895b80157a41ac391c5dc3eccaae09d66734dfb27e76c5c0faf2766a83e1",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2822",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8d00939b2b2fff159c4f287c69bcf8c6d96ffe81c5ce9c5cb44b760ae4626ce1",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2823",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:546e73747094666a9faacd67781072a18884d88db8765dbf83c56575aa2a4202",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2824",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:22a73546112336b4b4a501311c057cc57ce9088874c968afa2f0ece5e3a28cc7",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2825",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f0adb469a69be285b18c2e5a4c77b154a3bcc4ef0fd08cbb6751d37c75c4b214",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2826",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7264309b5c4e7002a3c33057b0697b1c260476159451885a1eaae9791c795624",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2827",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6fd9e840f5e927c3f98bde4c25f539b1c3fcdf92fbf39d8785da4514b614f4c3",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
     }
   ]
 }

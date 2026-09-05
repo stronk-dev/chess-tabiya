@@ -16096,3 +16096,36 @@ passes 5/5 repair groups. Exact receipts:
 `planning/provider-protocol-register/second-fresh-independent-buildability-review-2026-09-05.md`
 and `planning/provider-protocol-register/second-author-repair-2026-09-05.md`. Another genuinely
 fresh review and the shared-resource bootstrap dependency still gate acceptance and implementation.
+
+## 2026-09-05 — provider health sixth fresh independent review
+
+**What landed:** returned the fifth provider-health author repair on [[D2815]]–[[D2822]] with eight
+executable attacks. No production provider, route, web, storage, run schema, migration, content or
+protected-design byte changed.
+
+**What changed:** the new named checkpoint is a second weaker authority rather than a refinement of
+the prior state machine. It omits recovery/cache states, brands mutable consumer semantics, cannot
+represent promised pipeline dependencies or renew a lease, leaves exact cache detached from health,
+and accepts stale-ply, crossed-retry and caller-authored-policy recovery commands.
+
+**Evidence/next:** `make provider-health-sixth-fresh-review` passes 8/8 attacks and is enrolled in
+ordinary verification. Exact receipt:
+`planning/provider-health-degradation/sixth-fresh-independent-buildability-review-2026-09-05.md`.
+Next is one coherent bounded repair and another genuinely fresh review; both implementation
+checkpoints remain unauthorized.
+
+## 2026-09-05 — provider health sixth author repair
+
+**What landed:** author-repaired [[D2815]]–[[D2822]] plus self-audit [[D2823]]–[[D2827]] at contract
+tier. No production provider, route, client, store, schema, migration, content or protected-design
+byte changed.
+
+**What changed:** one replacement checkpoint now owns all provider state/cache arms, deeply sealed
+and exact application semantics, executable dependency validation, renewable generation leases,
+generation-safe true LRU cache and transaction-bound current-run failure/retry/change commands.
+Change parses policy and derives both resulting digests; callers cannot write them.
+
+**Evidence/next:** `make provider-health-sixth-author-repair` retains every predecessor and the 8/8
+fresh attacks, then passes 13/13 repair groups plus strict TypeScript. Exact receipt:
+`planning/provider-health-degradation/sixth-author-repair-2026-09-05.md`. Another genuinely fresh
+review and provider protocol/exchange still gate both implementation checkpoints.

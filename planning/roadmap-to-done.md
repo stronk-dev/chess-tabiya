@@ -309,6 +309,23 @@ repair groups. The process RFC remains draft pending the generic-bootstrap depen
 genuinely fresh review; no provider product implementation is authorized. Receipt:
 `planning/provider-protocol-register/second-author-repair-2026-09-05.md`.
 
+Provider health is freshly returned again on [[D2815]]–[[D2822]]. The fifth repair's named
+checkpoint is a second weaker authority: it cannot represent recovery/cache states, accepts mutable
+consumer semantics, has no executable pipeline dependency or lease-renewal path, and its durable
+recovery crosses stale ply, retry and policy identities. `make provider-health-sixth-fresh-review`
+passes 8/8 attacks and is verify-owned. Both the claim-free runtime checkpoint and lane-0.26 durable
+checkpoint remain held pending one coherent repair, another fresh review and provider protocol/
+exchange. Receipt:
+`planning/provider-health-degradation/sixth-fresh-independent-buildability-review-2026-09-05.md`.
+
+The same-day sixth author repair closes [[D2815]]–[[D2822]] and self-audit [[D2823]]–[[D2827]] at
+contract tier. One replacement checkpoint now owns full state/cache derivation, immutable semantic
+declarations, executable dependency grammar, renewable generation leases, real LRU behavior and
+current-run recovery commands under one transaction. `make provider-health-sixth-author-repair`
+retains the 8/8 attacks and passes 13/13 repair groups plus strict TypeScript. Both implementation
+checkpoints remain held for another fresh review and provider protocol/exchange. Receipt:
+`planning/provider-health-degradation/sixth-author-repair-2026-09-05.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

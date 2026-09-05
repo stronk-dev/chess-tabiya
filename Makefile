@@ -191,6 +191,15 @@ provider-protocol-second-fresh-review:
 provider-protocol-second-author-repair: provider-protocol-fresh-review provider-protocol-second-fresh-review
 	node --test tools/d2809-provider-protocol-second-author-repair/contract.test.mjs
 
+.PHONY: provider-health-sixth-fresh-review
+provider-health-sixth-fresh-review:
+	./node_modules/.bin/vitest run --config tools/d2815-provider-health-sixth-fresh-review/vitest.config.ts --reporter=verbose
+
+.PHONY: provider-health-sixth-author-repair
+provider-health-sixth-author-repair: provider-health-fifth-author-repair provider-health-sixth-fresh-review
+	./node_modules/.bin/vitest run --config tools/d2815-provider-health-sixth-author-repair/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc -p tools/d2815-provider-health-sixth-author-repair/tsconfig.json
+
 storage-backup-second-fresh-review:
 	node --test tools/d2460-storage-backup-second-fresh-review/contract.test.mjs
 
@@ -1094,7 +1103,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-ninth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-sixteenth-author-repair semantic-collectors-promotion-eleventh-author-repair provider-health-fifth-author-repair shared-resource-bootstrap-eleventh-author-repair provider-protocol-second-author-repair test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-ninth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-sixteenth-author-repair semantic-collectors-promotion-eleventh-author-repair provider-health-sixth-author-repair shared-resource-bootstrap-eleventh-author-repair provider-protocol-second-author-repair test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 
