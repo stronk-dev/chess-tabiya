@@ -15586,3 +15586,18 @@ closure is a caller string list rather than an import census.
 **Evidence/next:** the target retains 13 predecessor controls and passes 8/8 new falsifiers. Exact
 receipt: `planning/concept-registry/second-fresh-independent-buildability-review-2026-09-05.md`.
 One bounded author repair and another genuinely fresh review precede production.
+
+## 2026-09-05 — Concept registry second author repair
+
+**What landed:** a bounded contract-tier repair for [[D2709]]–[[D2716]] and maintained `make
+concept-registry-second-author-repair` coverage. No schema, registry content, migration, server,
+API, client, Campaign, Skills, archive or protected-design byte changed.
+
+**What changed:** revisions and refs now have one canonical duplicate-key-refusing parser and
+sealed identity; migration is a storage-owned atomic population operation over stored run/attempt
+and installed pack authority, with a disjoint lossless quarantine partition and restart receipt;
+consumer closure comes from an exact committed TypeScript import graph rather than caller names.
+
+**Evidence/next:** the target retains 21 predecessor controls and passes 8/8 new repair groups.
+Exact receipt: `planning/concept-registry/second-author-repair-2026-09-05.md`. Another genuinely
+fresh review and the shared-resource bootstrap dependency still precede implementation.

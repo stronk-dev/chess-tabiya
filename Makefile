@@ -1001,7 +1001,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 
@@ -1100,6 +1100,10 @@ concept-registry-author-repair: concept-registry-author-contract
 concept-registry-second-fresh-review: concept-registry-author-repair
 	node --test tools/d2661-concept-registry-fresh-review/contract.test.mjs
 	node --test tools/d2709-concept-registry-second-fresh-review/contract.test.mjs
+
+.PHONY: concept-registry-second-author-repair
+concept-registry-second-author-repair: concept-registry-second-fresh-review
+	node --test tools/d2709-concept-registry-second-author-repair/contract.test.mjs
 
 .PHONY: campaign-catalogue-author-contract
 campaign-catalogue-author-contract:

@@ -1211,6 +1211,15 @@ population receipt; and consumer closure trusts a deduplicated string list rathe
 The global identity foundation remains at contract repair, not implementation. Receipt:
 `planning/concept-registry/second-fresh-independent-buildability-review-2026-09-05.md`.
 
+The bounded second author repair now closes those eight requirements gaps without claiming product
+implementation. Revisions/refs are canonical and sealed; migration is one storage-owned,
+rollback-safe population transaction over stored run/attempt plus installed pack authority with a
+lossless restart receipt; and the six-consumer closure is derived from the committed TypeScript
+import graph. `make concept-registry-second-author-repair` retains 21 predecessor controls and
+passes eight repair groups. The RFC remains draft pending genuinely fresh review and the
+shared-resource bootstrap dependency; registry-dependent packs, Campaign and Skills remain blocked
+rather than consuming a shadow identity layer.
+
 ### 7. Human-like bots, personalities, roster, and bot events
 
 <!-- roadmap-capability: bots -->

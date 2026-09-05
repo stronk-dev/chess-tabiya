@@ -1,11 +1,10 @@
 # RFC: Concept registry — one cross-pack identity authority
 
-- **Status:** draft — **RETURNED by second fresh independent review 2026-09-05 on [[D2709]]–
-  [[D2716]].** The first repair's intent survives, but revision/ref parsing is noncanonical and
-  mutable, historical pack/occurrence authorities remain caller-minted, migration is a one-row
-  mapper rather than an atomic population transaction, and consumer closure trusts caller strings
-  rather than imports. `make concept-registry-second-fresh-review` retains 13 prior controls and
-  passes 8/8 new falsifiers. No implementation before repair, fresh review and the process
+- **Status:** draft — **second author repair complete 2026-09-05 for [[D2709]]–[[D2716]];
+  genuinely fresh review required.** Canonical duplicate-key-refusing revision/ref parsers,
+  inventory-and-storage-owned historical inputs, one atomic lossless population transaction and a
+  committed-import-graph consumer census now execute under `make
+  concept-registry-second-author-repair`. No implementation before fresh review and the process
   dependency.
 - **Author:** codex, factored from `rfc/skills.md` §4 and the D300/D700 measurements.
 - **Created:** 2026-08-31
@@ -99,7 +98,10 @@ in v1. Unknown or unverifiable legacy IDs never become ad-hoc retired entries.
 
 ## 2. One compiler and consumer closure
 
-`compileConceptRegistry(headBytes, revisionFiles)` is the only mint. It returns the schema version,
+`compileConceptRegistry(headBytes, revisionFiles)` is the only mint. Both the head and every
+revision pass the repository's duplicate-key-refusing JSON parser, exact-key grammar, Unicode-scalar
+validation and canonical-byte equality check before any digest is computed. Byte limits are UTF-8
+byte limits, not JavaScript string lengths. It returns the schema version,
 current digest, ordered current entries, exact revision lookup, `required(id)`, `has(id)` and
 active/retired projections. No fallback resolver and no `pack:<id>#<raw>` constructor remain in
 production registered-concept paths.
@@ -118,10 +120,15 @@ Two successor discharges are declared separately and must be absent at this land
 7. Campaign catalogue projection, owned by `campaign-catalogue-progression.md`;
 8. Skills taxonomy/credit join, owned by `skills.md`.
 
-The compiler test scans imports and fails a second ID/label map, direct JSON parser, local fallback,
-unregistered display transform, a missing/extra landing consumer or either successor importing a
-local registry. Successor contracts later replace their discharge with an import of this exact
-public projection; they do not widen the first landing's consumer count. Callers carry `ConceptRef`:
+The compiler test consumes an exact committed TypeScript import graph compiled with the same
+repository-snapshot and compiler authority as `shared-resource-register-bootstrap`; it does not
+accept a caller-supplied consumer-name array.
+It scans imports and fails a duplicate import edge, second ID/label map, direct JSON parser, local
+fallback, unregistered display transform, a missing/extra landing consumer or either successor
+importing a local registry. The closure receipt records the exact repository commit and ordered
+consumer paths. Successor contracts later replace their discharge with an import of this exact
+public projection; they do not widen the first landing's consumer count. Callers carry
+`ConceptRef`:
 
 There is no second ID/label map: the compiled registry is the only identity-and-label authority.
 
@@ -134,7 +141,9 @@ interface ConceptRef {
 ```
 
 Historical rows additionally retain their originating pack/run identity; a `ConceptRef` never
-claims occurrence by itself.
+claims occurrence by itself. `parseConceptRef` accepts exactly the three displayed keys, validates
+the slug, schema literal and full lowercase SHA-256 digest, copies the values and recursively seals
+the result before lookup. Resolvers never retain or return a caller object.
 
 ## 3. Pack authoring and evidence reference
 
@@ -177,7 +186,15 @@ resolve(packId, raw) {
 six packs produces one key and six exact pack occurrences, while two different IDs with equal-
 looking substrings never merge.
 
-The claimed migration runs in one transaction. It creates a registered table and a separate
+The claimed migration is a storage operation, not a row mapper with authority arguments. Its only
+inputs are the open application database, the exact compiled registry and an optional test-only
+fault point. It starts `BEGIN IMMEDIATE`, reads `attempt_concepts` joined to the stored `attempts`
+row and `drill_runs.snapshot_json`, reconstructs the run with the runtime's exact replay/parser,
+and resolves `pack_digest` only through `PackRegistry.byDigest` over built-in artifacts plus the
+validated `registered_packs` inventory loaded by Pack Studio. No public function accepts pack JSON,
+an attempt object, a run object, a concept population or a pre-minted occurrence receipt.
+
+The migration creates a registered table and a separate
 `attempt_concept_legacy` quarantine; only the former is a `ConceptRef` source:
 
 1. validates the exact concept registry artifact/digest expected by the application build;
@@ -191,8 +208,10 @@ The claimed migration runs in one transaction. It creates a registered table and
    `attempt_concept_legacy` with raw key/label and a closed reason. Quarantine rows render as
    unverified history but are excluded from related attempts, Campaign and Skills;
 6. refuses key collisions or injected write failures and rolls back all changes;
-7. writes the migration/version receipt only after set-equality over every input row versus the
-   disjoint registered-plus-quarantine output and exact foreign-key occurrences.
+7. writes the migration/version receipt only after set-equality over the canonical input primary
+   keys versus the disjoint registered-plus-quarantine output, exact foreign-key occurrences and
+   exact input/partition digests. On restart, the receipt is returned only when the recomputed
+   input digest agrees; changed input fails startup rather than silently re-running or widening.
 
 Fresh databases write only registered global keys. Mixed-version reads are forbidden; the
 application refuses startup if storage version and registry/migration receipt disagree. Account
@@ -284,6 +303,23 @@ falsifiers. Exact receipt:
 `planning/concept-registry/second-fresh-independent-buildability-review-2026-09-05.md`. A bounded
 author repair and another genuinely fresh review remain mandatory; no production schema,
 registry, migration or consumer work is authorized.
+
+## Second author repair — 2026-09-05
+
+The bounded repair closes [[D2709]]–[[D2716]] at the requirements tier. Revision and ref parsing now
+reject duplicate/unknown keys, noncanonical bytes, invalid UTF-8 byte bounds, invalid Unicode
+scalars and mutable caller identity. The executable migration no longer accepts separately minted
+pack or occurrence objects: one transaction reads stored attempt/run rows, parses the snapshot and
+resolves the exact pack digest through the installed artifact inventory. Registered and quarantine
+rows form a disjoint set-equal partition, any collision or injected failure rolls back, and an exact
+receipt governs restart.
+
+Consumer closure is derived from a committed TypeScript import graph. Missing, extra and duplicate
+imports plus a local pack-scoped resolver fail; the receipt records the repository commit rather
+than echoing claimed consumer strings. `make concept-registry-second-author-repair` retains all 21
+predecessor controls and passes eight new repair groups. Exact receipt:
+`planning/concept-registry/second-author-repair-2026-09-05.md`. This remains contract evidence only;
+another genuinely fresh review and the shared-resource bootstrap dependency precede implementation.
 
 ## Acceptance criteria
 

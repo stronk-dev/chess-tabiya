@@ -21754,7 +21754,7 @@
       "id": "D2709",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:240ae4dcdb8c35542307d5a7a0bfb507ac6b7ff4ce108201242e3b94928d7bba",
+      "sourceDigest": "sha256:6abd94a2a4daa6fb047c4bf01dc6281e11c48ba37d644fc6e4bf8750e1f189a8",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:concept-registry.md"
@@ -21763,7 +21763,7 @@
       "id": "D2710",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:cfb0bd91bebbfb049912d569d49f7eef32dc6759c934d4ec106577eda0262b85",
+      "sourceDigest": "sha256:6f6e5707b9d89bbf8a8b0ef9734f238f3515e683dca694baabc789336fda6fbc",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:concept-registry.md"
@@ -21772,7 +21772,7 @@
       "id": "D2711",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:eeecf960e7cc85a2ca43891bc5ca6cdee5009fca6091a850f1e7d8ea87de4f72",
+      "sourceDigest": "sha256:9e458d8fc5e8220132a86177f8e409d0d9030839b9f3ec04ea5e7d703e8d6236",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:concept-registry.md"
@@ -21781,7 +21781,7 @@
       "id": "D2712",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2a0d4fbf9abe7a422dcb35203b7d95f4486831fd123e81360484abd7383dee2e",
+      "sourceDigest": "sha256:98c79da58570c9ddbb537c45a7d5d62766f455ce6c61e7f819e7ac09b4b43d29",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:concept-registry.md"
@@ -21790,7 +21790,7 @@
       "id": "D2713",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7addfbbdfa979b9172432b9ffafc85d8fbf4dbfe70d2dbdb8f774d86d6a5d580",
+      "sourceDigest": "sha256:6095c68cf645cae06624e08010511f58008dcd786a66235c895e5d258ad54858",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:concept-registry.md"
@@ -21799,7 +21799,7 @@
       "id": "D2714",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a72035988a4a68151f62efbf1143be413312cce592e0225277fb5cb3d488ec8f",
+      "sourceDigest": "sha256:74ade9e7bb9e72f3cd53489b7b22af52efb6fc31f0a19ac21d2037d5fe913ccd",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:concept-registry.md"
@@ -21808,7 +21808,7 @@
       "id": "D2715",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c735bf64f8571fc66342a8d7e358068ca6f6d2c5e900d87e269a35d4143c6c14",
+      "sourceDigest": "sha256:8d5490d9386f954b821f3d5034442c94633a0e06fa5f897b25095a7a710ffca5",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:concept-registry.md"
@@ -21817,7 +21817,7 @@
       "id": "D2716",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1aae44badeb0cef9e15ead5cd816ef2faf632080a14d153452840af6c0de3965",
+      "sourceDigest": "sha256:e6797941e6b38189d1301fb7c7a8ecca0588d34f4f6e74164440a7d00cf35be7",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:concept-registry.md"
