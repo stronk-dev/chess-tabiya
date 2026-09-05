@@ -16478,3 +16478,23 @@ chain and passes 5/5 falsifiers. Exact receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
 One current application issuer→immutable snapshot→store→receipt→result repair, another fresh review
 and the existing provider/value dependencies precede either held projection.
+
+## 2026-09-06 — shared candidate packet eleventh author repair
+
+**What landed:** repaired [[D2860]]–[[D2863]] in one executable TypeScript checkpoint and enrolled
+that checkpoint in ordinary governance verification. No production runtime, API, schema, content,
+archive or protected-design byte changed.
+
+**What changed:** the production-backed collector graph is now composed with candidate-local
+cooperative groups and one public bounded service/cache lifecycle. Packet receipts retain all seven
+identity terms, projection-addressed total outcomes and same-outcome abstentions; terminal roots
+retain exact checkmate/stalemate identity. Single-flight, waiter-local cancellation, FIFO overload,
+queue/compile deadlines, scheduler failure, close and stats are executable. A losing deadline race
+cannot publish its later compiler result.
+
+**Evidence/next:** `make candidate-packet-eleventh-author-repair` retains the full predecessor and
+return chain, passes 8/8 new behavioral groups and strict TypeScript. Exact receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-eleventh-author-repair-2026-09-06.md`.
+Another genuinely fresh independent review and the draft value-authority dependency precede
+acceptance; the returned promotion installation boundary remains the parallel evidence-spine
+blocker.

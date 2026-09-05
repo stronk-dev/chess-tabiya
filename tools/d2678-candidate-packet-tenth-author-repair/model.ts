@@ -375,6 +375,61 @@ function executeCandidate(beforeFen: string, move: ExactLegalMove, plan: ReturnT
   return deepSeal({ row, events, readings, abstentions: row.abstentions, collectorOutcomes: Object.freeze(retainedOutcomes), executionOutcomes: Object.freeze(executionOutcomes) });
 }
 
+export interface CooperativeCandidateCompilationOptions {
+  readonly maxCollectorsPerGroup: number;
+  readonly signal: AbortSignal;
+  readonly yieldControl: (collectorId: CollectorId) => Promise<void>;
+}
+
+async function executeCandidateCooperatively(
+  beforeFen: string,
+  move: ExactLegalMove,
+  plan: ReturnType<typeof planCandidateCollectors>,
+  options: CooperativeCandidateCompilationOptions,
+) {
+  const afterFen = childFen(beforeFen, move);
+  const memo: Partial<Record<CollectorId, readonly CollectorOutcome[]>> = {};
+  const executionOutcomes: CollectorOutcome[] = [];
+  const retainedOutcomes: CollectorOutcome[] = [];
+  for (let offset = 0; offset < plan.length; offset += options.maxCollectorsPerGroup) {
+    if (options.signal.aborted) throw new TypeError("CANDIDATE_COMPILATION_ABORTED");
+    const group = plan.slice(offset, offset + options.maxCollectorsPerGroup);
+    for (const planned of group) {
+      const dependencyMemo: Partial<Record<CollectorId, readonly CollectorOutcome[]>> = {};
+      for (const dependency of COLLECTOR_DEPENDENCIES[planned.collectorId]) {
+        const outcomes = memo[dependency];
+        if (outcomes === undefined) throw new TypeError(`MISSING_DEPENDENCY:${dependency}`);
+        dependencyMemo[dependency] = outcomes;
+      }
+      const values = Object.freeze([...CANDIDATE_COLLECTOR_EXECUTION[planned.collectorId](deepSeal({
+        beforeFen,
+        moveUci: move.uci,
+        afterFen,
+        memo: deepSeal(dependencyMemo),
+      }))]);
+      for (const value of values) {
+        if ("anchor" in value) assertSemanticEvidenceEvent(PRIMARY_EVIDENCE_MANIFEST, value);
+        else assertDeclaredEvidence(value);
+      }
+      const outcome = deepSeal({ collectorId: planned.collectorId, values });
+      memo[planned.collectorId] = Object.freeze([outcome]);
+      executionOutcomes.push(outcome);
+      if (planned.retain) retainedOutcomes.push(outcome);
+    }
+    if (options.signal.aborted) throw new TypeError("CANDIDATE_COMPILATION_ABORTED");
+    await options.yieldControl(group[group.length - 1]!.collectorId);
+    if (options.signal.aborted) throw new TypeError("CANDIDATE_COMPILATION_ABORTED");
+  }
+  const events = Object.freeze(retainedOutcomes
+    .filter((outcome) => projectionScope(outcome.collectorId) === "events")
+    .flatMap((outcome) => outcome.values) as SemanticEvidenceEvent[]);
+  const readings = Object.freeze(retainedOutcomes
+    .filter((outcome) => projectionScope(outcome.collectorId) === "readings")
+    .flatMap((outcome) => outcome.values) as DeclaredEvidence<unknown>[]);
+  const row = deepSeal({ moveUci: move.uci, afterFen, events, readings, abstentions: Object.freeze([] as never[]) });
+  return deepSeal({ row, events, readings, abstentions: row.abstentions, collectorOutcomes: Object.freeze(retainedOutcomes), executionOutcomes: Object.freeze(executionOutcomes) });
+}
+
 const COMPILED_RECEIPTS = new WeakSet<object>();
 
 function mintCompiled(beforeFen: string, scope: CandidatePacketScope, legalMovesInput: DeclaredEvidence<ReturnType<typeof exactLegalMoveMap>>, candidateInputs: readonly ReturnType<typeof executeCandidate>[]) {
@@ -417,6 +472,28 @@ export function compileCandidatePopulation(requestValue: unknown): CompiledCandi
   const moves = legalMovesInput.payload.pieces.flatMap((piece) => piece.moves);
   const candidateInputs = Object.freeze(moves.map((move) => executeCandidate(beforeFen, move, plan)));
   return mintCompiled(beforeFen, request.scope, legalMovesInput, candidateInputs);
+}
+
+export async function compileCandidatePopulationCooperatively(
+  requestValue: unknown,
+  options: CooperativeCandidateCompilationOptions,
+): Promise<CompiledCandidatePacket> {
+  if (!Number.isSafeInteger(options.maxCollectorsPerGroup) || options.maxCollectorsPerGroup < 1 || options.maxCollectorsPerGroup > 8) {
+    throw new TypeError("INVALID_COLLECTOR_GROUP_LIMIT");
+  }
+  const request = parseCandidatePopulationRequest(requestValue);
+  const map = exactLegalMoveMap(request.beforeFen);
+  const beforeFen = map.fen;
+  const legalMovesInput = declareExactLegalMovesEvidence(map);
+  assertDeclaredEvidence(legalMovesInput);
+  const plan = planCandidateCollectors(request.scope);
+  const moves = legalMovesInput.payload.pieces.flatMap((piece) => piece.moves);
+  const candidateInputs = [];
+  for (const move of moves) {
+    candidateInputs.push(await executeCandidateCooperatively(beforeFen, move, plan, options));
+  }
+  if (options.signal.aborted) throw new TypeError("CANDIDATE_COMPILATION_ABORTED");
+  return mintCompiled(beforeFen, request.scope, legalMovesInput, Object.freeze(candidateInputs));
 }
 
 export function projectWide(compiled: CompiledCandidatePacket, targetScope: Exclude<CandidatePacketScope, "events_and_readings">): CompiledCandidatePacket {

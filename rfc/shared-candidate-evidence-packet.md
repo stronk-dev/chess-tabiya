@@ -1,11 +1,12 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — RETURNED by eleventh fresh independent review on [[D2860]]–[[D2863]].**
-  The tenth repair closes its bounded [[D2678]]–[[D2684]] and [[D2841]]–[[D2842]] seams, but its
-  current model replaces rather than composes the RFC's public service/result boundary, omits four
-  retained packet identity fields, deletes projection-addressed total collector outcomes and
-  abstentions, and collapses checkmate/stalemate into anonymous empty packets. The maintained
-  operation still
+- **Status:** **draft — eleventh author repair completed 2026-09-06 on [[D2860]]–[[D2863]];
+  another genuinely fresh independent review and the value-authority dependency remain.** The
+  current composed checkpoint restores the public asynchronous result/service/cache lifecycle,
+  candidate-local cooperative collector groups, exact packet identity fields,
+  projection-addressed total outcomes and abstentions, and explicit checkmate/stalemate terminal
+  states. It also prevents an over-deadline compilation from publishing a late cache value and
+  turns scheduler rejection into its exact typed failure. The maintained operation
   parses the closed request, derives the complete seven-term factual identity, gives direct and
   projected narrow receipts the same dependency-closed graph, derives cache identity internally,
   admits only one privately asserted whole receipt, seals below already-frozen ancestors and
@@ -2263,6 +2264,32 @@ falsifiers. Exact receipt:
 A composed author repair plus another genuinely fresh review are required; the value-authority
 factory dependency also remains. No production implementation is authorized.
 
+## Eleventh author repair (2026-09-06)
+
+One executable TypeScript checkpoint now composes rather than references the predecessor
+authorities. `createCandidatePopulationService` owns one bounded LRU, same-key single-flight,
+FIFO admission, queue and compile deadlines, waiter-local cancellation, idempotent close, frozen
+stats and direct/projected/miss/oversize result arms. The production path compiles each candidate
+in dependency order, slices its collector plan into `maxCollectorsPerGroup`, yields through a real
+`MessageChannel` continuation after each group and checks the shared abort signal around every
+boundary. A scheduler rejection returns `scheduler_failed` with the exact current collector id;
+an over-deadline compiler is barred from late cache admission.
+
+The packet now retains every term it hashes: canonical full FEN, standard ruleset, exact scope,
+legal convention id/version, move-identity convention, manifest digest and compiler version.
+Every declared collector projection receives a sealed move-addressed total result; an empty
+successful projection stays `available` with `values: []`, while an unavailable loose-piece
+projection produces the only registered `invalid_turn_clone` abstention from that same outcome.
+Zero legal candidates require and retain either `terminal.reason: checkmate` or `stalemate`.
+
+`make candidate-packet-eleventh-author-repair` retains the complete predecessor and return chain,
+passes 8/8 new behavioral groups and strict TypeScript. The controls cover identity retention,
+all declared projection outcomes, available-empty, both terminal states, cold/direct/projected
+cache paths, single-flight, waiter cancellation, overload, queue/compile deadlines, late-result
+non-publication, scheduler failure, close and exact yield accounting. This is positive author
+evidence, not acceptance: another genuinely fresh independent review and the named
+`evidence-value-authority` dependency still precede production implementation.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -2405,6 +2432,11 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-09-06 — [[D2860]]–[[D2863]] eleventh author repair. One current checkpoint composes the
+  production-backed compiler with cooperative group scheduling and the public bounded service,
+  retains all packet identity and total collector-result authorities, and distinguishes checkmate
+  from stalemate. `make candidate-packet-eleventh-author-repair` passes 8/8 new behavioral groups
+  plus strict TypeScript; fresh review and the value-authority dependency remain.
 - 2026-09-05 — eleventh fresh independent review returned the tenth repair on [[D2860]]–[[D2863]].
   Its bounded fixes survive, but the current model drops the public service/result/cache operation,
   retained identity fields, projection-addressed outcomes/abstentions and terminal distinction.

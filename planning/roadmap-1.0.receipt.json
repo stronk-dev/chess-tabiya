@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2b7b0dd5c0acade3ed90b318e429110f08df769b5c3eee08a4fdbd791fa4e9ee",
+    "roadmap": "sha256:45a0f15a5d1fa04fba256fbdee9caf29b41e34541a3261ad85b060cf3e95fc90",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:c0870c7a3ece327a7f1db4250ecd6dde0de00a79569b1cc5c92a49a41094f515",
-    "rfcRegister": "sha256:90b463258906ee9cd1822e24634e18060ec400a9bdf900bde8e5c7c4fd93fe27",
+    "workState": "sha256:0d9c6ec4d012819536a03c3cb793cdfdd0f4d30585ad3a14530ceec5af62d68e",
+    "rfcRegister": "sha256:2ef6813a2b4d177b8f2859ad24cbdc1792dd0e77c9b9259ecdca343c3d5b364c",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -151,22 +151,22 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Compose-repair the candidate packet's public service, identity, total outcomes and terminal state; repair promotion's issuer-to-result authority as one immutable snapshot; land the evidence-value-authority/provider dependencies, then finish selectors, grades, Review and learner modules.",
+      "nextAction": "Fresh-review the recomposed candidate packet; repair promotion's issuer-to-result authority as one immutable snapshot; land the evidence-value-authority/provider dependencies, then finish selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "The promotion twelfth repair was returned: its leaf fixes survive, but the public caller-path issuer binds no immutable inventory, two reads can tear, predecessor stores/results lose application authority, and empty generations pass. The spine remains 12/14.",
-        "impact": "regressed",
+        "summary": "The candidate packet is recomposed behind cooperative scheduling and the bounded service/cache lifecycle, with exact identity, total outcomes and terminal states restored. Fresh review and the returned promotion installation boundary remain; the spine remains 12/14.",
+        "impact": "advanced",
         "evidence": [
-          "planning/evidence-foundation-ux/semantic-collectors-promotion-thirteenth-fresh-independent-buildability-review-2026-09-05.md",
-          "tools/d2864-semantic-collectors-promotion-thirteenth-fresh-review/review.test.ts",
-          "rfc/semantic-collectors.md",
+          "planning/evidence-foundation-ux/shared-candidate-packet-eleventh-author-repair-2026-09-06.md",
+          "tools/d2860-candidate-packet-eleventh-author-repair/contract.test.ts",
+          "rfc/shared-candidate-evidence-packet.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "semantic-collectors.md",
-            "digest": "sha256:854706a4501e65048816ad3dc3e08ba26db2bcbed6f04d6d6331ce936fa919e0"
+            "id": "shared-candidate-evidence-packet.md",
+            "digest": "sha256:a117c5cdf006eab7965d0141084b2a471a5ca1c838c7e4249dc08e6e0c82b587"
           }
         ]
       },

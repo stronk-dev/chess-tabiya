@@ -2030,3 +2030,13 @@ but the checkpoint drops the public service/result/cache lifecycle, four retaine
 total collector outcomes/abstentions, and checkmate/stalemate identity. The evidence spine remains
 blocked until one composed model carries all of those authorities plus the production-backed
 collector graph through a fresh review; old green models cannot be assembled by the implementer.
+
+### 2026-09-06 evidence-spine checkpoint — candidate packet recomposed
+
+The candidate-packet return is author-repaired in one executable checkpoint: the real collector
+graph now sits behind candidate-local cooperative scheduling and the complete bounded public
+service/cache lifecycle; all seven identity terms, total projection outcomes, abstentions and exact
+checkmate/stalemate terminals survive into the receipt. The new gate also proves that a late compile
+cannot populate the cache after its deadline. This advances the active evidence spine but does not
+accept or implement it: a genuinely fresh review, the value-authority dependency and the returned
+promotion installation boundary remain next.
