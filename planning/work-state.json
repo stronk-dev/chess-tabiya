@@ -22145,6 +22145,87 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2753",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ccdc4dad97d67e2aa1b44650d501faeb5677c3361e34eaecac05fc66478741c0",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2754",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b1984eaa513054fbadfc6291235bcbd1cd79452118b8e92ddf2f8b64abdf00be",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2755",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:97872660a5363c98f50ddd80eeb75ac9255123513dfe5b0817cbc12633a13044",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2756",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f729a6f142a536385c4411ec41a24b057a619e58930d9fc166a35945dda4c859",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2757",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7fded5186f98f5c9d018c549588ad093fa699c1540b9743fc7fda32debe0a8e6",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2758",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:bf788e6600bc7bfa3243d6b9c1b7fd80f5af77e40dbcd7865bda4568cf54b03b",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2759",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:de83f11f41a30772da1e14485368ac0e8c8e680048896118adf1d7fc3c7e7157",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2760",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ea47957c71a7ea98bec5b18d2cf9e8d15b3a3d91349c8864394e1c92c0929b8a",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2761",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ad8940754c2d4439d3cf64d7fc164585253c5ab931e1a8c448b94d5b379ef449",
+      "uxItems": [],
+      "evidence": "planning/provider-health-degradation/fifth-fresh-independent-buildability-review-2026-09-05.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -1,12 +1,13 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — fourth author repair completed 2026-09-04 on [[D2575]]–[[D2583]]; another
-  genuinely fresh independent review is required. The complete ten-operation application census
-  now compiles onto the provider-exchange authority; speech consumes sealed prior text; recovery,
-  group leases, exact caches, opponent recovery and multi-stage settlement have executable total
-  contracts. `make provider-health-fourth-author-repair` retains 17 prior author controls and
-  passes 6/6 new behavioral controls plus strict TypeScript. Neither implementation checkpoint is
-  authorized before the fresh review and provider-protocol/exchange prerequisites.
+- **Status:** draft — fifth fresh independent review returned the fourth author repair on
+  [[D2753]]–[[D2761]] (2026-09-05). The promised claim-free checkpoint exports are incomplete; the
+  application census is local rather than derived from live consumers; caller-authored text,
+  delivery, circuit, lease and recovery objects can mint authority; the exact cache is unbounded;
+  and the cited gate was absent from ordinary verification. `make
+  provider-health-fifth-fresh-review` retains the full author chain and executes all nine returns.
+  Neither implementation checkpoint is authorized before another repair, fresh review and the
+  provider-protocol/exchange prerequisites.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -1085,6 +1086,15 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 | [[D2581]] | cache admission/value split | one atomic immutable cache resolution in §7; criterion 27 |
 | [[D2582]] | opponent recovery is prose | durable failure/recovery route and effective-policy projection in §10; criterion 28 |
 | [[D2583]] | one-stage result erases pipeline state | ordered stage settlement and derived application outcome in §4; criteria 19/29 |
+| [[D2753]] | checkpoint promises authorities the model does not export | return: exact snapshot/outcome/selector/release exports remain absent or renamed |
+| [[D2754]] | local obligation and declaration lists move together | return: no live consumer or provider-exchange-derived census exists |
+| [[D2755]] | public caller mints a prior-displayed-text seal | return: no renderer/display/source authority is required |
+| [[D2756]] | cache accepts crossed provenance and retains 513 entries | return: no sealed same-subject delivery join or 512-entry LRU exists |
+| [[D2757]] | crossed structural provider delivery settles complete | return: settlement validates labels rather than exact declared delivery identity |
+| [[D2758]] | structural unverified state heals without a live success | return: health state and monotonic operands are caller authority |
+| [[D2759]] | old-generation group lease blocks a new generation | return: generation change and parsed lease authority are incomplete |
+| [[D2760]] | JSON-round-tripped opponent state authorizes recovery | return: no storage/event/committed-ply authority participates |
+| [[D2761]] | cited author gate is absent from ordinary verification | repaired in review: the independent review target is now enrolled in `verify-governance` |
 
 `make provider-health-fourth-author-repair` retains the previous 17 author controls, executes 6/6
 new able-to-fail behavioral groups plus strict TypeScript, and remains an author contract rather
@@ -1121,6 +1131,12 @@ than implementation or review.
   hits, durable opponent recovery and ordered stage settlement are executable. The retained 17
   prior controls and 6/6 new behavioral groups pass with strict TypeScript. Fresh independent
   review and provider-protocol/exchange prerequisites remain required.
+- 2026-09-05 — fifth fresh independent review returned the fourth repair on [[D2753]]–[[D2761]].
+  The executable checkpoint omits three promised exports and renames the fourth; two local lists
+  substitute for a live consumer census; public structural values mint displayed-text, delivery,
+  health, lease and opponent-recovery authority; the cache is unbounded; and its cited target was
+  outside ordinary verification. Exact review:
+  `planning/provider-health-degradation/fifth-fresh-independent-buildability-review-2026-09-05.md`.
 - 2026-08-27 — independent buildability review returned the first draft on [[D1910]]–[[D1915]].
   Exact return: `planning/provider-health-degradation/independent-buildability-review-2026-08-27.md`.
 

@@ -292,11 +292,11 @@
       "completion": {
         "evidence": ["not_applicable", "This slice verifies evidence machinery but creates no chess truth."],
         "state": ["partial", "Schema/register/work/intent checks and three workflows exist; deployment now has an executable third contract repair for mounted config, receipts, TLS, readiness and durable migration, but production release state is not implemented."],
-        "api": ["partial", "Health exists; capability/degradation health, readiness, metrics policy, and production-boundary endpoint coverage remain."],
+        "api": ["partial", "Health exists, but the fifth fresh provider-health review proves the claim-free snapshot/outcome/selector/release checkpoint is still unexported and its caller-authority boundaries are unsound; readiness, metrics policy, and production-boundary coverage also remain."],
         "experience": ["blocked", "Install, first boot, engine degradation, backup, restore, update, rollback, and failure diagnostics are not one guided operator workflow."],
         "defaults": ["partial", "Compose boots with mock and insecure-cookie development defaults; safe public and private profiles are not complete."],
         "content": ["blocked", "Runtime content allow-list, licence notices, SBOM, model/runtime rights, and multi-architecture asset tiers remain."],
-        "verification": ["partial", "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof must be separate named tiers; mutable draft prose cannot be the assertion language of product smoke."],
+        "verification": ["partial", "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof must be separate named tiers; the current provider-health independent review is now enrolled after its cited author gate was found outside ordinary verification."],
         "release": ["blocked", "A clean machine can install a digest-pinned release, run it safely, observe degradation, upgrade and roll back without data loss."]
       }
     }
@@ -370,12 +370,12 @@
         "state": "blocked_contract",
         "capabilities": ["learner_model", "bots", "campaign", "social_play", "account_data", "operations"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Repair safe-deployment D2730-D2735; fresh-review Campaign's sixth and storage recovery's fourth author repairs independently; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
+        "nextAction": "Fresh-review safe deployment's third, Campaign's sixth and storage recovery's fourth author repairs independently; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "Campaign's sixth author repair now makes no-event provider settlement restart-stable, locks both aggregate revisions, seals assistance/event subjects and compiles complete official metadata; fresh review still gates it. Safe deployment remains returned on impossible mounted tuples, detached checks, incomplete receipts and non-durable migration, while storage recovery separately awaits fresh review.",
+          "summary": "Campaign's sixth repair makes no-event provider settlement restart-stable and seals both aggregate/event authorities. Safe deployment's third repair now closes its mounted-image, subject, receipt, TLS, readiness and migration contract seams. Campaign, deployment and storage recovery all remain held for genuinely fresh review before production state work.",
           "impact": "advanced",
-          "evidence": ["planning/campaign/sixth-author-repair-2026-09-05.md", "tools/d2736-campaign-sixth-author-repair/contract.test.ts", "planning/safe-deployment-profiles/third-fresh-independent-buildability-review-2026-09-05.md", "tools/d2730-safe-deployment-third-fresh-review/review.test.ts", "rfc/safe-deployment-profiles.md", "planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fourth-author-repair-2026-09-05.md", "rfc/storage-backup-recovery.md", "rfc/longitudinal-store.md", "planning/longitudinal-store/eighth-author-repair-2026-09-05.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/social-play.md"]
+          "evidence": ["planning/campaign/sixth-author-repair-2026-09-05.md", "tools/d2736-campaign-sixth-author-repair/contract.test.ts", "planning/safe-deployment-profiles/third-author-repair-2026-09-05.md", "tools/d2730-safe-deployment-third-author-repair/contract.test.ts", "rfc/safe-deployment-profiles.md", "planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fourth-author-repair-2026-09-05.md", "rfc/storage-backup-recovery.md", "rfc/longitudinal-store.md", "planning/longitudinal-store/eighth-author-repair-2026-09-05.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/social-play.md"]
         },
         "exit": "Every workflow survives restart, retry, upgrade and projection rebuild with owner/actor identity, immutable inputs, idempotence, lifecycle coverage and no workstation-only state."
       },

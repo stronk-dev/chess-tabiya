@@ -15827,3 +15827,22 @@ operator workflows and release proof still require another genuinely fresh indep
 
 **Next:** fresh-review the third repair against cross-process identity, receipt verification,
 TLS/readiness provenance and every journal/database/ingress crash boundary before acceptance.
+
+## 2026-09-05 — Provider health fifth fresh independent review
+
+**What landed:** the fourth author repair was independently returned on [[D2753]]–[[D2761]], with
+nine executable reproductions in `make provider-health-fifth-fresh-review`. No production provider,
+route, client, storage, run-schema, content, archive or protected-design byte changed.
+
+**What changed:** the review proves the claim-free checkpoint omits or renames its promised exports;
+the application closure is not derived from live consumers; caller objects can mint displayed-text,
+delivery, health, lease and opponent-recovery authority; and the exact cache is unbounded. The
+review target is now part of `verify-governance`, closing the finding that the cited contract gate
+was invisible to ordinary CI.
+
+**What is blocked:** provider health remains draft and both implementation checkpoints remain
+unauthorized. Bot policy's [[D2410]] dependency cannot clear until the exact runtime snapshot,
+outcome, selector and release symbols exist.
+
+**Next:** repair [[D2753]]–[[D2760]] at contract tier, rerun a genuinely fresh review, then let bot
+policy consume the shared production symbols rather than a private projection.

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:46bba427eca841045dab9192af481dcbcabcce58ca8389f4d6c2c26cb0b47a18",
+    "roadmap": "sha256:eec28186e46e751df11603a12064d9392ad539931d2910b3f60a9f463b025576",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:81c66e997b7d2b5c010c0a4ab1d7e6fc67b1df3bb3648f25103125e921886813",
-    "rfcRegister": "sha256:311454ba93538b8c2a261d1379802114a88a301a52225e2a9fb530aa9f728bcc",
+    "workState": "sha256:328dd98a040b7c200c757185baaeac9011a6b40c6144ea8e6e91c0d13e0f69e4",
+    "rfcRegister": "sha256:80b0b6c7ab6c124cfaf6d03321b61e57f873f9c620b9b0499bca13ce6e035ac3",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 1034,
-      "done": 825,
+      "blocked": 1042,
+      "done": 826,
       "refused": 3
     },
     "workItems": {
@@ -224,16 +224,16 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Repair safe-deployment D2730-D2735; fresh-review Campaign's sixth and storage recovery's fourth author repairs independently; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
+      "nextAction": "Fresh-review safe deployment's third, Campaign's sixth and storage recovery's fourth author repairs independently; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "Campaign's sixth author repair now makes no-event provider settlement restart-stable, locks both aggregate revisions, seals assistance/event subjects and compiles complete official metadata; fresh review still gates it. Safe deployment remains returned on impossible mounted tuples, detached checks, incomplete receipts and non-durable migration, while storage recovery separately awaits fresh review.",
+        "summary": "Campaign's sixth repair makes no-event provider settlement restart-stable and seals both aggregate/event authorities. Safe deployment's third repair now closes its mounted-image, subject, receipt, TLS, readiness and migration contract seams. Campaign, deployment and storage recovery all remain held for genuinely fresh review before production state work.",
         "impact": "advanced",
         "evidence": [
           "planning/campaign/sixth-author-repair-2026-09-05.md",
           "tools/d2736-campaign-sixth-author-repair/contract.test.ts",
-          "planning/safe-deployment-profiles/third-fresh-independent-buildability-review-2026-09-05.md",
-          "tools/d2730-safe-deployment-third-fresh-review/review.test.ts",
+          "planning/safe-deployment-profiles/third-author-repair-2026-09-05.md",
+          "tools/d2730-safe-deployment-third-author-repair/contract.test.ts",
           "rfc/safe-deployment-profiles.md",
           "planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md",
           "rfc/campaign-core.md",
@@ -1184,7 +1184,7 @@
         ],
         "api": [
           "partial",
-          "Health exists; capability/degradation health, readiness, metrics policy, and production-boundary endpoint coverage remain."
+          "Health exists, but the fifth fresh provider-health review proves the claim-free snapshot/outcome/selector/release checkpoint is still unexported and its caller-authority boundaries are unsound; readiness, metrics policy, and production-boundary coverage also remain."
         ],
         "experience": [
           "blocked",
@@ -1200,7 +1200,7 @@
         ],
         "verification": [
           "partial",
-          "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof must be separate named tiers; mutable draft prose cannot be the assertion language of product smoke."
+          "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof must be separate named tiers; the current provider-health independent review is now enrolled after its cited author gate was found outside ordinary verification."
         ],
         "release": [
           "blocked",

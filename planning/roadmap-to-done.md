@@ -1483,14 +1483,16 @@ migration, live degradation health, safe profiles, runtime content allow-list, b
 update/rollback, SBOM/notices/signatures, model/runtime rights, and complete multi-architecture
 proof.
 
-The 2026-09-04 fourth provider-health author repair closes [[D2575]]–[[D2583]] at contract tier.
-Ten application operations compile onto eight provider-exchange identities; reasoning review and
-sealed-text speech now match the real route graph; monotonic recovery, tokenized group leases,
-atomic cache hits, durable opponent recovery and ordered multi-stage settlement are executable.
-`make provider-health-fourth-author-repair` retains 17 prior author controls and passes 6/6 new
-behavioral groups plus strict TypeScript. Both implementation checkpoints remain held for another
-genuinely fresh review and the provider-protocol/exchange prerequisites; receipt:
-`planning/provider-health-degradation/fourth-author-repair-2026-09-04.md`.
+The 2026-09-05 fifth fresh provider-health review returned the fourth repair on
+[[D2753]]–[[D2761]]. The claim-free checkpoint does not export its promised exact snapshot,
+outcome, selector and release authorities; its application closure is two local lists rather than
+a live consumer join; structural callers mint displayed text, provider success, health, lease and
+opponent-recovery authority; and the exact cache has no 512-entry LRU. `make
+provider-health-fifth-fresh-review` retains the author chain and executes all nine reproductions.
+The review also closes the CI visibility defect by enrolling its current target in ordinary
+governance verification. Both implementation checkpoints remain held for an author repair, fresh
+review and the provider-protocol/exchange prerequisites; receipt:
+`planning/provider-health-degradation/fifth-fresh-independent-buildability-review-2026-09-05.md`.
 
 The 2026-09-02 [[D2503]] repair keeps real-content truth while removing repeated whole-corpus work
 from its own test file: one 92-pack census supplies both declarations and the no-declarations view;
