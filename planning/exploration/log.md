@@ -16392,3 +16392,21 @@ passed. Open string/number keys and `any`/`unknown` receivers remain refused.
 predecessor chain and passes 4/4 repair groups. Exact receipt:
 `planning/shared-resource-register-bootstrap/fourteenth-author-repair-2026-09-05.md`. Another
 genuinely fresh independent review still gates acceptance and all production register population.
+
+## 2026-09-05 — provider health eighth fresh independent review
+
+**What landed:** returned the seventh provider-health author repair on [[D2857]]–[[D2859]] with
+three executable, consumer-shaped attacks. No provider, API, client, schema, migration, content or
+protected-design implementation changed.
+
+**What changed:** successful generation-set validation itself replaces the current registry
+snapshot, so an operation invalidates the same snapshot its F1 availability must use without any
+state transition. Backoff settlement accepts unknown/inexact variants and mutates shared admission.
+An already-frozen outer provider payload can retain mutable descendants through sealed delivery and
+exact cache under an unchanged response digest.
+
+**Evidence/next:** `make provider-health-eighth-fresh-review` retains the complete predecessor chain
+and passes 3/3 falsifiers. Exact receipt:
+`planning/provider-health-degradation/eighth-fresh-independent-buildability-review-2026-09-05.md`.
+One bounded author repair must close all three without regressing the seventh checkpoint, followed
+by another genuinely fresh review; provider protocol/exchange continue to hold production.

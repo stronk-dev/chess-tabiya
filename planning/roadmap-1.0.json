@@ -326,14 +326,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Genuinely fresh-review the shared-resource bootstrap fourteenth repair against the complete real descriptor population before provider protocol; continue independent provider-health, pack-capability and longitudinal-store reviews in parallel lanes.",
+        "nextAction": "Repair D2857-D2859 in the provider-health contract without regressing its composed checkpoint, then obtain a genuinely fresh review; independently fresh-review the shared-resource bootstrap fourteenth repair before provider protocol, and continue pack-capability and longitudinal-store review lanes.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "The bootstrap fourteenth repair now projects both literal assistance follow-on descriptors, retains statically named index-signature reads, enumerates finite-key targets and preserves optional-call overload authority while open indexing remains refused. Fresh review still gates production.",
-          "impact": "advanced",
-          "evidence": ["planning/shared-resource-register-bootstrap/fourteenth-author-repair-2026-09-05.md", "tools/d2854-shared-resource-bootstrap-fourteenth-author-repair/contract.test.mjs", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"],
+          "summary": "The provider-health eighth fresh review found that a read-only generation check invalidates its own operation snapshot, unknown settlements mutate shared backoff, and shallow-frozen payloads mutate beneath sealed cache provenance. Production remains held for bounded repair and another review.",
+          "impact": "held",
+          "evidence": ["planning/provider-health-degradation/eighth-fresh-independent-buildability-review-2026-09-05.md", "tools/d2857-provider-health-eighth-fresh-review/review.test.ts", "rfc/provider-health-degradation.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "shared-resource-register-bootstrap.md", "digest": "sha256:b8868df254623a41a2010cb4f7ef25b3c22b9ff77ce796536b661c4da46b0c02"}
+            {"kind": "rfc", "id": "provider-health-degradation.md", "digest": "sha256:9ce9f8f94cdd0f600a66b721d9ad2b59a21389545e535a6cfd25d4a8b6296b8d"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

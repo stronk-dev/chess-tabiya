@@ -411,6 +411,16 @@ retains the chain and passes 6/6 repair groups plus strict TypeScript. Fresh rev
 protocol/exchange still gate implementation. Receipt:
 `planning/provider-health-degradation/seventh-author-repair-2026-09-05.md`.
 
+The eighth fresh independent review returns that composed checkpoint on [[D2857]]–[[D2859]]. A
+read-only generation-set check replaces the registry's current snapshot, so operation admission
+invalidates the exact snapshot F1 must still read; unknown or inexact settlements clear a live claim
+and mutate shared backoff; and a shallow-frozen provider payload keeps mutable descendants beneath
+one sealed delivery, response digest and exact-cache identity. `make
+provider-health-eighth-fresh-review` retains the complete chain and passes 3/3 consumer-shaped
+attacks. Both implementation checkpoints remain held for bounded repair, another fresh review and
+provider protocol/exchange. Receipt:
+`planning/provider-health-degradation/eighth-fresh-independent-buildability-review-2026-09-05.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

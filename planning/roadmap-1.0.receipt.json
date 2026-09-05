@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ba1f4520a0ebfe015b70e92a951622267a0a246f00503f5e03d4c3ff24b1f935",
+    "roadmap": "sha256:a098ea162fe20dec35593ecf5b644d750ff67739edea4c1ea9fc3fb95bd216bb",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:1967c7ff170d95fe6d84c83771661a9c9f49aeb0c180cb8c41864c9c90453ceb",
-    "rfcRegister": "sha256:3adee79aeb16d0f4ed43b78c5c45c048785a396b82b3a0fb13106d72455b8474",
+    "workState": "sha256:96e490adc8091bf260bbeaec40fc56aa914beaf7863931ba026ea13bcb2226f1",
+    "rfcRegister": "sha256:3216f44fa8b1a15edf0786b143ac1946fa088c374466162481b4cb0f4e62259c",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 1130,
+      "blocked": 1133,
       "done": 833,
       "refused": 3
     },
@@ -115,22 +115,22 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Genuinely fresh-review the shared-resource bootstrap fourteenth repair against the complete real descriptor population before provider protocol; continue independent provider-health, pack-capability and longitudinal-store reviews in parallel lanes.",
+      "nextAction": "Repair D2857-D2859 in the provider-health contract without regressing its composed checkpoint, then obtain a genuinely fresh review; independently fresh-review the shared-resource bootstrap fourteenth repair before provider protocol, and continue pack-capability and longitudinal-store review lanes.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "The bootstrap fourteenth repair now projects both literal assistance follow-on descriptors, retains statically named index-signature reads, enumerates finite-key targets and preserves optional-call overload authority while open indexing remains refused. Fresh review still gates production.",
-        "impact": "advanced",
+        "summary": "The provider-health eighth fresh review found that a read-only generation check invalidates its own operation snapshot, unknown settlements mutate shared backoff, and shallow-frozen payloads mutate beneath sealed cache provenance. Production remains held for bounded repair and another review.",
+        "impact": "held",
         "evidence": [
-          "planning/shared-resource-register-bootstrap/fourteenth-author-repair-2026-09-05.md",
-          "tools/d2854-shared-resource-bootstrap-fourteenth-author-repair/contract.test.mjs",
-          "rfc/shared-resource-register-bootstrap.md",
+          "planning/provider-health-degradation/eighth-fresh-independent-buildability-review-2026-09-05.md",
+          "tools/d2857-provider-health-eighth-fresh-review/review.test.ts",
+          "rfc/provider-health-degradation.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "shared-resource-register-bootstrap.md",
-            "digest": "sha256:b8868df254623a41a2010cb4f7ef25b3c22b9ff77ce796536b661c4da46b0c02"
+            "id": "provider-health-degradation.md",
+            "digest": "sha256:9ce9f8f94cdd0f600a66b721d9ad2b59a21389545e535a6cfd25d4a8b6296b8d"
           }
         ]
       },

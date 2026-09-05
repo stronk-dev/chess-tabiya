@@ -1,13 +1,12 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — **seventh author repair complete on [[D2846]]–[[D2851]].** One composed
-  checkpoint now closes configured provider identity, exact current/group-scoped lease authority,
-  shared rate-limit blocking, atomic cache provenance and the fifth repair's exported outcome/
-  selector/release authorities. It also removes the unused dependency/condition pipeline grammar:
-  `/speech` is a separate operation over sealed displayed text, not a hidden voice→TTS stage.
-  `make provider-health-seventh-author-repair` retains the complete chain and passes 6/6 repair
-  groups plus strict TypeScript. Neither implementation checkpoint is authorized before another
-  genuinely fresh review and the provider-protocol/exchange prerequisites.
+- **Status:** draft — **returned by eighth fresh independent review on [[D2857]]–[[D2859]].** The
+  composed checkpoint invalidates an unchanged operation snapshot while validating its generation
+  set, accepts unknown/inexact shared-backoff settlements, and can retain mutable nested provider
+  payload bytes beneath an unchanged response digest. `make provider-health-eighth-fresh-review`
+  retains the complete chain and passes 3/3 able-to-fail attacks. Neither implementation checkpoint
+  is authorized before one bounded repair, another genuinely fresh review, and the provider-
+  protocol/exchange prerequisites.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -968,6 +967,31 @@ attacks, passes 6/6 composed repair groups and strict TypeScript. Exact receipt:
 evidence, not acceptance or implementation. Another genuinely fresh review and the provider-
 protocol/exchange prerequisites still gate both implementation checkpoints.
 
+## Eighth fresh independent return (2026-09-05)
+
+The seventh repair composes the named surfaces, but three authority seams fail under ordinary
+consumer-shaped inputs:
+
+1. [[D2857]] — `assertGenerationSet` issues and installs a new snapshot while checking the supplied
+   generation set. A successful `BackoffCoordinator.acquire` therefore makes the unchanged snapshot
+   that created the set fail the later F1 availability selector, although registry revision,
+   provider health, cache inventory and generation did not change;
+2. [[D2858]] — `BackoffCoordinator.settle` does not parse its unknown input against the closed
+   settlement algebra. Every unrecognized `kind` falls through as a transient failure, and known
+   variants admit extra contradictory fields, so attacker-shaped bytes can clear the live lease and
+   alter shared upstream admission; and
+3. [[D2859]] — the recursive freezer stops at an already-frozen outer payload. A caller can supply a
+   shallow-frozen object with mutable descendants, receive a sealed delivery, cache it, mutate the
+   retained value and obtain different atomic bytes under the same response digest and cache key.
+
+`make provider-health-eighth-fresh-review` retains the complete predecessor/repair chain and passes
+3/3 committed-program falsifiers. Exact evidence:
+`planning/provider-health-degradation/eighth-fresh-independent-buildability-review-2026-09-05.md`.
+The bounded author repair must preserve one snapshot authority across read-only admission checks,
+parse settlement before consuming a claim, and recursively seal or independently validate the
+complete payload graph with digest correspondence. Another genuinely fresh review remains required;
+production implementation is unauthorized.
+
 ## Implementation plan
 
 **Staged dependency rule ([[D2364]]).** This RFC may remain `implementing` across two checked
@@ -1270,6 +1294,11 @@ than implementation or review.
 
 ## Changelog
 
+- 2026-09-05 — returned by eighth fresh independent buildability review on [[D2857]]–[[D2859]].
+  Read-only generation-set validation invalidates the issuing snapshot; unknown/inexact settlements
+  mutate shared backoff; and shallow-frozen payload descendants mutate beneath sealed delivery,
+  digest and cache identity. `make provider-health-eighth-fresh-review` passes 3/3; bounded repair
+  and another fresh review are required.
 - 2026-09-05 — seventh author repair closed [[D2846]]–[[D2851]] at contract tier. One composed
   authority now retains closed configuration identity, current registry/group authority, real
   shared backoff, full-grain atomic cache provenance and the outcome/availability/release surface.
