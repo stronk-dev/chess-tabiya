@@ -39,13 +39,14 @@ test("D1911 makes clean-start state and operation requestability total", () => {
   assert.match(rfc, /`\/capabilities` itself never triggers that request/u);
 });
 
-test("D1912 compiles rendering dependencies under one deadline", () => {
+test("D1912 compiles rendering provider operations under one deadline", () => {
   const execution = section("interface ProviderExecutionStage", "Producer availability preserves");
-  assert.match(execution, /readonly dependsOn: readonly string\[\]/u);
+  assert.match(execution, /readonly stage: ProviderExecutionStage/u);
+  assert.doesNotMatch(execution, /readonly dependsOn:|readonly when:|readonly stages:/u);
   assert.match(execution, /readonly deadline: "consumer_budget"/u);
   assert.match(execution, /`render\.speech` \| `audio:external-tts` → `external_tts\.synthesize@1`/u);
   assert.match(execution, /never calls\s+external voice again/u);
-  assert.match(execution, /missing or duplicate operation,[\s\S]*cycle,[\s\S]*absent total-deadline source/u);
+  assert.match(execution, /missing or duplicate operation,[\s\S]*absent total-deadline source/u);
 });
 
 test("D1913 closes provider operation results", () => {
@@ -54,8 +55,9 @@ test("D1913 closes provider operation results", () => {
     assert.match(result, new RegExp(arm.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&"), "u"));
   }
   assert.match(result, /delivery: ProviderDelivery/u);
-  assert.match(result, /readonly settlements: readonly ProviderStageSettlement/u);
-  assert.match(rfc, /Cancellation retains completed earlier stages but never heals or damages provider health/u);
+  assert.match(result, /readonly settlement: ProviderStageSettlement/u);
+  assert.doesNotMatch(result, /readonly settlements:|kind: "skipped"/u);
+  assert.match(rfc, /Caller\/superseded cancellation never heals or damages provider health/u);
 });
 
 test("D1914 claims and specifies durable opponent acquisition", () => {

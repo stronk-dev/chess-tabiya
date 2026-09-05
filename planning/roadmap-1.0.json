@@ -325,12 +325,12 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Genuinely fresh-review the shared-resource bootstrap thirteenth repair before provider protocol; independently review provider health, pack capability and longitudinal storage while evidence-value authority continues behind those contracts.",
+        "nextAction": "Genuinely fresh-review the shared-resource bootstrap thirteenth repair before provider protocol; independently review provider health's composed seventh repair, pack capability and longitudinal storage while evidence-value authority continues behind those contracts.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "The shared-resource bootstrap thirteenth repair now retains literal element-access targets, applies the existing shared UTF-16 order to every graph/artifact set and uses one Unicode-aware parser before descriptor issuance and during projection. Three repair controls pass; fresh independent review still leads the foundation critical path.",
+          "summary": "Provider health now has one composed seventh-repair authority for closed configuration, current registry/group identity, shared backoff, atomic cache provenance, outcomes, availability and release; its dead pipeline DAG is removed because speech is independently requested over sealed displayed text. The shared-resource bootstrap fresh review still leads the critical path, while provider health awaits its own fresh review.",
           "impact": "advanced",
-          "evidence": ["planning/shared-resource-register-bootstrap/thirteenth-author-repair-2026-09-05.md", "tools/d2843-shared-resource-bootstrap-thirteenth-author-repair/contract.test.mjs", "tools/d2843-shared-resource-bootstrap-thirteenth-fresh-review/review.test.mjs", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"]
+          "evidence": ["planning/provider-health-degradation/seventh-author-repair-2026-09-05.md", "tools/d2846-provider-health-seventh-author-repair/contract.test.ts", "rfc/provider-health-degradation.md", "planning/shared-resource-register-bootstrap/thirteenth-author-repair-2026-09-05.md", "tools/d2843-shared-resource-bootstrap-thirteenth-author-repair/contract.test.mjs", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
       },

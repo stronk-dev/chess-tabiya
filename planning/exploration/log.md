@@ -16263,3 +16263,21 @@ singleton/always/no-dependencies; and the earlier outcome/selector/release autho
 `planning/provider-health-degradation/seventh-fresh-independent-buildability-review-2026-09-05.md`.
 The next pass must compose one current checkpoint from the fifth and sixth authorities, then undergo
 another genuinely fresh review; provider protocol/exchange still gate production.
+
+## 2026-09-05 — provider-health seventh author repair
+
+**What landed:** repaired [[D2846]]–[[D2851]] at contract tier with one composed provider-health
+authority. No production provider, API, client, store, schema, migration, content, archive or
+protected-design byte changed.
+
+**What changed:** configuration is closed over instance/family/implementation; snapshots, release
+receipts and group generation sets require their issuing registry's exact current state; shared
+backoff owns settlement and Retry-After; exact cache hits retain their full application subject,
+value, original delivery and current service receipt; and outcomes, availability, settlement and
+release coexist with durable recovery. The unused dependency/condition DAG was deleted because
+`/speech` is an independent operation over sealed displayed text.
+
+**Evidence/next:** `make provider-health-seventh-author-repair` retains every predecessor and the
+6/6 seventh-review attacks, passes 6/6 composed repair groups and strict TypeScript. Exact receipt:
+`planning/provider-health-degradation/seventh-author-repair-2026-09-05.md`. Another genuinely fresh
+review and provider protocol/exchange still gate both production checkpoints.

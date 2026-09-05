@@ -22986,7 +22986,7 @@
       "id": "D2846",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:72dec942e006ee554cf106fe8d70345cc2d0db1bd98f0b7695d88e363e156f0a",
+      "sourceDigest": "sha256:0d3aa1acf100057d105034696c7b4ac2b7bae95cb5500759419802ad58d02cb3",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -22995,7 +22995,7 @@
       "id": "D2847",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:55dab75396e4320fee2a98d72f7ceefbfbe1a1254583f312313d607b75b8a1cd",
+      "sourceDigest": "sha256:a7e94f8713771817e6dbe2c0387d6264949ae261e2606b0d3ed9d83bffc04f39",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -23004,7 +23004,7 @@
       "id": "D2848",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9f43e69e8cb0de501bed9e8b93daef5e1a75538b70f7e8950d4b1f2164dd7c06",
+      "sourceDigest": "sha256:7b35a92f7b35f1f2c086a4fd1dae8d8c92072cf01c3fa3b10ae79d035391db39",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -23013,7 +23013,7 @@
       "id": "D2849",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:fbc0dc95b0e177c4dda8e80b09adaabafe98261897f673f190a6de889faa275e",
+      "sourceDigest": "sha256:8656596a0ca802a7cef35a5513ab8e5f0aba727223fc5bcefff6882a80d4c7ef",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -23022,7 +23022,7 @@
       "id": "D2850",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7470d12f1c042cb288c2709f250e11afb9b3ce3f8c70748ddca4ea18fb4c3840",
+      "sourceDigest": "sha256:d3486cfbd2ead3fd0f9a50ad243ebd78c5439c3a4d1103e2967c933f49069309",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -23031,7 +23031,7 @@
       "id": "D2851",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:433b6af633f9bfdbc96c831f54be63656e00624a593b46165acd52d4e323ede8",
+      "sourceDigest": "sha256:9359ef126cdd224123443cbddaaeaf2b22ba9a019e2a577bb2e40e2f57bb935d",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"

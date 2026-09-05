@@ -1,12 +1,13 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — **RETURNED by seventh fresh independent review on [[D2846]]–[[D2851]].** The
-  sixth repair closes its thirteen local controls, but the claimed replacement checkpoint regresses
-  configured provider identity, current/group-scoped lease authority, shared rate-limit blocking,
-  atomic cache provenance, non-vacuous pipeline semantics and the fifth repair's exported outcome/
-  selector/release authorities. `make provider-health-seventh-fresh-review` retains the complete
-  chain and passes 6/6 attacks. Neither implementation checkpoint is authorized before one composed
-  author repair, another fresh review and the provider-protocol/exchange prerequisites.
+- **Status:** draft — **seventh author repair complete on [[D2846]]–[[D2851]].** One composed
+  checkpoint now closes configured provider identity, exact current/group-scoped lease authority,
+  shared rate-limit blocking, atomic cache provenance and the fifth repair's exported outcome/
+  selector/release authorities. It also removes the unused dependency/condition pipeline grammar:
+  `/speech` is a separate operation over sealed displayed text, not a hidden voice→TTS stage.
+  `make provider-health-seventh-author-repair` retains the complete chain and passes 6/6 repair
+  groups plus strict TypeScript. Neither implementation checkpoint is authorized before another
+  genuinely fresh review and the provider-protocol/exchange prerequisites.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -322,7 +323,7 @@ Generation is per `ProviderInstanceId`, never per family. Generation change atom
 3. invalidates every cache entry whose key names the old generation;
 4. causes a late old-generation result to be discarded rather than healing the new generation.
 
-### 4. Provider-exchange input and ordered application settlement
+### 4. Provider-exchange input and application settlement
 
 Provider exchange owns the low-level operation id, normalized request digest, acquisition receipt,
 parsed payload receipt and live/retained delivery. Provider health consumes those sealed values and
@@ -341,30 +342,29 @@ type ProviderStageSettlement<K extends ProviderOperationId, T> =
   | { readonly kind: "failed"; readonly stageId: string;
       readonly result: ProviderSourceFailure<K> }
   | { readonly kind: "cancelled"; readonly stageId: string;
-      readonly reason: "caller" | "superseded" | "shutdown" }
-  | { readonly kind: "skipped"; readonly stageId: string;
-      readonly reason: "condition_false" | "dependency_failed" };
+      readonly reason: "caller" | "superseded" | "shutdown" };
 
 type ApplicationProviderOutcome<T> =
   | { readonly kind: "complete"; readonly value: T;
-      readonly settlements: readonly ProviderStageSettlement<ProviderOperationId, unknown>[] }
+      readonly settlement: ProviderStageSettlement<ProviderOperationId, unknown> }
   | { readonly kind: "fallback"; readonly value: T;
       readonly source: "deterministic_renderer" | "browser_speech_or_text";
-      readonly settlements: readonly ProviderStageSettlement<ProviderOperationId, unknown>[] }
+      readonly settlement: ProviderStageSettlement<ProviderOperationId, unknown> }
   | { readonly kind: "unavailable";
-      readonly settlements: readonly ProviderStageSettlement<ProviderOperationId, unknown>[] }
+      readonly settlement: ProviderStageSettlement<ProviderOperationId, unknown> }
   | { readonly kind: "cancelled"; readonly reason: "caller" | "superseded" | "shutdown";
-      readonly settlements: readonly ProviderStageSettlement<ProviderOperationId, unknown>[] };
+      readonly settlement: ProviderStageSettlement<ProviderOperationId, unknown> };
 ```
 
-The compiler fixes settlement cardinality and order to the selected application declaration.
-Every required stage has one settlement; conditional stages have an explicit `skipped` result, and
-dependency failure can never disappear. Final availability is derived from the ordered settlements
-and declared fallback: a successful text stage plus failed TTS may return text/browser-speech
-fallback while retaining both stage results. A failed required no-fallback stage is unavailable.
-Cancellation retains completed earlier stages but never heals or damages provider health when the
-reason is caller/superseded. Provider failures do update only the instance named by their sealed
-exchange result. This closes [[D2583]] without collapsing mixed stage health.
+The compiler fixes exactly one settlement to the selected application declaration. Voice rendering
+and speech are two independent application operations. Speech consumes a sealed reference to text
+that was already rendered and displayed; it does not execute voice or retain a synthetic earlier
+stage. A TTS failure therefore returns the speech operation's browser-speech/text fallback while
+the earlier rendering operation keeps its own outcome. A failed no-fallback operation is
+unavailable. Caller/superseded cancellation never heals or damages provider health. Provider
+failures update only the instance named by their sealed exchange result. This resolves [[D2583]] by
+preserving both real operation outcomes rather than inventing a mixed pipeline the request graph
+does not have.
 
 The sealed exchange delivery describes acquisition, not chess quality. It cannot say accurate,
 human, best, practical, insightful or trustworthy. Existing evidence payload provenance remains
@@ -555,21 +555,19 @@ interface ProviderExecutionStage {
   readonly stageId: string;
   readonly instanceId: ProviderInstanceId;
   readonly exchangeOperation: ProviderOperationId;
-  readonly dependsOn: readonly string[];
-  readonly when: "always" | "audio_requested";
   readonly fallback: "none" | "deterministic_renderer" | "browser_speech_or_text";
 }
 
 interface ProviderExecutionDeclaration {
   readonly operationId: ApplicationProviderOperationId;
   readonly consumer: { readonly id: string; readonly version: number };
-  readonly stages: readonly ProviderExecutionStage[];
+  readonly stage: ProviderExecutionStage;
   readonly deadline: "consumer_budget";
 }
 ```
 
-The literal declaration contains exactly these ten application operations. Stage ids are unique
-within an operation and are part of every health/cache join; provider-exchange identity stays in
+The literal declaration contains exactly these ten application operations. Each operation has one
+stage whose id is part of every health/cache join; provider-exchange identity stays in
 the sealed delivery rather than being reconstructed:
 
 | operation | stages in order |
@@ -597,12 +595,12 @@ provider failure is unavailable, never rewritten to an external empty answer ([[
 provider-protocol resource. An independent ten-member obligation tuple is set-equal to it. The
 compiler consumes the candidate declaration passed to it and rejects missing, extra, duplicate and
 count-preserving replacement operations; crossed instance/exchange mappings; unknown consumers;
-missing/forward/cyclic stage dependencies; illegal fallbacks; and absent consumer-budget deadlines.
+illegal fallbacks; and absent consumer-budget deadlines.
 The web/server import only the compiled image. This is the executable closure required by [[D2577]].
 
 The compiler rejects an unknown instance/operation/consumer, missing or duplicate operation,
-duplicate stage, missing dependency, cycle, dependency after use, two provider families for one
-stage, absent total-deadline source, and a fallback not legal for that stage. It also proves every
+an unknown or crossed stage, absent total-deadline source, and a fallback not legal for that stage.
+It also proves every
 provider-backed F1 producer and each of the three voice consumers has exactly one execution path.
 Server wrappers and the web capabilities parser consume the compiled image; neither owns a copied
 provider list. Because this tuple consumes and extends the provider-protocol resource, this RFC cannot be
@@ -936,6 +934,40 @@ falsifiers. Exact evidence:
 The next repair must compose the fifth and sixth authorities into one current checkpoint rather
 than satisfying only the newest finding list. Implementation remains unauthorized.
 
+## Seventh author repair (2026-09-05)
+
+The six returned seams now close in one replacement authority:
+
+1. [[D2846]] parses configuration against the exact seven instance declarations and each row's
+   allowed implementation set before registry construction; every configured snapshot retains
+   family, implementation and generation;
+2. [[D2847]] binds snapshots, release receipts and group generation sets to the issuing registry's
+   exact current revision and group. Old, copied, cross-registry and cross-group authorities fail;
+3. [[D2848]] gives the group coordinator acquire/renew/settle/expire plus owned blocked-until state,
+   bounded transient backoff and the Lichess 429 minimum of 60 seconds;
+4. [[D2849]] keys exact cache at application-operation/stage/exchange-operation/instance/
+   implementation/generation/request/cache-key grain and atomically returns the value, original
+   delivery and current cache-service receipt;
+5. [[D2850]] deletes the unused dependency/condition/multi-stage grammar. Production has ten real
+   one-stage operations; `render.speech` consumes sealed already-displayed text as an independent
+   request. A fabricated voice→TTS DAG would contradict the route and deadline boundary rather than
+   improve it; and
+6. [[D2851]] composes full health state, application outcome, availability selection, settlement,
+   exact cache, release and backoff authority while re-exporting the sixth repair's durable
+   recovery authority.
+
+During the repair, the focused gate caught and fixed an authority-composition error where a sealed
+delivery was rejected because registry currency accepted only the original request object's brand.
+The composed boundary now accepts only authority-sealed request/delivery/failure subjects while
+still rejecting structural copies. Availability and release receipts also require the exact current
+snapshot, so a later health or cache transition invalidates them.
+
+`make provider-health-seventh-author-repair` retains every predecessor and the 6/6 seventh-review
+attacks, passes 6/6 composed repair groups and strict TypeScript. Exact receipt:
+`planning/provider-health-degradation/seventh-author-repair-2026-09-05.md`. This is author contract
+evidence, not acceptance or implementation. Another genuinely fresh review and the provider-
+protocol/exchange prerequisites still gate both implementation checkpoints.
+
 ## Implementation plan
 
 **Staged dependency rule ([[D2364]]).** This RFC may remain `implementing` across two checked
@@ -1015,7 +1047,7 @@ bot-private health projection.
 4. Maia, both Stockfish instances, Explorer, tablebase, voice render, reasoning review and TTS each
    have timeout, cancellation, malformed-response, configured-off and recovery fixtures. Caller
    cancellation does not open a circuit; reasoning-review failure cannot become valid external empty.
-5. No provider operation or rendering pipeline, including queue, retry, conditional TTS and fallback, can exceed its compiled F1 consumer deadline.
+5. No provider operation, including queue, retry, rendering, TTS and fallback, can exceed its compiled F1 consumer deadline.
    A source guard fails on Maia's old `60_000` timeout and on per-attempt voice deadline reset.
 6. Lichess 429 opens the shared `lichess-api` coordinator for Explorer and tablebase for at least
    60 seconds, permits no concurrent cross-instance retry herd, and honors a longer valid
@@ -1029,7 +1061,7 @@ bot-private health projection.
    voice consumers compile voice rendering, reasoning review has its own operation, and speech
    compiles only TTS over a sealed prior-text identity. The application set is exactly ten and the
    exchange set exactly eight; an orphan, missing or substituted operation fails.
-   Missing/duplicate/cyclic/reset-deadline declarations fail. Every provider-off consumer produces
+   Missing/duplicate/reset-deadline declarations fail. Every provider-off consumer produces
    its declared state.
 9. Explorer `no_data_at_band` and tablebase out-of-range keep their providers healthy and render
    differently from unavailable. Negative fixtures fail if either is collapsed.
@@ -1059,9 +1091,9 @@ bot-private health projection.
 18. `make verify`, `make test-browser`, provider fault-injection, release-container smoke,
     register/status/roadmap checks and the local/GitHub required CI commands are green on the exact
     committed bytes.
-19. Every compiled `ApplicationProviderOutcome<T>` has the exact ordered stage settlements and one
-    legal complete/fallback/unavailable/cancelled arm. Missing, duplicate, reordered or erased
-    settlements fail. The health reducer consumes sealed provider-exchange results exhaustively;
+19. Every compiled `ApplicationProviderOutcome<T>` has the exact single stage settlement and one
+    legal complete/fallback/unavailable/cancelled arm. A missing, duplicate, crossed or erased
+    settlement fails. The health reducer consumes sealed provider-exchange results exhaustively;
     cached/fallback/caller-cancel arms cannot heal or damage health incorrectly.
 20. Cache inventory is live state authority at operation/stage/instance/generation/request/key
     grain. Removing the last valid entry by TTL expiry, LRU
@@ -1083,7 +1115,7 @@ bot-private health projection.
     makes every new opponent selection persist the exchange delivery and the two recovery events. *Fails if* either RFC
     claims the other fully implemented before its registered lane can land, or if lane 0.26 is
     renumbered to conceal the dependency.
-24. The compiler-generated application map is the only health/pipeline identity authority. All ten
+24. The compiler-generated application map is the only application/provider identity authority. All ten
     application operations map to one of eight provider-exchange operations and every stage crosses
     the strict unknown-input parser. Crossed application operation/stage/instance/exchange
     operation, implementation, generation, request digest or cached origin fails; count-preserving
@@ -1101,8 +1133,8 @@ bot-private health projection.
     replays the committed learner ply; retry preserves request identity; change records before/after
     policy digests and effective-policy projection without rewriting the initial session digest.
 29. Speech accepts only a sealed displayed-text identity for all five scopes, including Compare,
-    and never calls external voice. Text success plus TTS failure retains both settlements and falls
-    back without relabeling browser speech as provider audio.
+    and never calls external voice. Rendering success and later TTS failure remain two independently
+    settled operations; speech falls back without relabeling browser speech as provider audio.
 30. [[D2846]] Configuration is parsed against the closed instance/family/allowed-implementation
     declarations before registry construction. Unknown rows fail; configured snapshots retain the
     exact family and implementation whose generation they name.
@@ -1115,9 +1147,10 @@ bot-private health projection.
 33. [[D2849]] Exact-cache resolution retains application operation, stage, instance, generation,
     normalized request and cache-key identity and atomically returns value, original delivery and a
     current cache-service receipt.
-34. [[D2850]] At least one exact compiled application pipeline executes dependency and conditional
-    stages end to end; mixed success/failure/skipped settlements derive one ordered outcome. A
-    grammar whose entire admitted population is singleton/always/no-dependencies fails.
+34. [[D2850]] The declared application population has exactly one real provider stage per operation.
+    The unused `dependsOn`, `when`, `stages` and `skipped` axes do not exist. `render.speech` remains a
+    separate exact operation over a sealed displayed-text input, so adding an invented voice→TTS
+    dependency graph or collapsing both outcomes into one settlement fails.
 35. [[D2851]] The one replacement checkpoint exports the exact registry snapshot, closed application
     outcome, profile-availability selector, release receipt and settlement authorities together;
     retained predecessor tests cannot substitute for exports absent from the current authority.
@@ -1211,7 +1244,7 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 | [[D2580]] | shared lease is a boolean latch | token/generation acquire-renew-settle-expire algebra in §6; criterion 26 |
 | [[D2581]] | cache admission/value split | one atomic immutable cache resolution in §7; criterion 27 |
 | [[D2582]] | opponent recovery is prose | durable failure/recovery route and effective-policy projection in §10; criterion 28 |
-| [[D2583]] | one-stage result erases pipeline state | ordered stage settlement and derived application outcome in §4; criteria 19/29 |
+| [[D2583]] | one-stage result was asked to erase a synthetic voice/TTS pipeline | separate real rendering and speech operation outcomes in §§4/8; criteria 19/29/34 |
 | [[D2753]] | checkpoint promises authorities the model does not export | return: exact snapshot/outcome/selector/release exports remain absent or renamed |
 | [[D2754]] | local obligation and declaration lists move together | return: no live consumer or provider-exchange-derived census exists |
 | [[D2755]] | public caller mints a prior-displayed-text seal | return: no renderer/display/source authority is required |
@@ -1224,6 +1257,12 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 | [[D2762]] | stale/cross-registry snapshot mints a release receipt | current issuing registry revision/generation image is required |
 | [[D2763]] | caller generation string clears shared backoff | coordinator consumes only a registry-snapshot-derived sealed generation set |
 | [[D2764]] | cross-run idempotency key skips opponent recovery | durable replay joins exact run/action/operands before returning success |
+| [[D2846]] | unknown configuration is dropped and configured identity omitted | closed configuration parser plus family/implementation/generation-bearing snapshots; criteria 1/22/30 |
+| [[D2847]] | stale/cross-registry snapshot clears a live lease | registry-current snapshot, release and group-generation authorities; criteria 26/31 |
+| [[D2848]] | coordinator cannot establish shared backoff | owned blocked-until/result settlement and 60-second Lichess minimum; criteria 6/32 |
+| [[D2849]] | exact cache loses application grain and service receipt | full-grain key plus atomic value/original/current service receipt; criteria 20/27/33 |
+| [[D2850]] | unused pipeline grammar is vacuously green | dead DAG axes deleted; ten exact one-stage operations retain independent speech; criteria 8/19/29/34 |
+| [[D2851]] | replacement drops prior public authorities | one composed snapshot/outcome/selector/release/settlement checkpoint; criterion 35 |
 
 `make provider-health-fourth-author-repair` retains the previous 17 author controls, executes 6/6
 new able-to-fail behavioral groups plus strict TypeScript, and remains an author contract rather
@@ -1231,6 +1270,12 @@ than implementation or review.
 
 ## Changelog
 
+- 2026-09-05 — seventh author repair closed [[D2846]]–[[D2851]] at contract tier. One composed
+  authority now retains closed configuration identity, current registry/group authority, real
+  shared backoff, full-grain atomic cache provenance and the outcome/availability/release surface.
+  The unused dependency/condition grammar was removed because `/speech` is an independent
+  operation over sealed displayed text. `make provider-health-seventh-author-repair` retains the
+  chain and passes 6/6 repair groups plus strict TypeScript. Fresh review remains required.
 - 2026-09-05 — returned by seventh fresh independent buildability review on
   [[D2846]]–[[D2851]]. The sixth model fixes its local return list while dropping earlier
   configured identity, backoff, cache provenance, pipeline and exported-checkpoint contracts.

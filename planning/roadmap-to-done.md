@@ -375,6 +375,15 @@ provider-health-seventh-fresh-review` retains the chain and passes 6/6 attacks. 
 not another local patch, is required before review or implementation. Receipt:
 `planning/provider-health-degradation/seventh-fresh-independent-buildability-review-2026-09-05.md`.
 
+The same-day seventh author repair composes those missing authorities instead of selecting one
+predecessor model. Closed configuration, current registry/group authority, shared Retry-After
+backoff, full-grain atomic cache service, outcomes, availability and release now cross one model.
+It deletes the unused dependency/condition DAG because `/speech` is a separate operation over
+sealed displayed text, not a hidden voice stage. `make provider-health-seventh-author-repair`
+retains the chain and passes 6/6 repair groups plus strict TypeScript. Fresh review and provider
+protocol/exchange still gate implementation. Receipt:
+`planning/provider-health-degradation/seventh-author-repair-2026-09-05.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->
