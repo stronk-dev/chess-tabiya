@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a098ea162fe20dec35593ecf5b644d750ff67739edea4c1ea9fc3fb95bd216bb",
+    "roadmap": "sha256:d33eb8b84ef45bbd2602297d3d85e2aae86d4bd6979cccef5ac6238bccac207f",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:96e490adc8091bf260bbeaec40fc56aa914beaf7863931ba026ea13bcb2226f1",
-    "rfcRegister": "sha256:3216f44fa8b1a15edf0786b143ac1946fa088c374466162481b4cb0f4e62259c",
+    "workState": "sha256:841ba90cbd0710df164f1cfc374324ec21b1697b1422e645eb03ca4647c0acb7",
+    "rfcRegister": "sha256:c2fa1a70e88789e8a8e8e1a18d5779ac82ca16dbcbd7e133105dc6e54fb37e0e",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -115,14 +115,14 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Repair D2857-D2859 in the provider-health contract without regressing its composed checkpoint, then obtain a genuinely fresh review; independently fresh-review the shared-resource bootstrap fourteenth repair before provider protocol, and continue pack-capability and longitudinal-store review lanes.",
+      "nextAction": "Genuinely fresh-review the provider-health eighth repair and the shared-resource bootstrap fourteenth repair; accept only after independent buildability passes, then advance provider protocol/exchange and continue pack-capability and longitudinal-store review lanes.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "The provider-health eighth fresh review found that a read-only generation check invalidates its own operation snapshot, unknown settlements mutate shared backoff, and shallow-frozen payloads mutate beneath sealed cache provenance. Production remains held for bounded repair and another review.",
-        "impact": "held",
+        "summary": "The provider-health eighth author repair now preserves one operation snapshot across read-only generation checks, parses settlement before claim mutation, and copies, recursively seals and payload-digest-binds provider results. Fresh review still gates production.",
+        "impact": "advanced",
         "evidence": [
-          "planning/provider-health-degradation/eighth-fresh-independent-buildability-review-2026-09-05.md",
-          "tools/d2857-provider-health-eighth-fresh-review/review.test.ts",
+          "planning/provider-health-degradation/eighth-author-repair-2026-09-05.md",
+          "tools/d2857-provider-health-eighth-author-repair/contract.test.ts",
           "rfc/provider-health-degradation.md",
           "rfc/README.md"
         ],
@@ -130,7 +130,7 @@
           {
             "kind": "rfc",
             "id": "provider-health-degradation.md",
-            "digest": "sha256:9ce9f8f94cdd0f600a66b721d9ad2b59a21389545e535a6cfd25d4a8b6296b8d"
+            "digest": "sha256:d5ba319721d32eafbff7d52068251baf397f5419c523a1229e79d3d704b9b9c7"
           }
         ]
       },

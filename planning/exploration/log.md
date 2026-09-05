@@ -16410,3 +16410,19 @@ and passes 3/3 falsifiers. Exact receipt:
 `planning/provider-health-degradation/eighth-fresh-independent-buildability-review-2026-09-05.md`.
 One bounded author repair must close all three without regressing the seventh checkpoint, followed
 by another genuinely fresh review; provider protocol/exchange continue to hold production.
+
+## 2026-09-05 — provider health eighth author repair
+
+**What landed:** repaired [[D2857]]–[[D2859]] at contract tier. No production provider, API, client,
+store, schema, migration, content, archive or protected-design byte changed.
+
+**What changed:** generation-set checking is a pure current-circuit derivation and no longer issues
+a snapshot. Backoff settlement parses the exact four-arm unknown-input union before touching its
+claim. Provider success defensively copies and recursively seals the payload, including descendants
+of an already-frozen caller envelope, and retains a canonical payload digest beside the response
+digest.
+
+**Evidence/next:** `make provider-health-eighth-author-repair` retains the full chain, passes 9/9
+repair groups and strict TypeScript. Exact receipt:
+`planning/provider-health-degradation/eighth-author-repair-2026-09-05.md`. Another genuinely fresh
+review and provider protocol/exchange still gate both production checkpoints.

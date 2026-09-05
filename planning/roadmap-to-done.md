@@ -421,6 +421,15 @@ attacks. Both implementation checkpoints remain held for bounded repair, another
 provider protocol/exchange. Receipt:
 `planning/provider-health-degradation/eighth-fresh-independent-buildability-review-2026-09-05.md`.
 
+The same-day eighth author repair closes the three seams at contract tier. Generation-set
+validation derives the current group image without issuing a snapshot; the exact four-arm
+settlement parser runs before claim/backoff mutation; and provider payloads are defensively copied,
+recursively sealed and bound to a canonical payload digest. `make
+provider-health-eighth-author-repair` retains the full chain and passes 9/9 repair groups plus strict
+TypeScript. Production remains held for another genuinely fresh review and provider protocol/
+exchange. Receipt:
+`planning/provider-health-degradation/eighth-author-repair-2026-09-05.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

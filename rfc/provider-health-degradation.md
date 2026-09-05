@@ -1,12 +1,12 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — **returned by eighth fresh independent review on [[D2857]]–[[D2859]].** The
-  composed checkpoint invalidates an unchanged operation snapshot while validating its generation
-  set, accepts unknown/inexact shared-backoff settlements, and can retain mutable nested provider
-  payload bytes beneath an unchanged response digest. `make provider-health-eighth-fresh-review`
-  retains the complete chain and passes 3/3 able-to-fail attacks. Neither implementation checkpoint
-  is authorized before one bounded repair, another genuinely fresh review, and the provider-
-  protocol/exchange prerequisites.
+- **Status:** draft — **eighth author repair complete on [[D2857]]–[[D2859]].** Read-only
+  generation validation now preserves the operation snapshot; exact settlement parsing precedes
+  every claim/backoff mutation; and provider payloads are defensively copied, recursively sealed and
+  bound to a canonical payload digest. `make provider-health-eighth-author-repair` retains the
+  complete chain and passes 9/9 repair groups plus strict TypeScript. Neither implementation
+  checkpoint is authorized before another genuinely fresh review and the provider-protocol/
+  exchange prerequisites.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -992,6 +992,27 @@ parse settlement before consuming a claim, and recursively seal or independently
 complete payload graph with digest correspondence. Another genuinely fresh review remains required;
 production implementation is unauthorized.
 
+## Eighth author repair (2026-09-05)
+
+The three returned seams are repaired inside the composed authority:
+
+1. [[D2857]] recomputes the current backoff-group member image directly from the registry's current
+   circuits. It compares that image and digest without calling `snapshot()` or issuing another
+   generation set, so a successful acquire leaves the exact operation/F1 snapshot current;
+2. [[D2858]] accepts settlement as unknown input and parses the exact four-arm union, including
+   exact keys and Retry-After domain, before it validates or clears the lease. Unknown, missing and
+   extra fields fail without consuming the current claim or changing blocked-until state; and
+3. [[D2859]] defensively clones the supplied provider payload, recursively traverses descendants
+   even beneath an already-frozen parent, seals the retained graph and records its canonical
+   `payloadDigest` beside the transport response digest. Later mutation of the caller's graph cannot
+   change delivery or cache bytes.
+
+`make provider-health-eighth-author-repair` retains every predecessor and all 3/3 eighth-review
+attacks, passes 9/9 composed repair groups and strict TypeScript. Exact receipt:
+`planning/provider-health-degradation/eighth-author-repair-2026-09-05.md`. This is author contract
+evidence, not acceptance or production implementation. Another genuinely fresh review plus the
+provider-protocol/exchange prerequisites still gate both implementation checkpoints.
+
 ## Implementation plan
 
 **Staged dependency rule ([[D2364]]).** This RFC may remain `implementing` across two checked
@@ -1294,6 +1315,10 @@ than implementation or review.
 
 ## Changelog
 
+- 2026-09-05 — eighth author repair closed [[D2857]]–[[D2859]] at contract tier. Generation-set
+  validation is read-only, backoff settlement is parsed before claim mutation, and retained payloads
+  are copied, recursively sealed and payload-digest bound. `make
+  provider-health-eighth-author-repair` passes 9/9 plus strict TypeScript; fresh review remains.
 - 2026-09-05 — returned by eighth fresh independent buildability review on [[D2857]]–[[D2859]].
   Read-only generation-set validation invalidates the issuing snapshot; unknown/inexact settlements
   mutate shared backoff; and shallow-frozen payload descendants mutate beneath sealed delivery,

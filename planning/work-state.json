@@ -23087,7 +23087,7 @@
       "id": "D2857",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:01961228de7c16aca1c691c35d0303b96696968a5bab6dce8f54dae91dca601b",
+      "sourceDigest": "sha256:bcb01b0407f8b0f1f425660fc117fdb54a07cc3b2d3df49413d113d8296dbfe0",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -23096,7 +23096,7 @@
       "id": "D2858",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:6058f0d8c2f800b631492efcf2a1ab9764543e8b8cf730097c78d35f3cd4dbbd",
+      "sourceDigest": "sha256:cf455ce4d73b8822ce6ef2c4ea9818e4e3d97882b6f1a169031d636da31cbdca",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
@@ -23105,7 +23105,7 @@
       "id": "D2859",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:430b90596c5cf32838c7346c997c02f7f824e01ad7e61548191d54b1fa263622",
+      "sourceDigest": "sha256:3cdc3ede80bc42f99338a3c60db172b72588eb65ef1769ea46f9171ca429c2d6",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
