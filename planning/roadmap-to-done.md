@@ -1531,6 +1531,15 @@ passes eight repair groups. The RFC remains draft pending genuinely fresh review
 shared-resource bootstrap dependency; registry-dependent packs, Campaign and Skills remain blocked
 rather than consuming a shadow identity layer.
 
+The 2026-09-06 third fresh review returns that repair on [[D2878]]–[[D2884]]. Its executable
+migration targets a nonexistent row id and private run shape, substitutes a reduced projection for
+the full pack artifact, reads its population before locking and accepts stale restart state. The
+promised head/revision-file compiler is absent; six dead imports satisfy consumer closure; and label
+collision is locale lowercasing rather than Unicode case folding. `make
+concept-registry-third-fresh-review` retains 29 predecessor controls and passes 7/7 reproductions.
+The identity foundation remains at contract repair, not implementation. Receipt:
+`planning/concept-registry/third-fresh-independent-buildability-review-2026-09-06.md`.
+
 ### 7. Human-like bots, personalities, roster, and bot events
 
 <!-- roadmap-capability: bots -->

@@ -1,11 +1,12 @@
 # RFC: Concept registry — one cross-pack identity authority
 
-- **Status:** draft — **second author repair complete 2026-09-05 for [[D2709]]–[[D2716]];
-  genuinely fresh review required.** Canonical duplicate-key-refusing revision/ref parsers,
-  inventory-and-storage-owned historical inputs, one atomic lossless population transaction and a
-  committed-import-graph consumer census now execute under `make
-  concept-registry-second-author-repair`. No implementation before fresh review and the process
-  dependency.
+- **Status:** draft — **returned by third fresh independent review on [[D2878]]–[[D2884]].** The
+  second repair uses invented storage/run shapes and a reduced artifact digest; reads the migration
+  population before its transaction; trusts stale restart receipts; omits the promised revision-file
+  compiler; proves import anchors rather than consumption; and implements locale lowercasing rather
+  than Unicode case folding. `make concept-registry-third-fresh-review` retains the full chain and
+  passes 7/7 reproductions. Author repair, another fresh review and the process dependency precede
+  implementation.
 - **Author:** codex, factored from `rfc/skills.md` §4 and the D300/D700 measurements.
 - **Created:** 2026-08-31
 - **Design refs:** `design/01-training-model.md` §§60–65 (registry belongs to authoring);
@@ -320,6 +321,30 @@ than echoing claimed consumer strings. `make concept-registry-second-author-repa
 predecessor controls and passes eight new repair groups. Exact receipt:
 `planning/concept-registry/second-author-repair-2026-09-05.md`. This remains contract evidence only;
 another genuinely fresh review and the shared-resource bootstrap dependency precede implementation.
+
+## Third fresh independent review return — 2026-09-06
+
+The second repair closes its eight named findings but remains unbuildable on seven seams:
+
+1. [[D2878]] — its SQL model invents `attempt_concepts.row_id`, and its four-key snapshot parser
+   rejects the production `DrillRun` shape instead of consuming the runtime replay/parser;
+2. [[D2879]] — it hashes a reduced `{id, concepts}` projection as the pack digest, while production
+   run occurrences name the digest of the complete pack document stored as `document_json`;
+3. [[D2880]] — both the existing receipt and migration population are read before `BEGIN IMMEDIATE`,
+   so the operation does not read its accepted preimage inside the transaction it claims;
+4. [[D2881]] — restart compares only the legacy-row input digest and returns stored receipt JSON
+   without revalidating the registry digest, installed artifacts or registered/quarantine outputs;
+5. [[D2882]] — `compileConceptRegistry(headBytes, revisionFiles)` does not exist in the repair, so
+   current-head parsing, filename/digest equality and missing/cyclic revision history remain untested;
+6. [[D2883]] — consumer closure counts syntactic imports; six dead imports and zero consumer
+   operations satisfy it, while re-exported or barrel-routed authority is not resolved; and
+7. [[D2884]] — label uniqueness uses locale lowercasing, which accepts `Straße` and `STRASSE`
+   although full Unicode case folding identifies them.
+
+`make concept-registry-third-fresh-review` retains all predecessor reviews and repairs, then passes
+7/7 executable falsifiers. Exact evidence:
+`planning/concept-registry/third-fresh-independent-buildability-review-2026-09-06.md`. The RFC
+remains draft and no production schema, registry, migration or consumer work is authorized.
 
 ## Acceptance criteria
 

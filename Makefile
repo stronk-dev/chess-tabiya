@@ -1184,7 +1184,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-ninth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-sixteenth-author-repair candidate-packet-eleventh-author-repair semantic-collectors-promotion-thirteenth-author-repair provider-health-ninth-fresh-review shared-resource-bootstrap-fifteenth-fresh-review provider-protocol-second-author-repair provider-protocol-third-fresh-review review-evidence-third-author-repair bot-policy-fourth-author-repair test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review longitudinal-store-ninth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-sixteenth-author-repair candidate-packet-eleventh-author-repair semantic-collectors-promotion-thirteenth-author-repair provider-health-ninth-fresh-review shared-resource-bootstrap-fifteenth-fresh-review provider-protocol-second-author-repair provider-protocol-third-fresh-review review-evidence-third-author-repair bot-policy-fourth-author-repair test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 
@@ -1296,6 +1296,10 @@ concept-registry-second-fresh-review: concept-registry-author-repair
 .PHONY: concept-registry-second-author-repair
 concept-registry-second-author-repair: concept-registry-second-fresh-review
 	node --test tools/d2709-concept-registry-second-author-repair/contract.test.mjs
+
+.PHONY: concept-registry-third-fresh-review
+concept-registry-third-fresh-review: concept-registry-second-author-repair
+	node --test tools/d2878-concept-registry-third-fresh-review/review.test.mjs
 
 .PHONY: campaign-catalogue-author-contract
 campaign-catalogue-author-contract:

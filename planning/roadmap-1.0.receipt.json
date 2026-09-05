@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:4acfc564249f0c308c3853f9864c185130d3fb64f8470b5d10456b48761aa3b9",
+    "roadmap": "sha256:fcd47fa6dcc3a043874104f03de9ca5dd5170ed62b4ce91299333073e1a522c0",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:ea267d77c4d5d4a1070e64dbd7844891cca39a0136a6381a6b73dc1523708d48",
-    "rfcRegister": "sha256:764805e7174cc1bac9db78ef4319bb653bc23097481f0d79b7e0722a2df5ad2f",
+    "workState": "sha256:67f721e8bafe98fb0c5772fe64d5f385c4403495b74e665e6a4996f5ac1c777c",
+    "rfcRegister": "sha256:7c22f16b838e7a54a984bc9d399bddf7709d8b410d1f25180925ddfd81abd7db",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 648,
       "doing": 0,
-      "blocked": 1142,
+      "blocked": 1149,
       "done": 833,
       "refused": 3
     },
@@ -115,22 +115,22 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; author-repair provider-health D2869-D2873 and provider-protocol D2874-D2877, freshly review both, then advance provider exchange, pack-capability and longitudinal-store lanes.",
+      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; author-repair concept-registry D2878-D2884, provider-health D2869-D2873 and provider-protocol D2874-D2877, freshly review all three, then advance provider exchange, pack-capability and longitudinal-store lanes.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "Provider-protocol's third fresh review reproduced four remaining lifecycle, preimage, closeout and endpoint-identity failures; the process resource remains returned before provider exchange can claim its first lane.",
+        "summary": "Concept-registry's third fresh review reproduced seven product-authority, transaction, history, consumption and identity failures; global concept identity remains returned before packs, Skills and Campaign can consume it.",
         "impact": "held",
         "evidence": [
-          "planning/provider-protocol-register/third-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d2874-provider-protocol-third-fresh-review/review.test.mjs",
-          "rfc/provider-protocol-register.md",
+          "planning/concept-registry/third-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d2878-concept-registry-third-fresh-review/review.test.mjs",
+          "rfc/concept-registry.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "provider-protocol-register.md",
-            "digest": "sha256:5ead0fb3cbe2fa112b4004c3f61b6379a0a5f261cda40a7200fd14d71dd61062"
+            "id": "concept-registry.md",
+            "digest": "sha256:48b347e24d1a563a3c8b732f297fe34f01cf36ca462d88e0da00ffbcd49d5aa7"
           }
         ]
       },

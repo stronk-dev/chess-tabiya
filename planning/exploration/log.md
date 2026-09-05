@@ -16549,3 +16549,22 @@ canonical mapping from the product's structured endpoint authority.
 receipt: `planning/provider-protocol-register/third-fresh-independent-buildability-review-2026-09-06.md`.
 One author repair must close all four, then another genuinely fresh review and the generic bootstrap
 dependency still precede process implementation.
+
+## 2026-09-06 — concept-registry third fresh independent return
+
+**What landed:** independently reviewed the second concept-registry author repair and returned it
+on [[D2878]]–[[D2884]]. The maintained target retains every historical return and repair. No
+production schema, registry, storage, pack, API, client, content, archive or protected-design byte
+changed.
+
+**What changed:** seven executable failures reproduce. The migration uses an invented SQL key,
+private run snapshot and reduced pack digest; reads its population before taking its transaction;
+and accepts stale restart receipts after registry/artifact/output changes. The revision-file
+compiler is absent, dead imports satisfy consumer closure, and locale lowercasing is weaker than the
+promised Unicode case fold.
+
+**Evidence/next:** `make concept-registry-third-fresh-review` retains 29 predecessor controls and
+passes 7/7 falsifiers. Exact receipt:
+`planning/concept-registry/third-fresh-independent-buildability-review-2026-09-06.md`. One coherent
+author repair, another genuinely fresh review and the shared-resource bootstrap dependency still
+precede implementation.

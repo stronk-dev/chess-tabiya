@@ -23262,6 +23262,69 @@
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2878",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4981f5379416f9ac9451e5cb19a67ce3e324939e8c0cfa9dfe055282e7d1a232",
+      "uxItems": [],
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2879",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a5511cd980fddb7ed3adbb91ad1b9fd91b85b9501de49f7f860dbafa7a509d98",
+      "uxItems": [],
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2880",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4a04ed6d55a7d76682325096071c7883b6be5e7d70bcaf17220d1b441af2b9c7",
+      "uxItems": [],
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2881",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5736350404b17bf94ed5f2ab2f45325f47674337058fb8ea09beaf9ff717933c",
+      "uxItems": [],
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2882",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:58d56102ccee63d0b311e16f021260930b680532148a9049a4cb3ea9b8d78011",
+      "uxItems": [],
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2883",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:94cb0a24c013612ab8769c8419ba3f6c035864943a75881c64cbf1130bd18f1d",
+      "uxItems": [],
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2884",
+      "state": "blocked",
+      "owner": "coordinator",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:eed2d96536d9e5abd6debaa45d14af4d4554087b04a2423422c96dcaa2003671",
+      "uxItems": [],
+      "blocker": "rfc:concept-registry.md"
     }
   ]
 }
