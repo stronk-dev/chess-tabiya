@@ -325,12 +325,12 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Repair the pack-capability fifteenth return, then fresh-review it and the longitudinal eighth author repair; complete independent review and acceptance for claim anchors, module registration/presentation, review compiler/map, bot roster/route source, social play and casting; do not implement a draft contract early.",
+        "nextAction": "Fresh-review the pack-capability fifteenth author repair and longitudinal eighth author repair; complete independent review and acceptance for claim anchors, module registration/presentation, review compiler/map, bot roster/route source, social play and casting; do not implement a draft contract early.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "Pack capability's fifteenth fresh review reproduces six remaining authority failures: no exhaustive state-specific durable row, expired leases settle, structural provider values and crossed objectives apply, consumed replay ignores impossible residue, current image plus receipt can be rewritten together, and terminal clocks are literal placeholders. Pack schema 0.30, evidence-job storage and corpus application remain held.",
+          "summary": "Pack capability's fifteenth author repair closes the seven fresh-review failures plus one cross-database self-audit at contract tier: one exhaustive durable-state parser, database clocks, canonical kind-specific provider bytes, exact objective/lease joins and a retained before/after transition authority pass 8/8 new groups. Pack schema 0.30, storage and corpus application remain held for fresh review and provider-exchange acceptance.",
           "impact": "advanced",
-          "evidence": ["planning/pack-capability-contract/fifteenth-fresh-independent-buildability-review-2026-09-05.md", "tools/d2771-pack-capability-fifteenth-fresh-review/review.test.mjs", "planning/pack-capability-contract/fourteenth-author-repair-2026-09-05.md", "rfc/pack-capability-contract.md", "planning/longitudinal-store/eighth-author-repair-2026-09-05.md", "rfc/README.md"]
+          "evidence": ["planning/pack-capability-contract/fifteenth-author-repair-2026-09-05.md", "tools/d2771-pack-capability-fifteenth-author-repair/contract.test.mjs", "planning/pack-capability-contract/fifteenth-fresh-independent-buildability-review-2026-09-05.md", "rfc/pack-capability-contract.md", "planning/longitudinal-store/eighth-author-repair-2026-09-05.md", "rfc/README.md"]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
       },

@@ -250,6 +250,14 @@ groups. Pack schema 0.30, evidence-job storage and the held corpus remain unauth
 bounded repair and another fresh review. Receipt:
 `planning/pack-capability-contract/fifteenth-fresh-independent-buildability-review-2026-09-05.md`.
 
+The same-day fifteenth author repair closes [[D2771]]–[[D2778]] at contract tier. One exhaustive
+23-column state parser, database-observed lease and terminal clocks, canonical provider response
+bytes with four kind-specific payload parsers, exact objective/lease joins and a retained
+before/after transition authority now execute under `make pack-capability-fifteenth-author-repair`.
+The full predecessor chain and 8/8 new groups pass. Pack schema 0.30, the evidence-job/transition
+migration and D560 remain unauthorized pending a genuinely fresh review and accepted provider
+exchange. Receipt: `planning/pack-capability-contract/fifteenth-author-repair-2026-09-05.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

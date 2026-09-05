@@ -1,11 +1,11 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **RETURNED by the fifteenth fresh independent review on [[D2771]]–[[D2777]].**
-  The durable row has no exhaustive state parser; expired leases settle; structural provider values
-  and crossed objective transitions apply; replay ignores state residue and accepts a coordinated
-  history rewrite; terminal clocks persist the literal `now`. `make
-  pack-capability-fifteenth-fresh-review` retains the full chain and reproduces 6/6 groups. No
-  implementation is authorised and D560 stays whole.
+- **Status:** draft — **fifteenth author repair complete for [[D2771]]–[[D2778]]; another genuinely
+  fresh independent review is required.** One exhaustive durable-row parser, database-observed
+  lease/terminal clocks, canonical kind-specific provider bytes, exact objective joins and an
+  immutable before/after transition authority execute under `make
+  pack-capability-fifteenth-author-repair`, retaining the full chain and passing 8/8 groups. This is
+  author evidence only: no implementation is authorised and D560 stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -1455,6 +1455,23 @@ CREATE TABLE evidence_jobs (
   UNIQUE (batch_id, batch_ordinal),
   UNIQUE (run_id, result_seq)
 ) STRICT;
+
+CREATE TABLE evidence_run_transitions (
+  run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
+  job_id TEXT NOT NULL UNIQUE REFERENCES evidence_jobs(id) ON DELETE CASCADE,
+  from_revision INTEGER NOT NULL CHECK (from_revision >= 0),
+  to_revision INTEGER NOT NULL CHECK (to_revision = from_revision + 1),
+  before_run_json TEXT NOT NULL,
+  before_run_digest TEXT NOT NULL,
+  after_run_json TEXT NOT NULL,
+  after_run_digest TEXT NOT NULL,
+  first_event_seq INTEGER NOT NULL CHECK (first_event_seq >= 1),
+  last_event_seq INTEGER NOT NULL CHECK (last_event_seq >= first_event_seq),
+  event_digest TEXT NOT NULL,
+  transition_digest TEXT NOT NULL,
+  committed_at TEXT NOT NULL,
+  PRIMARY KEY (run_id, to_revision)
+) STRICT;
 ```
 
 The composite foreign key is authoritative: a child cannot repeat a different run or origin from
@@ -1677,7 +1694,7 @@ transaction stores this exact receipt in `application_receipt_json`:
 
 ```ts
 interface EvidenceApplicationReceiptV1 {
-  readonly schema: "evidence_application_receipt@1";
+  readonly schema: "evidence_application_receipt@2";
   readonly jobId: string;
   readonly runId: string;
   readonly nodeId: string;
@@ -1686,12 +1703,17 @@ interface EvidenceApplicationReceiptV1 {
   readonly firstEventSeq: number;
   readonly lastEventSeq: number;
   readonly eventDigest: `sha256:${string}`;
+  readonly transitionDigest: `sha256:${string}`;
 }
 ```
 
 The range is non-empty and contiguous; its canonical event-array digest uses UTF-8 prefix
 `chess-tabiya/evidence-application/v1\0`; every event is in the same run/revision transition and
 the evidence reference derived from `jobId` occurs in the attached event and any objective event.
+The transition digest covers the exact job/run ids, before/after revisions and run-image digests,
+event range and event digest under prefix `chess-tabiya/evidence-transition/v1\0`; the transition
+table retains both parsed run images and their digests, so current-image plus receipt cannot be
+rewritten together while the authoritative predecessor is discarded.
 Only `consumed` has a receipt, and every consumed row validates its exact event range against the
 retained run. Replay after response loss returns the stored receipt without appending events; a
 missing, crossed or digest-mismatched range is corrupt storage, never permission to reapply
@@ -2361,6 +2383,31 @@ passes 6/6 executable falsifier groups. Exact receipt:
 One bounded author repair must compose the real provider-exchange authority, an exhaustive durable
 row parser, internally observed clock and immutable transition journal before another fresh review.
 
+## Fifteenth author repair (2026-09-05)
+
+The bounded repair closes [[D2771]], [[D2772]], [[D2773]], [[D2774]], [[D2775]], [[D2776]],
+[[D2777]] and self-audit [[D2778]] at contract tier. A single exact parser now consumes all 23
+durable job columns and enforces mutually exclusive admitted, running, retry, settled, cancelled and
+consumed shapes on every load. Lease acquisition and settlement read the database clock, reject
+expired or changed expiry, and terminal writes persist canonical observed instants rather than a
+placeholder.
+
+Provider response bytes are parsed canonically through four kind-specific payload algebras; their
+digest, operation, instance, request, generation, exact database-issued lease and stored payload
+remain one subject. Structural copies, invalid values and equal rows under another database fail.
+An objective proposal must begin at the request's exact state and carry exactly the request's prior
+evidence plus this job's evidence reference.
+
+Application now records both parsed run images, their digests, the exact appended event slice and
+one whole transition digest before advancing the current image and consuming the job. Response-loss
+replay loads that record by job identity and rejoins receipt, both images and the retained current
+event slice. Rewriting current image plus receipt no longer invents a historical predecessor.
+`make pack-capability-fifteenth-author-repair` retains the complete predecessor chain and passes 8/8
+new groups. Exact receipt:
+`planning/pack-capability-contract/fifteenth-author-repair-2026-09-05.md`. The provider adapter in
+the executable model is explicitly disposable; production remains dependency-blocked on the
+accepted provider-exchange authority and another genuinely fresh review.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -2581,7 +2628,7 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     eval/tablebase results, malformed acquisition identity/time, corrupted consumed columns,
     floating receipt revisions and caller-supplied snapshots each fail independently.
 29. **Every durable transition is complete, live and source-authenticated ([[D2771]], [[D2772]],
-    [[D2773]], [[D2774]], [[D2775]], [[D2776]], [[D2777]]).**
+    [[D2773]], [[D2774]], [[D2775]], [[D2776]], [[D2777]], [[D2778]]).**
     One exhaustive state-specific parser owns every `evidence_jobs` read and rejects missing or
     forbidden lease/retry/result/clock/receipt columns. Lease acquisition and settlement compare a
     canonical internally observed transaction instant with the stored expiry. Success consumes an
@@ -2666,6 +2713,11 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-09-05 (**[[D2771]]–[[D2778]] fifteenth author repair**): added one exhaustive durable-state
+  parser, database-observed expiry/terminal clocks, canonical provider bytes and kind-specific
+  values, exact objective joins, exact lease/request authority, and a retained before/after
+  transition record. `make pack-capability-fifteenth-author-repair` retains the full chain and
+  passes 8/8 new groups. Fresh review still gates implementation.
 - 2026-09-05 (**fifteenth fresh independent return**): returned on [[D2771]]–[[D2777]]. The durable
   row parser is partial; expired leases settle; provider and objective evidence can be forged or
   crossed; consumed replay ignores impossible residue; current image plus receipt can be rewritten

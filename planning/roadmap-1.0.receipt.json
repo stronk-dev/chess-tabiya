@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:e2f7896fbf1c7b0a5eb0db59b96f78f77373bb7cf23faa449b39aaa3b8e1a177",
+    "roadmap": "sha256:78588991a6dda78479aa1aacb9370622d7d90909ae50ad854efe3e25e917008d",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:aa06d07251fe77b06d3c7a3fe58f42c256cf7d2cf516c19ec64e10922602ca6e",
-    "rfcRegister": "sha256:4195bfde63d5493a492e98c88c33addb28c31b9c46c01851afc3dd79a0f7f9e6",
+    "workState": "sha256:d7a78311de044ba7fcb5f0adf97ecf65d9c4df6ef7ecacb0ccfd337fe3c79978",
+    "rfcRegister": "sha256:67ea17951c75d9d38f6825cf7200fb49c55bf0d60bc291c10da518aac8da1019",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 1058,
+      "blocked": 1059,
       "done": 826,
       "refused": 3
     },
@@ -109,15 +109,15 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Repair the pack-capability fifteenth return, then fresh-review it and the longitudinal eighth author repair; complete independent review and acceptance for claim anchors, module registration/presentation, review compiler/map, bot roster/route source, social play and casting; do not implement a draft contract early.",
+      "nextAction": "Fresh-review the pack-capability fifteenth author repair and longitudinal eighth author repair; complete independent review and acceptance for claim anchors, module registration/presentation, review compiler/map, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "Pack capability's fifteenth fresh review reproduces six remaining authority failures: no exhaustive state-specific durable row, expired leases settle, structural provider values and crossed objectives apply, consumed replay ignores impossible residue, current image plus receipt can be rewritten together, and terminal clocks are literal placeholders. Pack schema 0.30, evidence-job storage and corpus application remain held.",
+        "summary": "Pack capability's fifteenth author repair closes the seven fresh-review failures plus one cross-database self-audit at contract tier: one exhaustive durable-state parser, database clocks, canonical kind-specific provider bytes, exact objective/lease joins and a retained before/after transition authority pass 8/8 new groups. Pack schema 0.30, storage and corpus application remain held for fresh review and provider-exchange acceptance.",
         "impact": "advanced",
         "evidence": [
+          "planning/pack-capability-contract/fifteenth-author-repair-2026-09-05.md",
+          "tools/d2771-pack-capability-fifteenth-author-repair/contract.test.mjs",
           "planning/pack-capability-contract/fifteenth-fresh-independent-buildability-review-2026-09-05.md",
-          "tools/d2771-pack-capability-fifteenth-fresh-review/review.test.mjs",
-          "planning/pack-capability-contract/fourteenth-author-repair-2026-09-05.md",
           "rfc/pack-capability-contract.md",
           "planning/longitudinal-store/eighth-author-repair-2026-09-05.md",
           "rfc/README.md"

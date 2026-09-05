@@ -15921,3 +15921,20 @@ D560's held corpus application remain unauthorized.
 
 **Next:** repair the exhaustive durable-state, provider-delivery, objective-transition, live-clock
 and immutable-transition authorities, then commission another genuinely fresh review.
+
+## 2026-09-05 — Pack capability fifteenth author repair
+
+**What landed:** a bounded contract repair for [[D2771]]–[[D2777]] plus self-audit [[D2778]]. No
+production, schema artifact, migration, content, route, client, archive or protected-design byte
+changed.
+
+**What changed:** one exhaustive durable-row parser, database-observed expiry and terminal clocks,
+canonical retained provider bytes with four kind-specific payload parsers, exact objective and
+database-issued lease joins, and a durable before/after transition authority now execute. `make
+pack-capability-fifteenth-author-repair` retains the complete chain and passes 8/8 new groups.
+
+**What is blocked:** the RFC remains draft. Pack schema 0.30, evidence-job/transition storage and
+D560 remain unauthorized before a genuinely fresh review and accepted provider-exchange dependency.
+
+**Next:** independently attack every durable state, provider-result/restart boundary, transition
+chain, objective join and clock race; only then consider acceptance.
