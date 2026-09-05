@@ -894,7 +894,7 @@ shared-resource-bootstrap-eleventh-fresh-review: shared-resource-bootstrap-tenth
 shared-resource-bootstrap-eleventh-author-repair: shared-resource-bootstrap-eleventh-fresh-review
 	node --test tools/d2795-shared-resource-bootstrap-eleventh-author-repair/contract.test.mjs
 
-.PHONY: shared-resource-bootstrap-twelfth-fresh-review shared-resource-bootstrap-twelfth-author-repair shared-resource-bootstrap-thirteenth-fresh-review
+.PHONY: shared-resource-bootstrap-twelfth-fresh-review shared-resource-bootstrap-twelfth-author-repair shared-resource-bootstrap-thirteenth-fresh-review shared-resource-bootstrap-thirteenth-author-repair
 shared-resource-bootstrap-twelfth-fresh-review: shared-resource-bootstrap-eleventh-author-repair
 	node --test tools/d2828-shared-resource-bootstrap-twelfth-fresh-review/contract.test.mjs
 
@@ -903,6 +903,9 @@ shared-resource-bootstrap-twelfth-author-repair: shared-resource-bootstrap-twelf
 
 shared-resource-bootstrap-thirteenth-fresh-review: shared-resource-bootstrap-twelfth-author-repair
 	node --test tools/d2843-shared-resource-bootstrap-thirteenth-fresh-review/review.test.mjs
+
+shared-resource-bootstrap-thirteenth-author-repair: shared-resource-bootstrap-thirteenth-fresh-review
+	node --test tools/d2843-shared-resource-bootstrap-thirteenth-author-repair/contract.test.mjs
 
 .PHONY: semantic-collectors-promotion-fifth-fresh-review semantic-collectors-promotion-fifth-author-repair semantic-collectors-promotion-sixth-fresh-review semantic-collectors-promotion-sixth-author-repair semantic-collectors-promotion-seventh-fresh-review semantic-collectors-promotion-seventh-author-repair semantic-collectors-promotion-eighth-fresh-review semantic-collectors-promotion-eighth-author-repair semantic-collectors-promotion-ninth-fresh-review semantic-collectors-promotion-ninth-author-repair semantic-collectors-promotion-tenth-fresh-review semantic-collectors-promotion-tenth-author-repair semantic-collectors-promotion-eleventh-fresh-review semantic-collectors-promotion-eleventh-author-repair semantic-collectors-promotion-twelfth-fresh-review
 semantic-collectors-promotion-fifth-fresh-review:
@@ -1121,7 +1124,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-ninth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-sixteenth-author-repair candidate-packet-tenth-author-repair semantic-collectors-promotion-twelfth-fresh-review provider-health-sixth-author-repair shared-resource-bootstrap-twelfth-author-repair provider-protocol-second-author-repair test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-ninth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-sixteenth-author-repair candidate-packet-tenth-author-repair semantic-collectors-promotion-twelfth-fresh-review provider-health-sixth-author-repair shared-resource-bootstrap-thirteenth-author-repair provider-protocol-second-author-repair test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 

@@ -1,10 +1,11 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **RETURNED by thirteenth fresh independent review on [[D2843]]–[[D2845]].**
-  The twelfth repair closes [[D2828]]–[[D2834]], but literal element access still loses its
-  referenced declaration, canonical ordering has two incompatible authorities and catalogue
-  admission accepts Unicode identifiers the projector refuses. Another bounded author repair and
-  genuinely fresh review are required before acceptance or production.
+- **Status:** draft — **thirteenth author repair completed on [[D2843]]–[[D2845]]; another genuinely
+  fresh independent review is required.** Literal element access now retains its exact property
+  symbol/site, the existing shared UTF-16 canonical order owns every graph/artifact set, and one
+  Unicode-aware selector parser runs before authority issuance and during projection. `make
+  shared-resource-bootstrap-thirteenth-author-repair` retains the complete chain and passes 3/3
+  repair controls. No implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -966,7 +967,7 @@ method remains representable. Call and construct overloads use their exact signa
 interface construct signatures remain complete and nested class constructors cannot cross.
 
 The projector accepts only the exact descriptor object issued by the validated catalogue compiler;
-plain, spread and incompatible descriptors fail. One UTF-8 byte comparator orders graph edges,
+plain, spread and incompatible descriptors fail. The shared UTF-16 code-unit comparator orders graph edges,
 declaration-artifact paths and other canonical string sets. `make
 shared-resource-bootstrap-twelfth-author-repair` retains the complete predecessor chain and passes
 all seven repairs plus three direct/self-audit controls (10/10). This remains author evidence only;
@@ -1021,6 +1022,23 @@ passes 3/3 executable falsifiers. Exact receipt:
 `planning/shared-resource-register-bootstrap/thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
 No production implementation is authorized until one ordering/parser authority and complete literal
 element-access retention are author-repaired and freshly reviewed.
+
+### Thirteenth author repair (2026-09-05)
+
+The bounded repair closes all three returns at contract tier without narrowing valid TypeScript.
+Literal string/numeric element access resolves the exact compiler property symbol, retains its
+site-bound edge and queues the target declaration exactly as dot access does. The RFC's existing
+canonical-object authority—ascending UTF-16 code-unit order—now owns root names, node ids, root
+members/selectors, complete serialized edges and declaration-artifact paths; the contradictory
+UTF-8 language is removed rather than creating a second canonicalizer.
+
+Catalogue compilation and projection call one Unicode `ID_Start`/`ID_Continue` structural parser.
+A descriptor with a valid Unicode function selector projects successfully, while malformed selector
+syntax fails before the descriptor enters the authority set. `make
+shared-resource-bootstrap-thirteenth-author-repair` retains the complete predecessor chain and
+passes 3/3 non-ASCII/literal-access controls. This remains author evidence only; another genuinely
+fresh independent review still gates acceptance and production. Receipt:
+`planning/shared-resource-register-bootstrap/thirteenth-author-repair-2026-09-05.md`.
 
 ## Acceptance criteria
 
@@ -1133,14 +1151,14 @@ element-access retention are author-repaired and freshly reviewed.
 43. [[D2832]] Case-distinct valid call graphs sort by the one canonical byte comparator and remain
     representable.
 44. [[D2833]] Nested class constructors never enter the overload set of an outer construction.
-45. [[D2834]] Dependency-artifact paths are ordered by the same canonical UTF-8 byte comparator
+45. [[D2834]] Dependency-artifact paths are ordered by the shared canonical UTF-16 code-unit comparator
     before their source digest is computed.
 46. [[D2843]] Literal string/numeric element access retains its exact compiler-resolved property
     declaration and site-bound edge just like dot access, or fails closed when no exact property
     exists.
-47. [[D2844]] One explicitly chosen canonical ordering authority applies to node ids, roots, complete
-    serialized edges and dependency-artifact paths; a non-ASCII fixture distinguishes UTF-8 byte
-    order from JavaScript/UTF-16 order and cannot be satisfied by contradictory prose.
+47. [[D2844]] The existing shared UTF-16 canonical ordering authority applies to node ids, roots,
+    complete serialized edges and dependency-artifact paths; a non-ASCII fixture distinguishes it
+    from UTF-8 byte order and cannot be satisfied by contradictory prose.
 48. [[D2845]] Catalogue admission and projection execute the same structural-selector parser and
     identifier domain; every catalogue-issued Unicode-identifier descriptor either projects or is
     refused before authority is issued.
@@ -1163,6 +1181,11 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-05: [[D2843]]–[[D2845]] thirteenth author repair. Literal element access retains its exact
+  property/site, every graph/artifact set uses the existing shared UTF-16 canonical order, and one
+  Unicode-aware selector parser owns catalogue issuance plus projection. `make
+  shared-resource-bootstrap-thirteenth-author-repair` retains the chain and passes 3/3 controls;
+  fresh review still gates production.
 - 2026-09-05: returned by thirteenth fresh independent buildability review on [[D2843]]–[[D2845]].
   Literal element access drops its target, graph ordering does not execute one declared comparator,
   and catalogue/projector selector grammars disagree. `make

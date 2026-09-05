@@ -246,6 +246,14 @@ falsifiers. The critical path remains a bounded author repair and another genuin
 catalogue/register implementation is unauthorized. Receipt:
 `planning/shared-resource-register-bootstrap/thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
 
+The same-day thirteenth author repair closes those three seams without narrowing valid TypeScript.
+Literal bracket access retains the exact property/site; the existing shared UTF-16 order now owns
+every graph and artifact set; and one Unicode-aware parser runs before descriptor issuance and at
+projection. `make shared-resource-bootstrap-thirteenth-author-repair` retains the complete chain
+and passes 3/3 non-ASCII/literal-access controls. Another genuinely fresh review still gates
+acceptance and production. Receipt:
+`planning/shared-resource-register-bootstrap/thirteenth-author-repair-2026-09-05.md`.
+
 The same-day twelfth `pack-capability-contract` author repair closes [[D2587]]–[[D2592]] at contract
 tier without claiming production. One transaction-owned before/after run result derives the exact
 core/objective/recorded-guard journal suffix and receipt; the complete nested objective request is

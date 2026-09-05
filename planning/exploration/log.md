@@ -16230,3 +16230,18 @@ predecessor chain and passes 3/3 new falsifiers. Exact receipt:
 `planning/shared-resource-register-bootstrap/thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
 One bounded author repair must unify relation retention, canonical ordering and selector admission,
 then undergo another genuinely fresh review before production implementation.
+
+## 2026-09-05 — shared-resource bootstrap thirteenth author repair
+
+**What landed:** repaired [[D2843]]–[[D2845]] at contract tier without changing any production
+catalogue, checker, register, schema, provider, product or content byte.
+
+**What changed:** literal bracket access now retains its exact compiler property declaration and
+site; the existing shared UTF-16 canonical order owns root names, node ids, roots, serialized edges
+and declaration artifacts; and one Unicode-aware structural-selector parser runs before authority
+issuance and during projection.
+
+**Evidence/next:** `make shared-resource-bootstrap-thirteenth-author-repair` retains the complete
+predecessor chain, reproduces all three returned attacks and passes 3/3 repair controls. Exact
+receipt: `planning/shared-resource-register-bootstrap/thirteenth-author-repair-2026-09-05.md`.
+Another genuinely fresh independent review still gates acceptance and production implementation.
