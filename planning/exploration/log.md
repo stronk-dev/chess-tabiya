@@ -16044,3 +16044,21 @@ canonicalized at their asserted ABI.
 predecessor controls and passes 7/7 new repair groups. Exact receipt:
 `planning/shared-resource-register-bootstrap/eleventh-author-repair-2026-09-05.md`. Another
 genuinely fresh independent review still gates acceptance and all production implementation.
+
+## 2026-09-05 — pack capability sixteenth fresh independent review
+
+**What landed:** returned the fifteenth author repair on [[D2802]]–[[D2808]] with seven executable
+falsifiers. No production schema, migration, storage, provider, route, client or content byte
+changed; D560 remains held.
+
+**What changed:** provider payloads can contradict their exact request/provider envelope and
+multiple JSON key orders receive distinct accepted digests. Retry and provider-unavailable terminal
+arms accept undeclared shapes; origin/consumer/operation identity crosses the exhaustive parser; a
+post-expiry provider timestamp settles; and a coordinated rewrite of the complete transition row,
+images, receipt and hashes passes replay.
+
+**Evidence/next:** `make pack-capability-sixteenth-fresh-review` retains the complete predecessor
+chain and passes 7/7 new falsifiers. Exact receipt:
+`planning/pack-capability-contract/sixteenth-fresh-independent-buildability-review-2026-09-05.md`.
+Next is a bounded repair using the canonical byte authority, exact provider/state joins and an
+append-only history authority, followed by another genuinely fresh review.

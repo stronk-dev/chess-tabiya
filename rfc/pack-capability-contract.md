@@ -1,11 +1,10 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **fifteenth author repair complete for [[D2771]]–[[D2778]]; another genuinely
-  fresh independent review is required.** One exhaustive durable-row parser, database-observed
-  lease/terminal clocks, canonical kind-specific provider bytes, exact objective joins and an
-  immutable before/after transition authority execute under `make
-  pack-capability-fifteenth-author-repair`, retaining the full chain and passing 8/8 groups. This is
-  author evidence only: no implementation is authorised and D560 stays whole.
+- **Status:** draft — **returned by the sixteenth fresh independent review on [[D2802]]–[[D2808]].**
+  Payload/request identity, canonical provider bytes, retry/terminal unions,
+  origin-consumer-operation joins, provider-within-lease time and immutable transition authority
+  remain incomplete. `make pack-capability-sixteenth-fresh-review` retains the complete predecessor
+  chain and passes 7/7 new falsifiers. No implementation is authorised and D560 stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -2407,6 +2406,23 @@ new groups. Exact receipt:
 `planning/pack-capability-contract/fifteenth-author-repair-2026-09-05.md`. The provider adapter in
 the executable model is explicitly disposable; production remains dependency-blocked on the
 accepted provider-exchange authority and another genuinely fresh review.
+
+## Sixteenth fresh independent return (2026-09-05)
+
+The next independent pass returns the durable boundary on [[D2802]], [[D2803]], [[D2804]],
+[[D2805]], [[D2806]], [[D2807]] and [[D2808]]. The sealed provider envelope does not join its
+payload to request FEN/depth or provider identity, and JSON round-trip equality admits multiple
+response byte images. Retry basis is arbitrary JSON; empty/unavailable settlements omit their
+required availability/failure authority; and parsed rows can cross origin, consumer and provider
+operation.
+
+A provider response timestamped after the exact lease expiry still settles. More fundamentally,
+the claimed immutable transition is a mutable SQL row protected only by recomputable hashes: a
+coherent rewrite of before/after/current images, revisions, digests, transition and receipt passes
+replay. `make pack-capability-sixteenth-fresh-review` retains the complete predecessor chain and
+passes 7/7 fresh falsifiers. Exact receipt:
+`planning/pack-capability-contract/sixteenth-fresh-independent-buildability-review-2026-09-05.md`.
+Production remains unauthorized pending a bounded repair and another genuinely fresh review.
 
 ## Acceptance criteria
 

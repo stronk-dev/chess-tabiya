@@ -276,6 +276,14 @@ The full predecessor chain and 8/8 new groups pass. Pack schema 0.30, the eviden
 migration and D560 remain unauthorized pending a genuinely fresh review and accepted provider
 exchange. Receipt: `planning/pack-capability-contract/fifteenth-author-repair-2026-09-05.md`.
 
+The sixteenth fresh independent review returns that repair on [[D2802]], [[D2803]], [[D2804]],
+[[D2805]], [[D2806]], [[D2807]] and [[D2808]]. Provider payloads can contradict their jobs;
+noncanonical bytes, fabricated retry/unavailability arms and crossed durable identities pass;
+response time can exceed the lease; and the transition “journal” can be coherently rewritten with
+recomputed hashes. `make pack-capability-sixteenth-fresh-review` retains the complete predecessor
+chain and passes 7/7 new falsifiers. Pack-schema/storage implementation remains held. Receipt:
+`planning/pack-capability-contract/sixteenth-fresh-independent-buildability-review-2026-09-05.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

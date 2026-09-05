@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:8ecec659ebda22a1c1e33a696a6c4933ce6aa0aa1e4c847bba695262d602a786",
+    "roadmap": "sha256:c0d81ed23e53ae634c1faf61ef868c273e4bafeec00e842093d2f7e3c8840980",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:1bd82e90f9c89906252c5e6fc7584ee18ec3a68f69d73cffe419bfa4b8f088d2",
-    "rfcRegister": "sha256:65c96f6d191f784865d5fbee30bd83a6f50eb03c4c3fe88898844dc5e54accce",
+    "workState": "sha256:0409aa2d96cb8e86b5d221e511c4955ed6fa4ae6df02523bd54d5a676061c813",
+    "rfcRegister": "sha256:8f4c2278df4aa45006aa0f6cb3a2d0171d1f6e7358e4127edd0b5ee88626434e",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 1082,
+      "blocked": 1089,
       "done": 826,
       "refused": 3
     },
@@ -109,16 +109,15 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Fresh-review the shared-resource bootstrap's eleventh repair, plus longitudinal storage and pack capability; complete independent review and acceptance for remaining foundation contracts; do not implement a draft contract early.",
+      "nextAction": "Author-repair pack capability's seven payload/state/time/history blockers, then fresh-review it; independently review shared-resource bootstrap and longitudinal storage; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "The eleventh shared-resource bootstrap author repair binds complete importer-visible declaration artifacts, fails closed on unresolved member access and global eval, represents constructor and local-call relations, canonicalizes both graph ABIs and limits assertion to the exact compiler-issued sealed image. Production remains held for fresh review.",
-        "impact": "advanced",
+        "summary": "The sixteenth fresh pack-capability review returns seven executable blockers: provider payloads can contradict their jobs, result bytes and retry/terminal states are not canonical/closed, durable identities cross, response time exceeds the lease, and the transition journal can be coherently rewritten. Pack schema and evidence-job storage remain held.",
+        "impact": "held",
         "evidence": [
-          "planning/shared-resource-register-bootstrap/eleventh-author-repair-2026-09-05.md",
-          "tools/d2795-shared-resource-bootstrap-eleventh-author-repair/contract.test.mjs",
-          "planning/shared-resource-register-bootstrap/eleventh-fresh-independent-buildability-review-2026-09-05.md",
-          "rfc/shared-resource-register-bootstrap.md",
+          "planning/pack-capability-contract/sixteenth-fresh-independent-buildability-review-2026-09-05.md",
+          "tools/d2802-pack-capability-sixteenth-fresh-review/review.test.mjs",
+          "rfc/pack-capability-contract.md",
           "rfc/README.md"
         ]
       },
