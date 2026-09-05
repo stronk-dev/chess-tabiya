@@ -206,6 +206,14 @@ shared-resource-bootstrap-eleventh-fresh-review` retains forty-nine predecessor 
 by another fresh review; no catalogue/register implementation is authorized. Receipt:
 `planning/shared-resource-register-bootstrap/eleventh-fresh-independent-buildability-review-2026-09-05.md`.
 
+The same-day eleventh author repair closes those seven bounded seams. Non-repository declarations
+now carry complete importer-visible declaration-artifact identity; property access and global
+`eval` fail closed; constructor and ordinary local-call graphs are representable; and only the
+exact compiler-projector-issued sealed graph crosses assertion. `make
+shared-resource-bootstrap-eleventh-author-repair` retains fifty-six predecessor controls and passes
+7/7 new repair groups. Another genuinely fresh review still gates acceptance and production.
+Receipt: `planning/shared-resource-register-bootstrap/eleventh-author-repair-2026-09-05.md`.
+
 The same-day twelfth `pack-capability-contract` author repair closes [[D2587]]–[[D2592]] at contract
 tier without claiming production. One transaction-owned before/after run result derives the exact
 core/objective/recorded-guard journal suffix and receipt; the complete nested objective request is

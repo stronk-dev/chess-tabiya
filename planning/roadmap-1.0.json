@@ -325,12 +325,12 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Author-repair the seven shared-resource bootstrap semantic-closure, relation and assertion blockers, then fresh-review it; independently review longitudinal storage and pack capability; do not implement a draft contract early.",
+        "nextAction": "Fresh-review the shared-resource bootstrap's eleventh repair, plus longitudinal storage and pack capability; complete independent review and acceptance for remaining foundation contracts; do not implement a draft contract early.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "The eleventh fresh shared-resource bootstrap review returns seven executable blockers: external sibling meaning and any-member relations can disappear, eval publishes, constructors and ordinary local calls are not representable, and digest/signature assertions trust rather than re-derive their claimed relations. Production catalogue/register work remains held.",
-          "impact": "held",
-          "evidence": ["planning/shared-resource-register-bootstrap/eleventh-fresh-independent-buildability-review-2026-09-05.md", "tools/d2795-shared-resource-bootstrap-eleventh-fresh-review/contract.test.mjs", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"]
+          "summary": "The eleventh shared-resource bootstrap author repair binds complete importer-visible declaration artifacts, fails closed on unresolved member access and global eval, represents constructor and local-call relations, canonicalizes both graph ABIs and limits assertion to the exact compiler-issued sealed image. Production remains held for fresh review.",
+          "impact": "advanced",
+          "evidence": ["planning/shared-resource-register-bootstrap/eleventh-author-repair-2026-09-05.md", "tools/d2795-shared-resource-bootstrap-eleventh-author-repair/contract.test.mjs", "planning/shared-resource-register-bootstrap/eleventh-fresh-independent-buildability-review-2026-09-05.md", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
       },

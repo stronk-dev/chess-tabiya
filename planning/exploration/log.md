@@ -16028,3 +16028,19 @@ complete predecessor chain and is enrolled in `verify-governance`.
 predecessor controls and passes 7/7 fresh groups. Exact receipt:
 `planning/shared-resource-register-bootstrap/eleventh-fresh-independent-buildability-review-2026-09-05.md`.
 Next is one bounded author repair and another genuinely fresh review; implementation remains held.
+
+## 2026-09-05 — shared-resource bootstrap eleventh author repair
+
+**What landed:** author-repaired [[D2795]]–[[D2801]] at contract tier. No production catalogue,
+checker, register, schema, product or content byte changed.
+
+**What changed:** one canonical semantic-source artifact image now binds every non-repository
+declaration; unresolved repository property access and compiler-resolved global `eval` fail;
+construct overloads and ordinary local calls are representable; and only the exact validated,
+sealed compiler-projector graph crosses assertion. Both enriched and compatibility graphs are
+canonicalized at their asserted ABI.
+
+**Evidence/next:** `make shared-resource-bootstrap-eleventh-author-repair` retains fifty-six
+predecessor controls and passes 7/7 new repair groups. Exact receipt:
+`planning/shared-resource-register-bootstrap/eleventh-author-repair-2026-09-05.md`. Another
+genuinely fresh independent review still gates acceptance and all production implementation.

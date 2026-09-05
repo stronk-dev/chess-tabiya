@@ -1,11 +1,10 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **returned by the eleventh fresh independent review on [[D2795]]–[[D2801]].**
-  Transitive external meaning remains unsealed; `any` property access and `eval` publish; construct
-  and ordinary local-call graphs are not representable; and the graph assertion does not bind
-  declaration digests or resolved signatures to their asserted trees/compiler relations. `make
-  shared-resource-bootstrap-eleventh-fresh-review` retains forty-nine earlier controls and passes
-  7/7 new falsifiers. No implementation is authorized.
+- **Status:** draft — **eleventh author repair completed on [[D2795]]–[[D2801]]; another genuinely
+  fresh independent review is required.** Exact declaration-artifact identity, fail-closed
+  member/`eval` resolution, constructor/local-call representation and compiler-issued sealed graph
+  authority now execute. `make shared-resource-bootstrap-eleventh-author-repair` retains fifty-six
+  earlier controls and passes 7/7 new repair groups. No implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -399,7 +398,7 @@ The closed adapter set is:
        readonly package: string;
        readonly version: string;
        readonly integrity: string;
-       readonly sourceDigest: `sha256:${string}`;
+     readonly sourceDigest: `sha256:${string}`; // complete installed declaration artifact
      } | null;
    }
 
@@ -425,7 +424,8 @@ The closed adapter set is:
    `graph`, node, edge, changed-symbol or compiler-program argument**. A private
    `compileTypeScriptGraph(descriptor, repositoryRevision)` constructs the graph from selector
    resolution and compiler-symbol traversal. A private `assertTypeScriptGraphV1` then validates the
-   complete constructed ABI before deep sealing: exact keys and canonical scalar domains for graph,
+   complete constructed ABI before deep sealing and issues authority only for that exact sealed
+   graph reference: exact keys and canonical scalar domains for graph,
    program, roots, nodes, syntax trees, edges and dependency identities; unique canonically ordered
    roots/node ids/edges; exact descriptor-selector equality; unique node ids; root and edge endpoint
    membership; legal origin/dependency combinations; repository reachability of every node from a
@@ -490,14 +490,15 @@ The closed adapter set is:
 
    External boundaries are closed rather than ignored ([[D2491]]):
    - `node:` builtins use `origin: "node_builtin"`, the module/export path in `id`, the exported
-     declaration as `tree`, and exact `{ package:"@types/node", version, integrity, sourceDigest }`
-     identity;
+   declaration as `tree`, and exact `{ package:"@types/node", version, integrity, sourceDigest }`
+     identity, where `sourceDigest` covers the complete importer-visible declaration artifact;
    - ECMAScript/DOM library symbols use `origin: "typescript_lib"`, the normalized lib filename and
      export path in `id`, the declaration as `tree`, and `{ package:"typescript", version,
-     integrity, sourceDigest }` from the exact compiler image and retained declaration;
+     integrity, sourceDigest }` from the exact compiler declaration artifact;
    - package imports use `origin: "external_package"`, package/export path in `id`, the public
      declaration as `tree`, and the exact resolved `{ package, version, integrity, sourceDigest }`
-     identity from `pnpm-lock.yaml` plus the retained declaration; workspace links resolve as
+     identity from `pnpm-lock.yaml` plus the complete importer-visible declaration artifact;
+     workspace links resolve as
      repository nodes, not external packages; and
    - every call/construct/tag edge records the compiler-selected signature plus the complete public
      overload set in the exact `ContractEdgeV1` fields above.
@@ -947,6 +948,23 @@ and passes 7/7 new falsifiers. Exact receipt:
 `planning/shared-resource-register-bootstrap/eleventh-fresh-independent-buildability-review-2026-09-05.md`.
 No production implementation is authorized until all seven are repaired and freshly reviewed.
 
+### Eleventh author repair (2026-09-05)
+
+The bounded repair closes all seven returns at contract tier. Every non-repository declaration is
+bound to the canonical path/byte image of its complete importer-visible declaration artifact, so
+sibling and cross-file meaning moves identity. Repository property access requires an exact
+retained property edge; global `eval` is refused by compiler-resolved target authority; and
+construct edges retain their constructor declaration overloads.
+
+The compiler-backed projector validates before deep sealing and issues authority only for that
+exact graph reference. Cloned or rewritten tree/signature payloads cannot re-enter assertion by
+shape. Enriched edges and the predecessor compatibility image are each canonicalized at their own
+ABI boundary, preserving ordinary local-call graphs. `make
+shared-resource-bootstrap-eleventh-author-repair` retains all fifty-six predecessor controls and
+passes 7/7 new repair groups. This remains author evidence only; another genuinely fresh review
+still gates acceptance and production. Receipt:
+`planning/shared-resource-register-bootstrap/eleventh-author-repair-2026-09-05.md`.
+
 ## Acceptance criteria
 
 1. Catalogue and README register populations are set-equal; no `RESOURCE_NAMES`, `SCHEMA_SLUGS` or
@@ -1032,6 +1050,21 @@ No production implementation is authorized until all seven are repaired and fres
 30. [[D2707]] Dynamic imports fail rather than introducing an unrepresented module dependency.
 31. [[D2708]] Element access accepts one literal string/numeric key and refuses broad runtime index
     lookup.
+32. [[D2795]] A semantic change anywhere in an importer-visible non-repository declaration
+    artifact moves every dependent node identity and graph digest even when the directly retained
+    declaration is unchanged.
+33. [[D2796]] Every repository property access resolves to an exact retained property edge;
+    `any`/`unknown` member access fails before publication.
+34. [[D2797]] Construct edges retain the compiler-selected signature and complete constructor
+    declaration overload set; a valid overloaded class remains representable.
+35. [[D2798]] The compiler-resolved global `eval` intrinsic fails while a legal object member with
+    the same spelling remains representable.
+36. [[D2799]] Replacing a declaration tree under an old artifact digest cannot cross graph
+    assertion.
+37. [[D2800]] Replacing a compiler-selected signature with any other syntax tree cannot cross graph
+    assertion.
+38. [[D2801]] Final enriched and compatibility graph images are independently canonicalized, and
+    an ordinary repository-local call remains representable.
 
 ## Discharges
 
