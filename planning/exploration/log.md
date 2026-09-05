@@ -15681,3 +15681,21 @@ authority; and canonical `/readyz` joins the real application boundary and 14-si
 groups plus strict TypeScript. Exact receipt:
 `planning/storage-backup-recovery/fourth-author-repair-2026-09-05.md`. Another genuinely fresh
 review precedes acceptance and production implementation.
+
+## 2026-09-05 — safe deployment profiles third fresh independent return
+
+**What landed:** [[D2730]]–[[D2735]] and `make safe-deployment-third-fresh-review`. Both retained
+author gates stay green, while six new controls cross the full compiled-image, common-subject,
+receipt, TLS, readiness and crash-recovery boundaries.
+
+**What changed:** `safe-deployment-profiles` remains draft and no production implementation is
+authorized. Canonical config parsing survives, but canonical mounted bytes can still carry an
+impossible profile; successful checks do not prove their receipt subject; the executable result is
+not the declared protocol; TLS and readiness can be asserted without their required authorities;
+and profile migration has no durable effect journal.
+
+**What is blocked:** the safe local/appliance/hosted release surface and F12-A remain held. The
+repair must compose, rather than copy, storage recovery's revision/readiness/journal authorities.
+
+**Next:** author [[D2730]]–[[D2735]] as one deployment authority, then require another genuinely
+fresh buildability review before production server, Compose, Caddy, workflow or release work.

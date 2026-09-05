@@ -1015,7 +1015,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-eighth-author-repair storage-backup-fourth-author-repair test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-eighth-author-repair storage-backup-fourth-author-repair safe-deployment-third-fresh-review test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 
@@ -1057,6 +1057,10 @@ safe-deployment-second-fresh-review: safe-deployment-author-repair
 safe-deployment-second-author-repair: safe-deployment-author-repair
 	./node_modules/.bin/vitest run --config tools/d2614-safe-deployment-second-author-repair/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/tsc -p tools/d2614-safe-deployment-second-author-repair/tsconfig.json
+
+.PHONY: safe-deployment-third-fresh-review
+safe-deployment-third-fresh-review: safe-deployment-second-author-repair
+	./node_modules/.bin/vitest run --config tools/d2730-safe-deployment-third-fresh-review/vitest.config.ts --reporter=verbose
 
 .PHONY: shared-resource-bootstrap-author-contract shared-resource-bootstrap-fresh-review shared-resource-bootstrap-author-repair shared-resource-bootstrap-second-fresh-review shared-resource-bootstrap-second-author-repair shared-register-reconciliation-author-repair shared-resource-bootstrap-third-fresh-review shared-resource-bootstrap-third-author-repair shared-resource-bootstrap-fourth-author-repair shared-resource-bootstrap-fourth-fresh-review shared-resource-bootstrap-fifth-author-repair shared-resource-bootstrap-sixth-fresh-review shared-resource-bootstrap-sixth-author-repair
 shared-resource-bootstrap-author-contract:

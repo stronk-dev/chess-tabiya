@@ -1,10 +1,11 @@
 # RFC: Safe deployment profiles and reverse proxy
 
-- **Status:** **draft — second author repair completed 2026-09-04 on [[D2614]]–[[D2618]]; another
-  genuinely fresh independent review is required.** One canonical compiled image crosses the
-  container boundary; runtime parsing, exact sealed receipts, TLS identity and durable profile
-  transitions are executable. `make safe-deployment-second-author-repair` retains the prior 8/8
-  author controls and passes 5/5 new behavioral groups plus strict TypeScript. Implementation
+- **Status:** **draft — third fresh independent review returned the second author repair on
+  [[D2730]]–[[D2735]].** The mounted-image relation is partial; sealed checks share no deployment
+  subject; the executable object is not the declared receipt protocol; TLS fingerprints are not a
+  sealed validation result; readiness bypasses its storage dependency; and profile migration is an
+  in-memory enum rather than crash-durable effect authority. `make
+  safe-deployment-third-fresh-review` retains both author gates and reproduces 6/6. Implementation
   remains unauthorized.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
@@ -44,6 +45,19 @@ The five returned seams are repaired as one cross-process deployment authority:
 behavioral groups plus strict TypeScript. Exact receipt:
 `planning/safe-deployment-profiles/second-author-repair-2026-09-04.md`. This is author evidence, not
 acceptance or implementation; another genuinely fresh independent review remains required.
+
+## Third fresh independent return (2026-09-05)
+
+The second repair closes the five seams it names, but the complete buildability pass returned it on
+six authority boundaries. [[D2730]] shows the mounted-image loader accepts profile-impossible
+canonical boundary tuples. [[D2731]] shows sealed checks under one UUID remain detached from the
+config, image, artifacts, origin and profile they supposedly prove. [[D2732]] shows the executable
+success object omits the declared receipt protocol/union and accepts mutable release identity and
+unsafe elapsed time. [[D2733]] shows certificate fingerprints are accepted without a sealed
+handshake/trust/clock proof. [[D2734]] shows deployment readiness bypasses the canonical storage
+readiness response this RFC depends on. [[D2735]] shows the advertised crash-resumable migration is
+a caller-authored in-memory state/effect progression. Exact receipt:
+`planning/safe-deployment-profiles/third-fresh-independent-buildability-review-2026-09-05.md`.
 
 ## Summary
 
@@ -996,6 +1010,10 @@ state or transition rule. Exact evidence:
     config/TLS restart advances digests; implicit profile/origin change refuses. Explicit migration
     crash-tests every journal/database/bind/fsync boundary and cannot serve the target until all
     learner sessions and public tokens are invalidated.
+25. A third author repair retains both prior gates and adds able-to-fail controls for complete
+    mounted-image relation/digest validation, one sealed deployment subject, the full canonical
+    receipt union, sealed live TLS proof, composed storage/deployment readiness and crash-durable
+    profile migration. Another genuinely fresh independent review still gates acceptance.
 
 ## Discharges
 
@@ -1014,6 +1032,12 @@ implementation detail.
 
 ## Changelog
 
+- 2026-09-05: third fresh independent review returned the second repair on
+  [[D2730]]–[[D2735]]. Six new controls reproduce partial mounted-image validation, detached check
+  proof, an incomplete/mutable receipt, ungrounded TLS identity, readiness-contract bypass and
+  caller-authored migration effects. `make safe-deployment-third-fresh-review` retains the prior
+  author gates and passes 6/6; no production/server/Compose/Caddy/workflow/release/content/archive
+  or protected-design byte changed.
 - 2026-09-04: second author repair completed [[D2614]]–[[D2618]]. One canonical mounted
   image crosses into the app; the runtime compiler closes unknown input; operation/profile success
   tuples derive from sealed live results; proxied live receipts bind TLS chain/SPKI/leaf identity;

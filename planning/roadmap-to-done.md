@@ -1506,6 +1506,16 @@ sessions and public tokens before new ingress. `make safe-deployment-second-auth
 implementation remains held for another genuinely fresh review; receipt:
 `planning/safe-deployment-profiles/second-author-repair-2026-09-04.md`.
 
+The 2026-09-05 third fresh safe-deployment review returned that repair on
+[[D2730]]–[[D2735]]. The mounted image admits profile-impossible tuples; sealed checks are detached
+from the deployment they claim to prove; the executable success object omits the declared receipt
+union and immutable revision rules; TLS fingerprints lack handshake/trust/clock authority;
+readiness bypasses storage's canonical proof; and migration effects are caller-authored memory
+rather than a durable journal. `make safe-deployment-third-fresh-review` retains both prior author
+gates and reproduces 6/6. The three supported profiles and production release proof remain held for
+one author repair and another genuinely fresh review; receipt:
+`planning/safe-deployment-profiles/third-fresh-independent-buildability-review-2026-09-05.md`.
+
 ## Production surface inventory
 
 ### Client routes

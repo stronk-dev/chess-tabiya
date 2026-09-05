@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a5e0a4ca58c1c63baf16da27e515c16aa259a9ef002b94603ce7135e7d9fecf1",
+    "roadmap": "sha256:4e3ab3e9dda6488922b932046f266a2e45d482947ebc88e3b488e8b9cc5a5a7d",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:a67ccc4fd951059726692c60c17171829bf5ce9f2beca9f6ccbaf78130b0711a",
-    "rfcRegister": "sha256:49755e77530bdf538f78d6a5e2133099bea19afb77f872d192256ac7b3daa167",
+    "workState": "sha256:ee854caf91f982017a2bfd089887de69ebf664b5d4561785f7629db83ea1f8c6",
+    "rfcRegister": "sha256:30af82d5d3899714e3dc0b48a4f920597db6833e71a999a9fbc4fc1cd73d92fe",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 1011,
+      "blocked": 1017,
       "done": 825,
       "refused": 3
     },
@@ -220,18 +220,17 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Fresh-review the storage-backup fourth author repair; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results; extend export, deletion, backup and rebuild with each object.",
+      "nextAction": "Repair safe-deployment D2730-D2735 against the storage journal/readiness/revision authority while fresh-reviewing storage independently; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "Storage backup/recovery completed its fourth author repair over six durable-authority blockers. Exact byte identities now gate replacement recovery; checks share one sealed operation/action/storage subject; one fixed journal has atomic publication and restart discovery; UUID/revision parsers are narrow; and canonical readiness joins the real application boundary. Backup/restore remains correctly blocked on a genuinely fresh review rather than shipping data-loss or false-readiness seams; longitudinal, safe deployment and Campaign remain separately pending fresh review.",
-        "impact": "advanced",
+        "summary": "A third fresh safe-deployment review returned six authority seams after the local author gate: canonical mounted images admit impossible profile tuples, sealed checks do not share the deployment subject, the result is not the full receipt protocol, TLS and readiness lack their claimed live authorities, and profile migration is not crash durable. Storage recovery's fourth author repair remains separately pending fresh review; neither release boundary can now falsely graduate the other.",
+        "impact": "held",
         "evidence": [
-          "planning/storage-backup-recovery/fourth-author-repair-2026-09-05.md",
-          "tools/d2724-storage-backup-fourth-author-repair/contract.test.ts",
-          "planning/storage-backup-recovery/fourth-fresh-independent-buildability-review-2026-09-05.md",
-          "rfc/storage-backup-recovery.md",
+          "planning/safe-deployment-profiles/third-fresh-independent-buildability-review-2026-09-05.md",
+          "tools/d2730-safe-deployment-third-fresh-review/review.test.ts",
           "rfc/safe-deployment-profiles.md",
-          "planning/safe-deployment-profiles/second-author-repair-2026-09-04.md",
+          "planning/storage-backup-recovery/fourth-author-repair-2026-09-05.md",
+          "rfc/storage-backup-recovery.md",
           "rfc/longitudinal-store.md",
           "planning/longitudinal-store/eighth-author-repair-2026-09-05.md",
           "rfc/bot-policy.md",
