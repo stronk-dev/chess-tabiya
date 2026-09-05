@@ -272,6 +272,15 @@ repair must make the two real descriptor candidates permanent positives without 
 index refusal; catalogue/register implementation remains unauthorized. Receipt:
 `planning/shared-resource-register-bootstrap/fourteenth-fresh-independent-buildability-review-2026-09-05.md`.
 
+The same-day fourteenth author repair closes those three seams at contract tier. Statically named
+reads through a declared index signature retain their exact receiver/index authority; finite
+literal-key unions enumerate every exact target while open keys still fail; and optional calls
+retain the compiler-selected non-null overload set. The decisive control projects both literal
+assistance follow-on descriptors at committed HEAD. `make
+shared-resource-bootstrap-fourteenth-author-repair` retains the complete chain and passes 4/4
+repair groups. Another genuinely fresh review still gates acceptance and production. Receipt:
+`planning/shared-resource-register-bootstrap/fourteenth-author-repair-2026-09-05.md`.
+
 The same-day twelfth `pack-capability-contract` author repair closes [[D2587]]–[[D2592]] at contract
 tier without claiming production. One transaction-owned before/after run result derives the exact
 core/objective/recorded-guard journal suffix and receipt; the complete nested objective request is

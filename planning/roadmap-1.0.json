@@ -326,14 +326,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Repair the shared-resource bootstrap fourteenth return by proving the real assistance/workflow descriptor candidates, exact finite-key indexing and optional-call overload authority; fresh-review it before provider protocol, while independent foundation reviews continue.",
+        "nextAction": "Genuinely fresh-review the shared-resource bootstrap fourteenth repair against the complete real descriptor population before provider protocol; continue independent provider-health, pack-capability and longitudinal-store reviews in parallel lanes.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "The fourteenth fresh bootstrap review returned the engine on its literal follow-on catalogue: four of eight assistance roots and two of ten workflow roots cannot project because checked record reads, finite-union indexing and optional interface calls are unrepresentable. Production remains held for a bounded repair and another fresh review.",
-          "impact": "held",
-          "evidence": ["planning/shared-resource-register-bootstrap/fourteenth-fresh-independent-buildability-review-2026-09-05.md", "tools/d2854-shared-resource-bootstrap-fourteenth-fresh-review/review.test.mjs", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"],
+          "summary": "The bootstrap fourteenth repair now projects both literal assistance follow-on descriptors, retains statically named index-signature reads, enumerates finite-key targets and preserves optional-call overload authority while open indexing remains refused. Fresh review still gates production.",
+          "impact": "advanced",
+          "evidence": ["planning/shared-resource-register-bootstrap/fourteenth-author-repair-2026-09-05.md", "tools/d2854-shared-resource-bootstrap-fourteenth-author-repair/contract.test.mjs", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "shared-resource-register-bootstrap.md", "digest": "sha256:180abb4af33ef7bbb74910a86e890fa70907094c1df99e01522da5275b85e205"}
+            {"kind": "rfc", "id": "shared-resource-register-bootstrap.md", "digest": "sha256:b8868df254623a41a2010cb4f7ef25b3c22b9ff77ce796536b661c4da46b0c02"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

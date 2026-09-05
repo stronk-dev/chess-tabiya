@@ -1,11 +1,12 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **RETURNED by the fourteenth fresh independent review on
-  [[D2854]], [[D2855]] and [[D2856]].** The real adopted assistance descriptor fails four of eight roots: checked
-  `Record<string, unknown>` reads have no exact property target, a closed finite-union record lookup
-  is rejected as broad indexing, and optional interface calls lose their overload set. `make
-  shared-resource-bootstrap-fourteenth-fresh-review` retains the complete chain and passes 3/3
-  executable falsifiers. No implementation is authorized.
+- **Status:** draft — **fourteenth author repair completed on [[D2854]], [[D2855]] and
+  [[D2856]]; another genuinely fresh independent review is required.** Statically named reads
+  through a declared index signature retain their exact receiver/index authority, finite literal
+  key unions enumerate exact targets, optional calls use non-null selected callable authority, and
+  both literal assistance follow-on descriptors project. `make
+  shared-resource-bootstrap-fourteenth-author-repair` retains the complete chain and passes 4/4
+  controls. No implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -491,7 +492,9 @@ The closed adapter set is:
    edges have `resolvedSignature: null` and
    empty overloads unless the edge is call/construct/tag; those three retain the compiler-selected
    signature and the complete public overload set selected with `SignatureKind.Call` or
-   `SignatureKind.Construct` as appropriate. Global `eval` is refused when either the exact value
+   `SignatureKind.Construct` as appropriate. Optional-call syntax is retained at the exact site,
+   while signature enumeration uses the compiler-selected non-null callable type; optionality may
+   not erase an otherwise exact method authority. Global `eval` is refused when either the exact value
    relation or selected signature reaches the TypeScript-library intrinsic, including aliases and
    `.call`; a repository-local method with the same spelling remains legal. This deliberately treats a local/import alias
    rename as a semantic change—the adapter promises deterministic complete coverage, not equivalence
@@ -514,7 +517,12 @@ The closed adapter set is:
 
    Ambient declarations without one of those three origins, `any`/`unknown`-based member or call
    resolution, `eval`, dynamic `import()`, computed property names not reducible to one literal,
-   broad index-signature lookup and missing/ambiguous lockfile identity fail. Re-exports resolve to
+   open runtime indexing and missing/ambiguous lockfile identity fail. A statically spelled dot or
+   literal-key read through a declared index signature retains that exact index/receiver
+   declaration plus the spelled site. A non-literal element access is admitted only when its key
+   type is a finite non-empty union of string/number literals and every member resolves against the
+   closed receiver; it emits one site-bound property edge per exact key. `string`, `number`, `any`,
+   `unknown`, missing-property and mixed/open unions still fail. Re-exports resolve to
    origin while retaining the public export path. This is the complete before/after authority used
    by adopted assistance resources; callers cannot supply a changed-symbol list. Its exact landed
    projection is
@@ -1190,6 +1198,13 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-05: [[D2854]]–[[D2856]] fourteenth author repair. Declared-index property reads retain
+  their exact receiver/index authority; finite literal-key unions enumerate every exact property;
+  optional interface calls derive overloads from the selected non-null callable; and the literal
+  assistance-config plus workflow-preference catalogue candidates project at committed HEAD.
+  `make shared-resource-bootstrap-fourteenth-author-repair` retains the complete chain and passes
+  4/4 controls. Another genuinely fresh review still gates acceptance and production; receipt:
+  `planning/shared-resource-register-bootstrap/fourteenth-author-repair-2026-09-05.md`.
 - 2026-09-05: returned by fourteenth fresh independent buildability review on
   [[D2854]], [[D2855]] and [[D2856]]. The claimed cross-RFC profile fit fails against the literal assistance
   catalogue addition: four of eight assistance-config roots and two of ten workflow-preference

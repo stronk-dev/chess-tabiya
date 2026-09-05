@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:26bbd623f15663494adf7d3216f7dcbc0def6575a575df132d5bc39ae44f06ec",
+    "roadmap": "sha256:ba1f4520a0ebfe015b70e92a951622267a0a246f00503f5e03d4c3ff24b1f935",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:0099251046fccb2ebfb3d44534d355e1f7c926af17252e11403bab13feb75086",
-    "rfcRegister": "sha256:cfdc2ecf8030495a439639f7f8686479bc448f7ad064d03c96d654ce1d91f4ac",
+    "workState": "sha256:1967c7ff170d95fe6d84c83771661a9c9f49aeb0c180cb8c41864c9c90453ceb",
+    "rfcRegister": "sha256:3adee79aeb16d0f4ed43b78c5c45c048785a396b82b3a0fb13106d72455b8474",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -115,14 +115,14 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Repair the shared-resource bootstrap fourteenth return by proving the real assistance/workflow descriptor candidates, exact finite-key indexing and optional-call overload authority; fresh-review it before provider protocol, while independent foundation reviews continue.",
+      "nextAction": "Genuinely fresh-review the shared-resource bootstrap fourteenth repair against the complete real descriptor population before provider protocol; continue independent provider-health, pack-capability and longitudinal-store reviews in parallel lanes.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "The fourteenth fresh bootstrap review returned the engine on its literal follow-on catalogue: four of eight assistance roots and two of ten workflow roots cannot project because checked record reads, finite-union indexing and optional interface calls are unrepresentable. Production remains held for a bounded repair and another fresh review.",
-        "impact": "held",
+        "summary": "The bootstrap fourteenth repair now projects both literal assistance follow-on descriptors, retains statically named index-signature reads, enumerates finite-key targets and preserves optional-call overload authority while open indexing remains refused. Fresh review still gates production.",
+        "impact": "advanced",
         "evidence": [
-          "planning/shared-resource-register-bootstrap/fourteenth-fresh-independent-buildability-review-2026-09-05.md",
-          "tools/d2854-shared-resource-bootstrap-fourteenth-fresh-review/review.test.mjs",
+          "planning/shared-resource-register-bootstrap/fourteenth-author-repair-2026-09-05.md",
+          "tools/d2854-shared-resource-bootstrap-fourteenth-author-repair/contract.test.mjs",
           "rfc/shared-resource-register-bootstrap.md",
           "rfc/README.md"
         ],
@@ -130,7 +130,7 @@
           {
             "kind": "rfc",
             "id": "shared-resource-register-bootstrap.md",
-            "digest": "sha256:180abb4af33ef7bbb74910a86e890fa70907094c1df99e01522da5275b85e205"
+            "digest": "sha256:b8868df254623a41a2010cb4f7ef25b3c22b9ff77ce796536b661c4da46b0c02"
           }
         ]
       },

@@ -16374,3 +16374,21 @@ predecessor chain and passes 3/3 minimal committed-program falsifiers. Exact rec
 The bounded repair must make both real TypeScript descriptor candidates permanent positives while
 preserving fail-closed open-index behavior, then undergo another genuinely fresh review before any
 production register implementation.
+
+## 2026-09-05 — shared-resource bootstrap fourteenth author repair
+
+**What landed:** repaired [[D2854]]–[[D2856]] at contract tier. Statically named reads through a
+declared index signature retain an exact receiver/index authority; finite literal key unions emit
+one exact target edge per key; and optional interface calls retain the compiler-selected non-null
+signature/overload set. No production catalogue, checker, register, schema, product or content byte
+changed.
+
+**What changed:** the author gate now projects the literal assistance-config and
+workflow-preference descriptor candidates against committed HEAD as complete graphs. This closes
+the synthetic-only gap that let four of eight and two of ten real roots fail while invented fixtures
+passed. Open string/number keys and `any`/`unknown` receivers remain refused.
+
+**Evidence/next:** `make shared-resource-bootstrap-fourteenth-author-repair` retains the complete
+predecessor chain and passes 4/4 repair groups. Exact receipt:
+`planning/shared-resource-register-bootstrap/fourteenth-author-repair-2026-09-05.md`. Another
+genuinely fresh independent review still gates acceptance and all production register population.
