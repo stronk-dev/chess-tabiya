@@ -1,8 +1,11 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — tenth author repair closes the ninth return [[D2678]]–[[D2684]] plus
-  newly exposed [[D2841]]–[[D2842]] at contract tier; genuinely fresh review and the named
-  `evidence-value-authority` dependency still precede acceptance.** The maintained operation now
+- **Status:** **draft — RETURNED by eleventh fresh independent review on [[D2860]]–[[D2863]].**
+  The tenth repair closes its bounded [[D2678]]–[[D2684]] and [[D2841]]–[[D2842]] seams, but its
+  current model replaces rather than composes the RFC's public service/result boundary, omits four
+  retained packet identity fields, deletes projection-addressed total collector outcomes and
+  abstentions, and collapses checkmate/stalemate into anonymous empty packets. The maintained
+  operation still
   parses the closed request, derives the complete seven-term factual identity, gives direct and
   projected narrow receipts the same dependency-closed graph, derives cache identity internally,
   admits only one privately asserted whole receipt, seals below already-frozen ancestors and
@@ -2240,6 +2243,26 @@ explicit `evidence-value-authority` landing dependency.
 9/9 new composed controls plus strict TypeScript. This is positive author evidence, not acceptance:
 another genuinely fresh independent review and the named dependency still gate production work.
 
+## Eleventh fresh independent return (2026-09-05)
+
+The tenth repair's seven bounded fixes survive, but the composed checkpoint is not buildable. The
+current model exports only a synchronous compiler plus insertion cache: it has no public service,
+typed request result/failure algebra, single-flight, cancellation, queue/compile deadline, close or
+stats authority, and admitting the same packet twice reports `miss` twice ([[D2860]]). Historical
+predecessor tests do not compose those authorities into the implementation model.
+
+The packet hashes seven factual terms but fails to retain its compiler version, legal convention,
+move-identity convention or manifest digest fields ([[D2861]]). Collector outcomes have regressed to
+`{collectorId, values}` with no move/projection/result arm; the generated abstention registry is not
+imported and every row writes an unconditional empty abstention list ([[D2862]]). Finally, executed
+checkmate and stalemate roots both produce zero-row packets with no terminal reason ([[D2863]]).
+
+`make candidate-packet-eleventh-fresh-review` retains the predecessor chain and passes 4/4 fresh
+falsifiers. Exact receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-eleventh-fresh-independent-buildability-review-2026-09-05.md`.
+A composed author repair plus another genuinely fresh review are required; the value-authority
+factory dependency also remains. No production implementation is authorized.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -2382,6 +2405,11 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-09-05 — eleventh fresh independent review returned the tenth repair on [[D2860]]–[[D2863]].
+  Its bounded fixes survive, but the current model drops the public service/result/cache operation,
+  retained identity fields, projection-addressed outcomes/abstentions and terminal distinction.
+  `make candidate-packet-eleventh-fresh-review` passes 4/4 falsifiers; implementation remains
+  unauthorized.
 - 2026-09-05 — [[D2678]]–[[D2684]] plus [[D2841]]–[[D2842]] tenth author repair. One
   production-backed contract operation closes request, seven-term identity, scope-private graph,
   cache authority, deep sealing and all thirteen real adapter paths while preserving aggregate

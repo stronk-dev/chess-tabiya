@@ -695,7 +695,7 @@ candidate-packet-fourth-author-repair:
 candidate-packet-fourth-fresh-review:
 	node --test tools/d2389-candidate-packet-fourth-fresh-review/contract.test.mjs
 
-.PHONY: candidate-packet-fifth-author-repair candidate-packet-fifth-fresh-review candidate-packet-d2428-measurement candidate-packet-sixth-author-repair candidate-packet-sixth-fresh-review candidate-packet-seventh-author-repair candidate-packet-eighth-fresh-review candidate-packet-eighth-author-repair candidate-packet-ninth-fresh-review candidate-packet-tenth-author-repair semantic-collectors-promotion-third-fresh-review semantic-collectors-promotion-third-author-repair semantic-collectors-promotion-fourth-fresh-review semantic-collectors-promotion-fourth-author-repair
+.PHONY: candidate-packet-fifth-author-repair candidate-packet-fifth-fresh-review candidate-packet-d2428-measurement candidate-packet-sixth-author-repair candidate-packet-sixth-fresh-review candidate-packet-seventh-author-repair candidate-packet-eighth-fresh-review candidate-packet-eighth-author-repair candidate-packet-ninth-fresh-review candidate-packet-tenth-author-repair candidate-packet-eleventh-fresh-review semantic-collectors-promotion-third-fresh-review semantic-collectors-promotion-third-author-repair semantic-collectors-promotion-fourth-fresh-review semantic-collectors-promotion-fourth-author-repair
 candidate-packet-fifth-author-repair:
 	node --test tools/d2389-candidate-packet-fifth-author-repair/contract.test.mjs
 
@@ -727,6 +727,9 @@ candidate-packet-ninth-fresh-review: candidate-packet-eighth-author-repair
 candidate-packet-tenth-author-repair: candidate-packet-ninth-fresh-review
 	./node_modules/.bin/vitest run --config tools/d2678-candidate-packet-tenth-author-repair/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/tsc -p tools/d2678-candidate-packet-tenth-author-repair/tsconfig.json --noEmit
+
+candidate-packet-eleventh-fresh-review: candidate-packet-tenth-author-repair
+	./node_modules/.bin/vitest run --config tools/d2860-candidate-packet-eleventh-fresh-review/vitest.config.ts --reporter=verbose
 
 semantic-collectors-promotion-third-fresh-review:
 	node --test tools/d2468-semantic-collectors-promotion-third-fresh-review/*.test.mjs
@@ -1162,7 +1165,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-ninth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-sixteenth-author-repair candidate-packet-tenth-author-repair semantic-collectors-promotion-twelfth-author-repair provider-health-eighth-author-repair shared-resource-bootstrap-fifteenth-fresh-review provider-protocol-second-author-repair review-evidence-third-author-repair bot-policy-fourth-author-repair test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-ninth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-sixteenth-author-repair candidate-packet-eleventh-fresh-review semantic-collectors-promotion-twelfth-author-repair provider-health-eighth-author-repair shared-resource-bootstrap-fifteenth-fresh-review provider-protocol-second-author-repair review-evidence-third-author-repair bot-policy-fourth-author-repair test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 

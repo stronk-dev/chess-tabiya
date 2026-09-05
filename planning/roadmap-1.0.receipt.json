@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2ab05a6f4b6586e1ae4a404a1734c1e4ba79086abe286a9d8727ad62977ec346",
+    "roadmap": "sha256:8dab6cf848d31e16163b79799869cc1095e1feb6ad132daaea466af0f1b90342",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:9dace67c312b9362e91b6be34aff5156116a038846324c3a39430b9d04b8e59a",
-    "rfcRegister": "sha256:8f9947ae1ea3c411f2fce98f48190e82c1979769fd87dd99e9f475b362b8ff68",
+    "workState": "sha256:21850dee0624e02d59c6d193ffcc9f12a125ea89a888b3e1de74afc2062fb45a",
+    "rfcRegister": "sha256:5e7c927fd2c95a8086c53e25eaddecdb3db8468efa30f80a533fb8c0b06485de",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -30,7 +30,7 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 639,
+      "todo": 643,
       "doing": 0,
       "blocked": 1133,
       "done": 833,
@@ -151,29 +151,22 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Fresh-review the production-backed candidate-packet tenth repair while landing its evidence-value-authority dependency; fresh-review the twelfth promotion repair, then land its provider/value dependencies and finish selectors, grades, Review and learner modules.",
+      "nextAction": "Compose-repair the candidate packet's public service, identity, total outcomes and terminal state while landing its evidence-value-authority dependency; fresh-review the twelfth promotion repair, then finish selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "The promotion pair's twelfth author repair now closes installed-inventory authority, exact artifact grammar, complete response/legal populations, non-vacuous pack support and unique durable subjects. Five repair groups pass; the spine remains 12/14 until fresh review and provider/value dependencies land, alongside the separately held candidate packet.",
-        "impact": "advanced",
+        "summary": "The candidate-packet tenth repair was returned: its focused fixes survive, but the current checkpoint drops the public service/result/cache lifecycle, four retained identity fields, total outcomes/abstentions and terminal distinction. The spine cannot build from separate historical models.",
+        "impact": "regressed",
         "evidence": [
-          "planning/evidence-foundation-ux/semantic-collectors-promotion-twelfth-author-repair-2026-09-05.md",
-          "tools/d2835-semantic-collectors-promotion-twelfth-author-repair/contract.test.ts",
-          "rfc/semantic-collectors.md",
-          "planning/evidence-foundation-ux/shared-candidate-packet-tenth-author-repair-2026-09-05.md",
+          "planning/evidence-foundation-ux/shared-candidate-packet-eleventh-fresh-independent-buildability-review-2026-09-05.md",
+          "tools/d2860-candidate-packet-eleventh-fresh-review/review.test.ts",
           "rfc/shared-candidate-evidence-packet.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "semantic-collectors.md",
-            "digest": "sha256:658253a74c67d43fbcea95912241031cc0d700d6e308b2c98f8b961a788ee0e2"
-          },
-          {
-            "kind": "rfc",
             "id": "shared-candidate-evidence-packet.md",
-            "digest": "sha256:5da31d21fb467f68d7b146dc1f203cfc7d1f7acbdb819c398435b4cccd87f4b0"
+            "digest": "sha256:18757817c63d199aabf8ecbdfe9002e361ba7bb5c976182bed393a59e3ea8bff"
           }
         ]
       },

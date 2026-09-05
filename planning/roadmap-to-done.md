@@ -2020,3 +2020,11 @@ review: both literal assistance/workflow descriptors project every root, checked
 access is discriminated, finite keys retain complete targets and optional calls retain all overloads.
 The foundation is ready for owner acceptance, after which implementation can unblock the provider,
 assistance and semantic-convention resource populations. No production byte is implied by this pass.
+
+### 2026-09-05 evidence-spine checkpoint — candidate packet returned
+
+The candidate packet's tenth repair is not a buildable current foundation. Its focused fixes hold,
+but the checkpoint drops the public service/result/cache lifecycle, four retained identity fields,
+total collector outcomes/abstentions, and checkmate/stalemate identity. The evidence spine remains
+blocked until one composed model carries all of those authorities plus the production-backed
+collector graph through a fresh review; old green models cannot be assembled by the implementer.
