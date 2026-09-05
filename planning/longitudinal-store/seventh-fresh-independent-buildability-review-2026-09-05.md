@@ -92,3 +92,11 @@ Repair these as one storage-owned source/claim authority:
 
 Retain every earlier author control and these five fresh negatives. Another genuinely fresh
 independent review remains mandatory before acceptance or implementation.
+
+## Author-derivation addendum — [[D2723]]
+
+The first eighth-author trace found one further buildability blocker before modeling began:
+`importedMainlinePlies` is said to come from the immutable `imported_games` record, but neither
+`ImportedGameRecord` nor the live table contains that field. The existing immutable authority is
+the imported replay's primary branch. The repair must derive the boundary from that branch or own
+a real schema change; it may not keep a fictional storage operand.

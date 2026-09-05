@@ -1,14 +1,13 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **RETURNED by the seventh fresh independent review 2026-09-05 on
-  [[D2718]]–[[D2722]].** The repaired local denominator, private registry, immutable-image and
-  five-state reset checks survive, but the source parser rejects real runtime events while sealing
-  invented ones; attribution/import operands may be incomplete; the mutation compiler counts
-  comments rather than transaction behavior; the claim checker omits cut/revision/lease/owner; and
-  source invalidation accepts a different run and owner. `make
-  longitudinal-store-seventh-fresh-review` passes 5/5 blocker reproductions plus the retained
-  author chain; no migration, worker, reader, consumer, API or client implementation is
-  authorized. The
+- **Status:** draft — **eighth author repair completed 2026-09-05 on
+  [[D2718]]–[[D2723]]; eighth fresh independent review required.** One storage-owned v4 source
+  reader replays real runtime events, derives complete authorship and imported-mainline truth,
+  binds source/job subjects, compiles real transaction calls through the TypeScript AST and checks
+  the complete cut/revision/lease/owner claim tuple. `make
+  longitudinal-store-eighth-author-repair` retains the complete chain and passes 6/6 new repair
+  groups plus strict TypeScript; no migration, worker, reader, consumer, API or client
+  implementation is authorized. The
   2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
   returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
@@ -369,13 +368,14 @@ zero observations, denominators, structure rows and jobs for both the deleted le
 
 Every persisted run mutation upserts only this cheap job watermark plus
 `requested_source_digest` in the **same transaction as the run bytes**; it does not enumerate legal
-alternatives. One exported server operation, `longitudinalSourceImageV3`, constructs the complete
-source authority after locking the run and its attribution records. Its exact image is:
+alternatives. One exported storage operation, `longitudinalSourceImageV4(runId, requestedSeq)`,
+constructs the complete source authority after locking the run and its attribution records. Its
+exact image is:
 
 ```ts
-interface LongitudinalSourceImageV3 {
-  readonly version: 3;
-  readonly runPrefix: ParsedRunPrefix; // branded result of exact readBackReplay authority
+interface LongitudinalSourceImageV4 {
+  readonly version: 4;
+  readonly runPrefix: ExactRunPrefix; // real copied DrillRunEvent[0..requestedSeq), replayed
   readonly ownerLearnerId: string;
   readonly moveAuthorship: readonly MoveAuthorship[]; // eventSeq then nodeId; only prefix commits
   readonly importedMainlinePlies: number | null;
@@ -384,20 +384,25 @@ interface LongitudinalSourceImageV3 {
 }
 ```
 
-`runPrefix` is parsed as the exact closed `{runId,ownerLearnerId,requestedSeq,events}` result of the
-shipped `readBackReplay` authority, not by slicing the current
-snapshot's arrays. Construction requires contiguous events `1..requestedSeq`, exact replay equality
-for every prefix-derived run field, one authorship row for every prefix user commit, canonical sort
-and no duplicate `eventSeq`; every authorship event/node must join the corresponding committed move
-in that prefix. Owner identity, imported length and the monotone structure disposition are parsed
-exactly. The two attribution fields are the **resolved projector inputs**:
+`runPrefix.events` is a recursively copied `DrillRunEvent[0..requestedSeq)` from the locked stored
+snapshot. The constructor invokes shipped `readBackReplay` on those bytes and requires the replayed
+run id and final sequence to equal the locked subject/cut; there is no second flattened event type.
+Construction requires one and only one resolved authorship row for every prefix user commit,
+canonical sort and no duplicate `eventSeq`; every authorship event/node must join the corresponding
+committed move in that prefix. The explicit no-collaboration-journal arm resolves every user commit
+to the owner and is legal only with `single_player`; a supplied population must be set-equal, and a
+`single_player` population containing null or non-owner authorship fails. Imported-mainline length
+is not a caller/storage operand: imported runs derive it from the maximum ply on the replayed
+immutable primary branch, while non-imported runs carry null ([[D2723]]). Owner identity and the
+monotone structure disposition come from the same locked storage read. These are the **resolved
+projector inputs**:
 irrelevant later journal entries or pause state do not churn the digest, while any change that
 alters owner authorship, imported-mainline membership or shared-structure eligibility changes the
 image. Raw journal/match rows are never hashed as an alternative authority.
 
-`longitudinalSourceDigestV3` is the sole digest constructor and accepts only the WeakSet-sealed,
-recursively copied/immutable value returned by `longitudinalSourceImageV3`. It encodes the literal
-UTF-8 domain prefix `tabiya.longitudinal-source.v3\0`, followed immediately by the RFC-8785 bytes
+`longitudinalSourceDigestV4` is the sole digest constructor and accepts only the WeakSet-sealed,
+recursively copied/immutable value returned by `longitudinalSourceImageV4`. It encodes the literal
+UTF-8 domain prefix `tabiya.longitudinal-source.v4\0`, followed immediately by the RFC-8785 bytes
 from the shipped `canonicalizeJson(image)`, then returns lower-case `sha256:<64 hex>`. A raw, spread,
 cross-run, duplicate, unsorted or post-construction-mutated object has no digest authority. The seven run writers, the two
 collaboration source mutations, startup reconciliation, worker exact-prefix read and rebuild call
@@ -412,11 +417,13 @@ The run-snapshot production closure remains exactly `create`, `createRatedRun`,
 The complete **source-mutation** closure additionally includes `createLiveSession` and
 write-capable `grantRole`; `deleteOwnedRun`/`deleteLearner` own suppression/owner change, and startup
 classification is the migration default, not a fictional runtime operation. Each exact
-`SQLiteRunStorage#method` transaction contains one co-located `longitudinalSourceMutation`
-descriptor classified `always | conditional | suppression | reconciliation`; the compiler derives
-the register from those calls and compares it bidirectionally with the normative 11-row authority.
-Missing, surplus, duplicate, renamed and wrong-effect rows fail, and the descriptor calls the
-watermark update inside the same database transaction rather than merely sharing a label. A checked
+`SQLiteRunStorage#method` transaction calls one co-located
+`this.#upsertLongitudinalWatermark({symbol,effect})`, classified
+`always | conditional | suppression | reconciliation`, after its literal `BEGIN IMMEDIATE` and
+before its literal `COMMIT`. A TypeScript-AST compiler derives the register from those call nodes
+and compares it bidirectionally with the normative 11-row authority. Comments, strings, wrong
+methods, outside-transaction calls, missing, surplus, duplicate, renamed and wrong-effect rows
+fail. The descriptor is the watermark update rather than a second label beside it. A checked
 operation registry distinguishes mutations that always change an operand from conditional ones. `createLiveSession` atomically writes
 `unattributable_shared` and refreshes the same-head source digest/job. `grantRole` does so exactly
 when a non-owner first receives `host` or `participant`; revocation cannot untaint it. Match-seat
@@ -433,7 +440,9 @@ the eight deferred paths remain unqueryable at revision 1. The observation parse
 SQL all enforce `0 < opportunities <= decisions`, exact reference cardinalities and occurred as a
 subset of opportunity. A process/JSON caller can narrow a query but cannot widen valid identities.
 
-Source/head invalidation consumes the exact five-state durable job union. Unchanged `pending`
+Source/head invalidation consumes the exact five-state durable job union and the two sealed source
+images. Both images' `(runId, ownerLearnerId)` must equal the locked job subject before digest
+comparison or mutation; crossed source/job subjects roll back. Unchanged `pending`
 returns byte-identically. Any changed digest resets `complete`, `running`, `retry_wait` and
 `quarantined` to the one pending image: `completed_seq=0`, current requested head/digest,
 generation incremented, retry count zero, and every claimed-seq/digest/token/worker/lease,
@@ -444,8 +453,10 @@ A worker claims bounded batches using one atomic transition from `pending`, an e
 `retry_wait`, or an expired `running` row. `quarantined` is never claimable. Claim increments
 `claim_generation`, writes a fresh opaque token, worker id and lease expiry, copies mutable
 `requested_seq` and `requested_source_digest` into immutable **`claimed_requested_seq=N`** and
-**`claimed_source_digest`**, and pins `(run_id, claimed_requested_seq=N,
-claimed_source_digest, derived_rev, generation, token, worker)`. A second live
+**`claimed_source_digest`**, and returns a receipt pinning `(run_id, learner_id,
+claimed_requested_seq=N, claimed_source_digest, derived_rev, generation, token, worker)`. Renew,
+fail and publish additionally compare the current locked job requested cut, current sealed source
+subject/digest and `lease_expires_at > now`; no caller supplies those current values. A second live
 claimer receives no work. Expiry permits a new generation; the old generation can no longer fail or
 publish. The failure vocabulary is the literal three-member CHECK/TypeScript union in the DDL.
 Claims select `(state='pending' OR (state='retry_wait' AND next_attempt_at<=:now)
@@ -1014,10 +1025,33 @@ run/source subject join returns five further seams. Exact evidence is in
    current durable owner/source truth are absent from the modeled receipt/check.
 5. **[[D2722]] — bind job and source subjects.** A job can be invalidated from a sealed source image
    belonging to another run and learner.
+6. **[[D2723]] — remove the fictional import-boundary field.** `imported_games` stores no
+   `importedMainlinePlies`; derive the immutable source boundary from the replayed imported run's
+   primary branch or claim an actual schema change.
 
 `make longitudinal-store-seventh-fresh-review` passes five blocker reproductions and the retained
 author chain. No production implementation is authorized until a bounded eighth author repair
-inverts them and another genuinely fresh review passes.
+inverts them, closes [[D2723]], and another genuinely fresh review passes.
+
+## Eighth author repair (2026-09-05)
+
+The six returned seams are repaired as one storage-owned source/claim boundary:
+
+- [[D2718]]: v4 copies and replays actual `DrillRunEvent` prefixes; no parallel flattened event
+  vocabulary exists.
+- [[D2719]]: authorship is set-equal to prefix user commits and cross-consistent with the monotone
+  structure disposition.
+- [[D2720]]: a TypeScript AST derives exact watermark-update calls inside matching storage
+  transactions; comments and labels have no authority.
+- [[D2721]]: the receipt and currentness check include cut, revision, sealed source, owner and lease
+  alongside generation/token/worker.
+- [[D2722]]: source invalidation requires source images and the locked job to share one run/owner.
+- [[D2723]]: imported-mainline length is derived from the replayed immutable primary branch rather
+  than a field absent from `imported_games`.
+
+`make longitudinal-store-eighth-author-repair` retains the complete predecessor/review chain,
+passes six new behavioral groups and strict TypeScript. No production byte changed. Another
+genuinely fresh independent review remains mandatory before acceptance or implementation.
 
 ### F. Acceptance criteria
 
@@ -1048,11 +1082,13 @@ These are the only live acceptance criteria; the historical AC list below is non
    explicitly new `single_player` arm; monotone shared and legacy-unattributable arms emit none.
 6. **Cheap complete write closure ([[D1616]]/[[D2570]]).** Each of the seven real production storage methods
    commits run bytes and the job watermark together and rolls both back together. Omitting any
-   operation fails a set-equality census. The separate source-mutation compiler derives co-located
-   transaction descriptors for `createLiveSession`, a non-owner write-capable `grantRole`, and
+   operation fails a set-equality census. The separate TypeScript-AST source-mutation compiler
+   derives actual co-located watermark calls inside the matching begin/commit transaction for
+   `createLiveSession`, a non-owner write-capable `grantRole`, and
    account/owner suppression. Startup legacy classification remains a migration default, not a
    runtime operation. Missing, surplus,
-   duplicate, renamed and wrong-effect descriptors fail bidirectional equality. A same-head private→shared transition changes the digest and invalidates
+   duplicate, renamed, wrong-effect, comment/string and outside-transaction descriptors fail
+   bidirectional equality. A same-head private→shared transition changes the digest and invalidates
    a complete job in the same transaction; revocation cannot untaint it. No semantic constructor or
    legal enumerator is reachable before the response.
 7. **Exclusive/recoverable claim ([[D1613]]/[[D2229]]).** Two simultaneous claimers yield one claim; expiry
@@ -1061,11 +1097,14 @@ These are the only live acceptance criteria; the historical AC list below is non
    unknown failure code fails schema and TypeScript fixtures. A source change resets complete,
    running, retry-wait and quarantined rows through one exact field-for-field pending transition;
    old claim tuples cannot renew, fail or publish ([[D2602]]). Work exceeding 30 seconds renews by
-   the full ownership/source-digest CAS; a four-row scan claims only the one immediately executable
+   the full run/owner/cut/revision/source/generation/token/worker/unexpired-lease CAS; a four-row scan claims only the one immediately executable
    slot. `snapshot_invalid` quarantines once; retry budgets exhaust; polling/restart never reopens a
    quarantine; changed source bytes or accepted revision replacement do.
-8. **Exact prefix and CAS ([[D1615]]/[[D2064]]).** A claim for N projects contiguous events 1..N.
-   Missing/duplicate/non-contiguous bytes fail `snapshot_invalid`; events
+8. **Exact prefix and CAS ([[D1615]]/[[D2064]]/[[D2718]]–[[D2722]]).** A claim for N copies and
+   replays actual runtime `DrillRunEvent` bytes 1..N from the locked row. Unknown, malformed,
+   missing/duplicate/non-contiguous bytes fail `snapshot_invalid`; incomplete/crossed authorship,
+   crossed source/job subjects and contradictory single-player attribution fail before hashing;
+   events
    appended between claim/read and derive/publish cannot be lost or overwritten by the stale
    claimant. Actual SQLite crosses N=N, M>N, source-digest mismatch, revision mismatch and stale
    generation. Rows and
@@ -1100,9 +1139,10 @@ These are the only live acceptance criteria; the historical AC list below is non
     exact parsed row families contain no `unknown`; JSON/process forges, count/ref mismatches and
     invalid registry pairs fail. The branded query parser rejects empty/duplicate/unknown or
     contradictory filters and produces stable bytewise ordering.
-    Source digests likewise accept only a recursively immutable sealed image constructed from the
-    exact replay prefix and joined owner/authorship/import/structure operands; raw/spread/crossed
-    or mutated objects fail ([[D2600]]).
+    Source digests likewise accept only a recursively immutable sealed image constructed by the
+    storage owner from the actual replay prefix and exact owner/authorship/structure operands;
+    imported-mainline length derives from that replay's primary branch rather than a caller field.
+    Raw/spread/crossed, incomplete or mutated objects fail ([[D2600]]/[[D2718]]/[[D2719]]/[[D2723]]).
 14. **Boundaries/privacy ([[D2065]]).** No learner renderer, rating, classroom, cohort, provider or
     LLM module reaches the store at landing. All four durable classes cascade on learner/run
     deletion and join export/deletion inventories. Delete → retained shared run → rebuild leaves
@@ -1123,7 +1163,7 @@ These are the only live acceptance criteria; the historical AC list below is non
     arm, 20 Hz health probes hold event-loop delay p95 <50 ms/max <250 ms, no probe exceeds 500 ms,
     and at least three in-loop full-CAS renewals precede publication. Main-thread execution and a
     timer-only worker heartbeat are able-to-fail negatives.
-17. **Eight-return author falsifier.** `make longitudinal-store-seventh-author-repair` retains the
+17. **Nine-return author falsifier.** `make longitudinal-store-eighth-author-repair` retains the
     complete earlier author chain and crosses both
     literal registries/signs, complete-population algebra, actual SQLite claim/index/constraint
     negatives, deletion/rebuild suppression, worker lifecycle, claim race/expiry/stale publisher,
@@ -1165,9 +1205,11 @@ These are the only live acceptance criteria; the historical AC list below is non
     file path and observe the same committed job. Required-worker `:memory:` and path disagreement
     fail before readiness. The explicit in-memory test helper has no worker and reports
     `disabled_test`; `main.ts` cannot import or construct it.
-28. **Source digest authority ([[D2516]]/[[D2570]]).** One exported v2 constructor domain-separates and hashes
-    RFC-8785 bytes for the exact replayed prefix plus resolved owner/authorship/import/structure
-    inputs, including the three-member durable structure disposition. Object insertion order is
+28. **Source digest authority ([[D2516]]/[[D2570]]/[[D2718]]–[[D2723]]).** One exported v4
+    storage-owned constructor domain-separates and hashes RFC-8785 bytes for the actual replayed
+    runtime prefix plus resolved owner/authorship/structure inputs, including the three-member
+    durable structure disposition; imported-mainline length derives from the replayed primary
+    branch. Object insertion order is
     invariant; every consumed input mutation changes the digest; journal/pause rows outside the
     resolved prefix and every job/clock/claim mutation do not. All run writers, source-changing
     collaboration operations, reconciliation, worker and rebuild are set-equal callers.

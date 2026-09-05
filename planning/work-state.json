@@ -21835,7 +21835,7 @@
       "id": "D2718",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:faa0e7d86077c7e8dcfa1df1bbbd80dec32c0356cf8c56879f043b4851919073",
+      "sourceDigest": "sha256:319679c72fca7a70bc2009559fe74dd243b3b1d958501c7c750c2abec5d80ff2",
       "uxItems": [],
       "owner": "learner-history",
       "blocker": "rfc:longitudinal-store.md"
@@ -21844,7 +21844,7 @@
       "id": "D2719",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:cfcb9d916d41dd0347e482dc66a6521ed110bc0f1632c6e1c52aa739cd7d6c46",
+      "sourceDigest": "sha256:13d3d4345ada5e37ef5e4cf016bd9e8a4d92d4e05a05d1d17f5e1d3bb6b5921f",
       "uxItems": [],
       "owner": "learner-history",
       "blocker": "rfc:longitudinal-store.md"
@@ -21853,7 +21853,7 @@
       "id": "D2720",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:58b8fa9ef4eb1b8ad863b855646dfd4c182dbd67e75c12d849049ff4fb7cecbe",
+      "sourceDigest": "sha256:f05f8bed208bc7d68f8b4818e0e170585a178263561417d280c35eedb5d2955b",
       "uxItems": [],
       "owner": "learner-history",
       "blocker": "rfc:longitudinal-store.md"
@@ -21862,7 +21862,7 @@
       "id": "D2721",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ff7c4b729b346c0e03882635e132c807f2a13d33cff76b740a084985b3f1b7c0",
+      "sourceDigest": "sha256:6ee7b4f6f3c2820ca5b9095edadc7e563b3865888198e6ab0fb3b1e1c17634e3",
       "uxItems": [],
       "owner": "learner-history",
       "blocker": "rfc:longitudinal-store.md"
@@ -21871,7 +21871,16 @@
       "id": "D2722",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:adcac0ad705ada09e1693b956ba5f14a2df3dd147ffd8c22b158221f28340ca6",
+      "sourceDigest": "sha256:c2fb07b1c929064d5a3e5c4974655301dda4ee46bddf35d1dfc4590b393315cd",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2723",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:85e56d95ae4e8886c1b219a52f52940e70b923f696ac238e7572821d4e1d397a",
       "uxItems": [],
       "owner": "learner-history",
       "blocker": "rfc:longitudinal-store.md"

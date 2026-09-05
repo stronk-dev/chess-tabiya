@@ -15629,3 +15629,19 @@ currentness operands, and its invalidator does not join the source subject to th
 chain. Exact receipt:
 `planning/longitudinal-store/seventh-fresh-independent-buildability-review-2026-09-05.md`. One
 bounded eighth author repair and another genuinely fresh review precede implementation.
+
+## 2026-09-05 — Longitudinal store eighth author repair
+
+**What landed:** a bounded contract-tier repair for [[D2718]]–[[D2723]] and maintained `make
+longitudinal-store-eighth-author-repair` coverage. No migration, worker, reader, consumer, API,
+client, content, archive or protected-design byte changed.
+
+**What changed:** one storage-owned v4 constructor copies and replays real runtime events, resolves
+an exact authorship population, derives imported-mainline length from the replayed primary branch
+and binds source/job subjects. Transaction closure now reads AST call sites inside matching
+begin/commit bodies; claim currentness includes cut, revision, sealed source, owner and lease.
+
+**Evidence/next:** the target retains the complete predecessor/review chain and passes six new
+repair groups plus strict TypeScript. Exact receipt:
+`planning/longitudinal-store/eighth-author-repair-2026-09-05.md`. Another genuinely fresh review
+precedes acceptance and implementation.

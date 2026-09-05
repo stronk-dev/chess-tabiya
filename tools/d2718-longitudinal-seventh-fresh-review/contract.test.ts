@@ -154,12 +154,12 @@ describe("longitudinal-store seventh fresh independent review", () => {
     });
   });
 
-  it("binds every reproduced boundary to the current RFC promise", () => {
-    const rfc = readFileSync("rfc/longitudinal-store.md", "utf8");
-    expect(rfc).toMatch(/exact closed `\{runId,ownerLearnerId,requestedSeq,events\}` result of the\s+shipped `readBackReplay` authority/u);
-    expect(rfc).toMatch(/one authorship row for every prefix user commit/u);
-    expect(rfc).toMatch(/descriptor calls the\s+watermark update inside the same database transaction/u);
-    expect(rfc).toMatch(/full ownership\/source-digest CAS/u);
-    expect(rfc).toMatch(/raw\/spread\/crossed/u);
+  it("binds every reproduced boundary to the immutable review receipt", () => {
+    const receipt = readFileSync("planning/longitudinal-store/seventh-fresh-independent-buildability-review-2026-09-05.md", "utf8");
+    expect(receipt).toMatch(/cannot consume the real replay authority/u);
+    expect(receipt).toMatch(/one row per relevant\s+commit/u);
+    expect(receipt).toMatch(/counts text, not transaction behavior/u);
+    expect(receipt).toMatch(/omits cut, revision, lease and durable owner truth/u);
+    expect(receipt).toMatch(/does not join the image to the job/u);
   });
 });

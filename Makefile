@@ -300,7 +300,7 @@ longitudinal-store-fresh-review:
 longitudinal-store-second-fresh-review:
 	node --test tools/d2227-longitudinal-second-fresh-review/contract.test.mjs
 
-.PHONY: longitudinal-store-third-fresh-review longitudinal-store-fourth-author-repair longitudinal-store-fourth-fresh-review longitudinal-store-fifth-author-repair longitudinal-store-fifth-fresh-review longitudinal-store-sixth-author-repair longitudinal-store-sixth-fresh-review longitudinal-store-seventh-author-repair longitudinal-store-seventh-fresh-review
+.PHONY: longitudinal-store-third-fresh-review longitudinal-store-fourth-author-repair longitudinal-store-fourth-fresh-review longitudinal-store-fifth-author-repair longitudinal-store-fifth-fresh-review longitudinal-store-sixth-author-repair longitudinal-store-sixth-fresh-review longitudinal-store-seventh-author-repair longitudinal-store-seventh-fresh-review longitudinal-store-eighth-author-repair
 longitudinal-store-third-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2402-longitudinal-third-fresh-review/vitest.config.ts --reporter=verbose
 
@@ -332,6 +332,10 @@ longitudinal-store-seventh-author-repair: longitudinal-store-sixth-author-repair
 
 longitudinal-store-seventh-fresh-review: longitudinal-store-seventh-author-repair
 	./node_modules/.bin/vitest run --config tools/d2718-longitudinal-seventh-fresh-review/vitest.config.ts --reporter=verbose
+
+longitudinal-store-eighth-author-repair: longitudinal-store-seventh-fresh-review
+	./node_modules/.bin/vitest run --config tools/d2718-longitudinal-eighth-author-repair/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc -p tools/d2718-longitudinal-eighth-author-repair/tsconfig.json
 
 .PHONY: bot-roster-fresh-review
 bot-roster-fresh-review:
@@ -1004,7 +1008,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-seventh-fresh-review test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-eighth-author-repair test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 
