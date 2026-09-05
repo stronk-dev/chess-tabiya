@@ -21821,6 +21821,15 @@
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2717",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c767ecce9b52087c91d645c2589d3c462ffcb75ff5d56566f44b972bbf17f25a",
+      "uxItems": [],
+      "evidence": "ledger:D2717",
+      "evidenceKind": "closeout-prose"
     }
   ]
 }

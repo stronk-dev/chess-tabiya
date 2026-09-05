@@ -1,7 +1,8 @@
 # RFC: Feedback delivery — give the claim layer a learner, and stop the strip printing the census
 
-- **Status:** **accepted 2026-08-16 — the owner gate is closed and every open question that
-  blocked acceptance is settled.** The narrowed Open question 1 was ruled on 2026-08-16
+- **Status:** **implementing — Stage 1 landed at `a64e6c5` on 2026-08-21; Stage 2 remains under
+  the [[D1005]] split and the RFC stays open through criteria 21–23. Accepted 2026-08-16 — the
+  owner gate is closed and every open question that blocked acceptance is settled.** The narrowed Open question 1 was ruled on 2026-08-16
   ([[D462]], `4ca7792`): **neither arm — both, in that order. Ship the surface, then run the
   binding wave before anyone plays.** The **three-way C6 fork is dead and must not be re-asked**
   (it priced a debt that is now payable, and the owner's 2026-08-16 instruction forbids re-asking

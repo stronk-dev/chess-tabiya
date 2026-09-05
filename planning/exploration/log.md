@@ -15601,3 +15601,15 @@ consumer closure comes from an exact committed TypeScript import graph rather th
 **Evidence/next:** the target retains 21 predecessor controls and passes 8/8 new repair groups.
 Exact receipt: `planning/concept-registry/second-author-repair-2026-09-05.md`. Another genuinely
 fresh review and the shared-resource bootstrap dependency still precede implementation.
+
+## 2026-09-05 — Live tracker status repair
+
+**What landed:** [[D2717]] and a source-derived foundation checkpoint correction.
+
+**What changed:** `feedback-delivery` now carries the `implementing` state its own §0.1 requires
+after the landed Stage 1, without changing the [[D1005]] Stage-2 split. The foundation milestone now
+reports the September 5 bootstrap/concept author repairs rather than ending at the superseded
+concept return.
+
+**Evidence/next:** `make status-parity roadmap-check roadmap-receipt work-state` guards the joined
+registers. Fresh independent review still gates both repaired foundation RFCs.
