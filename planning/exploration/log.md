@@ -15752,3 +15752,20 @@ byte changed.
 
 **Next:** repair [[D2748]]–[[D2752]] as one ledger/manifest/domain authority, then require another
 genuinely fresh review and the provider/value dependency landing before production implementation.
+
+## 2026-09-05 — Semantic collectors promotion ninth author repair
+
+**What landed:** a bounded contract-tier repair for [[D2748]]–[[D2752]] and maintained `make
+semantic-collectors-promotion-ninth-author-repair` coverage. No production collector, provider,
+packet, API, schema, content, archive or protected-design byte changed.
+
+**What changed:** complete immutable ledger records and the exact registered Syzygy source manifest
+now own recorded evidence; storage and legal unavailable arms are constructible sealed paths; and
+one request-derived seven-piece boundary precedes recorded lookup or live provider success. The
+target retains the complete predecessor chain and passes five new groups plus strict TypeScript.
+
+**What is blocked:** the evidence spine remains 12/14. Both promotion projections still await a
+tenth genuinely fresh independent review and the provider/value dependency landing.
+
+**Next:** fresh-review the ninth repair against durable-source identity, total-result reachability
+and domain-proof retention before authorizing either held production projection.

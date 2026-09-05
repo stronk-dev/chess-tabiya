@@ -831,7 +831,7 @@ shared-resource-bootstrap-tenth-fresh-review: shared-resource-bootstrap-ninth-au
 shared-resource-bootstrap-tenth-author-repair: shared-resource-bootstrap-tenth-fresh-review
 	node --test tools/d2701-shared-resource-bootstrap-tenth-author-repair/contract.test.mjs
 
-.PHONY: semantic-collectors-promotion-fifth-fresh-review semantic-collectors-promotion-fifth-author-repair semantic-collectors-promotion-sixth-fresh-review semantic-collectors-promotion-sixth-author-repair semantic-collectors-promotion-seventh-fresh-review semantic-collectors-promotion-seventh-author-repair semantic-collectors-promotion-eighth-fresh-review semantic-collectors-promotion-eighth-author-repair semantic-collectors-promotion-ninth-fresh-review
+.PHONY: semantic-collectors-promotion-fifth-fresh-review semantic-collectors-promotion-fifth-author-repair semantic-collectors-promotion-sixth-fresh-review semantic-collectors-promotion-sixth-author-repair semantic-collectors-promotion-seventh-fresh-review semantic-collectors-promotion-seventh-author-repair semantic-collectors-promotion-eighth-fresh-review semantic-collectors-promotion-eighth-author-repair semantic-collectors-promotion-ninth-fresh-review semantic-collectors-promotion-ninth-author-repair
 semantic-collectors-promotion-fifth-fresh-review:
 	node --test tools/d2548-semantic-collectors-promotion-fifth-fresh-review/contract.test.mjs
 
@@ -861,6 +861,10 @@ semantic-collectors-promotion-eighth-author-repair: semantic-collectors-promotio
 
 semantic-collectors-promotion-ninth-fresh-review: semantic-collectors-promotion-eighth-author-repair
 	./node_modules/.bin/vitest run --config tools/d2748-semantic-collectors-promotion-ninth-fresh-review/vitest.config.ts --reporter=verbose
+
+semantic-collectors-promotion-ninth-author-repair: semantic-collectors-promotion-ninth-fresh-review
+	./node_modules/.bin/vitest run --config tools/d2748-semantic-collectors-promotion-ninth-author-repair/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc -p tools/d2748-semantic-collectors-promotion-ninth-author-repair/tsconfig.json --noEmit
 
 .PHONY: semantic-collectors-deflection-authority-fresh-review
 semantic-collectors-deflection-authority-fresh-review:
@@ -1025,7 +1029,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-eighth-author-repair storage-backup-fourth-author-repair safe-deployment-third-fresh-review campaign-two-horizon-fifth-fresh-review pack-capability-thirteenth-fresh-review semantic-collectors-promotion-ninth-fresh-review test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-eighth-author-repair storage-backup-fourth-author-repair safe-deployment-third-fresh-review campaign-two-horizon-fifth-fresh-review pack-capability-thirteenth-fresh-review semantic-collectors-promotion-ninth-author-repair test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 

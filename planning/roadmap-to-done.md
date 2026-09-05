@@ -326,6 +326,15 @@ falsifiers. The spine remains **12/14** pending a bounded ninth author repair, a
 fresh review and provider/value dependency landing. Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-ninth-fresh-independent-buildability-review-2026-09-05.md`.
 
+The same-day ninth author repair closes those five seams at contract tier. A complete immutable
+ledger record and exact registered source manifest own recorded evidence through one retained
+receipt; sealed lookup and legal dependencies construct storage failure and input abstention; and a
+request-derived piece-count boundary runs before any recorded/live exact evidence. `make
+semantic-collectors-promotion-ninth-author-repair` retains every prior gate, passes 5/5 new controls
+and strict TypeScript. The spine remains **12/14** pending tenth fresh review and provider/value
+dependency landing. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-ninth-author-repair-2026-09-05.md`.
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded

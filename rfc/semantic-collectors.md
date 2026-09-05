@@ -7,13 +7,13 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair was returned by its ninth fresh review 2026-09-05 on [[D2748]], [[D2749]],
-  [[D2750]], [[D2751]] and [[D2752]].** One asynchronous transaction now owns recorded-first lookup, the exact
+  promotion pair completed its ninth author repair 2026-09-05 on [[D2748]], [[D2749]], [[D2750]],
+  [[D2751]] and [[D2752]] and awaits a tenth fresh review.** One asynchronous transaction now owns recorded-first lookup, the exact
   scheduler digest and invocation, cancellation/domain/failure outcomes, success-only legal move
   resolution, sealed ledger/live source creation and total input abstention. The maintained target
-  retains every predecessor gate and passes 8/8 author groups plus five fresh falsifiers, but its
-  recorded source is still caller-minted, its two unavailable dependency arms are unreachable and
-  its recorded/live success paths do not enforce the seven-piece tablebase domain;
+  retains every predecessor gate, passes five new repair groups and strict TypeScript; complete
+  durable ledger/manifest authority, reachable storage/legal unavailable arms and one shared
+  seven-piece boundary now precede recorded/live exact evidence;
   no held projection implementation is authorized. The
   request now owns a canonical full-FEN parser and total recorded lookup, uses the actual shared
   provider scheduler plus operation-keyed source factory with deterministic request bytes, and
@@ -1486,6 +1486,17 @@ fresh falsifiers. A bounded ninth author repair must make ledger lookup, unavail
 and tablebase-domain proof part of one exact transaction before another fresh review or either held
 production projection.
 
+The same-day ninth author repair closes all five returns at the bounded contract tier. Recorded
+truth begins at one validated immutable sourcing snapshot containing complete records and the exact
+registered Syzygy source manifest; the resulting authority receipt retains snapshot, record and
+evidence by identity. The sealed lookup can now construct both storage failures and refuses live
+fallback, while a sealed total legal resolver makes upstream unavailability reach honest input
+abstention. One request-derived piece-count boundary runs before recorded lookup, live scheduling
+or legal resolution, and the durable snapshot independently refuses outside-domain records. `make
+semantic-collectors-promotion-ninth-author-repair` retains every earlier promotion gate, passes 5/5
+new behavioral groups and strict TypeScript. This remains author evidence only: a tenth genuinely
+fresh review and the provider/value dependencies still gate both held production projections.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1502,11 +1513,11 @@ production projection.
 | [[D2653]] | author-repaired: the executable model uses the exact geometry/scope/signal request and complete typed result/delivery ABI |
 | [[D2654]] | author-repaired: the sole output is declared producer/projection evidence with one exact value-authority receipt |
 | [[D2693]]–[[D2700]] | author-repaired: one total transaction owns scheduler identity, recorded/live source authority, legal provider moves, failure/domain/cancellation and input abstention; ninth fresh review returned the resulting contract on [[D2748]]–[[D2752]] |
-| [[D2748]] | returned: recorded tablebase truth must resolve a complete durable ledger/manifest subject; caller JSON cannot mint source authority |
-| [[D2749]] | returned: the sealed recorded lookup must construct its declared failure arms and preserve no-fallback failure semantics |
-| [[D2750]] | returned: the sealed legal resolver must construct its declared unavailable arm and route it to total input abstention |
-| [[D2751]] | returned: live success must prove the exact request is inside the seven-piece tablebase domain before evidence exists |
-| [[D2752]] | returned: recorded success must carry the same exact domain proof from its durable source record before evidence exists |
+| [[D2748]] | author-repaired: a complete immutable durable ledger record and exact registered source manifest are the only route to recorded evidence, with one identity-retaining receipt |
+| [[D2749]] | author-repaired: the sealed recorded lookup constructs both declared failure arms and every failure refuses live fallback |
+| [[D2750]] | author-repaired: the sealed total legal resolver constructs its unavailable arm and routes it to sealed input abstention without manufactured evidence |
+| [[D2751]] | author-repaired: request-derived piece count proves the exact FEN is inside the seven-piece domain before any live provider work or evidence |
+| [[D2752]] | author-repaired: durable snapshot validation independently refuses any recorded tablebase record outside the same seven-piece domain |
 | [[D2469]] | author-repaired: provider preflight/domain and provider-failure arms execute before the lazy success-only legal-map resolver |
 | [[D2470]] | author-repaired: one request, dependency interface, sealed recorded resolver and exact collector signature fix source precedence |
 | [[D2471]] | author-repaired: specialized assertion failure throws `EvidenceInvariantError`; only typed unavailable inputs abstain, and invalid recorded bytes never permit live fallback |
@@ -1548,6 +1559,15 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-05: ninth author repair closes [[D2748]], [[D2749]], [[D2750]], [[D2751]] and
+  [[D2752]] at RFC tier. Complete durable ledger/manifest authority owns recorded evidence; sealed
+  lookup and legal dependencies expose their total failure/unavailable paths; and one request-derived
+  domain proof precedes recorded or live exact evidence. `make
+  semantic-collectors-promotion-ninth-author-repair` retains the complete chain, passes 5/5 new
+  controls and strict TypeScript. Exact receipt:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-ninth-author-repair-2026-09-05.md`.
+  Tenth fresh review and provider/value dependency landing remain mandatory; no held production id
+  is authorized.
 - 2026-09-05: ninth fresh independent review returned the held promotion pair on [[D2748]],
   [[D2749]], [[D2750]], [[D2751]] and [[D2752]]. Recorded evidence is still mintable from caller
   JSON; the storage-failure and legal-unavailable result arms cannot be constructed by sealed
