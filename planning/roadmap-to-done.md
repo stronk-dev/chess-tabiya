@@ -343,6 +343,15 @@ and strict TypeScript. The spine remains **12/14** pending tenth fresh review an
 dependency landing. Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-ninth-author-repair-2026-09-05.md`.
 
+The same-day tenth fresh independent review returns that repair on [[D2765]]–[[D2770]]. The model
+cannot ingest the production manifest dialect, while caller JSON can mint its durable snapshot,
+registered source, future time/unresolved support authority and dependency failures. A cloned
+request also reaches the early outside-domain result without request identity. `make
+semantic-collectors-promotion-tenth-fresh-review` retains the full chain and passes 6/6. The spine
+remains **12/14** pending a bounded repair that consumes production source/storage authority,
+another fresh review and provider/value dependency landing. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-tenth-fresh-independent-buildability-review-2026-09-05.md`.
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded

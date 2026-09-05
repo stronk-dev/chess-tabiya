@@ -22253,6 +22253,60 @@
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2765",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5cf5b2c261627bfe50095e372566b831fd81f6b2aecede8c69a6d270575ecdbe",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2766",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:db073c8ff8168cee60893bc1573e69c2764407d9fcd163c79cc32ef2aa814ac9",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2767",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:12393cab6a0ba1f1f3d180d3f635ec55593013f4750173a255839f687b26b8c6",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2768",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d787db19ae96ffee8deed47c5c19bd8d79ea29c2944ce10f7934b0a8b714782d",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2769",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6a7841f401927cdfd22f7fffa736305100af07a29664f5c2546f1f749034d353",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2770",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:af5f325e61c4fdfc6ea757dea6bdc9f03f407124780c4881dad7a8d0d5a68cf9",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
     }
   ]
 }

@@ -15865,3 +15865,24 @@ genuinely fresh review and the provider-protocol/exchange prerequisites.
 **Next:** independently attack the fifth repair's separate declaration authority, registry/release
 ownership, cache eviction, generation transitions and SQLite replay; only then unblock bot-policy's
 shared-health dependency.
+
+## 2026-09-05 — Semantic collectors promotion tenth fresh independent review
+
+**What landed:** the ninth held-promotion author repair was independently returned on [[D2765]]–
+[[D2770]], with six executable reproductions in `make
+semantic-collectors-promotion-tenth-fresh-review`. No production collector, provider, storage,
+schema, content, route, client or protected-design byte changed.
+
+**What changed:** the review proves the repair cannot ingest the production source-manifest dialect
+but does accept caller-minted durable snapshots, source registration, future time/unresolved support
+authority and dependency failures. It also accepts a cloned request on the new early domain branch.
+The fresh-review target now retains the full predecessor chain and is enrolled in
+`verify-governance`.
+
+**What is blocked:** the evidence spine remains 12/14. Neither held promotion projection may enter
+production before a bounded tenth repair, another genuinely fresh review, and the provider/value
+dependencies.
+
+**Next:** consume the real production manifest and durable storage authorities, bind exact
+source/time/document/pointer identity, assert request identity before every result, and make the
+owning dependencies the sole failure/abstention mints.
