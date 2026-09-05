@@ -16498,3 +16498,20 @@ return chain, passes 8/8 new behavioral groups and strict TypeScript. Exact rece
 Another genuinely fresh independent review and the draft value-authority dependency precede
 acceptance; the returned promotion installation boundary remains the parallel evidence-spine
 blocker.
+
+## 2026-09-06 — semantic collectors promotion thirteenth author repair
+
+**What landed:** repaired [[D2864]]–[[D2868]] in one executable TypeScript checkpoint and enrolled
+the checkpoint in ordinary governance verification. No production collector, API, schema, content,
+archive or protected-design byte changed.
+
+**What changed:** one application composition root now retains canonical installed-inventory bytes,
+digest, path, root and entries as an immutable snapshot. Registry construction refuses a changed
+delegated read; one generation maps to one current store; current receipts and result assertions
+retain the exact application→snapshot→registry→store chain. Empty installed generations fail.
+
+**Evidence/next:** `make semantic-collectors-promotion-thirteenth-author-repair` retains the complete
+predecessor and return chain, passes 5/5 current repair groups and strict TypeScript. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-thirteenth-author-repair-2026-09-06.md`.
+Another genuinely fresh independent review and provider/value dependency landing precede either
+held projection; the evidence spine remains 12/14.

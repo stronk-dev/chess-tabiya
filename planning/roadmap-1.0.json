@@ -344,14 +344,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Fresh-review the recomposed candidate packet; repair promotion's issuer-to-result authority as one immutable snapshot; land the evidence-value-authority/provider dependencies, then finish selectors, grades, Review and learner modules.",
+        "nextAction": "Fresh-review the recomposed candidate packet and promotion installation-authority repair; land the evidence-value-authority/provider dependencies, then finish selectors, grades, Review and learner modules.",
         "latestCheckpoint": {
-          "at": "2026-09-05",
-          "summary": "The candidate packet is recomposed behind cooperative scheduling and the bounded service/cache lifecycle, with exact identity, total outcomes and terminal states restored. Fresh review and the returned promotion installation boundary remain; the spine remains 12/14.",
+          "at": "2026-09-06",
+          "summary": "Promotion installation authority now forms one application-owned immutable inventory-byte chain through registry, cached store, recorded receipt and collector result; empty generations fail. Fresh review, candidate-packet fresh review and provider/value dependencies remain; the spine stays 12/14.",
           "impact": "advanced",
-          "evidence": ["planning/evidence-foundation-ux/shared-candidate-packet-eleventh-author-repair-2026-09-06.md", "tools/d2860-candidate-packet-eleventh-author-repair/contract.test.ts", "rfc/shared-candidate-evidence-packet.md", "rfc/README.md"],
+          "evidence": ["planning/evidence-foundation-ux/semantic-collectors-promotion-thirteenth-author-repair-2026-09-06.md", "tools/d2864-semantic-collectors-promotion-thirteenth-author-repair/contract.test.ts", "rfc/semantic-collectors.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "shared-candidate-evidence-packet.md", "digest": "sha256:a117c5cdf006eab7965d0141084b2a471a5ca1c838c7e4249dc08e6e0c82b587"}
+            {"kind": "rfc", "id": "semantic-collectors.md", "digest": "sha256:a79190b73867967926cbcfc21708fe6e4b118b89b81ca7f8199c4516ad98eaa2"}
           ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."

@@ -440,15 +440,15 @@ research found both sharp signals and overwhelming noise. Some families await di
 contracts; operand retention is incomplete; claim anchoring and pack compatibility are unresolved;
 producer-to-selector-to-consumer closure is not yet a release invariant.
 
-The 2026-09-05 thirteenth fresh promotion review returns the twelfth repair on [[D2864]]–[[D2868]].
-The leaf grammar/population fixes survive, but the public test issuer still turns a caller path into
-installation authority, the authority binds no inventory bytes, construction joins two inventory
-reads, and the returned store/result remains owned by the raw-path predecessor. Empty installed
-generations also satisfy the parser. `make semantic-collectors-promotion-thirteenth-fresh-review`
-retains the chain and passes 5/5 falsifiers. The evidence spine remains 12/14 pending one current
-issuer→snapshot→store→receipt→result repair, another fresh review and provider/value dependency
-landing. Receipt:
-`planning/evidence-foundation-ux/semantic-collectors-promotion-thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
+The 2026-09-06 thirteenth promotion author repair closes [[D2864]]–[[D2868]] at contract tier. One
+application-owned canonical inventory byte snapshot now governs current registry, cached generation
+store, durable recorded receipt and collector-result authority; a changed second read fails before
+issuance, and empty installed generations fail. `make
+semantic-collectors-promotion-thirteenth-author-repair` retains the predecessor/return chain,
+passes 5/5 current groups and strict TypeScript under ordinary governance. The evidence spine
+remains 12/14 pending another genuinely fresh review and provider/value dependency landing.
+Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-thirteenth-author-repair-2026-09-06.md`.
 
 Runtime opening identity is now a complete foundation slice: its pinned local artifact, exact
 endpoint/path/history projections, typed availability, production API route, and image boundary
