@@ -1,12 +1,10 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **RETURNED by tenth fresh independent review on [[D2701]]–[[D2708]].** The
-  ninth repair's repository closure and traversal fixes survive, but compiler config permits
-  duplicate keys, mutable installed declarations can move a same-commit projection under an
-  unchanged lock identity, graph invariants remain under-validated, and the explicit `any`, dynamic
-  import and broad-index refusals do not execute. `make
-  shared-resource-bootstrap-tenth-fresh-review` retains thirty-three earlier controls and passes
-  8/8 new falsifiers. No implementation is authorized before repair and another fresh review.
+- **Status:** draft — **tenth author repair completed on [[D2701]]–[[D2708]]; another genuinely
+  fresh independent review is required.** Duplicate-key config refusal, exact external declaration
+  digests, origin/root/edge invariants and fail-closed `any`, dynamic-import and broad-index
+  resolution now execute. `make shared-resource-bootstrap-tenth-author-repair` retains forty-one
+  earlier controls and passes 8/8 new repair groups. No implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -396,7 +394,12 @@ The closed adapter set is:
      readonly origin: "repository" | "node_builtin" | "typescript_lib" | "external_package";
      readonly exportedName: string | null;
      readonly tree: SyntaxTreeV1;
-     readonly dependencyIdentity: CanonicalValue | null;
+     readonly dependencyIdentity: {
+       readonly package: string;
+       readonly version: string;
+       readonly integrity: string;
+       readonly sourceDigest: `sha256:${string}`;
+     } | null;
    }
 
    interface ContractEdgeV1 {
@@ -486,14 +489,15 @@ The closed adapter set is:
 
    External boundaries are closed rather than ignored ([[D2491]]):
    - `node:` builtins use `origin: "node_builtin"`, the module/export path in `id`, the exported
-     declaration as `tree`, and `{ package:"@types/node", version, integrity:null }` as
-     `dependencyIdentity`;
+     declaration as `tree`, and exact `{ package:"@types/node", version, integrity, sourceDigest }`
+     identity;
    - ECMAScript/DOM library symbols use `origin: "typescript_lib"`, the normalized lib filename and
      export path in `id`, the declaration as `tree`, and `{ package:"typescript", version,
-     integrity }` from the exact lockfile package;
+     integrity, sourceDigest }` from the exact compiler image and retained declaration;
    - package imports use `origin: "external_package"`, package/export path in `id`, the public
-     declaration as `tree`, and the exact resolved `{ package, version, integrity }` identity from
-     `pnpm-lock.yaml`; workspace links resolve as repository nodes, not external packages; and
+     declaration as `tree`, and the exact resolved `{ package, version, integrity, sourceDigest }`
+     identity from `pnpm-lock.yaml` plus the retained declaration; workspace links resolve as
+     repository nodes, not external packages; and
    - every call/construct/tag edge records the compiler-selected signature plus the complete public
      overload set in the exact `ContractEdgeV1` fields above.
 
@@ -912,6 +916,21 @@ No production implementation is authorized until all eight are repaired and fres
 Exact routed returns: [[D2701]], [[D2702]], [[D2703]], [[D2704]], [[D2705]], [[D2706]],
 [[D2707]], [[D2708]].
 
+### Tenth author repair (2026-09-05)
+
+The bounded repair closes all eight returns at contract tier. Committed config crosses a
+duplicate-key syntax pass before option conversion. Every non-repository declaration combines its
+package/compiler identity with `sourceDigest`, the digest of the exact canonical retained syntax,
+so changed semantics can no longer carry the old complete dependency identity. Origin, id prefix,
+root uniqueness and relation-specific edge arms are asserted before sealing.
+
+Resolution is fail-closed: call/construct/tag requires an exact resolved signature and overload
+population; dynamic import is refused; and element access requires one literal key. `make
+shared-resource-bootstrap-tenth-author-repair` retains all forty-one predecessor controls and
+passes 8/8 new repair groups. This remains author evidence only; another genuinely fresh review
+still gates acceptance and production. Receipt:
+`planning/shared-resource-register-bootstrap/tenth-author-repair-2026-09-05.md`.
+
 ## Acceptance criteria
 
 1. Catalogue and README register populations are set-equal; no `RESOURCE_NAMES`, `SCHEMA_SLUGS` or
@@ -984,6 +1003,19 @@ Exact routed returns: [[D2701]], [[D2702]], [[D2703]], [[D2704]], [[D2705]], [[D
 23. [[D2649]] A three-declaration overload set resolves as one symbol and its root contains all three
     canonically ordered declaration node ids. Adding an unrelated same-spelling declaration cannot
     enter or renumber that set; no singular privileged overload node exists in the ABI.
+24. [[D2701]] The selected committed config rejects duplicate keys before JSON value construction
+    and compiler conversion.
+25. [[D2702]] Every retained non-repository declaration carries an exact canonical syntax digest;
+    changing its semantic declaration bytes changes the dependency identity and graph digest.
+26. [[D2703]] Repository, TypeScript-library, Node-builtin and external-package origins accept only
+    their exact dependency identity and id-prefix grammar.
+27. [[D2704]] Descriptor selectors and emitted root records are independently unique.
+28. [[D2705]] Call/construct/tag edges require selected signature and overload arms; every other
+    relation requires null/empty arms.
+29. [[D2706]] A call without an exact compiler-resolved signature fails before graph publication.
+30. [[D2707]] Dynamic imports fail rather than introducing an unrepresented module dependency.
+31. [[D2708]] Element access accepts one literal string/numeric key and refuses broad runtime index
+    lookup.
 
 ## Discharges
 
@@ -1003,6 +1035,12 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-05: [[D2701]]–[[D2708]] tenth author repair. Duplicate config keys fail; external
+  declarations carry exact syntax identity; origin/root/edge invariants are discriminator-exact;
+  and unresolved calls, dynamic imports and broad index lookups fail closed. `make
+  shared-resource-bootstrap-tenth-author-repair` retains forty-one earlier controls and passes 8/8
+  new repair groups. Another fresh review remains mandatory; receipt:
+  `planning/shared-resource-register-bootstrap/tenth-author-repair-2026-09-05.md`.
 - 2026-09-05: returned by tenth fresh independent buildability review on [[D2701]]–[[D2708]].
   Duplicate config keys and mutable dependency bytes violate the pinned program; graph origin/root/
   relation invariants remain incomplete; and the three explicit unresolved-resolution refusals do

@@ -188,6 +188,14 @@ controls and passes 8/8 new falsifiers. The foundation critical path remains bou
 and another genuinely fresh review; no catalogue/register implementation is authorized. Receipt:
 `planning/shared-resource-register-bootstrap/tenth-fresh-independent-buildability-review-2026-09-05.md`.
 
+The same-day tenth author repair closes those eight seams at contract tier. Committed config now
+rejects duplicate keys before conversion; exact retained declaration digests make external semantic
+bytes part of dependency identity; origin/root/edge invariants are discriminator-exact; and
+unresolved calls, dynamic imports and broad index lookups fail closed. `make
+shared-resource-bootstrap-tenth-author-repair` retains forty-one predecessor controls and passes
+8/8 new repair groups. Another genuinely fresh review still gates acceptance and production.
+Receipt: `planning/shared-resource-register-bootstrap/tenth-author-repair-2026-09-05.md`.
+
 The same-day twelfth `pack-capability-contract` author repair closes [[D2587]]–[[D2592]] at contract
 tier without claiming production. One transaction-owned before/after run result derives the exact
 core/objective/recorded-guard journal suffix and receipt; the complete nested objective request is

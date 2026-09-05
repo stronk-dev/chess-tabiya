@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:f25170efcd333e57df2bc95e9385da7249e218a0a79641296264dfb7b1ddcd88",
+    "roadmap": "sha256:acc1828778a8339a546feb9a29a5d90469daf0c1d846083142134a1d84c4605c",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:5ef653d89210acd59ea8f947da0381fc11ece61e5f2fb0f2b1c930513bf4e31a",
-    "rfcRegister": "sha256:ede52df0577e6741537efbbd03d42682b05a0db6f65688f41cccc5025be2493b",
+    "workState": "sha256:d9e7a9279ff69ac6a89795d311089302f063763259ff1f22f51728ee590e66fe",
+    "rfcRegister": "sha256:260252a05623880046709756d10a133b6d0c6227a4d57f3e0a3067f8d6babbef",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -112,7 +112,7 @@
       "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-04",
-        "summary": "The tenth fresh shared-resource-bootstrap review returns the ninth repair on eight executable seams. Duplicate compiler-config keys pass; mutable installed declarations move a same-commit projection under an unchanged lock identity; origin/root/edge invariants are under-validated; and any calls, dynamic imports and broad index lookups survive explicit refusals. Thirty-three retained controls and 8/8 new falsifiers pass; foundation implementation remains held for repair and another fresh review.",
+        "summary": "The shared-resource bootstrap now has a tenth bounded author repair: committed config rejects duplicate keys; external declarations join package/compiler identity to exact retained syntax; origin/root/edge invariants are discriminator-exact; and unresolved calls, dynamic imports and broad index lookups fail closed. Forty-one retained controls and 8/8 new groups pass; foundation implementation remains held for another genuinely fresh review.",
         "impact": "held",
         "evidence": [
           "planning/shared-resource-register-bootstrap/seventh-author-repair-2026-09-04.md",

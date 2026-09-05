@@ -15558,3 +15558,17 @@ import and broad-index resolution survive their explicit refusal clauses.
 falsifiers. Exact receipt:
 `planning/shared-resource-register-bootstrap/tenth-fresh-independent-buildability-review-2026-09-05.md`.
 One bounded author repair and another genuinely fresh review precede implementation.
+
+## 2026-09-05 — Shared-resource bootstrap tenth author repair
+
+**What landed:** bounded contract repair for [[D2701]]–[[D2708]] and maintained `make
+shared-resource-bootstrap-tenth-author-repair` coverage. No production catalogue, checker,
+register, schema, product, content, archive or protected-design byte changed.
+
+**What changed:** committed config now rejects duplicate keys; each external declaration joins its
+package/compiler identity to exact retained syntax; origin/root/edge invariants are exact; and
+unresolved calls, dynamic imports and broad index lookups fail before publication.
+
+**Evidence/next:** the target retains forty-one predecessor controls and passes 8/8 new repair
+groups. Exact receipt: `planning/shared-resource-register-bootstrap/tenth-author-repair-2026-09-05.md`.
+Another genuinely fresh independent review still precedes acceptance and implementation.
