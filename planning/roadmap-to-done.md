@@ -317,6 +317,15 @@ passes 8/8 new behavioral groups and strict TypeScript. The spine remains **12/1
 fresh review and provider/value dependency landing. Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-eighth-author-repair-2026-09-05.md`.
 
+The same-day ninth fresh review returns that repair on [[D2748]], [[D2749]], [[D2750]], [[D2751]]
+and [[D2752]]. Raw caller JSON can still mint the recorded sourcing-ledger authority; the sealed
+recorded lookup and legal resolver cannot construct their declared failure/unavailable arms; and
+both recorded and live success can emit exact tablebase evidence for an eight-piece request. `make
+semantic-collectors-promotion-ninth-fresh-review` retains the complete chain and passes 5/5 fresh
+falsifiers. The spine remains **12/14** pending a bounded ninth author repair, another genuinely
+fresh review and provider/value dependency landing. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-ninth-fresh-independent-buildability-review-2026-09-05.md`.
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded

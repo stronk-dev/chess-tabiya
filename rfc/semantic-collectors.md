@@ -7,11 +7,13 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair completed its **eighth author repair 2026-09-05 on [[D2693]]–[[D2700]] and awaits
-  a ninth fresh review.** One asynchronous transaction now owns recorded-first lookup, the exact
+  promotion pair was returned by its ninth fresh review 2026-09-05 on [[D2748]], [[D2749]],
+  [[D2750]], [[D2751]] and [[D2752]].** One asynchronous transaction now owns recorded-first lookup, the exact
   scheduler digest and invocation, cancellation/domain/failure outcomes, success-only legal move
   resolution, sealed ledger/live source creation and total input abstention. The maintained target
-  retains every predecessor gate and passes 8/8 new behavioral groups plus strict TypeScript;
+  retains every predecessor gate and passes 8/8 author groups plus five fresh falsifiers, but its
+  recorded source is still caller-minted, its two unavailable dependency arms are unreachable and
+  its recorded/live success paths do not enforce the seven-piece tablebase domain;
   no held projection implementation is authorized. The
   request now owns a canonical full-FEN parser and total recorded lookup, uses the actual shared
   provider scheduler plus operation-keyed source factory with deterministic request bytes, and
@@ -1472,6 +1474,18 @@ semantic-collectors-promotion-eighth-author-repair` retains every prior promotio
 new behavioral groups and strict TypeScript. This remains author evidence only: a ninth genuinely
 fresh review and the provider/value dependencies still gate both held production projections.
 
+The same-day ninth fresh independent review returns the repair on [[D2748]], [[D2749]], [[D2750]],
+[[D2751]] and [[D2752]]. A caller can manufacture `sourcing.ledger.tablebase_result@1` from raw JSON
+without a durable ledger record, registered source identity, anchor, grounds or supports. The
+declared recorded-storage failure and legal-map-unavailable arms have no sealed construction path,
+so the total operation cannot legitimately reach either. Finally, both a live provider success and
+a caller-recorded success mint exact tablebase evidence for an eight-piece request because the
+seven-piece domain is enforced only when the provider volunteers `outside_domain`. `make
+semantic-collectors-promotion-ninth-fresh-review` retains every predecessor gate and passes 5/5
+fresh falsifiers. A bounded ninth author repair must make ledger lookup, unavailable dependencies
+and tablebase-domain proof part of one exact transaction before another fresh review or either held
+production projection.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1487,7 +1501,12 @@ fresh review and the provider/value dependencies still gate both held production
 | [[D2652]] | author-repaired: recorded/live sources cross the shipped parser and all ten production tablebase categories |
 | [[D2653]] | author-repaired: the executable model uses the exact geometry/scope/signal request and complete typed result/delivery ABI |
 | [[D2654]] | author-repaired: the sole output is declared producer/projection evidence with one exact value-authority receipt |
-| [[D2693]]–[[D2700]] | author-repaired: one total transaction owns scheduler identity, recorded/live source authority, legal provider moves, failure/domain/cancellation and input abstention; ninth fresh review remains mandatory |
+| [[D2693]]–[[D2700]] | author-repaired: one total transaction owns scheduler identity, recorded/live source authority, legal provider moves, failure/domain/cancellation and input abstention; ninth fresh review returned the resulting contract on [[D2748]]–[[D2752]] |
+| [[D2748]] | returned: recorded tablebase truth must resolve a complete durable ledger/manifest subject; caller JSON cannot mint source authority |
+| [[D2749]] | returned: the sealed recorded lookup must construct its declared failure arms and preserve no-fallback failure semantics |
+| [[D2750]] | returned: the sealed legal resolver must construct its declared unavailable arm and route it to total input abstention |
+| [[D2751]] | returned: live success must prove the exact request is inside the seven-piece tablebase domain before evidence exists |
+| [[D2752]] | returned: recorded success must carry the same exact domain proof from its durable source record before evidence exists |
 | [[D2469]] | author-repaired: provider preflight/domain and provider-failure arms execute before the lazy success-only legal-map resolver |
 | [[D2470]] | author-repaired: one request, dependency interface, sealed recorded resolver and exact collector signature fix source precedence |
 | [[D2471]] | author-repaired: specialized assertion failure throws `EvidenceInvariantError`; only typed unavailable inputs abstain, and invalid recorded bytes never permit live fallback |
@@ -1529,6 +1548,15 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-05: ninth fresh independent review returned the held promotion pair on [[D2748]],
+  [[D2749]], [[D2750]], [[D2751]] and [[D2752]]. Recorded evidence is still mintable from caller
+  JSON; the storage-failure and legal-unavailable result arms cannot be constructed by sealed
+  dependencies; and recorded/live success can claim exact tablebase truth outside the seven-piece
+  domain. `make semantic-collectors-promotion-ninth-fresh-review` retains the complete chain and
+  passes 5/5 fresh falsifiers. Exact receipt:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-ninth-fresh-independent-buildability-review-2026-09-05.md`.
+  Another author repair and genuinely fresh review remain mandatory; no held production id is
+  authorized.
 - 2026-09-05: eighth author repair closes [[D2693]]–[[D2700]] at RFC tier. One total asynchronous
   transaction owns the recorded-first/provider/legal sequence, scheduler-derived request identity,
   sealed ledger/live source authority, exact-FEN provider move validation, outside-domain evidence

@@ -15734,3 +15734,21 @@ Support, bots, Review and Campaign from landing on a replayable but ungrounded r
 
 **Next:** repair [[D2742]]–[[D2747]] as one storage/provider/result authority, then require another
 genuinely fresh review before acceptance or production work.
+
+## 2026-09-05 — Semantic collectors promotion ninth fresh independent return
+
+**What landed:** [[D2748]], [[D2749]], [[D2750]], [[D2751]] and [[D2752]] plus `make
+semantic-collectors-promotion-ninth-fresh-review`. The complete retained promotion chain stays
+green, while five new controls cross durable-source, total-result and tablebase-domain boundaries.
+
+**What changed:** `semantic-collectors` remains implementing at 12/14. The eighth repair's total
+transaction exists, but recorded truth is still mintable from caller JSON; recorded-storage failure
+and legal-map unavailability have no sealed construction paths; and recorded/live success can claim
+exact tablebase evidence outside the seven-piece domain.
+
+**What is blocked:** both promotion projections and their downstream Support, Review, bot and pack
+consumers remain held. No production collector, provider, API, schema, content or protected-design
+byte changed.
+
+**Next:** repair [[D2748]]–[[D2752]] as one ledger/manifest/domain authority, then require another
+genuinely fresh review and the provider/value dependency landing before production implementation.

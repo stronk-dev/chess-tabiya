@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:49641e9396940cf5486a75cf3f68c83ff30eb895e7ecce12dc7d68b2eb5f41a0",
+    "roadmap": "sha256:a9dfb68b37c52891079aa640ddf48713d117a8b4de33b68a0db4f5f6be9b0a71",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:547f14d0780822b3d7334adf54dedb6725802e9e32e82b4b351ac6ec7d49d00b",
-    "rfcRegister": "sha256:497f20ca9bcbadcbaae1c4a5724a0db5642e4d3fdb98bf0fbf1118810810df91",
+    "workState": "sha256:f9e3213c85712a1d4d42d59c2a56e8510d532cc920a5f0080916708979b56a20",
+    "rfcRegister": "sha256:4346429094d1dd8e58bb4ab751f8f5f9d16f64363a958130c78d9d467d23dd09",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 1029,
+      "blocked": 1034,
       "done": 825,
       "refused": 3
     },
@@ -139,12 +139,14 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
+      "nextAction": "Repair D2748-D2752 in the held promotion collectors, then require another fresh review and provider/value dependency landing; finish capability/claim compatibility, the complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "The held promotion pair completed its eighth author repair on eight executable seams: one total asynchronous transaction now owns recorded-first lookup, scheduler-derived request identity, cancellation/domain/failure, success-only legal resolution, sealed ledger/live source creation and reachable input abstention. The retained chain passes 8/8 new behavioral groups plus strict TypeScript. The evidence spine remains 12/14 pending ninth fresh review and provider/value dependency landing.",
+        "summary": "The ninth fresh promotion review returned five source-authority gaps: recorded truth is caller-mintable without a durable ledger/manifest subject; recorded-storage failure and legal-map unavailability are declared but unreachable; and recorded/live success can claim exact tablebase evidence for an eight-piece request. The complete retained chain and five fresh falsifiers pass, while the evidence spine correctly remains 12/14.",
         "impact": "held",
         "evidence": [
+          "planning/evidence-foundation-ux/semantic-collectors-promotion-ninth-fresh-independent-buildability-review-2026-09-05.md",
+          "tools/d2748-semantic-collectors-promotion-ninth-fresh-review/review.test.ts",
           "planning/evidence-foundation-ux/shared-candidate-packet-eighth-fresh-independent-buildability-review-2026-09-04.md",
           "planning/evidence-foundation-ux/review-evidence-compiler-second-author-repair-2026-09-04.md",
           "rfc/review-evidence-compiler.md",
