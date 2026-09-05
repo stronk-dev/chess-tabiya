@@ -352,6 +352,15 @@ remains **12/14** pending a bounded repair that consumes production source/stora
 another fresh review and provider/value dependency landing. Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-tenth-fresh-independent-buildability-review-2026-09-05.md`.
 
+The same-day tenth author repair closes those six seams at contract tier. Canonical realpath-bound
+artifacts cross the production manifest/ledger/linkage validators and retain exact document,
+source, time, support, origin and record identity. Request identity precedes every result, and
+observed missing storage/legal artifacts are the only failure/abstention route. `make
+semantic-collectors-promotion-tenth-author-repair` retains every prior gate, passes 6/6 new groups
+and strict TypeScript. The spine remains **12/14** pending another fresh review and provider/value
+dependency landing. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-tenth-author-repair-2026-09-05.md`.
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded

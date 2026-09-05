@@ -7,10 +7,11 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair's ninth author repair was returned by its tenth fresh review 2026-09-05 on
-  [[D2765]]–[[D2770]].** The proposed transaction cannot consume the production source-manifest
-  dialect and still lets caller objects mint durable snapshots, source registration, time/support
-  authority, early request results and dependency failures. The preceding author model claimed one
+  promotion pair completed its tenth author repair 2026-09-05 on [[D2765]]–[[D2770]] and remains
+  held for another genuinely fresh review.** The repaired transaction consumes the production
+  source-manifest dialect from canonical realpath-bound storage and retains document, source,
+  origin, time, support and record identity; request identity precedes every early result and
+  dependency failures come from observed operations. The preceding author model claimed one
   asynchronous transaction owned recorded-first lookup, the exact
   scheduler digest and invocation, cancellation/domain/failure outcomes, success-only legal move
   resolution, sealed ledger/live source creation and total input abstention. The maintained target
@@ -1512,6 +1513,16 @@ fresh falsifiers. A bounded tenth author repair must consume the production mani
 storage authority, bind source/time/document/pointer identity, assert requests before every branch,
 and make only owning dependencies construct failure or abstention. The spine remains 12/14.
 
+The same-day tenth author repair closes all six returns at contract tier. A realpath-bound artifact
+store reads canonical `pack.json`, `sources.json` and `evidence.json`; runs the production
+manifest/ledger/linkage validators; resolves every support against the loaded document; refuses
+future observations; and retains exact file digests, source entry, HTTPS Syzygy origin and record in
+one identity-preserving receipt. Module-owned request identity is checked before geometry/domain,
+structural stores fail, and missing storage/legal artifacts produce their failure or abstention from
+the owning operation with zero provider calls. `make semantic-collectors-promotion-tenth-author-repair`
+retains the complete chain, passes 6/6 new groups and strict TypeScript. This is author evidence
+only: another genuinely fresh review and provider/value dependency landing still gate 12/14→14/14.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1533,12 +1544,12 @@ and make only owning dependencies construct failure or abstention. The spine rem
 | [[D2750]] | author-repaired: the sealed total legal resolver constructs its unavailable arm and routes it to sealed input abstention without manufactured evidence |
 | [[D2751]] | author-repaired: request-derived piece count proves the exact FEN is inside the seven-piece domain before any live provider work or evidence |
 | [[D2752]] | author-repaired: durable snapshot validation independently refuses any recorded tablebase record outside the same seven-piece domain |
-| [[D2765]] | returned: consume the production `tabiya.sourcing.manifest.v1`/`entries[]` parser and schema, not a parallel dialect |
-| [[D2766]] | returned: only a canonical durable read with artifact/digest/storage authority may create the recorded snapshot |
-| [[D2767]] | returned: bind observation time, document subject and resolvable support pointers before recorded truth exists |
-| [[D2768]] | returned: assert the exact sealed request before domain, no-work or any other early result branch |
-| [[D2769]] | returned: storage and legal dependencies alone mint their total failed/unavailable operation results |
-| [[D2770]] | returned: resolve the source through the installed production registry and origin receipt; never self-register beside a claim |
+| [[D2765]] | author-repaired: the durable path imports the production manifest/ledger/linkage validators and exact schema dialect |
+| [[D2766]] | author-repaired: canonical realpath-bound reads and exact file digests are the sole recorded-authority route |
+| [[D2767]] | author-repaired: internal observed time, loaded document identity and resolved supports precede recorded truth |
+| [[D2768]] | author-repaired: module-owned request identity is asserted before geometry, domain, lookup or any result |
+| [[D2769]] | author-repaired: observed storage/legal artifact operations alone yield failure/abstention and prevent fallback |
+| [[D2770]] | author-repaired: the exact production source entry and verified Syzygy response origin survive in the receipt |
 | [[D2469]] | author-repaired: provider preflight/domain and provider-failure arms execute before the lazy success-only legal-map resolver |
 | [[D2470]] | author-repaired: one request, dependency interface, sealed recorded resolver and exact collector signature fix source precedence |
 | [[D2471]] | author-repaired: specialized assertion failure throws `EvidenceInvariantError`; only typed unavailable inputs abstain, and invalid recorded bytes never permit live fallback |
@@ -1580,6 +1591,14 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-05: tenth author repair closes [[D2765]]–[[D2770]] at RFC tier. Canonical durable
+  artifacts cross the production sourcing validators and retain document/source/time/support/origin
+  identity; exact request identity precedes every result; and dependency failures are observed by
+  their owning operations. `make semantic-collectors-promotion-tenth-author-repair` retains the
+  complete chain, passes 6/6 new groups and strict TypeScript. Exact receipt:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-tenth-author-repair-2026-09-05.md`.
+  Another genuinely fresh review and provider/value dependency landing remain mandatory; no held
+  production id is authorized.
 - 2026-09-05: tenth fresh independent review returned the ninth held-promotion repair on
   [[D2765]]–[[D2770]]. The contract uses a nonexistent manifest dialect; caller JSON mints durable
   storage and source authority; time/support pointers are unchecked; a cloned request reaches an

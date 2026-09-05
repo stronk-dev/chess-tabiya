@@ -15886,3 +15886,21 @@ dependencies.
 **Next:** consume the real production manifest and durable storage authorities, bind exact
 source/time/document/pointer identity, assert request identity before every result, and make the
 owning dependencies the sole failure/abstention mints.
+
+## 2026-09-05 — Semantic collectors promotion tenth author repair
+
+**What landed:** a bounded contract repair for [[D2765]]–[[D2770]]. No production collector,
+provider, storage, schema, content, route, client, archive or protected-design byte changed.
+
+**What changed:** production-format canonical artifacts and production sourcing validators now own
+recorded truth; exact document/source/time/support/origin identity survives in one receipt. Request
+identity precedes every result, while observed storage/legal absence owns failure and abstention.
+The maintained target retains the entire promotion chain and passes 6/6 new groups plus strict
+TypeScript.
+
+**What is blocked:** the RFC remains at 12/14. The repair is author evidence and both held
+projections remain unauthorized before another genuinely fresh review and provider/value dependency
+landing.
+
+**Next:** independently attack artifact coherence/generation, origin and legal-operation authority,
+request/result crossing, and every possible alternate recorded-evidence mint.

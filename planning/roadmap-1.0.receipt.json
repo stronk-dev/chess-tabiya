@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:904553339a3c7a754fdcb74abb09e6d4d8c36beb682cc37089e277dd5dff44e4",
+    "roadmap": "sha256:f0e8ed1533c1d07a71953db57439bbb85d2b570186e3f09c21795b7d8d0774bb",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:4b3a0e6fa5a4167284d4785857991e276f9ab89d570487f35689f7750b1637de",
-    "rfcRegister": "sha256:b659639b48dc784b97a93c1e926ac94d6f37a3d32c0d5e619155622abded66bd",
+    "workState": "sha256:fc0f9f5140e8e0792a4c4084046d16d19236ad9432e16e8544c5e1e236f95c6b",
+    "rfcRegister": "sha256:f3ca76361a9b6c53d6cff5c888e0026ca9b947b4cf2f5c840898feb4db2b62a9",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -140,12 +140,14 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Repair the held promotion pair on D2765-D2770, fresh-review it, then land its provider/value dependencies; finish capability/claim compatibility, the complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
+      "nextAction": "Fresh-review the tenth held-promotion author repair, then land its provider/value dependencies; finish capability/claim compatibility, the complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "The tenth fresh promotion review returns the ninth repair on six authority gaps: it cannot ingest the production manifest dialect, caller JSON mints durable/source/time/support authority, a cloned request reaches an early trusted result, and callers manufacture dependency failures. The full retained chain and six fresh falsifiers pass; the evidence spine remains 12/14 pending bounded repair, another fresh review and provider/value dependency landing.",
+        "summary": "The tenth promotion author repair closes six authority gaps at contract tier: canonical realpath-bound artifacts cross production sourcing validators and retain exact document/source/time/support/origin identity; request identity precedes every result; and observed dependency operations own failure/abstention. The retained chain, six new groups and strict TypeScript pass; the evidence spine remains 12/14 pending fresh review and provider/value dependency landing.",
         "impact": "held",
         "evidence": [
+          "planning/evidence-foundation-ux/semantic-collectors-promotion-tenth-author-repair-2026-09-05.md",
+          "tools/d2765-semantic-collectors-promotion-tenth-author-repair/contract.test.ts",
           "planning/evidence-foundation-ux/semantic-collectors-promotion-tenth-fresh-independent-buildability-review-2026-09-05.md",
           "tools/d2765-semantic-collectors-promotion-tenth-fresh-review/review.test.ts",
           "planning/evidence-foundation-ux/semantic-collectors-promotion-ninth-author-repair-2026-09-05.md",
