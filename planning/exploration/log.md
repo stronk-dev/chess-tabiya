@@ -16193,3 +16193,23 @@ bytes but does not prove that a hand-authored checkpoint was superseded when a c
 
 **Evidence/next:** the current claim is repaired immediately; release-engineering owns an executable
 checkpoint→live-RFC/work-state supersession join so this class cannot recur silently.
+
+## 2026-09-05 — shared candidate packet tenth author repair
+
+**What landed:** repaired the ninth packet return [[D2678]]–[[D2684]] in one production-backed
+TypeScript contract operation and enrolled its Make target in ordinary governance verification.
+
+**What changed:** request input is closed; the packet id derives all seven factual terms; direct and
+projected narrow receipts retain the same dependency-closed target graph; cache admission derives
+its key from one privately asserted whole receipt; recursive sealing descends below frozen parents;
+and all thirteen collector paths execute current runtime semantic/F1 functions over the complete
+legal population. The author pass also found [[D2841]]–[[D2842]]: real evidence brands contradicted
+the old blanket symbol refusal, and the predecessor legal declaration was an unbranded lookalike.
+Both are repaired in the maintained operation without pretending the future one-call factory has
+landed.
+
+**Evidence/next:** `make candidate-packet-tenth-author-repair` passes the retained historical chain,
+9/9 new controls and strict TypeScript. Exact receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-tenth-author-repair-2026-09-05.md`.
+Production remains unauthorized pending genuinely fresh review and the named
+`evidence-value-authority` dependency.

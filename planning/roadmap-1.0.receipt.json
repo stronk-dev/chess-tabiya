@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a9ec560aac3b535189451427effb21dd856af69c53b1a428624e00e3a1dd38e8",
+    "roadmap": "sha256:6b66853e68c169a4a060565b153041051e77d39eb6ce48519ffa970536208e9c",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:c553e1fd3df7c1fa600f0cc90bacec36d07b6f8c31ff7b7e916fb4bc64c4eaa9",
-    "rfcRegister": "sha256:5e64479956d0d5e8f1a3fa5ef7ecea58a48bee872da622e586d73dc21bfb6489",
+    "workState": "sha256:bcd76b525b192200e2ef8ad44bdd947b91a3c89ab6f2653610776bd2bf807849",
+    "rfcRegister": "sha256:e82ffa327524524b79658157bb75b226681e298777225c1bd4131cd0b7996dc1",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 640,
       "doing": 0,
-      "blocked": 1120,
+      "blocked": 1122,
       "done": 826,
       "refused": 3
     },
@@ -139,15 +139,15 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Repair the twelfth held-promotion return by consuming application-wide recorded evidence instead of inventing a product-local trust root; close packet/provider/value dependencies, then finish capability/claim compatibility, selectors, grades, Review and learner modules.",
+      "nextAction": "Fresh-review the production-backed candidate-packet tenth repair while landing its evidence-value-authority dependency; separately repair the twelfth held promotion pair against shared recorded-evidence authority, then finish selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "The twelfth promotion review returned the held pair on five executable authority failures: caller-bootstrapped installation, open generation grammar, non-unique legal rows, vacuous supports and first-row duplicate record selection. The full retained chain passes, but the evidence spine remains 12/14 pending a shared recorded-evidence authority, author repair, fresh review and provider/value dependencies.",
-        "impact": "held",
+        "summary": "The shared candidate packet's tenth author repair now closes its request, seven-term identity, scope-private graph, cache authority and deep sealing against thirteen production-backed semantic/F1 adapter paths. Nine composed controls plus strict TypeScript pass; fresh review and value-authority landing still gate production, while the promotion pair remains 12/14 and separately held.",
+        "impact": "advanced",
         "evidence": [
-          "planning/evidence-foundation-ux/semantic-collectors-promotion-twelfth-fresh-independent-buildability-review-2026-09-05.md",
-          "tools/d2835-semantic-collectors-promotion-twelfth-fresh-review/review.test.ts",
-          "rfc/semantic-collectors.md",
+          "planning/evidence-foundation-ux/shared-candidate-packet-tenth-author-repair-2026-09-05.md",
+          "tools/d2678-candidate-packet-tenth-author-repair/contract.test.ts",
+          "rfc/shared-candidate-evidence-packet.md",
           "rfc/README.md"
         ]
       },

@@ -22936,6 +22936,24 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:46ea55345667c9aa499303e0d839c0fc5eda735de4f3510894742c182d287319",
       "uxItems": []
+    },
+    {
+      "id": "D2841",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:587fd0a1a49e8b0a409956b9a27f98eb2657e1da90f1c739e1fd3852d9fd8ce3",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
+    },
+    {
+      "id": "D2842",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0894785e28cf005510328ceea054e7ebfd668f6fd81bdb91efdf16cd3100fa2f",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-candidate-evidence-packet.md"
     }
   ]
 }

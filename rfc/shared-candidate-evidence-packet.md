@@ -1,13 +1,17 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — RETURNED by ninth fresh independent review on [[D2678]], [[D2679]],
-  [[D2680]], [[D2681]], [[D2682]], [[D2683]] and [[D2684]].**
-  The eighth author repair closes its bounded [[D2655]]–[[D2660]] inputs, but the composed author
-  surface still accepts an open request, emits an incomplete packet identity, retains different
-  private graphs for direct/projected packets sharing that identity, trusts caller cache keys and
-  crossed result wrappers, permits mutation behind a frozen envelope, and executes placeholder
-  collectors rather than the exact registered operations. Another author repair and genuinely
-  fresh review are required before acceptance.
+- **Status:** **draft — tenth author repair closes the ninth return [[D2678]]–[[D2684]] plus
+  newly exposed [[D2841]]–[[D2842]] at contract tier; genuinely fresh review and the named
+  `evidence-value-authority` dependency still precede acceptance.** The maintained operation now
+  parses the closed request, derives the complete seven-term factual identity, gives direct and
+  projected narrow receipts the same dependency-closed graph, derives cache identity internally,
+  admits only one privately asserted whole receipt, seals below already-frozen ancestors and
+  executes all thirteen adapters over real production semantic/F1 functions. Binding those real
+  values exposed two defects the placeholder repair could not reveal: production evidence brands
+  are private symbol slots that the old walker rejected, and the old predecessor legal-evidence
+  model emits an unbranded lookalike. The repair admits exactly production-asserted brand slots,
+  rejects arbitrary symbols, and exercises the real legal map/declaration path while retaining the
+  one-call production factory as an unlanded dependency rather than claiming it exists.
   The D2198–D2201 author repair remains present: the product factory fixes the primary manifest authority; every collector
   result is projection-addressed; thirteen exact context adapters satisfy the executable registry;
   and memo, service-stat and receipt-reference protocols are closed. The historical return remains
@@ -617,8 +621,12 @@ readings, abstentions, retained outcomes and dependency-only execution outcomes.
 manifest is deliberately excluded from per-entry weight because the service retains that one
 singleton whether the cache has zero or eight entries. Traversal follows every reachable array and
 plain object from those roots, sorts object keys, counts canonical UTF-8 key/scalar bytes, and counts
-each object identity once through a `WeakSet`; functions, symbols, bigint values, accessors and
-non-plain prototypes fail receipt measurement rather than receiving an invented size. Equal cloned
+each object identity once through a `WeakSet`; functions, bigint values, accessors and non-plain
+prototypes fail receipt measurement rather than receiving an invented size. A real
+`DeclaredEvidence` or `SemanticEvidenceEvent` necessarily has one module-private symbol brand.
+The walker admits that exact enumerable `true` slot only after the corresponding production
+assertion accepts the object, accounts for its scalar, and refuses every additional or unasserted
+symbol. Equal cloned
 objects count twice; a shared reference counts once. The category census is an independent closed
 root check, not a replacement for traversal. These are deterministic logical graph bounds—not a
 claim about V8 heap/RSS—and criterion 12 requires production Node-24 calibration before numeric
@@ -629,9 +637,10 @@ the three measured top-level fields (`packet`, `legalMovesInput`, `candidateInpu
 excludes only the process-wide `manifest`, and derives every category selector from those same
 rows. Measurement starts at the constructed private aggregate itself, so the candidate-input array,
 each private wrapper and all nested outcome/value arrays are reachable objects rather than flattened
-away. `Reflect.ownKeys` plus complete own-property descriptors reject symbol keys, accessors,
-non-enumerable data, undeclared keys, functions, bigint, non-finite numbers and unsupported
-prototypes before a receipt can reach the cache. An added reference field therefore fails root-set
+away. `Reflect.ownKeys` plus complete own-property descriptors reject unasserted/additional symbol
+keys, accessors, non-enumerable data, undeclared keys, functions, bigint, non-finite numbers and
+unsupported prototypes before a receipt can reach the cache. The asserted production-brand slot
+above is the only symbol exception. An added reference field therefore fails root-set
 closure until it is categorized and traversed; category keys are never compared back to a second
 copy of their own constant.
 
@@ -2008,9 +2017,12 @@ different retained graphs. It cannot supply a default. The implementation rerun 
     contains no recreated `evidence-source-adapters.ts`, same-purpose wrapper/alias or packet-side
     factory definition, and contains no `exactLegalMoveMap`/`exactLegalMoves` import below that
     boundary. This is an executable source-graph negative, not a comment convention.
-    The maintained author contract imports and executes the predecessor author model's
-    `compileLegalPopulation` path, observes one authority call and exact payload/move references,
-    and rejects a local duplicate definition; reading this criterion as text is not sufficient.
+    The maintained author contract imports and executes the real production `exactLegalMoveMap`
+    plus registered `declareExactLegalMovesEvidence` path, requires the result to pass
+    `assertDeclaredEvidence`, retains exact payload/move references, and rejects the old plain
+    lookalike ([[D2842]]). Until `evidence-value-authority` lands its named one-call factory, this
+    arm remains dependency-held; a harness double may not discharge it merely by matching the
+    producer/projection/payload fields. Reading this criterion as text is not sufficient.
 
 ## Fourth fresh independent return (2026-08-31)
 
@@ -2200,6 +2212,34 @@ Exact review and reproducer:
 `make candidate-packet-ninth-fresh-review`. One bounded author repair must close all seven before
 another genuinely fresh review. No production packet, cache or consumer is authorized.
 
+## Tenth author repair (2026-09-05)
+
+The repair closes [[D2678]]–[[D2684]] as one production-backed contract operation rather than seven
+independent predicates. `parseCandidatePopulationRequest` accepts exactly
+`{ beforeFen, ruleset, scope }`; the compiler alone derives the canonical root, primary-manifest
+digest, legal convention, move-identity convention, compiler version, standard ruleset and scope
+that form the seven-term packet digest. Direct narrow compilation and wide-to-narrow projection
+retain the same target plan's complete private dependency graph, so one packet id no longer names
+two cache weights depending on request order.
+
+The compiled wrapper is admitted to a private `WeakSet`; the cache accepts no caller key and derives
+the key only after asserting wrapper, packet, reference and digest identity. Recursive sealing walks
+below already-frozen ancestors. Entry, aggregate logical-byte and aggregate object limits remain
+independent, with access refreshing LRU order.
+
+Most importantly, the operation imports and executes the actual runtime semantic functions and F1
+declaration adapters behind all thirteen collector names over the complete legal set. That contact
+with production exposed [[D2841]] and [[D2842]]: real semantic/F1 values carry private symbol brands
+that the prior walker rejected, while the predecessor harness's supposed legal declaration was an
+unbranded lookalike. The walker now admits one asserted production brand slot and rejects arbitrary,
+additional, hidden and accessor properties. The legal input comes from the real map plus registered
+declaration adapter and must pass `assertDeclaredEvidence`; the future one-call factory remains an
+explicit `evidence-value-authority` landing dependency.
+
+`make candidate-packet-tenth-author-repair` retains the full sixth-through-ninth history and passes
+9/9 new composed controls plus strict TypeScript. This is positive author evidence, not acceptance:
+another genuinely fresh independent review and the named dependency still gate production work.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -2342,6 +2382,13 @@ D1354; corrected here per §0.7.)*
 
 ## Changelog
 
+- 2026-09-05 — [[D2678]]–[[D2684]] plus [[D2841]]–[[D2842]] tenth author repair. One
+  production-backed contract operation closes request, seven-term identity, scope-private graph,
+  cache authority, deep sealing and all thirteen real adapter paths while preserving aggregate
+  bounds. Binding real evidence also replaces the blanket symbol refusal with an assertion-gated
+  brand rule and refuses the predecessor's unbranded legal-evidence lookalike. `make
+  candidate-packet-tenth-author-repair` passes 9/9 plus strict TypeScript; fresh review and the
+  value-authority dependency remain required, and production implementation is unauthorized.
 - 2026-09-04 — ninth fresh independent review returned the eighth repair on [[D2678]]–[[D2684]].
   The bounded graph controls survive, but request, factual identity, projected private closure,
   cache key/result authority, deep immutability and exact collector execution do not compose.
