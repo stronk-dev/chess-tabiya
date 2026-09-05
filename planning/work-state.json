@@ -21889,7 +21889,7 @@
       "id": "D2724",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:41951d7e8e37c4fc4fc9533f6c09f3ddcb8bf0510659ed54b32082effe4ca1f0",
+      "sourceDigest": "sha256:2b9e6f5df10fd02261a146ab0ff7e0dd51ce37f12abcdf74668a1d879d013be0",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"
@@ -21898,7 +21898,7 @@
       "id": "D2725",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f55ced0c6402bffefda35d288f598279838067718fe9af35ac06191e638a6389",
+      "sourceDigest": "sha256:d2a7f0637a6cb66c8a1ebcf0bcc1b034b395044e886addc5e22a34cb9acee0be",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"
@@ -21907,7 +21907,7 @@
       "id": "D2726",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1575657c0f8b05ce3e1b359bddccca089b5d63c3b7c8a507f722fcacceb2c5f9",
+      "sourceDigest": "sha256:4a4ca100673d1c1ceb9dd7f3590799f15797dd750db96169d7b8ecaa3b8a248c",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"
@@ -21916,7 +21916,7 @@
       "id": "D2727",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4fe6d63090274db3b900788757e5b6b9171bc2aebeb1f0a5ca3dba904b436d97",
+      "sourceDigest": "sha256:1d273ef1468314075e2bf003415a2e5ad584b462461b6a330d209f35f90d6dda",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"
@@ -21925,7 +21925,7 @@
       "id": "D2728",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7a42b0d79b3c139c6a8f38af2ba025a7e73425ec854ba3d51462543a808ea92c",
+      "sourceDigest": "sha256:0b1a2dbaa01eede8ca448c730582b5dc8a784012f712c02b8e4f581e69dd81ac",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"
@@ -21934,7 +21934,7 @@
       "id": "D2729",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:90c787a5193a035ad1dd3b3f53bc3069941545974a4e4d993f9c1671632aaafd",
+      "sourceDigest": "sha256:6d454c8ea8dd515999af888dd0eaa6f5f7ea922daed4ca9cedd8d0a211455c40",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"

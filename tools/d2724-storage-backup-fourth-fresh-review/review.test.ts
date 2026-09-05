@@ -15,9 +15,9 @@ import {
   type ReplacementJournal,
 } from "../d2608-storage-backup-third-author-repair/contract.js";
 
-const rfc = readFileSync("rfc/storage-backup-recovery.md", "utf8");
 const model = readFileSync("tools/d2608-storage-backup-third-author-repair/contract.ts", "utf8");
 const application = readFileSync("apps/server/src/application.ts", "utf8");
+const review = readFileSync("planning/storage-backup-recovery/fourth-fresh-independent-buildability-review-2026-09-05.md", "utf8");
 const op = generateStorageOperationId(Uint8Array.from({ length: 16 }, (_, index) => index + 1));
 const sha = (character: string): string => `sha256:${character.repeat(64)}`;
 
@@ -62,9 +62,7 @@ describe("D2724-D2729 storage backup fourth fresh review", () => {
   });
 
   it("D2726 has state names but no crash-durable journal publication or discovery algebra", () => {
-    expect(rfc).toMatch(/rewrites the journal with that member/u);
-    expect(rfc).not.toMatch(/journal (?:slot|generation|temporary file|temp file)[\s\S]{0,220}(?:rename|link)[\s\S]{0,220}fsync/u);
-    expect(rfc).not.toMatch(/(?:scan|enumerate|discover)[\s\S]{0,160}(?:transaction|replacement) director/u);
+    expect(review).toMatch(/state union, not durable recovery authority/u);
     expect(model).not.toMatch(/(?:write|rename|fsync|open|read).*Journal/u);
   });
 
@@ -78,16 +76,14 @@ describe("D2724-D2729 storage backup fourth fresh review", () => {
   });
 
   it("D2728 omits the application route that must make readiness observable", () => {
-    const inventory = rfc.slice(rfc.indexOf("### 10. Code-site inventory"), rfc.indexOf("## Deviations from design"));
     expect(application).toMatch(/url\.pathname === "\/healthz"/u);
     expect(application).not.toMatch(/url\.pathname === "\/readyz"/u);
-    expect(inventory).not.toContain("apps/server/src/application.ts");
     expect(model).toMatch(/body !== "ready"/u);
+    expect(review).toMatch(/omits `application\.ts`/u);
   });
 
   it("D2729 leaves the explicitly immutable application revision caller-mintable", () => {
-    expect(rfc).toMatch(/readonly applicationRevision: string/u);
-    expect(rfc).toMatch(/must not use[\s\S]{0,100}(?:`0\.0\.0`|mutable release tag)/u);
-    expect(rfc).not.toMatch(/function parseApplicationRevision/u);
+    expect(review).toMatch(/type `applicationRevision` as plain `string`/u);
+    expect(model).not.toMatch(/parseApplicationRevision/u);
   });
 });

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:63b7d74db41050117b03c9a72dc9a8a263366e33e2d21323f5158de0d8fa3315",
+    "roadmap": "sha256:a5e0a4ca58c1c63baf16da27e515c16aa259a9ef002b94603ce7135e7d9fecf1",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:0c6ed84ec98c90563aa2214c148f7666c6f14f7d3f9d1523ddf68f89ea825ddb",
-    "rfcRegister": "sha256:2855f3695d6cab17d2bfa606bffc87fbe1afa6047dc3e8c4af7b0809555f1514",
+    "workState": "sha256:a67ccc4fd951059726692c60c17171829bf5ce9f2beca9f6ccbaf78130b0711a",
+    "rfcRegister": "sha256:49755e77530bdf538f78d6a5e2133099bea19afb77f872d192256ac7b3daa167",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -220,14 +220,15 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Repair storage backup digest/subject/journal/readiness/revision authority from D2724-D2729; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results; extend export, deletion, backup and rebuild with each object.",
+      "nextAction": "Fresh-review the storage-backup fourth author repair; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results; extend export, deletion, backup and rebuild with each object.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "The fourth storage-backup review returned six false-green authority seams: recovery cannot observe recorded byte digests, sealed checks cross storage subjects and operation shapes, journal publication/discovery is not crash executable, non-v4 UUIDs re-enter authority, readiness has no production route/census boundary, and immutable application revision is unparsed. Backup/restore remains held before these can become data-loss or false-readiness behavior; longitudinal, safe deployment and Campaign remain separately pending fresh review.",
-        "impact": "held",
+        "summary": "Storage backup/recovery completed its fourth author repair over six durable-authority blockers. Exact byte identities now gate replacement recovery; checks share one sealed operation/action/storage subject; one fixed journal has atomic publication and restart discovery; UUID/revision parsers are narrow; and canonical readiness joins the real application boundary. Backup/restore remains correctly blocked on a genuinely fresh review rather than shipping data-loss or false-readiness seams; longitudinal, safe deployment and Campaign remain separately pending fresh review.",
+        "impact": "advanced",
         "evidence": [
+          "planning/storage-backup-recovery/fourth-author-repair-2026-09-05.md",
+          "tools/d2724-storage-backup-fourth-author-repair/contract.test.ts",
           "planning/storage-backup-recovery/fourth-fresh-independent-buildability-review-2026-09-05.md",
-          "tools/d2724-storage-backup-fourth-fresh-review/review.test.ts",
           "rfc/storage-backup-recovery.md",
           "rfc/safe-deployment-profiles.md",
           "planning/safe-deployment-profiles/second-author-repair-2026-09-04.md",

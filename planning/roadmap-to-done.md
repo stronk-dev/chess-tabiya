@@ -1488,6 +1488,15 @@ storage-backup-fourth-fresh-review` retains the complete author chain and reprod
 backup/restore correctly held before data-loss and false-readiness seams reach production; receipt:
 `planning/storage-backup-recovery/fourth-fresh-independent-buildability-review-2026-09-05.md`.
 
+The 2026-09-05 fourth storage-backup author repair addresses [[D2724]]–[[D2729]] without claiming
+implementation. Replacement recovery now carries exact byte identities; checks derive from one
+sealed operation/action/storage subject; one fixed journal directory has atomic fsynced publication
+and unambiguous restart discovery; operation/revision identities are runtime-narrowed; and the
+canonical `/readyz` response joins the actual application route and 14-boundary census. `make
+storage-backup-fourth-author-repair` retains the complete chain and passes 6/6 new groups plus
+strict TypeScript. Backup/restore and D608 remain held for another genuinely fresh review; receipt:
+`planning/storage-backup-recovery/fourth-author-repair-2026-09-05.md`.
+
 The 2026-09-04 second safe-deployment author repair closes [[D2614]]–[[D2618]] at the draft tier.
 One mounted canonical image crosses into and is attested by the app; runtime config compilation and
 exact profile/operation proof are executable; live TLS identity records chain/SPKI/leaf changes; and

@@ -1,12 +1,12 @@
 # RFC: Storage backup, restore, upgrade, and recovery
 
-- **Status:** draft — fourth fresh independent review returned the third author repair on
-  [[D2724]]–[[D2729]]. Replacement recovery cannot observe its promised digests; check seals do
-  not bind one storage subject or operation shape; journal publication/discovery is not crash
-  executable; the UUID parser admits non-v4 identities; the readiness route is missing from the
-  consumer census; and application revision remains caller-mintable. `make
-  storage-backup-fourth-fresh-review` retains the complete author chain and reproduces 6/6.
-  Implementation remains unauthorized.
+- **Status:** draft — fourth author repair completed 2026-09-05 on [[D2724]]–[[D2729]]; another
+  genuinely fresh independent review is required. Replacement recovery observes exact byte
+  identities; checks share one sealed operation-specific storage subject; the fixed replacement
+  journal has atomic publication and unambiguous discovery; identities are runtime-narrowed;
+  and `/readyz` has an exact application boundary. `make storage-backup-fourth-author-repair`
+  retains the complete chain and passes 6/6 new groups plus strict TypeScript. Implementation
+  remains unauthorized.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
@@ -112,6 +112,39 @@ census while the model validates a non-shipped plain-text body. [[D2729]] shows 
 receipt still accept any `applicationRevision: string`, including the mutable identities §2
 explicitly forbids. Exact receipt:
 `planning/storage-backup-recovery/fourth-fresh-independent-buildability-review-2026-09-05.md`.
+
+## Fourth author repair (2026-09-05)
+
+The six returned boundaries are repaired as one durable storage authority:
+
+1. **[[D2724]]:** every old, staged, live and quarantine member observation carries a parsed
+   SHA-256 identity. Reconciliation admits only the exact pending or completed image for the
+   current phase and refuses absent, duplicate, unexpected, corrupt or crossed-generation bytes.
+2. **[[D2725]]:** each storage operation privately constructs one recursively sealed
+   `StorageCheckSubject` containing its operation id, exact operation/action discriminator,
+   observed storage digest and source version. Every check retains that exact object identity;
+   the compiler refuses another subject, action, null-source context or caller digest.
+3. **[[D2726]]:** replacement uses the single fixed sibling `.tabiya-replacement/`. Each canonical
+   journal generation is written exclusively to `journal.tmp`, fsynced, atomically renamed over
+   `journal.json`, then committed by fsyncing the transaction directory. Creation additionally
+   fsyncs the live parent. Startup accepts zero or one exact directory, refuses alternate/multiple
+   candidates and unknown entries, and distinguishes an empty pre-mutation reservation from one
+   valid recoverable journal.
+4. **[[D2727]]:** `parseStorageOperationId` accepts only canonical lowercase RFC-4122 version-4,
+   RFC variant identities; versions 1–3/5, wrong variants, nil and alternate forms refuse.
+5. **[[D2728]]:** `apps/server/src/application.ts` owns `/readyz` and joins the derived boundary
+   inventory. Its canonical JSON body is exactly `{representativeData:"ok",status:"ready",
+   storageVersion:N}`; rehearsal parses all three values and refuses health-only/plain-text,
+   wrong-version, noncanonical or incomplete responses.
+6. **[[D2729]]:** `ApplicationRevision` is reconstructed by one parser. Release form is exactly a
+   40-character lowercase source SHA; development permits only `dev+<full-sha>` or `dev+dirty`,
+   and neither development arm is release-recovery evidence. Mutable labels and `0.0.0` are
+   unrepresentable.
+
+`make storage-backup-fourth-author-repair` retains the complete review/author chain, passes 6/6
+new behavioral groups and runs strict TypeScript. Exact receipt:
+`planning/storage-backup-recovery/fourth-author-repair-2026-09-05.md`. This remains author evidence;
+another genuinely fresh review gates acceptance and implementation.
 
 ## Summary
 
@@ -255,7 +288,7 @@ interface StorageBackupManifestV1 {
   readonly createdAt: string;            // UTC ISO-8601 with exactly millisecond precision
   readonly reservationNonce: string;     // 32 lowercase hex chars from 128 random bits
   readonly reason: "manual" | "pre_upgrade" | "pre_restore";
-  readonly applicationRevision: string; // immutable image/source revision, never "latest"
+  readonly applicationRevision: ApplicationRevision; // parsed immutable image/source revision
   readonly sourceStorageVersion: number;
   readonly intendedStorageVersion: number;
   readonly database: {
@@ -277,6 +310,10 @@ declare const BACKUP_ID: unique symbol;
 type BackupId = string & { readonly [BACKUP_ID]: "BackupId" };
 
 function parseBackupId(value: unknown): BackupId;
+declare const APPLICATION_REVISION: unique symbol;
+type ApplicationRevision = string & { readonly [APPLICATION_REVISION]: "ApplicationRevision" };
+function parseApplicationRevision(value: unknown): ApplicationRevision;
+function releaseRecoveryEligible(value: ApplicationRevision): boolean;
 ```
 
 `parseBackupId` is the only constructor. It accepts exactly
@@ -323,10 +360,12 @@ bundle or overwrite an earlier bundle. Startup reports abandoned reservations an
 deletes, or publishes them automatically.
 
 `applicationRevision` is the full source Git SHA embedded as an OCI revision label and build-time
-constant in the server image. The implementation must not use the package's present `0.0.0`
-placeholder or a mutable release tag as recovery identity. Development builds use
-`dev+<full-git-sha>` when a source SHA is available and `dev+dirty` otherwise; `dev+dirty` bundles
-verify mechanically but are explicitly not eligible as release recovery evidence.
+constant in the server image. `parseApplicationRevision` is its only constructor. Release form is
+exactly 40 lowercase hexadecimal characters. Development form is exactly `dev+<40-lowercase-hex>`
+or `dev+dirty`; both verify mechanically but `releaseRecoveryEligible` returns false. The parser
+rejects the package's present `0.0.0` placeholder, mutable release tags, branch names, uppercase,
+prefix/suffix text and alternate lengths. Every unknown manifest and receipt reconstructs the
+brand before use.
 
 `formatVersion` versions the operator artifact local to this RFC. It is not a shared-resource
 register claim: one server package owns its parser and writer, it is not embedded in `schemas/`,
@@ -443,9 +482,23 @@ rename a main database directly. Its target set is exactly `<live>`, `<live>-wal
 on the live and staged databases is closed. The staged database must already be a verified,
 standalone main file with no sidecars.
 
-The primitive creates an exclusive same-filesystem transaction directory, records a canonical
-intent containing the target basename, operation id, existence and SHA-256 of each old triplet
-member, staged digest, and phase, and fsyncs the intent and both transaction/live parent directories.
+The primitive exclusively creates the single fixed same-filesystem sibling
+`.tabiya-replacement/`; an alternate or second prefix-matching directory refuses before SQLite
+opens. It records a canonical closed journal containing the target basename, parsed operation id,
+existence and parsed SHA-256 of each old triplet member, staged digest, phase and monotonic
+generation. The initial generation is written exclusively to `journal.tmp`, fsynced, atomically
+renamed to `journal.json`, then committed by fsyncing the transaction directory and live parent.
+Every later generation repeats temp-exclusive write, file fsync, atomic rename-over-journal and
+transaction-directory fsync. A restart accepts exactly the fixed directory with canonical
+`journal.json` and at most an owned leftover `journal.tmp`; unknown entries, invalid bytes,
+alternate/multiple candidates or a missing journal after any mutation refuse. An empty fixed
+directory is recognizable only as a crash before the first durable journal and before any live
+mutation, and may be removed after fsyncing its parent.
+
+The journal intent contains the target basename, operation id, existence and SHA-256 of each old
+triplet member, staged digest, and phase. Every digest is runtime parsed; reconciliation reads and
+hashes the actual live, staged and quarantine files rather than accepting path existence as byte
+identity.
 It then performs this durable state machine. Every journal arm retains the parsed operation id,
 complete old-member/digest inventory and staged digest:
 
@@ -466,6 +519,7 @@ the member. After all members it enters `rollback_verify_old`, verifies the comp
 then persists `rolled_back` before removing intent/artifacts. No rollback mutation occurs before
 rollback intent is durable ([[D2613]]).
 
+Restart discovers the one fixed transaction directory and parses its canonical journal.
 Restart reconciles the journal with the exact path/digest image before applying another mutation.
 For each forward or rollback member, either the source still exists and the destination does not
 (mutation pending), or the source is absent and destination has the recorded digest (mutation
@@ -510,6 +564,11 @@ inventory because no schema exists yet. Readiness belongs only to upgrade rehear
 smoke, whose operation lifetime starts the image, waits for `/readyz`, parses its storage version
 and probes representative data. Normal supervisor startup exposes readiness through that same HTTP
 contract rather than adding an impossible pre-HTTP storage receipt ([[D2610]]).
+`apps/server/src/application.ts` owns `/readyz`. It returns one canonical JSON object with exactly
+`representativeData:"ok"`, `status:"ready"` and the current integer `storageVersion`. Rehearsal
+parses and compares all three fields; `/healthz`, a plain-text body, wrong version, missing
+representative-data proof, extra/noncanonical bytes or a non-200 response cannot earn readiness
+([[D2728]]).
 
 Migration-specific invariants are part of each migration definition. At minimum every migration
 declares which tables may be added, removed, rebuilt, or change row count. All other tables must
@@ -622,7 +681,7 @@ interface StorageReceiptBaseV1 {
   readonly protocol: "tabiya-storage-admin-receipt";
   readonly protocolVersion: 1;
   readonly operationId: StorageOperationId;
-  readonly applicationRevision: string;
+  readonly applicationRevision: ApplicationRevision;
   readonly elapsedMs: number;         // non-negative integer from a monotonic clock
   readonly paths: readonly StoragePathRef[];
 }
@@ -689,33 +748,41 @@ type StorageFailureCode =
 ```
 
 `generateStorageOperationId` consumes exactly 16 CSPRNG bytes, sets RFC-4122 v4/variant bits and
-returns a canonical lowercase UUID only after `parseStorageOperationId`. The parser accepts no
-empty, uppercase, nil, delimiter-bearing, path-like or noncanonical UUID. Every argv boundary,
+returns a canonical lowercase UUID only after `parseStorageOperationId`. The parser accepts only
+that exact version-4/RFC-variant grammar: no other UUID version or variant, empty, uppercase, nil,
+delimiter-bearing, path-like or noncanonical UUID. Every argv boundary,
 owner marker, replacement journal, check result and receipt parser reconstructs the brand. Work-
 directory reservation is exclusive on the operation id; collision generates a new id before any
 storage mutation. A parsed id identifies one invocation but never replaces the FD lock authority
 ([[D2612]]).
 
 Success callers never supply `checks`. There is no exported
-`recordPassedStorageCheck(operationId, check)` or generic pass constructor. The module-private
-constructor is reachable only after one exact operation validates its real operands:
+`recordPassedStorageCheck(operationId, check)` or generic pass constructor. Each operation first
+privately constructs one recursively sealed `StorageCheckSubject` from its parsed operation id,
+exact operation/action discriminator, observed database/bundle digest and source version. No
+generic public subject constructor exists. The module-private check constructor is reachable only
+after one exact operation validates its real operands:
 `checkDigest(expected,actual,byteImage)`, `checkIntegrity(pragmaRows,databaseIdentity)`,
 `checkForeignKeys(pragmaRows,databaseIdentity)`,
 `checkInventory(expectedTables,actualTables,version)`,
 `checkCompatibility(source,target,matrix)`,
 `checkMigrationInvariants(before,after,declaredInvariants)`,
 `checkIdentityRetention(expectedIds,actualIds,bundle)` and
-`checkReadiness(httpStatus,parsedReadyBody,expectedStorageVersion)`. Each sealed result carries its
-parsed operation id, literal check and digest of those canonical operands. A caller-chosen enum,
-boolean, digest, plain/spread/JSON object or valid result from another operation fails
-([[D2611]]).
+`checkReadiness(httpStatus,parsedReadyBody,expectedStorageVersion)`. Each sealed result retains the
+exact `StorageCheckSubject` object plus its literal check; check operations compute rather than
+accept subject/operand digests. A caller-chosen enum, boolean, digest, plain/spread/JSON object,
+result from another subject, or compatibility result from another action fails ([[D2611]],
+[[D2725]]).
 
-The success compiler chooses the required tuple from the exact operation plus
+The success compiler chooses the required tuple from the sealed subject's exact operation plus
 `prepare_start.action` or restore/rehearsal `migration`, requires ordered set equality, rejects an
-empty, missing, extra, duplicate, failed, forged or differently operation-bound result, and emits
-the tuple in canonical order. Receipt parsing repeats the exact tuple check. A result from a prior
-invocation therefore cannot be replayed into a new success receipt, and a readiness result cannot
-stand in for backup integrity.
+empty, missing, extra, duplicate, failed, forged, differently subject-bound or action-incompatible
+result, and emits the tuple in canonical order. Receipt parsing repeats the exact tuple check. A
+result from a prior invocation or another database therefore cannot be replayed into a new success
+receipt, fresh/null compatibility cannot satisfy backup, and readiness cannot stand in for backup
+integrity.
+The compiler rejects an empty, missing, extra, duplicate, failed, forged or differently operation-bound result;
+the stronger subject/action checks are additional constraints.
 
 Every `BackupId` field and bundle path identity is reconstructed through `parseBackupId` while
 parsing unknown receipt bytes. Serializers accept the parsed receipt only; no raw argv or persisted
@@ -742,7 +809,7 @@ merely an open TCP port. Restore itself remains stopped-service storage work and
 ### 10. Code-site inventory
 
 The unit in this table is a production or verification boundary that must consume the contract.
-There are **13 boundaries**; acceptance criterion 12 derives the same set from declared anchors and
+There are **14 boundaries**; acceptance criterion 12 derives the same set from declared anchors and
 fails on a missing or duplicate consumer.
 
 | # | Boundary | Required change |
@@ -751,15 +818,16 @@ fails on a missing or duplicate consumer.
 | 2 | `apps/server/src/storage-admin.ts` | implement backup, verify, prepare-start, restore, receipts, and closed failures |
 | 3 | `apps/server/storage-supervisor.sh` | own FD 3, acquire `flock` once, run preflight/maintenance and exec HTTP without releasing the open-file description |
 | 4 | `apps/server/src/main.ts` | refuse an unprepared old/future database before creating the HTTP application |
-| 5 | `apps/server/package.json` | build/run the admin entry point from the shipped package |
-| 6 | `apps/server/Dockerfile` | install the exact POSIX-shell/util-linux lock boundary and include the supervisor/admin/build revision |
-| 7 | `compose.yaml` | development maintenance service and backup mount |
-| 8 | `deploy/compose.release.template.yaml` | digest-identical release maintenance service and backup mount |
-| 9 | `Makefile` | thin backup/verify/restore/rehearsal targets |
-| 10 | `.gitignore` / packaging checks | exclude local backups and refuse their inclusion in images/artifacts |
-| 11 | `.github/workflows/verify.yml` | native recovery contract tier using committed fixtures |
-| 12 | `.github/workflows/release.yml` | image/Compose upgrade-rehearsal smoke for both published architectures or declared emulation |
-| 13 | `docs/storage-backup-and-recovery.md` | operator procedure, compatibility, retention responsibility, and last-known-good recovery |
+| 5 | `apps/server/src/application.ts` | own canonical `/readyz` storage-version and representative-data response |
+| 6 | `apps/server/package.json` | build/run the admin entry point from the shipped package |
+| 7 | `apps/server/Dockerfile` | install the exact POSIX-shell/util-linux lock boundary and include the supervisor/admin/build revision |
+| 8 | `compose.yaml` | development maintenance service and backup mount |
+| 9 | `deploy/compose.release.template.yaml` | digest-identical release maintenance service and backup mount |
+| 10 | `Makefile` | thin backup/verify/restore/rehearsal targets |
+| 11 | `.gitignore` / packaging checks | exclude local backups and refuse their inclusion in images/artifacts |
+| 12 | `.github/workflows/verify.yml` | native recovery contract tier using committed fixtures |
+| 13 | `.github/workflows/release.yml` | image/Compose upgrade-rehearsal smoke for both published architectures or declared emulation |
+| 14 | `docs/storage-backup-and-recovery.md` | operator procedure, compatibility, retention responsibility, and last-known-good recovery |
 
 ## Deviations from design
 
@@ -825,7 +893,7 @@ Another genuinely fresh independent review is required before acceptance or impl
     restore, and last-known-good recovery pass using the built server image rather than tsx/source.
 11. The recovery drill runs for linux/amd64 and linux/arm64 release artifacts, natively or under the
     same declared emulation used to qualify the image, and records architecture plus image digest.
-12. A derived census is set-equal to all 13 code-site boundaries in §10 and proves the two Compose
+12. A derived census is set-equal to all 14 code-site boundaries in §10 and proves the two Compose
     services use the identical server image digest.
 13. `make verify` remains green; the ordinary software tier runs deterministic unit/fixture checks,
     while Docker/architecture recovery is a separately named release tier with no flaky wall-clock
@@ -861,7 +929,8 @@ Another genuinely fresh independent review is required before acceptance or impl
     bytes; no recoverable partial rollback returns `REPLACEMENT_RECOVERY_REQUIRED`.
 23. `make storage-backup-third-author-repair` retains all 23 earlier controls, passes the six new
     behavioral groups and strict TypeScript; another fresh independent review still gates acceptance.
-24. A fourth author repair retains the complete chain and adds able-to-fail controls for exact
+24. `make storage-backup-fourth-author-repair` retains the complete chain and adds able-to-fail
+    controls for exact
     digest reconciliation, one sealed storage subject/operation shape, atomic discoverable journal
     publication, v4-only operation parsing, the real `/readyz` route/response boundary, and parsed
     immutable application revision. Another fresh independent review still gates acceptance.
@@ -881,6 +950,12 @@ Another genuinely fresh independent review is required before acceptance or impl
 
 ## Changelog
 
+- 2026-09-05: fourth author repair completed [[D2724]]–[[D2729]]. Exact digest-bearing filesystem
+  images, subject/action-bound checks, fixed atomic journal publication/discovery, v4-only operation
+  identity, canonical `/readyz` and parsed immutable application revision now compose under `make
+  storage-backup-fourth-author-repair` with 6/6 new groups plus strict TypeScript. No production,
+  storage, schema, workflow, content, archive or protected-design byte changed; another genuinely
+  fresh review remains required.
 - 2026-09-05: fourth fresh independent review returned the third repair on
   [[D2724]]–[[D2729]]. Six local author controls pass, but digest recovery, subject-bound checks,
   durable journal authority, v4-only identity, readiness-route closure and release-revision parsing

@@ -151,7 +151,7 @@ semantic-validation-author-contract:
 .PHONY: semantic-validation-third-author-repair semantic-validation-adversarial-audit semantic-validation-fourth-author-repair semantic-validation-fifth-fresh-review semantic-validation-fifth-author-repair
 .PHONY: assistance-register-sixth-fresh-review
 .PHONY: provider-protocol-fresh-review
-.PHONY: storage-backup-second-fresh-review storage-backup-second-author-repair storage-backup-third-fresh-review storage-backup-third-author-repair storage-backup-fourth-fresh-review
+.PHONY: storage-backup-second-fresh-review storage-backup-second-author-repair storage-backup-third-fresh-review storage-backup-third-author-repair storage-backup-fourth-fresh-review storage-backup-fourth-author-repair
 semantic-validation-author-repair:
 	node --test tools/d2194-semantic-validation-author-repair/contract.test.mjs
 
@@ -199,6 +199,10 @@ storage-backup-third-author-repair: storage-backup-second-author-repair
 
 storage-backup-fourth-fresh-review: storage-backup-third-author-repair
 	./node_modules/.bin/vitest run --config tools/d2724-storage-backup-fourth-fresh-review/vitest.config.ts --reporter=verbose
+
+storage-backup-fourth-author-repair: storage-backup-fourth-fresh-review
+	./node_modules/.bin/vitest run --config tools/d2724-storage-backup-fourth-author-repair/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc -p tools/d2724-storage-backup-fourth-author-repair/tsconfig.json
 
 module-evidence-assembly:
 	./node_modules/.bin/vitest run --config tools/d1865-evidence-assembly-harness/vitest.config.ts --reporter=verbose
@@ -1011,7 +1015,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-eighth-author-repair storage-backup-fourth-fresh-review test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-eighth-author-repair storage-backup-fourth-author-repair test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 

@@ -15665,3 +15665,19 @@ proof remain blocked on one bounded author repair and another genuinely fresh in
 
 **Next:** repair the six storage authorities while independent review capacity advances another
 author's foundation contract; then accept and implement only after a fresh buildability pass.
+
+## 2026-09-05 — storage backup/recovery fourth author repair
+
+**What landed:** a bounded contract-tier repair for [[D2724]]–[[D2729]] and maintained `make
+storage-backup-fourth-author-repair` coverage. No production storage, server, API, schema, client,
+content, deployment, archive or protected-design byte changed.
+
+**What changed:** exact old/staged/live/quarantine digests now govern recovery; every check shares
+one private operation/action/storage subject; the fixed replacement journal publishes atomically
+and is discovered unambiguously; operation and application revision parsers exclude invented
+authority; and canonical `/readyz` joins the real application boundary and 14-site census.
+
+**Evidence/next:** the target retains the complete author/review chain and passes six new repair
+groups plus strict TypeScript. Exact receipt:
+`planning/storage-backup-recovery/fourth-author-repair-2026-09-05.md`. Another genuinely fresh
+review precedes acceptance and production implementation.
