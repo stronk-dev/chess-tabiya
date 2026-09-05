@@ -389,6 +389,16 @@ retains the complete chain and passes 6/6 fresh falsifiers plus strict TypeScrip
 seal, another fresh review and provider/value dependency landing. Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-eleventh-fresh-independent-buildability-review-2026-09-05.md`.
 
+The same-day eleventh author repair closes those six seams at contract tier. An installation
+inventory owns immutable named generations; the complete production pack/strict-sourcing checks
+and exact pack subject run before admission; support values, retained Syzygy response bytes and
+FEN-derived legal maps join one record; honest legal unavailability remains distinct from invalid
+evidence; and the current result assertion refuses predecessor-only recorded readings. `make
+semantic-collectors-promotion-eleventh-author-repair` retains the full chain, passes 7/7 new groups
+and strict TypeScript. The spine remains **12/14** pending a twelfth fresh review and provider/value
+dependency landing. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-eleventh-author-repair-2026-09-05.md`.
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded

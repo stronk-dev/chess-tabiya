@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:2c7a42778777bcc1fbe0a27ef808c4f5326c1df9f9367a57eb0e4e5714700994",
+    "roadmap": "sha256:e904936cbd763b6975a9517c2aec0415d202116e139ea2db1997f85cd13ceda3",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:ee6b6875ee76dbd0c7f15f1c9d49deb693c595c31885f99df1a60a868c19aa16",
-    "rfcRegister": "sha256:37735940bde23092b38baa992445358ebe0ddeeb2378188a9bd9cffb72c42292",
+    "workState": "sha256:76ebb743f2ccc3721676f6db8d14dbb1138fa82bed40df54af69db93e8ce3c52",
+    "rfcRegister": "sha256:73bff5467cd00c880ab615722d053817df5cf4089081c4a21aef4bf00fa18ef3",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -139,7 +139,7 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Repair the held promotion pair against an installed artifact generation with exact pack/support/response/legal joins and a current-only result seal, then fresh-review it and land provider/value dependencies; finish capability/claim compatibility, packets, selectors, grades, Review and learner modules.",
+      "nextAction": "Fresh-review the eleventh held-promotion author repair against installation/generation authority and exact pack/support/response/legal/result joins, then land provider/value dependencies; finish capability/claim compatibility, packets, selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
         "at": "2026-09-05",
         "summary": "The eleventh promotion fresh review returns six authority gaps: caller directories self-register; invalid packs and semantically crossed supports ground readings; response digest/length are unchecked metadata; legal authority is a token; and legacy results bypass the durable receipt. Six fresh falsifiers pass; the evidence spine remains 12/14.",

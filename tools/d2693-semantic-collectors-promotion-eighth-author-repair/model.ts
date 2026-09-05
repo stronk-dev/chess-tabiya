@@ -565,3 +565,13 @@ export function createExactLegalMovesResolver(calls?: string[]): PromotionRaceTa
   LEGAL_RESOLVERS.add(resolver);
   return resolver;
 }
+
+export function createRetainedExactLegalMovesResolver(evidence: ExactLegalMovesEvidence): PromotionRaceTablebaseDependencies["resolveLegalMoves"] {
+  assertExactLegalMovesEvidence(evidence);
+  const resolver: PromotionRaceTablebaseDependencies["resolveLegalMoves"] = (fen) => {
+    if (evidence.payload.fen !== fen) throw new TypeError("PROMOTION_LEGAL_FEN_CROSSED");
+    return Object.freeze({ kind: "evidence" as const, evidence });
+  };
+  LEGAL_RESOLVERS.add(resolver);
+  return resolver;
+}

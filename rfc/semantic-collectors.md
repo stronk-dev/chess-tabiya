@@ -7,12 +7,13 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair was **RETURNED by its eleventh fresh independent review 2026-09-05 on
-  [[D2789]]–[[D2794]].** The tenth repair's canonical reads and request ordering survive, but an
-  arbitrary caller directory still self-registers; invalid pack bytes and semantically crossed
-  support pointers ground readings; Syzygy digest/length are unchecked metadata; legal authority is
-  a status token; and the aggregate assertion accepts legacy recorded results with no durable
-  receipt. The preceding author model claimed one
+  promotion pair was **author-repaired for [[D2789]]–[[D2794]] on 2026-09-05 after the eleventh
+  fresh return.** One installed inventory owns immutable generations; complete production
+  pack/strict-sourcing checks precede admission; exact pack, support, retained Syzygy response,
+  FEN-derived legal-map and current result receipts now execute. The maintained target retains the
+  entire chain and passes 7/7 new groups plus strict TypeScript. A twelfth genuinely fresh review
+  and provider/value dependency landing still gate both held projections; no held projection
+  implementation is authorized. The preceding author model claimed one
   asynchronous transaction owned recorded-first lookup, the exact
   scheduler digest and invocation, cancellation/domain/failure outcomes, success-only legal move
   resolution, sealed ledger/live source creation and total input abstention. The maintained target
@@ -1611,6 +1612,14 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-05: eleventh author repair closes [[D2789]]–[[D2794]] at RFC tier. One installed
+  inventory owns immutable named generations; complete production pack/strict-sourcing checks,
+  exact pack/support/response-byte/legal-map joins and a current-only result receipt execute.
+  `make semantic-collectors-promotion-eleventh-author-repair` retains the chain, passes 7/7 new
+  groups and strict TypeScript. Exact receipt:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-eleventh-author-repair-2026-09-05.md`.
+  Twelfth fresh review and provider/value dependency landing remain mandatory; no held production
+  id is authorized.
 - 2026-09-05: eleventh fresh independent review returned the tenth held-promotion repair on
   [[D2789]]–[[D2794]]. Caller-selected directories remain self-registering; pack/support subjects,
   response bytes and legal-map authority are not exactly joined; and the current assertion accepts

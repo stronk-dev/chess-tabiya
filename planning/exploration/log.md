@@ -15995,3 +15995,20 @@ result authority. No production collector or held projection was authorized.
 **Evidence/next:** `make semantic-collectors-promotion-eleventh-fresh-review` retains the full chain,
 passes 6/6 fresh groups and strict TypeScript. Exact receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-eleventh-fresh-independent-buildability-review-2026-09-05.md`.
+
+## 2026-09-05 — held promotion eleventh author repair
+
+**What landed:** author-repaired [[D2789]]–[[D2794]] at contract tier. One installed inventory owns
+named immutable generations; generation admission runs the complete production pack and strict
+sourcing checks and retains exact pack, support, response-byte and legal-map authority. Arbitrary
+source ids, future observations, crossed support/FEN subjects, malformed legal maps and
+predecessor-only recorded readings fail.
+
+**What changed:** the bounded repair now has one coherent artifact snapshot and current aggregate
+result seal. The evidence spine remains 12/14: no production collector or held projection is
+authorized by author evidence.
+
+**Evidence/next:** `make semantic-collectors-promotion-eleventh-author-repair` retains the full
+promotion chain, passes 7/7 new behavioral groups and strict TypeScript. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-eleventh-author-repair-2026-09-05.md`.
+Next is a twelfth genuinely fresh independent review, then provider/value dependency landing.
