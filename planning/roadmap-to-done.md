@@ -2012,3 +2012,11 @@ eight dimensions proven or an explicit owner-approved descope.
 If a source document disagrees with this file about 1.0 state, its evidence still matters but its
 rollup claim does not. Update the source register and roadmap together; do not create another
 hand-maintained “feature complete” file.
+
+### 2026-09-05 foundation checkpoint — bootstrap independently buildable
+
+The shared-resource bootstrap fourteenth repair passed a fifteenth genuinely fresh executable
+review: both literal assistance/workflow descriptors project every root, checked versus open index
+access is discriminated, finite keys retain complete targets and optional calls retain all overloads.
+The foundation is ready for owner acceptance, after which implementation can unblock the provider,
+assistance and semantic-convention resource populations. No production byte is implied by this pass.

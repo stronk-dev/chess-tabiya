@@ -1,12 +1,12 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **fourteenth author repair completed on [[D2854]], [[D2855]] and
-  [[D2856]]; another genuinely fresh independent review is required.** Statically named reads
+- **Status:** draft — **fifteenth fresh independent review PASSED the fourteenth repair for
+  [[D2854]], [[D2855]] and [[D2856]]; owner acceptance is required.** Statically named reads
   through a declared index signature retain their exact receiver/index authority, finite literal
   key unions enumerate exact targets, optional calls use non-null selected callable authority, and
   both literal assistance follow-on descriptors project. `make
-  shared-resource-bootstrap-fourteenth-author-repair` retains the complete chain and passes 4/4
-  controls. No implementation is authorized.
+  shared-resource-bootstrap-fifteenth-fresh-review` retains the complete chain and passes 4/4
+  independent groups. No implementation is authorized before owner acceptance.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -1048,6 +1048,20 @@ passes 3/3 non-ASCII/literal-access controls. This remains author evidence only;
 fresh independent review still gates acceptance and production. Receipt:
 `planning/shared-resource-register-bootstrap/thirteenth-author-repair-2026-09-05.md`.
 
+### Fifteenth fresh independent review (2026-09-05)
+
+The fourteenth repair passes independent executable review. Both literal assistance/workflow
+descriptor candidates project every declared root against committed HEAD; checked named index
+reads retain reachable authority while `unknown` and open-string access fail; finite key unions
+retain their complete target set while an incomplete receiver fails; and optional calls retain the
+selected method plus every declared overload. `make shared-resource-bootstrap-fifteenth-fresh-review`
+retains the predecessor chain and passes 4/4 fresh groups. Exact receipt:
+`planning/shared-resource-register-bootstrap/fifteenth-fresh-independent-buildability-review-2026-09-05.md`.
+
+No new defect was reproduced in the repaired [[D2854]]–[[D2856]] boundary. This is buildability
+evidence, not owner acceptance and not production implementation evidence; the sixteen post-landing
+fixture families remain implementation obligations.
+
 ## Acceptance criteria
 
 1. Catalogue and README register populations are set-equal; no `RESOURCE_NAMES`, `SCHEMA_SLUGS` or
@@ -1198,6 +1212,9 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-05: fifteenth fresh independent review passed the fourteenth repair. Literal cross-RFC
+  descriptors and fresh checked/open/finite/optional-call controls pass 4/4; owner acceptance still
+  gates implementation.
 - 2026-09-05: [[D2854]]–[[D2856]] fourteenth author repair. Declared-index property reads retain
   their exact receiver/index authority; finite literal-key unions enumerate every exact property;
   optional interface calls derive overloads from the selected non-null callable; and the literal

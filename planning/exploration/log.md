@@ -16426,3 +16426,19 @@ digest.
 repair groups and strict TypeScript. Exact receipt:
 `planning/provider-health-degradation/eighth-author-repair-2026-09-05.md`. Another genuinely fresh
 review and provider protocol/exchange still gate both production checkpoints.
+
+## 2026-09-05 — shared-resource bootstrap fifteenth fresh independent review
+
+**What landed:** independently reviewed the fourteenth bootstrap repair for [[D2854]]–[[D2856]].
+No catalogue, checker, register, product, schema, storage, content, archive or protected-design byte
+changed.
+
+**What changed:** both literal assistance/workflow descriptor populations now project every root
+under a fresh gate. Checked index reads retain reachable authority; unknown/open access fails;
+finite keys retain the complete exact target set and incomplete populations fail; optional calls
+retain their selected method and all overloads. No new defect reproduced in the repaired boundary.
+
+**Evidence/next:** `make shared-resource-bootstrap-fifteenth-fresh-review` retains the complete
+predecessor chain and passes 4/4 independent groups. Exact receipt:
+`planning/shared-resource-register-bootstrap/fifteenth-fresh-independent-buildability-review-2026-09-05.md`.
+The RFC is ready for owner acceptance; implementation remains unauthorized until then.
