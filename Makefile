@@ -910,7 +910,7 @@ shared-resource-bootstrap-eleventh-fresh-review: shared-resource-bootstrap-tenth
 shared-resource-bootstrap-eleventh-author-repair: shared-resource-bootstrap-eleventh-fresh-review
 	node --test tools/d2795-shared-resource-bootstrap-eleventh-author-repair/contract.test.mjs
 
-.PHONY: shared-resource-bootstrap-twelfth-fresh-review shared-resource-bootstrap-twelfth-author-repair shared-resource-bootstrap-thirteenth-fresh-review shared-resource-bootstrap-thirteenth-author-repair
+.PHONY: shared-resource-bootstrap-twelfth-fresh-review shared-resource-bootstrap-twelfth-author-repair shared-resource-bootstrap-thirteenth-fresh-review shared-resource-bootstrap-thirteenth-author-repair shared-resource-bootstrap-fourteenth-fresh-review
 shared-resource-bootstrap-twelfth-fresh-review: shared-resource-bootstrap-eleventh-author-repair
 	node --test tools/d2828-shared-resource-bootstrap-twelfth-fresh-review/contract.test.mjs
 
@@ -922,6 +922,9 @@ shared-resource-bootstrap-thirteenth-fresh-review: shared-resource-bootstrap-twe
 
 shared-resource-bootstrap-thirteenth-author-repair: shared-resource-bootstrap-thirteenth-fresh-review
 	node --test tools/d2843-shared-resource-bootstrap-thirteenth-author-repair/contract.test.mjs
+
+shared-resource-bootstrap-fourteenth-fresh-review: shared-resource-bootstrap-thirteenth-author-repair
+	node --test tools/d2854-shared-resource-bootstrap-fourteenth-fresh-review/review.test.mjs
 
 .PHONY: semantic-collectors-promotion-fifth-fresh-review semantic-collectors-promotion-fifth-author-repair semantic-collectors-promotion-sixth-fresh-review semantic-collectors-promotion-sixth-author-repair semantic-collectors-promotion-seventh-fresh-review semantic-collectors-promotion-seventh-author-repair semantic-collectors-promotion-eighth-fresh-review semantic-collectors-promotion-eighth-author-repair semantic-collectors-promotion-ninth-fresh-review semantic-collectors-promotion-ninth-author-repair semantic-collectors-promotion-tenth-fresh-review semantic-collectors-promotion-tenth-author-repair semantic-collectors-promotion-eleventh-fresh-review semantic-collectors-promotion-eleventh-author-repair semantic-collectors-promotion-twelfth-fresh-review semantic-collectors-promotion-twelfth-author-repair
 semantic-collectors-promotion-fifth-fresh-review:

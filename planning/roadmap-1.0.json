@@ -326,15 +326,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Genuinely fresh-review the shared-resource bootstrap thirteenth repair before provider protocol; independently review provider health's composed seventh repair, pack capability and longitudinal storage while evidence-value authority continues behind those contracts.",
+        "nextAction": "Repair the shared-resource bootstrap fourteenth return by proving the real assistance/workflow descriptor candidates, exact finite-key indexing and optional-call overload authority; fresh-review it before provider protocol, while independent foundation reviews continue.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "Provider health now has one composed seventh-repair authority for closed configuration, current registry/group identity, shared backoff, atomic cache provenance, outcomes, availability and release; its dead pipeline DAG is removed because speech is independently requested over sealed displayed text. The shared-resource bootstrap fresh review still leads the critical path, while provider health awaits its own fresh review.",
-          "impact": "advanced",
-          "evidence": ["planning/provider-health-degradation/seventh-author-repair-2026-09-05.md", "tools/d2846-provider-health-seventh-author-repair/contract.test.ts", "rfc/provider-health-degradation.md", "planning/shared-resource-register-bootstrap/thirteenth-author-repair-2026-09-05.md", "tools/d2843-shared-resource-bootstrap-thirteenth-author-repair/contract.test.mjs", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"],
+          "summary": "The fourteenth fresh bootstrap review returned the engine on its literal follow-on catalogue: four of eight assistance roots and two of ten workflow roots cannot project because checked record reads, finite-union indexing and optional interface calls are unrepresentable. Production remains held for a bounded repair and another fresh review.",
+          "impact": "held",
+          "evidence": ["planning/shared-resource-register-bootstrap/fourteenth-fresh-independent-buildability-review-2026-09-05.md", "tools/d2854-shared-resource-bootstrap-fourteenth-fresh-review/review.test.mjs", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "provider-health-degradation.md", "digest": "sha256:e51cb35be5ec4481f806b6abdcadc9612a6cb8b1d26c67bdeaaaba81215d8d0d"},
-            {"kind": "rfc", "id": "shared-resource-register-bootstrap.md", "digest": "sha256:36b71e140a2108d17734e9328b87d58ea2c8f92194675b128452d136ac5938f6"}
+            {"kind": "rfc", "id": "shared-resource-register-bootstrap.md", "digest": "sha256:180abb4af33ef7bbb74910a86e890fa70907094c1df99e01522da5275b85e205"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

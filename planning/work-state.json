@@ -23055,6 +23055,33 @@
       "uxItems": [],
       "evidence": "7918b582",
       "evidenceKind": "commit"
+    },
+    {
+      "id": "D2854",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:fb2893c4aaf568f6965f5a88eba036b261a277e368c66a76281797988548ea92",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2855",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:151ea8c703249be6c9b39d15fddbc4c15dfffea66cf7d42cd88e5e2e75ce2084",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2856",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:fd2f90cd764fc8eda5984b5f38f25a623055b5e2dbe81a4d5b3976346164a9db",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
     }
   ]
 }

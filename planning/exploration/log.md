@@ -16355,3 +16355,22 @@ passes the 31 retained bot tests, six new inversion controls and strict TypeScri
 `planning/platform-alignment/bot-policy/fourth-author-repair-2026-09-05.md`. Another genuinely fresh
 independent review plus provider-health and shared-resource dependencies still gate acceptance and
 production implementation.
+
+## 2026-09-05 — shared-resource bootstrap fourteenth fresh independent review
+
+**What landed:** returned the thirteenth bootstrap author repair on [[D2854]]–[[D2856]] with three
+executable attacks. No catalogue, checker, register, schema, product or content implementation
+changed.
+
+**What changed:** the review executed the literal assistance follow-on catalogue, not only synthetic
+graph shapes. Four of eight assistance-config roots and two of ten workflow-preference roots cannot
+project. The three reproduced mechanisms are checked open-record property reads with no exact
+target, a compiler-enumerable finite-union record lookup rejected as broad, and an exact optional
+interface call whose overload set disappears.
+
+**Evidence/next:** `make shared-resource-bootstrap-fourteenth-fresh-review` retains the complete
+predecessor chain and passes 3/3 minimal committed-program falsifiers. Exact receipt:
+`planning/shared-resource-register-bootstrap/fourteenth-fresh-independent-buildability-review-2026-09-05.md`.
+The bounded repair must make both real TypeScript descriptor candidates permanent positives while
+preserving fail-closed open-index behavior, then undergo another genuinely fresh review before any
+production register implementation.

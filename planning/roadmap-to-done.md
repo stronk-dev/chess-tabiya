@@ -262,6 +262,16 @@ and passes 3/3 non-ASCII/literal-access controls. Another genuinely fresh review
 acceptance and production. Receipt:
 `planning/shared-resource-register-bootstrap/thirteenth-author-repair-2026-09-05.md`.
 
+The fourteenth fresh independent review returns that repair on [[D2854]]–[[D2856]] after executing
+the literal follow-on catalogue rather than another invented profile. Four of eight assistance
+roots and two of ten workflow-preference roots cannot project: checked record reads lack exact
+property targets, a finite-union lookup is rejected as broad indexing, and optional interface calls
+lose their overload set. `make shared-resource-bootstrap-fourteenth-fresh-review` retains the
+complete predecessor chain and passes 3/3 minimal committed-program falsifiers. The next bounded
+repair must make the two real descriptor candidates permanent positives without weakening open
+index refusal; catalogue/register implementation remains unauthorized. Receipt:
+`planning/shared-resource-register-bootstrap/fourteenth-fresh-independent-buildability-review-2026-09-05.md`.
+
 The same-day twelfth `pack-capability-contract` author repair closes [[D2587]]–[[D2592]] at contract
 tier without claiming production. One transaction-owned before/after run result derives the exact
 core/objective/recorded-guard journal suffix and receipt; the complete nested objective request is

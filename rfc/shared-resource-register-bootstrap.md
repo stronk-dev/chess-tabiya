@@ -1,11 +1,11 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **thirteenth author repair completed on [[D2843]]–[[D2845]]; another genuinely
-  fresh independent review is required.** Literal element access now retains its exact property
-  symbol/site, the existing shared UTF-16 canonical order owns every graph/artifact set, and one
-  Unicode-aware selector parser runs before authority issuance and during projection. `make
-  shared-resource-bootstrap-thirteenth-author-repair` retains the complete chain and passes 3/3
-  repair controls. No implementation is authorized.
+- **Status:** draft — **RETURNED by the fourteenth fresh independent review on
+  [[D2854]], [[D2855]] and [[D2856]].** The real adopted assistance descriptor fails four of eight roots: checked
+  `Record<string, unknown>` reads have no exact property target, a closed finite-union record lookup
+  is rejected as broad indexing, and optional interface calls lose their overload set. `make
+  shared-resource-bootstrap-fourteenth-fresh-review` retains the complete chain and passes 3/3
+  executable falsifiers. No implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -1162,6 +1162,15 @@ fresh independent review still gates acceptance and production. Receipt:
 48. [[D2845]] Catalogue admission and projection execute the same structural-selector parser and
     identifier domain; every catalogue-issued Unicode-identifier descriptor either projects or is
     refused before authority is issued.
+49. [[D2854]] The exact assistance-config catalogue candidate projects all eight declared roots as
+    one graph at a committed revision; a synthetic substitute or a reduced root list cannot
+    discharge cross-RFC profile fit.
+50. [[D2855]] A finite compiler-enumerable key union over an exact closed record retains the exact
+    possible target declarations, while `string`, `any`, `unknown` and otherwise open index
+    lookups still fail before publication.
+51. [[D2856]] Optional call syntax over an exact interface method retains the compiler-selected
+    signature plus that method symbol's complete call-overload set; nullable syntax cannot turn a
+    resolved method into an empty overload arm.
 
 ## Discharges
 
@@ -1181,6 +1190,14 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-05: returned by fourteenth fresh independent buildability review on
+  [[D2854]], [[D2855]] and [[D2856]]. The claimed cross-RFC profile fit fails against the literal assistance
+  catalogue addition: four of eight assistance-config roots and two of ten workflow-preference
+  roots cannot project. Checked record reads, finite-key indexing and optional interface calls are
+  each reproduced by a minimal committed TypeScript program. `make
+  shared-resource-bootstrap-fourteenth-fresh-review` retains the chain and passes 3/3 falsifiers;
+  another bounded author repair and genuinely fresh review remain mandatory. Receipt:
+  `planning/shared-resource-register-bootstrap/fourteenth-fresh-independent-buildability-review-2026-09-05.md`.
 - 2026-09-05: [[D2843]]–[[D2845]] thirteenth author repair. Literal element access retains its exact
   property/site, every graph/artifact set uses the existing shared UTF-16 canonical order, and one
   Unicode-aware selector parser owns catalogue issuance plus projection. `make

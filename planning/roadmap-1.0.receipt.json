@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:21f86fd0b674ebf3e9893b24e924aa7047f7dac1b425a516c4dd3e04d3bcde64",
+    "roadmap": "sha256:26bbd623f15663494adf7d3216f7dcbc0def6575a575df132d5bc39ae44f06ec",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:f87ba24f06325ba85b0d51ed94a1428b3366397d7cde6d558fd2be4ef3e642aa",
-    "rfcRegister": "sha256:0fefcb7851a7d31be5c23298ceaf314c2b044932a1c0a5c27761f7ceea311e0a",
+    "workState": "sha256:0099251046fccb2ebfb3d44534d355e1f7c926af17252e11403bab13feb75086",
+    "rfcRegister": "sha256:cfdc2ecf8030495a439639f7f8686479bc448f7ad064d03c96d654ce1d91f4ac",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 1127,
+      "blocked": 1130,
       "done": 833,
       "refused": 3
     },
@@ -115,30 +115,22 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Genuinely fresh-review the shared-resource bootstrap thirteenth repair before provider protocol; independently review provider health's composed seventh repair, pack capability and longitudinal storage while evidence-value authority continues behind those contracts.",
+      "nextAction": "Repair the shared-resource bootstrap fourteenth return by proving the real assistance/workflow descriptor candidates, exact finite-key indexing and optional-call overload authority; fresh-review it before provider protocol, while independent foundation reviews continue.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "Provider health now has one composed seventh-repair authority for closed configuration, current registry/group identity, shared backoff, atomic cache provenance, outcomes, availability and release; its dead pipeline DAG is removed because speech is independently requested over sealed displayed text. The shared-resource bootstrap fresh review still leads the critical path, while provider health awaits its own fresh review.",
-        "impact": "advanced",
+        "summary": "The fourteenth fresh bootstrap review returned the engine on its literal follow-on catalogue: four of eight assistance roots and two of ten workflow roots cannot project because checked record reads, finite-union indexing and optional interface calls are unrepresentable. Production remains held for a bounded repair and another fresh review.",
+        "impact": "held",
         "evidence": [
-          "planning/provider-health-degradation/seventh-author-repair-2026-09-05.md",
-          "tools/d2846-provider-health-seventh-author-repair/contract.test.ts",
-          "rfc/provider-health-degradation.md",
-          "planning/shared-resource-register-bootstrap/thirteenth-author-repair-2026-09-05.md",
-          "tools/d2843-shared-resource-bootstrap-thirteenth-author-repair/contract.test.mjs",
+          "planning/shared-resource-register-bootstrap/fourteenth-fresh-independent-buildability-review-2026-09-05.md",
+          "tools/d2854-shared-resource-bootstrap-fourteenth-fresh-review/review.test.mjs",
           "rfc/shared-resource-register-bootstrap.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "provider-health-degradation.md",
-            "digest": "sha256:e51cb35be5ec4481f806b6abdcadc9612a6cb8b1d26c67bdeaaaba81215d8d0d"
-          },
-          {
-            "kind": "rfc",
             "id": "shared-resource-register-bootstrap.md",
-            "digest": "sha256:36b71e140a2108d17734e9328b87d58ea2c8f92194675b128452d136ac5938f6"
+            "digest": "sha256:180abb4af33ef7bbb74910a86e890fa70907094c1df99e01522da5275b85e205"
           }
         ]
       },
