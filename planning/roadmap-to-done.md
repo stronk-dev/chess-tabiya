@@ -126,10 +126,18 @@ Primary RFCs: `measurement-records`, `shared-resource-register-bootstrap`, `work
 bootstrap RFC owns the product-byte-free absent-root protocol needed before a new versioned shared
 resource can be claimed.
 
-Release-engineering follow-up [[D2840]] adds an executable supersession join between each
-hand-authored milestone checkpoint and its named live RFC/work-state anchors. The current receipt
-proves those checkpoint bytes are sealed, but cannot yet refuse a regenerated receipt whose prose
-still describes a superseded review state.
+Release-engineering follow-up [[D2840]] now adds an executable supersession join between each
+hand-authored milestone checkpoint and its named live RFC/work-state anchors. The join hashes the
+exact active-register or ledger source row, requires every cited active RFC to be anchored, and
+refuses a changed, returned or removed authority even when somebody regenerates the receipt over
+unchanged checkpoint prose.
+
+Official-content planning has one owner decision before its next executable migration. [[D2852]]
+proves a cycle between Gate F clause 1 and pack schema 0.28: the gate requires no active pack-schema
+claim, while the graduation RFC requires the grammar and Gate-F-held corpus migration to land
+atomically. The recommended acyclic boundary allows foundation/schema migration before Gate F while
+continuing to hold every authored and claim-binding content wave; alternatively the gate must name
+an exact excluded migration class. The content hold remains in force until that ruling lands.
 
 The 2026-09-04 sixth bootstrap author repair closes its four bounded predecessor defects, but the
 seventh fresh review returns the generic projection engine on [[D2593]]–[[D2597]]. The TypeScript

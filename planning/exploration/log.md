@@ -16298,3 +16298,23 @@ predecessor and the 5/5 twelfth-review attacks, passes 5/5 repair groups and str
 Exact receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-twelfth-author-repair-2026-09-05.md`.
 Another genuinely fresh review and provider/value dependencies still gate 12/14→14/14.
+
+## 2026-09-05 — live-anchor milestone receipts and graduation reconciliation
+
+**What landed:** closed [[D2840]] by binding every 1.0 milestone checkpoint to at least one exact
+live RFC-register or work-state source-row digest. `make roadmap-check` now refuses missing,
+unknown, duplicate and stale anchors and requires an exact anchor for every active RFC cited as
+checkpoint evidence. The derived receipt retains those anchors, so regenerating it cannot bless a
+checkpoint after its named authority changes state.
+
+**What changed:** [[D2853]] corrects the graduation RFC, register and official-content checkpoint:
+the nine-template registry and all four emitter migrations shipped in `7918b582`; only pack schema
+0.28 and its coupled Gate-F-held corpus application remain. The reconciliation exposed [[D2852]],
+a real dependency cycle: Gate F requires no active pack-schema claim while the accepted graduation
+contract and the owner content hold require schema 0.28 to land atomically with a migration that
+cannot begin before Gate F.
+
+**Evidence/next:** roadmap and work-state anchors now fail on semantic supersession, not only byte
+drift. The recommended owner ruling permits foundation/schema migration before Gate F while holding
+all authored and claim-binding content waves; until that boundary is ruled, the content hold stays
+intact and other foundation work continues.

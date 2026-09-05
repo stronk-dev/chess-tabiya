@@ -312,10 +312,11 @@
         "dependsOn": [],
         "nextAction": "Keep every new live row assigned at creation, maintain the separately named verification tiers, and refresh the source-sealed receipt whenever a joined authority changes.",
         "latestCheckpoint": {
-          "at": "2026-09-04",
-          "summary": "The progress receipt still seals every live row with a zero-untriaged ceiling, and staged append-only enforcement now survives repository growth: Git-object reads use an explicit 64 MiB envelope and a permanent >1 MiB log regression distinguishes valid append, mutation and deletion instead of misreporting ENOBUFS.",
+          "at": "2026-09-05",
+          "summary": "Every milestone checkpoint now pins an exact live RFC-register or work-state source row. Changing, returning or removing that authority fails roadmap-check even after receipt regeneration; every cited active RFC must be anchored.",
           "impact": "advanced",
-          "evidence": ["tools/staged-process-contracts.mjs", "tools/staged-process-contracts.test.mjs", "rfc/archive/work-state.md", "planning/work-state.json", "tools/work-state.mjs", "tools/roadmap-receipt.mjs", "tools/roadmap-progress.mjs", "docs/progress-tracking.md"]
+          "evidence": ["tools/roadmap-check.mjs", "tools/roadmap-check.test.mjs", "tools/status-parity.mjs", "planning/work-state.json", "tools/roadmap-receipt.mjs", "tools/roadmap-progress.mjs", "docs/progress-tracking.md"],
+          "anchors": [{"kind": "work_state", "id": "D2840", "digest": "sha256:30d929e49319ced993b677e0738e10620f6ef2588bd13cdde6d886022ee86cf1"}]
         },
         "exit": "Every required check has one owner and failure meaning; all live 1.0 work is assigned; local parity matches GitHub; no planning census masquerades as a product contract."
       },
@@ -330,7 +331,11 @@
           "at": "2026-09-05",
           "summary": "Provider health now has one composed seventh-repair authority for closed configuration, current registry/group identity, shared backoff, atomic cache provenance, outcomes, availability and release; its dead pipeline DAG is removed because speech is independently requested over sealed displayed text. The shared-resource bootstrap fresh review still leads the critical path, while provider health awaits its own fresh review.",
           "impact": "advanced",
-          "evidence": ["planning/provider-health-degradation/seventh-author-repair-2026-09-05.md", "tools/d2846-provider-health-seventh-author-repair/contract.test.ts", "rfc/provider-health-degradation.md", "planning/shared-resource-register-bootstrap/thirteenth-author-repair-2026-09-05.md", "tools/d2843-shared-resource-bootstrap-thirteenth-author-repair/contract.test.mjs", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"]
+          "evidence": ["planning/provider-health-degradation/seventh-author-repair-2026-09-05.md", "tools/d2846-provider-health-seventh-author-repair/contract.test.ts", "rfc/provider-health-degradation.md", "planning/shared-resource-register-bootstrap/thirteenth-author-repair-2026-09-05.md", "tools/d2843-shared-resource-bootstrap-thirteenth-author-repair/contract.test.mjs", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"],
+          "anchors": [
+            {"kind": "rfc", "id": "provider-health-degradation.md", "digest": "sha256:e51cb35be5ec4481f806b6abdcadc9612a6cb8b1d26c67bdeaaaba81215d8d0d"},
+            {"kind": "rfc", "id": "shared-resource-register-bootstrap.md", "digest": "sha256:36b71e140a2108d17734e9328b87d58ea2c8f92194675b128452d136ac5938f6"}
+          ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
       },
@@ -345,7 +350,11 @@
           "at": "2026-09-05",
           "summary": "The promotion pair's twelfth author repair now closes installed-inventory authority, exact artifact grammar, complete response/legal populations, non-vacuous pack support and unique durable subjects. Five repair groups pass; the spine remains 12/14 until fresh review and provider/value dependencies land, alongside the separately held candidate packet.",
           "impact": "advanced",
-          "evidence": ["planning/evidence-foundation-ux/semantic-collectors-promotion-twelfth-author-repair-2026-09-05.md", "tools/d2835-semantic-collectors-promotion-twelfth-author-repair/contract.test.ts", "rfc/semantic-collectors.md", "planning/evidence-foundation-ux/shared-candidate-packet-tenth-author-repair-2026-09-05.md", "rfc/shared-candidate-evidence-packet.md", "rfc/README.md"]
+          "evidence": ["planning/evidence-foundation-ux/semantic-collectors-promotion-twelfth-author-repair-2026-09-05.md", "tools/d2835-semantic-collectors-promotion-twelfth-author-repair/contract.test.ts", "rfc/semantic-collectors.md", "planning/evidence-foundation-ux/shared-candidate-packet-tenth-author-repair-2026-09-05.md", "rfc/shared-candidate-evidence-packet.md", "rfc/README.md"],
+          "anchors": [
+            {"kind": "rfc", "id": "semantic-collectors.md", "digest": "sha256:658253a74c67d43fbcea95912241031cc0d700d6e308b2c98f8b961a788ee0e2"},
+            {"kind": "rfc", "id": "shared-candidate-evidence-packet.md", "digest": "sha256:5da31d21fb467f68d7b146dc1f203cfc7d1f7acbdb819c398435b4cccd87f4b0"}
+          ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."
       },
@@ -360,7 +369,8 @@
           "at": "2026-08-31",
           "summary": "The stable board region, desktop rail, tablet band, phone overlay and one-expanded Support/Branches/Actions queue ship; module seats and presets remain open.",
           "impact": "advanced",
-          "evidence": ["rfc/play-composition.md", "docs/play-composition.md", "planning/play-composition/plan.md"]
+          "evidence": ["rfc/play-composition.md", "docs/play-composition.md", "planning/play-composition/plan.md"],
+          "anchors": [{"kind": "rfc", "id": "play-composition.md", "digest": "sha256:726d752b1a23dda4cb2fdc874c85482f6d8537454757f3453d1035bea7e63a61"}]
         },
         "exit": "Quiet, Guided, Support, Drill, Review, Campaign, Academy and Stream open useful by default; the board never shrinks or moves; every primitive remains available under Advanced."
       },
@@ -375,7 +385,15 @@
           "at": "2026-09-05",
           "summary": "Campaign's sixth repair makes no-event provider settlement restart-stable and seals both aggregate/event authorities. Safe deployment's third repair now closes its mounted-image, subject, receipt, TLS, readiness and migration contract seams. Campaign, deployment and storage recovery all remain held for genuinely fresh review before production state work.",
           "impact": "advanced",
-          "evidence": ["planning/campaign/sixth-author-repair-2026-09-05.md", "tools/d2736-campaign-sixth-author-repair/contract.test.ts", "planning/safe-deployment-profiles/third-author-repair-2026-09-05.md", "tools/d2730-safe-deployment-third-author-repair/contract.test.ts", "rfc/safe-deployment-profiles.md", "planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fourth-author-repair-2026-09-05.md", "rfc/storage-backup-recovery.md", "rfc/longitudinal-store.md", "planning/longitudinal-store/eighth-author-repair-2026-09-05.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/social-play.md"]
+          "evidence": ["planning/campaign/sixth-author-repair-2026-09-05.md", "tools/d2736-campaign-sixth-author-repair/contract.test.ts", "planning/safe-deployment-profiles/third-author-repair-2026-09-05.md", "tools/d2730-safe-deployment-third-author-repair/contract.test.ts", "rfc/safe-deployment-profiles.md", "planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fourth-author-repair-2026-09-05.md", "rfc/storage-backup-recovery.md", "rfc/longitudinal-store.md", "planning/longitudinal-store/eighth-author-repair-2026-09-05.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md", "rfc/social-play.md"],
+          "anchors": [
+            {"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:8c579da56a578927f474a6920aaae98e71e84410c4fcf14fe5f2b660153c2144"},
+            {"kind": "rfc", "id": "campaign-core.md", "digest": "sha256:b0664c3a918fd559c42ccea0bb00201916f913514713f73792281dcbefa31af7"},
+            {"kind": "rfc", "id": "storage-backup-recovery.md", "digest": "sha256:fa59dcc71c58522cee9a1a610f1fbb5f51b387b7e1891a336f1a77d7e772d496"},
+            {"kind": "rfc", "id": "longitudinal-store.md", "digest": "sha256:84cfc23668cbb927946f92f0be87cae8dca6d6e58e0590890f3114dd21d3e8dd"},
+            {"kind": "rfc", "id": "bot-policy.md", "digest": "sha256:0cdc86e81d84391f9163037687ffc1c17f5a26c125a6e4bafaac0e24438c76bb"},
+            {"kind": "rfc", "id": "social-play.md", "digest": "sha256:3f81a29ba056944e9b54a9b56b5af9eb5bd5415253aada5eac6c9f862cb39a6b"}
+          ]
         },
         "exit": "Every workflow survives restart, retry, upgrade and projection rebuild with owner/actor identity, immutable inputs, idempotence, lifecycle coverage and no workstation-only state."
       },
@@ -390,7 +408,8 @@
           "at": "2026-08-31",
           "summary": "The production application route inventory is sealed, while foundation-dependent learner, bot, campaign, social and professional operation families remain incomplete.",
           "impact": "held",
-          "evidence": ["apps/server/src/application.ts", "planning/roadmap-to-done.md"]
+          "evidence": ["apps/server/src/application.ts", "planning/roadmap-to-done.md"],
+          "anchors": [{"kind": "work_state", "id": "D1532", "digest": "sha256:b44111952a53ef3e8b52977715088d3e73864be98b2c69171ad8c5d61d6f5e09"}]
         },
         "exit": "No feature is declared live from a direct REST handler alone; every advertised family crosses the production application and release-image boundary."
       },
@@ -405,7 +424,8 @@
           "at": "2026-08-31",
           "summary": "The in-run shell advanced, but full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
           "impact": "held",
-          "evidence": ["planning/ux-implementation-index.md", "rfc/play-composition.md"]
+          "evidence": ["planning/ux-implementation-index.md", "rfc/play-composition.md"],
+          "anchors": [{"kind": "rfc", "id": "play-composition.md", "digest": "sha256:726d752b1a23dda4cb2fdc874c85482f6d8537454757f3453d1035bea7e63a61"}]
         },
         "exit": "Every route has opinionated defaults, loading/empty/error/recovery, responsive and accessible behavior, return doors, and no raw enum/JSON/cp or settings-first workflow."
       },
@@ -418,9 +438,10 @@
         "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
         "latestCheckpoint": {
           "at": "2026-08-31",
-          "summary": "The graduation writer and read-only plan ship, but no official pack is graduated. Because acceptance criteria 1–2 couple closed pack schema 0.28, emitter output and all 92 pack/candidate migrations in one commit, every remaining graduation byte is one Gate-F-held slice rather than an executable pre-gate queue.",
+          "summary": "The graduation writer, read-only plan and centralized emitter templates ship, but no official pack is graduated. Criteria 1–2 still couple pack schema 0.28 and all pack/candidate migrations in one commit, leaving that corpus slice Gate-F-held; D2852 records the cycle that requires an owner boundary ruling.",
           "impact": "held",
-          "evidence": ["planning/content-era/plan.md", "rfc/graduation-clearance.md"]
+          "evidence": ["planning/content-era/plan.md", "rfc/graduation-clearance.md"],
+          "anchors": [{"kind": "rfc", "id": "graduation-clearance.md", "digest": "sha256:362988e87de0751e51949fd994c141afb9b7a5a6db6059370dce247921b35c63"}]
         },
         "exit": "The release contains an allow-listed official corpus exercising every important handshake, counter-case, honest-empty state and complete campaign without blind mass rewrites."
       },
@@ -435,7 +456,8 @@
           "at": "2026-09-05",
           "summary": "Safe deployment's third author repair now binds expected-digest mounted config, exact checks and the full receipt union to one subject, composes TLS/storage readiness authority, and makes migration effects restart-durable. Release proof remains blocked on fresh review, production implementation, official content and complete learner journeys.",
           "impact": "held",
-          "evidence": ["rfc/safe-deployment-profiles.md", "planning/safe-deployment-profiles/third-author-repair-2026-09-05.md", "planning/safe-deployment-profiles/third-fresh-independent-buildability-review-2026-09-05.md", "planning/roadmap-to-done.md", "deploy/compose.release.template.yaml"]
+          "evidence": ["rfc/safe-deployment-profiles.md", "planning/safe-deployment-profiles/third-author-repair-2026-09-05.md", "planning/safe-deployment-profiles/third-fresh-independent-buildability-review-2026-09-05.md", "planning/roadmap-to-done.md", "deploy/compose.release.template.yaml"],
+          "anchors": [{"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:8c579da56a578927f474a6920aaae98e71e84410c4fcf14fe5f2b660153c2144"}]
         },
         "exit": "Every core and breadth capability proves all applicable completion dimensions or has an explicit owner-approved descope; the owner can use the release without interpreting implementation vocabulary."
       }

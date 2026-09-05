@@ -20,9 +20,13 @@ set-equal assignment. A checkpoint can advance while its milestone remains activ
 never promotes a release gate by implication.
 
 Every milestone checkpoint records a date, an `advanced`/`held`/`regressed` impact, a short
-evidence-backed fact and repository-relative evidence files. Mutable live counts belong in the
-derived report, not checkpoint prose. `make roadmap-check` rejects absent evidence, malformed
-checkpoints and a stale receipt, including any change to `planning/work-state.json`.
+evidence-backed fact, repository-relative evidence files, and at least one exact live RFC-register
+or work-state anchor. The anchor pins the source-row digest, not only its name: returning an RFC or
+changing a ledger disposition makes the checkpoint stale even if somebody regenerates the derived
+receipt without updating the claim. Every active RFC cited as checkpoint evidence must be anchored.
+Mutable live counts belong in the derived report, not checkpoint prose. `make roadmap-check` rejects
+absent evidence, malformed or stale anchors, and a stale receipt, including any change to
+`planning/work-state.json`.
 
 The staged process guard closes the implementation flow-back gap. A staged change containing both
 non-test product code and an active RFC body must also stage the roadmap and regenerated receipt.

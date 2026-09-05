@@ -22931,11 +22931,12 @@
     },
     {
       "id": "D2840",
-      "state": "todo",
-      "owner": "release-engineering",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:46ea55345667c9aa499303e0d839c0fc5eda735de4f3510894742c182d287319",
-      "uxItems": []
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:30d929e49319ced993b677e0738e10620f6ef2588bd13cdde6d886022ee86cf1",
+      "uxItems": [],
+      "evidence": "tools/roadmap-check.mjs",
+      "evidenceKind": "path"
     },
     {
       "id": "D2841",
@@ -23035,6 +23036,25 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2852",
+      "state": "blocked",
+      "owner": "OWNER",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:675da04d063abce4efad378b49168ba64be209f91662697e416318b28d649d74",
+      "uxItems": [],
+      "blocker": "owner-ruling",
+      "question": "May foundation/schema migrations land before Gate F while authored and claim-binding content waves remain held?"
+    },
+    {
+      "id": "D2853",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:150b75eb849f81c767261a8ac2f31c2263163babd2fb383b122713d753a746d9",
+      "uxItems": [],
+      "evidence": "7918b582",
+      "evidenceKind": "commit"
     }
   ]
 }

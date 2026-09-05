@@ -25,9 +25,9 @@ export function bodyStatus(markdown) {
 export function parseActiveRecords(readme) {
   const names = new Set(parseActiveRfcRows(readme));
   const section = readme.match(/^## Active\s*$([\s\S]*?)(?=^##\s)/m)?.[1] ?? "";
-  return section.split("\n").filter((line) => /^\s*\|/.test(line)).map(cells)
-    .filter((row) => names.has(row[0]?.replaceAll("`", "")))
-    .map((row) => ({ rfc: row[0].replaceAll("`", ""), status: parseStatus(row[1]) }));
+  return section.split("\n").filter((line) => /^\s*\|/.test(line)).map((sourceLine) => ({ sourceLine: sourceLine.trim(), row: cells(sourceLine) }))
+    .filter(({ row }) => names.has(row[0]?.replaceAll("`", "")))
+    .map(({ row, sourceLine }) => ({ rfc: row[0].replaceAll("`", ""), status: parseStatus(row[1]), sourceLine }));
 }
 
 export function parseArchiveRows(readme) {

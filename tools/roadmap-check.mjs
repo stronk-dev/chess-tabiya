@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { parseActiveRfcRows } from "./register-check.mjs";
+import { parseActiveRecords } from "./status-parity.mjs";
 
 export const REQUIRED_DIMENSIONS = Object.freeze([
   "evidence",
@@ -22,6 +24,18 @@ const ROUTE_STATES = new Set(["live", "live_but_inadequate", "missing"]);
 const API_STATES = new Set(["live", "live_direct", "implemented_but_unreachable", "missing"]);
 const MILESTONE_STATES = new Set(["active", "implementing", "queued", "blocked_contract", "blocked_foundation", "complete"]);
 const CHECKPOINT_IMPACTS = new Set(["advanced", "held", "regressed"]);
+const CHECKPOINT_ANCHOR_KINDS = new Set(["rfc", "work_state"]);
+
+const sha256 = (value) => `sha256:${crypto.createHash("sha256").update(value).digest("hex")}`;
+
+export function parseActiveRfcAnchorDigests(readme) {
+  return new Map(parseActiveRecords(readme).map((record) => [record.rfc, sha256(record.sourceLine)]));
+}
+
+export function parseWorkStateAnchorDigests(source) {
+  const workState = JSON.parse(source);
+  return new Map((workState.items ?? []).map((item) => [item.id, item.sourceDigest]));
+}
 
 const sameSet = (left, right) =>
   left.size === right.size && [...left].every((value) => right.has(value));
@@ -96,6 +110,36 @@ export function validateRegistry(registry, context) {
           }
         }
         for (const reference of duplicates(checkpoint.evidence)) errors.push(`${milestone.id}: duplicate checkpoint evidence ${reference}`);
+      }
+      if (!Array.isArray(checkpoint.anchors) || checkpoint.anchors.length === 0) {
+        errors.push(`${milestone.id}: latestCheckpoint.anchors must be non-empty`);
+      } else {
+        const anchorKeys = [];
+        for (const anchor of checkpoint.anchors) {
+          if (anchor === null || typeof anchor !== "object" || Array.isArray(anchor)
+            || Object.keys(anchor).sort().join(",") !== "digest,id,kind"
+            || !CHECKPOINT_ANCHOR_KINDS.has(anchor.kind)
+            || typeof anchor.id !== "string" || anchor.id.length === 0
+            || !/^sha256:[0-9a-f]{64}$/u.test(anchor.digest ?? "")) {
+            errors.push(`${milestone.id}: invalid checkpoint anchor ${JSON.stringify(anchor)}`);
+            continue;
+          }
+          const key = `${anchor.kind}:${anchor.id}`;
+          anchorKeys.push(key);
+          const current = anchor.kind === "rfc"
+            ? context.rfcAnchorDigests?.get(anchor.id)
+            : context.workStateAnchorDigests?.get(anchor.id);
+          if (current === undefined) errors.push(`${milestone.id}: checkpoint anchor is not live: ${key}`);
+          else if (current !== anchor.digest) errors.push(`${milestone.id}: stale checkpoint anchor ${key}`);
+        }
+        for (const key of duplicates(anchorKeys)) errors.push(`${milestone.id}: duplicate checkpoint anchor ${key}`);
+        const anchoredRfcs = new Set(checkpoint.anchors.filter((anchor) => anchor?.kind === "rfc").map((anchor) => anchor.id));
+        for (const reference of checkpoint.evidence ?? []) {
+          const match = typeof reference === "string" ? /^rfc\/([^#]+\.md)(?:#|$)/u.exec(reference) : null;
+          if (match && context.rfcAnchorDigests?.has(match[1]) && !anchoredRfcs.has(match[1])) {
+            errors.push(`${milestone.id}: active RFC evidence lacks an exact checkpoint anchor: ${match[1]}`);
+          }
+        }
       }
     }
     for (const capability of milestone.capabilities ?? []) {
@@ -212,11 +256,15 @@ export function validateRegistry(registry, context) {
 export function main(root = process.cwd()) {
   const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
   const registry = JSON.parse(read("planning/roadmap-1.0.json"));
+  const rfcRegister = read("rfc/README.md");
+  const workState = read("planning/work-state.json");
   const uxFiles = fs.readdirSync(path.join(root, "design/research"))
     .filter((file) => file.startsWith("ux-") && file.endsWith(".md"))
     .sort();
   const result = validateRegistry(registry, {
-    activeRfcs: parseActiveRfcRows(read("rfc/README.md")),
+    activeRfcs: parseActiveRfcRows(rfcRegister),
+    rfcAnchorDigests: parseActiveRfcAnchorDigests(rfcRegister),
+    workStateAnchorDigests: parseWorkStateAnchorDigests(workState),
     roadmap: read("planning/roadmap-to-done.md"),
     uxFiles,
     uxIndex: read("planning/ux-implementation-index.md"),
