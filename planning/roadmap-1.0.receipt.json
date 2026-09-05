@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:96d4fdac6f7886ea7fa4b8b1ca97b7222a53e3d6ac545adf1a06d38619e931e3",
+    "roadmap": "sha256:512f8712b6b2c7a23e2662f2548c61711f440490dac8d9928859232faaaf1fcb",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:a40eff5654f3e2d075d711eaf98650dadfe865cccbab8ea92ecd0081e7e2731d",
-    "rfcRegister": "sha256:0871cf35302f08e8694188308d818e53e46f132013b37507ce73ec5660f0ba41",
+    "workState": "sha256:06718532a11fc3426c3a6237c176d7aed2c7fc95aecc401b035c25346be844e3",
+    "rfcRegister": "sha256:d01cbcaa2edeaca0c9e110e14c73409b78faa21679adadd2fd0f4a408ecbd35f",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 1089,
+      "blocked": 1095,
       "done": 826,
       "refused": 3
     },
@@ -109,15 +109,16 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Fresh-review the sixteenth pack-capability repair; independently review shared-resource bootstrap and longitudinal storage; do not implement a draft contract early.",
+      "nextAction": "Fresh-review the shared-resource bootstrap repair, then genuinely fresh-review the provider-protocol repair against that generic parent; independently review pack capability and longitudinal storage; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "The sixteenth pack-capability author repair closes seven contract blockers with request-bound provider payloads, canonical response bytes, closed retry/terminal unions, re-derived routing, lease-bounded response time and append-only transition storage. Pack schema and evidence-job storage remain held for fresh review and dependency acceptance.",
+        "summary": "The provider-protocol prerequisite is author-repaired at contract tier: historical returns remain reproducible, the maintained gate is verify-owned, README/type/routing semantics match the generic parent, and product obligation/consumer validation has one exact owner. Another fresh review and the shared-resource bootstrap still gate acceptance and all provider product implementation.",
         "impact": "held",
         "evidence": [
-          "planning/pack-capability-contract/sixteenth-author-repair-2026-09-05.md",
-          "tools/d2802-pack-capability-sixteenth-author-repair/contract.test.mjs",
-          "rfc/pack-capability-contract.md",
+          "planning/provider-protocol-register/second-author-repair-2026-09-05.md",
+          "tools/d2809-provider-protocol-second-author-repair/contract.test.mjs",
+          "tools/d2809-provider-protocol-second-fresh-review/review.test.mjs",
+          "rfc/provider-protocol-register.md",
           "rfc/README.md"
         ]
       },

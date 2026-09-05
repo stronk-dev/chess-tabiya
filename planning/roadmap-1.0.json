@@ -325,12 +325,12 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Fresh-review the sixteenth pack-capability repair; independently review shared-resource bootstrap and longitudinal storage; do not implement a draft contract early.",
+        "nextAction": "Fresh-review the shared-resource bootstrap repair, then genuinely fresh-review the provider-protocol repair against that generic parent; independently review pack capability and longitudinal storage; do not implement a draft contract early.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "The sixteenth pack-capability author repair closes seven contract blockers with request-bound provider payloads, canonical response bytes, closed retry/terminal unions, re-derived routing, lease-bounded response time and append-only transition storage. Pack schema and evidence-job storage remain held for fresh review and dependency acceptance.",
+          "summary": "The provider-protocol prerequisite is author-repaired at contract tier: historical returns remain reproducible, the maintained gate is verify-owned, README/type/routing semantics match the generic parent, and product obligation/consumer validation has one exact owner. Another fresh review and the shared-resource bootstrap still gate acceptance and all provider product implementation.",
           "impact": "held",
-          "evidence": ["planning/pack-capability-contract/sixteenth-author-repair-2026-09-05.md", "tools/d2802-pack-capability-sixteenth-author-repair/contract.test.mjs", "rfc/pack-capability-contract.md", "rfc/README.md"]
+          "evidence": ["planning/provider-protocol-register/second-author-repair-2026-09-05.md", "tools/d2809-provider-protocol-second-author-repair/contract.test.mjs", "tools/d2809-provider-protocol-second-fresh-review/review.test.mjs", "rfc/provider-protocol-register.md", "rfc/README.md"]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
       },

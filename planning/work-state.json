@@ -22649,6 +22649,60 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2809",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:bbdd849540d7165778a97b168c15590e638dac2cc9b2c727a6a491e923ef2822",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2810",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:bde664518ced482418de7313d33242e5a7f3a1322291c9f5dd7b4478513f6f9f",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2811",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2b718a65ba59485ef70ce82cf0c90682e0e10dd3cfa1676ff4496d51c25975a1",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2812",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:df6835781cc34c4ea295f9a2a11083861ebbcc6a37e44df533a59a547de2871d",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2813",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:3d4cc1fd3b569e3050531981d5b7c686776d8a05e6e970b9570cf5c31758a033",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2814",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:58bb453994e8db3b00de5f6e0560e7d0fe3aa4a45d1391099bb4622f14a8bc44",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-protocol-register.md"
     }
   ]
 }

@@ -16078,3 +16078,21 @@ reproduces all 7/7 prior attacks against the pinned pre-repair schema and passes
 Exact receipt: `planning/pack-capability-contract/sixteenth-author-repair-2026-09-05.md`. Another
 genuinely fresh independent review and accepted provider exchange still gate acceptance and all
 production implementation.
+
+## 2026-09-05 — provider-protocol second fresh review and author repair
+
+**What landed:** returned the provider-protocol process prerequisite on [[D2809]]–[[D2814]], then
+boundedly author-repaired those six defects at contract tier. No production catalogue, register,
+provider, runtime, schema, migration, API, client or content byte changed.
+
+**What changed:** both historical reviews now read the exact revisions they examined; the maintained
+repair target is verify-owned; the README remains human-owned and mechanically checked; the
+operation relation is a compilable complete mapped type; canonical-resource routing matches its
+descriptor; and exact obligation, consumer and able-to-fail closure belongs to the provider product
+RFC rather than a nonexistent generic hook.
+
+**Evidence/next:** `make provider-protocol-second-author-repair` retains both independent returns and
+passes 5/5 repair groups. Exact receipts:
+`planning/provider-protocol-register/second-fresh-independent-buildability-review-2026-09-05.md`
+and `planning/provider-protocol-register/second-author-repair-2026-09-05.md`. Another genuinely
+fresh review and the shared-resource bootstrap dependency still gate acceptance and implementation.

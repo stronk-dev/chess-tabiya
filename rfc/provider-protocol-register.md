@@ -1,10 +1,10 @@
 # RFC: Provider-protocol shared-resource catalogue population
 
-- **Status:** draft — canonical descriptor/static-resource repair complete 2026-09-01 under
-  [[D2499]]/[[D2501]]/[[D2502]], after [[D2455]]–[[D2459]]. Provider protocol now
-  inhabits the generic atomic-resource lifecycle, separates runtime literals from compile-time
-  relations and binds population to independent accepted product obligations. Fresh independent
-  review is required; implementation is unauthorized.
+- **Status:** draft — **second author repair completed on [[D2809]]–[[D2814]]; another genuinely
+  fresh independent review is required.** Historical reviews are revision-pinned; README ownership,
+  type relations and routing now match the generic parent; and product validation has one explicit
+  future owner instead of an invented generic hook. `make provider-protocol-second-author-repair`
+  retains both returns and passes 5/5 repair groups. Implementation is unauthorized.
 - **Author:** Codex
 - **Created:** 2026-08-30
 - **Design refs:** none. This is repository process and changes no provider behavior or learner UX.
@@ -24,12 +24,13 @@ planning/provider-protocol-register/catalogue-additions.v1.json
 ```
 
 ```tabiya-resource-roots
-provider-protocol | sequential/canonical_resource@1/absent | packages/runtime/src/provider-protocol.ts#export:PROVIDER_PROTOCOL_RESOURCE | packages/runtime/src/provider-protocol.ts#export:PROVIDER_PROTOCOL_RESOURCE.version
+provider-protocol | sequential/canonical_resource@1/absent | packages/runtime/src/provider-protocol.ts#export:PROVIDER_PROTOCOL_RESOURCE | none
 ```
 
 ## Summary
 
-This RFC introduces one absent `provider-protocol` catalogue root and generated README register.
+This RFC introduces one absent `provider-protocol` catalogue root and a human-owned, mechanically
+checked README register.
 The future product RFC will create a single atomic
 `packages/runtime/src/provider-protocol.ts#PROVIDER_PROTOCOL_RESOURCE` object. Runtime operation and
 digest-domain identities derive from that object; request/result type relations are checked beside
@@ -114,19 +115,20 @@ Beside the resource, derived types index the literal operation union and one exa
 relation checks:
 
 ```ts
-interface ProviderProtocolTypeRelations {
-  readonly [operation: ProviderOperationId]: {
+type ProviderProtocolTypeRelations = {
+  readonly [operation in ProviderOperationId]: {
     readonly request: unknown;
     readonly result: unknown;
     readonly localResult: unknown;
   };
-}
+};
 ```
 
 The product RFC supplies the exact mapped declaration using `satisfies`/indexed types. Server
 descriptors, response parsers, source factories, evidence projections and CLI dispatch are mapped
-sets keyed by the resource-derived operation union. A copied operation/domain union, array or
-switch vocabulary fails the product consumer census.
+sets keyed by the resource-derived operation union. The product RFC owns the exact source roots,
+exemptions and set-equality algorithm that rejects a copied operation/domain union, array or switch;
+this process RFC neither guesses that population nor claims it has already run.
 
 This distinction is exact: the register seals runtime identity and version; TypeScript proves
 request/result relations; provider able-to-fail fixtures prove parser/transport semantics. No
@@ -143,22 +145,25 @@ with provider/endpoint/parser/projection/factory/CLI pairings and ten digest
 domain/constructor-id pairs. That block is product intent, independently reviewed before runtime
 bytes exist. It is not imported by production and is not a second mutable runtime registry.
 
-At product landing, the generic whole-projection transition additionally invokes the product RFC's
-declared obligation join:
+Before product landing, `provider-exchange-and-execution.md` owns its exact obligation parser,
+consumer-root population and able-to-fail validator. Its accepted preimage is then an explicit input
+to that product RFC's landing check—not a hook smuggled into this descriptor. The product check:
 
 1. parse the exact accepted preimage block from the prior product RFC;
 2. derive the candidate resource payload from product bytes;
 3. require operation and digest-domain rows to be set-equal by complete row identity;
 4. require every operation to reach one mapped descriptor, parser, source factory/projection and
    CLI binding; and
-5. consume the sole prior lane claim into an owner-bound landed row.
+5. ask the generic lifecycle engine to consume the sole prior lane claim into an owner-bound
+   landed row only after those product checks pass.
 
 The obligation block is immutable after acceptance except through a reviewed RFC amendment that
 also owns a next resource lane. A count-preserving operation/provider/parser/factory/domain swap in
 product bytes alone fails. A coordinated change to both accepted intent and product bytes in one
 landing fails because the transition reads the prior accepted claim/obligation preimage.
 
-The initial obligations are not copied into this process RFC. Their authoritative current values
+This product validation is a Discharge and ordering precondition, not an acceptance criterion of
+this process RFC. The initial obligations are not copied here. Their authoritative current values
 remain the five operation and ten digest-domain declarations already normative in
 `provider-exchange-and-execution.md`; its author amendment converts them to the machine block.
 
@@ -173,14 +178,15 @@ The generic engine supplies all claim and history behavior:
 - fixed-head payload drift, skipped/backward lanes, duplicate claimants and partial roots fail; and
 - landed history cannot be deleted, rewritten or returned to absent.
 
-No provider-specific branch exists in `register-check`. Product obligation/consumer joins are
-declared validation hooks attached to the descriptor and executed through the generic projection
-hook protocol. A hook must be named in the accepted product RFC, receive immutable projected
-before/after images, return structured diagnostics and may not read or alter Git state.
+No provider-specific branch or validation-hook protocol exists in `register-check`. The generic
+engine proves descriptor, projection, claim and history transitions only. The product RFC's own
+normal verification target proves its accepted obligation and consumer closure before it invokes
+the generic transition operation; it receives projected before/after values through the public
+generic API and may not read or alter Git state.
 
 ## 5. Able-to-fail population fixtures
 
-Using the generic engine, this process implementation crosses:
+Using the generic engine, this process implementation crosses these ten process-owned families:
 
 1. exact absent descriptor/register with no product bytes;
 2. absent root plus no claim, ordinary lane, head 0 or landed row;
@@ -189,20 +195,18 @@ Using the generic engine, this process implementation crosses:
 5. process introduction plus product claim in one transition;
 6. exact later first claim;
 7. product landing without prior claim, wrong owner or lingering claim;
-8. missing/duplicate/computed/non-canonical operation/domain row;
-9. runtime function field inside canonical payload;
-10. compile-only type map missing/extra operation;
-11. copied runtime/server/CLI identity list even when equal;
-12. exact derived mapped/indexed consumers;
-13. obligation omission, extra and count-preserving coordinated product swap;
-14. obligation block changed in the same product landing;
-15. version-only/payload-only/digest-only partial resource;
-16. fixed-head nested payload drift; and
-17. landed-to-missing root with generic first-parent history.
+8. version-only/payload-only/digest-only partial resource;
+9. fixed-head nested payload drift; and
+10. landed-to-missing root with generic first-parent history.
+
+The product RFC separately owns missing/duplicate/computed/non-canonical operation/domain rows;
+runtime function fields; missing/extra type-map operations; copied identity lists; exact derived
+consumers; obligation omission/extra/swap; and same-landing obligation mutation. They are not
+counted as process fixtures before their source population and validator exist ([[D2812]], [[D2813]]).
 
 ## 6. Implementation boundary and order
 
-The accepted process implementation changes only the shared catalogue, generated README register,
+The accepted process implementation changes only the shared catalogue, human-owned checked README register,
 one population fixture set, development docs and this RFC's ledger/log/roadmap closeout. It does
 not change `tools/register-check.mjs` except through the already-implemented generic engine and
 creates no provider product file.
@@ -210,7 +214,7 @@ creates no provider product file.
 Order:
 
 1. generic engine is accepted, implemented and archived;
-2. fresh independent review executes these seventeen population fixtures;
+2. fresh independent review executes these ten process population fixtures;
 3. implement the absent descriptor/register and run full normal verification;
 4. archive this process RFC with ledger and append-only exploration log;
 5. amend/review/accept provider exchange with the exact machine obligation block and lane claim;
@@ -230,22 +234,63 @@ provider state machine. It closes only after this population's executable criter
 3. The process implementation adds no C11, parser branch, canonicalizer or Git history reader.
 4. Runtime payload fields and compile-only type relations are separate and compilable
    ([[D2456]]).
-5. Product population is joined to the prior independently accepted obligation block; coordinated
-   swaps fail ([[D2457]]).
+5. The future product validator has one exact owner and must join population to its prior
+   independently accepted obligation block before invoking the generic landing; coordinated swaps
+   fail there ([[D2457]], [[D2812]], [[D2813]]).
 6. Prior-claim and landed history use the generic staged/first-parent contract ([[D2458]]).
-7. All seventeen fixture families can fail for their named reason.
-8. Normal `make verify` covers snapshot and transition checks without bespoke user commands.
+7. All ten process fixture families can fail for their named reason; the seven product families are
+   explicit D4 obligations rather than false process coverage.
+8. Normal `make verify` covers the maintained current author/review target without bespoke user commands.
 9. No provider/engine/source/API/schema/storage/content/web/archive/protected-design product bytes
    change in the process implementation.
 10. [[D2189]] and [[D2455]]–[[D2459]] close only after executable process criteria pass; provider
     semantics remain blocked on the product RFC.
+
+## Second fresh independent return (2026-09-05)
+
+The generic descriptor file itself parses, but the repaired process contract is not buildable. The
+named `provider-protocol-fresh-review` target still runs the superseded C11/`RESOURCE_NAMES`
+assertions and fails on the current RFC, while no successor executes the claimed seventeen fixture
+families ([[D2809]]). The RFC twice says the human README register is generated although its generic
+parent explicitly keeps that file human-owned and checked ([[D2810]]).
+
+The normative `ProviderProtocolTypeRelations` interface produces TS1337 rather than compiling
+([[D2811]]). Its promise to detect copied operation/domain identities has no exact source
+population or algorithm ([[D2812]]), and the validation-hook protocol that allegedly supplies the
+obligation join does not exist in the exact generic descriptor grammar or bootstrap engine
+([[D2813]]). Finally, the canonical-resource routing row names a separate `.version` selector while
+the descriptor correctly contains only the atomic root; the generic parent's canonical-resource
+row uses `none` ([[D2814]]).
+
+`make provider-protocol-second-fresh-review` reproduces all five groups. Exact receipt:
+`planning/provider-protocol-register/second-fresh-independent-buildability-review-2026-09-05.md`.
+The RFC remains draft and dependency-blocked; no catalogue/register/provider product byte is
+authorized.
+
+## Second author repair (2026-09-05)
+
+The bounded repair closes [[D2809]]–[[D2814]] at contract tier. Both prior review harnesses now
+load the exact Git revision they reviewed, so later prose repairs cannot invert historical tests;
+the maintained successor target is part of normal verification. README language mirrors the
+generic parent's human-owned/check-only rule, and the type relation is a compilable mapped type
+with missing-operation failure.
+
+The nonexistent generic hook is deleted. The process RFC now owns only descriptor/projection/
+lifecycle behavior; `provider-exchange-and-execution.md` must define and test its exact obligation
+parser plus consumer population before it invokes the generic landing. The former seventeen
+fixtures split honestly into ten process-owned and seven product-owned families. Finally, the
+canonical-resource routing summary uses `none` for its nested version, byte-matching its descriptor
+and the parent's example. `make provider-protocol-second-author-repair` retains both returns and
+passes 5/5 repair groups. Exact receipt:
+`planning/provider-protocol-register/second-author-repair-2026-09-05.md`. Another genuinely fresh
+review and the generic bootstrap dependency still gate acceptance and implementation.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | D1 | Generic register engine lands first | shared-resource-register-bootstrap | archived SHA | |
-| D2 | Fresh independent review executes the seventeen fixtures | claude | review receipt plus acceptance/corrections | |
+| D2 | Fresh independent review executes the ten process fixtures | claude | review receipt plus acceptance/corrections | |
 | D3 | Absent descriptor/register lands with full verification | codex | implementation SHA plus green `make verify` | |
 | D4 | Product RFC publishes accepted obligations, claims lane 1 and later lands the atomic image | provider-exchange-and-execution | accepted preimage plus product SHA | |
 
@@ -256,6 +301,12 @@ semantics, not choices made by this process document.
 
 ## Changelog
 
+- 2026-09-05: second author repair on [[D2809]]–[[D2814]]. Revision-pinned historical reviews,
+  restored README ownership, compilable mapped relations, honest process/product validation scope
+  and descriptor-equal routing now execute under the maintained Make target.
+- 2026-09-05: second fresh independent review returned the generic rebase on [[D2809]]–[[D2814]].
+  The descriptor parses, but the maintained test, README ownership, type relation, consumer/hook
+  closure and routing summary do not match the claimed build.
 - 2026-09-01: added the complete canonical descriptor candidate and replaced the executable helper
   image with the generic adapter's side-effect-free literal `Object.freeze` shape; the maintained
   author target now asserts the atomic version field.

@@ -292,6 +292,23 @@ and 7/7 repair groups pass. Pack-schema/storage implementation remains held pend
 review and accepted provider exchange. Receipt:
 `planning/pack-capability-contract/sixteenth-author-repair-2026-09-05.md`.
 
+The provider-protocol process prerequisite is now freshly returned on [[D2809]]–[[D2814]]. Its
+canonical descriptor parses, but the maintained review target is stale, README ownership and the
+canonical-resource routing row contradict the generic parent, the normative relation does not
+typecheck, and copied-consumer/obligation closure relies on an undefined hook protocol. `make
+provider-protocol-second-fresh-review` passes 5/5 falsifier groups. This holds provider exchange and
+therefore pack-capability acceptance upstream of product implementation. Receipt:
+`planning/provider-protocol-register/second-fresh-independent-buildability-review-2026-09-05.md`.
+
+The bounded second author repair closes [[D2809]]–[[D2814]] at contract tier. Both historical
+returns are revision-pinned; the maintained target is verify-owned; README ownership, mapped type
+relations and canonical-resource routing now agree with the generic parent; and exact obligation,
+consumer and able-to-fail validation has one explicit product-RFC owner instead of a fictional
+generic hook. `make provider-protocol-second-author-repair` retains both returns and passes 5/5
+repair groups. The process RFC remains draft pending the generic-bootstrap dependency and another
+genuinely fresh review; no provider product implementation is authorized. Receipt:
+`planning/provider-protocol-register/second-author-repair-2026-09-05.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

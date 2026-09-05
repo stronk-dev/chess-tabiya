@@ -1,12 +1,12 @@
 // DISPOSABLE fresh independent buildability review — D2455-D2459.
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import test from "node:test";
 
-const read = (path) => readFileSync(path, "utf8");
-const rfc = read("rfc/provider-protocol-register.md");
-const bootstrap = read("rfc/shared-resource-register-bootstrap.md");
-const workflow = read(".github/workflows/verify.yml");
+// Historical falsifier: reproduce the exact pre-return RFC instead of rereading a repaired draft.
+const rfc = execFileSync("git", ["show", "f5d26ff2^:rfc/provider-protocol-register.md"], { encoding: "utf8" });
+const bootstrap = execFileSync("git", ["show", "f5d26ff2^:rfc/shared-resource-register-bootstrap.md"], { encoding: "utf8" });
+const workflow = execFileSync("git", ["show", "f5d26ff2^:.github/workflows/verify.yml"], { encoding: "utf8" });
 
 function between(text, start, end) {
   const from = text.indexOf(start);
