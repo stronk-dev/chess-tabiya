@@ -1651,15 +1651,16 @@ store/bot predecessors. Every link needs a typed reducer, immutable inputs, idem
 resume/rebuild, owner/actor identity, prior-release migration, account lifecycle, and a production
 API/client consumer.
 
-The longitudinal-store seventh author repair closes [[D2598]]–[[D2602]] at contract tier.
-Opportunity ordering is shared by SQL/parser/projector; row/query parsers close over the literal
-ingest registry; source identity is parsed, replay-joined, immutable and sealed; exact transaction
-markers replace the hand-written operation claim; and all five durable job states share one reset
-and stale-claim authority. `make longitudinal-store-seventh-author-repair` retains 43 prior controls
-and passes 5/5 new controls plus strict TypeScript. Player style, skills, opening performance,
-durable tips, bot history and campaign progression still require fresh acceptance and production
-persistence; no downstream feature credit is claimed. Receipt:
-`planning/longitudinal-store/seventh-author-repair-2026-09-04.md`.
+The longitudinal-store eighth fresh independent review returns the latest repair on [[D2779]]–
+[[D2784]]. Its replay/authorship algebra survives, but the claimed storage reader is a caller-built
+map; null journal state, owner, job, receipt and clock remain caller values; unreachable operations
+in synthetic source satisfy the AST census while production storage contains none of them;
+invalidation is a pure object rewrite; and equal images cross independent stores. `make
+longitudinal-store-eighth-fresh-review` retains the full chain and passes five executable blocker
+groups plus strict TypeScript. Player style, skills, opening performance, durable tips, bot history
+and campaign progression remain blocked on a SQLite-owned ninth repair, another fresh review,
+acceptance and production persistence; no downstream feature credit is claimed. Receipt:
+`planning/longitudinal-store/eighth-fresh-independent-buildability-review-2026-09-05.md`.
 
 ### CI and deployment
 

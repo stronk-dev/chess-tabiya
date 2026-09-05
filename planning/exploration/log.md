@@ -15938,3 +15938,23 @@ D560 remain unauthorized before a genuinely fresh review and accepted provider-e
 
 **Next:** independently attack every durable state, provider-result/restart boundary, transition
 chain, objective join and clock race; only then consider acceptance.
+
+## 2026-09-05 — Longitudinal store eighth fresh independent review
+
+**What landed:** the eighth author repair was independently returned on [[D2779]]–[[D2784]], with
+five executable blocker groups in `make longitudinal-store-eighth-fresh-review`. No production
+storage, migration, worker, route, client, content, archive or protected-design byte changed.
+
+**What changed:** the review proves the “storage-owned” source is a caller-created map; owner and
+journal absence, complete job, receipt and clock remain caller values; unreachable calls in
+synthetic source pass the AST census while production contains no integration; invalidation does
+not touch SQLite; and equal images cross independent store authorities. The current fresh-review
+target retains the complete predecessor chain and is enrolled in `verify-governance`.
+
+**What is blocked:** longitudinal observations, player style, skills, opening performance,
+personalized Review, durable recommendations and campaign history remain unauthorized before a
+SQLite-owned ninth repair, another genuinely fresh review and acceptance.
+
+**Next:** compose a real disposable SQLite authority that internally loads owner/authorship/source,
+job and clock truth; execute actual storage paths and transactional invalidation with restart,
+idempotence and stale-writer negatives; then commission a fresh review.

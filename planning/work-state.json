@@ -22379,6 +22379,60 @@
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D2779",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:177452dac9af33013a1ee0b318e95dc3e8049ee1d44e86eda7980f6da53eded4",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2780",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0a0e3b1c4926a6d875b80e947fd683395b18ad2c425f9c57dc669e2605b64936",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2781",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:af6b1ca80fb14ea0db78b9498b63155bbc2c7e9ea20d61617b693c547989cbb9",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2782",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:03cfe5859bbcc71cd1b6d194d5ec4fd5f3f9c0d6f19ca1a52f93754fbad1cb35",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2783",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9c3ab0b18e2c60dd4edec3c4d4ec0fc973511efaf0ef989b30c40e732ecb9a78",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2784",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:397e1941ec58e1767e39028bffe8174ae3720063ef597d354d8f0fa8d97de73a",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
     }
   ]
 }

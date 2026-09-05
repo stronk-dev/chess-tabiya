@@ -307,7 +307,7 @@ longitudinal-store-fresh-review:
 longitudinal-store-second-fresh-review:
 	node --test tools/d2227-longitudinal-second-fresh-review/contract.test.mjs
 
-.PHONY: longitudinal-store-third-fresh-review longitudinal-store-fourth-author-repair longitudinal-store-fourth-fresh-review longitudinal-store-fifth-author-repair longitudinal-store-fifth-fresh-review longitudinal-store-sixth-author-repair longitudinal-store-sixth-fresh-review longitudinal-store-seventh-author-repair longitudinal-store-seventh-fresh-review longitudinal-store-eighth-author-repair
+.PHONY: longitudinal-store-third-fresh-review longitudinal-store-fourth-author-repair longitudinal-store-fourth-fresh-review longitudinal-store-fifth-author-repair longitudinal-store-fifth-fresh-review longitudinal-store-sixth-author-repair longitudinal-store-sixth-fresh-review longitudinal-store-seventh-author-repair longitudinal-store-seventh-fresh-review longitudinal-store-eighth-author-repair longitudinal-store-eighth-fresh-review
 longitudinal-store-third-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2402-longitudinal-third-fresh-review/vitest.config.ts --reporter=verbose
 
@@ -343,6 +343,10 @@ longitudinal-store-seventh-fresh-review: longitudinal-store-seventh-author-repai
 longitudinal-store-eighth-author-repair: longitudinal-store-seventh-fresh-review
 	./node_modules/.bin/vitest run --config tools/d2718-longitudinal-eighth-author-repair/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/tsc -p tools/d2718-longitudinal-eighth-author-repair/tsconfig.json
+
+longitudinal-store-eighth-fresh-review: longitudinal-store-eighth-author-repair
+	./node_modules/.bin/vitest run --config tools/d2779-longitudinal-eighth-fresh-review/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc -p tools/d2779-longitudinal-eighth-fresh-review/tsconfig.json
 
 .PHONY: bot-roster-fresh-review
 bot-roster-fresh-review:
@@ -1056,7 +1060,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-eighth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-fifteenth-author-repair semantic-collectors-promotion-tenth-author-repair provider-health-fifth-author-repair test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair longitudinal-store-eighth-fresh-review storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-fifteenth-author-repair semantic-collectors-promotion-tenth-author-repair provider-health-fifth-author-repair test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 

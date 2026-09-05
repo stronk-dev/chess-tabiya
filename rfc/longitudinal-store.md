@@ -1,12 +1,12 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **eighth author repair completed 2026-09-05 on
-  [[D2718]]–[[D2723]]; eighth fresh independent review required.** One storage-owned v4 source
-  reader replays real runtime events, derives complete authorship and imported-mainline truth,
-  binds source/job subjects, compiles real transaction calls through the TypeScript AST and checks
-  the complete cut/revision/lease/owner claim tuple. `make
-  longitudinal-store-eighth-author-repair` retains the complete chain and passes 6/6 new repair
-  groups plus strict TypeScript; no migration, worker, reader, consumer, API or client
+- **Status:** draft — **RETURNED by the eighth fresh independent review on 2026-09-05 on
+  [[D2779]]–[[D2784]].** The v4 model repairs the six prior internal seams, but its “storage-owned”
+  authority is a caller-created in-memory map; caller values choose owner/journal absence, job,
+  receipt and clock; synthetic unreachable AST calls satisfy the transaction census; invalidation
+  is a pure object rewrite; and equal images cross independent store authorities. `make
+  longitudinal-store-eighth-fresh-review` retains the complete chain and passes five executable
+  blocker groups plus strict TypeScript. No migration, worker, reader, consumer, API or client
   implementation is authorized. The
   2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
@@ -1053,6 +1053,32 @@ The six returned seams are repaired as one storage-owned source/claim boundary:
 passes six new behavioral groups and strict TypeScript. No production byte changed. Another
 genuinely fresh independent review remains mandatory before acceptance or implementation.
 
+## Eighth fresh independent return (2026-09-05)
+
+The repair survives at the six bounded internal properties it names, but a fresh application to
+the claimed durable boundary returns six production-authority seams. Exact evidence is in
+`planning/longitudinal-store/eighth-fresh-independent-buildability-review-2026-09-05.md`.
+
+1. **[[D2779]] — consume storage rather than caller records.** The source store is an in-memory map
+   constructed from caller-supplied runs, owners, authorship and structure dispositions.
+2. **[[D2780]] — observe authorship absence.** A null caller field plus a caller `single_player`
+   label launders every user move into any named learner's private history.
+3. **[[D2781]] — prove committed transaction behavior.** Unreachable descriptors and commits in a
+   caller-provided source string satisfy the AST census while the production storage has none of
+   the promised operations.
+4. **[[D2782]] — own the complete job, receipt and clock.** Impossible running-state residue and an
+   expired lease validate through structural objects and a caller-selected historical clock.
+5. **[[D2783]] — make invalidation a durable CAS.** The proposed invalidation only returns a new
+   object; it neither locks nor changes SQLite and proves no restart/idempotence behavior.
+6. **[[D2784]] — scope capabilities to the issuing database.** Equal source images from independent
+   stores share a digest and cross claim authority.
+
+`make longitudinal-store-eighth-fresh-review` passes five executable blocker groups, retains every
+prior checkpoint and type-checks the review. A bounded ninth repair must compose a real disposable
+SQLite store, internally resolve owner/authorship/clock/current job, execute the actual operation
+population and perform transactional invalidation. Another genuinely fresh review still gates
+acceptance and production implementation.
+
 ### F. Acceptance criteria
 
 These are the only live acceptance criteria; the historical AC list below is non-normative.
@@ -1163,7 +1189,7 @@ These are the only live acceptance criteria; the historical AC list below is non
     arm, 20 Hz health probes hold event-loop delay p95 <50 ms/max <250 ms, no probe exceeds 500 ms,
     and at least three in-loop full-CAS renewals precede publication. Main-thread execution and a
     timer-only worker heartbeat are able-to-fail negatives.
-17. **Nine-return author falsifier.** `make longitudinal-store-eighth-author-repair` retains the
+17. **Nine-return author falsifier.** `make longitudinal-store-eighth-fresh-review` retains the
     complete earlier author chain and crosses both
     literal registries/signs, complete-population algebra, actual SQLite claim/index/constraint
     negatives, deletion/rebuild suppression, worker lifecycle, claim race/expiry/stale publisher,
@@ -1224,6 +1250,12 @@ These are the only live acceptance criteria; the historical AC list below is non
     collaboration invalidation, monotone shared/legacy attribution, exact parsed row families,
     revision-1 observed-only imports and the branded filter parser. Every negative mutates a
     passing positive and strict TypeScript refuses an unparsed query.
+31. **Durable source/claim authority ([[D2779]]–[[D2784]]).** The production-composed storage
+    operation loads exact run/event, owner, journal/seating, structure and complete job rows under
+    one database identity and transaction clock. Caller records, null-authorship testimony,
+    structural job/receipt objects, historical clocks, cross-database images, unreachable
+    descriptors, rolled-back mutations and pure-object invalidation all fail. Transactional
+    invalidation survives reload, is idempotent on retry, and fences a stale claimant.
 
 ## Motivation
 
@@ -1927,6 +1959,11 @@ head after that renumbering and **not yet written**:
 
 ## Changelog
 
+- 2026-09-05: eighth fresh independent review returned the repair on [[D2779]]–[[D2784]]. The
+  claimed storage authority is caller-created; authorship absence, job, receipt and clock remain
+  caller values; unreachable synthetic AST calls pass while production contains no integration;
+  invalidation is not durable; and equal images cross database authorities. Exact review:
+  `planning/longitudinal-store/eighth-fresh-independent-buildability-review-2026-09-05.md`.
 - 2026-09-04: seventh author repair completed [[D2598]]–[[D2602]]. Denominator ordering now spans
   SQL/parser/projector; parser admission is private and literal; source identity is parsed,
   replay-joined, recursively immutable and sealed; mutation descriptors compile from exact
