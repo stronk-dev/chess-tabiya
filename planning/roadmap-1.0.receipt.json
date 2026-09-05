@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1a08a0a1c54f8adee74cbca508bc8459a751ea11ec9733c4d8ca29110ac609b1",
+    "roadmap": "sha256:8e32ac2970f37a9773be48fa703992104f96435df4b7dd3c550e653450a9c792",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:76ebb743f2ccc3721676f6db8d14dbb1138fa82bed40df54af69db93e8ce3c52",
-    "rfcRegister": "sha256:73bff5467cd00c880ab615722d053817df5cf4089081c4a21aef4bf00fa18ef3",
+    "workState": "sha256:9129dbae2d4b42589a0540a83dabd70c1135b2df44124dd54f846fc2ce328880",
+    "rfcRegister": "sha256:48d6f3cc87b57c5b798d8f46f477140fc88def928a4516ab62a65e4959beb641",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 1075,
+      "blocked": 1082,
       "done": 826,
       "refused": 3
     },
@@ -109,16 +109,15 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Fresh-review the longitudinal store's SQLite-owned ninth repair and pack capability's fifteenth repair; complete independent review and acceptance for claim anchors, module registration/presentation, review compiler/map, bot roster/route source, social play and casting; do not implement a draft contract early.",
+      "nextAction": "Author-repair the seven shared-resource bootstrap semantic-closure, relation and assertion blockers, then fresh-review it; independently review longitudinal storage and pack capability; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "Longitudinal storage's ninth author repair replaces caller authority with a file-backed SQLite contract: exact source/owner/journal/authorship, all five job states, database clock, store-scoped claim capabilities, current-source acquisition/validation and durable restart-stable invalidation pass eight groups. Production remains held for a genuinely fresh review and acceptance.",
-        "impact": "advanced",
+        "summary": "The eleventh fresh shared-resource bootstrap review returns seven executable blockers: external sibling meaning and any-member relations can disappear, eval publishes, constructors and ordinary local calls are not representable, and digest/signature assertions trust rather than re-derive their claimed relations. Production catalogue/register work remains held.",
+        "impact": "held",
         "evidence": [
-          "planning/longitudinal-store/ninth-author-repair-2026-09-05.md",
-          "tools/d2779-longitudinal-ninth-author-repair/contract.test.ts",
-          "planning/longitudinal-store/eighth-fresh-independent-buildability-review-2026-09-05.md",
-          "rfc/longitudinal-store.md",
+          "planning/shared-resource-register-bootstrap/eleventh-fresh-independent-buildability-review-2026-09-05.md",
+          "tools/d2795-shared-resource-bootstrap-eleventh-fresh-review/contract.test.mjs",
+          "rfc/shared-resource-register-bootstrap.md",
           "rfc/README.md"
         ]
       },

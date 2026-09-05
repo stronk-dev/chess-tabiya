@@ -196,6 +196,16 @@ shared-resource-bootstrap-tenth-author-repair` retains forty-one predecessor con
 8/8 new repair groups. Another genuinely fresh review still gates acceptance and production.
 Receipt: `planning/shared-resource-register-bootstrap/tenth-author-repair-2026-09-05.md`.
 
+The eleventh fresh independent review returns that repair on [[D2795]], [[D2796]], [[D2797]],
+[[D2798]], [[D2799]], [[D2800]] and [[D2801]]. External sibling
+meaning can still move under a fixed graph and retained identity; `any` property access and global
+`eval` publish; constructor and ordinary local-call programs are rejected; and graph assertion
+trusts rather than re-derives declaration digests and selected signatures. `make
+shared-resource-bootstrap-eleventh-fresh-review` retains forty-nine predecessor controls and passes
+7/7 new falsifiers. The foundation critical path remains a bounded eleventh author repair followed
+by another fresh review; no catalogue/register implementation is authorized. Receipt:
+`planning/shared-resource-register-bootstrap/eleventh-fresh-independent-buildability-review-2026-09-05.md`.
+
 The same-day twelfth `pack-capability-contract` author repair closes [[D2587]]–[[D2592]] at contract
 tier without claiming production. One transaction-owned before/after run result derives the exact
 core/objective/recorded-guard journal suffix and receipt; the complete nested objective request is

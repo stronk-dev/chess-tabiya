@@ -1,10 +1,11 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **tenth author repair completed on [[D2701]]–[[D2708]]; another genuinely
-  fresh independent review is required.** Duplicate-key config refusal, exact external declaration
-  digests, origin/root/edge invariants and fail-closed `any`, dynamic-import and broad-index
-  resolution now execute. `make shared-resource-bootstrap-tenth-author-repair` retains forty-one
-  earlier controls and passes 8/8 new repair groups. No implementation is authorized.
+- **Status:** draft — **returned by the eleventh fresh independent review on [[D2795]]–[[D2801]].**
+  Transitive external meaning remains unsealed; `any` property access and `eval` publish; construct
+  and ordinary local-call graphs are not representable; and the graph assertion does not bind
+  declaration digests or resolved signatures to their asserted trees/compiler relations. `make
+  shared-resource-bootstrap-eleventh-fresh-review` retains forty-nine earlier controls and passes
+  7/7 new falsifiers. No implementation is authorized.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -930,6 +931,21 @@ shared-resource-bootstrap-tenth-author-repair` retains all forty-one predecessor
 passes 8/8 new repair groups. This remains author evidence only; another genuinely fresh review
 still gates acceptance and production. Receipt:
 `planning/shared-resource-register-bootstrap/tenth-author-repair-2026-09-05.md`.
+
+### Eleventh fresh independent return (2026-09-05)
+
+The next independent pass returns the projector on [[D2795]]–[[D2801]]. A retained external
+declaration's sibling dependencies can change without moving the graph, digest or complete retained
+identity. `any` property access and the explicitly refused global `eval` call publish. Constructor
+edges enumerate call rather than construct signatures, while ordinary repository-local calls can
+fail solely because identity enrichment and predecessor assertion disagree on canonical edge order.
+
+The assertion boundary also accepts a changed external declaration tree under its old
+`sourceDigest` and an arbitrary compiler-unrelated syntax tree as a call's `resolvedSignature`.
+`make shared-resource-bootstrap-eleventh-fresh-review` retains all forty-nine predecessor controls
+and passes 7/7 new falsifiers. Exact receipt:
+`planning/shared-resource-register-bootstrap/eleventh-fresh-independent-buildability-review-2026-09-05.md`.
+No production implementation is authorized until all seven are repaired and freshly reviewed.
 
 ## Acceptance criteria
 

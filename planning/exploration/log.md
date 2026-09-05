@@ -16012,3 +16012,19 @@ authorized by author evidence.
 promotion chain, passes 7/7 new behavioral groups and strict TypeScript. Exact receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-eleventh-author-repair-2026-09-05.md`.
 Next is a twelfth genuinely fresh independent review, then provider/value dependency landing.
+
+## 2026-09-05 — shared-resource bootstrap eleventh fresh independent review
+
+**What landed:** returned the tenth author repair on [[D2795]]–[[D2801]] with seven executable
+falsifiers. No production catalogue, checker, register, schema, product or content byte changed.
+
+**What changed:** selected external declaration digests do not cover sibling meaning; `any` member
+access and global `eval` publish; constructor and ordinary local-call programs are unrepresentable;
+and the public assertion trusts declaration digests and resolved-signature trees without binding
+them back to the asserted tree/compiler relation. The current fresh-review target retains the
+complete predecessor chain and is enrolled in `verify-governance`.
+
+**Evidence/next:** `make shared-resource-bootstrap-eleventh-fresh-review` retains forty-nine
+predecessor controls and passes 7/7 fresh groups. Exact receipt:
+`planning/shared-resource-register-bootstrap/eleventh-fresh-independent-buildability-review-2026-09-05.md`.
+Next is one bounded author repair and another genuinely fresh review; implementation remains held.

@@ -325,12 +325,12 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Fresh-review the longitudinal store's SQLite-owned ninth repair and pack capability's fifteenth repair; complete independent review and acceptance for claim anchors, module registration/presentation, review compiler/map, bot roster/route source, social play and casting; do not implement a draft contract early.",
+        "nextAction": "Author-repair the seven shared-resource bootstrap semantic-closure, relation and assertion blockers, then fresh-review it; independently review longitudinal storage and pack capability; do not implement a draft contract early.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "Longitudinal storage's ninth author repair replaces caller authority with a file-backed SQLite contract: exact source/owner/journal/authorship, all five job states, database clock, store-scoped claim capabilities, current-source acquisition/validation and durable restart-stable invalidation pass eight groups. Production remains held for a genuinely fresh review and acceptance.",
-          "impact": "advanced",
-          "evidence": ["planning/longitudinal-store/ninth-author-repair-2026-09-05.md", "tools/d2779-longitudinal-ninth-author-repair/contract.test.ts", "planning/longitudinal-store/eighth-fresh-independent-buildability-review-2026-09-05.md", "rfc/longitudinal-store.md", "rfc/README.md"]
+          "summary": "The eleventh fresh shared-resource bootstrap review returns seven executable blockers: external sibling meaning and any-member relations can disappear, eval publishes, constructors and ordinary local calls are not representable, and digest/signature assertions trust rather than re-derive their claimed relations. Production catalogue/register work remains held.",
+          "impact": "held",
+          "evidence": ["planning/shared-resource-register-bootstrap/eleventh-fresh-independent-buildability-review-2026-09-05.md", "tools/d2795-shared-resource-bootstrap-eleventh-fresh-review/contract.test.mjs", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
       },
