@@ -378,6 +378,17 @@ and strict TypeScript. The spine remains **12/14** pending another fresh review 
 dependency landing. Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-tenth-author-repair-2026-09-05.md`.
 
+The same-day eleventh fresh independent review returns that repair on [[D2789]]–[[D2794]]. An
+arbitrary caller directory and source id still self-register; the document can be an invalid pack
+and its resolved support value can contradict the record FEN; HTTP digest and length are never
+checked against retained response bytes; and the legal file is only a status token whose malformed
+bytes become benign absence. A predecessor recorded result also passes the current aggregate
+assertion without the new durable receipt. `make semantic-collectors-promotion-eleventh-fresh-review`
+retains the complete chain and passes 6/6 fresh falsifiers plus strict TypeScript. The spine remains
+**12/14** pending an installed-generation authority, full subject/value joins, a current-only result
+seal, another fresh review and provider/value dependency landing. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-eleventh-fresh-independent-buildability-review-2026-09-05.md`.
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded

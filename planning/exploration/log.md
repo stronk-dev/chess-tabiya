@@ -15979,3 +15979,19 @@ before another genuinely fresh review and acceptance.
 **Next:** independently attack exact row constraints, fixture/production seams, transaction clocks,
 source mutation races, restart/reclaim behavior, capability transfer and actual production
 composition; only then consider acceptance.
+
+## 2026-09-05 — held promotion eleventh fresh independent review
+
+**What landed:** returned the tenth `semantic-collectors` held-promotion repair on [[D2789]]–
+[[D2794]] with six executable falsifiers. Canonical reads and request ordering survive, but caller
+directories self-register; invalid packs and crossed support values ground exact readings; response
+digest/length are unchecked metadata; legal authority is only a status token; and predecessor
+recorded results bypass the current durable receipt.
+
+**What changed:** the evidence spine remains 12/14. The next bounded repair must introduce an
+installed artifact generation, exact pack/support/response/legal joins and a current-only aggregate
+result authority. No production collector or held projection was authorized.
+
+**Evidence/next:** `make semantic-collectors-promotion-eleventh-fresh-review` retains the full chain,
+passes 6/6 fresh groups and strict TypeScript. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-eleventh-fresh-independent-buildability-review-2026-09-05.md`.

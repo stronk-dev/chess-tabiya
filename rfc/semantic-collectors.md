@@ -7,11 +7,12 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair completed its tenth author repair 2026-09-05 on [[D2765]]–[[D2770]] and remains
-  held for another genuinely fresh review.** The repaired transaction consumes the production
-  source-manifest dialect from canonical realpath-bound storage and retains document, source,
-  origin, time, support and record identity; request identity precedes every early result and
-  dependency failures come from observed operations. The preceding author model claimed one
+  promotion pair was **RETURNED by its eleventh fresh independent review 2026-09-05 on
+  [[D2789]]–[[D2794]].** The tenth repair's canonical reads and request ordering survive, but an
+  arbitrary caller directory still self-registers; invalid pack bytes and semantically crossed
+  support pointers ground readings; Syzygy digest/length are unchecked metadata; legal authority is
+  a status token; and the aggregate assertion accepts legacy recorded results with no durable
+  receipt. The preceding author model claimed one
   asynchronous transaction owned recorded-first lookup, the exact
   scheduler digest and invocation, cancellation/domain/failure outcomes, success-only legal move
   resolution, sealed ledger/live source creation and total input abstention. The maintained target
@@ -1523,6 +1524,19 @@ the owning operation with zero provider calls. `make semantic-collectors-promoti
 retains the complete chain, passes 6/6 new groups and strict TypeScript. This is author evidence
 only: another genuinely fresh review and provider/value dependency landing still gate 12/14→14/14.
 
+The same-day eleventh fresh independent review returns that repair on [[D2789]]–[[D2794]]. Its
+canonical file reads are real, but their authority remains caller-selected: any realpath directory
+and arbitrary source id can self-register. The path does not run full pack validation or bind a
+ledger pack identity, accepts a support pointer whose value contradicts the record FEN, and trusts
+HTTP digest/length metadata without retaining response bytes. `legal-authority.json` is only a
+status token while a different in-memory resolver manufactures the legal map; malformed token
+bytes become benign absence. Most decisively, the current aggregate assertion delegates legacy
+recorded results to the predecessor assertion, so public predecessor constructors bypass the new
+durable receipt completely. `make semantic-collectors-promotion-eleventh-fresh-review` retains the
+full chain and passes 6/6 fresh falsifiers plus strict TypeScript. The spine remains 12/14 pending
+an installed-generation artifact authority, exact document/support/response/legal joins, a closed
+current result seal, another fresh review and provider/value dependency landing.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1550,6 +1564,12 @@ only: another genuinely fresh review and provider/value dependency landing still
 | [[D2768]] | author-repaired: module-owned request identity is asserted before geometry, domain, lookup or any result |
 | [[D2769]] | author-repaired: observed storage/legal artifact operations alone yield failure/abstention and prevent fallback |
 | [[D2770]] | author-repaired: the exact production source entry and verified Syzygy response origin survive in the receipt |
+| [[D2789]] | returned: arbitrary realpath directories self-register; require an installed generation from an owning artifact registry |
+| [[D2790]] | returned: the document is not pack-validated or joined to ledger id/version/digest |
+| [[D2791]] | returned: support pointer existence does not prove its value agrees with the record subject |
+| [[D2792]] | returned: source digest/length metadata is never checked against retained response bytes |
+| [[D2793]] | returned: a status token stands in for an exact legal-map operation and malformed bytes become absence |
+| [[D2794]] | returned: predecessor recorded results bypass the current durable receipt at assertion |
 | [[D2469]] | author-repaired: provider preflight/domain and provider-failure arms execute before the lazy success-only legal-map resolver |
 | [[D2470]] | author-repaired: one request, dependency interface, sealed recorded resolver and exact collector signature fix source precedence |
 | [[D2471]] | author-repaired: specialized assertion failure throws `EvidenceInvariantError`; only typed unavailable inputs abstain, and invalid recorded bytes never permit live fallback |
@@ -1591,6 +1611,14 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-05: eleventh fresh independent review returned the tenth held-promotion repair on
+  [[D2789]]–[[D2794]]. Caller-selected directories remain self-registering; pack/support subjects,
+  response bytes and legal-map authority are not exactly joined; and the current assertion accepts
+  a predecessor recorded result with no durable receipt. `make
+  semantic-collectors-promotion-eleventh-fresh-review` retains the complete chain and passes 6/6
+  fresh falsifiers plus strict TypeScript. Exact receipt:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-eleventh-fresh-independent-buildability-review-2026-09-05.md`.
+  The spine stays 12/14; no held production id is authorized.
 - 2026-09-05: tenth author repair closes [[D2765]]–[[D2770]] at RFC tier. Canonical durable
   artifacts cross the production sourcing validators and retain document/source/time/support/origin
   identity; exact request identity precedes every result; and dependency failures are observed by
