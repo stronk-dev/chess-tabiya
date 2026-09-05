@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:3ef3c2c26f24eef8335eb5039980ddf77247e7f076370c5b7125e5b4b1b05f9f",
+    "roadmap": "sha256:a9ec560aac3b535189451427effb21dd856af69c53b1a428624e00e3a1dd38e8",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:c40f5f1270cf372d704b17e62ab7a9c5579b9c77a38f15ca1d6bb7036bea5421",
+    "workState": "sha256:c553e1fd3df7c1fa600f0cc90bacec36d07b6f8c31ff7b7e916fb4bc64c4eaa9",
     "rfcRegister": "sha256:5e64479956d0d5e8f1a3fa5ef7ecea58a48bee872da622e586d73dc21bfb6489",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
@@ -30,7 +30,7 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 639,
+      "todo": 640,
       "doing": 0,
       "blocked": 1120,
       "done": 826,
@@ -139,16 +139,14 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Fresh-review the eleventh held-promotion author repair against installation/generation authority and exact pack/support/response/legal/result joins, then land provider/value dependencies; finish capability/claim compatibility, packets, selectors, grades, Review and learner modules.",
+      "nextAction": "Repair the twelfth held-promotion return by consuming application-wide recorded evidence instead of inventing a product-local trust root; close packet/provider/value dependencies, then finish capability/claim compatibility, selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "The eleventh promotion author repair now resolves installed immutable generations through one inventory, runs complete production pack and strict sourcing validation, joins exact pack/support/response-byte/legal-map authority, preserves the live provider path, and requires the current durable result receipt. Seven new groups and the complete retained chain pass; the evidence spine remains 12/14 pending fresh review.",
-        "impact": "advanced",
+        "summary": "The twelfth promotion review returned the held pair on five executable authority failures: caller-bootstrapped installation, open generation grammar, non-unique legal rows, vacuous supports and first-row duplicate record selection. The full retained chain passes, but the evidence spine remains 12/14 pending a shared recorded-evidence authority, author repair, fresh review and provider/value dependencies.",
+        "impact": "held",
         "evidence": [
-          "planning/evidence-foundation-ux/semantic-collectors-promotion-eleventh-author-repair-2026-09-05.md",
-          "tools/d2789-semantic-collectors-promotion-eleventh-author-repair/contract.test.ts",
-          "planning/evidence-foundation-ux/semantic-collectors-promotion-eleventh-fresh-independent-buildability-review-2026-09-05.md",
-          "tools/d2789-semantic-collectors-promotion-eleventh-fresh-review/review.test.ts",
+          "planning/evidence-foundation-ux/semantic-collectors-promotion-twelfth-fresh-independent-buildability-review-2026-09-05.md",
+          "tools/d2835-semantic-collectors-promotion-twelfth-fresh-review/review.test.ts",
           "rfc/semantic-collectors.md",
           "rfc/README.md"
         ]

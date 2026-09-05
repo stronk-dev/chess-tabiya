@@ -16180,3 +16180,16 @@ predecessor chain and passes 5/5 fresh falsifiers plus strict TypeScript. Exact 
 `planning/evidence-foundation-ux/semantic-collectors-promotion-twelfth-fresh-independent-buildability-review-2026-09-05.md`.
 Next is a bounded author repair, another genuinely fresh review and the separately tracked
 provider/value dependency landing; the production evidence spine remains 12/14.
+
+## 2026-09-05 — evidence-spine milestone checkpoint correction
+
+**What landed:** corrected the source 1.0 milestone after `roadmap-progress` exposed that its latest
+checkpoint still described the superseded eleventh promotion author repair as `advanced`.
+
+**What changed:** the milestone now reports the twelfth executable return as `held`, points at its
+current receipt and names the shared recorded-evidence authority rather than another product-local
+registry as the next step. [[D2840]] records the general defect: the receipt seals current roadmap
+bytes but does not prove that a hand-authored checkpoint was superseded when a cited RFC moved.
+
+**Evidence/next:** the current claim is repaired immediately; release-engineering owns an executable
+checkpoint→live-RFC/work-state supersession join so this class cannot recur silently.

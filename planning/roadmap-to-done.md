@@ -126,6 +126,11 @@ Primary RFCs: `measurement-records`, `shared-resource-register-bootstrap`, `work
 bootstrap RFC owns the product-byte-free absent-root protocol needed before a new versioned shared
 resource can be claimed.
 
+Release-engineering follow-up [[D2840]] adds an executable supersession join between each
+hand-authored milestone checkpoint and its named live RFC/work-state anchors. The current receipt
+proves those checkpoint bytes are sealed, but cannot yet refuse a regenerated receipt whose prose
+still describes a superseded review state.
+
 The 2026-09-04 sixth bootstrap author repair closes its four bounded predecessor defects, but the
 seventh fresh review returns the generic projection engine on [[D2593]]–[[D2597]]. The TypeScript
 projector accepts incomplete programs, duplicate nodes and dangling edges; selector admission

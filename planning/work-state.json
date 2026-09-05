@@ -22928,6 +22928,14 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2840",
+      "state": "todo",
+      "owner": "release-engineering",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:46ea55345667c9aa499303e0d839c0fc5eda735de4f3510894742c182d287319",
+      "uxItems": []
     }
   ]
 }
