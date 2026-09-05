@@ -1,10 +1,10 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **returned by the sixteenth fresh independent review on [[D2802]]–[[D2808]].**
-  Payload/request identity, canonical provider bytes, retry/terminal unions,
-  origin-consumer-operation joins, provider-within-lease time and immutable transition authority
-  remain incomplete. `make pack-capability-sixteenth-fresh-review` retains the complete predecessor
-  chain and passes 7/7 new falsifiers. No implementation is authorised and D560 stays whole.
+- **Status:** draft — **sixteenth author repair completed on [[D2802]]–[[D2808]]; another genuinely
+  fresh independent review is required.** Payload/request identity, canonical provider bytes,
+  retry/terminal unions, origin-consumer-operation joins, provider-within-lease time and append-only
+  transition authority now execute under `make pack-capability-sixteenth-author-repair`. No
+  implementation is authorised and D560 stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -1471,7 +1471,25 @@ CREATE TABLE evidence_run_transitions (
   committed_at TEXT NOT NULL,
   PRIMARY KEY (run_id, to_revision)
 ) STRICT;
+
+CREATE TRIGGER evidence_run_transitions_no_update
+BEFORE UPDATE ON evidence_run_transitions
+BEGIN SELECT RAISE(ABORT, 'EVIDENCE_TRANSITION_IMMUTABLE'); END;
+
+CREATE TRIGGER evidence_run_transitions_no_direct_delete
+BEFORE DELETE ON evidence_run_transitions
+WHEN EXISTS (SELECT 1 FROM drill_runs WHERE id=OLD.run_id)
+  AND EXISTS (SELECT 1 FROM evidence_jobs WHERE id=OLD.job_id)
+BEGIN SELECT RAISE(ABORT, 'EVIDENCE_TRANSITION_IMMUTABLE'); END;
 ```
+
+Transition rows are append-only application authority, not merely data carrying recomputable
+hashes. The storage migration installs both triggers above in the same schema change as the table.
+No application operation may update a transition. Direct deletion while its run and job remain is
+refused; deletion is reachable only as the foreign-key cascade of deleting the owning durable
+run/job. Re-open and replay assert the triggers exist before trusting stored history. A schema
+writer that can drop migrations is outside the application-corruption boundary; ordinary SQL
+through the application connection cannot coherently rewrite history ([[D2808]]).
 
 The composite foreign key is authoritative: a child cannot repeat a different run or origin from
 its batch. `request_json` parses as the exact `EvidenceBatchRequestV1` below; `job_count` equals its
@@ -1519,6 +1537,14 @@ implementation imports `canonicalizeJson` from `@chess-tabiya/schema/drill-pack`
 lowercase SHA-256 over UTF-8 `chess-tabiya/evidence-job-request/v1\0` plus those canonical bytes; a
 batch digest uses the distinct prefix `chess-tabiya/evidence-batch-request/v1\0` over its complete
 request. These two exported functions are the only writers and verifiers of the columns ([[D2544]]).
+
+Provider response identity uses that same imported RFC-8785 authority, not JSON parse/stringify
+round-trip. The accepted raw response must byte-equal `canonicalizeJson(parsedPayload)` before its
+digest is issued. For Stockfish payloads, `engineId` equals the compiled provider instance and the
+one requested depth/movetime arm equals the stored request. For tablebase payloads, `fen` equals the
+stored request, `sourceId` equals the compiled provider instance and `pieceCount` is derived from
+that parsed FEN rather than trusted from the response. These joins occur before a provider result
+can be sealed and are reasserted inside settlement ([[D2802]], [[D2803]]).
 
 **[[D2565]]:** both functions accept only the brand returned by the corresponding exact v1 parser.
 The job parser rejects missing/extra keys, a wrong schema literal, an unknown kind, invalid search
@@ -1574,6 +1600,16 @@ than omitting the member. Closing and reopening therefore applies the **same val
 bytes**; it never reruns the upgrader. Request bytes are parsed and both canonical job and batch
 digests are rechecked. Unknown/crossed state, origin, consumer, operation, result kind, availability,
 receipt generation or extra field is corrupt storage, not a best-effort job.
+
+The retry union is literal: `{kind:"provider_unavailable",availability,failure?}`,
+`{kind:"shutdown"}`, or `{kind:"expired_lease",failure?}`. Provider unavailability admits only
+`cached_exact_only` or `unavailable`, whose instance set is exactly the compiled singleton provider
+for this job. A failure, when present, is the sealed provider-exchange failure for the same
+exchange operation and normalized job-request digest. The provider-unavailable `empty` arm carries
+the same exact availability/failure authority; the `unavailable` arm has no duplicate `reason`
+field. `capability_not_configured` and `not_applicable` remain the only two-field empty arms. Every
+parsed row also re-derives origin→consumer and request-kind→queued-provider-operation; insertion
+checks are not treated as read authority ([[D2804]]–[[D2806]]).
 
 The strict durable-state protocol is the eleventh-repair authority at
 `tools/d2563-pack-capability-eleventh-author-repair/protocol.typecheck.ts`, superseding the narrower
@@ -1744,6 +1780,12 @@ lease, generation, job request digest or node is stale is discarded and cannot h
 settle the job. This is the before/after-202 distinction [[D2520]] required: provider loss before
 durable admission can still produce a synchronous refusal; provider loss after admission is a
 durable job outcome visible after restart.
+
+The sealed provider interval is inside the lease interval: both its database-observed `requestedAt`
+and `retrievedAt` are no later than the exact stored lease expiry, retrieval is no earlier than
+request, and settlement still observes a live matching lease from the database clock. A response
+that finishes after expiry is stale even when the settlement transaction starts before another
+worker reclaims the row ([[D2807]]).
 
 **Gate F clause 5 — what it now needs, stated because it was blocked on this question.** Clause 5
 (*"pack capabilities and deprecations have a compatibility policy"*) is **unblocked**: the policy is
@@ -2424,6 +2466,23 @@ passes 7/7 fresh falsifiers. Exact receipt:
 `planning/pack-capability-contract/sixteenth-fresh-independent-buildability-review-2026-09-05.md`.
 Production remains unauthorized pending a bounded repair and another genuinely fresh review.
 
+## Sixteenth author repair (2026-09-05)
+
+The bounded repair closes [[D2802]]–[[D2808]] at contract tier. Engine and tablebase payloads now
+join their exact stored search/FEN operands and compiled provider instance before sealing and again
+at settlement. Raw provider bytes must equal the repository's RFC-8785 canonical image. Retry,
+empty and unavailable values parse as closed unions carrying the same exact provider availability
+and optional sealed failure receipt, while every durable read re-derives both routing maps.
+
+Provider request/retrieval timestamps must fall inside the exact database-issued lease. The
+transition table is now append-only application authority: same-migration SQLite triggers reject
+updates and direct deletion while preserving whole-owner cascade deletion, and replay requires
+those guards before trusting history. `make pack-capability-sixteenth-author-repair` retains the
+complete predecessor chain and passes 7/7 new repair groups. Exact receipt:
+`planning/pack-capability-contract/sixteenth-author-repair-2026-09-05.md`. This remains disposable
+author evidence; another genuinely fresh review and the accepted provider-exchange dependency both
+gate acceptance and production implementation.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -2655,6 +2714,14 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     receipt. Terminal clocks are observed canonical instants, never placeholders. Independent
     fixtures fail expired leases, invented values, crossed identities/objectives, partial terminal
     rows, coordinated revision rewrites and literal clocks.
+30. **Provider payload, retry, time and history authority are exact ([[D2802]]–[[D2808]]).** The
+    provider result is RFC-8785 canonical and its kind-specific source/search/FEN operands equal the
+    stored request and compiled provider. Retry and terminal absence parse only their closed exact
+    availability/failure arms; origin fixes consumer and kind fixes provider operation on every
+    read. Requested/retrieved instants fall inside the exact lease. Retained transitions reject
+    update and direct delete at the storage boundary while whole-owner cascade deletion remains
+    legal. Independent fixtures cross each operand, reorder equal JSON, invent retry/terminal
+    fields, cross routing, finish after expiry, and coherently rewrite/delete history; each fails.
 
 ## Discharges
 
@@ -2729,6 +2796,11 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-09-05 (**[[D2802]]–[[D2808]] sixteenth author repair**): joined provider payloads to stored
+  requests/provider identities, required shared RFC-8785 bytes, closed retry/unavailable unions and
+  routing joins, fenced provider time by lease expiry, and made transition rows append-only under
+  SQLite authority. `make pack-capability-sixteenth-author-repair` retains the chain and passes 7/7
+  new groups. Fresh review and provider-exchange acceptance still gate implementation.
 - 2026-09-05 (**[[D2771]]–[[D2778]] fifteenth author repair**): added one exhaustive durable-state
   parser, database-observed expiry/terminal clocks, canonical provider bytes and kind-specific
   values, exact objective joins, exact lease/request authority, and a retained before/after

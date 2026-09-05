@@ -325,12 +325,12 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Author-repair pack capability's seven payload/state/time/history blockers, then fresh-review it; independently review shared-resource bootstrap and longitudinal storage; do not implement a draft contract early.",
+        "nextAction": "Fresh-review the sixteenth pack-capability repair; independently review shared-resource bootstrap and longitudinal storage; do not implement a draft contract early.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "The sixteenth fresh pack-capability review returns seven executable blockers: provider payloads can contradict their jobs, result bytes and retry/terminal states are not canonical/closed, durable identities cross, response time exceeds the lease, and the transition journal can be coherently rewritten. Pack schema and evidence-job storage remain held.",
+          "summary": "The sixteenth pack-capability author repair closes seven contract blockers with request-bound provider payloads, canonical response bytes, closed retry/terminal unions, re-derived routing, lease-bounded response time and append-only transition storage. Pack schema and evidence-job storage remain held for fresh review and dependency acceptance.",
           "impact": "held",
-          "evidence": ["planning/pack-capability-contract/sixteenth-fresh-independent-buildability-review-2026-09-05.md", "tools/d2802-pack-capability-sixteenth-fresh-review/review.test.mjs", "rfc/pack-capability-contract.md", "rfc/README.md"]
+          "evidence": ["planning/pack-capability-contract/sixteenth-author-repair-2026-09-05.md", "tools/d2802-pack-capability-sixteenth-author-repair/contract.test.mjs", "rfc/pack-capability-contract.md", "rfc/README.md"]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
       },

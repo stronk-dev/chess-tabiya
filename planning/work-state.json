@@ -22591,7 +22591,7 @@
       "id": "D2802",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5c85795b214aca6de178f45d9d4b32b7e9495b028d11e8ea57ef82542f81bdb4",
+      "sourceDigest": "sha256:c3a956f100b096447628cb84177f5087b2e414ddfa9dfcf3bcef0b0af950f073",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:pack-capability-contract.md"
@@ -22600,7 +22600,7 @@
       "id": "D2803",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c54c9eb68b08e8948ba0d489737cdb748cbf86c441166a6abd67a430b68b6e65",
+      "sourceDigest": "sha256:742d3860af0671a9a6ea2d0e0a69b47d76bb3b23ef5e9105f98bf8fe90800a49",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:pack-capability-contract.md"
@@ -22609,7 +22609,7 @@
       "id": "D2804",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3267c1a71f7c6224c49ff199fa6de117349110cb4ba4debacefb68b564bdf366",
+      "sourceDigest": "sha256:c402b930c3c81ccbdf124964a06b0ae34d6f34cc6755da1d9a24da848275ddec",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:pack-capability-contract.md"
@@ -22618,7 +22618,7 @@
       "id": "D2805",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1cf9a0ed88d35ddc08b98715e789cfee9b0b29eaffc822af4de383fef70a754e",
+      "sourceDigest": "sha256:e0ecacb588f1ec0bc537e414a0d403cdd91dfbb39a20281ed34b836bd42fb8e4",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:pack-capability-contract.md"
@@ -22627,7 +22627,7 @@
       "id": "D2806",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4d8af4fc3a3ce29f3a306114ab1392e38a335fa926cd54020113eb8bf77679e9",
+      "sourceDigest": "sha256:23678d2dc791729a7e08cea0e41e0c795e0e1438e2339d3bcc9a0c3809103818",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:pack-capability-contract.md"
@@ -22636,7 +22636,7 @@
       "id": "D2807",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:80d1fce31d455d687353ef248272a1085beed7673d034d233797e4cbd5e4bd43",
+      "sourceDigest": "sha256:53b0a6f7a2525433b1cafa12a139fa172a3cd5e9616b61154c7af81a574a972b",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:pack-capability-contract.md"
@@ -22645,7 +22645,7 @@
       "id": "D2808",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:bf80e1c0e2d8af4f0cee38dd9f6626e79e0a137430ce128a6a96f64292720174",
+      "sourceDigest": "sha256:3f9ad3ba0368f3d28cb22c0746f30c87e2971bbd2600cf0d8ac4768442295170",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:pack-capability-contract.md"

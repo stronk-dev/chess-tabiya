@@ -284,6 +284,14 @@ recomputed hashes. `make pack-capability-sixteenth-fresh-review` retains the com
 chain and passes 7/7 new falsifiers. Pack-schema/storage implementation remains held. Receipt:
 `planning/pack-capability-contract/sixteenth-fresh-independent-buildability-review-2026-09-05.md`.
 
+The same-day sixteenth author repair closes [[D2802]]–[[D2808]] at contract tier. Exact
+request/payload/provider joins, shared RFC-8785 response bytes, closed retry/terminal unions,
+re-derived durable routing, lease-bounded provider time and append-only SQLite transition authority
+now execute under `make pack-capability-sixteenth-author-repair`; the retained predecessor chain
+and 7/7 repair groups pass. Pack-schema/storage implementation remains held pending another fresh
+review and accepted provider exchange. Receipt:
+`planning/pack-capability-contract/sixteenth-author-repair-2026-09-05.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

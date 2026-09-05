@@ -22,7 +22,10 @@ import {
 
 const rfc = readFileSync("rfc/pack-capability-contract.md", "utf8");
 const section = rfc.match(/#### §5\.2 Queued evidence([\s\S]*?)\n### §6\./u)?.[1] ?? "";
-const ddl = section.match(/```sql\n([\s\S]*?)\n```/u)?.[1] ?? "";
+// This review reproduces the pre-sixteenth-repair schema. Later RFC amendments must not silently
+// repair the historical falsifier before the successor author target runs.
+const ddl = (section.match(/```sql\n([\s\S]*?)\n```/u)?.[1] ?? "")
+  .replace(/\nCREATE TRIGGER evidence_run_transitions_no_update[\s\S]*$/u, "");
 const fen = "8/8/8/8/8/8/8/K6k w - - 0 1";
 
 function objectiveRequest() {

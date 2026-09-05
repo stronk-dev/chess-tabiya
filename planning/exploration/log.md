@@ -16062,3 +16062,19 @@ chain and passes 7/7 new falsifiers. Exact receipt:
 `planning/pack-capability-contract/sixteenth-fresh-independent-buildability-review-2026-09-05.md`.
 Next is a bounded repair using the canonical byte authority, exact provider/state joins and an
 append-only history authority, followed by another genuinely fresh review.
+
+## 2026-09-05 — pack capability sixteenth author repair
+
+**What landed:** bounded author evidence for [[D2802]]–[[D2808]]. No production schema, migration,
+storage, provider, route, client, pack or content byte changed; D560 remains held.
+
+**What changed:** provider payloads now join exact request/provider operands and shared RFC-8785
+bytes; retry and unavailable terminal values have closed availability/failure unions; durable reads
+re-derive both routing maps; response time is fenced by the lease; and same-migration SQLite guards
+make retained transitions append-only under application authority.
+
+**Evidence/next:** `make pack-capability-sixteenth-author-repair` retains the predecessor chain,
+reproduces all 7/7 prior attacks against the pinned pre-repair schema and passes 7/7 repair groups.
+Exact receipt: `planning/pack-capability-contract/sixteenth-author-repair-2026-09-05.md`. Another
+genuinely fresh independent review and accepted provider exchange still gate acceptance and all
+production implementation.
