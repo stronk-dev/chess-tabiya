@@ -15808,3 +15808,22 @@ variety, full UX and one human-authored official campaign.
 
 **Next:** fresh-review the sixth repair, keep every successor milestone open, and authorize no
 campaign schema/migration/API/client/content work before foundation acceptance.
+
+## 2026-09-05 — Safe deployment profiles third author repair
+
+**What landed:** a bounded RFC-tier repair for [[D2730]]–[[D2735]] and maintained `make
+safe-deployment-third-author-repair` coverage. No production server, Compose, Caddy, workflow,
+release, content, archive or protected-design byte changed.
+
+**What changed:** expected-digest mounted-image validation covers the complete profile relation;
+checks and the full terminal receipt union share one sealed deployment subject; live TLS proof owns
+trust/chain/clock/SAN validation; readiness composes canonical storage and deployment attestations;
+and an fsynced fixed-file journal surrounds durable database effects, exact target readiness and
+ingress publication across restart. The target retains both prior author gates and passes 6/6 new
+groups plus strict TypeScript.
+
+**What is blocked:** `safe-deployment-profiles` remains draft. Production server, Compose, Caddy,
+operator workflows and release proof still require another genuinely fresh independent review.
+
+**Next:** fresh-review the third repair against cross-process identity, receipt verification,
+TLS/readiness provenance and every journal/database/ingress crash boundary before acceptance.

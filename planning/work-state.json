@@ -21942,8 +21942,8 @@
     {
       "id": "D2730",
       "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e58b2d7c422c2c309f7d3a1e9aaac6fc3a74178547a7ee9583a68556dd8b74d7",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:3bf134ab8a8a8c84658150b85e009592de0d4ba0b6c444d89511096b36571fac",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:safe-deployment-profiles.md"
@@ -21951,8 +21951,8 @@
     {
       "id": "D2731",
       "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2bf24d40d8dd989378842dd1a73caea355fa52022d02bece005022844dea6617",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:8dc9eb4802bcdbea5a7031d4d8d96a27e3d9fe4a7a9676a57e4efbb86eadcabb",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:safe-deployment-profiles.md"
@@ -21960,8 +21960,8 @@
     {
       "id": "D2732",
       "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e3abcdc4285076184d092e26319b7d6668f5cc3a2c776bcf307885930885ecf4",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:77c6aebe969a2b07af07f22ee864d7880fddbb3f1bbd958fd489d2dbe51a6a27",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:safe-deployment-profiles.md"
@@ -21969,8 +21969,8 @@
     {
       "id": "D2733",
       "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ad0a137c5010d2d4d8025121b426f8585254e3df929b631ca5a6c2bf12f99e2a",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:a99a880a91bf2196d644893a93ed6b046412799a008141721e207f31f465816c",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:safe-deployment-profiles.md"
@@ -21978,8 +21978,8 @@
     {
       "id": "D2734",
       "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0b16317c1996ef9506f80b2b2646291acc6e33bc0f20293db9cb9221a8ab37bf",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:d9c68a5d8e713755302dac025fbbe1d355357c3b3c17543becbc976517283501",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:safe-deployment-profiles.md"
@@ -21987,8 +21987,8 @@
     {
       "id": "D2735",
       "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:25e347a7a6228b245b808a35fef489ceb57dca9ad01267394852baa3da3559e8",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:e86a22ed55153599a288bc722c4fbaf0fc2769f6b73452f301a64bd47ad415da",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:safe-deployment-profiles.md"

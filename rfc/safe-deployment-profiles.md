@@ -1,12 +1,10 @@
 # RFC: Safe deployment profiles and reverse proxy
 
-- **Status:** **draft — third fresh independent review returned the second author repair on
-  [[D2730]]–[[D2735]].** The mounted-image relation is partial; sealed checks share no deployment
-  subject; the executable object is not the declared receipt protocol; TLS fingerprints are not a
-  sealed validation result; readiness bypasses its storage dependency; and profile migration is an
-  in-memory enum rather than crash-durable effect authority. `make
-  safe-deployment-third-fresh-review` retains both author gates and reproduces 6/6. Implementation
-  remains unauthorized.
+- **Status:** **draft — third author repair completed [[D2730]]–[[D2735]]; another genuinely fresh
+  independent buildability review is required.** One expected-digest compiled image, sealed
+  deployment subject, complete receipt union, live TLS authority, composed readiness proof and
+  fsynced restart-resumable migration are executable in `make
+  safe-deployment-third-author-repair`. Production implementation remains unauthorized.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
@@ -58,6 +56,34 @@ handshake/trust/clock proof. [[D2734]] shows deployment readiness bypasses the c
 readiness response this RFC depends on. [[D2735]] shows the advertised crash-resumable migration is
 a caller-authored in-memory state/effect progression. Exact receipt:
 `planning/safe-deployment-profiles/third-fresh-independent-buildability-review-2026-09-05.md`.
+
+## Third author repair (2026-09-05)
+
+The six returned seams are repaired as one release authority rather than six independent checks:
+
+1. **[[D2730]]:** mounted canonical bytes are accepted only when their SHA-256 equals the expected
+   renderer identity and every field matches the complete local/appliance/hosted compiler relation.
+2. **[[D2731]]:** one privately sealed deployment subject owns operation, profile, canonical config
+   and image, immutable artifacts and compiler-derived public origin. Every passed check is sealed
+   to that exact subject; success cannot combine checks, origins or artifacts across subjects.
+3. **[[D2732]]:** the executable receipt is the declared versioned protocol, including succeeded,
+   refused, failed and cancelled arms, exact checks/services/artifacts, immutable 40-lower-hex
+   application revision, safe elapsed time and canonical unknown-input verification.
+4. **[[D2733]]:** proxied live authority is constructed only from an exact-host handshake whose
+   leaf/SPKI/chain/trust-root digests, chain-validation result, singleton SAN and canonical UTC
+   validity window all pass at the observed instant. Structural clones are not live authority.
+5. **[[D2734]]:** readiness is one sealed join between canonical storage body
+   `{representativeData:true,status:"ready",storageVersion}` and the exact deployment revision and
+   compiled-image attestation of the same subject.
+6. **[[D2735]]:** profile migration uses the fixed operational state file with exclusive temporary
+   creation, file fsync, rename and parent fsync; session and token effects commit in separate
+   idempotent SQLite transactions; restart reparses the full from/to journal; target readiness and
+   the ingress switch must both be sealed to the intended target before atomic active publication.
+
+`make safe-deployment-third-author-repair` retains the first and second author gates and passes six
+new able-to-fail groups plus strict TypeScript. Exact receipt:
+`planning/safe-deployment-profiles/third-author-repair-2026-09-05.md`. This is author evidence, not
+acceptance or production implementation; another genuinely fresh review remains mandatory.
 
 ## Summary
 
@@ -227,8 +253,10 @@ interface CompiledDeploymentImageV1 {
 Its canonical bytes are written into an operation-owned directory, fsynced, mounted read-only at
 the fixed path `/run/tabiya/deployment.json`, and covered by `compiledConfigImageDigest`. The
 renderer and Caddy generator consume the branded in-memory source; the separate application process
-reparses the mounted canonical image, recomputes its digest, validates every profile/origin/listen/
-cookie relation, and refuses before opening storage or HTTP on mismatch. Its internal readiness
+receives the renderer's expected digest, reparses the mounted canonical image, recomputes and
+compares that digest, and validates the complete profile matrix: exact internal listen host/port,
+origin, proxy, cookie, hostname and TLS-mode relation for the selected arm. Canonical but
+profile-impossible bytes are refused before opening storage or HTTP. Its internal readiness
 attestation returns that image digest to `deployment-admin`; Caddy strips the attestation from public
 responses. Compose labels, start/probe receipts and the attestation must all equal the renderer's
 image digest. A changed mount therefore cannot produce success or receive public traffic
@@ -292,7 +320,9 @@ labels make restart reconciliation explicit rather than replaying a guessed half
 crash resumes the earliest incomplete phase after checking the recorded database effect and
 artifact digests. It never rolls back to valid old sessions after invalidation. Old LAN DNS, client
 trust and certificate removal remain operator effects shown before confirmation; the command cannot
-claim those external effects. A fixture crashes before/after every database transaction, state
+claim those external effects. `target_ready` accepts only the composed readiness authority whose
+profile, origin, config digest and compiled-image digest equal the journal's complete target state;
+`active` additionally requires a sealed ingress-switch receipt for that same target. A fixture crashes before/after every database transaction, state
 write, bind and fsync and reaches either the old active generation before invalidation or the new
 active generation with all old sessions/tokens invalid ([[D2618]]).
 
@@ -666,9 +696,12 @@ interface TlsIdentityV1 {
   readonly leafSha256: Sha256;
   readonly spkiSha256: Sha256;
   readonly chainSha256: Sha256;
+  readonly trustRootSha256: Sha256;
+  readonly chainValidated: true;
   readonly subjectAltName: readonly [string]; // exact configured hostname
   readonly notBefore: string;                 // canonical UTC instant
   readonly notAfter: string;
+  readonly observedAt: string;
 }
 ```
 
@@ -683,8 +716,11 @@ success without this identity, or a local success carrying one, is profile-impos
 ### 12. Health, readiness, and failure behavior
 
 - `/healthz` is liveness: the HTTP event loop responds with no provider or database mutation.
-- `/readyz` is readiness: storage is current/verified, static shell is loadable, and application
-  construction completed. Optional provider loss belongs to F12-D and does not make core unready.
+- `/readyz` is readiness: the internal response contains the exact canonical storage proof
+  `{representativeData:true,status:"ready",storageVersion}` plus immutable application revision and
+  compiled-image attestation. `deployment-admin` accepts it only for the same sealed deployment
+  subject after storage is current/verified, static shell is loadable, and application construction
+  completed. Optional provider loss belongs to F12-D and does not make core unready.
 - Caddy's upstream health uses `/readyz`; public `/healthz` and `/readyz` reveal only status and
   immutable release revision, not configuration, paths, table counts, or provider secrets.
 - TLS/certificate/origin/profile validation failure prevents the proxy/app from serving learner
@@ -745,6 +781,7 @@ interface DeploymentReceiptBaseV1 {
   readonly operationId: DeploymentOperationId; // parsed/generated canonical UUID v4
   readonly operation: DeploymentAdminOperation;
   readonly profile: DeploymentProfile;
+  readonly deploymentRevision: string; // exact immutable 40-lower-hex application revision
   readonly configDigest: Sha256;
   readonly compiledConfigImageDigest: Sha256;
   readonly publicUrl: string;   // exactly the compiler-derived canonical publicOrigin
@@ -789,8 +826,10 @@ Successful `check` means the exact rendered artifacts and pins validate without 
 traffic, so certificate is not falsely claimed for an as-yet unstarted ACME/internal deployment.
 Successful `start` means the exact live profile tuple above passed; `services` is structurally
 `["app"]` for local and `["app", "caddy"]` for appliance/hosted. Successful `probe` uses the complete
-profile tuple. The compiler selects the tuple from operation and parsed profile, accepts only
-privately sealed results returned by exact live operations, and rejects empty, missing, extra,
+profile tuple. The compiler selects the tuple from operation and parsed profile, constructs one
+sealed subject from the compiled config/image, immutable artifacts and compiler-derived origin,
+accepts only privately sealed results returned for that exact subject, and rejects cross-subject,
+empty, missing, extra,
 duplicate, reordered, failed, forged or differently operation-bound results. A public enum/boolean
 pass factory does not exist. Local artifacts require all Caddy/TLS fields null; proxy check requires
 static Caddy identity and no invented live certificate; proxy start/probe require the observed TLS
@@ -1032,6 +1071,14 @@ implementation detail.
 
 ## Changelog
 
+- 2026-09-05: third author repair completed [[D2730]]–[[D2735]]. Expected-digest mounted-image
+  validation now covers the complete profile relation; one sealed deployment subject owns checks
+  and receipts; the full canonical terminal union enforces immutable revisions and safe elapsed
+  time; live TLS authority includes trust/clock/SAN proof; readiness composes storage and deployment
+  attestations; and the fixed fsynced journal surrounds durable session/token effects, target
+  readiness and ingress publication. `make safe-deployment-third-author-repair` retains both prior
+  author gates and passes 6/6 new groups plus strict TypeScript. No production, Compose, Caddy,
+  workflow, release, content, archive or protected-design byte changed; fresh review remains.
 - 2026-09-05: third fresh independent review returned the second repair on
   [[D2730]]–[[D2735]]. Six new controls reproduce partial mounted-image validation, detached check
   proof, an incomplete/mutable receipt, ungrounded TLS identity, readiness-contract bypass and

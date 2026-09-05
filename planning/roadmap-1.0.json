@@ -291,7 +291,7 @@
       "rfcs": ["storage-backup-recovery.md", "safe-deployment-profiles.md", "provider-health-degradation.md", "verifiable-runtime-distribution.md"],
       "completion": {
         "evidence": ["not_applicable", "This slice verifies evidence machinery but creates no chess truth."],
-        "state": ["partial", "Schema/register/work/intent checks and three workflows exist; many research harnesses and release states are not enforced."],
+        "state": ["partial", "Schema/register/work/intent checks and three workflows exist; deployment now has an executable third contract repair for mounted config, receipts, TLS, readiness and durable migration, but production release state is not implemented."],
         "api": ["partial", "Health exists; capability/degradation health, readiness, metrics policy, and production-boundary endpoint coverage remain."],
         "experience": ["blocked", "Install, first boot, engine degradation, backup, restore, update, rollback, and failure diagnostics are not one guided operator workflow."],
         "defaults": ["partial", "Compose boots with mock and insecure-cookie development defaults; safe public and private profiles are not complete."],
@@ -432,10 +432,10 @@
         "dependsOn": ["official-content"],
         "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
-          "at": "2026-09-04",
-          "summary": "Safe deployment now has a bounded second author repair for cross-process config, runtime compilation, exact receipts, TLS identity and durable profile migration. Release proof remains blocked on another fresh review, production implementation, official content and complete learner journeys.",
+          "at": "2026-09-05",
+          "summary": "Safe deployment's third author repair now binds expected-digest mounted config, exact checks and the full receipt union to one subject, composes TLS/storage readiness authority, and makes migration effects restart-durable. Release proof remains blocked on fresh review, production implementation, official content and complete learner journeys.",
           "impact": "held",
-          "evidence": ["rfc/safe-deployment-profiles.md", "planning/safe-deployment-profiles/second-author-repair-2026-09-04.md", "planning/safe-deployment-profiles/second-fresh-independent-buildability-review-2026-09-04.md", "planning/roadmap-to-done.md", "deploy/compose.release.template.yaml"]
+          "evidence": ["rfc/safe-deployment-profiles.md", "planning/safe-deployment-profiles/third-author-repair-2026-09-05.md", "planning/safe-deployment-profiles/third-fresh-independent-buildability-review-2026-09-05.md", "planning/roadmap-to-done.md", "deploy/compose.release.template.yaml"]
         },
         "exit": "Every core and breadth capability proves all applicable completion dimensions or has an explicit owner-approved descope; the owner can use the release without interpreting implementation vocabulary."
       }

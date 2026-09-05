@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:14d1b5922f37233cc38f5a2226f7579d88b21873d86e634978391ec26899a988",
+    "roadmap": "sha256:46bba427eca841045dab9192af481dcbcabcce58ca8389f4d6c2c26cb0b47a18",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:9034a4586bc9cae5755a57af084247c3d8ece11adeb54aef6c397ed1452fb316",
-    "rfcRegister": "sha256:2cfa5cad341b492b4100681bc8aa2b575d7c083c4f3d88a96cafa72c03441e86",
+    "workState": "sha256:81c66e997b7d2b5c010c0a4ab1d7e6fc67b1df3bb3648f25103125e921886813",
+    "rfcRegister": "sha256:311454ba93538b8c2a261d1379802114a88a301a52225e2a9fb530aa9f728bcc",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -367,13 +367,13 @@
       ],
       "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
       "latestCheckpoint": {
-        "at": "2026-09-04",
-        "summary": "Safe deployment now has a bounded second author repair for cross-process config, runtime compilation, exact receipts, TLS identity and durable profile migration. Release proof remains blocked on another fresh review, production implementation, official content and complete learner journeys.",
+        "at": "2026-09-05",
+        "summary": "Safe deployment's third author repair now binds expected-digest mounted config, exact checks and the full receipt union to one subject, composes TLS/storage readiness authority, and makes migration effects restart-durable. Release proof remains blocked on fresh review, production implementation, official content and complete learner journeys.",
         "impact": "held",
         "evidence": [
           "rfc/safe-deployment-profiles.md",
-          "planning/safe-deployment-profiles/second-author-repair-2026-09-04.md",
-          "planning/safe-deployment-profiles/second-fresh-independent-buildability-review-2026-09-04.md",
+          "planning/safe-deployment-profiles/third-author-repair-2026-09-05.md",
+          "planning/safe-deployment-profiles/third-fresh-independent-buildability-review-2026-09-05.md",
           "planning/roadmap-to-done.md",
           "deploy/compose.release.template.yaml"
         ]
@@ -1180,7 +1180,7 @@
         ],
         "state": [
           "partial",
-          "Schema/register/work/intent checks and three workflows exist; many research harnesses and release states are not enforced."
+          "Schema/register/work/intent checks and three workflows exist; deployment now has an executable third contract repair for mounted config, receipts, TLS, readiness and durable migration, but production release state is not implemented."
         ],
         "api": [
           "partial",

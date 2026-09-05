@@ -1571,6 +1571,17 @@ gates and reproduces 6/6. The three supported profiles and production release pr
 one author repair and another genuinely fresh review; receipt:
 `planning/safe-deployment-profiles/third-fresh-independent-buildability-review-2026-09-05.md`.
 
+The 2026-09-05 third safe-deployment author repair addresses [[D2730]]–[[D2735]] without claiming
+implementation. Expected-digest loading validates the complete profile relation; checks and the
+full canonical terminal receipt union derive from one sealed config/image/artifact/origin subject;
+TLS proof binds trust, chain, singleton SAN and canonical clock; readiness composes storage and
+deployment attestations; and an atomic fsynced fixed-file journal surrounds durable session/token
+effects, exact target readiness and ingress publication across restart. `make
+safe-deployment-third-author-repair` retains both earlier author gates and passes 6/6 new groups
+plus strict TypeScript. Production profiles and release proof remain held for another genuinely
+fresh review; receipt:
+`planning/safe-deployment-profiles/third-author-repair-2026-09-05.md`.
+
 ## Production surface inventory
 
 ### Client routes
