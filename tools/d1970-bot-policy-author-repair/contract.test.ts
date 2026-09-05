@@ -38,6 +38,10 @@ import {
 import { exactLegalMoves } from "../../packages/runtime/src/legal-moves.js";
 import { makeProviderDelivery, type ProviderScore, type TypedProviderResult } from
   "../d2056-provider-exchange-author-repair/shared-provider-contract.js";
+import {
+  ExchangeAuthority,
+  ProviderRegistry,
+} from "../d2846-provider-health-seventh-author-repair/contract.js";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const sha = (value: string): Sha => `sha256:${value.padEnd(64, "0").slice(0, 64)}`;
@@ -368,43 +372,43 @@ describe("D2221 retained provider delivery authority", () => {
 });
 
 describe("D2222 provider-health joined roster availability", () => {
-  const snapshot = (maia: "available" | "requestable_unverified" | "cached_exact_only" | "unavailable",
-    stockfish?: "available" | "requestable_unverified" | "cached_exact_only" | "unavailable") => ({
-    revision: 9,
-    instances: [
-      { instanceId: "maia-inference" as const, generation: "maia-g1", state: maia === "requestable_unverified" ? "unverified" as const
-        : maia === "cached_exact_only" ? "degraded_cached_only" as const : maia },
-      ...(stockfish === undefined ? [] : [{ instanceId: "stockfish-play" as const, generation: "sf-g1",
-        state: stockfish === "requestable_unverified" ? "unverified" as const
-          : stockfish === "cached_exact_only" ? "degraded_cached_only" as const : stockfish }]),
-    ],
-    operations: [
-      { operationId: "maia.policy_page@1" as const, availability: maia === "unavailable"
-        ? { state: "unavailable" as const, instanceIds: ["maia-inference" as const], reason: "provider_off" }
-        : { state: maia, instanceIds: ["maia-inference" as const] } },
-      ...(stockfish === undefined ? [] : [{ operationId: "stockfish.legal_root_table@1" as const,
-        availability: stockfish === "unavailable"
-          ? { state: "unavailable" as const, instanceIds: ["stockfish-play" as const], reason: "provider_off" }
-          : { state: stockfish, instanceIds: ["stockfish-play" as const] } }]),
-    ],
-  });
-  const receipt = { catalogDigest: BOT_PROFILE_CATALOG_DIGEST, maiaGeneration: "maia-g1",
-    stockfishGeneration: "sf-g1", guardComplete: true } as const;
+  const registryWith = (stockfish: boolean) => new ProviderRegistry([
+    { instanceId: "maia-inference", implementation: "local_service", generation: "maia-g1" },
+    ...(stockfish ? [{ instanceId: "stockfish-play" as const, implementation: "uci_sidecar" as const, generation: "sf-g1" }] : []),
+  ]);
+  const markAvailable = (registry: ProviderRegistry, operation: "maia.policy_page@1" | "stockfish.legal_root_table@1",
+    implementation: "local_service" | "uci_sidecar", generation: string, now: number) => {
+    const exchange = new ExchangeAuthority();
+    const request = exchange.request(operation, implementation, generation, `${operation}-request`);
+    registry.success(request, exchange.success(request, "ready", `${operation}-response`), now);
+  };
 
-  it("keeps baseline independent and requires a matching guard release receipt", () => {
-    expect(profileAvailability(resolveBotProfile("human-baseline.1400@1"), snapshot("available"))).toEqual({ kind: "available", snapshotRevision: 9 });
-    expect(profileAvailability(resolveBotProfile("human-baseline.1400@1"), snapshot("requestable_unverified")))
-      .toEqual({ kind: "available", snapshotRevision: 9 });
-    expect(profileAvailability(resolveBotProfile("human-baseline.1400@1"), snapshot("cached_exact_only")))
-      .toEqual({ kind: "available", snapshotRevision: 9 });
-    expect(profileAvailability(resolveBotProfile("guarded-human.1400@1"), snapshot("available")))
+  it("keeps baseline independent and requires shared current guard authority", () => {
+    const unverified = registryWith(false);
+    const unverifiedSnapshot = unverified.snapshot(0);
+    expect(profileAvailability(resolveBotProfile("human-baseline.1400@1"), unverifiedSnapshot))
+      .toEqual({ kind: "conditional", snapshotRevision: unverifiedSnapshot.revision, reason: "maia_check_required" });
+
+    const baseline = registryWith(false);
+    markAvailable(baseline, "maia.policy_page@1", "local_service", "maia-g1", 1);
+    const baselineSnapshot = baseline.snapshot(1);
+    expect(profileAvailability(resolveBotProfile("human-baseline.1400@1"), baselineSnapshot))
+      .toEqual({ kind: "available", snapshotRevision: baselineSnapshot.revision });
+    expect(profileAvailability(resolveBotProfile("guarded-human.1400@1"), baselineSnapshot))
       .toEqual({ kind: "unavailable", reason: "guard_provider_unavailable" });
-    expect(profileAvailability(resolveBotProfile("guarded-human.1400@1"), snapshot("available", "available")))
-      .toEqual({ kind: "unavailable", reason: "release_receipt_missing_or_stale" });
-    expect(profileAvailability(resolveBotProfile("guarded-human.1400@1"), snapshot("available", "available"), receipt))
-      .toEqual({ kind: "available", snapshotRevision: 9 });
-    expect(profileAvailability(resolveBotProfile("guarded-human.1400@1"), snapshot("available", "available"),
-      { ...receipt, stockfishGeneration: "sf-stale" })).toEqual({ kind: "unavailable", reason: "release_receipt_missing_or_stale" });
+
+    const guarded = registryWith(true);
+    markAvailable(guarded, "maia.policy_page@1", "local_service", "maia-g1", 1);
+    markAvailable(guarded, "stockfish.legal_root_table@1", "uci_sidecar", "sf-g1", 2);
+    const snapshot = guarded.snapshot(2);
+    expect(profileAvailability(resolveBotProfile("guarded-human.1400@1"), snapshot))
+      .toEqual({ kind: "conditional", snapshotRevision: snapshot.revision, reason: "release_receipt_required" });
+    const receipt = guarded.releaseReceipt(snapshot);
+    expect(profileAvailability(resolveBotProfile("guarded-human.1400@1"), snapshot, receipt))
+      .toEqual({ kind: "available", snapshotRevision: snapshot.revision });
+    guarded.changeGeneration("stockfish-play", "sf-g2");
+    expect(profileAvailability(resolveBotProfile("guarded-human.1400@1"), guarded.snapshot(2), receipt))
+      .toEqual({ kind: "conditional", snapshotRevision: guarded.snapshot(2).revision, reason: "guard_check_required" });
   });
 });
 
@@ -456,13 +460,14 @@ describe("D2226 pre-provider retry and serialized concurrent commit", () => {
     const profile = resolveBotProfile("guarded-human.1400@1");
     expect(beginBotOperation({ request, root: authority.identity, writerLeaseDigest: sha("lease"), profile, seed: 7, previous: envelope }))
       .toEqual({ kind: "replayed_idempotent", envelope });
-    expect(profileAvailability(profile, { revision: 10, instances: [
-      { instanceId: "maia-inference", generation: "later", state: "unavailable" },
-      { instanceId: "stockfish-play", generation: "later", state: "unavailable" },
-    ], operations: [
-      { operationId: "maia.policy_page@1", availability: { state: "unavailable", instanceIds: ["maia-inference"], reason: "provider_off" } },
-      { operationId: "stockfish.legal_root_table@1", availability: { state: "unavailable", instanceIds: ["stockfish-play"], reason: "provider_off" } },
-    ] })).toEqual({ kind: "unavailable", reason: "maia_unavailable" });
+    const registry = new ProviderRegistry([
+      { instanceId: "maia-inference", implementation: "local_service", generation: "later" },
+      { instanceId: "stockfish-play", implementation: "uci_sidecar", generation: "later" },
+    ]);
+    const exchange = new ExchangeAuthority();
+    const providerRequest = exchange.request("maia.policy_page@1", "local_service", "later", "request");
+    registry.failure(providerRequest, exchange.failure(providerRequest, "network"), 1);
+    expect(profileAvailability(profile, registry.snapshot(1))).toEqual({ kind: "unavailable", reason: "maia_unavailable" });
   });
 
   it("replays a byte-identical concurrent winner and conflicts on changed delivered bytes", () => {

@@ -19035,48 +19035,48 @@
     },
     {
       "id": "D2407",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7a89ed734d5abf0b9858e021aaa711a2f7bce20b3b7e805410a4d5f21ff16573",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d828aac5541eece6a66230f21fea7aa53b0fb4c3fb08a7a413bc8fa6ff09c5a9",
       "uxItems": [],
-      "owner": "bot-play",
-      "blocker": "rfc:bot-policy.md"
+      "evidence": "| D2407 ✅ | **THE BOT AUTHOR SAMPLER APPLIED TOP-P TO UNNORMALIZED TEMPERED WEIGHTS.** It now normalizes before membership and executes the actual compiler against the registered sampler over the complete three-row control | ✅ contract repaired 2026-09-05 — `make bot-policy-fourth-author-repair`; fresh review still gates implementation |",
+      "evidenceKind": "closeout-prose"
     },
     {
       "id": "D2408",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f840a75d69b9b0a1cca150a7225b27e82613f25a30ad661087592ef32335d7b1",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f2ada87a3328b8084b62fb0588bcd78b93bf5bc161de599513e42bb6290c018f",
       "uxItems": [],
-      "owner": "bot-play",
-      "blocker": "rfc:bot-policy.md"
+      "evidence": "| D2408 ✅ | **THE DETERMINISTIC BOT DECISION DIGEST INCLUDED DELIVERY TIMESTAMPS.** Complete delivery provenance remains recorded while a closed semantic projection excludes only the three clocks; clock and response-identity controls prove the split | ✅ contract repaired 2026-09-05 — `make bot-policy-fourth-author-repair`; fresh review still gates implementation |",
+      "evidenceKind": "closeout-prose"
     },
     {
       "id": "D2409",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:42e6da035aef33158c47a91976ff2f90a1b0ed575fb2da42eca2c918792a62d2",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:96eeb3cd3a568f67ffbeb9d149dbdec072602d06c98746b078a6c83ab0315369",
       "uxItems": [],
-      "owner": "bot-play",
-      "blocker": "rfc:bot-policy.md"
+      "evidence": "| D2409 ✅ | **THE BOT SAVE/RELOAD FALSIFIER COMPARED THE CALLER TO ITSELF.** One unknown-byte parser now rederives decision, pre-provider, commit and operation identities, cross-checks duplicated operands and seals the parsed envelope; mutation matrices cover every deterministic family | ✅ contract repaired 2026-09-05 — `make bot-policy-fourth-author-repair`; fresh review still gates implementation |",
+      "evidenceKind": "closeout-prose"
     },
     {
       "id": "D2410",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:6be5ab58b879bbb7f5168563e9b1407bc80f4c276af412acc8c3d0dc265d0170",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:022adc6cbe399b938d2481a838fa0f5e06b1752c0e0f8a702f86112974a29177",
       "uxItems": [],
-      "owner": "bot-play",
-      "blocker": "rfc:bot-policy.md"
+      "evidence": "| D2410 ✅ | **THE BOT AUTHOR CONTRACT RECREATED PROVIDER-HEALTH AUTHORITY.** The four local declarations are deleted; snapshot, receipt, selector and assertion now come directly from the provider-health author checkpoint, and a structural substitute fails | ✅ contract repaired 2026-09-05 — `make bot-policy-fourth-author-repair`; fresh review still gates implementation |",
+      "evidenceKind": "closeout-prose"
     },
     {
       "id": "D2411",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2739deb34ccde4265620621ed19ea740cf02731ec494ff521ac894adcd61b360",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9d58a8635900580c94003f59cf6417736e48f83c18112e10c5ae53016592cad2",
       "uxItems": [],
-      "owner": "bot-play",
-      "blocker": "rfc:bot-policy.md"
+      "evidence": "| D2411 ✅ | **REQUEST-SPECIFIC CACHED PROVIDER HEALTH WAS PROMOTED TO GENERAL BOT AVAILABILITY.** Unverified, recovering and cached-exact states now remain named conditionals; a real unrelated exact-cache hit cannot enable the roster profile, and guarded availability also requires a current shared receipt | ✅ contract repaired 2026-09-05 — `make bot-policy-fourth-author-repair`; fresh review still gates implementation |",
+      "evidenceKind": "closeout-prose"
     },
     {
       "id": "D2412",

@@ -16338,3 +16338,20 @@ can no longer pass while this maintained contract is red.
 `planning/evidence-foundation-ux/review-evidence-compiler-third-author-repair-2026-09-05.md`.
 Another genuinely fresh independent review plus the declared recorded-path, provider, value,
 presentation and module dependencies still gate acceptance and production.
+
+## 2026-09-05 — Bot policy fourth author repair
+
+**What landed:** repaired [[D2407]]–[[D2411]] at contract tier. The bot compiler now normalizes
+tempered mass before top-p, derives deterministic identity from a clock-free semantic source image
+while retaining complete delivery provenance, parses unknown durable bytes by rederiving both
+records, consumes provider-health authority directly, and keeps exact-cache health
+request-conditional. No production bot, roster, route, schema, migration or content byte changed.
+
+**What changed:** the five third-review blockers are closed in the author model, and the fourth
+repair target is enrolled in ordinary governance verification. `make bot-policy-fourth-author-repair`
+passes the 31 retained bot tests, six new inversion controls and strict TypeScript.
+
+**Evidence/next:** exact receipt:
+`planning/platform-alignment/bot-policy/fourth-author-repair-2026-09-05.md`. Another genuinely fresh
+independent review plus provider-health and shared-resource dependencies still gate acceptance and
+production implementation.

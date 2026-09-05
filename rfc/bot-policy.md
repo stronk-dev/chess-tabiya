@@ -1,12 +1,13 @@
 # RFC: Bot policy
 
-- **Status:** **draft — RETURNED by the third fresh independent review 2026-08-31 on
-  [[D2407]]–[[D2411]].** The D2219–D2226 repair retains its exact model, legal-board classifier,
-  delivery, route and concurrency improvements, but the author sampler applies top-p before
-  normalization; deterministic identity hashes delivery timestamps; save/reload accepts a forged
-  decision; provider-health types are copied; and exact-cache state is promoted to global roster
-  availability. `make bot-policy-third-fresh-review` passes 5/5 as the blocker reproduction.
-  **Acceptance and implementation remain blocked** on author repair, another fresh review,
+- **Status:** **draft — fourth author repair completed 2026-09-05 on
+  [[D2407]]–[[D2411]]; another fresh independent review is required.** The executable author
+  boundary now normalizes tempered mass before top-p, separates complete delivery provenance from
+  the clock-free derivation image, parses unknown durable bytes by rederiving every decision and
+  operation identity, imports provider-health authority directly, and exposes cached-exact health
+  only as request-conditional. `make bot-policy-fourth-author-repair` passes the retained 31 arms,
+  six new inversion controls and strict TypeScript.
+  **Acceptance and implementation remain blocked** on another fresh review,
   accepted provider health, and the shared-resource bootstrap/register claim. No
   implementation is authorized. Claims 0.18/migration remain held. *(Prior checkpoints:
   implementing; accepted 2026-08-22; draft; D1601–D1609 author-amended; D1970–D1976
@@ -136,6 +137,17 @@ owns only bot-specific derivation, policy projection and the run-bound append. R
 mass, legal-set equality and feature coverage are three separate facts. A retry replays its durable
 event envelope; it never recreates equality by recomputation. If Maia supplies no distribution,
 there is no base distribution and therefore no move.
+
+**2026-09-05 fourth author repair.** Complete provider delivery remains beside each decision as
+provenance, but deterministic identity projects it without `requestedAt`, `retrievedAt` or
+`servedAt`; request, endpoint, generation, requested/actual model, response digest, delivery kind,
+cache identity and payload remain covered. Persistence has one parser over unknown bytes: it
+checks the closed shapes, rederives decision/pre-provider/commit/operation digests, cross-checks
+every duplicated root/profile/seed/source/move operand, and returns a newly sealed immutable
+envelope. Bot roster state imports provider health's snapshot/receipt selectors directly. An
+unverified or recovering dependency is conditional, and `cached_exact_only` means
+`exact_request_required`—never general profile availability. The executable repair is an author
+checkpoint, not production implementation or acceptance.
 
 ## Motivation
 
@@ -337,8 +349,11 @@ pinned image at MultiPV-20: median
 achieved Elo (O8.4, [[D344]]).
 
 **§2.2 Sampler** — `sampler.maia_reconstruction@1`: reconstruct
-`softmax(logits/T)` from raw mass as `p^(1/T)`, apply the pinned cumulative `≤ topP`
-rule forcing top-1, renormalize. Parameters (T, topP, completeness threshold — default
+`softmax(logits/T)` from raw mass as `p^(1/T)`, **normalize that complete tempered page before
+testing top-p membership**, apply the pinned cumulative `≤ topP` rule forcing top-1, then
+renormalize the retained set. Applying the threshold to raw powered values is forbidden: the
+three-row `0.5/0.3/0.2` control must drop the third row and remain set/value-equal to the registered
+production sampler. Parameters (T, topP, completeness threshold — default
 0.97, below the measured minimum) are part of the profile, not the request. Parameter
 domains are compiled, not assumed: **T > 0** (`p^(1/T)` is undefined at zero, and
 Temperature 0 is already refused doctrine — *"a modal opponent is a different product"*,
@@ -670,14 +685,17 @@ availability/degraded state from the same record rather than rewriting it as per
 
 `profileAvailability` consumes the exact provider-health snapshot revision and operation
 availability for `maia.policy_page@1` and, for guarded families,
-`stockfish.legal_root_table@1`. `available`, request-specific `cached_exact_only`, and
-`requestable_unverified` are requestable states; `unavailable` is not. Baseline requires only the
+`stockfish.legal_root_table@1`. Only provider-health `available` is generally available.
+`requestable_unverified` and `recovering` project to named conditional roster states;
+`cached_exact_only` projects to `exact_request_required`, because a roster card has no position or
+request digest with which to prove a hit. `unavailable` is unavailable. Baseline requires only the
 Maia operation. Guarded and pawn-forward additionally require the Stockfish operation and one
-`BotReleaseReceipt` whose catalog digest, Maia generation, Stockfish generation and
-`guardComplete: true` match that snapshot. Missing/stale receipts make only those guarded families
-unavailable. The snapshot, operation result and generation semantics are imported from provider
-health's [[D2364]] checkpoint; this RFC owns only the profile join and cannot recreate health from
-configuration presence.
+current provider-health `ProviderReleaseReceipt` whose snapshot digest, revision and Maia/
+Stockfish generations match the exact snapshot. A missing receipt is conditional; a forged,
+cross-registry or stale receipt is unavailable. The snapshot, operation result, release receipt
+and generation semantics are imported from provider health's [[D2364]] checkpoint; this RFC owns
+only the profile join and defines no bot-private health declaration or configuration-presence
+shortcut.
 
 **§4.4 Candidate generation.** The [[D810]] evidence basis is the union the owner named —
 Maia policy mass ∪ book/explorer frequency ∪ engine multipv — realized in v1 as: the
@@ -880,13 +898,23 @@ map, forged execution or structurally matching plain object is rejected, includi
 as` double cast ([[D1972]]).
 
 The deterministic decision deliberately contains no request id, writer lease, elapsed time or
-delivery timestamps. Its digest covers exact root, profile, seed, exact provider source/payload
-identities, transformations and sampled move. `compileBotPolicyEventEnvelope` accepts the sealed
+delivery timestamps. Its digest covers exact root, profile, seed, and a semantic projection of each
+provider delivery containing every field except `requestedAt`, `retrievedAt` and `servedAt`, plus
+transformations and sampled move. The complete delivery and its time-bearing delivery digest remain
+in the record for provenance and commit identity. `compileBotPolicyEventEnvelope` accepts the sealed
 decision plus parsed request, writer lease and allocated event sequence. `operationDigest` uses the
 canonical operation image described in §4.1 and excludes timing, the resulting event-head digest
 and itself. The surrounding event hash authenticates the entire envelope. An idempotent retry
 returns that already-committed envelope; it does not rerun providers or compare timing-bearing
 objects ([[D1973]]/[[D1974]]). REST and storage accept neither object from the browser.
+
+All storage/replay/export reads pass unknown bytes through one `parseBotPolicyEventEnvelope`
+authority. It rejects extra or missing fields, validates the exact catalog profile and provider
+input subjects, rederives the semantic decision digest, pre-provider operand, commit operand and
+operation digest, and checks root/profile/seed/provider-delivery/chosen-move equality across the two
+records before sealing a deep immutable result. It also requires the chosen move to carry positive
+final mass. Comparing a persisted digest string with the caller's copy is not validation. Timing is
+shape/range checked but remains outside deterministic operation identity as declared above.
 
 **What this buys, and the law-8 line.** *"It missed your fork because the knight had just
 moved"* — or in v1's honest vocabulary, *"the fork candidate carried 0.03 of the policy's
@@ -1180,7 +1208,8 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
   inputs all fail compilation. Forcing ×3 and quiet ×3 remain measured negative registrations.
 - **A6 — derivation determinism, operation idempotency.** Same exact root/seed/profile and delivered
   Maia/Stockfish payload identities produce a byte-identical `BotPolicyDerivation` digest across
-  restarts; equal-mass ties use `neutralTiebreak` and the composed path records `seedHonored: true`.
+  restarts and across acquisition-time changes; request/model/response/payload changes alter it.
+  Equal-mass ties use `neutralTiebreak` and the composed path records `seedHonored: true`.
   Request id, writer lease and timing occur only in the event-embedded operation record. The parsed
   request and pre-provider digest distinguish writer/root/profile/seed before provider calls; the
   commit digest additionally binds derivation and exact provider identities. *Fails if* elapsed
@@ -1188,8 +1217,10 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
   retry recomputes instead of replaying the committed envelope. It also fails if an advanced-head
   concurrent winner is reported stale before the request winner is compared.
 - **A7 — sampler positive control.** The committed R11 captured production sample remains within
-  0.5 cp and 0.1 pp of reconstruction; the raw display vector breaks the loss bound by >30 cp. The fixture reads the artifact, not
-  restated expected numbers.
+  0.5 cp and 0.1 pp of reconstruction; the raw display vector breaks the loss bound by >30 cp. The
+  fixture reads the artifact, not restated expected numbers. A second fixture executes the actual
+  compiler over `0.5/0.3/0.2` at T=0.8/top-p=0.92 and compares the entire retained move/mass vector
+  with the registered production sampler; summary-only agreement cannot pass.
 - **A8 — atomic persistence and migration.** Move, sealed policy projection, exact root/source/
   candidate digests, layer actions, abstentions and durable operation envelope survive event-log replay
   byte-identically under run 0.18. The append rechecks writer lease, node, branch and event head; a
@@ -1203,7 +1234,8 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
   delivered Maia distribution byte-identical and baseline selectable, make guarded/pawn profiles unavailable when the
   exact provider-health operation state or generation-bound release receipt is red, and never
   present an abstained guard as applied. Baseline ignores Stockfish state; no configuration-presence
-  shortcut exists. Maia unavailable/failed
+  shortcut exists. Unverified/recovering states are conditional and cached-exact-only is
+  `exact_request_required`, never generally available before a position/request exists. Maia unavailable/failed
   returns the typed retryable no-move result and commits no selection event; it never falls through
   to an invented “base” move. A below-floor delivered page runs the same declared seeded sampler and
   records degradation. Prediction/human-split paths remain raw Maia consumers.
@@ -1240,6 +1272,14 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
   its claim-free authority before bot lane 0.18 and retains acquisition persistence for lane 0.26.
   *Fails if* any dependency is called implemented out of order, a copied enum passes, or a green
   author fixture uses fake model/provider identities.
+- **A16 — fourth-return inversion.** `make bot-policy-fourth-author-repair` retains the 31 prior
+  author arms and additionally executes six controls: full-vector sampler equality; clock-invariant
+  but source-sensitive derivation; unknown-byte mutation across every deterministic decision
+  family; mutation across every deterministic operation family while timing remains explicitly
+  outside identity; compile-time/direct use of provider-health snapshot and release authorities;
+  and a real degraded provider registry with an unrelated exact cache that remains conditional.
+  It fails if a bot-private provider-health declaration returns, a structural snapshot is accepted,
+  or either digest is validated against caller-supplied comparison bytes.
 
 ## Third fresh independent return (2026-08-31)
 
@@ -1261,6 +1301,26 @@ operation returns five blockers. Exact evidence and executable controls are in
 `make bot-policy-third-fresh-review` passes 5/5. No catalog, schema, migration, route, roster,
 client or content implementation is authorized until an author repair inverts these controls and
 another fresh independent review passes.
+
+## Fourth author repair (2026-09-05)
+
+The five returns are closed at contract tier without claiming acceptance or production landing:
+
+1. **[[D2407]]:** the compiler normalizes the full tempered page before cumulative top-p and its
+   complete vector is compared with the registered production sampler.
+2. **[[D2408]]:** the decision retains the exact complete delivery but hashes a closed semantic
+   source image that excludes only delivery clocks.
+3. **[[D2409]]:** one parser over unknown stored bytes rederives and cross-checks the decision,
+   pre-provider, commit and operation images before issuing a new runtime seal.
+4. **[[D2410]]:** bot policy imports provider health's `ProviderRegistrySnapshot`,
+   `ProviderReleaseReceipt`, `ProfileAvailability`, selector and receipt assertion; the four local
+   copies are deleted.
+5. **[[D2411]]:** requestable-unverified, recovering and cached-exact states are distinct conditional
+   roster results; only a current available state is globally available, and guarded profiles also
+   require a current shared release receipt.
+
+Reproduction: `make bot-policy-fourth-author-repair` (31 retained tests + 6 inversion tests + both
+strict TypeScript programs). Another fresh independent review remains mandatory.
 
 ## Discharges
 
@@ -1370,3 +1430,9 @@ as a named future measured layer (Open question 4).
   durable reload accepts forged decision fields; provider-health authority is copied; and
   request-specific cache state is advertised globally. Exact review:
   `planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md`.
+- 2026-09-05: fourth author repair closed [[D2407]]–[[D2411]] at contract tier. The sampler now
+  executes normalized top-p, derivation separates clock-free source identity from complete delivery
+  provenance, durable bytes are rederived through one parser, provider-health authority is imported
+  rather than copied, and cached-exact health is request-conditional. `make
+  bot-policy-fourth-author-repair` passes 37 tests plus strict TypeScript. Another fresh review and
+  the already named dependencies still gate acceptance and implementation.

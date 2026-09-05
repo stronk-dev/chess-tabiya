@@ -10,9 +10,17 @@ import {
   type StockfishLegalRootTable,
   type TypedProviderResult,
 } from "../d2056-provider-exchange-author-repair/shared-provider-contract.js";
+import {
+  assertProviderReleaseReceipt,
+  selectProfileAvailability,
+  type ProfileAvailability,
+  type ProviderRegistrySnapshot,
+  type ProviderReleaseReceipt,
+} from "../d2846-provider-health-seventh-author-repair/contract.js";
 import { exactLegalMoves, type ExactLegalMove } from "../../packages/runtime/src/legal-moves.js";
 
 export type { MaiaPolicyPage, ProviderDelivery, ProviderEvidenceDelivery, StockfishLegalRootTable, TypedProviderResult };
+export type { ProfileAvailability, ProviderRegistrySnapshot, ProviderReleaseReceipt };
 
 export const BOT_PROFILE_FAMILIES = Object.freeze(["human-baseline", "guarded-human", "pawn-forward"] as const);
 export const BOT_MODEL_BANDS = Object.freeze([1000, 1400, 1800, 2200] as const);
@@ -172,7 +180,12 @@ const registeredProviderInput = <T, K extends BotProviderOperation>(delivery: Pr
   return Object.freeze({ operation: delivery.acquisition.operation, delivery, deliveryDigest: digest(delivery) });
 };
 
-export function assertPersistedProviderInput<T, K extends BotProviderOperation>(input: RegisteredBotProviderInput<T, K>): void {
+export function assertPersistedProviderInput<T, K extends BotProviderOperation>(value: unknown): asserts value is RegisteredBotProviderInput<T, K> {
+  if (!plainRecord(value) || !exactObjectKeys(value, ["delivery", "deliveryDigest", "operation"])
+    || !plainRecord(value.delivery) || !plainRecord(value.delivery.acquisition)) {
+    throw new TypeError("persisted provider input mismatch");
+  }
+  const input = value as unknown as RegisteredBotProviderInput<T, K>;
   if (input.operation !== input.delivery.acquisition.operation || input.deliveryDigest !== digest(input.delivery)
     || !/^sha256:.{64}$/u.test(input.delivery.acquisition.normalizedRequestDigest)
     || !/^sha256:.{64}$/u.test(input.delivery.acquisition.responseDigest)) {
@@ -389,7 +402,10 @@ export function compileBotPolicyExecution(input: {
     || input.featureSubset.maiaPopulationDigest !== digest(input.source.maiaPage.candidates.map((row) => row.moveUci)))) {
     throw new TypeError("feature population mismatch");
   }
-  const transformed = input.source.maiaPage.candidates.map((row) => ({ moveUci: row.moveUci, mass: row.probability ** (1 / input.profile.sampler.temperature) }));
+  const transformed = normalized(input.source.maiaPage.candidates.map((row) => ({
+    moveUci: row.moveUci,
+    mass: row.probability ** (1 / input.profile.sampler.temperature),
+  })));
   const ranked = [...transformed].sort((left, right) => right.mass - left.mass || digest([input.source.root.identity, left.moveUci]).localeCompare(digest([input.source.root.identity, right.moveUci])));
   const topP: typeof ranked = [];
   let cumulative = 0;
@@ -459,6 +475,45 @@ export interface BotPolicyDecisionRecord {
   readonly derivationDigest: Sha;
 }
 
+type BotPolicyDecisionImage = Omit<BotPolicyDecisionRecord, "derivationDigest" | "sources"> & Readonly<{
+  sources: Readonly<{
+    maia: unknown;
+    stockfish?: unknown;
+    candidateSubsetDigest?: Sha;
+  }>;
+}>;
+
+const semanticProviderInput = <T, K extends BotProviderOperation>(
+  source: RegisteredBotProviderInput<T, K>,
+): unknown => {
+  const { servedAt: _servedAt, acquisition, ...delivery } = source.delivery;
+  const { requestedAt: _requestedAt, retrievedAt: _retrievedAt, ...semanticAcquisition } = acquisition;
+  return {
+    operation: source.operation,
+    delivery: { ...delivery, acquisition: semanticAcquisition },
+  };
+};
+
+const decisionImage = (decision: Omit<BotPolicyDecisionRecord, "derivationDigest">): BotPolicyDecisionImage => ({
+  root: decision.root,
+  profile: decision.profile,
+  seed: decision.seed,
+  sources: {
+    maia: semanticProviderInput(decision.sources.maia),
+    ...(decision.sources.stockfish === undefined ? {} : {
+      stockfish: semanticProviderInput(decision.sources.stockfish),
+    }),
+    ...(decision.sources.candidateSubsetDigest === undefined ? {} : {
+      candidateSubsetDigest: decision.sources.candidateSubsetDigest,
+    }),
+  },
+  returnedProbabilityMass: decision.returnedProbabilityMass,
+  coverage: decision.coverage,
+  layers: decision.layers,
+  considered: decision.considered,
+  chosenMoveUci: decision.chosenMoveUci,
+});
+
 export function projectBotPolicyDecisionRecord(execution: BotPolicyExecution): BotPolicyDecisionRecord {
   if (!EXECUTIONS.has(execution)) throw new TypeError("unsealed policy execution");
   const body = { root: execution.source.root.identity, profile: execution.profile, seed: execution.source.root.seed,
@@ -467,7 +522,11 @@ export function projectBotPolicyDecisionRecord(execution: BotPolicyExecution): B
       ...(execution.featureSubsetDigest !== undefined ? { candidateSubsetDigest: execution.featureSubsetDigest } : {}) },
     returnedProbabilityMass: execution.source.maiaPage.returnedProbabilityMass, coverage: execution.source.coverage,
     layers: execution.layers, considered: execution.considered, chosenMoveUci: execution.chosenMoveUci };
-  const value = Object.freeze({ ...body, sources: Object.freeze(body.sources), derivationDigest: digest(body) });
+  const value = Object.freeze({
+    ...body,
+    sources: Object.freeze(body.sources),
+    derivationDigest: digest(decisionImage(body)),
+  });
   DECISIONS.add(value);
   return value;
 }
@@ -559,56 +618,155 @@ export function commitBotOperation(input: { request: BotOpponentPlyRequest; curr
   return Object.freeze({ kind: "committed", envelope });
 }
 
-export function saveReloadEnvelope(envelope: BotPolicyEventEnvelope): BotPolicyEventEnvelope {
-  const value = JSON.parse(JSON.stringify(envelope)) as BotPolicyEventEnvelope;
-  const { operationDigest, timingMs: _timing, ...operationImage } = value.operation;
-  if (digest(operationImage) !== operationDigest) throw new TypeError("persisted operation digest mismatch");
-  if (value.decision.derivationDigest !== envelope.decision.derivationDigest) throw new TypeError("persisted decision mismatch");
-  assertPersistedProviderInput(value.decision.sources.maia);
-  if (value.decision.sources.stockfish !== undefined) assertPersistedProviderInput(value.decision.sources.stockfish);
-  return Object.freeze({ decision: Object.freeze(value.decision), operation: Object.freeze({ ...value.operation, timingMs: Object.freeze(value.operation.timingMs) }) });
+const plainRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
+const exactObjectKeys = (value: Record<string, unknown>, expected: readonly string[]): boolean => {
+  const actual = Object.keys(value).sort();
+  const wanted = [...expected].sort();
+  return actual.length === wanted.length && actual.every((key, index) => key === wanted[index]);
+};
+
+const deepFreezeValue = <T>(value: T): T => {
+  if (typeof value !== "object" || value === null || Object.isFrozen(value)) return value;
+  for (const child of Object.values(value as object)) deepFreezeValue(child);
+  return Object.freeze(value);
+};
+
+const persistedDecisionKeys = [
+  "chosenMoveUci", "considered", "coverage", "derivationDigest", "layers", "profile",
+  "returnedProbabilityMass", "root", "seed", "sources",
+] as const;
+const persistedOperationKeys = [
+  "chosenMoveUci", "commitOperandDigest", "committedEventSequence", "derivationDigest",
+  "operationDigest", "preProviderOperandDigest", "profileDigest", "providerDeliveryDigests",
+  "requestId", "root", "seed", "timingMs", "writerLeaseDigest",
+] as const;
+
+export function parseBotPolicyEventEnvelope(value: unknown): BotPolicyEventEnvelope {
+  if (!plainRecord(value) || !exactObjectKeys(value, ["decision", "operation"])
+    || !plainRecord(value.decision) || !exactObjectKeys(value.decision, persistedDecisionKeys)
+    || !plainRecord(value.operation) || !exactObjectKeys(value.operation, persistedOperationKeys)) {
+    throw new TypeError("invalid persisted bot envelope");
+  }
+  const decision = value.decision as unknown as BotPolicyDecisionRecord;
+  const operation = value.operation as unknown as BotOperationRecord;
+  if (!plainRecord(decision.root) || !exactObjectKeys(decision.root as unknown as Record<string, unknown>,
+    ["beforeFenDigest", "branchId", "historyDigest", "nodeId", "preCommitEventHeadDigest", "runId"])
+    || !plainRecord(decision.profile) || !plainRecord(decision.sources)
+    || !Array.isArray(decision.layers) || !Array.isArray(decision.considered)
+    || decision.considered.length === 0 || typeof decision.chosenMoveUci !== "string"
+    || !Number.isSafeInteger(decision.seed) || !Number.isFinite(decision.returnedProbabilityMass)
+    || !["bounded_subset", "legal_set_equal"].includes(decision.coverage)) {
+    throw new TypeError("invalid persisted bot decision");
+  }
+  const sourceKeys = Object.keys(decision.sources);
+  if (!sourceKeys.includes("maia") || sourceKeys.some((key) => !["maia", "stockfish", "candidateSubsetDigest"].includes(key))) {
+    throw new TypeError("invalid persisted bot sources");
+  }
+  assertPersistedProviderInput<MaiaPolicyPage, "maia.policy_page@1">(decision.sources.maia);
+  if (decision.sources.maia.operation !== "maia.policy_page@1") throw new TypeError("invalid persisted Maia source");
+  if (decision.sources.stockfish !== undefined) {
+    assertPersistedProviderInput<StockfishLegalRootTable, "stockfish.legal_root_table@1">(decision.sources.stockfish);
+    if (decision.sources.stockfish.operation !== "stockfish.legal_root_table@1") throw new TypeError("invalid persisted Stockfish source");
+  }
+  const catalogProfile = resolveBotProfile(decision.profile.id);
+  if (stable(catalogProfile) !== stable(decision.profile)) throw new TypeError("persisted bot profile mismatch");
+  for (const layer of decision.layers) assertBotLayerAction(layer);
+  for (const row of decision.considered) {
+    if (!plainRecord(row) || !exactObjectKeys(row, ["classifiers", "features", "finalMass", "guard", "moveUci", "rawMass", "reconstructedMass"])
+      || typeof row.moveUci !== "string" || !Array.isArray(row.classifiers) || !Array.isArray(row.features)
+      || !plainRecord(row.guard) || ![row.rawMass, row.reconstructedMass, row.finalMass]
+        .every((mass) => typeof mass === "number" && Number.isFinite(mass) && mass >= 0)) {
+      throw new TypeError("invalid persisted considered move");
+    }
+  }
+  if (!decision.considered.some((row) => row.moveUci === decision.chosenMoveUci && row.finalMass > 0)) {
+    throw new TypeError("persisted chosen move outside distribution");
+  }
+  const { derivationDigest: _derivationDigest, ...body } = decision;
+  if (decision.derivationDigest !== digest(decisionImage(body))) throw new TypeError("persisted decision digest mismatch");
+
+  if (!plainRecord(operation.root) || stable(operation.root) !== stable(decision.root)
+    || operation.profileDigest !== decision.profile.digest || operation.seed !== decision.seed
+    || operation.derivationDigest !== decision.derivationDigest || operation.chosenMoveUci !== decision.chosenMoveUci
+    || !Array.isArray(operation.providerDeliveryDigests) || !plainRecord(operation.timingMs)
+    || !exactObjectKeys(operation.timingMs as unknown as Record<string, unknown>, ["composition", "guard", "maia", "total"])
+    || !Object.values(operation.timingMs).every((duration) => Number.isFinite(duration) && duration >= 0)
+    || !Number.isSafeInteger(operation.committedEventSequence) || operation.committedEventSequence < 0) {
+    throw new TypeError("persisted decision/operation mismatch");
+  }
+  const deliveryDigests = [decision.sources.maia.deliveryDigest,
+    ...(decision.sources.stockfish === undefined ? [] : [decision.sources.stockfish.deliveryDigest])];
+  if (stable(deliveryDigests) !== stable(operation.providerDeliveryDigests)) throw new TypeError("persisted provider digest mismatch");
+  const reconstructedRequest: BotOpponentPlyRequest = {
+    requestId: operation.requestId,
+    expectedNodeId: operation.root.nodeId,
+    expectedBranchId: operation.root.branchId,
+    expectedEventHeadDigest: operation.root.preCommitEventHeadDigest,
+  };
+  if (operation.preProviderOperandDigest !== preProviderOperandDigest({ request: reconstructedRequest,
+    root: operation.root, writerLeaseDigest: operation.writerLeaseDigest, profile: decision.profile, seed: operation.seed })) {
+    throw new TypeError("persisted pre-provider digest mismatch");
+  }
+  if (operation.commitOperandDigest !== digest({ preProviderOperandDigest: operation.preProviderOperandDigest,
+    derivationDigest: decision.derivationDigest, providerDeliveryDigests: deliveryDigests })) {
+    throw new TypeError("persisted commit digest mismatch");
+  }
+  const { operationDigest: _operationDigest, timingMs: _timingMs, ...operationImage } = operation;
+  if (operation.operationDigest !== digest(operationImage)) throw new TypeError("persisted operation digest mismatch");
+
+  const parsedDecision = deepFreezeValue(structuredClone(decision));
+  const parsedOperation = deepFreezeValue(structuredClone(operation));
+  DECISIONS.add(parsedDecision);
+  return Object.freeze({ decision: parsedDecision, operation: parsedOperation });
 }
 
-export type BotProviderInstanceSnapshot =
-  | Readonly<{ instanceId: "maia-inference" | "stockfish-play"; state: "not_configured" }>
-  | Readonly<{ instanceId: "maia-inference" | "stockfish-play"; state: "unverified"; generation: string }>
-  | Readonly<{ instanceId: "maia-inference" | "stockfish-play"; state: "available" | "degraded_cached_only" | "unavailable"; generation: string }>;
-export type BotProviderOperationAvailability =
-  | Readonly<{ state: "available" | "requestable_unverified" | "cached_exact_only"; instanceIds: readonly ("maia-inference" | "stockfish-play")[] }>
-  | Readonly<{ state: "unavailable"; instanceIds: readonly ("maia-inference" | "stockfish-play")[]; reason: string }>;
-export interface BotProviderRegistrySnapshot {
-  readonly revision: number;
-  readonly instances: readonly BotProviderInstanceSnapshot[];
-  readonly operations: readonly Readonly<{ operationId: BotProviderOperation; availability: BotProviderOperationAvailability }>[];
+export function saveReloadEnvelope(envelope: BotPolicyEventEnvelope): BotPolicyEventEnvelope {
+  return parseBotPolicyEventEnvelope(JSON.parse(JSON.stringify(envelope)));
 }
-export interface BotReleaseReceipt {
-  readonly catalogDigest: Sha;
-  readonly maiaGeneration: string;
-  readonly stockfishGeneration: string | null;
-  readonly guardComplete: boolean;
-}
+
 export type BotProfileAvailability =
   | Readonly<{ kind: "available"; snapshotRevision: number }>
-  | Readonly<{ kind: "unavailable"; reason: "maia_unavailable" | "guard_provider_unavailable" | "release_receipt_missing_or_stale" }>;
+  | Readonly<{ kind: "conditional"; snapshotRevision: number; reason:
+      "maia_check_required" | "maia_recovering" | "maia_exact_request_required" |
+      "guard_check_required" | "guard_recovering" | "guard_exact_request_required" |
+      "release_receipt_required" }>
+  | Readonly<{ kind: "unavailable"; reason: "maia_unavailable" | "guard_provider_unavailable" | "release_receipt_stale" }>;
 
-export function profileAvailability(profile: BotProfileReference, snapshot: BotProviderRegistrySnapshot, receipt?: BotReleaseReceipt): BotProfileAvailability {
-  const maia = snapshot.instances.find((instance) => instance.instanceId === "maia-inference");
-  const stockfish = snapshot.instances.find((instance) => instance.instanceId === "stockfish-play");
-  const maiaOperation = snapshot.operations.find((operation) => operation.operationId === "maia.policy_page@1");
-  const stockfishOperation = snapshot.operations.find((operation) => operation.operationId === "stockfish.legal_root_table@1");
-  if (maia === undefined || maiaOperation === undefined || maiaOperation.availability.state === "unavailable") {
-    return Object.freeze({ kind: "unavailable", reason: "maia_unavailable" });
+const conditionalAvailability = (
+  availability: ProfileAvailability,
+  subject: "maia" | "guard",
+  revision: number,
+): BotProfileAvailability | null => {
+  if (availability.state === "available") return null;
+  if (availability.state === "unavailable") {
+    return Object.freeze({ kind: "unavailable", reason: subject === "maia" ? "maia_unavailable" : "guard_provider_unavailable" });
   }
+  const suffix = availability.state === "requestable_unverified" ? "check_required"
+    : availability.state === "recovering" ? "recovering" : "exact_request_required";
+  return Object.freeze({ kind: "conditional", snapshotRevision: revision,
+    reason: `${subject}_${suffix}` as BotProfileAvailability extends Readonly<{ kind: "conditional"; reason: infer R }> ? R : never });
+};
+
+export function profileAvailability(profile: BotProfileReference, snapshot: ProviderRegistrySnapshot, receipt?: ProviderReleaseReceipt): BotProfileAvailability {
+  const maia = selectProfileAvailability(snapshot, "opponent.maia_inference");
+  const maiaBoundary = conditionalAvailability(maia, "maia", snapshot.revision);
+  if (maiaBoundary !== null) return maiaBoundary;
   if (profile.family === "human-baseline") return Object.freeze({ kind: "available", snapshotRevision: snapshot.revision });
-  if (stockfish === undefined || stockfishOperation === undefined || stockfishOperation.availability.state === "unavailable") {
-    return Object.freeze({ kind: "unavailable", reason: "guard_provider_unavailable" });
+  const guard = selectProfileAvailability(snapshot, "opponent.stockfish_play");
+  const guardBoundary = conditionalAvailability(guard, "guard", snapshot.revision);
+  if (guardBoundary !== null) return guardBoundary;
+  if (receipt === undefined) return Object.freeze({ kind: "conditional", snapshotRevision: snapshot.revision, reason: "release_receipt_required" });
+  try {
+    assertProviderReleaseReceipt(receipt);
+  } catch {
+    return Object.freeze({ kind: "unavailable", reason: "release_receipt_stale" });
   }
-  if (!("generation" in maia) || !("generation" in stockfish)) {
-    return Object.freeze({ kind: "unavailable", reason: "release_receipt_missing_or_stale" });
-  }
-  if (receipt === undefined || receipt.catalogDigest !== BOT_PROFILE_CATALOG_DIGEST || receipt.maiaGeneration !== maia.generation
-    || receipt.stockfishGeneration !== stockfish.generation || !receipt.guardComplete) {
-    return Object.freeze({ kind: "unavailable", reason: "release_receipt_missing_or_stale" });
+  if (receipt.snapshotDigest !== snapshot.digest || receipt.registryRevision !== snapshot.revision
+    || !receipt.generations.some((row) => row.instanceId === maia.instanceId && row.generation === maia.generation)
+    || !receipt.generations.some((row) => row.instanceId === guard.instanceId && row.generation === guard.generation)) {
+    return Object.freeze({ kind: "unavailable", reason: "release_receipt_stale" });
   }
   return Object.freeze({ kind: "available", snapshotRevision: snapshot.revision });
 }

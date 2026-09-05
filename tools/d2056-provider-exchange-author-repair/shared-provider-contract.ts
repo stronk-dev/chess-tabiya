@@ -137,7 +137,13 @@ export function makeProviderDelivery<K extends ProviderOperationId>(input: {
   readonly normalizedRequestDigest: `sha256:${string}`;
   readonly responseDigest: `sha256:${string}`;
   readonly payload: ProviderOperationResultMap[K];
+  readonly timing?: Readonly<{ requestedAt: string; retrievedAt: string; servedAt: string }>;
 }): ProviderDelivery<ProviderOperationResultMap[K], K> {
+  const timing = input.timing ?? {
+    requestedAt: "2026-08-30T10:00:00.000Z",
+    retrievedAt: "2026-08-30T10:00:00.010Z",
+    servedAt: "2026-08-30T10:00:00.011Z",
+  };
   const acquisition = Object.freeze({
     operation: input.operation,
     provider: input.provider,
@@ -145,15 +151,15 @@ export function makeProviderDelivery<K extends ProviderOperationId>(input: {
     requestedIdentity: Object.freeze({ ...input.requestedIdentity }),
     actualIdentity: Object.freeze({ ...input.actualIdentity }),
     generation: 1,
-    requestedAt: "2026-08-30T10:00:00.000Z",
-    retrievedAt: "2026-08-30T10:00:00.010Z",
+    requestedAt: timing.requestedAt,
+    retrievedAt: timing.retrievedAt,
     normalizedRequestDigest: input.normalizedRequestDigest,
     responseDigest: input.responseDigest,
   }) as ProviderAcquisitionReceipt<K>;
   ACQUISITIONS.add(acquisition);
   const delivery = Object.freeze({
     kind: "live" as const,
-    servedAt: "2026-08-30T10:00:00.011Z",
+    servedAt: timing.servedAt,
     cacheIdentity: null,
     acquisition,
     payload: Object.freeze(input.payload),

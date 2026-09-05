@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:c77182328a3eeedf50d9ab0dc9aa2fea38e1595c570b546c6ec474b4177cd10a",
+    "roadmap": "sha256:21f86fd0b674ebf3e9893b24e924aa7047f7dac1b425a516c4dd3e04d3bcde64",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:c5e71ff1852d72852489519caff5dbaa655a7446324b8e988ac81af60a3359aa",
-    "rfcRegister": "sha256:511e00cdf309ca157071ede11410375b34b510411aab379f736c8c55cc12f71b",
+    "workState": "sha256:f87ba24f06325ba85b0d51ed94a1428b3366397d7cde6d558fd2be4ef3e642aa",
+    "rfcRegister": "sha256:0fefcb7851a7d31be5c23298ceaf314c2b044932a1c0a5c27761f7ceea311e0a",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 1132,
-      "done": 828,
+      "blocked": 1127,
+      "done": 833,
       "refused": 3
     },
     "workItems": {
@@ -237,7 +237,7 @@
       "nextAction": "Fresh-review safe deployment's third, Campaign's sixth and storage recovery's fourth author repairs independently; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "Campaign's sixth repair makes no-event provider settlement restart-stable and seals both aggregate/event authorities. Safe deployment's third repair now closes its mounted-image, subject, receipt, TLS, readiness and migration contract seams. Campaign, deployment and storage recovery all remain held for genuinely fresh review before production state work.",
+        "summary": "Campaign, deployment, storage recovery and bot policy have executable author repairs. Bot policy now normalizes the actual sampler, separates clock-free decision identity from delivery provenance, rederives durable envelopes and consumes shared provider health without advertising unrelated cache entries. All remain held for genuinely fresh review before production state work.",
         "impact": "advanced",
         "evidence": [
           "planning/campaign/sixth-author-repair-2026-09-05.md",
@@ -252,7 +252,8 @@
           "rfc/longitudinal-store.md",
           "planning/longitudinal-store/eighth-author-repair-2026-09-05.md",
           "rfc/bot-policy.md",
-          "planning/platform-alignment/bot-policy/third-fresh-independent-buildability-review-2026-08-31.md",
+          "planning/platform-alignment/bot-policy/fourth-author-repair-2026-09-05.md",
+          "tools/d2407-bot-policy-fourth-author-repair/contract.test.ts",
           "rfc/social-play.md"
         ],
         "anchors": [
@@ -279,7 +280,7 @@
           {
             "kind": "rfc",
             "id": "bot-policy.md",
-            "digest": "sha256:0cdc86e81d84391f9163037687ffc1c17f5a26c125a6e4bafaac0e24438c76bb"
+            "digest": "sha256:18e2f4d00465f10682a831138a939d7a7ee61e0f467832aac5176bca6a74d3bb"
           },
           {
             "kind": "rfc",
