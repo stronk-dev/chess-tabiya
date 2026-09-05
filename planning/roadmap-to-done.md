@@ -233,6 +233,14 @@ schema 0.30, evidence-job migration and the held corpus remain unauthorized pend
 another fresh review. Receipt:
 `planning/pack-capability-contract/thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
 
+The same-day fourteenth author repair closes [[D2742]]–[[D2747]] at contract tier. Database-bound
+lease capabilities, complete provider-result/job joins, total objective success and full
+request/result/receipt/run replay validation now execute under `make
+pack-capability-fourteenth-author-repair`, which retains the complete chain and passes 6/6 new
+groups. Pack schema 0.30, evidence-job storage and the held corpus remain unauthorized pending
+another genuinely fresh review. Receipt:
+`planning/pack-capability-contract/fourteenth-author-repair-2026-09-05.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

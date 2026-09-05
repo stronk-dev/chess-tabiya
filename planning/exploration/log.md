@@ -15769,3 +15769,22 @@ tenth genuinely fresh independent review and the provider/value dependency landi
 
 **Next:** fresh-review the ninth repair against durable-source identity, total-result reachability
 and domain-proof retention before authorizing either held production projection.
+
+## 2026-09-05 — Pack capability fourteenth author repair
+
+**What landed:** a bounded contract-tier repair for [[D2742]]–[[D2747]] and maintained `make
+pack-capability-fourteenth-author-repair` coverage. No production provider, collector, route,
+schema, migration, pack, content, archive or protected-design byte changed.
+
+**What changed:** one application-database authority now issues run/job lease capabilities;
+settlement joins the complete provider result to the exact leased request before allocation; the
+success union represents exact null and non-null objective proposals; consumed replay reparses and
+rejoins request, settlement, receipt and retained transition; and batch replay loads durable run
+truth internally. The target retains the complete predecessor chain and passes 6/6 new groups.
+
+**What is blocked:** `pack-capability-contract` remains draft. Pack schema 0.30, evidence-job
+storage, implementation and the held 92-pack application still require a genuinely fresh
+independent buildability review.
+
+**Next:** fresh-review the fourteenth repair across database, provider-result, objective-result and
+replay authority before accepting the RFC or authorizing production work.
