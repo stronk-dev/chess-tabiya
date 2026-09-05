@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:b2826d0228c332e272a247038e5d5e5c20fa92c14f06f4f4d0a13620a555af43",
+    "roadmap": "sha256:17f63f7ac11df07893937ff1981cf36a4329c6bf00b149026af017ce3cd75656",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:681ed021aaeb22c505701825bf564fed355a76987619a58d7961b5490bdab75e",
-    "rfcRegister": "sha256:9cf820a47c4c069684689a6c6e6abb28f5638b975e747113a70d383bf65ba7e0",
+    "workState": "sha256:b37414a22ba9544b3fd94afd4d94a5efa60e92566a363a2e5d8f4a3a36db1e20",
+    "rfcRegister": "sha256:d27d4039df3e0cd32d4d3d7d093483cf484f6ba9f096777a27dab9e81746274b",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 640,
       "doing": 0,
-      "blocked": 1125,
+      "blocked": 1131,
       "done": 826,
       "refused": 3
     },
@@ -1153,7 +1153,7 @@
         ],
         "api": [
           "partial",
-          "Health exists and the fifth provider-health author repair now models the exact claim-free snapshot/outcome/selector/release checkpoint, but fresh review and production route integration remain; readiness, metrics policy, and production-boundary coverage also remain."
+          "Health exists, but the seventh provider-health review proves the newest replacement regresses configured identity, backoff, exact-cache provenance, pipeline execution and prior checkpoint exports; a composed repair, fresh review and production route integration remain, alongside readiness, metrics policy and production-boundary coverage."
         ],
         "experience": [
           "blocked",
@@ -1169,7 +1169,7 @@
         ],
         "verification": [
           "partial",
-          "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof must be separate named tiers; the maintained provider-health repair chain is enrolled in ordinary verification after its earlier omission."
+          "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof must be separate named tiers; the seventh provider-health review is now the verify-owned tip and executes six replacement-regression attacks."
         ],
         "release": [
           "blocked",

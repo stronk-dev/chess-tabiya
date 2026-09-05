@@ -16245,3 +16245,21 @@ issuance and during projection.
 predecessor chain, reproduces all three returned attacks and passes 3/3 repair controls. Exact
 receipt: `planning/shared-resource-register-bootstrap/thirteenth-author-repair-2026-09-05.md`.
 Another genuinely fresh independent review still gates acceptance and production implementation.
+
+## 2026-09-05 — provider-health seventh fresh independent review
+
+**What landed:** returned the sixth provider-health author repair on [[D2846]]–[[D2851]] with six
+executable attacks. No provider, route, client, runtime, schema, migration or protected-design byte
+changed.
+
+**What changed:** the claimed replacement checkpoint fixes its newest local list while regressing
+earlier contract breadth. Unknown configuration is silently dropped; configured family/
+implementation is absent; stale or cross-registry snapshots clear leases; the coordinator cannot
+establish a 429 block; cache hits lose application/stage/service provenance; every exact pipeline is
+singleton/always/no-dependencies; and the earlier outcome/selector/release authorities disappear.
+
+**Evidence/next:** `make provider-health-seventh-fresh-review` retains the complete chain and passes
+6/6 falsifiers. Exact receipt:
+`planning/provider-health-degradation/seventh-fresh-independent-buildability-review-2026-09-05.md`.
+The next pass must compose one current checkpoint from the fifth and sixth authorities, then undergo
+another genuinely fresh review; provider protocol/exchange still gate production.

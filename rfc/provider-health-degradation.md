@@ -1,11 +1,12 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — **sixth author repair completed on [[D2815]]–[[D2822]] plus self-audit
-  [[D2823]]–[[D2827]]; another genuinely fresh review is required.** One replacement checkpoint now
-  owns full state/cache derivation, immutable compiled declarations, renewable generation leases and
-  current-run recovery commands. `make provider-health-sixth-author-repair` retains every prior
-  attack and passes 13/13 repair groups plus strict TypeScript. Neither implementation checkpoint is
-  authorized before fresh review and the provider-protocol/exchange prerequisites.
+- **Status:** draft — **RETURNED by seventh fresh independent review on [[D2846]]–[[D2851]].** The
+  sixth repair closes its thirteen local controls, but the claimed replacement checkpoint regresses
+  configured provider identity, current/group-scoped lease authority, shared rate-limit blocking,
+  atomic cache provenance, non-vacuous pipeline semantics and the fifth repair's exported outcome/
+  selector/release authorities. `make provider-health-seventh-fresh-review` retains the complete
+  chain and passes 6/6 attacks. Neither implementation checkpoint is authorized before one composed
+  author repair, another fresh review and the provider-protocol/exchange prerequisites.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -910,6 +911,31 @@ receipt: `planning/provider-health-degradation/sixth-author-repair-2026-09-05.md
 contract evidence, not acceptance or implementation; another genuinely fresh review remains
 required.
 
+## Seventh fresh independent return (2026-09-05)
+
+The sixth replacement closes [[D2815]]–[[D2827]] locally but does not compose the normative
+checkpoint it claims to replace. Six independent attacks return it:
+
+1. [[D2846]] — configuration accepts and silently drops an unknown instance, while every configured
+   snapshot omits the required family and implementation identity;
+2. [[D2847]] — any old or cross-registry sealed snapshot can mint a generation set and clear a live
+   lease; the set is bound to neither the issuing registry's current revision nor one backoff group;
+3. [[D2848]] — the coordinator has no blocked-until/result/Retry-After state, so settling a Lichess
+   429 admits the next Explorer/tablebase request immediately;
+4. [[D2849]] — exact-cache lookup omits application operation, stage and cache-key identity and
+   returns no current cache-service receipt, regressing the atomic provenance contract;
+5. [[D2850]] — all ten exact declarations remain one unconditional dependency-free stage, so the
+   dependency/condition grammar and mixed-stage outcome criteria are green without one live case;
+6. [[D2851]] — the replacement exports none of the fifth checkpoint's
+   `ApplicationProviderOutcome`, profile-availability selector, release receipt or settlement
+   authority.
+
+`make provider-health-seventh-fresh-review` retains every predecessor/repair and passes 6/6
+falsifiers. Exact evidence:
+`planning/provider-health-degradation/seventh-fresh-independent-buildability-review-2026-09-05.md`.
+The next repair must compose the fifth and sixth authorities into one current checkpoint rather
+than satisfying only the newest finding list. Implementation remains unauthorized.
+
 ## Implementation plan
 
 **Staged dependency rule ([[D2364]]).** This RFC may remain `implementing` across two checked
@@ -1077,6 +1103,24 @@ bot-private health projection.
 29. Speech accepts only a sealed displayed-text identity for all five scopes, including Compare,
     and never calls external voice. Text success plus TTS failure retains both settlements and falls
     back without relabeling browser speech as provider audio.
+30. [[D2846]] Configuration is parsed against the closed instance/family/allowed-implementation
+    declarations before registry construction. Unknown rows fail; configured snapshots retain the
+    exact family and implementation whose generation they name.
+31. [[D2847]] A generation set is issued only from the exact current snapshot of its owning registry
+    and exact compiled backoff group. Old, cross-registry and cross-group sealed snapshots fail and
+    cannot release, renew or settle a live claim.
+32. [[D2848]] The same coordinator that owns acquire/renew/settle/expire also owns blocked-until,
+    backoff sequence and result settlement. A Lichess 429 blocks both group members for at least
+    60,000 ms and honors a longer valid Retry-After.
+33. [[D2849]] Exact-cache resolution retains application operation, stage, instance, generation,
+    normalized request and cache-key identity and atomically returns value, original delivery and a
+    current cache-service receipt.
+34. [[D2850]] At least one exact compiled application pipeline executes dependency and conditional
+    stages end to end; mixed success/failure/skipped settlements derive one ordered outcome. A
+    grammar whose entire admitted population is singleton/always/no-dependencies fails.
+35. [[D2851]] The one replacement checkpoint exports the exact registry snapshot, closed application
+    outcome, profile-availability selector, release receipt and settlement authorities together;
+    retained predecessor tests cannot substitute for exports absent from the current authority.
 
 ## Falsifiers and negative fixtures
 
@@ -1187,6 +1231,11 @@ than implementation or review.
 
 ## Changelog
 
+- 2026-09-05 — returned by seventh fresh independent buildability review on
+  [[D2846]]–[[D2851]]. The sixth model fixes its local return list while dropping earlier
+  configured identity, backoff, cache provenance, pipeline and exported-checkpoint contracts.
+  `make provider-health-seventh-fresh-review` passes 6/6; one composed repair and another fresh
+  review are required.
 - 2026-08-31 — author-repaired [[D1910]]–[[D1915]]. Split provider families from concrete
   instances/operations; made clean-start state and requestability total; added a compiler-owned
   voice/TTS execution DAG with one deadline; replaced the loose receipt with a closed operation

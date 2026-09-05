@@ -22981,6 +22981,60 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2846",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:72dec942e006ee554cf106fe8d70345cc2d0db1bd98f0b7695d88e363e156f0a",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2847",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:55dab75396e4320fee2a98d72f7ceefbfbe1a1254583f312313d607b75b8a1cd",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2848",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9f43e69e8cb0de501bed9e8b93daef5e1a75538b70f7e8950d4b1f2164dd7c06",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2849",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:fbc0dc95b0e177c4dda8e80b09adaabafe98261897f673f190a6de889faa275e",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2850",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7470d12f1c042cb288c2709f250e11afb9b3ce3f8c70748ddca4ea18fb4c3840",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2851",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:433b6af633f9bfdbc96c831f54be63656e00624a593b46165acd52d4e323ede8",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-health-degradation.md"
     }
   ]
 }

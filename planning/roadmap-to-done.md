@@ -366,6 +366,15 @@ retains the 8/8 attacks and passes 13/13 repair groups plus strict TypeScript. B
 checkpoints remain held for another fresh review and provider protocol/exchange. Receipt:
 `planning/provider-health-degradation/sixth-author-repair-2026-09-05.md`.
 
+The seventh fresh provider-health review returns that replacement on [[D2846]]–[[D2851]]. The
+newest controls pass, but the current model silently drops unknown configuration, omits configured
+family/implementation, lets stale or cross-registry snapshots clear leases, cannot establish a
+shared 429 block, regresses exact-cache service provenance, keeps every exact pipeline
+unconditional/single-stage, and drops the prior outcome/selector/release authorities. `make
+provider-health-seventh-fresh-review` retains the chain and passes 6/6 attacks. One composed repair,
+not another local patch, is required before review or implementation. Receipt:
+`planning/provider-health-degradation/seventh-fresh-independent-buildability-review-2026-09-05.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

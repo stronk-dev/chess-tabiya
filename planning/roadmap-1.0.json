@@ -292,11 +292,11 @@
       "completion": {
         "evidence": ["not_applicable", "This slice verifies evidence machinery but creates no chess truth."],
         "state": ["partial", "Schema/register/work/intent checks and three workflows exist; deployment now has an executable third contract repair for mounted config, receipts, TLS, readiness and durable migration, but production release state is not implemented."],
-        "api": ["partial", "Health exists and the fifth provider-health author repair now models the exact claim-free snapshot/outcome/selector/release checkpoint, but fresh review and production route integration remain; readiness, metrics policy, and production-boundary coverage also remain."],
+        "api": ["partial", "Health exists, but the seventh provider-health review proves the newest replacement regresses configured identity, backoff, exact-cache provenance, pipeline execution and prior checkpoint exports; a composed repair, fresh review and production route integration remain, alongside readiness, metrics policy and production-boundary coverage."],
         "experience": ["blocked", "Install, first boot, engine degradation, backup, restore, update, rollback, and failure diagnostics are not one guided operator workflow."],
         "defaults": ["partial", "Compose boots with mock and insecure-cookie development defaults; safe public and private profiles are not complete."],
         "content": ["blocked", "Runtime content allow-list, licence notices, SBOM, model/runtime rights, and multi-architecture asset tiers remain."],
-        "verification": ["partial", "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof must be separate named tiers; the maintained provider-health repair chain is enrolled in ordinary verification after its earlier omission."],
+        "verification": ["partial", "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof must be separate named tiers; the seventh provider-health review is now the verify-owned tip and executes six replacement-regression attacks."],
         "release": ["blocked", "A clean machine can install a digest-pinned release, run it safely, observe degradation, upgrade and roll back without data loss."]
       }
     }
