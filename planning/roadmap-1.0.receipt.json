@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ded883f49220397adc07db3dc140cba8cd8953dc23166f3bdea02a1ee57c08b9",
+    "roadmap": "sha256:02ea75992e9d434de8d3258adf2171999d0e6d06c66a1230f39d845e7a9eb566",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:a2cf603f28d62d0ae5cecfaa3365fdb06e24c65e2fcb6ba040a9868511ab24ce",
-    "rfcRegister": "sha256:4bc3af2f4d2c4b0b8c723e6b66c4f5221e1854975fa748e2eb5ed1d3b661c3d4",
+    "workState": "sha256:4da51afe44a0be5abd98f2317c56f7d6233911c3d9ac6d1b1d6835c2b84547ec",
+    "rfcRegister": "sha256:8f45c334f99e151fcc7bad6ceb072b3ad3a8ebd5d9abe90e46c6251b929a5e26",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 648,
       "doing": 0,
-      "blocked": 1156,
+      "blocked": 1161,
       "done": 833,
       "refused": 3
     },
@@ -151,15 +151,18 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Author-repair candidate-packet D2885-D2891, freshly review the promotion installation boundary, then land the evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+      "nextAction": "Author-repair candidate-packet D2885-D2891 and promotion installation D2892-D2896, freshly review both, then land the evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "The candidate packet's twelfth fresh review reproduced seven request, lifecycle, failure, memory, eviction and duplicate-execution defects in the shared service; the evidence spine remains at contract repair before bots, hints, Review or packs consume it.",
+        "summary": "Fresh reviews returned both shared evidence prerequisites: seven candidate-service defects and five promotion installation/population/concurrency authority defects. The spine remains 12/14 and at contract repair before bots, hints, Review or packs consume it.",
         "impact": "held",
         "evidence": [
           "planning/evidence-foundation-ux/shared-candidate-packet-twelfth-fresh-independent-buildability-review-2026-09-06.md",
+          "planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-fresh-independent-buildability-review-2026-09-06.md",
           "tools/d2885-candidate-packet-twelfth-fresh-review/review.test.ts",
+          "tools/d2892-semantic-collectors-promotion-fourteenth-fresh-review/review.test.ts",
           "rfc/shared-candidate-evidence-packet.md",
+          "rfc/semantic-collectors.md",
           "rfc/README.md"
         ],
         "anchors": [
@@ -167,6 +170,11 @@
             "kind": "rfc",
             "id": "shared-candidate-evidence-packet.md",
             "digest": "sha256:5016ef6bfa3edea8386d86ad9911310991dccfd9f78cc7191a35b1c42df98c26"
+          },
+          {
+            "kind": "rfc",
+            "id": "semantic-collectors.md",
+            "digest": "sha256:0d429b97de3c3a58eb9c5ce33ef68519a80a58cf9749873e0a7cc931ac7f376d"
           }
         ]
       },

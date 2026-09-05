@@ -467,6 +467,16 @@ remains 12/14 pending another genuinely fresh review and provider/value dependen
 Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-thirteenth-author-repair-2026-09-06.md`.
 
+The same-day fourteenth fresh independent review returns that repair on [[D2892]]–[[D2896]]. The
+application constructor still turns an arbitrary importer-selected path into installed authority
+and reaches the predecessor test-only issuer. Registry publication does not validate the complete
+generation population it advertises, and repeated/concurrent registry or first-generation opens
+can mint multiple simultaneously current authority lineages. `make
+semantic-collectors-promotion-fourteenth-fresh-review` retains the full history and passes 5/5
+fresh falsifiers plus strict TypeScript. One bounded author repair, another genuinely fresh review
+and provider/value dependency landing remain before the held pair can move 12/14→14/14. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-fresh-independent-buildability-review-2026-09-06.md`.
+
 Runtime opening identity is now a complete foundation slice: its pinned local artifact, exact
 endpoint/path/history projections, typed availability, production API route, and image boundary
 ship. Its learner-facing Review, theory, bot, and longitudinal bindings deliberately remain owned

@@ -7,14 +7,14 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair's thirteenth author repair closes [[D2864]]–[[D2868]] at contract tier on
-  2026-09-06.** Application composition now owns one immutable canonical inventory snapshot and
-  carries its exact bytes/digest through current registry, cached generation store, recorded
-  receipt and collector-result authority. The current parser refuses empty installed generations.
-  `make semantic-collectors-promotion-thirteenth-author-repair` retains the entire predecessor and
-  return chain, passes 5/5 current repair groups and strict TypeScript. Another genuinely fresh
-  review and provider/value dependency landing still gate both held projections; no held projection
-  implementation is authorized. The preceding author model claimed one
+  promotion pair's thirteenth author repair is returned by the fourteenth fresh independent review
+  on [[D2892]]–[[D2896]] (2026-09-06).** The renamed application entry point still accepts an
+  arbitrary caller path and reaches the predecessor test-only issuer; registry publication does not
+  validate its declared generation population; and registry/store authority splits under concurrent
+  opens. `make semantic-collectors-promotion-fourteenth-fresh-review` retains the entire predecessor
+  and return chain, passes 5/5 fresh falsifiers and strict TypeScript. One bounded author repair,
+  another genuinely fresh review and provider/value dependency landing still gate both held
+  projections; no held projection implementation is authorized. The preceding author model claimed one
   asynchronous transaction owned recorded-first lookup, the exact
   scheduler digest and invocation, cancellation/domain/failure outcomes, success-only legal move
   resolution, sealed ledger/live source creation and total input abstention. The maintained target
@@ -1593,6 +1593,23 @@ chain, then passes 5/5 repair groups plus strict TypeScript. Exact receipt:
 This remains author evidence only: another genuinely fresh review and the provider/value
 dependencies precede any 12/14→14/14 production transition.
 
+The same-day fourteenth fresh independent review returns the held pair on [[D2892]]–[[D2896]].
+`openPromotionApplication(inventoryPath)` remains an exported raw-path authority issuer available
+to any importer, and its product path calls the predecessor's explicitly test-only issuer. A
+registry can be published while its sole declared generation is missing, because complete
+generation validation is deferred until selection. Repeated or concurrent `openRegistry()` calls
+mint distinct simultaneously valid current registries, while concurrent first `openGeneration()`
+calls cross awaited I/O before populating the store cache and can mint distinct current stores.
+
+`make semantic-collectors-promotion-fourteenth-fresh-review` retains every predecessor return and
+repair, then passes 5/5 fresh falsifiers plus strict TypeScript. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-fresh-independent-buildability-review-2026-09-06.md`.
+The next repair must bind application creation to an exact product composition/configuration
+authority, remove the test helper from the product dependency graph, validate the complete listed
+generation population before installed-registry publication, and single-flight one registry/store
+authority per immutable application snapshot and generation. Another genuinely fresh review and
+the existing provider/value dependencies remain mandatory; the spine stays 12/14.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1636,6 +1653,11 @@ dependencies precede any 12/14→14/14 production transition.
 | [[D2866]] | returned: registry construction combines first-read entries with a second-read predecessor digest and store |
 | [[D2867]] | returned: the returned store, collector and receipt remain predecessor authorities and retain no application registry |
 | [[D2868]] | returned: an empty response/legal population satisfies the nominally non-vacuous installed-generation parser |
+| [[D2892]] | returned: the exported application constructor still turns an arbitrary importer-selected path into installed authority |
+| [[D2893]] | returned: the current product path calls the predecessor test-only raw-path issuer internally |
+| [[D2894]] | returned: registry publication does not validate the complete generation population it advertises as installed |
+| [[D2895]] | returned: one immutable application can issue multiple simultaneously valid current registries |
+| [[D2896]] | returned: concurrent first generation opens cross awaited work before caching and can split current store authority |
 | [[D2469]] | author-repaired: provider preflight/domain and provider-failure arms execute before the lazy success-only legal-map resolver |
 | [[D2470]] | author-repaired: one request, dependency interface, sealed recorded resolver and exact collector signature fix source precedence |
 | [[D2471]] | author-repaired: specialized assertion failure throws `EvidenceInvariantError`; only typed unavailable inputs abstain, and invalid recorded bytes never permit live fallback |
@@ -1677,6 +1699,15 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-06: fourteenth fresh independent review returned the held promotion pair on
+  [[D2892]]–[[D2896]]. The public application entry point remains caller-path authority and invokes
+  the predecessor test issuer; registry publication validates no complete generation population;
+  repeated registry opens and concurrent first generation opens split current authority. `make
+  semantic-collectors-promotion-fourteenth-fresh-review` retains the complete chain and passes 5/5
+  fresh falsifiers plus strict TypeScript. Exact receipt:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-fresh-independent-buildability-review-2026-09-06.md`.
+  One bounded author repair, another fresh review and provider/value dependency landing remain
+  mandatory; the held pair stays unimplemented.
 - 2026-09-06: thirteenth author repair closes [[D2864]]–[[D2868]] at contract tier. One
   application-owned canonical inventory byte snapshot now governs current registries, cached
   generation stores, durable receipts and collector results; a digest mismatch refuses torn reads,

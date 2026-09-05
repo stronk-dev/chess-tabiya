@@ -16585,3 +16585,22 @@ pack tooling. `make candidate-packet-twelfth-fresh-review` retains the predecess
 **Blocked/next:** bounded author repair, then another genuinely fresh independent review. The
 separate `evidence-value-authority` dependency still must land before implementation. Exact receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-twelfth-fresh-independent-buildability-review-2026-09-06.md`.
+
+## 2026-09-06 — semantic collectors promotion fourteenth fresh return
+
+**What landed:** independently reviewed the thirteenth promotion author repair and returned the
+held pair on [[D2892]]–[[D2896]]. Five executable controls reproduce caller-selected installation
+authority, a product dependency on the predecessor test issuer, incomplete installed-population
+validation, duplicate current registries and non-single-flight current generation stores.
+
+**What changed:** the immutable snapshot and current wrapper chain remain useful, but they do not
+yet establish one application-owned, completely validated and unique authority lineage. `make
+semantic-collectors-promotion-fourteenth-fresh-review` retains every predecessor return/repair and
+passes 5/5 fresh falsifiers plus strict TypeScript. No production projection was implemented or
+authorized.
+
+**Blocked/next:** one bounded author repair must bind application creation to exact product
+composition/configuration authority, remove the test issuer from the product graph, validate every
+listed generation before registry publication and single-flight registry/store construction. Then
+another genuinely fresh review and the existing provider/value dependencies remain. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-fresh-independent-buildability-review-2026-09-06.md`.
