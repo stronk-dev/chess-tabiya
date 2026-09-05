@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:6fb236385df2746e596bc73125e3e9f10fea7a0d74b1fab822bc520c49f76f84",
+    "roadmap": "sha256:d57f679fb03d336c014957b6e847c8478767e86cffd7ad3b316ca6940e8164c4",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:965f5005b64458c37e53da1ec4c4f8ea6f7bdbdfa431f95f1d0045859010f209",
-    "rfcRegister": "sha256:9f664dd9feaef69d4e6afcb6e751799d091991f65088405ab30e0d92d7907cc3",
+    "workState": "sha256:2af8a63afa0114155499a126a6fc8fddff66ecb0e24c4cbad25c3cbfb6964b40",
+    "rfcRegister": "sha256:9491e48e59e88dea04d4445227e47ab642403932e4053f40e3dc631d7b89f8c6",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -186,7 +186,7 @@
       "nextAction": "Finish the held semantic projections, capability/claim compatibility, complete-candidate packet, selectors, grade/review projections and the eleven registered learner modules; bind each producer to real module, bot and Review consumers.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "The eighth fresh held-promotion review returns the seventh leaf repair on eight executable seams: the total collector transaction is absent; request digests and recorded/live sources bypass exact shared authorities; provider results cross; provider moves lack legal-FEN validation; and input abstention is unreachable. The evidence spine remains 12/14 pending repair, fresh review and dependency landing.",
+        "summary": "The held promotion pair completed its eighth author repair on eight executable seams: one total asynchronous transaction now owns recorded-first lookup, scheduler-derived request identity, cancellation/domain/failure, success-only legal resolution, sealed ledger/live source creation and reachable input abstention. The retained chain passes 8/8 new behavioral groups plus strict TypeScript. The evidence spine remains 12/14 pending ninth fresh review and provider/value dependency landing.",
         "impact": "held",
         "evidence": [
           "planning/evidence-foundation-ux/shared-candidate-packet-eighth-fresh-independent-buildability-review-2026-09-04.md",

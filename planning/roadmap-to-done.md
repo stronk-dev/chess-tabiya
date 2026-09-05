@@ -279,6 +279,16 @@ retains the full chain and passes 8/8. The spine remains **12/14** pending bound
 another fresh review and provider/value dependency landing. Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-eighth-fresh-independent-buildability-review-2026-09-05.md`.
 
+The same-day eighth author repair closes those eight executable seams at contract tier. One total
+asynchronous collector owns recorded-first lookup, the scheduler-derived request digest and exact
+invocation, cancellation/domain/failure, success-only legal resolution, sealed ledger/live source
+creation and reachable input abstention. Provider moves are checked against the exact request FEN,
+outside-domain evidence reproduces its piece count, and crossed request/result/source authorities
+fail. `make semantic-collectors-promotion-eighth-author-repair` retains every prior promotion gate,
+passes 8/8 new behavioral groups and strict TypeScript. The spine remains **12/14** pending ninth
+fresh review and provider/value dependency landing. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-eighth-author-repair-2026-09-05.md`.
+
 **Required breadth:** structures and changes; attacks/defences; hanging, overload, deflection,
 clearance, attraction, discovered attack, pins, skewers, forks, trapped pieces and mating nets;
 king/castling/promotion state; space/development/files/diagonals/outposts; multi-ply and bounded

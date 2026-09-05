@@ -15524,3 +15524,20 @@ fresh falsifiers. Exact receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-eighth-fresh-independent-buildability-review-2026-09-05.md`.
 One bounded author repair and another genuinely fresh review precede production; the evidence spine
 remains 12/14.
+
+## 2026-09-05 — Held promotion collectors eighth author repair
+
+**What landed:** a bounded contract-tier repair for [[D2693]]–[[D2700]] and maintained `make
+semantic-collectors-promotion-eighth-author-repair` coverage. No production collector, provider,
+packet, API, schema, content, archive or protected-design byte changed.
+
+**What changed:** one asynchronous transaction now owns recorded-first lookup, scheduler-derived
+request identity, cancellation/domain/failure outcomes, success-only legal resolution, sealed
+ledger/live source creation and reachable input abstention. Provider moves are legal-validated
+against the exact request FEN, and crossed or caller-minted authority fails.
+
+**Evidence/next:** the target retains every predecessor promotion gate and passes 8/8 new behavioral
+groups plus strict TypeScript. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-eighth-author-repair-2026-09-05.md`.
+A ninth genuinely fresh independent review and provider/value dependency landing still precede
+production; the evidence spine remains 12/14.
