@@ -1,13 +1,14 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **seventh author repair completed 2026-09-04 on
-  [[D2598]]–[[D2602]]; seventh fresh independent review required.** Denominator order is enforced
-  in SQL/parser/projector; row/query parsers close over the literal immutable ingest registry; one
-  replay-joined source constructor recursively seals every digest operand; co-located transaction
-  markers compile the exact source-mutation population; and all five durable job states share one
-  reset/CAS authority. `make longitudinal-store-seventh-author-repair` retains all 43 prior author
-  controls and passes 5/5 new controls plus strict TypeScript; no migration, worker, reader,
-  consumer, API or client implementation is authorized. The
+- **Status:** draft — **RETURNED by the seventh fresh independent review 2026-09-05 on
+  [[D2718]]–[[D2722]].** The repaired local denominator, private registry, immutable-image and
+  five-state reset checks survive, but the source parser rejects real runtime events while sealing
+  invented ones; attribution/import operands may be incomplete; the mutation compiler counts
+  comments rather than transaction behavior; the claim checker omits cut/revision/lease/owner; and
+  source invalidation accepts a different run and owner. `make
+  longitudinal-store-seventh-fresh-review` passes 5/5 blocker reproductions plus the retained
+  author chain; no migration, worker, reader, consumer, API or client implementation is
+  authorized. The
   2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
   returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
@@ -995,6 +996,28 @@ claim tuple across renew, fail and publish.
 new behavioral controls and strict TypeScript. No production migration, worker, reader, consumer,
 API, client or content byte changed. Another genuinely fresh independent review remains mandatory
 before acceptance or implementation.
+
+## Seventh fresh independent return (2026-09-05)
+
+The [[D2598]]–[[D2602]] repair survives at the bounded properties it names. Fresh application to
+the actual runtime replay, complete source operands, transaction bodies, full claim tuple and
+run/source subject join returns five further seams. Exact evidence is in
+`planning/longitudinal-store/seventh-fresh-independent-buildability-review-2026-09-05.md`.
+
+1. **[[D2718]] — consume the actual replay authority.** The proposed exact parser rejects real
+   `{seq,type,at,data}` runtime events and accepts invented flattened event kinds.
+2. **[[D2719]] — prove source-operand completeness.** Missing authorship and impossible imported
+   mainline bounds currently seal and hash; supplied-row validity is not population equality.
+3. **[[D2720]] — compile transaction behavior, not matching text.** Commented descriptor strings
+   satisfy the operation census without a method, reachable call, watermark update or transaction.
+4. **[[D2721]] — restore the full claim/CAS tuple.** Cut, derivation revision, lease validity and
+   current durable owner/source truth are absent from the modeled receipt/check.
+5. **[[D2722]] — bind job and source subjects.** A job can be invalidated from a sealed source image
+   belonging to another run and learner.
+
+`make longitudinal-store-seventh-fresh-review` passes five blocker reproductions and the retained
+author chain. No production implementation is authorized until a bounded eighth author repair
+inverts them and another genuinely fresh review passes.
 
 ### F. Acceptance criteria
 

@@ -21830,6 +21830,51 @@
       "uxItems": [],
       "evidence": "ledger:D2717",
       "evidenceKind": "closeout-prose"
+    },
+    {
+      "id": "D2718",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:faa0e7d86077c7e8dcfa1df1bbbd80dec32c0356cf8c56879f043b4851919073",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2719",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:cfcb9d916d41dd0347e482dc66a6521ed110bc0f1632c6e1c52aa739cd7d6c46",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2720",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:58b8fa9ef4eb1b8ad863b855646dfd4c182dbd67e75c12d849049ff4fb7cecbe",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2721",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ff7c4b729b346c0e03882635e132c807f2a13d33cff76b740a084985b3f1b7c0",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2722",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:adcac0ad705ada09e1693b956ba5f14a2df3dd147ffd8c22b158221f28340ca6",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
     }
   ]
 }

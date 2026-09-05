@@ -15613,3 +15613,19 @@ concept return.
 
 **Evidence/next:** `make status-parity roadmap-check roadmap-receipt work-state` guards the joined
 registers. Fresh independent review still gates both repaired foundation RFCs.
+
+## 2026-09-05 — Longitudinal store seventh fresh independent return
+
+**What landed:** [[D2718]]–[[D2722]] and `make longitudinal-store-seventh-fresh-review` as an
+executable independent review of the seventh author repair. No migration, worker, reader,
+consumer, API, client, content, archive or protected-design byte changed.
+
+**What changed:** the author repair's local checks survive, but its modeled source cannot consume
+the real runtime event shape and can seal invented events, incomplete attribution and impossible
+import bounds. Its operation closure counts comments, its claim check omits four required
+currentness operands, and its invalidator does not join the source subject to the job subject.
+
+**Evidence/next:** the review target passes five blocker reproductions plus the retained author
+chain. Exact receipt:
+`planning/longitudinal-store/seventh-fresh-independent-buildability-review-2026-09-05.md`. One
+bounded eighth author repair and another genuinely fresh review precede implementation.

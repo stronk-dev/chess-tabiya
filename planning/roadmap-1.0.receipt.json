@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:805c5665db979a86b9d3080f95032fd61bbea0b4872f6dec67cb4550bb48728c",
+    "roadmap": "sha256:d6a7139c0a7b36d37d24e45224f1c25107ab3e870b25c09af9a9af1dddd7e285",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:3fbafec2141c524b4b6231dc016d15a90a8853b081f3eb4032a730beccd36ecf",
-    "rfcRegister": "sha256:1fde327ad80d83b9974ff0235f6a480e521821580d5a6481bfade60d895c8621",
+    "workState": "sha256:e16fc728f4dc310a506458a7ae3e19f7afb61a63aee62a5adafc4fce37930b20",
+    "rfcRegister": "sha256:4e8d923523f33fd833d2d8cd69664a8d6aadd1c23a62d6bca236a771c997a0b4",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 639,
       "doing": 0,
-      "blocked": 999,
+      "blocked": 1004,
       "done": 825,
       "refused": 3
     },
@@ -109,16 +109,17 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, longitudinal store, bot roster/route source, social play and casting; do not implement a draft contract early.",
+      "nextAction": "Repair longitudinal source/replay/transaction/CAS authority from D2718-D2722; complete independent review and acceptance for pack capability/claim anchors, module registration/presentation, review compiler/map, bot roster/route source, social play and casting; do not implement a draft contract early.",
       "latestCheckpoint": {
         "at": "2026-09-05",
-        "summary": "Shared-resource bootstrap and concept-registry completed bounded author repairs over their latest returns. Compiler closure now rejects ambiguous config, dependency, graph and resolution authority; concept identity now has canonical sealed revisions/refs, storage-and-inventory-owned migration inputs, one rollback-safe lossless population receipt and committed-import-graph consumer closure. Both remain draft pending genuinely fresh review, so downstream implementation stays blocked rather than consuming shadow authorities.",
+        "summary": "The seventh longitudinal-store review returned five source/claim authority blockers: its parser cannot consume real runtime events, source operands need not be complete, transaction closure counts comments, the claim check omits cut/revision/lease/owner truth, and invalidation accepts another run/owner. This prevents player-history, skills, style, adaptive support, bot personalization and campaign consumers from building on false learner data. Shared-resource bootstrap and concept-registry author repairs remain separately pending fresh review.",
         "impact": "advanced",
         "evidence": [
+          "planning/longitudinal-store/seventh-fresh-independent-buildability-review-2026-09-05.md",
+          "tools/d2718-longitudinal-seventh-fresh-review/contract.test.ts",
+          "rfc/longitudinal-store.md",
           "planning/shared-resource-register-bootstrap/tenth-author-repair-2026-09-05.md",
           "planning/concept-registry/second-author-repair-2026-09-05.md",
-          "rfc/shared-resource-register-bootstrap.md",
-          "rfc/concept-registry.md",
           "rfc/README.md"
         ]
       },
