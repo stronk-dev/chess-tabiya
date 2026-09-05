@@ -16213,3 +16213,20 @@ landed.
 `planning/evidence-foundation-ux/shared-candidate-packet-tenth-author-repair-2026-09-05.md`.
 Production remains unauthorized pending genuinely fresh review and the named
 `evidence-value-authority` dependency.
+
+## 2026-09-05 — shared-resource bootstrap thirteenth fresh independent review
+
+**What landed:** returned the twelfth bootstrap author repair on [[D2843]]–[[D2845]] with three
+executable attacks. No catalogue, checker, register, schema, product or content implementation
+changed.
+
+**What changed:** literal element access is admitted while its exact property declaration and edge
+disappear; Unicode identifiers prove graph ordering does not execute the repair's claimed UTF-8
+comparator and expose a conflicting UTF-16 rule in the RFC; and catalogue validation issues Unicode
+selector descriptors the projector's ASCII-only parser rejects.
+
+**Evidence/next:** `make shared-resource-bootstrap-thirteenth-fresh-review` retains the complete
+predecessor chain and passes 3/3 new falsifiers. Exact receipt:
+`planning/shared-resource-register-bootstrap/thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
+One bounded author repair must unify relation retention, canonical ordering and selector admission,
+then undergo another genuinely fresh review before production implementation.

@@ -325,12 +325,12 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Genuinely fresh-review the shared-resource bootstrap twelfth repair before provider protocol; independently review provider health, pack capability and longitudinal storage; do not implement a draft contract early.",
+        "nextAction": "Repair the shared-resource bootstrap thirteenth return by retaining literal element-access targets and unifying canonical ordering plus selector admission; fresh-review it before provider protocol, then continue the independent provider-health, pack-capability and storage reviews.",
         "latestCheckpoint": {
           "at": "2026-09-05",
-          "summary": "The shared-resource bootstrap twelfth repair now retains exact compiler relation sites, alias-safe eval refusal, exact construct overloads, catalogue-issued descriptors and canonical byte ordering across ten repair/self-audit groups. Fresh independent review now leads the foundation critical path.",
+          "summary": "The thirteenth fresh bootstrap review returned the generic engine on three executable seams: literal element access drops its target declaration, graph sets do not share one canonical comparator, and catalogue admission accepts Unicode identifiers the projector rejects. The retained chain passes, but production remains held for author repair and another fresh review.",
           "impact": "held",
-          "evidence": ["planning/shared-resource-register-bootstrap/twelfth-author-repair-2026-09-05.md", "tools/d2828-shared-resource-bootstrap-twelfth-author-repair/contract.test.mjs", "tools/d2828-shared-resource-bootstrap-twelfth-fresh-review/contract.test.mjs", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"]
+          "evidence": ["planning/shared-resource-register-bootstrap/thirteenth-fresh-independent-buildability-review-2026-09-05.md", "tools/d2843-shared-resource-bootstrap-thirteenth-fresh-review/review.test.mjs", "rfc/shared-resource-register-bootstrap.md", "rfc/README.md"]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
       },

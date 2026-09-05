@@ -22954,6 +22954,33 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:shared-candidate-evidence-packet.md"
+    },
+    {
+      "id": "D2843",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:06307c5e25449e19d1cbb7b6fce1f95f1d8e725c6d9ae8b2442b0729bb9b9ac1",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2844",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:80d0b9edd121e4a6cfb6f18902165a9a554b40c2081837be5fa3e3e6b120bd94",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D2845",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0a2f67e88803fb9a2d0b77ba8d80be618221b0186c278783b70c0bf2b7434b6a",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
     }
   ]
 }

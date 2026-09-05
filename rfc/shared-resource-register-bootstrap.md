@@ -1,10 +1,10 @@
 # RFC: Shared-resource register engine, bootstrap and adoption
 
-- **Status:** draft — **twelfth author repair completed on [[D2828]]–[[D2834]]; another genuinely
-  fresh independent review is required.** Exact compiler syntax sites, alias-safe `eval` refusal,
-  compiler-selected construct overloads, catalogue-issued descriptor authority and canonical byte
-  ordering now execute. `make shared-resource-bootstrap-twelfth-author-repair` retains the complete
-  predecessor chain and passes 10/10 repair/self-audit groups. No implementation is authorized.
+- **Status:** draft — **RETURNED by thirteenth fresh independent review on [[D2843]]–[[D2845]].**
+  The twelfth repair closes [[D2828]]–[[D2834]], but literal element access still loses its
+  referenced declaration, canonical ordering has two incompatible authorities and catalogue
+  admission accepts Unicode identifiers the projector refuses. Another bounded author repair and
+  genuinely fresh review are required before acceptance or production.
 - **Author:** Codex
 - **Created:** 2026-08-31
 - **Design refs:** none; this is repository process and changes no learner/product behavior
@@ -1006,6 +1006,22 @@ closed. Exact receipt:
 `planning/shared-resource-register-bootstrap/twelfth-fresh-independent-buildability-review-2026-09-05.md`.
 No production implementation is authorized until all seven are repaired and freshly reviewed.
 
+### Thirteenth fresh independent return (2026-09-05)
+
+The next independent pass returns the twelfth repair on [[D2843]]–[[D2845]]. Literal element access
+is admitted but never becomes a relation, so its property declaration and edge disappear from the
+claimed complete graph. The repair's UTF-8 byte-order claim is not executed by node or edge sorting
+and conflicts with the RFC's separately declared UTF-16 canonical-object ordering; non-ASCII
+identifiers expose the difference that the ASCII-only control cannot. Finally, catalogue validation
+admits Unicode TypeScript identifiers while projection reparses the issued descriptor through an
+ASCII-only grammar.
+
+`make shared-resource-bootstrap-thirteenth-fresh-review` retains the complete predecessor chain and
+passes 3/3 executable falsifiers. Exact receipt:
+`planning/shared-resource-register-bootstrap/thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
+No production implementation is authorized until one ordering/parser authority and complete literal
+element-access retention are author-repaired and freshly reviewed.
+
 ## Acceptance criteria
 
 1. Catalogue and README register populations are set-equal; no `RESOURCE_NAMES`, `SCHEMA_SLUGS` or
@@ -1119,6 +1135,15 @@ No production implementation is authorized until all seven are repaired and fres
 44. [[D2833]] Nested class constructors never enter the overload set of an outer construction.
 45. [[D2834]] Dependency-artifact paths are ordered by the same canonical UTF-8 byte comparator
     before their source digest is computed.
+46. [[D2843]] Literal string/numeric element access retains its exact compiler-resolved property
+    declaration and site-bound edge just like dot access, or fails closed when no exact property
+    exists.
+47. [[D2844]] One explicitly chosen canonical ordering authority applies to node ids, roots, complete
+    serialized edges and dependency-artifact paths; a non-ASCII fixture distinguishes UTF-8 byte
+    order from JavaScript/UTF-16 order and cannot be satisfied by contradictory prose.
+48. [[D2845]] Catalogue admission and projection execute the same structural-selector parser and
+    identifier domain; every catalogue-issued Unicode-identifier descriptor either projects or is
+    refused before authority is issued.
 
 ## Discharges
 
@@ -1138,6 +1163,11 @@ can be smuggled through descriptor options.
 
 ## Changelog
 
+- 2026-09-05: returned by thirteenth fresh independent buildability review on [[D2843]]–[[D2845]].
+  Literal element access drops its target, graph ordering does not execute one declared comparator,
+  and catalogue/projector selector grammars disagree. `make
+  shared-resource-bootstrap-thirteenth-fresh-review` retains the predecessor chain and passes 3/3
+  falsifiers. No production implementation is authorized.
 - 2026-09-05: [[D2828]]–[[D2834]] twelfth author repair. Compiler relations retain exact syntax
   sites; global `eval` is alias-safe; construct overloads come from the exact signature kind;
   catalogue-issued descriptor authority is mandatory; and one canonical byte comparator owns graph

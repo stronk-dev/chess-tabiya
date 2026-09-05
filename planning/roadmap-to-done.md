@@ -237,6 +237,15 @@ shared-resource-bootstrap-twelfth-author-repair` retains the predecessor chain a
 repair/self-audit groups. Another genuinely fresh review still gates acceptance and production.
 Receipt: `planning/shared-resource-register-bootstrap/twelfth-author-repair-2026-09-05.md`.
 
+The thirteenth fresh independent review returns that repair on [[D2843]]–[[D2845]]. Literal bracket
+access is admitted while its exact property declaration disappears; Unicode fixtures prove graph
+sets do not execute the claimed UTF-8 comparator and expose the RFC's conflicting UTF-16 authority;
+and catalogue admission accepts Unicode identifiers the projector refuses. `make
+shared-resource-bootstrap-thirteenth-fresh-review` retains the complete chain and passes 3/3 new
+falsifiers. The critical path remains a bounded author repair and another genuinely fresh review;
+catalogue/register implementation is unauthorized. Receipt:
+`planning/shared-resource-register-bootstrap/thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
+
 The same-day twelfth `pack-capability-contract` author repair closes [[D2587]]–[[D2592]] at contract
 tier without claiming production. One transaction-owned before/after run result derives the exact
 core/objective/recorded-guard journal suffix and receipt; the complete nested objective request is
