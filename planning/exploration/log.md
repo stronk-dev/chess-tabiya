@@ -16694,3 +16694,22 @@ history and passes 5/5 current repair groups plus strict TypeScript. Exact recei
 `planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-author-repair-2026-09-06.md`.
 A fifteenth genuinely fresh review and the existing provider/value dependencies precede the held
 pair's production implementation.
+
+## 2026-09-06 — bot calibration verdict exploration gate
+
+**What landed:** answered [[D2236]] with a literal 17-arm / 13,200-game experiment manifest, a
+frozen 24,000-decision CC0 human comparator and an executable three-axis verdict. Candidate-loss
+ECDF, Regan `(s,c)`, simultaneous severe-tail and exact-position opening identity now have named
+populations, deterministic clustered reference limits, insufficiency behavior and Holm
+multiplicity before any expensive result is read.
+
+**What changed:** relative strength, human-distribution equivalence and band identity can no longer
+collapse into one “human-like” checkbox. A disclosed guard-caused mismatch is
+`controlled_divergence`, which permits mechanism copy but explicitly forbids a human-like claim.
+The prior arithmetic is corrected by derivation: 17 arms and 13,200 games, not 16/12,400.
+
+**Evidence/next:** `make bot-calibration-verdict-contract` passes 9/9 able-to-fail groups. Receipt:
+`planning/bot-roster/calibration-verdict-contract-2026-09-06.md`. The next author pass absorbs
+[[D2234]]–[[D2237]] into `rfc/bot-roster.md`; [[D2233]] remains honestly dependency-blocked until
+bot-policy survives fresh review. No bot, schema, API, client, content or protected-design byte
+changed and no profile has been calibrated.

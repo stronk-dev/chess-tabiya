@@ -1,0 +1,121 @@
+{
+  "schema": "tabiya.research.bot-calibration-gates.v1",
+  "experiment": {
+    "id": "bot-roster-v1-relative-ladder",
+    "reference": "maia-band-1400-internal-sampler",
+    "gamesPerStandardArm": 800,
+    "arms": [
+      { "id": "C1", "kind": "null_control", "games": 800 },
+      { "id": "C2", "kind": "sensitivity_control", "games": 400 },
+      { "id": "N", "kind": "weakened_engine_control", "games": 800 },
+      { "id": "A1", "kind": "profile", "profile": "human-baseline-1000", "band": 1000, "games": 800 },
+      { "id": "A2", "kind": "profile", "profile": "human-baseline-1400", "band": 1400, "games": 800 },
+      { "id": "A3", "kind": "profile", "profile": "human-baseline-1800", "band": 1800, "games": 800 },
+      { "id": "A4", "kind": "profile", "profile": "human-baseline-2200", "band": 2200, "games": 800 },
+      { "id": "B1", "kind": "profile", "profile": "guarded-human-1000", "band": 1000, "games": 800 },
+      { "id": "B2", "kind": "profile", "profile": "guarded-human-1400", "band": 1400, "games": 800 },
+      { "id": "B3", "kind": "profile", "profile": "guarded-human-1800", "band": 1800, "games": 800 },
+      { "id": "B4", "kind": "profile", "profile": "guarded-human-2200", "band": 2200, "games": 800 },
+      { "id": "P1", "kind": "profile", "profile": "pawn-forward-1000", "band": 1000, "games": 800 },
+      { "id": "P2", "kind": "profile", "profile": "pawn-forward-1400", "band": 1400, "games": 800 },
+      { "id": "P3", "kind": "profile", "profile": "pawn-forward-1800", "band": 1800, "games": 800 },
+      { "id": "P4", "kind": "profile", "profile": "pawn-forward-2200", "band": 2200, "games": 800 },
+      { "id": "G1", "kind": "layer_contrast", "left": "guarded-human-1400", "right": "human-baseline-1400", "games": 800 },
+      { "id": "G2", "kind": "layer_contrast", "left": "pawn-forward-1400", "right": "guarded-human-1400", "games": 800 }
+    ]
+  },
+  "humanReference": {
+    "license": "CC0",
+    "sourceUrl": "https://database.lichess.org/standard/lichess_db_standard_rated_2026-06.pgn.zst",
+    "compressedRange": "bytes=0-268435455",
+    "compressedSha256": "sha256:399d79b546e045fa3e6706efddd723202c6b00a4c335398e5526c73114abff4d",
+    "decompressedSha256": "sha256:89d444ea00e073ee17d6a02747a7c9da12fe49c949d5b407c9e0d0a60b7d81ea",
+    "variant": "standard",
+    "speed": "blitz",
+    "ratedOnly": true,
+    "completedOnly": true,
+    "excludeBotAccounts": true,
+    "bands": [
+      { "id": "1000", "min": 1000, "max": 1399 },
+      { "id": "1400", "min": 1400, "max": 1799 },
+      { "id": "1800", "min": 1800, "max": 2199 },
+      { "id": "2200", "min": 2200, "max": 2599 }
+    ],
+    "windows": [
+      { "id": "opening-8-16", "minPly": 8, "maxPly": 16 },
+      { "id": "middlegame-17-40", "minPly": 17, "maxPly": 40 },
+      { "id": "late-41-plus", "minPly": 41, "maxPly": null }
+    ],
+    "decisionsPerBandWindow": 2000,
+    "selection": "one-decision-per-game-window/min-sha256(game-bytes,NUL,ply-index)",
+    "split": "sha256(game-bytes)[0] parity; fixed before engine analysis"
+  },
+  "analysisAuthority": {
+    "engine": "Stockfish 18",
+    "bound": { "kind": "depth", "value": 8 },
+    "threads": 1,
+    "hashMiB": 16,
+    "resetPerPosition": ["ucinewgame", "Clear Hash", "isready"],
+    "candidateSet": "all exact legal moves",
+    "scoreDomains": ["centipawn", "mate"],
+    "mateCoercion": "forbidden"
+  },
+  "metrics": [
+    {
+      "id": "candidate_loss_ecdf",
+      "scope": "all-three-windows",
+      "statistic": "two-sample-kolmogorov-smirnov",
+      "referenceLimit": "q95 of 999 deterministic game-clustered target-human split replicates",
+      "test": "q95 of 999 deterministic game-clustered bot-vs-target replicates <= referenceLimit",
+      "requiredForHumanDistribution": true
+    },
+    {
+      "id": "regan_s_c",
+      "scope": "all-three-windows",
+      "statistic": "bounded-maximum-likelihood plus bootstrap-mahalanobis",
+      "referenceLimit": "q95 of 999 deterministic target-human split Mahalanobis replicates",
+      "test": "q95 bot-vs-target Mahalanobis <= referenceLimit",
+      "requiredForHumanDistribution": true
+    },
+    {
+      "id": "candidate_loss_tail",
+      "scope": "all-three-windows",
+      "statistic": "simultaneous-max-standardized-rate-difference",
+      "thresholdsCp": [50, 100, 150, 250],
+      "mateLossArm": true,
+      "referenceLimit": "q95 of 999 deterministic target-human split max-statistic replicates",
+      "test": "q95 bot-vs-target max-statistic <= referenceLimit",
+      "requiredForHumanDistribution": true
+    },
+    {
+      "id": "opening_band_identity",
+      "scope": "exact-fen-opening-only",
+      "statistic": "mean-negative-log-probability-of-observed-human-move",
+      "population": "128 canonical exact FENs, each with >=100 observed moves in every band",
+      "referenceLimit": "999 deterministic game-clustered bootstrap replicates over the frozen exact-FEN population",
+      "test": "target band is unique minimum and Holm-adjusted q05 target-vs-runner-up margin > 0",
+      "requiredForHumanDistribution": false,
+      "requiredForBandIdentity": true
+    }
+  ],
+  "multiplicity": {
+    "method": "holm-bonferroni",
+    "familyWiseAlpha": 0.05,
+    "family": "every claimed profile x every required metric; no metric may be dropped after results"
+  },
+  "verdicts": {
+    "strength": ["calibrated_relative", "unresolved", "invalid"],
+    "distribution": ["human_reference_equivalent", "controlled_divergence", "rejected", "insufficient"],
+    "bandIdentity": ["supported", "refuted", "insufficient"],
+    "humanLikeLabelRequires": {
+      "strength": "calibrated_relative",
+      "distribution": "human_reference_equivalent",
+      "bandIdentity": "supported"
+    },
+    "controlledDivergence": {
+      "allowedPolicyFamilies": ["guarded-human", "pawn-forward"],
+      "labelPermission": "mechanism-only; human-like/personality-equivalence forbidden",
+      "disclosure": "name every failed metric and the exact policy layer responsible"
+    }
+  }
+}

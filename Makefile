@@ -407,6 +407,10 @@ longitudinal-store-ninth-author-repair: longitudinal-store-eighth-fresh-review
 bot-roster-fresh-review:
 	node --test tools/d2233-bot-roster-fresh-review/contract.test.mjs
 
+.PHONY: bot-calibration-verdict-contract
+bot-calibration-verdict-contract:
+	node --test tools/d2236-bot-calibration-verdict-contract/contract.test.mjs
+
 .PHONY: opponent-experience-fresh-review
 opponent-experience-fresh-review:
 	node --test tools/d2238-opponent-experience-fresh-review/contract.test.mjs

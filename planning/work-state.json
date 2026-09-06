@@ -17508,7 +17508,7 @@
       "id": "D2236",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:499f72879f81e5845d611f7e52d675f925ec011fa6ec543c05bbc980958c19e3",
+      "sourceDigest": "sha256:e99c1c2aed36d798041e66c536bebbbf4c0b0a299ad266fee3801bf39e559f64",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-roster.md"
