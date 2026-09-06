@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ea805b01fe1023da5682e6aefa73e88ff4d2cdb0966b73fd049a65827ffc417b",
+    "roadmap": "sha256:30f1a3111e5a937e4a08adf63ca50f0872469d5e8a7187169f4f79276986c553",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:d18c09ede11e3d801f5c533d003470077e9dafd783beb384c35cbee3d77b5267",
-    "rfcRegister": "sha256:1fc58db0a7e64ab4062cc6e3ab8bda7128bbbfcbc0a24e7560d573966639d568",
+    "workState": "sha256:b7319e284167d45f3191686a4916a5cd6e2cec98f7cc2383d9291a69301b90b2",
+    "rfcRegister": "sha256:2ca600512f437987c9c0ba29421d36b69e721827a04676264609f1a29c503111",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -152,15 +152,15 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Author-repair candidate-packet D2885-D2891 and promotion installation D2892-D2896, freshly review both, then land the evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+      "nextAction": "Freshly review the repaired candidate packet; author-repair promotion installation D2892-D2896 and freshly review it; then land the evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "Fresh reviews returned both shared evidence prerequisites: seven candidate-service defects and five promotion installation/population/concurrency authority defects. The spine remains 12/14 and at contract repair before bots, hints, Review or packs consume it.",
+        "summary": "The seven candidate-service returns are repaired in one composed 15-group contract; the five promotion installation/population/concurrency returns remain. The spine stays at contract repair before bots, hints, Review or packs consume it.",
         "impact": "held",
         "evidence": [
-          "planning/evidence-foundation-ux/shared-candidate-packet-twelfth-fresh-independent-buildability-review-2026-09-06.md",
+          "planning/evidence-foundation-ux/shared-candidate-packet-twelfth-author-repair-2026-09-06.md",
           "planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d2885-candidate-packet-twelfth-fresh-review/review.test.ts",
+          "tools/d2885-candidate-packet-twelfth-author-repair/contract.test.ts",
           "tools/d2892-semantic-collectors-promotion-fourteenth-fresh-review/review.test.ts",
           "rfc/shared-candidate-evidence-packet.md",
           "rfc/semantic-collectors.md",
@@ -170,7 +170,7 @@
           {
             "kind": "rfc",
             "id": "shared-candidate-evidence-packet.md",
-            "digest": "sha256:5016ef6bfa3edea8386d86ad9911310991dccfd9f78cc7191a35b1c42df98c26"
+            "digest": "sha256:b0606d87e172c805a4f4b93aabd4602801ea9d9f32e8136d1f22c125cd1f850c"
           },
           {
             "kind": "rfc",

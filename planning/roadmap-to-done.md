@@ -2118,3 +2118,13 @@ caches; does not refresh projected-hit LRU recency; and re-runs loose-piece ches
 result the registry execution should preserve. Seven executable falsifiers pass under `make
 candidate-packet-twelfth-fresh-review`. The evidence spine remains active at contract repair: bots,
 hints, Review and packs must not build separate candidate populations around these defects.
+
+### 2026-09-06 evidence-spine checkpoint — candidate service authority repaired
+
+The candidate packet's twelfth author repair now carries canonical request equality, one-shot
+queue/compile lifecycle, reachable collector failures, independently proven terminal states, exact
+retained-receipt accounting, projection-hit LRU recency and single-invocation total outcomes through
+one composed service. `make candidate-packet-twelfth-author-repair` retains all earlier returns and
+passes 15/15 current groups plus strict TypeScript. This advances the shared evidence foundation but
+does not accept or implement it: a genuinely fresh review, the value-authority dependency and the
+returned promotion installation boundary remain next.

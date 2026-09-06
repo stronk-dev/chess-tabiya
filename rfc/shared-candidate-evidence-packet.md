@@ -2321,6 +2321,43 @@ unauthorized pending a bounded author repair, another genuinely fresh independen
 named `evidence-value-authority` dependency. Exact receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-twelfth-fresh-independent-buildability-review-2026-09-06.md`.
 
+## Twelfth author repair (2026-09-06)
+
+The repair closes [[D2885]]–[[D2891]] at the composed contract boundary rather than asking each
+consumer to defend the service independently:
+
+1. the service joins the returned receipt's canonical FEN, ruleset, literal scope, selected member
+   and complete seven-term packet id to the active job before cache admission or publication;
+2. queue admission clears the queue timer before installing compile-deadline authority, and every
+   job has one guarded terminal transition, so stale timers and late compiler results cannot finish
+   it twice;
+3. the collector registry invocation converts throws and invalid results into sealed
+   move/projection-addressed failures, while unknown compiler/receipt exceptions remain
+   `invariant_failed:receipt` rather than impersonating a collector;
+4. checkmate and stalemate are tested independently; zero legal candidates in any other position
+   produce the reachable `non_terminal_empty` failure, and a non-empty terminal population fails;
+5. cache accounting walks the exact enriched receipt that the entry retains, including identity,
+   result and abstention wrappers, and enforces both logical-byte and unique-object bounds on that
+   measured root;
+6. both direct and wide-to-narrow successful reads refresh the source cache entry under the stated
+   LRU policy; and
+7. every collector invocation returns its total result. In particular the loose-piece adapter calls
+   `loosePieceSemanticEvents` once and retains either its exact values or its exact unavailable
+   reason; no post-hoc detector call reconstructs status.
+
+Criteria 37–43 are the corresponding able-to-fail controls: crossed genuine receipts fail before
+cache mutation; an admitted job survives its former queue deadline and completes exactly once;
+collector and unknown failures take distinct public arms; initial-position zero-population,
+checkmate, stalemate and non-empty-terminal controls all differ; reported cache weight equals an
+independent walk of the retained receipt; a projection hit protects the wide entry from the next
+LRU eviction; and the execution record retains one total result per declared projection with no
+`currentOutcomes`/second loose-piece computation path.
+
+`make candidate-packet-twelfth-author-repair` retains every predecessor return and repair, passes
+15/15 current positive groups and strict TypeScript. This is author evidence, not acceptance or
+production implementation. Another genuinely fresh independent review and the named
+`evidence-value-authority` dependency still gate both.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |

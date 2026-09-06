@@ -16659,3 +16659,21 @@ chain and passes 7/7 current groups plus strict TypeScript. Exact receipt:
 `planning/concept-registry/third-author-repair-2026-09-06.md`. Another genuinely fresh independent
 review and the independently-passed shared-resource bootstrap still precede acceptance and
 implementation.
+
+## 2026-09-06 — candidate packet twelfth author repair
+
+**What landed:** [[D2885]]–[[D2891]] are author-repaired at contract tier. The composed candidate
+service now binds every returned receipt to its active canonical request, transfers queue deadline
+authority before compilation, settles jobs once, maps registered collector failures distinctly,
+separates checkmate/stalemate/non-terminal-empty states, measures the exact cached receipt, refreshes
+projection-hit LRU recency and retains loose-piece availability from one collector invocation.
+
+**What changed:** the candidate packet no longer relies on consumers to defend crossed work or on a
+second detector execution to reconstruct evidence status. No production, schema, API, client,
+content, archive or protected-design byte changed; the RFC remains draft.
+
+**Evidence/next:** `make candidate-packet-twelfth-author-repair` retains the full historical chain
+and passes 15/15 current groups plus strict TypeScript. Exact receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-twelfth-author-repair-2026-09-06.md`.
+Another genuinely fresh review and `evidence-value-authority` still precede acceptance and
+implementation; promotion installation [[D2892]]–[[D2896]] is the parallel foundation repair.

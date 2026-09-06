@@ -23331,7 +23331,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2681736cc5fa4d979ad3a5d08fea6209fabac77cacec0d4291bf797d3c9e7c7a",
+      "sourceDigest": "sha256:1f2ba5c8d1fc02c5747bb0f3b3b86b052878bb1d5c475b76113706c060fe49ed",
       "uxItems": [],
       "blocker": "rfc:shared-candidate-evidence-packet.md"
     },
@@ -23340,7 +23340,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9a8b8bc360922550eac09c979bee838146f06fb8c10efc3c046e37ba6919ed95",
+      "sourceDigest": "sha256:c107981d1f516aca51c4e7633a80d518518a0b8f28643829f45cbf70bb1b28ef",
       "uxItems": [],
       "blocker": "rfc:shared-candidate-evidence-packet.md"
     },
@@ -23349,7 +23349,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5e55c88c508a1e23f005f3b5df7c98f36e298c485cd87db0a70e029b0505b148",
+      "sourceDigest": "sha256:f8ed1e2e0a78b5bf81f32588542e679216fb82836fc30241d7c08442288d2c2d",
       "uxItems": [],
       "blocker": "rfc:shared-candidate-evidence-packet.md"
     },
@@ -23358,7 +23358,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:180504983514edcdfec9e647e27767a4a7b54fcd350d779933144a9d60563810",
+      "sourceDigest": "sha256:fa2f4b6011f866b09f72a882d3f1e478c90f1dd650e888cc0c2be83b7955d2ca",
       "uxItems": [],
       "blocker": "rfc:shared-candidate-evidence-packet.md"
     },
@@ -23367,7 +23367,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c60c2272e20b0b228c1248339f15f1f42af9adbf09eda835b267d2f80d211085",
+      "sourceDigest": "sha256:1f7d51bc7500c998ee8967660df791ec7035c40289ad393d88510967b586dd69",
       "uxItems": [],
       "blocker": "rfc:shared-candidate-evidence-packet.md"
     },
@@ -23376,7 +23376,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d5b968d4e4277af7425151ff9c74915c6093a8ec691c5d00ebf0e6964b234835",
+      "sourceDigest": "sha256:c4761dde8d6e966e834fb482d1fb99a247a968df5e83687765f383fe5b7d9260",
       "uxItems": [],
       "blocker": "rfc:shared-candidate-evidence-packet.md"
     },
@@ -23385,7 +23385,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2810a9e43cb03ce662a6013e6fd82378b036b5c299288d4a96c476f2048ae2c0",
+      "sourceDigest": "sha256:9d5b4c645ec0c0891c0b35f36afeabf478fb7307240f983a25e4637916bdb168",
       "uxItems": [],
       "blocker": "rfc:shared-candidate-evidence-packet.md"
     },
