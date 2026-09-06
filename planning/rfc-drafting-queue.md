@@ -1447,3 +1447,32 @@ tension: zero packs have graduated, so the door initially opens onto very little
 redirected to research; the row and its three constraints are in
 `planning/campaign-research-queue.md` as **R12**. Do not draft a campaign failure RFC from it — it is
 a GAP row under law 1 until the research lands.
+
+## Owner rulings 2026-09-06 — Gate F unblocked, the bootstrap sent back to be cut
+
+**[[D3033]] — the Gate F cycle is broken.** Foundation and schema migrations proceed; **every
+authored-content and claim-binding wave stays held**. The quality gate is untouched — nothing is
+blessed as official — while the pack format can grow so a pack can carry the evidence base. Lane
+**0.28** and the official-content path are unblocked. This deadlock, not quality or effort, is why
+**zero packs have graduated**.
+
+**[[D3034]] — `shared-resource-register-bootstrap.md` is not accepted; it is sent back to be cut.**
+The owner asked *"can't we simplify this? we just need a solid way to not lose track"*, and the
+evidence is on his side:
+
+- **The problem is real** — 62 ledger rows record collisions, id races or renumbering.
+- **The core idea is right and already proven cheap** — [[D1341]]'s C7 made the schema set **data
+  derived from disk** rather than a hand-written list in about **forty lines**, and caught a schema
+  that had shipped unregistered for weeks.
+- **The document is 1,330 lines** proposing a catalogue engine, a projection engine, a lifecycle
+  engine and a staged/first-parent transition reader — and has taken **fifteen fresh independent
+  reviews**. That count is not rigour; it is the shadow-implementation pattern measured on one
+  document.
+
+**The cut:** keep resource-names-as-data so a new register is a **row rather than a parser**. Defer
+the three engines and the three new roots (release manifest, concept registry, source attribution)
+until something concrete needs them. Anything that cannot be justified by a recorded collision comes
+out.
+
+This is the first application of the changed unit of delivery: **bound the repair to the blocking
+contract instead of widening the RFC.**
