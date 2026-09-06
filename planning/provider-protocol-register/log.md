@@ -37,3 +37,14 @@ surrogates; and a changed accepted v1 receipt inside later history is ignored.
 `make provider-protocol-fifth-fresh-review` retains the complete review/repair chain and passes 6/6
 fresh counterexamples. A bounded author repair and another genuinely fresh review remain before the
 generic dependency can unlock implementation.
+
+## 2026-09-06 — Fifth author repair
+
+The returned authority boundary now reads an actual Git repository instead of accepting history
+shapes. It retains exact accepted receipt bytes, independently re-reads HEAD/index/worktree state,
+requires canonical bytes before object parsing, reuses the shipped RFC-8785 canonicalizer and
+refuses any later accepted-v1 byte mutation.
+
+`make provider-protocol-fifth-author-repair` retains the complete chain and passes 6/6 direct repair
+groups plus strict TypeScript. The RFC remains draft pending a genuinely fresh review and the
+accepted/implemented generic bootstrap.

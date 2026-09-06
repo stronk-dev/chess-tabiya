@@ -327,14 +327,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; repair concept-registry D2923-D2928, provider-health D2942-D2949 and provider-protocol D2950-D2955; freshly review each repair; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; repair concept-registry D2923-D2928 and provider-health D2942-D2949; freshly review provider-protocol's fifth repair and each remaining repair; then advance provider exchange, pack-capability and longitudinal-store lanes.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Provider-protocol's fifth fresh review returned the fourth repair: its accepted preimage is still built from caller-authored history and parsed values rather than actual first-parent ancestry and exact accepted/current/index/worktree bytes.",
+          "summary": "Provider-protocol's fifth author repair now derives acceptance from actual complete first-parent Git history, binds exact accepted/HEAD/index/worktree bytes, uses the shipped RFC-8785 canonicalizer and refuses later v1 mutation; fresh review remains.",
           "impact": "held",
-          "evidence": ["planning/provider-protocol-register/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2950-provider-protocol-fifth-fresh-review/review.test.mjs", "rfc/provider-protocol-register.md", "rfc/README.md"],
+          "evidence": ["planning/provider-protocol-register/fifth-author-repair-2026-09-06.md", "tools/d2950-provider-protocol-fifth-author-repair/contract.test.ts", "rfc/provider-protocol-register.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "provider-protocol-register.md", "digest": "sha256:5a1ada23a8e90a3ef853d34beba44811a67716e4c31ebf85c944f52d06b173e0"}
+            {"kind": "rfc", "id": "provider-protocol-register.md", "digest": "sha256:e0f7d90498e0e2d60c9ff4be7c6b3869a8e2afc4aec70c94292e7a5e49e4a253"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

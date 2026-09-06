@@ -1,12 +1,12 @@
 # RFC: Provider-protocol shared-resource catalogue population
 
-- **Status:** draft — **RETURNED by fifth fresh independent review on [[D2950]]–[[D2955]].** The
-  fourth repair closes its ordering and value-grammar defects, but caller-authored history and
-  receipt objects still impersonate Git ancestry and exact file bytes; committed/staged state is
-  unobserved; duplicate keys and invalid Unicode enter; and accepted receipt mutation is ignored.
-  `make provider-protocol-fifth-fresh-review` retains the complete chain and passes 6/6 fresh
-  counterexamples. A bounded author repair, another genuinely fresh review and the generic
-  bootstrap dependency remain required. Implementation is unauthorized.
+- **Status:** draft — **fifth author repair completed on [[D2950]]–[[D2955]].** A repository-owned
+  reader now derives complete first-parent acceptance from resolved Git objects; exact accepted,
+  HEAD, index and worktree bytes remain distinct; canonical bytes reject duplicate keys and invalid
+  Unicode through the shipped RFC-8785 authority; and post-accept v1 mutation fails. `make
+  provider-protocol-fifth-author-repair` retains the complete chain and passes 6/6 direct repairs
+  plus strict TypeScript. Another genuinely fresh review and the generic bootstrap dependency
+  remain required. Implementation is unauthorized.
 - **Author:** Codex
 - **Created:** 2026-08-30
 - **Design refs:** none. This is repository process and changes no provider behavior or learner UX.
@@ -426,6 +426,24 @@ three new executable falsifiers. Exact evidence:
 The RFC remains draft; no descriptor, register, obligation receipt or provider product byte is
 authorized.
 
+## Fifth author repair (2026-09-06)
+
+The six returned defects are repaired as one repository-owned boundary. [[D2950]] removes the
+history-array API: one operation resolves the repository and walks its actual complete first-parent
+history, reading source status and receipt bytes from each commit object. [[D2951]] gives exact
+accepted receipt bytes their own digest, distinct from the semantic obligations digest. [[D2952]]
+makes landing re-read HEAD, index and worktree bytes rather than accept a `currentReceipt` operand.
+[[D2953]] requires the raw file to equal its RFC-8785 canonical image plus one newline before object
+parsing. [[D2954]] imports the shipped canonicalizer and its Unicode-scalar refusal. [[D2955]] checks
+the exact accepted v1 bytes at every later first-parent image, including mutate-then-restore.
+
+`make provider-protocol-fifth-author-repair` retains all predecessor evidence, passes the 6/6 fifth
+fresh-review counterexamples and then passes 6/6 direct repairs plus repository-compatible
+TypeScript. Exact receipt:
+`planning/provider-protocol-register/fifth-author-repair-2026-09-06.md`. This remains author-contract
+evidence; another genuinely fresh review and the generic bootstrap dependency precede acceptance
+or implementation.
+
 ## Fourth author repair (2026-09-06)
 
 The three returned acceptance-authority defects are repaired as one boundary:
@@ -470,6 +488,10 @@ semantics, not choices made by this process document.
 
 ## Changelog
 
+- 2026-09-06: fifth author repair closes [[D2950]]–[[D2955]] at contract tier with an actual
+  repository-owned first-parent reader, exact accepted/HEAD/index/worktree byte joins, canonical
+  raw receipt parsing through the shared RFC-8785 authority and post-accept byte immutability.
+  `make provider-protocol-fifth-author-repair` passes 6/6 plus strict TypeScript.
 - 2026-09-06: fifth fresh independent review returned the fourth repair on [[D2950]]–[[D2955]]:
   history and exact bytes remain caller claims, checkout state is unobserved, duplicate keys and
   invalid Unicode enter, and later accepted-receipt mutation is ignored. `make

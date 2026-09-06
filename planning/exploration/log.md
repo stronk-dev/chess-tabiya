@@ -17064,3 +17064,15 @@ counterexamples. A bounded author repair must join repository-owned first-parent
 accepted/current/index/worktree bytes and the shared RFC-8785 parser before another fresh review.
 The generic bootstrap still precedes process implementation; product population semantics remain
 the later D4 obligation.
+
+## 2026-09-06 — provider protocol fifth author repair
+
+**What landed:** a bounded contract-tier repair for [[D2950]]–[[D2955]]. The model now derives
+acceptance from actual complete first-parent Git history and reads exact accepted, HEAD, index and
+worktree receipt bytes itself. Raw receipt bytes must be the shared RFC-8785 canonical image plus
+one newline before semantic parsing, and every post-accept v1 image must retain those exact bytes.
+
+**Evidence/next:** `make provider-protocol-fifth-author-repair` retains every prior return/repair and
+passes 6/6 direct repairs plus strict TypeScript. No catalogue, register, provider product, schema,
+storage, content, archive or protected-design byte changed. Another genuinely fresh review and the
+accepted/implemented generic bootstrap still precede implementation; D4 remains product-owned.
