@@ -345,15 +345,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Freshly review the repaired candidate packet and promotion installation, then land the evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+        "nextAction": "Repair promotion installation D2929-D2933 without deleting its current collector path; freshly review the repaired candidate packet; then land the evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Both shared population prerequisites are author-repaired: the candidate service has one request/lifecycle/cache authority and promotion installation has one sealed, eagerly validated, single-flight registry/store authority. Fresh review and provider/value dependencies remain before production.",
+          "summary": "The promotion pair's fifteenth fresh review returned a forgeable, production-unreachable installation whose checksum-only validation admits invalid documents and whose replacement deleted the current lookup/collector/result authority chain.",
           "impact": "held",
-          "evidence": ["planning/evidence-foundation-ux/shared-candidate-packet-twelfth-author-repair-2026-09-06.md", "planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-author-repair-2026-09-06.md", "tools/d2885-candidate-packet-twelfth-author-repair/contract.test.ts", "tools/d2892-semantic-collectors-promotion-fourteenth-author-repair/contract.test.ts", "rfc/shared-candidate-evidence-packet.md", "rfc/semantic-collectors.md", "rfc/README.md"],
+          "evidence": ["planning/evidence-foundation-ux/semantic-collectors-promotion-fifteenth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2929-semantic-collectors-promotion-fifteenth-fresh-review/review.test.ts", "rfc/semantic-collectors.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "shared-candidate-evidence-packet.md", "digest": "sha256:b0606d87e172c805a4f4b93aabd4602801ea9d9f32e8136d1f22c125cd1f850c"},
-            {"kind": "rfc", "id": "semantic-collectors.md", "digest": "sha256:38cf8853e5c48205e8e2ba8bec2abaa1eaefe0754b291ba5b7f2fb6be1701246"}
+            {"kind": "rfc", "id": "semantic-collectors.md", "digest": "sha256:ced310d35a3f21ea57d5072e72128b9357a85da6941e766decbafad89bc3ff19"}
           ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."

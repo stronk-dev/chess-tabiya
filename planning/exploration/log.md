@@ -16987,3 +16987,22 @@ plus strict TypeScript. A bounded author repair must close capability issuance, 
 capability, complete-document validation, mandatory restart validation, the real Svelte graph and
 operation-specific value flow before another fresh review. The shared-resource bootstrap still
 precedes acceptance and implementation.
+
+## 2026-09-06 — held promotion collectors fifteenth fresh buildability return
+
+**What landed:** a fresh requirements-tier review of the fourteenth promotion repair, with five
+executable counterexamples registered as [[D2929]]–[[D2933]]. No product, schema, storage, content,
+archive or protected-design byte changed.
+
+**What changed:** eager generation validation and single-flight construction survive, but the held
+pair remains returned. The installed-configuration map is exported and forgeable while no
+production issuer exists; canonical/checksum validation admits pack and provider documents rejected
+by their production parsers; and the replacement store deletes recorded/legal lookup plus the
+current request, collector, result and receipt lineage.
+
+**Evidence/next:**
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fifteenth-fresh-independent-buildability-review-2026-09-06.md`;
+`make semantic-collectors-promotion-fifteenth-fresh-review` retains the entire history and passes
+5/5 fresh counterexamples plus strict TypeScript. A bounded author repair must restore one
+non-forgeable production composition and complete current collector path before another genuinely
+fresh review. Provider/value dependencies still precede implementation; the spine stays 12/14.
