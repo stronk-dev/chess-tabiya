@@ -26,10 +26,10 @@ This is a scoped refusal of the global one-ply multiplier, not a refusal of king
 preregistered phase- or outcome-specific bot mechanism. It does not itself mean centralization,
 opposition, shouldering, escorting, activity or correct technique. `[M]` (contract interpretation)
 
-No personality or human-like claim is available. Maia is the policy being transformed and cannot
-also serve as an independent human endgame reference. The result's overall disposition therefore
-remains `insufficient_human_reference`, with `refused_exact_transform` as the only permitted
-promotion. `[V]` (result `verdict`); `[M]` (product interpretation)
+This instrument contains no independent human reference: Maia is the policy being transformed and
+cannot also serve as its comparator. D2903 subsequently supplied a checksum-pinned same-FEN human
+sample and independently refused the same direction; neither result earns personality or human-like
+copy. `[V]` (`human-endgame-bot-reference.md`); `[M]` (product interpretation)
 
 ## Population and reproduction
 
@@ -73,6 +73,7 @@ that the tested global transform passed. `[M]` (preregistration discipline)
   (`planning/bot-roster/d2902-endgame-king-activity-plan.md`)
 - The screen is one-ply. It says nothing about multi-ply coherence, conversion technique, fun or
   whether a learner perceives a distinct opponent. `[M]`
-- The next endgame-bot research must obtain an independent human move reference or preregister a
-  different semantic mechanism. It must not relabel this transform or tune its multiplier from the
-  observed winning subgroup. `[M]`
+- The independent human reference is now measured and also refuses this direction. The next
+  endgame-bot research must preregister a different semantic mechanism; it must not relabel this
+  transform or tune its multiplier from the observed winning subgroup. `[V]`
+  (`human-endgame-bot-reference.md`); `[M]` (scope interpretation)

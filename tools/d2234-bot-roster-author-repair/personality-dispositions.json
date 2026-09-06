@@ -130,7 +130,7 @@
       "id": "king_activity_endgame",
       "disposition": "refused_exact_transform",
       "profilePath": null,
-      "source": "design/research/endgame-bot-king-activity.md"
+      "source": "design/research/human-endgame-bot-reference.md"
     },
     {
       "id": "clock_history_behavior",

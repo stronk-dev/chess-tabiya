@@ -1,0 +1,215 @@
+{
+  "schema": "tabiya.research.d2903-human-endgame-reference.v1",
+  "measuredAt": "2026-09-06T10:55:42.004Z",
+  "parameters": {
+    "temperature": 0.8,
+    "topP": 0.92,
+    "multiplier": 4,
+    "bootstrapSamples": 2000,
+    "guard": "exact-five-state-syzygy-category-equality",
+    "exactMoveFloor": {
+      "total": 30,
+      "perBand": 10
+    }
+  },
+  "inputs": {
+    "population": "sha256:6d61e48f60b2a73025dfb35704ee99615aab422d8d80b18e4f83f8f500a7b2da",
+    "tablebase": "sha256:b21d2e2ce92cd157c7ebaa281888787b7c23ca9b970098c8c53a4d119c2cbc48",
+    "maia1400": "sha256:de7b5e1ab89996eee6505393b122356d3cc8bdd122484a22f34f8f6314f23356",
+    "maia1800": "sha256:f8f1e6e293bd186fa96a573c3c2b05cf53c7280c4250837c3c7fb5443c7cf0ed"
+  },
+  "identity": {
+    "identity": {
+      "id": "maia-5m",
+      "kind": "opponent",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true
+    },
+    "options": [
+      {
+        "name": "Elo",
+        "type": "spin",
+        "default": "1500",
+        "min": 0,
+        "max": 5000
+      },
+      {
+        "name": "SelfElo",
+        "type": "spin",
+        "default": "1500",
+        "min": 0,
+        "max": 5000
+      },
+      {
+        "name": "OppoElo",
+        "type": "spin",
+        "default": "1500",
+        "min": 0,
+        "max": 5000
+      },
+      {
+        "name": "Temperature",
+        "type": "string",
+        "default": "1.0"
+      },
+      {
+        "name": "TopP",
+        "type": "string",
+        "default": "1.0"
+      },
+      {
+        "name": "MultiPV",
+        "type": "spin",
+        "default": "5",
+        "min": 1,
+        "max": 20
+      }
+    ],
+    "bandRange": {
+      "min": 1000,
+      "max": 2400
+    }
+  },
+  "population": {
+    "selected": 128,
+    "capacity": {
+      "distinctGames": 128,
+      "band1400": 64,
+      "band1800": 64,
+      "king": 52,
+      "nonKing": 76,
+      "preProviderSufficient": true
+    },
+    "providerComplete": 128,
+    "providerAttempts": {
+      "tablebase": 143,
+      "tablebaseFailures": 15
+    },
+    "safetyCompatible": 126,
+    "safetyExcluded": 2,
+    "guardEmpty": 0,
+    "safetyByBand": {
+      "1400": 64,
+      "1800": 62
+    },
+    "safetyByClass": {
+      "king": 52,
+      "nonKing": 74
+    },
+    "referenceSufficient": true,
+    "exactMoveRetained": 109,
+    "exactMoveAbsent": 17,
+    "exactMoveByBand": {
+      "1400": 53,
+      "1800": 56
+    },
+    "exactPageSufficient": true,
+    "infiniteClassLosses": 2
+  },
+  "summary": {
+    "pooled": {
+      "games": 126,
+      "humanKingRate": 0.412698,
+      "guardedKingMass": 0.410172,
+      "transformedKingMass": 0.464772
+    },
+    "byBand": {
+      "1400": {
+        "games": 64,
+        "humanKingRate": 0.390625,
+        "guardedKingMass": 0.394223,
+        "transformedKingMass": 0.45799
+      },
+      "1800": {
+        "games": 62,
+        "humanKingRate": 0.435484,
+        "guardedKingMass": 0.426636,
+        "transformedKingMass": 0.471773
+      }
+    },
+    "byRootCategory": {
+      "draw": {
+        "games": 25,
+        "humanKingRate": 0.48,
+        "guardedKingMass": 0.435057,
+        "transformedKingMass": 0.500623
+      },
+      "loss": {
+        "games": 44,
+        "humanKingRate": 0.727273,
+        "guardedKingMass": 0.737318,
+        "transformedKingMass": 0.780169
+      },
+      "win": {
+        "games": 57,
+        "humanKingRate": 0.140351,
+        "guardedKingMass": 0.146724,
+        "transformedKingMass": 0.205583
+      }
+    },
+    "byPieceCount": {
+      "3": {
+        "games": 6,
+        "humanKingRate": 0.5,
+        "guardedKingMass": 0.584209,
+        "transformedKingMass": 0.691562
+      },
+      "4": {
+        "games": 17,
+        "humanKingRate": 0.529412,
+        "guardedKingMass": 0.510996,
+        "transformedKingMass": 0.550022
+      },
+      "5": {
+        "games": 14,
+        "humanKingRate": 0.357143,
+        "guardedKingMass": 0.374882,
+        "transformedKingMass": 0.397805
+      },
+      "6": {
+        "games": 29,
+        "humanKingRate": 0.37931,
+        "guardedKingMass": 0.393947,
+        "transformedKingMass": 0.458911
+      },
+      "7": {
+        "games": 60,
+        "humanKingRate": 0.4,
+        "guardedKingMass": 0.380279,
+        "transformedKingMass": 0.436397
+      }
+    }
+  },
+  "scores": {
+    "classLogLoss": null,
+    "classBrier": {
+      "mean": 0.026759,
+      "ci95": [
+        0.006186,
+        0.04675
+      ]
+    },
+    "exactMoveNll": {
+      "mean": 0.052151,
+      "ci95": [
+        -0.002223,
+        0.108322
+      ]
+    }
+  },
+  "comparison": {
+    "d2902Overall": "insufficient_human_reference",
+    "d2902PermittedPromotion": "refused_exact_transform"
+  },
+  "verdict": {
+    "overall": "refused_human_reference",
+    "promising": false,
+    "globalTransformRescued": false,
+    "profileClaim": false,
+    "personalityClaim": false,
+    "humanLikeClaim": false
+  }
+}

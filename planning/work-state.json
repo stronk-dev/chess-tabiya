@@ -17517,7 +17517,7 @@
       "id": "D2237",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5db41db88985f891c9420e896f96b6e35b5762218598f930a1bceb8f2568ed53",
+      "sourceDigest": "sha256:3031d986082a734539de2b60d8dee1ff2a52bcb4b0109116c49ee5f128befd86",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-roster.md"
@@ -23483,6 +23483,14 @@
       "state": "todo",
       "sourceGlyph": "📊",
       "sourceDigest": "sha256:8e6bdabea029c66d8c7c0a25a980a0537435bf55950da51a6e3cde199dc917e7",
+      "uxItems": [],
+      "owner": "bot-play"
+    },
+    {
+      "id": "D2903",
+      "state": "todo",
+      "sourceGlyph": "📊",
+      "sourceDigest": "sha256:207b926d52c55dcb176686af7722203d5772cc351b59383a76ab48d4021c7e62",
       "uxItems": [],
       "owner": "bot-play"
     }

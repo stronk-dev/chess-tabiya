@@ -16796,3 +16796,26 @@ used as a post-hoc rescue.
 Review and drills. Bot promotion still needs a separately preregistered semantic/phase mechanism,
 multi-ply coherence and an independent human endgame move reference; this result earns zero
 personality or human-like claim.
+
+## 2026-09-06 — D2903 paired human endgame reference
+
+**What landed:** a preregistered, privacy-minimized same-FEN comparator over the checksum-pinned
+D1329 June Lichess CC0 source. The streaming arm replayed 827,067 complete blocks without retaining
+usernames or raw games, selected 128 distinct late 3–7-piece blitz decisions before provider
+results, then joined every position to a complete exact Syzygy successor map and the matching
+1400/1800 production Maia page. The normal Make targets own the small-fixture refusal, expanded
+source capture, provider retry/completeness contract and report.
+
+**What changed:** the independent-reference gap is closed for the exact global king-move ×4
+mechanism, and the reference rejects it. Of 128 selected games, 126 preserve the exact five-state
+root category and 109 observed moves retain positive guarded Maia mass. Human king-move rate is
+41.27% against 41.02% guarded Maia mass; ×4 raises mass to 46.48%. Paired Brier worsens +0.026759
+with 95% game-bootstrap interval [0.006186, 0.046750]; exact-move NLL worsens on average, and two
+observed-class log losses are literal infinity without epsilon smoothing.
+
+**Evidence/next:** `design/research/human-endgame-bot-reference.md`,
+`planning/bot-roster/d2903-human-endgame-reference-results.json` and
+`tools/d2903-human-endgame-reference/`. D2902 remains refused rather than rescued. Literal
+king-move identity still serves Support, Review and drill conditions; bot work moves to a newly
+preregistered semantic opportunity with multi-ply coherence, not another global multiplier. No
+profile, personality, rating or general human-like claim is licensed.
