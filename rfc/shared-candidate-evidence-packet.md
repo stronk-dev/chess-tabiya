@@ -622,8 +622,9 @@ A scope's execution plan — which declarations run, in what order, and which of
 dependencies retained only privately — is `rfc/candidate-collector-registry.md`'s contract, and so is
 the rule that no collector callable ever receives `scope`. What this RFC fixes is the consequence:
 for the same root and the same compiler/manifest versions, an output executed under more than one
-plan has the same canonical projection identity and the same evidence payload. Request order may
-change cache hits, never factual bytes.
+plan has the same canonical projection identity and the same evidence payload.
+Request order may change
+cache hits, never factual bytes.
 
 The candidate set is always complete. Scope is part of the cache identity (§6.1) so a narrow packet
 is never served to a consumer that needs the wide one. A cached wide packet may satisfy a narrow request only by a
@@ -666,6 +667,15 @@ validator: callers lose the ability to propose bytes for validation. Existing pa
 tests become compile/runtime refusal tests at the input boundary; map integrity remains covered by
 the exact-mobility authority's permanent ordinary, pin/check, castling, en-passant, promotion and
 terminal fixtures.
+
+**The single authority is measured, not aesthetic ([[D2428]]).** On the current production symbols,
+six positions (ordinary, castling, promotion, middlegame, pawn endgame and terminal), 20 warm-up
+rounds and 100 measured rounds produced median **0.029465 ms/position** for one authority
+computation and **0.080278 ms/position** for the current compiler-plus-validating-adapter path:
+**2.724×**. `[V]` This is a local author measurement, not a release latency promise; its purpose is
+to show that the duplicate trust path is measurable work before a single candidate collector runs.
+Reproducer: `make candidate-packet-d2428-measurement`. Criterion 36 binds one factory call to one
+internal authority call and the same declared object graph.
 
 **§4.2 — The convention is retained, not re-declared.** `legalConvention` is the versioned id of
 `rules.mobility.reading.legal_moves@1` and `moveIdentityConvention` is `MOVE_IDENTITY_CONVENTION`
@@ -858,8 +868,16 @@ measurement into a new claim ([[D1579]]). The Node-24 record at
 52.28 MB heap, 6,629 readings raising the same eight-entry cache to 91.78 MB — is retained as
 evidence that equal visible-item weights fail, not as calibration.
 
-Which dimensions bound the cache, how a retained graph is measured, and how eviction and oversize
-behave are `rfc/candidate-population-service.md`'s to specify and to measure. [[D1580]] remains
+The cache is bounded independently by **entry count**, **complete retained logical UTF-8 bytes**
+(`maxRetainedLogicalBytes`) and **unique retained object count** (`maxRetainedObjects`); all three
+are explicit composition-root inputs.
+No public-packet serialization or visible event/reading coefficient
+is an admissible substitute for measuring the retained graph. Exactly
+one retained-root descriptor names the measured top-level fields and derives every category
+selector from those same rows, so an added reference field fails root-set closure until it is
+categorized rather than being silently unmeasured ([[D2657]]–[[D2659]]). How that graph is
+traversed, and how eviction and oversize behave, are
+`rfc/candidate-population-service.md`'s to specify and to measure. [[D1580]] remains
 separate: no release tier declares a numeric heap/RSS envelope, so a deterministic cache bound is
 necessary and does not manufacture release clearance.
 

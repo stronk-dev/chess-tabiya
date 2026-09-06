@@ -829,6 +829,16 @@ candidate-packet-thirteenth-author-repair: candidate-packet-thirteenth-fresh-rev
 	./node_modules/.bin/vitest run --config tools/d2934-candidate-packet-thirteenth-author-repair/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/tsc -p tools/d2934-candidate-packet-thirteenth-author-repair/tsconfig.json --noEmit
 
+# Retired from verify-governance 2026-09-06 by the cut of rfc/shared-candidate-evidence-packet.md
+# ([[D3034]]'s changed unit of delivery, second application). The chain from the sixth author repair
+# to the fourteenth fresh review greps the RFC's prose for the service factory, the collector result
+# algebra and the retained-graph walker — the material the cut routed to
+# rfc/candidate-population-service.md and rfc/candidate-collector-registry.md. Holding the gate would
+# require un-cutting the document, which is the shadow-implementation loop being repaired. The
+# targets remain runnable as historical evidence; the acceptance authority is now owner acceptance of
+# the bounded contract and, after that, the implementation itself. Every arm that asserts a property
+# the cut document still carries was kept green and is verified by
+# `make candidate-packet-seventh-author-repair`.
 candidate-packet-fourteenth-fresh-review: candidate-packet-thirteenth-author-repair
 	./node_modules/.bin/vitest run --config tools/d3009-candidate-packet-fourteenth-fresh-review/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/tsc -p tools/d3009-candidate-packet-fourteenth-fresh-review/tsconfig.json --noEmit
@@ -1027,7 +1037,10 @@ pack-capability-sixteenth-author-repair: pack-capability-sixteenth-fresh-review
 pack-capability-seventeenth-fresh-review: pack-capability-sixteenth-author-repair
 	node --test tools/d3002-pack-capability-seventeenth-fresh-review/review.test.mjs
 
-.PHONY: shared-resource-bootstrap-seventh-fresh-review shared-resource-bootstrap-seventh-author-repair shared-resource-bootstrap-eighth-fresh-review shared-resource-bootstrap-eighth-author-repair shared-resource-bootstrap-ninth-fresh-review shared-resource-bootstrap-ninth-author-repair shared-resource-bootstrap-tenth-fresh-review shared-resource-bootstrap-tenth-author-repair
+.PHONY: shared-resource-bootstrap-collision-core-author-contract shared-resource-bootstrap-seventh-fresh-review shared-resource-bootstrap-seventh-author-repair shared-resource-bootstrap-eighth-fresh-review shared-resource-bootstrap-eighth-author-repair shared-resource-bootstrap-ninth-fresh-review shared-resource-bootstrap-ninth-author-repair shared-resource-bootstrap-tenth-fresh-review shared-resource-bootstrap-tenth-author-repair
+shared-resource-bootstrap-collision-core-author-contract:
+	node --test tools/d3034-shared-resource-bootstrap-collision-core-author-contract/contract.test.mjs
+
 shared-resource-bootstrap-seventh-fresh-review:
 	node --test tools/d2593-shared-resource-bootstrap-seventh-fresh-review/contract.test.mjs
 
@@ -1301,6 +1314,10 @@ bounded-target-fifth-author-repair: bounded-target-fourth-author-repair
 bounded-target-fifth-fresh-review: bounded-target-fifth-author-repair
 	./node_modules/.bin/vitest run --config tools/d3042-bounded-target-fifth-fresh-review/vitest.config.ts --reporter=verbose
 
+.PHONY: bounded-target-sixth-author-repair
+bounded-target-sixth-author-repair: bounded-target-fifth-fresh-review
+	node --test tools/d3042-bounded-target-sixth-author-repair/contract.test.mjs
+
 .PHONY: professional-closure-audit
 professional-closure-audit:
 	node --test tools/d2261-professional-closure-audit/contract.test.mjs
@@ -1340,7 +1357,9 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review concept-registry-fourth-author-repair concept-registry-fifth-author-repair concept-registry-sixth-fresh-review longitudinal-store-tenth-fresh-review storage-backup-fourth-author-repair storage-backup-fifth-fresh-review safe-deployment-third-author-repair safe-deployment-fourth-fresh-review campaign-two-horizon-sixth-author-repair campaign-two-horizon-seventh-fresh-review pack-capability-seventeenth-fresh-review candidate-packet-fourteenth-fresh-review semantic-collectors-promotion-sixteenth-fresh-review bounded-target-fifth-fresh-review provider-health-ninth-fresh-review provider-health-ninth-author-repair provider-health-tenth-fresh-review provider-health-eleventh-author-repair provider-health-twelfth-fresh-review shared-resource-bootstrap-fifteenth-fresh-review provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review provider-protocol-sixth-fresh-review live-sources-author-repair review-evidence-third-author-repair evidence-presentation-sixth-fresh-review bot-policy-fifth-fresh-review bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review concept-registry-fourth-author-repair concept-registry-fifth-author-repair concept-registry-sixth-fresh-review longitudinal-store-tenth-fresh-review storage-backup-fourth-author-repair storage-backup-fifth-fresh-review safe-deployment-third-author-repair safe-deployment-fourth-fresh-review campaign-two-horizon-sixth-author-repair campaign-two-horizon-seventh-fresh-review pack-capability-seventeenth-fresh-review semantic-collectors-promotion-sixteenth-fresh-review bounded-target-fifth-fresh-review provider-health-ninth-fresh-review provider-health-ninth-author-repair provider-health-tenth-fresh-review provider-health-eleventh-author-repair provider-health-twelfth-fresh-review shared-resource-bootstrap-fifteenth-fresh-review provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review provider-protocol-sixth-fresh-review live-sources-author-repair review-evidence-third-author-repair evidence-presentation-sixth-fresh-review bot-policy-fifth-fresh-review bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract test-tier-check docs-check staged-process-contracts-test
+verify-governance: shared-resource-bootstrap-collision-core-author-contract
+verify-governance: bounded-target-sixth-author-repair
 
 verify-content: test-content
 

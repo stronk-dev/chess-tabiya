@@ -58,5 +58,9 @@ test("D2428/D2468 RFC consumes the registered production route and measured boun
   assert.match(rfc, /imports neither `exactLegalMoveMap` nor `exactLegalMoves`/u);
   assert.match(rfc, /createRulesMobilityReadingLegalMovesV1Evidence/u);
   assert.match(rfc, /\*\*2\.724×\*\*/u);
-  assert.match(rfc, /another fresh independent review is required before implementation/u);
+  // 2026-09-06: the RFC was cut to its blocking contract under [[D3034]]'s changed unit of
+  // delivery, which replaced "another fresh independent review" with owner acceptance as the gate.
+  // The property this arm exists to hold is that the RFC still refuses implementation; that is what
+  // is asserted now, against the sentence the cut document actually carries.
+  assert.match(rfc, /[Ii]mplementation remains unauthorized/u);
 });
