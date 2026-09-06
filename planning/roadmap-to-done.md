@@ -2405,3 +2405,17 @@ events, close request/provider/population grammars, rebase on accepted current p
 inherit the repository compiler contract before another fresh review. The 4×3 roster, calibrated
 human-likeness, route source, cards, rematches, Review integration, phase/endgame behavior and bot
 tournaments remain separate required 1.0 work.
+
+## Checkpoint — Bounded target facts returned at async ownership boundaries
+
+The target/immediate/bounded-return semantic split remains part of the evidence foundation, but its
+fifth fresh review proves the proposed background service is not yet an exact authority. The
+protocol equality ignores types, queued arrays remain caller-mutable, byte dedup conflicts with
+exact-reference factory ancestry, the public result validator is absent and malformed cyclic input
+throws before the declared `seal_failed` arm.
+
+`make bounded-target-fifth-fresh-review` retains both author layers and passes 5/5 fresh
+counterexamples. The next repair must own one immutable admitted request, reconcile its equivalence
+with derived ancestry, publish an exact result parser and totalize malformed input before another
+fresh review. Support, Review, bot policy and longitudinal style consumers remain correctly blocked
+from treating these facts as production evidence.

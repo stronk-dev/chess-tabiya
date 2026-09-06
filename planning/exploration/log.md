@@ -17381,3 +17381,23 @@ component, module, seat, preset or protected-design byte changed.
 `make evidence-presentation-sixth-fresh-review` retains every predecessor and passes 7/7 fresh
 groups. Complete one bounded sixth author repair, obtain another genuinely fresh review, and retain
 [[D1672]]/[[D2401]] as independent acceptance blockers.
+
+## 2026-09-06 — Bounded targets fifth fresh independent return
+
+**What landed:** a fresh executable review returns the fifth bounded-target author repair on
+[[D3042]]–[[D3046]]. The target/immediate/return semantic split, finite background traversal and
+central no-alias value routes survive; the complete asynchronous authority does not.
+
+**What changed:** `bounded-policy-targets.md` remains draft. Its AST equality ignores public field
+and callable types; queued jobs retain a caller-mutable exchange array; byte-digest dedup shares
+results whose exact factory ancestry belongs to another waiter; the promised public result
+validator is not declared; and a cyclic unsealed payload throws while the RFC promises a typed
+`seal_failed` result. No runtime, provider, schema, API, content, client or protected-design byte
+changed.
+
+**Evidence/next:**
+`planning/bounded-policy-targets/fifth-fresh-independent-buildability-review-2026-09-06.md`;
+`make bounded-target-fifth-fresh-review` retains the two author layers and passes 5/5 fresh
+counterexamples. Complete one bounded sixth repair across type equality, input ownership,
+dedup/ancestry and result/error closure; then obtain another genuinely fresh review after its value
+and semantic-validation dependencies are accepted.

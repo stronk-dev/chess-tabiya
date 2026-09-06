@@ -24734,6 +24734,51 @@
       "uxItems": [],
       "owner": "assistance-and-presentation",
       "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D3042",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2ddbfe7fe89f6e32a41037f2fbceac3d5b238993d3d0f471b1f9df8471b2e4d1",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:bounded-policy-targets.md"
+    },
+    {
+      "id": "D3043",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6c4d14b9f3639a1818367375ab96c10a5e7800633fe79dc16ca4e821b0085f13",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:bounded-policy-targets.md"
+    },
+    {
+      "id": "D3044",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:dc4263aa9731b447dc75a1535032f7b19319905950730539ef5a9e4f70740352",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:bounded-policy-targets.md"
+    },
+    {
+      "id": "D3045",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:eed578b33a648352efa5cf75464ed8df53adcdc01c0e48a68883ad765445c3da",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:bounded-policy-targets.md"
+    },
+    {
+      "id": "D3046",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:371ee1b9427d7152d64d1fbc0ac970f08576ab30481c76efc69489bc088521e3",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:bounded-policy-targets.md"
     }
   ]
 }

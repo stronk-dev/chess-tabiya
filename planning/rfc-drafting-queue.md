@@ -1476,3 +1476,22 @@ out.
 
 This is the first application of the changed unit of delivery: **bound the repair to the blocking
 contract instead of widening the RFC.**
+
+## Owner rulings 2026-09-06 (second batch) — the conversion rule, and two signals demoted
+
+**[[D3047]] — a foundation may land with a staged discharge.** The owner took the faster arm against
+my recommendation. My ground stands, recorded rather than re-argued: **~35 documents of
+specified-but-unbuilt product exist, and staged discharges are how they got there.** So the ruling
+carries a condition that makes it safe rather than a repetition: **a staged discharge must have an
+owner, a date, and existence as a tracked `work-state` item** in `blocked` with
+`blocker: "item:D<n>"` naming its foundation. **Prose in an RFC does not count** — [[D1523]]
+established that an id cited in a document is not queued work, and prose discharges are precisely
+the form that rotted before. The enforcement clause is owed to `rfc/work-state.md`.
+
+**[[D3048]] — `human_divergence` and `option_collapse` are demoted to on-request.** Unasked help is
+the strongest claim this product makes and should be its rarest; both now sit behind a learner's
+request under L6. Closes [[D52]] and [[D53]].
+
+**With [[D3033]] and [[D3047]], all four owner-gated blockers in the repository are now closed.**
+Every remaining blocked item — 1,288 of them — waits on an RFC, and ten RFCs hold 654. Three cuts are
+commissioned against the top four ([[D3049]]).

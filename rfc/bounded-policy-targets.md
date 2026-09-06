@@ -1,12 +1,12 @@
 # RFC: Convention-grounded bounded material targets
 
-- **Status:** **draft — fifth author repair completed 2026-09-04 on [[D2628]]–[[D2630]];
-  another fresh independent review is required.** The complete normative protocol declaration is
-  set-equal to the RFC's public names, fields and discriminated arms; the package-internal central
-  value-route invoker is the service's sole construction path; and the threat source consumes the
-  exact registered `createRulesTacticConsequenceThreatV1Evidence` route with no alias. `make
-  bounded-target-fifth-author-repair` retains the previous author controls and executes the three
-  new inversions. Implementation remains unauthorised until fresh acceptance and dependency landing.
+- **Status:** **draft — fifth fresh independent review returned the fifth author repair on
+  [[D3042]]–[[D3046]].** Protocol equality ignores field/callable types; queued request containers
+  remain caller-mutable; byte dedup contradicts exact-reference ancestry; the named public result
+  validator is absent; and malformed cyclic input throws before the promised `seal_failed` result.
+  `make bounded-target-fifth-fresh-review` retains both author layers and reproduces 5/5 fresh
+  counterexamples. Bounded sixth author repair, another genuinely fresh review and dependency
+  landing are required before implementation.
 - **Author:** codex, preserving the D1023 research contract and applying `planning/bounded-policy-targets/author-repair-2026-08-26.md`
 - **Created:** 2026-08-23; narrowed 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; executable contract closure in `design/research/bounded-policy-target-contract-closure.md`
@@ -1278,8 +1278,31 @@ background service an exact route; and the threat authority uses the already-reg
 symbol only. `make bounded-target-fifth-author-repair` is positive author evidence; a fresh reviewer
 still owns acceptance.
 
+## Fifth fresh independent return (2026-09-06)
+
+The semantic and route direction survives, but the public async operation remains unbuildable at
+five seams:
+
+1. [[D3042]] — exported/field/discriminant equality ignores field types, modifiers, generics and
+   callable signatures;
+2. [[D3043]] — the validated request retains a caller-mutable exchange array across queueing;
+3. [[D3044]] — byte-equal requests deduplicate even though successful evidence must retain each
+   waiter's exact input references;
+4. [[D3045]] — the promised public result validator is absent from the complete protocol and
+   consumer fixture; and
+5. [[D3046]] — hashing malformed caller bytes before seal assertion can throw instead of returning
+   the closed `failed/seal_failed` result.
+
+Exact review and reproducer:
+`planning/bounded-policy-targets/fifth-fresh-independent-buildability-review-2026-09-06.md` and
+`make bounded-target-fifth-fresh-review`. A bounded sixth author repair must close all five while
+retaining the complete semantic/traversal/source/route chain before another fresh review.
+
 ## Changelog
 
+- 2026-09-06 — fifth fresh independent review returned [[D3042]]–[[D3046]] at the complete type,
+  queued-input ownership, dedup/ancestry, result-validation and malformed-input boundaries. No
+  production/schema/content/UX byte changed.
 - 2026-09-04 — author-repaired [[D2628]]–[[D2630]]. Replaced the reduced protocol illustration
   with a complete normative declaration and structural RFC/module set-equality checks, defined the closed
   service→central-route-invoker→factory call graph, and removed the conflicting threat alias in

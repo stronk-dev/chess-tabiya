@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:57b1cb8628168297f0c68ffad059eb2f734b13a1ce717a3fe76b3ec4bdc0721d",
+    "roadmap": "sha256:e5a12a1925453905ba9577ae7184dae7b24549598b83b364e3e8fbab63181504",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:d7d1666b06909c0d2a0a12a962b44d8bf60d0e75adf3c6764a05fd091c182b3f",
-    "rfcRegister": "sha256:f1caa0623e58ee2cd4ad74ecb9b7b1f0f89204cb09e550f2538feec43ad0beef",
+    "workState": "sha256:ea8c67f9b80d9a58d5820e0dfdf3115e5184c1325048e19eb71867b519c715af",
+    "rfcRegister": "sha256:41a33f646d2f301af876ecc9bb4fd058a98005453f3cc4de837ddbdff70af25f",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 652,
       "doing": 0,
-      "blocked": 1293,
+      "blocked": 1298,
       "done": 842,
       "refused": 3
     },
@@ -115,22 +115,26 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair the returned provider-protocol, concept-registry, provider-health, storage, deployment, Campaign and longitudinal real-boundary contracts, freshly review those repairs, then advance provider exchange and pack-capability lanes.",
+      "nextAction": "Execute the owner-ruled D3034 cut of the shared-resource bootstrap to its collision-prevention core, freshly review and implement that smaller contract, then populate the convention/provider roots and continue the returned provider, concept, health, storage, deployment, Campaign and longitudinal authority repairs.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "The longitudinal store's tenth fresh review returns its real mutation and worker authority: eleven operations only mint receipts, duplicate requests cancel healthy claims, source cuts regress, parser and DDL state unions disagree, retry/reclaim transitions are absent, legacy provenance is inverted and V4 identity silently became V5.",
-        "impact": "regressed",
+        "summary": "Owner ruling D3034 rejects accepting the 1,330-line shared-resource shadow implementation after fifteen review rounds: retain data-derived collision prevention and cut the unused projection/lifecycle engines before fresh review.",
+        "impact": "held",
         "evidence": [
-          "planning/longitudinal-store/tenth-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d2994-longitudinal-tenth-fresh-review/review.test.ts",
-          "rfc/longitudinal-store.md",
-          "rfc/README.md"
+          "design/BACKLOG.md",
+          "rfc/shared-resource-register-bootstrap.md",
+          "planning/rfc-drafting-queue.md"
         ],
         "anchors": [
           {
+            "kind": "work_state",
+            "id": "D3034",
+            "digest": "sha256:8c243cc9d34a2e094e9c7bda5775f8ca190f2c289a4e93090498e418db65b670"
+          },
+          {
             "kind": "rfc",
-            "id": "longitudinal-store.md",
-            "digest": "sha256:d6c2798b7b33d17cd80d2d31c471e0e74f7e175ca76203a30bab16752db2acff"
+            "id": "shared-resource-register-bootstrap.md",
+            "digest": "sha256:36678457dd952ac50cc9b110617249259822b97192dfdd02f3e79d6b7d1a4ecb"
           }
         ]
       },
@@ -151,22 +155,22 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Complete bounded author repairs for the returned candidate-packet, pack-capability and promotion authorities; freshly review all three; then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+      "nextAction": "Complete bounded author repairs for candidate-packet, pack-capability, promotion and bounded-target authorities; freshly review each repaired contract; then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "The promotion sixteenth fresh review returns the fifteenth installation repair: caller paths still mint authority, geometry/no-race and live/domain source selection are absent, required output/value authorities are dropped, duplicate durable records publish and the result algebra differs from the RFC.",
+        "summary": "Bounded targets' fifth fresh review returns the async authority: protocol equality ignores types, queued arrays are mutable, byte dedup crosses exact ancestry, result validation is absent and malformed input throws before its typed failure arm.",
         "impact": "regressed",
         "evidence": [
-          "planning/evidence-foundation-ux/semantic-collectors-promotion-sixteenth-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d3018-semantic-collectors-promotion-sixteenth-fresh-review/review.test.ts",
-          "rfc/semantic-collectors.md",
+          "planning/bounded-policy-targets/fifth-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d3042-bounded-target-fifth-fresh-review/review.test.ts",
+          "rfc/bounded-policy-targets.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "semantic-collectors.md",
-            "digest": "sha256:33e5de793636f503f692c25a4008325efdaa4586b1e77d2b11c6ab54192d65d5"
+            "id": "bounded-policy-targets.md",
+            "digest": "sha256:cba1bd51ea0fd50d684cba59967a2cef4283d48ba7ccb3ed6e45a0394df8a55d"
           }
         ]
       },
