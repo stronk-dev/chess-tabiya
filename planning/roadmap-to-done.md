@@ -446,6 +446,16 @@ complete chain and passes 6/6 plus strict TypeScript. Production remains held fo
 fresh review and provider protocol/exchange. Receipt:
 `planning/provider-health-degradation/ninth-author-repair-2026-09-06.md`.
 
+The same-day tenth fresh review returns that repair on [[D2912]]–[[D2915]]. Instance-wide cache
+inventory is promoted to an exact operation hit without a request/key; release receipts omit the
+current monotonic projection that stales their source snapshots; shared Lichess backoff blocks the
+coordinator while capability still calls the sibling operation requestable; and issuance versus
+validation ordering makes a two-provider receipt reject itself immediately. `make
+provider-health-tenth-fresh-review` retains the full chain and passes 4/4 reproductions. Both
+implementation checkpoints remain held for one coherent repair, another genuinely fresh review and
+provider protocol/exchange. Receipt:
+`planning/provider-health-degradation/tenth-fresh-independent-buildability-review-2026-09-06.md`.
+
 The same day's third fresh provider-protocol review returns its second repair on
 [[D2874]]–[[D2877]]. The process contract asks a one-selector resource for an unreachable partial
 state, names no lawful reader for the prior accepted obligation preimage, closes product-only defects

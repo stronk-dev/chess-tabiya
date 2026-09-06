@@ -16851,3 +16851,32 @@ passes three new falsifiers plus the descriptor positive control. Exact receipt:
 `planning/provider-protocol-register/fourth-fresh-independent-buildability-review-2026-09-06.md`.
 A bounded fourth author repair, another genuinely fresh review and the implemented generic
 bootstrap precede acceptance or provider exchange.
+
+## 2026-09-06 — provider-health tenth fresh independent return
+
+**What landed:** [[D2912]]–[[D2915]] return the ninth provider-health repair after composing its
+cache, snapshot/release and shared-backoff authorities. No production, schema, content, archive or
+protected design byte changed.
+
+**What changed:** a cache row for one request falsely advertises an exact hit for another request;
+a release receipt remains current after monotonic time invalidates its source snapshot; a Lichess
+429 blocks tablebase admission while its availability remains requestable; and a freshly issued
+two-provider receipt self-rejects because issuance and validation use different orders.
+
+**Evidence/next:** `make provider-health-tenth-fresh-review` retains every predecessor round and
+passes 4/4 executable reproductions. Exact receipt:
+`planning/provider-health-degradation/tenth-fresh-independent-buildability-review-2026-09-06.md`.
+One coherent author repair, another genuinely fresh review and provider protocol/exchange still
+precede either production checkpoint.
+
+## 2026-09-06 — deterministic D2890 cache-policy review fixture
+
+**What landed:** closed [[D2916]] without widening a timeout. The maintained D2890 LRU falsifier
+now compiles one real sealed receipt per distinct position outside the timed test and injects those
+exact receipts into the service. Its five-call miss/miss/projection-hit/miss/evicted-miss behavior is
+unchanged; only the repeated full semantic recompilation after eviction is removed from the policy
+test's wall clock.
+
+**Evidence/next:** `make candidate-packet-twelfth-fresh-review` passes the full predecessor chain;
+the D2890 test falls from the generic-timeout edge to an immediate cache-policy check after fixture
+construction. The complete `make verify-awake` gate remains the commit boundary.

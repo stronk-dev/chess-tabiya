@@ -23565,6 +23565,51 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2912",
+      "state": "blocked",
+      "owner": "release-engineering",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:edd1b60dbe3c5647af8f7e0ac420f292f2e4df80890bc616052b818c62b5b4cd",
+      "uxItems": [],
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2913",
+      "state": "blocked",
+      "owner": "release-engineering",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4b7a9d21a6ae32b356e8f2908075e663c028f16d6e7351246902808e7ae66879",
+      "uxItems": [],
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2914",
+      "state": "blocked",
+      "owner": "release-engineering",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ead13db4fd6bb2dc2c20564c735a22ca79294c50a8258d4b133dd19747e93782",
+      "uxItems": [],
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2915",
+      "state": "blocked",
+      "owner": "release-engineering",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8b909cf1607e3ac1214de077c4e85f3b6b13e6428531061ace578d1f51474ba9",
+      "uxItems": [],
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2916",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:89c2a9f0c9fa27101d1b06dc310c01953364ba05bc20ca3b40f03952fc2869b6",
+      "uxItems": [],
+      "evidence": "| D2916 ✅ | **THE MAINTAINED D2890 CACHE-POLICY FALSIFIER RECOMPILES THE SAME EXPENSIVE CHESS POSITION AFTER EVICTION.** Its subject is LRU ordering, but five service calls trigger four full semantic compilations and cross Vitest's generic five-second timeout under the complete governance suite. Compile one real receipt for each of the three distinct positions once, inject those exact sealed receipts into the service, and retain the same miss/projection-hit/eviction/miss assertions without raising any timeout | ✅ fixed 2026-09-06 — deterministic three-receipt fixture preserves the exact cache-policy attack; complete gate required |",
+      "evidenceKind": "closeout-prose"
     }
   ]
 }

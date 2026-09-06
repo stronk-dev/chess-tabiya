@@ -1,14 +1,13 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — **ninth author repair completed on [[D2869]]–[[D2873]].** Snapshot currentness
-  is revision/time-state authority rather than latest-object identity; application cache keys are
-  registry-issued capabilities; group leases retain only their exact group generation image;
-  application settlements cross one exact parser and sealed local-domain authority; and every
-  implementation/configuration change requires a distinct generation. `make
-  provider-health-ninth-author-repair` retains the complete return/repair chain and passes 6/6
-  current composition groups plus strict TypeScript. Another genuinely fresh review remains
-  mandatory; neither implementation checkpoint is authorized before acceptance and the
-  provider-protocol/exchange prerequisites.
+- **Status:** draft — returned in tenth fresh review on [[D2912]]–[[D2915]]. The ninth repair makes its five
+  named inversions pass, but operation availability promotes instance-wide cache inventory to an
+  exact hit without a request; release receipts omit current monotonic state; group backoff is
+  absent from the capability/admission projection; and issuance/validation order makes a
+  multi-provider release receipt reject itself. `make provider-health-tenth-fresh-review` retains
+  the complete chain and passes 4/4 reproductions. A coherent author repair and another genuinely
+  fresh review remain mandatory; neither implementation checkpoint is authorized before acceptance
+  and the provider-protocol/exchange prerequisites.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -1089,6 +1088,25 @@ strict TypeScript. Exact receipt:
 evidence, not acceptance or production implementation; another genuinely fresh review remains
 required.
 
+## Tenth fresh independent return (2026-09-06)
+
+The ninth repair pays its five immediate debts but leaves four authority joins inconsistent:
+
+1. [[D2912]] maps an instance-wide nonzero cache count to `cached_exact_only` even though the
+   selector has no exact request or issued cache key and the requested key may miss;
+2. [[D2913]] validates release receipts without a current monotonic sample, so an old receipt remains
+   valid after its source snapshot's retry/expiry projection is stale;
+3. [[D2914]] keeps shared backoff entirely inside `BackoffCoordinator`, leaving a sibling operation
+   `requestable_unverified` while that exact coordinator refuses admission; and
+4. [[D2915]] issues generation rows in declaration order but validates them in locale order, making
+   an untouched receipt for two providers immediately reject itself.
+
+`make provider-health-tenth-fresh-review` retains the whole predecessor chain and passes 4/4
+executable reproductions. Exact evidence:
+`planning/provider-health-degradation/tenth-fresh-independent-buildability-review-2026-09-06.md`.
+The RFC remains returned; both implementation checkpoints are unauthorized pending one coherent
+repair, another genuinely fresh review and the provider-protocol/exchange prerequisites.
+
 ## Implementation plan
 
 **Staged dependency rule ([[D2364]]).** This RFC may remain `implementing` across two checked
@@ -1291,6 +1309,19 @@ bot-private health projection.
 40. [[D2873]] Every behavior-affecting configuration/implementation change requires a distinct
     derived generation. Reusing the prior generation fails before cache, health or group claims
     change; a valid new generation invalidates all three together.
+41. [[D2912]] Instance-level conditional cache capability and exact-operation service are distinct
+    types. An operation may become `cached_exact_only` only from the atomic hit returned for its
+    exact registry-issued request/cache key; a different request on the same failed instance misses
+    and remains unavailable for cache service.
+42. [[D2913]] Every release-receipt assertion receives current injected monotonic time and rejects
+    when the retry/cache-expiry projection of its source snapshot differs, even if registry revision
+    and configured generations are unchanged.
+43. [[D2914]] The operation availability and admission authority consumes the exact current
+    backoff-group block/claim projection. A Lichess 429 makes both Explorer and tablebase
+    non-requestable for the shared delay while retaining their distinct instance-health snapshots.
+44. [[D2915]] One canonical sorted generation-image projection is used verbatim for snapshot release
+    issuance and currentness validation. A freshly issued multi-provider receipt validates before
+    any transition; a member, implementation, generation, order or time-state mismatch fails.
 
 ## Falsifiers and negative fixtures
 

@@ -30,6 +30,11 @@ const limits = (overrides: Partial<CandidatePopulationServiceLimits> = {}): Cand
 });
 const signal = () => new AbortController().signal;
 const delay = (milliseconds: number) => new Promise<void>((resolve) => setTimeout(resolve, milliseconds));
+const CACHE_POLICY_RECEIPTS = new Map([
+  [INITIAL, compileCandidatePopulation(request(INITIAL))],
+  [AFTER_E4, compileCandidatePopulation(request(AFTER_E4))],
+  [AFTER_D4, compileCandidatePopulation(request(AFTER_D4))],
+]);
 
 describe("D2885-D2891 candidate packet twelfth fresh review", () => {
   it("D2885 accepts a genuine receipt compiled for a different request", async () => {
@@ -97,7 +102,14 @@ describe("D2885-D2891 candidate packet twelfth fresh review", () => {
   });
 
   it("D2890 does not refresh the wide cache entry on a projection hit", async () => {
-    const service = createCandidatePopulationService({ limits: limits({ maxEntries: 2 }) });
+    const service = createCandidatePopulationServiceForTest({
+      limits: limits({ maxEntries: 2 }),
+      compile: async (value) => {
+        const receipt = CACHE_POLICY_RECEIPTS.get(value.beforeFen);
+        if (receipt === undefined) throw new TypeError("unexpected fixture position");
+        return receipt;
+      },
+    });
     expect(await service.get(request(INITIAL), signal())).toMatchObject({ kind: "ready", cache: "miss" });
     expect(await service.get(request(AFTER_E4), signal())).toMatchObject({ kind: "ready", cache: "miss" });
     expect(await service.get(request(INITIAL, "events"), signal())).toMatchObject({ kind: "ready", cache: "projection_hit" });
