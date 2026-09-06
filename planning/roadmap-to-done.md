@@ -2330,3 +2330,19 @@ those contracts to the actual run operation, provider, persistence, authenticati
 registry boundaries, followed by another fresh review. Campaign API, web route/map, complete pilot,
 full-game bosses, catalogue progression, durable variety and end-to-end verification remain separate
 required 1.0 work; this checkpoint closes none of them.
+
+## Checkpoint — Longitudinal state returned at mutation and worker authority
+
+The learner-history foundation remains incomplete after its tenth fresh independent review. The
+ninth repair retains file-backed source bytes and store-scoped claim shapes, but every named source
+operation is a receipt-only no-op; duplicate requests destroy healthy work; caller-selected cuts
+can regress the watermark; the parser and database admit different lifecycle states; eligible
+retries and expired claims cannot run; legacy provenance is reversed; and the normative V4 source
+identity was changed without a migration contract.
+
+`make longitudinal-store-tenth-fresh-review` retains the complete predecessor chain and passes 8/8
+new able-to-fail controls plus strict TypeScript. The next bounded repair must compose the real
+storage mutations with atomic invalidation, close one exact job-state algebra and implement the
+complete retry/reclaim/renew/fail/publish CAS lifecycle before another fresh review. Player style,
+skills, opening performance, longitudinal recommendations, profile export/deletion and every
+learner-facing history surface remain blocked on that accepted and implemented foundation.

@@ -1,14 +1,16 @@
 # RFC: Longitudinal store — the personal observation ledger
 
-- **Status:** draft — **ninth author repair completed 2026-09-05 on [[D2779]]–[[D2788]];
-  ninth fresh independent review required.** A file-backed SQLite contract now owns exact replayed
-  source/owner/journal/authorship truth, the five-state job parser, database clock, claim capability,
-  current-source acquisition/validation and transactional invalidation. The eleven mutation
-  symbols execute with durable commit/rollback receipts rather than compiling caller source text.
-  `make longitudinal-store-ninth-author-repair` retains the complete chain and passes eight new
-  groups plus strict TypeScript. No production migration, `SQLiteRunStorage` method, worker, reader,
-  consumer, API or client
-  implementation is authorized. The
+- **Status:** draft — **RETURNED by the tenth fresh independent review on 2026-09-06 on
+  [[D2994]]–[[D3001]].** The ninth repair's file-backed model retains durable source bytes,
+  store-scoped claim capabilities and a five-state row shape, but its eleven named source
+  mutations are receipt-only no-ops; identical requests cancel healthy claims; caller-selected
+  cuts can regress the high-water mark; SQL and parsing admit mutually inconsistent states; due
+  retries and expired claims cannot run; legacy provenance is inverted; and the repair silently
+  forks the normative V4 source identity to V5. `make longitudinal-store-tenth-fresh-review`
+  retains the complete chain and passes 8/8 counterexamples plus strict TypeScript. Another
+  bounded author repair and genuinely fresh independent review are required. No production
+  migration, `SQLiteRunStorage` method, worker, reader, consumer, API or client implementation is
+  authorized. The
   2026-08-22 acceptance remains history, not implementation authority.
   *(Prior state: accepted 2026-08-22 by claude as register owner after the grain amendment;
   returned 2026-08-23 when the later buildability pass made that acceptance unsafe.)*
@@ -1107,6 +1109,42 @@ SQLite contract:
 passes eight new behavioral groups and strict TypeScript. Exact receipt:
 `planning/longitudinal-store/ninth-author-repair-2026-09-05.md`. No production byte changed. Another
 genuinely fresh independent review remains mandatory before acceptance or implementation.
+
+## Tenth fresh independent return (2026-09-06)
+
+The ninth repair is **returned**, not accepted. Its durable shapes and predecessor controls remain
+useful, but the new executable review crosses the actual mutation and worker lifecycle authority
+that the repair claimed:
+
+- [[D2994]]: all eleven `LONGITUDINAL_SOURCE_MUTATION_OPERATIONS` append receipts while leaving the
+  stored source and requested job byte-identical. A receipt census over no-op methods is not proof
+  that a committed run/owner/journal mutation and its invalidation share one transaction.
+- [[D2995]]: requesting the byte-identical run, learner, cut, source digest and derivation revision
+  resets a healthy running job and increments its generation. Repeated wakeups and response-loss
+  retries must be idempotent rather than cancel useful work.
+- [[D2996]]: `invalidateForCurrentSource` accepts a caller-selected historical cut and can move the
+  durable requested high-water mark backward. The current head must be derived inside the owning
+  transaction and remain monotone under concurrent appends.
+- [[D2997]]/[[D2998]]: the parser and SQLite constraints do not describe one closed state algebra.
+  Impossible pending/completed and failure/budget combinations parse; partial claim tuples commit;
+  and an empty worker id lets `claimJob` create a row that `readJob` rejects.
+- [[D2999]]: only `pending` is claimable. Due `retry_wait` and expired `running` jobs cannot be
+  selected, and the model exposes no renew, fail or publish transition, so it does not yet exercise
+  the worker lifecycle its five-state vocabulary promises.
+- [[D3000]]: the required journal-less `unattributable_legacy` source is refused while a
+  journal-present legacy source is admitted. Close the full journal × structure-disposition union
+  for new private, active shared and pre-migration legacy runs.
+- [[D3001]]: the repair changes `LongitudinalSourceImageV4` and the
+  `tabiya.longitudinal-source.v4\0` domain to undeclared V5 identity. Preserve V4 unless an explicit
+  version, compatibility and migration amendment authorizes a new identity.
+
+The next author repair must compose the eleven real storage mutations with atomic watermark and
+invalidation updates; make duplicate requests idempotent; derive the monotone current source head
+internally; enforce the identical closed job union in parser, DDL and operation inputs; implement
+pending/due-retry/expired-running selection plus renew/fail/publish CAS transitions; close legacy
+provenance; and retain the normative V4 source identity. The complete predecessor chain and these
+eight counterexamples must remain green before another genuinely fresh review. Exact receipt:
+`planning/longitudinal-store/tenth-fresh-independent-buildability-review-2026-09-06.md`.
 
 ### F. Acceptance criteria
 

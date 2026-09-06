@@ -181,12 +181,12 @@
       "rfcs": ["longitudinal-store.md", "player-style.md", "learner-rating.md", "skills.md"],
       "completion": {
         "evidence": ["partial", "Every metric has occurrence and opportunity denominators, actor attribution, phase/decision splits, revision, confidence, and source drill-down."],
-        "state": ["blocked", "Background longitudinal jobs, observations, aggregates, rating periods, skills, and style cards persist idempotently."],
+        "state": ["blocked", "The tenth fresh longitudinal review returned the durable foundation: named mutations are receipt-only, duplicate requests cancel work, source cuts regress, lifecycle states disagree, retries/reclaims cannot run, legacy provenance is inverted, and source identity changed without authority."],
         "api": ["partial", "Rating, history, rated-game, marks, and cohort-standing families cross the production application boundary; longitudinal/profile APIs are absent."],
         "experience": ["partial", "Rating works as a narrow surface; complete history, opening performance, skill credit, style dimensions, privacy, sharing, and grounded recommendations do not."],
         "defaults": ["blocked", "Profiles abstain until denominators clear; no universal confidence badge, GM twin, personality verdict, weakness ranking, or advice leakage."],
         "content": ["blocked", "Metric explanations, examples, counterexamples, and related drills exist for every published dimension."],
-        "verification": ["partial", "Rating isolation and calibration pass; actor attribution, rebuild, privacy, longitudinal cost, recommendation, and presentation gates remain."],
+        "verification": ["partial", "Rating isolation and calibration pass; the longitudinal predecessor chain and 8/8 tenth-review counterexamples pass, but actual mutation/invalidation atomicity, lifecycle closure, actor attribution, rebuild, privacy, cost, recommendation, and presentation gates remain."],
         "release": ["blocked", "Learners can export/delete all profile data and rebuild projections from immutable owned events."]
       }
     },
@@ -327,14 +327,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair the returned provider-protocol, concept-registry, provider-health, storage, deployment and Campaign real-boundary contracts, freshly review those repairs, then advance provider exchange, pack-capability and longitudinal-store lanes.",
+        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair the returned provider-protocol, concept-registry, provider-health, storage, deployment, Campaign and longitudinal real-boundary contracts, freshly review those repairs, then advance provider exchange and pack-capability lanes.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Campaign's seventh fresh review returns its operation and evidence authority: charged commands do not execute their named play mutation or append an event, while provider, assistance, event, document, human-review and curriculum facts remain caller-mintable.",
+          "summary": "The longitudinal store's tenth fresh review returns its real mutation and worker authority: eleven operations only mint receipts, duplicate requests cancel healthy claims, source cuts regress, parser and DDL state unions disagree, retry/reclaim transitions are absent, legacy provenance is inverted and V4 identity silently became V5.",
           "impact": "regressed",
-          "evidence": ["planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md", "tools/d2986-campaign-seventh-fresh-review/review.test.ts", "rfc/campaign-core.md", "rfc/README.md"],
+          "evidence": ["planning/longitudinal-store/tenth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2994-longitudinal-tenth-fresh-review/review.test.ts", "rfc/longitudinal-store.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "campaign-core.md", "digest": "sha256:f9cd84da95a0d6d367c943e8560936b58fb86c3eb94358d6b4ec6a9919ae0e86"}
+            {"kind": "rfc", "id": "longitudinal-store.md", "digest": "sha256:d6c2798b7b33d17cd80d2d31c471e0e74f7e175ca76203a30bab16752db2acff"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
@@ -379,17 +379,17 @@
         "state": "blocked_contract",
         "capabilities": ["learner_model", "bots", "campaign", "social_play", "account_data", "operations"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Repair and freshly review the returned storage, safe-deployment and Campaign real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
+        "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign and longitudinal real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Campaign's seventh fresh review proves its charged commands can report success without mutating the play graph or appending an event, while caller-authored provider, assistance, review and curriculum facts can authorize the result. Storage recovery and safe deployment are separately returned; longitudinal state and bot policy remain held.",
+          "summary": "The longitudinal store's tenth fresh review proves durable receipts still do not establish real mutations or a complete worker lifecycle: mutation no-ops, destructive duplicate requests, regressing cuts, inconsistent states, missing retry/reclaim transitions, inverted legacy provenance and an unauthorized identity fork all remain. Storage recovery, safe deployment and Campaign are separately returned; bot policy remains held.",
           "impact": "regressed",
-          "evidence": ["planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md", "tools/d2986-campaign-seventh-fresh-review/review.test.ts", "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts", "rfc/safe-deployment-profiles.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts", "rfc/storage-backup-recovery.md", "rfc/longitudinal-store.md", "planning/longitudinal-store/eighth-author-repair-2026-09-05.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/fourth-author-repair-2026-09-05.md", "tools/d2407-bot-policy-fourth-author-repair/contract.test.ts", "rfc/social-play.md"],
+          "evidence": ["planning/longitudinal-store/tenth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2994-longitudinal-tenth-fresh-review/review.test.ts", "rfc/longitudinal-store.md", "planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md", "tools/d2986-campaign-seventh-fresh-review/review.test.ts", "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts", "rfc/safe-deployment-profiles.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts", "rfc/storage-backup-recovery.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/fourth-author-repair-2026-09-05.md", "tools/d2407-bot-policy-fourth-author-repair/contract.test.ts", "rfc/social-play.md"],
           "anchors": [
             {"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"},
             {"kind": "rfc", "id": "campaign-core.md", "digest": "sha256:f9cd84da95a0d6d367c943e8560936b58fb86c3eb94358d6b4ec6a9919ae0e86"},
             {"kind": "rfc", "id": "storage-backup-recovery.md", "digest": "sha256:418c43b100179f09ea6838114bc3525763c32d358314a8c7e0855fc31127a11d"},
-            {"kind": "rfc", "id": "longitudinal-store.md", "digest": "sha256:84cfc23668cbb927946f92f0be87cae8dca6d6e58e0590890f3114dd21d3e8dd"},
+            {"kind": "rfc", "id": "longitudinal-store.md", "digest": "sha256:d6c2798b7b33d17cd80d2d31c471e0e74f7e175ca76203a30bab16752db2acff"},
             {"kind": "rfc", "id": "bot-policy.md", "digest": "sha256:18e2f4d00465f10682a831138a939d7a7ee61e0f467832aac5176bca6a74d3bb"},
             {"kind": "rfc", "id": "social-play.md", "digest": "sha256:3f81a29ba056944e9b54a9b56b5af9eb5bd5415253aada5eac6c9f862cb39a6b"}
           ]

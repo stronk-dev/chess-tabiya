@@ -17253,3 +17253,21 @@ content, archive or protected-design byte changed.
 campaign-two-horizon-seventh-fresh-review` retains the complete chain and passes 7/7 new
 counterexamples plus strict TypeScript. Complete a bounded seventh author repair, then obtain
 another genuinely fresh review before acceptance or implementation.
+
+## 2026-09-06 — Longitudinal store tenth fresh independent review
+
+**What landed:** a fresh executable return on [[D2994]]–[[D3001]]. The ninth repair's durable
+source bytes and store-scoped claim shapes remain, but the review proves the named mutation and
+worker authorities are not real yet.
+
+**What changed:** `longitudinal-store.md` remains draft. Eleven source operations only append
+receipts; identical requests cancel healthy claims; caller cuts regress the high-water mark; parser
+and DDL accept different state unions; due retries and expired claims cannot run; journal/legacy
+provenance is inverted; and V4 source identity silently became V5. No production migration,
+storage method, worker, reader, API, client, learner profile or protected-design byte changed.
+
+**Evidence/next:**
+`planning/longitudinal-store/tenth-fresh-independent-buildability-review-2026-09-06.md`; `make
+longitudinal-store-tenth-fresh-review` retains the complete chain and passes 8/8 new counterexamples
+plus strict TypeScript. Complete a bounded repair at the real storage mutation and worker lifecycle
+boundaries, preserve V4 unless separately amended, then obtain another genuinely fresh review.

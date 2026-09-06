@@ -24303,6 +24303,78 @@
       "uxItems": [],
       "evidence": "apps/server/src/engine-supervisor.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2994",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:31bff4fcbbebd234fdbdefeeac8556cb3ea06e69a002f0d819ed7c49d8fbcb81",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2995",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:acae6159d7eb1b046edf339832abd37f7a2800c8d7318bed6539323da03bd3ca",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2996",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9c031e53ab393e47521c6f7666bee0ae269de6a9eb9b9bb893365e9db4bc1cb9",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2997",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9a599204eb4994d22d833365489126b8e0ce485ca7d33dbc603423e1e526c18b",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2998",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0ee130cbd00a54de3e1a6923f4474499a0373cf7b24ecdd50a3f8626004ee495",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D2999",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:217807f3ac22b9e44b3d87478e5b372f1525aa41bbcf12a16b21e0a1c63102a8",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D3000",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8d8c5c013b2ed63bc9fc4e854cafb01f620ef70588cf74b6717f7ce263237be7",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D3001",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:42c163c9126edd6b4a27c6f86e833a6d4ad2e65e99133268ec4efb6af035f90f",
+      "uxItems": [],
+      "owner": "learner-history",
+      "blocker": "rfc:longitudinal-store.md"
     }
   ]
 }
