@@ -1,13 +1,10 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — returned in tenth fresh review on [[D2912]]–[[D2915]]. The ninth repair makes its five
-  named inversions pass, but operation availability promotes instance-wide cache inventory to an
-  exact hit without a request; release receipts omit current monotonic state; group backoff is
-  absent from the capability/admission projection; and issuance/validation order makes a
-  multi-provider release receipt reject itself. `make provider-health-tenth-fresh-review` retains
-  the complete chain and passes 4/4 reproductions. A coherent author repair and another genuinely
-  fresh review remain mandatory; neither implementation checkpoint is authorized before acceptance
-  and the provider-protocol/exchange prerequisites.
+- **Status:** draft — tenth author repair completed on [[D2912]]–[[D2915]] and adjacent
+  [[D2917]]–[[D2919]]. `make provider-health-tenth-author-repair` retains the complete chain and
+  passes 8/8 direct/composition groups plus strict TypeScript. Another genuinely fresh review
+  remains mandatory; neither implementation checkpoint is authorized before acceptance and the
+  provider-protocol/exchange prerequisites.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -261,9 +258,18 @@ type ProviderHealthSnapshot =
 type ProviderOperationAvailability =
   | { readonly state: "available"; readonly instanceIds: readonly ProviderInstanceId[] }
   | { readonly state: "requestable_unverified"; readonly instanceIds: readonly ProviderInstanceId[] }
+  | { readonly state: "recovering"; readonly instanceIds: readonly ProviderInstanceId[] }
+  | { readonly state: "conditional_exact_cache"; readonly instanceIds: readonly ProviderInstanceId[] }
   | { readonly state: "cached_exact_only"; readonly instanceIds: readonly ProviderInstanceId[] }
+  | { readonly state: "temporarily_blocked"; readonly instanceIds: readonly ProviderInstanceId[]; readonly reason: "upstream_backoff" | "group_claimed"; readonly retryAfterMs: number }
   | { readonly state: "unavailable"; readonly instanceIds: readonly ProviderInstanceId[]; readonly reason: ProviderFailureReason | "not_configured" };
 ```
+
+`conditional_exact_cache` is the request-free capability projection: at least one current-generation
+cache row exists, but no particular request has been proven serviceable. `cached_exact_only` is
+available only from the atomic resolution of the exact registry-issued request/cache key and is
+never serialized by a requestless `/capabilities` read. `temporarily_blocked` is derived from the
+same current group projection that owns admission; per-instance health remains unchanged.
 
 The transitions are closed:
 
@@ -1107,6 +1113,30 @@ executable reproductions. Exact evidence:
 The RFC remains returned; both implementation checkpoints are unauthorized pending one coherent
 repair, another genuinely fresh review and the provider-protocol/exchange prerequisites.
 
+## Tenth author repair (2026-09-06)
+
+The four returned joins and three adjacent closure defects are repaired as one composed authority:
+
+1. [[D2912]] makes request-free cache inventory `conditional_exact_cache`; only an atomic exact-key
+   hit can produce `cached_exact_only` service;
+2. [[D2913]] binds every release assertion to current injected monotonic time and revalidates the
+   exact source snapshot rather than only its revision/generation labels;
+3. [[D2914]] joins the coordinator's current group claim/block projection into both availability and
+   admission without merging distinct instance-health state;
+4. [[D2915]] uses one byte-sorted instance/implementation/generation image for both receipt issue and
+   validation;
+5. [[D2917]] carries `recovering` as a distinct operation-availability arm;
+6. [[D2918]] refuses snapshot, release and selection authority unless every configured non-null
+   backoff group has exactly one registered coordinator projection; and
+7. [[D2919]] retains the coordinator's declared 5/15/60-second transient sequence in the exact
+   snapshot-facing projection, resetting it only on success or generation change.
+
+`make provider-health-tenth-author-repair` retains every predecessor and the 4/4 tenth-review
+reproductions, then passes 8/8 direct/composition groups plus strict TypeScript. Exact receipt:
+`planning/provider-health-degradation/tenth-author-repair-2026-09-06.md`. This is author-contract
+evidence, not acceptance or production implementation; another genuinely fresh review remains
+required.
+
 ## Implementation plan
 
 **Staged dependency rule ([[D2364]]).** This RFC may remain `implementing` across two checked
@@ -1322,6 +1352,14 @@ bot-private health projection.
 44. [[D2915]] One canonical sorted generation-image projection is used verbatim for snapshot release
     issuance and currentness validation. A freshly issued multi-provider receipt validates before
     any transition; a member, implementation, generation, order or time-state mismatch fails.
+45. [[D2917]] The first success after the repeat-open threshold projects `recovering`, never
+    `available`, until the second current-generation live success completes.
+46. [[D2918]] Every configured non-null backoff group contributes exactly one coordinator projection
+    before a snapshot, release receipt or operation selection can become authority. Missing or
+    duplicate coordinators fail closed.
+47. [[D2919]] The snapshot-facing group projection and admission coordinator share the exact
+    5/15/60-second repeated-transient sequence. The second transient failure blocks both for fifteen
+    seconds; success or generation change resets the sequence.
 
 ## Falsifiers and negative fixtures
 
@@ -1436,6 +1474,13 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 | [[D2871]] | unrelated cache traffic invalidates a live group lease | group-only instance/implementation/generation image; criterion 38 |
 | [[D2872]] | structural and caller-authored settlements bypass strict parsing | exact settlement parser plus sealed same-request local-domain authority; criterion 39 |
 | [[D2873]] | implementation change reuses generation and predecessor claim | distinct generation required before configuration change; criterion 40 |
+| [[D2912]] | request-free instance cache inventory impersonates an exact request hit | conditional capability is distinct from atomic exact-key service; criterion 41 |
+| [[D2913]] | release authority outlives its monotonic source snapshot | every assertion revalidates the exact source snapshot at current injected time; criterion 42 |
+| [[D2914]] | shared backoff blocks admission while sibling availability remains requestable | one current group projection drives admission and capability; criterion 43 |
+| [[D2915]] | issuance and validation order make a fresh multi-provider receipt self-reject | one byte-sorted generation-image function serves both; criterion 44 |
+| [[D2917]] | operation availability cannot represent recovering | exact recovering arm; criterion 45 |
+| [[D2918]] | a configured group disappears when composition omits its coordinator | total configured-group/coordinator closure; criterion 46 |
+| [[D2919]] | projection collapses repeated transient backoff to five seconds | exact 5/15/60 sequence in the shared authority; criterion 47 |
 
 `make provider-health-fourth-author-repair` retains the previous 17 author controls, executes 6/6
 new able-to-fail behavioral groups plus strict TypeScript, and remains an author contract rather

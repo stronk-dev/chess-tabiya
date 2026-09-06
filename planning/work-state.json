@@ -23571,7 +23571,7 @@
       "state": "blocked",
       "owner": "release-engineering",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:edd1b60dbe3c5647af8f7e0ac420f292f2e4df80890bc616052b818c62b5b4cd",
+      "sourceDigest": "sha256:2990de7e87a5c80afdf97a8ed3debafe96c3f3ddb2e5bc7fc502ff6835e116d8",
       "uxItems": [],
       "blocker": "rfc:provider-health-degradation.md"
     },
@@ -23580,7 +23580,7 @@
       "state": "blocked",
       "owner": "release-engineering",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4b7a9d21a6ae32b356e8f2908075e663c028f16d6e7351246902808e7ae66879",
+      "sourceDigest": "sha256:a61cefc66cf6da384a3c2a4384f994b0c35c1bcd7cdd79d8f39c0e7ea0f91949",
       "uxItems": [],
       "blocker": "rfc:provider-health-degradation.md"
     },
@@ -23589,7 +23589,7 @@
       "state": "blocked",
       "owner": "release-engineering",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ead13db4fd6bb2dc2c20564c735a22ca79294c50a8258d4b133dd19747e93782",
+      "sourceDigest": "sha256:7b6eb710b6d2171df0897a94ab8b095a66e2857025991f08bd78492448d6a2d4",
       "uxItems": [],
       "blocker": "rfc:provider-health-degradation.md"
     },
@@ -23598,7 +23598,7 @@
       "state": "blocked",
       "owner": "release-engineering",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8b909cf1607e3ac1214de077c4e85f3b6b13e6428531061ace578d1f51474ba9",
+      "sourceDigest": "sha256:01e54791b86628417c24bde9968ffbea84fd31435ae688c2fd1dd6cf7e33afef",
       "uxItems": [],
       "blocker": "rfc:provider-health-degradation.md"
     },
@@ -23610,6 +23610,33 @@
       "uxItems": [],
       "evidence": "| D2916 ✅ | **THE MAINTAINED D2890 CACHE-POLICY FALSIFIER RECOMPILES THE SAME EXPENSIVE CHESS POSITION AFTER EVICTION.** Its subject is LRU ordering, but five service calls trigger four full semantic compilations and cross Vitest's generic five-second timeout under the complete governance suite. Compile one real receipt for each of the three distinct positions once, inject those exact sealed receipts into the service, and retain the same miss/projection-hit/eviction/miss assertions without raising any timeout | ✅ fixed 2026-09-06 — deterministic three-receipt fixture preserves the exact cache-policy attack; complete gate required |",
       "evidenceKind": "closeout-prose"
+    },
+    {
+      "id": "D2917",
+      "state": "blocked",
+      "owner": "release-engineering",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b5f413411cad1714d185bcc4eb82269ddb788922d45105752b137aa7121f2a8f",
+      "uxItems": [],
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2918",
+      "state": "blocked",
+      "owner": "release-engineering",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:68a859bc571865f4879fbc3e0749c3b80d0e7c1bf0c4b4049a21a352067f22b6",
+      "uxItems": [],
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2919",
+      "state": "blocked",
+      "owner": "release-engineering",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:44dc4a43632a288bcb7a83d95c5b606b62e769fcdd5e7b639ee1f9ea73bb4194",
+      "uxItems": [],
+      "blocker": "rfc:provider-health-degradation.md"
     }
   ]
 }

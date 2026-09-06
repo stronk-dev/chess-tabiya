@@ -16880,3 +16880,19 @@ test's wall clock.
 **Evidence/next:** `make candidate-packet-twelfth-fresh-review` passes the full predecessor chain;
 the D2890 test falls from the generic-timeout edge to an immediate cache-policy check after fixture
 construction. The complete `make verify-awake` gate remains the commit boundary.
+
+## 2026-09-06 — provider-health tenth author repair
+
+**What landed:** repaired [[D2912]]–[[D2915]] and adjacent self-audit findings [[D2917]]–[[D2919]]
+at contract tier. No production, schema, content, archive or protected-design byte changed.
+
+**What changed:** request-free cache inventory is conditional instead of an invented exact hit;
+release currentness rechecks its source snapshot at current monotonic time; one shared-group
+projection drives admission and capability; release issue and validation use one byte-sorted image;
+recovery remains distinct; missing configured-group coordinators fail closed; and repeated transient
+backoff remains 5/15/60 seconds instead of silently flattening to five.
+
+**Evidence/next:** `make provider-health-tenth-author-repair` retains the complete predecessor and
+4/4 return chain, passes 8/8 direct/composition groups and strict TypeScript. Exact receipt:
+`planning/provider-health-degradation/tenth-author-repair-2026-09-06.md`. Another genuinely fresh
+review and provider protocol/exchange still precede either implementation checkpoint.

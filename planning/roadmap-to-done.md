@@ -456,6 +456,16 @@ implementation checkpoints remain held for one coherent repair, another genuinel
 provider protocol/exchange. Receipt:
 `planning/provider-health-degradation/tenth-fresh-independent-buildability-review-2026-09-06.md`.
 
+The same-day tenth author repair closes those four joins and three adjacent closure findings at
+contract tier. Request-free cache inventory is conditional rather than exact; release assertions
+revalidate their source snapshot at current monotonic time; one group projection drives admission
+and capability; release issue/validation share one byte-sorted generation image; recovery is an
+exact arm; every configured group requires a coordinator; and repeated transient failures retain
+the 5/15/60-second sequence. `make provider-health-tenth-author-repair` retains the complete chain
+and passes 8/8 plus strict TypeScript. Production remains held for another genuinely fresh review
+and provider protocol/exchange. Receipt:
+`planning/provider-health-degradation/tenth-author-repair-2026-09-06.md`.
+
 The same day's third fresh provider-protocol review returns its second repair on
 [[D2874]]–[[D2877]]. The process contract asks a one-selector resource for an unreachable partial
 state, names no lawful reader for the prior accepted obligation preimage, closes product-only defects
