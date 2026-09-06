@@ -17198,3 +17198,21 @@ changed.
 `make provider-health-twelfth-fresh-review` retains the complete chain and passes 6/6 new controls
 plus strict TypeScript. Repair the sealed execution/generation authority, complete lease lifecycle,
 Retry-After operand, release/test split and TTL policy, then obtain another genuinely fresh review.
+
+## 2026-09-06 — storage backup/recovery fifth fresh independent review
+
+**What landed:** a fresh executable return on [[D2972]]–[[D2977]]. The fourth repair's narrowed
+identities and digest-bearing shapes remain, but public constructors still mint the storage subject
+and every semantic pass from caller-supplied values.
+
+**What changed:** `storage-backup-recovery.md` remains draft. Verify/terminal journals now explicitly
+owe complete live/quarantine/staged reconciliation; durable publication and temp-intent discovery
+owe real filesystem authority; and readiness owes the actual application route rather than a JSON
+parser. No production storage, server, API, schema, client, content, deployment, archive or
+protected-design byte changed.
+
+**Evidence/next:**
+`planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md`;
+`make storage-backup-fifth-fresh-review` retains the complete chain and passes 6/6 new controls plus
+strict TypeScript. Repair the operation-owned check issuer, filesystem/crash state machine, complete
+phase reconciliation and live readiness receipt, then obtain another genuinely fresh review.

@@ -24105,6 +24105,60 @@
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2972",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e19b81534f63a0fb870192b1f720017d9c4acec157723fa42ca3d3ae49b3e496",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:storage-backup-recovery.md"
+    },
+    {
+      "id": "D2973",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8d0e4fa843b4e6f39f065b118f8635ac091dd6e0d619f92f07736b841fd1235f",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:storage-backup-recovery.md"
+    },
+    {
+      "id": "D2974",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:83e23fa26ad4e5b8e172051bb8d1dbd45abfa357578ac79d6de2389e8f7ad924",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:storage-backup-recovery.md"
+    },
+    {
+      "id": "D2975",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:832a393514e8cc843a37918891c819ea3775f1712ada03584e87218731d612cd",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:storage-backup-recovery.md"
+    },
+    {
+      "id": "D2976",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d870766e07d5b262af3ad7d6b5688bf23a540be556159057b1e9b89791d444a5",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:storage-backup-recovery.md"
+    },
+    {
+      "id": "D2977",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:fb1763b468bd48b220ae10349dfaa93843e1bcc9040fc7b6d37236e3dd2eed96",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:storage-backup-recovery.md"
     }
   ]
 }

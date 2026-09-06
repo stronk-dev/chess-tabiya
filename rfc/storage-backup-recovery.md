@@ -1,12 +1,12 @@
 # RFC: Storage backup, restore, upgrade, and recovery
 
-- **Status:** draft — fourth author repair completed 2026-09-05 on [[D2724]]–[[D2729]]; another
-  genuinely fresh independent review is required. Replacement recovery observes exact byte
-  identities; checks share one sealed operation-specific storage subject; the fixed replacement
-  journal has atomic publication and unambiguous discovery; identities are runtime-narrowed;
-  and `/readyz` has an exact application boundary. `make storage-backup-fourth-author-repair`
-  retains the complete chain and passes 6/6 new groups plus strict TypeScript. Implementation
-  remains unauthorized.
+- **Status:** **draft — fifth fresh independent review returned the fourth repair on
+  [[D2972]]–[[D2977]].** Storage subjects and semantic check results remain caller-mintable;
+  terminal journal phases accept contradictory disk images; publication is a string-list check;
+  leftover temp intent is unread; and `/readyz` authority is only caller-authored HTTP bytes.
+  `make storage-backup-fifth-fresh-review` retains the complete chain and passes 6/6 executable
+  counterexamples plus strict TypeScript. A bounded fifth author repair and another genuinely fresh
+  review precede acceptance or implementation.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
@@ -145,6 +145,34 @@ The six returned boundaries are repaired as one durable storage authority:
 new behavioral groups and runs strict TypeScript. Exact receipt:
 `planning/storage-backup-recovery/fourth-author-repair-2026-09-05.md`. This remains author evidence;
 another genuinely fresh review gates acceptance and implementation.
+
+## Fifth fresh independent return (2026-09-06)
+
+The fourth repair closes [[D2724]]–[[D2729]] locally but leaves six false authorities at its real
+storage and application boundaries:
+
+1. **[[D2972]]:** exported `inspectBackupSubject` and `inspectPrepareFreshSubject` functions mint
+   operation subjects from caller-selected bytes rather than an operation-owned storage handle;
+2. **[[D2973]]:** exported semantic check functions seal caller-supplied pragma rows, inventories
+   and compatibility matrices, so mutually consistent invented answers compile as a successful
+   backup;
+3. **[[D2974]]:** verify and terminal journal phases validate only old-member placement, allowing a
+   `verified` keep-new decision while the old main remains live and the staged new main is not
+   installed;
+4. **[[D2975]]:** journal publication compares four supplied step-name strings and performs no open,
+   exclusive create, write, fsync or rename against an owned filesystem capability;
+5. **[[D2976]]:** discovery accepts `journal.json` beside an unread `journal.tmp`, so it cannot prove
+   the leftover temp belongs to the same operation and generation; and
+6. **[[D2977]]:** readiness is reconstructed from caller-selected status/body bytes without invoking
+   the application route, storage connection or representative-data read.
+
+`make storage-backup-fifth-fresh-review` retains the complete predecessor chain and passes all six
+counterexamples plus strict TypeScript. Exact receipt:
+`planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md`.
+This is a return, not acceptance or product implementation. The repair must move subject/check
+issuance inside each storage operation, execute the durable state machine against one owned
+filesystem capability with crash controls, reconcile every journal arm and bind readiness to the
+live application route.
 
 ## Summary
 

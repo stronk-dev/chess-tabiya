@@ -2291,3 +2291,15 @@ provider-health-twelfth-fresh-review` retains the complete chain and passes 6/6 
 counterexamples plus strict TypeScript. Foundation contracts remain active at bounded author repair;
 no provider exchange, external evidence, bot input, Support availability or release proof may treat
 this RFC as accepted.
+
+### 2026-09-06 foundation checkpoint — storage recovery returned at real boundaries
+
+The fifth fresh storage-backup review preserves the fourth repair's digest grammar, UUID narrowing
+and closed response shapes, but proves the alleged authorities remain caller projections. Public
+functions mint storage subjects and passed semantic checks from supplied bytes and arrays; a
+`verified` journal accepts the old main still live and the new main still staged; the durable
+publication check compares four strings; a second temp intent is never read; and arbitrary status
+and body bytes mint readiness without the application route. `make storage-backup-fifth-fresh-review`
+retains the complete chain and passes 6/6 executable counterexamples plus strict TypeScript.
+Foundation contracts remain active at bounded author repair; no backup/restore, update/rollback,
+release rehearsal or clean-host proof may treat this RFC as accepted.
