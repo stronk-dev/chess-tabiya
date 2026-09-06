@@ -1,0 +1,5 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "noEmit": true },
+  "include": ["configuration-state.ts", "test-fixture.ts", "model.ts", "contract.test.ts", "vitest.config.ts"]
+}

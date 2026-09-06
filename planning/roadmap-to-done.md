@@ -494,6 +494,15 @@ fresh falsifiers plus strict TypeScript. One bounded author repair, another genu
 and provider/value dependency landing remain before the held pair can move 12/14→14/14. Receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-fresh-independent-buildability-review-2026-09-06.md`.
 
+The same-day fourteenth author repair closes [[D2892]]–[[D2896]] at contract tier. Installed
+configuration is runtime-sealed and path-free at the product entry point; the model imports no
+test issuer or predecessor promotion module; every declared generation validates before registry
+publication; and registry/store construction is promise-single-flight with failed-promise eviction.
+`make semantic-collectors-promotion-fourteenth-author-repair` retains the entire chain and passes
+5/5 repair groups plus strict TypeScript. The spine remains **12/14** pending a fifteenth fresh
+review and provider/value dependency landing. Receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-author-repair-2026-09-06.md`.
+
 Runtime opening identity is now a complete foundation slice: its pinned local artifact, exact
 endpoint/path/history projections, typed availability, production API route, and image boundary
 ship. Its learner-facing Review, theory, bot, and longitudinal bindings deliberately remain owned

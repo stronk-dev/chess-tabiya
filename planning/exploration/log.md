@@ -16677,3 +16677,20 @@ and passes 15/15 current groups plus strict TypeScript. Exact receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-twelfth-author-repair-2026-09-06.md`.
 Another genuinely fresh review and `evidence-value-authority` still precede acceptance and
 implementation; promotion installation [[D2892]]–[[D2896]] is the parallel foundation repair.
+
+## 2026-09-06 — promotion installation fourteenth author repair
+
+**What landed:** [[D2892]]–[[D2896]] are author-repaired at contract tier. The product model now
+requires one runtime-sealed installed configuration, imports no path-taking test issuer or
+predecessor promotion module, validates the complete listed generation population before registry
+publication, and single-flights registry/store construction with rejected-promise eviction.
+
+**What changed:** current installation authority is no longer chosen by an arbitrary product
+importer or split by call timing. No production projection, schema, API, client, content, archive
+or protected-design byte changed; the evidence spine remains 12/14 and the RFC remains implementing.
+
+**Evidence/next:** `make semantic-collectors-promotion-fourteenth-author-repair` retains the full
+history and passes 5/5 current repair groups plus strict TypeScript. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-author-repair-2026-09-06.md`.
+A fifteenth genuinely fresh review and the existing provider/value dependencies precede the held
+pair's production implementation.

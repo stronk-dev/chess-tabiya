@@ -344,15 +344,15 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Freshly review the repaired candidate packet; author-repair promotion installation D2892-D2896 and freshly review it; then land the evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+        "nextAction": "Freshly review the repaired candidate packet and promotion installation, then land the evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "The seven candidate-service returns are repaired in one composed 15-group contract; the five promotion installation/population/concurrency returns remain. The spine stays at contract repair before bots, hints, Review or packs consume it.",
+          "summary": "Both shared population prerequisites are author-repaired: the candidate service has one request/lifecycle/cache authority and promotion installation has one sealed, eagerly validated, single-flight registry/store authority. Fresh review and provider/value dependencies remain before production.",
           "impact": "held",
-          "evidence": ["planning/evidence-foundation-ux/shared-candidate-packet-twelfth-author-repair-2026-09-06.md", "planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2885-candidate-packet-twelfth-author-repair/contract.test.ts", "tools/d2892-semantic-collectors-promotion-fourteenth-fresh-review/review.test.ts", "rfc/shared-candidate-evidence-packet.md", "rfc/semantic-collectors.md", "rfc/README.md"],
+          "evidence": ["planning/evidence-foundation-ux/shared-candidate-packet-twelfth-author-repair-2026-09-06.md", "planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-author-repair-2026-09-06.md", "tools/d2885-candidate-packet-twelfth-author-repair/contract.test.ts", "tools/d2892-semantic-collectors-promotion-fourteenth-author-repair/contract.test.ts", "rfc/shared-candidate-evidence-packet.md", "rfc/semantic-collectors.md", "rfc/README.md"],
           "anchors": [
             {"kind": "rfc", "id": "shared-candidate-evidence-packet.md", "digest": "sha256:b0606d87e172c805a4f4b93aabd4602801ea9d9f32e8136d1f22c125cd1f850c"},
-            {"kind": "rfc", "id": "semantic-collectors.md", "digest": "sha256:0d429b97de3c3a58eb9c5ce33ef68519a80a58cf9749873e0a7cc931ac7f376d"}
+            {"kind": "rfc", "id": "semantic-collectors.md", "digest": "sha256:38cf8853e5c48205e8e2ba8bec2abaa1eaefe0754b291ba5b7f2fb6be1701246"}
           ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."

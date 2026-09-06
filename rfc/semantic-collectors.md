@@ -7,13 +7,14 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair's thirteenth author repair is returned by the fourteenth fresh independent review
-  on [[D2892]]–[[D2896]] (2026-09-06).** The renamed application entry point still accepts an
-  arbitrary caller path and reaches the predecessor test-only issuer; registry publication does not
-  validate its declared generation population; and registry/store authority splits under concurrent
-  opens. `make semantic-collectors-promotion-fourteenth-fresh-review` retains the entire predecessor
-  and return chain, passes 5/5 fresh falsifiers and strict TypeScript. One bounded author repair,
-  another genuinely fresh review and provider/value dependency landing still gate both held
+  promotion pair's fourteenth author repair closes [[D2892]]–[[D2896]] at contract tier
+  (2026-09-06).** Application opening now requires a runtime-sealed installed configuration rather
+  than a path; its product dependency graph contains neither the test issuer nor a predecessor
+  registry; every listed generation validates before registry publication; and promise authority is
+  installed before the first await for one registry and one store per generation, with failed
+  construction evicted. `make semantic-collectors-promotion-fourteenth-author-repair` retains the
+  entire predecessor and return chain, passes 5/5 repair groups and strict TypeScript. A fifteenth
+  genuinely fresh review and provider/value dependency landing still gate both held
   projections; no held projection implementation is authorized. The preceding author model claimed one
   asynchronous transaction owned recorded-first lookup, the exact
   scheduler digest and invocation, cancellation/domain/failure outcomes, success-only legal move
@@ -1610,6 +1611,23 @@ generation population before installed-registry publication, and single-flight o
 authority per immutable application snapshot and generation. Another genuinely fresh review and
 the existing provider/value dependencies remain mandatory; the spine stays 12/14.
 
+The same-day fourteenth author repair closes those five returns at contract tier. The product model
+accepts only a runtime-sealed installed-configuration object; caller strings and copied structural
+values fail. Its module graph contains no test-fixture or predecessor repair import. Registry
+construction validates every declared generation manifest and every referenced pack, source,
+evidence, response and legal-map artifact—including the retained response/legal population and
+durable-subject joins—before it publishes any installed generation id.
+
+One registry promise is cached on the immutable application snapshot before validation awaits.
+Each generation likewise caches its first store-construction promise before revalidation awaits;
+both cache levels delete only their own rejected promise, so a repaired installation can retry
+without ever publishing two current lineages. `make
+semantic-collectors-promotion-fourteenth-author-repair` retains the complete predecessor/return
+chain, then passes 5/5 repair groups plus strict TypeScript. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-author-repair-2026-09-06.md`.
+This remains author evidence only: a fifteenth genuinely fresh review and the existing
+provider/value dependencies remain mandatory; the spine stays 12/14.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1653,11 +1671,11 @@ the existing provider/value dependencies remain mandatory; the spine stays 12/14
 | [[D2866]] | returned: registry construction combines first-read entries with a second-read predecessor digest and store |
 | [[D2867]] | returned: the returned store, collector and receipt remain predecessor authorities and retain no application registry |
 | [[D2868]] | returned: an empty response/legal population satisfies the nominally non-vacuous installed-generation parser |
-| [[D2892]] | returned: the exported application constructor still turns an arbitrary importer-selected path into installed authority |
-| [[D2893]] | returned: the current product path calls the predecessor test-only raw-path issuer internally |
-| [[D2894]] | returned: registry publication does not validate the complete generation population it advertises as installed |
-| [[D2895]] | returned: one immutable application can issue multiple simultaneously valid current registries |
-| [[D2896]] | returned: concurrent first generation opens cross awaited work before caching and can split current store authority |
+| [[D2892]] | author-repaired: application opening accepts only a runtime-sealed installed-configuration authority; path strings and structural copies fail |
+| [[D2893]] | author-repaired: the product model imports neither the path-taking test fixture nor any predecessor promotion module |
+| [[D2894]] | author-repaired: complete listed generation and referenced-artifact validation precedes installed-registry publication |
+| [[D2895]] | author-repaired: one promise-backed current registry belongs to each immutable application snapshot; failed construction is evicted |
+| [[D2896]] | author-repaired: one promise-backed current store belongs to each application/generation; concurrent first opens join and failed construction is evicted |
 | [[D2469]] | author-repaired: provider preflight/domain and provider-failure arms execute before the lazy success-only legal-map resolver |
 | [[D2470]] | author-repaired: one request, dependency interface, sealed recorded resolver and exact collector signature fix source precedence |
 | [[D2471]] | author-repaired: specialized assertion failure throws `EvidenceInvariantError`; only typed unavailable inputs abstain, and invalid recorded bytes never permit live fallback |
@@ -1699,6 +1717,15 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-06: fourteenth author repair closes [[D2892]]–[[D2896]] at contract tier. One sealed
+  installed-configuration authority replaces the caller path; the product model has no test-issuer
+  or predecessor dependency; every listed generation validates before registry publication; and
+  registry/store construction is single-flight with failed-promise eviction. `make
+  semantic-collectors-promotion-fourteenth-author-repair` retains the chain and passes 5/5 repair
+  groups plus strict TypeScript. Exact receipt:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-author-repair-2026-09-06.md`.
+  Fifteenth fresh review and provider/value dependencies remain mandatory; the held pair stays
+  unimplemented.
 - 2026-09-06: fourteenth fresh independent review returned the held promotion pair on
   [[D2892]]–[[D2896]]. The public application entry point remains caller-path authority and invokes
   the predecessor test issuer; registry publication validates no complete generation population;
