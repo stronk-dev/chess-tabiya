@@ -17517,7 +17517,7 @@
       "id": "D2237",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f1c8baccb4967f2ff7fd213ed3cd7acbe1cfe5668bd80a68dea16c34572ec018",
+      "sourceDigest": "sha256:ced24ccb26e91547ac92c012f20cce93c1feb44779c0daa1b12d5c3de0618d2a",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-roster.md"
@@ -23450,6 +23450,32 @@
       "sourceDigest": "sha256:be8703d1957bd6776f707da6a39949fad847566f3a6ac752ac3a8e80b8b51f73",
       "uxItems": [],
       "evidence": "tools/d2878-concept-registry-third-fresh-review/review.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2899",
+      "state": "todo",
+      "sourceGlyph": "📊",
+      "sourceDigest": "sha256:46f206f7bb3f02994de892547c114ccb778be16364fa7aeac697958be973ce3c",
+      "uxItems": [],
+      "owner": "bot-play"
+    },
+    {
+      "id": "D2900",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1fd6d185fee8eb808b4f9f21d371ffdb6512276e6629f604415387ca6ff1d2e3",
+      "uxItems": [],
+      "evidence": "Makefile",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D2901",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8300ecd5bc34a54b52b027b09d4ba9d853c18d2700666c1c705e3477c34673b1",
+      "uxItems": [],
+      "evidence": "vitest.software.config.ts",
       "evidenceKind": "path"
     }
   ]

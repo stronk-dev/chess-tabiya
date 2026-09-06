@@ -80,51 +80,51 @@
     },
     {
       "id": "minor_piece_global_x4",
-      "disposition": "research_required",
+      "disposition": "measured_pass",
       "profilePath": null,
-      "source": "rfc/bot-roster.md#5.3"
+      "source": "design/research/stage-a-bot-trait-screen.md"
     },
     {
       "id": "central_destination_global_x4",
-      "disposition": "research_required",
+      "disposition": "measured_pass",
       "profilePath": null,
-      "source": "rfc/bot-roster.md#5.3"
+      "source": "design/research/stage-a-bot-trait-screen.md"
     },
     {
       "id": "long_move_global_x4",
-      "disposition": "research_required",
+      "disposition": "refused_exact_transform",
       "profilePath": null,
-      "source": "rfc/bot-roster.md#5.3"
+      "source": "design/research/stage-a-bot-trait-screen.md"
     },
     {
       "id": "piece_repeat_global_x0_25",
-      "disposition": "research_required",
+      "disposition": "refused_exact_transform",
       "profilePath": null,
-      "source": "rfc/bot-roster.md#5.3"
+      "source": "design/research/stage-a-bot-trait-screen.md"
     },
     {
       "id": "rim_destination_global_x0_25",
-      "disposition": "research_required",
+      "disposition": "refused_exact_transform",
       "profilePath": null,
-      "source": "rfc/bot-roster.md#5.3"
+      "source": "design/research/stage-a-bot-trait-screen.md"
     },
     {
       "id": "capture_global_x4",
-      "disposition": "research_required",
+      "disposition": "refused_exact_transform",
       "profilePath": null,
-      "source": "rfc/bot-roster.md#5.3"
+      "source": "design/research/stage-a-bot-trait-screen.md"
     },
     {
       "id": "check_global_x4",
-      "disposition": "research_required",
+      "disposition": "refused_exact_transform",
       "profilePath": null,
-      "source": "rfc/bot-roster.md#5.3"
+      "source": "design/research/stage-a-bot-trait-screen.md"
     },
     {
       "id": "rank_advance_global_x3",
-      "disposition": "research_required",
+      "disposition": "refused_exact_transform",
       "profilePath": null,
-      "source": "rfc/bot-roster.md#5.3"
+      "source": "design/research/stage-a-bot-trait-screen.md"
     },
     {
       "id": "king_activity_endgame",

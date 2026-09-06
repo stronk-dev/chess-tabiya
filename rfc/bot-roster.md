@@ -355,8 +355,8 @@ does not invent another registry.
 | monotone Maia-window route filter | **refused**: 1/12 completion and two forced regressions | no further shortlist filter/multiplier variant |
 | separately identified generated route source | **mechanism pass, personality unproven**: 9/12 completion, 41 route selections, 55 guard refusals, max admitted loss 234 cp | enter through `bot-route-source`; it needs registered route content, the §6 calibration contract and owner-use before personality copy |
 | evidence-to-move conditional selector | **refused as a standalone base and as the measured guard composition**: proper score improved, severe-tail/guard-retention gates failed | evidence signal remains valid for Support/Review/drills; this fitted selector cannot register a bot |
-| minor-piece, central-destination, long-move and piece-repeat transforms | **research required** on the fixed captured screen | no profile id, name or card claim until measured |
-| rim avoidance, capture/check preference and rank advance | **research required; prior “likely fail” is not evidence** | remain unregistered; prediction text is not a refusal |
+| minor-piece ×4 and central-destination ×4 | **measured controlled-divergence pass**: +11.91/+10.27 pp; all safety/retention clauses pass | full-calibration candidates only; no profile id, name, card or launch-floor membership yet |
+| long-move ×4, piece-repeat ×0.25, rim avoidance ×0.25, capture/check ×4 and rank advance ×3 | **refused at the exact global transform**: +7.67/+2.20/+5.89/+4.80/+0.40/+3.47 pp | primitives remain available to evidence/Review/drills/style; none registers as a bot trait |
 | king activity | **population blocked**: the fixed corpus has zero endgame cells | requires an endgame population before any screen |
 | clock/history behavior and phase-specific endgame behavior | **research required** | full 1.0 bot depth remains open even when the launch floor registers |
 
@@ -367,7 +367,7 @@ route result proves a source boundary, not that the route is fun, coherent acros
 human-like. `[V]` (`shared-style-atoms-as-bot-traits.md`, `state-directed-bot-profile.md`,
 `finite-state-bot-route-controller.md`, `monotone-bot-route-controller.md`,
 `generated-bot-route-source.md`, `evidence-to-move-proper-score-repair.md`,
-`evidence-to-move-guard-composition.md`)
+`evidence-to-move-guard-composition.md`, `stage-a-bot-trait-screen.md`)
 
 #### 5.4 Full 1.0 personality depth cannot be replaced by names
 

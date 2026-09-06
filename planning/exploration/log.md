@@ -16731,3 +16731,47 @@ shared Support/Review/drill primitives.
 [[D2233]] stays dependency-blocked until `bot-policy` survives genuinely fresh review; the roster
 then refreshes its consumed authorities and returns to independent review. The production catalogue
 remains empty and no implementation is authorized.
+
+## 2026-09-06 — D2237 Stage-A bot-trait fixed-population screen
+
+**What landed:** preregistered and ran eight exact board-arithmetic transforms on a freshly
+regenerated 279-position/837-cell R11 population, retaining 804 cells after 33 whole-cell mixed
+mate/cp abstentions. One normal Make target now owns extraction, exact-FEN Explorer join, Maia
+MultiPV-20 capture, Stockfish-18 depth-8 pricing and aggregate measurement; a separate normal target
+runs the semantic/able-to-fail controls without engines.
+
+**What changed:** minor-piece ×4 (+11.91 pp) and central-destination ×4 (+10.27 pp) pass the existing
+controlled-divergence gate. Long move, piece-repeat/rim suppression, capture/check preference and
+generic forward movement fail their preregistered reach clause. All retain the safety and human-
+reference clauses. The machine-readable roster matrix and draft RFC now distinguish the two
+full-calibration candidates from six exact-transform refusals; none is called a personality.
+
+**Evidence/next:** `design/research/stage-a-bot-trait-screen.md` and
+`planning/bot-roster/d2237-stage-a-trait-screen-results.json`; `make bot-trait-screen-contract`
+passes locally. Maia/Explorer/SAN inputs reproduce byte-for-byte. Native Stockfish regeneration
+drifts +0.066139 cp / +0.001822 severe mass from the old aggregate, inside the preregistered bound,
+and both identity digests are recorded. The two passes next require the full 13,200-game/24,000-
+decision calibration contract; phase, clocks/history, endgames and multi-ply coherence remain open.
+
+## 2026-09-06 — uninterrupted local full-verification wrapper
+
+**What landed:** [[D2900]] adds `make verify-awake`. On macOS it runs the unchanged complete
+`make verify` dependency graph under `caffeinate -i`; on hosts without that command it delegates
+unchanged. CI continues to invoke the original tier targets and no timeout moved.
+
+**Why:** two local full-gate runs crossed host suspension while a five-second Vitest contract was
+active. The reported single-test durations jumped to 298,817 ms and 914,404 ms; immediate runs of
+the same normal candidate-packet target completed those operations in 636–797 ms. Weakening the
+timeouts would misclassify system sleep as product latency and would not make the bound meaningful.
+
+## 2026-09-06 — deterministic mixed software-suite concurrency
+
+**What landed:** [[D2901]] lowers the one shared `vitest.software.config.ts` worker ceiling from four
+to two. Both `make test-software` locally and the GitHub software-contracts job consume this exact
+configuration; no timeout, include, exclusion or assertion changed.
+
+**Why:** the complete awake run eliminated host suspension yet still timed out three independent
+five-second contracts together: real Stockfish restart, Studio withdrawal and human-model split.
+The tier deliberately mixes subprocess, SQLite/schema and Svelte work, so four file workers still
+oversubscribed the host. A smaller bounded pool fixes the runner contract rather than making slow
+functional behavior acceptable.

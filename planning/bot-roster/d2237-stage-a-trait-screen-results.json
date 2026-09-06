@@ -1,0 +1,1179 @@
+{
+  "schema": "tabiya.research.d2237-bot-trait-screen.v1",
+  "measuredAt": "2026-09-06T03:11:53.325Z",
+  "parameters": {
+    "temperature": 0.8,
+    "topP": 0.92,
+    "guardCp": 250,
+    "gates": {
+      "traitMovement": 0.1,
+      "lossDeltaCp": 35,
+      "severeRise": 0.01,
+      "humanRetention": 0.9
+    },
+    "sensitivity": [
+      2,
+      8
+    ],
+    "multipliers": {
+      "minorPiece": 4,
+      "centralDestination": 4,
+      "longMove": 4,
+      "pieceRepeat": 0.25,
+      "rimDestination": 0.25,
+      "capture": 4,
+      "givesCheck": 4,
+      "forwardMove": 3
+    }
+  },
+  "inputs": {
+    "maia": "sha256:61b4e12a4fa6e728ad5cc7bc44276c9cc676ae4be1d29f7c8e4b66d9fc466400",
+    "sf": "sha256:9bf8c09a38e3140101fa6606ea6b15e191750be7008fc42fecffb6bd4fb55a23",
+    "probes": "sha256:fe081f45d95b6115ee649831882e45561ff7b0d960b6759242ac335654e9cfed",
+    "san": "sha256:4e88eae51cc0df0a5cb4882a2a33679de73c41e3c8f26dfab4def80df3103473",
+    "maiaIdentity": "sha256:51f02fb44e88cfecbbdb0dc12fac2fc78ecb7bfe0cbbf7db1705cddbd4a3a426",
+    "stockfishIdentity": "sha256:b9146f60cc504d2b5212bd0521c094aa54eac4cab556dcddd7b609e736c3c26a"
+  },
+  "population": {
+    "maiaRows": 837,
+    "sfRows": 279,
+    "probePositions": 279,
+    "cells": 804,
+    "abstainedMixedScoreCells": 33,
+    "unmappableCandidates": 0
+  },
+  "priorAnchor": {
+    "expectedLossCp": 20.821109,
+    "severe250": 0.004316,
+    "humanMatch": 0.31329
+  },
+  "anchorDrift": {
+    "expectedLossCp": 0.066139,
+    "severe250": 0.001822,
+    "humanMatch": 0
+  },
+  "production": {
+    "cells": 804,
+    "expectedLossCp": 20.887248,
+    "severe250": 0.006138,
+    "humanMatch": 0.31329
+  },
+  "summary": {
+    "minorPiece": {
+      "guarded": {
+        "cells": 804,
+        "expectedLossCp": 18.94587,
+        "severe250": 0,
+        "humanMatch": 0.314021,
+        "traitRate": 0.450436,
+        "opportunityCells": 424,
+        "intermediateCells": 331,
+        "conditionalTraitRate": 0.519224
+      },
+      "weighted": {
+        "cells": 804,
+        "expectedLossCp": 19.601602,
+        "severe250": 0,
+        "humanMatch": 0.313157,
+        "traitRate": 0.569493,
+        "opportunityCells": 424,
+        "intermediateCells": 331,
+        "conditionalTraitRate": 0.744982
+      },
+      "byBand": {
+        "1400": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 21.160815,
+            "severe250": 0,
+            "humanMatch": 0.282189,
+            "traitRate": 0.455584,
+            "opportunityCells": 152,
+            "intermediateCells": 116,
+            "conditionalTraitRate": 0.520372
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 22.055922,
+            "severe250": 0,
+            "humanMatch": 0.282984,
+            "traitRate": 0.581547,
+            "opportunityCells": 152,
+            "intermediateCells": 116,
+            "conditionalTraitRate": 0.742465
+          }
+        },
+        "1600": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 19.109704,
+            "severe250": 0,
+            "humanMatch": 0.318984,
+            "traitRate": 0.453709,
+            "opportunityCells": 143,
+            "intermediateCells": 113,
+            "conditionalTraitRate": 0.514643
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 19.798831,
+            "severe250": 0,
+            "humanMatch": 0.316616,
+            "traitRate": 0.574781,
+            "opportunityCells": 143,
+            "intermediateCells": 113,
+            "conditionalTraitRate": 0.741548
+          }
+        },
+        "1800": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 16.56709,
+            "severe250": 0,
+            "humanMatch": 0.34089,
+            "traitRate": 0.442016,
+            "opportunityCells": 129,
+            "intermediateCells": 102,
+            "conditionalTraitRate": 0.522949
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 16.950051,
+            "severe250": 0,
+            "humanMatch": 0.339872,
+            "traitRate": 0.552151,
+            "opportunityCells": 129,
+            "intermediateCells": 102,
+            "conditionalTraitRate": 0.751755
+          }
+        }
+      }
+    },
+    "centralDestination": {
+      "guarded": {
+        "cells": 804,
+        "expectedLossCp": 18.94587,
+        "severe250": 0,
+        "humanMatch": 0.314021,
+        "traitRate": 0.480021,
+        "opportunityCells": 380,
+        "intermediateCells": 289,
+        "conditionalTraitRate": 0.481414
+      },
+      "weighted": {
+        "cells": 804,
+        "expectedLossCp": 19.624371,
+        "severe250": 0,
+        "humanMatch": 0.31581,
+        "traitRate": 0.582733,
+        "opportunityCells": 380,
+        "intermediateCells": 289,
+        "conditionalTraitRate": 0.698731
+      },
+      "byBand": {
+        "1400": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 21.160815,
+            "severe250": 0,
+            "humanMatch": 0.282189,
+            "traitRate": 0.486685,
+            "opportunityCells": 132,
+            "intermediateCells": 104,
+            "conditionalTraitRate": 0.472966
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 22.062478,
+            "severe250": 0,
+            "humanMatch": 0.282286,
+            "traitRate": 0.597154,
+            "opportunityCells": 132,
+            "intermediateCells": 104,
+            "conditionalTraitRate": 0.697252
+          }
+        },
+        "1600": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 19.109704,
+            "severe250": 0,
+            "humanMatch": 0.318984,
+            "traitRate": 0.479303,
+            "opportunityCells": 130,
+            "intermediateCells": 96,
+            "conditionalTraitRate": 0.480409
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 19.869645,
+            "severe250": 0,
+            "humanMatch": 0.320627,
+            "traitRate": 0.582933,
+            "opportunityCells": 130,
+            "intermediateCells": 96,
+            "conditionalTraitRate": 0.694046
+          }
+        },
+        "1800": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 16.56709,
+            "severe250": 0,
+            "humanMatch": 0.34089,
+            "traitRate": 0.474077,
+            "opportunityCells": 118,
+            "intermediateCells": 89,
+            "conditionalTraitRate": 0.49197
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 16.94099,
+            "severe250": 0,
+            "humanMatch": 0.344516,
+            "traitRate": 0.568114,
+            "opportunityCells": 118,
+            "intermediateCells": 89,
+            "conditionalTraitRate": 0.705546
+          }
+        }
+      }
+    },
+    "longMove": {
+      "guarded": {
+        "cells": 804,
+        "expectedLossCp": 18.94587,
+        "severe250": 0,
+        "humanMatch": 0.314021,
+        "traitRate": 0.15917,
+        "opportunityCells": 265,
+        "intermediateCells": 219,
+        "conditionalTraitRate": 0.331974
+      },
+      "weighted": {
+        "cells": 804,
+        "expectedLossCp": 20.056688,
+        "severe250": 0,
+        "humanMatch": 0.305425,
+        "traitRate": 0.235877,
+        "opportunityCells": 265,
+        "intermediateCells": 219,
+        "conditionalTraitRate": 0.564697
+      },
+      "byBand": {
+        "1400": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 21.160815,
+            "severe250": 0,
+            "humanMatch": 0.282189,
+            "traitRate": 0.162159,
+            "opportunityCells": 97,
+            "intermediateCells": 80,
+            "conditionalTraitRate": 0.303696
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 22.289441,
+            "severe250": 0,
+            "humanMatch": 0.274131,
+            "traitRate": 0.245774,
+            "opportunityCells": 97,
+            "intermediateCells": 80,
+            "conditionalTraitRate": 0.534717
+          }
+        },
+        "1600": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 19.109704,
+            "severe250": 0,
+            "humanMatch": 0.318984,
+            "traitRate": 0.159247,
+            "opportunityCells": 88,
+            "intermediateCells": 71,
+            "conditionalTraitRate": 0.337251
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 20.353064,
+            "severe250": 0,
+            "humanMatch": 0.310396,
+            "traitRate": 0.235506,
+            "opportunityCells": 88,
+            "intermediateCells": 71,
+            "conditionalTraitRate": 0.569497
+          }
+        },
+        "1800": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 16.56709,
+            "severe250": 0,
+            "humanMatch": 0.34089,
+            "traitRate": 0.156106,
+            "opportunityCells": 80,
+            "intermediateCells": 68,
+            "conditionalTraitRate": 0.360455
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 17.527561,
+            "severe250": 0,
+            "humanMatch": 0.331748,
+            "traitRate": 0.226349,
+            "opportunityCells": 80,
+            "intermediateCells": 68,
+            "conditionalTraitRate": 0.595768
+          }
+        }
+      }
+    },
+    "pieceRepeat": {
+      "guarded": {
+        "cells": 804,
+        "expectedLossCp": 18.94587,
+        "severe250": 0,
+        "humanMatch": 0.314021,
+        "traitRate": 0.129175,
+        "opportunityCells": 102,
+        "intermediateCells": 85,
+        "conditionalTraitRate": 0.302516
+      },
+      "weighted": {
+        "cells": 804,
+        "expectedLossCp": 18.901795,
+        "severe250": 0,
+        "humanMatch": 0.313712,
+        "traitRate": 0.107159,
+        "opportunityCells": 102,
+        "intermediateCells": 85,
+        "conditionalTraitRate": 0.128982
+      },
+      "byBand": {
+        "1400": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 21.160815,
+            "severe250": 0,
+            "humanMatch": 0.282189,
+            "traitRate": 0.132842,
+            "opportunityCells": 41,
+            "intermediateCells": 32,
+            "conditionalTraitRate": 0.307354
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 20.910421,
+            "severe250": 0,
+            "humanMatch": 0.281721,
+            "traitRate": 0.107524,
+            "opportunityCells": 41,
+            "intermediateCells": 32,
+            "conditionalTraitRate": 0.141865
+          }
+        },
+        "1600": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 19.109704,
+            "severe250": 0,
+            "humanMatch": 0.318984,
+            "traitRate": 0.129275,
+            "opportunityCells": 32,
+            "intermediateCells": 27,
+            "conditionalTraitRate": 0.301428
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 19.103966,
+            "severe250": 0,
+            "humanMatch": 0.318537,
+            "traitRate": 0.107892,
+            "opportunityCells": 32,
+            "intermediateCells": 27,
+            "conditionalTraitRate": 0.122349
+          }
+        },
+        "1800": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 16.56709,
+            "severe250": 0,
+            "humanMatch": 0.34089,
+            "traitRate": 0.125408,
+            "opportunityCells": 29,
+            "intermediateCells": 26,
+            "conditionalTraitRate": 0.296876
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 16.690999,
+            "severe250": 0,
+            "humanMatch": 0.340879,
+            "traitRate": 0.106062,
+            "opportunityCells": 29,
+            "intermediateCells": 26,
+            "conditionalTraitRate": 0.118088
+          }
+        }
+      }
+    },
+    "rimDestination": {
+      "guarded": {
+        "cells": 804,
+        "expectedLossCp": 18.94587,
+        "severe250": 0,
+        "humanMatch": 0.314021,
+        "traitRate": 0.196356,
+        "opportunityCells": 261,
+        "intermediateCells": 205,
+        "conditionalTraitRate": 0.378812
+      },
+      "weighted": {
+        "cells": 804,
+        "expectedLossCp": 19.316527,
+        "severe250": 0,
+        "humanMatch": 0.314934,
+        "traitRate": 0.137478,
+        "opportunityCells": 261,
+        "intermediateCells": 205,
+        "conditionalTraitRate": 0.197442
+      },
+      "byBand": {
+        "1400": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 21.160815,
+            "severe250": 0,
+            "humanMatch": 0.282189,
+            "traitRate": 0.185447,
+            "opportunityCells": 97,
+            "intermediateCells": 77,
+            "conditionalTraitRate": 0.357729
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 21.668485,
+            "severe250": 0,
+            "humanMatch": 0.282906,
+            "traitRate": 0.121739,
+            "opportunityCells": 97,
+            "intermediateCells": 77,
+            "conditionalTraitRate": 0.181711
+          }
+        },
+        "1600": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 19.109704,
+            "severe250": 0,
+            "humanMatch": 0.318984,
+            "traitRate": 0.194891,
+            "opportunityCells": 88,
+            "intermediateCells": 67,
+            "conditionalTraitRate": 0.388986
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 19.510692,
+            "severe250": 0,
+            "humanMatch": 0.319359,
+            "traitRate": 0.136262,
+            "opportunityCells": 88,
+            "intermediateCells": 67,
+            "conditionalTraitRate": 0.210435
+          }
+        },
+        "1800": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 16.56709,
+            "severe250": 0,
+            "humanMatch": 0.34089,
+            "traitRate": 0.208729,
+            "opportunityCells": 76,
+            "intermediateCells": 61,
+            "conditionalTraitRate": 0.393939
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 16.770403,
+            "severe250": 0,
+            "humanMatch": 0.342537,
+            "traitRate": 0.154433,
+            "opportunityCells": 76,
+            "intermediateCells": 61,
+            "conditionalTraitRate": 0.202473
+          }
+        }
+      }
+    },
+    "capture": {
+      "guarded": {
+        "cells": 804,
+        "expectedLossCp": 18.94587,
+        "severe250": 0,
+        "humanMatch": 0.314021,
+        "traitRate": 0.244664,
+        "opportunityCells": 168,
+        "intermediateCells": 134,
+        "conditionalTraitRate": 0.397082
+      },
+      "weighted": {
+        "cells": 804,
+        "expectedLossCp": 19.365524,
+        "severe250": 0,
+        "humanMatch": 0.306745,
+        "traitRate": 0.292689,
+        "opportunityCells": 168,
+        "intermediateCells": 134,
+        "conditionalTraitRate": 0.626914
+      },
+      "byBand": {
+        "1400": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 21.160815,
+            "severe250": 0,
+            "humanMatch": 0.282189,
+            "traitRate": 0.251127,
+            "opportunityCells": 63,
+            "intermediateCells": 50,
+            "conditionalTraitRate": 0.401618
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 21.683459,
+            "severe250": 0,
+            "humanMatch": 0.27511,
+            "traitRate": 0.305371,
+            "opportunityCells": 63,
+            "intermediateCells": 50,
+            "conditionalTraitRate": 0.632371
+          }
+        },
+        "1600": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 19.109704,
+            "severe250": 0,
+            "humanMatch": 0.318984,
+            "traitRate": 0.243038,
+            "opportunityCells": 56,
+            "intermediateCells": 45,
+            "conditionalTraitRate": 0.395255
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 19.597196,
+            "severe250": 0,
+            "humanMatch": 0.311354,
+            "traitRate": 0.291538,
+            "opportunityCells": 56,
+            "intermediateCells": 45,
+            "conditionalTraitRate": 0.627361
+          }
+        },
+        "1800": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 16.56709,
+            "severe250": 0,
+            "humanMatch": 0.34089,
+            "traitRate": 0.239827,
+            "opportunityCells": 49,
+            "intermediateCells": 39,
+            "conditionalTraitRate": 0.39334
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 16.815917,
+            "severe250": 0,
+            "humanMatch": 0.33377,
+            "traitRate": 0.281157,
+            "opportunityCells": 49,
+            "intermediateCells": 39,
+            "conditionalTraitRate": 0.619387
+          }
+        }
+      }
+    },
+    "givesCheck": {
+      "guarded": {
+        "cells": 804,
+        "expectedLossCp": 18.94587,
+        "severe250": 0,
+        "humanMatch": 0.314021,
+        "traitRate": 0.01619,
+        "opportunityCells": 18,
+        "intermediateCells": 14,
+        "conditionalTraitRate": 0.278731
+      },
+      "weighted": {
+        "cells": 804,
+        "expectedLossCp": 19.050122,
+        "severe250": 0,
+        "humanMatch": 0.313386,
+        "traitRate": 0.020203,
+        "opportunityCells": 18,
+        "intermediateCells": 14,
+        "conditionalTraitRate": 0.457958
+      },
+      "byBand": {
+        "1400": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 21.160815,
+            "severe250": 0,
+            "humanMatch": 0.282189,
+            "traitRate": 0.017187,
+            "opportunityCells": 10,
+            "intermediateCells": 8,
+            "conditionalTraitRate": 0.260622
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 21.338736,
+            "severe250": 0,
+            "humanMatch": 0.281419,
+            "traitRate": 0.024459,
+            "opportunityCells": 10,
+            "intermediateCells": 8,
+            "conditionalTraitRate": 0.455488
+          }
+        },
+        "1600": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 19.109704,
+            "severe250": 0,
+            "humanMatch": 0.318984,
+            "traitRate": 0.016049,
+            "opportunityCells": 5,
+            "intermediateCells": 4,
+            "conditionalTraitRate": 0.260238
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 19.198734,
+            "severe250": 0,
+            "humanMatch": 0.318199,
+            "traitRate": 0.019172,
+            "opportunityCells": 5,
+            "intermediateCells": 4,
+            "conditionalTraitRate": 0.427623
+          }
+        },
+        "1800": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 16.56709,
+            "severe250": 0,
+            "humanMatch": 0.34089,
+            "traitRate": 0.015335,
+            "opportunityCells": 3,
+            "intermediateCells": 2,
+            "conditionalTraitRate": 0.369915
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 16.612897,
+            "severe250": 0,
+            "humanMatch": 0.340539,
+            "traitRate": 0.016979,
+            "opportunityCells": 3,
+            "intermediateCells": 2,
+            "conditionalTraitRate": 0.516748
+          }
+        }
+      }
+    },
+    "forwardMove": {
+      "guarded": {
+        "cells": 804,
+        "expectedLossCp": 18.94587,
+        "severe250": 0,
+        "humanMatch": 0.314021,
+        "traitRate": 0.842206,
+        "opportunityCells": 209,
+        "intermediateCells": 113,
+        "conditionalTraitRate": 0.67528
+      },
+      "weighted": {
+        "cells": 804,
+        "expectedLossCp": 19.199655,
+        "severe250": 0,
+        "humanMatch": 0.315884,
+        "traitRate": 0.876868,
+        "opportunityCells": 209,
+        "intermediateCells": 113,
+        "conditionalTraitRate": 0.80862
+      },
+      "byBand": {
+        "1400": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 21.160815,
+            "severe250": 0,
+            "humanMatch": 0.282189,
+            "traitRate": 0.848423,
+            "opportunityCells": 77,
+            "intermediateCells": 39,
+            "conditionalTraitRate": 0.693213
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 21.437039,
+            "severe250": 0,
+            "humanMatch": 0.283968,
+            "traitRate": 0.884526,
+            "opportunityCells": 77,
+            "intermediateCells": 39,
+            "conditionalTraitRate": 0.81887
+          }
+        },
+        "1600": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 19.109704,
+            "severe250": 0,
+            "humanMatch": 0.318984,
+            "traitRate": 0.843249,
+            "opportunityCells": 64,
+            "intermediateCells": 36,
+            "conditionalTraitRate": 0.656107
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 19.414127,
+            "severe250": 0,
+            "humanMatch": 0.320684,
+            "traitRate": 0.877177,
+            "opportunityCells": 64,
+            "intermediateCells": 36,
+            "conditionalTraitRate": 0.798177
+          }
+        },
+        "1800": {
+          "guarded": {
+            "cells": 268,
+            "expectedLossCp": 16.56709,
+            "severe250": 0,
+            "humanMatch": 0.34089,
+            "traitRate": 0.834945,
+            "opportunityCells": 68,
+            "intermediateCells": 38,
+            "conditionalTraitRate": 0.673019
+          },
+          "weighted": {
+            "cells": 268,
+            "expectedLossCp": 16.747798,
+            "severe250": 0,
+            "humanMatch": 0.343001,
+            "traitRate": 0.8689,
+            "opportunityCells": 68,
+            "intermediateCells": 38,
+            "conditionalTraitRate": 0.806843
+          }
+        }
+      }
+    }
+  },
+  "gates": {
+    "minorPiece": {
+      "traitMovement": 0.119057,
+      "lossDeltaCp": -1.285646,
+      "severeRise": -0.006138,
+      "humanRetention": 0.999575,
+      "pass": 1
+    },
+    "centralDestination": {
+      "traitMovement": 0.102712,
+      "lossDeltaCp": -1.262877,
+      "severeRise": -0.006138,
+      "humanRetention": 1.008044,
+      "pass": 1
+    },
+    "longMove": {
+      "traitMovement": 0.076707,
+      "lossDeltaCp": -0.83056,
+      "severeRise": -0.006138,
+      "humanRetention": 0.974895,
+      "pass": 0
+    },
+    "pieceRepeat": {
+      "traitMovement": 0.022016,
+      "lossDeltaCp": -1.985453,
+      "severeRise": -0.006138,
+      "humanRetention": 1.001347,
+      "pass": 0
+    },
+    "rimDestination": {
+      "traitMovement": 0.058878,
+      "lossDeltaCp": -1.570721,
+      "severeRise": -0.006138,
+      "humanRetention": 1.005248,
+      "pass": 0
+    },
+    "capture": {
+      "traitMovement": 0.048025,
+      "lossDeltaCp": -1.521724,
+      "severeRise": -0.006138,
+      "humanRetention": 0.979109,
+      "pass": 0
+    },
+    "givesCheck": {
+      "traitMovement": 0.004013,
+      "lossDeltaCp": -1.837126,
+      "severeRise": -0.006138,
+      "humanRetention": 1.000306,
+      "pass": 0
+    },
+    "forwardMove": {
+      "traitMovement": 0.034662,
+      "lossDeltaCp": -1.687593,
+      "severeRise": -0.006138,
+      "humanRetention": 1.00828,
+      "pass": 0
+    }
+  },
+  "controls": {
+    "pawn": {
+      "traitMovement": 0.122529,
+      "lossDeltaCp": -1.673584,
+      "severeRise": -0.006138,
+      "humanRetention": 0.988066,
+      "pass": 1
+    },
+    "forcing": {
+      "traitMovement": 0.039957,
+      "lossDeltaCp": -1.557719,
+      "severeRise": -0.006138,
+      "humanRetention": 0.983276,
+      "pass": 0
+    }
+  },
+  "sensitivity": {
+    "minorPiece": {
+      "2": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.19098,
+          "severe250": 0,
+          "humanMatch": 0.314698,
+          "traitRate": 0.513602,
+          "opportunityCells": 424,
+          "intermediateCells": 331,
+          "conditionalTraitRate": 0.639
+        },
+        "gate": {
+          "traitMovement": 0.063166,
+          "lossDeltaCp": -1.696268,
+          "severeRise": -0.006138,
+          "humanRetention": 1.004494,
+          "pass": 0
+        }
+      },
+      "8": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 20.084338,
+          "severe250": 0,
+          "humanMatch": 0.3105,
+          "traitRate": 0.61462,
+          "opportunityCells": 424,
+          "intermediateCells": 331,
+          "conditionalTraitRate": 0.830553
+        },
+        "gate": {
+          "traitMovement": 0.164184,
+          "lossDeltaCp": -0.80291,
+          "severeRise": -0.006138,
+          "humanRetention": 0.991095,
+          "pass": 1
+        }
+      }
+    },
+    "centralDestination": {
+      "2": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.211914,
+          "severe250": 0,
+          "humanMatch": 0.315957,
+          "traitRate": 0.532906,
+          "opportunityCells": 380,
+          "intermediateCells": 289,
+          "conditionalTraitRate": 0.593306
+        },
+        "gate": {
+          "traitMovement": 0.052885,
+          "lossDeltaCp": -1.675334,
+          "severeRise": -0.006138,
+          "humanRetention": 1.008513,
+          "pass": 0
+        }
+      },
+      "8": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 20.125422,
+          "severe250": 0,
+          "humanMatch": 0.314288,
+          "traitRate": 0.626192,
+          "opportunityCells": 380,
+          "intermediateCells": 289,
+          "conditionalTraitRate": 0.79068
+        },
+        "gate": {
+          "traitMovement": 0.146171,
+          "lossDeltaCp": -0.761826,
+          "severeRise": -0.006138,
+          "humanRetention": 1.003186,
+          "pass": 1
+        }
+      }
+    },
+    "longMove": {
+      "2": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.403521,
+          "severe250": 0,
+          "humanMatch": 0.310494,
+          "traitRate": 0.19587,
+          "opportunityCells": 265,
+          "intermediateCells": 219,
+          "conditionalTraitRate": 0.443319
+        },
+        "gate": {
+          "traitMovement": 0.0367,
+          "lossDeltaCp": -1.483727,
+          "severeRise": -0.006138,
+          "humanRetention": 0.991075,
+          "pass": 0
+        }
+      },
+      "8": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 20.822218,
+          "severe250": 0,
+          "humanMatch": 0.29943,
+          "traitRate": 0.275296,
+          "opportunityCells": 265,
+          "intermediateCells": 219,
+          "conditionalTraitRate": 0.684294
+        },
+        "gate": {
+          "traitMovement": 0.116126,
+          "lossDeltaCp": -0.06503,
+          "severeRise": -0.006138,
+          "humanRetention": 0.95576,
+          "pass": 1
+        }
+      }
+    },
+    "pieceRepeat": {
+      "0.5": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 18.887345,
+          "severe250": 0,
+          "humanMatch": 0.314027,
+          "traitRate": 0.116601,
+          "opportunityCells": 102,
+          "intermediateCells": 85,
+          "conditionalTraitRate": 0.203401
+        },
+        "gate": {
+          "traitMovement": 0.012574,
+          "lossDeltaCp": -1.999903,
+          "severeRise": -0.006138,
+          "humanRetention": 1.002352,
+          "pass": 0
+        }
+      },
+      "0.125": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 18.954743,
+          "severe250": 0,
+          "humanMatch": 0.313286,
+          "traitRate": 0.100663,
+          "opportunityCells": 102,
+          "intermediateCells": 85,
+          "conditionalTraitRate": 0.077772
+        },
+        "gate": {
+          "traitMovement": 0.028512,
+          "lossDeltaCp": -1.932505,
+          "severeRise": -0.006138,
+          "humanRetention": 0.999987,
+          "pass": 0
+        }
+      }
+    },
+    "rimDestination": {
+      "0.5": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.117321,
+          "severe250": 0,
+          "humanMatch": 0.314799,
+          "traitRate": 0.164462,
+          "opportunityCells": 261,
+          "intermediateCells": 205,
+          "conditionalTraitRate": 0.280566
+        },
+        "gate": {
+          "traitMovement": 0.031894,
+          "lossDeltaCp": -1.769927,
+          "severeRise": -0.006138,
+          "humanRetention": 1.004817,
+          "pass": 0
+        }
+      },
+      "0.125": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.517219,
+          "severe250": 0,
+          "humanMatch": 0.314658,
+          "traitRate": 0.115885,
+          "opportunityCells": 261,
+          "intermediateCells": 205,
+          "conditionalTraitRate": 0.130927
+        },
+        "gate": {
+          "traitMovement": 0.080471,
+          "lossDeltaCp": -1.370029,
+          "severeRise": -0.006138,
+          "humanRetention": 1.004367,
+          "pass": 0
+        }
+      }
+    },
+    "capture": {
+      "2": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.111935,
+          "severe250": 0,
+          "humanMatch": 0.310892,
+          "traitRate": 0.268157,
+          "opportunityCells": 168,
+          "intermediateCells": 134,
+          "conditionalTraitRate": 0.509515
+        },
+        "gate": {
+          "traitMovement": 0.023493,
+          "lossDeltaCp": -1.775313,
+          "severeRise": -0.006138,
+          "humanRetention": 0.992346,
+          "pass": 0
+        }
+      },
+      "8": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.657656,
+          "severe250": 0,
+          "humanMatch": 0.302213,
+          "traitRate": 0.315829,
+          "opportunityCells": 168,
+          "intermediateCells": 134,
+          "conditionalTraitRate": 0.737657
+        },
+        "gate": {
+          "traitMovement": 0.071165,
+          "lossDeltaCp": -1.229592,
+          "severeRise": -0.006138,
+          "humanRetention": 0.964643,
+          "pass": 0
+        }
+      }
+    },
+    "givesCheck": {
+      "2": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 18.993785,
+          "severe250": 0,
+          "humanMatch": 0.313786,
+          "traitRate": 0.017895,
+          "opportunityCells": 18,
+          "intermediateCells": 14,
+          "conditionalTraitRate": 0.354876
+        },
+        "gate": {
+          "traitMovement": 0.001705,
+          "lossDeltaCp": -1.893463,
+          "severeRise": -0.006138,
+          "humanRetention": 1.001583,
+          "pass": 0
+        }
+      },
+      "8": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.116307,
+          "severe250": 0,
+          "humanMatch": 0.31284,
+          "traitRate": 0.023009,
+          "opportunityCells": 18,
+          "intermediateCells": 14,
+          "conditionalTraitRate": 0.583308
+        },
+        "gate": {
+          "traitMovement": 0.006819,
+          "lossDeltaCp": -1.770941,
+          "severeRise": -0.006138,
+          "humanRetention": 0.998564,
+          "pass": 0
+        }
+      }
+    },
+    "forwardMove": {
+      "2": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.104499,
+          "severe250": 0,
+          "humanMatch": 0.31528,
+          "traitRate": 0.865248,
+          "opportunityCells": 209,
+          "intermediateCells": 113,
+          "conditionalTraitRate": 0.763921
+        },
+        "gate": {
+          "traitMovement": 0.023042,
+          "lossDeltaCp": -1.782749,
+          "severeRise": -0.006138,
+          "humanRetention": 1.006352,
+          "pass": 0
+        }
+      },
+      "8": {
+        "metrics": {
+          "cells": 804,
+          "expectedLossCp": 19.413033,
+          "severe250": 0,
+          "humanMatch": 0.316969,
+          "traitRate": 0.89906,
+          "opportunityCells": 209,
+          "intermediateCells": 113,
+          "conditionalTraitRate": 0.893992
+        },
+        "gate": {
+          "traitMovement": 0.056854,
+          "lossDeltaCp": -1.474215,
+          "severeRise": -0.006138,
+          "humanRetention": 1.011743,
+          "pass": 0
+        }
+      }
+    }
+  }
+}
