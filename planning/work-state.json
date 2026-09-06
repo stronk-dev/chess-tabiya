@@ -23997,6 +23997,60 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2960",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5c022a73819e35a3f0674954e667936d82b258335d88e6c7640544af4c43c368",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2961",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8c24267aac1e72199a8e02ee9367592d762920453e75eb59fb1c57a42787c866",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2962",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ccd851aba532441b91324de8176ba067353c0eea2cb2d11af6e280611f64c9c0",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2963",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:3d76653a811ff5b2769e58a9b86560e6fb5e924513fbcce9247d505c26721700",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2964",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f99c4141cb8e9f35f592e9d434445265c49c5609c0ba6459c74a0bd04c680e3d",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2965",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:81a9172d5ccd99ae7a93506692b2eb0297461cf4f02e60cd10ec5844e9f1ef1c",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:concept-registry.md"
     }
   ]
 }

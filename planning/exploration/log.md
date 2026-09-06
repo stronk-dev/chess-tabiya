@@ -17163,3 +17163,20 @@ byte changed.
 `make provider-protocol-sixth-fresh-review` retains the complete chain and passes 5/5 new controls
 plus strict TypeScript. Repair the lifecycle/composition boundary, then obtain another genuinely
 fresh review before acceptance.
+
+## 2026-09-06 — concept registry sixth fresh independent review
+
+**What landed:** a fresh executable return on [[D2960]]–[[D2965]]. The fifth repair's focused
+fixes hold, but its consumer receipt authenticates text names rather than live typed boundaries,
+crosses server/web compiler configurations, and hashes an order-dependent artifact population.
+
+**What changed:** `concept-registry.md` remains draft. Startup is now explicitly returned because a
+digest-shaped caller registry authorizes migration, failed post-commit composition can leak valid
+readiness, and rejected startup leaves the bootstrap database open. No concept schema, migration,
+registry content, product consumer, storage, archive or protected-design byte changed.
+
+**Evidence/next:**
+`planning/concept-registry/sixth-fresh-independent-buildability-review-2026-09-06.md`; `make
+concept-registry-sixth-fresh-review` retains the complete chain and passes 6/6 new counterexamples
+plus strict TypeScript. Repair the exact project/symbol graph, canonical inventory, compiler
+authority and failure lifecycle, then obtain another genuinely fresh review before acceptance.

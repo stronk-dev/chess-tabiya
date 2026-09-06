@@ -327,14 +327,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair provider-protocol's lifecycle/composition boundary, freshly review that repair plus concept-registry and provider-health, then advance provider exchange, pack-capability and longitudinal-store lanes.",
+        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair the returned provider-protocol and concept-registry lifecycle/composition boundaries, freshly review those repairs plus provider-health, then advance provider exchange, pack-capability and longitudinal-store lanes.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Provider-protocol's sixth fresh review preserves exact receipt bytes but returns the build boundary: legal lifecycle successors fail, current source drift is ignored, repository identity is caller-selected and the product resource is not a staged generic projection.",
+          "summary": "Concept-registry's sixth fresh review returns its composed consumer and startup authority: counterfeit or dormant boundaries pass, project configs cross, artifact receipts are order-dependent, registry identity is structural, failed composition leaks readiness and rejected startup leaves SQLite open.",
           "impact": "regressed",
-          "evidence": ["planning/provider-protocol-register/sixth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2956-provider-protocol-sixth-fresh-review/review.test.ts", "rfc/provider-protocol-register.md", "rfc/README.md"],
+          "evidence": ["planning/concept-registry/sixth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2960-concept-registry-sixth-fresh-review/review.test.ts", "rfc/concept-registry.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "provider-protocol-register.md", "digest": "sha256:0ea2ac36188f1b6def772c21c835c9e00643ad2508f1e05e9227c4575ebf27cb"}
+            {"kind": "rfc", "id": "concept-registry.md", "digest": "sha256:5de735fe4301de11b91ce02906262e6044411a1223cb800ef4d91bc42230de90"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

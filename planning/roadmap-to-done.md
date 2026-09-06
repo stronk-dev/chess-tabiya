@@ -2266,3 +2266,16 @@ while the product root is absent. `make provider-protocol-sixth-fresh-review` re
 chain and passes 5/5 new counterexamples plus strict TypeScript. Foundation contracts remain active
 at author repair and the generic bootstrap dependency; provider exchange, external evidence and bot
 inputs cannot treat this register as accepted.
+
+### 2026-09-06 foundation checkpoint — concept authority returned at composition boundary
+
+The sixth fresh concept-registry review preserves the fifth repair's private migration and pack
+validation gains but proves its composed application authority remains false. Consumer closure
+accepts counterfeit boundary names and calls hidden inside uncalled functions; a shallow combined
+TypeScript program lets web options erase server diagnostics; and the same artifact set receives a
+different restart digest when its load order changes. Startup separately accepts a digest-shaped
+fake registry, exposes valid readiness to a callback that can retain it while failing, and leaves
+the bootstrap database usable after rejection. `make concept-registry-sixth-fresh-review` retains
+the complete chain and passes 6/6 executable counterexamples plus strict TypeScript. Foundation
+contracts remain active at bounded author repair; no concept schema, migration, Campaign, Skills or
+cross-pack learner-history consumer may treat this RFC as accepted.

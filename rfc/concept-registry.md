@@ -1,13 +1,13 @@
 # RFC: Concept registry — one cross-pack identity authority
 
-- **Status:** draft — **fifth author repair completed on [[D2923]]–[[D2928]].** Readiness now has a
-  private lexical issuer; migration receives no raw database or transaction control; the shipped
-  complete-pack validator precedes digest authority; restart requires an exact recomputed receipt;
-  committed Svelte imports participate in the real application graph; and every operation result
-  reaches its declared product boundary. `make concept-registry-fifth-author-repair` retains the
-  predecessor chain and passes 6/6 direct repairs plus strict TypeScript. Another genuinely fresh
-  review and the independently-passed shared-resource bootstrap still precede acceptance and
-  implementation.
+- **Status:** draft — **sixth fresh independent review returned the fifth repair on
+  [[D2960]]–[[D2965]].** The claimed value-flow proof accepts counterfeit and dormant boundaries;
+  project configuration is shallow-merged across server and web; artifact population identity is
+  order-dependent; digest-shaped registry objects mint readiness; a failed post-commit composition
+  can leak a valid ready token; and unsuccessful startup leaves the database open. `make
+  concept-registry-sixth-fresh-review` retains the predecessor chain and passes 6/6 executable
+  counterexamples plus strict TypeScript. Another bounded author repair, another genuinely fresh
+  review and the independently-passed shared-resource bootstrap precede acceptance or implementation.
 - **Author:** codex, factored from `rfc/skills.md` §4 and the D300/D700 measurements.
 - **Created:** 2026-08-31
 - **Design refs:** `design/01-training-model.md` §§60–65 (registry belongs to authoring);
@@ -508,6 +508,32 @@ direct repair groups and strict TypeScript. Exact receipt:
 `planning/concept-registry/fifth-author-repair-2026-09-06.md`. This remains author-contract evidence,
 not acceptance or implementation; another genuinely fresh review and the implemented shared-
 resource bootstrap still precede both.
+
+## Sixth fresh independent review return — 2026-09-06
+
+The fifth repair closes [[D2923]]–[[D2928]], but its composed startup and consumer authorities are
+still not buildable:
+
+1. [[D2960]] — boundary use is matched by identifier text in any reachable file, so a local
+   counterfeit or a call inside an uncalled function satisfies every consumer;
+2. [[D2961]] — server and web compiler options are shallow-merged into one program, allowing the
+   later web configuration to erase a diagnostic required by the server project;
+3. [[D2962]] — the exact same validated artifact population hashes differently when loader order
+   changes;
+4. [[D2963]] — a caller-created object carrying only a syntactically valid digest substitutes for
+   the one compiled concept registry;
+5. [[D2964]] — `afterCommit` receives valid readiness before complete composition succeeds and can
+   retain that authority while throwing; and
+6. [[D2965]] — migration and post-commit failures reject without closing the bootstrap database.
+
+`make concept-registry-sixth-fresh-review` retains the complete predecessor return/repair chain,
+passes all six current counterexamples and compiles them under the repository TypeScript contract.
+Exact receipt:
+`planning/concept-registry/sixth-fresh-independent-buildability-review-2026-09-06.md`. This is a
+return, not acceptance or implementation. The next author repair must use symbol-resolved live
+boundary calls under each exact project configuration, sort the artifact population before hashing,
+consume private compiler authority, and make readiness publication plus failure closure one atomic
+application-composition boundary.
 
 ## Acceptance criteria
 
