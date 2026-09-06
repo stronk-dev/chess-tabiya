@@ -24159,6 +24159,78 @@
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:storage-backup-recovery.md"
+    },
+    {
+      "id": "D2978",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:622fd82fc1f6026a5e136ea382a9502494ecb49f2a004eadef87e782f0750509",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D2979",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:da803e8aae6ed157c89cff4bc257b09b7baa9c2f875a7bd683dac6e12a87f6f6",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D2980",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9a2b0c7ed1035f6da4978dff6dd10f664cea86e7310ce32050de5eb545f1f418",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D2981",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7bd075039a7687a324f2c5b392d30b5a6707bf8d1fbb5e33e7147ccaee998f19",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D2982",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8e93b3b2305aaf4beb676e12ca13a811bf244b88016b269a4144df5003c6b77e",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D2983",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:cb63399c7eb6b7ea236b04e068941c262a9458d3000972b30ecd2b4c0e819ffa",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D2984",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d9efde111f24ced00bde31fa491cd6ab1faf3b54b049abeaec0151c6a696ca46",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D2985",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8e4a400db4d6769764ab210f2538f887bda7fd0ab2ecb7ea5e488e36a2f88d5d",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:safe-deployment-profiles.md"
     }
   ]
 }

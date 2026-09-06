@@ -2303,3 +2303,15 @@ and body bytes mint readiness without the application route. `make storage-backu
 retains the complete chain and passes 6/6 executable counterexamples plus strict TypeScript.
 Foundation contracts remain active at bounded author repair; no backup/restore, update/rollback,
 release rehearsal or clean-host proof may treat this RFC as accepted.
+
+### 2026-09-06 foundation checkpoint — safe deployment returned at live-operation boundaries
+
+The fourth fresh safe-deployment review preserves the third repair's closed compiled shapes and
+durable JSON publication but proves they are not release authority. A caller can mint trusted TLS
+for an absent server, self-attest eleven deployment checks, serialize readiness without invoking the
+application, and publish migrated state after a no-op ingress seal. The migration edits private
+look-alike tables, clean initialization ignores existing storage, receipt parsing admits crossed
+profile arms, and mounted-image compilation never opens the mount. `make
+safe-deployment-fourth-fresh-review` retains the complete chain and passes 8/8 executable
+counterexamples plus strict TypeScript. Foundation contracts remain active at bounded author repair;
+no public deployment, operator workflow, migration or release proof may treat this RFC as accepted.

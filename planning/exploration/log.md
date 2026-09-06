@@ -17216,3 +17216,21 @@ protected-design byte changed.
 `make storage-backup-fifth-fresh-review` retains the complete chain and passes 6/6 new controls plus
 strict TypeScript. Repair the operation-owned check issuer, filesystem/crash state machine, complete
 phase reconciliation and live readiness receipt, then obtain another genuinely fresh review.
+
+## 2026-09-06 — safe deployment fourth fresh independent review
+
+**What landed:** a fresh executable return on [[D2978]]–[[D2985]]. The third repair's compiled
+relations, syntax validation and fsynced JSON state remain, but every value advertised as live can
+still originate in caller testimony rather than the operation it claims to prove.
+
+**What changed:** `safe-deployment-profiles.md` remains draft. TLS, eleven checks, readiness, ingress
+and mounted-image authority now explicitly owe real process boundaries; migration must use the
+accepted product session/token schema and storage lock/inspection; receipt verification must close
+the complete operation/profile/artifact/origin union. No production server, Compose, Caddy, API,
+schema, client, content, archive or protected-design byte changed.
+
+**Evidence/next:**
+`planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md`;
+`make safe-deployment-fourth-fresh-review` retains the complete chain and passes 8/8 new controls
+plus strict TypeScript. Repair each issuer at its real mount, command, TLS, HTTP, storage and ingress
+boundary, then obtain another genuinely fresh review.

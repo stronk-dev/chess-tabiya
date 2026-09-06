@@ -292,12 +292,12 @@
       "rfcs": ["storage-backup-recovery.md", "safe-deployment-profiles.md", "provider-health-degradation.md", "verifiable-runtime-distribution.md"],
       "completion": {
         "evidence": ["not_applicable", "This slice verifies evidence machinery but creates no chess truth."],
-        "state": ["partial", "Schema/register/work/intent checks and three workflows exist; deployment has executable contract models, but the fifth storage review proves backup subjects/checks, journal persistence and readiness are not yet bound to real storage, filesystem and application-route authority."],
+        "state": ["partial", "Schema/register/work/intent checks and three workflows exist; storage and deployment have executable contract models, but fresh reviews prove their success authorities remain detached from real storage, filesystem, mounted-file, TLS, HTTP and ingress operations."],
         "api": ["partial", "Health exists, but the twelfth provider-health review proves the newest repair still accepts caller-minted exchange and generation authority, omits renew/expire, cannot carry longer Retry-After, admits test providers to release and exceeds its cache-TTL ceiling; a bounded repair, fresh review and production route integration remain, alongside readiness, metrics policy and production-boundary coverage."],
         "experience": ["blocked", "Install, first boot, engine degradation, backup, restore, update, rollback, and failure diagnostics are not one guided operator workflow."],
         "defaults": ["partial", "Compose boots with mock and insecure-cookie development defaults; safe public and private profiles are not complete."],
         "content": ["blocked", "Runtime content allow-list, licence notices, SBOM, model/runtime rights, and multi-architecture asset tiers remain."],
-        "verification": ["partial", "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof remain separate named tiers; the fifth storage review is now verify-owned and executes six subject, filesystem, crash-state and live-route attacks while retaining its predecessor chain."],
+        "verification": ["partial", "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof remain separate named tiers; fresh storage and deployment reviews now execute fourteen real-authority attacks while retaining both predecessor chains."],
         "release": ["blocked", "A clean machine can install a digest-pinned release, run it safely, observe degradation, upgrade and roll back without data loss."]
       }
     }
@@ -327,14 +327,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair the returned provider-protocol, concept-registry, provider-health and storage real-boundary contracts, freshly review those repairs, then advance provider exchange, pack-capability and longitudinal-store lanes.",
+        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair the returned provider-protocol, concept-registry, provider-health, storage and deployment real-boundary contracts, freshly review those repairs, then advance provider exchange, pack-capability and longitudinal-store lanes.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Storage backup/recovery's fifth fresh review returns its real-boundary authority: callers mint storage subjects and semantic passes, terminal journal phases accept contradictory disk state, publication is string narration, temp intent is unread and readiness is caller-authored HTTP bytes.",
+          "summary": "Safe deployment's fourth fresh review returns its real-boundary authority: callers mint trusted TLS, eleven checks, readiness and ingress without live services; migration misses product rows and safe initialization; receipt and mounted-image verification accept caller projections.",
           "impact": "regressed",
-          "evidence": ["planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts", "rfc/storage-backup-recovery.md", "rfc/README.md"],
+          "evidence": ["planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts", "rfc/safe-deployment-profiles.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "storage-backup-recovery.md", "digest": "sha256:418c43b100179f09ea6838114bc3525763c32d358314a8c7e0855fc31127a11d"}
+            {"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
@@ -379,14 +379,14 @@
         "state": "blocked_contract",
         "capabilities": ["learner_model", "bots", "campaign", "social_play", "account_data", "operations"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Fresh-review safe deployment's third and Campaign's sixth repairs independently; repair and freshly review storage recovery's returned real-boundary authority; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
+        "nextAction": "Repair and freshly review the returned storage and safe-deployment real-boundary authorities; fresh-review Campaign's sixth repair independently; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Storage recovery's fifth fresh review returns its operation, filesystem and readiness authority: the newest contract accepts caller-minted checks, narrated journal durability, contradictory terminal disk state, unread temp intent and forged route responses. Campaign, deployment, longitudinal state and bot policy remain held behind their own reviews and foundation dependencies.",
+          "summary": "Safe deployment's fourth fresh review proves the newest contract can report live TLS, readiness, all checks and ingress without running those operations, while profile migration leaves product session/token rows live and can bless existing storage. Storage recovery is separately returned; Campaign, longitudinal state and bot policy remain held.",
           "impact": "regressed",
-          "evidence": ["planning/campaign/sixth-author-repair-2026-09-05.md", "tools/d2736-campaign-sixth-author-repair/contract.test.ts", "planning/safe-deployment-profiles/third-author-repair-2026-09-05.md", "tools/d2730-safe-deployment-third-author-repair/contract.test.ts", "rfc/safe-deployment-profiles.md", "planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts", "rfc/storage-backup-recovery.md", "rfc/longitudinal-store.md", "planning/longitudinal-store/eighth-author-repair-2026-09-05.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/fourth-author-repair-2026-09-05.md", "tools/d2407-bot-policy-fourth-author-repair/contract.test.ts", "rfc/social-play.md"],
+          "evidence": ["planning/campaign/sixth-author-repair-2026-09-05.md", "tools/d2736-campaign-sixth-author-repair/contract.test.ts", "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts", "rfc/safe-deployment-profiles.md", "planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts", "rfc/storage-backup-recovery.md", "rfc/longitudinal-store.md", "planning/longitudinal-store/eighth-author-repair-2026-09-05.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/fourth-author-repair-2026-09-05.md", "tools/d2407-bot-policy-fourth-author-repair/contract.test.ts", "rfc/social-play.md"],
           "anchors": [
-            {"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:8c579da56a578927f474a6920aaae98e71e84410c4fcf14fe5f2b660153c2144"},
+            {"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"},
             {"kind": "rfc", "id": "campaign-core.md", "digest": "sha256:b0664c3a918fd559c42ccea0bb00201916f913514713f73792281dcbefa31af7"},
             {"kind": "rfc", "id": "storage-backup-recovery.md", "digest": "sha256:418c43b100179f09ea6838114bc3525763c32d358314a8c7e0855fc31127a11d"},
             {"kind": "rfc", "id": "longitudinal-store.md", "digest": "sha256:84cfc23668cbb927946f92f0be87cae8dca6d6e58e0590890f3114dd21d3e8dd"},
@@ -452,11 +452,11 @@
         "dependsOn": ["official-content"],
         "nextAction": "Exercise the ten release journeys against digest-pinned images on clean hosts, including provider-off degradation, migration, backup/restore, update/rollback, accessibility, rights/SBOM and owner-device use.",
         "latestCheckpoint": {
-          "at": "2026-09-05",
-          "summary": "Safe deployment's third author repair now binds expected-digest mounted config, exact checks and the full receipt union to one subject, composes TLS/storage readiness authority, and makes migration effects restart-durable. Release proof remains blocked on fresh review, production implementation, official content and complete learner journeys.",
-          "impact": "held",
-          "evidence": ["rfc/safe-deployment-profiles.md", "planning/safe-deployment-profiles/third-author-repair-2026-09-05.md", "planning/safe-deployment-profiles/third-fresh-independent-buildability-review-2026-09-05.md", "planning/roadmap-to-done.md", "deploy/compose.release.template.yaml"],
-          "anchors": [{"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:8c579da56a578927f474a6920aaae98e71e84410c4fcf14fe5f2b660153c2144"}]
+          "at": "2026-09-06",
+          "summary": "Safe deployment's fourth fresh review returns the third repair: its sealed objects still originate in caller testimony rather than mounted files, live TLS/HTTP/check/ingress operations or product storage. Release proof remains blocked on a bounded repair, fresh review, production implementation, official content and complete learner journeys.",
+          "impact": "regressed",
+          "evidence": ["rfc/safe-deployment-profiles.md", "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts", "planning/roadmap-to-done.md", "deploy/compose.release.template.yaml"],
+          "anchors": [{"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"}]
         },
         "exit": "Every core and breadth capability proves all applicable completion dimensions or has an explicit owner-approved descope; the owner can use the release without interpreting implementation vocabulary."
       }

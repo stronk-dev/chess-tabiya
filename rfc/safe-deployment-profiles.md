@@ -1,10 +1,12 @@
 # RFC: Safe deployment profiles and reverse proxy
 
-- **Status:** **draft — third author repair completed [[D2730]]–[[D2735]]; another genuinely fresh
-  independent buildability review is required.** One expected-digest compiled image, sealed
-  deployment subject, complete receipt union, live TLS authority, composed readiness proof and
-  fsynced restart-resumable migration are executable in `make
-  safe-deployment-third-author-repair`. Production implementation remains unauthorized.
+- **Status:** **draft — fourth fresh independent review returned the third repair on
+  [[D2978]]–[[D2985]].** TLS, deployment checks, readiness, ingress and mounted-image authority
+  remain caller-mintable; migration edits look-alike tables and can bless existing storage; receipt
+  parsing does not re-establish the closed profile union. `make safe-deployment-fourth-fresh-review`
+  retains the complete chain and passes 8/8 executable counterexamples plus strict TypeScript. A
+  bounded fourth author repair and another genuinely fresh review precede acceptance or production
+  implementation.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B8
@@ -84,6 +86,34 @@ The six returned seams are repaired as one release authority rather than six ind
 new able-to-fail groups plus strict TypeScript. Exact receipt:
 `planning/safe-deployment-profiles/third-author-repair-2026-09-05.md`. This is author evidence, not
 acceptance or production implementation; another genuinely fresh review remains mandatory.
+
+## Fourth fresh independent return (2026-09-06)
+
+The third repair closes [[D2730]]–[[D2735]] inside its model, but eight real-boundary failures remain:
+
+1. **[[D2978]]:** TLS trust is branded from caller-written booleans, digests and clock strings without
+   a TLS connection, certificate parser or chain verification;
+2. **[[D2979]]:** eleven of thirteen deployment checks accept a public expected-digest echo instead
+   of a check-specific live observation;
+3. **[[D2980]]:** readiness accepts caller-written response bytes without invoking the application
+   route, storage connection or static-shell readiness;
+4. **[[D2981]]:** exported `sealIngressSwitch` mints authority from target state without binding or
+   probing any public ingress;
+5. **[[D2982]]:** migration deletes private `deployment_*` look-alike tables rather than the accepted
+   `learner_sessions` and `public_tokens` storage authorities;
+6. **[[D2983]]:** initialization neither inspects storage nor holds the supervisor lock and permits a
+   generation-zero active state over existing data;
+7. **[[D2984]]:** unknown receipt parsing accepts crossed profile/origin/artifact arms and arbitrary
+   refusal, failure and failed-check vocabularies; and
+8. **[[D2985]]:** mounted-image compilation receives a caller string and matching digest rather than
+   opening the fixed read-only application mount.
+
+`make safe-deployment-fourth-fresh-review` retains the complete predecessor chain and passes all
+eight counterexamples plus strict TypeScript. Exact receipt:
+`planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md`.
+This is a return, not acceptance or product implementation. The repair must move every live authority
+inside the exact file, command, TLS, HTTP, storage and ingress operation that observes it; a sealed
+object around caller testimony is not release proof.
 
 ## Summary
 
