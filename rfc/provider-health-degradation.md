@@ -1,13 +1,14 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — **returned by ninth fresh independent review on [[D2869]]–[[D2873]].** The
-  eighth repair closes its three named seams, but concurrent read-only snapshots revoke one another,
-  cache application grain is caller-mintable, unrelated cache traffic invalidates live group
-  leases, application settlements bypass the promised exact parser, and implementation changes can
-  reuse a generation while retaining predecessor claims. `make provider-health-ninth-fresh-review`
-  retains the complete chain and passes 5/5 reproductions. Author repair and another genuinely fresh
-  review remain mandatory; neither implementation checkpoint is authorized before acceptance and
-  the provider-protocol/exchange prerequisites.
+- **Status:** draft — **ninth author repair completed on [[D2869]]–[[D2873]].** Snapshot currentness
+  is revision/time-state authority rather than latest-object identity; application cache keys are
+  registry-issued capabilities; group leases retain only their exact group generation image;
+  application settlements cross one exact parser and sealed local-domain authority; and every
+  implementation/configuration change requires a distinct generation. `make
+  provider-health-ninth-author-repair` retains the complete return/repair chain and passes 6/6
+  current composition groups plus strict TypeScript. Another genuinely fresh review remains
+  mandatory; neither implementation checkpoint is authorized before acceptance and the
+  provider-protocol/exchange prerequisites.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -301,6 +302,16 @@ state rather than claiming an old recovery streak. Cache hits never advance it.
 `checkedAt` exists only after a real outcome and changes only on a real handshake/request outcome. Reading `/capabilities`, reading a
 cache entry, rendering deterministic text, and a browser polling the server do not refresh it.
 
+An internal registry snapshot also retains sealed `stateRevision` and
+`observedAtMonotonic` authority. Currentness is not object identity: any number of snapshots
+issued over the same revision and equal time-derived state remain valid concurrently. Every
+admission, selector and release-receipt operation receives the current injected monotonic sample
+and recomputes the time-derived projection. A health/cache/generation mutation, or crossing a
+retry/cache-expiry boundary that changes projected state, refuses the old snapshot and requires a
+new one. Merely issuing another equal read-only snapshot revokes nothing.
+`observedAtMonotonic` is process-local authority and is never serialized on
+`/capabilities`; `generatedAt` remains display-only civil time.
+
 ### 3. Generation and identity
 
 Every configured provider has a stable generation digest:
@@ -322,6 +333,11 @@ Generation is per `ProviderInstanceId`, never per family. Generation change atom
 2. cancels or lets finish—but never publishes—old-generation in-flight work;
 3. invalidates every cache entry whose key names the old generation;
 4. causes a late old-generation result to be discarded rather than healing the new generation.
+
+The generation-change operation refuses an equal generation string even when implementation also
+changes. Its configured identity is derived by the composition root rather than accepted as an
+arbitrary opaque label. Backoff-group member images retain instance, implementation and generation,
+so a behavior-affecting configuration change cannot inherit an old upstream claim.
 
 ### 4. Provider-exchange input and application settlement
 
@@ -355,6 +371,13 @@ type ApplicationProviderOutcome<T> =
   | { readonly kind: "cancelled"; readonly reason: "caller" | "superseded" | "shutdown";
       readonly settlement: ProviderStageSettlement<ProviderOperationId, unknown> };
 ```
+
+`settleOperation` accepts `unknown` and crosses one exact discriminated-union parser before
+reading or mutating application state. Every arm rejects missing and extra keys. The
+`local_domain` arm contains a sealed `ProviderLocalDomainResult<K>` issued by provider exchange
+from the same request; an application caller cannot author its value or reconstruct it
+structurally. Operation, instance, implementation, generation and normalized-request identity are
+equal across request, result and compiled stage before the application outcome is formed.
 
 The compiler fixes exactly one settlement to the selected application declaration. Voice rendering
 and speech are two independent application operations. Speech consumes a sealed reference to text
@@ -434,9 +457,11 @@ generation change clears the vector and every claim. Civil timestamps are projec
 never decide duration. This is the complete operand set for [[D2579]].
 
 Each backoff group has exactly one immutable `{blockedUntilMonotonic, claim}` state. A claim is
-`{generationSet, claimToken, leaseExpiresAtMonotonic}`. `acquire` first expires an elapsed claim,
+`{groupGenerationImage, claimToken, leaseExpiresAtMonotonic}`. The image is the sorted exact set
+of configured `{instanceId, implementation, generation}` members in that compiled group and its
+digest; it carries no whole-registry or unrelated-cache revision. `acquire` first expires an elapsed claim,
 then returns exactly `blocked`, `claimed`, or a newly tokenized claim. `renew` and `settle` require
-the equal live token and generation set before expiry; stale/expired calls fail and cannot clear or
+the equal live token and group image before expiry; stale/expired calls fail and cannot clear or
 extend a successor. `settle(rate_limited)` clears the claim and advances the block to at least
 `now + 60_000` or a longer valid Retry-After. Abort/throw/crash leaves the lease to expire, after
 which one successor is admitted. A generation-set change invalidates the claim before admission.
@@ -452,7 +477,12 @@ window expiry makes two distant failures independent. Cache hits never count.
 
 ### 7. Cache contract
 
-All provider caches use bounded LRU entries and generation-complete keys. The opponent cache is
+All provider caches use bounded LRU entries and generation-complete keys. A cache key is an opaque
+registry-issued capability derived from one compiled application declaration, its exact stage and
+one sealed provider-exchange request. The issuer binds application operation, stage, exchange
+operation, instance, implementation, generation, normalized request and cache digest. `put` and
+`resolveExact` require that same issued object and owning registry; a spread, JSON round-trip,
+structurally equal object or application/stage relabel fails before touching cache state. The opponent cache is
 changed from an unbounded `Map<string, Promise<OpponentSelection>>` to:
 
 - maximum 512 settled entries plus at most the bounded in-flight population;
@@ -1032,7 +1062,32 @@ The eighth repair pays its three immediate debts but leaves five composition fai
 `make provider-health-ninth-fresh-review` retains the full chain and passes 5/5 executable
 falsifiers. Exact evidence:
 `planning/provider-health-degradation/ninth-fresh-independent-buildability-review-2026-09-06.md`.
-The RFC remains returned; production implementation is unauthorized.
+The RFC remained returned at that checkpoint; production implementation was unauthorized.
+
+## Ninth author repair (2026-09-06)
+
+The five returned seams are repaired as one current authority boundary:
+
+1. [[D2869]] replaces latest-object currentness with owner, state-revision and current
+   time-derived-state validation, so equal concurrent reads coexist while actual retry/expiry
+   transitions still stale old authority;
+2. [[D2870]] brands cache keys to the issuing registry, compiled application/stage and sealed exact
+   request, and checks that authority on both insertion and resolution;
+3. [[D2871]] removes global registry revision from group-lease validity and compares the sorted
+   group-only instance/implementation/generation image;
+4. [[D2872]] parses every settlement from unknown input with exact keys and admits local-domain
+   completion only through a same-request provider-exchange-issued result; and
+5. [[D2873]] refuses equal-generation configuration changes and includes implementation in the
+   group image, so old claims cannot survive a remote/local swap.
+
+The executable checkpoint composes these repairs over the prior health reducer, bounded exact LRU,
+availability selector and release receipt rather than replacing them. `make
+provider-health-ninth-author-repair` retains all predecessor repairs and the 5/5 ninth-review
+reproductions, passes 5/5 direct inversions plus one whole-checkpoint composition group, and runs
+strict TypeScript. Exact receipt:
+`planning/provider-health-degradation/ninth-author-repair-2026-09-06.md`. This is author-contract
+evidence, not acceptance or production implementation; another genuinely fresh review remains
+required.
 
 ## Implementation plan
 
@@ -1220,6 +1275,22 @@ bot-private health projection.
 35. [[D2851]] The one replacement checkpoint exports the exact registry snapshot, closed application
     outcome, profile-availability selector, release receipt and settlement authorities together;
     retained predecessor tests cannot substitute for exports absent from the current authority.
+36. [[D2869]] Two read-only snapshots at the same revision and monotonic sample are independently
+    valid for selectors and release-receipt issuance. A real state revision or current monotonic
+    sample whose retry/expiry projection differs rejects both old snapshots. Creating an equal
+    snapshot alone never revokes either.
+37. [[D2870]] Cache insertion and lookup accept only a cache-key capability issued by the owning
+    registry from the exact compiled application declaration and sealed exchange request. A
+    structural clone, JSON round-trip, application/stage relabel or cross-registry key fails.
+38. [[D2871]] Backoff acquire/renew/settle currentness depends only on the exact compiled group
+    member image. Cache or health traffic outside the group leaves a live claim valid; changing any
+    member's implementation/generation invalidates it before stale settlement can mutate state.
+39. [[D2872]] Every application settlement arm is exact-key parsed before use. `local_domain`
+    accepts only a same-request sealed provider-exchange domain result; arbitrary caller values,
+    crossed results and invented fields fail.
+40. [[D2873]] Every behavior-affecting configuration/implementation change requires a distinct
+    derived generation. Reusing the prior generation fails before cache, health or group claims
+    change; a valid new generation invalidates all three together.
 
 ## Falsifiers and negative fixtures
 
@@ -1329,11 +1400,11 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 | [[D2849]] | exact cache loses application grain and service receipt | full-grain key plus atomic value/original/current service receipt; criteria 20/27/33 |
 | [[D2850]] | unused pipeline grammar is vacuously green | dead DAG axes deleted; ten exact one-stage operations retain independent speech; criteria 8/19/29/34 |
 | [[D2851]] | replacement drops prior public authorities | one composed snapshot/outcome/selector/release/settlement checkpoint; criterion 35 |
-| [[D2869]] | read-only snapshots revoke equal concurrent snapshots | return: single-object currentness is not revision/state authority |
-| [[D2870]] | cache application/stage grain is caller-mintable | return: cache keys are unsealed and insertion validates only provider grain |
-| [[D2871]] | unrelated cache traffic invalidates a live group lease | return: group authority is coupled to global registry revision |
-| [[D2872]] | structural and caller-authored settlements bypass strict parsing | return: no exact settlement parser/provider local-domain authority guards `settleOperation` |
-| [[D2873]] | implementation change reuses generation and predecessor claim | return: configuration change does not require a distinct generation identity |
+| [[D2869]] | read-only snapshots revoke equal concurrent snapshots | revision plus current time-derived state authorizes concurrent snapshots; criterion 36 |
+| [[D2870]] | cache application/stage grain is caller-mintable | registry/application/request-issued key authority on put and resolve; criterion 37 |
+| [[D2871]] | unrelated cache traffic invalidates a live group lease | group-only instance/implementation/generation image; criterion 38 |
+| [[D2872]] | structural and caller-authored settlements bypass strict parsing | exact settlement parser plus sealed same-request local-domain authority; criterion 39 |
+| [[D2873]] | implementation change reuses generation and predecessor claim | distinct generation required before configuration change; criterion 40 |
 
 `make provider-health-fourth-author-repair` retains the previous 17 author controls, executes 6/6
 new able-to-fail behavioral groups plus strict TypeScript, and remains an author contract rather
@@ -1341,6 +1412,11 @@ than implementation or review.
 
 ## Changelog
 
+- 2026-09-06 — ninth author repair closed [[D2869]]–[[D2873]] at contract tier. Concurrent equal
+  snapshots share revision/time-state authority; cache keys and local-domain settlements are
+  sealed; group leases ignore unrelated traffic; and configuration changes require new generation
+  identity. `make provider-health-ninth-author-repair` passes 6/6 plus strict TypeScript; fresh
+  review remains.
 - 2026-09-06 — returned by ninth fresh independent buildability review on [[D2869]]–[[D2873]].
   Equal read-only snapshots revoke one another; cache keys admit forged application grain; unrelated
   cache traffic invalidates group leases; application settlements bypass exact parsing; and an

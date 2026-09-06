@@ -23186,7 +23186,7 @@
       "id": "D2869",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:361911e42b6bc90784a5750b005a13fedd37471a084d2a37d670a9ed72a45603",
+      "sourceDigest": "sha256:1f563d174295a73b7d8e1c9b4aa2de1b079c754572e9d0900208a50a88c7366d",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-health-degradation.md"
@@ -23195,7 +23195,7 @@
       "id": "D2870",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:bc4acced12c0a4e781835b4cd09588fa112a407719628e7aabf606854415fbfd",
+      "sourceDigest": "sha256:ae0ed337e75748c9b5c7df487f300bd15d61ecba1d8b8f4a7644c5e14606e21e",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-health-degradation.md"
@@ -23204,7 +23204,7 @@
       "id": "D2871",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b0f126b0299a87af0739a8a17b35dea059f9f9ddf038e335cea988f25b76c921",
+      "sourceDigest": "sha256:5371c2d2fe1271cc542bfb04eea87130830213466086ff7b68d81e28b41754ae",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-health-degradation.md"
@@ -23213,7 +23213,7 @@
       "id": "D2872",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:44f86466704c1c0c2b900181a134fe2ac7f46bcdd2181e6cf89f65e603ed6501",
+      "sourceDigest": "sha256:e2daf0815ab306b05fcd8376caecc7498ab4524ef8f168671ec9871edaa5e1cd",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-health-degradation.md"
@@ -23222,7 +23222,7 @@
       "id": "D2873",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:cb2ce9a213601bf84ec134477c1cd11ff1ad65579c7557665005e0448b632174",
+      "sourceDigest": "sha256:2ac7c88c19d3fa757ef7d6fc0278eb44d82d263b02909d9b3507187e8509d9ea",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-health-degradation.md"

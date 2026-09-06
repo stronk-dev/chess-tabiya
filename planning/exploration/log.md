@@ -16621,3 +16621,21 @@ repair no longer rewrites its historical evidence.
 passes 4/4 repair groups. Exact receipt:
 `planning/provider-protocol-register/third-author-repair-2026-09-06.md`. Another genuinely fresh
 review and the generic bootstrap dependency still precede acceptance and implementation.
+
+## 2026-09-06 — provider-health ninth author repair
+
+**What landed:** closed [[D2869]]–[[D2873]] at contract tier. Concurrent equal snapshots share
+revision/current-time-state authority; cache keys and local-domain results are sealed; group leases
+compare only their group image; settlements parse exactly; and configuration changes require a
+distinct generation. No production provider, API, client, storage, schema, migration, content,
+archive or protected-design byte changed.
+
+**What changed:** the current executable checkpoint composes the repair over the earlier health
+reducer, bounded exact cache, availability selector and release receipt rather than replacing them.
+`make provider-health-ninth-author-repair` retains every return/repair and passes 6/6 current
+composition groups plus strict TypeScript.
+
+**Evidence/next:** exact receipt:
+`planning/provider-health-degradation/ninth-author-repair-2026-09-06.md`. Another genuinely fresh
+review and provider-protocol/provider-exchange still precede acceptance and either implementation
+checkpoint.

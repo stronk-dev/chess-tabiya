@@ -438,6 +438,14 @@ complete chain and passes 5/5 reproductions. Both implementation checkpoints rem
 coherent author repair, another fresh review and provider protocol/exchange. Receipt:
 `planning/provider-health-degradation/ninth-fresh-independent-buildability-review-2026-09-06.md`.
 
+The same-day ninth author repair closes all five at contract tier. Snapshot currentness is
+owner/revision/current-time-state authority; cache keys and local-domain results are sealed;
+backoff leases compare only their exact group image; settlement parsing is exact; and configuration
+changes require a distinct generation. `make provider-health-ninth-author-repair` retains the
+complete chain and passes 6/6 plus strict TypeScript. Production remains held for another genuinely
+fresh review and provider protocol/exchange. Receipt:
+`planning/provider-health-degradation/ninth-author-repair-2026-09-06.md`.
+
 The same day's third fresh provider-protocol review returns its second repair on
 [[D2874]]–[[D2877]]. The process contract asks a one-selector resource for an unreachable partial
 state, names no lawful reader for the prior accepted obligation preimage, closes product-only defects
