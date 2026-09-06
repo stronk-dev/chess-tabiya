@@ -327,14 +327,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; freshly review concept-registry's fifth repair and provider-protocol's fifth repair; repair provider-health D2942-D2949; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; freshly review concept-registry, provider-protocol and provider-health repairs; then advance provider exchange, pack-capability and longitudinal-store lanes.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Concept-registry's fifth author repair closes private readiness issuance, transaction-limited migration, complete-pack validation, exact restart receipts, the real Svelte graph and operation-specific result flow; fresh review remains.",
+          "summary": "Provider-health's eleventh author repair now derives one private provider/group authority, atomically reduces sealed exchange outcomes, exposes exact-cache and reason-bearing operation results, and separates monotonic from civil time; fresh review remains.",
           "impact": "held",
-          "evidence": ["planning/concept-registry/fifth-author-repair-2026-09-06.md", "tools/d2923-concept-registry-fifth-author-repair/contract.test.ts", "rfc/concept-registry.md", "rfc/README.md"],
+          "evidence": ["planning/provider-health-degradation/eleventh-author-repair-2026-09-06.md", "tools/d2942-provider-health-eleventh-author-repair/contract.test.ts", "rfc/provider-health-degradation.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "concept-registry.md", "digest": "sha256:d5dc14467c68aecf56f22b38ff4f272f9b42f03ce5cd29be354edbf1795be645"}
+            {"kind": "rfc", "id": "provider-health-degradation.md", "digest": "sha256:01ba33a52c9fa0cf10035b509b0166e5f8628b820b9cfada74d57b76a88f3d62"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

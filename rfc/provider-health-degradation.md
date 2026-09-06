@@ -1,12 +1,11 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** **draft — RETURNED by eleventh fresh independent review on [[D2942]]–[[D2949]].**
-  The tenth repair's seven fixes survive, but group membership is copied, predecessor mutation and
-  coordinator registration/reset are public, group settlement accepts caller-authored truth, the
-  exact-cache operation arm and reason-bearing wire shape are incomplete, and monotonic duration is
-  published as civil time. `make provider-health-eleventh-fresh-review` retains the complete chain
-  and passes 8/8 fresh counterexamples. A bounded author repair, another genuinely fresh review and
-  the provider-protocol/exchange prerequisites precede either implementation checkpoint.
+- **Status:** **draft — eleventh author repair completed on [[D2942]]–[[D2949]].** One private
+  declaration-derived composition now owns provider/group state, generation reset and sealed
+  exchange settlement; exact-cache service and the reason-bearing operation wire are complete; and
+  monotonic/civil clocks are separate. `make provider-health-eleventh-author-repair` retains the
+  complete chain and passes 8/8 direct repairs plus strict TypeScript. Another genuinely fresh
+  review and the provider-protocol/exchange prerequisites precede either implementation checkpoint.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -1164,6 +1163,30 @@ returned on eight new boundaries:
 8/8 fresh counterexamples plus repository-compatible TypeScript. Exact receipt:
 `planning/provider-health-degradation/eleventh-fresh-independent-buildability-review-2026-09-06.md`.
 The RFC remains draft and neither implementation checkpoint is authorized.
+
+## Eleventh author repair (2026-09-06)
+
+The provider registry, shared backoff and exact cache are now exposed only through one private
+composition. Its provider/group relation is derived from `PROVIDER_INSTANCE_DECLARATIONS`; there is
+no second map, predecessor escape, public coordinator registration or direct reset. A group resets
+only when the registry accepts a distinct generation for one of its declared members.
+
+Settlement is one operation over the current group claim, exact request and sealed exchange
+delivery/failure. The same outcome advances instance health and group backoff, so a plain success
+enum, crossed registry, wrong member, wrong request or stale generation fails before mutation. One
+strict operation-availability parser emits the complete plural/reason-bearing union. Request-free
+inventory can emit only `conditional_exact_cache`; `cached_exact_only` is created solely beside the
+value, original delivery and cache-service receipt returned by one atomic exact-key lookup.
+
+Snapshot construction accepts a monotonic duration and canonical civil instant as separate
+operands. Group admission, retry, expiry and release currentness consume the former; only display
+bytes consume the latter.
+
+`make provider-health-eleventh-author-repair` retains every predecessor return/repair and passes
+8/8 direct repair groups plus strict TypeScript. Exact receipt:
+`planning/provider-health-degradation/eleventh-author-repair-2026-09-06.md`. This remains
+author-contract evidence, not acceptance or production implementation; another genuinely fresh
+review and the provider protocol/exchange dependencies remain.
 
 ## Implementation plan
 

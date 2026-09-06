@@ -2218,3 +2218,15 @@ named publication, persistence, query, rendering or wire boundary. `make
 concept-registry-fifth-author-repair` retains the entire return/repair chain and passes 6/6 current
 groups plus strict TypeScript. Foundation contracts advance to genuinely fresh review and the
 shared-resource bootstrap dependency; no concept schema or migration is accepted yet.
+
+### 2026-09-06 foundation checkpoint — provider health recomposed
+
+The eleventh provider-health author repair removes the parallel authorities that let health,
+backoff and operation availability contradict each other. One declaration-derived private
+composition now owns group state and generation transitions; a sealed exact-subject exchange
+outcome updates instance and group truth together; atomic exact-cache lookup owns
+`cached_exact_only`; and the strict client result carries plural instances plus block/unavailable
+reasons. Monotonic and civil time are separate inputs. `make provider-health-eleventh-author-repair`
+retains the full chain and passes 8/8 current groups plus strict TypeScript. The foundation remains
+at fresh review and provider protocol/exchange dependencies; no runtime or run-schema byte is
+authorized yet.

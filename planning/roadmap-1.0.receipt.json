@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ef8a35ba853682ff781cca567bc71fa38454fa4a04c7c9fe8cfc968f6f3d12a7",
+    "roadmap": "sha256:ef151a98fe0eeddd1659845777c7fab701bf04e7798b8a487ccc86c0d4b8ada4",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:eb57a6e918c7841a4dc33167e9c669e27499ef0f705626b16e17746b5633dee2",
-    "rfcRegister": "sha256:2cc74af1e43e73b882e5a56a0d072a0119b42a3fc45f3bd8f27bddda080e24cc",
+    "workState": "sha256:ac0a720db0d0ecc5d1c76bbcbee64a2f55ff7ce1fd398490ede37b33e6c5616d",
+    "rfcRegister": "sha256:51e21902c43f785820a9b3259dd9f29420b6ac90d8d3cbba5749f895f298a691",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -115,22 +115,22 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; freshly review concept-registry's fifth repair and provider-protocol's fifth repair; repair provider-health D2942-D2949; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; freshly review concept-registry, provider-protocol and provider-health repairs; then advance provider exchange, pack-capability and longitudinal-store lanes.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "Concept-registry's fifth author repair closes private readiness issuance, transaction-limited migration, complete-pack validation, exact restart receipts, the real Svelte graph and operation-specific result flow; fresh review remains.",
+        "summary": "Provider-health's eleventh author repair now derives one private provider/group authority, atomically reduces sealed exchange outcomes, exposes exact-cache and reason-bearing operation results, and separates monotonic from civil time; fresh review remains.",
         "impact": "held",
         "evidence": [
-          "planning/concept-registry/fifth-author-repair-2026-09-06.md",
-          "tools/d2923-concept-registry-fifth-author-repair/contract.test.ts",
-          "rfc/concept-registry.md",
+          "planning/provider-health-degradation/eleventh-author-repair-2026-09-06.md",
+          "tools/d2942-provider-health-eleventh-author-repair/contract.test.ts",
+          "rfc/provider-health-degradation.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "concept-registry.md",
-            "digest": "sha256:d5dc14467c68aecf56f22b38ff4f272f9b42f03ce5cd29be354edbf1795be645"
+            "id": "provider-health-degradation.md",
+            "digest": "sha256:01ba33a52c9fa0cf10035b509b0166e5f8628b820b9cfada74d57b76a88f3d62"
           }
         ]
       },

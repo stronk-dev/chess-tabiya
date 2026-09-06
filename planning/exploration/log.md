@@ -17093,3 +17093,19 @@ concept-registry-fifth-author-repair` retains the predecessor chain and passes 6
 plus strict TypeScript. No schema, migration, production, content, archive or protected-design byte
 changed. Another genuinely fresh review and the accepted/implemented shared-resource bootstrap
 still precede implementation.
+
+## 2026-09-06 — provider health eleventh author repair
+
+**What landed:** a bounded contract-tier repair for [[D2942]]–[[D2949]]. One private composition
+derives groups from the canonical provider declarations, owns generation reset, and atomically
+reduces a sealed provider-exchange outcome into instance health plus shared group state.
+
+**What changed:** operation availability is now one strict plural/reason-bearing wire union; only
+an atomic exact-key cache hit emits `cached_exact_only` beside its value, original delivery and
+service receipt. Snapshot construction accepts independent monotonic and civil clocks.
+
+**Evidence/next:**
+`planning/provider-health-degradation/eleventh-author-repair-2026-09-06.md`; `make
+provider-health-eleventh-author-repair` retains the predecessor chain and passes 8/8 direct repairs
+plus strict TypeScript. No runtime, run schema, storage, content, archive or protected-design byte
+changed. Another genuinely fresh review and provider protocol/exchange still precede production.
