@@ -2243,3 +2243,15 @@ catalogues and is checked against the live collector. `make candidate-packet-thi
 retains the full history and passes 22/22 current groups plus the repository-strict TypeScript
 contract. The evidence spine advances to genuinely fresh review and its value-authority/provider
 dependencies; no production selector, Support, bot, Review or content byte is authorized yet.
+
+### 2026-09-06 evidence-spine checkpoint — promotion installation authority repaired
+
+The fifteenth promotion author repair closes the five returned composition and semantic-authority
+seams at contract tier. One application composition owns configuration and memoizes the application;
+all installed generations cross the production pack, sourcing, Syzygy and exact legal-map parsers
+before publication; typed store lookups retain those values; and each request, result and receipt is
+bound to one application/registry/generation/store/FEN lineage. `make
+semantic-collectors-promotion-fifteenth-author-repair` retains the entire return/repair history and
+passes 5/5 current groups plus the repository TypeScript contract. The evidence spine advances to
+genuinely fresh reviews of this repair and candidate-packet, then the value-authority/provider
+dependencies; the held pair remains unimplemented at 12/14.

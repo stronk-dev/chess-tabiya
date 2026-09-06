@@ -17127,3 +17127,21 @@ and the model now compiles under the repository base TypeScript contract.
 `make candidate-packet-thirteenth-author-repair` passes 22/22 current groups plus strict
 TypeScript. No production, schema, storage, content, archive or protected-design byte changed.
 Another genuinely fresh review and the value-authority/provider dependencies precede production.
+
+## 2026-09-06 — semantic collectors promotion fifteenth author repair
+
+**What landed:** a bounded contract-tier repair for [[D2929]]–[[D2933]]. One application
+composition owns configured-installation loading and memoizes one current application; no exported
+authority map or test-only positive path remains.
+
+**What changed:** registry publication now runs and retains the production pack, source, evidence,
+Syzygy-response and exact legal-map semantics for every installed generation. The typed store
+restores recorded/legal lookup, while requests, collector results and durable receipts reassert one
+application/registry/generation/store/FEN lineage; copied values fail at every boundary.
+
+**Evidence/next:**
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fifteenth-author-repair-2026-09-06.md`;
+`make semantic-collectors-promotion-fifteenth-author-repair` retains the complete history and passes
+5/5 direct repairs plus strict TypeScript. No production, schema, storage, content, archive or
+protected-design byte changed. Another genuinely fresh review and the value-authority/provider
+dependencies precede either held projection; the evidence spine remains 12/14.

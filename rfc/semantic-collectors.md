@@ -7,16 +7,16 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair's fifteenth fresh review returns the fourteenth repair on [[D2929]]–[[D2933]]
-  (2026-09-06).** The exported mutable configuration map lets a same-package importer mint the
-  accepted authority, while the only honest constructor is test-only and no production composition
-  path exists. Registry publication accepts pack/provider artifacts rejected by their production
-  validators. More decisively, the replacement store deletes recorded/legal lookup and the current
-  request→collector→result→receipt chain rather than composing it. `make
-  semantic-collectors-promotion-fifteenth-fresh-review` retains the complete history and passes 5/5
-  executable counterexamples plus strict TypeScript. Another author repair, another genuinely fresh
-  review and provider/value dependency landing still gate both held projections; no held projection
-  implementation is authorized. The preceding author model claimed one
+  promotion pair's fifteenth author repair closes [[D2929]]–[[D2933]] at contract tier
+  (2026-09-06).** One application-composition closure owns configuration loading and issues one
+  application; no exported mutable issuer or test-only positive path remains. Registry publication
+  retains production-validated pack, source, evidence, Syzygy response and exact legal-map values.
+  The resulting typed store restores recorded/legal lookup, and store-bound requests, collector
+  results and durable receipts remain on one current application→registry→store lineage. `make
+  semantic-collectors-promotion-fifteenth-author-repair` retains the complete history and passes
+  5/5 direct repairs plus strict TypeScript. Another genuinely fresh review and provider/value
+  dependency landing still gate both held projections; no held projection implementation is
+  authorized. The preceding author model claimed one
   asynchronous transaction owned recorded-first lookup, the exact
   scheduler digest and invocation, cancellation/domain/failure outcomes, success-only legal move
   resolution, sealed ledger/live source creation and total input abstention. The maintained target
@@ -1647,6 +1647,24 @@ artifact parser, and restore one current application→registry→store→reques
 without a predecessor/public-constructor bypass. Another genuinely fresh review and the existing
 provider/value dependencies remain mandatory; the spine stays 12/14.
 
+The same-day fifteenth author repair closes those five returns at contract tier without claiming
+either held production projection. `createPromotionApplicationComposition` is the sole current
+configuration owner: it captures the configured installation path, canonical-reads the inventory,
+memoizes one application, and exposes no authority map or test-only issuer. Copied composition,
+application, registry, store, request and result objects fail runtime identity checks.
+
+Before publishing any generation id, the registry runs the shipped pack validator, source-manifest
+and evidence-ledger parsers, source linkage and evidence semantics/support checks, the shipped
+Syzygy response parser, and an exact recomputed legal-map comparison. It retains those typed values
+rather than discarding parsed bytes. A generation store exposes FEN-bound recorded and exact-legal
+lookups; the request constructor binds the exact store, and collection, derived reading, result
+assertion and recorded receipt reassert the same application/registry/generation/store/FEN chain.
+`make semantic-collectors-promotion-fifteenth-author-repair` retains every prior return and repair,
+then passes 5/5 current groups plus the repository TypeScript contract. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-fifteenth-author-repair-2026-09-06.md`.
+Another genuinely fresh review and the existing provider/value dependencies remain mandatory; the
+spine stays 12/14 and no held projection is authorized.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1741,6 +1759,15 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-06: fifteenth author repair closes [[D2929]]–[[D2933]] at contract tier. One private
+  application-composition closure owns configuration and memoizes the exact application; complete
+  production pack/source/evidence/response/legal validation precedes registry publication and
+  retains typed values; recorded/legal store operations and one store-bound request→collector→
+  result→receipt lineage are restored. `make semantic-collectors-promotion-fifteenth-author-repair`
+  retains the chain and passes 5/5 direct repairs plus strict TypeScript. Exact receipt:
+  `planning/evidence-foundation-ux/semantic-collectors-promotion-fifteenth-author-repair-2026-09-06.md`.
+  Another genuinely fresh review and provider/value dependencies remain mandatory; the held pair
+  stays unimplemented.
 - 2026-09-06: fifteenth fresh independent review returns the held pair on [[D2929]]–[[D2933]].
   The exported mutable configuration map remains forgeable while no production issuer exists;
   canonical/digest checks admit semantically invalid artifacts; and the replacement store deletes
