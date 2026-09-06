@@ -1869,3 +1869,25 @@ than the RFC is blocking itself, and the answer is a cut, not another round.** I
 
 **[[D3052]]** — the first cut orphaned a row and caught it in the same pass, rehoming it into the
 criterion that genuinely covers it. That is the failure mode of cutting, handled correctly.
+
+### Second cut — [[D3053]]–[[D3055]]
+
+`rfc/pack-capability-contract.md` **3,022 → 1,526 lines** (`38e5e5b3`), criteria 30 → 19, nothing
+deleted and every piece homed.
+
+**[[D3053]]: 12 of 83 dependents are real.** The other 71 are the document's own review findings from
+**seventeen fresh reviews**. The twelve are named with what each waits for, and **none needs the
+durable job queue or the 60-branch route census that occupied 628 lines** — an async job system had
+grown inside a versioning contract. **Across both cuts: 12 real of 158 claimed — 7.6%.** The
+"654 items across ten RFCs" figure is badly overstated, and [[D3051]]'s id-age signal predicted both
+results before either document was opened.
+
+**[[D3054]]: the Gate F ruling paid for itself in hours.** §4.1a's dual reader, 92-row allowlist,
+mismatch error and two mutually-exclusive gates existed **only** because the corpus could not be
+restamped. [[D3033]] licensed the migration, so schema and restamp land in one commit and the
+apparatus has no job. Marked owner-vetoable, cut text recoverable verbatim.
+
+**[[D3055]]: both documents now need exactly one bounded review each** — at the new size, against
+the named dependents and nothing else. Seventeen reviews read a document twice this size; an
+unbounded eighteenth would regrow what was removed. Also: **32 of 33 harness directories are
+referenced by no gate**, the same unowned-instrument residue the first cut found.
