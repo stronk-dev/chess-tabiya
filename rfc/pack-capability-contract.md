@@ -1,21 +1,25 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **seventeenth fresh independent review returned the sixteenth repair on
-  [[D3002]]–[[D3008]].** The durable model still has two success-field authorities, structurally
-  mintable provider receipts, crossed provider-off terminal effects, substituted retry bytes,
-  stale lease execution, inverted clocks and an unchecked parent batch. No implementation is
-  authorised and D560 stays whole.
+- **Status:** draft — **cut to its blocking obligation 2026-09-06.** The durable evidence-job
+  model, the HTTP capability-operation census and every asynchronous-settlement criterion left this
+  document for successor draft `planning/pack-capability-contract/evidence-job-durability.md`,
+  which inherits [[D2429]]–[[D3008]] **unresolved**; §4.1a's D560 compatibility reader was cut on
+  the [[D3033]] ruling; seventeen rounds of review narrative moved to
+  `planning/pack-capability-contract/review-history.md`. What remains is the contract the twelve
+  non-self-referential dependents are waiting on. No implementation is authorised and D560 stays
+  whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
 - **Exploration gate:** O6.1 approved as [[D995]] and O6.2 ruled as [[D996]]; `planning/platform-alignment/theory-drill/o5-o6-handoff.md:96` reads verbatim `O6.1 + O6.2 approved → F3 may draft` (line corrected from `:100`, a code fence, by cross-review 2026-08-23)
-- **Depends on:** `archive/evidence-contract-manifest.md` (F1 — the compiled manifest this versions),
-  `rfc/graduation-clearance.md` (accepted — lane 0.28, the planner precedent in its §6.5), and
-  `rfc/provider-health-degradation.md` for the exact two evidence-provider operation results and
-  acquisition/failure receipts consumed by §5.2. **Followed by, never imports:** draft
-  `rfc/claim-semantic-anchors.md`, which may adopt F3's generic identity only after F3 is accepted.
+- **Depends on:** `archive/evidence-contract-manifest.md` (F1 — the compiled manifest this versions)
+  and `rfc/graduation-clearance.md` (accepted — lane 0.28, the planner precedent in its §6.5).
+  The `rfc/provider-health-degradation.md` dependency left with §5.2 on 2026-09-06 and is now the
+  successor's. **Followed by, never imports:** draft `rfc/claim-semantic-anchors.md`, which may
+  adopt F3's generic identity only after F3 is accepted.
 - **Parent / amends:** — (this is F3 in `planning/platform-alignment/rfc-graph.md:70`)
-- **Supersedes / superseded by:** —
+- **Supersedes / superseded by:** — **Cut into:** successor draft
+  `planning/pack-capability-contract/evidence-job-durability.md` (2026-09-06)
 - **Planning:** `planning/platform-alignment/` (`f3-derivation.md`)
 
 ```tabiya-claims
@@ -51,8 +55,22 @@ The one-line test this document must pass: **would it have caught [[D566]]?** Th
 repo had for noticing change reported "nothing changed". §2.3's semantics digest is the answer, and
 criterion 13 is that exact case as a regression test.
 
-Claims **pack-schema lane 0.30**, per owner ruling [[D1058]], plus one migration position behind
-`longitudinal-store` for the durable asynchronous evidence-job boundary found by [[D2520]].
+Claims **pack-schema lane 0.30**, per owner ruling [[D1058]]. The `migration` claim line is
+**reserved, not exercised**: the durable evidence-job tables it names moved to the successor draft
+on 2026-09-06 and the position transfers with them. The claim line and its `rfc/README.md:380`
+register row must move together or C3 breaks — a concurrent writer holds that file, so the transfer
+is proposed as a ledger row below rather than made here, and until it lands this RFC holds the
+position on the successor's behalf.
+
+**What this document is bounded to, and by what.** 83 ledger rows name this RFC as their blocker.
+**71 of them are its own review findings** ([[D2050]]–[[D3008]]), raised across seventeen rounds
+against material the document had grown; they are not dependents waiting on a contract. The
+remaining **twelve** are [[D228]], [[D576]], [[D996]], [[D1003]], [[D1004]], [[D1037]], [[D1045]],
+[[D1049]], [[D1058]], [[D1077]], [[D1327]] and [[D1620]]. Those twelve are this document's
+obligation, and nothing else is; every section, criterion and discharge below is here because one of
+them needs it. This is a bound to a **named obligation**, not to a landable minimum — nothing was
+dropped for being expensive, and every cut piece has a named home recorded in
+`planning/pack-capability-contract/cut-2026-09-06.md`.
 
 ## Motivation
 
@@ -87,11 +105,12 @@ can express. §2.2 keys capabilities on **evaluator identity** rather than on JS
 so that ordering is expressible.
 
 **Out of scope, explicitly.** Pilot membership (O6.3 / F7's job); UX defaults; new chess
-primitives; applying the corpus plan (the [[D560]] content hold stands whole per [[D949]] — this
-RFC ships a *planner* and a sealed 0.27→0.30 transition, while its applier writes nothing until the
-hold's graduation arm lifts);
-lifting Gate F; detector semantics v1 (clause 4 of the gate, a separate document); and the 14 F1
-declared-vs-consumed mismatch rows.
+primitives; authored-content and claim-binding waves (the [[D560]] hold stands whole per [[D949]]
+and [[D3033]], which licensed only foundation and schema migrations); lifting Gate F; detector
+semantics v1 (clause 4 of the gate, a separate document); the 14 F1 declared-vs-consumed mismatch
+rows; and — since 2026-09-06 — the durable evidence-job boundary and the HTTP capability-operation
+census, both owned by successor draft
+`planning/pack-capability-contract/evidence-job-durability.md`.
 
 ## Specification
 
@@ -702,67 +721,49 @@ all writers call the same function before `digestDrillPack`. The JSON schema set
 and ordering. A reordered or duplicate equivalent set is invalid rather than allowed to change a
 pack digest. Planner output and authored `requires` compare canonical arrays byte-for-byte.
 
-#### §4.1a The cumulative 0.27→0.28→0.29→0.30 transition is a closed compatibility reader
+#### §4.1a The 0.30 schema and its 92-document migration land in one commit — [[D3033]]
 
-The D560 hold makes a same-commit 92-pack rewrite illegal today; making `requires` optional would
-make absence permissive forever. The transition therefore has two real schemas and no heuristic
-legacy mode:
+**Cut 2026-09-06 on the owner's ruling; the reading below is claude's and is owner-vetoable.** This
+section previously specified a sealed 0.27 compatibility reader — a 92-row path+raw-digest legacy
+allowlist, `PACK_CAPABILITY_STAMP_REQUIRED`/`PACK_LEGACY_IMAGE_MISMATCH`, an internally supplied
+catalogue identity, and two mutually exclusive gates (`pack-capability-software-check` before the
+hold lifted, `pack-capability-corpus-check` after). Every line of it existed for one reason, stated
+in its own opening sentence: *"the D560 hold makes a same-commit 92-pack rewrite illegal today."*
 
-- `urn:chess-tabiya:schema:drill-pack:0.30` requires `requires` and is the only schema accepted for
-  newly authored, uploaded, Studio-written or API-submitted packs;
-- the 0.27 reader accepts an unstamped document **only** when its repository-relative path and raw
-  SHA-256 are members of the author-sealed 92-document legacy catalogue population; and
-- an unstamped document outside that exact allowlist fails `PACK_CAPABILITY_STAMP_REQUIRED`. A
-  changed legacy byte fails `PACK_LEGACY_IMAGE_MISMATCH`; neither condition falls back to generic
-  0.27 validation.
+[[D3033]] dissolved that premise. **Foundation and schema migrations proceed before Gate F; only
+authored-content and claim-binding waves stay held**, expressly so *"the pack format can grow so a
+pack can carry the evidence base."* A `requires` array projected mechanically from a document's own
+content is a schema migration, not authored content. The transition therefore needs no compatibility
+reader, no allowlist and no second gate:
 
-`rfc/contracts/pack-capability-schema-transition-v1.json` (artifact v3; SHA-256
-`b3e936c805927287f28c423fd75b7f4be834dfbde4bb5ffd6827edbb9e627c72`) seals the legacy schema,
-the sorted path+raw-digest population (`92`, digest
-`933eeecd0aee6e50b2a595b62bfc22485ba8a4d2dc945a5b4efdd9cf35fca849`), and three ordered
-owner-qualified stages. The exact post-images are: 0.28 = 84,113 canonical bytes / SHA-256
-`c4132e4c9268a964d229323e0b6ec8dfc8723b976bd272f0b56dbe5003fcfafe`; 0.29 = 85,581 bytes /
-`55c0095dfe381cfd5750cd4c6bdb71d2f80337f6c22616419cba798a3368a605`; and 0.30 = 87,000 bytes /
-`f7818f5ea08dd6c63efb422508174baa07868e3e11cd91a60891f151df0f25db`. Each stage's source digest
-is the prior stage's target digest. Implementation applies the stages in order and verifies every
-post-image; it cannot skip, regenerate or amend predecessor authority. The final target contains
-typed graduation clearance, `corpusEvidence`, the widened timing note, `provenance_note`,
-`citable_text`, and required capability declarations.
+- `urn:chess-tabiya:schema:drill-pack:0.30` requires `requires` and is the **only** drill-pack
+  schema the runtime reads. There is no legacy admission path for any caller, upload, Studio write
+  or API submission.
+- The implementing commit applies the three ordered owner-qualified stages sealed in
+  `rfc/contracts/pack-capability-schema-transition-v1.json` (artifact v3; SHA-256
+  `b3e936c805927287f28c423fd75b7f4be834dfbde4bb5ffd6827edbb9e627c72`) and rewrites all 92 documents
+  in the same commit. The exact post-images are: 0.28 = 84,113 canonical bytes / SHA-256
+  `c4132e4c9268a964d229323e0b6ec8dfc8723b976bd272f0b56dbe5003fcfafe`; 0.29 = 85,581 bytes /
+  `55c0095dfe381cfd5750cd4c6bdb71d2f80337f6c22616419cba798a3368a605`; and 0.30 = 87,000 bytes /
+  `f7818f5ea08dd6c63efb422508174baa07868e3e11cd91a60891f151df0f25db`. Each stage's source digest is
+  the prior stage's target digest; implementation applies them in order and verifies every
+  post-image. The final target contains typed graduation clearance, `corpusEvidence`, the widened
+  timing note, `provenance_note`, `citable_text`, and required capability declarations.
+- The artifact's `legacy.documents` — the literal sorted 92-row `{path,sha256}` authority, population
+  digest `933eeecd0aee6e50b2a595b62bfc22485ba8a4d2dc945a5b4efdd9cf35fca849` — survives as the
+  **migration population**, not as a reader allowlist: it is what the applier rewrites and what
+  proves the rewrite was total. `make pack-capability-author-repair` independently rediscovers the
+  eligible `content/drafts/*.json` and `content/candidates/*/pack.json` population, recomputes each
+  raw digest, set-equals all rows and recomputes `populationSha256`; editing, deleting, renaming or
+  swapping a path, or adding an otherwise-valid 93rd pack, fails.
 
-The artifact's `legacy.documents` is the literal sorted 92-row `{path,sha256}` authority, not an
-opaque digest. `make pack-capability-author-repair` independently discovers the eligible
-`content/drafts/*.json` and `content/candidates/*/pack.json` population, recomputes each raw digest,
-set-equals all rows and recomputes `populationSha256` over the exact ordered row image. Editing,
-deleting, renaming or swapping a path, or adding an otherwise-valid 93rd pack fails. Runtime legacy
-admission indexes this generated checked table by the internally discovered canonical path; a
-caller never supplies either field.
-
-The compatibility arm is repository-catalogue-only. The server never accepts a caller-supplied
-path as proof of legacy membership. `PackRegistry` supplies an internal catalogue identity after
-reading the sealed file, and every other entry point selects 0.30. The migration applier replaces
-all 92 files and dependent digests atomically after the D560 budget decision. The same commit then
-deletes the 0.27 reader and allowlist; adding a 93rd legacy digest is forbidden. This is a bounded
-transition, not a second permanent format.
-
-**The 0.30 stamp is inside `digestDrillPack`.** `packages/schema/src/drill-pack/digest.ts:69` digests
-every byte with no field filter, so a requirement cannot drift from the content it describes. The
-cost, accepted knowingly by [[D1058]]: **all 92 packs churn their digest** when the held migration
-is applied and every ledger `packDigest` must be re-stamped (§6 plans it). The software transition
-lands first without changing those legacy bytes. Its pre-apply gate is
-`make pack-capability-software-check`: it proves the exact 92 legacy rows are admitted, every other
-unstamped input is refused, and a complete canonical 92-document projected migration exists
-without writing content. It does **not** claim the current corpus has authored `requires` arrays.
-After [[D560]] authorizes the content transaction, `make pack-capability-corpus-check` instead
-requires all 92 files to contain the exact projected canonical arrays, verifies every dependent
-digest/ledger update, and proves the compatibility reader plus allowlist are absent. The post-apply
-gate refuses even one unstamped file; the pre-apply gate refuses pretending projected arrays are
-authored bytes. These are sequential gates, never two simultaneous assertions over one tree.
-
-**The Gate F cost, stated plainly.** Clause 1 requires that *no active RFC holds a drill-pack schema
-lane*. Lane 0.28 is held by accepted `graduation-clearance`, 0.29 by draft
-`pack-population-provenance`, and this RFC takes 0.30 — **clause 1 goes from two-deep to three, and
-the content hold's lift is delayed by that much.** The owner ruled for binding integrity over
-speed; this paragraph exists so no later reader mistakes it for an oversight.
+**The 0.30 stamp is inside `digestDrillPack`.** `packages/schema/src/drill-pack/digest.ts:69`
+digests every byte with no field filter, so a requirement cannot drift from the content it
+describes. The cost, accepted knowingly by [[D1058]]: **all 92 packs churn their digest** and every
+evidence-ledger `packDigest` must be re-stamped — §6 plans it and discharge D3 owns it. Gate F
+clause 1 still records that this RFC takes lane 0.30 behind 0.28 and 0.29; that fact is unchanged.
+What [[D3033]] changed is that holding a lane no longer forces the migration to wait for the gate
+the lane was blocking.
 
 #### §4.2 What the runtime publishes
 
@@ -1148,200 +1149,14 @@ right thing with no new field.
   wrongly unavailable for the process's lifetime. It is a per-request condition on the 503 arm,
   retryable, and the run survives it.
 
-The operation boundary is shared and typed. It never accepts a requirement list from a route, and
-it does not collapse three creation sources into a fictional always-packed operation:
-
-```ts
-type HttpCapabilityOperationId =
-  | "pack.register"
-  | "run.create.pack" | "run.create.position" | "run.create.imported"
-  | "run.create.rated" | "run.create.playtest" | "run.create.repertoire_gap"
-  | "run.create.flip" | "run.create.duplicate_pack" | "run.create.duplicate_position"
-  | "opponent.select" | "story.public" | "shared.join_page"
-  | "run.graph" | "run.events" | "run.evidence.read" | "run.authored_feedback"
-  | "run.pgn" | "run.grants.read" | "run.reasoning.read" | "run.import_record"
-  | "run.story" | "run.share.list" | "run.derivations" | "run.marks.read"
-  | "run.human_split" | "run.corpus" | "run.group_reply"
-  | "run.branch_decidedness" | "run.analysis" | "run.prediction"
-  | "run.voice" | "run.speech" | "run.reasoning_review"
-  | "run.group.hand_picked" | "run.group.authored"
-  | "run.group.human_replies" | "run.group.engine_top_n"
-  | "run.marks.replace" | "run.marks.rescope"
-  | "run.deletion_preview" | "run.delete" | "run.distill"
-  | "run.share.create" | "run.share.revoke"
-  | "run.lease" | "run.reveal" | "run.schedule"
-  | "run.grant" | "run.revoke"
-  | "run.move.user" | "run.move.opponent_received"
-  | "run.rewind" | "run.fork" | "run.compare" | "run.simulate" | "run.simulate_enter"
-  | "run.reasoning.record" | "run.evidence.apply";
-type QueuedProviderOperationId =
-  | "evidence.stockfish_analysis"
-  | "evidence.tablebase_probe";
-type CapabilityOperationId = HttpCapabilityOperationId | QueuedProviderOperationId;
-type CreateSessionCapabilitySource =
-  | { readonly kind: "pack"; readonly packId: string; readonly packDigest: string }
-  | { readonly kind: "position"; readonly opponentPolicy: PositionOpponentPolicy }
-  | { readonly kind: "imported"; readonly opponentPolicy: PositionOpponentPolicy };
-type OperationCapabilitySource =
-  | { readonly kind: "session_create"; readonly sessionKind: CreateSessionCapabilitySource["kind"] }
-  | { readonly kind: "registered_pack"; readonly phase: "static_admission" }
-  | { readonly kind: "run_session_operation" }
-  | { readonly kind: "fixed_registry" }
-  | { readonly kind: "none" };
-type CapabilityConsumerId = EvidenceConsumerId | OperationalCapabilityConsumerId;
-interface OperationCapabilityBinding {
-  readonly operationId: CapabilityOperationId;
-  readonly source: OperationCapabilitySource;
-  readonly consumer?: CapabilityConsumerId;
-}
-type CheckedOperationCapabilityBinding =
-  | { readonly operationId: CapabilityOperationId; readonly source: { readonly kind: "none" } }
-  | { readonly operationId: CapabilityOperationId; readonly source: Exclude<OperationCapabilitySource, { readonly kind: "none" }>; readonly consumer: CapabilityConsumerId };
-interface CapabilityRouteBranch {
-  readonly operationId: HttpCapabilityOperationId;
-  readonly method: "GET" | "POST" | "PUT" | "DELETE";
-  readonly route:
-    | "/packs/drafts/:draftId/register" | "/packs/drafts/:draftId/playtest"
-    | "/runs" | "/runs/import" | "/rated-games" | "/select-move"
-    | "/repertoires/:id/gaps/enter" | "/api/shared/:token/story" | "/shared/:token"
-    | "/runs/:runId/share/:token" | "/runs/:runId/:action";
-  readonly action?: string;
-  readonly discriminant?:
-    | { readonly path: "/session/kind"; readonly value: "pack" | "position" }
-    | { readonly path: "/rescopeFrom"; readonly presence: "present" | "absent" }
-    | { readonly path: "/op"; readonly value: "grant" | "revoke" }
-    | { readonly path: "/selection"; readonly presence: "present" | "absent" }
-    | { readonly path: "/source"; readonly value: "hand_picked" | "authored" | "human_replies" | "engine_top_n" }
-    | { readonly loaded: "run.sessionKind"; readonly value: "pack" | "position" }
-    | { readonly loaded: "publicToken.scope"; readonly value: "story_read" | "session_join" };
-}
-```
-
-`OperationCapabilityBinding` is the generated read projection. Authoring accepts only
-`CheckedOperationCapabilityBinding`, so a non-`none` source without a consumer and a `none` source
-with a consumer are unrepresentable; no call site constructs the looser projection directly.
-
-The reviewed seventh-author base image is
-`tools/d2509-pack-capability-seventh-author-repair/operation-authority.json`; the eighth-author
-post-image is its digest-pinned composition with
-`tools/d2518-pack-capability-eighth-author-repair/operation-amendment.json`. Neither is a second
-production registry: implementation translates the composed image into co-located typed route,
-worker and enqueue-origin declarations, then retires both author artifacts.
-`CapabilityOperationId`, `CAPABILITY_OPERATION_BINDINGS`, the HTTP resolver and the worker resolver
-are generated from those declarations. A source census independently parses the live
-`parseRunRoute` action grammar, all method/action handler branches, every run-creation storage site,
-both public-card branches, every enqueue origin and every call through either synchronous or queued
-provider gateway; set inequality fails. Consequently a new route, creation site, enqueue origin or
-provider call fails before anyone edits a hand-written expected list.
-
-The bounded population is syntactic and deliberately wider than “operations we currently think
-need a provider”: every supported method/action branch under `parseRunRoute`, every route that
-creates a run, Pack Studio registration, `/select-move`, public Story and share-token revocation.
-Account, classroom, shape-authoring and authenticated live-session APIs are outside this pack/run
-boundary by their distinct route parsers, and the census asserts those exclusions by parser
-identity. The shared HTML route is inside because one of its token scopes renders Story evidence.
-The composed author image contains **36/36 run actions, 48 run-route branches, 12 external-route
-branches and 60 HTTP branches over 59 unique HTTP operation ids**, plus **2 queued provider
-operations** for **61 unique capability operation ids overall**. The following table is only the
-capability-bearing and split-branch excerpt; the composed artifacts are the complete author image:
-
-| method + route | body branch | operation id | capability source |
-|---|---|---|---|
-| `POST /packs/drafts/:draftId/register` | — | `pack.register` | `registered_pack/static_admission` |
-| `POST /packs/drafts/:draftId/playtest` | — | `run.create.playtest` | `session_create/pack` |
-| `POST /runs` | `session.kind=pack` | `run.create.pack` | `session_create/pack` |
-| `POST /runs` | `session.kind=position` | `run.create.position` | `session_create/position` |
-| `POST /runs/import` | — | `run.create.imported` | `session_create/imported` |
-| `POST /rated-games` | — | `run.create.rated` | `session_create/position` |
-| `POST /repertoires/:id/gaps/enter` | — | `run.create.repertoire_gap` | `session_create/position` |
-| `POST /select-move` | — | `opponent.select` | `fixed_registry` |
-| `GET /runs/:runId/human-split` | — | `run.human_split` | `run_session_operation` |
-| `GET /runs/:runId/corpus` | — | `run.corpus` | `run_session_operation` |
-| `GET /runs/:runId/story` | — | `run.story` | `run_session_operation` |
-| `GET /api/shared/:token/story` | — | `story.public` | `run_session_operation` |
-| `GET /shared/:token` | loaded token scope `story_read` | `story.public` | `run_session_operation` |
-| `GET /shared/:token` | loaded token scope `session_join` | `shared.join_page` | `none` |
-| `POST /runs/:runId/group-reply` | — | `run.group_reply` | `run_session_operation` |
-| `POST /runs/:runId/branch-decidedness` | — | `run.branch_decidedness` | `run_session_operation` |
-| `POST /runs/:runId/analysis` | — | `run.analysis` | `run_session_operation` |
-| `POST /runs/:runId/prediction` | — | `run.prediction` | `run_session_operation` |
-| `POST /runs/:runId/voice` | — | `run.voice` | `run_session_operation` |
-| `POST /runs/:runId/speech` | — | `run.speech` | `run_session_operation` |
-| `POST /runs/:runId/reasoning-review` | — | `run.reasoning_review` | `run_session_operation` |
-| `PUT /runs/:runId/marks` | `rescopeFrom` absent / present | `run.marks.replace` / `run.marks.rescope` | `none` / `none` |
-| `POST /runs/:runId/deletion-preview` | — | `run.deletion_preview` | `none` |
-| `POST /runs/:runId/delete` | — | `run.delete` | `none` |
-| `POST /runs/:runId/distill` | — | `run.distill` | `none` |
-| `POST /runs/:runId/share` | — | `run.share.create` | `run_session_operation` |
-| `DELETE /runs/:runId/share/:token` | — | `run.share.revoke` | `none` |
-| `POST /runs/:runId/flip` | — | `run.create.flip` | `session_create/position` |
-| `POST /runs/:runId/lease` | — | `run.lease` | `none` |
-| `POST /runs/:runId/reveal` | — | `run.reveal` | `none` |
-| `POST /runs/:runId/duplicate` | loaded `sessionKind=pack` / `position` | `run.create.duplicate_pack` / `run.create.duplicate_position` | `session_create/pack` / `session_create/position` |
-| `POST /runs/:runId/schedule` | — | `run.schedule` | `none` |
-| `POST /runs/:runId/grants` | `op=grant` / `op=revoke` | `run.grant` / `run.revoke` | `none` / `none` |
-| `POST /runs/:runId/group` | `source=hand_picked` / `authored` | `run.group.hand_picked` / `run.group.authored` | `none` / `none` |
-| `POST /runs/:runId/group` | `source=human_replies` / `engine_top_n` | `run.group.human_replies` / `run.group.engine_top_n` | `run_session_operation` / `run_session_operation` |
-| `POST /runs/:runId/moves` | `selection` absent / present | `run.move.user` / `run.move.opponent_received` | `none` / `none` |
-| `POST /runs/:runId/rewind` | — | `run.rewind` | `none` |
-| `POST /runs/:runId/fork` | — | `run.fork` | `none` |
-| `POST /runs/:runId/compare` | — | `run.compare` | `none` |
-| `POST /runs/:runId/simulate-enter` | — | `run.simulate_enter` | `none` |
-| `POST /runs/:runId/reasoning` | — | `run.reasoning.record` | `none` |
-| `POST /runs/:runId/evidence` | — | `run.evidence.apply` | `none` |
-
-The shared HTML handler must resolve the token once by hash before dispatch: `story_read` enters
-`story.public`, while `session_join` enters the local `shared.join_page`. Trying Story and then
-catching every error as a join-page discriminator is forbidden: provider failure on a real Story
-token must not change token scope, and a join token must never enter Story capability enforcement.
-
-The excerpt omits the local read/mutation rows only for legibility; they remain literal in the
-60-branch author image. The implementation does not regex-generate a dispatcher from formatting.
-Instead, route declarations and provider-operation wrappers are production authority, while the
-AST census independently discovers their population and compares semantic identities. A call to a
-provider outside `executeCapabilityOperation`, a run-creation storage call outside a declared
-creation operation, an action in `parseRunRoute` without all of its supported methods, or an
-invented `/studio/drafts` prefix is a distinct failure.
-
-`run.create.pack` and Pack Studio playtest resolve authenticated pack identity and require the
-complete canonical `pack.requires` set against configured support. Position, imported, rated,
-repertoire-gap and flip creation cannot resolve or impersonate a pack: their sealed session source
-selects the exact opponent/runtime requirements through the same registry mappings that own those
-policy modes. Duplicate selects pack or position only from the already-authorized stored source
-run, never from a request discriminator. A mode with no requirement yields an explicit empty
-derived set; absence is a registry fact, not a caller-supplied empty array. Crossed fixtures prove a
-position/imported source cannot select `registered_pack`, a pack source cannot select the non-pack
-resolver, a duplicate request cannot change source kind, and a body/session-kind disagreement fails
-before admission. `pack.register` separately uses `registered_pack/static_admission` over the
-parsed draft pack.
-
-Provider operations plus `opponent.select` use either `run_session_operation` or an exact
-fixed-registry capability. A run-session resolver loads the authenticated immutable run and derives
-the union of (a) the operation consumer's fixed capability requirements, (b) the exact opponent
-policy requirements of that session, and (c) `pack.requires` only when the run actually has a pack.
-Position and imported sessions therefore remain first-class rather than failing a fictitious pack
-lookup. Routes supply only `{operationId, runId/idempotencyKey when applicable}`; the operation id
-is the generated result of the closed route-branch resolver, not a caller field. They cannot add,
-omit or replace capability ids, a pack path or a requirement array.
-
-Every `source:none` action still passes through the operation census but does not call transient
-capability enforcement; `run.move.opponent_received`
-commits an already admitted provider-delivery receipt, so provider death after delivery cannot
-invalidate the received move. Adding a mutating route fails the census until it is assigned to
-exactly one provider-bound or explicit-none source. The four `group.source` arms are distinct
-operations: `hand_picked` and `authored` are local; `human_replies` and `engine_top_n` must pass the
-opponent consumer before `select`/`enumerate` and before the first branch or distribution write.
-Crossed fixtures move one operation between sets, omit a provider binding, add an extra caller id,
-make a discriminator overlap or gap, and place the check after the first write.
-
-Before a first-flight provider operation appends any run event or mutates run state,
-`executeCapabilityOperation({operationId, runId}, body)` derives the authoritative set above and
-reads the current deployment projection. It also resolves the operation's declared consumer and
-joins that consumer to its compiled `ProviderOffBehavior`; routes never pass either a behavior or a
-capability list. Idempotent replay first returns the stored terminal operation receipt and does not
-re-decide historical provider reachability; a concurrent first flight shares one admitted
-operation. Recovery of a previously uncommitted request re-runs the pre-write check. This paragraph
-describes request-synchronous operations; queued evidence uses §5.2's durable admission boundary.
+**This section resolves request-synchronous operations only.** Provider work that is admitted now
+and settled later — `POST /runs/:runId/analysis`'s 202, Story completion and automatic move
+enrichment — cannot be governed by a rule that runs inside the admitting request. [[D2520]] measured
+that. The durable admission/settlement boundary answering it, together with the closed HTTP
+capability-operation census that binds each route and queued gateway to its capability source, is
+specified by successor draft `planning/pack-capability-contract/evidence-job-durability.md`; that
+document inherits [[D2429]]–[[D3008]] unresolved. This RFC states the two ruled causes and their
+request-synchronous effects, and nothing about asynchronous settlement.
 
 Reachability cause and consumer effect remain orthogonal. On request-synchronous operations, an
 `unavailable` consumer returns the retryable HTTP 503 envelope and writes nothing. An `honest_empty` consumer returns its typed empty
@@ -1353,439 +1168,6 @@ digest-pinned composed author image; copying
 `providerOff` into a route row is forbidden. Boot without a configured provider still takes the
 static 422/listing-exclusion path. Criteria cover boot absence, all three transient effects, death
 after registration, recovery in-process, and the impossible local/build-time transient.
-
-#### §5.2 Queued evidence is admission plus durable settlement, never a delayed HTTP fiction
-
-`POST /runs/:runId/analysis`, Story completion and automatic move enrichment do not execute their
-provider call inside the admitting request. The first returns 202; the latter two may enqueue while
-serving another response or after committing a move. Therefore the synchronous rule above cannot
-be applied after the response has left. **HTTP 202 means only that the durable `admitted` row
-committed.** It never means the provider succeeded, that evidence exists or that an unavailable
-result became a successful request.
-
-The queued operation population is closed separately from HTTP routes:
-
-| queued operation id | sole gateway | kinds |
-|---|---|---|
-| `evidence.stockfish_analysis` | `EvidenceJobQueue.#execute` → `EvidenceExecutor.execute` | `bestline`, `eval`, `wdl` |
-| `evidence.tablebase_probe` | `EvidenceJobQueue.#tablebasePayload` → `TablebaseSource.probe` | `tablebase` |
-
-These are the exact operation ids already owned by `provider-health-degradation.md`; F3 consumes
-its `ProviderOperationResult` and receipts rather than inventing another provider state or failure
-vocabulary. The worker census is set-equal over calls through both gateway interfaces. A third
-gateway, a direct engine/tablebase call, or a kind with no operation mapping fails. The queue input
-does not accept a consumer, behavior, capability list or operation id from a route. One sealed
-origin fixes them:
-
-| origin | production enqueue owner | compiled consumer | terminal provider-off effect |
-|---|---|---|---|
-| `explicit_analysis` | `RunService.enqueueEvidence` | `runtime.analysis` | `settled_unavailable` |
-| `story_completion` | `RunService.#ensureStoryEvidence` | `review.story_evidence` | `settled_empty` |
-| `run_enrichment` | `RunService.#enqueueMoveEvidence` | `runtime.background_evidence` | `settled_empty` |
-
-`runtime.background_evidence` is an operational consumer: no learner sentence is attributed to it,
-and absence creates no evidence payload. Upstream callers such as import, public Story, moves,
-opponent plies and group creation reach exactly one of those three enqueue owners; they do not
-become extra worker gateways. The composed author artifact records the four concrete enqueue calls
-(`enqueue` on all three origins plus `enqueueProducer` for run-enrichment tablebase work).
-
-The durable authority is an additive `evidence_job_batches` + `evidence_jobs` pair plus one
-`evidence_result_sequences` allocator in the
-application database, claimed in one migration position behind `longitudinal-store`. A batch is the
-admission and replay boundary; a job is the lease and settlement boundary. The migration owns these
-exact fields:
-
-```sql
-CREATE TABLE evidence_job_batches (
-  id TEXT PRIMARY KEY,
-  run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
-  origin TEXT NOT NULL CHECK (origin IN
-    ('explicit_analysis','story_completion','run_enrichment')),
-  idempotency_key TEXT NOT NULL,
-  request_json TEXT NOT NULL,
-  request_digest TEXT NOT NULL,
-  job_count INTEGER NOT NULL CHECK (job_count >= 1 AND job_count <= 16),
-  admitted_at TEXT NOT NULL,
-  UNIQUE (id, run_id, origin),
-  UNIQUE (run_id, origin, idempotency_key)
-) STRICT;
-
-CREATE TABLE evidence_result_sequences (
-  run_id TEXT PRIMARY KEY REFERENCES drill_runs(id) ON DELETE CASCADE,
-  next_result_seq INTEGER NOT NULL CHECK (next_result_seq >= 1)
-) STRICT;
-
-CREATE TABLE evidence_jobs (
-  id TEXT PRIMARY KEY,
-  batch_id TEXT NOT NULL REFERENCES evidence_job_batches(id) ON DELETE CASCADE,
-  batch_ordinal INTEGER NOT NULL CHECK (batch_ordinal >= 0 AND batch_ordinal < 16),
-  run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
-  node_id TEXT NOT NULL,
-  origin TEXT NOT NULL CHECK (origin IN
-    ('explicit_analysis','story_completion','run_enrichment')),
-  consumer_id TEXT NOT NULL CHECK (consumer_id IN
-    ('runtime.analysis','review.story_evidence','runtime.background_evidence')),
-  provider_operation_id TEXT NOT NULL CHECK (provider_operation_id IN
-    ('evidence.stockfish_analysis','evidence.tablebase_probe')),
-  job_request_digest TEXT NOT NULL,
-  request_json TEXT NOT NULL,
-  state TEXT NOT NULL CHECK (state IN
-    ('admitted','running','retry_wait','settled_success','settled_empty',
-     'settled_unavailable','cancelled','consumed')),
-  attempt_count INTEGER NOT NULL CHECK (attempt_count >= 0),
-  admitted_at TEXT NOT NULL,
-  lease_owner TEXT,
-  lease_expires_at TEXT,
-  lease_generation INTEGER NOT NULL DEFAULT 0 CHECK (lease_generation >= 0),
-  next_attempt_at TEXT,
-  retry_basis_json TEXT,
-  settled_at TEXT,
-  result_seq INTEGER,
-  settlement_json TEXT,
-  consumed_at TEXT,
-  application_receipt_json TEXT,
-  CHECK (
-    (origin='explicit_analysis' AND consumer_id='runtime.analysis') OR
-    (origin='story_completion' AND consumer_id='review.story_evidence') OR
-    (origin='run_enrichment' AND consumer_id='runtime.background_evidence')
-  ),
-  FOREIGN KEY (batch_id, run_id, origin)
-    REFERENCES evidence_job_batches(id, run_id, origin) ON DELETE CASCADE,
-  UNIQUE (batch_id, batch_ordinal),
-  UNIQUE (run_id, result_seq)
-) STRICT;
-
-CREATE TABLE evidence_run_transitions (
-  run_id TEXT NOT NULL REFERENCES drill_runs(id) ON DELETE CASCADE,
-  job_id TEXT NOT NULL UNIQUE REFERENCES evidence_jobs(id) ON DELETE CASCADE,
-  from_revision INTEGER NOT NULL CHECK (from_revision >= 0),
-  to_revision INTEGER NOT NULL CHECK (to_revision = from_revision + 1),
-  before_run_json TEXT NOT NULL,
-  before_run_digest TEXT NOT NULL,
-  after_run_json TEXT NOT NULL,
-  after_run_digest TEXT NOT NULL,
-  first_event_seq INTEGER NOT NULL CHECK (first_event_seq >= 1),
-  last_event_seq INTEGER NOT NULL CHECK (last_event_seq >= first_event_seq),
-  event_digest TEXT NOT NULL,
-  transition_digest TEXT NOT NULL,
-  committed_at TEXT NOT NULL,
-  PRIMARY KEY (run_id, to_revision)
-) STRICT;
-
-CREATE TRIGGER evidence_run_transitions_no_update
-BEFORE UPDATE ON evidence_run_transitions
-BEGIN SELECT RAISE(ABORT, 'EVIDENCE_TRANSITION_IMMUTABLE'); END;
-
-CREATE TRIGGER evidence_run_transitions_no_direct_delete
-BEFORE DELETE ON evidence_run_transitions
-WHEN EXISTS (SELECT 1 FROM drill_runs WHERE id=OLD.run_id)
-  AND EXISTS (SELECT 1 FROM evidence_jobs WHERE id=OLD.job_id)
-BEGIN SELECT RAISE(ABORT, 'EVIDENCE_TRANSITION_IMMUTABLE'); END;
-```
-
-Transition rows are append-only application authority, not merely data carrying recomputable
-hashes. The storage migration installs both triggers above in the same schema change as the table.
-No application operation may update a transition. Direct deletion while its run and job remain is
-refused; deletion is reachable only as the foreign-key cascade of deleting the owning durable
-run/job. Re-open and replay assert the triggers exist before trusting stored history. A schema
-writer that can drop migrations is outside the application-corruption boundary; ordinary SQL
-through the application connection cannot coherently rewrite history ([[D2808]]).
-
-The composite foreign key is authoritative: a child cannot repeat a different run or origin from
-its batch. `request_json` parses as the exact `EvidenceBatchRequestV1` below; `job_count` equals its
-ordered `jobs.length`; child ordinals are exactly contiguous `0..job_count-1`; and each child's
-parsed request and digest equal that indexed batch member. Missing, extra, duplicated, crossed or
-reordered children are corrupt storage. Batch parsing never trusts the duplicated columns merely
-because each is independently well-formed ([[D2542]]).
-
-**[[D2566]]/[[D2590]]:** the parser join is literal and bidirectional. `validateStoredBatch`
-accepts one parsed, recursively immutable run snapshot rather than a bare node/FEN map. Its run id
-equals the parsed batch request; `batchRow.run_id`/`origin` equal that request; every contiguous
-child row equals its indexed parsed member on batch id, ordinal, run, origin, compiled consumer,
-provider operation, request bytes/digest and node id; and the request FEN equals that immutable
-node's FEN in the same snapshot. A self-consistent batch/job request for run B stored beneath run-A
-columns, or an equal run-B node map supplied for run A, is corrupt even when both digests and the
-composite foreign key are valid. A copied/spread snapshot loses its parser authority.
-
-Request identity is one literal image, not “canonical JSON” left to the implementer:
-
-```ts
-interface EvidenceJobRequestV1 {
-  readonly schema: "evidence_job_request@1";
-  readonly runId: string;
-  readonly nodeId: string;
-  readonly fen: string;
-  readonly kind: EvidenceKind;
-  readonly depth: number | null;
-  readonly movetime: number | null;
-  readonly multiPv: number | null;
-  readonly timeoutMs: number | null;
-  readonly objectiveRequest: ObjectiveEvidenceRequest | null;
-}
-
-interface EvidenceBatchRequestV1 {
-  readonly schema: "evidence_batch_request@1";
-  readonly runId: string;
-  readonly origin: "explicit_analysis" | "story_completion" | "run_enrichment";
-  readonly jobs: readonly [EvidenceJobRequestV1, ...EvidenceJobRequestV1[]];
-}
-```
-
-Every optional input is normalized to an explicit `null`; unknown/extra keys fail. `fen` is the
-exact immutable node FEN, and a non-null objective request must repeat the same run/node/FEN. The
-implementation imports `canonicalizeJson` from `@chess-tabiya/schema/drill-pack`. A job digest is
-lowercase SHA-256 over UTF-8 `chess-tabiya/evidence-job-request/v1\0` plus those canonical bytes; a
-batch digest uses the distinct prefix `chess-tabiya/evidence-batch-request/v1\0` over its complete
-request. These two exported functions are the only writers and verifiers of the columns ([[D2544]]).
-
-Provider response identity uses that same imported RFC-8785 authority, not JSON parse/stringify
-round-trip. The accepted raw response must byte-equal `canonicalizeJson(parsedPayload)` before its
-digest is issued. For Stockfish payloads, `engineId` equals the compiled provider instance and the
-one requested depth/movetime arm equals the stored request. For tablebase payloads, `fen` equals the
-stored request, `sourceId` equals the compiled provider instance and `pieceCount` is derived from
-that parsed FEN rather than trusted from the response. These joins occur before a provider result
-can be sealed and are reasserted inside settlement ([[D2802]], [[D2803]]).
-
-**[[D2565]]:** both functions accept only the brand returned by the corresponding exact v1 parser.
-The job parser rejects missing/extra keys, a wrong schema literal, an unknown kind, invalid search
-bounds and a crossed non-null objective identity. The batch parser rejects missing/extra keys,
-anything outside 1–16 jobs and any job whose `runId` differs from the batch. Hashing an arbitrary
-JSON-shaped object is not an overload. Parser, digest writer and digest verifier share these exact
-functions.
-
-**[[D2588]]:** `ObjectiveEvidenceRequest` is not an opaque nested object. Its exact key set is
-`runId`, `packId`, `packDigest`, `nodeId`, `fen`, `objectiveState`, `evidenceRefs`, `policyConfig`.
-The parser validates the closed six-member objective-state union; the closed `seedMode`; the closed
-`locus` keys and execution locus; and every exact `{id,version}` engine/model member. It recursively
-copies and freezes every object and array before branding the outer job. Missing/extra nested keys,
-invalid union members and crossed run/node/FEN fail. Mutating any caller-owned nested array or
-policy object after parsing cannot move the accepted digest.
-
-The production parser adds state-specific exact-key and presence checks that SQLite cannot express
-without duplicating the union. `running` alone requires both lease fields. `retry_wait` requires
-`next_attempt_at` plus one exact `retry_basis_json` arm: provider unavailable carries the exact
-`ProviderOperationAvailability` and its optional **real** `ProviderFailureReceipt`; shutdown carries
-no provider failure; expired lease may retain the last real failure. It never synthesizes a failure
-receipt. Settled states require one exact `settlement_json` arm and no retry basis:
-
-```ts
-type UnavailableProviderAvailability = Extract<
-  ProviderOperationAvailability,
-  { readonly state: "unavailable" | "cached_exact_only" }
->;
-
-type DurableEvidenceSettlement =
-  | { readonly kind: "success";
-      readonly payload: EvidencePayload;
-      readonly objectiveProposal: ObjectiveEvidenceProposal | null;
-      readonly acquisition: ProviderAcquisitionReceipt }
-  | { readonly kind: "empty";
-      readonly reason: "capability_not_configured" | "not_applicable" }
-  | { readonly kind: "empty";
-      readonly reason: "provider_unavailable";
-      readonly availability: UnavailableProviderAvailability;
-      readonly failure?: ProviderFailureReceipt }
-  | { readonly kind: "unavailable";
-      readonly availability: UnavailableProviderAvailability;
-      readonly failure?: ProviderFailureReceipt }
-  | { readonly kind: "cancelled";
-      readonly reason: "caller" | "superseded" };
-```
-
-`settled_success` requires the success arm and `result_seq`; `settled_empty` requires an empty arm
-and no sequence; `settled_unavailable` requires the unavailable arm and no sequence; `cancelled`
-requires the cancelled arm; and `consumed` retains the byte-identical success arm and adds
-`consumed_at`. A success stores `objectiveProposal: null` when the upgrader produced none rather
-than omitting the member. Closing and reopening therefore applies the **same validated settled
-bytes**; it never reruns the upgrader. Request bytes are parsed and both canonical job and batch
-digests are rechecked. Unknown/crossed state, origin, consumer, operation, result kind, availability,
-receipt generation or extra field is corrupt storage, not a best-effort job.
-
-The retry union is literal: `{kind:"provider_unavailable",availability,failure?}`,
-`{kind:"shutdown"}`, or `{kind:"expired_lease",failure?}`. Provider unavailability admits only
-`cached_exact_only` or `unavailable`, whose instance set is exactly the compiled singleton provider
-for this job. A failure, when present, is the sealed provider-exchange failure for the same
-exchange operation and normalized job-request digest. The provider-unavailable `empty` arm carries
-the same exact availability/failure authority; the `unavailable` arm has no duplicate `reason`
-field. `capability_not_configured` and `not_applicable` remain the only two-field empty arms. Every
-parsed row also re-derives origin→consumer and request-kind→queued-provider-operation; insertion
-checks are not treated as read authority ([[D2804]]–[[D2806]]).
-
-The strict durable-state protocol is the eleventh-repair authority at
-`tools/d2563-pack-capability-eleventh-author-repair/protocol.typecheck.ts`, superseding the narrower
-ninth-author shape. A `running` arm contains the complete `{jobId, leaseOwner, leaseGeneration,
-jobRequestDigest}` receipt plus expiry ([[D2563]]). A `consumed` arm contains the complete
-`EvidenceApplicationReceiptV1`; no other arm may carry one ([[D2564]]). Missing receipt fields and
-application receipts on admitted rows are compile-time negatives.
-
-Every claim increments `lease_generation` in the same compare-and-swap that changes the row to
-`running` and returns a sealed
-`{jobId, leaseOwner, leaseGeneration, jobRequestDigest}` receipt. Reclaim after expiry increments it
-again even when the owner string is unchanged. Retry, cancellation and settlement require exact
-state plus all four receipt fields; settlement also requires the provider result's own exact
-operation/generation identity. A stale receipt affects zero rows and cannot settle, retry, heal or
-cancel the newer claim ([[D2543]]).
-
-#### Admission identity and replay
-
-The exact author authority is
-`tools/d2524-pack-capability-ninth-author-repair/admission-authority.json`. Job and batch ids are
-generated with `crypto.randomUUID()` on first admission and persisted; the authority declares both
-constructors. They never use a process
-counter and are never regenerated on replay. The uniqueness boundary is
-`(run_id, origin, idempotency_key)`; the key source is origin-specific:
-
-The eleventh author model makes that constructor executable ([[D2569]]): UUID construction occurs
-inside the `BEGIN IMMEDIATE` absence arm, after the unique-key read, once for the batch and once per
-job. The concurrent winner reports those constructions; the loser/replay reports zero and returns
-the stored UUIDs. Fixed candidate ids and a separately asserted constructor name do not satisfy the
-contract.
-
-**[[D2591]]:** that same lock-held worker derives `consumer_id` from the parsed sealed origin with
-one exhaustive function: explicit analysis → `runtime.analysis`, Story completion →
-`review.story_evidence`, run enrichment → `runtime.background_evidence`. Neither a caller nor a
-constant at the insert site supplies it. The concurrency gate runs two simultaneous first flights
-for each origin and proves one winning UUID population, one zero-construction replay, the exact
-stored consumer and no SQL-check failure in all three arms.
-
-| origin | durable idempotency key | canonical batch request |
-|---|---|---|
-| `explicit_analysis` | caller's required, canonical UUID `Idempotency-Key` | caller-ordered 1–16 node/kind/search-bound requests |
-| `story_completion` | SHA-256 of canonical `{schema:"story_evidence@1",branchId,terminalNodeId}` | ordered Story evidence plan for that terminal node |
-| `run_enrichment` | `run_enrichment@1:<nodeId>` | ordered compiled enrichment plan for that immutable node |
-
-An existing key with the equal batch request digest returns the stored batch and job ids without a
-provider call. The same key with different bytes returns typed `IDEMPOTENCY_CONFLICT` and writes
-nothing. Versioning the internal key prefix is the explicit mechanism for a later plan revision;
-changing an implicit producer set under the same prefix fails the digest check. The public analysis
-client creates and retains one key across transport retry. The REST response names `batchId` plus
-the ordered stored jobs.
-
-Standalone admission and every outer run mutation use the same
-`admitEvidenceBatchInTransaction` operation under `BEGIN IMMEDIATE` with the connection's existing
-5-second busy timeout. After the write lock is acquired it selects the unique key. Existing equal
-bytes return the stored batch/jobs; existing unequal bytes roll back with `IDEMPOTENCY_CONFLICT`.
-Only absence generates one candidate batch UUID plus job UUIDs and inserts the complete batch. A
-busy timeout returns the existing typed retryable storage error and writes nothing. Because the
-second writer cannot pass `BEGIN IMMEDIATE` until the winner commits or rolls back, response loss
-and simultaneous first flights have one observable winner; the loser re-reads rather than exposing
-a uniqueness error. The author gate uses two SQLite connections released from one barrier and
-requires the same stored batch id, one child population and one winner marker ([[D2545]]).
-
-Admission is atomic per batch. Explicit analysis validates every node and all 1–16 job requests,
-then inserts the batch and **all 1–16 jobs in one transaction** before returning 202. Validation,
-constraint, storage or injected failure at any ordinal leaves zero batch/job rows. A replay after
-response loss returns the committed batch; it cannot insert a prefix or duplicate it. If capability
-support is absent from the startup projection, explicit analysis returns typed unavailable before
-admission, while Story/run enrichment take their compiled honest-empty arm without pretending a
-job exists. Transient health never makes an admitted row disappear: the worker observes it through
-the provider operation result.
-
-#### The one run/job transaction owner
-
-The application-database storage adapter exposes the following closed mutation authority; service
-and worker code may not sequence the underlying writes themselves:
-
-| operation | one-transaction effects |
-|---|---|
-| `admitEvidenceBatch` | idempotency lookup/conflict plus one whole explicit/Story batch and every admitted job |
-| `commitRunMutationWithEvidence` | run lease/CAS, complete run event bytes, and zero-to-eight enrichment batches (one per new eligible node) with every job |
-| `commitRewindWithEvidenceCancellation` | run lease/CAS, rewind event, and the exact pruned-node durable-state transitions below |
-| `settleEvidenceJob` | lease/generation/request check, exact settlement, and allocation/increment of the durable per-run result counter where required |
-| `applyEvidenceAndConsumeJob` | parsed before-run + run lease/CAS, internally derived core/objective/recorded-guard suffix, parsed after-run + retained journal, receipt, and transition of that same success row to consumed |
-
-Learner move, opponent ply and grouped seed creation derive the complete `run_enrichment` batch
-from the post-mutation immutable node(s) before calling `commitRunMutationWithEvidence`. There is no
-post-save enqueue loop. The pure runtime `rewind` result reports pruned node ids but performs no queue
-side effect; the service passes both run result and ids to `commitRewindWithEvidenceCancellation`.
-If either run CAS/save or any job write fails, both the old run and old job set remain. This removes
-the current observer-before-save ordering rather than trying to compensate after it.
-
-For a pruned node, rewind's transition table is total: `admitted`, `running`, `retry_wait` and
-`settled_success` transition to `cancelled` with reason `superseded`; a running transition increments
-the lease generation and clears its lease; `settled_empty`, `settled_unavailable`, `cancelled` and
-`consumed` are retained unchanged as terminal audit rows. The `settled_success` transition is the
-old in-memory “staged” case and cannot later apply. No durable `pending` or `staged` state exists.
-Cancellation uses the same exact lease receipt when a worker currently owns the row; a zero-row CAS
-forces the transaction to re-read/retry rather than committing the rewind against an unfenced
-worker ([[D2546]]).
-
-**[[D2567]]/[[D2592]]:** this is a row transition, not a state-label lookup. Each cancellable row writes the
-`{kind:"cancelled",reason:"superseded"}` settlement, clears lease/retry/application fields and
-`result_seq`, and a running row additionally increments `lease_generation`. Each retained terminal
-row is returned byte-identically. Tests compare every changed or preserved field; projecting only
-the destination state cannot satisfy criterion 26. Clearing a visible `result_seq` never rewinds
-`evidence_result_sequences.next_result_seq`: `settleEvidenceJob` initializes that row at 1, reads
-and increments it under the same `BEGIN IMMEDIATE` transaction as the job CAS, and assigns the
-pre-increment value. The allocator row is retained until its run is deleted. Neither
-`MAX(result_seq)` nor a process counter is permitted. The permanent sequence fixture closes and
-reopens SQLite between settle → rewind → settle and requires `1 → 2`.
-
-Workers claim with a compare-and-swap lease and increment `attempt_count`. Success atomically writes
-the complete success settlement and per-run `result_seq`; the existing evidence page reads
-unconsumed successful rows. Applying evidence derives every event, including an objective event,
-only from that stored settlement and marks the same row consumed in one transaction. That
-transaction stores this exact receipt in `application_receipt_json`:
-
-```ts
-interface EvidenceApplicationReceiptV1 {
-  readonly schema: "evidence_application_receipt@2";
-  readonly jobId: string;
-  readonly runId: string;
-  readonly nodeId: string;
-  readonly fromRevision: number;
-  readonly toRevision: number;
-  readonly firstEventSeq: number;
-  readonly lastEventSeq: number;
-  readonly eventDigest: `sha256:${string}`;
-  readonly transitionDigest: `sha256:${string}`;
-}
-```
-
-The range is non-empty and contiguous; its canonical event-array digest uses UTF-8 prefix
-`chess-tabiya/evidence-application/v1\0`; every event is in the same run/revision transition and
-the evidence reference derived from `jobId` occurs in the attached event and any objective event.
-The transition digest covers the exact job/run ids, before/after revisions and run-image digests,
-event range and event digest under prefix `chess-tabiya/evidence-transition/v1\0`; the transition
-table retains both parsed run images and their digests, so current-image plus receipt cannot be
-rewritten together while the authoritative predecessor is discarded.
-Only `consumed` has a receipt, and every consumed row validates its exact event range against the
-retained run. Replay after response loss returns the stored receipt without appending events; a
-missing, crossed or digest-mismatched range is corrupt storage, never permission to reapply
-([[D2547]]). Provider
-unavailability first enters `retry_wait` under the compiled operation policy with exact availability
-and any real failure retained. When the bound is exhausted, `runtime.analysis` becomes
-`settled_unavailable`; Story and run enrichment become `settled_empty` with reason
-`provider_unavailable`. Both retain availability and optional real failure for diagnostics. No empty
-settlement mints evidence.
-
-**[[D2568]]/[[D2587]]/[[D2589]]:** there is no public receipt constructor accepting revisions or
-events. `applyEvidenceAndConsumeJob` alone receives the parsed CAS-owned before-run, stored job and
-stored success. It constructs `evidence.attached`; constructs the exact
-`objective.state_changed` event only for a non-null stored proposal; invokes the registered
-`applyRecordedEngineGuard` authority when the before-run policy is `immediate_guard`; appends that
-authority's complete zero-or-more `feedback.generated` result; saves the one-revision after-run;
-then derives the exact appended journal suffix and receipt from those two retained snapshots. An
-`immediate_guard` application cannot omit even an honestly empty guard outcome. The after-run must
-retain the entire before-run journal byte-for-byte, and each new sequence begins exactly after its
-tail. Another run, node, ref, payload, proposal, guard invocation, revision or journal prefix fails
-inside the transaction. Replay returns the stored sealed result; a spread/copy cannot satisfy the
-transaction-result assertion.
-
-On process restart, `admitted` and `retry_wait` rows remain eligible, and an expired `running` lease
-returns to `retry_wait` with its exact retry basis/history retained. Provider-result cancellation for
-shutdown also maps to a shutdown retry basis; shutdown is never terminal `cancelled`. Only a caller
-or one atomically committed superseding run-graph change may terminally cancel. A late result whose
-lease, generation, job request digest or node is stale is discarded and cannot heal the provider or
-settle the job. This is the before/after-202 distinction [[D2520]] required: provider loss before
-durable admission can still produce a synchronous refusal; provider loss after admission is a
-durable job outcome visible after restart.
-
-The sealed provider interval is inside the lease interval: both its database-observed `requestedAt`
-and `retrievedAt` are no later than the exact stored lease expiry, retrieval is no earlier than
-request, and settlement still observes a live matching lease from the database clock. A response
-that finishes after expiry is stale even when the settlement transaction starts before another
-worker reclaims the row ([[D2807]]).
 
 **Gate F clause 5 — what it now needs, stated because it was blocked on this question.** Clause 5
 (*"pack capabilities and deprecations have a compatibility policy"*) is **unblocked**: the policy is
@@ -1881,625 +1263,15 @@ derivation only to *check* it (criterion 3: the declared set must equal the deri
 derivation function an unversioned root — a derivation bug is silent, where a mismatch between
 declared and derived is loud. The derivation is retained as the check, not as the record.
 
-## Fresh-return author obligations (2026-08-30) — discharged by this amendment
-
-This live RFC owns the next author pass; the review rows are not free-floating defects:
-
-- [[D2050]] — replace the public ID regex and every parser/criterion positive with one inventory-
-  complete base-id grammar and the structured integer/semver result.
-- [[D2051]] — publish the complete applicability mapping as reviewed author bytes plus digest,
-  rather than asking implementation to create its own authority.
-- [[D2052]] — make the strict schema keyword represent every member of a multi-value enum (or
-  normalize to annotated const branches), with missing/duplicate/wrong-member negatives.
-- [[D2053]] — replace both prose evaluator roots with exact exported symbols and live-reader checks.
-- [[D2054]] — point weakened-Stockfish refusal at its protected-design anchor rather than treating
-  `AGENTS.md` as protected intent.
-- [[D2055]] — replace finite literal pointers for recursive/reused vocabularies with schema-aware
-  member selectors evaluated over the finite pack instance.
-
-The author pass inverts `make pack-capability-fresh-review`, preserves the prior 7 + 11 arms and
-requests another independent review. It does not implement lane 0.30 or touch corpus bytes.
-
-## Second-fresh-return author obligations (2026-08-30) — discharged by this amendment
-
-This live RFC owns the seven new return seams:
-
-- [[D2070]] — make schema/stamp/corpus landing atomic or specify a real versioned compatibility
-  transition that can keep both implementation and content gates green.
-- [[D2071]] — separate plan-shape verification from apply-readiness refusal.
-- [[D2072]] — publish author-owned post-migration schema bytes or an exact patch/post-image digest.
-- [[D2073]] — publish complete member→source/dependency authority, including helpers, tables and
-  multiple interpretation sites.
-- [[D2074]] — exclude capability metadata from semantic applicability by an exact independent
-  authority so the stamp never derives from itself.
-- [[D2075]] — define retained per-version declarations, one current version and acyclic successor
-  history.
-- [[D2076]] — replace schema-ordinal public ids with stable authored/discriminator identities.
-
-This author pass inverts `make pack-capability-second-fresh-review`, preserves the previous
-7 + 11 + 6 arms, runs full verification and requests another independent review. It does not
-implement lane 0.30 or mutate corpus bytes; the staged authority exists solely so a later accepted
-implementation can land without violating D560.
-
-## Third fresh independent return (2026-08-30)
-
-The third fresh buildability review returned this RFC on [[D2152]], [[D2153]], [[D2154]],
-[[D2155]] and [[D2156]]. The exact evidence and
-repair obligations are in
-`planning/pack-capability-contract/third-fresh-independent-review-2026-08-30.md`; the executable
-reproducer is `make pack-capability-third-fresh-review` (5/5).
-
-1. The sealed 0.27→0.30 patch must become a legal cumulative transition containing the already-owned
-   0.28 and 0.29 post-images, or serialize behind their exact accepted patches. It may not discard
-   predecessor claims or invalidate its own source digest by landing after them.
-2. The 373 applicability decisions must exist as literal checked rows, or as the output of a
-   deterministic generator with a complete independently recomputable source inventory and digest.
-3. All unconditional meaning roots and convention tables need exact module-qualified symbol sites
-   and transitive dependencies, with zero/multiple matches failing.
-4. External packages that contribute chess semantics—including `chessops`—must be exact
-   lockfile-resolved meaning sources inside the semantics digest.
-5. A withdrawn declaration must retain a typed successor when one exists, and the planner must
-   follow that edge; lawful no-successor withdrawal remains explicit and cycle-safe.
-
-This is an author return, not an implementation checkpoint. The D560 corpus hold remains whole and
-fresh independent review is required after repair.
-
-## Fourth author repair (2026-08-30) — D2152–D2156
-
-The five third-review blockers are repaired without implementing any schema or product byte:
-
-- [[D2152]] — the transition artifact is now a three-stage cumulative authority with exact 0.28,
-  0.29 and 0.30 source/post-image digests and owner documents. The final image asserts every
-  predecessor field before admitting the capability stamp.
-- [[D2153]] — the applicability artifact publishes its complete 397-row target source inventory;
-  `make pack-capability-author-repair` deterministically expands it, proves identity collision
-  freedom and recomputes both mapping digests.
-- [[D2154]] — all 14 unconditional rows, their dependencies and all 16 constant/convention rows use
-  exact repository-relative `module#symbol` sites. The author contract fails zero or multiple
-  declarations.
-- [[D2155]] — `package_dependency` is a first-class meaning source. The authority pins
-  `chessops@0.15.1`, its exact integrity, lock key and four workspace manifest specifiers, with an
-  able-to-fail upgrade fixture.
-- [[D2156]] — withdrawal is a closed successor/no-successor union; the planner follows successor
-  edges and retains typed refusal debt when no migration exists.
-
-The repaired author contract preserves the prior 7 + 11 + 6 + 7 arms and adds five able-to-fail
-controls. The historical third-review reproducer is not rewritten. Fresh independent review still
-gates acceptance and implementation; [[D560]] still holds the 92-pack apply.
-
-## Fourth fresh independent return (2026-08-30)
-
-The fourth fresh buildability review returned this RFC on [[D2334]]–[[D2339]]. Exact evidence and
-repair requirements are in
-`planning/pack-capability-contract/fourth-fresh-independent-review-2026-08-30.md`; the executable
-reproducer is `make pack-capability-fourth-fresh-review` (6/6).
-
-1. [[D2334]] — publish and check the exact 92 legacy path/raw-digest rows. A count plus opaque digest cannot
-   implement a file allowlist, and the author contract must recompute it from those rows and the
-   current sealed bytes.
-2. [[D2335]] — separate software-transition acceptance from post-apply corpus acceptance. The former must pass
-   with the exact sealed unstamped legacy population; only the latter may require all 92 canonical
-   `requires` arrays and legacy-reader removal.
-3. [[D2336]] — make every unconditional applicability row carry an exact structured `CapabilityId` and selector
-   shape. No generator may silently assume version 1 from a base string.
-4. [[D2337]] — use one declaration/history identity algebra in specification and fixtures. The author fixture's
-   `{subjectId,id:CapabilityId}` rows currently cannot inhabit `CapabilityDeclaration`'s
-   `{id:string,version}` shape.
-5. [[D2338]] — publish one closed, shared `packCapabilities` response row with separate semantic disposition and
-   deployment reachability, and bind the server producer plus web parser/type to it.
-6. [[D2339]] — derive transient checks from a closed operation→capability binding or the internally compiled
-   pack requirement set. A caller-provided `requiredIds` list cannot be the authority that proves
-   itself complete.
-
-This is an author return, not an implementation checkpoint. The D560 corpus hold remains whole and
-fifth fresh independent review is required after repair.
-
-## Fifth author repair (2026-08-31) — D2334–D2339
-
-- [[D2334]]: transition artifact v3 contains the exact independently recomputed 92 sorted
-  path/raw-digest rows; population movement, edits, deletion, rename/path swap and a 93rd member fail.
-- [[D2335]]: pre-D560 software admission proves the exact legacy set plus projected migrations;
-  post-D560 corpus admission requires real canonical stamps and legacy-reader deletion. Neither gate
-  may impersonate the other.
-- [[D2336]]: applicability authority v2 stores all 14 unconditional rows as literal
-  `always` selectors with structured integer-version capabilities.
-- [[D2337]]: declarations use one `subjectId` plus structured `CapabilityId` identity; successor,
-  refusal and cycle fixtures compile with `satisfies CapabilityDeclaration`.
-- [[D2338]]: one closed safe public projection separates semantic disposition from deployment
-  reachability and is the sole server producer/web parser authority.
-- [[D2339]]: operation bindings derive requirements from registered pack/fixed registry facts;
-  routes cannot pass ids, every mutation belongs to provider-bound or explicit-no-provider census,
-  and first-flight/replay ordering is closed.
-
-`make pack-capability-author-repair` passes the cumulative three-stage/397-mapping author contract,
-six new executable repair arms and strict TypeScript positive/negative cases. This is author repair,
-not acceptance: no production/schema/API/client/corpus/digest byte changed, D560 remains held, and a
-fifth fresh independent buildability review is mandatory.
-
-## Fifth fresh independent return (2026-08-31)
-
-The [[D2334]]–[[D2339]] repairs survive, but the new operation/public boundary returns on three
-buildability seams. [[D2429]]: `run.create` is fixed to registered-pack admission even though the
-live contract creates pack-less Position sessions. [[D2430]]: the eleven-member dotted operation
-union, twenty-two snake-case no-provider actions and coarser REST route branches have no typed
-method/route/discriminant projection joining them, so the promised exhaustive census cannot be
-implemented as specified. [[D2431]]: the shared public row omits deployment `availability`, while
-its parser is required to distinguish a lawful provider transient from an impossible local/build-
-time transient.
-
-Repair creation by exact session source, publish one generated route-branch operation map, and
-either carry the safe availability mode or separate structural parsing from registry-backed
-semantic validation. Exact review and reproducer:
-`planning/pack-capability-contract/fifth-fresh-independent-review-2026-08-31.md` and
-`make pack-capability-fifth-fresh-review`. No implementation is authorized before another fresh
-review.
-
-## Sixth author repair (2026-09-01)
-
-The fifth return is repaired without changing production/schema/API/client/corpus bytes.
-[[D2429]] is closed at the author boundary by three distinct creation operations and one sealed
-`CreateSessionCapabilitySource`: pack creation derives the complete registered-pack set, while
-position and imported creation derive only their policy/runtime set from registry facts. Empty is a
-possible computed result, never a route default. [[D2430]] is closed by the 35-operation,
-32-route-row `CAPABILITY_ROUTE_BRANCHES` authority in §5.1: method, route template, action and the
-four closed body discriminants generate the operation union, binding table and live dispatcher
-resolution together. The snake-case side census is deleted rather than translated. [[D2431]] is
-closed by carrying the safe four-member `availability` class on the public row; the shared parser
-can now structurally reject a transient non-provider row without importing or duplicating the
-private deployment registry.
-
-`make pack-capability-sixth-author-repair` exercises the three repaired seams and strict positive /
-negative TypeScript cases. `make pack-capability-author-repair` retains the cumulative transition,
-applicability and six surviving fifth-repair arms. This remains a draft: another fresh independent
-buildability review must attack the creation resolver, route-branch exhaustiveness and public-wire
-privacy/semantics before acceptance or implementation. [[D560]] still holds the 92-pack apply.
-
-## Sixth fresh independent return (2026-09-02)
-
-The structured creation-source union and safe public availability field survive, and every earlier
-author contract remains green. The fresh source join returns the operation boundary on
-[[D2509]]–[[D2512]]:
-
-1. `POST /studio/drafts/:draftId/register` is not a live route; Pack Studio registers at
-   `POST /packs/drafts/:draftId/register`.
-2. [[D2510]] — a POST/PUT-only, 32-route table cannot be the complete capability-sensitive operation
-   population while rated games, draft playtests, repertoire-gap runs, provider-bearing GETs,
-   story evidence enqueue and DELETE share revocation exist outside it; flip and duplicate also
-   create sessions while declared `none`.
-3. [[D2511]] — `run.group` is not provider-free: `human_replies` calls `select` and `engine_top_n` calls
-   `enumerate` before durable mutation, but `/source` is absent from the branch authority.
-4. [[D1077]] defines two absence causes, not one response. The proposed blanket transient 503
-   erases the shipped `honest_empty` arm and contradicts consumers such as branch decidedness.
-
-Exact evidence: `planning/pack-capability-contract/sixth-fresh-independent-review-2026-09-02.md`;
-`make pack-capability-sixth-fresh-review` passes 4/4. A seventh author repair and another fresh
-independent review are required before acceptance or implementation.
-
-## Seventh author repair (2026-09-02)
-
-The sixth return is repaired without changing production/schema/API/client/corpus bytes.
-[[D2509]] uses the exact Pack Studio route and retains `/studio/drafts` as a negative. [[D2510]]
-replaces the self-defined 35-operation table with a checked 58-branch author image: all 36
-`parseRunRoute` actions and their 48 supported method/body branches, plus ten exact external
-creation/registration/provider/public/mutation routes. The implementation must derive that
-population from co-located production declarations and independently census the router, provider
-gateways and run-creation storage sites.
-
-[[D2511]] splits all four group sources, with only `human_replies` and `engine_top_n` entering the
-opponent consumer before any write. [[D2512]] separates the owner's two absence causes from the
-compiled consumer effect: `unavailable` returns retryable 503, `honest_empty` returns a typed empty
-or unresolved projection, and `available` uses its declared deterministic fallback. No route may
-copy this value. The trace also found [[D2513]]: provider operations are valid on Position and
-imported sessions, so `run_session_operation` derives fixed operation requirements, session policy
-requirements and pack requirements only when a pack exists.
-
-The exact author bytes are
-`tools/d2509-pack-capability-seventh-author-repair/operation-authority.json`; the executable and
-strict type controls are `make pack-capability-seventh-author-repair`. Earlier author controls
-remain cumulative. This is still draft authoring: another fresh independent review must attack the
-AST population boundary, nested creation discriminants and all three provider-off effects before
-acceptance or implementation.
-
-## Seventh fresh independent return (2026-09-02)
-
-The author repair's 36-action/48-run-branch synchronous image and its exact group/session fixes
-survive. Fresh production-boundary review returns the contract on three outer seams:
-
-1. [[D2518]] — `GET /shared/:token` calls the same `publicStory`/Story-evidence path as the declared
-   API route but is absent from the ten external branches, proving that population is still not
-   derived set-equal from the router.
-2. [[D2519]] — `EvidenceJobQueue` calls Stockfish through `EvidenceExecutor.execute` and Syzygy
-   through `TablebaseSource.probe`, yet the provider-call census contains no worker site despite
-   analysis, moves, imports and Story feeding it.
-3. [[D2520]] — analysis returns 202 after enqueue and records provider failure later inside the
-   worker; a request-synchronous `unavailable → 503/no write` effect cannot represent provider loss
-   after admission or job recovery in another process lifetime.
-
-Exact evidence:
-`planning/pack-capability-contract/seventh-fresh-independent-review-2026-09-02.md`;
-`make pack-capability-seventh-fresh-review` passes 3/3. An eighth author repair must derive both
-public Story branches, close queued provider operations and specify admitted versus settled job
-outcomes before another fresh independent review, acceptance or implementation.
-
-## Eighth author repair (2026-09-02)
-
-[[D2518]] is closed at contract tier by resolving a shared token once and declaring two disjoint
-HTML branches: `story_read` aliases the existing `story.public` operation and `session_join` is the
-local `shared.join_page` operation. The composed route image is now 48 run branches plus 12 external
-branches, 60 total over 59 unique HTTP operation ids.
-
-[[D2519]] is closed by a separate queued-operation population: exactly
-`evidence.stockfish_analysis` and `evidence.tablebase_probe`, joined to the only two worker gateway
-calls and three sealed enqueue origins. [[D2520]] is closed at contract tier by §5.2's durable
-`evidence_jobs` algebra. A request admits work; a leased worker settles it. Provider failure after
-202 is retained as retry/empty/unavailable, expired leases recover after restart, and shutdown
-cannot erase a job. Successful payload, acquisition receipt, staged sequence and consumption share
-one row and transactional boundary with event application.
-
-The exact amendment is
-`tools/d2518-pack-capability-eighth-author-repair/operation-amendment.json`, digest-pinned to the
-seventh-author base. `make pack-capability-eighth-author-repair` passes three able-to-fail author
-controls plus strict TypeScript, and the cumulative author contract includes it. This repair adds a
-migration position, not a migration number; no production/storage/schema/API/client/corpus byte
-changed. Another genuinely fresh independent review must attack token dispatch, worker population,
-origin spoofing, lease recovery and cross-transaction crash states before acceptance or
-implementation.
-
-## Eighth fresh independent return (2026-09-02)
-
-The token-scope and queued-provider populations survive. Fresh review returns the durable job
-contract on six deeper boundaries:
-
-1. [[D2524]] — `StagedEvidence.objectiveProposal` reaches `applyEvidence` but has no durable result
-   field, so restart loses or recomputes part of the settled result.
-2. [[D2525]] — provider-health permits an `unavailable` result without a fresh failure receipt,
-   while F3 requires failure data in every retry/unavailable state.
-3. [[D2526]] — automatic move enrichment is admitted after the run save, so a crash can commit the
-   node and lose its job.
-4. [[D2527]] — analysis is one 1–16-node HTTP batch but the contract admits and tests one row at a
-   time, allowing invisible prefixes.
-5. [[D2528]] — job id/request digest has no persistent origin-specific idempotency key or dedupe
-   grain, so response-loss/restart can duplicate provider calls and evidence.
-6. [[D2529]] — rewind cancels queue work before the rewind save; a storage fault cancels work for a
-   mutation that never committed.
-
-Exact evidence:
-`planning/pack-capability-contract/eighth-fresh-independent-buildability-review-2026-09-02.md`;
-`make pack-capability-eighth-fresh-review` passes 6/6. A ninth author repair must define the full
-settled result, exact no-failure-unavailable arm, batch/idempotency identities, and atomic
-run↔job mutation boundaries before another review, acceptance or implementation.
-
-## Ninth author repair (2026-09-02)
-
-The six returned seams are repaired at contract tier only. [[D2524]] replaces disconnected payload
-columns with one exact settlement union whose success arm contains payload, acquisition and
-`objectiveProposal` value-or-null; apply consumes those stored bytes without rerunning the upgrader.
-[[D2525]] carries the complete upstream unavailable availability and optional real failure in retry,
-empty and unavailable arms, so the job layer has no reason or permission to manufacture a receipt.
-
-[[D2527]] and [[D2528]] add the batch authority and three origin-specific key sources. Explicit
-analysis atomically admits all 1–16 requests under a validated caller idempotency key; Story and
-enrichment use versioned identities derived from immutable branch/node facts. Persistent UUIDs are
-returned on equal replay, while an unequal digest under the same scope refuses. [[D2526]] and
-[[D2529]] put run mutation plus enrichment and rewind plus cancellation behind two closed storage
-operations; runtime rewind loses its queue side effect and no service call may save then enqueue.
-
-The exact author bytes are
-`tools/d2524-pack-capability-ninth-author-repair/admission-authority.json` and its strict protocol
-types. `make pack-capability-ninth-author-repair` passes six able-to-fail transaction/replay controls
-plus TypeScript negative cases; the eighth author controls remain green. The historical eighth
-fresh-review reproducer now rejects the four repaired contract absences and still observes the two
-expected unimplemented production orderings. No
-production, schema, migration, API, storage, content, pack or digest byte changed. Another genuinely
-fresh independent review must attack result completeness, optional-failure parsing, concurrent
-batch replay, internal-key stability and every transaction fault boundary before acceptance or
-implementation.
-
-## Ninth fresh independent return (2026-09-02)
-
-The complete settlement, optional real failure, origin-specific replay keys and joined run/job
-transaction direction survive. Fresh review returns six durable proof boundaries:
-
-1. [[D2542]] — child `run_id`/`origin` values are not relationally bound to their parent batch;
-2. [[D2543]] — stale-worker refusal names a lease generation the schema cannot store;
-3. [[D2544]] — batch/job request digests have no literal canonical preimage or byte authority;
-4. [[D2545]] — concurrent same-key admission and persisted batch UUID construction are prose-only;
-5. [[D2546]] — rewind cancels conceptual `pending/running/staged` states rather than the durable
-   state union; and
-6. [[D2547]] — consumed rows retain no run revision/event-range/digest receipt for applied events.
-
-Exact evidence:
-`planning/pack-capability-contract/ninth-fresh-independent-buildability-review-2026-09-02.md`;
-`make pack-capability-ninth-fresh-review` passes 6/6. A tenth author repair must close the composite
-batch identity, exact request image, lease fence, two-connection winner/loser protocol, durable
-rewind transition table and application receipt before another fresh review, acceptance or
-implementation.
-
-## Tenth author repair (2026-09-02)
-
-The ninth return is repaired at contract tier only. [[D2542]] adds a composite batch identity and
-requires exact, contiguous child equality with the canonical ordered batch request. [[D2543]] adds
-a monotone lease generation to every claim receipt and requires the same four-field receipt at
-retry, cancellation and settlement. [[D2544]] closes the job and batch request types and their
-separate canonical digest domains.
-
-[[D2545]] gives both stored identities one UUID constructor and specifies `BEGIN IMMEDIATE` admission
-under the existing busy timeout: the second connection waits, then re-reads the committed winner.
-[[D2546]] replaces the conceptual rewind vocabulary with a total transition over all eight durable
-states. [[D2547]] binds consumption to one non-empty contiguous run-event range, revision pair and
-canonical event digest; response-loss replay returns that stored receipt.
-
-`make pack-capability-tenth-author-repair` exercises all six seams, including two real SQLite
-connections released from one barrier. The retained eighth and ninth author targets remain part of
-the buildability proof. No production, schema, migration, API, storage, content, pack or protected-
-design byte changed. Another genuinely fresh independent review must attack the exact SQL/parser
-join, concurrent loser behavior, lease rollover, every rewind source state and receipt reload before
-acceptance or implementation.
-
-## Tenth fresh independent return (2026-09-04)
-
-The tenth repair's column-level composite foreign key, durable SQL lease counter, separate digest
-domains, two-connection lock ordering, eight-state vocabulary and contiguous event-range check all
-survive. Fresh review returns seven deeper executable boundaries:
-
-1. [[D2563]] — the retained strict `running` protocol still omits lease generation and request
-   digest, so code can compile without the four-field lease receipt;
-2. [[D2564]] — its `consumed` arm still omits the application receipt entirely;
-3. [[D2565]] — request digests accept arbitrary objects because the author image has no closed v1
-   parser and still types batch jobs as `unknown`;
-4. [[D2566]] — the composite foreign key binds duplicated columns but the demonstrated image does
-   not join batch columns to batch request values, child columns, indexed job request or immutable
-   node/FEN;
-5. [[D2567]] — rewind is modeled as string-to-string state mapping and cannot observe lease clear,
-   generation increment, cancellation settlement or preserved terminal bytes;
-6. [[D2568]] — application receipts validate only a non-empty contiguous sequence, accepting
-   reversed revisions and events unrelated to the claimed run/node/job; and
-7. [[D2569]] — the concurrent gate supplies fixed batch/job ids, so its adjacent declaration of
-   `crypto.randomUUID()` is never executed.
-
-Exact evidence:
-`planning/pack-capability-contract/tenth-fresh-independent-buildability-review-2026-09-04.md`;
-`make pack-capability-tenth-fresh-review` passes 7/7. A bounded eleventh author repair must make the
-retained protocol, parsers and transaction models the same authority as the prose before another
-fresh review, acceptance or implementation.
-
-## Eleventh author repair (2026-09-04)
-
-[[D2563]] and [[D2564]] are closed by one superseding strict durable-state protocol: a running row
-cannot compile without its full generation-bound lease receipt, and a consumed row cannot compile
-without its exact application receipt; no other state admits that receipt. [[D2565]] and [[D2566]]
-are closed by branded exact job/batch parsers shared by digest writer and verifier, plus a complete
-batch-row → batch-request → indexed child-row/request → immutable node/FEN join.
-
-[[D2567]] replaces the label-only rewind model with complete row transitions, including running
-generation fencing, lease/retry/result cleanup, the exact superseded settlement and byte-identical
-terminal preservation. [[D2568]] makes receipt construction consume the stored success and exact
-forward run event array, using the shipped engine/tablebase evidence-reference constructors.
-[[D2569]] moves UUID calls inside the lock-held absence branch and makes the concurrent winner/loser
-fixture observe two winner constructions versus zero loser constructions for a one-job batch.
-
-`make pack-capability-eleventh-author-repair` passes six executable groups plus strict TypeScript;
-every prior author control remains required. No production, schema, migration, API, storage, pack,
-content or protected-design byte changed. Another genuinely fresh independent review must attack
-the joined model before acceptance or implementation, and [[D560]] remains whole.
-
-## Eleventh fresh independent return (2026-09-04)
-
-The eleventh repair's strict lease/consumption union, outer request-key closure, batch/child request
-joins, row-level rewind and winner-only UUID construction survive. Fresh production-boundary and
-SQLite review returns six deeper seams:
-
-1. [[D2587]] — valid `immediate_guard` application can append `feedback.generated`, which the exact
-   one/two-event receipt rejects;
-2. [[D2588]] — `objectiveRequest` is neither parsed exactly nor recursively immutable, so one
-   branded request can change digest after admission;
-3. [[D2589]] — caller-supplied revisions/events can mint a receipt without an actual retained run
-   transition or journal suffix;
-4. [[D2590]] — a bare node/FEN map carries no run identity and accepts an equal foreign snapshot;
-5. [[D2591]] — the executable admission worker hard-codes `runtime.analysis`, so Story and
-   enrichment violate the exact origin/consumer SQL check; and
-6. [[D2592]] — rewind clears the only stored result sequence, permitting reuse because no durable
-   monotone allocator exists.
-
-Exact evidence:
-`planning/pack-capability-contract/eleventh-fresh-independent-buildability-review-2026-09-04.md`;
-`make pack-capability-eleventh-fresh-review` passes 6/6. A bounded twelfth author repair must retain
-every earlier control while joining complete run effects, nested request identity, actual run
-snapshots/transitions, all origins and restart-stable result ordering before another review.
-
-## Twelfth author repair (2026-09-04)
-
-[[D2587]] and [[D2589]] are closed by removing the free receipt constructor. One transaction-owned
-operation consumes a parsed CAS before-run and the stored success, constructs attached/objective
-events, composes the registered guard's complete result for `immediate_guard`, constructs the
-after-run and only then digests the retained appended suffix. [[D2588]] is closed by exact recursive
-parsing and immutable copying of the complete live `ObjectiveEvidenceRequest` including policy
-locus and versioned engine/model members. [[D2590]] replaces the bare node map with one parsed,
-run-identified immutable snapshot.
-
-[[D2591]] derives the child consumer from the sealed origin inside the lock-held winner and races
-first flight/replay for all three origins. [[D2592]] adds `evidence_result_sequences`: allocation
-and increment happen in the settlement transaction, while rewind may clear the visible job
-sequence but cannot erase the allocator. The fixture closes/reopens SQLite between the two
-settlements and observes 1 then 2.
-
-`make pack-capability-twelfth-author-repair` first runs the complete eleventh-author target, then
-passes six new executable controls. No production, schema, migration, API, storage, pack, content
-or protected-design byte changed. A genuinely fresh twelfth independent review is required before
-acceptance or implementation, and [[D560]] remains whole.
-
-## Twelfth fresh independent return (2026-09-04)
-
-The next independent pass returned the repair on [[D2673]], [[D2674]], [[D2675]], [[D2676]] and
-[[D2677]]. Its new guard constructor
-brands caller-supplied emitted events instead of invoking `applyRecordedEngineGuard`; its apply
-operation accepts an unparsed caller job and can attach evidence to a node absent from the run; and
-both apply and settle accept an incomplete success payload/acquisition that the retained settlement
-parser would refuse. The allocator update also checks only job id/run/state, not the required lease
-owner, generation and request digest, leaving the completed lease fields attached.
-
-At admission replay, the worker checks the batch digest but returns the persisted child ids without
-running `validateStoredBatch`; corrupt child request bytes/digests therefore become a successful
-equal-key replay. `make pack-capability-twelfth-fresh-review` retains the full predecessor chain and
-passes 6/6 new falsifiers. Exact receipt:
-`planning/pack-capability-contract/twelfth-fresh-independent-buildability-review-2026-09-04.md`.
-One bounded author repair must compose these authorities before another fresh review or any
-pack/schema/storage implementation.
-
-## Thirteenth author repair (2026-09-04)
-
-The bounded repair closes [[D2673]], [[D2674]], [[D2675]], [[D2676]] and [[D2677]] at contract tier.
-Application no longer accepts emitted events, caller jobs or caller success shapes. One
-SQLite-backed operation loads the settled job and run image, joins the stored request's run/node/FEN,
-parses the stored success, invokes the registered immediate guard internally, derives the journal
-suffix, advances the run CAS, marks the same row consumed and stores the receipt in one transaction.
-
-Settlement now requires the branded job lease's owner, generation and request digest, validates the
-exact success before allocating, and clears the completed lease under the same CAS/counter
-transaction. Admission replay loads every child and runs the complete stored-batch/run validator;
-application replay re-joins its receipt to the retained journal before returning it. `make
-pack-capability-thirteenth-author-repair` retains the complete earlier chain and passes 6/6 repair
-groups. Exact receipt:
-`planning/pack-capability-contract/thirteenth-author-repair-2026-09-04.md`. This remains author
-evidence; another genuinely fresh review gates acceptance and implementation.
-
-## Thirteenth fresh independent return (2026-09-05)
-
-The fresh pass returns the repair on [[D2742]], [[D2743]], [[D2744]], [[D2745]], [[D2746]] and
-[[D2747]]. The branded run/job leases are
-module-global object identities rather than capabilities issued by one exact application database,
-so a lease from database A mutates database B when rows happen to match. Settlement parses a
-success in isolation: an eval request accepts a tablebase payload, crossed acquisition generation
-and request digest, empty provider identities/endpoint and invalid instants. The same parser rejects
-every non-null objective proposal despite criteria 23 and 27 requiring that arm.
-
-Two replay paths remain partial. A consumed job returns successfully after its canonical request
-and settlement columns are corrupted, and its receipt accepts arbitrary from/to revisions because
-only their difference and event range are checked. Batch replay accepts a caller-supplied parsed
-snapshot even after the durable run image has removed the referenced node. `make
-pack-capability-thirteenth-fresh-review` retains the complete predecessor chain and passes 6/6
-falsifiers. Exact receipt:
-`planning/pack-capability-contract/thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
-One bounded author repair must compose these storage, provider, result and replay authorities before
-another fresh review or any pack/schema/storage implementation.
-
-## Fourteenth author repair (2026-09-05)
-
-The bounded repair closes [[D2742]]–[[D2747]] at contract tier. Run and job lease capabilities are
-now issued for one exact application database and fail when crossed into another database with
-coincidentally equal rows. Settlement loads the stored running job inside the transaction, parses
-the complete success result, and joins payload kind/source plus acquisition operation, provider,
-lease generation and normalized request identity before allocating a result sequence or changing
-durable state. The success union now carries an exact immutable objective proposal or literal null.
-
-Consumed replay reparses and rejoins the canonical stored request, settlement and application
-receipt on every read, including the retained before/after run revisions and event journal. Batch
-replay accepts only its durable batch id and loads the authoritative run image inside the storage
-operation. `make pack-capability-fourteenth-author-repair` retains the complete predecessor chain
-and passes 6/6 new repair groups. Exact receipt:
-`planning/pack-capability-contract/fourteenth-author-repair-2026-09-05.md`. This remains author
-evidence; another genuinely fresh review gates acceptance, implementation and the held corpus plan.
-
-## Fifteenth fresh independent return (2026-09-05)
-
-The fresh pass returns the repair on [[D2771]], [[D2772]], [[D2773]], [[D2774]], [[D2775]],
-[[D2776]] and [[D2777]]. Every operation selects a different
-hand-picked subset of `evidence_jobs`; no closed state-specific parser proves which lease, retry,
-result, clock and receipt fields are required or forbidden. A consumed row therefore replays after
-its result sequence and terminal clocks are erased and a lease is resurrected. A lease expired in
-2000 also loads and settles because expiry is never selected or compared with an observed clock.
-
-The claimed complete provider result remains a structural caller object. Arbitrary `values`, a
-crossed actual identity, attacker endpoint and unrelated response digest settle as
-`engine_validated`; the digest is not tied to response bytes or a sealed provider delivery. An
-objective request from `active` accepts a `failed`→`achieved` proposal plus an unrelated evidence
-reference because the join checks only that the expected reference occurs somewhere in the list.
-
-Finally, the receipt is joined only to the mutable current image: rewriting both the run revision
-and receipt from 4→5 to 899→900 passes replay without a retained before-image. Settlement and
-consumption persist the literal word `now`, so their clocks establish no ordering or lease
-validity. `make pack-capability-fifteenth-fresh-review` retains the complete predecessor chain and
-passes 6/6 executable falsifier groups. Exact receipt:
-`planning/pack-capability-contract/fifteenth-fresh-independent-buildability-review-2026-09-05.md`.
-One bounded author repair must compose the real provider-exchange authority, an exhaustive durable
-row parser, internally observed clock and immutable transition journal before another fresh review.
-
-## Fifteenth author repair (2026-09-05)
-
-The bounded repair closes [[D2771]], [[D2772]], [[D2773]], [[D2774]], [[D2775]], [[D2776]],
-[[D2777]] and self-audit [[D2778]] at contract tier. A single exact parser now consumes all 23
-durable job columns and enforces mutually exclusive admitted, running, retry, settled, cancelled and
-consumed shapes on every load. Lease acquisition and settlement read the database clock, reject
-expired or changed expiry, and terminal writes persist canonical observed instants rather than a
-placeholder.
-
-Provider response bytes are parsed canonically through four kind-specific payload algebras; their
-digest, operation, instance, request, generation, exact database-issued lease and stored payload
-remain one subject. Structural copies, invalid values and equal rows under another database fail.
-An objective proposal must begin at the request's exact state and carry exactly the request's prior
-evidence plus this job's evidence reference.
-
-Application now records both parsed run images, their digests, the exact appended event slice and
-one whole transition digest before advancing the current image and consuming the job. Response-loss
-replay loads that record by job identity and rejoins receipt, both images and the retained current
-event slice. Rewriting current image plus receipt no longer invents a historical predecessor.
-`make pack-capability-fifteenth-author-repair` retains the complete predecessor chain and passes 8/8
-new groups. Exact receipt:
-`planning/pack-capability-contract/fifteenth-author-repair-2026-09-05.md`. The provider adapter in
-the executable model is explicitly disposable; production remains dependency-blocked on the
-accepted provider-exchange authority and another genuinely fresh review.
-
-## Sixteenth fresh independent return (2026-09-05)
-
-The next independent pass returns the durable boundary on [[D2802]], [[D2803]], [[D2804]],
-[[D2805]], [[D2806]], [[D2807]] and [[D2808]]. The sealed provider envelope does not join its
-payload to request FEN/depth or provider identity, and JSON round-trip equality admits multiple
-response byte images. Retry basis is arbitrary JSON; empty/unavailable settlements omit their
-required availability/failure authority; and parsed rows can cross origin, consumer and provider
-operation.
-
-A provider response timestamped after the exact lease expiry still settles. More fundamentally,
-the claimed immutable transition is a mutable SQL row protected only by recomputable hashes: a
-coherent rewrite of before/after/current images, revisions, digests, transition and receipt passes
-replay. `make pack-capability-sixteenth-fresh-review` retains the complete predecessor chain and
-passes 7/7 fresh falsifiers. Exact receipt:
-`planning/pack-capability-contract/sixteenth-fresh-independent-buildability-review-2026-09-05.md`.
-Production remains unauthorized pending a bounded repair and another genuinely fresh review.
-
-## Sixteenth author repair (2026-09-05)
-
-The bounded repair closes [[D2802]]–[[D2808]] at contract tier. Engine and tablebase payloads now
-join their exact stored search/FEN operands and compiled provider instance before sealing and again
-at settlement. Raw provider bytes must equal the repository's RFC-8785 canonical image. Retry,
-empty and unavailable values parse as closed unions carrying the same exact provider availability
-and optional sealed failure receipt, while every durable read re-derives both routing maps.
-
-Provider request/retrieval timestamps must fall inside the exact database-issued lease. The
-transition table is now append-only application authority: same-migration SQLite triggers reject
-updates and direct deletion while preserving whole-owner cascade deletion, and replay requires
-those guards before trusting history. `make pack-capability-sixteenth-author-repair` retains the
-complete predecessor chain and passes 7/7 new repair groups. Exact receipt:
-`planning/pack-capability-contract/sixteenth-author-repair-2026-09-05.md`. This remains disposable
-author evidence; another genuinely fresh review and the accepted provider-exchange dependency both
-gate acceptance and production implementation.
-
-## Seventeenth fresh independent return (2026-09-06)
-
-The next independent pass returns the durable provider/job boundary on [[D3002]], [[D3003]],
-[[D3004]], [[D3005]], [[D3006]], [[D3007]] and [[D3008]]. The
-normative success union names `acquisition`, while the executable parser and writer require
-`provider` and reject the declared arm. Provider availability and failure receipts are still
-accepted as structural JSON, and the origin-specific provider-off terminal table is not encoded.
-Retry parsing validates the stored basis but returns the base parser's substituted `{}` bytes.
-
-A loaded lease may begin provider work after its durable expiry changes. Process-global response
-time may place retrieval after the database settlement timestamp, and settlement never rejoins the
-child to its parent batch request, digest, ordinal and count. `make
-pack-capability-seventeenth-fresh-review` retains the complete predecessor chain and passes 7/7 new
-falsifiers. Exact receipt:
-`planning/pack-capability-contract/seventeenth-fresh-independent-buildability-review-2026-09-06.md`.
-Production remains unauthorized pending a bounded repair, another genuinely fresh review and the
-accepted provider-exchange dependency.
+## Review history
+
+Seventeen author-repair / fresh-independent-review rounds ran between 2026-08-26 and 2026-09-06.
+The round-by-round narrative — what each round accepted and what each fresh review returned — moved
+on 2026-09-06 to `planning/pack-capability-contract/review-history.md`; the per-round evidence and
+executable reproducers were already homed in `planning/pack-capability-contract/*.md` and are
+unchanged. The findings from the fifth round onward ([[D2429]]–[[D3008]]) are about material that
+left this document in the same commit; they travel to the successor draft and are **not** discharged
+here.
 
 ## Acceptance criteria
 
@@ -2521,19 +1293,16 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
    its base schema-member source plus every interpreter root and transitive symbol dependency named
    by the author authority; helper-only edits in structural, transition and objective families move
    the intended closed digest, while unused and unreachable same-name symbols do not.
-3. **Declared equals applicable closure, in two sequential gates.** Before D560,
-   `pack-capability-software-check` admits exactly the sealed 92 unstamped rows and proves a
-   read-only projected `requires` array for every one; it never asserts those arrays exist in the
-   current files. After the authorized apply, `pack-capability-corpus-check` requires all 92 authored
-   arrays to byte-equal those projections and requires the legacy reader/manifest to be absent.
-   Neither gate may pass in the other's tree state. The outpost/default fixture derives
-   exactly `guard.defaults`, `objective.state_machine`, `structuralFeature.outpost` and
-   `structuralFeature.pawn_safe_square`; omitting the helper and adding unrelated
-   `structuralFeature.isolated_pawn` fail with distinct under/over-declaration diagnostics.
-   A three-level nested structural expression and the same `$defs` member reached through two root
-   references both derive their exact schema-member capability; an equal scalar attached to a
-   different schema identity does not. Marking recursive schema identities visited globally (and
-   thereby skipping the nested instance) fails the positive control.
+3. **Declared equals applicable closure, in one gate ([[D3033]]).** `pack-capability-check` requires
+   every one of the 92 authored `requires` arrays to byte-equal the read-only projection derived
+   from that document's own content, and requires that no second drill-pack reader exists. The
+   outpost/default fixture derives exactly `guard.defaults`, `objective.state_machine`,
+   `structuralFeature.outpost` and `structuralFeature.pawn_safe_square`; omitting the helper and
+   adding unrelated `structuralFeature.isolated_pawn` fail with distinct under/over-declaration
+   diagnostics. A three-level nested structural expression and the same `$defs` member reached
+   through two root references both derive their exact schema-member capability; an equal scalar
+   attached to a different schema identity does not. Marking recursive schema identities visited
+   globally (and thereby skipping the nested instance) fails the positive control.
 4. **The census has independent roots (§3.1).** `make capability-census` rejects an unannotated
    schema union, orphan interpreter, missing named evaluator, extra declaration and
    count-preserving swapped public ids with the five named error codes. It set-equals identities,
@@ -2612,134 +1381,35 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     *Wrong implementation that passes criteria 1–15 and fails this:* one resolving both states at
     registration, which makes a pack permanently unavailable for the process lifetime because a
     provider was down for two minutes — the precise flexibility the ruling exists to preserve.
-    Routes never supply `requiredIds` or `providerOff`: the generated operation id plus
-    authenticated request/run identity derives the exact set, and its compiled consumer derives the
-    effect. Three transient fixtures prove distinct outcomes: `unavailable` produces a retryable
-    503 envelope with no write, `honest_empty` produces the consumer's typed empty/unresolved
-    response, and `available` produces the declared deterministic fallback. Changing only the
-    consumer registry changes the operation effect; a stale copied route value fails. Pack,
-    Position, imported, rated, playtest, repertoire-gap, flip and duplicate creation select
-    non-interchangeable source arms; crossed source/session-kind fixtures fail. The bounded
-    **60-branch HTTP** image is set-equal to 36/36 parsed run actions, 48 supported run-route branches
-    and twelve external branches over 59 unique HTTP operation ids. Marks, grants, moves, duplicate,
-    group and shared-token scope prove disjoint/total
-    discriminants; an overlap, gap, second binding, new provider gateway call, new run-creation
-    storage site, or new live route/action without a declaration fails independently. Every
-    operation resolves to exactly one registry-derived or explicit-`none` source, and first-flight
-    checks precede first write; replay returns the stored receipt without re-deciding historical
-    reachability.
+    Three transient fixtures prove distinct request-synchronous outcomes: an `unavailable` consumer
+    produces a retryable 503 envelope with no write, `honest_empty` produces the consumer's typed
+    empty/unresolved response, and `available` produces the declared deterministic fallback.
+    Changing only the compiled consumer registry changes the effect; a stale `providerOff` value
+    copied into a route row fails.
 17. **Instruments stay green.** `make verify` passes with shape-only `migration-plan-check`,
     `capability-census` and `capability-check` wired in; CI invokes the same Make targets.
-18. **The staged schema transition is exact and temporary ([[D2070]]–[[D2074]], [[D2152]]).**
+18. **The staged schema transition is exact ([[D2070]]–[[D2074]], [[D2152]], [[D3033]]).**
     Applying the three owner-qualified patches to the committed 0.27 schema produces the sealed
-    0.28, 0.29 and 0.30 bytes/digests in order. The final image contains every predecessor field and
-    a required `requires` key; deleting any graduation/provenance member fails before the 0.30
-    stage is considered. Exactly the sealed 92 path+raw-digest catalogue files may enter the
-    internal 0.27 reader; an edited member, a 93rd file, any upload/API document without a stamp,
-    or caller-supplied path fails. `/requires` and its two grammar definitions emit zero
-    applicability rows. Branch reorder and `$defs` relocation preserve stable ids; a real member
-    rename changes identity and requires a successor. After all 92 migrate, one fixture proves the
-    legacy reader/allowlist are deleted together.
+    0.28, 0.29 and 0.30 bytes/digests in order; each stage's source digest is its predecessor's
+    target. The final image contains every predecessor field and a required `requires` key; deleting
+    any graduation/provenance member fails before the 0.30 stage is considered. `/requires` and its
+    two grammar definitions emit zero applicability rows. Branch reorder and `$defs` relocation
+    preserve stable ids; a real member rename changes identity and requires a successor. The
+    migrating commit rewrites the exact sealed 92-document population — an unmigrated document, a
+    missing row, an edited path or an otherwise-valid 93rd fails — and one fixture proves that no
+    second drill-pack reader and no legacy path allowlist exists anywhere in the tree afterwards.
 19. **Author authorities are inspectable and externally closed ([[D2153]]–[[D2155]]).**
     `make pack-capability-author-repair` recomputes the cumulative target, its literal 397-member
     source inventory, all 397 public mappings and both mapping digests; removing one row fails.
     Every unconditional/dependency/constant site is `module#symbol` and resolves exactly once.
     Every external package reached by semantic AST closure contributes exact manifest pins and a
     lockfile-resolved version+integrity source; mutating the `chessops` version or integrity fails.
-20. **Both public-card scopes are derived, not exception-dispatched ([[D2518]]).** The API Story
-    route and HTML `story_read` branch both resolve `story.public`; the HTML `session_join` branch
-    alone resolves `shared.join_page`/`none`. Token lookup occurs once before capability dispatch.
-    A Story provider failure cannot fall through to join, and a join token never enters Story.
-    Removing either branch, restoring try-Story/catch-join, or adding a third token scope without a
-    branch fails the router census.
-21. **Queued providers are a closed operation population ([[D2519]]).** The two gateway interfaces
-    are set-equal to `evidence.stockfish_analysis` and `evidence.tablebase_probe`; kinds are total
-    and disjoint. The three production enqueue owners construct sealed
-    `explicit_analysis|story_completion|run_enrichment` origins, whose consumer/provider-off pairs
-    are type-fixed. A route-supplied consumer, behavior or operation; a direct provider call; an
-    unclassified kind; or an extra enqueue origin fails independently.
-22. **Admission survives asynchronous settlement and restart ([[D2520]], [[D2527]]).** A configured
-    explicit analysis request commits one batch plus all 1–16 `admitted` jobs before returning 202.
-    The composite `(batch_id,run_id,origin)` reference rejects crossed children; `job_count` and the
-    exact contiguous `0..job_count-1` child population equal the ordered canonical batch request.
-    An injected refusal/fault at every ordinal leaves zero rows. Response loss followed by replay of
-    the equal idempotency key/digest returns the stored batch and ids; a crossed digest returns
-    `IDEMPOTENCY_CONFLICT` without writes. Fixtures kill the provider (a) before admission and
-    observe synchronous refusal/no row and (b) after 202 and observe a durable retry followed by
-    `settled_unavailable`; the latter remains visible after closing and reopening SQLite.
-23. **The durable settled value is complete ([[D2524]], [[D2525]]).** Success persists payload,
-    acquisition and `objectiveProposal` value-or-null as one parsed settlement. Close/reopen before
-    apply produces byte-identical evidence and objective events with zero upgrader calls. A lawful
-    `unavailable` provider result with `failure: undefined` reaches retry and terminal settlement
-    without a synthetic failure; real failure and exact availability survive. Crossed result kinds,
-    missing explicit proposal absence, invented failure, or unavailable-without-availability fail.
-24. **Every origin has one restart-stable replay identity ([[D2528]]).** Explicit analysis uses its
-    validated client key; Story and enrichment use their exact versioned derived keys. Job/batch ids
-    are persisted UUIDs from the declared constructors, not process counters. Job and batch request
-    digests use the exact closed request types and separate `chess-tabiya/evidence-*-request/v1\0`
-    canonical domains. Duplicate discovery, restart and response-loss retry produce one batch and
-    one provider call per stored job. A two-connection `BEGIN IMMEDIATE` fixture releases both
-    writers from one barrier and observes one winner, one stored batch/child population and the same
-    stored batch id from the loser. Equal key with unequal canonical request refuses. Bumping an
-    internal plan without its key version refuses. The same concurrent fixture runs all three
-    origins and joins their stored children to the exact origin-derived consumer; no insert-site
-    constant or caller-supplied consumer is accepted ([[D2591]]).
-25. **Run mutation and automatic enrichment are one commit ([[D2526]]).** Learner move, opponent
-    ply and grouped seed creation each commit their run event plus the complete internal batch/jobs
-    through `commitRunMutationWithEvidence`. A fault before either side leaves the old run and zero
-    new jobs; a crash after commit exposes both. A source guard fails any save-then-enqueue call or
-    post-save job loop.
-26. **Rewind and cancellation are one commit ([[D2529]]).** Runtime rewind has no queue observer
-    side effect. `commitRewindWithEvidenceCancellation` commits the rewind event and cancellation
-    of exactly the pruned-node jobs together. A total fixture covers all eight durable source
-    states: admitted/running/retry-wait/settled-success cancel, while settled-empty,
-    settled-unavailable, cancelled and consumed remain terminal audit rows. Running cancellation
-    increments the lease generation and clears the lease. Lease conflict/storage fault leaves the
-    old run and every old job unchanged; a late worker result cannot settle a cancelled generation.
-27. **Settlement and consumption remain exact.** Expired leases recover; shutdown returns work to
-    `retry_wait`; every claim/reclaim increments the durable lease generation, and a stale
-    generation/owner/request receipt cannot retry, cancel or settle. Success writes the complete
-    settlement plus a sequence allocated/incremented by the durable per-run counter in that same
-    transaction; settle→rewind→restart→settle is strictly increasing ([[D2592]]). Apply derives its
-    core/objective events solely from the stored settlement, composes the registered guard result
-    when the policy requires it, derives before/after and appended suffix from retained run snapshots,
-    and consumes the same row in one transaction. The consumed row retains the exact
-    before/after revision, non-empty contiguous event range and canonical event-array digest;
-    close/reopen and response-loss replay return the stored receipt, while a missing, crossed or
-    digest-mismatched range fails as corrupt. Crash fixtures yield only complete earlier/later
-    states—never lost work, duplicate evidence/objective events, unattached consumed rows or fake
-    empty payloads. Valid immediate-guard feedback remains inside the same receipt ([[D2587]]);
-    caller-supplied revisions/events, copied snapshots, mutable nested requests, unknown/crossed
-    states, extra keys and origin-consumer pairs fail ([[D2588]]–[[D2590]]).
-28. **Storage, provider result and replay share one authority ([[D2742]]–[[D2747]]).** Run/job
-    leases are issued for and usable only with one exact application database/transaction subject.
-    Settlement reparses the complete provider receipt and joins operation, evidence kind,
-    generation and normalized request identity to the stored leased job before sequence allocation;
-    both null and non-null objective proposals are representable and exact. Consumed replay
-    reparses/rejoins request, settlement and receipt to the retained before/after transition, and
-    batch replay loads its authoritative run image internally. Cross-database leases, crossed
-    eval/tablebase results, malformed acquisition identity/time, corrupted consumed columns,
-    floating receipt revisions and caller-supplied snapshots each fail independently.
-29. **Every durable transition is complete, live and source-authenticated ([[D2771]], [[D2772]],
-    [[D2773]], [[D2774]], [[D2775]], [[D2776]], [[D2777]], [[D2778]]).**
-    One exhaustive state-specific parser owns every `evidence_jobs` read and rejects missing or
-    forbidden lease/retry/result/clock/receipt columns. Lease acquisition and settlement compare a
-    canonical internally observed transaction instant with the stored expiry. Success consumes an
-    exact sealed provider delivery through its kind-specific value parser and binds response bytes,
-    provider identity, endpoint, request and generation; objective proposals equal the requested
-    from-state and authorized evidence set exactly. Application writes an immutable before/after
-    transition record whose digest cannot be preserved by jointly rewriting current image and
-    receipt. Terminal clocks are observed canonical instants, never placeholders. Independent
-    fixtures fail expired leases, invented values, crossed identities/objectives, partial terminal
-    rows, coordinated revision rewrites and literal clocks.
-30. **Provider payload, retry, time and history authority are exact ([[D2802]]–[[D2808]]).** The
-    provider result is RFC-8785 canonical and its kind-specific source/search/FEN operands equal the
-    stored request and compiled provider. Retry and terminal absence parse only their closed exact
-    availability/failure arms; origin fixes consumer and kind fixes provider operation on every
-    read. Requested/retrieved instants fall inside the exact lease. Retained transitions reject
-    update and direct delete at the storage boundary while whole-owner cascade deletion remains
-    legal. Independent fixtures cross each operand, reorder equal JSON, invent retry/terminal
-    fields, cross routing, finish after expiry, and coherently rewrite/delete history; each fails.
+
+Criteria 20–30 of the pre-cut document — the public-card scope census, the closed queued-operation
+population, and every durable admission, lease, retry, settlement, consumption and provider-receipt
+assertion ([[D2518]]–[[D3008]]) — moved with their specification to
+`planning/pack-capability-contract/evidence-job-durability.md`. They are not satisfied by this RFC
+and are not claimed by it.
 
 ## Discharges
 
@@ -2747,9 +1417,9 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
 |---|---|---|---|---|
 | D1 | Open question 1 — what a capability refusal *does*. **Reframed and ruled by [[D1077]]** 2026-08-23: the question is not what we do to the pack but *why the capability is missing*, and there are exactly two causes (§5.1). Gate F clause 5 is **unblocked** | OWNER | the ruling's landing commit | **discharged 2026-08-23 — [[D1077]], `cc98fcb`** |
 | D2 | The sacrificial pilot must exercise every **required** 1.0 capability. Membership and proof are owned by the existing F7 node and Phase-8 Gate-F procedure | `planning/platform-alignment/rfc-graph.md` F7 | `planning/platform-alignment/execution-queue.md` Phase 8 proof commit | |
-| D3 | Re-stamp every affected evidence-ledger `packDigest` after lane-0.30 churn; the planner derives the population. [[D949]] holds application until Gate F | codex | the implementing/apply commit | |
+| D3 | Re-stamp every affected evidence-ledger `packDigest` after lane-0.30 churn; the planner derives the population. [[D3033]] released the schema migration from the Gate F wait; [[D949]] still holds every authored-content wave | codex | the implementing/apply commit | |
 | D4 | `EVIDENCE_KINDS` remains the checked membership register in `rfc/README.md`; it is provenance vocabulary, not evaluator semantics. An evaluator over a kind gets its own capability | `archive/shared-resource-registers.md` | this amendment | **discharged 2026-08-28** |
-| D5 | Implement the registry, census, checks, handshake, sealed 0.27 compatibility reader, 0.30 schema and planner without applying the held corpus plan | codex | the implementing commit | |
+| D5 | Implement the registry, census, checks, handshake, 0.30 schema and planner, and apply the 92-document schema migration in the same commit ([[D3033]] licensed it; no authored-content or claim-binding wave rides along) | codex | the implementing commit | |
 | D6 | Close [[D576]] when declared-vs-derived pack requirements ship | codex | the implementing commit | |
 | D7 | Close [[D632]] when D566 dependants appear as judgement debt | codex | the implementing commit | |
 | D8 | Close [[D1003]] when the no-property-filter migration population ships | codex | the implementing commit | |
@@ -2812,211 +1482,45 @@ longer manufacture a route for an unrelated landed row).
   — [[D984]]'s class, arriving through the derivation channel. Derivations should hand over a
   *procedure* and a measured baseline, never a total.
 
+Proposed at the 2026-09-06 cut (unnumbered per [[D1503]]; renumber at landing):
+
+- 🛠 **The `migration` register row must move with the tables it names.** `rfc/README.md:380`
+  records `position behind longitudinal-store` against `pack-capability-contract.md` for
+  `evidence_job_batches` + `evidence_jobs` + `evidence_result_sequences`. Those tables left this
+  document for `planning/pack-capability-contract/evidence-job-durability.md` on 2026-09-06. The
+  row, the claim line in this RFC's `tabiya-claims` block, and `rfc/README.md:381`'s
+  `position behind pack-capability-contract` (held by `concept-registry.md`) must be re-pointed in
+  one edit or `register-check` C3 breaks. Not made in the cutting commit because a concurrent
+  writer held `rfc/README.md`; the transfer is the successor's Active-registration commit.
+- 🛠 **The successor draft has no `## Active` row and therefore cannot live under `rfc/`.**
+  `status-parity` P3 set-equals `## Active` rows to `rfc/*.md` files, so
+  `rfc/evidence-job-durability.md` cannot be created without editing `rfc/README.md`. The successor
+  is held at `planning/pack-capability-contract/evidence-job-durability.md` until one commit can
+  write the Active row, the register transfer above, and the file move together.
+- 🐞 **83 blocked rows named this RFC and 71 of them were its own review findings.** The blocker
+  count that made this the repository's top hold was measuring the document against itself:
+  [[D2050]]–[[D3008]] are defects raised on material the document had grown, not dependents waiting
+  on a contract. `planning/work-state.json` cannot currently tell the two apart, so any "what is
+  this RFC blocking" measurement over it overstates by the size of its own review history. A
+  self-referential blocker needs a distinct `blocker` kind, or the metric keeps rewarding growth.
+- 💡 **Seventeen review rounds produced 33 harness directories, one of which is in `verify`.**
+  `tools/d1982-…` through `tools/d3002-pack-capability-seventeenth-fresh-review` all read this RFC;
+  only the seventeenth is wired into `make verify-governance`. The other 32 are unreferenced by any
+  gate and are neither retired nor promoted. Decide once whether a returned round's reproducer is
+  kept green forever or retired with its round.
+
 ## Changelog
 
+Entries before 2026-09-06 are at `planning/pack-capability-contract/review-history.md`.
+
+- 2026-09-06 (**cut to the blocking obligation**): §4.1a's D560 compatibility reader cut on
+  [[D3033]]; §5.1's HTTP capability-operation census and §5.2's durable evidence-job model moved,
+  with criteria 20–30, to successor draft
+  `planning/pack-capability-contract/evidence-job-durability.md`; seventeen rounds of review
+  narrative and the pre-cut changelog moved to
+  `planning/pack-capability-contract/review-history.md`. Criteria 3, 16 and 18 were rewritten to the
+  smaller surface; every other surviving criterion keeps its bytes. The cut record, the register
+  transfer it needs and the [[D3033]] reading are in
+  `planning/pack-capability-contract/cut-2026-09-06.md`.
 - 2026-09-06 (**seventeenth fresh independent return**): returned the sixteenth repair on
-  [[D3002]]–[[D3008]]. Success-field parity, sealed provider authority, origin-terminal closure,
-  retained retry bytes, current lease authority, one ordered clock and parent-batch revalidation
-  remain open. `make pack-capability-seventeenth-fresh-review` retains the chain and passes 7/7.
-- 2026-09-05 (**[[D2802]]–[[D2808]] sixteenth author repair**): joined provider payloads to stored
-  requests/provider identities, required shared RFC-8785 bytes, closed retry/unavailable unions and
-  routing joins, fenced provider time by lease expiry, and made transition rows append-only under
-  SQLite authority. `make pack-capability-sixteenth-author-repair` retains the chain and passes 7/7
-  new groups. Fresh review and provider-exchange acceptance still gate implementation.
-- 2026-09-05 (**[[D2771]]–[[D2778]] fifteenth author repair**): added one exhaustive durable-state
-  parser, database-observed expiry/terminal clocks, canonical provider bytes and kind-specific
-  values, exact objective joins, exact lease/request authority, and a retained before/after
-  transition record. `make pack-capability-fifteenth-author-repair` retains the full chain and
-  passes 8/8 new groups. Fresh review still gates implementation.
-- 2026-09-05 (**fifteenth fresh independent return**): returned on [[D2771]]–[[D2777]]. The durable
-  row parser is partial; expired leases settle; provider and objective evidence can be forged or
-  crossed; consumed replay ignores impossible residue; current image plus receipt can be rewritten
-  together; and terminal clocks are literal placeholders. `make
-  pack-capability-fifteenth-fresh-review` retains the full chain and reproduces 6/6 groups.
-- 2026-09-05 (**[[D2742]]–[[D2747]] fourteenth author repair**): bound run/job leases to one exact
-  application database; joined complete provider settlement to the stored leased request; made the
-  objective-result arm total; and made consumed/batch replay reload and validate their complete
-  durable subjects. `make pack-capability-fourteenth-author-repair` retains the full chain and
-  passes 6/6 new controls. Fresh review still gates implementation.
-- 2026-09-05 (**thirteenth fresh independent return**): returned on [[D2742]]–[[D2747]]. Lease
-  brands are not database-bound; provider settlement is not joined to the leased request; the
-  objective-result success arm is missing; consumed replay skips canonical stored values; receipt
-  revisions are unbound; and batch replay trusts a caller snapshot. `make
-  pack-capability-thirteenth-fresh-review` retains the full chain and reproduces 6/6. No production
-  or content byte changed.
-- 2026-09-04 (**[[D2587]]–[[D2592]] twelfth author repair**): replaced the caller-mintable receipt
-  with one sealed before/after run transaction; recursively parsed/froze objective requests; bound
-  stored jobs to a parsed run snapshot; derived all three consumers from origin; and added a
-  restart-stable per-run result allocator. `make pack-capability-twelfth-author-repair` retains the
-  complete eleventh target and passes 6/6 new controls. Fresh review still gates implementation.
-- 2026-09-04 (**eleventh fresh independent return**): returned on [[D2587]]–[[D2592]]. Valid guarded
-  run effects are outside the receipt; nested objective values remain mutable/unparsed; receipts and
-  node maps lack their run authority; both internal origins fail exact SQL; and result ordering can
-  reuse a cleared sequence. `make pack-capability-eleventh-fresh-review` reproduces 6/6. Exact
-  report: `planning/pack-capability-contract/eleventh-fresh-independent-buildability-review-2026-09-04.md`.
-- 2026-09-04 (**[[D2563]]–[[D2569]] eleventh author repair**): superseded the incomplete strict
-  protocol; added branded request parsers plus full storage/value joins, row-level rewind and
-  stored-success event receipts; and exercised UUID construction inside the concurrent winner.
-  `make pack-capability-eleventh-author-repair` passes six groups plus strict TypeScript. Another
-  fresh independent review still gates acceptance and implementation.
-- 2026-09-04 (**tenth fresh independent return**): returned on [[D2563]]–[[D2569]]. The retained
-  protocol omits the new lease/application receipts; arbitrary request objects can be digested;
-  canonical request values are not joined to storage columns; rewind and application models prove
-  only partial transitions; and fixed ids bypass the declared UUID authority. Exact report:
-  `planning/pack-capability-contract/tenth-fresh-independent-buildability-review-2026-09-04.md`.
-  `make pack-capability-tenth-fresh-review` passes 7/7; implementation remains unauthorized.
-- 2026-09-02 (**[[D2518]]–[[D2520]] eighth author repair**): added both disjoint HTML shared-token
-  branches, the two queued evidence-provider operation ids, three sealed enqueue origins and one
-  durable admission/lease/retry/settlement/consumption algebra. Claims a migration position behind
-  `longitudinal-store`; consumes provider-health receipts instead of duplicating them. The composed
-  author image is 60 HTTP branches / 59 HTTP ids plus 2 worker ids. Author controls pass; fresh
-  independent review still gates acceptance and implementation.
-- 2026-09-02 (**seventh fresh independent return**): returned on [[D2518]]–[[D2520]] because the
-  public HTML Story branch and both worker provider gateways were outside the population, and the
-  synchronous effect model could not represent settlement after 202/restart. Exact report:
-  `planning/pack-capability-contract/seventh-fresh-independent-review-2026-09-02.md`.
-- 2026-09-01 (**[[D2429]]–[[D2431]] sixth author repair**): split creation into sealed pack,
-  position and imported source arms; replaced the unjoined dotted/snake-case inventories with one
-  generated 35-operation/32-route-row method+route+body-branch authority; and added the safe closed
-  availability class to the public row so transient reachability is structurally checkable.
-  `make pack-capability-sixth-author-repair` passes three executable arms and strict TypeScript;
-  the cumulative prior author contract remains green. No production/schema/API/client/corpus byte
-  changed; fresh independent review and [[D560]] remain.
-- 2026-08-31 (**fifth fresh independent return**): returned on [[D2429]]–[[D2431]]. Pack-less
-  creation has no operation-binding arm; the closed operation union and no-provider route actions
-  use unjoined identities; and the public parser lacks the deployment mode needed to reject an
-  impossible transient row. Exact review:
-  `planning/pack-capability-contract/fifth-fresh-independent-review-2026-08-31.md`.
-- 2026-08-31 (**D2334–D2339 fifth author repair**): materialized and recomputed the 92-row legacy
-  manifest; split pre/post-D560 gates; structured all unconditional selectors; unified and compiled
-  declaration history; closed the public projection; and replaced caller requirement lists with an
-  internally derived operation census. `make pack-capability-author-repair` passes the cumulative
-  artifact contract, 6/6 new arms and TypeScript. No implementation/corpus bytes changed; fifth
-  fresh review and D560 remain.
-- 2026-08-30 (**fourth fresh independent return**): returned on [[D2334]]–[[D2339]]. The exact
-  legacy allowlist has no rows or recomputation; software-first and all-stamped gates conflict;
-  unconditional rows omit structured versions; history fixtures use a different type from the RFC;
-  `/capabilities` has no closed shared response row; and transient enforcement trusts a
-  caller-supplied requirement set. Exact return:
-  `planning/pack-capability-contract/fourth-fresh-independent-review-2026-08-30.md`.
-  `make pack-capability-fourth-fresh-review` passes 6/6. No implementation is authorised.
-- 2026-08-30 (**D2152–D2156 fourth author repair**): replaced the illegal direct 0.27→0.30 patch
-  with exact cumulative 0.28/0.29/0.30 stages; published the literal 397-member target inventory
-  and checked generator; module-qualified all unconditional, dependency and constant/convention
-  sites; admitted lockfile-resolved external semantic sources; and made withdrawal successor versus
-  no-successor a typed, planner-visible union. `make pack-capability-author-repair` is the new
-  five-arm positive contract. Fresh independent review remains required; no implementation or
-  corpus bytes changed.
-- 2026-08-30 (**third fresh independent return**): returned on [[D2152]]–[[D2156]]. The sealed
-  0.30 target omits the already-owned 0.28/0.29 schema changes; the 373-row applicability authority
-  contains no rows or checked generator; fourteen unconditional meaning entries are bare symbols;
-  external chess dependencies cannot participate in semantic digests; and withdrawn declarations
-  cannot encode their promised successor. Exact return:
-  `planning/pack-capability-contract/third-fresh-independent-review-2026-08-30.md`.
-  `make pack-capability-third-fresh-review` passes 5/5. No implementation is authorised.
-- 2026-08-30 (**D2070–D2076 author repair**): replaced the impossible atomic corpus landing with a
-  byte-sealed two-schema transition. Only the exact 92 committed 0.27 catalogue documents may use
-  the internal legacy reader; every new/external 0.30 document requires a stamp, and the legacy arm
-  retires with the held apply. Split plan validity from apply readiness; published an ordered
-  author patch and exact 0.30 post-image; added schema-member plus transitive interpreter meaning
-  authority; excluded the complete capability-metadata subtree; made declaration history
-  subject+version keyed with one acyclic current chain; and replaced ordinal ids with semantic
-  owner/discriminator identities, including the two quantified structural forms. The maintained
-  7 + 11 + 6 arms and repaired 7-arm contract pass. Fresh independent review still gates
-  acceptance and implementation.
-- 2026-08-30 (**second fresh independent return**): returned on [[D2070]]–[[D2076]]. Required
-  stamps cannot land apart from the held 92-pack rewrite; judgement-bearing plan output is both
-  required red and verify-green; the old raw schema digest cannot survive required annotations and
-  `requires`; no author source/dependency closure exists for 373 AST-backed members; capability
-  metadata derives capabilities from itself; one declaration per subject cannot retain old+new
-  versions; and `oneOf` ordinals make public ids move under semantic no-op reorder. Exact return:
-  `planning/pack-capability-contract/second-fresh-independent-review-2026-08-30.md`.
-- 2026-08-30 (**D2050–D2055 author repair**): widened the compatibility grammar to shipped
-  one-segment ids and made the legacy criterion return `CapabilityVersion`; published the complete
-  digest-sealed applicability authority; replaced object annotations with total member arrays;
-  named exact transition/opponent sites; moved weakened-Stockfish authority to protected design;
-  and replaced finite vocabulary pointers with schema-aware traversal after the repair found the
-  recursive-expression under-stamp class. The prior 7 + 11 arms and the repaired 6-arm contract
-  pass. Fresh independent review still gates acceptance and implementation.
-- 2026-08-30 (**fresh independent return**): returned on [[D2050]]–[[D2054]]. The compatibility
-  regex rejects real one-segment shipped ids and criterion 1 contradicts the structured version
-  union; the generated applicability authority still has no independent mapping bytes and its
-  single-object keyword cannot express per-enum-member mappings; two named evaluator roots remain
-  non-symbol prose; and `AGENTS.md` is not a protected-intent authority. Reproduction:
-  `make pack-capability-fresh-review`. No schema, pack, registry or product byte changed.
-- 2026-08-30 (**second-return author repair**): repaired [[D1982]]–[[D1992]] without implementing
-  lane 0.30. Published the exact compatibility id regex and integer/semver version algebra; replaced
-  the partial applicability examples with one generated schema/always/reference authority and
-  exclusions artifact; gave F1 and resolved content subject-specific source/digest rules; named all
-  constant roots; routed both annotations through one strict AJV factory; and canonicalized
-  `requires` tuples and bytes. The 20 legacy refusals now have a total identity-keyed migration that
-  distinguishes refusal, refutation, unmeasured, pending-decision, unimplemented, withdrawn,
-  active and deprecated states. F3's claim-binding seam is compile-time only, leaving all sidecar
-  behavior to the downstream RFC after acceptance. `make pack-capability-repeat-review` is now an
-  eleven-arm positive author contract. Fresh independent review and the [[D560]] hold remain.
-- 2026-08-28 (**seven-blocker independent-return amendment**): [[D1620]]–[[D1622]] now have an
-  executable 7-arm disposable falsifier behind `make pack-capability-closure`: literal/absence
-  selectors and dependency closure derive exact requirements; AST-token symbol/arm sites catch the
-  helper-only D566 change at exact grain; and semantic status cannot alias deployment reachability.
-  [[D1623]] gains annotated schema/interpreter roots, literal 13-evaluator/16-table inventories and
-  five distinct negative census controls. [[D1624]] is re-derived at `37/193/25/210 core`,
-  `67/67/15/1 semantic`, and format `7 reached / 3 refused / 1 retired / 1 unmeasured`.
-  [[D1625]] now bans suffix strings only at typed current-authority sites while preserving named
-  compatibility fixtures and unrelated artifact-schema ids. [[D1626]] now points F7, evidence-kind
-  membership and digest freshness at existing authorities; all seven ledger effects are checked
-  Discharges, and the anonymous checkpoint correction landed in the register. Repeat independent
-  buildability review remains required; no production or corpus implementation is authorised.
-- 2026-08-23 (**six-blocker repair**, post-return): (1) **§3.1 replaces the hand-counted census with
-  `make capability-census`, a derivation procedure** over the schema's 52 `$defs`, the tree's
-  exhaustive `never` switches, the named evaluators without a vocabulary, and the manifest by
-  reference; `CAPABILITY_DECLARATIONS` is asserted **set-equal by id** to its output and the HEAD
-  count is baked only as a drift tripwire. This dissolves three blockers together — the four wrong
-  arithmetic terms cannot recur because no arithmetic is asserted, the two omitted parent unions
-  (`SimpleTrigger` 6, `TransitionExpression` 5) are enumerated by rule, and **`claim.binding` is
-  registered** so §4.3's handshake stops refusing every sidecar that names it. (2) **Counts corrected
-  at source**: §3a **90**, §3a-ter **62**, conventions **13** (`BREADTH_CONVENTION_TEXT` is 8
-  entries), constant tables **16**; primary total **206**. Summary and §2.4 updated to match. (3)
-  **§4.2 publishes the supported projection** (that repair's reached/transient formulation), resolving
-  the criterion-8/16 contradiction. The repair's copied claim of **5** refused format rows was later
-  corrected by the 2026-08-28 amendment to the executable **3**. (4) **§4.4 rewritten onto
-  `claim-semantic-anchors` §7's per-binding
-  `contract` grammar**; the root-level `requires` form is withdrawn because §7's Stage A keeps a
-  legacy binding inside a file the V2 parser also reads, which a per-document declaration cannot
-  express; `SIDECAR_CAPABILITY_UNSUPPORTED` is withdrawn so the seam has one refusal code and it is
-  the consumer's; the invented *"explicit pinned default"* is struck because §7 refuses an explicit
-  `claim.binding@1` in both stages. (5) Criteria **4, 8 and 15** rewritten to match, each naming the
-  returned draft's own behaviour as its wrong implementation. §2.5 now states that both vocabularies
-  it asserts site-completeness for are declared — the draft asserted criterion 6 against a capability
-  criterion 4 forbade.
-- 2026-08-23: created, drafted from `planning/platform-alignment/f3-derivation.md` under
-  [[D995]]/[[D996]], with the central lane-vs-sidecar fork ruled by [[D1058]].
-- 2026-08-23 (scope amendment, pre-review): added **§4.4, the evidence-sidecar declaration**, and
-  acceptance criterion 15. **Reason: a cross-document block that acceptance would not have
-  cleared.** `rfc/claim-semantic-anchors.md` §7 defers its entire compatibility story to "the
-  accepted F3 declaration", and its criterion 7 needs the F3 migration plan to exist as an
-  artifact — but the sidecar declaration was **absent from this RFC's derived scope**
-  (`f3-derivation.md:798-815`, which never mentions that RFC), so shipping the derived scope
-  unchanged would have left `claim-semantic-anchors` blocked **on the day this RFC was accepted**.
-  Caught by `planning/platform-alignment/rfc-disposition-packet.md` §3.3 while this draft was still
-  in motion. §4.4 also resolves that RFC's conditional claims block to `none` by stating that the
-  seam does **not** become a registered resource.
-- 2026-08-23 (cross-review): five citation/measurement corrections applied in place; **six
-  return-class blockers reported, not fixed** (see the reviewer's report). Corrected here:
-  (1) the exploration-gate line cite `o5-o6-handoff.md:100` → `:96` (`:100` is a code fence; the
-  `rfc/README.md` Active row carries the same wrong line and is not this reviewer's file to edit);
-  (2) §1's quote range `:52-58` → `:54-61` (the drafted range excluded the second quoted paragraph);
-  (3) §5.1's *"refuse-to-serve, not degrade"* re-sourced from `docs/drill-client.md:16` — which
-  contains no such string anywhere in the file — to `planning/archive/drill-client/log.md:49`;
-  (4) §6's *"rubber stamp in a new costume"* cite `graduation-clearance.md:2445-2449` → `:2457-2458`;
-  (5) §6's tripwire cite `semantic-evidence-check.ts:25` → `:26` (`:25` is the definition, `:26` the
-  assertion); and (6) **criterion 15's sidecar population 32 → 68** — the drafted
-  `git ls-files 'content/**/*.evidence.json'` is a filename-convention filter that matches only the
-  `content/drafts/` naming and drops all 36 `content/candidates/*/evidence.json` sidecars; 68
-  documents carry `schema: "tabiya.sourcing.evidence.v1"` at HEAD, 0 with a `requires` key.
-- 2026-08-23 (owner ruling, pre-review): **[[D1077]] reframed and ruled Open question 1.** Added
-  **§5.1** (unavailability has exactly two causes — `unsupported` when not configured at startup,
-  `temporarily_unavailable` when configured but unreachable, with the owner's completeness argument
-  that there is no third cause), rewrote §4.3's refusal paragraph onto it, added acceptance
-  criterion 16, and discharged D1. The ruled model reuses the shipped `ProviderOffBehavior` /
-  `AvailabilityMode` types and the [[D509]] not-configured-means-not-advertised precedent rather
-  than adding parallel machinery. **Gate F clause 5 is unblocked** and needs no further ruling.
+  [[D3002]]–[[D3008]]. Those seven rows are unresolved and travel to the successor.

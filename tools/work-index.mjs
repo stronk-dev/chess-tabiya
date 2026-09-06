@@ -15,6 +15,14 @@ const ROUTE_EXACT = new Set([
   "planning/content-wave-work-order.md",
   "planning/open-work-inventory.md",
   "planning/roadmap-to-done.md",
+  // Added 2026-09-06 with the pack-capability-contract cut. The successor draft is held in
+  // planning/ only because status-parity P3 forbids an rfc/*.md without an ## Active row, and the
+  // review history is the index over rounds five to seventeen. Between them they carry every
+  // [[D2050]]-[[D3008]] row that used to route through the RFC body; without these entries the
+  // cut silently unroutes 83 open rows.
+  "planning/pack-capability-contract/evidence-job-durability.md",
+  "planning/pack-capability-contract/review-history.md",
+  "planning/pack-capability-contract/cut-2026-09-06.md",
 ]);
 const EXCLUDED = new Set([
   "planning/WORK.md",

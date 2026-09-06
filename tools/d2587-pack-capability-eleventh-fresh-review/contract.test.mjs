@@ -16,8 +16,12 @@ import {
 } from "../d2563-pack-capability-eleventh-author-repair/model.mjs";
 
 const read = (path) => readFileSync(path, "utf8");
-const rfc = read("rfc/pack-capability-contract.md");
-const section = rfc.match(/#### §5\.2 Queued evidence([\s\S]*?)\n### §6\./u)?.[1] ?? "";
+// Repointed 2026-09-06: the durable evidence-job model, the operation census and criteria
+// 20-30 were cut out of rfc/pack-capability-contract.md byte-for-byte into the successor
+// draft; the review narrative moved to review-history.md. This reproducer asserts nothing
+// new -- it reads the same bytes in their new homes.
+const rfc = read("planning/pack-capability-contract/evidence-job-durability.md") + read("planning/pack-capability-contract/review-history.md");
+const section = rfc.match(/#### §5\.2 Queued evidence([\s\S]*?)\n## §3\./u)?.[1] ?? "";
 const ddl = section.match(/```sql\n([\s\S]*?)\n```/u)?.[1] ?? "";
 const fen = "8/8/8/8/8/8/8/K6k w - - 0 1";
 
