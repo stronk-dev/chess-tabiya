@@ -485,3 +485,24 @@ the index says *trivial*, *one string*, *one line* or *two lines* is an afternoo
 - **CMP-a27** (§1.2) — Every pack a campaign could reference today is an ungraduated draft: 55 of 56 carry blocking `graduationBlockers` and `content/packs/` is empty
 - **CMP-a28** (§1.3) — The shipped exhaustion string is an internal error id plus a bare shortage, with no income statement
 - **CMP-a29** (§10 res-9/10) — Two bounded evidence limits recorded: some prior art came via search-index snapshots (Fandom HTTP 402), and two claims are unverifiable anywhere (Chessable's *"up to 95%"*, the *Chess Life* Solitaire table) — used for nothing
+
+## Theming is unblocked — [[D3062]]–[[D3064]], 2026-09-07
+
+**The owner picked the roster: all ten schemes from his own registries** — tokyo-night, dracula,
+nord, catppuccin, gruvbox, one-dark, github-dark, rose-pine, solarized, ayu-mirage. `theming`
+Discharge D1 is **closed**. The implementation has been complete since **2026-08-23**; the only
+missing input was the list. `rfc/theming.md:209-212` already verified all ten carry the 12 tokens and
+called adding a scheme *"a copy, not a design exercise"* — so this is transcription, not design.
+
+**The three delegated picks are claude's, and they wait on one repair** ([[D3063]]): criterion 7 is
+**chroma-only and blind to luminance** — `last-move` passes at ΔE 36.3 while measuring **1.02:1
+luminance** and greyscale distance **3 of 441**; the capture indicator is not in its population at
+all; and check-red vanishes for tritanopes. **Repair the criterion, then pick against it.** Picking
+now would ratify the same blindness three more times.
+
+**[[D3064]] is the topology that matters.** Codex has been building — 316 `apps/web`, 156
+`apps/server`, 65 `packages/runtime` file-touches in fourteen days — and **six RFCs are `awaiting`
+with implementations complete**. Four carry the same discharge, *production-module eligibility*, and
+all four point at `learner-modules`, which is blocked on **draft `module-registration.md`**. That
+draft has sat since 2026-08-24. It is the keystone under codex's finished work and the presentation
+layer the owner has been missing. A bounded repair is running against it now.
