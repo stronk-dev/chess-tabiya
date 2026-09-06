@@ -1846,3 +1846,26 @@ resource changes, not implementation discretion.
 cross-classroom and all-rendering-site authorities. Example fixtures do not discharge those total
 invariants. AC-17 stays with the returned Campaign product path rather than a synthetic rated-boss
 test over no production route.
+
+### The first cut, and a triage signal — [[D3050]]–[[D3052]]
+
+`rfc/provider-health-degradation.md` **1,666 → 832 lines**, criteria **51 → 22**, claims → `none`
+(`ca3e30b5`). **One dependency remains and it is external** — `provider-protocol-register` plus
+`provider-exchange-and-execution` lane 1 — where before it sat behind an open-ended sequence of
+harness rounds.
+
+**[[D3050]] is the finding.** All 75 "dependents" were **defect rows against the RFC's own author
+harness** — 5,446 lines, 22 directories, twelve rounds — and **not one was a product feature waiting
+on a published contract**. Twelve rounds produced ~60 new blocked rows and **zero shipped bytes**,
+and five of those rounds were the *model* failing to implement what the prose had specified since
+the fourth repair. The cut retires the harness as acceptance authority and names the implementation
+as the proof.
+
+**[[D3051]] gives us a cheap triage instrument.** Ledger ids are monotonic, so **the age of an RFC's
+blocked ids separates real dependents from self-generated review debt**. The two documents with the
+most review rounds have the newest, tightest clusters. **An RFC whose blocked ids are mostly newer
+than the RFC is blocking itself, and the answer is a cut, not another round.** It also means the
+"654 items across ten RFCs" figure overstates real dependency by an amount each cut will reveal.
+
+**[[D3052]]** — the first cut orphaned a row and caught it in the same pass, rehoming it into the
+criterion that genuinely covers it. That is the failure mode of cutting, handled correctly.

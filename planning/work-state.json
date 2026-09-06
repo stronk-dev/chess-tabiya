@@ -12225,7 +12225,7 @@
       "sourceDigest": "sha256:ab6b7736a2c1fdad0bbd0370e4e9b593af55525252a212c15c635cd13d4fa409",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D1580",
@@ -12234,7 +12234,7 @@
       "sourceDigest": "sha256:b7e38af29163e9111bf2c2dd710d3cea144f101bb622ab1bb554eba44c6952d6",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D1581",
@@ -12684,7 +12684,7 @@
       "sourceDigest": "sha256:042216e968bb0fcb79d98f54dad9d6cf84da4faadd9c211b59eb02627d369ba8",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D1634",
@@ -12701,7 +12701,7 @@
       "sourceDigest": "sha256:54c8711447fc3e1e9ca2250fb4b4223c5c9497fab9f85a3fcf205cc44b8f56ed",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D1636",
@@ -14501,7 +14501,7 @@
       "sourceDigest": "sha256:fa4a806fbf7493649475445a2df26b441e4f9a7dce123576a6fa59c6b40ecf35",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D1901",
@@ -14627,7 +14627,7 @@
       "sourceDigest": "sha256:fd146f4773035c2be1a7a52c99078e3ea0b72dba49a85f66f97ee918f2b159e6",
       "uxItems": [],
       "owner": "release-engineering",
-      "blocker": "rfc:opponent-recovery-journey.md"
+      "blocker": "rfc:provider-health-degradation.md"
     },
     {
       "id": "D1915",
@@ -15035,7 +15035,7 @@
       "sourceDigest": "sha256:7816e97761bb05a4ab45eef6a85255180ed6e44c0838d61b5f169aa198cf09b4",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D1961",
@@ -15185,7 +15185,7 @@
       "sourceDigest": "sha256:9bda913fffefdf77384bf841645c632c5c2d406e1b41facab5524998d1819a9d",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D1978",
@@ -15203,7 +15203,7 @@
       "sourceDigest": "sha256:31f88bb7d8c851a118e19a962e5b77bf5a3060dffeaa88bf1e07e8cc03f2f9f2",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D1980",
@@ -16265,7 +16265,7 @@
       "sourceDigest": "sha256:6c450ea37493201fc5d7b4d966c294f483ddd660bf175d0bb22bec1798c3df30",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2098",
@@ -16283,7 +16283,7 @@
       "sourceDigest": "sha256:10669263d6a70856b3ded30d4134ab7fea0bb4a239bef53d0dd1a2300c8b5790",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2100",
@@ -16292,7 +16292,7 @@
       "sourceDigest": "sha256:7e1fc5f99b5a793a14cf020b24116d2bd5c37d3a94c5d69af308f7f3a6568ce8",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2101",
@@ -16301,7 +16301,7 @@
       "sourceDigest": "sha256:0828f6a1bbbc7ea823235bf8a936c64dadfb20849f840fa6d7ac2af17deb4310",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2102",
@@ -16310,7 +16310,7 @@
       "sourceDigest": "sha256:18fe06f040007654c6aa89c94a96b73cf3cd33bd2e731190d1d318e5c49d31b3",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2103",
@@ -16328,7 +16328,7 @@
       "sourceDigest": "sha256:4b532e0e0fffc6e0332170443a4aeb675db1ed512e5231d70453d8d633c731ee",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2105",
@@ -17169,7 +17169,7 @@
       "sourceDigest": "sha256:f1d1cd4ea5805d9fa1759de27de9fb10f3c5d4f1b70f93ce0cbf73dcec5609f3",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2199",
@@ -17178,7 +17178,7 @@
       "sourceDigest": "sha256:74224601a01ea75ba58d1cac9b7df6e728b281eb5fdf29406e5037b12c0ba058",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2200",
@@ -17187,7 +17187,7 @@
       "sourceDigest": "sha256:6cbb887d212496d80ffe0068304790773e73b61ca5f56520b28cc67247579995",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2201",
@@ -17196,7 +17196,7 @@
       "sourceDigest": "sha256:d2490cbf2a2a9db4c128a33ddabce5bc211b1fd7dddbcd5534e7b452e44bd0c9",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2202",
@@ -18347,7 +18347,7 @@
       "sourceDigest": "sha256:d941a881773611ba2de5c9ebdc8b16b0f2482b6c45cf8522a1707e6c17b88edd",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2330",
@@ -18356,7 +18356,7 @@
       "sourceDigest": "sha256:0aaf0d01726479db57f4b2fcbece4eb4f043dfa13ebad9d786c4801f9064b7d1",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2331",
@@ -20614,7 +20614,7 @@
       "sourceDigest": "sha256:a646c8c73b9730a51a792e7e20539b8d77d21fcbf669dd042fc272a2854a2e9d",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:opponent-recovery-journey.md"
+      "blocker": "rfc:provider-health-degradation.md"
     },
     {
       "id": "D2583",
@@ -21010,7 +21010,7 @@
       "sourceDigest": "sha256:5960864ae4975910f9b52bd7e75a8f1cdae50e6bd19e46834e99803d04a60b3a",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2627",
@@ -21019,7 +21019,7 @@
       "sourceDigest": "sha256:3a51a0fd1bc8645ce8579c75bf9e0f8260b4d200b1a2aefe78623feb35fba0e6",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2628",
@@ -21271,7 +21271,7 @@
       "sourceDigest": "sha256:36bd0de17093571c0410375632f4fa6c95c74fc346916f8f98ceb94c18454b1a",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2656",
@@ -21280,7 +21280,7 @@
       "sourceDigest": "sha256:3444be14f393836025e856a5d2ce29742fb1939344387f29b391d79507819d9f",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2657",
@@ -21289,7 +21289,7 @@
       "sourceDigest": "sha256:e5e410f4fee5ddfe0e463cfd08e3595ff466d3aad2f9e3a2b40c03f2ed75fb4b",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2658",
@@ -21298,7 +21298,7 @@
       "sourceDigest": "sha256:585c5352827619181401ec810a874a07ded08c88f94cdf1755bc550b83f7d892",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2659",
@@ -21307,7 +21307,7 @@
       "sourceDigest": "sha256:39ccbaa81c819203abef860bce634bbee640ea897b21891447d1f62d15bf5e4b",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2660",
@@ -21316,7 +21316,7 @@
       "sourceDigest": "sha256:4fd1ecac4026da946d23739f3aacfa5d1e3f33d3c542f88f465170441102dffb",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2661",
@@ -21478,7 +21478,7 @@
       "sourceDigest": "sha256:18fc7c2aa1cb90912dc29cac71e80fd11ee9a15f1b1f8f6b9ed88e9cfbbf6c0d",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2679",
@@ -21487,7 +21487,7 @@
       "sourceDigest": "sha256:604cdea9e8e862d79bb243cfdbb041e80a481184b414ec128db7136533d6126f",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2680",
@@ -21496,7 +21496,7 @@
       "sourceDigest": "sha256:89cc5d594603e681ded1b3aa092de700bc747d53ed8bc2272096f703a968db98",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2681",
@@ -21505,7 +21505,7 @@
       "sourceDigest": "sha256:0520c7b1acec100bdd1393ffb22655ada8a5f0ef47596ec6b65729293576715c",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2682",
@@ -21514,7 +21514,7 @@
       "sourceDigest": "sha256:5646e598a3041e072df749f9515b742f7682ba0a038929caeaa9df32caccb96b",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2683",
@@ -21523,7 +21523,7 @@
       "sourceDigest": "sha256:195d92d2ca3bb7aa3ed4a4663c490eb48f3f9587eb42671c3a5cfacbdffa4328",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2684",
@@ -21532,7 +21532,7 @@
       "sourceDigest": "sha256:931e1cef1ce25374c9d80de6ad628b43dd0a1337d927173c12f28a9dbd719423",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2685",
@@ -22216,7 +22216,7 @@
       "sourceDigest": "sha256:bf7d1b7abc93ee31406398615fdae2708e6753641f7a35ebc07e10e3c0dd46c3",
       "uxItems": [],
       "owner": "release-engineering",
-      "blocker": "rfc:opponent-recovery-journey.md"
+      "blocker": "rfc:provider-health-degradation.md"
     },
     {
       "id": "D2761",
@@ -22252,7 +22252,7 @@
       "sourceDigest": "sha256:6b4984fff6024a934d37d33c4dbe430a8d43bc6f6e38b5f782969ab99b551ef2",
       "uxItems": [],
       "owner": "release-engineering",
-      "blocker": "rfc:opponent-recovery-journey.md"
+      "blocker": "rfc:provider-health-degradation.md"
     },
     {
       "id": "D2765",
@@ -22756,7 +22756,7 @@
       "sourceDigest": "sha256:2a6eaa79e0f8baebf678e18dc1496e79ad0b84e453d13f5fe45539bb1e2e6dc1",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:opponent-recovery-journey.md"
+      "blocker": "rfc:provider-health-degradation.md"
     },
     {
       "id": "D2821",
@@ -22765,7 +22765,7 @@
       "sourceDigest": "sha256:71fc895b80157a41ac391c5dc3eccaae09d66734dfb27e76c5c0faf2766a83e1",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:opponent-recovery-journey.md"
+      "blocker": "rfc:provider-health-degradation.md"
     },
     {
       "id": "D2822",
@@ -22774,7 +22774,7 @@
       "sourceDigest": "sha256:8d00939b2b2fff159c4f287c69bcf8c6d96ffe81c5ce9c5cb44b760ae4626ce1",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:opponent-recovery-journey.md"
+      "blocker": "rfc:provider-health-degradation.md"
     },
     {
       "id": "D2823",
@@ -22792,7 +22792,7 @@
       "sourceDigest": "sha256:22a73546112336b4b4a501311c057cc57ce9088874c968afa2f0ece5e3a28cc7",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:opponent-recovery-journey.md"
+      "blocker": "rfc:provider-health-degradation.md"
     },
     {
       "id": "D2825",
@@ -22945,7 +22945,7 @@
       "sourceDigest": "sha256:587fd0a1a49e8b0a409956b9a27f98eb2657e1da90f1c739e1fd3852d9fd8ce3",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2842",
@@ -23333,7 +23333,7 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:1f2ba5c8d1fc02c5747bb0f3b3b86b052878bb1d5c475b76113706c060fe49ed",
       "uxItems": [],
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2886",
@@ -23342,7 +23342,7 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:c107981d1f516aca51c4e7633a80d518518a0b8f28643829f45cbf70bb1b28ef",
       "uxItems": [],
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2887",
@@ -23351,7 +23351,7 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:f8ed1e2e0a78b5bf81f32588542e679216fb82836fc30241d7c08442288d2c2d",
       "uxItems": [],
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2888",
@@ -23360,7 +23360,7 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:fa2f4b6011f866b09f72a882d3f1e478c90f1dd650e888cc0c2be83b7955d2ca",
       "uxItems": [],
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2889",
@@ -23369,7 +23369,7 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:1f7d51bc7500c998ee8967660df791ec7035c40289ad393d88510967b586dd69",
       "uxItems": [],
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2890",
@@ -23378,7 +23378,7 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:c4761dde8d6e966e834fb482d1fb99a247a968df5e83687765f383fe5b7d9260",
       "uxItems": [],
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2891",
@@ -23387,7 +23387,7 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:9d5b4c645ec0c0891c0b35f36afeabf478fb7307240f983a25e4637916bdb168",
       "uxItems": [],
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2892",
@@ -23771,7 +23771,7 @@
       "sourceDigest": "sha256:69ad16ad79c051d658cc08c51831b7cbb60147f2e17587cc0a985744fd38d712",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2935",
@@ -23780,7 +23780,7 @@
       "sourceDigest": "sha256:8e5d6007763d11b22d03cbb0a4ecd6d642f5ce0a3daede09aec9538f06e71200",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2936",
@@ -23789,7 +23789,7 @@
       "sourceDigest": "sha256:3418975bdfc1dc04777382357c0bf4775a744d10ea1f5d0dfef12abe502c7dfc",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2937",
@@ -23798,7 +23798,7 @@
       "sourceDigest": "sha256:2d38ac5a8aafeb401328614d97224fbc6d7d6f15c7e415c81ca0d0c14940b8c1",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2938",
@@ -23807,7 +23807,7 @@
       "sourceDigest": "sha256:77118931715e699993fe6b35079c68dcc659c88bd37364a428067ffc6ac982fa",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D2939",
@@ -23816,7 +23816,7 @@
       "sourceDigest": "sha256:15583208c89d224e0771eee5f8608b37f552bb102d9c3305974d0492e69460b5",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2940",
@@ -23825,7 +23825,7 @@
       "sourceDigest": "sha256:aa95354132be2749e3637daa41e2bb7323dd3e7bab93dcf8589cc8a6df039084",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2941",
@@ -23834,7 +23834,7 @@
       "sourceDigest": "sha256:e15fedd2f743c8d924dd64a0b9b7cec92c0b4755dee99dc63e9b535d4968368b",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D2942",
@@ -24446,7 +24446,7 @@
       "sourceDigest": "sha256:e48a2b15236f1b8d63a14ec8b4455783facb22e8dd4ef089cf49d648e593cf67",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D3010",
@@ -24455,7 +24455,7 @@
       "sourceDigest": "sha256:b2c39dee45fefe5cc2dcac592a4808f6096bfb1134da60544197626bb9225c15",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D3011",
@@ -24464,7 +24464,7 @@
       "sourceDigest": "sha256:8a067c6a4d4559d0fa2cb6431a9dfc1782cf2df9275b0fec7635bee45b217508",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D3012",
@@ -24473,7 +24473,7 @@
       "sourceDigest": "sha256:30de90104a7af96fa45c67f8f62d840dc1160f27a67e30cf0966bc4980b2f01f",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-collector-registry.md"
     },
     {
       "id": "D3013",
@@ -24482,7 +24482,7 @@
       "sourceDigest": "sha256:a2dd26484a042632f81013b6ababf6db3a5d9ce0afe7902ec077e62a22458176",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D3014",
@@ -24491,7 +24491,7 @@
       "sourceDigest": "sha256:c26002ead389763785c94baa38f5bf25d62151ae90ab3b22751d2e720bac0bf7",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D3015",
@@ -24500,7 +24500,7 @@
       "sourceDigest": "sha256:81dc75b4469adabb62891fe80a4fddf4787c66bddf2d0d409d659d619046bf07",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D3016",
@@ -24509,7 +24509,7 @@
       "sourceDigest": "sha256:c3fa86321b34fce48be2f108f9c1d877d414f794b144446d19b57c641b77fab1",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:shared-candidate-evidence-packet.md"
+      "blocker": "rfc:candidate-population-service.md"
     },
     {
       "id": "D3017",
