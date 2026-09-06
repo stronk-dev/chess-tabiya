@@ -17401,3 +17401,119 @@ changed.
 counterexamples. Complete one bounded sixth repair across type equality, input ownership,
 dedup/ancestry and result/error closure; then obtain another genuinely fresh review after its value
 and semantic-validation dependencies are accepted.
+
+## 2026-09-06 — Shared-resource bootstrap cut to the collision core
+
+**What landed:** the owner-directed [[D3034]] author cut. The draft is 282 lines, down from 1,330,
+and its exact seed contains only the seven shared resources already governed at HEAD. Resource id,
+claim grammar and the three existing tree-reader bindings become checked data.
+
+**What changed:** the generic TypeScript projection graph, canonical-resource projection, lifecycle
+engine, staged/first-parent Git reader and release-manifest/concept/source-attribution roots are
+withdrawn rather than moved. Assistance, semantic-convention and provider registrations must now
+justify their smallest concrete reader instead of inheriting the shadow engine. No checker,
+product, schema, migration, vocabulary, content or register byte changed.
+
+**Evidence/next:**
+`planning/shared-resource-register-bootstrap/collision-core-author-cut-2026-09-06.md`;
+`make shared-resource-bootstrap-collision-core-author-contract` passes 5/5. A genuinely fresh
+independent review and owner acceptance still gate implementation.
+
+## 2026-09-06 — Bounded-target sixth author repair
+
+**What landed:** the bounded [[D3042]]–[[D3046]] repair. Canonical declaration images now cover
+public types/modifiers/generics/callables; request admission owns a frozen exchange-reference
+container; dedup shares only exact authority references within a byte bucket; the result assertion
+is public and consumed; malformed input has a digest-free `rejected/invalid_request` arm.
+
+**What changed:** byte equality no longer launders exact factory ancestry, and a cyclic caller value
+cannot throw before the service produces a typed result. `seal_failed` is post-admission only.
+No runtime, server, API, schema, persistence, client, content or protected-design byte changed.
+
+**Evidence/next:** `planning/bounded-policy-targets/sixth-author-repair-2026-09-06.md`;
+`make bounded-target-sixth-author-repair` retains the full chain and passes 5/5 new groups.
+Another genuinely fresh review plus the value/semantic-validation dependencies still gate
+implementation.
+
+## 2026-09-07 — Withdrawn bootstrap engine debts terminalized
+
+**What landed:** the 41 historical defect rows whose only subject was the generic projection,
+lifecycle or Git-history engine removed by the owner-directed [[D3034]] cut are now `⛔` refused,
+not orphaned open work.
+
+**What changed:** the first full `make verify-awake` after the cut correctly failed because removing
+the obsolete RFC machinery also removed the only live routes for those rows. The rows retain their
+original findings as history, while
+`planning/shared-resource-register-bootstrap/withdrawn-engine-row-closeout-2026-09-07.md` records
+the exact terminal population and the surviving collision-core boundary. Reintroduction is new
+scope, not a reason to reopen these repairs.
+
+**Evidence/next:** `make work-index`, `make work-state`, and the full `make verify-awake` must all
+pass before the cut and closeout are committed. Fresh independent review still gates the seven-row
+collision-core implementation.
+
+## 2026-09-07 — Canonical governance follows current RFC cuts
+
+**What landed:** [[D3059]] and [[D3060]] replace two retired shadow-implementation chains in
+`verify-governance` with bounded contracts for the RFC images that actually exist. Historical
+provider-health and shared-resource targets remain runnable; CI no longer requires either RFC to
+restore removed scope.
+
+**What changed:** `provider-health-cut-contract` checks the claim-free live-health surface, all 22
+row-backed criteria, the lane-0.26 successor handoff and canonical-gate membership. The existing
+five-group collision-core contract remains the bootstrap gate. The first post-cut full run was
+valuable precisely because it failed: seven of eight old provider-health assertions and the first
+incompatible bootstrap layer demanded material the cuts intentionally removed.
+
+**Evidence/next:**
+`planning/provider-health-degradation/cut-contract-closeout-2026-09-07.md` and
+`planning/shared-resource-register-bootstrap/cut-gate-closeout-2026-09-07.md`. Re-run the complete
+governance and awake gates; fresh review/acceptance requirements of both product RFCs are unchanged.
+
+## 2026-09-07 — Provider-protocol README invariant follows the bootstrap cut
+
+**What landed:** [[D3061]] replaces one sentence-exact D2810 assertion with the two surviving
+properties: `rfc/README.md` remains human-owned, and the checker does not generate or rewrite it.
+
+**What changed:** no provider protocol, register, claim grammar or product behavior changed. The
+maintained provider-protocol author target remains in canonical governance and passes against the
+cut bootstrap without requiring deleted wording.
+
+**Evidence/next:** `node --test tools/d2809-provider-protocol-second-author-repair/contract.test.mjs`
+passes 5/5; continue the full governance and awake gates.
+
+## 2026-09-07 — Correction: provider-health cut gate is transitively closed
+
+The earlier [[D3059]] entry said the retired chain was out of canonical governance after inspecting
+only the top-level `verify-governance` prerequisites. That was incomplete: bot policy still reached
+the seventh provider-health round transitively and the full gate failed there. The cut contract now
+walks the Make dependency graph, the bot-policy prerequisite names `provider-health-cut-contract`,
+and `make bot-policy-fifth-fresh-review` passes its 31 + 6 + 8 groups without the retired chain.
+
+## 2026-09-07 — Evidence presentation sixth author repair
+
+**What landed:** the disposable author model for [[D3035]]–[[D3041]] now closes all seven seams
+returned on 2026-09-06: shared canonical bytes, closed citation operands, exact Explorer result
+reasons, workflow-owned question issuance, executable named-structure witnesses, committed-edge UCI
+parsing and executable pre/postimage anchors for all eight Checkpoint-P operations.
+
+**What changed:** `make evidence-presentation-sixth-author-repair` retains the full predecessor chain
+and passes seven new able-to-fail controls. No production, schema, content, API, UI, module, preset,
+seat or protected-design byte changed, and the RFC remains draft.
+
+**Evidence/next:**
+`planning/platform-alignment/evidence-presentation/sixth-author-repair-2026-09-07.md`. A genuinely
+fresh independent review is next; [[D1672]] and [[D2401]] independently continue to block acceptance
+and implementation.
+
+## 2026-09-07 — Codex wave queue entered the work-index route class
+
+**What landed:** [[D3068]] registers `planning/codex-wave-3.md` as one exact living route and adds a
+discovery fixture for its deliberately numbered basename.
+
+**What changed:** the six committed theme/module findings [[D3062]]–[[D3067]] move from unrouted to
+their actual durable queue without duplicating references into unrelated RFCs. Their work-state
+owners and states are explicit; the global untriaged ceiling remains zero.
+
+**Evidence/next:** `make work-index` and `make work-state`; continue each row from the existing
+Codex wave queue.

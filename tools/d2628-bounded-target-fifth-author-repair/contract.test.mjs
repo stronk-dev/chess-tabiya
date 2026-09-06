@@ -20,7 +20,7 @@ function exportedName(node) {
 }
 
 function declaration(name, file = source) {
-  const node = file.statements.find((statement) => exportedName(statement) === name);
+  const node = file.statements.filter((statement) => exportedName(statement) === name).at(-1);
   assert.ok(node, `missing exported declaration ${name}`);
   return node;
 }
@@ -29,6 +29,12 @@ function memberNames(name, file = source) {
   const node = declaration(name, file);
   assert.ok(ts.isInterfaceDeclaration(node) || ts.isClassDeclaration(node), `${name} is not structured`);
   return node.members.map((member) => member.name?.getText(file)).filter(Boolean).sort();
+}
+
+const printer = ts.createPrinter({ removeComments: true });
+function declarationImage(name, file = source) {
+  return printer.printNode(ts.EmitHint.Unspecified, declaration(name, file), file)
+    .replace(/^export declare (function|class) /u, "export $1 ");
 }
 
 function literalPropertyValues(typeNode, propertyName, file = source) {
@@ -68,11 +74,13 @@ test("D2628 complete protocol exports and structural fields are set-equal", () =
     "CandidateDerivation", "TargetDerivation", "BoundedTargetInputDigests", "BoundedTargetRequestIdentity",
     "BoundedTargetResultIdentity", "BoundedTargetBatchCompleted", "BoundedTargetBatchAbstentionReason",
     "BoundedTargetBatchAbstained", "BoundedTargetBatchCancellationReason", "BoundedTargetBatchCancelled",
-    "BoundedTargetBatchFailureReason", "BoundedTargetBatchFailed", "BoundedTargetBatchResult",
+    "BoundedTargetBatchFailureReason", "BoundedTargetBatchFailed", "BoundedTargetBatchRejectionReason",
+    "BoundedTargetBatchRejected", "BoundedTargetBatchResult",
     "BoundedTargetServiceLimits", "BoundedTargetServiceOptions", "BoundedTargetBackgroundService",
     "threatPassAnchor", "assertThreatPassAnchor", "threatEvidencePassAnchor",
     "assertNamedMaterialTargetEvidence", "assertBoundedTargetImmediateEvidence",
-    "assertBoundedTargetReturnEvidence", "createBoundedTargetBackgroundService",
+    "assertBoundedTargetReturnEvidence", "assertBoundedTargetBatchResult",
+    "createBoundedTargetBackgroundService",
   ].sort();
   assert.deepEqual(source.statements.map(exportedName).filter(Boolean).sort(), expectedExports);
 
@@ -92,7 +100,7 @@ test("D2628 complete protocol exports and structural fields are set-equal", () =
   for (const [name, fields] of Object.entries(expectedFields)) assert.deepEqual(memberNames(name), fields.sort(), name);
 });
 
-test("D2628 normative module is structurally set-equal to the RFC model", () => {
+test("D3042 every exported declaration is canonically AST-equal to the RFC model", () => {
   const internalOnly = new Set([
     "makeNamedMaterialTargetEvidence",
     "makeBoundedTargetImmediateEvidence",
@@ -104,12 +112,7 @@ test("D2628 normative module is structurally set-equal to the RFC model", () => 
   assert.deepEqual(moduleExports, rfcExports);
 
   for (const name of moduleExports) {
-    const moduleNode = declaration(name, source);
-    const rfcNode = declaration(name, rfcSource);
-    if ((ts.isInterfaceDeclaration(moduleNode) || ts.isClassDeclaration(moduleNode)) &&
-        (ts.isInterfaceDeclaration(rfcNode) || ts.isClassDeclaration(rfcNode))) {
-      assert.deepEqual(memberNames(name, source), memberNames(name, rfcSource), `${name} fields`);
-    }
+    assert.equal(declarationImage(name, source), declarationImage(name, rfcSource), name);
   }
 
   for (const [name, property] of [
@@ -142,7 +145,7 @@ test("D2628 all nested projections and discriminated arms remain complete", () =
     BoundedTargetImmediateFactoryResult: { kind: ["abstained", "evidence"] },
     ReturnDerivation: { kind: ["abstained", "evidence"] },
     CandidateDerivation: { kind: ["abstained", "preserved", "removed"] },
-    BoundedTargetBatchResult: { kind: ["abstained", "cancelled", "completed", "failed"] },
+    BoundedTargetBatchResult: { kind: ["abstained", "cancelled", "completed", "failed", "rejected"] },
   };
   for (const [name, properties] of Object.entries(expectedDiscriminants)) {
     const alias = declaration(name);

@@ -34,10 +34,11 @@ test("D2809 historical reviews are revision-pinned and the maintained repair is 
   assert.match(makefile, /verify-governance:[^\n]*provider-protocol-second-author-repair/u);
 });
 
-test("D2810 README is human-owned and mechanically checked exactly as the generic parent requires", () => {
+test("D2810 README remains human-owned and mechanically checked after the parent cut", () => {
   assert.doesNotMatch(prose, /generated README register/u);
   assert.match(prose, /human-owned, mechanically checked README register/u);
-  assert.match(bootstrap, /`rfc\/README\.md` is \*\*not generated\*\*/u);
+  assert.match(bootstrap, /human-owned register prose remains in `rfc\/README\.md`/u);
+  assert.match(bootstrap, /The tool checks it; it does not generate\s+or rewrite it/u);
 });
 
 test("D2811 the operation relation is a compilable complete mapped type", () => {

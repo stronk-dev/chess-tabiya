@@ -15,6 +15,9 @@ const ROUTE_EXACT = new Set([
   "planning/content-wave-work-order.md",
   "planning/open-work-inventory.md",
   "planning/roadmap-to-done.md",
+  // The named Codex execution queue owns the current cross-RFC repair wave. Its numeric suffix is
+  // deliberate and therefore cannot satisfy the generic *-queue.md basename grammar.
+  "planning/codex-wave-3.md",
   // Added 2026-09-06 with the pack-capability-contract cut. The successor draft is held in
   // planning/ only because status-parity P3 forbids an rfc/*.md without an ## Active row, and the
   // review history is the index over rounds five to seventeen. Between them they carry every

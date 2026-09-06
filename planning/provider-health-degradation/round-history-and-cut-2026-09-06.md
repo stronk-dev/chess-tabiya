@@ -23,10 +23,11 @@ counted as an item this RFC blocks. Twelve rounds produced sixty new blocked row
 bytes.
 
 That is the loop the cut ends. The RFC now states a contract and names the implementation as its
-proof. The harness stays on disk as retained exploration evidence — the `make provider-health-*`
-targets and their enrolment in `verify-governance` ([[D2761]]) are untouched — but it is **no
-longer the RFC's acceptance authority**, and a thirteenth round against it is not a prerequisite
-for anything.
+proof. The harness stays on disk as retained exploration evidence, but the first full post-cut gate
+proved its live-RFC prose checks require reversing the cut ([[D3059]]). The old targets remain
+runnable and leave `verify-governance`; one bounded cut contract replaces their canonical enrolment.
+It is **no longer the RFC's acceptance authority**, and a thirteenth round against it is not a
+prerequisite for anything.
 
 ## What moved out of the RFC, and where each piece went
 
@@ -58,8 +59,9 @@ two facts:
    the harness not doing it. These rows close against the **implementation**, under the cut RFC's
    criteria, and not against a thirteenth harness round.
 
-[[D2761]] is already discharged and stays discharged: the review target remains enrolled in
-`verify-governance`.
+[[D2761]] is already discharged and stays discharged in its valid scope: canonical governance still
+checks the current provider-health RFC. [[D3059]] changes the enrolled target from a retired author
+image to the bounded cut contract; it does not remove provider-health from the gate.
 
 ## Author-model criteria
 

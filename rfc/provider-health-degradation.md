@@ -813,10 +813,11 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
   `planning/provider-health-degradation/round-history-and-cut-2026-09-06.md`; durable opponent
   recovery and run-schema lane 0.26 moved to `rfc/opponent-recovery-journey.md`; the provider-exchange
   type re-declaration in §4 collapsed to the consumption rule that
-  `rfc/provider-exchange-and-execution.md` already owns. The `make provider-health-*` targets remain
-  on disk and in `verify-governance` as retained exploration evidence, but they are no longer this
-  RFC's acceptance authority, and no further harness round is a prerequisite for anything. Acceptance
-  criteria are now 22, each mapped to the rows it discharges.
+  `rfc/provider-exchange-and-execution.md` already owns. The historical `make provider-health-*`
+  targets remain on disk as retained exploration evidence, but canonical governance runs only the
+  bounded `provider-health-cut-contract`; otherwise old prose assertions require reversing the cut
+  ([[D3059]]). No further harness round is a prerequisite for anything. Acceptance criteria are now
+  22, each mapped to the rows it discharges.
 - 2026-09-06 — twelfth fresh independent review returned the eleventh repair on [[D2966]]–[[D2971]].
   With the eleven preceding rounds it is indexed in the planning note above.
 - 2026-08-27 — created on the owner's O13 Choice-C ruling after R18 reproduced D609 by stopping Maia

@@ -710,6 +710,10 @@ provider-health-author-repair:
 	node --test tools/d1910-provider-health-author-repair/contract.test.mjs
 	./node_modules/.bin/tsc -p tools/d1910-provider-health-author-repair/tsconfig.contract.json --noEmit
 
+.PHONY: provider-health-cut-contract
+provider-health-cut-contract:
+	node --test tools/d3059-provider-health-cut-contract/contract.test.mjs
+
 .PHONY: provider-health-second-fresh-review
 provider-health-second-fresh-review:
 	node --test tools/d2412-provider-health-second-fresh-review/contract.test.mjs
@@ -894,7 +898,7 @@ bot-policy-second-fresh-review:
 bot-policy-third-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2407-bot-policy-third-fresh-review/vitest.config.ts --reporter=verbose
 
-bot-policy-fourth-author-repair: provider-health-seventh-author-repair bot-policy-author-contract
+bot-policy-fourth-author-repair: provider-health-cut-contract bot-policy-author-contract
 	./node_modules/.bin/vitest run --config tools/d2407-bot-policy-fourth-author-repair/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/tsc -p tools/d2407-bot-policy-fourth-author-repair/tsconfig.json --noEmit
 
@@ -1237,12 +1241,15 @@ evidence-presentation-fourth-fresh-review:
 evidence-presentation-fifth-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2436-evidence-presentation-fifth-fresh-review/vitest.config.ts --reporter=verbose
 
-.PHONY: evidence-presentation-fifth-author-repair evidence-presentation-sixth-fresh-review
+.PHONY: evidence-presentation-fifth-author-repair evidence-presentation-sixth-fresh-review evidence-presentation-sixth-author-repair
 evidence-presentation-fifth-author-repair: evidence-presentation-author-contract evidence-presentation-second-author-repair evidence-presentation-third-author-repair evidence-presentation-fourth-author-repair
 	./node_modules/.bin/vitest run --config tools/d2644-evidence-presentation-fifth-author-repair/vitest.config.ts --reporter=verbose
 
 evidence-presentation-sixth-fresh-review: evidence-presentation-fifth-author-repair
 	./node_modules/.bin/vitest run --config tools/d3035-evidence-presentation-sixth-fresh-review/vitest.config.ts --reporter=verbose
+
+evidence-presentation-sixth-author-repair: evidence-presentation-sixth-fresh-review
+	./node_modules/.bin/vitest run --config tools/d3035-evidence-presentation-sixth-author-repair/vitest.config.ts --reporter=verbose
 
 module-registration-second-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2164-module-registration-second-fresh-review/vitest.config.ts
@@ -1357,7 +1364,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review concept-registry-fourth-author-repair concept-registry-fifth-author-repair concept-registry-sixth-fresh-review longitudinal-store-tenth-fresh-review storage-backup-fourth-author-repair storage-backup-fifth-fresh-review safe-deployment-third-author-repair safe-deployment-fourth-fresh-review campaign-two-horizon-sixth-author-repair campaign-two-horizon-seventh-fresh-review pack-capability-seventeenth-fresh-review semantic-collectors-promotion-sixteenth-fresh-review bounded-target-fifth-fresh-review provider-health-ninth-fresh-review provider-health-ninth-author-repair provider-health-tenth-fresh-review provider-health-eleventh-author-repair provider-health-twelfth-fresh-review shared-resource-bootstrap-fifteenth-fresh-review provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review provider-protocol-sixth-fresh-review live-sources-author-repair review-evidence-third-author-repair evidence-presentation-sixth-fresh-review bot-policy-fifth-fresh-review bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review concept-registry-fourth-author-repair concept-registry-fifth-author-repair concept-registry-sixth-fresh-review longitudinal-store-tenth-fresh-review storage-backup-fourth-author-repair storage-backup-fifth-fresh-review safe-deployment-third-author-repair safe-deployment-fourth-fresh-review campaign-two-horizon-sixth-author-repair campaign-two-horizon-seventh-fresh-review pack-capability-seventeenth-fresh-review semantic-collectors-promotion-sixteenth-fresh-review bounded-target-fifth-fresh-review provider-health-cut-contract provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review provider-protocol-sixth-fresh-review live-sources-author-repair review-evidence-third-author-repair evidence-presentation-sixth-author-repair bot-policy-fifth-fresh-review bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract test-tier-check docs-check staged-process-contracts-test
 verify-governance: shared-resource-bootstrap-collision-core-author-contract
 verify-governance: bounded-target-sixth-author-repair
 

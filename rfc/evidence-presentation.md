@@ -1,12 +1,14 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft — **RETURNED BY SIXTH FRESH INDEPENDENT REVIEW 2026-09-06 on
-  [[D3035]]–[[D3041]]; bounded sixth author repair required.** The fifth repair retains its
-  31 author assertions, but canonical resource identity, citation semantics, operation-derived
-  abstention, workflow-owned question issuance, atomic named-structure witnesses, committed-edge
-  UCI parsing and the eight-operation source fence remain unbuildable. `make
-  evidence-presentation-sixth-fresh-review` reproduces all seven failures while retaining every
-  predecessor. [[D1672]] and [[D2401]] remain independent blockers. No implementation is authorised.
+- **Status:** draft — **SIXTH AUTHOR REPAIR COMPLETE 2026-09-07 on [[D3035]]–[[D3041]];
+  another genuinely fresh review is required.** The disposable author model now uses the shared
+  fail-closed canonical serializer; parses closed citation content, field binding, source, licence
+  and revision authorities; consumes the Explorer operation-result reason union without a synonym;
+  makes the owning workflow request/decision the only question issuer; executes one registered
+  named-structure expression/witness traversal; parses nullable committed UCI; and resolves an
+  operation plus executable pre/postimage anchors for all eight P repairs. `make
+  evidence-presentation-sixth-author-repair` retains the predecessor chain and passes 7/7 new
+  controls. [[D1672]] and [[D2401]] remain independent blockers. No implementation is authorised.
   Landing remains three checkpoints (§2.1): manifest truth, sealed current consumers, then
   module/hint seats.
   Prior amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
@@ -266,6 +268,35 @@ buildability failures:
 `make evidence-presentation-sixth-fresh-review` retains every predecessor and passes 7/7 fresh
 review arms. Exact evidence and repair requirements are in the sixth fresh-review dossier. This is
 an author return: no implementation or protected-design change is authorised.
+
+## Sixth author repair (2026-09-07)
+
+The returned seams are closed in the disposable author model without widening Checkpoint P:
+
+1. [[D3035]] delegates semantic-image bytes to the shared RFC-8785 `canonicalizeJson`; non-finite
+   numbers, unsupported values and lone surrogates fail before hashing.
+2. [[D3036]] admits only `quoted_passage | authored_summary`, a registered projection/retained-field
+   binding with canonical evidence digest, a versioned registered source, and licence/revision
+   values whose authority matches that source row.
+3. [[D3037]] exports the exact `CorpusResult` abstention discriminants as one operation-result
+   authority consumed by the Explorer presentation row; `empty_population` is no longer translated
+   locally into `no_data_at_band`.
+4. [[D3038]] removes the public registry mint. Question issuance consumes a process-sealed owning
+   workflow request and decision, and the issued object retains request id and decision identity;
+   copy, JSON and crossed-request forms fail.
+5. [[D3039]] publishes the four exact structure expressions in the author model and evaluates match
+   plus positive `pieceOnSquare` witnesses in one traversal. Real Maroczy FEN, FEN mutation and
+   expression mutation controls replace the unrelated toy evaluator.
+6. [[D3040]] parses nullable committed UCI through the same canonical grammar as candidates before
+   comparison, preserving absent versus malformed as different states.
+7. [[D3041]] gives each of the eight P rows one resolved operation and non-empty exact preimage and
+   postimage anchor sets. The author gate executes every anchor and fails a missing source, symbol,
+   preimage or postimage; the eight-id census remains only the set-closure arm.
+
+`make evidence-presentation-sixth-author-repair` passes the retained 5 + 6 + 7 + 7 + 6 + 7
+assertions plus lifecycle typecheck. The author fixture that constructs sealed workflow authority is
+explicitly disposable and has no production export analogue. Another genuinely fresh review must
+attack the repaired semantics before acceptance or implementation.
 
 ## Summary
 
@@ -1769,6 +1800,12 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-09-07 — sixth author repair for [[D3035]]–[[D3041]]. Reused the shared canonical byte
+  authority; closed citation operands; moved Explorer absence to its operation-result union;
+  subordinated question issuance to a sealed workflow request/decision; executed real registered
+  structure expressions and witnesses; parsed committed UCI; and made every Checkpoint-P operation
+  resolve executable pre/postimage anchors. `make evidence-presentation-sixth-author-repair`
+  passes; fresh review, [[D1672]] and [[D2401]] still gate acceptance and all production work.
 - 2026-09-06 — returned by sixth fresh independent buildability review on [[D3035]]–[[D3041]].
   Resource serialization, citation semantics, operation-result ownership, question issuance,
   structure match/witness execution, committed-edge UCI and Checkpoint-P source seams remain

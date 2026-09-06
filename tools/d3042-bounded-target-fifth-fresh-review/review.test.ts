@@ -5,6 +5,10 @@ import { evidenceDigest } from "../../packages/runtime/src/evidence-contract.js"
 
 const rfc = readFileSync("rfc/bounded-policy-targets.md", "utf8");
 const author = readFileSync("tools/d2628-bounded-target-fifth-author-repair/contract.test.mjs", "utf8");
+const review = readFileSync(
+  "planning/bounded-policy-targets/fifth-fresh-independent-buildability-review-2026-09-06.md",
+  "utf8",
+);
 const protocolPath = "tools/d2202-bounded-target-third-author-repair/protocol.proposed.ts";
 const protocol = readFileSync(protocolPath, "utf8");
 
@@ -37,8 +41,8 @@ describe("bounded-target fifth fresh independent review", () => {
       );
     expect(changed).not.toBe(protocol);
     expect(authorShape(changed)).toEqual(authorShape(protocol));
-    expect(author).toContain("memberNames(name, source)");
-    expect(author).not.toMatch(/moduleNode\.getText|rfcNode\.getText|SyntaxKind\.ReadonlyKeyword|questionToken/u);
+    expect(review).toContain("[[D3042]]");
+    expect(author).toContain("printer.printNode");
   });
 
   test("D3043 readonly request syntax does not snapshot a queued caller-owned array", () => {
@@ -48,7 +52,8 @@ describe("bounded-target fifth fresh independent review", () => {
     callerOwned.push(Object.freeze({ id: "exchange-b" }));
     expect(admittedForLater).toHaveLength(2);
     expect(rfc).toContain("readonly exchanges: readonly LegalExchangeEvidence[];");
-    expect(rfc).not.toMatch(/(?:snapshot|cop(?:y|ies)|clone)[^.]{0,120}(?:exchange|request).{0,120}(?:before|prior to).{0,80}(?:queue|dedup)/iu);
+    expect(review).toContain("[[D3043]]");
+    expect(rfc).toMatch(/copies the exchange references into a new\s+frozen array/u);
   });
 
   test("D3044 byte dedup returns the first wrapper's ancestry to an equal genuine waiter", () => {
@@ -64,12 +69,14 @@ describe("bounded-target fifth fresh independent review", () => {
     expect(attached?.input).not.toBe(second);
     expect(rfc).toMatch(/exact input references\/digests/u);
     expect(rfc).toMatch(/an equal rebuilt input[\s\S]{0,80}fails/u);
-    expect(rfc).toMatch(/Each exact request digest owns one queued\/running job/u);
+    expect(review).toContain("[[D3044]]");
+    expect(rfc).toMatch(/byte equality is not authority equality/u);
   });
 
   test("D3045 the promised public result validator is absent from the complete protocol", () => {
-    expect(rfc).toMatch(/the public validator removes it and recomputes the same image/u);
-    expect(protocol).not.toMatch(/export declare function (?:assert|parse|validate)BoundedTargetBatchResult/u);
+    expect(review).toContain("[[D3045]]");
+    expect(protocol).toMatch(/export declare function assertBoundedTargetBatchResult/u);
+    expect(rfc).toMatch(/The exported `assertBoundedTargetBatchResult\(value\)`/u);
     expect(protocol).toContain("export type BoundedTargetBatchResult =");
   });
 
@@ -77,7 +84,8 @@ describe("bounded-target fifth fresh independent review", () => {
     const cyclic: Record<string, unknown> = {};
     cyclic.self = cyclic;
     expect(() => evidenceDigest({ domain: "tabiya:bounded-target-input@1", payload: cyclic })).toThrow();
-    expect(rfc).toMatch(/A failed seal still receives a stable\s+request identity by hashing the visible triple first/su);
+    expect(review).toContain("[[D3046]]");
+    expect(rfc).toMatch(/malformed caller input is always\s+`rejected\/invalid_request`/u);
     expect(rfc).toMatch(/Once constructed, `submit\(\)` never throws/u);
   });
 });

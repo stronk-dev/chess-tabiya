@@ -12,8 +12,9 @@ import {
   SOURCE_BOUND_CITATION_DERIVATION,
   assertRegisteredPresentationQuestion,
   constructExplorerCountOperands,
+  issueRegisteredPresentationQuestion,
   parseCitationOperand,
-  registeredPresentationQuestion,
+  presentationWorkflowQuestionAuthorityFixture,
   sourceAttributionRegistryDigest,
 } from "../d1862-presentation-adapter-plan/plan.js";
 
@@ -26,7 +27,10 @@ test("D2348: checkpoint P publishes one transformed 112-row adaptable authority"
 });
 
 test("D2349: citation operation, parser and adapter share one nested operand", () => {
-  const value = { content: { kind: "fact", text: "Measured.", binding: "ref-1" }, source: { source: "Stockfish", title: "Reading", locator: "artifact", licence: "GPL-3.0-only", revision: "sha256:abc" } };
+  const value = {
+    content: { kind: "authored_summary", text: "Measured.", binding: { projection: { id: "run.record.evidence_ref_resolution", version: 1 }, field: "text", evidenceDigest: `sha256:${"0".repeat(64)}` } },
+    source: { source: { id: "live.stockfish.eval", version: 1 }, title: "Stockfish engine reading", locator: "deployment-artifact:stockfish", licence: { authority: "source-attribution-registry@1", value: "GPL-3.0-only" }, url: "https://stockfishchess.org/", revision: { authority: "deployment-receipt@1", value: `sha256:${"1".repeat(64)}` } },
+  };
   assert.deepEqual(parseCitationOperand(value), value);
   assert.deepEqual(SOURCE_BOUND_CITATION_DERIVATION.outputFields, ["content", "source"]);
   const adapter = POST_P_PRESENTATION_ADAPTER_ROWS.find((row) => row.projection === SOURCE_BOUND_CITATION_DERIVATION.projection);
@@ -54,13 +58,15 @@ test("D2351: every source reason has one explicit learner disposition", () => {
 
 test("D2352: lifecycle question identity is registered and adapter-local", () => {
   const key = "inspector.corpus@1\0human.explorer.population@1";
-  const question = registeredPresentationQuestion(key, "question.explorer_population");
+  const decision = { eventHeadSeq: 1, cursor: { branchId: "b1", nodeId: "n1" }, disclosureBoundarySeq: null, digest: "d1" } as const;
+  const authority = presentationWorkflowQuestionAuthorityFixture({ requestId: "r1", adapterKey: key, questionId: "question.explorer_population" }, decision);
+  const question = issueRegisteredPresentationQuestion(authority);
   assert.equal(question.label, "Was a human-game population available here?");
   assert.equal(question.registry, "presentation-questions@1");
-  assert.doesNotThrow(() => assertRegisteredPresentationQuestion(question, key, "question.explorer_population"));
-  assert.throws(() => assertRegisteredPresentationQuestion({ ...question }, key, "question.explorer_population"));
-  assert.throws(() => registeredPresentationQuestion(key, "question.story_title"));
-  assert.throws(() => registeredPresentationQuestion("invented\0adapter", "question.explorer_population"));
+  assert.doesNotThrow(() => assertRegisteredPresentationQuestion(question, key, "question.explorer_population", "r1", decision));
+  assert.throws(() => assertRegisteredPresentationQuestion({ ...question }, key, "question.explorer_population", "r1", decision));
+  assert.throws(() => issueRegisteredPresentationQuestion({ request: { requestId: "r1", adapterKey: key, questionId: "question.story_title" }, decision }));
+  assert.throws(() => issueRegisteredPresentationQuestion({ request: { requestId: "r1", adapterKey: "invented\0adapter", questionId: "question.explorer_population" }, decision }));
 });
 
 test("D2353: Explorer candidates construct exact nonzero denominator operands", () => {

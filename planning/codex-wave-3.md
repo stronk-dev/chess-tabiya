@@ -531,3 +531,11 @@ is `blocked_dependencies` / `requirements_only`, so **acceptance alone authorise
 Secondary blocker: §2.5.0 is marked *"must not be implemented"* while holding the module query
 route, request union, boundary validations, decision stamp and Review paging that A16/A19/A20 assert
 against — because its withdrawal names a **heading range** rather than a **set of clauses**.
+[[D3066]] owns the remaining cross-document sweep for declaration tables that lag their own repaired
+normative sections.
+
+## Work-index route repair — [[D3068]], 2026-09-07
+
+This file is the durable execution queue for the six findings above, but its basename is outside
+the route grammar. Register `planning/codex-wave-3.md` as one exact living route and test that the
+queue remains discoverable; do not repeat the six rows into unrelated RFC bodies.

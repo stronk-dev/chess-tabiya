@@ -1,1330 +1,282 @@
-# RFC: Shared-resource register engine, bootstrap and adoption
+# RFC: Shared-resource register catalogue bootstrap
 
-- **Status:** draft — **fifteenth fresh independent review PASSED the fourteenth repair for
-  [[D2854]], [[D2855]] and [[D2856]]; owner acceptance is required.** Statically named reads
-  through a declared index signature retain their exact receiver/index authority, finite literal
-  key unions enumerate exact targets, optional calls use non-null selected callable authority, and
-  both literal assistance follow-on descriptors project. `make
-  shared-resource-bootstrap-fifteenth-fresh-review` retains the complete chain and passes 4/4
-  independent groups. No implementation is authorized before owner acceptance.
+- **Status:** draft — owner-directed collision-core cut complete for [[D3034]]; fresh independent
+  buildability review is required before acceptance or implementation
 - **Author:** Codex
-- **Created:** 2026-08-31
-- **Design refs:** none; this is repository process and changes no learner/product behavior
-- **Exploration gate:** [[D2363]] reproduced the checker/process deadlock; the second fresh review
-  reproduced [[D2442]]–[[D2444]]; cross-RFC reconciliation reproduced [[D2454]], [[D2455]],
-  [[D2465]]–[[D2467]]
+- **Created:** 2026-08-31; cut to the owner-ruled scope 2026-09-06
+- **Design refs:** none; this is repository process and changes no learner or product behavior
+- **Exploration gate:** [[D2363]] reproduced the checker/process deadlock; [[D3034]] measured 62
+  collision/id-race/renumbering rows and ruled the former 1,330-line solution disproportionate
 - **Depends on:** implemented `rfc/archive/shared-resource-registers.md`
-- **Parent / amends:** RFC-0000 rule 7, `rfc/README.md`, `rfc/template.md`,
-  `tools/register-check.mjs`
-- **Supersedes / superseded by:** supersedes the bespoke register-engine portions of
-  `assistance-config-register.md`, `semantic-convention-register.md` and
-  `provider-protocol-register.md`; those documents remain resource-population contracts
+- **Parent / amends:** RFC-0000 rule 7, `rfc/README.md`, and `tools/register-check.mjs`
+- **Supersedes / superseded by:** supersedes only the hard-coded resource-name and schema-slug
+  inventories in `tools/register-check.mjs`; the former projection, lifecycle and Git-history
+  engines are withdrawn, not relocated
 - **Planning:** `planning/shared-resource-register-bootstrap/`
 
 ```tabiya-claims
 none
 ```
 
-```tabiya-resource-roots
-campaign-schema | sequential/json_schema_id@1/existing | schemas/campaign.schema.json#$id | none
-concept-registry-schema | sequential/json_schema_id@1/absent | schemas/concept_registry.schema.json#$id | packages/schema/src/index.ts#export:CONCEPT_REGISTRY_SCHEMA_VERSION
-evidence-kinds | member_set/literal_string_tuple@1/existing | apps/server/src/sourcing/types.ts#export:EVIDENCE_KINDS | none
-migration | sequential/migration_sequence@1/existing | apps/server/src/storage.ts#class:SQLiteRunStorage/private-method:migrate/local:migrations | apps/server/src/storage.ts#export:STORAGE_VERSION
-pack-schema | sequential/json_schema_id@1/existing | schemas/drill_pack.schema.json#$id | packages/schema/src/index.ts#export:DRILL_PACK_SCHEMA_VERSION
-principle-entry-schema | sequential/json_schema_id@1/existing | schemas/principle_entry.schema.json#$id | packages/schema/src/index.ts#export:PRINCIPLE_ENTRY_SCHEMA_VERSION
-release-manifest-schema | sequential/json_schema_id@1/absent | schemas/release_manifest.schema.json#$id | packages/schema/src/index.ts#export:RELEASE_MANIFEST_SCHEMA_VERSION
-run-schema | sequential/json_schema_id@1/existing | schemas/drill_run.schema.json#$id | packages/schema/src/index.ts#export:DRILL_RUN_SCHEMA_VERSION
-shape-entry-schema | sequential/json_schema_id@1/existing | schemas/shape_entry.schema.json#$id | packages/schema/src/index.ts#export:SHAPE_ENTRY_SCHEMA_VERSION
-source-attribution-registry | sequential/canonical_resource@1/absent | packages/runtime/src/source-attribution.ts#export:SOURCE_ATTRIBUTION_REGISTRY_RESOURCE | none
-```
-
 ## Summary
 
-All shared-resource governance runs through one machine-readable catalogue, one projection engine,
-one lifecycle engine and one staged/first-parent transition reader. Resource names are data. They
-never select parser code, check numbers or Git history behavior.
+The existing register checker prevents collisions, but the resources it knows are duplicated in
+two code constants. A new shared register therefore requires checker surgery before an RFC can even
+declare its claim. That is the bootstrap deadlock in [[D2363]].
 
-This RFC migrates the seven existing registers into that engine and introduces three genuinely
-absent roots without creating product bytes: release-manifest schema, concept-registry schema and
-source-attribution registry. It also defines the only lawful route for later process RFCs to add a
-future root or adopt an already-landed authority.
+This RFC makes the **seven resources already governed at HEAD** data in one checked JSON catalogue.
+The checker derives resource ids, claim grammar and the existing tree-reader configuration from
+those rows. Adding another resource that fits one of the three existing reader shapes is one data
+row plus its human-readable register section—not a new resource-name branch or parser.
 
-The assistance, provider and semantic-convention process RFCs no longer add C9, C10 or C11. They
-declare catalogue entries using the closed lifecycle/projection vocabulary here. Their distinct
-product semantics remain in their own RFCs; their parsing, claims, register joins and time model do
-not.
+Nothing else is in scope. This RFC does **not** introduce absent roots, project arbitrary TypeScript
+graphs, define resource lifecycle/history, generate `rfc/README.md`, or replace the parent RFC's
+claim/register/tree join. The previous draft attempted all of those and grew to 1,330 lines across
+fifteen review rounds. [[D3034]] explicitly withdrew that architecture.
 
-## 1. One machine-readable catalogue
+## 1. The catalogue
 
-The implementation creates `rfc/shared-resource-catalogue.json`. Its exact bootstrap preimage is
-checked in now as
-`planning/shared-resource-register-bootstrap/initial-catalogue.v1.json`; author review validates
-that file against the type and compatibility table below, the ten-row metadata block above and the
-live selectors. Implementation copies it byte-for-byte to the runtime catalogue before adding any
-derived register state. There is no prose-only seventh-resource reconstruction left to an
-implementer ([[D2489]]).
+Implementation creates `rfc/shared-resource-registers.json` from the exact reviewed seed at
+`planning/shared-resource-register-bootstrap/collision-catalogue.v1.json`.
 
-`rfc/README.md` is **not generated**. It remains the human-owned explanation/register surface from
-the implemented parent. `make register-check` parses its resource markers and table rows and fails
-when their checked projection differs from the catalogue/tree/claims in either direction. No tool
-rewrites, deletes or owns the file's wave order, pins, rationale, archive links or any other bytes
-([[D2493]]). There is no independent `RESOURCE_NAMES`, `SCHEMA_SLUGS`, check-number resource list
-or hand-maintained count.
+The top-level value has exactly `schemaVersion` and `resources`; `schemaVersion` is exactly `1`.
+`resources` is a non-empty array, ASCII-sorted by unique `id`. Each id matches
+`^[a-z][a-z0-9-]*$`. Unknown or extra keys fail.
 
-Every process RFC that introduces or adopts resources carries exactly one
-`tabiya-resource-descriptor-source` fenced block naming a repository-relative canonical JSON file.
-That file has the same `{ "schemaVersion": 1, "resources": [...] }` envelope and complete
-descriptor grammar as the catalogue, and contains exactly the descriptors that RFC authorizes.
-The path is literal (no glob, absolute path, `..` or symlink traversal), is checked in before
-acceptance and is part of review. The transition reader obtains no descriptor field from prose: it
-requires canonical equality between the source file's rows and the rows appended to the catalogue,
-then checks the RFC's `tabiya-resource-roots` block as a routing summary of the same ids,
-lifecycle/adapter/introduction profiles, primary roots and version selectors. Missing, extra or
-cross-RFC descriptor rows fail. For every post-bootstrap introduction or adoption, `introducedBy`
-must equal that declaring RFC's basename, not merely name any active process RFC. The bootstrap
-seed alone retains `shared-resource-registers.md` on the six authorities that parent actually
-introduced; its four rows first governed here name this RFC ([[D2499]]).
-
-This RFC's descriptor authority is:
-
-```tabiya-resource-descriptor-source
-planning/shared-resource-register-bootstrap/initial-catalogue.v1.json
-```
-
-The catalogue has schema version 1 and exact top-level keys in this order:
-
-```json
-{
-  "schemaVersion": 1,
-  "resources": []
-}
-```
-
-Each resource entry has exactly:
+Every resource row has exactly:
 
 ```ts
-interface SharedResourceDescriptorV1 {
+interface SharedResourceRegisterRowV1 {
   readonly id: string;
-  readonly lifecycle: "sequential" | "member_set" | "lineage_set";
-  readonly projection: SharedResourceProjectionV1;
-  readonly claimMode: "prose" | "whole_projection" | "members";
-  readonly introducedBy: string;
-  readonly introduction: "existing" | "absent" | "adopted";
+  readonly claimKind: "schema_lane" | "migration_position" | "members";
+  readonly source: SharedResourceSourceV1;
 }
+
+type SharedResourceSourceV1 =
+  | Readonly<{
+      kind: "json_schema";
+      schemaSlug: string;
+      versionExport: string | null;
+    }>
+  | Readonly<{
+      kind: "storage_migrations";
+      path: "apps/server/src/storage.ts";
+      headExport: "STORAGE_VERSION";
+    }>
+  | Readonly<{
+      kind: "string_tuple";
+      path: string;
+      exportName: string;
+    }>;
 ```
 
-The previously undefined projection field is this exact closed discriminated union ([[D2488]]):
+The exact bootstrap rows are:
 
-```ts
-type StructuralSelectorV1 = string;
-
-type SharedResourceProjectionV1 =
-  | {
-      readonly adapter: "json_schema_id@1";
-      readonly schemaSelector: StructuralSelectorV1;
-      readonly versionSelector: StructuralSelectorV1 | null;
-    }
-  | {
-      readonly adapter: "migration_sequence@1";
-      readonly sequenceSelector: StructuralSelectorV1;
-      readonly headSelector: StructuralSelectorV1;
-      readonly programConfig: "tsconfig.base.json";
-    }
-  | {
-      readonly adapter: "literal_string_tuple@1";
-      readonly rootSelector: StructuralSelectorV1;
-    }
-  | {
-      readonly adapter: "literal_string_union@1";
-      readonly rootSelector: StructuralSelectorV1;
-    }
-  | {
-      readonly adapter: "canonical_resource@1";
-      readonly rootSelector: StructuralSelectorV1;
-    }
-  | {
-      readonly adapter: "typescript_contract@1";
-      readonly versionSelector: StructuralSelectorV1;
-      readonly programConfig: "tsconfig.base.json";
-      readonly roots: readonly [StructuralSelectorV1, ...StructuralSelectorV1[]];
-      readonly repositoryEdges: "transitive";
-      readonly externalEdges: "resolved_signature";
-    }
-  | {
-      readonly adapter: "versioned_declarations@1";
-      readonly rootSelector: StructuralSelectorV1;
-      readonly idField: "id";
-      readonly versionField: "version";
-    };
-```
-
-No adapter accepts an open `options` object. The exact keys above are the only configuration;
-missing or extra keys fail. `StructuralSelectorV1` is a branded output of one parser, never a string
-assertion. The parser returns this closed value:
-
-```ts
-type SelectorRootV1 =
-  | { readonly kind: "json_id" }
-  | { readonly kind: "export" | "interface" | "type" | "function" | "class"; readonly name: string };
-type SelectorDescentV1 =
-  | { readonly kind: "private_method" | "method" | "local" | "member" | "object"; readonly name: string }
-  | { readonly kind: "literal" };
-interface ParsedStructuralSelectorV1 {
-  readonly canonical: StructuralSelectorV1;
-  readonly path: string;
-  readonly root: SelectorRootV1;
-  readonly descent: readonly SelectorDescentV1[];
-}
-declare function parseStructuralSelector(value: unknown): ParsedStructuralSelectorV1;
-```
-
-The path is a non-empty normalized repository-relative POSIX path: ASCII `/`, no scheme, drive,
-backslash, leading slash, empty/`.`/`..` segment, glob, control byte, percent-encoded separator,
-query/fragment or symlink escape. `#` occurs exactly once. `$id` is terminal and admits no descent.
-Every other root is exactly `export:<IdentifierName>`, `interface:<IdentifierName>`,
-`type:<IdentifierName>`, `function:<IdentifierName>` or `class:<IdentifierName>`; descent segments
-are slash-separated `private-method:`, `method:`, `local:`, `member:`, `object:` or terminal
-`literal`. Empty names, root kinds in descent, descent kinds at root, `export:` below a root, dotted
-pseudo-paths, bytes after `literal` and grammatically impossible parent/child pairs fail in the
-parser.
-
-Catalogue admission stores only `parsed.canonical`, and every adapter receives the exact parsed
-object from that admission pass. `resolveStructuralSelector(program, parsed)` is the sole
-TypeScript resolver; `resolveJsonSelector(bytes, parsed)` is the sole JSON resolver. Neither reparses
-or switches on a raw string. Root export/interface/type/function/class symbols, class methods,
-locals, direct members, object-literal properties and terminal literals each have one compiler/AST
-resolution rule. Zero or multiple matches fail. The same parser/resolvers must represent every
-selector in the ten-row seed and all three follow-on descriptor files; a descriptor cannot validate
-if its selector form has no resolver branch ([[D2498]], [[D2594]]).
-
-`id` matches `^[a-z][a-z0-9-]*$`, is unique, and equals the README register marker. `introducedBy`
-is one active or archived process RFC basename. Catalogue entries are ASCII-sorted by `id`.
-Unknown/missing/extra keys, duplicate ids, unsafe paths, unknown adapters or incompatible
-lifecycle/claim-mode pairs fail before claims are parsed.
-
-The initial catalogue is exactly the seven already-registered resources plus these three absent
-ones. The table is a reading aid; the checked-in JSON is the complete normative image:
-
-| resource | lifecycle | projection |
+| id | claim kind | source |
 |---|---|---|
-| `campaign-schema` | `sequential` | `json_schema_id@1` |
-| `concept-registry-schema` | `sequential` | `json_schema_id@1` |
-| `evidence-kinds` | `member_set` | `literal_string_tuple@1` |
-| `migration` | `sequential` | `migration_sequence@1` |
-| `pack-schema` | `sequential` | `json_schema_id@1` |
-| `principle-entry-schema` | `sequential` | `json_schema_id@1` |
-| `release-manifest-schema` | `sequential` | `json_schema_id@1` |
-| `run-schema` | `sequential` | `json_schema_id@1` |
-| `shape-entry-schema` | `sequential` | `json_schema_id@1` |
-| `source-attribution-registry` | `sequential` | `canonical_resource@1` |
+| `campaign-schema` | `schema_lane` | schema slug `campaign`; no duplicated version export |
+| `evidence-kinds` | `members` | `EVIDENCE_KINDS` in `apps/server/src/sourcing/types.ts` |
+| `migration` | `migration_position` | `STORAGE_VERSION` and migration entries in `apps/server/src/storage.ts` |
+| `pack-schema` | `schema_lane` | `drill-pack`; `DRILL_PACK_SCHEMA_VERSION` |
+| `principle-entry-schema` | `schema_lane` | `principle-entry`; `PRINCIPLE_ENTRY_SCHEMA_VERSION` |
+| `run-schema` | `schema_lane` | `drill-run`; `DRILL_RUN_SCHEMA_VERSION` |
+| `shape-entry-schema` | `schema_lane` | `shape-entry`; `SHAPE_ENTRY_SCHEMA_VERSION` |
 
-The exact compatibility table is closed:
+These are the seven resources already present in `RESOURCE_NAMES` and already represented by
+register sections. The bootstrap neither discovers nor invents another resource.
 
-| lifecycle | allowed adapters | required claim mode |
-|---|---|---|
-| `sequential` | `json_schema_id@1`, `migration_sequence@1`, `canonical_resource@1`, `typescript_contract@1` | `prose` or `whole_projection` |
-| `member_set` | `literal_string_tuple@1`, `literal_string_union@1` | `members` |
-| `lineage_set` | `versioned_declarations@1` | `members` |
+### 1.1 Catalogue validation
 
-Existing rows retain `claimMode: prose`; the three new sequential roots use
-`claimMode: whole_projection`. Follow-on process RFCs use the same engine and may add only the
-closed adapters/lifecycles specified below. Adding an adapter or lifecycle requires an accepted
-amendment to this RFC's process contract and a second synthetic able-to-fail resource; a product
-RFC cannot add checker code.
+`tools/register-check.mjs` exports `parseResourceCatalogue(value)` and fails closed before reading
+claims or registers when:
 
-## 2. Closed projection adapters
+- the envelope, row keys, source keys, enum values or literals differ;
+- ids are duplicated, malformed or not ASCII-sorted;
+- two `json_schema` rows name the same `schemaSlug`;
+- a `schema_lane` row does not use `json_schema`, a `migration_position` row does not use
+  `storage_migrations`, or a `members` row does not use `string_tuple`;
+- a path is absolute, contains `..`, escapes the repository, or does not name a regular tracked
+  file; or
+- a configured export name is not a JavaScript identifier.
 
-Selector population and semantic validity are different facts. Every adapter returns this exact
-union; `partial` is not represented by throwing or collapsed into absence ([[D2490]]):
+The parser returns a deeply immutable owned copy. Mutating the caller's parsed JSON after admission
+cannot change a running audit.
 
-```ts
-interface ProjectedResourceV1 {
-  readonly identity: Readonly<Record<string, CanonicalValue>>;
-  readonly semantic: CanonicalValue;
-  readonly digest: `sha256:${string}` | null;
-  readonly resolvedSelectors: readonly string[];
-}
+## 2. One data source replaces the two inventories
 
-type ResourceResolutionV1 =
-  | {
-      readonly state: "absent";
-      readonly resolvedSelectors: readonly [];
-      readonly missingSelectors: readonly string[];
-    }
-  | {
-      readonly state: "partial";
-      readonly resolvedSelectors: readonly string[];
-      readonly missingSelectors: readonly string[];
-    }
-  | {
-      readonly state: "invalid";
-      readonly resolvedSelectors: readonly string[];
-      readonly missingSelectors: readonly [];
-      readonly diagnostics: readonly ResourceDiagnosticV1[];
-    }
-  | {
-      readonly state: "landed";
-      readonly resolvedSelectors: readonly string[];
-      readonly missingSelectors: readonly [];
-      readonly projection: ProjectedResourceV1;
-    };
-```
+Implementation deletes `RESOURCE_NAMES` and `SCHEMA_SLUGS` as independent authorities.
 
-Every successful adapter passes its identity, semantic value and selector array through one private
-`deepSealCanonical` boundary **before** digesting or publishing them. It validates the closed
-canonical-value domain, recursively copies arrays/plain objects into new plain containers,
-sorts object keys by the canonical byte order, rejects cycles, aliases outside the parsed/compiler
-graph, accessors, symbols, functions, `undefined`, non-finite numbers, negative zero and non-plain
-prototypes, then recursively freezes the copy. The digest is computed from that exact sealed copy
-and `ProjectedResourceV1` retains that same reference. Resolution maps, diagnostics and transition
-operands are recursively sealed too. Post-projection mutation of any caller/parser/compiler input
-therefore cannot change semantic bytes, and mutation through the result throws or is inert; the
-digest always re-computes from the retained semantic reference ([[D2597]]).
+The checker loads `rfc/shared-resource-registers.json` once. Every check receives that admitted
+catalogue or maps derived from it:
 
-The engine first expands the descriptor's selector fields in their declared order. Zero resolved
-selectors is `absent`; a strict non-zero subset is `partial`; all selectors resolving but failing
-adapter grammar/digest/agreement is `invalid`; only a valid complete projection is `landed`.
-`assertSharedResourceTransition` receives immutable before/after maps of descriptor id to this
-union, so introduction, adoption and regression rules cannot reinterpret an adapter exception.
+- C1 claim parsing accepts only catalogue ids and selects grammar by `claimKind`;
+- C2 applies lane ordering/depth only to `schema_lane` rows;
+- C3 collision identity and declaration/register bijection use catalogue ids;
+- C4 and C6 iterate every catalogue row, never a code list;
+- C5 applies the existing bare-integer refusal only to `migration_position` rows;
+- C7 maps every versioned schema on disk through the catalogue's `json_schema.schemaSlug` rows;
+- C8 uses the same slug map for schema digest reconciliation; and
+- `derivedOutput` iterates catalogue rows and formats by `claimKind`.
 
-The adapter is selected by `projection.adapter`, never by resource id. Exact selector identity is
-`<repository-relative POSIX path>#<structural selector>`. Paths may repeat across resources;
-complete selector strings may not. Every path rejects absolute form, glob, `..`, symlink traversal
-and non-repository targets. A selector must resolve structurally exactly once. Text matching is not
-resolution.
+There is no fallback list. A resource present in a register section but absent from the catalogue,
+or present in the catalogue but missing its one register section, fails set equality. Duplicate
+register markers still fail through C6.
 
-The closed adapter set is:
+The human-owned register prose remains in `rfc/README.md`. The tool checks it; it does not generate
+or rewrite it.
 
-1. `json_schema_id@1` — resolves one JSON file `$id` and optional exported version selector;
-   identity is the terminal version component parsed from the exact
-   `urn:chess-tabiya:schema:<slug>:<version>` id, semantic is the complete JSON value parsed with
-   duplicate-key rejection, and the digest is over that value. When non-null, the exported version
-   must be one literal string/positive safe integer equal to the parsed id component after canonical
-   decimal/dotted-decimal spelling. No comments or non-JSON number forms exist in the input.
-2. `migration_sequence@1` — resolves one literal ordered migration array and one exported positive
-   safe-integer head under the descriptor's exact `programConfig: "tsconfig.base.json"`; identity is
-   the contiguous `1..head` sequence. Each array member must be the
-   exact object `{ version, name, apply }`, where `version` is a literal positive safe integer,
-   `name` a literal string and `apply` an arrow/function expression whose repository calls resolve
-   under the TypeScript graph rules below. Semantic is the ordered array of
-   `{ version, name, applyGraph }`; `applyGraph` is the exact `TypeScriptGraphV1` image below with
-   the migration callback as its sole root. SQL is retained as decoded string-literal values inside
-   that graph. There is no separately “normalized SQL” text and therefore no second SQL parser/image.
-3. `literal_string_tuple@1` — resolves one exported readonly literal string tuple; identity and
-   semantic are the ASCII-sorted unique member set. Source order, whitespace and comments do not
-   move a set resource.
-4. `literal_string_union@1` — resolves one exported type alias whose complete body is a union of
-   unique string literals; identity and semantic are the ASCII-sorted member set. Parentheses,
-   source order, whitespace and comments do not enter the image; every non-string-literal arm,
-   duplicate or alias fails. It exists because adoption must describe the live
-   `AssistancePermission` authority rather than rewriting it into a tuple ([[D2467]]).
-5. `canonical_resource@1` — statically resolves one exported `const` declaration through the same
-   pinned TypeScript program/checker; it never imports, bundles or executes the target module. Its
-   initializer may contain only parentheses, `as const` or `satisfies` wrappers and optional
-   `Object.freeze(...)` wrappers around a plain object literal. The receiver identifier and property
-   access are resolved, not compared as text: `Object` must be the global `ObjectConstructor` symbol
-   from the program's pinned TypeScript library and `freeze` must resolve to its exact intrinsic
-   signature. A local/imported/parameter value binding named `Object`, an alias of the intrinsic,
-   computed access or any shadowed `freeze` fails before literal projection ([[D2595]]).
-   Object members are property assignments with static identifier or string-literal keys; values
-   recurse only through JSON literals, arrays and plain object literals under the same wrappers.
-   Spread, shorthand, computed keys, methods/accessors, identifier references, calls other than the
-   admitted `Object.freeze`, templates, getters, holes and duplicate keys fail. After the wrappers
-   are erased, the value has exact keys `{ id, version, payload, digest }`: `id` equals the
-   descriptor id, `version` is a positive safe integer, `payload` is a canonical JSON object, and
-   literal `digest` equals the shared-resource digest of `{ id, version, payload }`. Extra semantic
-   fields outside `payload` fail. String values are string literals, never templates; numeric values
-   use canonical decimal JSON integer spelling, and hexadecimal, octal, binary, exponent, fractional
-   and negative-zero syntax fails before canonicalization. Its exact landed projection is
-   `{ identity:{ version }, semantic:payload, digest, resolvedSelectors:[rootSelector] }`; the
-   sequential lifecycle head is `identity.version`, and `digest` is the already-validated literal
-   digest rather than a second digest over the wrapper. This side-effect-free AST image is the
-   required shape for source attribution, provider protocol and assistance exchange ([[D2501]],
-   [[D2537]], [[D2541]]).
-   **[[D2559]]–[[D2560]]:** the parser and projector both receive the complete descriptor, not only
-   its selector. They require the parsed `id` to equal `descriptor.id` before digest agreement and
-   require `payload` to be a non-null, non-array plain JSON object. Passing the parsed id back as the
-   expected id is forbidden. The wider canonical-byte function still admits every value in §2.1;
-   the object restriction belongs to this adapter alone.
-6. `typescript_contract@1` — resolves a positive safe-integer literal version selector plus one or
-   more type/value roots using the repository-pinned TypeScript compiler and the descriptor's exact
-   `programConfig: "tsconfig.base.json"`. Starting from each root,
-   it follows every compiler-symbol reference in type positions, initializers, property access,
-   call/new/tagged-template expressions and return/throw/control-flow expressions. It traverses
-   repository declarations transitively, including re-export origins, generic declarations,
-   constraints/defaults and every local overload signature plus its implementation. Repository
-   edges are exactly `type_reference`, `value_reference`, `property_reference`, `call`,
-   `construct`, `tag`, `extends`, `implements`, `import` and `re_export`; any repository symbol edge
-   outside that enum fails.
+## 3. The three retained tree readers
 
-   The semantic graph is exactly this canonical value ([[D2500]]):
+This RFC data-drives only behavior that already exists in `register-check`.
 
-   ```ts
-   interface SyntaxTreeV1 {
-     readonly kind: string; // TypeScript SyntaxKind name
-     readonly text: string | number | boolean | null;
-     readonly children: readonly SyntaxTreeV1[];
-   }
+### 3.1 JSON schema
 
-   interface TypeScriptProgramIdentityV1 {
-     readonly compilerPackage: "typescript";
-     readonly compilerVersion: string;
-     readonly compilerIntegrity: string;
-     readonly repositoryCommit: string;
-     readonly configPath: "tsconfig.base.json";
-     readonly configDigest: `sha256:${string}`;
-     readonly rootNames: readonly string[];
-     readonly compilerOptions: CanonicalValue;
-   }
+`readSchemaFiles` continues to derive slug, version and digest from every `schemas/*.schema.json`
+file. A `json_schema` row binds one unique slug to one resource id. If `versionExport` is non-null,
+the existing schema-index reader requires that exported literal to equal the schema `$id` version.
+If it is null, the `$id` version is the sole head. Missing or extra schema slugs fail C7.
 
-   type ContractRootV1 =
-     | {
-         readonly kind: "selector";
-         readonly selector: string;
-         readonly nodes: readonly [string, ...string[]];
-       }
-     | {
-         readonly kind: "migration_apply";
-         readonly sequenceSelector: string;
-         readonly version: number;
-         readonly property: "apply";
-         readonly nodes: readonly [string, ...string[]];
-       };
+### 3.2 Storage migrations
 
-   interface ContractNodeV1 {
-     readonly id: string;
-     readonly origin: "repository" | "node_builtin" | "typescript_lib" | "external_package";
-     readonly exportedName: string | null;
-     readonly tree: SyntaxTreeV1;
-     readonly dependencyIdentity: {
-       readonly package: string;
-       readonly version: string;
-       readonly integrity: string;
-     readonly sourceDigest: `sha256:${string}`; // complete installed declaration artifact
-     } | null;
-   }
+The single `storage_migrations` row retains today's check: the exported `STORAGE_VERSION` must equal
+the largest literal migration entry in the configured file. This is not a generic lifecycle or
+history engine and reads no Git state.
 
-   interface ContractEdgeV1 {
-     readonly from: string;
-     readonly to: string;
-     readonly sitePath: readonly number[];
-     readonly kind: "type_reference" | "value_reference" | "property_reference" | "call" |
-       "construct" | "tag" | "extends" | "implements" | "import" | "re_export";
-     readonly exportPath: readonly string[];
-     readonly resolvedSignature: SyntaxTreeV1 | null;
-     readonly overloads: readonly SyntaxTreeV1[];
-   }
+### 3.3 String tuple
 
-   interface TypeScriptGraphV1 {
-     readonly program: TypeScriptProgramIdentityV1;
-     readonly roots: readonly ContractRootV1[];
-     readonly nodes: readonly ContractNodeV1[];
-     readonly edges: readonly ContractEdgeV1[];
-   }
-   ```
+The `string_tuple` row reads the named exported literal string tuple from its configured file and
+derives its members. Missing exports, computed/spread elements, duplicates and non-string members
+fail. This makes the existing evidence vocabulary source explicit; it does not project arbitrary
+TypeScript contracts.
 
-   The public adapter accepts only the validated descriptor and repository revision; it has **no
-   `graph`, node, edge, changed-symbol or compiler-program argument**. A private
-   `compileTypeScriptGraph(descriptor, repositoryRevision)` constructs the graph from selector
-   resolution and compiler-symbol traversal. A private `assertTypeScriptGraphV1` then validates the
-   complete constructed ABI before deep sealing and issues authority only for that exact sealed
-   graph reference: exact keys and canonical scalar domains for graph,
-   program, roots, nodes, syntax trees, edges and dependency identities; unique canonically ordered
-   roots/node ids/edges; exact descriptor-selector equality; unique node ids; root and edge endpoint
-   membership; legal origin/dependency combinations; repository reachability of every node from a
-   root; edge-kind/signature/overload relations; and program identity equality with the pinned
-   compiler invocation and resolved Git commit. An incomplete program, malformed syntax node, duplicate/orphan node,
-   dangling endpoint, invented edge kind, crossed signature or extra key fails before a digest
-   exists ([[D2593]]).
+Adding a future source shape requires its own measured need and RFC. This bootstrap does not claim
+that three readers can represent every future shared resource.
 
-   Program construction is closed. The engine duplicate-key parses `tsconfig.base.json`; requires
-   exactly its repository-relative bytes and no `files`, `include`, `exclude`, `references` or
-   `extends`; converts its `compilerOptions` with the pinned compiler; forces `types: []`,
-   `noEmit: true`, `incremental: false` and `composite: false`; and rejects any unknown or
-   diagnostic option. `configDigest` is `sharedResourceDigest` over the duplicate-key-checked complete
-   parsed config value. `rootNames` is the ASCII-sorted unique set of TypeScript source paths named by
-   the descriptor's roots and version selector. One `ts.createProgram` is created at repository
-   root with the pinned compiler's standard host, case-sensitive real repository paths,
-   `preserveSymlinks: false`, no ambient automatic type acquisition and no generated/declaration
-   substitute for a workspace source. For `typescript_contract@1`, `rootNames` comes from the roots
-   and version selector; for `migration_sequence@1`, it comes from the sequence and head selectors.
-   Module resolution uses that exact program and importing source
-   path; workspace package exports resolve to repository source, while external packages resolve to
-   the unique importer-visible lockfile instance. Any source root absent from the program, compiler
-   diagnostic on an owned root/edge, ambiguous realpath/case, missing workspace source or multiple
-   importer-visible package identities fails. `program.compilerOptions` is the canonical converted
-   semantic options after the four forced values; its config/compiler/root identities make program
-   drift part of the graph ([[D2539]]). `repositoryCommit` is the fully resolved 40-hex commit read
-   by the program host; repository paths are read from that Git tree, never from caller text or a
-   mutable working tree. `compilerIntegrity` is the SHA-512 of the exact installed pinned compiler
-   package metadata plus executable compiler image, never a label supplied by the adapter caller.
+## 4. Claim grammar and collision behavior
 
-   A repository node id is its resolved repository path plus the declaration's zero-based preorder
-   ordinal **among retained repository declarations in that path**, computed only after transitive
-   reachability closes. Retention is an identity graph over exact compiler `ts.Symbol` and
-   declaration-node objects returned by the checker—not a set of identifier strings. Each resolved
-   root seeds its exact symbol/declarations; traversed type/value/call/property/re-export edges add
-   only the declarations of the exact resolved target symbol. All overload declarations belonging
-   to that symbol are retained together. The retained image is an ordered declaration list, never a
-   map keyed by exported name: every retained declaration, including same-name overload signatures
-   and their implementation, receives its own ordinal and node. An unrelated same-spelling
-   declaration in another lexical scope has another symbol and cannot enter or renumber the graph
-   ([[D2596]]). A declaration outside the retained graph cannot move an id. A newly retained
-   declaration can; so can a retained binding/member rename through its `SyntaxTreeV1`, which is
-   intentional. An external node id is its origin, dependency identity and public export path joined
-   with NUL separators. `SyntaxTreeV1.children` retains compiler child order; `text` is non-null only
-   for identifiers, decoded literals and operator tokens, and is otherwise null. Trivia, comments
-   and source offsets do not enter the tree; binding/member names, operators, statement/argument
-   order and type structure do. A selector resolves to one exact compiler symbol; its root stores
-   the canonically ordered non-empty `nodes` set of every declaration owned by that symbol. This
-   makes overloads and declaration merging explicit in the ABI instead of choosing a privileged
-   declaration. Alias roots include the public alias declaration and the exact aliased target
-   declarations, with a `re_export` edge to the target. Migration roots likewise store their exact
-   non-empty `nodes` set, derived from the already-resolved unique sequence member and never
-   reconstructed as an undeclared selector. Roots sort by canonical bytes and are unique; nodes sort by `id`;
-   `sitePath` is the zero-based child-index path from the retained declaration root to the exact
-   compiler relation node, using the same trivia-free child order as `SyntaxTreeV1`. It is
-   non-empty for expression relations and distinguishes repeated equal-looking accesses; no edge
-   at another site, declaration or spelling can discharge it. Edges sort by the canonical bytes of
-   the complete edge and only exact same-site duplicates collapse. Every
-   root `nodes` member must name a retained node, and every retained declaration of the resolved root
-   symbol must appear exactly once. Every edge endpoint must name a retained node. Repository
-   edges have `resolvedSignature: null` and
-   empty overloads unless the edge is call/construct/tag; those three retain the compiler-selected
-   signature and the complete public overload set selected with `SignatureKind.Call` or
-   `SignatureKind.Construct` as appropriate. Optional-call syntax is retained at the exact site,
-   while signature enumeration uses the compiler-selected non-null callable type; optionality may
-   not erase an otherwise exact method authority. Global `eval` is refused when either the exact value
-   relation or selected signature reaches the TypeScript-library intrinsic, including aliases and
-   `.call`; a repository-local method with the same spelling remains legal. This deliberately treats a local/import alias
-   rename as a semantic change—the adapter promises deterministic complete coverage, not equivalence
-   proving ([[D2538]], [[D2540]]).
-
-   External boundaries are closed rather than ignored ([[D2491]]):
-   - `node:` builtins use `origin: "node_builtin"`, the module/export path in `id`, the exported
-   declaration as `tree`, and exact `{ package:"@types/node", version, integrity, sourceDigest }`
-     identity, where `sourceDigest` covers the complete importer-visible declaration artifact;
-   - ECMAScript/DOM library symbols use `origin: "typescript_lib"`, the normalized lib filename and
-     export path in `id`, the declaration as `tree`, and `{ package:"typescript", version,
-     integrity, sourceDigest }` from the exact compiler declaration artifact;
-   - package imports use `origin: "external_package"`, package/export path in `id`, the public
-     declaration as `tree`, and the exact resolved `{ package, version, integrity, sourceDigest }`
-     identity from `pnpm-lock.yaml` plus the complete importer-visible declaration artifact;
-     workspace links resolve as
-     repository nodes, not external packages; and
-   - every call/construct/tag edge records the compiler-selected signature plus the complete public
-     overload set in the exact `ContractEdgeV1` fields above.
-
-   Ambient declarations without one of those three origins, `any`/`unknown`-based member or call
-   resolution, `eval`, dynamic `import()`, computed property names not reducible to one literal,
-   open runtime indexing and missing/ambiguous lockfile identity fail. A statically spelled dot or
-   literal-key read through a declared index signature retains that exact index/receiver
-   declaration plus the spelled site. A non-literal element access is admitted only when its key
-   type is a finite non-empty union of string/number literals and every member resolves against the
-   closed receiver; it emits one site-bound property edge per exact key. `string`, `number`, `any`,
-   `unknown`, missing-property and mixed/open unions still fail. Re-exports resolve to
-   origin while retaining the public export path. This is the complete before/after authority used
-   by adopted assistance resources; callers cannot supply a changed-symbol list. Its exact landed
-   projection is
-   `{ identity:{ version }, semantic:graph, digest:sharedResourceDigest({ adapter:"typescript_contract@1", version, graph }), resolvedSelectors:[...roots, versionSelector] }`,
-   with selectors in descriptor order; the sequential lifecycle head is `identity.version`
-   ([[D2541]]). The projector does not accept `graph` as an input; it constructs, validates and
-   recursively seals the exact graph above, then computes the digest over that retained reference.
-   **[[D2561]]:** before producing that image, the projector requires set equality
-   between descriptor `roots` plus `versionSelector` and `graph.roots`' selector values; every root
-   names its complete non-empty retained `ContractNodeV1` declaration set; and the unique source-path set of those selectors equals
-   `program.rootNames`. Empty, extra, duplicate, crossed-node and crossed-program root images are
-   invalid, never landed.
-7. `versioned_declarations@1` — resolves one literal declaration array whose members contain a
-   base id and canonical positive safe-integer version under the descriptor's literal field names.
-   Every member must be a recursively canonical JSON object literal: no spread, shorthand,
-   computed key, method, accessor, identifier reference or non-canonical numeric literal.
-   Identity is the ASCII-sorted `id@version` set; semantic is the same-order array of the complete
-   parsed objects, with object keys canonicalized by §2.1. Declaration/source order, comments and
-   whitespace do not enter the image. This supplies semantic conventions' per-base lineage without
-   a bespoke checker ([[D2492]]).
-
-Adapter configuration is the discriminated data union in §1: exact roots/version selector and no
-open options. All owned selectors are derived from those fields. The generic engine rejects a
-descriptor whose configuration omits a required root, repeats a selector or contains a key the
-adapter does not consume. These rules define the pre-canonical semantic values; §2.1 alone defines
-their bytes and digest ([[D2492]]).
-
-### 2.1 One canonical byte authority
-
-The implementation adds `tools/shared-resource-canonical.mjs` exporting
-`canonicalSharedResourceBytes(value)` and `sharedResourceDigest(value)`. Both register checking and
-all build-time resource digest generation import these functions; a second project implementation
-is forbidden.
-
-The admitted value domain is recursively: `null`, booleans, strings with no unpaired surrogate,
-safe integers other than negative zero, arrays, and plain objects with unique own string keys.
-Floating-point values, `undefined`, bigint, functions, symbols, dates, maps, sets, prototypes,
-cycles, accessors and sparse arrays fail.
-
-Canonical bytes are produced recursively: object keys are sorted by ascending UTF-16 code-unit
-sequence; scalars and keys use ECMAScript `JSON.stringify` escaping; arrays retain order; objects
-and arrays use `,`/`:` with no whitespace; the final string is UTF-8. Digest input is the UTF-8
-prefix `chess-tabiya/shared-resource/v1\0` followed by those bytes. Output is lowercase
-`sha256:<64 hex>`.
-
-Independent reference fixtures prove cross-key-order equality, array-order sensitivity, resolver-
-policy sensitivity, UTF-8/escape behavior and refusal of every unsupported value class. Therefore
-`canonical(rows)` and insertion-order `JSON.stringify` are not alternate conforming images
-([[D2444]]).
-
-## 3. Lifecycles and claim grammar
-
-Lifecycle, not adapter or resource name, selects claim/collision/landing behavior.
-
-### 3.1 Sequential
-
-A landed sequential resource has a positive integer/dotted version head as its adapter defines.
-At most one active RFC claims it. Existing `prose` resources retain their registered lane grammar
-and non-empty change description. A `whole_projection` resource uses exactly:
+The parent RFC's public `tabiya-claims` form stays unchanged:
 
 ```text
-<resource> | first lane 1 | whole projection
-<resource> | lane <next version> | whole projection
+resource-id | claim | changes
 ```
 
-`first lane 1` is valid only from `absent`. Later claims name exactly the adapter-specific next
-version. A landing must advance the head, change the complete projection digest, consume the sole
-prior claim and append one owner-bound landed row atomically. Fixed-head semantic drift, skipped or
-backward lanes, multiple claimants and partial landings fail.
+Grammar is selected from the catalogue row:
 
-### 3.2 Member set
+- `schema_lane`: `lane <dotted-nonnegative-decimal>` with the same component depth as the landed
+  head and strictly greater than that head;
+- `migration_position`: `position next` or `position behind <rfc-stem>`; bare integers remain
+  refused; and
+- `members`: `members <member>, ...`, with unique ASCII-lower-snake-case members.
 
-Claims use sorted unique `members <member>, ...`; collision identity is each member. Tree members
-and landed member rows are set-equal. Additions require exact prior claims; deletion of a landed
-member is forbidden. Semantic operations do not belong in a member-set resource. Assistance uses
-one member-set for the permission vocabulary and a separate sequential contract for its operation
-graph, resolving [[D2453]].
+C3 retains its collision identities: exact lane for schemas, position ordering for migrations, and
+individual member name for member sets. Declarations and README live-claim rows remain exactly
+set-equal. This RFC changes where the resource and grammar inventories come from, not what a valid
+claim means.
 
-### 3.3 Lineage set
+## 5. Explicitly removed scope
 
-Claims use sorted unique `members <id>@<version>, ...`. Collision identity is the base id. A new id
-starts at 1; an existing id advances exactly one version; prior versions remain landed. The same
-generic transition reader binds the before claim to the after declaration/history rows. This is
-semantic conventions' distinct profile, not C10.
+The implementation must not contain or introduce any of the following on this RFC's authority:
 
-## 4. Introduction, absence and adoption
+1. `typescript_contract`, `canonical_resource`, `versioned_declarations`, structural selectors or
+   a TypeScript dependency graph;
+2. generic semantic projections, canonical resource digests or projected object graphs;
+3. `absent`, `adopted`, `existing` or other lifecycle states;
+4. staged-index, parent-commit, first-parent or Git-history readers;
+5. release-manifest, concept-registry, source-attribution, assistance, semantic-convention or
+   provider-protocol roots; or
+6. generated `rfc/README.md` prose.
 
-Catalogue growth is authorized only by an accepted process RFC. Its implementation changes the
-catalogue, README register, process closeout, ledger and append-only exploration log together and
-must match both that RFC's canonical `tabiya-resource-descriptor-source` and its
-`tabiya-resource-roots` routing summary. A product RFC cannot add its own entry.
+Those mechanisms were part of the withdrawn shadow implementation. A later RFC may justify a
+small addition from a concrete collision, but it cannot cite the former draft as accepted design.
 
-### 4.1 Genuinely absent root
+## 6. Cross-RFC consequence
 
-`unregistered -> absent` is legal only when the adapter result is exactly `state: "absent"`.
-File existence is irrelevant: a new export may be introduced in an existing module ([[D2443]]).
-`partial` and `invalid` both refuse introduction with distinct stable diagnostics. The README image
-is `head=absent`, header-only Landed and Live-claims tables, and an immutable `introduced-by`
-marker.
+`assistance-config-register.md`, `semantic-convention-register.md` and
+`provider-protocol-register.md` currently depend on the withdrawn projection/lifecycle engine.
+They do not become implementable merely because this collision catalogue lands. Their next author
+round must reduce each registration to the smallest concrete source/claim shape it needs, adding a
+new reader only if the three retained readers genuinely cannot express it.
 
-After the process RFC archives, one product RFC may add `first lane 1`. A later product transition
-must make every owned selector resolve, produce a valid projection, remove the claim and append the
-landed row together. Once landed, missing/partial selectors can never be read as absence.
+This is a staged discharge under [[D3047]], not prose-only future work: [[D2454]] remains a tracked
+work-state item owned by `assistance-and-presentation`, and the provider/semantic register rows
+remain tracked behind this foundation. Before this RFC can **land**, the implementing closeout must
+show each surviving discharge in `planning/work-state.json` with an owner, date and
+`blocker: "item:D3034"`; otherwise foundation implementation is refused.
 
-### 4.2 Already-landed adoption
+## 7. Able-to-fail contract
 
-`unregistered -> adopted` is the only route for a current product authority ([[D2465]]). It is
-legal only when:
+Fresh review and implementation must execute all of these controls:
 
-1. the accepted process RFC declares `introduction: adopted` and the exact descriptor;
-2. every owned selector resolves in both before and after trees;
-3. their bytes and complete projected image are identical across the transition;
-4. the after register writes exactly one `adopted@<current head>` baseline row with the derived
-   digest, the process RFC owner and `coverage begins here` marker;
-5. there is no live claim; and
-6. catalogue/register/ledger/log are the only semantic governance additions.
+1. the exact seven-row seed parses and is ASCII-sorted with seven unique ids;
+2. deleting, duplicating, renaming or adding an extra key to a row fails catalogue admission;
+3. a duplicate schema slug fails even when ids differ;
+4. every current claim/register/tree test remains green against the catalogue-driven checker;
+5. deleting either former code inventory does not change the result because neither exists;
+6. a synthetic versioned schema becomes a known resource by adding one `json_schema` catalogue row
+   and one register fixture, with no checker-source edit;
+7. that synthetic schema without its row fails C7, and its row without a schema fails C7;
+8. an unknown claim resource fails even if a README section uses the same unknown name;
+9. two RFCs claiming one synthetic schema lane collide;
+10. a missing/extra register section fails catalogue/register set equality;
+11. a missing tuple export, spread/computed tuple, duplicate member and non-string member each fail;
+12. caller mutation after catalogue admission leaves the admitted image unchanged; and
+13. a source scan proves the implementation contains none of §5 items or the three removed
+    speculative root ids.
 
-The adoption does not invent earlier landed rows. Future sequential continuity starts above the
-adopted head; member/lineage deletion remains forbidden from the adopted identity set. Adoption
-cannot run for a registered resource, cannot coincide with a product change and cannot be used to
-reset history.
-
-This is how assistance-config v4, workflow-preference v1 and the current assistance-permission
-vocabulary enter the generic engine without being described as absent or historically governed.
-
-## 5. One temporal authority
-
-Snapshot validation and checked register projection remain in `register-check`, but every temporal rule is
-implemented by one exported pure function:
-
-```text
-assertSharedResourceTransition(beforeTree, afterTree, changedPaths)
-```
-
-The staged runner materializes the Git index and compares committed `HEAD` to that index; unstaged
-and untracked bytes cannot satisfy it. CI runs `make register-history-check` with required
-`REGISTER_BASE_SHA`, set to `github.event.before` on push and the PR base SHA on pull requests, and
-full history checkout. It walks every first-parent commit in order and calls the same function.
-`make ci-local` checks committed `HEAD^..HEAD` plus the staged index. Missing/unresolvable parents,
-shallow history, second-parent-only prerequisites and a hidden bad intermediate commit fail closed.
-
-The function admits only:
-
-- catalogue bootstrap over the seven existing registered resources plus the three declared absent
-  roots;
-- `unregistered -> absent`;
-- `unregistered -> adopted`;
-- `absent -> first claim`;
-- `first claim -> landed 1`;
-- registered sequential/member/lineage claim and landing transitions; and
-- product-byte-preserving catalogue metadata corrections authorized by a separate accepted process
-  RFC.
-
-Combined introduction+claim, introduction+product landing, adoption+product change, claimless
-landing, lingering claim, rewritten older row, landed-to-absent/partial and fixed-head digest drift
-all fail before current-snapshot equality can make them look valid.
-
-Diagnostics use stable `R/<resource>/<rule>` codes. Human output may summarize them under one
-`register-check` line; new resources do not allocate C9/C10/C11 and therefore cannot reorder or
-shadow existing checks.
-
-## 6. Cross-RFC handoff
-
-The exact reconciliation is recorded in
-`planning/shared-resource-register-bootstrap/cross-rfc-reconciliation-2026-09-01.md`.
-
-- `assistance-config-register.md` depends on this implemented RFC, adds catalogue entries/adoption
-  baselines only, and delegates every projection/transition/history check. Its hand-written symbol
-  deltas are removed as authority.
-- `semantic-convention-register.md` uses `versioned_declarations@1` plus `lineage_set`, depends on
-  this engine rather than assistance C9, and retains its product semantic-history guarantee.
-- `provider-protocol-register.md` uses one atomic `canonical_resource@1`; independent accepted
-  producer/source obligations establish expected population in the product RFC, not in the
-  register tuple itself.
-- `evidence-presentation.md` may claim source-attribution `first lane 1` only after this process
-  implementation. Its payload includes rows, resolver identity and missing-field policy, all under
-  one digest ([[D2442]]).
-
-## 7. Able-to-fail matrix
-
-The implementation—not pre-acceptance review—supplies executable fixtures for at least:
-
-1. catalogue derivation over all ten initial resources with no hard-coded resource list;
-2. a second synthetic resource for every lifecycle and adapter, proving no resource-id dispatch;
-3. duplicate id/selector, repeated path with distinct selectors, unsafe path and unknown adapter;
-4. existing-file/new-selector absence passing while borrowed or partial selectors fail;
-5. exact absent introduction, combined introduction+claim and combined introduction+landing;
-6. exact adoption, adoption with product-byte/digest change, invented prior rows and replayed
-   adoption;
-7. canonical-resource resolver/missing-policy changes moving the digest at fixed row membership;
-8. key-order canonical equality plus unsupported-value refusal and independent digest agreement;
-9. sequential first/next/skipped/backward/duplicate claimant and claimless landing;
-10. member addition/removal/collision and a same-membership operation change refused unless routed
-    through a separate sequential resource;
-11. lineage new-id/next-version/skipped/backward/same-base collision;
-12. TypeScript contract transitive type/call/property change, omitted root, unresolved dynamic edge,
-    formatting/comment control, retained import-alias/local-binding rename, unrelated out-of-graph
-    declaration invariance, program-config mutation and crossed compiler/package identity;
-13. atomic root with version-only, payload-only or digest-only partial artifact;
-14. staged index-vs-HEAD, committed first-parent, missing parent, shallow range, hidden bad commit and
-    second-parent-only prerequisite;
-15. landed-to-absent and landed-to-partial regression; and
-16. checked README/catalogue bijection, preservation of unrelated README prose and stable
-    diagnostics after adding a resource.
+The full repository gate is `make verify-awake`. The focused contract receives its own normal Make
+target and is enrolled in `verify-governance`; no ad-hoc environment command is part of the
+acceptance surface.
 
 ## 8. Implementation boundary and order
 
-The accepted process implementation may change only the register/catalogue tools and tests,
-`rfc/shared-resource-catalogue.json`, `rfc/README.md`, RFC-0000/template/development documentation,
-CI checkout/base wiring, the three absent register sections, and its ledger/log/roadmap closeout.
-It creates no release schema, concept registry, source-attribution object, assistance/provider/
-semantic product authority, API, storage, content, web or protected-design bytes.
-
-Order:
-
-1. fresh independent buildability review executes the latest author-repair contract: parse and validate
-   the literal ten-descriptor seed, projection union, compatibility matrix, four resolution states,
-   adapter semantic-image rules, README ownership and the implementation-test boundary;
-2. only after acceptance, implement the generic catalogue/projection/lifecycle/transition engine,
-   all sixteen fixture families and three absent roots;
-3. run normal `make register-check`, governance and full `make verify`;
-4. archive this RFC with ledger and append-only exploration-log closeout;
-5. rebase/accept/implement the assistance population RFC, then semantic/provider population RFCs;
-6. only then accept and implement their product lanes.
-
-Step 1 proves the contract is literal and implementable; it does not pretend the unimplemented
-engine already executes its implementation acceptance suite. Step 2 must make every family in §7
-red against its named mutation before the implementation can complete ([[D2494]]).
-
-## Historical finding routing
-
-The generic engine retains the earlier returned obligations rather than making them invisible:
-
-- [[D2381]] remains the header-only empty-register rule;
-- [[D2382]] remains the second-resource/no-name-dispatch falsifier;
-- [[D2383]] remains exact catalogue population and selector-grammar closure; and
-- [[D2384]] remains staged-index plus committed first-parent temporal verification.
-
-The third fresh review adds the author-repair batch without changing that direction:
-
-- [[D2488]] defines the missing projection/config discriminated union;
-- [[D2489]] supplies all ten literal complete baseline descriptors;
-- [[D2490]] carries selector `partial` through one typed resolver/transition image;
-- [[D2491]] closes TypeScript traversal and external-edge semantics;
-- [[D2492]] defines the three missing adapter normal forms;
-- [[D2493]] fixes README derived-byte ownership while preserving hand-authored prose; and
-- [[D2494]] makes the pre-acceptance review matrix executable without implementing product bytes.
-
-The fourth author preflight found four remaining literal-contract gaps:
-
-- [[D2498]] closes selector descent and proves the two adopted assistance heads resolve;
-- [[D2499]] makes each process RFC authorize complete descriptor bytes rather than prose fields;
-- [[D2500]] defines the exact TypeScript/migration node, edge, signature and ordering image; and
-- [[D2501]] makes canonical resources a static side-effect-free literal AST projection.
-
-Their earlier repairs are incorporated into §§1–7. They close only when the amended executable
-criteria land; rewriting the architecture does not retire the findings.
-
-The fourth fresh review returns five remaining generic-image obligations to this RFC:
-
-- [[D2537]] makes the canonical-resource author receipt enforce its digest and literal grammar;
-- [[D2538]] replaces file-global declaration ordinals with stable retained-symbol identities;
-- [[D2539]] defines one reproducible compiler-program and module-resolution authority;
-- [[D2540]] gives each migration callback graph a representable deterministic root; and
-- [[D2541]] defines complete projected identity, semantic, digest and lifecycle-head values for the
-  canonical-resource and TypeScript-contract adapters.
-
-They require a bounded fifth author repair and another fresh independent review. None authorizes
-implementation while this RFC remains returned.
-
-The sixth fresh review preserves those repairs and returns four remaining exact-image obligations:
-
-- [[D2559]] binds a canonical resource's literal `id` to its catalogue descriptor instead of
-  validating the parsed id against itself;
-- [[D2560]] enforces the adapter's canonical JSON **object** payload without narrowing the shared
-  canonicalizer's wider value domain;
-- [[D2561]] joins every TypeScript descriptor selector to one exact graph root and retained node,
-  refusing the current green empty-graph projection; and
-- [[D2562]] preserves every retained overload declaration instead of overwriting same-name entries
-  in an object map.
-
-They require a bounded sixth author repair and another fresh independent review. No implementation
-is authorized while any of these four boundaries remains open.
-
-The sixth author repair closes those four contract images: descriptor id and adapter payload are
-validated before projection; descriptor selectors, graph roots, retained nodes and program roots
-form one exact join; and retained declarations are an ordered list that preserves overloads. The
-new 4/4 author contract retains empty/extra/crossed graph negatives and all three non-object payload
-negatives. Another genuinely fresh review still gates acceptance and implementation.
-
-The seventh fresh review preserves those bounded repairs and returns five deeper projection
-authorities:
-
-- [[D2593]] requires the complete `TypeScriptGraphV1` program/node/edge ABI rather than root-only
-  membership around arbitrary caller bytes;
-- [[D2594]] unifies normalized repository selector admission with the resolver that must implement
-  every seed and follow-on root/descent form;
-- [[D2595]] binds the admitted `Object.freeze` wrapper to the global intrinsic so static and runtime
-  resource bytes cannot diverge;
-- [[D2596]] derives retained declarations from compiler-symbol reachability rather than identifier
-  spelling; and
-- [[D2597]] makes projected semantic payloads recursively immutable under their digest.
-
-`make shared-resource-bootstrap-seventh-fresh-review` reproduces all five. They require a bounded
-seventh author repair and another fresh independent review; no engine/catalogue implementation is
-authorized while these seams remain open.
-
-The seventh author repair closes the five authorities without adding a resource-specific branch:
-
-- [[D2593]] removes caller-authored TypeScript graphs from the adapter API and validates every
-  constructed program/root/node/tree/edge field plus graph reachability before sealing;
-- [[D2594]] makes a branded parsed selector the only value catalogue admission and every resolver
-  consume, and crosses the ten seed plus three follow-on descriptor files through that one grammar;
-- [[D2595]] resolves `Object.freeze` through the pinned checker to the global intrinsic and rejects
-  local, imported, parameter and alias shadows;
-- [[D2596]] seeds and follows exact compiler symbols/declaration nodes, retaining overloads while an
-  unrelated same-spelling declaration cannot enter or renumber the graph; and
-- [[D2597]] recursively canonical-copies and freezes every published projection/resolution value
-  before digesting the exact retained reference.
-
-`make shared-resource-bootstrap-seventh-author-repair` retains the sixth 4/4 controls and executes
-the five inversions. It is positive author evidence only; another genuinely fresh independent
-review still gates acceptance and implementation.
-
-### Eighth fresh independent return (2026-09-04)
-
-The next independent pass executed the author model beyond its named fixtures and returned it on
-[[D2645]]–[[D2649]]. The alleged complete graph contains only explicit selector nodes and no edges;
-its program is arbitrary caller source stamped with fixture compiler/config identity; aliased
-re-exports retain only the alias declaration; recursive sealing accepts fractions, unsafe integers
-and unpaired surrogates outside the canonical domain; and an ordinary overload set cannot resolve
-as a root at all. The singular contract root also lacks a deterministic declaration rule.
-
-The repair owns each obligation separately: [[D2645]] complete transitive graph construction,
-[[D2646]] pinned repository-program identity, [[D2647]] alias/re-export target reach, [[D2648]] exact
-canonical scalar admission and [[D2649]] overload-root identity.
-
-`make shared-resource-bootstrap-eighth-fresh-review` retains the prior 4 + 5 controls and reproduces
-the five new contradictions. Green means the falsifiers fire. A bounded eighth author repair must
-construct a real pinned repository program, traverse its complete declared compiler-symbol graph,
-resolve aliases, enforce the exact scalar domain and define overload-root identity. Another fresh
-review still gates acceptance and every production byte. Receipt:
-`planning/shared-resource-register-bootstrap/eighth-fresh-independent-buildability-review-2026-09-04.md`.
-
-### Eighth author repair (2026-09-04)
-
-The bounded repair replaces the caller-source projector with a repository-bound projector whose
-only request operands are the complete descriptor and a Git revision. The host resolves that
-revision to one commit, reads every repository source/config path from that tree, records the commit,
-digests the committed config and hashes the actual installed compiler image. Working-tree changes
-cannot move a projection of the same commit ([[D2646]]).
-
-Starting from the resolved roots, the model retains exact declaration objects, walks compiler-
-resolved type/value/property/call/construct/tag/heritage/import/re-export relations and recursively
-adds repository targets ([[D2645]]). A public alias retains both its own declaration and the aliased
-target with an exact `re_export` edge ([[D2647]]). Root ABI now carries a canonical non-empty `nodes`
-set, so one overload symbol retains every signature plus implementation without inventing a
-privileged declaration ([[D2649]]). The shared sealing boundary rejects fractional/unsafe/negative-
-zero numbers and unpaired surrogates in values or keys before a digest exists ([[D2648]]).
-
-`make shared-resource-bootstrap-eighth-author-repair` retains 4 + 5 + 5 earlier controls and passes
-5/5 new repair controls against an actual committed temporary Git repository. It is positive author
-evidence only. Another genuinely fresh independent review still gates acceptance and every
-production implementation. Receipt:
-`planning/shared-resource-register-bootstrap/eighth-author-repair-2026-09-04.md`.
-
-### Ninth fresh independent return (2026-09-04)
-
-The next independent pass returned the projector on [[D2667]], [[D2668]], [[D2669]], [[D2670]],
-[[D2671]] and [[D2672]]. Standard-host fallback admits untracked repository and `node_modules`
-bytes outside the selected Git tree; installed package declarations can be misclassified as
-repository nodes; external IDs embed absolute paths; merged library symbols retain unreachable
-declarations; property-access receivers are skipped; and the nested graph ABI is not recursively
-validated.
-
-`make shared-resource-bootstrap-ninth-fresh-review` retains all nineteen predecessor controls and
-passes 7/7 new falsifiers. Exact receipt:
-`planning/shared-resource-register-bootstrap/ninth-fresh-independent-buildability-review-2026-09-04.md`.
-No production implementation is authorized until all six are repaired and freshly reviewed.
-
-### Ninth author repair (2026-09-04)
-
-The bounded author repair closes [[D2667]]–[[D2672]] at contract tier. Repository paths resolve only
-from the selected Git tree, including negative lookups, while installed packages are classified
-before repository containment and require one unique package/version/integrity entry from the
-committed pnpm lockfile. Portable external node IDs contain normalized library or package/subpath
-identity rather than checkout or installation prefixes.
-
-The graph now emits reach to every retained declaration of a merged compiler symbol, treats a
-property-access receiver as an independent value reference, and recursively validates the exact
-program/root/node/syntax-tree/edge/dependency ABI plus canonical ordering and uniqueness. `make
-shared-resource-bootstrap-ninth-author-repair` retains all twenty-six prior controls and passes 7/7
-new repair groups against committed temporary repositories, a lock-backed package, standard
-TypeScript library symbols, merged `Promise` declarations and crossed nested values. This is author
-evidence only; another genuinely fresh independent review still gates acceptance and production.
-Receipt: `planning/shared-resource-register-bootstrap/ninth-author-repair-2026-09-04.md`.
-
-### Tenth fresh independent return (2026-09-05)
-
-The next independent pass returns the projector on [[D2701]]–[[D2708]]. Its config parser silently
-accepts duplicate keys; mutable installed declaration bytes move a same-commit graph while retaining
-the same lock identity; origin/dependency combinations, root uniqueness and relation-specific edge
-arms remain unenforced; and `any` calls, dynamic imports and broad index-signature calls survive
-despite explicit RFC refusals.
-
-`make shared-resource-bootstrap-tenth-fresh-review` retains all thirty-three predecessor controls
-and passes 8/8 new falsifiers. Exact receipt:
-`planning/shared-resource-register-bootstrap/tenth-fresh-independent-buildability-review-2026-09-05.md`.
-No production implementation is authorized until all eight are repaired and freshly reviewed.
-Exact routed returns: [[D2701]], [[D2702]], [[D2703]], [[D2704]], [[D2705]], [[D2706]],
-[[D2707]], [[D2708]].
-
-### Tenth author repair (2026-09-05)
-
-The bounded repair closes all eight returns at contract tier. Committed config crosses a
-duplicate-key syntax pass before option conversion. Every non-repository declaration combines its
-package/compiler identity with `sourceDigest`, the digest of the exact canonical retained syntax,
-so changed semantics can no longer carry the old complete dependency identity. Origin, id prefix,
-root uniqueness and relation-specific edge arms are asserted before sealing.
-
-Resolution is fail-closed: call/construct/tag requires an exact resolved signature and overload
-population; dynamic import is refused; and element access requires one literal key. `make
-shared-resource-bootstrap-tenth-author-repair` retains all forty-one predecessor controls and
-passes 8/8 new repair groups. This remains author evidence only; another genuinely fresh review
-still gates acceptance and production. Receipt:
-`planning/shared-resource-register-bootstrap/tenth-author-repair-2026-09-05.md`.
-
-### Eleventh fresh independent return (2026-09-05)
-
-The next independent pass returns the projector on [[D2795]]–[[D2801]]. A retained external
-declaration's sibling dependencies can change without moving the graph, digest or complete retained
-identity. `any` property access and the explicitly refused global `eval` call publish. Constructor
-edges enumerate call rather than construct signatures, while ordinary repository-local calls can
-fail solely because identity enrichment and predecessor assertion disagree on canonical edge order.
-
-The assertion boundary also accepts a changed external declaration tree under its old
-`sourceDigest` and an arbitrary compiler-unrelated syntax tree as a call's `resolvedSignature`.
-`make shared-resource-bootstrap-eleventh-fresh-review` retains all forty-nine predecessor controls
-and passes 7/7 new falsifiers. Exact receipt:
-`planning/shared-resource-register-bootstrap/eleventh-fresh-independent-buildability-review-2026-09-05.md`.
-No production implementation is authorized until all seven are repaired and freshly reviewed.
-
-### Twelfth author repair (2026-09-05)
-
-The bounded repair closes all seven returns at contract tier. Every retained relation now carries
-the exact trivia-free compiler syntax path that produced it; repeated equal-looking accesses remain
-distinct and an unresolved site cannot borrow another edge. The compiler-selected signature and
-value relations refuse direct, aliased and `.call` uses of global `eval`, while a local same-name
-method remains representable. Call and construct overloads use their exact signature kinds, so
-interface construct signatures remain complete and nested class constructors cannot cross.
-
-The projector accepts only the exact descriptor object issued by the validated catalogue compiler;
-plain, spread and incompatible descriptors fail. The shared UTF-16 code-unit comparator orders graph edges,
-declaration-artifact paths and other canonical string sets. `make
-shared-resource-bootstrap-twelfth-author-repair` retains the complete predecessor chain and passes
-all seven repairs plus three direct/self-audit controls (10/10). This remains author evidence only;
-another genuinely fresh independent review still gates acceptance and production. Receipt:
-`planning/shared-resource-register-bootstrap/twelfth-author-repair-2026-09-05.md`.
-
-### Eleventh author repair (2026-09-05)
-
-The bounded repair closes all seven returns at contract tier. Every non-repository declaration is
-bound to the canonical path/byte image of its complete importer-visible declaration artifact, so
-sibling and cross-file meaning moves identity. Repository property access requires an exact
-retained property edge; global `eval` is refused by compiler-resolved target authority; and
-construct edges retain their constructor declaration overloads.
-
-The compiler-backed projector validates before deep sealing and issues authority only for that
-exact graph reference. Cloned or rewritten tree/signature payloads cannot re-enter assertion by
-shape. Enriched edges and the predecessor compatibility image are each canonicalized at their own
-ABI boundary, preserving ordinary local-call graphs. `make
-shared-resource-bootstrap-eleventh-author-repair` retains all fifty-six predecessor controls and
-passes 7/7 new repair groups. This remains author evidence only; another genuinely fresh review
-still gates acceptance and production. Receipt:
-`planning/shared-resource-register-bootstrap/eleventh-author-repair-2026-09-05.md`.
-
-### Twelfth fresh independent return (2026-09-05)
-
-The next independent pass returns the projector on [[D2828]]–[[D2834]]. Property resolution is
-bound only to a containing declaration and member spelling, so one legitimate edge masks a separate
-unresolved `any` site. Aliasing the global `eval` intrinsic also bypasses the direct target check.
-Constructor recovery collapses interface construct overloads to one selected signature and sweeps
-nested class constructors into an unrelated outer call.
-
-The public projector accepts an incompatible unvalidated descriptor, while both final edge order
-and dependency-artifact order use locale collation instead of the declared canonical byte order.
-`make shared-resource-bootstrap-twelfth-fresh-review` retains the complete predecessor chain and
-passes seven new falsifiers plus the positive control proving a direct unresolved `any` call remains
-closed. Exact receipt:
-`planning/shared-resource-register-bootstrap/twelfth-fresh-independent-buildability-review-2026-09-05.md`.
-No production implementation is authorized until all seven are repaired and freshly reviewed.
-
-### Thirteenth fresh independent return (2026-09-05)
-
-The next independent pass returns the twelfth repair on [[D2843]]–[[D2845]]. Literal element access
-is admitted but never becomes a relation, so its property declaration and edge disappear from the
-claimed complete graph. The repair's UTF-8 byte-order claim is not executed by node or edge sorting
-and conflicts with the RFC's separately declared UTF-16 canonical-object ordering; non-ASCII
-identifiers expose the difference that the ASCII-only control cannot. Finally, catalogue validation
-admits Unicode TypeScript identifiers while projection reparses the issued descriptor through an
-ASCII-only grammar.
-
-`make shared-resource-bootstrap-thirteenth-fresh-review` retains the complete predecessor chain and
-passes 3/3 executable falsifiers. Exact receipt:
-`planning/shared-resource-register-bootstrap/thirteenth-fresh-independent-buildability-review-2026-09-05.md`.
-No production implementation is authorized until one ordering/parser authority and complete literal
-element-access retention are author-repaired and freshly reviewed.
-
-### Thirteenth author repair (2026-09-05)
-
-The bounded repair closes all three returns at contract tier without narrowing valid TypeScript.
-Literal string/numeric element access resolves the exact compiler property symbol, retains its
-site-bound edge and queues the target declaration exactly as dot access does. The RFC's existing
-canonical-object authority—ascending UTF-16 code-unit order—now owns root names, node ids, root
-members/selectors, complete serialized edges and declaration-artifact paths; the contradictory
-UTF-8 language is removed rather than creating a second canonicalizer.
-
-Catalogue compilation and projection call one Unicode `ID_Start`/`ID_Continue` structural parser.
-A descriptor with a valid Unicode function selector projects successfully, while malformed selector
-syntax fails before the descriptor enters the authority set. `make
-shared-resource-bootstrap-thirteenth-author-repair` retains the complete predecessor chain and
-passes 3/3 non-ASCII/literal-access controls. This remains author evidence only; another genuinely
-fresh independent review still gates acceptance and production. Receipt:
-`planning/shared-resource-register-bootstrap/thirteenth-author-repair-2026-09-05.md`.
-
-### Fifteenth fresh independent review (2026-09-05)
-
-The fourteenth repair passes independent executable review. Both literal assistance/workflow
-descriptor candidates project every declared root against committed HEAD; checked named index
-reads retain reachable authority while `unknown` and open-string access fail; finite key unions
-retain their complete target set while an incomplete receiver fails; and optional calls retain the
-selected method plus every declared overload. `make shared-resource-bootstrap-fifteenth-fresh-review`
-retains the predecessor chain and passes 4/4 fresh groups. Exact receipt:
-`planning/shared-resource-register-bootstrap/fifteenth-fresh-independent-buildability-review-2026-09-05.md`.
-
-No new defect was reproduced in the repaired [[D2854]]–[[D2856]] boundary. This is buildability
-evidence, not owner acceptance and not production implementation evidence; the sixteen post-landing
-fixture families remain implementation obligations.
+After fresh independent review and owner acceptance:
+
+1. add the exact reviewed JSON catalogue;
+2. add its strict parser and owned immutable image;
+3. refactor `register-check` to consume it and remove both old inventories;
+4. extend `tools/register-check.test.mjs` with the able-to-fail controls;
+5. enroll the focused target in `verify-governance`;
+6. make the [[D3047]] staged-discharge rows enforceably present; and
+7. run `make verify-awake`, then archive with ledger and append-only log closeout.
+
+No product, schema, migration, vocabulary or content bytes change in this implementation.
 
 ## Acceptance criteria
 
-1. Catalogue and README register populations are set-equal; no `RESOURCE_NAMES`, `SCHEMA_SLUGS` or
-   numbered resource-specific branch remains.
-2. All ten initial descriptors resolve through their adapter/lifecycle or the exact absent state;
-   the assistance, semantic-convention and provider follow-on descriptor candidates validate under
-   the same union, and both adopted assistance version selectors resolve exactly once.
-3. `canonical_resource@1` statically seals every payload semantic field through the one named
-   canonical byte authority without importing the target module; [[D2442]], [[D2444]] and
-   [[D2501]] fixtures fail before the repair and pass after it. Arbitrary digest, template,
-   non-decimal integer and negative-zero forms are permanent negatives ([[D2537]]).
-4. `typescript_contract@1` and `migration_sequence@1` use the descriptor-pinned canonical compiler
-   program; retained node ids ignore out-of-graph declarations; selector and migration roots are
-   disjoint values; and both TypeScript/canonical adapters return their exact complete projection and
-   sequential head ([[D2538]]–[[D2541]]).
-5. Selector-level absence admits an export in an existing file, refuses duplicate selector
-   identity and refuses every partial artifact ([[D2443]], [[D2459]]).
-6. Adoption pins current product bytes without mutating them or inventing prior history; later
-   lanes begin above the adopted baseline ([[D2465]]).
-7. Lifecycle behavior is selected by descriptor data. Assistance/provider/semantic follow-ons can
-   inhabit the closed profiles without adding C9/C10/C11 or Git readers ([[D2454]]–[[D2455]],
-   [[D2466]]); the exact catalogue addition must equal the declaring RFC's checked descriptor file.
-8. One transition function validates staged and every committed first-parent image; CI/local
-   preimages are explicit and fail closed.
-9. After implementation, all sixteen fixture families are able to fail for their named reason,
-   including a second synthetic resource for every adapter/lifecycle; pre-acceptance review instead
-   executes the bounded author contract named in §8.
-10. Existing C1–C8 behavioral protections remain green through compatibility tests even though
-   implementation diagnostics move to resource-scoped codes.
-11. `make verify` invokes snapshot, staged and committed-history checks through normal targets; no
-    bespoke environment command is required from the user.
-12. No product/runtime/web/schema/storage/content/archive or protected-design bytes land in this
-    process implementation.
-13. [[D2363]], [[D2370]], [[D2401]], [[D2442]]–[[D2444]], [[D2454]], [[D2455]] and
-    [[D2465]]–[[D2467]] close only after executable criteria pass; downstream resources remain unclaimable
-    until their catalogue roots land.
-14. [[D2593]] The exported TypeScript adapter has no graph/program/node/edge input. Its private
-    compiler emits the complete exact `TypeScriptGraphV1`; malformed program fields, duplicate or
-    orphan nodes, dangling endpoints, illegal edge kinds/signature arms, wrong ordering, extra keys
-    and descriptor/program crossings all fail before digest construction.
-15. [[D2594]] One selector parser admits and canonicalizes every selector in the ten initial and
-    three follow-on descriptor files; the exact parsed objects feed JSON/TypeScript resolvers. HTTPS,
-    drive/backslash/traversal/glob paths, root-only kinds in descent, unsupported legal-looking
-    segments and bytes after `literal` fail at catalogue admission. Every existing selected symbol
-    resolves once; intentionally absent roots report absence rather than “unsupported grammar.”
-16. [[D2595]] Canonical-resource fixtures resolve `Object.freeze` to the pinned global intrinsic.
-    A source-local const/function parameter/import alias named `Object`, computed `freeze`,
-    aliased intrinsic or arbitrary same-spelling method fails, while the unshadowed intrinsic yields
-    the same static semantic bytes/digest as the registered runtime constant.
-17. [[D2596]] Repository retention starts from exact root symbols and follows checker-resolved symbol
-    edges. All declarations of one overload symbol remain; an unrelated same-spelling nested/local
-    symbol neither enters nor renumbers the retained nodes. Anonymous/default/re-export roots have
-    representable identity without inventing an identifier name.
-18. [[D2597]] Mutating any parser/compiler input after projection cannot move the published semantic
-    value, and mutating the published projection at any depth fails. Recomputing the digest from the
-    exact retained semantic reference always equals the stored digest for canonical-resource and
-    TypeScript-contract adapters; alias/cycle/non-plain/accessor inputs fail deep sealing.
-19. [[D2645]] A committed two-file contract whose exported interface refers to a second repository
-    declaration retains that declaration and a typed transitive edge. Removing the dependency node
-    or edge from the constructed image fails exact compiler-graph agreement.
-20. [[D2646]] The adapter accepts descriptor plus repository revision, never path/source/program
-    bytes. Its graph records the resolved commit, actual compiler-image integrity, parsed-config
-    digest, converted options and exact roots; mutating the working tree after the commit cannot move
-    the projection, while an unknown revision and a caller `sourceText` field fail.
-21. [[D2647]] An exported alias roots both its public declaration and exact aliased target and emits
-    one `re_export` edge. Removing or crossing either endpoint fails the compiled graph.
-22. [[D2648]] Both TypeScript and canonical-resource sealing reject fractions, unsafe integers,
-    negative zero and unpaired surrogates in values or keys before a digest exists; a valid surrogate
-    pair and both safe-integer boundaries remain admitted.
-23. [[D2649]] A three-declaration overload set resolves as one symbol and its root contains all three
-    canonically ordered declaration node ids. Adding an unrelated same-spelling declaration cannot
-    enter or renumber that set; no singular privileged overload node exists in the ABI.
-24. [[D2701]] The selected committed config rejects duplicate keys before JSON value construction
-    and compiler conversion.
-25. [[D2702]] Every retained non-repository declaration carries an exact canonical syntax digest;
-    changing its semantic declaration bytes changes the dependency identity and graph digest.
-26. [[D2703]] Repository, TypeScript-library, Node-builtin and external-package origins accept only
-    their exact dependency identity and id-prefix grammar.
-27. [[D2704]] Descriptor selectors and emitted root records are independently unique.
-28. [[D2705]] Call/construct/tag edges require selected signature and overload arms; every other
-    relation requires null/empty arms.
-29. [[D2706]] A call without an exact compiler-resolved signature fails before graph publication.
-30. [[D2707]] Dynamic imports fail rather than introducing an unrepresented module dependency.
-31. [[D2708]] Element access accepts one literal string/numeric key and refuses broad runtime index
-    lookup.
-32. [[D2795]] A semantic change anywhere in an importer-visible non-repository declaration
-    artifact moves every dependent node identity and graph digest even when the directly retained
-    declaration is unchanged.
-33. [[D2796]] Every repository property access resolves to an exact retained property edge;
-    `any`/`unknown` member access fails before publication.
-34. [[D2797]] Construct edges retain the compiler-selected signature and complete constructor
-    declaration overload set; a valid overloaded class remains representable.
-35. [[D2798]] The compiler-resolved global `eval` intrinsic fails while a legal object member with
-    the same spelling remains representable.
-36. [[D2799]] Replacing a declaration tree under an old artifact digest cannot cross graph
-    assertion.
-37. [[D2800]] Replacing a compiler-selected signature with any other syntax tree cannot cross graph
-    assertion.
-38. [[D2801]] Final enriched and compatibility graph images are independently canonicalized, and
-    an ordinary repository-local call remains representable.
-39. [[D2828]] Every relation edge carries its exact compiler syntax-site path; two equal-looking
-    occurrences remain distinct and no resolved sibling can mask an unresolved `any` member.
-40. [[D2829]] Direct, aliased and `.call` access to the compiler-resolved global `eval` intrinsic
-    fails, while a repository-local method with the same spelling remains representable.
-41. [[D2830]] Construct edges use the exact target type's complete construct-signature set; a
-    two-overload construct interface retains both arms.
-42. [[D2831]] The public projector accepts only an exact descriptor issued by complete catalogue
-    validation; literals, spreads, copies and incompatible descriptors fail.
-43. [[D2832]] Case-distinct valid call graphs sort by the one canonical byte comparator and remain
-    representable.
-44. [[D2833]] Nested class constructors never enter the overload set of an outer construction.
-45. [[D2834]] Dependency-artifact paths are ordered by the shared canonical UTF-16 code-unit comparator
-    before their source digest is computed.
-46. [[D2843]] Literal string/numeric element access retains its exact compiler-resolved property
-    declaration and site-bound edge just like dot access, or fails closed when no exact property
-    exists.
-47. [[D2844]] The existing shared UTF-16 canonical ordering authority applies to node ids, roots,
-    complete serialized edges and dependency-artifact paths; a non-ASCII fixture distinguishes it
-    from UTF-8 byte order and cannot be satisfied by contradictory prose.
-48. [[D2845]] Catalogue admission and projection execute the same structural-selector parser and
-    identifier domain; every catalogue-issued Unicode-identifier descriptor either projects or is
-    refused before authority is issued.
-49. [[D2854]] The exact assistance-config catalogue candidate projects all eight declared roots as
-    one graph at a committed revision; a synthetic substitute or a reduced root list cannot
-    discharge cross-RFC profile fit.
-50. [[D2855]] A finite compiler-enumerable key union over an exact closed record retains the exact
-    possible target declarations, while `string`, `any`, `unknown` and otherwise open index
-    lookups still fail before publication.
-51. [[D2856]] Optional call syntax over an exact interface method retains the compiler-selected
-    signature plus that method symbol's complete call-overload set; nullable syntax cannot turn a
-    resolved method into an empty overload arm.
+1. A fresh independent review verifies this document and its exact seed against current
+   `register-check`, reproduces at least one original collision/deadlock, and finds no unruled
+   product or future-resource semantics.
+2. The document is no longer than 300 lines and contains no projection/lifecycle/history engine.
+3. The seed contains exactly the seven already-governed resources and no speculative root.
+4. The author contract proves the seed shape, old-scope absence, current-resource equality and
+   data-row extension property.
+5. Owner acceptance follows the fresh review; implementation is forbidden before it.
+6. Implementation satisfies all thirteen able-to-fail controls and `make verify-awake` at the exact
+   landing commit.
+7. Every staged discharge required by [[D3047]] is a dated, owned work-state item blocked on
+   `item:D3034`; missing metadata fails the focused gate.
+8. Closeout updates the RFC register, relevant ledger rows, roadmap/receipt and append-only
+   exploration log in the implementation commit.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Fresh independent review executes the bounded author-repair contract and verifies the cross-RFC profile fit | claude | review receipt plus acceptance/corrections | |
-| D2 | Generic engine/catalogue/three absent roots land with normal full verification | codex | implementing SHA plus green `make verify` | |
-| D3 | Assistance population removes bespoke architecture and names this dependency | assistance-config-register.md | amended RFC plus fresh review | |
-| D4 | Semantic-convention population removes bespoke architecture and names this dependency | semantic-convention-register.md | amended RFC plus fresh review | |
-| D5 | Provider-protocol population removes bespoke architecture and names this dependency | provider-protocol-register.md | amended RFC plus fresh review | |
+| D1 | Fresh independent review of the cut contract; due 2026-09-07 | claude | review receipt plus verdict | |
+| D2 | Catalogue/checker implementation after acceptance; due 2026-09-07 | codex | implementing SHA plus `make verify-awake` | |
+| D3 | Rebase assistance/provider/semantic register RFCs on the minimal catalogue; due 2026-09-08 | codex | tracked owned items blocked on `item:D3034` | |
 
 ## Open questions
 
-None for the owner. This is repository-process architecture. Fresh review should attack adapter
-closure, adoption honesty, canonical byte interoperability and whether a resource-specific branch
-can be smuggled through descriptor options.
+None for the owner. [[D3034]] settled the scope: collision prevention now; additional readers only
+when a concrete resource proves one necessary.
 
 ## Changelog
 
-- 2026-09-05: fifteenth fresh independent review passed the fourteenth repair. Literal cross-RFC
-  descriptors and fresh checked/open/finite/optional-call controls pass 4/4; owner acceptance still
-  gates implementation.
-- 2026-09-05: [[D2854]]–[[D2856]] fourteenth author repair. Declared-index property reads retain
-  their exact receiver/index authority; finite literal-key unions enumerate every exact property;
-  optional interface calls derive overloads from the selected non-null callable; and the literal
-  assistance-config plus workflow-preference catalogue candidates project at committed HEAD.
-  `make shared-resource-bootstrap-fourteenth-author-repair` retains the complete chain and passes
-  4/4 controls. Another genuinely fresh review still gates acceptance and production; receipt:
-  `planning/shared-resource-register-bootstrap/fourteenth-author-repair-2026-09-05.md`.
-- 2026-09-05: returned by fourteenth fresh independent buildability review on
-  [[D2854]], [[D2855]] and [[D2856]]. The claimed cross-RFC profile fit fails against the literal assistance
-  catalogue addition: four of eight assistance-config roots and two of ten workflow-preference
-  roots cannot project. Checked record reads, finite-key indexing and optional interface calls are
-  each reproduced by a minimal committed TypeScript program. `make
-  shared-resource-bootstrap-fourteenth-fresh-review` retains the chain and passes 3/3 falsifiers;
-  another bounded author repair and genuinely fresh review remain mandatory. Receipt:
-  `planning/shared-resource-register-bootstrap/fourteenth-fresh-independent-buildability-review-2026-09-05.md`.
-- 2026-09-05: [[D2843]]–[[D2845]] thirteenth author repair. Literal element access retains its exact
-  property/site, every graph/artifact set uses the existing shared UTF-16 canonical order, and one
-  Unicode-aware selector parser owns catalogue issuance plus projection. `make
-  shared-resource-bootstrap-thirteenth-author-repair` retains the chain and passes 3/3 controls;
-  fresh review still gates production.
-- 2026-09-05: returned by thirteenth fresh independent buildability review on [[D2843]]–[[D2845]].
-  Literal element access drops its target, graph ordering does not execute one declared comparator,
-  and catalogue/projector selector grammars disagree. `make
-  shared-resource-bootstrap-thirteenth-fresh-review` retains the predecessor chain and passes 3/3
-  falsifiers. No production implementation is authorized.
-- 2026-09-05: [[D2828]]–[[D2834]] twelfth author repair. Compiler relations retain exact syntax
-  sites; global `eval` is alias-safe; construct overloads come from the exact signature kind;
-  catalogue-issued descriptor authority is mandatory; and one canonical byte comparator owns graph
-  and artifact order. `make shared-resource-bootstrap-twelfth-author-repair` retains the predecessor
-  chain and passes 10/10 repair/self-audit groups. Another fresh review remains mandatory; receipt:
-  `planning/shared-resource-register-bootstrap/twelfth-author-repair-2026-09-05.md`.
-- 2026-09-05: returned by twelfth fresh independent buildability review on
-  [[D2828]]–[[D2834]]. Relation validation lacks exact syntax-site identity; aliased `eval`, crossed
-  constructor overloads, unvalidated descriptors and locale-dependent ordering survive. `make
-  shared-resource-bootstrap-twelfth-fresh-review` retains the predecessor chain and passes seven
-  new falsifiers plus one direct-call control. Another author repair and fresh review remain
-  mandatory; no implementation is authorized. Receipt:
-  `planning/shared-resource-register-bootstrap/twelfth-fresh-independent-buildability-review-2026-09-05.md`.
-- 2026-09-05: [[D2701]]–[[D2708]] tenth author repair. Duplicate config keys fail; external
-  declarations carry exact syntax identity; origin/root/edge invariants are discriminator-exact;
-  and unresolved calls, dynamic imports and broad index lookups fail closed. `make
-  shared-resource-bootstrap-tenth-author-repair` retains forty-one earlier controls and passes 8/8
-  new repair groups. Another fresh review remains mandatory; receipt:
-  `planning/shared-resource-register-bootstrap/tenth-author-repair-2026-09-05.md`.
-- 2026-09-05: returned by tenth fresh independent buildability review on [[D2701]]–[[D2708]].
-  Duplicate config keys and mutable dependency bytes violate the pinned program; graph origin/root/
-  relation invariants remain incomplete; and the three explicit unresolved-resolution refusals do
-  not execute. `make shared-resource-bootstrap-tenth-fresh-review` retains thirty-three earlier
-  controls and passes 8/8 new falsifiers. Receipt:
-  `planning/shared-resource-register-bootstrap/tenth-fresh-independent-buildability-review-2026-09-05.md`.
-  Another author repair and fresh review remain mandatory; no implementation is authorized.
-- 2026-09-04: [[D2645]]–[[D2649]] eighth author repair. Exact committed repository bytes and actual
-  compiler/config identity feed a transitive typed symbol graph; re-export targets are retained;
-  canonical scalar admission is exact; and overload roots carry every declaration. `make
-  shared-resource-bootstrap-eighth-author-repair` retains fourteen earlier controls and passes 5/5
-  new repair controls. Another fresh review remains required; receipt:
-  `planning/shared-resource-register-bootstrap/eighth-author-repair-2026-09-04.md`.
-- 2026-09-04: returned by eighth fresh independent buildability review on [[D2645]]–[[D2649]].
-  The seventh author model has no transitive graph, uses caller source plus fabricated program
-  identity, stops at re-export aliases, accepts forbidden canonical scalars and rejects overload
-  roots. `make shared-resource-bootstrap-eighth-fresh-review` retains nine prior controls and
-  reproduces 5/5 new blockers; receipt:
-  `planning/shared-resource-register-bootstrap/eighth-fresh-independent-buildability-review-2026-09-04.md`.
-- 2026-09-04: [[D2593]]–[[D2597]] seventh author repair. TypeScript graphs are compiler-constructed
-  and fully validated; one parsed selector grammar feeds every adapter; canonical freeze wrappers
-  resolve to the global intrinsic; retained declarations follow exact compiler symbols; and every
-  projected semantic value is a recursively immutable canonical copy under its digest. `make
-  shared-resource-bootstrap-seventh-author-repair` is positive author evidence only; another fresh
-  independent review remains required.
-- 2026-09-04: returned by seventh fresh independent buildability review on [[D2593]]–[[D2597]].
-  TypeScript graphs remain caller-controlled/incomplete, selector grammars disagree, shadowed
-  `Object.freeze` splits static/runtime bytes, retained nodes are name-based and projected semantic
-  values remain mutable. `make shared-resource-bootstrap-seventh-fresh-review` reproduces 5/5;
-  receipt:
-  `planning/shared-resource-register-bootstrap/seventh-fresh-independent-buildability-review-2026-09-04.md`.
-- 2026-09-04: sixth author repair on [[D2559]]–[[D2562]]. Canonical descriptor/payload binding,
-  exact TypeScript root closure and overload-safe retained declaration identity now pass
-  `make shared-resource-bootstrap-sixth-author-repair` 4/4. Another fresh independent review is
-  required; implementation remains unauthorized.
-- 2026-09-04: returned by sixth fresh independent buildability review on
-  [[D2559]]–[[D2562]]; receipt:
-  `planning/shared-resource-register-bootstrap/sixth-fresh-independent-buildability-review-2026-09-04.md`.
-- 2026-09-02: fifth author repair on [[D2537]]–[[D2541]]. Exact canonical literal/digest
-  validation, retained-only repository ids, descriptor-pinned compiler programs, typed migration
-  roots and complete canonical/TypeScript projected images now pass the bounded author contract.
-  Another fresh independent review remains required; implementation is unauthorized.
-- 2026-09-02: returned by fourth fresh independent buildability review on [[D2537]]–[[D2541]];
-  receipt:
-  `planning/shared-resource-register-bootstrap/fourth-fresh-independent-buildability-review-2026-09-02.md`.
-- 2026-09-01: fourth author repair on [[D2498]]–[[D2501]]. Selector descent now admits exact
-  member/object/literal paths and the two assistance heads use resolvable slash paths; every process
-  RFC supplies canonical descriptor-candidate bytes; TypeScript/migration graphs define exact
-  nodes, edges, signatures and ordering; canonical resources are statically parsed closed literal
-  ASTs. Another fresh independent review remains required; implementation is unauthorized.
-- 2026-09-01: author-repaired [[D2488]]–[[D2494]] after the third return. Added the closed
-  projection/config union, literal ten-descriptor seed, four-state resolver result, explicit
-  adapter semantic images and TypeScript edge boundary, check-not-generate README contract and an
-  honest split between pre-acceptance author checks and implementation fixtures. Another fresh
-  independent review remains required; implementation is unauthorized.
-- 2026-09-01: returned by third fresh independent buildability review on [[D2488]]–[[D2494]];
-  receipt: `planning/shared-resource-register-bootstrap/third-fresh-independent-buildability-review-2026-09-01.md`.
-- 2026-09-01: author-repaired the second return and reconciled the three competing follow-ons.
-  Added a descriptor catalogue, seven closed projection adapters, three lifecycles, exact canonical
-  bytes, selector-level absence, honest adoption, one temporal reader and resource-scoped
-  diagnostics. Fresh independent review remains required; implementation is unauthorized.
-- 2026-08-31: returned by second fresh independent review on [[D2442]]–[[D2444]]. The
-  `versioned_registry` object/digest could not represent its first consumer, absence was file-bound
-  and canonical digest bytes were unspecified.
-- 2026-08-31: added the generic `versioned_registry` attempt and source-attribution absent root.
-- 2026-08-31: author-repaired [[D2381]]–[[D2384]] with header-only empty registers, generic kind
-  semantics and staged/first-parent transition policy.
-- 2026-08-31: returned by first fresh review on [[D2381]]–[[D2384]].
-- 2026-08-31: drafted from [[D2363]], later adding [[D2370]] and [[D2401]] consumers.
+- 2026-09-06: owner-directed [[D3034]] cut. Replaced the 1,330-line catalogue/projection/lifecycle/
+  history architecture with the seven-row collision catalogue and three existing reader shapes.
+  Removed all three speculative roots and deferred every dependent generic engine. Earlier repair
+  and review receipts remain immutable in `planning/shared-resource-register-bootstrap/` and Git
+  history; they are evidence of the withdrawn attempt, not requirements of this RFC.
+- 2026-08-31 through 2026-09-05: original bootstrap drafted and repaired through fifteen review
+  rounds; withdrawn by [[D3034]] before acceptance or implementation.

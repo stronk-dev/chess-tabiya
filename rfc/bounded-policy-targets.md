@@ -1,12 +1,12 @@
 # RFC: Convention-grounded bounded material targets
 
-- **Status:** **draft — fifth fresh independent review returned the fifth author repair on
-  [[D3042]]–[[D3046]].** Protocol equality ignores field/callable types; queued request containers
-  remain caller-mutable; byte dedup contradicts exact-reference ancestry; the named public result
-  validator is absent; and malformed cyclic input throws before the promised `seal_failed` result.
-  `make bounded-target-fifth-fresh-review` retains both author layers and reproduces 5/5 fresh
-  counterexamples. Bounded sixth author repair, another genuinely fresh review and dependency
-  landing are required before implementation.
+- **Status:** **draft — sixth author repair complete for [[D3042]]–[[D3046]].** Canonical exported
+  declaration images cover types/modifiers/generics/callables; admission owns a frozen request
+  container; dedup requires byte identity plus exact authority references; the public result
+  assertion is declared and consumed; and malformed input returns pre-identity
+  `rejected/invalid_request`. `make bounded-target-sixth-author-repair` retains the complete
+  chain and passes 5/5 new controls. Another genuinely fresh review and dependency landing are
+  required before implementation.
 - **Author:** codex, preserving the D1023 research contract and applying `planning/bounded-policy-targets/author-repair-2026-08-26.md`
 - **Created:** 2026-08-23; narrowed 2026-08-27
 - **Exploration gate:** [[D1023]] ✅; executable contract closure in `design/research/bounded-policy-target-contract-closure.md`
@@ -666,11 +666,19 @@ export interface BoundedTargetBatchFailed {
   readonly visitedPositions: number;
 }
 
+export type BoundedTargetBatchRejectionReason = "invalid_request";
+
+export interface BoundedTargetBatchRejected {
+  readonly kind: "rejected";
+  readonly reason: BoundedTargetBatchRejectionReason;
+}
+
 export type BoundedTargetBatchResult =
   | BoundedTargetBatchCompleted
   | BoundedTargetBatchAbstained
   | BoundedTargetBatchCancelled
-  | BoundedTargetBatchFailed;
+  | BoundedTargetBatchFailed
+  | BoundedTargetBatchRejected;
 
 export interface BoundedTargetServiceLimits {
   readonly maxActive: number;                // exactly 1 in v1
@@ -698,6 +706,9 @@ export declare class BoundedTargetBackgroundService {
 export declare function createBoundedTargetBackgroundService(
   options?: BoundedTargetServiceOptions,
 ): BoundedTargetBackgroundService;
+export declare function assertBoundedTargetBatchResult(
+  value: unknown,
+): asserts value is BoundedTargetBatchResult;
 ```
 
 The three callable factories above are exported from
@@ -748,7 +759,17 @@ orientation and population cells through the shared authority; its value-factory
 necessary construction conjunct, never semantic validation by itself. No local second receipt or
 generic compatibility adapter is introduced.
 
-`boundedTargetInputDigest(item)` calls the shipped browser-safe `evidenceDigest()` over exactly
+`admitBoundedTargetBatchRequest(value)` is the first operation inside `submit()`. It catches every
+parser/assertion failure and returns the closed pre-identity
+`{ kind: "rejected", reason: "invalid_request" }` arm; that arm has no request/result identity
+because malformed bytes cannot truthfully name one. The operation first asserts the exact request
+keys and every genuine sealed evidence wrapper, then copies the exchange references into a new
+frozen array and freezes a private owned request object. No digest, queue lookup or job state is
+touched before this owned image exists. The evidence wrappers are already deep-sealed authorities;
+the service copies their container, not their identity.
+
+`boundedTargetInputDigest(item)` is called only over an admitted wrapper and uses the shipped
+browser-safe `evidenceDigest()` over exactly
 `{ domain: "tabiya:bounded-target-input@1", producer, projection, payload }`. The non-serializable
 process seal is separately verified for admission and is not digest material.
 `boundedTargetRequestIdentity()` sorts the exchange item digests lexicographically, retains threat
@@ -759,14 +780,17 @@ Therefore exchange-array reordering preserves request identity; changing the pri
 producer, projection or payload byte changes it. The request's public order never controls target
 enumeration, which remains canonical by target capture UCI.
 
-Every exit is built by one checked result constructor. It maps each declared evidence item to its
+Every post-identity exit is built by one checked result constructor. It maps each declared evidence item to its
 exact `{ producer, projection, payload }` image, retains ordinary closed result fields, excludes
 `identity.resultDigest`, and hashes
 `{ domain: "tabiya:bounded-target-result@1", requestDigest, result }`. The constructor inserts the
-result digest; the public validator removes it and recomputes the same image. An arbitrary digest,
-input permutation or result mutation therefore refuses. A failed seal still receives a stable
-request identity by hashing the visible triple first, but it never enters deduplication or the job
-map and returns `failed/seal_failed`.
+result digest. The exported `assertBoundedTargetBatchResult(value)` parses exact keys and every
+nested discriminant, recomputes the request identity from its named digest slots, removes
+`identity.resultDigest` and recomputes the same result image. The pre-identity `rejected` arm is
+validated separately as the exact two-key value and carries no digest. An arbitrary digest, input
+permutation, result mutation or extra key therefore refuses. `seal_failed` is reserved for an
+internal admitted-authority invariant/fault after identity exists; malformed caller input is always
+`rejected/invalid_request` and never enters deduplication or the job map.
 
 The batch validates compiler-admitted seals, requires the supplied exchange set to be set-equal to
 all positive material exchanges referenced by the threat reading, and derives the complete
@@ -783,9 +807,9 @@ or refutation. `batch_budget_exhausted` is a whole-job abstention at exactly 100
 positions and carries no `targets`. Pure helpers may be exported for tests, but application/server
 callers use the service and no second adapter may declare a payload-shaped object later.
 
-The concrete class, fixed product factory and public limit type are exported from
+The concrete class, fixed product factory, public result assertion and public limit type are exported from
 `packages/runtime/src/index.ts`. The barrel also exports the complete closed operation family:
-`BoundedTargetBatchRequest`, `BoundedTargetBatchResult`, its four named result arms and three reason
+`BoundedTargetBatchRequest`, `BoundedTargetBatchResult`, its five named result arms and four reason
 unions, `TargetDerivation`,
 `CandidateDerivation`, `ReturnDerivation`, all three evidence/result aliases, request/result
 identities, payload/outcome tuples, source evidence aliases, limits and options. It does not export
@@ -820,20 +844,27 @@ replace the manifest or any evidence factory. Deployment limits may narrow but n
 ceilings; `maxActive` remains exactly one. Non-safe-integer, non-positive or out-of-range values
 throw synchronously. A module-private `createBoundedTargetBackgroundServiceForTest()` accepts
 sealed yield/traversal/seal fault hooks and is absent from the runtime barrel and production import
-graph. Once constructed, `submit()` never throws: chess admission exits are `abstained`, waiter or
-service termination is `cancelled`, and adapter/traversal/seal/invariant exits are `failed`. Every
+graph. Once constructed, `submit()` never throws: malformed caller input is `rejected`, chess
+admission exits are `abstained`, waiter or service termination is `cancelled`, and
+adapter/traversal/seal/invariant exits are `failed`. Every
 settlement removes its listeners; a terminal job leaves the active/queue/dedup maps in the same
 state as if it had never been admitted. No cancelled or failed operation publishes or retains a
 partial evidence array ([[D2106]], [[D2110]]).
 
-Identity validation and the 512-pair check precede job admission. Deduplication then occurs **before
-queue-capacity admission**. Each exact request digest owns one queued/running job and each `submit`
-owns one waiter attached to it. A caller abort settles only that waiter as
+Owned-input validation and the 512-pair check precede job admission. Deduplication then occurs
+**before queue-capacity admission**, but byte equality is not authority equality. The job map
+buckets by request digest and attaches only when `sameBoundedTargetAuthorities(a, b)` also proves
+the exact same threat and source-position object references plus set equality of the exact exchange
+wrapper references. Reordered arrays containing those same references attach; independently
+genuine byte-equal wrappers do not and start a separate job. Thus every shared job has one exact
+ancestry image and its factory receipts are valid for every attached waiter. Each authority-exact
+request owns one queued/running job and each `submit` owns one waiter attached to it. A caller abort settles only that waiter as
 `cancelled/caller_aborted`; other waiters continue to share the same job. When the last waiter
 aborts, a queued job is removed immediately, while a running job receives its private abort and
 stops at the next surrounding signal check/yield. A duplicate may attach to an already-queued job
 when eight other unique jobs fill capacity. Attachment is permitted only while the job is queued or
-running: settlement atomically removes the job-map entry, so a later identical request starts a new
+running: settlement atomically removes the authority-exact job from its digest bucket (and removes
+an empty bucket), so a later identical request starts a new
 job rather than receiving an undeclared cache. A race between final settlement and attachment is
 serialized by the job state transition; it cannot attach to a settled promise.
 
@@ -1108,7 +1139,8 @@ undergo another fresh independent review before implementation.
 17. `boundedTargetRequestIdentity()` uses the exact three domain-separated input images and sorted
     exchange digests. Key/exchange reordering preserves identity; any producer/projection/payload or
     request-kind mutation changes it. The checked result digest rejects arbitrary identity strings,
-    reordered named slots and any completed/abstained/cancelled/failed result mutation.
+    reordered named slots and any completed/abstained/cancelled/failed result mutation; the exact
+    pre-identity rejected arm is the only result with no digest.
 18. Default construction is exactly 1 active, 8 queued, 512 pairs, 25,000 per-candidate positions,
     100,000 whole-job positions, 64-position yields and fixed shared
     `messageChannelMacrotaskYield`; deployment may only narrow those ceilings and invalid/raised
@@ -1142,7 +1174,7 @@ undergo another fresh independent review before implementation.
     witness/visited-count injection, crossed ancestry and forged/larger traversal counters fail.
     Unavailable/exhausted arms mint no evidence. Semantic validation executes these route profiles.
 25. **The public service protocol is exhaustively importable ([[D2205]]).** A runtime-subpath-only
-    TypeScript fixture imports and switches every top-level result, candidate, immediate and return
+    TypeScript fixture imports and switches every top-level result—including `rejected`—candidate, immediate and return
     discriminant. Omitting an arm, crossing request/result/identity/evidence members or naming a
     private factory, counter, traversal or test symbol fails. The barrel census is set-equal to the
     explicitly exported family in §4.
@@ -1159,16 +1191,36 @@ undergo another fresh independent review before implementation.
    `invokeEvidenceValueRoute`, whose route/input/result maps are set-equal and runtime-key checked.
    An application import, direct service-to-factory edge, second dispatcher/registry, unknown route,
    extra input member or crossed route/input/result fails the census or runtime fixture.
-29. **The complete protocol is one source ([[D2628]]).** The normative declaration module contains
-   every public name from §§2 and 4, and the consumer typecheck imports only that module. An AST
-   comparison is set-equal over exported names, interface fields, projection objects and every
-   discriminated-union arm. Removing `TargetDerivation.target`, any request/service/options/factory
-   result, evidence ancestry, identity input or nested projection member fails before TypeScript's
-   positive consumer fixture runs.
+29. **The complete protocol is one source ([[D2628]], [[D3042]]).** The normative declaration
+   module contains every public name from §§2 and 4, and the consumer typecheck imports only that
+   module. Canonically printed declaration ASTs are exactly equal by exported name, including field
+   and callable types, readonly/optional modifiers, generic bounds, projection objects and every
+   discriminated-union arm. Type, modifier, generic and callable mutation controls fail before
+   TypeScript's positive consumer fixture runs.
 30. **The threat route has one exact symbol ([[D2630]]).** The cross-RFC route fixture requires
    `rules.tactic.consequence.threat@1` to resolve only to
    `createRulesTacticConsequenceThreatV1Evidence`; `declareThreatEvidence`, any compatibility alias,
    second route or old caller-payload adapter fails the route/import census.
+31. **Admission owns the request ([[D3043]]).** Exact-key and seal checks precede every digest and
+    queue operation. The service copies the exchange references into one frozen owned array and
+    never reads the caller's container again. Caller mutation before execution cannot change the
+    admitted exchange set, while every retained wrapper remains reference-identical.
+32. **Dedup preserves exact ancestry ([[D3044]]).** Request digest selects a bucket; exact threat,
+    source-position and exchange-wrapper reference-set equality selects a job. Reordering the same
+    wrapper references shares one execution, while independently genuine byte-equal wrappers start
+    separate jobs. Capacity, cancellation and cleanup fixtures cover multiple jobs in one digest
+    bucket.
+33. **The result validator is public and complete ([[D3045]]).**
+    `assertBoundedTargetBatchResult` is exported beside the result union, validates exact nested
+    arms and recomputes post-identity digests. The consumer fixture crosses it before use; deleting
+    the declaration, import or call fails.
+34. **Malformed input has a pre-identity arm ([[D3046]]).** Null, extra/missing keys, foreign
+    wrappers, cyclic payloads and unsupported values return exactly
+    `rejected/invalid_request`, with no identity, digest, job, queue or listener. They do not throw
+    and cannot be mislabeled `seal_failed`; the latter is post-admission only.
+35. **The six-repair target retains every prior control.** `make bounded-target-sixth-author-repair`
+    runs the imported protocol typecheck, fifth author contract, fifth fresh counterexamples and
+    all five new repair groups before another fresh review.
 
 ## Discharges
 
@@ -1298,8 +1350,19 @@ Exact review and reproducer:
 `make bounded-target-fifth-fresh-review`. A bounded sixth author repair must close all five while
 retaining the complete semantic/traversal/source/route chain before another fresh review.
 
+The 2026-09-06 sixth author repair closes all five returned seams without production bytes.
+Canonical declaration printing replaces names-only equality; one frozen owned request precedes
+digesting; dedup is exact-authority-local inside byte buckets; the closed result assertion is part
+of the public protocol and consumer; and malformed input uses a digest-free
+`rejected/invalid_request` arm. `make bounded-target-sixth-author-repair` retains the full chain
+and passes 5/5 new groups. Another genuinely fresh review still owns acceptance.
+
 ## Changelog
 
+- 2026-09-06 — sixth author repair for [[D3042]]–[[D3046]]. Sealed complete exported declaration
+  ASTs, owned the admitted request container, reconciled dedup with reference ancestry, added and
+  exercised the public result assertion, and split malformed input into a pre-identity rejection.
+  Fresh independent review remains required; no production/schema/content/UX byte changed.
 - 2026-09-06 — fifth fresh independent review returned [[D3042]]–[[D3046]] at the complete type,
   queued-input ownership, dedup/ancestry, result-validation and malformed-input boundaries. No
   production/schema/content/UX byte changed.

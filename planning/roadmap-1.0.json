@@ -51,6 +51,8 @@
         "breadth-collectors.md",
         "evidence-move-selector.md",
         "shared-candidate-evidence-packet.md",
+        "candidate-collector-registry.md",
+        "candidate-population-service.md",
         "bounded-policy-targets.md",
         "bounded-target-policy-composition.md",
         "recorded-semantic-path.md",
@@ -327,15 +329,15 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Execute the owner-ruled D3034 cut of the shared-resource bootstrap to its collision-prevention core, freshly review and implement that smaller contract, then populate the convention/provider roots and continue the returned provider, concept, health, storage, deployment, Campaign and longitudinal authority repairs.",
+        "nextAction": "Freshly review the completed D3034 collision-core bootstrap cut, accept and implement the seven-row catalogue, then reduce the convention/provider registrations to concrete readers and continue the returned provider, concept, health, storage, deployment, Campaign and longitudinal authority repairs.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Owner ruling D3034 rejects accepting the 1,330-line shared-resource shadow implementation after fifteen review rounds: retain data-derived collision prevention and cut the unused projection/lifecycle engines before fresh review.",
-          "impact": "held",
-          "evidence": ["design/BACKLOG.md", "rfc/shared-resource-register-bootstrap.md", "planning/rfc-drafting-queue.md"],
+          "summary": "The D3034 author cut reduced the shared-resource bootstrap from 1,330 to 282 lines: seven existing resources become checked data, while projection/lifecycle/Git-history engines and speculative roots are withdrawn. Fresh independent review now gates acceptance.",
+          "impact": "advanced",
+          "evidence": ["design/BACKLOG.md", "rfc/shared-resource-register-bootstrap.md", "planning/shared-resource-register-bootstrap/collision-core-author-cut-2026-09-06.md"],
           "anchors": [
-            {"kind": "work_state", "id": "D3034", "digest": "sha256:8c243cc9d34a2e094e9c7bda5775f8ca190f2c289a4e93090498e418db65b670"},
-            {"kind": "rfc", "id": "shared-resource-register-bootstrap.md", "digest": "sha256:36678457dd952ac50cc9b110617249259822b97192dfdd02f3e79d6b7d1a4ecb"}
+            {"kind": "work_state", "id": "D3034", "digest": "sha256:dffca84d4c580756395a0843adac86308e8ceefdba21d6aaaeb99c0edc08b535"},
+            {"kind": "rfc", "id": "shared-resource-register-bootstrap.md", "digest": "sha256:8312c11663933bfceb08164d1f43f05a34331378084dac69be3b3729a475e789"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
@@ -346,14 +348,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Complete bounded author repairs for candidate-packet, pack-capability, promotion and bounded-target authorities; freshly review each repaired contract; then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+        "nextAction": "Freshly review the repaired bounded-target authority and the cut pack-capability contract, obtain owner acceptance for the cut candidate packet, complete the promotion repair, then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Bounded targets' fifth fresh review returns the async authority: protocol equality ignores types, queued arrays are mutable, byte dedup crosses exact ancestry, result validation is absent and malformed input throws before its typed failure arm.",
-          "impact": "regressed",
-          "evidence": ["planning/bounded-policy-targets/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d3042-bounded-target-fifth-fresh-review/review.test.ts", "rfc/bounded-policy-targets.md", "rfc/README.md"],
+          "summary": "Bounded targets' sixth author repair closes the five reproduced async-authority seams: complete declaration images, owned request snapshots, authority-exact dedup, a consumed public result assertion and digest-free malformed-input rejection now pass the retained chain.",
+          "impact": "advanced",
+          "evidence": ["planning/bounded-policy-targets/sixth-author-repair-2026-09-06.md", "tools/d3042-bounded-target-sixth-author-repair/contract.test.mjs", "rfc/bounded-policy-targets.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "bounded-policy-targets.md", "digest": "sha256:cba1bd51ea0fd50d684cba59967a2cef4283d48ba7ccb3ed6e45a0394df8a55d"}
+            {"kind": "rfc", "id": "bounded-policy-targets.md", "digest": "sha256:e3c1492733f284d1bec4e60fa7299bae40a47fba544c8557ac162c60eb476eee"}
           ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."
@@ -364,13 +366,13 @@
         "state": "active",
         "capabilities": ["accessibility", "support", "rehearsal"],
         "dependsOn": ["evidence-to-consumer-spine"],
-        "nextAction": "Complete and freshly review the bounded evidence-presentation repair, retain the shipped stable board shell, then land the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
+        "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, then land the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
         "latestCheckpoint": {
-          "at": "2026-09-06",
-          "summary": "Evidence presentation's sixth fresh review returns the fifth repair: the component vocabulary and post-P population survive, but canonical resource identity, citation semantics, abstention operation ownership, workflow-owned questions, structure witnesses, committed-edge UCI and the source fence remain unbuildable.",
-          "impact": "regressed",
-          "evidence": ["planning/platform-alignment/evidence-presentation/sixth-fresh-independent-buildability-review-2026-09-06.md", "tools/d3035-evidence-presentation-sixth-fresh-review/review.test.ts", "rfc/evidence-presentation.md", "rfc/README.md", "docs/play-composition.md"],
-          "anchors": [{"kind": "rfc", "id": "evidence-presentation.md", "digest": "sha256:458cde5a02a1aa7da26f1c53ed9de7b9582bd9adf46adae762bc301517e1745d"}]
+          "at": "2026-09-07",
+          "summary": "Evidence presentation's sixth author repair closes all seven returned author-model seams while preserving the exact 112-pair component boundary; fresh review and two independent dependency discharges still gate acceptance and production.",
+          "impact": "advanced",
+          "evidence": ["planning/platform-alignment/evidence-presentation/sixth-author-repair-2026-09-07.md", "tools/d3035-evidence-presentation-sixth-author-repair/contract.test.ts", "rfc/evidence-presentation.md", "rfc/README.md", "docs/play-composition.md"],
+          "anchors": [{"kind": "rfc", "id": "evidence-presentation.md", "digest": "sha256:02d3a9a5085e8d4eaf1508b10430bd82b06897e35e3dbe68ae98c9b17f2a5e7f"}]
         },
         "exit": "Quiet, Guided, Support, Drill, Review, Campaign, Academy and Stream open useful by default; the board never shrinks or moves; every primitive remains available under Advanced."
       },

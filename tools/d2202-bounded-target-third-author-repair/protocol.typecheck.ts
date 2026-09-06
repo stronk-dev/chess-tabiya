@@ -1,5 +1,5 @@
 import type { BoundedReturnOutcome, BoundedTargetBatchRequest, BoundedTargetBatchResult, BoundedTargetImmediateFactoryResult, BoundedTargetResultIdentity, BoundedTargetServiceOptions, CandidateDerivation, NamedMaterialTargetFactoryResult, ReturnDerivation, TargetDerivation } from "./protocol.proposed.js";
-import { createBoundedTargetBackgroundService } from "./protocol.proposed.js";
+import { assertBoundedTargetBatchResult, createBoundedTargetBackgroundService } from "./protocol.proposed.js";
 
 function never(value: never): never { throw new Error(String(value)); }
 function consumeOutcome(outcome: BoundedReturnOutcome): string {
@@ -34,6 +34,7 @@ function consumeResult(result: BoundedTargetBatchResult): string {
     case "abstained": return result.reason;
     case "cancelled": return result.reason;
     case "failed": return result.reason;
+    case "rejected": return result.reason;
     default: return never(result);
   }
 }
@@ -51,6 +52,11 @@ declare const immediateFactoryResult: BoundedTargetImmediateFactoryResult;
 const options: BoundedTargetServiceOptions = { limits: { maxQueued: 8 } };
 const service = createBoundedTargetBackgroundService(options);
 void service.submit(request, new AbortController().signal).then(consumeResult);
+void service.submit(request, new AbortController().signal).then((result) => {
+  const untrusted: unknown = result;
+  assertBoundedTargetBatchResult(untrusted);
+  return consumeResult(untrusted);
+});
 void service.close();
 consumeNamedFactory(namedFactoryResult);
 consumeImmediateFactory(immediateFactoryResult);

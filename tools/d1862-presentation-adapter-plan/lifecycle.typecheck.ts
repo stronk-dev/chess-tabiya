@@ -1,9 +1,18 @@
 // Compile-only negatives: pending is not a terminal absence and settlement requires source authority.
-import { registeredPresentationQuestion, type PresentationAbstentionLifecycle, type PresentationDecisionStamp } from "./plan.js";
+import {
+  issueRegisteredPresentationQuestion,
+  presentationWorkflowQuestionAuthorityFixture,
+  type PresentationAbstentionLifecycle,
+  type PresentationDecisionStamp,
+} from "./plan.js";
 
 declare const decision: PresentationDecisionStamp;
 
-const question = registeredPresentationQuestion("inspector.corpus@1\0human.explorer.population@1", "question.explorer_population");
+const question = issueRegisteredPresentationQuestion(presentationWorkflowQuestionAuthorityFixture({
+  requestId: "r1",
+  adapterKey: "inspector.corpus@1\0human.explorer.population@1",
+  questionId: "question.explorer_population",
+}, decision));
 const identity = { question, projection: "human.explorer.population@1", producer: "human.explorer@1" } as const;
 const pending: PresentationAbstentionLifecycle = { kind: "pending", ...identity, requestId: "r1", decision };
 const settled: PresentationAbstentionLifecycle = {

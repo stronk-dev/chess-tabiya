@@ -7,10 +7,13 @@ import {
   PRESENTATION_ABSTENTION_ROWS,
   SOURCE_ATTRIBUTION_REGISTRY_RESOURCE,
   SOURCE_ATTRIBUTION_REGISTRY_SEMANTIC_IMAGE,
+  STRUCTURE_PREDICATES,
   assertRegisteredPresentationQuestion,
   constructExplorerCountOperands,
+  evaluateNamedStructureWithWitness,
+  issueRegisteredPresentationQuestion,
   parseCitationOperand,
-  registeredPresentationQuestion,
+  presentationWorkflowQuestionAuthorityFixture,
   sourceAttributionRegistryDigest,
 } from "../d1862-presentation-adapter-plan/plan.js";
 
@@ -29,11 +32,26 @@ describe("evidence-presentation fifth author repair", () => {
 
   test("D2437 a complete citation requires a non-empty revision", () => {
     const valid = {
-      content: { kind: "fact", text: "Measured.", binding: "ref-1" },
-      source: { source: "Stockfish", title: "Reading", locator: "artifact", licence: "GPL-3.0-only", revision: "sha256:abc" },
+      content: {
+        kind: "authored_summary",
+        text: "Measured.",
+        binding: {
+          projection: { id: "run.record.evidence_ref_resolution", version: 1 },
+          field: "text",
+          evidenceDigest: `sha256:${"0".repeat(64)}`,
+        },
+      },
+      source: {
+        source: { id: "live.stockfish.eval", version: 1 },
+        title: "Stockfish engine reading",
+        locator: "deployment-artifact:stockfish",
+        licence: { authority: "source-attribution-registry@1", value: "GPL-3.0-only" },
+        url: "https://stockfishchess.org/",
+        revision: { authority: "deployment-receipt@1", value: `sha256:${"1".repeat(64)}` },
+      },
     };
     expect(parseCitationOperand(valid)).toEqual(valid);
-    expect(() => parseCitationOperand({ ...valid, source: { ...valid.source, revision: "" } })).toThrow();
+    expect(() => parseCitationOperand({ ...valid, source: { ...valid.source, revision: { ...valid.source.revision, value: "" } } })).toThrow();
     const { revision: _revision, ...withoutRevision } = valid.source;
     expect(() => parseCitationOperand({ ...valid, source: withoutRevision })).toThrow();
   });
@@ -55,29 +73,31 @@ describe("evidence-presentation fifth author repair", () => {
   test("D2439 copied or deserialized questions lose lifecycle authority", () => {
     const adapter = "inspector.corpus@1\0human.explorer.population@1";
     const id = "question.explorer_population";
-    const question = registeredPresentationQuestion(adapter, id);
-    expect(() => assertRegisteredPresentationQuestion(question, adapter, id)).not.toThrow();
+    const decision = { eventHeadSeq: 4, cursor: { branchId: "b1", nodeId: "n1" }, disclosureBoundarySeq: null, digest: "decision-1" } as const;
+    const authority = presentationWorkflowQuestionAuthorityFixture({ requestId: "r1", adapterKey: adapter, questionId: id }, decision);
+    const question = issueRegisteredPresentationQuestion(authority);
+    expect(() => assertRegisteredPresentationQuestion(question, adapter, id, "r1", decision)).not.toThrow();
     for (const copy of [
       { ...question, label: "Play the engine move." },
       structuredClone(question),
       JSON.parse(JSON.stringify(question)),
-    ]) expect(() => assertRegisteredPresentationQuestion(copy, adapter, id)).toThrow();
+    ]) expect(() => assertRegisteredPresentationQuestion(copy, adapter, id, "r1", decision)).toThrow();
   });
 
   test("D2440 structure matching and witnesses have one expression authority", () => {
     expect(NAMED_STRUCTURE_WITNESS_AUTHORITY.expression.symbol).toBe("STRUCTURE_PREDICATES");
     expect(NAMED_STRUCTURE_WITNESS_AUTHORITY.operation.symbol).toBe("evaluateNamedStructureWithWitness");
     expect(NAMED_STRUCTURE_WITNESS_AUTHORITY).not.toHaveProperty("rows");
-
-    type Leaf = Readonly<{ id: string; square: string; piece: string }>;
-    const evaluate = (expression: readonly Leaf[], board: Readonly<Record<string, string>>) => {
-      const matched = expression.every((leaf) => board[leaf.square] === leaf.piece);
-      return { matched, witnesses: matched ? expression.map((leaf) => ({ leafId: leaf.id, square: leaf.square })) : [] };
+    const fen = "4k3/8/3p4/8/2P1P3/8/8/4K3 w - - 0 1";
+    expect(evaluateNamedStructureWithWitness(fen, "maroczy-bind")?.squares).toEqual(["c4", "e4"]);
+    const changed = {
+      ...STRUCTURE_PREDICATES,
+      "maroczy-bind": { kind: "all" as const, of: [
+        { kind: "pieceOnSquare" as const, square: "d4" as const, piece: { color: "white" as const, role: "pawn" as const } },
+        ...STRUCTURE_PREDICATES["maroczy-bind"].of.slice(1),
+      ] as const },
     };
-    const expression = [{ id: "white-pawn-c4", square: "c4", piece: "P" }, { id: "white-pawn-e4", square: "e4", piece: "P" }] as const;
-    expect(evaluate(expression, { c4: "P", e4: "P" })).toEqual({ matched: true, witnesses: [{ leafId: "white-pawn-c4", square: "c4" }, { leafId: "white-pawn-e4", square: "e4" }] });
-    expect(evaluate(expression, { c4: "P", e4: "N" })).toEqual({ matched: false, witnesses: [] });
-    expect(evaluate([{ ...expression[0], square: "c3" }, expression[1]], { c4: "P", e4: "P" })).toEqual({ matched: false, witnesses: [] });
+    expect(evaluateNamedStructureWithWitness(fen, "maroczy-bind", changed)).toBeNull();
   });
 
   test("D2441 Explorer uses unique canonical UCI while retaining SAN only for display", () => {

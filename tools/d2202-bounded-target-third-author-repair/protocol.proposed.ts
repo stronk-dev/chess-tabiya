@@ -155,7 +155,17 @@ export interface BoundedTargetBatchFailed {
   readonly reason: BoundedTargetBatchFailureReason;
   readonly visitedPositions: number;
 }
-export type BoundedTargetBatchResult = BoundedTargetBatchCompleted | BoundedTargetBatchAbstained | BoundedTargetBatchCancelled | BoundedTargetBatchFailed;
+export type BoundedTargetBatchRejectionReason = "invalid_request";
+export interface BoundedTargetBatchRejected {
+  readonly kind: "rejected";
+  readonly reason: BoundedTargetBatchRejectionReason;
+}
+export type BoundedTargetBatchResult =
+  | BoundedTargetBatchCompleted
+  | BoundedTargetBatchAbstained
+  | BoundedTargetBatchCancelled
+  | BoundedTargetBatchFailed
+  | BoundedTargetBatchRejected;
 
 export interface BoundedTargetServiceLimits {
   readonly maxActive: number;
@@ -180,4 +190,5 @@ export declare function threatEvidencePassAnchor(evidence: SourceBoundThreatEvid
 export declare function assertNamedMaterialTargetEvidence(value: unknown): asserts value is NamedMaterialTargetEvidence;
 export declare function assertBoundedTargetImmediateEvidence(value: unknown): asserts value is BoundedTargetImmediateEvidence;
 export declare function assertBoundedTargetReturnEvidence(value: unknown): asserts value is BoundedTargetReturnEvidence;
+export declare function assertBoundedTargetBatchResult(value: unknown): asserts value is BoundedTargetBatchResult;
 export declare function createBoundedTargetBackgroundService(options?: BoundedTargetServiceOptions): BoundedTargetBackgroundService;
