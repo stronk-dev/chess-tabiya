@@ -24582,6 +24582,78 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D3025",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:187af39b70cbfb8be5abb03ba4e866de584f2efce5ca9e0777d79a441ccb4ff1",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D3026",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d9baefdbe634499bab85da045f3286fd9f3990efd3e16ab5bd296a84b2908118",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D3027",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8889b083bf858a3896b8c617a185bf5ec731c8a229dd06a17d5b448a03301b67",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D3028",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ccedac4719e5ed0af486fa9c1dba3c0d0afc1793738cdf61653ebdbc23aa6f09",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D3029",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ae7a0f7b32786d0913711414f551ef5df65edb5eaec0c6fbff80ce6bcb97ef5e",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D3030",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b0cfaeda678f687f74b19e2cc99130bc78d9328d9932057daf8b108edf888c6e",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D3031",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:069c8ee3a7a6a67f9b57338a97cbc92574c1b34d5565e8740fd727ebd162d35b",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D3032",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:929780a0e93d25bece0ceb048a673c64ccf00da5916004ffaab5c634885776ac",
+      "uxItems": [],
+      "owner": "bot-play",
+      "blocker": "rfc:bot-policy.md"
     }
   ]
 }

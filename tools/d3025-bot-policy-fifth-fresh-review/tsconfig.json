@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "exactOptionalPropertyTypes": false,
+    "types": ["node", "vitest/globals"]
+  },
+  "include": ["review.test.ts", "vitest.config.ts"]
+}

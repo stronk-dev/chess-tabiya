@@ -880,13 +880,17 @@ bot-policy-fresh-review:
 bot-policy-second-fresh-review:
 	node --test tools/d2219-bot-policy-second-fresh-review/contract.test.mjs
 
-.PHONY: bot-policy-third-fresh-review bot-policy-fourth-author-repair
+.PHONY: bot-policy-third-fresh-review bot-policy-fourth-author-repair bot-policy-fifth-fresh-review
 bot-policy-third-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2407-bot-policy-third-fresh-review/vitest.config.ts --reporter=verbose
 
 bot-policy-fourth-author-repair: provider-health-seventh-author-repair bot-policy-author-contract
 	./node_modules/.bin/vitest run --config tools/d2407-bot-policy-fourth-author-repair/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/tsc -p tools/d2407-bot-policy-fourth-author-repair/tsconfig.json --noEmit
+
+bot-policy-fifth-fresh-review: bot-policy-fourth-author-repair
+	./node_modules/.bin/vitest run --config tools/d3025-bot-policy-fifth-fresh-review/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc -p tools/d3025-bot-policy-fifth-fresh-review/tsconfig.json --noEmit
 
 bot-trait-screen-contract:
 	./node_modules/.bin/vitest run --config tools/d2237-bot-trait-screen/vitest.config.ts --reporter=verbose
@@ -1330,7 +1334,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review concept-registry-fourth-author-repair concept-registry-fifth-author-repair concept-registry-sixth-fresh-review longitudinal-store-tenth-fresh-review storage-backup-fourth-author-repair storage-backup-fifth-fresh-review safe-deployment-third-author-repair safe-deployment-fourth-fresh-review campaign-two-horizon-sixth-author-repair campaign-two-horizon-seventh-fresh-review pack-capability-seventeenth-fresh-review candidate-packet-fourteenth-fresh-review semantic-collectors-promotion-sixteenth-fresh-review provider-health-ninth-fresh-review provider-health-ninth-author-repair provider-health-tenth-fresh-review provider-health-eleventh-author-repair provider-health-twelfth-fresh-review shared-resource-bootstrap-fifteenth-fresh-review provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review provider-protocol-sixth-fresh-review live-sources-author-repair review-evidence-third-author-repair bot-policy-fourth-author-repair bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review concept-registry-fourth-author-repair concept-registry-fifth-author-repair concept-registry-sixth-fresh-review longitudinal-store-tenth-fresh-review storage-backup-fourth-author-repair storage-backup-fifth-fresh-review safe-deployment-third-author-repair safe-deployment-fourth-fresh-review campaign-two-horizon-sixth-author-repair campaign-two-horizon-seventh-fresh-review pack-capability-seventeenth-fresh-review candidate-packet-fourteenth-fresh-review semantic-collectors-promotion-sixteenth-fresh-review provider-health-ninth-fresh-review provider-health-ninth-author-repair provider-health-tenth-fresh-review provider-health-eleventh-author-repair provider-health-twelfth-fresh-review shared-resource-bootstrap-fifteenth-fresh-review provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review provider-protocol-sixth-fresh-review live-sources-author-repair review-evidence-third-author-repair bot-policy-fifth-fresh-review bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 

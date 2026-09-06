@@ -2378,3 +2378,20 @@ storage mutations with atomic invalidation, close one exact job-state algebra an
 complete retry/reclaim/renew/fail/publish CAS lifecycle before another fresh review. Player style,
 skills, opening performance, longitudinal recommendations, profile export/deletion and every
 learner-facing history surface remain blocked on that accepted and implemented foundation.
+
+## Checkpoint — Bot policy returned at identity, replay and provider authority
+
+The bot foundation remains incomplete after its fifth fresh independent review. The fourth repair
+retains normalized top-p and honest request-conditional cache state, but a genuine profile digest
+does not bind family/layers; coordinated stored-decision rewrites can promote a sampler-excluded
+move; replay trusts caller envelopes; the request grammar is open; duplicate Stockfish rows select
+guard truth; durable provider authority is local; roster availability trusts substituted profiles
+and a superseded health checkpoint; and the model fails the repository TypeScript dialect.
+
+`make bot-policy-fifth-fresh-review` retains the 31+6 predecessor controls and passes 8/8 new
+able-to-fail groups plus its TypeScript checkpoints. The next bounded repair must resolve exact
+catalog members, reconstruct decisions from parsed shared authorities, load replay from durable
+events, close request/provider/population grammars, rebase on accepted current provider health and
+inherit the repository compiler contract before another fresh review. The 4×3 roster, calibrated
+human-likeness, route source, cards, rematches, Review integration, phase/endgame behavior and bot
+tournaments remain separate required 1.0 work.

@@ -164,12 +164,12 @@
       "rfcs": ["bot-policy.md", "bot-roster.md", "bot-route-source.md", "opponent-experience.md"],
       "completion": {
         "evidence": ["partial", "Maia bands, candidate probabilities, guards, routes, repertoire, traits, memory, clock behavior, and endgame behavior are measured separately."],
-        "state": ["blocked", "Named profile digests persist every model, bound, proposal, guard, trait, and fallback used for a move."],
+        "state": ["blocked", "The fifth fresh review proves a genuine profile digest can carry substituted family/layer semantics and coordinated durable rewrites can select a sampler-excluded move; replay/provider authority is not yet trustworthy."],
         "api": ["partial", "Opponent discovery and selection expose only registered profiles and reproduce their policy after resume."],
         "experience": ["missing", "A learner chooses an honest bot card and experiences its behavior in play, history, rematches, review, and local bot tournaments."],
         "defaults": ["blocked", "Strength is a measured rung, personality is behavior, and no generic Elo knob or adjective-only persona is presented."],
         "content": ["blocked", "The 4 by 3 roster, openings/routes, profile copy, names, absences, and calibration reports are populated."],
-        "verification": ["blocked", "Blind human-likeness, strength, trait observability, off-window proposal, fallback, severe-loss, clock, phase, and reproducibility gates pass per profile."],
+        "verification": ["blocked", "The retained 31+6 controls and eight fifth-review falsifiers pass, but exact profile binding, reconstruction from provider truth, durable replay, request grammar, unique guard rows, current health authority, repository compilation, calibration, phase/endgame and human-likeness gates remain."],
         "release": ["blocked", "CPU-capable provider-off opponents remain playable and every stronger optional engine degrades visibly."]
       }
     },
@@ -379,18 +379,18 @@
         "state": "blocked_contract",
         "capabilities": ["learner_model", "bots", "campaign", "social_play", "account_data", "operations"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign and longitudinal real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
+        "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "The longitudinal store's tenth fresh review proves durable receipts still do not establish real mutations or a complete worker lifecycle: mutation no-ops, destructive duplicate requests, regressing cuts, inconsistent states, missing retry/reclaim transitions, inverted legacy provenance and an unauthorized identity fork all remain. Storage recovery, safe deployment and Campaign are separately returned; bot policy remains held.",
+          "summary": "Bot policy's fifth fresh review returns its profile, durable decision, replay, request, guard-row, provider, health-currentness and repository-compiler authorities; a coordinated stored rewrite can select a sampler-excluded move. Longitudinal state, storage recovery, safe deployment and Campaign remain separately returned.",
           "impact": "regressed",
-          "evidence": ["planning/longitudinal-store/tenth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2994-longitudinal-tenth-fresh-review/review.test.ts", "rfc/longitudinal-store.md", "planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md", "tools/d2986-campaign-seventh-fresh-review/review.test.ts", "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts", "rfc/safe-deployment-profiles.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts", "rfc/storage-backup-recovery.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/fourth-author-repair-2026-09-05.md", "tools/d2407-bot-policy-fourth-author-repair/contract.test.ts", "rfc/social-play.md"],
+          "evidence": ["planning/platform-alignment/bot-policy/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d3025-bot-policy-fifth-fresh-review/review.test.ts", "rfc/bot-policy.md", "planning/longitudinal-store/tenth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2994-longitudinal-tenth-fresh-review/review.test.ts", "rfc/longitudinal-store.md", "planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md", "tools/d2986-campaign-seventh-fresh-review/review.test.ts", "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts", "rfc/safe-deployment-profiles.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts", "rfc/storage-backup-recovery.md", "rfc/social-play.md"],
           "anchors": [
             {"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"},
             {"kind": "rfc", "id": "campaign-core.md", "digest": "sha256:f9cd84da95a0d6d367c943e8560936b58fb86c3eb94358d6b4ec6a9919ae0e86"},
             {"kind": "rfc", "id": "storage-backup-recovery.md", "digest": "sha256:418c43b100179f09ea6838114bc3525763c32d358314a8c7e0855fc31127a11d"},
             {"kind": "rfc", "id": "longitudinal-store.md", "digest": "sha256:d6c2798b7b33d17cd80d2d31c471e0e74f7e175ca76203a30bab16752db2acff"},
-            {"kind": "rfc", "id": "bot-policy.md", "digest": "sha256:18e2f4d00465f10682a831138a939d7a7ee61e0f467832aac5176bca6a74d3bb"},
+            {"kind": "rfc", "id": "bot-policy.md", "digest": "sha256:8a1d26c9dc08c687ae5ea8805514ff5262b8137f9ecaf989698b6ad9eb8ee740"},
             {"kind": "rfc", "id": "social-play.md", "digest": "sha256:3f81a29ba056944e9b54a9b56b5af9eb5bd5415253aada5eac6c9f862cb39a6b"}
           ]
         },

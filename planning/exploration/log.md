@@ -17342,3 +17342,23 @@ derived evidence; duplicate durable records publish; and its result union differ
 `make semantic-collectors-promotion-sixteenth-fresh-review` retains every predecessor and passes
 6/6 fresh groups plus strict TypeScript. Complete one bounded composed repair, then obtain another
 genuinely fresh review and land the central provider/value dependencies before implementation.
+
+## 2026-09-06 — Bot policy fifth fresh independent return
+
+**What landed:** a fresh executable return on [[D3025]]–[[D3032]]. The fourth repair's normalized
+top-p, clock-free semantic image, individual mutation rejection, imported health types and
+request-conditional exact-cache state survive; the complete bot authority chain does not.
+
+**What changed:** `bot-policy.md` remains draft. Genuine profile ids/digests do not bind family and
+layers; coordinated durable rewrites can select a zero-mass move; idempotent replay returns unparsed
+caller bytes; the route request is open; duplicate Stockfish rows apply; persisted provider truth
+is locally self-authored; availability trusts substituted profiles and the obsolete seventh health
+repair; and the author model fails the repository TypeScript dialect. No product, schema, migration,
+catalog, route, roster, client, tournament or content byte changed.
+
+**Evidence/next:**
+`planning/platform-alignment/bot-policy/fifth-fresh-independent-buildability-review-2026-09-06.md`;
+`make bot-policy-fifth-fresh-review` retains the 31+6 author controls and passes 8/8 fresh groups
+plus TypeScript checkpoints. Complete one bounded authority repair, then obtain another genuinely
+fresh review and land the accepted current provider-health and shared-resource dependencies before
+implementation.

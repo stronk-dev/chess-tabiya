@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:160715bb41046b70f641985e2a99ba7c9612b995829ad91e42de5778189af185",
+    "roadmap": "sha256:bf9d27b02bbe2f686c693c96017c47996f6699a9348260548c98adb5be6bff86",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:5a1743c4409c17aac411af09e82e090881891db8d9b41c4aa6d7c770fb9b5061",
-    "rfcRegister": "sha256:de08abffa180b505ee99911025842eff2d2d3025071efeee6cbafef981e39563",
+    "workState": "sha256:5b0620f521922165093443b6481b342ddd5307e413059191dbbfab5bef83d767",
+    "rfcRegister": "sha256:c33ece587bd10949c6c22e3fc6c4b4391c47dd67e15138425138075d47d46152",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 651,
       "doing": 0,
-      "blocked": 1277,
+      "blocked": 1285,
       "done": 842,
       "refused": 3
     },
@@ -219,12 +219,15 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign and longitudinal real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
+      "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "The longitudinal store's tenth fresh review proves durable receipts still do not establish real mutations or a complete worker lifecycle: mutation no-ops, destructive duplicate requests, regressing cuts, inconsistent states, missing retry/reclaim transitions, inverted legacy provenance and an unauthorized identity fork all remain. Storage recovery, safe deployment and Campaign are separately returned; bot policy remains held.",
+        "summary": "Bot policy's fifth fresh review returns its profile, durable decision, replay, request, guard-row, provider, health-currentness and repository-compiler authorities; a coordinated stored rewrite can select a sampler-excluded move. Longitudinal state, storage recovery, safe deployment and Campaign remain separately returned.",
         "impact": "regressed",
         "evidence": [
+          "planning/platform-alignment/bot-policy/fifth-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d3025-bot-policy-fifth-fresh-review/review.test.ts",
+          "rfc/bot-policy.md",
           "planning/longitudinal-store/tenth-fresh-independent-buildability-review-2026-09-06.md",
           "tools/d2994-longitudinal-tenth-fresh-review/review.test.ts",
           "rfc/longitudinal-store.md",
@@ -237,9 +240,6 @@
           "planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md",
           "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts",
           "rfc/storage-backup-recovery.md",
-          "rfc/bot-policy.md",
-          "planning/platform-alignment/bot-policy/fourth-author-repair-2026-09-05.md",
-          "tools/d2407-bot-policy-fourth-author-repair/contract.test.ts",
           "rfc/social-play.md"
         ],
         "anchors": [
@@ -266,7 +266,7 @@
           {
             "kind": "rfc",
             "id": "bot-policy.md",
-            "digest": "sha256:18e2f4d00465f10682a831138a939d7a7ee61e0f467832aac5176bca6a74d3bb"
+            "digest": "sha256:8a1d26c9dc08c687ae5ea8805514ff5262b8137f9ecaf989698b6ad9eb8ee740"
           },
           {
             "kind": "rfc",
@@ -824,7 +824,7 @@
         ],
         "state": [
           "blocked",
-          "Named profile digests persist every model, bound, proposal, guard, trait, and fallback used for a move."
+          "The fifth fresh review proves a genuine profile digest can carry substituted family/layer semantics and coordinated durable rewrites can select a sampler-excluded move; replay/provider authority is not yet trustworthy."
         ],
         "api": [
           "partial",
@@ -844,7 +844,7 @@
         ],
         "verification": [
           "blocked",
-          "Blind human-likeness, strength, trait observability, off-window proposal, fallback, severe-loss, clock, phase, and reproducibility gates pass per profile."
+          "The retained 31+6 controls and eight fifth-review falsifiers pass, but exact profile binding, reconstruction from provider truth, durable replay, request grammar, unique guard rows, current health authority, repository compilation, calibration, phase/endgame and human-likeness gates remain."
         ],
         "release": [
           "blocked",

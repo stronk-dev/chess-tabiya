@@ -1,13 +1,14 @@
 # RFC: Bot policy
 
-- **Status:** **draft — fourth author repair completed 2026-09-05 on
-  [[D2407]]–[[D2411]]; another fresh independent review is required.** The executable author
-  boundary now normalizes tempered mass before top-p, separates complete delivery provenance from
-  the clock-free derivation image, parses unknown durable bytes by rederiving every decision and
-  operation identity, imports provider-health authority directly, and exposes cached-exact health
-  only as request-conditional. `make bot-policy-fourth-author-repair` passes the retained 31 arms,
-  six new inversion controls and strict TypeScript.
-  **Acceptance and implementation remain blocked** on another fresh review,
+- **Status:** **draft — fifth fresh independent review returned the fourth repair on
+  [[D3025]]–[[D3032]] (2026-09-06).** Exact profile semantics remain substitutable under a genuine
+  id/digest; durable parsing accepts coordinated decision rewrites; replay returns unparsed caller
+  envelopes; the route request grammar is open; duplicate Stockfish rows apply; persisted provider
+  truth is a bot-local self-digest; availability trusts substituted profiles and an obsolete health
+  checkpoint; and the model fails the repository TypeScript dialect. `make
+  bot-policy-fifth-fresh-review` retains the 31+6 author controls and passes 8/8 fresh falsifiers
+  plus its TypeScript checkpoints.
+  **Acceptance and implementation remain blocked** on a bounded fifth author repair, another fresh review,
   accepted provider health, and the shared-resource bootstrap/register claim. No
   implementation is authorized. Claims 0.18/migration remain held. *(Prior checkpoints:
   implementing; accepted 2026-08-22; draft; D1601–D1609 author-amended; D1970–D1976
@@ -1322,6 +1323,35 @@ The five returns are closed at contract tier without claiming acceptance or prod
 Reproduction: `make bot-policy-fourth-author-repair` (31 retained tests + 6 inversion tests + both
 strict TypeScript programs). Another fresh independent review remains mandatory.
 
+## Fifth fresh independent return (2026-09-06)
+
+Fresh application to the complete author model returns it on eight executable boundaries:
+
+1. **[[D3025]]:** a genuine profile id/digest survives caller substitution of its family and layer
+   semantics, so catalog identity does not own the execution value;
+2. **[[D3026]]:** coordinated stored-decision and digest rewrites promote a sampler-excluded move
+   into the selected move because durable parsing re-hashes instead of reconstructing;
+3. **[[D3027]]:** pre-provider idempotent replay returns a structurally invalid caller-supplied prior
+   envelope without invoking the durable parser or storage authority;
+4. **[[D3028]]:** the sole opponent-ply request parser accepts extra fields, empty root identities
+   and a non-digest event head;
+5. **[[D3029]]:** duplicate all-legal Stockfish rows pass the deduplicating set check and the first
+   row silently becomes guard truth;
+6. **[[D3030]]:** persisted provider inputs accept invalid unsealed delivery bytes under a
+   recomputed bot-local digest instead of consuming shared durable provider authority;
+7. **[[D3031]]:** roster availability trusts a substituted profile family and imports the obsolete
+   seventh provider-health repair rather than the eventually accepted current checkpoint; and
+8. **[[D3032]]:** the model produces TS2322/TS2375 under the repository compiler contract, hidden by
+   its standalone weaker TypeScript configuration.
+
+Exact report:
+`planning/platform-alignment/bot-policy/fifth-fresh-independent-buildability-review-2026-09-06.md`.
+`make bot-policy-fifth-fresh-review` retains the full predecessor chain and passes all eight fresh
+groups plus its TypeScript checkpoints. A bounded fifth author repair, another genuinely fresh
+review, accepted current provider health and the shared-resource bootstrap still gate acceptance;
+no catalog, schema, migration, route, roster, client, tournament or production bot implementation
+is authorized.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -1436,3 +1466,8 @@ as a named future measured layer (Open question 4).
   rather than copied, and cached-exact health is request-conditional. `make
   bot-policy-fourth-author-repair` passes 37 tests plus strict TypeScript. Another fresh review and
   the already named dependencies still gate acceptance and implementation.
+- 2026-09-06: fifth fresh independent review returned the fourth repair on [[D3025]], [[D3026]],
+  [[D3027]], [[D3028]], [[D3029]], [[D3030]], [[D3031]] and [[D3032]]. Profile, durable replay,
+  route request, guard population, provider authority, health-currentness and repository compiler
+  boundaries remain open. `make bot-policy-fifth-fresh-review` passes 8/8 fresh falsifiers plus the
+  retained chain; bounded repair and another fresh review remain mandatory.
