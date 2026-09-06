@@ -23,6 +23,10 @@ const ROUTE_EXACT = new Set([
   "planning/pack-capability-contract/evidence-job-durability.md",
   "planning/pack-capability-contract/review-history.md",
   "planning/pack-capability-contract/cut-2026-09-06.md",
+  // Added 2026-09-07 with the module-registration cut, on the same evidence and for the same
+  // reason. Ten author repairs and ten fresh reviews carried the [[D2120]]-[[D2586]] rows through
+  // the RFC body; moving that narration to planning/ would silently unroute those open rows.
+  "planning/learner-modules/author-repair-and-review-chain.md",
 ]);
 const EXCLUDED = new Set([
   "planning/WORK.md",

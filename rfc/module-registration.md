@@ -1,66 +1,18 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — tenth author repair completed on [[D2584]], [[D2585]] and [[D2586]];
-  another genuinely fresh review is required.** Exact-window inputs now retain their literal
-  position/edge offsets, each module moment selects candidate or recorded occurrence authority,
-  and the live observed-tactic emitters reject independently crossed move, duty, capture and
-  exchange evidence. `make module-registration-tenth-author-repair` passes 3/3 plus the maintained
-  11/11 contract. No module becomes executable and no implementation is authorised. The
-  ninth [[D2557]] repair survives: the live check projection, selector and constructor remain
-  correctly separated from the unbuilt recorded-path occurrence operation. The new review proves
-  that exact tactic windows relabel a position duty reading as edge evidence, postcommit/review
-  rows point at a hypothetical-candidate view that forbids committed edges, and the live observed
-  tactic emitters accept sealed but crossed move/duty/capture/exchange evidence. `make
-  module-registration-tenth-fresh-review` reproduces all three. No implementation is authorised.
-  Provider acquisition, exact catalogue gates, edge-grained eval delta,
-  per-alternative deflection inputs, all 205 exact pointers and the final receipt seal survive. The
-  regenerated execution image now binds the live check projection, induction selector, sealed event
-  constructor and emitter as implemented derivation authority, while retaining the real
-  `awaiting_upstream_occurrence_receipt` hold for the unbuilt recorded-path module source. `make
-  module-registration-ninth-author-repair` passes retained 11/11 + 6/6 + 2/2. No implementation is
-  authorised.
-  The fourth
-  repair rejects the prior generator's
-  central premise: learner modules do not invoke 117 detector/provider functions. They consume
-  projection-keyed sealed pools produced by the candidate packet, recorded semantic path, Review,
-  catalogue and provider authorities. The generated artifacts are therefore digest-sealed
-  **requirements** with every row dependency-blocked, not counterfeit executable plans. Policy is
-  derived from real workflow/module authorities; subject grain and the nine external DAG inputs
-  are explicit; Guided Hint is an explicit D1639 owner blocker; and presentation bindings require
-  real pair-specific adapters instead of fabricated ids. `make module-registration-author-contract`
-  passes 11/11. Exact repair:
-  `planning/learner-modules/third-author-repair-2026-08-30.md`. The fourth repair now shares one
-  acceptance algebra with D1865, declares exact projection grains and lawful cross-grain views,
-  intersects module timing with sealed-operation applicability, and derives the complete form
-  image through `MODULE_FORM_IMAGE` without dropping `list` from cards. The maintained author and
-  assembly targets pass 11/11 and 13/13; `make module-registration-fourth-author-repair` passes
-  5/5. Exact repair receipt: `planning/learner-modules/fourth-author-repair-2026-08-31.md`.
-  The fresh review found an undeclared generic cross-grain relabel, contradictory surviving
-  direct-call instructions, and packet-wide rather than exact projection/view timing. Exact return:
-  `planning/learner-modules/fourth-fresh-independent-buildability-review-2026-08-31.md`. No
-  implementation is authorised. The fifth repair retains every input's intrinsic grain through
-  typed derivation relations, makes the direct-call block explicitly non-normative, and refuses to
-  mint final timing until the exact upstream operation supplies applicability. Exact repair:
-  `planning/learner-modules/fifth-author-repair-2026-08-31.md`; maintained targets plus
-  `make module-registration-fifth-author-repair` pass. That repair keeps timing unresolved, but
-  its grain-only relations could not express multi-edge tactics or ordered delta operands; the candidate
-  packet had no root/child occurrence selector; and the five source contracts named operations their
-  owners did not declare. Exact return:
-  `planning/learner-modules/fifth-fresh-independent-buildability-review-2026-08-31.md`. The
-  sixth repair now retains operation-owned ordered window/endpoints contracts, publishes four exact
-  candidate occurrence views while forbidding committed/root projection impersonation, binds the
-  five sources to their actual callable contracts (including one module-owned catalogue adapter),
-  and leaves every exact occurrence/timing operation unresolved. It also consumed [[D2473]]: move
-  quality's manifest conjunction contradicts its accepted same-lane alternative rule. `make
-  module-registration-sixth-author-repair` passes 5/5; no row becomes executable. Another fresh
-  review is required. The
-  [[D1870]]/[[D2030]] dependency image remains the owner-ruled measured 207-pair target,
-  including requested-Sight `pawn_safe_square`. Prior
-  amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] and the rebuilt
-  `hint-distance` contract. The [[D1430]] document: the learner-module layer exists as a
-  contract, a compiler, a reducer pipeline and a preset algebra, and **has never been
-  instantiated**. This RFC writes the instances, calls the compiler in production, and gives each
-  module a seat a person can look at.
+- **Status:** **draft — normative contract complete; not acceptable.** The artifacts are
+  `completionClaim: requirements_only` and all 205 binding rows are `blocked_dependencies`, so no
+  module becomes executable and no implementation is authorised. Standing blockers: the
+  `evidence-value-authority` successor rebase (§1.3.1), the `hint-distance` measured family×rung
+  registry (D7), and the exact-operation resolution receipt (D8). **Two named acceptance blockers,
+  both measured 2026-09-07:** (1) the coverage section — this document does not cover the four
+  `awaiting` RFCs' discharges it exists to free, missing nine ids including the one
+  `exact-legal-mobility` D1 names literally; (2) §2.5.0 is marked *must not be implemented* while
+  carrying the query route, decision stamp and Review paging that A16/A19/A20 require. The
+  maintained author contract is **10/11 at HEAD**, not 11/11: the D2170 artifact digest fails on
+  committed bytes, independently of this document. Repair history is indexed at
+  `planning/learner-modules/author-repair-and-review-chain.md`; no further round of self-review is
+  commissioned ([[D3057]]).
 - **Author:** claude (drafted on the [[D1430]] audit, re-verified line by line at HEAD `f0d5460`)
 - **Created:** 2026-08-24
 - **Design refs:** `design/05-in-run-experience.md` §1 (the six invariants — *"absence is stated,
@@ -141,181 +93,12 @@ Criterion A16 exercises both durable and ephemeral arms; a rules-floor-only fixt
 `node tools/register-check.mjs` passes with this block declaring `none` (C1–C8, including C8's
 digest refusal of an undeclared schema edit).
 
-## Second fresh independent return (2026-08-30)
+## Repair history
 
-The generated author artifacts exposed seven further buildability blockers: [[D2164]], [[D2165]],
-[[D2166]], [[D2167]], [[D2168]], [[D2169]] and [[D2170]].
-
-1. Timing, roles, sessions, forms and budgets are copied from local tables rather than derived
-   from workflow/module/adapter authorities.
-2. An execution row names only a source and callable; it has no typed invocation, input builder,
-   projection extractor, result parser, abstention mapping or sealed result.
-3. Every derived projection is labelled edge-local and same-subject by construction, including
-   run-wide story rank.
-4. Nine derivation inputs are absent from both executable rows and any declared source-input set.
-5. Guided Hint has no acceptance key or binding row, so the mandatory family×rung product passes
-   vacuously at zero.
-6. Binding adapter ids are synthesized without a presentation registry and the forms join omits
-   the registered-adapter term.
-7. Two broad source-family smokes never prove that any of 117 rows emits its declared projection.
-
-`make module-registration-second-fresh-review` reproduces 7/7. Exact evidence and repair
-obligations are in the second fresh review dossier. This is an author return; another fresh review
-is mandatory before implementation.
-
-## Third author repair — modules consume evidence; they do not collect it (2026-08-30)
-
-The second return exposed a more important error than any missing callable signature: §2.5's
-117-function execution plan made the learner-module layer a second evidence engine. It would have
-re-run structural rules, semantic tactics, providers and Review derivations after those systems had
-already established their own subjects, seals, absence semantics and scheduling. That violates the
-producer→evidence→module boundary this RFC exists to build and creates two authorities for every
-fact.
-
-The direct-call execution plan is withdrawn. Any later wording in §2.5 that implies a module
-collector may invoke a raw detector or provider is superseded by this section. The only legal
-module input is a projection-keyed admitted item from one of five upstream contracts:
-
-| sealed pool | authority | subject/use |
-|---|---|---|
-| `candidate_population@1` | `shared-candidate-evidence-packet` | one position/edge decision population |
-| `recorded_semantic_path@1` | `semantic-collectors` | ordered facts over the committed path |
-| `review_evidence_packet@1` | `review-evidence-compiler` | one immutable run prefix or branch comparison |
-| `catalogue_evidence_packet@1` | `pack-population-provenance` | cited pack, shape and theory facts |
-| `provider_evidence_packet@1` | `provider-exchange-and-execution` | sealed Stockfish, Syzygy, Maia and Explorer receipts |
-
-Each contract must eventually name its input, invocation, projection extraction, payload parser,
-typed abstention and output seal. **Those operations remain upstream dependencies:** strings in an
-author requirement do not pretend the operations ship. Until they exist, all 117 projection rows
-have `status: awaiting_upstream_sealed_operation` and the artifact has
-`completionClaim: requirements_only`. Acceptance criterion A20 cannot turn green merely because a
-function with a plausible name is importable.
-
-The derived graph now has four meaningful subject grains rather than one universal edge:
-position/edge products use the candidate decision context; compare products use a declared branch
-pair; story/grade products use one frozen run prefix. Nine inputs outside the 117 accepted-output
-population are declared exactly as source-input nodes, with acquisition authority and subject
-grain. A derivation join says `same_edge_context`, `declared_branch_pair` or
-`same_frozen_prefix`; `sameSubject: true` is deleted because it hid the very distinction the graph
-had to enforce.
-
-The 205 non-hint binding rows are also requirements, not registered bindings. Timing, roles,
-forms and budgets come from `AUTHOR_MODULE_POLICIES`; sessions are derived from
-`WORKFLOW_CONTEXT_POLICIES`. The presentation planner is imported only to identify reusable base
-component capability. It does **not** authorize inventing `presentation.module.*` ids: every row
-names the exact future `module.* × projection` pair and stays
-`awaiting_exact_module_pair_adapter` until Checkpoint B registers it.
-
-Guided Hint is present as an empty acceptance key and explicit D1639 owner blocker. Its final rows
-must be set-equal to a non-empty measured-family × non-empty rung product. Zero rows is therefore a
-visible refusal, never a green Cartesian-product test.
-
-## Fourth author repair — one subject/timing/form authority per pair (2026-08-31)
-
-This section supersedes only the five returned requirement-artifact seams [[D2343]]–[[D2347]]. It
-does not authorize production implementation or weaken any upstream dependency.
-
-1. **One acceptance algebra.** The D1865 assembly harness imports `AUTHOR_MODULE_ACCEPTS`
-   directly. It no longer maintains a second nine-key copy. The explicit empty `guided_hint` key
-   is therefore present in both authorities, remains blocked by D1639, contributes zero rows and
-   cannot disappear in a falsely green non-hint census.
-2. **Exact subject authority.** Common sealed stages declare only their intrinsic grain. Every
-   `position_or_edge_local` and `derived_after_inputs` projection must have an exact
-   `AUTHOR_PROJECTION_SUBJECT_OVERRIDES` row; absence is a generator error. The four join rules are
-   `same_position`, `same_edge_context`, `declared_branch_pair` and `same_frozen_prefix`.
-   `derived.material.reading.role_signature@1` is position-grained,
-   `derived.grade.move_quality@1` is edge-grained, compare rows are branch-pair-grained and story
-   rank is frozen-prefix-grained. Producer family names are not consulted.
-3. **Grain-specific sealed views.** Every requirement row publishes its complete `subjectViews`.
-   The primary view is identity-sealed by its acquisition contract. A secondary view names the
-   explicit `projection_between_grains@1` adapter and the sealed acquisition that owns the target
-   grain. External inputs are keyed by `(projection, subjectKind)`, so `run.record.move@1` has
-   separate edge and branch-pair views rather than one fictional run-prefix node. Generation walks
-   every derivation edge and refuses unless the input has a view exactly matching the consumer's
-   join grain.
-4. **Operation applicability participates in timing.** Each of the five upstream source contracts
-   declares non-empty `subjectKinds` and `timings`. A module binding receives the complete
-   non-empty intersection of module policy and its exact acquisition contract. Recorded semantic
-   path evidence therefore reaches `threat_radar × defender_exposure` only at `postcommit`, never
-   its `precommit` arm. An empty intersection is an author failure, not an unavailable-at-runtime
-   binding.
-5. **Forms come from the module vocabulary.** `AUTHOR_MODULE_POLICIES.forms` contains
-   `ModuleForm` values, not copied `EvidenceForm` values. The generator expands them through the
-   shipped `MODULE_FORM_IMAGE`, intersects the projection image, and records that entire set as
-   both `forms` and `presentationRequirement.requiredForms`. The future exact pair adapter must be
-   set-equal to that requirement. Thus `card` retains both `panel` and `list` whenever the
-   projection carries both; a convenient subset cannot satisfy the artifact.
-
-Both digest-sealed artifacts were regenerated at the unchanged honest boundary: 117 evidence
-requirements, 205 non-hint binding requirements, every row still
-`awaiting_upstream_sealed_operation`/`blocked_dependencies`, and `completionClaim` still
-`requirements_only`. `make module-registration-author-contract` passes 11/11,
-`make module-evidence-assembly` passes 13/13 and
-`make module-registration-fourth-author-repair` passes 5/5. These are author/buildability facts,
-not evidence that a module reaches production.
-
-## Fifth author repair — intrinsic subjects and unresolved exact timing (2026-08-31)
-
-This section repairs [[D2398]]–[[D2400]] and supersedes the withdrawn direct-call draft in
-historical §2.5.0. It does not make any requirements-only row executable.
-
-1. **Inputs keep their intrinsic grain.** `subjectViews` and `projection_between_grains@1` are
-   deleted. A derived row carries one `inputBinding` per literal input: the input projection, its
-   intrinsic `sourceSubjectKind`, and one closed relation owned by the derived operation:
-   `same_position`, `same_edge`, `same_branch_pair`, `same_frozen_prefix`,
-   `edge_position_endpoints`, `branch_pair_edges`, `branch_pair_position_endpoints`,
-   `prefix_position_occurrences`, `prefix_edge_occurrences`, or
-   `prefix_branch_pair_occurrences`. These relations bind retained occurrences into the output
-   subject; they never relabel an evidence item. `run.record.move@1` therefore has one edge-grained
-   source input and `piece_route` consumes recorded edges through `branch_pair_edges`.
-2. **Exact timing remains visibly unresolved.** A requirements-only binding has no `timing` field.
-   It carries `timingRequirement`: the module-requested timings, the broad sealed-pool ceiling,
-   `exactProjectionOperation: null`, and `status: awaiting_upstream_exact_operation`. The final F1
-   binding cannot exist until the upstream exact operation supplies applicability and the compiler
-   intersects all three terms. A packet being callable never proves that every item inside it is
-   applicable.
-3. **The direct-call plan is withdrawn from the contract.** Historical §2.5.0 is retained only to
-   explain the D2165 return; every interface, callable test and eight-family execution instruction
-   in it is explicitly non-normative and must not be implemented. Normative §2.5 contains only the
-   sealed-pool requirement schema, typed input relations, unresolved timing requirement and
-   final-emission refusal.
-
-The regenerated artifacts remain 117 evidence requirements and 205 non-hint binding requirements,
-all dependency-blocked and `requirements_only`. `make module-registration-fifth-author-repair`
-crosses all three returned seams. Another fresh independent review remains required.
-
-## Sixth author repair — exact occurrences without a second execution engine (2026-09-01)
-
-This section repairs [[D2432]]–[[D2435]] and records the repaired upstream contradiction [[D2473]]. It does
-not turn any requirement into an executable binding.
-
-1. **Multi-edge tactics retain their operation-owned topology.** The seven observed projections
-   carry literal alternative windows with horizon, ordered edge/position offsets, occurrence roles,
-   cardinalities, output edge and equality joins. Three-, four- and five-edge operations can no
-   longer compile as `same_edge`. Their callable owner remains `recordedSemanticPath(run,branchId)`;
-   final emission waits for its sealed per-projection occurrence receipt.
-2. **Candidate population has four exact views, not one generic pool.** Its service operation is
-   `CandidatePopulationService.get(request,signal)`. `root_legal_population` contains only the
-   legal root authority; `candidate_child_position_by_uci` and `candidate_edge_by_uci` select one
-   canonical row; `complete_candidate_population` retains all rows for denominators. It explicitly
-   cannot provide `committed_edge` or an arbitrary `current_root_projection`. Every candidate-backed
-   module pair names its view and canonical-UCI selector, while its exact projection operation stays
-   null. A post-commit/current-position consumer must resolve through the recorded path or a real
-   position operation; it cannot reinterpret a hypothetical child.
-3. **Signed deltas retain ordered operands.** Compare eval delta requires exactly branch-A and
-   branch-B eval occurrences with identical engine/search/domain. Move quality requires exactly
-   before/after occurrences from either the recorded lane or the live lane, with identical
-   engine/search limit. The latter is `upstream_same_lane_anyof_verified`, because its
-   current manifest declares the two lanes as a conjunction while its accepted RFC forbids mixing.
-4. **Five source contracts name real operations.** Candidate, recorded path, Review and provider
-   sources reference their owners' exact callable APIs. Catalogue acquisition is the one new
-   module-owned adapter, `compileCatalogueEvidencePool(input)`, specified below. The rejected
-   `AUTHOR_ADDITIONAL_SUBJECT_VIEWS` export is deleted. No placeholder invocation string survives.
-
-The artifacts remain digest-sealed requirements: 117 evidence rows and 205 pairs, all final timing,
-occurrence-operation and presentation fields blocked. `make module-registration-sixth-author-repair`
-is positive author evidence only; another fresh review gates acceptance.
-
+Ten author repairs and ten fresh reviews are indexed in
+`planning/learner-modules/author-repair-and-review-chain.md`. The one clause from that chain that
+binds an implementer — the five sealed pools that are the only legal module input — is normative in
+§2.5 and reproduced there.
 ## Summary
 
 `packages/runtime/src/module-contract.ts` is 202 lines of finished contract: eleven closed module
@@ -469,7 +252,7 @@ the reading proactive or interesting by default.
 `review_map` a `principal_variation` ceiling while noting *"no accepted projection here carries a
 PV"*. Verified: none of its 48 rows declares `candidate_moves`, `move`, `ranked_moves` or
 `principal_variation`. A permission nothing can exercise cannot fail a test, so it is corrected to
-`evaluation` (§1.1). `sight_on_request`'s `fact` ceiling is corrected upward to `pattern`, because
+the `threat, evaluation` capability pair (§1.1). `sight_on_request`'s `fact` ceiling is corrected upward to `pattern`, because
 the literal 22-row set derives an exact `fact + pattern` answer union. `rook_on_seventh` is the
 sole pattern witness; `space` and `pawn_connectivity` are separate Structure rows and never part of
 Sight. The compiler derives this union from the accepted projection declarations rather than
@@ -511,19 +294,19 @@ D2).
 Table caption — unit: **module id**; total: **11**, set-equal to `MODULE_IDS`
 (`module-contract.ts:3-7`). Changes from `learner-modules.md` §4 are **bold**.
 
-| # | id | timings (initiative) | seat | answerCeiling | facts / words / marks / arrows | novelty | empty |
+| # | id | timings (initiative) | seat | declared answer capabilities (§2.3a) | facts / words / marks / arrows | novelty | empty |
 |---:|---|---|---|---|---|---:|---|
 | 1 | `rules_floor` | pre_commit (ambient) | board_input | none | 0 / 0 / — / 0 | 0 | silent |
 | 2 | `sight_on_request` | pre_commit (on_request) **· post_commit (on_request)** | rail | **pattern** | 1 / 30 / 6 / 1 | 0 | stated_absence |
 | 3 | `blunder_prevention` | at_commit (proactive) | board_adjacent | threat | 1 / 20 / 1 / 1 | 0 | silent |
-| 4 | `threat_radar` | pre_commit (on_request) · post_commit (on_request) | rail | threat | 3 / 60 / 4 / 2 | 0 | stated_absence |
-| 5 | `postcommit_nudge` | post_commit (proactive) | rail | **evaluation** | 2 / 50 / 2 / 1 | 3 | silent |
+| 4 | `threat_radar` | pre_commit (on_request) · post_commit (on_request) | rail | **pattern, threat** | 3 / 60 / 4 / 2 | 0 | stated_absence |
+| 5 | `postcommit_nudge` | post_commit (proactive) | rail | **threat, evaluation** | 2 / 50 / 2 / 1 | 3 | silent |
 | 6 | `structure_nudge` | post_commit (**proactive**) | rail | **theory** | 1 / 80 / 4 / 0 | 3 | stated_absence |
 | 7 | `theory_breadcrumb` | post_commit (on_request) | rail | **theory** | 1 / 60 / 0 / 0 | **0** | stated_absence |
 | 8 | `guided_hint` | checkpoint (on_request, progressive disclosure) | rail | **move, through `guided_hint@1` disclosure** | 1 / 40 / 2 / 1 per rung | 0 | unavailable_source |
-| 9 | `compare_coach` | checkpoint (on_request) · review (on_request) | rail | **evaluation** | 2 / 60 / 2 / 2 | 0 | stated_absence |
-| 10 | `review_map` | review (proactive) | timeline | **evaluation** | 3 / 80 / 3 / 2 per moment | 0 | stated_absence |
-| 11 | `full_inspector` | review (explicit_mode) | explicit_surface | principal_variation | 20 / 400 / 20 / 8 | 0 | stated_absence |
+| 9 | `compare_coach` | checkpoint (on_request) · review (on_request) | rail | **move, evaluation** | 2 / 60 / 2 / 2 | 0 | stated_absence |
+| 10 | `review_map` | review (proactive) | timeline | **threat, evaluation** | 3 / 80 / 3 / 2 per moment | 0 | stated_absence |
+| 11 | `full_inspector` | review (explicit_mode) | explicit_surface | **threat, theory, evaluation, principal_variation** | 20 / 400 / 20 / 8 | 0 | stated_absence |
 
 Four changes need their argument stated rather than assumed:
 
@@ -941,6 +724,18 @@ operation timing, occurrence selection and pair presentation remain explicitly u
 module operation may invoke a raw detector or provider, and no final F1 row may be emitted while
 any dependency is unresolved.
 
+The only legal module input is a projection-keyed admitted item from one of five upstream sealed
+pools. A module collector may not invoke a raw detector or provider; that would make the module
+layer a second evidence engine and create two authorities for every fact.
+
+| sealed pool | authority | subject/use |
+|---|---|---|
+| `candidate_population@1` | `shared-candidate-evidence-packet` | one position/edge decision population |
+| `recorded_semantic_path@1` | `semantic-collectors` | ordered facts over the committed path |
+| `review_evidence_packet@1` | `review-evidence-compiler` | one immutable run prefix or branch comparison |
+| `catalogue_evidence_packet@1` | `pack-population-provenance` | cited pack, shape and theory facts |
+| `provider_evidence_packet@1` | `provider-exchange-and-execution` | sealed Stockfish, Syzygy, Maia and Explorer receipts |
+
 The source contract vocabulary is closed over five callable boundaries:
 
 ```ts
@@ -1115,13 +910,25 @@ call `assertModuleExactOperationResolutionReceipt` before reading any row; the a
 its sole legal resolution input. Dependency landing triggers regeneration and this compiler; no
 upstream RFC is expected to know module-specific occurrence-view names.
 
-#### 2.5.0 — Withdrawn direct-call draft (historical, non-normative)
+#### 2.5.0 — Withdrawn direct-call draft, and the normative contract still trapped inside it
 
-Everything from this heading through §2.5.4 is retained solely as the evidence that produced
-[[D2165]] and [[D2399]]. Its interfaces, callable-operation requirements, source-family execution
-tests and direct assembly instructions are **deleted from the implementation contract and must not
-be implemented**. Where this historical text conflicts with §2.5 or the fifth author repair, the
-requirements-only sealed-pool contract is the sole authority.
+**The blanket withdrawal below is wrong and blocks acceptance until it is split.** The
+**direct-call** parts of this section — the assembler's callable-operation requirements,
+source-family execution tests and direct assembly instructions — are deleted from the
+implementation contract and **must not be implemented**; they are retained as the evidence that
+produced [[D2165]] and [[D2399]], and where they conflict with §2.5 the requirements-only
+sealed-pool contract is the sole authority.
+
+But the same block also carries the **module query route, its typed request union, the four
+boundary validations, the decision stamp, the Review paging contract and the `ModuleQueryPage`
+response** — and criteria A16, A19 and A20 depend on all of them. A20 requires *"Review crosses a
+>32-subject frozen prefix through multiple pages"*; the only definition of that prefix, its cursor
+and its staleness refusal is here, under a heading that says not to implement it. `prefixDigest`,
+`ReviewCursor` and `MODULE_REVIEW_PREFIX_STALE` occur nowhere else in this RFC.
+
+No implementer can act on a section that is simultaneously forbidden and load-bearing. The split is
+an owner-or-author decision, not a review finding, and it is named in the coverage section as a
+second acceptance blocker rather than left for an eleventh round to rediscover.
 
 `apps/server/src/module-evidence-assembler.ts` (new) owns the operation missing in [[D1865]]. Its
 input is one authoritative, timing-specific subject frame; its output is a frozen declared pool
@@ -1355,7 +1162,6 @@ digest and effective-config digest. Before publishing an asynchronous result, th
 client both compare the current stamp with the request stamp; a late result is a typed stale result
 and never renders. A mutation, rewind/fork, selection generation, disclosure close or source
 availability change invalidates the relevant entry.
-
 #### 2.6 Steps 5–6 — seat, client side
 
 `apps/web/src/lib/module-seats.ts` (new) maps packets to seats; `ModuleSeat.svelte` (new) renders
@@ -1981,6 +1787,14 @@ deleting one disclosure id from the family×rung product fails;
     named exchange payload to the event operand. Independently crossing any one valid sealed input
     fails. **RED now:** the plan remains requirements-only until its recorded source operation
     lands; the joins themselves pass the bounded author falsifier.
+26. **A26 — Upstream discharge coverage is derived and total.** `make module-evidence-assembly`
+    emits, per upstream RFC, the set difference between that RFC's literal discharge id set and the
+    compiled acceptance image, and the test asserts each difference is either empty or exactly the
+    ids listed as a recorded refusal in the §Discharges coverage table. **RED at HEAD:** the
+    difference is nine ids — two refused-but-unrecorded, six unnamed, and
+    `rules.mobility.reading.legal_moves@1`, which the criterion reports as an unrefused gap.
+    **Negative:** deleting any covered id from a module's `accepts` moves it into the difference and
+    fails; adding a refusal line for an id that is in fact bound also fails.
 
 ## Discharges
 
@@ -1995,6 +1809,32 @@ deleting one disclosure id from the family×rung product fails;
 | D7 | `HINT_HORIZON_PROJECTION_IDS`, `HINT_DISCLOSURE_PROJECTION_IDS` and the sealed rung compiler — one internal projection per measured family and one learner projection per family/rung, each retaining only its exact evidence inputs, relation polarity, answer image, abstention and scope. The module imports only the literal disclosure set and remains RED while either registry differs from the measured family×rung product | hint-distance | the accepted producer amendment and implementation commit | |
 | D8 | Exact source/view/timing/presentation resolution for the current 117 projections and 205 module pairs. `compileModuleExactOperationResolution` is the sole successor: it remains blocked while any source ABI/assertion or presentation pair is absent and emits one set-equal receipt before final F1 rows exist | module-registration | the implementation commit whose receipt key sets equal both generated `exactOperationResolution` sets | |
 
+## Coverage of the four `awaiting` RFCs' discharges — measured, and short
+
+This RFC is the document four completed implementations wait on. That claim is testable, so it is
+tested here rather than assumed. Coverage is derived from `rfc/contracts/module-binding-plan-v1.json`
+(205 rows, 117 unique projections) against each RFC's literal discharge text; regenerate with
+`make module-evidence-assembly`.
+
+| upstream discharge | its literal demand | covered | uncovered ids | state |
+|---|---|---:|---|---|
+| `tactical-collectors` D1 | production-module eligibility for **every §3 collector** (30 ids) | 28/30 | `rules.exchange.predicate.legal_exchange@1`, `derived.tactic.fork_survives_reply@1` | both are deliberate — §2.4 retains them as non-module dispositions. Discharges **only if** `tactical-collectors` accepts a recorded refusal for the two; as written its D1 says *every* |
+| `breadth-collectors` D1 | production-module eligibility for **the admitted breadth projections** (18 ids) | 12/18 | `rules.square.event.control@1`, `rules.mobility.event.piece_destinations@1`, `derived.pawn.sequence.contact_timing@1`, `derived.pawn.sequence.harassment_pressure@1`, `derived.tactic.sequence.defender_consequence@1`, `derived.material.event.role_asymmetry@1` | **not discharged.** The six are neither bound nor refused anywhere in this document |
+| `exact-legal-mobility` D1 | *"compile `legal_moves@1` into the selected-square/requested-sight module under the accepted per-module ceilings"* | 0/1 | `rules.mobility.reading.legal_moves@1` | **not discharged.** The id occurs nowhere in this RFC or the binding plan; `module.sight_on_request`'s 22 rows do not include it. `rules.mobility.reading.piece_destinations@1` is a different projection that `exact-legal-mobility` explicitly declines to redefine |
+| `runtime-opening-identity` D1 | learner-facing theory/Review/module bindings **over the three ids** | 1/3 | `theory.opening.catalogue_membership@1` (present only as a derivation *input*, not a module binding), `derived.opening.deepest_reached@1` (absent) | **not discharged** |
+| `runtime-opening-identity` D2 | runtime-artifact rights/inventory in the F12 release proof | — | — | out of scope; owned by `planning/platform-alignment/`. Unaffected by this landing either way |
+
+Three of the five are unmet on ids this document simply never names. Closing them is either nine
+acceptance rows plus their regenerated artifacts, or an explicit recorded refusal negotiated with
+each upstream owner — a bounded decision, not a review round.
+
+**The second acceptance blocker, for completeness.** §2.5.0 forbids its own implementation while
+holding the only definition of the module query route, its request union and boundary validations,
+the decision stamp, `prefixDigest`/`ReviewCursor` and `MODULE_REVIEW_PREFIX_STALE` — all of which
+A16, A19 and A20 assert against. The section must be split into its withdrawn direct-call half and
+its normative route/paging half before any implementer can act on it.
+
+
 ## Open questions
 
 1. **Answered 2026-08-30 — yes, `pawn_safe_square` returns to requested Sight alongside
@@ -2005,195 +1845,6 @@ deleting one disclosure id from the family×rung product fails;
    and requires the producer→typed relation→module→board path. [[D1867]] distinguishes that ruling
    from the redundant experimental F1 consumer identity, which §6 retires while retaining the
    Advanced config axis as the narrowing clamp.
-
-## Fresh-review routing
-
-Fourth fresh review return (2026-08-31):
-
-| row | returned requirement |
-|---|---|
-| [[D2398]] | replace the generic `projection_between_grains@1` relabel with exact typed occurrence/edge/compare derivations or honest unavailability |
-| [[D2399]] | delete or rewrite §2.5's obsolete callable-operation schema and its eight-family execution criteria to the requirements-only sealed-pool architecture |
-| [[D2400]] | compile timing from the exact projection plus chosen subject-view operation, not the packet-wide source timing list |
-
-`make module-registration-fourth-fresh-review` reproduces all three. Fifth author repair and a new
-fresh independent review are required before acceptance or implementation.
-
-Fifth author repair (2026-08-31):
-
-| row | author repair; fifth fresh review still required |
-|---|---|
-| [[D2398]] | inputs retain intrinsic grains; derived rows bind them through one closed exact subject relation instead of a generic relabel |
-| [[D2399]] | normative §2.5 is requirements-only; the direct-call draft is explicitly historical/non-normative and forbidden to implement |
-| [[D2400]] | binding rows carry a requested/source-ceiling timing requirement and `exactProjectionOperation:null`; no final timing is claimed before dependency landing |
-
-`make module-registration-fifth-author-repair` passes 4/4. Another fresh independent review is
-required; no production implementation is authorized.
-
-Fifth fresh independent return (2026-08-31):
-
-| row | returned requirement |
-|---|---|
-| [[D2432]] | replace grain-only `same_edge` bindings with operation-owned ordered occurrence/window topology for multi-edge semantic tactics |
-| [[D2433]] | distinguish candidate-packet root, child, selected-candidate, committed-edge and complete-population occurrences before assigning its items to module moments |
-| [[D2434]] | give comparison/grade operations exact operand roles, cardinalities and equality joins rather than generic endpoint membership |
-| [[D2435]] | bind the five pools to exact upstream operations or declared module-owned adapters and delete the rejected additional-subject-view authority |
-
-`make module-registration-fifth-fresh-review` reproduces all four. No implementation is authorized
-before a sixth author repair and another fresh independent review.
-
-Sixth author repair (2026-09-01):
-
-| row | author repair; fresh review still required |
-|---|---|
-| [[D2432]] | seven multi-edge operations retain ordered alternatives, horizons, offsets, roles, cardinalities, output anchors and equality joins owned by their upstream callable |
-| [[D2433]] | candidate service publishes four exact views; child/edge require canonical UCI, while committed edge and arbitrary current-root projection are forbidden |
-| [[D2434]] | eval delta and move quality carry ordered endpoint roles/cardinality plus instrument/search/domain equalities; final operation remains null |
-| [[D2435]] | four source contracts reference exact owner callables; catalogue uses one fully specified module-owned adapter; the rejected additional-view export is deleted |
-| [[D2473]] | discharged 2026-09-01: the manifest now declares recorded-pair OR live-pair and the generated requirement retains two ordered occurrences from the selected lane; consumer adapters remain separate dependencies |
-
-`make module-registration-sixth-author-repair` passes 5/5. Artifacts remain
-`requirements_only`; another fresh independent review is required before acceptance or
-implementation.
-
-Sixth fresh independent return (2026-09-02):
-
-| row | returned requirement |
-|---|---|
-| [[D2505]] | bind complete real source ABIs: declared input/result/assertion/seal symbols, including the provider operation argument and operation-keyed source factory |
-| [[D2506]] | preserve `derived.compare.eval_delta` as the shipped consecutive same-branch transition, or introduce a different cross-branch projection |
-| [[D2507]] | encode deflection's bait-capture **or** check-induced alternatives and fixture both against the authoritative detector |
-| [[D2508]] | assign the 117 exact projection operations and 205 occurrence/timing resolutions to one named successor/owner with a set-equal receipt |
-
-`make module-registration-sixth-fresh-review` reproduces all four. Exact review:
-`planning/learner-modules/sixth-fresh-independent-buildability-review-2026-09-02.md`. The seventh
-author repair must keep every requirement blocked until the real operation exists; it may not make
-the review green by deleting the nulls or copying new private source authorities.
-
-Seventh author repair (2026-09-02):
-
-| row | author repair; fresh review still required |
-|---|---|
-| [[D2505]] | source rows name complete declared owner ABIs; missing Recorded/Review aggregate assertions are explicit blockers, catalogue declares and seals its own adapter, and provider success retains the operation argument plus operation-keyed source factory |
-| [[D2506]] | eval delta uses ordered `before`/`after` consecutive points on one recorded branch and retains the shipped `delta`/`plyOffset` operands |
-| [[D2507]] | deflection has literal bait-capture and check-induced alternatives; the check arm requires check on edge 1 and capture only on the positive target-capture edge 3 |
-| [[D2508]] | `compileModuleExactOperationResolution` and D8 own one set-equal 117-projection/205-pair receipt; every null row points to that owner and candidate view names are module-owned selectors |
-
-`make module-registration-seventh-author-repair` exercises the repair. Artifacts remain
-`requirements_only` and every pair remains dependency-blocked; another fresh independent review is
-required before acceptance or implementation.
-
-Seventh fresh independent return (2026-09-02):
-
-| row | returned requirement |
-|---|---|
-| [[D2530]] | replace the type-only `ProviderSourceFactories[...]` expression with the real injected `sourceFactories` value and preserve operation correlation |
-| [[D2531]] | declare exact producer/projection identities for both catalogue gate inputs and reject crossed sealed evidence |
-| [[D2532]] | make eval delta's outer subject/view/join agree with its consecutive same-branch meaning, or name a distinct cross-branch projection |
-| [[D2533]] | express check as an input of only the check-induced deflection alternative rather than leaving it outside closure or requiring it in both arms |
-| [[D2534]] | join every row pointer to the exact `module.<id>@1\0<projection>@1` required key |
-| [[D2535]] | runtime-seal the exact-operation resolution receipt and require its assertion at final F1 emission |
-
-`make module-registration-seventh-fresh-review` reproduces all six. Exact review:
-`planning/learner-modules/seventh-fresh-independent-buildability-review-2026-09-02.md`. The prior
-source-blocker honesty and positive semantic examples survive. An eighth author repair and another
-fresh independent review are required before acceptance or implementation.
-
-Eighth author repair (2026-09-02):
-
-| row | author repair; fresh review still required |
-|---|---|
-| [[D2530]] | provider acquisition calls `application.scheduler` and the same injected application's operation-correlated `sourceFactories` value; the mapped type is never invoked |
-| [[D2531]] | catalogue position is exactly `run.record.position@1`; each of its three requested outputs maps to one exact applicability producer/projection and crossed declarations are refused |
-| [[D2532]] | the shipped eval delta is edge-grained through `review_evidence_packet@1/recorded_edge`, with consecutive points on one recorded branch; no cross-branch projection is invented |
-| [[D2533]] | deflection requirements are common inputs plus literal bait-capture/check-induced input sets. The upstream `semantic-collectors` seam now carries the sealed `rules.tactic.event.check@1` event on the check-induced arm; the next fresh module-registration review must exercise the now-buildable join rather than treating it as dependency-blocked |
-| [[D2534]] | every row points to its exact `module.<id>@1\0<projection>@1` receipt key and the author gate joins all 205 pointers set-equal |
-| [[D2535]] | the resolution compiler creates a frozen runtime-sealed receipt; the final F1 emitter asserts constructor identity before consuming it |
-
-`make module-registration-eighth-author-repair` exercises all six boundaries. The generated
-artifacts remain `requirements_only`, every final binding remains dependency-blocked, and the
-deflection check-arm dependency is now stated rather than laundered as closure. Another genuinely
-fresh independent review is required before acceptance or implementation.
-
-Eighth fresh independent return (2026-09-04):
-
-The six named repairs survive, but [[D2557]] returns the execution image. Its deflection row still
-calls `rules.tactic.event.check@1` a missing upstream projection and the author contract requires
-that stale state. D2536 now provides the exact alternative derivation, shared induction selector
-and runtime-sealed `checkSemanticEvent`; broad and exact-source event identity is proven. Only the
-separate recorded-path occurrence operation remains upstream-held. A ninth repair must delete the
-false missing-check authority, name the live constructor/selector and leave the occurrence hold
-intact. `make module-registration-eighth-fresh-review` reproduces all seven boundaries. Exact
-review: `planning/learner-modules/eighth-fresh-independent-buildability-review-2026-09-04.md`.
-
-Ninth author repair (2026-09-04):
-
-[[D2557]] is repaired at the generator, artifact and author-contract layers. The deflection authority
-names `rules.tactic.event.check@1`, `deflectionObservedInduction(anchors)`,
-`checkSemanticEvent(beforeFen, moveUci, afterFen)` and the exact emitter, with status
-`implemented_exact_derivation_authority`. The independent `recordedSemanticPath(run, branchId)`
-requirement remains `awaiting_upstream_occurrence_receipt`; no requirement row becomes executable
-and final emission remains refused. `make module-registration-ninth-author-repair` passes retained
-11/11 + 6/6 + 2/2. Exact repair:
-`planning/learner-modules/ninth-author-repair-2026-09-04.md`. Another genuinely fresh review gates
-acceptance and implementation.
-
-Tenth fresh independent return (2026-09-04):
-
-| row | returned requirement |
-|---|---|
-| [[D2584]] | retain `defender_duty_set` as a position-zero reading in every exact tactic window; do not relabel it edge-grained behind a generic operation relation |
-| [[D2585]] | compile a closed module-moment-to-source relation so Postcommit and Review consume recorded edges rather than candidate views that forbid committed edges |
-| [[D2586]] | bind every sealed move/duty/capture/exchange derivation input to the exact event anchors, offsets and retained identities; crossed valid evidence must fail |
-
-`make module-registration-tenth-fresh-review` reproduces all three, including a runtime crossed-line
-splice. Exact review:
-`planning/learner-modules/tenth-fresh-independent-buildability-review-2026-09-04.md`. A bounded
-tenth author repair and another fresh independent review are required before acceptance or
-implementation.
-
-Tenth author repair (2026-09-04):
-
-| row | author repair; fresh review still required |
-|---|---|
-| [[D2584]] | `defender_duty_set` is position-grained and every exact input binding retains its literal alternative, cardinality, position/edge offsets and roles under `ordered_window_operand` |
-| [[D2585]] | every binding carries a closed `byMoment` source/view/selector image: candidates only before commitment, recorded occurrence identity after commitment |
-| [[D2586]] | observed-tactic runtime joins validate exact recorded anchor bytes, position-zero duty FEN, capture/exchange edge identity and named exchange payload; four independent crossed-input negatives fail |
-
-`make module-registration-tenth-author-repair` passes the maintained 11/11 contract and 3/3 new
-controls. Exact receipt: `planning/learner-modules/tenth-author-repair-2026-09-04.md`. The generated
-artifacts remain `requirements_only`, all final operations remain unresolved, and another genuinely
-fresh independent review gates acceptance and implementation.
-
-| row | author repair; fresh review still required |
-|---|---|
-| [[D2343]] | **author-repaired:** D1865 imports the single explicit blocked-hint algebra; maintained targets pass 13/13 and 11/11 |
-| [[D2344]] | **author-repaired:** exact projection exceptions plus sealed-stage profiles produce position, edge, branch-pair and prefix grains without producer-family inference |
-| [[D2345]] | **author-repaired:** grain-keyed external inputs and typed `projection_between_grains@1` views make every derivation join exact |
-| [[D2346]] | **author-repaired:** every sealed operation declares timing/subject applicability and pair timing is the complete non-empty intersection |
-| [[D2347]] | **author-repaired:** module forms expand through `MODULE_FORM_IMAGE`; exact-pair requirements retain the complete form set including `card`'s `list` arm |
-
-The fourth fresh review confirms these five named repairs survive and closes [[D2343]]–[[D2347]].
-Its new [[D2398]]–[[D2400]] return remains above; a passing repair is not whole-RFC acceptance.
-| [[D2164]] | module policy bytes derive from one author table and sessions derive from live workflow policies |
-| [[D2165]] | direct detector call plan withdrawn; five complete sealed-pool operation requirements are explicit dependencies |
-| [[D2166]] | position/edge/branch-pair/run-prefix grains and their distinct join rules replace universal edge/same-subject |
-| [[D2167]] | the nine external derivation inputs are set-equal source nodes with grain and acquisition authority |
-| [[D2168]] | Guided Hint is explicitly present and D1639-blocked until non-empty family×rung authority lands |
-| [[D2169]] | invented adapters deleted; each binding waits on its exact module/projection presentation pair |
-| [[D2170]] | both artifacts refuse completion; per-row sealed-output fixtures remain an acceptance dependency |
-| [[D2120]] | exact 117-projection population retained; its source/symbol direct-call interpretation is superseded by [[D2165]] |
-| [[D2121]] | exact 205-row requirement population retained; final bindings remain blocked on exact presentation pairs |
-| [[D2122]] | atomic fact-bundle fit over exact facts/words/marks/arrows units and loud receipts |
-| [[D2123]] | immutable prefix, 1..32 paging, total/source budgets, cancellation and single-pass equivalence |
-| [[D2124]] | one total runtime-role → evidence-role projection consumed by module and F1 checks |
-| [[D2125]] | closed eight-family Inspector state algebra with mixed availability preserved |
-| [[D2126]] | exact AND/OR DAG retained; its universal same-subject rule is superseded by [[D2166]]'s grain-specific joins |
-3. **Answered 2026-08-25 — `structure_nudge` is proactive as a passive marker, with content on
-   request.** [[D1564]] confirms §1.1's declarable reading; no modal or unsolicited prose follows.
-4. **Which preset names survive owner use?** All five carry `validation: "candidate"`
-   (`presets.ts:32-36`) and `intent-presets.md` §7 makes confirmation an owner ruling after real
-   sessions. This RFC reads the table and freezes nothing about the names.
 
 ## Ledger rows
 
@@ -2242,8 +1893,59 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   square-sight caption is unreachable by keyboard — a live violation of `design/05` §3-forms'
   input-equivalence clause inside the surface built to satisfy it.
 
+**Added 2026-09-07 (bounded repair pass).**
+
+- **The keystone claim is measurably false for three of the five discharges this document exists to
+  free.** Derived from `rfc/contracts/module-binding-plan-v1.json`: `breadth-collectors` D1 at
+  12/18, `runtime-opening-identity` D1 at 1/3, `exact-legal-mobility` D1 at **0/1**. Four RFCs have
+  been `awaiting` with complete implementations since 2026-08-22/24 behind a document that never
+  names nine of the ids they are waiting on. The gap was invisible because every round of review
+  audited the document against *itself* and none checked it against the obligations it inherited.
+- **`exact-legal-mobility` D1 is the sharpest case, and it is one line.** The discharge names a
+  literal projection — *"compile `legal_moves@1` into the selected-square/requested-sight module"* —
+  and `rules.mobility.reading.legal_moves@1` occurs **zero** times in this RFC and zero times in the
+  binding plan. `module.sight_on_request` has 22 rows and none is it. A discharge specific enough to
+  be a one-line grep went unchecked through ten review rounds.
+- **[[D1445]] survived as a half-repair, which is worse than an unrepaired defect because it reads
+  as closed.** §2.3(a) correctly replaced the singleton `MODULE_ANSWER_IMAGE` with a branched
+  capability image, and §1.1 — the table titled *"The eleven declarations"*, the one an implementer
+  types from — kept the old singleton tokens for five of eleven modules. `full_inspector` still read
+  `principal_variation` alone, which is exactly the defect's own words: it *"can carry none of its
+  rows"*. Repaired here. A type repair in one section and a declaration table in another are not the
+  same repair.
+- **A 240-line section marked *"must not be implemented"* holds the contract four acceptance
+  criteria assert against.** §2.5.0's blanket withdrawal swept the module query route, its typed
+  request union, the four boundary validations, the decision stamp and the whole Review paging
+  contract in with the direct-call plan it meant to kill. `prefixDigest`, `ReviewCursor` and
+  `MODULE_REVIEW_PREFIX_STALE` occur nowhere else in the document, and A20 requires the paging they
+  define. Ten review rounds read past it. A withdrawal that names a *heading range* rather than a
+  *set of clauses* is how this happens.
+- **The status line's `passes 11/11` did not reproduce.** The maintained author contract is 10/11 at
+  committed HEAD with no working-tree changes: D2170's artifact digest assertion
+  (`expect(sealed).toBe(digest(body))`) fails on the checked-in JSON. The claim was repeated through
+  four consecutive status revisions without being run.
+- **Twenty `tools/` directories exist to review this one RFC** — ten author repairs and ten fresh
+  reviews between 2026-08-30 and 2026-09-04, each commissioning the next. This is [[D3057]]'s shape
+  at the largest scale in the repo: 605 of 2370 lines were narration about the review chain rather
+  than contract. Moved to `planning/learner-modules/`; no further round is commissioned.
+
 ## Changelog
 
+- 2026-09-07 (bounded repair, no review round commissioned): repaired [[D1445]]'s surviving
+  residue — §1.1's declaration table and §0.2's C6 now carry the §2.3 capability unions instead of
+  the singleton ceiling tokens, so `threat_radar`, `postcommit_nudge`, `compare_coach`, `review_map`
+  and `full_inspector` can each carry their own accepted rows. Verified [[D1455]] already repaired
+  at HEAD and enforced in the runtime, not only in prose: `module-contract.test.ts:95-96` proves a
+  stage-3 `principal_variation` throws `MODULE_STAGE_INVALID`, and `module.guided_hint` accepts only
+  `HINT_DISCLOSURE_PROJECTION_IDS`. Added the §Discharges coverage table and criterion A26, which
+  measure this document against the four `awaiting` RFCs it is supposed to free rather than against
+  itself. Cut 2370 → 2047 lines by moving the ten-round repair
+  narration, the status-line accretion and the fresh-review routing to
+  `planning/learner-modules/author-repair-and-review-chain.md`; the five sealed pools were retained
+  as normative text in §2.5. §2.5.0 was moved out and then **restored**: its blanket withdrawal
+  turned out to cover normative route/paging text, which is now named as the second acceptance
+  blocker rather than silently cut. Recorded that the maintained author contract is 10/11 at HEAD,
+  not the 11/11 the status line claimed.
 - 2026-09-02 (seventh author repair): repaired [[D2505]]–[[D2508]] without laundering missing
   dependencies into callable APIs. The generated source contracts distinguish declared aggregate
   assertions from item-only seals, preserve provider operation-keyed admission, restore shipped
