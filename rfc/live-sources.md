@@ -1,11 +1,12 @@
 # RFC: live-sources — Phase A, finished-round broadcast ingestion
 
-- **Status:** draft — **ACCEPTANCE WITHDRAWN by fresh independent review 2026-08-30 on
-  [[D2277]]–[[D2285]].** The real-PGN feasibility and strip-before-storage direction survive,
-  but “finished-only” admits ongoing boards into automatic engine evaluation; source/choice
-  contracts are duplicated or unspecified; splitter/clock/resource/rules proofs are incomplete;
-  dependencies are returned; and the web journey would be unreachable or false. No implementation
-  before author repair and another review. **Prior status:** accepted — 2026-08-22.
+- **Status:** draft — **first author repair completed 2026-09-06 for [[D2277]]–[[D2285]];
+  another genuinely fresh independent review is required.** The repair adds an observed-finished
+  receipt over current Lichess authority, one shared import-source protocol, digest-bound board
+  choice and stale retry, parser-backed framing, per-game clock extraction, streamed resource
+  budgets, exact Standard/start-position admission and the complete browser journey. No production,
+  schema, migration or client implementation is authorized. **Prior status:** acceptance withdrawn
+  2026-08-30; accepted 2026-08-22.
 - **Author:** claude (coordinator), from `planning/live-sources/rfc-derivation.md`
 - **Created:** 2026-08-22
 - **Design refs:** `design/03-product-breadth.md` Live surfaces (:81-83, :291) and the
@@ -17,111 +18,181 @@
   `tools/d947-broadcast-roundtrip-harness/` ran 20 real tournament games through the
   shipped parser, 4/4 tests green ([[D414]] discharged by execution). The campaign
   lane's drafting gate was checked and does not reach this lane.
+- **Research refresh:** `design/research/live-source-finished-receipt.md` (current official API and
+  live public probes, 2026-09-06)
 - **Depends on:** `rfc/archive/` import machinery as shipped (`importGame`,
-  `import-source.ts`); `longitudinal-store` (accepted — the `decision_class` grain,
-  consumed not changed); `intent-presets` (accepted — named for Phase B's ceiling term
-  only; Phase A takes no dependency on its implementation)
+  `import-source.ts`); accepted and implemented `shared-resource-register-bootstrap.md` plus the
+  `import-source-protocol-register.md` absent-root registration specified in §1; the migration predecessor
+  chain through accepted and implemented `campaign-catalogue-progression.md`. Returned
+  `longitudinal-store.md`, `intent-presets.md`, `recorded-clocks.md`, `variants.md` and Phase B are
+  **not** Phase-A dependencies: this RFC claims no longitudinal projection or assistance behavior,
+  retains lossless raw clock tokens for the later clock authority, and admits only explicit
+  Standard/from-standard-start PGN.
 - **Parent / amends:** amends `docs/game-import-and-story.md`'s chess.com sentence
   ([[D413]]); everything else is new surface beside `resolveImportSource`
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/live-sources/`
 
 ```tabiya-claims
-migration | position behind campaign-catalogue-progression | imported_games.source_kind CHECK gains 'lichess_broadcast' (storage.ts:3356; STRICT table — SQLite CHECK edits require a rebuild migration)
+migration | position behind campaign-catalogue-progression | imported_games.source_kind CHECK gains 'lichess_broadcast' and source_receipt_json retains the typed broadcast receipt (storage.ts:3356; STRICT table — SQLite CHECK edits require a rebuild migration)
 ```
 
 ## Summary
 
-Phase A makes a finished Lichess broadcast round importable: paste a broadcast round or
-game URL → fetch the round PGN → split it into games → pick a board → strip third-party
-annotations **with an assertion, not a hope** → hand one sanitized game to the existing
-`importGame` path. It discharges [[D410]] (grade-stripping at the boundary), [[D413]]
-(the chess.com refusal, generalized in the doc), [[D414]] (already discharged by the
-harness; recorded here), and the import half of [[D412]]. It deliberately ships **no**
-live-follow, no assistance lock, and no casting surface — those are Phase B and a
-composition, deferred with named rows (§6, Open questions). Everything Phase A relies
-on is measured, not inferred: the fixtures, counts, and latency figures below are the
-harness record (`tools/d947-broadcast-roundtrip-harness/roundtrip-output.md`).
+Phase A makes one **observed-finished** Lichess broadcast game importable: paste a round
+or game URL → verify current round completion → choose a stable game identity → fetch a
+bounded PGN snapshot → verify the same completion/choice again → parse the round with
+one framing authority → extract lossless per-game clock tokens → strip third-party
+annotations **with an assertion, not a hope** → hand one sanitized Standard game to the
+existing `importGame` path → open its Story. The receipt binds both round observations,
+the raw round digest, selected game identity and sanitized bytes; it explicitly does
+not claim Lichess exposes an atomic or permanent upstream snapshot.
+
+The delivery unit includes the shared request/result/source vocabulary and the full
+keyboard/mobile-capable browser journey. It discharges [[D410]] (grade-stripping at the
+boundary), [[D413]] (the chess.com refusal, generalized in the doc), [[D414]] (already
+discharged by the harness; recorded here), and the import half of [[D412]]. It ships no
+live-follow, assistance lock, casting or discovery catalogue — those remain named
+successors (§6). The 20-game parse/annotation evidence survives; the completion
+authority is refreshed in `design/research/live-source-finished-receipt.md`.
 
 ## Motivation
 
 The owner commissioned the lane verbatim ([[D947]]). The research base existed for
-months (D410–D414, D704/D705/D709/D710) and never became an RFC; three of its rows had
+months ([[D410]]–[[D414]], [[D704]]/[[D705]]/[[D709]]/[[D710]]) and never became an RFC; three of its rows had
 escaped routing entirely ([[D948]]). The harness then answered the one open feasibility
 question by execution: **all 20 real tournament games parsed through
 `parsePgnMainline`** — 10 from a finished Campeonato de España 2026 round, 10 fetched
 mid-round from Sants Open 2026 — so the open work is everything *around* the parse:
 sourcing, splitting, stripping-with-assertion.
 
-**Scope boundary.** Phase A = finished-round ingestion only, shippable on today's
-measured behavior alone (derivation §6, recommended cut). Out of scope, each with a
-named home: live-follow (the round follower, the run growth model, the [[D411]]
-assistance lock — proposed row D957), casting (a composition over the existing stream
-session + overlay per [[D705]], gated on the owner's B5 ruling — proposed row D958),
-discovery UI beyond URL paste (derivation gap 8: the smallest slice that lets a URL
-paste work ships first).
+**Scope boundary.** Phase A imports an immutable local copy only after Lichess declares
+the round and selected board finished on both sides of the captured PGN read. An
+unknown, future, ongoing, changing or non-terminal source refuses before `importGame`,
+so no record or evidence job exists to lock. Phase B owns following a growing source
+and the [[D411]] assistance lock; casting composes over Phase B; discovery beyond URL
+paste remains later. This is why Phase A can remain separate without the unsafe old
+shortcut.
 
 ## Specification
 
-Captions state units. All line cites verified at HEAD 2026-08-22 (`6d524c5`-era tree);
-the derivation dossier re-verifies each.
+Captions state units. Historical line cites identify the 2026-08-22 derivation tree; every symbol
+and current authority used by the author repair was re-verified at HEAD on 2026-09-06 and is pinned
+by the repair receipt or its cited dossier.
 
-### 1. The source kind — `resolveBroadcastSource`
+### 1. One shared import-source protocol
 
-`ImportSource` at HEAD is a closed two-kind union, `"pgn"` | `"lichess"`
-(`apps/server/src/import-source.ts:3-5`). **New symbols** (all absent at HEAD — the
-string `broadcast` appears nowhere in `apps/`, `packages/`, or `workers/` code,
-grep-verified in the derivation):
+The request and durable source vocabularies are already copied through server parsing,
+service code, web API types, storage, account export and client rendering ([[D2278]]).
+Before this RFC can be accepted, `import-source-protocol-register.md` registers an
+absent `import-source-protocol` root under the generic shared-resource engine. This RFC
+then replaces its currently absent live claim with exactly:
 
-- `ImportSource` gains `{ kind: "broadcast"; url: string; board?: string }` — a
-  server-code union member, not a versioned register entry (the union crosses no
-  package boundary and appears in no schema; the one versioned resource this RFC
-  touches is the §4 storage migration, claimed in the tabiya-claims block).
-- `resolveBroadcastSource(url, board, fetchImpl)` in `import-source.ts`, beside
-  `resolveImportSource` and `resolveStudySource`, sharing the module-wide serialized
-  fetch queue (:21, :68), the 10 s timeout, and the `429/5xx` →
-  `IMPORT_SOURCE_UNAVAILABLE` + `retryAfter` passthrough (:79-83).
+```text
+import-source-protocol | first lane 1 | whole projection
+```
 
-**URL grammar** (unit: accepted URL forms; total: 2): a broadcast **round** URL
-(`lichess.org/broadcast/{tourSlug}/{roundSlug}/{roundId}`), and a broadcast **game**
-URL (round URL + `/{gameId}`). The round id is the path segment Lichess round URLs
-carry; the fetch target is `GET https://lichess.org/api/broadcast/round/{roundId}.pgn`
-(public, no auth — derivation §5). A game URL implies the board; a round URL with no
-`board` argument returns the round's game list (White/Black/Result per game, from the
-split of §2) as a typed `BROADCAST_BOARD_CHOICE_REQUIRED` refusal payload so the caller
-can present a picker — selection lives in the URL grammar first, UI later.
+Advertising that claim before the descriptor lands is invalid, not a reservation; the generic
+register must recognize the resource before this product RFC can claim its first version.
 
-Any chess.com URL is refused with the typed `IMPORT_SOURCE_UNSUPPORTED` naming the
-general refusal ([[D413]]: nothing live or in-progress is publicly exposed, probes 404,
-ToS prohibits the use; chess.com events reach Lichess broadcasts anyway — measured, an
-Esports World Cup round carries `[Site "Chess.com"]` per game).
+The implementing checkpoint creates
+`packages/runtime/src/import-source-protocol.ts#IMPORT_SOURCE_PROTOCOL_RESOURCE` at
+version 1. Its single atomic payload declares:
 
-### 2. The splitter — `splitBroadcastRound`
+- request kinds `pgn | lichess | broadcast`;
+- durable source kinds `pgn_paste | lichess_url | lichess_broadcast`;
+- result/error discriminants `resolved | broadcast_board_choice_required |
+  broadcast_selection_stale | broadcast_round_not_finished |
+  broadcast_source_too_large`;
+- the exact receipt/choice fields and §5 resource limits; and
+- the canonical digest domains `tabiya:import-round-observation:v1`,
+  `tabiya:import-round-pgn:v1`, and `tabiya:import-selected-pgn:v1`.
 
-The round endpoint always returns every board in one body, and `parsePgnMainline`
-refuses multi-game bodies whole (*"PGN must contain exactly one game"*,
-`pgn-import.ts:26`; both harness fixtures reproduced it). **New symbol:**
-`splitBroadcastRound(roundPgn): readonly string[]` in `import-source.ts` — splits on
-PGN game boundaries (a header block following a game's movetext/result terminator),
-returning one PGN string per board with headers intact. It performs **no** chess
-validation; `parsePgnMainline` remains the sole legality authority for the selected
-board (one parser, no clone — the [[D523]]/one-authority discipline).
+All runtime interfaces below derive literal members from that object. Server REST,
+service/storage/account export and web API/client import the runtime types; no copied
+string union remains. SQL cannot import TypeScript, so the migration CHECK is generated
+from the resource's durable-source member set and a test requires set equality with the
+running database. The resource digest covers ordered JSON-canonicalized semantic
+fields; changing a limit, discriminant, field or member requires the next lane.
 
-Not-yet-started boards (headers, zero moves — a real state in live rounds, though
-**no committed fixture game carries it**: the harness demonstrated the refusal on a
-header-only PGN it derived from the ongoing fixture's first game,
-`roundtrip.test.ts:105`) stay in the split output and are refused **at import** by
-the existing
-`requireMoves: true` configuration (*"PGN must contain at least one move"*,
-`pgn-import.ts:38-40`), surfaced as a typed refusal naming the board rather than a
-crash. **Phase A convention: a board becomes importable at its first move.** Following
-a board from move 0 is Phase B's growth model by definition (derivation gap 6) — it
-needs the follower, not a `requireMoves` exception.
+```ts
+type ImportSource =
+  | { readonly kind: "pgn"; readonly pgn: string }
+  | { readonly kind: "lichess"; readonly url: string }
+  | {
+      readonly kind: "broadcast";
+      readonly url: string;
+      readonly selection?: {
+        readonly roundId: string;
+        readonly observationDigest: `sha256:${string}`;
+        readonly gameId: string;
+      };
+    };
 
-The 64 KiB `importGame` body cap (`service.ts:504-505`) is measured-compatible: a full
-annotated round is 220 KB, a single annotated game ~5 KB, and sanitization (§3)
-shrinks it further. The cap is applied to the **selected, sanitized game**, never the
-round; no cap change.
+interface BroadcastBoardChoice {
+  readonly gameId: string;
+  readonly white: string;
+  readonly black: string;
+  readonly status: "1-0" | "0-1" | "1/2-1/2";
+  readonly order: number; // presentation only; never identity
+}
+
+interface BroadcastBoardChoiceRequired {
+  readonly kind: "broadcast_board_choice_required";
+  readonly roundId: string;
+  readonly roundName: string;
+  readonly finishedAtMs: number;
+  readonly observationDigest: `sha256:${string}`;
+  readonly choices: readonly BroadcastBoardChoice[];
+}
+```
+
+`resolveBroadcastSource` joins one entire multi-fetch operation to the shipped module
+queue; its status/PGN/status calls cannot interleave with another local Lichess import.
+It returns a `resolved` value or throws a typed server error whose closed details are
+the corresponding protocol result. `Retry-After` is parsed as delta-seconds or an HTTP
+date into `retryAt`; invalid/missing values yield no invented retry time and the client
+offers a manual retry.
+
+**URL grammar** remains two public forms: a broadcast round URL
+(`lichess.org/broadcast/{tourSlug}/{roundSlug}/{roundId}`), and that URL plus an
+eight-character `{gameId}`. Slugs are presentation-only; ids are normalized and exact.
+A game URL supplies the intended game id and completes the receipt in one request. A
+round URL without a selection returns HTTP 409 `BROADCAST_BOARD_CHOICE_REQUIRED` with
+the closed payload above and creates nothing. A selection retry is bound to the
+observation digest; any changed/removed game or observation returns HTTP 409
+`BROADCAST_SELECTION_STALE` carrying a newly computed choice payload.
+
+Any chess.com URL remains a typed `IMPORT_SOURCE_UNSUPPORTED` refusal naming the
+general refusal ([[D413]]). No fetch is attempted.
+
+### 2. Parser-backed framing and stable board identity
+
+The round endpoint returns every board in one body while `parsePgnMainline` correctly
+requires exactly one game. `parseBroadcastRound` uses `chessops/pgn.parsePgn` as the
+sole **framing** authority and `makePgn` to produce one unit per parsed game; it never
+splits with a regex, an `[Event]` sentinel or a result terminator. The selected unit
+still passes through `parsePgnMainline`, which remains the sole mainline legality and
+move authority. Framing and legality are different jobs but share one parser library.
+
+Every parsed unit must have exactly one `GameURL` whose final path segment is an
+eight-character game id and whose preceding round segment matches the normalized
+request round id. Duplicate/missing/malformed `GameURL`, duplicate game ids or a PGN
+game absent from the status observation fail the entire source before choice or import.
+Player names and round order are display metadata only. The selected unit's normalized
+result must equal the status observation after mapping Lichess `½-½` to PGN
+`1/2-1/2`; `*` is never Phase-A-selectable.
+
+The parser-backed tests include reordered/missing `Event`, literal `[Event ...]` text
+inside a comment, CRLF, arbitrary blank lines, a header-only game and adjacent `*`
+games. Friendly 10+10 real fixtures remain census controls, not the grammar. A
+header-only or not-yet-started board has no terminal status and is omitted from the
+choice list; direct selection returns `BROADCAST_ROUND_NOT_FINISHED` and creates
+nothing.
+
+All size checks are §5 source-boundary checks. The existing 64 KiB import cap remains
+the selected sanitized-game ceiling; unlike the withdrawn text, the whole external
+body is bounded before it reaches the parser.
 
 ### 3. Strip-with-assertion — `sanitizeBroadcastPgn` ([[D410]])
 
@@ -141,40 +212,40 @@ authored-looking text — the law-8-adjacent trap D410 names, and the shipped
 `evals=false&literate=false` query (`import-source.ts:73`) is *"reliance on an
 upstream default we do not control, with no test"* (D410, verbatim).
 
-**Decision: strip before the record** (derivation gap 3, first option — simpler, and
-loses only data we must not show anyway). **New symbol:** `sanitizeBroadcastPgn(pgn)`
-in `import-source.ts`:
+**Decision: extract losslessly, then strip before the record.** `sanitizeBroadcastPgn`
+accepts exactly one parser-framed game plus its stable `gameId`. Before deleting any
+annotation it walks the mainline AST and retains every clock-like token with its exact
+game/ply/occurrence identity:
 
-> **AMENDED 2026-08-23 ([[D1048]]) — extract clock tags BEFORE the strip.** Two contracts
-> accepted the same day pointed in opposite directions: this section destroys the `[%clk]` tags
-> the time-control lane ([[D1041]]) is built on — the harness measured **902** of them in one
-> finished round. The amendment adds an **extraction step ahead of the strip**; the strip itself
-> is unchanged and the fail-closed assertion keeps every character it had.
->
-> **Why this is safe, and why it is not a hole in [[D410]].** A clock reading is a **measured
-> fact about the game** — how much time remained on a clock, recorded by the organiser's
-> equipment — not another product's **judgement of a move**. D410's trap is that
-> *"another product's verdict on a move enters our corpus as authored truth"*: `[%eval]`,
-> `Blunder.`, `??`. A clock asserts nothing about move quality and grades nothing, so it sits on
-> the opposite side of that line. The distinction is the same one law 8 draws everywhere in this
-> repo — render measured evidence, never manufactured judgement.
->
-> **The extraction, specified:** before any stripping, `sanitizeBroadcastPgn` parses `[%clk H:MM:SS]`
-> occurrences into a typed, per-ply structure and returns it alongside the sanitized PGN —
-> `{ pgn: string; clocks: readonly { readonly ply: number; readonly remaining: string }[] }`. The
-> structure carries **no PGN annotation syntax by construction** (integers and a duration
-> string), so nothing it holds can re-enter the movetext. Its storage home is a typed field
-> beside `ImportedGameRecord.pgn` (`storage.ts:156-166`) and is **claimed by the time-control
-> lane, not by this RFC** — Phase A neither persists nor reads `clocks`; it only stops
-> destroying them, and the field's schema, lane and migration are that lane's to claim. A
-> consumer arriving before then finds the extraction available and the storage absent, which is
-> the honest state rather than a silent one.
->
-> **Criterion 3 is unchanged and still fails closed.** Its assertion is over the **movetext of
-> the stored record**, where a clock tag remains exactly as forbidden as an eval: the extraction
-> lifts clocks *out* and the strip then removes them, so the movetext still contains zero `[%clk`.
-> The guarantee did not need narrowing — it needed the extraction to happen first. Criterion 11
-> below covers the new step.
+```ts
+interface BroadcastClockToken {
+  readonly gameId: string;
+  readonly ply: number;
+  readonly occurrence: number;
+  readonly raw: string;
+}
+
+interface SanitizedBroadcastGame {
+  readonly pgn: string;
+  readonly clockTokens: readonly BroadcastClockToken[];
+  readonly selectedPgnDigest: `sha256:${string}`;
+}
+```
+
+This is deliberately a lossless source hand-off, not a competing `ClockReading` parser.
+No clock token is called valid, no duration is inferred and Phase A persists or renders
+none of them. Missing clocks produce an empty array for that selected game; duplicate
+and malformed clock-like annotations remain distinct raw rows rather than being dropped
+or guessed. Phase B owns revisions; an immutable Phase-A snapshot has none. The returned
+`recorded-clocks` RFC later parses, validates and persists these tokens under its own
+authority. This breaks the former circular contract while preserving the evidence it
+needs ([[D2281]]/[[D2287]]).
+
+A clock reading is a measured source fact, not another product's judgement. Retaining
+its exact token in a non-rendered side channel therefore does not weaken [[D410]]. The
+stored movetext still contains no clock tag. The finished fixture's ten selected-game
+arrays are asserted separately, including its real zero-token game; their aggregate
+remains the 902-token census and is never treated as one game's reading array.
 
 - removes all `{...}` comments (which is where Lichess keeps evals, clocks, and
   literate verdicts — measured: zero fixture games carried `(...)` variations in
@@ -215,10 +286,69 @@ silently here.
 
 ### 4. The import hand-off
 
-`resolveBroadcastSource` output matches the existing resolved-source shape
-(`import-source.ts:85-90`): sanitized `pgn`, `sourceKind: "lichess_broadcast" as
-const`, `sourceUrl` (the round/game URL as given), and the licence note in the
-existing `no-rights-asserted` form (derivation gap 11), **exact text**:
+#### 4.1 Observed-finished receipt
+
+An initial round-only request reads bounded round detail and returns only terminal
+choices. A direct game request or selection retry runs this sequence inside one
+serialized queue task:
+
+1. `GET /api/broadcast/-/-/{roundId}` → normalized observation A;
+2. require exact round id, integer `finishedAt`, `ongoing !== true`, selected game id
+   present and selected status terminal;
+3. `GET /api/broadcast/round/{roundId}.pgn?clocks=true&comments=false` → bounded raw
+   bytes and `roundPgnDigest`;
+4. parser-frame and bind the selected unit by exact `GameURL` id;
+5. repeat the round-detail GET → normalized observation B; and
+6. require A and B byte-equal after canonical normalization, then sanitize and issue
+   the receipt.
+
+The canonical observation contains only `roundId`, integer `finishedAtMs`, `ongoing` normalized
+to false, and the complete set of `{gameId,status}` rows sorted by UTF-8 game id. Its
+digest uses §1's `tabiya:import-round-observation:v1` domain. Unknown completion,
+`ongoing:true`, `*`, A/B drift, a status/PGN-result mismatch or missing game identity
+refuses before `importGame`; no run, record or evidence job is created. A selection
+retry must additionally match A's digest or returns a fresh
+`BROADCAST_SELECTION_STALE` choice payload.
+
+```ts
+interface BroadcastFinishedReceipt {
+  readonly schema: "tabiya.broadcast-finished-receipt.v1";
+  readonly roundId: string;
+  readonly gameId: string;
+  readonly finishedAtMs: number;
+  readonly status: "1-0" | "0-1" | "1/2-1/2";
+  readonly observationBeforeDigest: `sha256:${string}`;
+  readonly observationAfterDigest: `sha256:${string}`;
+  readonly roundPgnDigest: `sha256:${string}`;
+  readonly selectedPgnDigest: `sha256:${string}`;
+  readonly observedBeforeAt: string;
+  readonly observedAfterAt: string;
+  readonly pgnLastModified?: string;
+}
+```
+
+The observation digests must be equal. This means Lichess declared the same captured
+game and round finished immediately before and after retrieval. It does not mean the
+upstream snapshot was atomic or can never be reset; the official API exposes neither
+guarantee. `pgnLastModified` is advisory provenance only. After import, Phase A never
+polls the source again.
+
+#### 4.2 Standard/start-position admission
+
+Phase A does not wait on the returned variant foundation and does not guess. Every
+selected PGN must carry exactly one `[Variant "Standard"]`, must carry neither `SetUp`
+nor `FEN`, and `parsePgnMainline` must return the canonical standard initial position.
+Missing Variant, `From Position`, Chess960 and every other variant refuse as
+`BROADCAST_RULES_UNSUPPORTED` before storage, including the missing-FEN Chess960 shape
+that [[D1033]] proved could otherwise be misread. Same-FEN/different-rules and
+missing-header controls make the refusal non-vacuous. A later variant RFC may widen
+this through shared `rules + setupFamily`; Phase A declares no such support.
+
+#### 4.3 Storage and existing run path
+
+`resolveBroadcastSource` returns sanitized `pgn`, `sourceKind:
+"lichess_broadcast"`, normalized source URL, the finished receipt, and the existing
+`no-rights-asserted` licence-note form, **exact text**:
 
 ```
 no-rights-asserted: public lichess broadcast round export {url}; retrieved {ISO-8601}
@@ -228,41 +358,58 @@ no-rights-asserted: public lichess broadcast round export {url}; retrieved {ISO-
 OTB games Lichess does not originate) and recording only retrieval URL and time,
 matching `import-source.ts:40,89`'s two shipped forms.
 
-From there the path is the shipped one, byte-for-byte: `importGame`
+From there the path is the shipped one: `importGame`
 (`service.ts:497-568`) → `parsePgnMainline(pgn, { requireMoves: true })` →
 `movetextDigest` → session `{ kind: "imported", feedbackPolicy: "attempt_end" }` →
 `createRun` + replay with `actor: "user"` for the chosen side, `"system"` for the
-other → `ImportedGameRecord` → story evidence pass. **No new session kind, no new
-run field, no run-schema change — but one storage migration.** Cross-review
-2026-08-22 re-derived the write path at source: `imported_games` is a STRICT
-table with `source_kind TEXT NOT NULL CHECK (source_kind IN
-('pgn_paste','lichess_url'))` (`storage.ts:3356`), so this section's INSERT of
-`"lichess_broadcast"` **fails the CHECK on every database at HEAD** — the record
-this RFC specifies was unwritable as drafted. SQLite cannot alter a CHECK in
-place; the implementing commit ships the next-numbered storage migration (claim
-`position behind campaign-catalogue-progression` in the tabiya-claims block — behind the Campaign
-catalogue successor, which follows `campaign-core`): a standard table
-rebuild of `imported_games` widening the CHECK to admit `'lichess_broadcast'`,
-no data rewrite. `ImportedGameRecord.sourceKind` (`storage.ts:144`) and the
-resolved-source `sourceKind` union widen by the same one member.
-The accepted `longitudinal-store` grain already
-reserves exactly this shape: the broadcast players' moves are `decision_class='game'`,
-the learner's forks `'played'` (its imported-run acceptance case, :662-663) — consumed,
-not amended.
+other → `ImportedGameRecord` → story evidence pass. The receipt is returned to the
+caller and stored as the typed nullable `ImportedGameRecord.sourceReceipt`; it is never flattened
+into the human-readable licence note. Existing `pgn_paste` and `lichess_url` rows carry null. The
+account archive exports and imports the structured receipt byte-for-byte under the same runtime
+type, so round/game identity, both observations and all captured digests survive a round trip.
 
-Result mapping is the parser's own: a finished board carries its result; anything
-non-terminal coerces to `"*"` (`pgn-import.ts:57-60`). Phase A imports **finished
-boards from finished rounds** as its supported contract; an ongoing board imports as a
-partial game exactly as the parser leaves it (measured: 9 ongoing-fixture games,
-23–37 plies, `result: "*"`), and what makes that a *followed* game is Phase B.
+There is no new session kind, run field or run-schema change, but there is one storage
+migration. `imported_games.source_kind` is a STRICT-table CHECK closed over
+`pgn_paste | lichess_url`; the claimed migration rebuilds the table with the
+resource-derived third member and nullable `source_receipt_json`. A CHECK requires a receipt
+exactly when `source_kind = 'lichess_broadcast'`; read and archive hydration validate the parsed
+JSON against the shared receipt type before returning a record. The rebuild preserves every old
+row byte-identically with a null receipt. It remains
+positioned behind `campaign-catalogue-progression`; implementation is blocked until
+that migration predecessor and the shared-resource bootstrap/register are accepted and
+implemented. The author repair does not pretend the queue is ready.
+
+Only terminal results reach the parser hand-off. The old sentence allowing partial
+`*` imports is deleted: partial/growing games belong exclusively to Phase B.
 
 ### 5. Provider boundary and operating assumptions
 
 Lichess-first per [[D709]]/[[D710]]; we consume, we do not relay-operate (no
 `push|url|urls|ids|users` sync sources, no organiser delay configuration, no OAuth —
-public rounds need no auth). Politeness is the shipped mechanism: module-serialized
-fetches, one request at a time (Lichess's own stated policy), 429 → typed
-`IMPORT_SOURCE_UNAVAILABLE` with `retryAfter`, back off ≥ 1 minute.
+public rounds were re-probed without auth). Politeness is the shipped mechanism:
+module-serialized operations, one request at a time. There is no background retry.
+`429/5xx` becomes typed `IMPORT_SOURCE_UNAVAILABLE`; a valid upstream `Retry-After`
+becomes exact `retryAt`, and the browser disables retry until that time. Unknown retry
+timing stays unknown rather than inventing “one minute.”
+
+Every external response is read as a byte stream under one abort controller and one
+10-second response deadline. The version-1 protocol declares these exact limits:
+
+| resource | limit | refusal |
+|---|---:|---|
+| round-detail JSON body, each of A/B | 2 MiB | `BROADCAST_SOURCE_TOO_LARGE` |
+| round PGN body | 8 MiB | `BROADCAST_SOURCE_TOO_LARGE` |
+| parser-framed games | 128 | `BROADCAST_SOURCE_TOO_LARGE` |
+| serialized bytes per framed game | 64 KiB | `BROADCAST_SOURCE_TOO_LARGE` |
+| headers per game | 128 | `BROADCAST_SOURCE_TOO_LARGE` |
+| total UTF-8 header key+value bytes per game | 32 KiB | `BROADCAST_SOURCE_TOO_LARGE` |
+
+The reader counts bytes before concatenation and aborts on `limit + 1`; the typed
+details report resource, limit and `observedAtLeast`, never echo the external body. A
+missing stream body is read through a bounded `arrayBuffer` fallback under the same
+limit. Boundary fixtures cover exactly-at-limit acceptance, limit+1 refusal, chunk
+crossing, abort observation, oversized JSON before parsing, too many games, per-game
+overflow and header overflow. No parser sees an over-budget body.
 
 Stated operating assumptions (measured, derivation §1/§5 — carried so the Phase-B
 polling-vs-streaming choice is made on cost, not vibes): discovery index ~1.2 s; a
@@ -278,10 +425,39 @@ Unit: deferred obligations; total: 4. Each has a named home — none is dropped.
 
 | deferred | home |
 |---|---|
-| Live-follow: the server-side round follower (one held stream per followed round), the run **growth model** (nothing at HEAD appends to an imported run — re-import-per-update vs append-to-run is Phase B's hardest decision), move-0 follows | proposed row **D957**, the Phase-B RFC |
-| The [[D411]] lock (*"assistance must be lockable on 'the source game is still live'"*): pinned now as the **workflow/session-ceiling term** of `intent-presets` §2's four-term ∩ algebra — a dynamic `AssistanceContext` bit (sibling of `seatedInContest`, `assistance.ts:21-33`), **not** a new `WorkflowContextId` — release/fail-closed semantics specified in Phase B where the follower that knows liveness exists | proposed row **D957**; the ceiling-term pinning is normative now so Phase B composes rather than invents |
-| Casting: host imports a board → hosts it as the existing `stream` session → the existing `/live/overlay/:runId` projects it ([[D705]]: composition, not a new evidence mode; [[D704]]: the overlay issues no evidence/provider query). Blocked on the owner's B5 justification ruling — the lane justifies on **anyone-analyses** unless the owner rules casting leads | proposed row **D958**, Open question 1 |
+| Live-follow: growing source, immutable cuts, move-0 follow and [[D411]] liveness assistance lock | [[D957]], returned `live-following.md` |
+| Casting: compose followed cuts with Stream/overlay and the professional workflow; provider/chat/editorial integrations remain the separate absences measured by [[D704]] | [[D958]], returned `casting.md`; sequence already ruled by [[D1272]] |
 | Discovery UI beyond URL paste (`/api/broadcast` index, curation, IA placement) | derivation gap 8; a later slice of this lane |
+| Variant broadcast imports | returned `variants.md`; Phase A refuses everything except explicit Standard/from-standard-start |
+
+### 6.1 Complete Phase-A browser journey
+
+Phase A is one vertical delivery unit, not a backend union. `/review` keeps one “Bring
+in a game” entry and labels its accepted sources: pasted PGN, individual Lichess game,
+or finished Lichess broadcast URL. Submitting a round URL produces an in-form board
+picker from the closed choice payload; each row shows White, Black and recorded result,
+while the stable game id is available in accessible detail rather than used as a label.
+
+The learner then chooses “I played White” or “I played Black” and confirms one explicit
+disclosure: Tabiya stores a sanitized local copy, retains source/clock provenance, and
+removes third-party comments, evaluations and verdict glyphs. The existing false
+“original PGN is stored verbatim” copy is used only for pasted PGN and individual-game
+behavior where true; broadcast copy names sanitization. Submit imports exactly once and
+opens the resulting Story. A repeat click while pending is disabled and cannot duplicate
+the run.
+
+On `BROADCAST_SELECTION_STALE`, the picker refreshes in place, preserves perspective,
+announces the change and requires a new explicit selection. Not-finished, unsupported
+rules, too-large, unavailable/retry-at, empty choices and annotation-residue refusals
+render specific recovery copy; none collapses to “Import failed.” Provider-off makes
+URL fetching unavailable while pasted PGN remains usable.
+
+Keyboard order is URL → board choices → perspective → disclosure → submit; the board
+choices are a labelled radio group, status updates use a polite live region and errors
+receive focus. At 360×680 the picker scrolls inside the form without horizontal
+overflow and no board exists yet to shrink or occlude. Browser criteria exercise round
+URL, game URL, duplicate names, changed order, stale selection, provider-off, empty,
+oversized and keyboard/mobile cases through the real REST client—not a component stub.
 
 ## Deviations from design
 
@@ -313,103 +489,99 @@ all nine obligations are incorporated and independently reviewed.
 
 ## Acceptance criteria
 
-Unit: criteria; total: 11. Each is failable — the wrong implementation it catches is
-named where non-obvious.
+Unit: able-to-fail criteria; total: 18.
 
-1. `splitBroadcastRound` on the two committed harness fixtures returns **exactly 10
-   and 10** games (the trims), each individually accepted by `parsePgnMainline` where
-   the whole body is refused. (Catches a splitter that "works" by regex luck: counts
-   are exact, and every split unit must parse.)
-2. The finished-fixture games import end-to-end through `importGame` to runs whose
-   mainline ply counts equal the harness record's per-game plies (134, 46, 60, 145,
-   211, 88, 65, 80, 75, 68). (Catches silent move loss in split/sanitize.)
-3. **The D410 assertion, positive arm:** a broadcast import of the finished fixture
-   stores an `ImportedGameRecord.pgn` whose movetext contains zero occurrences of
-   `{`, `}`, `;`, `[%`, `$`, `!`, and `?` (§3's character classes — this is what
-   catches the fixture's 61 `?`/`?!`/`??` suffix glyphs, which the earlier
-   six-token form provably stored) and zero occurrences of `[%eval`, `[%clk`,
-   `Blunder.`, `Mistake.`, `Inaccuracy.`, `was best` — asserted against the
-   **stored record**, not the parse result (the parse already drops them; the record
-   is where D410's trap lives).
-4. **The D410 assertion, negative control:** the same raw fixture **game** (one
-   split unit, not the multi-game round file, which the parser refuses whole)
-   pasted through the existing `kind: "pgn"` path retains its annotations —
-   comments and suffix glyphs — in the stored record. (Proves criterion 3
-   measures the broadcast boundary, not an accidental global behavior change —
-   the [[D444]] vacuity guard.)
-5. `BROADCAST_ANNOTATION_RESIDUE`: feeding `sanitizeBroadcastPgn` a constructed PGN
-   whose annotation survives the strip (e.g. a verdict token outside any comment)
-   fails closed with the typed error; nothing is stored.
-6. A not-yet-started board (headers, zero moves — constructed from the ongoing
-   fixture's headers exactly as the harness does at `roundtrip.test.ts:105`; no
-   committed fixture game is itself zero-move) selected for import yields the
-   typed refusal naming the board; the process does not crash and no record is
-   created.
-7. The stored record for a broadcast import carries the broadcast provenance headers
-   (`BroadcastName`, `BroadcastURL`, `GameURL` when upstream provides them) and the
-   licence note **byte-matching** §4's form.
-8. A chess.com URL yields the typed refusal, and
-   `docs/game-import-and-story.md`'s sentence is strengthened to the general refusal
-   ([[D413]]) in the implementing commit.
-9. Broadcast fetches run through the module-serialized queue: a test issuing two
-   concurrent broadcast resolves observes sequential upstream calls (the shipped
-   `import-source.ts` serialization, extended not bypassed).
-10. **Scope guard:** at Phase-A landing, the strings `sourceGameLive` and
-    `stream/broadcast/round` appear nowhere in shipped code (grep, mirroring the
-    derivation's absence check) — live-follow did not leak in under this RFC's name.
-    (Failable by exactly the creep it forbids.)
-11. **The migration writes what HEAD refuses:** on a database at the pre-landing
-    storage version, a broadcast import's `imported_games` INSERT fails the shipped
-    `source_kind` CHECK (`storage.ts:3356`); after the §4 rebuild migration the
-    same INSERT succeeds, existing `pgn_paste`/`lichess_url` rows survive
-    byte-identically, and an unknown `source_kind` is still refused. (Catches
-    both the unwritable-record defect cross-review found and a rebuild that
-    silently drops the CHECK.)
-12. **Clock extraction survives the strip ([[D1048]], amendment 2026-08-23):** running
-    `sanitizeBroadcastPgn` over the committed finished-round fixture returns a `clocks`
-    array of **exactly 902 entries** — the harness's measured `[%clk]` count — each with an
-    integer `ply` and a `H:MM:SS` `remaining` string, **while criterion 3's movetext
-    assertion still passes on the same call's `pgn`**. Both arms must hold in one
-    invocation. (Catches the two failures that matter in opposite directions: a strip that
-    runs first and destroys the timing data the time-control lane needs, and an extraction
-    that leaks a clock tag back into the stored movetext. A fixture whose `clocks` is empty
-    fails, so the criterion cannot pass vacuously on a sanitizer that never extracts.)
+1. **Shared authority:** the generic register accepts exactly one live lane-1
+   `import-source-protocol` claim. Server REST/service/storage/account export and web API/client
+   compile against its types; AST and SQL-member censuses equal the resource's request/source
+   sets. A copied extra member or changed limit fails.
+2. **Finished gate:** finished→PGN→same-finished issues a receipt and imports. Future, unknown,
+   `ongoing:true`, selected `*`, missing `finishedAt`, or a terminal game inside an ongoing round
+   each refuses before `importGame`; spies observe zero record writes and zero evidence jobs.
+3. **Receipt drift:** changing `finishedAt`, selected status, game membership or round id between
+   observations returns `BROADCAST_SELECTION_STALE`; no receipt is issued. An unchanged display
+   order or player label does not change identity.
+4. **No false atomicity:** receipt verification recomputes both observation digests and all PGN
+   digests. `Last-Modified` mutation alone does not affect validity, and no test or product copy
+   calls the receipt atomic, immutable upstream or permanently finished.
+5. **Choice protocol:** a round URL without selection returns HTTP 409 with the exact closed
+   `BroadcastBoardChoiceRequired`; duplicate player names remain independently selectable by game
+   id. Retry with a stale digest yields a fresh 409 choice payload; a direct game URL needs no
+   picker round trip.
+6. **Parser framing:** the real fixtures produce exactly 10+10 units, while reordered/missing
+   `Event`, comment lookalikes, CRLF, arbitrary blanks, header-only and adjacent-`*` fixtures are
+   framed by `chessops`, never by regex. Every selected unit still passes `parsePgnMainline`.
+7. **Identity join:** missing/duplicate/malformed `GameURL`, duplicate game id, wrong round id,
+   observation-only game, PGN-only game and status/result mismatch each fail the whole source.
+8. **Move preservation:** the ten finished-fixture imports preserve exact mainline ply counts
+   `134,46,60,145,211,88,65,80,75,68` after sanitize/import.
+9. **Annotation positive:** the stored broadcast PGN contains none of `{ } ; [% $ ! ?` in
+   movetext and none of the measured verdict tokens, including the 61 suffix glyphs. Headers and
+   source identities survive.
+10. **Annotation controls:** the same raw single game through `kind:pgn` retains its annotations;
+    a constructed sanitizer residue throws `BROADCAST_ANNOTATION_RESIDUE`; neither path can make
+    the broadcast assertion pass vacuously.
+11. **Per-game clocks:** the finished round is framed first, then each game is sanitized
+    independently. The exact per-game token vector is
+    `134,46,60,144,210,88,65,80,75,0`; only its sum is 902. Duplicate/malformed tokens retain separate
+    `{gameId,ply,occurrence,raw}` rows and no token survives stored movetext.
+12. **Resource boundaries:** exactly-at-limit fixtures pass and limit+1 fixtures fail for both
+    JSON reads, PGN bytes, game count, serialized game bytes, header count and header bytes.
+    Chunk-crossing and missing-body fallback tests prove counting before concatenation; abort is
+    observed and no parser/storage call occurs after refusal.
+13. **Rules/setup:** only explicit `Variant:Standard` with no `SetUp`/`FEN` and canonical standard
+    root imports. Missing Variant, `From Position`, Chess960, same-FEN/different-rules and
+    missing-FEN Chess960 all return `BROADCAST_RULES_UNSUPPORTED` before storage.
+14. **Queue/retry:** two concurrent broadcast resolutions observe non-interleaved complete
+    status/PGN/status sequences. Delta/date `Retry-After` values become exact `retryAt`; malformed
+    or absent values remain unknown; no background retry runs.
+15. **Migration/durable receipt:** pre-landing DB rejects `lichess_broadcast`; the claimed rebuild
+    admits exactly the resource source-kind set, preserves old rows byte-identically and still
+    rejects unknowns. Its CHECK rejects a broadcast row without `source_receipt_json` and a
+    non-broadcast row with one; malformed receipt JSON fails hydration. Account export/import
+    round-trips the typed receipt and exact digest/timestamp fields, not a prose reconstruction.
+16. **Real REST/browser journey:** through production client and route, round URL → choice →
+    perspective → broadcast-specific sanitization disclosure → one import → Story passes. Game URL
+    skips choice. The test asserts no duplicate run on repeat submit.
+17. **Recovery/accessibility:** stale, unfinished, unsupported-rules, oversized, provider-off,
+    empty and unavailable/retry-at states render distinct copy. Full keyboard completion and
+    360×680 projection have no horizontal overflow; status/error focus/live-region behavior is
+    asserted.
+18. **Scope/dependency guard:** no Phase-B stream/follower/liveness field ships; the register,
+    bootstrap and migration predecessor are accepted/implemented before this implementation can
+    start. The implementing commit closes [[D2277]]–[[D2285]], updates the RFC register and appends
+    the exploration log in the same change.
 
 ### 7. Ledger rows this RFC closes
 
-Unit: ledger rows; total: 5. [[D410]] — §3's strip-with-assertion at the record
-boundary (criteria 3–5), flips at the implementation commit. [[D412]] — the events-row
+Unit: ledger rows; total: 14. [[D410]] — §3's strip-with-assertion at the record
+boundary, flips at the implementation commit. [[D412]] — the events-row
 clause (§Deviations) plus this RFC's import half; the clause lands with an owner
 ruling at acceptance, the import half at implementation. [[D413]] — criterion 8's doc
 edit, implementation commit. [[D414]] — already ✅, discharged by execution
 2026-08-22 (`tools/d947-broadcast-roundtrip-harness/`); recorded here as the evidence
 base. [[D947]] — **partially**: Phase A of the commission; Phase B and casting remain
-with proposed rows D957/D958.
+with D957/D958. [[D2277]]–[[D2285]] close only when criteria 1–18 ship; author repair
+alone does not close implementation defects.
 
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Phase B — the round follower (held stream), the imported-run growth model, move-0 follows, and the [[D411]] lock as a dynamic ceiling-term bit with fail-closed release (§6 rows 1–2); proposed row D957 owns the seam until its RFC exists | claude | `planning/live-sources/` | |
-| D2 | Casting composition ([[D705]]) — blocked on the owner's B5 justification ruling (Open question 1); proposed row D958 | OWNER | `planning/live-sources/` | |
+| D1 | Phase B — growing source, immutable cuts, move-0 follow and [[D411]] lock | `live-following.md` / [[D957]] | its accepted implementation | |
+| D2 | Casting/professional composition over Phase B, separately integrated per [[D1272]] | `casting.md` / [[D958]] | its accepted implementation | |
 | D3 | The [[D412]] events-row clause in `design/03` — law 5, owner ruling at this RFC's acceptance or severed to its own ruling (Open question 3) | OWNER | `planning/live-sources/` | |
-| D4 | Phase-A implementation: criteria 1–11 (including the `imported_games` CHECK rebuild migration), the [[D413]] doc edit, and the [[D410]]/[[D412]]-import ledger flips in the implementing commit | codex | `planning/codex-queue.md` | |
+| D4 | Phase-A implementation: criteria 1–18, migration, [[D413]] doc edit, [[D410]]/[[D412]] import and [[D2277]]–[[D2285]] flips | codex | work-state queue after acceptance/dependencies | |
+| D5 | Register absent `import-source-protocol` and implement the generic shared-resource bootstrap before this RFC's first lane-1 claim | `import-source-protocol-register.md` + `shared-resource-register-bootstrap.md` | register/check receipts | |
 
 ## Open questions
 
-1. **⚖️ Owner — justification order (derivation gap 9):** the lane currently
-   justifies on **anyone-analyses** (solo import, then follow); casting is a
-   nearly-free composition behind it. If casting should *lead*, that reopens the B5
-   audience-gate revival condition — an owner call. Phase A is identical either way;
-   the answer sequences Phase B vs the casting composition.
-2. **⚖️ Owner — facet vs kind (derivation gap 10):** Phase A stores broadcast games
-   as `sessionKind: "imported"` (the only shape that exists, and the derivation's
-   recommendation — it keeps `ASSISTANCE_PROFILES`, the frozen `WorkflowContextId`
-   set, and the `decision_class='game'` grain untouched). The open half is Phase B's:
-   whether the D411 lock rides a **source facet** on `imported` or a new session
-   kind. Deferred to D957's RFC with the recommendation recorded, not decided.
-3. **Owner at acceptance — the D412 design clause** (§Deviations): ride this
+1. **Owner at acceptance — the D412 design clause** (§Deviations): ride this
    acceptance or sever to its own ruling.
+
+The former sequencing and facet/kind questions are no longer Phase-A questions.
+[[D1272]] separated following from casting; `live-following.md` owns its liveness
+facet. This RFC stores the unchanged `sessionKind:"imported"` local copy.
 
 ## Ledger rows (proposed — renumber at landing)
 
@@ -426,9 +598,9 @@ at landing** — these are current, not promised.
   HEAD appends to an imported run), move-0 follows, and the [[D411]] lock as a
   dynamic ceiling-term bit with fail-closed release semantics. Needs its own RFC;
   this row owns the seam until then.
-- **D958 (landed)** — casting is a composition ([[D705]]) blocked on the owner's B5
-  justification ruling (Open question 1); binding the existing `stream` session +
-  overlay to a followed run requires Phase B's follower and no new evidence mode.
+- **D958 (landed)** — casting is a separate composition over the existing `stream`
+  session + overlay and Phase B's followed cuts, per [[D1272]]; it adds no evidence
+  mode and does not gate import/following.
 - **D959 (landed)** — 🐞 the paste path stores third-party annotations verbatim
   today: `kind: "pgn"` retains comments (including engine verdicts) in
   `ImportedGameRecord.pgn` — [[D410]]'s trap through the manual door, out of Phase A's
@@ -436,6 +608,15 @@ at landing** — these are current, not promised.
 
 ## Changelog
 
+- 2026-09-06: first author repair for [[D2277]]–[[D2285]]. Current official Lichess
+  authority replaces the PGN-result shortcut with a bounded before/after
+  `finishedAt` receipt and explicitly refuses atomic/permanent-upstream claims. One
+  shared protocol now owns request/result/source vocabulary; board choice is
+  digest-bound with stale retry; `chessops` owns framing; clock tokens retain exact
+  game/ply/occurrence grain; external JSON/PGN/game/header resources are bounded;
+  Phase A admits only explicit Standard/from-standard-start; dependencies match the
+  live register; and the complete production REST/browser journey is in the delivery
+  unit. Another fresh review is required.
 - 2026-08-30: acceptance withdrawn on [[D2277]]–[[D2285]]. The accepted path could import an
   ongoing board and immediately enqueue engine evidence with no liveness check. Fresh review also
   returned the duplicated request/source vocabulary, board-choice protocol, framing and clock

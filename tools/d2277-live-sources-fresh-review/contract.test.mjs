@@ -1,18 +1,23 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import test from "node:test";
 
-const rfc = readFileSync("rfc/live-sources.md", "utf8");
-const service = readFileSync("apps/server/src/service.ts", "utf8");
-const rest = readFileSync("apps/server/src/rest.ts", "utf8");
-const serverSource = readFileSync("apps/server/src/import-source.ts", "utf8");
-const webApi = readFileSync("apps/web/src/lib/api.ts", "utf8");
-const app = readFileSync("apps/web/src/App.svelte", "utf8");
-const harness = readFileSync("tools/d947-broadcast-roundtrip-harness/roundtrip.test.ts", "utf8");
-const backlog = readFileSync("design/BACKLOG.md", "utf8");
-const intent = readFileSync("rfc/intent-presets.md", "utf8");
-const longitudinal = readFileSync("rfc/longitudinal-store.md", "utf8");
-const campaign = readFileSync("rfc/campaign-core.md", "utf8");
+const REVIEW_COMMIT = "ab246e75";
+const atReview = (path) => execFileSync("git", ["show", `${REVIEW_COMMIT}:${path}`], {
+  encoding: "utf8",
+  maxBuffer: 4 * 1024 * 1024,
+});
+const rfc = atReview("rfc/live-sources.md");
+const service = atReview("apps/server/src/service.ts");
+const rest = atReview("apps/server/src/rest.ts");
+const serverSource = atReview("apps/server/src/import-source.ts");
+const webApi = atReview("apps/web/src/lib/api.ts");
+const app = atReview("apps/web/src/App.svelte");
+const harness = atReview("tools/d947-broadcast-roundtrip-harness/roundtrip.test.ts");
+const backlog = atReview("design/BACKLOG.md");
+const intent = atReview("rfc/intent-presets.md");
+const longitudinal = atReview("rfc/longitudinal-store.md");
+const campaign = atReview("rfc/campaign-core.md");
 const original = rfc.split("\n## Fresh independent buildability return", 1)[0];
 const criteria = rfc.match(/## Acceptance criteria[\s\S]*?### 7\./u)?.[0] ?? "";
 

@@ -16930,3 +16930,39 @@ The fourth historical review is now commit-pinned rather than reading the live b
 5/5 fourth-review return cases, then passes 5/5 direct inversions plus strict TypeScript. Exact
 receipt: `planning/concept-registry/fourth-author-repair-2026-09-06.md`. Another genuinely fresh
 review and the implemented shared-resource bootstrap still precede acceptance or implementation.
+
+## 2026-09-06 — live-source finished-receipt authority refresh
+
+**What landed:** current official Lichess API research for [[D2277]] and the status half of
+[[D2279]], including unauthenticated one-at-a-time probes of a public finished round and an
+ongoing round. No product, schema, content, archive or protected-design byte changed.
+
+**What changed:** the withdrawn RFC's PGN-result shortcut is replaced at research tier by the
+current completion authority: `round.finishedAt`, with `finished` deprecated and `ongoing`
+separate. The upstream exposes no immutable revision joining round JSON to PGN, and its official
+reset operation proves completion is not permanent. The honest Phase-A contract is therefore a
+bounded before/after observed-finished receipt over exact round/game identities and captured PGN
+digests, never an atomic or permanent upstream claim.
+
+**Evidence/next:** `design/research/live-source-finished-receipt.md`. Phase A can remain separate
+from Phase B, but `rfc/live-sources.md` still requires the complete D2277–D2285 author repair and
+another fresh independent review before implementation.
+
+## 2026-09-06 — live-sources first author repair and protocol registration draft
+
+**What landed:** repaired the complete [[D2277]]–[[D2285]] contract return and drafted the absent
+`import-source-protocol` shared-resource registration. No production, schema, storage, content,
+archive or protected-design byte changed.
+
+**What changed:** Phase A now brackets a bounded parser-backed PGN capture with two equal current
+`finishedAt` observations, binds stable round/game ids and domain-separated digests, persists a
+typed receipt, retains clock tokens losslessly per selected game, refuses all non-explicit-Standard
+setups, applies streamed source budgets and ships the complete REST/client/browser journey as one
+future delivery unit. The historical return harnesses read the exact reviewed commit so repairing
+the RFC cannot erase their negative controls. `make live-sources-author-repair` is now part of the
+normal governance gate.
+
+**Evidence/next:** `planning/live-sources/first-author-repair-2026-09-06.md`; 9/9 historical return
+cases and 11/11 repaired-contract cases pass. Another genuinely fresh review, owner disposition of
+[[D412]], accepted/implemented generic bootstrap plus protocol registration, and the migration
+predecessor still precede implementation.

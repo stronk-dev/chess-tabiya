@@ -17876,7 +17876,7 @@
       "id": "D2277",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:07b32d73d6b5b1cf9f5d7efc0ad0d4fb814cde34444e2fbb9f111358f367fa43",
+      "sourceDigest": "sha256:c115dddba6f8eb29737e05b8114ccd3b4c37f3e9fa82cf95df02fe0d967ff9b2",
       "uxItems": [],
       "owner": "live-and-social",
       "blocker": "rfc:live-sources.md"
@@ -17885,7 +17885,7 @@
       "id": "D2278",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d723e95acd9391ccbee326c378a9e3fbab6f1834777412fe2760c10a21756a80",
+      "sourceDigest": "sha256:a0b346f8d93c70e95316af3da1111b0c3113de3a03aa0fa8fbd10553f145dad2",
       "uxItems": [],
       "owner": "live-and-social",
       "blocker": "rfc:live-sources.md"
@@ -17894,7 +17894,7 @@
       "id": "D2279",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:fad87289fa2aca052dab5f19f4026b1ae2d45730eb58bd96ddf4fc897cf6cf54",
+      "sourceDigest": "sha256:26f9b3b6eeceec95daad519410d5b8b62c82e602d9126bbc8d4e7a6d2b569e85",
       "uxItems": [],
       "owner": "live-and-social",
       "blocker": "rfc:live-sources.md"
@@ -17903,7 +17903,7 @@
       "id": "D2280",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0394bfcc491bb1253acf1101f47c63464d52635927ee5f3c3bd3d11fe1f6294b",
+      "sourceDigest": "sha256:58daa29e12651db0bbc99f7b5fc4961cc40df3235974a2935a36e9654311b318",
       "uxItems": [],
       "owner": "live-and-social",
       "blocker": "rfc:live-sources.md"
@@ -17912,7 +17912,7 @@
       "id": "D2281",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c778f496ad922ff78a05ff843068ab0fb0f2bff00f6e05ea25f3d3ed68a3dd1d",
+      "sourceDigest": "sha256:d3b0ea9f4ca0dd27e474315825352c38e9ea44d2b0a1123d48bb8df1b552e569",
       "uxItems": [],
       "owner": "live-and-social",
       "blocker": "rfc:live-sources.md"
@@ -17921,7 +17921,7 @@
       "id": "D2282",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:dcfd86300b868e6a632bd5f47b2bb2d7fe63735fc0967b906461290719a3730a",
+      "sourceDigest": "sha256:361a84f447c4e752c1289ee7d5242b5b805dee5f9bc7468b8f31ef74ad7c27ea",
       "uxItems": [],
       "owner": "live-and-social",
       "blocker": "rfc:live-sources.md"
@@ -17930,7 +17930,7 @@
       "id": "D2283",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ccdff69195bf76cd79c10493fc9ae5d1b5b6f4ea5ad9ee26c98f14e90d95183c",
+      "sourceDigest": "sha256:5dfb98b05df4657e264d2b6d6443a531e9c935efddbf8ac608e581f21a2c60de",
       "uxItems": [],
       "owner": "live-and-social",
       "blocker": "rfc:live-sources.md"
@@ -17939,7 +17939,7 @@
       "id": "D2284",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7c76f4c5d67a52d79d36142f8cc0aacb599ab1e23b8410e61152bcb2755f9afb",
+      "sourceDigest": "sha256:bfe709df5f9662dfba9e3535b99312a81211f130ee3a161e3893d83f509c7f41",
       "uxItems": [],
       "owner": "live-and-social",
       "blocker": "rfc:live-sources.md"
@@ -17948,7 +17948,7 @@
       "id": "D2285",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:477aebdf3a4f0f2da6cb7306771dd35906b960776721b70603d876e85dad5780",
+      "sourceDigest": "sha256:f1494a3f280c9fc30dd3b959e6f4c15154796076682936cdabec2a72c109d8c7",
       "uxItems": [],
       "owner": "live-and-social",
       "blocker": "rfc:live-sources.md"

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
@@ -9,7 +10,7 @@ const original = rfc.replace(
   "\n## Acceptance criteria",
 );
 const register = read("rfc/README.md");
-const liveSources = read("rfc/live-sources.md");
+const liveSources = execFileSync("git", ["show", "ab246e75:rfc/live-sources.md"], { encoding: "utf8" });
 const runtime = read("packages/runtime/src/runtime.ts");
 const service = read("apps/server/src/service.ts");
 const storage = read("apps/server/src/storage.ts");

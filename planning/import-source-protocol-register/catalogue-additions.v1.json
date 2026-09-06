@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "resources": [
+    {
+      "id": "import-source-protocol",
+      "lifecycle": "sequential",
+      "projection": {
+        "adapter": "canonical_resource@1",
+        "rootSelector": "packages/runtime/src/import-source-protocol.ts#export:IMPORT_SOURCE_PROTOCOL_RESOURCE"
+      },
+      "claimMode": "whole_projection",
+      "introducedBy": "import-source-protocol-register.md",
+      "introduction": "absent"
+    }
+  ]
+}

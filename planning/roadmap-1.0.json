@@ -213,6 +213,7 @@
       "release": "breadth",
       "owner": "live-and-social",
       "rfcs": [
+        "import-source-protocol-register.md",
         "live-sources.md",
         "live-following.md",
         "social-play.md",
