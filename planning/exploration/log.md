@@ -17180,3 +17180,21 @@ registry content, product consumer, storage, archive or protected-design byte ch
 concept-registry-sixth-fresh-review` retains the complete chain and passes 6/6 new counterexamples
 plus strict TypeScript. Repair the exact project/symbol graph, canonical inventory, compiler
 authority and failure lifecycle, then obtain another genuinely fresh review before acceptance.
+
+## 2026-09-06 — provider health twelfth fresh independent review
+
+**What landed:** a fresh executable return on [[D2966]]–[[D2971]]. The eleventh repair's unified
+state and exact-cache projection remain, but its exchange and generation outcomes are publicly
+mintable, the composed lease surface omits renew/expire, and valid longer upstream backoff cannot be
+represented.
+
+**What changed:** `provider-health-degradation.md` remains draft. Release composition now explicitly
+owes refusal of `local_fixture`, and cache insertion owes an operation-selected TTL capped at 24
+hours. No provider product, runtime, run schema, storage, content, archive or protected-design byte
+changed.
+
+**Evidence/next:**
+`planning/provider-health-degradation/twelfth-fresh-independent-buildability-review-2026-09-06.md`;
+`make provider-health-twelfth-fresh-review` retains the complete chain and passes 6/6 new controls
+plus strict TypeScript. Repair the sealed execution/generation authority, complete lease lifecycle,
+Retry-After operand, release/test split and TTL policy, then obtain another genuinely fresh review.

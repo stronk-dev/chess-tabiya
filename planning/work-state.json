@@ -24051,6 +24051,60 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:concept-registry.md"
+    },
+    {
+      "id": "D2966",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a902a00557e2f189ff403d9d4634632f35c65d3cd5a246f77b4c92a44a6d4079",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2967",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:438f6a6c6fa10f86e56afa1153cde84a0d4d9dfd3e795f4c2f0c66c1c3b38a50",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2968",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:fa0978cf18c4a247a586a3bd3167388cbc44a2190a39e1c50336158f18f30a2b",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2969",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5ecaa722a360a450295d400e211c6a90fb569ca4a0b6997fd84662dc8c4e848f",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2970",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6b93a4d31250b1ca04047c545d82871870fc47a3cfa6ffa4c0b233d8099fa21f",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2971",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2f76dc23f25df65647d5cc4be96af2916d73fa99f98521ad3f49adf40397e0cd",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
     }
   ]
 }

@@ -293,11 +293,11 @@
       "completion": {
         "evidence": ["not_applicable", "This slice verifies evidence machinery but creates no chess truth."],
         "state": ["partial", "Schema/register/work/intent checks and three workflows exist; deployment now has an executable third contract repair for mounted config, receipts, TLS, readiness and durable migration, but production release state is not implemented."],
-        "api": ["partial", "Health exists, but the eleventh provider-health review proves the newest repair still has split group and predecessor authorities, forgeable reset and settlement paths, incomplete exact-cache and reason-bearing availability arms, and a mixed monotonic/civil clock; a bounded repair, fresh review and production route integration remain, alongside readiness, metrics policy and production-boundary coverage."],
+        "api": ["partial", "Health exists, but the twelfth provider-health review proves the newest repair still accepts caller-minted exchange and generation authority, omits renew/expire, cannot carry longer Retry-After, admits test providers to release and exceeds its cache-TTL ceiling; a bounded repair, fresh review and production route integration remain, alongside readiness, metrics policy and production-boundary coverage."],
         "experience": ["blocked", "Install, first boot, engine degradation, backup, restore, update, rollback, and failure diagnostics are not one guided operator workflow."],
         "defaults": ["partial", "Compose boots with mock and insecure-cookie development defaults; safe public and private profiles are not complete."],
         "content": ["blocked", "Runtime content allow-list, licence notices, SBOM, model/runtime rights, and multi-architecture asset tiers remain."],
-        "verification": ["partial", "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof remain separate named tiers; the eleventh provider-health review is now the verify-owned tip and executes eight fresh authority and projection attacks."],
+        "verification": ["partial", "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof remain separate named tiers; the twelfth provider-health review is now the verify-owned tip and executes six authority, lifecycle and policy attacks while retaining its predecessor chain."],
         "release": ["blocked", "A clean machine can install a digest-pinned release, run it safely, observe degradation, upgrade and roll back without data loss."]
       }
     }
@@ -327,14 +327,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair the returned provider-protocol and concept-registry lifecycle/composition boundaries, freshly review those repairs plus provider-health, then advance provider exchange, pack-capability and longitudinal-store lanes.",
+        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair the returned provider-protocol, concept-registry and provider-health lifecycle/composition boundaries, freshly review those repairs, then advance provider exchange, pack-capability and longitudinal-store lanes.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Concept-registry's sixth fresh review returns its composed consumer and startup authority: counterfeit or dormant boundaries pass, project configs cross, artifact receipts are order-dependent, registry identity is structural, failed composition leaks readiness and rejected startup leaves SQLite open.",
+          "summary": "Provider-health's twelfth fresh review returns its exchange, generation, lease, rate-limit, release-profile and cache authority: callers can mint outcomes and resets, renew/expire regressed, longer Retry-After is lost, local fixtures receive release receipts and cache TTL exceeds 24 hours.",
           "impact": "regressed",
-          "evidence": ["planning/concept-registry/sixth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2960-concept-registry-sixth-fresh-review/review.test.ts", "rfc/concept-registry.md", "rfc/README.md"],
+          "evidence": ["planning/provider-health-degradation/twelfth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2966-provider-health-twelfth-fresh-review/review.test.ts", "rfc/provider-health-degradation.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "concept-registry.md", "digest": "sha256:5de735fe4301de11b91ce02906262e6044411a1223cb800ef4d91bc42230de90"}
+            {"kind": "rfc", "id": "provider-health-degradation.md", "digest": "sha256:6537fee220adc1d5f8aab31602260b57a4592f1329f7c083c47b419c4820e489"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

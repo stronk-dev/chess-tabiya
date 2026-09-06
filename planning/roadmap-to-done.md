@@ -2279,3 +2279,15 @@ the bootstrap database usable after rejection. `make concept-registry-sixth-fres
 the complete chain and passes 6/6 executable counterexamples plus strict TypeScript. Foundation
 contracts remain active at bounded author repair; no concept schema, migration, Campaign, Skills or
 cross-pack learner-history consumer may treat this RFC as accepted.
+
+### 2026-09-06 foundation checkpoint — provider health returned at authority and policy boundaries
+
+The twelfth fresh provider-health review preserves the eleventh repair's unified state and exact
+cache gains but proves six required boundaries remain open. Callers can mint successful provider
+outcomes and arbitrary generation resets; the composed authority dropped lease renewal and expiry;
+rate-limit outcomes cannot carry a longer upstream `Retry-After`; test-only providers receive valid
+release receipts; and cache entries can outlive the declared 24-hour maximum. `make
+provider-health-twelfth-fresh-review` retains the complete chain and passes 6/6 executable
+counterexamples plus strict TypeScript. Foundation contracts remain active at bounded author repair;
+no provider exchange, external evidence, bot input, Support availability or release proof may treat
+this RFC as accepted.

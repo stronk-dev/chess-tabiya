@@ -1,10 +1,11 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** **draft — eleventh author repair completed on [[D2942]]–[[D2949]].** One private
-  declaration-derived composition now owns provider/group state, generation reset and sealed
-  exchange settlement; exact-cache service and the reason-bearing operation wire are complete; and
-  monotonic/civil clocks are separate. `make provider-health-eleventh-author-repair` retains the
-  complete chain and passes 8/8 direct repairs plus strict TypeScript. Another genuinely fresh
+- **Status:** **draft — twelfth fresh independent review returned the eleventh repair on
+  [[D2966]]–[[D2971]].** Exchange and generation authority remain caller-mintable; the required
+  renew/expire lease surface regressed; long `Retry-After` is unrepresentable; test-only providers
+  receive release authority; and cache TTLs exceed the declared 24-hour ceiling. `make
+  provider-health-twelfth-fresh-review` retains the complete chain and passes 6/6 executable
+  counterexamples plus strict TypeScript. A bounded twelfth author repair, another genuinely fresh
   review and the provider-protocol/exchange prerequisites precede either implementation checkpoint.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
@@ -1187,6 +1188,31 @@ bytes consume the latter.
 `planning/provider-health-degradation/eleventh-author-repair-2026-09-06.md`. This remains
 author-contract evidence, not acceptance or production implementation; another genuinely fresh
 review and the provider protocol/exchange dependencies remain.
+
+## Twelfth fresh independent return (2026-09-06)
+
+The eleventh repair closes [[D2942]]–[[D2949]], but its private composition still accepts public or
+incomplete authorities on six boundaries:
+
+1. [[D2966]] — exported, publicly constructible `ExchangeAuthority` lets any caller mint a request
+   and success/failure without executing a provider, then mutate instance and group health;
+2. [[D2967]] — public `changeGeneration(instanceId, string)` accepts an arbitrary relabel rather
+   than a transition derived from configuration, model, endpoint, engine or supervisor truth, and
+   that relabel clears real backoff;
+3. [[D2968]] — the composed interface drops `renew` and `expire`, regressing the closed lease
+   lifecycle repaired under [[D2818]] and still required by criteria 26/32;
+4. [[D2969]] — `ExchangeFailure` has no parsed `Retry-After` operand, so every rate limit becomes
+   exactly 60 seconds and a longer upstream instruction cannot be honored;
+5. [[D2970]] — `local_fixture` configuration can produce a valid release receipt despite the
+   explicit production-release refusal; and
+6. [[D2971]] — cache insertion admits a 48-hour expiry and serves it after the RFC's 24-hour maximum.
+
+`make provider-health-twelfth-fresh-review` retains the complete predecessor chain and passes all
+six executable counterexamples plus strict TypeScript. Exact receipt:
+`planning/provider-health-degradation/twelfth-fresh-independent-buildability-review-2026-09-06.md`.
+This is a return, not acceptance or production implementation. The repair must consume opaque
+provider-execution and derived-generation transitions, restore the complete lease lifecycle, carry
+bounded upstream retry delay, separate release/test composition and enforce operation-selected TTL.
 
 ## Implementation plan
 
