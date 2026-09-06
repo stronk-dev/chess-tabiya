@@ -1,15 +1,16 @@
 # RFC: Campaign core — the pure-chess campaign over authored encounters
 
-- **Status:** draft — **sixth author repair complete for [[D2736]]–[[D2741]]; another genuinely
-  fresh independent review is required.** Provider failure is durable; charged commands bind both
-  aggregate identities and revisions; assistance receipts carry sealed complete subjects; event
-  integrity covers canonical whole envelopes; official curriculum compiles the full projection
-  from sealed nested authorities; and dependency states match the live register. `make
-  campaign-two-horizon-sixth-author-repair` retains the full chain and passes 6/6 new groups. This
-  RFC is explicitly the Campaign foundation, not the whole 1.0. No campaign
+- **Status:** draft — **seventh fresh independent review returned the sixth repair on
+  [[D2986]]–[[D2992]].** Charged commands can report success without executing their named play
+  mutation or appending a Campaign event; provider and assistance outcomes remain caller-issued;
+  event/document parsing remains open below the envelope; and public local factories mint the
+  purported human-review and curriculum-registry authorities. `make
+  campaign-two-horizon-seventh-fresh-review` retains the complete chain and passes 7/7 new
+  counterexamples plus strict TypeScript. A bounded seventh repair, another genuinely fresh review
+  and accepted dependencies are required. This RFC is
+  explicitly the Campaign foundation, not the whole 1.0. No campaign
   schema, migration, production route, official
-  campaign or surface may resume before another fresh independent
-  review and accepted dependencies.
+  campaign or surface may resume before that repair, review and dependency acceptance.
   *(Prior line: [[D2077]]–[[D2086]] author repair complete 2026-08-30; fresh independent review
   required. Before that:
   implementing — 2026-08-23 authored-contract + registry + module-algebra checkpoints. Before
@@ -1334,6 +1335,35 @@ receipt of the pre-repair return; it is deliberately not a prerequisite that ass
 must remain broken. Exact receipt: `planning/campaign/sixth-author-repair-2026-09-05.md`. Another
 genuinely fresh independent review and accepted dependencies still gate every schema, migration,
 route, client, official-content and production implementation.
+
+## Seventh fresh independent return (2026-09-06)
+
+The sixth repair closes its named local counterexamples, but the complete buildability pass returned
+seven real-boundary authorities:
+
+1. **[[D2986]]:** `rewind`, `fork`, `group` and `simulate_enter` all decrement a charge and bump
+   revisions without executing the named play mutation or appending a `campaign_events` row.
+2. **[[D2987]]:** an unsealed caller callback supplies the terminal provider outcome while the
+   Campaign write transaction remains open.
+3. **[[D2988]]:** a public fixture issuer supplies every assistance decision without requiring the
+   campaign, play, pack, passage or provider authorities it claims to summarize.
+4. **[[D2989]]:** generic event parsing accepts arbitrary payloads, crossed result kinds and invalid
+   timestamps below an otherwise canonical envelope.
+5. **[[D2990]]:** the Campaign document parser casts most nested economy, reward, module, consumer,
+   suppressor and boss semantics instead of validating the closed foundation.
+6. **[[D2991]]:** any caller can instantiate the local human-review authority and approve any parsed
+   document without an authenticated durable owner decision.
+7. **[[D2992]]:** a public registry sealer brands caller-authored pack, theory, target and provider
+   facts instead of resolving them through their owning accepted registries.
+
+Exact receipt:
+`planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md`. The next author
+round must bind each charged operation to the real run mutation and atomic Campaign event; consume
+sealed provider execution outside the write lock; derive assistance from the real owning stores;
+implement kind-specific event schemas and the complete document validator; accept authenticated,
+durable human review; and resolve curriculum metadata through its owning authorities. Another fresh
+review must retain the entire predecessor chain. These repairs do not discharge the separately
+tracked boss, catalogue, durable-variety, UX or official-content obligations.
 
 ## Campaign 1.0 closure map
 

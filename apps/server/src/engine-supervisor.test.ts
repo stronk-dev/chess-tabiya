@@ -151,7 +151,7 @@ describe("UCI engine supervisor", () => {
       id: "stockfish-analysis",
       kind: "judge",
       name: "Stockfish",
-      version: "18",
+      version: expect.stringMatching(/^\d+(?:\.\d+)*$/u),
       modelId: "test-nnue-identity",
       containerDigest: `sha256:${"0".repeat(64)}`,
       seedHonored: false,

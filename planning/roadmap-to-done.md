@@ -2315,3 +2315,18 @@ profile arms, and mounted-image compilation never opens the mount. `make
 safe-deployment-fourth-fresh-review` retains the complete chain and passes 8/8 executable
 counterexamples plus strict TypeScript. Foundation contracts remain active at bounded author repair;
 no public deployment, operator workflow, migration or release proof may treat this RFC as accepted.
+
+## Checkpoint — Campaign returned at operation and evidence authority
+
+Campaign foundation remains incomplete after its seventh fresh independent review. The sixth repair
+retains durable command-result replay and canonical event-envelope integrity, but `rewind`, `fork`,
+`group` and `simulate_enter` can report `committed` while changing no play graph and appending no
+Campaign event. The same build surface lets callers author provider, assistance, event, document,
+human-review and curriculum-registry facts that it later treats as authority.
+
+`make campaign-two-horizon-seventh-fresh-review` retains the complete predecessor chain and passes
+7/7 new able-to-fail controls plus strict TypeScript. The next bounded author repair must connect
+those contracts to the actual run operation, provider, persistence, authentication and owning
+registry boundaries, followed by another fresh review. Campaign API, web route/map, complete pilot,
+full-game bosses, catalogue progression, durable variety and end-to-end verification remain separate
+required 1.0 work; this checkpoint closes none of them.

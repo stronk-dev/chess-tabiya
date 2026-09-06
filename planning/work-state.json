@@ -24231,6 +24231,78 @@
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:safe-deployment-profiles.md"
+    },
+    {
+      "id": "D2986",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f27cbc36ff9574128a1888358d8eafc83360d79c16a09a088b3374bc8359ff05",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2987",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:92d8401436fbcf637b4b378e75eadf97205983dc38d4f83a8e758c8c66f17e51",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2988",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:65ecc731a68a184ec1309f0f8b5297fad66e28e6feb9104d96364b24c7861e3f",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2989",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c3bc943997127420f8644080479ba8eb94149b401c87342c57bfe528592bf0fa",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2990",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:51b82106ad2f0f67c4b6e7b02e523fce1a558afc4274415404dbda8fd106736b",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2991",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:0538e872b3ef7b98b15ef22efb071daccd9b5c0334f643cc815d163e4a786f92",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2992",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:edf7be5f079993ba909c0339e061b87b4bf8838f490f0becead6f14f2002af10",
+      "uxItems": [],
+      "owner": "campaign",
+      "blocker": "rfc:campaign-core.md"
+    },
+    {
+      "id": "D2993",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fb9ed67d0e6b2413cc7ffbf8ced936d6046681235e514844337d7d5ed20c3a0a",
+      "uxItems": [],
+      "evidence": "apps/server/src/engine-supervisor.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

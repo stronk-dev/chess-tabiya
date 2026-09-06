@@ -198,12 +198,12 @@
       "rfcs": ["campaign-core.md", "campaign-boss-games.md", "campaign-catalogue-progression.md", "training-mode-variants.md"],
       "completion": {
         "evidence": ["partial", "Encounter eligibility and rewards spend only registered pack, module, rating, skill, and bot facts."],
-        "state": ["partial", "The sixth contract repair makes provider failure durable, binds charged mutations to both aggregates/revisions, seals assistance and event authority, and compiles full curriculum metadata; fresh review and the campaign migration remain."],
+        "state": ["partial", "The seventh fresh review returned the foundation because charged commands can report committed without performing their play mutation or appending a Campaign event; provider, assistance, review, event and curriculum authority also remain caller-mintable."],
         "api": ["missing", "Enter, read, seal, fail, reward, spend, unlock, resume, and abandon endpoints do not exist."],
         "experience": ["missing", "There is no campaign route, map, encounter flow, resource explanation, failure result, or return path in the web app."],
         "defaults": ["blocked", "Campaign has an opinionated preset and earned modules never disappear because of an unrelated settings choice."],
         "content": ["missing", "No authored campaign exists; 1.0 needs a complete, replayable pilot with varied encounter and boss forms."],
-        "verification": ["blocked", "The sixth repair passes six new authority controls plus the retained author chain; a fresh independent review and state-fold, persistence, crash/retry, reward conservation, failure consequence, accessibility, campaign-to-review, and full-run browser tests remain."],
+        "verification": ["blocked", "The seventh fresh review retains the complete author chain and passes seven new authority counterexamples plus strict TypeScript; a bounded repair, another fresh review, and state-fold, persistence, crash/retry, reward conservation, failure consequence, accessibility, campaign-to-review, and full-run browser tests remain."],
         "release": ["blocked", "The campaign survives upgrade and backup/restore and never locks the open library or sells progression."]
       }
     },
@@ -327,14 +327,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair the returned provider-protocol, concept-registry, provider-health, storage and deployment real-boundary contracts, freshly review those repairs, then advance provider exchange, pack-capability and longitudinal-store lanes.",
+        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair the returned provider-protocol, concept-registry, provider-health, storage, deployment and Campaign real-boundary contracts, freshly review those repairs, then advance provider exchange, pack-capability and longitudinal-store lanes.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Safe deployment's fourth fresh review returns its real-boundary authority: callers mint trusted TLS, eleven checks, readiness and ingress without live services; migration misses product rows and safe initialization; receipt and mounted-image verification accept caller projections.",
+          "summary": "Campaign's seventh fresh review returns its operation and evidence authority: charged commands do not execute their named play mutation or append an event, while provider, assistance, event, document, human-review and curriculum facts remain caller-mintable.",
           "impact": "regressed",
-          "evidence": ["planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts", "rfc/safe-deployment-profiles.md", "rfc/README.md"],
+          "evidence": ["planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md", "tools/d2986-campaign-seventh-fresh-review/review.test.ts", "rfc/campaign-core.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"}
+            {"kind": "rfc", "id": "campaign-core.md", "digest": "sha256:f9cd84da95a0d6d367c943e8560936b58fb86c3eb94358d6b4ec6a9919ae0e86"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
@@ -379,15 +379,15 @@
         "state": "blocked_contract",
         "capabilities": ["learner_model", "bots", "campaign", "social_play", "account_data", "operations"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Repair and freshly review the returned storage and safe-deployment real-boundary authorities; fresh-review Campaign's sixth repair independently; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
+        "nextAction": "Repair and freshly review the returned storage, safe-deployment and Campaign real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Safe deployment's fourth fresh review proves the newest contract can report live TLS, readiness, all checks and ingress without running those operations, while profile migration leaves product session/token rows live and can bless existing storage. Storage recovery is separately returned; Campaign, longitudinal state and bot policy remain held.",
+          "summary": "Campaign's seventh fresh review proves its charged commands can report success without mutating the play graph or appending an event, while caller-authored provider, assistance, review and curriculum facts can authorize the result. Storage recovery and safe deployment are separately returned; longitudinal state and bot policy remain held.",
           "impact": "regressed",
-          "evidence": ["planning/campaign/sixth-author-repair-2026-09-05.md", "tools/d2736-campaign-sixth-author-repair/contract.test.ts", "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts", "rfc/safe-deployment-profiles.md", "planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts", "rfc/storage-backup-recovery.md", "rfc/longitudinal-store.md", "planning/longitudinal-store/eighth-author-repair-2026-09-05.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/fourth-author-repair-2026-09-05.md", "tools/d2407-bot-policy-fourth-author-repair/contract.test.ts", "rfc/social-play.md"],
+          "evidence": ["planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md", "tools/d2986-campaign-seventh-fresh-review/review.test.ts", "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts", "rfc/safe-deployment-profiles.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts", "rfc/storage-backup-recovery.md", "rfc/longitudinal-store.md", "planning/longitudinal-store/eighth-author-repair-2026-09-05.md", "rfc/bot-policy.md", "planning/platform-alignment/bot-policy/fourth-author-repair-2026-09-05.md", "tools/d2407-bot-policy-fourth-author-repair/contract.test.ts", "rfc/social-play.md"],
           "anchors": [
             {"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"},
-            {"kind": "rfc", "id": "campaign-core.md", "digest": "sha256:b0664c3a918fd559c42ccea0bb00201916f913514713f73792281dcbefa31af7"},
+            {"kind": "rfc", "id": "campaign-core.md", "digest": "sha256:f9cd84da95a0d6d367c943e8560936b58fb86c3eb94358d6b4ec6a9919ae0e86"},
             {"kind": "rfc", "id": "storage-backup-recovery.md", "digest": "sha256:418c43b100179f09ea6838114bc3525763c32d358314a8c7e0855fc31127a11d"},
             {"kind": "rfc", "id": "longitudinal-store.md", "digest": "sha256:84cfc23668cbb927946f92f0be87cae8dca6d6e58e0590890f3114dd21d3e8dd"},
             {"kind": "rfc", "id": "bot-policy.md", "digest": "sha256:18e2f4d00465f10682a831138a939d7a7ee61e0f467832aac5176bca6a74d3bb"},

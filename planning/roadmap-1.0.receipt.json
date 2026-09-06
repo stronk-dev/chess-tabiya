@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:7200e7a1e0abf89b8bbc59f0567471c216a1dd2ee4457e95268d5edf71c2677d",
+    "roadmap": "sha256:c7808387350077b19ce09a2fe4b4629149451966dc6a0d695517f84cc5a4fe12",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:c2a89cab5da6109fc14f97a1634e0de74316d7a8764b6f445c2dc537db364836",
-    "rfcRegister": "sha256:9538e0878720767a83879d5e43cc76cee567b82e9509112a1e7d6d796051eab0",
+    "workState": "sha256:0f61da1d6b2f13cd635a05525556d3a1b2d8c28153eabb10ce5559172252cd02",
+    "rfcRegister": "sha256:f29b18f3e8d9c10c8e94ef14e4b4706a6bde1a83ee49c6727a43ae77c59b1acb",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 651,
       "doing": 0,
-      "blocked": 1240,
-      "done": 840,
+      "blocked": 1247,
+      "done": 841,
       "refused": 3
     },
     "workItems": {
@@ -115,22 +115,22 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair the returned provider-protocol, concept-registry, provider-health, storage and deployment real-boundary contracts, freshly review those repairs, then advance provider exchange, pack-capability and longitudinal-store lanes.",
+      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair the returned provider-protocol, concept-registry, provider-health, storage, deployment and Campaign real-boundary contracts, freshly review those repairs, then advance provider exchange, pack-capability and longitudinal-store lanes.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "Safe deployment's fourth fresh review returns its real-boundary authority: callers mint trusted TLS, eleven checks, readiness and ingress without live services; migration misses product rows and safe initialization; receipt and mounted-image verification accept caller projections.",
+        "summary": "Campaign's seventh fresh review returns its operation and evidence authority: charged commands do not execute their named play mutation or append an event, while provider, assistance, event, document, human-review and curriculum facts remain caller-mintable.",
         "impact": "regressed",
         "evidence": [
-          "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts",
-          "rfc/safe-deployment-profiles.md",
+          "planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d2986-campaign-seventh-fresh-review/review.test.ts",
+          "rfc/campaign-core.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "safe-deployment-profiles.md",
-            "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"
+            "id": "campaign-core.md",
+            "digest": "sha256:f9cd84da95a0d6d367c943e8560936b58fb86c3eb94358d6b4ec6a9919ae0e86"
           }
         ]
       },
@@ -219,18 +219,17 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Repair and freshly review the returned storage and safe-deployment real-boundary authorities; fresh-review Campaign's sixth repair independently; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
+      "nextAction": "Repair and freshly review the returned storage, safe-deployment and Campaign real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "Safe deployment's fourth fresh review proves the newest contract can report live TLS, readiness, all checks and ingress without running those operations, while profile migration leaves product session/token rows live and can bless existing storage. Storage recovery is separately returned; Campaign, longitudinal state and bot policy remain held.",
+        "summary": "Campaign's seventh fresh review proves its charged commands can report success without mutating the play graph or appending an event, while caller-authored provider, assistance, review and curriculum facts can authorize the result. Storage recovery and safe deployment are separately returned; longitudinal state and bot policy remain held.",
         "impact": "regressed",
         "evidence": [
-          "planning/campaign/sixth-author-repair-2026-09-05.md",
-          "tools/d2736-campaign-sixth-author-repair/contract.test.ts",
+          "planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d2986-campaign-seventh-fresh-review/review.test.ts",
           "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md",
           "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts",
           "rfc/safe-deployment-profiles.md",
-          "planning/campaign/fifth-fresh-independent-buildability-review-2026-09-05.md",
           "rfc/campaign-core.md",
           "planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md",
           "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts",
@@ -251,7 +250,7 @@
           {
             "kind": "rfc",
             "id": "campaign-core.md",
-            "digest": "sha256:b0664c3a918fd559c42ccea0bb00201916f913514713f73792281dcbefa31af7"
+            "digest": "sha256:f9cd84da95a0d6d367c943e8560936b58fb86c3eb94358d6b4ec6a9919ae0e86"
           },
           {
             "kind": "rfc",
@@ -942,7 +941,7 @@
         ],
         "state": [
           "partial",
-          "The sixth contract repair makes provider failure durable, binds charged mutations to both aggregates/revisions, seals assistance and event authority, and compiles full curriculum metadata; fresh review and the campaign migration remain."
+          "The seventh fresh review returned the foundation because charged commands can report committed without performing their play mutation or appending a Campaign event; provider, assistance, review, event and curriculum authority also remain caller-mintable."
         ],
         "api": [
           "missing",
@@ -962,7 +961,7 @@
         ],
         "verification": [
           "blocked",
-          "The sixth repair passes six new authority controls plus the retained author chain; a fresh independent review and state-fold, persistence, crash/retry, reward conservation, failure consequence, accessibility, campaign-to-review, and full-run browser tests remain."
+          "The seventh fresh review retains the complete author chain and passes seven new authority counterexamples plus strict TypeScript; a bounded repair, another fresh review, and state-fold, persistence, crash/retry, reward conservation, failure consequence, accessibility, campaign-to-review, and full-run browser tests remain."
         ],
         "release": [
           "blocked",

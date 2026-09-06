@@ -17234,3 +17234,22 @@ schema, client, content, archive or protected-design byte changed.
 `make safe-deployment-fourth-fresh-review` retains the complete chain and passes 8/8 new controls
 plus strict TypeScript. Repair each issuer at its real mount, command, TLS, HTTP, storage and ingress
 boundary, then obtain another genuinely fresh review.
+
+## 2026-09-06 — Campaign seventh fresh independent review
+
+**What landed:** a fresh executable return on [[D2986]]–[[D2992]]. The sixth repair's durable
+command replay and canonical envelope remain, but a successful charged command performs no named
+play mutation and appends no Campaign event. Provider and assistance outcomes are caller-issued;
+event/document parsing remains open; and public factories mint human-review and curriculum facts.
+
+**What changed:** `campaign-core.md` remains draft. Its next author round now owns the actual
+run-operation/event boundary, provider execution outside the write lock, real assistance joins,
+kind-specific event schemas, the complete document validator, authenticated durable human review
+and owning-registry resolution. No production campaign schema, migration, route, client, official
+content, archive or protected-design byte changed.
+
+**Evidence/next:**
+`planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md`; `make
+campaign-two-horizon-seventh-fresh-review` retains the complete chain and passes 7/7 new
+counterexamples plus strict TypeScript. Complete a bounded seventh author repair, then obtain
+another genuinely fresh review before acceptance or implementation.
