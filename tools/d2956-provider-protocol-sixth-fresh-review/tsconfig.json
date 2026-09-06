@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node", "vitest/globals"]
+  },
+  "include": [
+    "review.test.ts",
+    "../d2950-provider-protocol-fifth-author-repair/model.ts"
+  ]
+}

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:73a0e08c4014940493d0a7365ceb3699f12711cfaf64f6405d95b27d2deac0b8",
+    "roadmap": "sha256:c9f4ee4cf2d86ebd496e3f1e5bf51c828632800cd6f3245ac4a5d9b74639b6d2",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:247bebafdf34a82fe219a6215e452e1f1c28399db36711d526595b8b4b9586c4",
-    "rfcRegister": "sha256:63ffbb53f3f3d00e2982761c1b43fed1206639ba455ab295625d3d0d16323b59",
+    "workState": "sha256:46ae24a74e3cd9e7be2bf4ee23ad3b9da93e5d9f307134690a9b586661466509",
+    "rfcRegister": "sha256:a194fe7380469bebf6c65cfda556cb66c0867d6f8a492d4b94aa145abb05b3a4",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 651,
       "doing": 0,
-      "blocked": 1210,
+      "blocked": 1214,
       "done": 840,
       "refused": 3
     },
@@ -115,22 +115,22 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; freshly review concept-registry, provider-protocol and provider-health repairs; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair provider-protocol's lifecycle/composition boundary, freshly review that repair plus concept-registry and provider-health, then advance provider exchange, pack-capability and longitudinal-store lanes.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "Provider-health's eleventh author repair now derives one private provider/group authority, atomically reduces sealed exchange outcomes, exposes exact-cache and reason-bearing operation results, and separates monotonic from civil time; fresh review remains.",
-        "impact": "held",
+        "summary": "Provider-protocol's sixth fresh review preserves exact receipt bytes but returns the build boundary: legal lifecycle successors fail, current source drift is ignored, repository identity is caller-selected and the product resource is not a staged generic projection.",
+        "impact": "regressed",
         "evidence": [
-          "planning/provider-health-degradation/eleventh-author-repair-2026-09-06.md",
-          "tools/d2942-provider-health-eleventh-author-repair/contract.test.ts",
-          "rfc/provider-health-degradation.md",
+          "planning/provider-protocol-register/sixth-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d2956-provider-protocol-sixth-fresh-review/review.test.ts",
+          "rfc/provider-protocol-register.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "provider-health-degradation.md",
-            "digest": "sha256:01ba33a52c9fa0cf10035b509b0166e5f8628b820b9cfada74d57b76a88f3d62"
+            "id": "provider-protocol-register.md",
+            "digest": "sha256:0ea2ac36188f1b6def772c21c835c9e00643ad2508f1e05e9227c4575ebf27cb"
           }
         ]
       },

@@ -17145,3 +17145,21 @@ application/registry/generation/store/FEN lineage; copied values fail at every b
 5/5 direct repairs plus strict TypeScript. No production, schema, storage, content, archive or
 protected-design byte changed. Another genuinely fresh review and the value-authority/provider
 dependencies precede either held projection; the evidence spine remains 12/14.
+
+## 2026-09-06 — provider protocol sixth fresh independent review
+
+**What landed:** a fresh executable return on [[D2956]]–[[D2959]]. The fifth repair's exact receipt
+bytes survive, but its repository/product authority rejects legal implementing/archive successors,
+accepts an arbitrary lookalike repository, ignores current source-RFC lifecycle drift and validates
+a caller-built product resource with no product root in the repository.
+
+**What changed:** `provider-protocol-register.md` remains draft and now routes a sixth author repair
+through the generic build-owned repository and staged canonical-resource authorities. No catalogue,
+register, obligation receipt, provider product, schema, storage, content, archive or protected-design
+byte changed.
+
+**Evidence/next:**
+`planning/provider-protocol-register/sixth-fresh-independent-buildability-review-2026-09-06.md`;
+`make provider-protocol-sixth-fresh-review` retains the complete chain and passes 5/5 new controls
+plus strict TypeScript. Repair the lifecycle/composition boundary, then obtain another genuinely
+fresh review before acceptance.

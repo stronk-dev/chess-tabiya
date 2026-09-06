@@ -327,14 +327,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; freshly review concept-registry, provider-protocol and provider-health repairs; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; author-repair provider-protocol's lifecycle/composition boundary, freshly review that repair plus concept-registry and provider-health, then advance provider exchange, pack-capability and longitudinal-store lanes.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Provider-health's eleventh author repair now derives one private provider/group authority, atomically reduces sealed exchange outcomes, exposes exact-cache and reason-bearing operation results, and separates monotonic from civil time; fresh review remains.",
-          "impact": "held",
-          "evidence": ["planning/provider-health-degradation/eleventh-author-repair-2026-09-06.md", "tools/d2942-provider-health-eleventh-author-repair/contract.test.ts", "rfc/provider-health-degradation.md", "rfc/README.md"],
+          "summary": "Provider-protocol's sixth fresh review preserves exact receipt bytes but returns the build boundary: legal lifecycle successors fail, current source drift is ignored, repository identity is caller-selected and the product resource is not a staged generic projection.",
+          "impact": "regressed",
+          "evidence": ["planning/provider-protocol-register/sixth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2956-provider-protocol-sixth-fresh-review/review.test.ts", "rfc/provider-protocol-register.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "provider-health-degradation.md", "digest": "sha256:01ba33a52c9fa0cf10035b509b0166e5f8628b820b9cfada74d57b76a88f3d62"}
+            {"kind": "rfc", "id": "provider-protocol-register.md", "digest": "sha256:0ea2ac36188f1b6def772c21c835c9e00643ad2508f1e05e9227c4575ebf27cb"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

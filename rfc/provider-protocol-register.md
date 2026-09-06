@@ -1,12 +1,12 @@
 # RFC: Provider-protocol shared-resource catalogue population
 
-- **Status:** draft — **fifth author repair completed on [[D2950]]–[[D2955]].** A repository-owned
-  reader now derives complete first-parent acceptance from resolved Git objects; exact accepted,
-  HEAD, index and worktree bytes remain distinct; canonical bytes reject duplicate keys and invalid
-  Unicode through the shipped RFC-8785 authority; and post-accept v1 mutation fails. `make
-  provider-protocol-fifth-author-repair` retains the complete chain and passes 6/6 direct repairs
-  plus strict TypeScript. Another genuinely fresh review and the generic bootstrap dependency
-  remain required. Implementation is unauthorized.
+- **Status:** draft — **sixth fresh independent review returned the fifth repair on [[D2956]]–[[D2959]].**
+  Exact accepted receipt bytes now survive their earlier attacks, but the reader rejects legal
+  implementing/archive successors, ignores staged source-lifecycle drift, accepts an arbitrary
+  lookalike repository and validates a caller-built resource while the staged product root is
+  absent. `make provider-protocol-sixth-fresh-review` retains the complete chain and passes 5/5
+  executable counterexamples plus strict TypeScript. Another author repair, fresh review and the
+  generic bootstrap dependency remain required. Implementation is unauthorized.
 - **Author:** Codex
 - **Created:** 2026-08-30
 - **Design refs:** none. This is repository process and changes no provider behavior or learner UX.
@@ -481,6 +481,28 @@ counterexamples. Exact evidence:
 The RFC remains draft; no descriptor, register, obligation receipt or provider product byte is
 authorized.
 
+## Sixth fresh independent return (2026-09-06)
+
+The fifth repair makes accepted receipt bytes exact, but the surrounding build authority is still
+not buildable through the lifecycle it is meant to govern:
+
+1. [[D2956]] — after observing acceptance, `scanAcceptance` permits only the literal `accepted`
+   source status. The first legal `implementing` successor throws `SOURCE_STATUS`, and moving an
+   implemented RFC into the archive becomes `ACCEPTANCE_REGRESSION`;
+2. [[D2957]] — `openRepositoryAcceptance(repoDirectory)` still accepts a raw caller path. A complete
+   independently constructed lookalike repository mints authority and validates;
+3. [[D2958]] — landing binds receipt bytes across HEAD/index/worktree but observes source-RFC status
+   only from committed history. A worktree source changed to `withdrawn` remains green before commit
+   and turns red after commit; and
+4. [[D2959]] — the candidate resource remains a caller-built plain object. The validator succeeds
+   when `packages/runtime/src/provider-protocol.ts` is absent from the repository, so no generic
+   staged canonical-resource projection owns the supposed product bytes.
+
+`make provider-protocol-sixth-fresh-review` retains all five preceding review/repair rounds and
+passes 5/5 new executable counterexamples plus the repository TypeScript contract. Exact evidence:
+`planning/provider-protocol-register/sixth-fresh-independent-buildability-review-2026-09-06.md`.
+The RFC remains draft; no catalogue, register, receipt or provider product byte is authorized.
+
 ## Open questions
 
 None for the owner. The five operations, providers and ten digest domains are existing product-RFC
@@ -488,6 +510,10 @@ semantics, not choices made by this process document.
 
 ## Changelog
 
+- 2026-09-06: sixth fresh independent review returned the fifth repair on [[D2956]]–[[D2959]]:
+  post-accept lifecycle states fail, current source drift is unobserved, repository identity remains
+  caller-selected and the product resource is not a staged generic projection. `make
+  provider-protocol-sixth-fresh-review` passes 5/5 new counterexamples plus strict TypeScript.
 - 2026-09-06: fifth author repair closes [[D2950]]–[[D2955]] at contract tier with an actual
   repository-owned first-parent reader, exact accepted/HEAD/index/worktree byte joins, canonical
   raw receipt parsing through the shared RFC-8785 authority and post-accept byte immutability.

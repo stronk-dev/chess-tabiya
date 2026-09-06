@@ -2255,3 +2255,14 @@ semantic-collectors-promotion-fifteenth-author-repair` retains the entire return
 passes 5/5 current groups plus the repository TypeScript contract. The evidence spine advances to
 genuinely fresh reviews of this repair and candidate-packet, then the value-authority/provider
 dependencies; the held pair remains unimplemented at 12/14.
+
+### 2026-09-06 foundation checkpoint — provider obligation authority returned at lifecycle boundary
+
+The sixth fresh provider-protocol review preserves the fifth repair's exact accepted receipt but
+finds that its surrounding authority cannot survive the very product lifecycle it is meant to
+authorize. Legal implementing and archive successors fail; an uncommitted withdrawn source remains
+green; an arbitrary lookalike repository can mint authority; and a caller-built resource validates
+while the product root is absent. `make provider-protocol-sixth-fresh-review` retains the complete
+chain and passes 5/5 new counterexamples plus strict TypeScript. Foundation contracts remain active
+at author repair and the generic bootstrap dependency; provider exchange, external evidence and bot
+inputs cannot treat this register as accepted.
