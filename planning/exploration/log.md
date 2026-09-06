@@ -17006,3 +17006,22 @@ current request, collector, result and receipt lineage.
 5/5 fresh counterexamples plus strict TypeScript. A bounded author repair must restore one
 non-forgeable production composition and complete current collector path before another genuinely
 fresh review. Provider/value dependencies still precede implementation; the spine stays 12/14.
+
+## 2026-09-06 — shared candidate packet thirteenth fresh buildability return
+
+**What landed:** a fresh requirements-tier review of the twelfth candidate-packet repair, with
+eight executable counterexamples registered as [[D2934]]–[[D2941]]. No product, schema, storage,
+content, archive or protected-design byte changed.
+
+**What changed:** the repaired request/lifecycle/accounting seams survive, but the current model
+still passes undeclared prior results to collectors, invents projection-local failure identity,
+lets a later caller join an abandoned generation, misdiagnoses valid-FEN request errors, counts a
+process singleton per cache entry, incompletely checks receipt joins, copies its output vocabulary
+and compiles only under a local TypeScript config weaker than the destination package's contract.
+
+**Evidence/next:**
+`planning/evidence-foundation-ux/shared-candidate-packet-thirteenth-fresh-independent-buildability-review-2026-09-06.md`;
+`make candidate-packet-thirteenth-fresh-review` retains every predecessor and passes 8/8 fresh
+counterexamples. A bounded author repair must close all eight seams in one repository-compatible
+model before another genuinely fresh review. `evidence-value-authority` remains a separate landing
+dependency; Support, bot and Review consumers remain held on this denominator.

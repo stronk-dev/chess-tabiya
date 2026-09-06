@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:c113a87c9e61ccc854ffe4431dc3927af505dada17cda66dab4e98f1a764f8cd",
+    "roadmap": "sha256:424f10ccc3beeeb39c89fe4b3e4ea8801771e5a1e2dbf3d9c63dc7308a5b9e56",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:58d67c64f1cb5ee4fd7ea54ad1e324a5c7b4c8ae87ffcea87e6eccc43120e4c1",
-    "rfcRegister": "sha256:53f5f6a54db311b14805e10936ef068bb7a27bbe634aa54a70f88db940418bd8",
+    "workState": "sha256:68fec6ee3c4fe024826b14f43775756ad331e799a3ff4b5ef59e2b703e045b39",
+    "rfcRegister": "sha256:24ddae37503aa18e860666ebdb50fdb05bae28c7c878dc3ecf4d72e6bd2542a4",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 651,
       "doing": 0,
-      "blocked": 1188,
+      "blocked": 1196,
       "done": 840,
       "refused": 3
     },
@@ -151,22 +151,22 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Repair promotion installation D2929-D2933 without deleting its current collector path; freshly review the repaired candidate packet; then land the evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+      "nextAction": "Repair promotion installation D2929-D2933 and candidate-packet authority D2934-D2941 in their complete current models; freshly review both; then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "The promotion pair's fifteenth fresh review returned a forgeable, production-unreachable installation whose checksum-only validation admits invalid documents and whose replacement deleted the current lookup/collector/result authority chain.",
+        "summary": "The candidate packet's thirteenth fresh review returned hidden collector dependencies, false typed failures, abandoned-generation rejoin, inexact accounting and receipt joins, a copied output vocabulary and a model that fails the repository compiler contract.",
         "impact": "held",
         "evidence": [
-          "planning/evidence-foundation-ux/semantic-collectors-promotion-fifteenth-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d2929-semantic-collectors-promotion-fifteenth-fresh-review/review.test.ts",
-          "rfc/semantic-collectors.md",
+          "planning/evidence-foundation-ux/shared-candidate-packet-thirteenth-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d2934-candidate-packet-thirteenth-fresh-review/review.test.ts",
+          "rfc/shared-candidate-evidence-packet.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "semantic-collectors.md",
-            "digest": "sha256:ced310d35a3f21ea57d5072e72128b9357a85da6941e766decbafad89bc3ff19"
+            "id": "shared-candidate-evidence-packet.md",
+            "digest": "sha256:2634643215ab143cecf08d0882f2469bad49f01f1a341164cbd21bd587cb46a3"
           }
         ]
       },

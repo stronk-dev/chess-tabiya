@@ -1,13 +1,14 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — returned by twelfth fresh independent review on [[D2885]]–[[D2891]].** The
-  eleventh repair's composition is real, but the service accepts a crossed request receipt, carries
-  queue deadlines into active work, exposes unreachable collector/non-terminal failures, measures
-  a smaller predecessor graph than the cached receipt, fails to refresh projected-hit recency and
-  re-executes loose-piece chess logic to reconstruct total outcomes. `make
-  candidate-packet-twelfth-fresh-review` retains the predecessor chain and passes 7/7
-  reproductions. Author repair, another genuinely fresh review and the value-authority dependency
-  precede implementation. The maintained operation
+- **Status:** **draft — returned by thirteenth fresh independent review on [[D2934]]–[[D2941]].**
+  The twelfth repair closes its seven named seams, but its current model passes undeclared memo
+  authority to every collector, invents projection precision for collector-wide throws, lets new
+  callers join an irreversibly abandoned job, mislabels closed-request errors as invalid FEN,
+  counts the process manifest once per cache entry, omits exact receipt joins, hand-copies the
+  child-reading vocabulary and does not compile under the repository's actual optional-property
+  rules. `make candidate-packet-thirteenth-fresh-review` retains the full predecessor chain and
+  passes 8/8 fresh counterexamples. Author repair, another genuinely fresh review and the
+  value-authority dependency precede implementation. The maintained operation
   parses the closed request, derives the complete seven-term factual identity, gives direct and
   projected narrow receipts the same dependency-closed graph, derives cache identity internally,
   admits only one privately asserted whole receipt, seals below already-frozen ancestors and
@@ -2358,6 +2359,35 @@ LRU eviction; and the execution record retains one total result per declared pro
 production implementation. Another genuinely fresh independent review and the named
 `evidence-value-authority` dependency still gate both.
 
+## Thirteenth fresh independent return (2026-09-06)
+
+The twelfth checkpoint retains its repaired request, lifecycle, outcome, terminal, accounting and
+LRU behavior, but a genuinely fresh executable review returns the current model on eight new
+authority seams:
+
+1. [[D2934]] — sync and cooperative execution give every collector the full prior memo instead of
+   its declared dependency image, reopening hidden order dependencies;
+2. [[D2935]] — a collector-wide exception is attributed to the first output projection of a
+   multi-output collector, inventing precision the operation does not possess;
+3. [[D2936]] — after the final waiter cancels an active job, an equal later request can join the
+   already-aborted generation and receive `failed:service_closed` from an open service;
+4. [[D2937]] — unknown scope and extra-key failures on a valid FEN are both typed as `invalid_fen`;
+5. [[D2938]] — per-entry cache measurement walks the public receipt and charges the process-wide
+   manifest singleton once for every entry despite the RFC's explicit exclusion;
+6. [[D2939]] — receipt assertion checks only seals, digest and counts, not legal-map authority,
+   flattened legal-move identity, candidate-row identity, UCI set equality or child FEN;
+7. [[D2940]] — the twenty child-reading keys are copied locally and the positive control derives
+   its expected set from that same copy; and
+8. [[D2941]] — the author model passes a private strict config only because it omits the
+   repository's `exactOptionalPropertyTypes`; the destination compiler rejects both optional timer
+   assignments with TS2412.
+
+`make candidate-packet-thirteenth-fresh-review` retains every predecessor review and repair and
+passes 8/8 fresh counterexamples. Exact receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-thirteenth-fresh-independent-buildability-review-2026-09-06.md`.
+The RFC remains draft. A bounded author repair, another genuinely fresh independent review and the
+named `evidence-value-authority` dependency still precede implementation.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -2403,6 +2433,12 @@ production implementation. Another genuinely fresh independent review and the na
    `CandidatePopulationService` (§6.0).
 
 ## Ledger rows
+
+The current return is registered in the shared ledger as [[D2934]]–[[D2941]]: dependency-specific
+memo authority, honest collector-level failure identity, abandoned-generation isolation, exact
+request diagnostics, service-scope singleton accounting, complete receipt joins, independently
+derived child-reading vocabulary and repository compiler compatibility. These rows are blocking
+RFC work; none authorizes production implementation.
 
 *(Proposed — ids assigned at landing; unnumbered per [[D1503]], which retires the D1130 head-stating
 convention. Historical note, since §0's correction 7 turns on it: the head at the drafting commit
@@ -2499,6 +2535,12 @@ D1354; corrected here per §0.7.)*
   it names the seven checks that cannot catch the thing being asserted.
 
 ## Changelog
+
+- 2026-09-06 — thirteenth fresh independent review returned the twelfth repair on [[D2934]]–
+  [[D2941]]. Hidden memo dependencies, false projection attribution, abandoned-job rejoin, invalid
+  request misclassification, repeated singleton accounting, incomplete receipt joins, a copied
+  output vocabulary and a weakened local TypeScript contract reproduce under `make
+  candidate-packet-thirteenth-fresh-review` (8/8). Implementation remains unauthorized.
 
 - 2026-09-06 — twelfth fresh independent review returned the eleventh repair on [[D2885]]–[[D2891]].
   Crossed receipts, stale queue timers, unreachable failures, vacuous terminal guarding, incomplete

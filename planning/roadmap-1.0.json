@@ -345,14 +345,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Repair promotion installation D2929-D2933 without deleting its current collector path; freshly review the repaired candidate packet; then land the evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+        "nextAction": "Repair promotion installation D2929-D2933 and candidate-packet authority D2934-D2941 in their complete current models; freshly review both; then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "The promotion pair's fifteenth fresh review returned a forgeable, production-unreachable installation whose checksum-only validation admits invalid documents and whose replacement deleted the current lookup/collector/result authority chain.",
+          "summary": "The candidate packet's thirteenth fresh review returned hidden collector dependencies, false typed failures, abandoned-generation rejoin, inexact accounting and receipt joins, a copied output vocabulary and a model that fails the repository compiler contract.",
           "impact": "held",
-          "evidence": ["planning/evidence-foundation-ux/semantic-collectors-promotion-fifteenth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2929-semantic-collectors-promotion-fifteenth-fresh-review/review.test.ts", "rfc/semantic-collectors.md", "rfc/README.md"],
+          "evidence": ["planning/evidence-foundation-ux/shared-candidate-packet-thirteenth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2934-candidate-packet-thirteenth-fresh-review/review.test.ts", "rfc/shared-candidate-evidence-packet.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "semantic-collectors.md", "digest": "sha256:ced310d35a3f21ea57d5072e72128b9357a85da6941e766decbafad89bc3ff19"}
+            {"kind": "rfc", "id": "shared-candidate-evidence-packet.md", "digest": "sha256:2634643215ab143cecf08d0882f2469bad49f01f1a341164cbd21bd587cb46a3"}
           ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."
