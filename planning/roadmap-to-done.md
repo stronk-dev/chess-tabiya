@@ -573,6 +573,16 @@ plus lifecycle typecheck. Fresh review, the owner-tier component amendment and s
 still gate implementation. Receipt:
 `planning/platform-alignment/evidence-presentation/fifth-author-repair-2026-09-04.md`.
 
+The 2026-09-06 sixth fresh evidence-presentation review returns that repair on [[D3035]]–[[D3041]].
+The whole-resource digest bypasses the shared canonical serializer; the citation parser and public
+question issuer accept caller semantics; abstention and structure controls compare descriptions
+instead of consuming their named operations; malformed committed-edge UCI is accepted; and the
+eight-operation scope fence never validates source pre/postimages. `make
+evidence-presentation-sixth-fresh-review` retains all 31 author assertions and passes 7/7 fresh
+attacks. The stable-board milestone therefore still has a presentation contract, not learner-ready
+modules. Receipt:
+`planning/platform-alignment/evidence-presentation/sixth-fresh-independent-buildability-review-2026-09-06.md`.
+
 The same-day sixth held-promotion author repair closes [[D2603]]–[[D2607]] at contract tier. One
 maintained target now retains every earlier source/FEN/provider gate; one registered factory and
 one sealed total result own the output; category, DTZ, precise DTZ, perspective and FEN come from

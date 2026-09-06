@@ -363,13 +363,13 @@
         "state": "active",
         "capabilities": ["accessibility", "support", "rehearsal"],
         "dependsOn": ["evidence-to-consumer-spine"],
-        "nextAction": "Keep the shipped stable board shell fixed while completing the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
+        "nextAction": "Complete and freshly review the bounded evidence-presentation repair, retain the shipped stable board shell, then land the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
         "latestCheckpoint": {
-          "at": "2026-08-31",
-          "summary": "The stable board region, desktop rail, tablet band, phone overlay and one-expanded Support/Branches/Actions queue ship; module seats and presets remain open.",
-          "impact": "advanced",
-          "evidence": ["rfc/play-composition.md", "docs/play-composition.md", "planning/play-composition/plan.md"],
-          "anchors": [{"kind": "rfc", "id": "play-composition.md", "digest": "sha256:726d752b1a23dda4cb2fdc874c85482f6d8537454757f3453d1035bea7e63a61"}]
+          "at": "2026-09-06",
+          "summary": "Evidence presentation's sixth fresh review returns the fifth repair: the component vocabulary and post-P population survive, but canonical resource identity, citation semantics, abstention operation ownership, workflow-owned questions, structure witnesses, committed-edge UCI and the source fence remain unbuildable.",
+          "impact": "regressed",
+          "evidence": ["planning/platform-alignment/evidence-presentation/sixth-fresh-independent-buildability-review-2026-09-06.md", "tools/d3035-evidence-presentation-sixth-fresh-review/review.test.ts", "rfc/evidence-presentation.md", "rfc/README.md", "docs/play-composition.md"],
+          "anchors": [{"kind": "rfc", "id": "evidence-presentation.md", "digest": "sha256:458cde5a02a1aa7da26f1c53ed9de7b9582bd9adf46adae762bc301517e1745d"}]
         },
         "exit": "Quiet, Guided, Support, Drill, Review, Campaign, Academy and Stream open useful by default; the board never shrinks or moves; every primitive remains available under Advanced."
       },

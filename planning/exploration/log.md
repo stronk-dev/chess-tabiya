@@ -17362,3 +17362,22 @@ catalog, route, roster, client, tournament or content byte changed.
 plus TypeScript checkpoints. Complete one bounded authority repair, then obtain another genuinely
 fresh review and land the accepted current provider-health and shared-resource dependencies before
 implementation.
+
+## 2026-09-06 — Evidence presentation sixth fresh independent return
+
+**What landed:** a fresh executable return on [[D3035]]–[[D3041]]. The fourteen-component
+vocabulary, 112-pair post-P population and all 31 accumulated author assertions survive; the fifth
+repair's seven authority claims do not.
+
+**What changed:** `evidence-presentation.md` remains draft. Resource identity bypasses the shared
+RFC-8785 serializer; citation semantics are arbitrary strings; abstention reasons still come from
+projection copies; any importer can issue a genuine question; named-structure match/witness remains
+symbol text beside production's empty squares; malformed committed UCI is accepted; and the P fence
+does not validate its declared source pre/postimages. No production, schema, content, API, client,
+component, module, seat, preset or protected-design byte changed.
+
+**Evidence/next:**
+`planning/platform-alignment/evidence-presentation/sixth-fresh-independent-buildability-review-2026-09-06.md`;
+`make evidence-presentation-sixth-fresh-review` retains every predecessor and passes 7/7 fresh
+groups. Complete one bounded sixth author repair, obtain another genuinely fresh review, and retain
+[[D1672]]/[[D2401]] as independent acceptance blockers.

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:bf9d27b02bbe2f686c693c96017c47996f6699a9348260548c98adb5be6bff86",
+    "roadmap": "sha256:57b1cb8628168297f0c68ffad059eb2f734b13a1ce717a3fe76b3ec4bdc0721d",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:5b0620f521922165093443b6481b342ddd5307e413059191dbbfab5bef83d767",
-    "rfcRegister": "sha256:c33ece587bd10949c6c22e3fc6c4b4391c47dd67e15138425138075d47d46152",
+    "workState": "sha256:d7d1666b06909c0d2a0a12a962b44d8bf60d0e75adf3c6764a05fd091c182b3f",
+    "rfcRegister": "sha256:f1caa0623e58ee2cd4ad74ecb9b7b1f0f89204cb09e550f2538feec43ad0beef",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -30,9 +30,9 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 651,
+      "todo": 652,
       "doing": 0,
-      "blocked": 1285,
+      "blocked": 1293,
       "done": 842,
       "refused": 3
     },
@@ -184,21 +184,23 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "Keep the shipped stable board shell fixed while completing the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
+      "nextAction": "Complete and freshly review the bounded evidence-presentation repair, retain the shipped stable board shell, then land the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
       "latestCheckpoint": {
-        "at": "2026-08-31",
-        "summary": "The stable board region, desktop rail, tablet band, phone overlay and one-expanded Support/Branches/Actions queue ship; module seats and presets remain open.",
-        "impact": "advanced",
+        "at": "2026-09-06",
+        "summary": "Evidence presentation's sixth fresh review returns the fifth repair: the component vocabulary and post-P population survive, but canonical resource identity, citation semantics, abstention operation ownership, workflow-owned questions, structure witnesses, committed-edge UCI and the source fence remain unbuildable.",
+        "impact": "regressed",
         "evidence": [
-          "rfc/play-composition.md",
-          "docs/play-composition.md",
-          "planning/play-composition/plan.md"
+          "planning/platform-alignment/evidence-presentation/sixth-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d3035-evidence-presentation-sixth-fresh-review/review.test.ts",
+          "rfc/evidence-presentation.md",
+          "rfc/README.md",
+          "docs/play-composition.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "play-composition.md",
-            "digest": "sha256:726d752b1a23dda4cb2fdc874c85482f6d8537454757f3453d1035bea7e63a61"
+            "id": "evidence-presentation.md",
+            "digest": "sha256:458cde5a02a1aa7da26f1c53ed9de7b9582bd9adf46adae762bc301517e1745d"
           }
         ]
       },

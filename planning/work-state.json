@@ -24654,6 +24654,86 @@
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-policy.md"
+    },
+    {
+      "id": "D3033",
+      "state": "todo",
+      "sourceGlyph": "⚖️",
+      "sourceDigest": "sha256:2808691a3576d69e100b9817d963bfc600087bd5448fe4b438abab5f1f231427",
+      "uxItems": [],
+      "owner": "evidence-foundation"
+    },
+    {
+      "id": "D3034",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:8c243cc9d34a2e094e9c7bda5775f8ca190f2c289a4e93090498e418db65b670",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D3035",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6e81f2f9bc1df2d76e456278d13ce82147de18c39d707ca575a41c78411eb425",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D3036",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7f99758c60bdc04f99d02529270c68b8f9170e19e92ef7cea1b8b9df51a9294c",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D3037",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:407e4abc18875b92a448329b7e736da6f740b1aa453081a16a7fa22203bd5b58",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D3038",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:fa56928dd2c1ce18ae868da7d5d8e392bf1059466112de6f88e286fd469667ed",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D3039",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:118fc0b6356f285f9db5656f1b6b9687b39c116332e5c8200504710ab8c92f23",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D3040",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5592b47b285a9f569ff561a00924a8b6249610d23be45f91adbbc7b50c5cd189",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D3041",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:adbb84fd17285e92b317caf03038b99a917b132388e99bbd5b565794fa26bd28",
+      "uxItems": [],
+      "owner": "assistance-and-presentation",
+      "blocker": "rfc:evidence-presentation.md"
     }
   ]
 }

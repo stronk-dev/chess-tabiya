@@ -1,13 +1,12 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft — **FIFTH AUTHOR REPAIR 2026-09-04 on [[D2436]]–[[D2441]] and
-  [[D2644]]; fresh independent review required.** The repaired contract hashes the complete
-  attribution resource image, requires non-empty revision metadata, derives terminal absence
-  reasons from the owning operation, makes registered questions non-copyable at runtime, derives
-  named-structure witnesses from the same expression as the match, and uses canonical UCI as the
-  Explorer edge identity. `make evidence-presentation-fifth-author-repair` passes all five author
-  layers (31 assertions plus lifecycle typecheck). [[D1672]] and [[D2401]] remain independent
-  blockers. No implementation is authorised.
+- **Status:** draft — **RETURNED BY SIXTH FRESH INDEPENDENT REVIEW 2026-09-06 on
+  [[D3035]]–[[D3041]]; bounded sixth author repair required.** The fifth repair retains its
+  31 author assertions, but canonical resource identity, citation semantics, operation-derived
+  abstention, workflow-owned question issuance, atomic named-structure witnesses, committed-edge
+  UCI parsing and the eight-operation source fence remain unbuildable. `make
+  evidence-presentation-sixth-fresh-review` reproduces all seven failures while retaining every
+  predecessor. [[D1672]] and [[D2401]] remain independent blockers. No implementation is authorised.
   Landing remains three checkpoints (§2.1): manifest truth, sealed current consumers, then
   module/hint seats.
   Prior amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
@@ -243,6 +242,30 @@ new sixth-arm harness reads the real `CorpusResult` union from the server bounda
 server/manifest mismatch fails independently of the plan's copy. This is author repair, not
 acceptance: another fresh independent review must attack all seven repaired seams and the exact
 eight-operation P boundary before implementation.
+
+## Sixth fresh independent return (2026-09-06)
+
+The fifth repair retains all 31 author assertions, but a fresh attack reproduces seven remaining
+buildability failures:
+
+1. [[D3035]] — source-attribution identity uses a private serializer that accepts lone surrogates
+   and non-finite numbers refused by the shared RFC-8785 authority;
+2. [[D3036]] — the complete citation parser accepts arbitrary content kinds, bindings, source ids
+   and licences as non-empty strings, including generated advice;
+3. [[D3037]] — abstention rows still derive from projection-local reason copies plus a one-off
+   Explorer synonym branch rather than an exported operation result;
+4. [[D3038]] — any importer can mint the exact WeakSet-backed question without an owning workflow
+   request or decision stamp;
+5. [[D3039]] — the declared named-structure expression and atomic witness operation remain symbol
+   strings; the author control executes an unrelated toy evaluator while production emits empty
+   squares;
+6. [[D3040]] — malformed `committedMoveUci` is accepted as a valid non-match; and
+7. [[D3041]] — the eight-operation P fence checks ids/counts but not resolved sources or executable
+   preimage/postimage assertions.
+
+`make evidence-presentation-sixth-fresh-review` retains every predecessor and passes 7/7 fresh
+review arms. Exact evidence and repair requirements are in the sixth fresh-review dossier. This is
+an author return: no implementation or protected-design change is authorised.
 
 ## Summary
 
@@ -1746,6 +1769,13 @@ Proposed — ids assigned at landing; head was **D1434** at drafting.
 
 ## Changelog
 
+- 2026-09-06 — returned by sixth fresh independent buildability review on [[D3035]]–[[D3041]].
+  Resource serialization, citation semantics, operation-result ownership, question issuance,
+  structure match/witness execution, committed-edge UCI and Checkpoint-P source seams remain
+  unbuildable despite the retained fifth-repair controls. `make
+  evidence-presentation-sixth-fresh-review` passes 7/7. Exact return:
+  `planning/platform-alignment/evidence-presentation/sixth-fresh-independent-buildability-review-2026-09-06.md`.
+  No implementation is authorised.
 - 2026-09-04 — fifth author repair for [[D2436]]–[[D2441]] and [[D2644]]. Canonical
   whole-resource hashing, mandatory citation revision, operation-derived terminal reasons,
   WeakSet-backed question authority, single-expression structure witnesses and canonical Explorer
