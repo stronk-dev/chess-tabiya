@@ -23835,6 +23835,78 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:shared-candidate-evidence-packet.md"
+    },
+    {
+      "id": "D2942",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:82f35f5967d19cac53877fef82afd055868a9c8b263b7c8fd9f1947c2baad260",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2943",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:7fcbd5e3b96dcae5d1955424220e975a260541f27ab309ad8120c2fc076c3c25",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2944",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6f705ab06edc7d8ff6ba69f58e096c270b7dab45356a01c1b16b5b38f28cbf51",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2945",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:08942ae2b98ee9e386b64f0fc562de6fed7747bb2af713a9d547ecfeeb8bba83",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2946",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a6403a0e767ff5af2e1ceb0faad094b5f23e0a73e26f8dde8c18e32bf702b310",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2947",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b76f381ec15a9f380ab7e6de12176606a47f908cd4fd9f6eb90e36c23b86f83f",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2948",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4d1a292dc03b3c08c6bfce4206d786bb117a48d03bc14b6f410aea0d9756612e",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2949",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:1d0a9c50e10e79dbe4f54e24d3ff15ef893d7a82ff62c7490ac1bc11da3d535f",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "blocker": "rfc:provider-health-degradation.md"
     }
   ]
 }

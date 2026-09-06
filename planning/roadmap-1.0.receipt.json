@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:424f10ccc3beeeb39c89fe4b3e4ea8801771e5a1e2dbf3d9c63dc7308a5b9e56",
+    "roadmap": "sha256:b6c09480c13cdd9aad6b6165341830af993d83ff0b130c7e3410fbe65df446cb",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:68fec6ee3c4fe024826b14f43775756ad331e799a3ff4b5ef59e2b703e045b39",
-    "rfcRegister": "sha256:24ddae37503aa18e860666ebdb50fdb05bae28c7c878dc3ecf4d72e6bd2542a4",
+    "workState": "sha256:d78ee895a5bf18ea670a192e5751fc85f35124154b6206f50a9c3f9f5cb396ea",
+    "rfcRegister": "sha256:99855d7ae74f0d2ca58f87168096bd05aff8b4aaafce6c5d439534e80d3e7d27",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 651,
       "doing": 0,
-      "blocked": 1196,
+      "blocked": 1204,
       "done": 840,
       "refused": 3
     },
@@ -115,22 +115,22 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; repair concept-registry D2923-D2928 and re-review it; freshly review the provider-protocol and provider-health repairs; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; repair concept-registry D2923-D2928; repair provider-health D2942-D2949; freshly review provider-protocol's fourth repair; then advance provider exchange, pack-capability and longitudinal-store lanes.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "Concept-registry's fifth fresh review returned the startup authority on six executable seams: forgeable readiness, raw transaction escape, unvalidated pack snapshots, optional restart receipts, an untraversable real Svelte entry and discarded values counted as consumption.",
+        "summary": "Provider-health's eleventh fresh review returned the tenth repair on eight executable seams: copied group membership, public predecessor/coordinator/reset authority, unsealed settlement truth, incomplete exact-cache and reason-bearing availability, and monotonic time published as civil time.",
         "impact": "held",
         "evidence": [
-          "planning/concept-registry/fifth-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d2923-concept-registry-fifth-fresh-review/review.test.ts",
-          "rfc/concept-registry.md",
+          "planning/provider-health-degradation/eleventh-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d2942-provider-health-eleventh-fresh-review/review.test.ts",
+          "rfc/provider-health-degradation.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "concept-registry.md",
-            "digest": "sha256:019b2262b476b692556f3fe9c58231f55c2345dade790bcc0e3804876fcff517"
+            "id": "provider-health-degradation.md",
+            "digest": "sha256:f6c652fd47c19ca25694eeeacd109546c691e206659116a181c7db38679d356d"
           }
         ]
       },
@@ -1240,7 +1240,7 @@
         ],
         "api": [
           "partial",
-          "Health exists, but the seventh provider-health review proves the newest replacement regresses configured identity, backoff, exact-cache provenance, pipeline execution and prior checkpoint exports; a composed repair, fresh review and production route integration remain, alongside readiness, metrics policy and production-boundary coverage."
+          "Health exists, but the eleventh provider-health review proves the newest repair still has split group and predecessor authorities, forgeable reset and settlement paths, incomplete exact-cache and reason-bearing availability arms, and a mixed monotonic/civil clock; a bounded repair, fresh review and production route integration remain, alongside readiness, metrics policy and production-boundary coverage."
         ],
         "experience": [
           "blocked",
@@ -1256,7 +1256,7 @@
         ],
         "verification": [
           "partial",
-          "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof must be separate named tiers; the seventh provider-health review is now the verify-owned tip and executes six replacement-regression attacks."
+          "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof remain separate named tiers; the eleventh provider-health review is now the verify-owned tip and executes eight fresh authority and projection attacks."
         ],
         "release": [
           "blocked",

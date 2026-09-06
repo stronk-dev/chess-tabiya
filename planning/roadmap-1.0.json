@@ -293,11 +293,11 @@
       "completion": {
         "evidence": ["not_applicable", "This slice verifies evidence machinery but creates no chess truth."],
         "state": ["partial", "Schema/register/work/intent checks and three workflows exist; deployment now has an executable third contract repair for mounted config, receipts, TLS, readiness and durable migration, but production release state is not implemented."],
-        "api": ["partial", "Health exists, but the seventh provider-health review proves the newest replacement regresses configured identity, backoff, exact-cache provenance, pipeline execution and prior checkpoint exports; a composed repair, fresh review and production route integration remain, alongside readiness, metrics policy and production-boundary coverage."],
+        "api": ["partial", "Health exists, but the eleventh provider-health review proves the newest repair still has split group and predecessor authorities, forgeable reset and settlement paths, incomplete exact-cache and reason-bearing availability arms, and a mixed monotonic/civil clock; a bounded repair, fresh review and production route integration remain, alongside readiness, metrics policy and production-boundary coverage."],
         "experience": ["blocked", "Install, first boot, engine degradation, backup, restore, update, rollback, and failure diagnostics are not one guided operator workflow."],
         "defaults": ["partial", "Compose boots with mock and insecure-cookie development defaults; safe public and private profiles are not complete."],
         "content": ["blocked", "Runtime content allow-list, licence notices, SBOM, model/runtime rights, and multi-architecture asset tiers remain."],
-        "verification": ["partial", "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof must be separate named tiers; the seventh provider-health review is now the verify-owned tip and executes six replacement-regression attacks."],
+        "verification": ["partial", "Unit contracts, real-content acceptance, browser smoke, accessibility matrices, production-boundary smoke, migrations, and release proof remain separate named tiers; the eleventh provider-health review is now the verify-owned tip and executes eight fresh authority and projection attacks."],
         "release": ["blocked", "A clean machine can install a digest-pinned release, run it safely, observe degradation, upgrade and roll back without data loss."]
       }
     }
@@ -327,14 +327,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; repair concept-registry D2923-D2928 and re-review it; freshly review the provider-protocol and provider-health repairs; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; repair concept-registry D2923-D2928; repair provider-health D2942-D2949; freshly review provider-protocol's fourth repair; then advance provider exchange, pack-capability and longitudinal-store lanes.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Concept-registry's fifth fresh review returned the startup authority on six executable seams: forgeable readiness, raw transaction escape, unvalidated pack snapshots, optional restart receipts, an untraversable real Svelte entry and discarded values counted as consumption.",
+          "summary": "Provider-health's eleventh fresh review returned the tenth repair on eight executable seams: copied group membership, public predecessor/coordinator/reset authority, unsealed settlement truth, incomplete exact-cache and reason-bearing availability, and monotonic time published as civil time.",
           "impact": "held",
-          "evidence": ["planning/concept-registry/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2923-concept-registry-fifth-fresh-review/review.test.ts", "rfc/concept-registry.md", "rfc/README.md"],
+          "evidence": ["planning/provider-health-degradation/eleventh-fresh-independent-buildability-review-2026-09-06.md", "tools/d2942-provider-health-eleventh-fresh-review/review.test.ts", "rfc/provider-health-degradation.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "concept-registry.md", "digest": "sha256:019b2262b476b692556f3fe9c58231f55c2345dade790bcc0e3804876fcff517"}
+            {"kind": "rfc", "id": "provider-health-degradation.md", "digest": "sha256:f6c652fd47c19ca25694eeeacd109546c691e206659116a181c7db38679d356d"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

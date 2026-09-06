@@ -17025,3 +17025,23 @@ and compiles only under a local TypeScript config weaker than the destination pa
 counterexamples. A bounded author repair must close all eight seams in one repository-compatible
 model before another genuinely fresh review. `evidence-value-authority` remains a separate landing
 dependency; Support, bot and Review consumers remain held on this denominator.
+
+## 2026-09-06 — provider health eleventh fresh buildability return
+
+**What landed:** a fresh requirements-tier review of the tenth provider-health repair, with eight
+executable counterexamples registered as [[D2942]]–[[D2949]]. No product, schema, storage, content,
+archive or protected-design byte changed.
+
+**What changed:** the prior seven fixes survive, but the composed checkpoint still has two
+provider/group maps; public predecessor, coordinator-registration and generation-reset authorities;
+caller-authored group settlement; no request-specific `cached_exact_only` operation arm; an
+incomplete reason-bearing client wire shape; and one clock operand falsely serving monotonic and
+civil time.
+
+**Evidence/next:**
+`planning/provider-health-degradation/eleventh-fresh-independent-buildability-review-2026-09-06.md`;
+`make provider-health-eleventh-fresh-review` retains the complete chain and passes 8/8 fresh
+counterexamples plus repository-compatible TypeScript. A bounded author repair must make one
+private declaration-derived registry/coordinator/exchange authority and one complete operation wire
+result before another genuinely fresh review. Provider protocol and exchange still precede either
+implementation checkpoint.

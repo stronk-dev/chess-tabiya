@@ -1,10 +1,12 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** draft — tenth author repair completed on [[D2912]]–[[D2915]] and adjacent
-  [[D2917]]–[[D2919]]. `make provider-health-tenth-author-repair` retains the complete chain and
-  passes 8/8 direct/composition groups plus strict TypeScript. Another genuinely fresh review
-  remains mandatory; neither implementation checkpoint is authorized before acceptance and the
-  provider-protocol/exchange prerequisites.
+- **Status:** **draft — RETURNED by eleventh fresh independent review on [[D2942]]–[[D2949]].**
+  The tenth repair's seven fixes survive, but group membership is copied, predecessor mutation and
+  coordinator registration/reset are public, group settlement accepts caller-authored truth, the
+  exact-cache operation arm and reason-bearing wire shape are incomplete, and monotonic duration is
+  published as civil time. `make provider-health-eleventh-fresh-review` retains the complete chain
+  and passes 8/8 fresh counterexamples. A bounded author repair, another genuinely fresh review and
+  the provider-protocol/exchange prerequisites precede either implementation checkpoint.
 - **Author:** Codex on the owner's O13 Choice-C ruling
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
@@ -1137,6 +1139,32 @@ reproductions, then passes 8/8 direct/composition groups plus strict TypeScript.
 evidence, not acceptance or production implementation; another genuinely fresh review remains
 required.
 
+## Eleventh fresh independent return (2026-09-06)
+
+The tenth repair closes its named cache/time/group/recovery seams, but the composed authority is
+returned on eight new boundaries:
+
+1. [[D2942]] — `GROUP_BY_INSTANCE` is a second partial hand map rather than a derivation of the
+   canonical provider declarations;
+2. [[D2943]] — public `registry.prior()` permits health/generation mutation outside wrapper revision,
+   configured-generation and coordinator authority; a snapshot at `g2` can receive an asserted
+   release generation image at `g1`;
+3. [[D2944]] — public coordinator registration accepts a coordinator owned by another registry;
+4. [[D2945]] — public `generationChanged()` clears a live rate-limit block with no generation or
+   registry-state transition;
+5. [[D2946]] — coordinator settlement accepts a caller enum unrelated to any sealed provider
+   exchange, so real instance failure and fake group success can coexist;
+6. [[D2947]] — the composed operation result cannot represent the promised request-specific
+   `cached_exact_only` arm;
+7. [[D2948]] — the projection exposes singular identity and omits the required block/unavailable
+   reasons from the normative operation-availability wire shape; and
+8. [[D2949]] — the monotonic process clock is converted directly into display civil time.
+
+`make provider-health-eleventh-fresh-review` retains every predecessor review and repair and passes
+8/8 fresh counterexamples plus repository-compatible TypeScript. Exact receipt:
+`planning/provider-health-degradation/eleventh-fresh-independent-buildability-review-2026-09-06.md`.
+The RFC remains draft and neither implementation checkpoint is authorized.
+
 ## Implementation plan
 
 **Staged dependency rule ([[D2364]]).** This RFC may remain `implementing` across two checked
@@ -1360,6 +1388,18 @@ bot-private health projection.
 47. [[D2919]] The snapshot-facing group projection and admission coordinator share the exact
     5/15/60-second repeated-transient sequence. The second transient failure blocks both for fifteen
     seconds; success or generation change resets the sequence.
+48. [[D2942]]–[[D2944]] One private composition derives provider/group membership from
+    `PROVIDER_INSTANCE_DECLARATIONS`, owns coordinator construction and exposes no predecessor
+    registry. A copied map, public/cross-registry coordinator or direct predecessor mutation fails.
+49. [[D2945]]–[[D2946]] Group reset and settlement consume the exact registry-owned generation
+    transition or sealed provider exchange. A same-generation reset, plain success enum,
+    wrong-member result or contradictory health/group outcome fails before state changes.
+50. [[D2947]]–[[D2948]] One strict `ProviderOperationAvailability` parser/projector supplies the
+    normative population/reason fields, and only the atomic exact-key resolution can return
+    `cached_exact_only`. Request-free counts, other-request hits and reasonless arms fail.
+51. [[D2949]] Snapshot construction receives monotonic and civil-clock operands separately.
+    Changing civil time changes display bytes only; changing monotonic time can change retry/expiry
+    state but is never interpreted as Unix epoch time.
 
 ## Falsifiers and negative fixtures
 
@@ -1487,6 +1527,12 @@ new able-to-fail behavioral groups plus strict TypeScript, and remains an author
 than implementation or review.
 
 ## Changelog
+
+- 2026-09-06 — eleventh fresh independent review returned the tenth repair on [[D2942]]–
+  [[D2949]]. A copied group map, public predecessor/coordinator/reset authorities, unsealed group
+  settlement, missing exact-cache operation result, incomplete reason-bearing wire projection and
+  conflated civil/monotonic clocks reproduce under `make provider-health-eleventh-fresh-review`
+  (8/8 plus repository-compatible TypeScript). Neither implementation checkpoint is authorized.
 
 - 2026-09-06 — ninth author repair closed [[D2869]]–[[D2873]] at contract tier. Concurrent equal
   snapshots share revision/time-state authority; cache keys and local-domain settlements are
