@@ -506,3 +506,28 @@ with implementations complete**. Four carry the same discharge, *production-modu
 all four point at `learner-modules`, which is blocked on **draft `module-registration.md`**. That
 draft has sat since 2026-08-24. It is the keystone under codex's finished work and the presentation
 layer the owner has been missing. A bounded repair is running against it now.
+
+## The keystone claim was wrong — [[D3065]]–[[D3067]], 2026-09-07
+
+**Landing `module-registration.md` does NOT free the four awaiting RFCs.** Measured against the
+205-row binding plan versus each discharge's literal text, **nine ids are uncovered**:
+
+| discharge | covered | gap |
+|---|---|---|
+| `exact-legal-mobility` D1 | **0 / 1** | `rules.mobility.reading.legal_moves@1` appears **zero times** in the binding plan |
+| `runtime-opening-identity` D1 | 1 / 3 | `catalogue_membership` is a derivation input, not a binding; `deepest_reached` absent |
+| `breadth-collectors` D1 | 12 / 18 | six ids neither bound nor refused |
+| `tactical-collectors` D1 | 28 / 30 | two are deliberate refusals, unrecorded upstream, while D1 says *every* |
+
+**The `exact-legal-mobility` gap is the one to feel.** Its discharge is specific enough to be a
+one-line grep — *"compile `legal_moves@1` into the selected-square/requested-sight module"* — and it
+went unchecked through **ten review rounds**.
+
+**This is the whole unblock and it is small**: nine acceptance rows, or an explicit refusal
+negotiated with each upstream owner. Not a review round. Also note every one of the 205 binding rows
+is `blocked_dependencies` / `requirements_only`, so **acceptance alone authorises no binding commit**
+— the rows must be closed for the four to move.
+
+Secondary blocker: §2.5.0 is marked *"must not be implemented"* while holding the module query
+route, request union, boundary validations, decision stamp and Review paging that A16/A19/A20 assert
+against — because its withdrawal names a **heading range** rather than a **set of clauses**.
