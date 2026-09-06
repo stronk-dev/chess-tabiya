@@ -357,7 +357,7 @@ does not invent another registry.
 | evidence-to-move conditional selector | **refused as a standalone base and as the measured guard composition**: proper score improved, severe-tail/guard-retention gates failed | evidence signal remains valid for Support/Review/drills; this fitted selector cannot register a bot |
 | minor-piece ×4 and central-destination ×4 | **measured controlled-divergence pass**: +11.91/+10.27 pp; all safety/retention clauses pass | full-calibration candidates only; no profile id, name, card or launch-floor membership yet |
 | long-move ×4, piece-repeat ×0.25, rim avoidance ×0.25, capture/check ×4 and rank advance ×3 | **refused at the exact global transform**: +7.67/+2.20/+5.89/+4.80/+0.40/+3.47 pp | primitives remain available to evidence/Review/drills/style; none registers as a bot trait |
-| king activity | **population blocked**: the fixed corpus has zero endgame cells | requires an endgame population before any screen |
+| global endgame `king_move` ×4 after exact root-WDL guard | **refused at the exact global transform**: +6.47 pp on 580 eligible cells; diagnostic ×8 reaches +9.51 pp; post-guard WDL-worsening mass is zero | literal king-move evidence remains shared; no bot trait, profile or human-like claim; a phase/outcome-specific successor is a new preregistered mechanism |
 | clock/history behavior and phase-specific endgame behavior | **research required** | full 1.0 bot depth remains open even when the launch floor registers |
 
 The first five refusals are scoped to their exact mechanisms, not to the evidence primitives. A
@@ -368,6 +368,13 @@ human-like. `[V]` (`shared-style-atoms-as-bot-traits.md`, `state-directed-bot-pr
 `finite-state-bot-route-controller.md`, `monotone-bot-route-controller.md`,
 `generated-bot-route-source.md`, `evidence-to-move-proper-score-repair.md`,
 `evidence-to-move-guard-composition.md`, `stage-a-bot-trait-screen.md`)
+
+The endgame screen uses a separate fixed population: 196 complete tracked tablebase positions and
+three Maia bands yield 580 eligible cells after eight exact-guard abstentions. The winning stratum
+reaches +10.82 points, but the pooled preregistered arm fails and cannot be rescued after reading a
+subgroup. The source has no independent human move distribution and no honest prior history, so
+human resemblance, clock/history behavior and multi-ply technique remain unmeasured. `[V]`
+(`design/research/endgame-bot-king-activity.md`)
 
 #### 5.4 Full 1.0 personality depth cannot be replaced by names
 
@@ -554,7 +561,7 @@ provider, schema, route, client, asset or calibration byte is authorized by this
    strength, human-distribution and band-identity results with clustered uncertainty and Holm
    multiplicity. No current profile is claimed to pass.
 4. **Breadth:** §5 names the 4×3 floor honestly, records every measured refusal/pass/research debt,
-   and retains route/phase/clock/endgame/evidence-adapter work as full-1.0 obligations. Shared
+   and retains route/phase/clock/history/multi-ply/human-reference/evidence-adapter work as full-1.0 obligations. Shared
    learner evidence is not discarded merely because one bot transform failed.
 
 [[D2233]] deliberately remains open. This pass does not copy shapes from the returned

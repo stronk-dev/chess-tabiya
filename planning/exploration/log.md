@@ -16775,3 +16775,24 @@ five-second contracts together: real Stockfish restart, Studio withdrawal and hu
 The tier deliberately mixes subprocess, SQLite/schema and Svelte work, so four file workers still
 oversubscribed the host. A smaller bounded pool fixes the runner contract rather than making slow
 functional behavior acceptable.
+
+## 2026-09-06 — D2902 endgame king-activity fixed-population screen
+
+**What landed:** preregistered and measured the exact global `king_move` ×4 transform on the
+tracked R4 tablebase population. The normal repository workflow probes 196 complete non-terminal
+positions at Maia 1400/1600/1800, joins retained candidates to exact mover-relative WDL/DTZ and
+fails closed on unmapped or guard-empty cells. Synthetic mixed/all-king/unsafe/unmapped/empty-guard
+controls establish that the instrument can fail.
+
+**What changed:** the prior population blocker is closed and the proposed mechanism is refused.
+Across 580 eligible cells, the exact WDL guard leaves 60.70% king-move mass and ×4 raises it only to
+67.16% (**+6.47 pp**) against the frozen 10-point gate; diagnostic ×8 reaches +9.51 pp. Sampled
+WDL-worsening mass falls from 0.9345% before the guard to zero after it. The winning subgroup is not
+used as a post-hoc rescue.
+
+**Evidence/next:** `design/research/endgame-bot-king-activity.md`,
+`planning/bot-roster/d2902-endgame-king-activity-results.json` and
+`tools/d2902-bot-endgame-trait-screen/`. Literal king-move evidence remains available to Support,
+Review and drills. Bot promotion still needs a separately preregistered semantic/phase mechanism,
+multi-ply coherence and an independent human endgame move reference; this result earns zero
+personality or human-like claim.

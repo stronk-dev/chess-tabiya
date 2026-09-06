@@ -128,9 +128,9 @@
     },
     {
       "id": "king_activity_endgame",
-      "disposition": "population_blocked",
+      "disposition": "refused_exact_transform",
       "profilePath": null,
-      "source": "design/research/bot-candidate-sharpness.md"
+      "source": "design/research/endgame-bot-king-activity.md"
     },
     {
       "id": "clock_history_behavior",

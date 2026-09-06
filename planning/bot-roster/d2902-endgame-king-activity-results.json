@@ -1,0 +1,588 @@
+{
+  "schema": "tabiya.research.d2902-bot-endgame-trait-screen.v1",
+  "measuredAt": "2026-09-06T08:54:34.894Z",
+  "parameters": {
+    "temperature": 0.8,
+    "topP": 0.92,
+    "multiplier": 4,
+    "gate": {
+      "movement": 0.1,
+      "mixedCells": 50,
+      "unmappedCandidates": 0,
+      "postGuardWdlWorsening": 0
+    },
+    "sensitivity": [
+      2,
+      8
+    ]
+  },
+  "inputs": {
+    "tablebase": "sha256:1a10fac10d4b62cc10f45188ce1fb1b28c3f2b15ec927ab6adffecb1091b0ade",
+    "maia": "sha256:4218226541ecf9082e1844ec97094c8cecb53c3320804e2dbb6e9f8c87acdb2a",
+    "probeSet": "sha256:58211a6a57969112048eaea9e7f57e35b08663a164662f2eeb476029e57007be",
+    "maiaIdentity": "sha256:51f02fb44e88cfecbbdb0dc12fac2fc78ecb7bfe0cbbf7db1705cddbd4a3a426"
+  },
+  "identity": {
+    "identity": {
+      "id": "maia-5m",
+      "kind": "opponent",
+      "name": "Maia3",
+      "version": "1e13597c42d4858b7cfd7cfdae01e297263364b2",
+      "modelId": "maia3-5m@b6559de2398d7140b985f28fd2c19fb5e47ddabe",
+      "seedHonored": false,
+      "eloHonored": true
+    },
+    "options": [
+      {
+        "name": "Elo",
+        "type": "spin",
+        "default": "1500",
+        "min": 0,
+        "max": 5000
+      },
+      {
+        "name": "SelfElo",
+        "type": "spin",
+        "default": "1500",
+        "min": 0,
+        "max": 5000
+      },
+      {
+        "name": "OppoElo",
+        "type": "spin",
+        "default": "1500",
+        "min": 0,
+        "max": 5000
+      },
+      {
+        "name": "Temperature",
+        "type": "string",
+        "default": "1.0"
+      },
+      {
+        "name": "TopP",
+        "type": "string",
+        "default": "1.0"
+      },
+      {
+        "name": "MultiPV",
+        "type": "spin",
+        "default": "5",
+        "min": 1,
+        "max": 20
+      }
+    ],
+    "bandRange": {
+      "min": 1000,
+      "max": 2400
+    }
+  },
+  "population": {
+    "sourceRows": 257,
+    "completePositions": 196,
+    "historicalFailures": 61,
+    "expectedMaiaRows": 588,
+    "maiaRows": 588,
+    "eligibleCells": 580,
+    "candidateEmpty": 0,
+    "guardEmpty": 8,
+    "unmappedCandidates": 0,
+    "rawCandidates": 6402,
+    "retainedCandidates": 1403
+  },
+  "summary": {
+    "pooled": {
+      "cells": 580,
+      "guardedKingMass": 0.606954,
+      "transformedKingMass": 0.67163,
+      "movement": 0.064677,
+      "mixedCells": 169,
+      "intermediateCells": 125,
+      "wdlWorsening": {
+        "production": 0.009345,
+        "guarded": 0,
+        "transformed": 0
+      },
+      "expectedAbsChildDtz": {
+        "production": 10.138467,
+        "guarded": 10.194693,
+        "transformed": 10.150122,
+        "shiftFromGuard": -0.044571
+      }
+    },
+    "byBand": {
+      "1400": {
+        "cells": 192,
+        "guardedKingMass": 0.605144,
+        "transformedKingMass": 0.671849,
+        "movement": 0.066705,
+        "mixedCells": 57,
+        "intermediateCells": 42,
+        "wdlWorsening": {
+          "production": 0.012034,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 10.23706,
+          "guarded": 10.305272,
+          "transformed": 10.262044,
+          "shiftFromGuard": -0.043229
+        }
+      },
+      "1600": {
+        "cells": 193,
+        "guardedKingMass": 0.605651,
+        "transformedKingMass": 0.672316,
+        "movement": 0.066664,
+        "mixedCells": 57,
+        "intermediateCells": 42,
+        "wdlWorsening": {
+          "production": 0.009211,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 10.154186,
+          "guarded": 10.208946,
+          "transformed": 10.162971,
+          "shiftFromGuard": -0.045974
+        }
+      },
+      "1800": {
+        "cells": 195,
+        "guardedKingMass": 0.610024,
+        "transformedKingMass": 0.670737,
+        "movement": 0.060713,
+        "mixedCells": 55,
+        "intermediateCells": 41,
+        "wdlWorsening": {
+          "production": 0.006831,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 10.025832,
+          "guarded": 10.071709,
+          "transformed": 10.027205,
+          "shiftFromGuard": -0.044504
+        }
+      }
+    },
+    "byPieceCount": {
+      "3": {
+        "cells": 183,
+        "guardedKingMass": 0.82072,
+        "transformedKingMass": 0.853509,
+        "movement": 0.032788,
+        "mixedCells": 31,
+        "intermediateCells": 17,
+        "wdlWorsening": {
+          "production": 0.004672,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 7.452984,
+          "guarded": 7.462327,
+          "transformed": 7.521925,
+          "shiftFromGuard": 0.059599
+        }
+      },
+      "4": {
+        "cells": 261,
+        "guardedKingMass": 0.59553,
+        "transformedKingMass": 0.676481,
+        "movement": 0.080951,
+        "mixedCells": 91,
+        "intermediateCells": 73,
+        "wdlWorsening": {
+          "production": 0.011321,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 15.628041,
+          "guarded": 15.763271,
+          "transformed": 15.590179,
+          "shiftFromGuard": -0.173093
+        }
+      },
+      "5": {
+        "cells": 108,
+        "guardedKingMass": 0.394502,
+        "transformedKingMass": 0.474308,
+        "movement": 0.079806,
+        "mixedCells": 38,
+        "intermediateCells": 30,
+        "wdlWorsening": {
+          "production": 0.013784,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 3.877884,
+          "guarded": 3.832974,
+          "transformed": 3.905217,
+          "shiftFromGuard": 0.072243
+        }
+      },
+      "6": {
+        "cells": 22,
+        "guardedKingMass": 0.055959,
+        "transformedKingMass": 0.122164,
+        "movement": 0.066206,
+        "mixedCells": 6,
+        "intermediateCells": 5,
+        "wdlWorsening": {
+          "production": 0,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 0.227273,
+          "guarded": 0.227273,
+          "transformed": 0.227273,
+          "shiftFromGuard": 0
+        }
+      },
+      "7": {
+        "cells": 6,
+        "guardedKingMass": 0.428433,
+        "transformedKingMass": 0.479865,
+        "movement": 0.051432,
+        "mixedCells": 3,
+        "intermediateCells": 0,
+        "wdlWorsening": {
+          "production": 0.0203,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 2.280774,
+          "guarded": 2.356867,
+          "transformed": 2.459731,
+          "shiftFromGuard": 0.102864
+        }
+      }
+    },
+    "byRootCategory": {
+      "draw": {
+        "cells": 60,
+        "guardedKingMass": 0.302644,
+        "transformedKingMass": 0.386225,
+        "movement": 0.083581,
+        "mixedCells": 23,
+        "intermediateCells": 19,
+        "wdlWorsening": {
+          "production": 0.018637,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 0.093186,
+          "guarded": 0,
+          "transformed": 0,
+          "shiftFromGuard": 0
+        }
+      },
+      "loss": {
+        "cells": 255,
+        "guardedKingMass": 0.884501,
+        "transformedKingMass": 0.899461,
+        "movement": 0.01496,
+        "mixedCells": 13,
+        "intermediateCells": 13,
+        "wdlWorsening": {
+          "production": 0,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 9.717389,
+          "guarded": 9.717389,
+          "transformed": 9.732025,
+          "shiftFromGuard": 0.014636
+        }
+      },
+      "win": {
+        "cells": 265,
+        "guardedKingMass": 0.40878,
+        "transformedKingMass": 0.517017,
+        "movement": 0.108237,
+        "mixedCells": 133,
+        "intermediateCells": 93,
+        "wdlWorsening": {
+          "production": 0.016234,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 12.818058,
+          "guarded": 12.962218,
+          "transformed": 12.850583,
+          "shiftFromGuard": -0.111635
+        }
+      }
+    },
+    "byPack": {
+      "lucena-bridge-convert": {
+        "cells": 42,
+        "guardedKingMass": 0.488593,
+        "transformedKingMass": 0.557078,
+        "movement": 0.068485,
+        "mixedCells": 13,
+        "intermediateCells": 8,
+        "wdlWorsening": {
+          "production": 0,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 8.141359,
+          "guarded": 8.141359,
+          "transformed": 8.384104,
+          "shiftFromGuard": 0.242744
+        }
+      },
+      "mate-bishop-knight": {
+        "cells": 117,
+        "guardedKingMass": 0.601387,
+        "transformedKingMass": 0.706337,
+        "movement": 0.104949,
+        "mixedCells": 51,
+        "intermediateCells": 41,
+        "wdlWorsening": {
+          "production": 0.000629,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 21.397404,
+          "guarded": 21.416731,
+          "transformed": 21.139361,
+          "shiftFromGuard": -0.27737
+        }
+      },
+      "mate-k-q-technique": {
+        "cells": 57,
+        "guardedKingMass": 0.891542,
+        "transformedKingMass": 0.922517,
+        "movement": 0.030975,
+        "mixedCells": 13,
+        "intermediateCells": 4,
+        "wdlWorsening": {
+          "production": 0,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 7.545403,
+          "guarded": 7.545403,
+          "transformed": 7.554731,
+          "shiftFromGuard": 0.009328
+        }
+      },
+      "mate-k-r-technique": {
+        "cells": 57,
+        "guardedKingMass": 0.786302,
+        "transformedKingMass": 0.845286,
+        "movement": 0.058984,
+        "mixedCells": 15,
+        "intermediateCells": 10,
+        "wdlWorsening": {
+          "production": 0,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 12.767311,
+          "guarded": 12.767311,
+          "transformed": 13.010561,
+          "shiftFromGuard": 0.24325
+        }
+      },
+      "mate-two-bishops": {
+        "cells": 51,
+        "guardedKingMass": 0.610561,
+        "transformedKingMass": 0.72227,
+        "movement": 0.111709,
+        "mixedCells": 27,
+        "intermediateCells": 20,
+        "wdlWorsening": {
+          "production": 0.038926,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 8.90124,
+          "guarded": 9.261256,
+          "transformed": 9.207498,
+          "shiftFromGuard": -0.053757
+        }
+      },
+      "opposite-bishops-fortress-hold": {
+        "cells": 18,
+        "guardedKingMass": 0.068394,
+        "transformedKingMass": 0.149312,
+        "movement": 0.080918,
+        "mixedCells": 6,
+        "intermediateCells": 5,
+        "wdlWorsening": {
+          "production": 0,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 0,
+          "guarded": 0,
+          "transformed": 0,
+          "shiftFromGuard": 0
+        }
+      },
+      "pawn-breakthrough-convert": {
+        "cells": 25,
+        "guardedKingMass": 0.189136,
+        "transformedKingMass": 0.288852,
+        "movement": 0.099716,
+        "mixedCells": 11,
+        "intermediateCells": 8,
+        "wdlWorsening": {
+          "production": 0.004872,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 2.78835,
+          "guarded": 2.806612,
+          "transformed": 2.73558,
+          "shiftFromGuard": -0.071032
+        }
+      },
+      "pawn-opposition-convert": {
+        "cells": 69,
+        "guardedKingMass": 0.790648,
+        "transformedKingMass": 0.803295,
+        "movement": 0.012646,
+        "mixedCells": 3,
+        "intermediateCells": 3,
+        "wdlWorsening": {
+          "production": 0.01239,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 2.986541,
+          "guarded": 3.01132,
+          "transformed": 2.960735,
+          "shiftFromGuard": -0.050586
+        }
+      },
+      "philidor-passive-rook-convert": {
+        "cells": 45,
+        "guardedKingMass": 0.590953,
+        "transformedKingMass": 0.625178,
+        "movement": 0.034225,
+        "mixedCells": 7,
+        "intermediateCells": 6,
+        "wdlWorsening": {
+          "production": 0.008232,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 1.869373,
+          "guarded": 1.885836,
+          "transformed": 1.841797,
+          "shiftFromGuard": -0.044039
+        }
+      },
+      "philidor-third-rank-hold": {
+        "cells": 42,
+        "guardedKingMass": 0.403036,
+        "transformedKingMass": 0.487759,
+        "movement": 0.084722,
+        "mixedCells": 17,
+        "intermediateCells": 14,
+        "wdlWorsening": {
+          "production": 0.026624,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 0.133122,
+          "guarded": 0,
+          "transformed": 0,
+          "shiftFromGuard": 0
+        }
+      },
+      "queen-vs-pawn-seventh-convert": {
+        "cells": 57,
+        "guardedKingMass": 0.532272,
+        "transformedKingMass": 0.560549,
+        "movement": 0.028277,
+        "mixedCells": 6,
+        "intermediateCells": 6,
+        "wdlWorsening": {
+          "production": 0.015719,
+          "guarded": 0,
+          "transformed": 0
+        },
+        "expectedAbsChildDtz": {
+          "production": 18.554324,
+          "guarded": 18.811747,
+          "transformed": 18.671372,
+          "shiftFromGuard": -0.140376
+        }
+      }
+    }
+  },
+  "sensitivity": {
+    "2": {
+      "cells": 580,
+      "guardedKingMass": 0.606954,
+      "transformedKingMass": 0.639042,
+      "movement": 0.032088,
+      "mixedCells": 169,
+      "intermediateCells": 125,
+      "wdlWorsening": {
+        "production": 0.009345,
+        "guarded": 0,
+        "transformed": 0
+      },
+      "expectedAbsChildDtz": {
+        "production": 10.138467,
+        "guarded": 10.194693,
+        "transformed": 10.164625,
+        "shiftFromGuard": -0.030068
+      }
+    },
+    "8": {
+      "cells": 580,
+      "guardedKingMass": 0.606954,
+      "transformedKingMass": 0.702077,
+      "movement": 0.095123,
+      "mixedCells": 169,
+      "intermediateCells": 125,
+      "wdlWorsening": {
+        "production": 0.009345,
+        "guarded": 0,
+        "transformed": 0
+      },
+      "expectedAbsChildDtz": {
+        "production": 10.138467,
+        "guarded": 10.194693,
+        "transformed": 10.158717,
+        "shiftFromGuard": -0.035976
+      }
+    }
+  },
+  "verdict": {
+    "mechanismReach": false,
+    "humanReferenceAvailable": false,
+    "overall": "insufficient_human_reference",
+    "permittedPromotion": "refused_exact_transform",
+    "personalityClaim": false,
+    "humanLikeClaim": false
+  }
+}

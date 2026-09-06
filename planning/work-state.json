@@ -17517,7 +17517,7 @@
       "id": "D2237",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ced24ccb26e91547ac92c012f20cce93c1feb44779c0daa1b12d5c3de0618d2a",
+      "sourceDigest": "sha256:5db41db88985f891c9420e896f96b6e35b5762218598f930a1bceb8f2568ed53",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-roster.md"
@@ -23477,6 +23477,14 @@
       "uxItems": [],
       "evidence": "vitest.software.config.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D2902",
+      "state": "todo",
+      "sourceGlyph": "📊",
+      "sourceDigest": "sha256:8e6bdabea029c66d8c7c0a25a980a0537435bf55950da51a6e3cde199dc917e7",
+      "uxItems": [],
+      "owner": "bot-play"
     }
   ]
 }
