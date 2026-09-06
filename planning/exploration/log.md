@@ -16896,3 +16896,20 @@ backoff remains 5/15/60 seconds instead of silently flattening to five.
 4/4 return chain, passes 8/8 direct/composition groups and strict TypeScript. Exact receipt:
 `planning/provider-health-degradation/tenth-author-repair-2026-09-06.md`. Another genuinely fresh
 review and provider protocol/exchange still precede either implementation checkpoint.
+
+## 2026-09-06 — provider-protocol fourth author repair
+
+**What landed:** repaired [[D2909]]–[[D2911]] and [[D2920]]/[[D2921]] at contract tier. No generic catalogue/register,
+provider product, schema, storage, content, archive or protected-design byte changed.
+
+**What changed:** a unique complete first-parent transition into `accepted` now issues the opaque
+authority for the exact receipt bytes, so an intervening self-consistent replacement fails. Receipt
+and resource arrays share one strict unique UTF-8/JCS row order, and the receipt accepts one literal
+schema plus one domain-separated lowercase `sha256:` wire image. The historical review now reads
+its exact `ae7fe5b3` inputs rather than live repaired prose, and a shallow history cannot invent a
+missing draft predecessor.
+
+**Evidence/next:** `make provider-protocol-fourth-author-repair` retains every predecessor and the
+fourth review's positive control plus 3/3 return cases, then passes 4/4 direct inversions. Exact
+receipt: `planning/provider-protocol-register/fourth-author-repair-2026-09-06.md`. Another genuinely
+fresh review and the generic bootstrap still precede implementation.

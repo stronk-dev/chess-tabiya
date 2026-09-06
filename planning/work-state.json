@@ -23543,7 +23543,7 @@
       "id": "D2909",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:48e3587346e7d07188e02786a19e8b48e61041a77ba1772bfd025a38c3591039",
+      "sourceDigest": "sha256:415d07e1adde86fce6f827c8d3c2a449342a410e44363e7974b76671a240422b",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-protocol-register.md"
@@ -23552,7 +23552,7 @@
       "id": "D2910",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:579db952d967b4a06cd50f79be3a1d559cf8b90350a05e4f70802cc3e6a54d12",
+      "sourceDigest": "sha256:241574a79e658ff1cd590e207f2c848ceaee9565d349368b326d32a72c1aad8d",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-protocol-register.md"
@@ -23561,7 +23561,7 @@
       "id": "D2911",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:060a73e898ca1adde9e761a0ae4062891aea80b84a78dc9f66a1fc2ced0c6d63",
+      "sourceDigest": "sha256:27fd789eb6dbdeeb6846c929dd3d345267ddfbc24d76d5aa3dda05e46ebec131",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:provider-protocol-register.md"
@@ -23637,6 +23637,24 @@
       "sourceDigest": "sha256:44dc4a43632a288bcb7a83d95c5b606b62e769fcdd5e7b639ee1f9ea73bb4194",
       "uxItems": [],
       "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2920",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:586e26e1d2e747f21145095b6e739369caeaa39893b52ac8b6e18a3c84e45af3",
+      "uxItems": [],
+      "evidence": "| D2920 ✅ | **CLOSED: THE FOURTH PROVIDER-PROTOCOL HISTORICAL REVIEW NOW READS ITS RFC AND DESCRIPTOR INPUTS FROM THE EXACT `ae7fe5b3` REVIEW COMMIT.** A later repair can invert D2909–D2911 while the maintained review continues proving what it found instead of silently changing its subject | ✅ provider-protocol fourth author self-repair 2026-09-06 — commit-pinned historical inputs retained in the normal target |",
+      "evidenceKind": "closeout-prose"
+    },
+    {
+      "id": "D2921",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c47ec38711bf143659dd2f23f76dbb54693c8fb280396179e296e0dd1ad9dbdf",
+      "uxItems": [],
+      "blocker": "rfc:provider-protocol-register.md"
     }
   ]
 }

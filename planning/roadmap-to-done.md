@@ -484,6 +484,21 @@ provider-protocol-third-author-repair` retains the complete chain and passes 4/4
 process population still waits on another genuinely fresh review and the generic bootstrap
 dependency. Receipt: `planning/provider-protocol-register/third-author-repair-2026-09-06.md`.
 
+The same-day fourth fresh review returns that repair on [[D2909]]–[[D2911]]: current-HEAD receipt
+self-authentication survives an intervening replacement, set equality permits a resource-digest-
+changing permutation, and the receipt's schema/domain/output wire image is undefined. `make
+provider-protocol-fourth-fresh-review` retains the chain and passes all three reproductions plus the
+descriptor positive control. Receipt:
+`planning/provider-protocol-register/fourth-fresh-independent-buildability-review-2026-09-06.md`.
+
+The fourth author repair closes those three plus [[D2920]]/[[D2921]] at contract tier. The unique first-parent transition
+into accepted status pins an opaque exact receipt authority; receipt and resource share one strict
+UTF-8/JCS row order; and one literal schema plus domain-separated lowercase SHA-256 grammar owns the
+wire, while the historical review reads the exact `ae7fe5b3` bytes it reviewed. `make
+provider-protocol-fourth-author-repair` retains the chain and passes 4/4 direct
+inversions. Another genuinely fresh review and the generic bootstrap still gate implementation.
+Receipt: `planning/provider-protocol-register/fourth-author-repair-2026-09-06.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

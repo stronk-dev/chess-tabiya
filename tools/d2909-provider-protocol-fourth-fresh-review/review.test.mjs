@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { validateCatalogue } from "../d2488-shared-resource-bootstrap-third-author-repair/model.mjs";
 
-const read = (path) => readFileSync(path, "utf8");
+const REVIEWED_REVISION = "ae7fe5b3";
+const read = (path) => execFileSync("git", ["show", `${REVIEWED_REVISION}:${path}`], { encoding: "utf8" });
 const rfc = read("rfc/provider-protocol-register.md");
 const normative = rfc.slice(rfc.indexOf("## Summary"), rfc.indexOf("## Second fresh independent return"));
 const catalogue = JSON.parse(read("planning/provider-protocol-register/catalogue-additions.v1.json"));

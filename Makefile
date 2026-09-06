@@ -187,7 +187,7 @@ provider-protocol-fresh-review:
 provider-protocol-second-fresh-review:
 	node --test tools/d2809-provider-protocol-second-fresh-review/review.test.mjs
 
-.PHONY: provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review
+.PHONY: provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review provider-protocol-fourth-author-repair
 provider-protocol-second-author-repair: provider-protocol-fresh-review provider-protocol-second-fresh-review
 	node --test tools/d2809-provider-protocol-second-author-repair/contract.test.mjs
 
@@ -200,6 +200,9 @@ provider-protocol-third-author-repair: provider-protocol-third-fresh-review
 
 provider-protocol-fourth-fresh-review: provider-protocol-third-author-repair
 	node --test tools/d2909-provider-protocol-fourth-fresh-review/review.test.mjs
+
+provider-protocol-fourth-author-repair: provider-protocol-fourth-fresh-review
+	node --test tools/d2909-provider-protocol-fourth-author-repair/contract.test.mjs
 
 .PHONY: provider-health-sixth-fresh-review
 provider-health-sixth-fresh-review:
@@ -1255,7 +1258,7 @@ build:
 
 verify-software: typecheck test-software test-performance schema-check evidence-manifest-check semantic-evidence-check opening-catalogue-check account-data-lifecycle-check learner-rating-bracket-check learner-rating-isolation-check
 
-verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review longitudinal-store-ninth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-sixteenth-author-repair candidate-packet-twelfth-author-repair semantic-collectors-promotion-fourteenth-author-repair provider-health-ninth-fresh-review provider-health-ninth-author-repair provider-health-tenth-fresh-review provider-health-tenth-author-repair shared-resource-bootstrap-fifteenth-fresh-review provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review review-evidence-third-author-repair bot-policy-fourth-author-repair bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract test-tier-check docs-check staged-process-contracts-test
+verify-governance: register-check status-parity work-index work-state work-item-check roadmap-check intent-parity evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review longitudinal-store-ninth-author-repair storage-backup-fourth-author-repair safe-deployment-third-author-repair campaign-two-horizon-sixth-author-repair pack-capability-sixteenth-author-repair candidate-packet-twelfth-author-repair semantic-collectors-promotion-fourteenth-author-repair provider-health-ninth-fresh-review provider-health-ninth-author-repair provider-health-tenth-fresh-review provider-health-tenth-author-repair shared-resource-bootstrap-fifteenth-fresh-review provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review provider-protocol-fourth-author-repair review-evidence-third-author-repair bot-policy-fourth-author-repair bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract test-tier-check docs-check staged-process-contracts-test
 
 verify-content: test-content
 

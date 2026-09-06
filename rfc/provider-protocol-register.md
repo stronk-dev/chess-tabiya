@@ -1,12 +1,12 @@
 # RFC: Provider-protocol shared-resource catalogue population
 
-- **Status:** draft — **fourth fresh independent review returned the third repair on
-  [[D2909]]–[[D2911]].** The acceptance receipt has no immutable external pin, unordered set
-  equality admits resource-digest-changing permutations, and its schema/digest wire image is
-  incomplete. `make provider-protocol-fourth-fresh-review` retains the complete predecessor chain,
-  preserves the generic descriptor positive control and passes 3/3 new falsifiers. Another author
-  repair, fresh review and the generic bootstrap dependency remain required. Implementation is
-  unauthorized.
+- **Status:** draft — **fourth author repair completed on [[D2909]]–[[D2911]] and adjacent
+  [[D2920]]/[[D2921]].** A first-parent
+  acceptance-transition authority pins the exact reviewed receipt; canonical row-byte ordering is
+  shared by receipt and resource; and the receipt has one literal schema plus domain-separated
+  digest grammar. `make provider-protocol-fourth-author-repair` retains the complete predecessor
+  chain and passes 4/4 direct repairs. Another genuinely fresh review and the generic bootstrap
+  dependency remain required. Implementation is unauthorized.
 - **Author:** Codex
 - **Created:** 2026-08-30
 - **Design refs:** none. This is repository process and changes no provider behavior or learner UX.
@@ -158,17 +158,29 @@ bytes exist. It is not imported by production and is not a second mutable runtim
 
 The acceptance commit also writes the canonical build-only projection
 `planning/provider-protocol-register/accepted-obligations.v1.json` with the exact closed shape
-`{schema, sourceRfc, obligationsDigest, operations, digestDomains}`. `sourceRfc` is the literal
-`provider-exchange-and-execution.md`; `obligationsDigest` is the RFC-8785 SHA-256 digest of
-`{operations,digestDomains}`; and the two populations are byte-equal to the accepted metadata
-block after canonical parsing. This file is an acceptance receipt, not product configuration: it
-is neither copied into a release image nor imported by runtime code.
+`{schema, sourceRfc, obligationsDigest, operations, digestDomains}`. `schema` is the literal
+`tabiya.provider-obligations.v1`; `sourceRfc` is the literal
+`provider-exchange-and-execution.md`. Each population is strictly sorted by the unsigned
+lexicographic UTF-8 bytes of its row's RFC-8785 serialization and contains no duplicate row.
+`obligationsDigest` is exactly `sha256:` followed by 64 lowercase hexadecimal characters over
+`UTF8("tabiya.provider-obligations.v1\0") || UTF8(RFC8785({operations,digestDomains}))`.
+No alternate schema type, prefix, case, encoding, order or extra key parses. The two ordered
+populations are byte-equal to the accepted metadata block after canonical parsing. This file is an
+acceptance receipt, not product configuration: it is neither copied into a release image nor
+imported by runtime code.
 
-Acceptance and implementation are separate commits. The product landing gate requires the
-receipt to exist in committed HEAD and refuses any staged modification to it while provider product
-bytes change. A later obligation change requires a separately reviewed RFC amendment and a new
-acceptance commit before the next product lane may land. Thus a coordinated same-landing swap
-cannot replace the preimage it is checked against.
+Acceptance and implementation are separate commits. Build orchestration walks the required complete
+first-parent history and finds the unique transition where `provider-exchange-and-execution.md`
+enters `accepted`. It reads the receipt from that exact commit and issues an opaque
+`AcceptedProviderObligationsAuthority` carrying that commit id and the SHA-256 digest of the exact
+receipt bytes. The product validator accepts those receipt bytes only through that authority; it
+does not accept a filename, current-HEAD self-digest or caller-constructed substitute. The product
+landing gate additionally requires current committed receipt bytes to equal the accepted bytes and
+refuses any staged modification to it while provider product bytes change. An intervening commit
+that replaces the receipt and recalculates
+its internal digest therefore fails. A later obligation change requires a separately reviewed RFC
+amendment, a new versioned acceptance receipt and a new accepted transition before the next product
+lane may land; an existing accepted receipt is never rewritten.
 
 Before product landing, `provider-exchange-and-execution.md` owns its exact obligation parser,
 consumer-root population and able-to-fail validator. Build orchestration reads the committed
@@ -176,18 +188,21 @@ acceptance-receipt bytes and passes them as an explicit input to that pure produ
 validator reads neither Git nor RFC prose. This is not a hook smuggled into the descriptor. The
 product check:
 
-1. parse the exact committed `accepted-obligations.v1.json` bytes and verify their internal digest;
+1. derive the acceptance-transition authority from complete first-parent history, parse the exact
+   receipt bytes at that commit, and require current/staged receipt identity to remain unchanged;
 2. derive the candidate resource payload from product bytes;
-3. require operation and digest-domain rows to be set-equal by complete row identity;
+3. require both operation and digest-domain arrays to be in the one canonical row-byte order and
+   ordered-equal by complete row identity;
 4. require every operation to reach one mapped descriptor, parser, source factory/projection and
    CLI binding; and
 5. ask the generic lifecycle engine to consume the sole prior lane claim into an owner-bound
    landed row only after those product checks pass.
 
-The obligation block is immutable after acceptance except through a reviewed RFC amendment that
-also owns a next resource lane. A count-preserving operation/provider/parser/factory/domain swap in
-product bytes alone fails. A coordinated change to both accepted intent and product bytes in one
-landing fails because the transition reads the prior accepted claim/obligation preimage.
+The accepted receipt version is immutable after acceptance. A reviewed amendment that owns a next
+resource lane creates the next receipt version and a new accepted transition rather than rewriting
+history. A count-preserving operation/provider/parser/factory/domain swap in product bytes alone
+fails. A coordinated change to current receipt and product bytes fails because the authority reads
+the exact earlier accepted-transition preimage.
 
 This product validation is a Discharge and ordering precondition, not an acceptance criterion of
 this process RFC. The initial obligations are not copied here. Their authoritative current values
@@ -275,6 +290,18 @@ provider state machine. It closes only after this population's executable criter
 10. [[D2189]], [[D2455]], [[D2458]] and [[D2459]] close only after executable process criteria
     pass. Product-only [[D2456]] and [[D2457]] remain open through D4 until the atomic runtime
     image/type relation and independent obligation validator actually land.
+11. [[D2909]] Build orchestration derives one opaque acceptance authority from the unique complete
+    first-parent transition into `accepted` and pins the exact receipt bytes at that commit. A later
+    self-consistent replacement, a caller-constructed authority or a staged receipt edit fails.
+12. [[D2910]] Receipt and canonical-resource operation/domain arrays are strictly sorted and unique
+    by the unsigned lexicographic UTF-8 bytes of each RFC-8785 row. Ordered equality, not set
+    equality, binds the accepted population to the governed resource bytes.
+13. [[D2911]] The receipt accepts only schema `tabiya.provider-obligations.v1` and a
+    `sha256:`-prefixed 64-character lowercase hexadecimal digest over the exact domain-separated
+    bytes. A pinned independent reference fixture and malformed schema/prefix/key fixtures pass.
+14. [[D2921]] Acceptance authority requires a complete history projection that witnesses the source
+    RFC in draft immediately before its unique transition to accepted. A shallow history whose first
+    visible image is already accepted cannot mint authority.
 
 ## Second fresh independent return (2026-09-05)
 
@@ -383,6 +410,27 @@ three new executable falsifiers. Exact evidence:
 The RFC remains draft; no descriptor, register, obligation receipt or provider product byte is
 authorized.
 
+## Fourth author repair (2026-09-06)
+
+The three returned acceptance-authority defects are repaired as one boundary:
+
+1. [[D2909]] replaces current-HEAD self-authentication with an opaque authority derived from the
+   unique first-parent transition into `accepted`, pinning the exact receipt commit and bytes;
+2. [[D2910]] sorts both populations by unsigned lexicographic UTF-8 bytes of each RFC-8785 row and
+   requires strict unique ordered equality between acceptance receipt and canonical resource; and
+3. [[D2911]] fixes the schema literal, domain/input bytes and lowercase `sha256:` output grammar,
+   including an independent fixed digest vector and malformed-wire negatives; and
+4. [[D2920]] pins the fourth historical review's text/data inputs to commit `ae7fe5b3`, so this
+   repair inverts its findings without rewriting the evidence that found them; and
+5. [[D2921]] requires the complete history projection to observe an actual draft predecessor and
+   transition into accepted status; a shallow suffix beginning at `accepted` fails closed.
+
+`make provider-protocol-fourth-author-repair` retains all earlier returns and repairs plus the
+fourth-review descriptor control and 3/3 falsifiers, then passes 4/4 direct inversions. Exact
+receipt: `planning/provider-protocol-register/fourth-author-repair-2026-09-06.md`. This is
+author-contract evidence, not acceptance or implementation; another genuinely fresh review and the
+generic bootstrap dependency remain mandatory.
+
 ## Open questions
 
 None for the owner. The five operations, providers and ten digest domains are existing product-RFC
@@ -390,6 +438,9 @@ semantics, not choices made by this process document.
 
 ## Changelog
 
+- 2026-09-06: fourth author repair closes [[D2909]]–[[D2911]] and [[D2920]]/[[D2921]] at contract tier with a
+  first-parent acceptance-transition authority, canonical ordered populations and one exact
+  receipt wire grammar. `make provider-protocol-fourth-author-repair` passes 4/4 repair groups.
 - 2026-09-06: fourth fresh independent review returned the third repair on [[D2909]]–[[D2911]]:
   mutable self-authenticating acceptance state, set-equal/order-sensitive resource drift and an
   incomplete receipt wire contract. `make provider-protocol-fourth-fresh-review` passes the three
