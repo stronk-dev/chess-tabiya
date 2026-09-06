@@ -17109,3 +17109,21 @@ service receipt. Snapshot construction accepts independent monotonic and civil c
 provider-health-eleventh-author-repair` retains the predecessor chain and passes 8/8 direct repairs
 plus strict TypeScript. No runtime, run schema, storage, content, archive or protected-design byte
 changed. Another genuinely fresh review and provider protocol/exchange still precede production.
+
+## 2026-09-06 — candidate packet thirteenth author repair
+
+**What landed:** a bounded contract-tier repair for [[D2934]]–[[D2941]]. Collector memo views are
+declaration-derived and refuse hidden reads; collector-wide exceptions no longer invent projection
+precision; and last-waiter cancellation removes admission identity while preserving the running
+concurrency slot.
+
+**What changed:** public request failures retain shape/scope/ruleset/FEN identity; cache accounting
+separates exact entry roots from one process singleton; receipt reads reassert all legal/row/child
+joins; child readings derive from admitted catalogues and are checked against the live collector;
+and the model now compiles under the repository base TypeScript contract.
+
+**Evidence/next:**
+`planning/evidence-foundation-ux/shared-candidate-packet-thirteenth-author-repair-2026-09-06.md`;
+`make candidate-packet-thirteenth-author-repair` passes 22/22 current groups plus strict
+TypeScript. No production, schema, storage, content, archive or protected-design byte changed.
+Another genuinely fresh review and the value-authority/provider dependencies precede production.

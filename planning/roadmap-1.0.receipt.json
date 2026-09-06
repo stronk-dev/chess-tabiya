@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ef151a98fe0eeddd1659845777c7fab701bf04e7798b8a487ccc86c0d4b8ada4",
+    "roadmap": "sha256:64ee725e9dd8eaebc02da78b394ef5c941e5e9470614276905541e8e21a43e9f",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:ac0a720db0d0ecc5d1c76bbcbee64a2f55ff7ce1fd398490ede37b33e6c5616d",
-    "rfcRegister": "sha256:51e21902c43f785820a9b3259dd9f29420b6ac90d8d3cbba5749f895f298a691",
+    "workState": "sha256:7e8e88387bb5603f8eee065a905fd42aceca9e349b1e4692c5a957c9f62eeb0d",
+    "rfcRegister": "sha256:bbc9d8fde4bcfde73f60cf46acafd68ecf6fd3708274123bb86abb0c69c0d1d2",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -151,14 +151,14 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Repair promotion installation D2929-D2933 and candidate-packet authority D2934-D2941 in their complete current models; freshly review both; then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+      "nextAction": "Repair promotion installation D2929-D2933; obtain genuinely fresh reviews of it and the repaired candidate-packet authority; then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "The candidate packet's thirteenth fresh review returned hidden collector dependencies, false typed failures, abandoned-generation rejoin, inexact accounting and receipt joins, a copied output vocabulary and a model that fails the repository compiler contract.",
-        "impact": "held",
+        "summary": "The candidate packet's thirteenth author repair now enforces declared-only collector inputs, truthful failure/request identities, fresh generations after abandonment, exact entry accounting and receipt joins, catalogue-derived child readings and repository-strict TypeScript.",
+        "impact": "advanced",
         "evidence": [
-          "planning/evidence-foundation-ux/shared-candidate-packet-thirteenth-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d2934-candidate-packet-thirteenth-fresh-review/review.test.ts",
+          "planning/evidence-foundation-ux/shared-candidate-packet-thirteenth-author-repair-2026-09-06.md",
+          "tools/d2934-candidate-packet-thirteenth-author-repair/contract.test.ts",
           "rfc/shared-candidate-evidence-packet.md",
           "rfc/README.md"
         ],
@@ -166,7 +166,7 @@
           {
             "kind": "rfc",
             "id": "shared-candidate-evidence-packet.md",
-            "digest": "sha256:2634643215ab143cecf08d0882f2469bad49f01f1a341164cbd21bd587cb46a3"
+            "digest": "sha256:846f37c30d7582749b0b9394c82c57c079d60693dfb7f46115f6e224dfab8273"
           }
         ]
       },

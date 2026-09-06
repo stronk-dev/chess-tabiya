@@ -1,14 +1,14 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — returned by thirteenth fresh independent review on [[D2934]]–[[D2941]].**
-  The twelfth repair closes its seven named seams, but its current model passes undeclared memo
-  authority to every collector, invents projection precision for collector-wide throws, lets new
-  callers join an irreversibly abandoned job, mislabels closed-request errors as invalid FEN,
-  counts the process manifest once per cache entry, omits exact receipt joins, hand-copies the
-  child-reading vocabulary and does not compile under the repository's actual optional-property
-  rules. `make candidate-packet-thirteenth-fresh-review` retains the full predecessor chain and
-  passes 8/8 fresh counterexamples. Author repair, another genuinely fresh review and the
-  value-authority dependency precede implementation. The maintained operation
+- **Status:** **draft — thirteenth author repair completed on [[D2934]]–[[D2941]]; another genuinely fresh review is required.**
+  The current model gives collectors only proxy-guarded declared dependencies, separates
+  collector-wide from projection-local failure identity, retires abandoned single-flight identity
+  immediately without widening concurrency, preserves exact request diagnostics, separates entry
+  weight from process singletons, reasserts every legal/row/FEN join, derives child readings from
+  the admitted catalogues and compiles under the repository TypeScript contract. `make
+  candidate-packet-thirteenth-author-repair` retains the full predecessor chain and passes 22/22
+  current groups plus strict TypeScript. Another genuinely fresh review and the value-authority
+  dependency precede implementation. The maintained operation
   parses the closed request, derives the complete seven-term factual identity, gives direct and
   projected narrow receipts the same dependency-closed graph, derives cache identity internally,
   admits only one privately asserted whole receipt, seals below already-frozen ancestors and
@@ -68,6 +68,36 @@
 - **Parent / amends:** amends the `SemanticSelectionInput` contract in `packages/runtime/src/semantic-evidence.ts` (§3 — the caller-supplied alternative population becomes a compiled packet). It consumes, and does not amend or co-own, `evidence-value-authority`'s exact FEN→legal-evidence factory; projection, operands and move semantics do not change here. It supplies the complete-population input and one-root score-source correction to `evidence-move-selector.md`/bot Discharge D10 without implementing a dormant candidate vector here. Review's separate node-free position evaluation stays owned by `provider-exchange-and-execution` plus `review-evidence-compiler`; this RFC does not turn it into N child searches. **Discharges rebuilt `rfc/hint-distance.md` D2 on landing**; that row is its author's to flip
 - **Supersedes / superseded by:** —
 - **Planning:** `planning/evidence-foundation-ux/` (once implementing)
+
+## Thirteenth author repair — declared inputs and independently asserted packet authority
+
+The compiler now imports the one collector-dependency declaration used by the planner. Before each
+collector call it constructs a new image containing exactly those dependencies; a proxy refuses
+every undeclared property read, including reads from collectors whose dependency set is empty.
+Invocation exceptions retain collector identity only. A projection is named only when the exact
+returned value carrying that projection fails its value assertion.
+
+Single-flight admission and execution capacity are separate sets. Cancelling the final waiter
+removes the job from join identity immediately, but the abandoned execution retains its concurrency
+slot until it actually settles. A later equal request therefore receives a fresh job without
+running above the configured ceiling. Request parsing now distinguishes unsupported rulesets,
+invalid FEN, invalid scope and invalid closed shape.
+
+The cache measures only the entry roots: packet, exact legal evidence and candidate inputs. The
+primary manifest is measured separately once per service. Receipt assertion independently
+rechecks the declared legal-map authority, exact flattened move references, unique UCI population,
+candidate-row references and every recomputed child FEN. Test-only crossed receipts prove these
+checks can fail.
+
+Finally, the child-reading population is no longer a local twenty-string copy. It is derived from
+the compiled primary manifest intersected with the admitted tactical/breadth collector catalogues,
+excluding the two separately owned readings and Maia provider output; a live `reading.child`
+witness must be set-equal to that independent population at module construction. The author target
+extends the repository base TypeScript configuration and deletes optional timer fields rather than
+assigning forbidden `undefined`.
+
+Exact executable receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-thirteenth-author-repair-2026-09-06.md`.
 
 ```tabiya-claims
 none

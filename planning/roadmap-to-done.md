@@ -2230,3 +2230,16 @@ reasons. Monotonic and civil time are separate inputs. `make provider-health-ele
 retains the full chain and passes 8/8 current groups plus strict TypeScript. The foundation remains
 at fresh review and provider protocol/exchange dependencies; no runtime or run-schema byte is
 authorized yet.
+
+### 2026-09-06 evidence-spine checkpoint — candidate packet authority repaired
+
+The thirteenth candidate-packet author repair closes the eight returned authority seams without
+claiming product implementation. Collectors now receive only their declared dependency image;
+invocation and projection failures retain truthful precision; abandoned single-flight generations
+cannot poison a later equal request; request errors retain their actual class; and cache entries no
+longer charge the process manifest repeatedly. Every receipt read reasserts the exact legal-map,
+flattened-move, row, UCI and child-FEN joins. Child-reading membership derives from the admitted
+catalogues and is checked against the live collector. `make candidate-packet-thirteenth-author-repair`
+retains the full history and passes 22/22 current groups plus the repository-strict TypeScript
+contract. The evidence spine advances to genuinely fresh review and its value-authority/provider
+dependencies; no production selector, Support, bot, Review or content byte is authorized yet.

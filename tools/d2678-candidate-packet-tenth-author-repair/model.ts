@@ -91,7 +91,7 @@ export interface CandidatePopulationRequest<S extends CandidatePacketScope = Can
 }
 
 type EvidenceValue = SemanticEvidenceEvent | DeclaredEvidence<unknown>;
-type CollectorId = keyof typeof COLLECTOR_DEPENDENCIES;
+type CollectorId = keyof typeof CANDIDATE_COLLECTOR_DEPENDENCIES;
 type Memo = Readonly<Partial<Record<CollectorId, readonly CollectorOutcome[]>>>;
 
 interface CollectorContext {
@@ -125,7 +125,7 @@ const READING_COLLECTORS = Object.freeze([
   "reading.fork_survival",
 ] as const);
 
-const COLLECTOR_DEPENDENCIES = Object.freeze({
+export const CANDIDATE_COLLECTOR_DEPENDENCIES = Object.freeze({
   "event.structural": Object.freeze([] as const),
   "event.pawn_island": Object.freeze([] as const),
   "event.transition": Object.freeze([] as const),
@@ -283,7 +283,7 @@ export function planCandidateCollectors(scope: CandidatePacketScope): readonly {
   const retained = requested(scope);
   const required = new Set(retained);
   const visit = (id: CollectorId): void => {
-    for (const dependency of COLLECTOR_DEPENDENCIES[id]) {
+    for (const dependency of CANDIDATE_COLLECTOR_DEPENDENCIES[id]) {
       required.add(dependency);
       visit(dependency);
     }
@@ -293,7 +293,7 @@ export function planCandidateCollectors(scope: CandidatePacketScope): readonly {
   const complete = new Set<CollectorId>();
   const append = (id: CollectorId): void => {
     if (complete.has(id)) return;
-    for (const dependency of COLLECTOR_DEPENDENCIES[id]) append(dependency);
+    for (const dependency of CANDIDATE_COLLECTOR_DEPENDENCIES[id]) append(dependency);
     complete.add(id);
     ordered.push(id);
   };
@@ -343,7 +343,7 @@ function executeCandidate(beforeFen: string, move: ExactLegalMove, plan: ReturnT
   const executionOutcomes: CollectorOutcome[] = [];
   const retainedOutcomes: CollectorOutcome[] = [];
   for (const planned of plan) {
-    const dependencies = COLLECTOR_DEPENDENCIES[planned.collectorId];
+    const dependencies = CANDIDATE_COLLECTOR_DEPENDENCIES[planned.collectorId];
     const dependencyMemo: Partial<Record<CollectorId, readonly CollectorOutcome[]>> = {};
     for (const dependency of dependencies) {
       const outcomes = memo[dependency];
@@ -396,7 +396,7 @@ async function executeCandidateCooperatively(
     const group = plan.slice(offset, offset + options.maxCollectorsPerGroup);
     for (const planned of group) {
       const dependencyMemo: Partial<Record<CollectorId, readonly CollectorOutcome[]>> = {};
-      for (const dependency of COLLECTOR_DEPENDENCIES[planned.collectorId]) {
+      for (const dependency of CANDIDATE_COLLECTOR_DEPENDENCIES[planned.collectorId]) {
         const outcomes = memo[dependency];
         if (outcomes === undefined) throw new TypeError(`MISSING_DEPENDENCY:${dependency}`);
         dependencyMemo[dependency] = outcomes;
