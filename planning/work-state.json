@@ -23669,7 +23669,7 @@
       "id": "D2923",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ccd8c4421f39641db2b973b241626b709e540a651e4c1a09a908f947f306ca77",
+      "sourceDigest": "sha256:02d90bc27abfb024f80591f993bedaf1c35e804105b695d5a6a7bf1a73abc09e",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:concept-registry.md"
@@ -23678,7 +23678,7 @@
       "id": "D2924",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1e1d4a9c93ea6eb33ccb9d25f7a37248085245f70fb475d55f12b3cfc0ce2a75",
+      "sourceDigest": "sha256:d0d5d09b0c73b464cb3669039153d587587c4b90815472fb9dd0a12083ea49d8",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:concept-registry.md"
@@ -23687,7 +23687,7 @@
       "id": "D2925",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ad0641d68ab960289241f05ccb9060fe2abee52b07b1e41720b2690643ed0290",
+      "sourceDigest": "sha256:654107ea6ed93e799e134241085230d89da9cd76470a036ce0b33894b982090a",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:concept-registry.md"
@@ -23696,7 +23696,7 @@
       "id": "D2926",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:af00949a7a4d65a20fa5715133c65c02d3cdb575cb125fc0c28a1417479dc19d",
+      "sourceDigest": "sha256:6fce771318cfd7529fa4442ba525dc33e114a3511fe2b3feb90709a8b12d4830",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:concept-registry.md"
@@ -23705,7 +23705,7 @@
       "id": "D2927",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:6ae94d58d5c7b8cbfa587613fa8a7038b540dfaba7c823c41a526bbdd28503f1",
+      "sourceDigest": "sha256:e36ba46d72cdbce6e78eaf31476cce834486f61ca739152366019e920dfc6fc8",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:concept-registry.md"
@@ -23714,7 +23714,7 @@
       "id": "D2928",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:fcf4e44d2a1cedcaa2f585e164bb2f1a971d5a15a7b11acfd8e527e7a61f2ade",
+      "sourceDigest": "sha256:af97beddd016ffe045d17c9c712851dd5292ad25c7753dd024d571d93948a194",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:concept-registry.md"

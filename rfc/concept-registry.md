@@ -1,13 +1,13 @@
 # RFC: Concept registry — one cross-pack identity authority
 
-- **Status:** draft — **returned by the fifth genuinely fresh independent review on
-  [[D2923]]–[[D2928]].** The fourth repair closes its assigned findings, but readiness remains
-  publicly mintable; raw SQLite lets the data callback escape the coordinator transaction; matching
-  hashes admit invalid packs; restart receipt validation is optional; the graph cannot traverse the
-  real Svelte entry; and discarded operation results count as consumed. `make
-  concept-registry-fifth-fresh-review` retains the predecessor chain and executes all six
-  counterexamples. A bounded author repair and another genuinely fresh review are required. The
-  independently-passed shared-resource bootstrap still precedes acceptance and implementation.
+- **Status:** draft — **fifth author repair completed on [[D2923]]–[[D2928]].** Readiness now has a
+  private lexical issuer; migration receives no raw database or transaction control; the shipped
+  complete-pack validator precedes digest authority; restart requires an exact recomputed receipt;
+  committed Svelte imports participate in the real application graph; and every operation result
+  reaches its declared product boundary. `make concept-registry-fifth-author-repair` retains the
+  predecessor chain and passes 6/6 direct repairs plus strict TypeScript. Another genuinely fresh
+  review and the independently-passed shared-resource bootstrap still precede acceptance and
+  implementation.
 - **Author:** codex, factored from `rfc/skills.md` §4 and the D300/D700 measurements.
 - **Created:** 2026-08-31
 - **Design refs:** `design/01-training-model.md` §§60–65 (registry belongs to authoring);
@@ -485,6 +485,30 @@ review target means the return is reproduced, not that the RFC is accepted. The 
 close capability issuance, transaction capability, pack validation, restart validation, the real
 Svelte graph and operation-specific value flow before another genuinely fresh review.
 
+## Fifth author repair — 2026-09-06
+
+The service-ready token is now an opaque object whose issuer remains inside the coordinator's
+lexical scope. No exported value constructs it, and every storage operation checks private runtime
+authority, so a type assertion or lookalike object cannot cross the boundary. The coordinator gives
+the concept rewrite a frozen operation-specific repository rather than `DatabaseSync`; transaction,
+SQL and pragma controls are absent. It validates each complete pack through the shipped validator
+before canonical hashing and snapshot admission.
+
+Initial migration writes one canonical receipt inside the coordinator transaction. An
+already-versioned database takes a distinct restart path that requires and strictly parses that
+receipt, then recomputes registry, input, complete-artifact and output digests before minting
+readiness. The committed consumer graph now includes `.svelte` instance scripts and therefore
+traverses `main.ts → App.svelte → api.ts`. Consumer closure also changed from call reachability to
+declared value flow: the registered operation must be returned by its wrapper and that wrapper's
+result must enter the operation-specific publication, persistence, query, rendering or wire
+boundary. A bare expression call proves nothing.
+
+`make concept-registry-fifth-author-repair` retains every predecessor return/repair, passes 6/6
+direct repair groups and strict TypeScript. Exact receipt:
+`planning/concept-registry/fifth-author-repair-2026-09-06.md`. This remains author-contract evidence,
+not acceptance or implementation; another genuinely fresh review and the implemented shared-
+resource bootstrap still precede both.
+
 ## Acceptance criteria
 
 1. The process prerequisite's absent root exists before this RFC declares `first lane 1`; first
@@ -556,6 +580,24 @@ Svelte graph and operation-specific value flow before another genuinely fresh re
 24. The exact committed repository compiler/config/dependency authority rejects all diagnostics
     before the closure receipt is minted; the same reachable graph with one type-invalid consumer,
     unresolved import or incompatible config fails.
+25. Service-ready storage has no exported value constructor or issuer. Only the coordinator's
+    successful post-commit path can mint it, and direct, static, cast and structural forgeries fail
+    the private runtime authority check.
+26. The concept rewrite receives only a frozen operation-specific repository capability. It has no
+    raw database, SQL, begin, commit, rollback or pragma surface; the coordinator remains sole owner
+    of transaction state and the version stamp.
+27. Every historical pack crosses the shipped complete-document validator before its canonical
+    digest is admitted. A hash-matching document with any schema, lint or runtime error fails with
+    pointed diagnostics.
+28. Initial migration and restart are distinct closed paths. Restart requires a canonical receipt
+    and recomputes registry, input, complete-artifact and output digests; missing, malformed or stale
+    receipt authority refuses readiness.
+29. Consumer closure follows committed `.svelte` instance-script imports, including the production
+    `main.ts → App.svelte → api.ts` chain. Replacing it with a direct fixture or disconnecting
+    `api.ts` fails.
+30. Each registered operation result returns through its owning wrapper and enters its declared
+    operation-specific product boundary. Bare expression calls, unused wrapper returns and a result
+    routed to another operation's boundary all fail.
 
 ## Discharges
 

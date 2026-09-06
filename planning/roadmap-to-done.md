@@ -2207,3 +2207,14 @@ canonical-resource digest; and neither the schema discriminant nor digest wire g
 three new falsifiers plus the valid generic descriptor control. Foundation contracts remain active
 at author repair; provider exchange, source-backed evidence, bot inputs and external-source Support
 cannot treat this register as accepted.
+
+### 2026-09-06 foundation checkpoint — concept authority reaches real consumers
+
+The fifth concept-registry author repair closes the six seams found at the application boundary.
+Readiness has no public issuer; the migration receives no raw SQL or transaction control; invalid
+complete packs fail before hashing; restart requires and recomputes an exact receipt; the committed
+graph follows `main.ts → App.svelte → api.ts`; and each registered operation result reaches its
+named publication, persistence, query, rendering or wire boundary. `make
+concept-registry-fifth-author-repair` retains the entire return/repair chain and passes 6/6 current
+groups plus strict TypeScript. Foundation contracts advance to genuinely fresh review and the
+shared-resource bootstrap dependency; no concept schema or migration is accepted yet.

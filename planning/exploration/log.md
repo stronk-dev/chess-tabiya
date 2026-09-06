@@ -17076,3 +17076,20 @@ one newline before semantic parsing, and every post-accept v1 image must retain 
 passes 6/6 direct repairs plus strict TypeScript. No catalogue, register, provider product, schema,
 storage, content, archive or protected-design byte changed. Another genuinely fresh review and the
 accepted/implemented generic bootstrap still precede implementation; D4 remains product-owned.
+
+## 2026-09-06 — concept registry fifth author repair
+
+**What landed:** a bounded contract-tier repair for [[D2923]]–[[D2928]]. Service readiness is now
+privately minted after the coordinator commit; migration receives an operation-only capability;
+complete packs cross the shipped validator before digest authority; and restart requires an exact
+receipt whose registry, input, artifact and output images are recomputed.
+
+**What changed:** the committed consumer graph now follows Svelte instance-script imports through
+the real web entry, and closure requires each operation's returned value to reach its named product
+boundary. A reachable or invoked-but-discarded operation no longer counts as consumption.
+
+**Evidence/next:** `planning/concept-registry/fifth-author-repair-2026-09-06.md`; `make
+concept-registry-fifth-author-repair` retains the predecessor chain and passes 6/6 direct repairs
+plus strict TypeScript. No schema, migration, production, content, archive or protected-design byte
+changed. Another genuinely fresh review and the accepted/implemented shared-resource bootstrap
+still precede implementation.

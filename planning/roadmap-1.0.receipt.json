@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:878321cb4b55adc9b0c2e726e649e7b79689fa2a0271ac940dcb1f065fb63bce",
+    "roadmap": "sha256:ef8a35ba853682ff781cca567bc71fa38454fa4a04c7c9fe8cfc968f6f3d12a7",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:3cea3b7260cb3c0b5c64f436d76cec7b44efc89e8f7fa5f2b4f1026170189a5d",
-    "rfcRegister": "sha256:2ae3648923aae844a6a888acc54af12827eb2d26ef15b2fd451ba28c560d55bf",
+    "workState": "sha256:eb57a6e918c7841a4dc33167e9c669e27499ef0f705626b16e17746b5633dee2",
+    "rfcRegister": "sha256:2cc74af1e43e73b882e5a56a0d072a0119b42a3fc45f3bd8f27bddda080e24cc",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -115,22 +115,22 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; repair concept-registry D2923-D2928 and provider-health D2942-D2949; freshly review provider-protocol's fifth repair and each remaining repair; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; freshly review concept-registry's fifth repair and provider-protocol's fifth repair; repair provider-health D2942-D2949; then advance provider exchange, pack-capability and longitudinal-store lanes.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "Provider-protocol's fifth author repair now derives acceptance from actual complete first-parent Git history, binds exact accepted/HEAD/index/worktree bytes, uses the shipped RFC-8785 canonicalizer and refuses later v1 mutation; fresh review remains.",
+        "summary": "Concept-registry's fifth author repair closes private readiness issuance, transaction-limited migration, complete-pack validation, exact restart receipts, the real Svelte graph and operation-specific result flow; fresh review remains.",
         "impact": "held",
         "evidence": [
-          "planning/provider-protocol-register/fifth-author-repair-2026-09-06.md",
-          "tools/d2950-provider-protocol-fifth-author-repair/contract.test.ts",
-          "rfc/provider-protocol-register.md",
+          "planning/concept-registry/fifth-author-repair-2026-09-06.md",
+          "tools/d2923-concept-registry-fifth-author-repair/contract.test.ts",
+          "rfc/concept-registry.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "provider-protocol-register.md",
-            "digest": "sha256:e0f7d90498e0e2d60c9ff4be7c6b3869a8e2afc4aec70c94292e7a5e49e4a253"
+            "id": "concept-registry.md",
+            "digest": "sha256:d5dc14467c68aecf56f22b38ff4f272f9b42f03ce5cd29be354edbf1795be645"
           }
         ]
       },
