@@ -1,12 +1,13 @@
 # RFC: Concept registry — one cross-pack identity authority
 
-- **Status:** draft — **returned by third fresh independent review on [[D2878]]–[[D2884]].** The
-  second repair uses invented storage/run shapes and a reduced artifact digest; reads the migration
-  population before its transaction; trusts stale restart receipts; omits the promised revision-file
-  compiler; proves import anchors rather than consumption; and implements locale lowercasing rather
-  than Unicode case folding. `make concept-registry-third-fresh-review` retains the full chain and
-  passes 7/7 reproductions. Author repair, another fresh review and the process dependency precede
-  implementation.
+- **Status:** draft — **third author repair completed on [[D2878]]–[[D2884]].** The executable
+  checkpoint now uses the shipped compound storage key, runtime replay and complete PackRegistry
+  artifact authority inside one transaction; revalidates restart preimages and outputs; compiles the
+  canonical on-disk revision chain; proves six named consumer operations through TypeScript symbol
+  resolution; and executes the versioned locale-free label collision key. `make
+  concept-registry-third-author-repair` retains the complete return/repair chain and passes 7/7
+  current groups plus strict TypeScript. Another genuinely fresh review and the independently-passed
+  shared-resource bootstrap dependency precede acceptance and implementation.
 - **Author:** codex, factored from `rfc/skills.md` §4 and the D300/D700 measurements.
 - **Created:** 2026-08-31
 - **Design refs:** `design/01-training-model.md` §§60–65 (registry belongs to authoring);
@@ -71,7 +72,13 @@ interface ConceptRegistryEntry {
 ```
 
 `ConceptId` is a branded lower-case slug matching `^[a-z0-9]+(?:-[a-z0-9]+)*$`, 1–80 bytes.
-Labels are trimmed 1–100-byte authored display strings. IDs and case-folded labels are unique.
+Labels are trimmed 1–100-byte authored display strings. IDs and `labelCollisionKeyV1` values are
+unique. The key is a versioned, locale-free build rule: validate Unicode scalar input; require the
+supported runtime's pinned Unicode-data version `17.0`; apply NFKC, ECMA-262 default lowercasing,
+the two explicit full-fold expansions `ß → ss` and `ς → σ`, then NFC. No locale-sensitive API or
+host-default locale participates. This is deliberately the exact v1 collision rule, not a claim to
+track an ambient or future Unicode case-fold table; changing the rule or Unicode-data version is a
+registry-compiler version change with cross-platform fixtures.
 Entries sort by `id`; unknown keys fail; JSON duplicate keys, invalid Unicode and non-canonical
 ordering fail. Immutable revision bytes live at
 `content/concepts/revisions/<sha256-hex>.json`; the filename must equal the canonical source-byte
@@ -123,12 +130,15 @@ Two successor discharges are declared separately and must be absent at this land
 
 The compiler test consumes an exact committed TypeScript import graph compiled with the same
 repository-snapshot and compiler authority as `shared-resource-register-bootstrap`; it does not
-accept a caller-supplied consumer-name array.
-It scans imports and fails a duplicate import edge, second ID/label map, direct JSON parser, local
-fallback, unregistered display transform, a missing/extra landing consumer or either successor
-importing a local registry. The closure receipt records the exact repository commit and ordered
-consumer paths. Successor contracts later replace their discharge with an import of this exact
-public projection; they do not widen the first landing's consumer count. Callers carry
+accept a caller-supplied consumer-name array. Each of the six paths is paired with the exact public
+operation it must call. TypeScript symbol resolution follows direct imports, aliases, barrels and
+re-exports back to that operation's declaration; an unused/dead import therefore proves nothing.
+The retained structural scan separately fails a duplicate import edge, second ID/label map, direct
+JSON parser, local fallback, unregistered display transform, a missing/extra landing consumer or
+either successor importing a local registry. The closure receipt records the exact repository
+commit and ordered `path#operation` identities. Successor contracts later replace their discharge
+with an import of this exact public projection; they do not widen the first landing's consumer
+count. Callers carry
 `ConceptRef`:
 
 There is no second ID/label map: the compiled registry is the only identity-and-label authority.
@@ -209,10 +219,13 @@ The migration creates a registered table and a separate
    `attempt_concept_legacy` with raw key/label and a closed reason. Quarantine rows render as
    unverified history but are excluded from related attempts, Campaign and Skills;
 6. refuses key collisions or injected write failures and rolls back all changes;
-7. writes the migration/version receipt only after set-equality over the canonical input primary
-   keys versus the disjoint registered-plus-quarantine output, exact foreign-key occurrences and
-   exact input/partition digests. On restart, the receipt is returned only when the recomputed
-   input digest agrees; changed input fails startup rather than silently re-running or widening.
+7. writes the migration/version receipt only after set-equality over the canonical compound input
+   keys versus the disjoint registered-plus-quarantine output, exact occurrence identities and
+   exact input, registry-artifact, installed-pack-artifact and complete-output digests. On restart,
+   it strictly parses the stored receipt and, inside a new `BEGIN IMMEDIATE`, recomputes all four
+   authorities plus both output populations. A changed registry, unavailable/changed pack
+   artifact, added/removed/changed source row, changed output row or malformed receipt fails startup
+   rather than returning stale success, silently re-running or widening.
 
 Fresh databases write only registered global keys. Mixed-version reads are forbidden; the
 application refuses startup if storage version and registry/migration receipt disagree. Account
@@ -346,6 +359,35 @@ The second repair closes its eight named findings but remains unbuildable on sev
 `planning/concept-registry/third-fresh-independent-buildability-review-2026-09-06.md`. The RFC
 remains draft and no production schema, registry, migration or consumer work is authorized.
 
+## Third author repair — 2026-09-06
+
+The bounded repair closes [[D2878]]–[[D2884]] at the requirements tier without publishing a
+registry or changing product storage. The executable checkpoint reads the production
+`attempt_concepts` compound key, stored `DrillRun` event stream through `readBackReplay`, and exact
+full-document digest through `PackRegistry.byDigest`; no reduced pack projection or caller-minted
+occurrence object remains. `BEGIN IMMEDIATE` now precedes receipt, population and artifact reads.
+Both initial completion and restart validate the registry, source rows, referenced artifacts,
+registered/quarantine partition and complete output bytes, with rollback and malformed-receipt
+fixtures.
+
+`compileConceptRegistry(headBytes, revisionFiles)` now validates canonical head/revision bytes,
+filename-to-digest equality, complete predecessor reachability and lifecycle monotonicity, while
+preserving exact historical resolution. Consumer closure names six operations rather than six
+files and follows TypeScript aliases/barrels to the defining symbol, so dead imports fail. The
+portable v1 label-collision key is now literal and version-bounded instead of relying on a locale;
+both multi-code-point `Straße`/`STRASSE` and Greek final-sigma collisions execute.
+
+The full gate found and closed [[D2898]] during this repair: the predecessor “historical” review
+read the live RFC, storage and model text, so correcting D2884 made its retained falsifier fail.
+Those reviewed text inputs now come from exact commit `da3fde39`, and the successor asserts the
+pin. Later contract repairs can no longer rewrite the evidence that caused them.
+
+`make concept-registry-third-author-repair` retains all 36 predecessor controls and passes 7/7
+current repair groups plus strict TypeScript. Exact receipt:
+`planning/concept-registry/third-author-repair-2026-09-06.md`. This is author-contract evidence, not
+acceptance or implementation; another genuinely fresh independent review and the
+shared-resource-register bootstrap still precede both.
+
 ## Acceptance criteria
 
 1. The process prerequisite's absent root exists before this RFC declares `first lane 1`; first
@@ -379,6 +421,27 @@ remains draft and no production schema, registry, migration or consumer work is 
 12. `make verify` plus the focused author/implementation contract runs in the local and GitHub
     governance gate; no real corpus assertion enters the generic software tier except the separate
     content set-equality check.
+13. Migration fixtures use the shipped `(run_id, branch_id, concept_key)` source identity and a
+    production-shaped `DrillRun`; any private `row_id` or reduced run-snapshot authority fails.
+14. Historical occurrence is admitted only when `readBackReplay` validates the stored run and
+    `PackRegistry.byDigest` resolves its exact complete document digest; reduced `{id, concepts}`
+    projections and caller pack bytes cannot mint authority.
+15. Receipt lookup, source join, artifact resolution, writes and final validation all occur after
+    one `BEGIN IMMEDIATE`; an injected write failure rolls back registered rows, quarantine rows
+    and the receipt together.
+16. Restart strictly parses the receipt and recomputes registry, input, referenced artifact,
+    partition and complete-output digests; registry replacement, missing/changed artifact, deleted
+    output, changed input or malformed receipt each fails closed.
+17. The on-disk compiler rejects malformed/noncanonical head bytes, misnamed/missing/orphan/cyclic
+    history and lifecycle reversal, and resolves both current and exact historical refs from the
+    complete reachable revision chain.
+18. Each of the six landing paths calls its distinct registered operation. TypeScript symbol
+    resolution follows an alias/barrel to the declaration, while the same six imports with no calls
+    fail operation closure.
+19. Label collision uses exactly `labelCollisionKeyV1` under Unicode data 17.0, independent of
+    locale. Expansion and contextual-equivalence fixtures at minimum cover `Straße`/`STRASSE` and
+    Greek `σ`/`ς`; a runtime with different Unicode data refuses the build pending a versioned rule
+    update.
 
 ## Discharges
 

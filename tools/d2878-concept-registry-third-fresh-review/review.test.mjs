@@ -19,9 +19,10 @@ const {
   revisionBytes,
 } = model;
 
-const source = readFileSync("tools/d2709-concept-registry-second-author-repair/model.mjs", "utf8");
-const storage = readFileSync("apps/server/src/storage.ts", "utf8");
-const rfc = readFileSync("rfc/concept-registry.md", "utf8").replace(/\s+/gu, " ");
+const reviewed = (file) => execFileSync("git", ["show", `da3fde393220f1d36241f6e19399038b86ae2da9:${file}`], { encoding: "utf8" });
+const source = reviewed("tools/d2709-concept-registry-second-author-repair/model.mjs");
+const storage = reviewed("apps/server/src/storage.ts");
+const rfc = reviewed("rfc/concept-registry.md").replace(/\s+/gu, " ");
 
 function catalogue(label = "Fork") {
   const registry = new RevisionCatalogue();

@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:275bc4ee1d0e2ad1995a3e8de88e0f448504225c9ebe6ce732b4e8cc1517f09c",
+    "roadmap": "sha256:ea805b01fe1023da5682e6aefa73e88ff4d2cdb0966b73fd049a65827ffc417b",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:e544218dd040d9cb4196e456c6f7d89014dda1a791b34de95357a63bd6124033",
-    "rfcRegister": "sha256:51df245effc1668f9fe214ca8e142a6d457ceb95b2a263d3e52d6b1f622d2a06",
+    "workState": "sha256:d18c09ede11e3d801f5c533d003470077e9dafd783beb384c35cbee3d77b5267",
+    "rfcRegister": "sha256:1fc58db0a7e64ab4062cc6e3ab8bda7128bbbfcbc0a24e7560d573966639d568",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -33,7 +33,7 @@
       "todo": 648,
       "doing": 0,
       "blocked": 1161,
-      "done": 834,
+      "done": 835,
       "refused": 3
     },
     "workItems": {
@@ -115,23 +115,23 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; author-repair concept-registry D2878-D2884; freshly review that contract plus the repaired provider-health D2869-D2873 and provider-protocol D2874-D2877 contracts; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; freshly review the repaired concept-registry D2878-D2884, provider-health D2869-D2873 and provider-protocol D2874-D2877 contracts; then advance provider exchange, pack-capability and longitudinal-store lanes.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "Provider-health's ninth author repair now composes concurrent snapshot, sealed cache/settlement, group-local lease and distinct-generation authority over the retained reducer/cache/availability/release checkpoint. Fresh review and provider protocol/exchange still gate implementation.",
+        "summary": "Concept-registry's third author repair now uses shipped storage/runtime/pack authority under one transaction, validates complete restart state, compiles immutable history and proves six consumer operations. Fresh review and the shared-resource bootstrap still gate implementation.",
         "impact": "advanced",
         "evidence": [
-          "planning/provider-health-degradation/ninth-author-repair-2026-09-06.md",
-          "tools/d2869-provider-health-ninth-author-repair/contract.test.ts",
-          "tools/d2869-provider-health-ninth-fresh-review/review.test.ts",
-          "rfc/provider-health-degradation.md",
+          "planning/concept-registry/third-author-repair-2026-09-06.md",
+          "tools/d2878-concept-registry-third-author-repair/contract.test.ts",
+          "tools/d2878-concept-registry-third-fresh-review/review.test.mjs",
+          "rfc/concept-registry.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "provider-health-degradation.md",
-            "digest": "sha256:0aeea5d631c0fec63fbcd9c1ea6f897021e9b71ee02dfbfbe9b624b9d6fbabcd"
+            "id": "concept-registry.md",
+            "digest": "sha256:864b91a77d3cd8387dc1de3a66718bba67df53cad616a5507d47eee4decd4054"
           }
         ]
       },

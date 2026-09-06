@@ -16639,3 +16639,23 @@ composition groups plus strict TypeScript.
 `planning/provider-health-degradation/ninth-author-repair-2026-09-06.md`. Another genuinely fresh
 review and provider-protocol/provider-exchange still precede acceptance and either implementation
 checkpoint.
+
+## 2026-09-06 — concept-registry third author repair
+
+**What landed:** closed [[D2878]]–[[D2884]] at contract tier and fixed the historical-review defect
+found during the full gate as [[D2898]]. The executable checkpoint now uses
+the production compound concept key, stored-run replay and exact full PackRegistry artifact inside
+one immediate transaction; restart revalidates registry/input/artifact/partition/output authority;
+the canonical revision-file compiler retains historical refs; six consumer operations resolve
+through TypeScript symbols; and a pinned locale-free label collision key executes. The predecessor
+review now reads its text inputs from exact commit `da3fde39`.
+
+**What changed:** the third return's seven failures are now positive able-to-fail requirements, not
+prose corrections. No product schema, storage, API, client, registry or content byte changed, and
+the RFC remains draft.
+
+**Evidence/next:** `make concept-registry-third-author-repair` retains the complete predecessor
+chain and passes 7/7 current groups plus strict TypeScript. Exact receipt:
+`planning/concept-registry/third-author-repair-2026-09-06.md`. Another genuinely fresh independent
+review and the independently-passed shared-resource bootstrap still precede acceptance and
+implementation.

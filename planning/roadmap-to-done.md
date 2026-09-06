@@ -1567,6 +1567,21 @@ concept-registry-third-fresh-review` retains 29 predecessor controls and passes 
 The identity foundation remains at contract repair, not implementation. Receipt:
 `planning/concept-registry/third-fresh-independent-buildability-review-2026-09-06.md`.
 
+The bounded third author repair closes those seven requirements gaps without claiming a landed
+registry. The migration now executes against the shipped compound storage identity, runtime replay
+and exact PackRegistry artifact under one transaction; restart recomputes every authority and both
+output populations. The canonical revision-chain compiler, exact historical resolver, six
+operation-level TypeScript consumer obligations and a pinned locale-free collision key are
+executable. `make concept-registry-third-author-repair` retains the chain and passes 7/7 current
+groups plus strict TypeScript. Fresh independent review and the shared-resource bootstrap still
+precede acceptance and implementation. Receipt:
+`planning/concept-registry/third-author-repair-2026-09-06.md`.
+
+The full verification gate also found [[D2898]]: the third “historical” review reread live RFC,
+storage and predecessor source text, so repairing D2884 invalidated its retained falsifier. Those
+reviewed text inputs are now pinned to exact commit `da3fde39`, and the successor asserts the pin;
+the review/repair chain can be green simultaneously without erasing why the repair exists.
+
 ### 7. Human-like bots, personalities, roster, and bot events
 
 <!-- roadmap-capability: bots -->
