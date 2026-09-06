@@ -25,3 +25,15 @@ inherited from the shared engine.
 
 `make shared-register-reconciliation-author-repair` passes 6/6. No provider product bytes changed.
 Fresh independent review waits on the generic engine.
+
+## 2026-09-06 — Fifth fresh independent buildability return
+
+The fourth repair's value grammar and canonical population ordering survive, but six executable
+controls show that repository authority is still represented by caller-shaped data. Invented commit
+labels mint acceptance; semantic equality hides exact receipt byte drift; current/staged checkout
+state is not observed; duplicate keys collapse before parsing; the local canonicalizer admits lone
+surrogates; and a changed accepted v1 receipt inside later history is ignored.
+
+`make provider-protocol-fifth-fresh-review` retains the complete review/repair chain and passes 6/6
+fresh counterexamples. A bounded author repair and another genuinely fresh review remain before the
+generic dependency can unlock implementation.

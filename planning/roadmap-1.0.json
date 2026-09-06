@@ -327,14 +327,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; repair concept-registry D2923-D2928; repair provider-health D2942-D2949; freshly review provider-protocol's fourth repair; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; repair concept-registry D2923-D2928, provider-health D2942-D2949 and provider-protocol D2950-D2955; freshly review each repair; then advance provider exchange, pack-capability and longitudinal-store lanes.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Provider-health's eleventh fresh review returned the tenth repair on eight executable seams: copied group membership, public predecessor/coordinator/reset authority, unsealed settlement truth, incomplete exact-cache and reason-bearing availability, and monotonic time published as civil time.",
+          "summary": "Provider-protocol's fifth fresh review returned the fourth repair: its accepted preimage is still built from caller-authored history and parsed values rather than actual first-parent ancestry and exact accepted/current/index/worktree bytes.",
           "impact": "held",
-          "evidence": ["planning/provider-health-degradation/eleventh-fresh-independent-buildability-review-2026-09-06.md", "tools/d2942-provider-health-eleventh-fresh-review/review.test.ts", "rfc/provider-health-degradation.md", "rfc/README.md"],
+          "evidence": ["planning/provider-protocol-register/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2950-provider-protocol-fifth-fresh-review/review.test.mjs", "rfc/provider-protocol-register.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "provider-health-degradation.md", "digest": "sha256:f6c652fd47c19ca25694eeeacd109546c691e206659116a181c7db38679d356d"}
+            {"kind": "rfc", "id": "provider-protocol-register.md", "digest": "sha256:5a1ada23a8e90a3ef853d34beba44811a67716e4c31ebf85c944f52d06b173e0"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

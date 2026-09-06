@@ -23907,6 +23907,60 @@
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-health-degradation.md"
+    },
+    {
+      "id": "D2950",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d59c3f7002b52ca4e468d9ff03a69a2f36be0d9adfe567badd7bedcd13a08a64",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2951",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ead66c3f0ef571a89035fd02c78e689cad01ef84c842488284cd0efb61df7c97",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2952",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ecfeef0152d3a626c5e239f7afdedc16e270d546a97d81733866ab598ca2e434",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2953",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:339598f3f71f14de50dfc5b8fa52768e6b7cfeed46b952b8e61fdc5fae6a5e3c",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2954",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:a6781ac8ac2fabac4aed26b6731c0e155b8ef0dac35d6044ccd81175b28a6513",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2955",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5e3a31aee45591cef236a5f5f0cbc6fab51f3ab77cc39e2c0475cf559f9abc1d",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-protocol-register.md"
     }
   ]
 }

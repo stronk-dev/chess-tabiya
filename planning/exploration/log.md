@@ -17045,3 +17045,22 @@ counterexamples plus repository-compatible TypeScript. A bounded author repair m
 private declaration-derived registry/coordinator/exchange authority and one complete operation wire
 result before another genuinely fresh review. Provider protocol and exchange still precede either
 implementation checkpoint.
+
+## 2026-09-06 — provider protocol fifth fresh buildability return
+
+**What landed:** a genuinely fresh review of the fourth provider-protocol repair, registering six
+executable counterexamples as [[D2950]]–[[D2955]]. No catalogue, register, provider product, schema,
+storage, content, archive or protected-design byte changed.
+
+**What changed:** canonical population ordering and the receipt value grammar survive. The accepted
+preimage does not: caller-authored history mints authority, exact receipt bytes collapse to a parsed
+value, current/staged checkout state is unobserved, duplicate keys disappear before parsing, a
+partial canonicalizer accepts invalid Unicode, and later accepted-receipt mutation is ignored.
+
+**Evidence/next:**
+`planning/provider-protocol-register/fifth-fresh-independent-buildability-review-2026-09-06.md`;
+`make provider-protocol-fifth-fresh-review` retains every predecessor and passes 6/6 fresh
+counterexamples. A bounded author repair must join repository-owned first-parent history, exact
+accepted/current/index/worktree bytes and the shared RFC-8785 parser before another fresh review.
+The generic bootstrap still precedes process implementation; product population semantics remain
+the later D4 obligation.

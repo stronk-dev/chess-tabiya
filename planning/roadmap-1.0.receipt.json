@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:b6c09480c13cdd9aad6b6165341830af993d83ff0b130c7e3410fbe65df446cb",
+    "roadmap": "sha256:2f9fb1004f0912cf030a14b0dfef032c056b58cf8b8b42f5baaafc3813914b25",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:d78ee895a5bf18ea670a192e5751fc85f35124154b6206f50a9c3f9f5cb396ea",
-    "rfcRegister": "sha256:99855d7ae74f0d2ca58f87168096bd05aff8b4aaafce6c5d439534e80d3e7d27",
+    "workState": "sha256:3cea3b7260cb3c0b5c64f436d76cec7b44efc89e8f7fa5f2b4f1026170189a5d",
+    "rfcRegister": "sha256:6e6979ba58a7ab11d2e4699fb5579e976469cc8885099be2ddc16186a1d8ed97",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 651,
       "doing": 0,
-      "blocked": 1204,
+      "blocked": 1210,
       "done": 840,
       "refused": 3
     },
@@ -115,22 +115,22 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; repair concept-registry D2923-D2928; repair provider-health D2942-D2949; freshly review provider-protocol's fourth repair; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; repair concept-registry D2923-D2928, provider-health D2942-D2949 and provider-protocol D2950-D2955; freshly review each repair; then advance provider exchange, pack-capability and longitudinal-store lanes.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "Provider-health's eleventh fresh review returned the tenth repair on eight executable seams: copied group membership, public predecessor/coordinator/reset authority, unsealed settlement truth, incomplete exact-cache and reason-bearing availability, and monotonic time published as civil time.",
+        "summary": "Provider-protocol's fifth fresh review returned the fourth repair: its accepted preimage is still built from caller-authored history and parsed values rather than actual first-parent ancestry and exact accepted/current/index/worktree bytes.",
         "impact": "held",
         "evidence": [
-          "planning/provider-health-degradation/eleventh-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d2942-provider-health-eleventh-fresh-review/review.test.ts",
-          "rfc/provider-health-degradation.md",
+          "planning/provider-protocol-register/fifth-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d2950-provider-protocol-fifth-fresh-review/review.test.mjs",
+          "rfc/provider-protocol-register.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "provider-health-degradation.md",
-            "digest": "sha256:f6c652fd47c19ca25694eeeacd109546c691e206659116a181c7db38679d356d"
+            "id": "provider-protocol-register.md",
+            "digest": "sha256:5a1ada23a8e90a3ef853d34beba44811a67716e4c31ebf85c944f52d06b173e0"
           }
         ]
       },

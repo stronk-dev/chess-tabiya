@@ -1,12 +1,12 @@
 # RFC: Provider-protocol shared-resource catalogue population
 
-- **Status:** draft — **fourth author repair completed on [[D2909]]–[[D2911]] and adjacent
-  [[D2920]]/[[D2921]].** A first-parent
-  acceptance-transition authority pins the exact reviewed receipt; canonical row-byte ordering is
-  shared by receipt and resource; and the receipt has one literal schema plus domain-separated
-  digest grammar. `make provider-protocol-fourth-author-repair` retains the complete predecessor
-  chain and passes 4/4 direct repairs. Another genuinely fresh review and the generic bootstrap
-  dependency remain required. Implementation is unauthorized.
+- **Status:** draft — **RETURNED by fifth fresh independent review on [[D2950]]–[[D2955]].** The
+  fourth repair closes its ordering and value-grammar defects, but caller-authored history and
+  receipt objects still impersonate Git ancestry and exact file bytes; committed/staged state is
+  unobserved; duplicate keys and invalid Unicode enter; and accepted receipt mutation is ignored.
+  `make provider-protocol-fifth-fresh-review` retains the complete chain and passes 6/6 fresh
+  counterexamples. A bounded author repair, another genuinely fresh review and the generic
+  bootstrap dependency remain required. Implementation is unauthorized.
 - **Author:** Codex
 - **Created:** 2026-08-30
 - **Design refs:** none. This is repository process and changes no provider behavior or learner UX.
@@ -302,6 +302,22 @@ provider state machine. It closes only after this population's executable criter
 14. [[D2921]] Acceptance authority requires a complete history projection that witnesses the source
     RFC in draft immediately before its unique transition to accepted. A shallow history whose first
     visible image is already accepted cannot mint authority.
+15. [[D2950]] Only a repository-owned reader over the required complete first-parent history can
+    issue acceptance authority. Caller arrays, unresolved object ids, broken parent adjacency,
+    wrong repository/base and status rows not derived from exact source-RFC bytes fail.
+16. [[D2951]] Acceptance authority carries the SHA-256 digest of the exact receipt file bytes from
+    the accepted transition, distinct from the receipt's semantic obligations digest. Whitespace,
+    key-order or final-newline drift fails even when parsed values are equal.
+17. [[D2952]] One build-owned observation binds accepted bytes, committed HEAD bytes, index bytes and
+    worktree bytes before product validation. A caller cannot supply any of those observations;
+    committed replacement, staged replacement and unstaged replacement each fail independently.
+18. [[D2953]] Receipt bytes reject duplicate keys and non-canonical representation before ordinary
+    JSON value construction; the resulting parsed value then passes the closed semantic parser.
+19. [[D2954]] Receipt and resource canonicalization reuse the repository's shipped RFC-8785
+    authority. Lone high and low surrogates fail before digesting or sorting any row.
+20. [[D2955]] Every first-parent image after v1 acceptance preserves the exact accepted receipt
+    bytes until a separately versioned amendment transition. Mutation, disappearance and
+    mutate-then-restore all fail the history projection.
 
 ## Second fresh independent return (2026-09-05)
 
@@ -431,6 +447,22 @@ receipt: `planning/provider-protocol-register/fourth-author-repair-2026-09-06.md
 author-contract evidence, not acceptance or implementation; another genuinely fresh review and the
 generic bootstrap dependency remain mandatory.
 
+## Fifth fresh independent return (2026-09-06)
+
+The fourth repair's population order and value-level receipt grammar survive, but the claimed
+repository authority is still a caller-constructed model. [[D2950]] accepts invented commit labels
+and unproved array order as complete first-parent history. [[D2951]] hashes a re-canonicalized
+receipt value rather than exact accepted file bytes. [[D2952]] trusts a supplied current object and
+observes neither HEAD, index nor worktree receipt state. [[D2953]] cannot refuse duplicate keys
+after JSON has materialized. [[D2954]] implements a partial canonicalizer that hashes lone
+surrogates. [[D2955]] ignores changed receipt bytes in every accepted history image after the first.
+
+`make provider-protocol-fifth-fresh-review` retains every predecessor and passes 6/6 fresh
+counterexamples. Exact evidence:
+`planning/provider-protocol-register/fifth-fresh-independent-buildability-review-2026-09-06.md`.
+The RFC remains draft; no descriptor, register, obligation receipt or provider product byte is
+authorized.
+
 ## Open questions
 
 None for the owner. The five operations, providers and ten digest domains are existing product-RFC
@@ -438,6 +470,10 @@ semantics, not choices made by this process document.
 
 ## Changelog
 
+- 2026-09-06: fifth fresh independent review returned the fourth repair on [[D2950]]–[[D2955]]:
+  history and exact bytes remain caller claims, checkout state is unobserved, duplicate keys and
+  invalid Unicode enter, and later accepted-receipt mutation is ignored. `make
+  provider-protocol-fifth-fresh-review` passes 6/6 fresh counterexamples.
 - 2026-09-06: fourth author repair closes [[D2909]]–[[D2911]] and [[D2920]]/[[D2921]] at contract tier with a
   first-parent acceptance-transition authority, canonical ordered populations and one exact
   receipt wire grammar. `make provider-protocol-fourth-author-repair` passes 4/4 repair groups.
