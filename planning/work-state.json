@@ -24375,6 +24375,69 @@
       "uxItems": [],
       "owner": "learner-history",
       "blocker": "rfc:longitudinal-store.md"
+    },
+    {
+      "id": "D3002",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6dc54bfa3b45ec752d12c803d6642a407810c66bea643f1837e9f6802fddc146",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D3003",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:872349ab71eff63685265c02ef15e7f34be6d223c0ba6959a85652a11396a260",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D3004",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:92805495f9b2c2e5ec5cffe1a7896415a34413363405c394ed6a0fb29de26cad",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D3005",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:33e85bf15e58cace0e8e5c24e15cda7df3ecd99f459c45db959520f29f5d6608",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D3006",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:95c2686263f38465c5489e595ad53f600c7d7fdddf01c1e11c65c48ccd73a87f",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D3007",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4238387b15ec3078a51ea4f9e7e088f99e6243a96992d1ee9a2e560a592eba25",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D3008",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:310b7b79ed7eb91b9db3b8b9ac88b9925cb7bdfc0c0594864ab59a122b073aa6",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:pack-capability-contract.md"
     }
   ]
 }

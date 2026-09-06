@@ -359,6 +359,16 @@ and 7/7 repair groups pass. Pack-schema/storage implementation remains held pend
 review and accepted provider exchange. Receipt:
 `planning/pack-capability-contract/sixteenth-author-repair-2026-09-05.md`.
 
+The 2026-09-06 seventeenth fresh independent review returns that repair on [[D3002]]–[[D3008]].
+Normative and executable success fields disagree; provider availability/failure authority remains
+structural; origin-specific provider-off effects cross; and retry parsing returns substituted
+bytes. Provider work may start after durable expiry changes, process and database clocks can invert
+retrieval/settlement, and settlement ignores a rewritten parent batch. `make
+pack-capability-seventeenth-fresh-review` retains the chain and passes 7/7 new falsifiers. The
+evidence-to-consumer critical path remains one bounded repair, another genuinely fresh review and
+accepted provider-exchange authority before production. Receipt:
+`planning/pack-capability-contract/seventeenth-fresh-independent-buildability-review-2026-09-06.md`.
+
 The provider-protocol process prerequisite is now freshly returned on [[D2809]]–[[D2814]]. Its
 canonical descriptor parses, but the maintained review target is stale, README ownership and the
 canonical-resource routing row contradict the generic parent, the normative relation does not

@@ -1,10 +1,10 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **sixteenth author repair completed on [[D2802]]–[[D2808]]; another genuinely
-  fresh independent review is required.** Payload/request identity, canonical provider bytes,
-  retry/terminal unions, origin-consumer-operation joins, provider-within-lease time and append-only
-  transition authority now execute under `make pack-capability-sixteenth-author-repair`. No
-  implementation is authorised and D560 stays whole.
+- **Status:** draft — **seventeenth fresh independent review returned the sixteenth repair on
+  [[D3002]]–[[D3008]].** The durable model still has two success-field authorities, structurally
+  mintable provider receipts, crossed provider-off terminal effects, substituted retry bytes,
+  stale lease execution, inverted clocks and an unchecked parent batch. No implementation is
+  authorised and D560 stays whole.
 - **Author:** claude (drafted from `planning/platform-alignment/f3-derivation.md`, the HEAD derivation of every surface this document versions)
 - **Created:** 2026-08-23
 - **Design refs:** `design/research/pack-primitive-stability.md` §6 (R6's six-part model); `planning/platform-alignment/plan.md` Gate F clauses 1, 5, 6, 7
@@ -2483,6 +2483,24 @@ complete predecessor chain and passes 7/7 new repair groups. Exact receipt:
 author evidence; another genuinely fresh review and the accepted provider-exchange dependency both
 gate acceptance and production implementation.
 
+## Seventeenth fresh independent return (2026-09-06)
+
+The next independent pass returns the durable provider/job boundary on [[D3002]], [[D3003]],
+[[D3004]], [[D3005]], [[D3006]], [[D3007]] and [[D3008]]. The
+normative success union names `acquisition`, while the executable parser and writer require
+`provider` and reject the declared arm. Provider availability and failure receipts are still
+accepted as structural JSON, and the origin-specific provider-off terminal table is not encoded.
+Retry parsing validates the stored basis but returns the base parser's substituted `{}` bytes.
+
+A loaded lease may begin provider work after its durable expiry changes. Process-global response
+time may place retrieval after the database settlement timestamp, and settlement never rejoins the
+child to its parent batch request, digest, ordinal and count. `make
+pack-capability-seventeenth-fresh-review` retains the complete predecessor chain and passes 7/7 new
+falsifiers. Exact receipt:
+`planning/pack-capability-contract/seventeenth-fresh-independent-buildability-review-2026-09-06.md`.
+Production remains unauthorized pending a bounded repair, another genuinely fresh review and the
+accepted provider-exchange dependency.
+
 ## Acceptance criteria
 
 Each criterion names what a wrong implementation would do to pass it, because a criterion nothing
@@ -2796,6 +2814,10 @@ longer manufacture a route for an unrelated landed row).
 
 ## Changelog
 
+- 2026-09-06 (**seventeenth fresh independent return**): returned the sixteenth repair on
+  [[D3002]]–[[D3008]]. Success-field parity, sealed provider authority, origin-terminal closure,
+  retained retry bytes, current lease authority, one ordered clock and parent-batch revalidation
+  remain open. `make pack-capability-seventeenth-fresh-review` retains the chain and passes 7/7.
 - 2026-09-05 (**[[D2802]]–[[D2808]] sixteenth author repair**): joined provider payloads to stored
   requests/provider identities, required shared RFC-8785 bytes, closed retry/unavailable unions and
   routing joins, fenced provider time by lease expiry, and made transition rows append-only under

@@ -345,14 +345,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Obtain genuinely fresh reviews of the repaired promotion installation and candidate-packet authorities; then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+        "nextAction": "Complete the bounded pack-capability provider/job repair and freshly review it; obtain genuinely fresh reviews of the repaired promotion installation and candidate-packet authorities; then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "The promotion installation's fifteenth author repair now owns configuration in one application composition, validates and retains every semantic artifact before registry publication, restores typed store lookup and binds request/result/receipt authority to one current lineage.",
-          "impact": "advanced",
-          "evidence": ["planning/evidence-foundation-ux/semantic-collectors-promotion-fifteenth-author-repair-2026-09-06.md", "tools/d2929-semantic-collectors-promotion-fifteenth-author-repair/contract.test.ts", "rfc/semantic-collectors.md", "rfc/README.md"],
+          "summary": "The pack-capability seventeenth fresh review returns the durable provider/job boundary: normative and executable success shapes disagree, provider receipts remain structural, origin effects cross, retry bytes are substituted, lease and clock authority are stale, and settlement ignores its parent batch.",
+          "impact": "regressed",
+          "evidence": ["planning/pack-capability-contract/seventeenth-fresh-independent-buildability-review-2026-09-06.md", "tools/d3002-pack-capability-seventeenth-fresh-review/review.test.mjs", "rfc/pack-capability-contract.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "semantic-collectors.md", "digest": "sha256:d6f584cf3f93b4a4722ced9c3cb3bc9675268006fc94b8afdfa5eee569a53c97"}
+            {"kind": "rfc", "id": "pack-capability-contract.md", "digest": "sha256:14c491470a26ce290c3ba1ed5c5e602cb78ad9f7cd6091e1f270152a5ff21afe"}
           ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."

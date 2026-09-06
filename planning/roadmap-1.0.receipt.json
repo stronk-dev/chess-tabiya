@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:e5327c478554a0028457c76fb91db8ee4443dff4b7acde7da3bb805b0ef79241",
+    "roadmap": "sha256:e4ac360fc274662dc440f6b4c29a4f7a6c7e27b05ca7200cf06c6fac5e663058",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:ed8df0177f7e657682bc77958e50c0e0e1db07c67b944fa3bc98366519691d1c",
-    "rfcRegister": "sha256:33cf5b45e87387b2feb620d7d591b535b2dcf8e583ee3845ef7929bda4b06127",
+    "workState": "sha256:528cc9df29932de3c1af11e22be3a810209564ee3ab132087ed6d624aa858fd9",
+    "rfcRegister": "sha256:981e4b0b6dd892ab1bbd7abfb8f46b84571511b19b3c42985d9bcc4d49b34e4b",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 651,
       "doing": 0,
-      "blocked": 1255,
+      "blocked": 1262,
       "done": 841,
       "refused": 3
     },
@@ -151,22 +151,22 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Obtain genuinely fresh reviews of the repaired promotion installation and candidate-packet authorities; then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+      "nextAction": "Complete the bounded pack-capability provider/job repair and freshly review it; obtain genuinely fresh reviews of the repaired promotion installation and candidate-packet authorities; then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "The promotion installation's fifteenth author repair now owns configuration in one application composition, validates and retains every semantic artifact before registry publication, restores typed store lookup and binds request/result/receipt authority to one current lineage.",
-        "impact": "advanced",
+        "summary": "The pack-capability seventeenth fresh review returns the durable provider/job boundary: normative and executable success shapes disagree, provider receipts remain structural, origin effects cross, retry bytes are substituted, lease and clock authority are stale, and settlement ignores its parent batch.",
+        "impact": "regressed",
         "evidence": [
-          "planning/evidence-foundation-ux/semantic-collectors-promotion-fifteenth-author-repair-2026-09-06.md",
-          "tools/d2929-semantic-collectors-promotion-fifteenth-author-repair/contract.test.ts",
-          "rfc/semantic-collectors.md",
+          "planning/pack-capability-contract/seventeenth-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d3002-pack-capability-seventeenth-fresh-review/review.test.mjs",
+          "rfc/pack-capability-contract.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "semantic-collectors.md",
-            "digest": "sha256:d6f584cf3f93b4a4722ced9c3cb3bc9675268006fc94b8afdfa5eee569a53c97"
+            "id": "pack-capability-contract.md",
+            "digest": "sha256:14c491470a26ce290c3ba1ed5c5e602cb78ad9f7cd6091e1f270152a5ff21afe"
           }
         ]
       },

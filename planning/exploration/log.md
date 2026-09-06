@@ -17271,3 +17271,22 @@ storage method, worker, reader, API, client, learner profile or protected-design
 longitudinal-store-tenth-fresh-review` retains the complete chain and passes 8/8 new counterexamples
 plus strict TypeScript. Complete a bounded repair at the real storage mutation and worker lifecycle
 boundaries, preserve V4 unless separately amended, then obtain another genuinely fresh review.
+
+## 2026-09-06 — Pack capability seventeenth fresh independent review
+
+**What landed:** a fresh executable return on [[D3002]]–[[D3008]]. The sixteenth repair's exact
+request/payload joins, canonical response bytes and append-only transition guards survive, but the
+review proves its durable provider/job authority is still split or bypassable.
+
+**What changed:** `pack-capability-contract.md` remains draft. Normative and executable success
+fields disagree; provider receipts are caller-shaped; origin/provider-off effects cross; retry
+parsing returns substituted bytes; provider work begins after a changed expiry; process and
+database clocks invert retrieval/settlement; and settlement ignores a rewritten parent batch. No
+production pack schema, migration, queue, storage, provider, route, client, content, archive or
+protected-design byte changed.
+
+**Evidence/next:**
+`planning/pack-capability-contract/seventeenth-fresh-independent-buildability-review-2026-09-06.md`;
+`make pack-capability-seventeenth-fresh-review` retains the complete chain and passes 7/7 new
+falsifiers. Complete one bounded provider/job repair, then obtain another genuinely fresh review
+and the accepted provider-exchange dependency before acceptance or implementation.
