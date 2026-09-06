@@ -2148,3 +2148,14 @@ caller-stamped digest through mutable registry methods. `make concept-registry-f
 retains all predecessor evidence and passes five new falsifiers. The foundation-contracts milestone
 therefore remains active at author repair; no concept schema, migration or downstream Campaign/
 Skills work may treat this contract as accepted.
+
+### 2026-09-06 foundation checkpoint — provider obligation preimage returned
+
+The provider-protocol register's third repair is not yet an independently accepted product
+preimage. Its receipt can be replaced in an earlier commit because only its self-digest and current
+staged state are checked; its set-equality join admits array permutations that change the governed
+canonical-resource digest; and neither the schema discriminant nor digest wire grammar is defined.
+`make provider-protocol-fourth-fresh-review` retains the complete predecessor chain and executes
+three new falsifiers plus the valid generic descriptor control. Foundation contracts remain active
+at author repair; provider exchange, source-backed evidence, bot inputs and external-source Support
+cannot treat this register as accepted.

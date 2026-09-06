@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:3a78c8ce3e528eb3a673dc0fa98d7d020222b8d7744302898a89388b5dc2664c",
+    "roadmap": "sha256:3a967a8e952737cb27a900dd7e4cbb8f8090bcb56166475a50a7ca27a664621e",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:e78669ac04b20c5b4c0a0665e8b6a40afeb75d5204e642f9460a2af294f1eb10",
-    "rfcRegister": "sha256:729a5d1b25796653c0be1a99ab662ebf0583af2153f7720184b2332b171ae756",
+    "workState": "sha256:82d364ff57fb7d148356c0a44c652b67bd459adeb9483896b7d425aa53ff9d39",
+    "rfcRegister": "sha256:5303a68c04345e38e387ff23a886c5bd619d97bf54397bc02f5ad59e5f876f45",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 651,
       "doing": 0,
-      "blocked": 1166,
+      "blocked": 1169,
       "done": 837,
       "refused": 3
     },
@@ -115,22 +115,22 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; repair concept-registry D2904-D2908 at the real startup/compiler/artifact boundary; freshly review the provider-health D2869-D2873 and provider-protocol D2874-D2877 repairs; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; repair concept-registry D2904-D2908 and provider-protocol D2909-D2911 at their real startup/acceptance boundaries; freshly review provider-health D2869-D2873; then advance provider exchange, pack-capability and longitudinal-store lanes.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "Concept-registry's fourth fresh review returned the repair: its required PackRegistry exists only after storage migration, transaction ownership collides, consumer closure accepts unreachable/type-invalid calls and mutable registry methods accept caller-stamped digests.",
+        "summary": "Provider-protocol's fourth fresh review returned the repair: its obligation receipt can be replaced before landing, set equality admits order-sensitive resource drift and the receipt wire image is incomplete.",
         "impact": "regressed",
         "evidence": [
-          "planning/concept-registry/fourth-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d2904-concept-registry-fourth-fresh-review/review.test.ts",
-          "rfc/concept-registry.md",
+          "planning/provider-protocol-register/fourth-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d2909-provider-protocol-fourth-fresh-review/review.test.mjs",
+          "rfc/provider-protocol-register.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "concept-registry.md",
-            "digest": "sha256:46c6c8db0fdad53e00ab33b2c63a9d0767beb692fc90c04158f39487424045c1"
+            "id": "provider-protocol-register.md",
+            "digest": "sha256:150582d5692d8fca34886fcff0ad72d042ec959fd95d0c60a17407aaf5d4b3ce"
           }
         ]
       },

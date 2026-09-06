@@ -1,12 +1,12 @@
 # RFC: Provider-protocol shared-resource catalogue population
 
-- **Status:** draft — **third author repair closes [[D2874]]–[[D2877]] at contract tier.** Malformed
-  one-selector resources are `invalid`; a canonical build-only acceptance artifact supplies the
-  prior obligation preimage without a runtime registry or product Git reader; process closeout
-  leaves product-only defects open; and endpoint identity is the exact structured UCI/HTTPS value
-  already owned by the product RFC. `make provider-protocol-third-author-repair` retains the
-  complete return/repair chain and passes 4/4 repair groups. Another genuinely fresh review and the
-  generic bootstrap dependency remain required. Implementation is unauthorized.
+- **Status:** draft — **fourth fresh independent review returned the third repair on
+  [[D2909]]–[[D2911]].** The acceptance receipt has no immutable external pin, unordered set
+  equality admits resource-digest-changing permutations, and its schema/digest wire image is
+  incomplete. `make provider-protocol-fourth-fresh-review` retains the complete predecessor chain,
+  preserves the generic descriptor positive control and passes 3/3 new falsifiers. Another author
+  repair, fresh review and the generic bootstrap dependency remain required. Implementation is
+  unauthorized.
 - **Author:** Codex
 - **Created:** 2026-08-30
 - **Design refs:** none. This is repository process and changes no provider behavior or learner UX.
@@ -361,6 +361,28 @@ groups. Exact receipt:
 `planning/provider-protocol-register/third-author-repair-2026-09-06.md`. Another genuinely fresh
 review and the generic bootstrap dependency still gate acceptance and implementation.
 
+## Fourth fresh independent return (2026-09-06)
+
+The third repair closes [[D2874]]–[[D2877]] but leaves three acceptance-authority failures:
+
+1. [[D2909]] — the receipt is self-authenticating mutable HEAD. A commit between product-RFC
+   acceptance and product implementation can replace the rows and their self-digest; the later
+   landing leaves the receipt unstaged and passes every stated guard. `sourceRfc` names only a
+   filename, so no accepted revision or external receipt digest survives the substitution;
+2. [[D2910]] — the validator requires set equality while `canonical_resource@1` hashes ordered
+   arrays. Permuting either population passes the accepted-obligation join but changes the governed
+   resource semantic bytes and digest; and
+3. [[D2911]] — the closed receipt shape does not define the literal/type of `schema`, the digest
+   domain/input prefix or the digest output encoding. Numeric-schema/prefixed-hex and named-schema/
+   bare-hex implementations are both consistent with the current prose and are wire-incompatible.
+
+`make provider-protocol-fourth-fresh-review` retains all three predecessor return/repair rounds,
+preserves the generic absent canonical-resource descriptor as a positive control and passes the
+three new executable falsifiers. Exact evidence:
+`planning/provider-protocol-register/fourth-fresh-independent-buildability-review-2026-09-06.md`.
+The RFC remains draft; no descriptor, register, obligation receipt or provider product byte is
+authorized.
+
 ## Open questions
 
 None for the owner. The five operations, providers and ten digest domains are existing product-RFC
@@ -368,6 +390,10 @@ semantics, not choices made by this process document.
 
 ## Changelog
 
+- 2026-09-06: fourth fresh independent review returned the third repair on [[D2909]]–[[D2911]]:
+  mutable self-authenticating acceptance state, set-equal/order-sensitive resource drift and an
+  incomplete receipt wire contract. `make provider-protocol-fourth-fresh-review` passes the three
+  new falsifiers plus the descriptor positive control.
 - 2026-09-06: third author repair closes [[D2874]]–[[D2877]] at contract tier: malformed atomic
   roots are `invalid`; a canonical committed acceptance receipt supplies the product validator's
   preimage; process closeout leaves product-only defects open; and endpoint identity is the exact

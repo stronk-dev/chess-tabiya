@@ -16835,3 +16835,19 @@ and passes 5/5 new falsifiers plus strict TypeScript. Exact receipt:
 author repair must define one executable startup/migration phase boundary, real reachable consumers
 and sealed exact pack-artifact authority before another fresh review. No product byte or protected
 design byte changed.
+
+## 2026-09-06 — provider-protocol fourth fresh independent return
+
+**What landed:** [[D2909]]–[[D2911]] return the third provider-protocol repair at its independently
+accepted obligation boundary. The generic descriptor remains a valid absent canonical-resource
+population; no provider product or protected design byte changed.
+
+**What changed:** an intervening committed receipt replacement passes the stated self-digest and
+later staged-diff checks; array permutations pass set equality while moving the canonical resource
+digest; and the receipt does not define its schema discriminant or digest wire grammar.
+
+**Evidence/next:** `make provider-protocol-fourth-fresh-review` retains all predecessor rounds and
+passes three new falsifiers plus the descriptor positive control. Exact receipt:
+`planning/provider-protocol-register/fourth-fresh-independent-buildability-review-2026-09-06.md`.
+A bounded fourth author repair, another genuinely fresh review and the implemented generic
+bootstrap precede acceptance or provider exchange.
