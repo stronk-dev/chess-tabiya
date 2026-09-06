@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "../..",
+    "paths": {
+      "@chess-tabiya/schema/*": ["packages/schema/src/*"]
+    },
+    "types": ["node", "vitest/globals"]
+  },
+  "include": [
+    "review.test.ts",
+    "../d2904-concept-registry-fourth-author-repair/model.ts"
+  ]
+}

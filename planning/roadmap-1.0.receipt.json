@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ff5c779a0299c499204ecd7db4620d371316df213ca073f7f95cd22be2f53b00",
+    "roadmap": "sha256:e0bccabfdb45f998a7de005bdd964c6f51f43ed9f703e3268e203b9bf78930e3",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:d845e617e72bb91637f0c9e9870aab70a009dec7c8e8455fd202c582ca817f81",
-    "rfcRegister": "sha256:4178df0b7a7e99cce929429886571169ac70b8ea87b243d969e5b0d8510dcf66",
+    "workState": "sha256:26c3c8bbfd40b17fbd303c34e6b6ff1d76bf1c4b2e6945ef501927bd1ce04ff1",
+    "rfcRegister": "sha256:b9f16f1c6070991e0746738fd65f91a2e972f8d2dc3dfe802bc6bd2d7b795f8c",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 651,
       "doing": 0,
-      "blocked": 1177,
+      "blocked": 1183,
       "done": 840,
       "refused": 3
     },
@@ -115,14 +115,14 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; freshly review the author-repaired provider-protocol, provider-health and concept-registry authorities; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; repair concept-registry D2923-D2928 and re-review it; freshly review the provider-protocol and provider-health repairs; then advance provider exchange, pack-capability and longitudinal-store lanes.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "Concept-registry's fourth author repair now defines a recoverable two-phase startup, one coordinator-owned artifact/migration/version transaction, sealed recomputed pack authority and diagnostic-clean operations used from real application entries; fresh review still gates implementation.",
-        "impact": "advanced",
+        "summary": "Concept-registry's fifth fresh review returned the startup authority on six executable seams: forgeable readiness, raw transaction escape, unvalidated pack snapshots, optional restart receipts, an untraversable real Svelte entry and discarded values counted as consumption.",
+        "impact": "held",
         "evidence": [
-          "planning/concept-registry/fourth-author-repair-2026-09-06.md",
-          "tools/d2904-concept-registry-fourth-author-repair/contract.test.ts",
+          "planning/concept-registry/fifth-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d2923-concept-registry-fifth-fresh-review/review.test.ts",
           "rfc/concept-registry.md",
           "rfc/README.md"
         ],
@@ -130,7 +130,7 @@
           {
             "kind": "rfc",
             "id": "concept-registry.md",
-            "digest": "sha256:7c57f9a75f38802aa6eb0233be3894a8f3b525be72cca9038e264e24a8c9e258"
+            "digest": "sha256:019b2262b476b692556f3fe9c58231f55c2345dade790bcc0e3804876fcff517"
           }
         ]
       },

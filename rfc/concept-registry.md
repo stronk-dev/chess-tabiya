@@ -1,14 +1,13 @@
 # RFC: Concept registry — one cross-pack identity authority
 
-- **Status:** draft — **fourth author repair completed 2026-09-06 on [[D2904]]–[[D2908]] and
-  adjacent [[D2922]]; another
-  genuinely fresh independent review is required.** One two-phase startup path now hydrates and
-  seals exact pack artifacts inside the coordinator-owned concept transaction, stamps the storage
-  version atomically, and mints service-ready storage only after commit. Consumer closure starts at
-  the real server/web entries, proves the operation result is used, and rejects repository-compiler
-  diagnostics. `make concept-registry-fourth-author-repair` retains the full predecessor chain and
-  passes 5/5 direct inversions plus strict TypeScript. The independently-passed shared-resource
-  bootstrap dependency still precedes acceptance and implementation.
+- **Status:** draft — **returned by the fifth genuinely fresh independent review on
+  [[D2923]]–[[D2928]].** The fourth repair closes its assigned findings, but readiness remains
+  publicly mintable; raw SQLite lets the data callback escape the coordinator transaction; matching
+  hashes admit invalid packs; restart receipt validation is optional; the graph cannot traverse the
+  real Svelte entry; and discarded operation results count as consumed. `make
+  concept-registry-fifth-fresh-review` retains the predecessor chain and executes all six
+  counterexamples. A bounded author repair and another genuinely fresh review are required. The
+  independently-passed shared-resource bootstrap still precedes acceptance and implementation.
 - **Author:** codex, factored from `rfc/skills.md` §4 and the D300/D700 measurements.
 - **Created:** 2026-08-31
 - **Design refs:** `design/01-training-model.md` §§60–65 (registry belongs to authoring);
@@ -459,6 +458,32 @@ direct inversions and strict TypeScript. Exact receipt:
 `planning/concept-registry/fourth-author-repair-2026-09-06.md`. This remains author-contract
 evidence, not acceptance or implementation; another genuinely fresh review and the implemented
 shared-resource bootstrap still precede both.
+
+## Fifth fresh independent review return — 2026-09-06
+
+The fourth repair closes [[D2904]]–[[D2908]], but its composed authority remains unbuildable on six
+new seams:
+
+1. [[D2923]] — exported `ReadyStorage.issue(database)` lets any importer mint service-ready storage
+   without the coordinator, migration or receipt;
+2. [[D2924]] — the transaction-free data callback receives raw `DatabaseSync`, can commit the outer
+   transaction and lets data plus `user_version` escape the coordinator's failed rollback;
+3. [[D2925]] — a matching digest seals an invalid complete pack because snapshot compilation never
+   invokes schema/runtime validation;
+4. [[D2926]] — an already-versioned database can run a no-op callback and mint readiness with no
+   receipt or restart revalidation;
+5. [[D2927]] — the graph loads only TypeScript/JSON and cannot traverse production's
+   `main.ts → App.svelte → api.ts` chain, which the positive fixture replaces with a direct import;
+   and
+6. [[D2928]] — operation calls and their wrappers may discard every result while satisfying the
+   claimed consumer-use closure.
+
+`make concept-registry-fifth-fresh-review` retains the complete predecessor chain and executes six
+new counterexamples. Exact evidence:
+`planning/concept-registry/fifth-fresh-independent-buildability-review-2026-09-06.md`. A green
+review target means the return is reproduced, not that the RFC is accepted. The next repair must
+close capability issuance, transaction capability, pack validation, restart validation, the real
+Svelte graph and operation-specific value flow before another genuinely fresh review.
 
 ## Acceptance criteria
 

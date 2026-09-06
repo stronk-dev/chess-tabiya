@@ -327,14 +327,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; freshly review the author-repaired provider-protocol, provider-health and concept-registry authorities; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap and implement it; repair concept-registry D2923-D2928 and re-review it; freshly review the provider-protocol and provider-health repairs; then advance provider exchange, pack-capability and longitudinal-store lanes.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Concept-registry's fourth author repair now defines a recoverable two-phase startup, one coordinator-owned artifact/migration/version transaction, sealed recomputed pack authority and diagnostic-clean operations used from real application entries; fresh review still gates implementation.",
-          "impact": "advanced",
-          "evidence": ["planning/concept-registry/fourth-author-repair-2026-09-06.md", "tools/d2904-concept-registry-fourth-author-repair/contract.test.ts", "rfc/concept-registry.md", "rfc/README.md"],
+          "summary": "Concept-registry's fifth fresh review returned the startup authority on six executable seams: forgeable readiness, raw transaction escape, unvalidated pack snapshots, optional restart receipts, an untraversable real Svelte entry and discarded values counted as consumption.",
+          "impact": "held",
+          "evidence": ["planning/concept-registry/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2923-concept-registry-fifth-fresh-review/review.test.ts", "rfc/concept-registry.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "concept-registry.md", "digest": "sha256:7c57f9a75f38802aa6eb0233be3894a8f3b525be72cca9038e264e24a8c9e258"}
+            {"kind": "rfc", "id": "concept-registry.md", "digest": "sha256:019b2262b476b692556f3fe9c58231f55c2345dade790bcc0e3804876fcff517"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

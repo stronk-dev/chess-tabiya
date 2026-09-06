@@ -16966,3 +16966,24 @@ normal governance gate.
 cases and 11/11 repaired-contract cases pass. Another genuinely fresh review, owner disposition of
 [[D412]], accepted/implemented generic bootstrap plus protocol registration, and the migration
 predecessor still precede implementation.
+
+## 2026-09-06 — concept-registry fifth fresh buildability return
+
+**What landed:** a fresh requirements-tier review of the fourth concept-registry repair, with six
+executable falsifiers registered as [[D2923]]–[[D2928]]. No product, schema, storage, content,
+archive or protected-design byte changed.
+
+**What changed:** the RFC is returned rather than allowed to pass on a nominally private readiness
+constructor and a call-expression census. Public `ReadyStorage.issue` bypasses startup; raw
+`DatabaseSync` lets the data callback commit and strand `user_version`; hash equality admits an
+invalid pack; an already-versioned receipt-less database becomes ready; the graph cannot traverse
+the real `main.ts → App.svelte → api.ts` path; and every registered operation result may be
+discarded while the receipt says it was consumed.
+
+**Evidence/next:**
+`planning/concept-registry/fifth-fresh-independent-buildability-review-2026-09-06.md`; `make
+concept-registry-fifth-fresh-review` retains every predecessor and passes 6/6 new counterexamples
+plus strict TypeScript. A bounded author repair must close capability issuance, transaction
+capability, complete-document validation, mandatory restart validation, the real Svelte graph and
+operation-specific value flow before another fresh review. The shared-resource bootstrap still
+precedes acceptance and implementation.
