@@ -4,5 +4,6 @@ export default defineConfig({
   test: {
     include: ["tools/d2678-candidate-packet-tenth-author-repair/contract.test.ts"],
     environment: "node",
+    testTimeout: 15_000,
   },
 });

@@ -345,14 +345,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Complete the bounded pack-capability provider/job repair and freshly review it; obtain genuinely fresh reviews of the repaired promotion installation and candidate-packet authorities; then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+        "nextAction": "Complete bounded author repairs for the returned candidate-packet and pack-capability authorities, freshly review both plus the repaired promotion installation, then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "The pack-capability seventeenth fresh review returns the durable provider/job boundary: normative and executable success shapes disagree, provider receipts remain structural, origin effects cross, retry bytes are substituted, lease and clock authority are stale, and settlement ignores its parent batch.",
+          "summary": "The candidate-packet fourteenth fresh review returns its public/private contract: hidden dependency outcomes are exposed, product options accept authority extras, failure and stats algebras disagree, graph/receipt closure is incomplete, scope typing is erased and the collector fault seam is absent.",
           "impact": "regressed",
-          "evidence": ["planning/pack-capability-contract/seventeenth-fresh-independent-buildability-review-2026-09-06.md", "tools/d3002-pack-capability-seventeenth-fresh-review/review.test.mjs", "rfc/pack-capability-contract.md", "rfc/README.md"],
+          "evidence": ["planning/evidence-foundation-ux/shared-candidate-packet-fourteenth-fresh-independent-buildability-review-2026-09-06.md", "tools/d3009-candidate-packet-fourteenth-fresh-review/review.test.ts", "rfc/shared-candidate-evidence-packet.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "pack-capability-contract.md", "digest": "sha256:14c491470a26ce290c3ba1ed5c5e602cb78ad9f7cd6091e1f270152a5ff21afe"}
+            {"kind": "rfc", "id": "shared-candidate-evidence-packet.md", "digest": "sha256:0a54e70e563921dab038f14b92e4a194426f80a3675864996efa97f2785e4c2f"}
           ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."

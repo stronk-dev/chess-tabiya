@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:e4ac360fc274662dc440f6b4c29a4f7a6c7e27b05ca7200cf06c6fac5e663058",
+    "roadmap": "sha256:fd65d312ce5d4300f6cd73ea87d308838aef398e4a0b475bc070126567b09f5c",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:528cc9df29932de3c1af11e22be3a810209564ee3ab132087ed6d624aa858fd9",
-    "rfcRegister": "sha256:981e4b0b6dd892ab1bbd7abfb8f46b84571511b19b3c42985d9bcc4d49b34e4b",
+    "workState": "sha256:ab42e58cbc2c07deda4fcb4f55824d4ef1f7085ed314df8e69d0e57529d2efb0",
+    "rfcRegister": "sha256:6cebcfbd5850339c26f88a7ccc114804e8227fd1d9680d5d5c7686fd63d83e00",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 651,
       "doing": 0,
-      "blocked": 1262,
-      "done": 841,
+      "blocked": 1270,
+      "done": 842,
       "refused": 3
     },
     "workItems": {
@@ -151,22 +151,22 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Complete the bounded pack-capability provider/job repair and freshly review it; obtain genuinely fresh reviews of the repaired promotion installation and candidate-packet authorities; then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+      "nextAction": "Complete bounded author repairs for the returned candidate-packet and pack-capability authorities, freshly review both plus the repaired promotion installation, then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "The pack-capability seventeenth fresh review returns the durable provider/job boundary: normative and executable success shapes disagree, provider receipts remain structural, origin effects cross, retry bytes are substituted, lease and clock authority are stale, and settlement ignores its parent batch.",
+        "summary": "The candidate-packet fourteenth fresh review returns its public/private contract: hidden dependency outcomes are exposed, product options accept authority extras, failure and stats algebras disagree, graph/receipt closure is incomplete, scope typing is erased and the collector fault seam is absent.",
         "impact": "regressed",
         "evidence": [
-          "planning/pack-capability-contract/seventeenth-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d3002-pack-capability-seventeenth-fresh-review/review.test.mjs",
-          "rfc/pack-capability-contract.md",
+          "planning/evidence-foundation-ux/shared-candidate-packet-fourteenth-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d3009-candidate-packet-fourteenth-fresh-review/review.test.ts",
+          "rfc/shared-candidate-evidence-packet.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "pack-capability-contract.md",
-            "digest": "sha256:14c491470a26ce290c3ba1ed5c5e602cb78ad9f7cd6091e1f270152a5ff21afe"
+            "id": "shared-candidate-evidence-packet.md",
+            "digest": "sha256:0a54e70e563921dab038f14b92e4a194426f80a3675864996efa97f2785e4c2f"
           }
         ]
       },

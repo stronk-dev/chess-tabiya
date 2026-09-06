@@ -18,5 +18,6 @@ export default defineConfig({
   test: {
     include: ["tools/d1631-candidate-packet-repair-harness/*.test.ts"],
     disableConsoleIntercept: true,
+    testTimeout: 15_000,
   },
 });

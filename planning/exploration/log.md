@@ -17290,3 +17290,37 @@ protected-design byte changed.
 `make pack-capability-seventeenth-fresh-review` retains the complete chain and passes 7/7 new
 falsifiers. Complete one bounded provider/job repair, then obtain another genuinely fresh review
 and the accepted provider-exchange dependency before acceptance or implementation.
+
+## 2026-09-06 — Candidate packet fourteenth fresh independent review
+
+**What landed:** a fresh executable return on [[D3009]]–[[D3016]]. The thirteenth repair's declared
+memo views, abandoned-generation handling, request diagnosis, legal/row/FEN joins and catalogue
+derivation survive, but the review proves its public/private and normative contracts do not.
+
+**What changed:** `shared-candidate-evidence-packet.md` remains draft. Readings receipts expose
+hidden event outcomes; product options accept authority extras; failure unions disagree; receipt
+and retained-graph closure are incomplete; scope typing is erased; the collector fault seam is
+absent; and stats expose eighteen fields against a sixteen-field contract. The run also exposed and
+closed [[D3017]]: the predecessor correctness suite no longer mistakes Vitest's five-second default
+for a performance budget. No production packet, cache, selector, bot, Support, Review, schema,
+content or protected-design byte changed.
+
+**Evidence/next:**
+`planning/evidence-foundation-ux/shared-candidate-packet-fourteenth-fresh-independent-buildability-review-2026-09-06.md`;
+`make candidate-packet-fourteenth-fresh-review` retains the complete chain and passes 8/8 new
+falsifiers plus strict TypeScript. Complete one bounded repair across the normative interface,
+model and real fault fixtures, then obtain another genuinely fresh review and land the accepted
+value-authority dependency before implementation.
+
+## 2026-09-06 — Candidate packet correctness-timeout class closure
+
+**What landed:** the canonical `make verify-awake` run reproduced [[D3017]] in the retained tenth
+author suite: semantically successful assertions took 7.0 and 9.3 seconds and were killed by
+Vitest's default five-second correctness timeout.
+
+**What changed:** the explicit 15-second non-performance timeout now covers every candidate-packet
+research, author and fresh-review Vitest configuration in the retained chain. No assertion or
+dedicated Node-24 latency budget changed.
+
+**Evidence/next:** rerun the candidate-packet chain and the complete canonical gate. The checkpoint
+cannot commit until both pass.

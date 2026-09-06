@@ -1,14 +1,12 @@
 # RFC: Shared candidate evidence packet — the compiled legal population three consumers are measured against
 
-- **Status:** **draft — thirteenth author repair completed on [[D2934]]–[[D2941]]; another genuinely fresh review is required.**
-  The current model gives collectors only proxy-guarded declared dependencies, separates
-  collector-wide from projection-local failure identity, retires abandoned single-flight identity
-  immediately without widening concurrency, preserves exact request diagnostics, separates entry
-  weight from process singletons, reasserts every legal/row/FEN join, derives child readings from
-  the admitted catalogues and compiles under the repository TypeScript contract. `make
-  candidate-packet-thirteenth-author-repair` retains the full predecessor chain and passes 22/22
-  current groups plus strict TypeScript. Another genuinely fresh review and the value-authority
-  dependency precede implementation. The maintained operation
+- **Status:** **draft — fourteenth fresh independent review returned the thirteenth repair on [[D3009]]–[[D3016]]; bounded author repair required.**
+  The thirteenth model's eight named repairs survive, but `make
+  candidate-packet-fourteenth-fresh-review` proves that hidden dependency outcomes are public,
+  authority-looking product options are accepted, failure and stats contracts disagree, receipt
+  and retained-graph closure are incomplete, scope typing is erased, and the named collector fault
+  seam does not exist. A bounded author repair, another genuinely fresh review and the
+  value-authority dependency precede implementation. The maintained operation
   parses the closed request, derives the complete seven-term factual identity, gives direct and
   projected narrow receipts the same dependency-closed graph, derives cache identity internally,
   admits only one privately asserted whole receipt, seals below already-frozen ancestors and
@@ -98,6 +96,25 @@ assigning forbidden `undefined`.
 
 Exact executable receipt:
 `planning/evidence-foundation-ux/shared-candidate-packet-thirteenth-author-repair-2026-09-06.md`.
+
+## Fourteenth fresh independent return — public/private and contract closure
+
+The thirteenth repair's eight named fixes survive, but the composed model still differs materially
+from the RFC it is supposed to make buildable. A readings-only receipt publicly exposes its hidden
+event-dependency outcomes ([[D3009]]), while the product factory accepts the very manifest/digest/
+collector extras it promises to refuse ([[D3010]]). Failure identity has three incompatible
+normative, prose and model unions ([[D3011]]); receipt assertion does not rebuild outcome, retained
+view or abstention bijections ([[D3012]]); and retained-graph accounting lacks the specified private
+reference map, one-root descriptor and category census ([[D3013]]).
+
+The public type also erases request-scope correlation ([[D3014]]), the test factory has no legal or
+collector fault seam and therefore tests collector failure by throwing a prebuilt private error
+([[D3015]]), and runtime stats expose eighteen fields against a normative sixteen-field snapshot
+([[D3016]]). `make candidate-packet-fourteenth-fresh-review` retains the complete predecessor chain,
+passes all eight fresh falsifiers and compiles the real scope diagnostic under the repository base
+configuration. Keep the RFC in draft; complete one bounded repair across the normative interface,
+model and able-to-fail fixtures before another fresh review. Exact receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-fourteenth-fresh-independent-buildability-review-2026-09-06.md`.
 
 ```tabiya-claims
 none
@@ -2565,6 +2582,12 @@ D1354; corrected here per §0.7.)*
   it names the seven checks that cannot catch the thing being asserted.
 
 ## Changelog
+
+- 2026-09-06 — fourteenth fresh independent review returned the thirteenth repair on [[D3009]]–
+  [[D3016]]. Hidden execution outcomes, permissive product options, split failure algebras,
+  incomplete receipt/graph closure, erased scope typing, absent collector fault injection and
+  eighteen-versus-sixteen stats reproduce under `make candidate-packet-fourteenth-fresh-review`
+  (8/8 plus strict TypeScript). Implementation remains unauthorized.
 
 - 2026-09-06 — thirteenth fresh independent review returned the twelfth repair on [[D2934]]–
   [[D2941]]. Hidden memo dependencies, false projection attribution, abandoned-job rejoin, invalid

@@ -2254,6 +2254,16 @@ retains the full history and passes 22/22 current groups plus the repository-str
 contract. The evidence spine advances to genuinely fresh review and its value-authority/provider
 dependencies; no production selector, Support, bot, Review or content byte is authorized yet.
 
+The same-day fourteenth fresh candidate-packet review returns that repair on [[D3009]]–[[D3016]].
+The readings-only public receipt exposes hidden event dependencies; product construction accepts
+authority-looking extras; failure and stats contracts disagree across prose and types; and receipt,
+retained-graph and scope closure are incomplete. The named collector fault hook is absent, so the
+author suite manufactures the private error it expects rather than exercising the registry.
+`make candidate-packet-fourteenth-fresh-review` retains the full chain and passes 8/8 new
+falsifiers plus strict TypeScript. The evidence spine stays at one bounded author repair, another
+genuinely fresh review and the accepted value-authority dependency before production. Receipt:
+`planning/evidence-foundation-ux/shared-candidate-packet-fourteenth-fresh-independent-buildability-review-2026-09-06.md`.
+
 ### 2026-09-06 evidence-spine checkpoint — promotion installation authority repaired
 
 The fifteenth promotion author repair closes the five returned composition and semantic-authority
