@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:02ea75992e9d434de8d3258adf2171999d0e6d06c66a1230f39d845e7a9eb566",
+    "roadmap": "sha256:7c0daa4cb68400d23ce78630b06a3266931543491b3ae09c6dfa604cd08b6b01",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:4da51afe44a0be5abd98f2317c56f7d6233911c3d9ac6d1b1d6835c2b84547ec",
-    "rfcRegister": "sha256:8f45c334f99e151fcc7bad6ceb072b3ad3a8ebd5d9abe90e46c6251b929a5e26",
+    "workState": "sha256:0e8db2f27a54361add0c1c0368747f359e2f535a9651911e246e94ec6d6c8f57",
+    "rfcRegister": "sha256:1015b4b7a904431d7262216950a3041c5b4537061193db8b30ecc31f5b934a9e",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -33,7 +33,7 @@
       "todo": 648,
       "doing": 0,
       "blocked": 1161,
-      "done": 833,
+      "done": 834,
       "refused": 3
     },
     "workItems": {
@@ -115,22 +115,23 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; author-repair concept-registry D2878-D2884, provider-health D2869-D2873 and provider-protocol D2874-D2877, freshly review all three, then advance provider exchange, pack-capability and longitudinal-store lanes.",
+      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; author-repair concept-registry D2878-D2884 and provider-health D2869-D2873; freshly review those plus provider-protocol's repaired D2874-D2877 contract; then advance provider exchange, pack-capability and longitudinal-store lanes.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "Concept-registry's third fresh review reproduced seven product-authority, transaction, history, consumption and identity failures; global concept identity remains returned before packs, Skills and Campaign can consume it.",
-        "impact": "held",
+        "summary": "Provider-protocol's third author repair now has executable invalid-state, accepted-preimage, closeout and structured-endpoint contracts; historical review evidence is commit-pinned. Fresh review and the generic bootstrap still gate implementation.",
+        "impact": "advanced",
         "evidence": [
-          "planning/concept-registry/third-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d2878-concept-registry-third-fresh-review/review.test.mjs",
-          "rfc/concept-registry.md",
+          "planning/provider-protocol-register/third-author-repair-2026-09-06.md",
+          "tools/d2874-provider-protocol-third-author-repair/contract.test.mjs",
+          "tools/d2874-provider-protocol-third-fresh-review/review.test.mjs",
+          "rfc/provider-protocol-register.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "concept-registry.md",
-            "digest": "sha256:48b347e24d1a563a3c8b732f297fe34f01cf36ca462d88e0da00ffbcd49d5aa7"
+            "id": "provider-protocol-register.md",
+            "digest": "sha256:bf97ebf888d44dfc7759a229d244ea225b9928c935c8d846d2a120db545c11d2"
           }
         ]
       },

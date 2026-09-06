@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import test from "node:test";
 
 import {
@@ -8,13 +8,13 @@ import {
   validateCatalogue,
 } from "../d2488-shared-resource-bootstrap-third-author-repair/model.mjs";
 
-const read = (path) => readFileSync(path, "utf8");
-const rfc = read("rfc/provider-protocol-register.md");
+const reviewed = (path) => execFileSync("git", ["show", `3597176a:${path}`], { encoding: "utf8" });
+const rfc = reviewed("rfc/provider-protocol-register.md");
 const prose = rfc.replace(/\s+/gu, " ");
-const bootstrap = read("rfc/shared-resource-register-bootstrap.md").replace(/\s+/gu, " ");
-const product = read("rfc/provider-exchange-and-execution.md");
+const bootstrap = reviewed("rfc/shared-resource-register-bootstrap.md").replace(/\s+/gu, " ");
+const product = reviewed("rfc/provider-exchange-and-execution.md");
 const descriptor = validateCatalogue(JSON.parse(
-  read("planning/provider-protocol-register/catalogue-additions.v1.json"),
+  reviewed("planning/provider-protocol-register/catalogue-additions.v1.json"),
 )).resources[0];
 
 test("D2874 the one-selector resource cannot produce the promised partial state", () => {

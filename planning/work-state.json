@@ -23231,7 +23231,7 @@
       "id": "D2874",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1660afa45c377ed94308b58df4f855cb04df0bac75a659f336dfde623fa31804",
+      "sourceDigest": "sha256:6c2cab1fc18b0ce11a75b2a30f01658dbc254e58f71b3f8c93ee48f0c3509abd",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-protocol-register.md"
@@ -23240,7 +23240,7 @@
       "id": "D2875",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7fef70f732547b059457103b84e5644f23da0650ecb1d83aab0770c98bd15c71",
+      "sourceDigest": "sha256:f7aaad56aab51aa3626341b4088e53d36797a4b53d9c59fc4c185153710a0cbd",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-protocol-register.md"
@@ -23249,7 +23249,7 @@
       "id": "D2876",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c5cffb9626acf40e984ebaed2d24039fa53338b8bc7e91d3624554e61bcb7f1c",
+      "sourceDigest": "sha256:5acc77dd0f1f31b2b65bffe379da6c824382148081eb0abc8d74d5a72a28ba4f",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-protocol-register.md"
@@ -23258,7 +23258,7 @@
       "id": "D2877",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:951083bb43eacc54ea8d7cb38796650a9b4b6f3397ab3ba51d1bdd2e53f26d01",
+      "sourceDigest": "sha256:a236ce82f6ca2bcbde8eedb6723f7f6def755f3a328ea44a304489ca1b0b2620",
       "uxItems": [],
       "owner": "release-engineering",
       "blocker": "rfc:provider-protocol-register.md"
@@ -23433,6 +23433,15 @@
       "sourceDigest": "sha256:621edd19f0397d9570e242611c3e0726a9125b39c98d26426540b8a512fe7b6b",
       "uxItems": [],
       "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D2897",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:101ae4b6cc3ec1674fd9d721176c6dbddf41f3952c364d4969cafab8663fb0ac",
+      "uxItems": [],
+      "evidence": "tools/d2874-provider-protocol-third-fresh-review/review.test.mjs",
+      "evidenceKind": "path"
     }
   ]
 }

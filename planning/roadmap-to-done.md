@@ -447,6 +447,15 @@ protocol population remains blocked on one coherent author repair, another fresh
 generic bootstrap dependency. Receipt:
 `planning/provider-protocol-register/third-fresh-independent-buildability-review-2026-09-06.md`.
 
+The same-day third author repair closes [[D2874]]–[[D2877]] at contract tier and closes [[D2897]],
+the live-reading historical-review defect found while executing it. Malformed atomic roots now use
+`invalid`; a canonical build-only receipt committed at product-RFC acceptance supplies the pure
+product validator's prior preimage; [[D2456]]/[[D2457]] remain open until product D4; and endpoint
+identity is the exact structured UCI/HTTPS value already owned by the product map. `make
+provider-protocol-third-author-repair` retains the complete chain and passes 4/4 repair groups. The
+process population still waits on another genuinely fresh review and the generic bootstrap
+dependency. Receipt: `planning/provider-protocol-register/third-author-repair-2026-09-06.md`.
+
 ### 2. Evidence collection, semantic events, selection, and grounding
 
 <!-- roadmap-capability: evidence -->

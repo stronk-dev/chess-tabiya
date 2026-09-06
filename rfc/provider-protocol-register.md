@@ -1,11 +1,12 @@
 # RFC: Provider-protocol shared-resource catalogue population
 
-- **Status:** draft — **returned by third fresh independent review on [[D2874]]–[[D2877]].** The
-  one-selector resource cannot produce the promised partial state; the accepted obligation
-  preimage has no lawful reader; process closeout claims product-only repairs; and the string
-  endpoint field has no canonical mapping from the structured product authority. `make
-  provider-protocol-third-fresh-review` retains the complete chain and passes 4/4 reproductions.
-  Author repair and another genuinely fresh review are required. Implementation is unauthorized.
+- **Status:** draft — **third author repair closes [[D2874]]–[[D2877]] at contract tier.** Malformed
+  one-selector resources are `invalid`; a canonical build-only acceptance artifact supplies the
+  prior obligation preimage without a runtime registry or product Git reader; process closeout
+  leaves product-only defects open; and endpoint identity is the exact structured UCI/HTTPS value
+  already owned by the product RFC. `make provider-protocol-third-author-repair` retains the
+  complete return/repair chain and passes 4/4 repair groups. Another genuinely fresh review and the
+  generic bootstrap dependency remain required. Implementation is unauthorized.
 - **Author:** Codex
 - **Created:** 2026-08-30
 - **Design refs:** none. This is repository process and changes no provider behavior or learner UX.
@@ -56,8 +57,9 @@ The catalogue entry is:
 | introduced by | `provider-protocol-register.md` |
 
 Because version, payload and digest are fields of one atomic export, absence means that exact
-selector does not resolve. A file with unrelated exports remains absent; a malformed/partial
-`PROVIDER_PROTOCOL_RESOURCE` is partial and fails. Once a landed row exists, a missing or renamed
+selector does not resolve. A file with unrelated exports remains absent; a malformed
+`PROVIDER_PROTOCOL_RESOURCE` is `invalid` and fails. There is no `partial` state for this
+one-selector descriptor. Once a landed row exists, a missing or renamed
 selector is a regression, never a new absence ([[D2459]]).
 
 The process implementation adds the exact marker `provider-protocol head=absent` with header-only
@@ -98,10 +100,18 @@ and no function is stored inside the payload.
 Each operation payload row contains only canonical JSON fields:
 
 ```ts
+type ProviderProtocolEndpointIdentity =
+  | Readonly<{ kind: "uci_supervisor"; engineId: "stockfish-analysis" | "maia-5m" }>
+  | Readonly<{
+      kind: "https";
+      origin: "https://tablebase.lichess.org" | "https://explorer.lichess.ovh";
+      path: "/standard" | "/lichess";
+    }>;
+
 interface ProviderProtocolOperationIdentity {
   readonly operation: string;
   readonly provider: "stockfish" | "maia" | "syzygy" | "lichess_explorer";
-  readonly endpoint: string;
+  readonly endpoint: ProviderProtocolEndpointIdentity;
   readonly parserId: string;
   readonly sourceProjection: string;
   readonly sourceFactoryId: string;
@@ -146,11 +156,27 @@ with provider/endpoint/parser/projection/factory/CLI pairings and ten digest
 domain/constructor-id pairs. That block is product intent, independently reviewed before runtime
 bytes exist. It is not imported by production and is not a second mutable runtime registry.
 
-Before product landing, `provider-exchange-and-execution.md` owns its exact obligation parser,
-consumer-root population and able-to-fail validator. Its accepted preimage is then an explicit input
-to that product RFC's landing check—not a hook smuggled into this descriptor. The product check:
+The acceptance commit also writes the canonical build-only projection
+`planning/provider-protocol-register/accepted-obligations.v1.json` with the exact closed shape
+`{schema, sourceRfc, obligationsDigest, operations, digestDomains}`. `sourceRfc` is the literal
+`provider-exchange-and-execution.md`; `obligationsDigest` is the RFC-8785 SHA-256 digest of
+`{operations,digestDomains}`; and the two populations are byte-equal to the accepted metadata
+block after canonical parsing. This file is an acceptance receipt, not product configuration: it
+is neither copied into a release image nor imported by runtime code.
 
-1. parse the exact accepted preimage block from the prior product RFC;
+Acceptance and implementation are separate commits. The product landing gate requires the
+receipt to exist in committed HEAD and refuses any staged modification to it while provider product
+bytes change. A later obligation change requires a separately reviewed RFC amendment and a new
+acceptance commit before the next product lane may land. Thus a coordinated same-landing swap
+cannot replace the preimage it is checked against.
+
+Before product landing, `provider-exchange-and-execution.md` owns its exact obligation parser,
+consumer-root population and able-to-fail validator. Build orchestration reads the committed
+acceptance-receipt bytes and passes them as an explicit input to that pure product validator; the
+validator reads neither Git nor RFC prose. This is not a hook smuggled into the descriptor. The
+product check:
+
+1. parse the exact committed `accepted-obligations.v1.json` bytes and verify their internal digest;
 2. derive the candidate resource payload from product bytes;
 3. require operation and digest-domain rows to be set-equal by complete row identity;
 4. require every operation to reach one mapped descriptor, parser, source factory/projection and
@@ -176,7 +202,8 @@ The generic engine supplies all claim and history behavior:
 - first landing must create the one atomic root, valid digest and version 1;
 - it must consume the prior claimant and append exactly one owner-bound landed row;
 - later claims target exactly the next positive safe integer;
-- fixed-head payload drift, skipped/backward lanes, duplicate claimants and partial roots fail; and
+- fixed-head payload drift, skipped/backward lanes, duplicate claimants and malformed roots fail as
+  `invalid`; and
 - landed history cannot be deleted, rewritten or returned to absent.
 
 No provider-specific branch or validation-hook protocol exists in `register-check`. The generic
@@ -192,11 +219,11 @@ Using the generic engine, this process implementation crosses these ten process-
 1. exact absent descriptor/register with no product bytes;
 2. absent root plus no claim, ordinary lane, head 0 or landed row;
 3. file exists with unrelated export and remains selector-absent;
-4. malformed/partial atomic root is not absent;
+4. malformed atomic root is `invalid`, never absent;
 5. process introduction plus product claim in one transition;
 6. exact later first claim;
 7. product landing without prior claim, wrong owner or lingering claim;
-8. version-only/payload-only/digest-only partial resource;
+8. version-only/payload-only/digest-only malformed resource, each `invalid`;
 9. fixed-head nested payload drift; and
 10. landed-to-missing root with generic first-parent history.
 
@@ -231,7 +258,8 @@ provider state machine. It closes only after this population's executable criter
 
 1. `provider-protocol` exists once in the generic catalogue/register and nowhere in a parallel
    resource-name list.
-2. Exact selector absence and atomic canonical-resource semantics refuse partial product authority.
+2. Exact selector absence and atomic canonical-resource semantics classify every malformed
+   product authority as `invalid`.
 3. The process implementation adds no C11, parser branch, canonicalizer or Git history reader.
 4. Runtime payload fields and compile-only type relations are separate and compilable
    ([[D2456]]).
@@ -244,8 +272,9 @@ provider state machine. It closes only after this population's executable criter
 8. Normal `make verify` covers the maintained current author/review target without bespoke user commands.
 9. No provider/engine/source/API/schema/storage/content/web/archive/protected-design product bytes
    change in the process implementation.
-10. [[D2189]] and [[D2455]]–[[D2459]] close only after executable process criteria pass; provider
-    semantics remain blocked on the product RFC.
+10. [[D2189]], [[D2455]], [[D2458]] and [[D2459]] close only after executable process criteria
+    pass. Product-only [[D2456]] and [[D2457]] remain open through D4 until the atomic runtime
+    image/type relation and independent obligation validator actually land.
 
 ## Second fresh independent return (2026-09-05)
 
@@ -314,6 +343,24 @@ then passes 4/4 executable falsifiers. Exact evidence:
 `planning/provider-protocol-register/third-fresh-independent-buildability-review-2026-09-06.md`.
 The RFC remains draft and implementation remains unauthorized.
 
+## Third author repair (2026-09-06)
+
+The bounded repair closes [[D2874]]–[[D2877]] at contract tier. The one-selector descriptor now
+uses the generic engine's actual `invalid` result for every malformed root. The independently
+accepted obligation becomes a canonical build-only receipt committed at product-RFC acceptance;
+build orchestration supplies those exact bytes to the pure product validator, while a staged-diff
+guard forbids replacing the receipt in the product landing that consumes it. No runtime registry or
+product Git/RFC reader is introduced.
+
+Process closeout now names only [[D2189]], [[D2455]], [[D2458]] and [[D2459]]; product-only
+[[D2456]]/[[D2457]] remain open through D4. Finally, operation rows carry the exact structured
+`uci_supervisor` or `https` endpoint object already used by `ProviderEndpointMap`, so canonical JSON
+row equality is lossless and requires no invented string encoding. `make
+provider-protocol-third-author-repair` retains the full return/repair chain and passes 4/4 repair
+groups. Exact receipt:
+`planning/provider-protocol-register/third-author-repair-2026-09-06.md`. Another genuinely fresh
+review and the generic bootstrap dependency still gate acceptance and implementation.
+
 ## Open questions
 
 None for the owner. The five operations, providers and ten digest domains are existing product-RFC
@@ -321,6 +368,10 @@ semantics, not choices made by this process document.
 
 ## Changelog
 
+- 2026-09-06: third author repair closes [[D2874]]–[[D2877]] at contract tier: malformed atomic
+  roots are `invalid`; a canonical committed acceptance receipt supplies the product validator's
+  preimage; process closeout leaves product-only defects open; and endpoint identity is the exact
+  structured product value. `make provider-protocol-third-author-repair` passes 4/4 repair groups.
 - 2026-09-06: third fresh independent review returned the second repair on [[D2874]]–[[D2877]]:
   unreachable partial-state semantics, an unreadable accepted obligation preimage, premature
   product-defect closeout and an undefined structured-endpoint-to-string mapping. `make

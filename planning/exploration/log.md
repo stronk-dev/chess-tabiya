@@ -16604,3 +16604,20 @@ composition/configuration authority, remove the test issuer from the product gra
 listed generation before registry publication and single-flight registry/store construction. Then
 another genuinely fresh review and the existing provider/value dependencies remain. Exact receipt:
 `planning/evidence-foundation-ux/semantic-collectors-promotion-fourteenth-fresh-independent-buildability-review-2026-09-06.md`.
+
+## 2026-09-06 — provider-protocol third author repair
+
+**What landed:** closed [[D2874]]–[[D2877]] at contract tier and fixed the historical-review defect
+found during execution as [[D2897]]. Malformed atomic roots use `invalid`; one canonical committed
+acceptance receipt supplies the build-time obligation preimage; product-only defects remain open
+through D4; and operation rows use the exact structured UCI/HTTPS endpoint identity.
+
+**What changed:** the product validator can now receive prior accepted intent without reading Git,
+RFC prose or a parallel runtime registry, and a product landing cannot replace that receipt in the
+same staged change. The third fresh-review harness now reads exact commit `3597176a`, so a live RFC
+repair no longer rewrites its historical evidence.
+
+**Evidence/next:** `make provider-protocol-third-author-repair` retains the complete chain and
+passes 4/4 repair groups. Exact receipt:
+`planning/provider-protocol-register/third-author-repair-2026-09-06.md`. Another genuinely fresh
+review and the generic bootstrap dependency still precede acceptance and implementation.
