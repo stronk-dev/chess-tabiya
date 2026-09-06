@@ -1891,3 +1891,22 @@ apparatus has no job. Marked owner-vetoable, cut text recoverable verbatim.
 the named dependents and nothing else. Seventeen reviews read a document twice this size; an
 unbounded eighteenth would regrow what was removed. Also: **32 of 33 harness directories are
 referenced by no gate**, the same unowned-instrument residue the first cut found.
+
+### Three cuts complete — [[D3056]]–[[D3058]]
+
+**7,474 → 4,190 lines (−43%). 28 of 250 claimed dependents are real (11.2%).**
+
+**[[D3056]]** — `shared-candidate-evidence-packet` 2,786 → 1,832, blocked 92 → 33; 16 real against 76
+review-debt rows from fourteen rounds. The measurement that settles the diagnosis: **58 of its 92
+rows were routed by that document alone** — it had become the only home for defects it manufactured.
+Nothing deleted: 59 rows moved to two new registered successors held by discharges.
+
+**[[D3057]] is the one to read.** A gate in `verify-governance` **greps the RFC's own prose**, so
+holding it green required **un-cutting the document** — and one assertion demanded the literal
+sentence *"another fresh independent review is required before implementation."* **An instrument that
+mandated the document keep demanding reviews of itself.** That is why fourteen rounds never
+converged. Three assertions were genuinely the packet's and were restored into the spec; the rest
+left `verify-governance` with reasons recorded. **The other harness chains need the same audit.**
+
+**[[D3058]]** — each of the three now has **exactly one named blocker, and none is another review**:
+an external RFC pair, one bounded review at the new size, and owner acceptance.
