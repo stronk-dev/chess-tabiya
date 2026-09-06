@@ -23499,7 +23499,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d8b3a8f38b9495e7bba96e9cf759ae60ac5c9ebc7e8822bc99f3a29df373365a",
+      "sourceDigest": "sha256:61ae0d91e78254ba18c1bfb19bc7880d836977a4b446d00ab32a6f16afeca2c5",
       "uxItems": [],
       "blocker": "rfc:concept-registry.md"
     },
@@ -23508,7 +23508,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:da01b682d692f6ec7314d1dca4a90cf40dee83e7fe21d12438ea3b128ef02483",
+      "sourceDigest": "sha256:ab26f916bf914863f5a59826587e32b6b7f16434b87bbab8dd8b9b1c6f0dc122",
       "uxItems": [],
       "blocker": "rfc:concept-registry.md"
     },
@@ -23517,7 +23517,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:abab656971dbe3e557c24059e3f2fd412170da03dd6d6de1833925006fa4e87b",
+      "sourceDigest": "sha256:353cdb4658556234dd6e6f461bf2148335b5fd655e88cecdf939d3e24c9c2bbb",
       "uxItems": [],
       "blocker": "rfc:concept-registry.md"
     },
@@ -23526,7 +23526,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:57268f2262ad32dcc8b0bad56dca653026a93e9c01b21e77bd589b9ecd00e555",
+      "sourceDigest": "sha256:0c7f2cecdb8b33bbac661e1ca4caf9fdbcb54b1e4c457f200ef38b3975023eb1",
       "uxItems": [],
       "blocker": "rfc:concept-registry.md"
     },
@@ -23535,7 +23535,7 @@
       "state": "blocked",
       "owner": "evidence-foundation",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7354a1d96301324aefe123cbba5bd29b6f18c31f37647eb019cccb3cd7c9f1c0",
+      "sourceDigest": "sha256:52f7061c884bbddebd083eaceb55d0ef5b9b2a014d0bd3280bedf2bcfe4e90e5",
       "uxItems": [],
       "blocker": "rfc:concept-registry.md"
     },
@@ -23655,6 +23655,15 @@
       "sourceDigest": "sha256:c47ec38711bf143659dd2f23f76dbb54693c8fb280396179e296e0dd1ad9dbdf",
       "uxItems": [],
       "blocker": "rfc:provider-protocol-register.md"
+    },
+    {
+      "id": "D2922",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2af151002998f6b5a4cd29d977ef0caac32bbd9e218897b3ae90336e8fe64a2d",
+      "uxItems": [],
+      "evidence": "planning/concept-registry/fourth-author-repair-2026-09-06.md",
+      "evidenceKind": "path"
     }
   ]
 }

@@ -1,12 +1,14 @@
 # RFC: Concept registry — one cross-pack identity authority
 
-- **Status:** draft — **fourth fresh independent review returned the third repair on
-  [[D2904]]–[[D2908]].** The migration has no buildable place in the real startup order, conflicts
-  with the storage coordinator's transaction ownership, trusts caller-stamped mutable pack
-  artifacts, and its graph accepts unreachable or type-invalid consumers. `make
-  concept-registry-fourth-fresh-review` retains the complete predecessor chain and passes 5/5 new
-  falsifiers plus strict TypeScript. Another author repair, fresh review and the independently-passed
-  shared-resource bootstrap dependency precede acceptance and implementation.
+- **Status:** draft — **fourth author repair completed 2026-09-06 on [[D2904]]–[[D2908]] and
+  adjacent [[D2922]]; another
+  genuinely fresh independent review is required.** One two-phase startup path now hydrates and
+  seals exact pack artifacts inside the coordinator-owned concept transaction, stamps the storage
+  version atomically, and mints service-ready storage only after commit. Consumer closure starts at
+  the real server/web entries, proves the operation result is used, and rejects repository-compiler
+  diagnostics. `make concept-registry-fourth-author-repair` retains the full predecessor chain and
+  passes 5/5 direct inversions plus strict TypeScript. The independently-passed shared-resource
+  bootstrap dependency still precedes acceptance and implementation.
 - **Author:** codex, factored from `rfc/skills.md` §4 and the D300/D700 measurements.
 - **Created:** 2026-08-31
 - **Design refs:** `design/01-training-model.md` §§60–65 (registry belongs to authoring);
@@ -128,10 +130,15 @@ Two successor discharges are declared separately and must be absent at this land
 8. Skills taxonomy/credit join, owned by `skills.md`.
 
 The compiler test consumes an exact committed TypeScript import graph compiled with the same
-repository-snapshot and compiler authority as `shared-resource-register-bootstrap`; it does not
-accept a caller-supplied consumer-name array. Each of the six paths is paired with the exact public
+repository-snapshot, dependency and compiler/config authority as
+`shared-resource-register-bootstrap`; it does not accept a caller-supplied consumer-name array and
+fails on every syntactic, semantic, resolution or options diagnostic before emitting a receipt.
+Reachability starts at `apps/server/src/main.ts` and the web `main.ts → App.svelte → lib/api.ts`
+entry chain, never an invented `client.ts`. Each of the six paths is paired with the exact public
 operation it must call. TypeScript symbol resolution follows direct imports, aliases, barrels and
-re-exports back to that operation's declaration; an unused/dead import therefore proves nothing.
+re-exports back to that operation's declaration. A call nested in a declaration is admitted only
+when a reachable caller invokes that declaration and consumes the projection; an imported module,
+unused/dead import or exported-but-uncalled helper therefore proves nothing.
 The retained structural scan separately fails a duplicate import edge, second ID/label map, direct
 JSON parser, local fallback, unregistered display transform, a missing/extra landing consumer or
 either successor importing a local registry. The closure receipt records the exact repository
@@ -196,13 +203,31 @@ resolve(packId, raw) {
 six packs produces one key and six exact pack occurrences, while two different IDs with equal-
 looking substrings never merge.
 
-The claimed migration is a storage operation, not a row mapper with authority arguments. Its only
-inputs are the open application database, the exact compiled registry and an optional test-only
-fault point. It starts `BEGIN IMMEDIATE`, reads `attempt_concepts` joined to the stored `attempts`
-row and `drill_runs.snapshot_json`, reconstructs the run with the runtime's exact replay/parser,
-and resolves `pack_digest` only through `PackRegistry.byDigest` over built-in artifacts plus the
-validated `registered_packs` inventory loaded by Pack Studio. No public function accepts pack JSON,
-an attempt object, a run object, a concept population or a pre-minted occurrence receipt.
+The application has one explicit recoverable two-phase startup instead of constructing a
+service-ready `SQLiteRunStorage` before its migration authorities exist:
+
+1. a bootstrap-only storage handle opens SQLite and completes/stamps the ordinary structural
+   migrations through the concept migration's prerequisite version; it exposes only the exact
+   hydration reads needed by Shape Studio and Pack Studio and cannot be passed to REST/services;
+2. current shapes, principles, built-in packs and the concept registry compile; the bootstrap
+   coordinator then starts one `BEGIN IMMEDIATE`, reads every stored registered/playtest pack,
+   validates each complete document and recomputes its canonical digest, clones and recursively
+   seals the complete built-in-plus-stored digest inventory, executes the concept data operation,
+   validates/writes its receipt, stamps the concept `PRAGMA user_version`, and commits; and
+3. only that successful commit mints `ReadyRunStorage`, from which Pack/Shape Studio and every
+   service/server object are constructed. Any compilation, hydration, digest, migration, receipt,
+   version-stamp or commit failure rolls back phase 2, leaves the prerequisite version restartable,
+   closes the database, and makes `createApplication` reject before a server exists.
+
+The claimed data migration is an operation invoked inside that already-open coordinator
+transaction, not a row mapper and not a second transaction owner. Its only inputs are the open
+transaction, exact compiled registry, the opaque sealed pack-artifact snapshot and an optional
+test-only fault point. It asserts that the transaction is active but never issues `BEGIN`, `COMMIT`,
+`ROLLBACK` or `PRAGMA user_version`. It reads `attempt_concepts` joined to the stored `attempts` row
+and `drill_runs.snapshot_json`, reconstructs the run with the runtime's exact replay/parser, and
+resolves `pack_digest` only through the sealed snapshot. `PackRegistry.byDigest` is not migration
+authority. No public function accepts pack JSON, a caller-stamped digest, an attempt object, a run
+object, a concept population or a pre-minted occurrence receipt.
 
 The migration creates a registered table and a separate
 `attempt_concept_legacy` quarantine; only the former is a `ConceptRef` source:
@@ -408,6 +433,33 @@ new executable falsifiers plus strict TypeScript. Exact evidence:
 `planning/concept-registry/fourth-fresh-independent-buildability-review-2026-09-06.md`. The RFC
 remains draft; no schema, registry, migration or consumer implementation is authorized.
 
+## Fourth author repair — 2026-09-06
+
+The bounded repair closes [[D2904]]–[[D2908]] and adjacent [[D2922]] at contract tier. Startup is now explicitly split at
+the authority boundary: prerequisite structural migrations produce a bootstrap-only handle; the
+coordinator compiles the registries, opens one concept transaction, hydrates and recomputes every
+complete pack artifact inside it, executes the transaction-free data operation, stamps the version
+and commits; only then can it mint storage usable by services. An injected failure rolls back data
+and version together and leaves the prerequisite phase restartable.
+
+Historical resolution no longer trusts mutable `PackRegistry.byDigest`: it consumes an opaque,
+cloned, recursively sealed snapshot whose complete-document digests were recomputed inside the
+transaction. Consumer closure now names the real `api.ts` web boundary, starts from both product
+entries, requires each operation-bearing declaration to have a reachable caller, and refuses every
+compiler/config/resolution diagnostic before receipt publication.
+
+The full gate found the same historical-review defect class again: the fourth review read live RFC,
+application, storage and registry bytes, so correcting its subject made its retained D2904
+falsifier fail. [[D2922]] pins every reviewed text input to commit `8596c97c`; D2908's behavior is a
+bounded vulnerable model tied to those pinned source bytes. A future product repair can now invert
+the defect without erasing the evidence that returned it.
+
+`make concept-registry-fourth-author-repair` retains every predecessor review/repair, passes 5/5
+direct inversions and strict TypeScript. Exact receipt:
+`planning/concept-registry/fourth-author-repair-2026-09-06.md`. This remains author-contract
+evidence, not acceptance or implementation; another genuinely fresh review and the implemented
+shared-resource bootstrap still precede both.
+
 ## Acceptance criteria
 
 1. The process prerequisite's absent root exists before this RFC declares `first lane 1`; first
@@ -462,6 +514,23 @@ remains draft; no schema, registry, migration or consumer implementation is auth
     locale. Expansion and contextual-equivalence fixtures at minimum cover `Straße`/`STRASSE` and
     Greek `σ`/`ς`; a runtime with different Unicode data refuses the build pending a versioned rule
     update.
+20. A production-shaped startup fixture proves the only order is prerequisite structural migration
+    → registry compilation → coordinator transaction → stored-pack hydration and complete-document
+    digest validation → concept rewrite/receipt/version stamp → commit → service-ready storage.
+    Failure at every phase refuses application readiness; a phase-2 failure leaves the prerequisite
+    version and can restart without partial concept rows.
+21. The storage coordinator is the sole owner of `BEGIN IMMEDIATE`, rollback, commit and
+    `PRAGMA user_version`. The concept data operation requires an active transaction and is unable to
+    open or close one; its writes, receipt and version stamp roll back together.
+22. Historical pack resolution consumes only an opaque snapshot compiled inside the transaction
+    from cloned, recursively sealed documents whose complete canonical digest is recomputed. A
+    caller-stamped mismatch, later caller mutation, unavailable digest or forged snapshot fails.
+23. Consumer closure uses `api.ts`, not absent `client.ts`, starts at both real application entries,
+    and proves each containing operation is called from another reachable module. A reachable module
+    containing an uncalled export and an unreachable module containing a call both fail.
+24. The exact committed repository compiler/config/dependency authority rejects all diagnostics
+    before the closure receipt is minted; the same reachable graph with one type-invalid consumer,
+    unresolved import or incompatible config fails.
 
 ## Discharges
 

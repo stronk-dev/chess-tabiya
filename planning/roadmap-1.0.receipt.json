@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:c97da802ca0e36db9a5bc08440d5bb080715b97f8c4c1d083d8ec7ac0d9e2da3",
+    "roadmap": "sha256:2c6a6ae094416cac2b9b0801fb16e7318bf8e0447c24e0c697ea170bc8ada0f3",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:1661089df84aabd05dcfe9a1662d5dc90f3dfe5f092fd09ad41c2bedb70c34fa",
-    "rfcRegister": "sha256:942aba3eafbadf397f76d162f4fe3961c5a6fa6b568eefa486f4face83c74a49",
+    "workState": "sha256:bcb6db7b1463f16a28e335d80184dacf5e4b6ef0617c7e01ca3fb3faf605c6d5",
+    "rfcRegister": "sha256:ffb2e637e426d9fb137ef6aac863643d9643f92241589adc63abb1d8fa7d363f",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -33,7 +33,7 @@
       "todo": 651,
       "doing": 0,
       "blocked": 1177,
-      "done": 839,
+      "done": 840,
       "refused": 3
     },
     "workItems": {
@@ -115,22 +115,22 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; freshly review the author-repaired provider-protocol and provider-health authorities; repair concept-registry D2904-D2908 at the real startup/migration boundary; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+      "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; freshly review the author-repaired provider-protocol, provider-health and concept-registry authorities; then advance provider exchange, pack-capability and longitudinal-store lanes.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "Provider-protocol's fourth author repair now pins exact accepted receipt bytes through witnessed first-parent transition authority, shares canonical ordered populations with the resource, closes the receipt wire grammar and commit-pins its historical review; fresh review still gates implementation.",
+        "summary": "Concept-registry's fourth author repair now defines a recoverable two-phase startup, one coordinator-owned artifact/migration/version transaction, sealed recomputed pack authority and diagnostic-clean operations used from real application entries; fresh review still gates implementation.",
         "impact": "advanced",
         "evidence": [
-          "planning/provider-protocol-register/fourth-author-repair-2026-09-06.md",
-          "tools/d2909-provider-protocol-fourth-author-repair/contract.test.mjs",
-          "rfc/provider-protocol-register.md",
+          "planning/concept-registry/fourth-author-repair-2026-09-06.md",
+          "tools/d2904-concept-registry-fourth-author-repair/contract.test.ts",
+          "rfc/concept-registry.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "provider-protocol-register.md",
-            "digest": "sha256:4bd1a765c9910898fa449b420b2f86e99f24c20bebd19ddf7457534d422cd6db"
+            "id": "concept-registry.md",
+            "digest": "sha256:7c57f9a75f38802aa6eb0233be3894a8f3b525be72cca9038e264e24a8c9e258"
           }
         ]
       },

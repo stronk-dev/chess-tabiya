@@ -326,14 +326,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; freshly review the author-repaired provider-protocol and provider-health authorities; repair concept-registry D2904-D2908 at the real startup/migration boundary; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; freshly review the author-repaired provider-protocol, provider-health and concept-registry authorities; then advance provider exchange, pack-capability and longitudinal-store lanes.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Provider-protocol's fourth author repair now pins exact accepted receipt bytes through witnessed first-parent transition authority, shares canonical ordered populations with the resource, closes the receipt wire grammar and commit-pins its historical review; fresh review still gates implementation.",
+          "summary": "Concept-registry's fourth author repair now defines a recoverable two-phase startup, one coordinator-owned artifact/migration/version transaction, sealed recomputed pack authority and diagnostic-clean operations used from real application entries; fresh review still gates implementation.",
           "impact": "advanced",
-          "evidence": ["planning/provider-protocol-register/fourth-author-repair-2026-09-06.md", "tools/d2909-provider-protocol-fourth-author-repair/contract.test.mjs", "rfc/provider-protocol-register.md", "rfc/README.md"],
+          "evidence": ["planning/concept-registry/fourth-author-repair-2026-09-06.md", "tools/d2904-concept-registry-fourth-author-repair/contract.test.ts", "rfc/concept-registry.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "provider-protocol-register.md", "digest": "sha256:4bd1a765c9910898fa449b420b2f86e99f24c20bebd19ddf7457534d422cd6db"}
+            {"kind": "rfc", "id": "concept-registry.md", "digest": "sha256:7c57f9a75f38802aa6eb0233be3894a8f3b525be72cca9038e264e24a8c9e258"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

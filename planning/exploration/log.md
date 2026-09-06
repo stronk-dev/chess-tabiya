@@ -16913,3 +16913,20 @@ missing draft predecessor.
 fourth review's positive control plus 3/3 return cases, then passes 4/4 direct inversions. Exact
 receipt: `planning/provider-protocol-register/fourth-author-repair-2026-09-06.md`. Another genuinely
 fresh review and the generic bootstrap still precede implementation.
+
+## 2026-09-06 — concept-registry fourth author repair
+
+**What landed:** repaired [[D2904]]–[[D2908]] and adjacent [[D2922]] at contract tier. No product, schema, storage,
+content, archive or protected-design byte changed.
+
+**What changed:** startup is now a recoverable two-phase protocol whose coordinator alone owns the
+transaction, stored-pack hydration, recomputed complete-document artifact snapshot, concept
+rewrite/receipt/version stamp and readiness boundary. Consumer closure names the real `api.ts`,
+starts at both application entries, requires the operation-bearing declaration to be used, and
+rejects repository compiler/config diagnostics before publishing a receipt.
+The fourth historical review is now commit-pinned rather than reading the live bytes it returned.
+
+**Evidence/next:** `make concept-registry-fourth-author-repair` retains every predecessor and the
+5/5 fourth-review return cases, then passes 5/5 direct inversions plus strict TypeScript. Exact
+receipt: `planning/concept-registry/fourth-author-repair-2026-09-06.md`. Another genuinely fresh
+review and the implemented shared-resource bootstrap still precede acceptance or implementation.

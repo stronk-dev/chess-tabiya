@@ -2184,6 +2184,19 @@ retains all predecessor evidence and passes five new falsifiers. The foundation-
 therefore remains active at author repair; no concept schema, migration or downstream Campaign/
 Skills work may treat this contract as accepted.
 
+### 2026-09-06 foundation checkpoint — concept startup authority repaired
+
+The fourth concept-registry author repair closes the returned application boundary without
+pretending the schema has shipped. One recoverable two-phase startup now owns the exact order from
+prerequisite migrations through registry compilation, transaction-scoped pack hydration and
+complete-document digest validation, concept rewrite/receipt/version stamp, commit, then service
+readiness. The data operation cannot nest a transaction; historical pack authority is an opaque
+sealed snapshot; and the consumer receipt now requires diagnostic-clean, used operations reachable
+from the real server/web entries. `make concept-registry-fourth-author-repair` retains the full
+chain and passes 5/5 direct inversions plus strict TypeScript. Foundation contracts advance to
+another fresh review and the shared-resource bootstrap dependency; no product schema or migration
+is accepted yet.
+
 ### 2026-09-06 foundation checkpoint — provider obligation preimage returned
 
 The provider-protocol register's third repair is not yet an independently accepted product

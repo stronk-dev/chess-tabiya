@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "../..",
+    "paths": { "@chess-tabiya/schema/*": ["packages/schema/src/*"] },
+    "types": ["node", "vitest/globals"]
+  },
+  "include": ["*.ts"]
+}
