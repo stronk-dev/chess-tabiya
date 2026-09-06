@@ -1,12 +1,11 @@
 # RFC: Concept registry — one cross-pack identity authority
 
-- **Status:** draft — **third author repair completed on [[D2878]]–[[D2884]].** The executable
-  checkpoint now uses the shipped compound storage key, runtime replay and complete PackRegistry
-  artifact authority inside one transaction; revalidates restart preimages and outputs; compiles the
-  canonical on-disk revision chain; proves six named consumer operations through TypeScript symbol
-  resolution; and executes the versioned locale-free label collision key. `make
-  concept-registry-third-author-repair` retains the complete return/repair chain and passes 7/7
-  current groups plus strict TypeScript. Another genuinely fresh review and the independently-passed
+- **Status:** draft — **fourth fresh independent review returned the third repair on
+  [[D2904]]–[[D2908]].** The migration has no buildable place in the real startup order, conflicts
+  with the storage coordinator's transaction ownership, trusts caller-stamped mutable pack
+  artifacts, and its graph accepts unreachable or type-invalid consumers. `make
+  concept-registry-fourth-fresh-review` retains the complete predecessor chain and passes 5/5 new
+  falsifiers plus strict TypeScript. Another author repair, fresh review and the independently-passed
   shared-resource bootstrap dependency precede acceptance and implementation.
 - **Author:** codex, factored from `rfc/skills.md` §4 and the D300/D700 measurements.
 - **Created:** 2026-08-31
@@ -387,6 +386,27 @@ current repair groups plus strict TypeScript. Exact receipt:
 `planning/concept-registry/third-author-repair-2026-09-06.md`. This is author-contract evidence, not
 acceptance or implementation; another genuinely fresh independent review and the
 shared-resource-register bootstrap still precede both.
+
+## Fourth fresh independent review return — 2026-09-06
+
+The third repair closes [[D2878]]–[[D2884]] but is returned on five real integration seams:
+
+1. [[D2904]] — storage migrations finish before the built-in plus stored-pack `PackRegistry` the
+   concept migration requires can exist;
+2. [[D2905]] — both the shipped storage coordinator and the proposed data operation own
+   `BEGIN IMMEDIATE`, producing an exact nested-transaction failure and no defined atomic
+   `user_version` boundary;
+3. [[D2906]] — an expected call inside an unimported function passes “live” consumer closure, and
+   the named web anchor is an absent `client.ts` rather than the real `api.ts` boundary;
+4. [[D2907]] — the partial TypeScript program never checks diagnostics, so type-invalid committed
+   consumers receive a compiler-derived receipt; and
+5. [[D2908]] — public PackRegistry mutation accepts a caller-stamped digest and exposes it through
+   `byDigest` without recomputing exact complete-document identity.
+
+`make concept-registry-fourth-fresh-review` retains every predecessor review/repair and passes 5/5
+new executable falsifiers plus strict TypeScript. Exact evidence:
+`planning/concept-registry/fourth-fresh-independent-buildability-review-2026-09-06.md`. The RFC
+remains draft; no schema, registry, migration or consumer implementation is authorized.
 
 ## Acceptance criteria
 

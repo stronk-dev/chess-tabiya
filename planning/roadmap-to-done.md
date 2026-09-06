@@ -2137,3 +2137,14 @@ one composed service. `make candidate-packet-twelfth-author-repair` retains all 
 passes 15/15 current groups plus strict TypeScript. This advances the shared evidence foundation but
 does not accept or implement it: a genuinely fresh review, the value-authority dependency and the
 returned promotion installation boundary remain next.
+
+### 2026-09-06 foundation checkpoint — concept registry returned at application boundary
+
+The concept registry's third repair is not buildable in the real application order. Storage runs
+and completes migrations before the complete built-in plus stored-pack registry can be hydrated,
+while both the coordinator and proposed operation claim the same SQLite transaction. Its consumer
+receipt also accepts unreachable and type-invalid calls, and its pack lookup accepts a
+caller-stamped digest through mutable registry methods. `make concept-registry-fourth-fresh-review`
+retains all predecessor evidence and passes five new falsifiers. The foundation-contracts milestone
+therefore remains active at author repair; no concept schema, migration or downstream Campaign/
+Skills work may treat this contract as accepted.

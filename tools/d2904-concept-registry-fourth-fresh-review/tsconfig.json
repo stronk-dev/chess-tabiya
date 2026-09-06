@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "../..",
+    "noEmit": true,
+    "paths": {
+      "@chess-tabiya/runtime": ["packages/runtime/src/index.ts"],
+      "@chess-tabiya/runtime/*": ["packages/runtime/src/*"]
+    },
+    "types": ["node", "vitest/globals"]
+  },
+  "include": [
+    "review.test.ts",
+    "../d2878-concept-registry-third-author-repair/model.ts"
+  ]
+}

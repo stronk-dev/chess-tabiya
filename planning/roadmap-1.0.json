@@ -326,14 +326,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; freshly review the repaired concept-registry D2878-D2884, provider-health D2869-D2873 and provider-protocol D2874-D2877 contracts; then advance provider exchange, pack-capability and longitudinal-store lanes.",
+        "nextAction": "Obtain owner acceptance for the independently-passed shared-resource bootstrap, then implement it; repair concept-registry D2904-D2908 at the real startup/compiler/artifact boundary; freshly review the provider-health D2869-D2873 and provider-protocol D2874-D2877 repairs; then advance provider exchange, pack-capability and longitudinal-store lanes.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "Concept-registry's third author repair now uses shipped storage/runtime/pack authority under one transaction, validates complete restart state, compiles immutable history and proves six consumer operations. Fresh review and the shared-resource bootstrap still gate implementation.",
-          "impact": "advanced",
-          "evidence": ["planning/concept-registry/third-author-repair-2026-09-06.md", "tools/d2878-concept-registry-third-author-repair/contract.test.ts", "tools/d2878-concept-registry-third-fresh-review/review.test.mjs", "rfc/concept-registry.md", "rfc/README.md"],
+          "summary": "Concept-registry's fourth fresh review returned the repair: its required PackRegistry exists only after storage migration, transaction ownership collides, consumer closure accepts unreachable/type-invalid calls and mutable registry methods accept caller-stamped digests.",
+          "impact": "regressed",
+          "evidence": ["planning/concept-registry/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2904-concept-registry-fourth-fresh-review/review.test.ts", "rfc/concept-registry.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "concept-registry.md", "digest": "sha256:864b91a77d3cd8387dc1de3a66718bba67df53cad616a5507d47eee4decd4054"}
+            {"kind": "rfc", "id": "concept-registry.md", "digest": "sha256:46c6c8db0fdad53e00ab33b2c63a9d0767beb692fc90c04158f39487424045c1"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

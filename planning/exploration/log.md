@@ -16819,3 +16819,19 @@ observed-class log losses are literal infinity without epsilon smoothing.
 king-move identity still serves Support, Review and drill conditions; bot work moves to a newly
 preregistered semantic opportunity with multi-ply coherence, not another global multiplier. No
 profile, personality, rating or general human-like claim is licensed.
+
+## 2026-09-06 — concept registry fourth fresh independent return
+
+**What landed:** returned the third concept-registry repair on [[D2904]]–[[D2908]] after tracing it
+through the real application boot order, storage migration coordinator, web entry point, TypeScript
+diagnostics and mutable PackRegistry authority. The author harness was coherent in isolation but
+could not enter production: storage migrates before the complete registry exists, both layers start
+the same SQLite transaction, dead functions and invalid programs satisfy consumer closure, and a
+caller-stamped digest is accepted by `byDigest`.
+
+**Evidence/next:** `make concept-registry-fourth-fresh-review` retains the full predecessor chain
+and passes 5/5 new falsifiers plus strict TypeScript. Exact receipt:
+`planning/concept-registry/fourth-fresh-independent-buildability-review-2026-09-06.md`. A fourth
+author repair must define one executable startup/migration phase boundary, real reachable consumers
+and sealed exact pack-artifact authority before another fresh review. No product byte or protected
+design byte changed.
