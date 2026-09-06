@@ -289,11 +289,11 @@
       "name": "CI parity, packaging, deployment, observability, and release",
       "release": "core",
       "owner": "release-engineering",
-      "rfcs": ["storage-backup-recovery.md", "safe-deployment-profiles.md", "provider-health-degradation.md", "verifiable-runtime-distribution.md"],
+      "rfcs": ["storage-backup-recovery.md", "safe-deployment-profiles.md", "provider-health-degradation.md", "opponent-recovery-journey.md", "verifiable-runtime-distribution.md"],
       "completion": {
         "evidence": ["not_applicable", "This slice verifies evidence machinery but creates no chess truth."],
         "state": ["partial", "Schema/register/work/intent checks and three workflows exist; storage and deployment have executable contract models, but fresh reviews prove their success authorities remain detached from real storage, filesystem, mounted-file, TLS, HTTP and ingress operations."],
-        "api": ["partial", "Health exists, but the twelfth provider-health review proves the newest repair still accepts caller-minted exchange and generation authority, omits renew/expire, cannot carry longer Retry-After, admits test providers to release and exceeds its cache-TTL ceiling; a bounded repair, fresh review and production route integration remain, alongside readiness, metrics policy and production-boundary coverage."],
+        "api": ["partial", "Health exists, but `/capabilities` still converts constructor flags into availability and the client still deletes controls when a provider is absent. Provider health was cut to its blocking obligation on 2026-09-06: its twelve-round author model is retired as acceptance authority and the production implementation is now the proof, with durable opponent recovery split into opponent-recovery-journey.md. Route integration, readiness, metrics policy and production-boundary coverage remain."],
         "experience": ["blocked", "Install, first boot, engine degradation, backup, restore, update, rollback, and failure diagnostics are not one guided operator workflow."],
         "defaults": ["partial", "Compose boots with mock and insecure-cookie development defaults; safe public and private profiles are not complete."],
         "content": ["blocked", "Runtime content allow-list, licence notices, SBOM, model/runtime rights, and multi-architecture asset tiers remain."],

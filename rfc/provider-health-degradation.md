@@ -1,26 +1,26 @@
 # RFC: Provider health and honest degradation
 
-- **Status:** **draft — twelfth fresh independent review returned the eleventh repair on
-  [[D2966]]–[[D2971]].** Exchange and generation authority remain caller-mintable; the required
-  renew/expire lease surface regressed; long `Retry-After` is unrepresentable; test-only providers
-  receive release authority; and cache TTLs exceed the declared 24-hour ceiling. `make
-  provider-health-twelfth-fresh-review` retains the complete chain and passes 6/6 executable
-  counterexamples plus strict TypeScript. A bounded twelfth author repair, another genuinely fresh
-  review and the provider-protocol/exchange prerequisites precede either implementation checkpoint.
-- **Author:** Codex on the owner's O13 Choice-C ruling
+- **Status:** **draft — cut to its blocking obligation 2026-09-06.** The twelve-round author-model
+  chain is retired as this RFC's acceptance authority and moved to
+  `planning/provider-health-degradation/round-history-and-cut-2026-09-06.md`; durable opponent
+  recovery and run-schema lane 0.26 moved to `rfc/opponent-recovery-journey.md`. What remains is the
+  live provider-health authority, and it claims nothing versioned. It is bound to a **named
+  obligation** — the 67 ledger rows in the map below — not to a landable minimum. Owner acceptance
+  and the provider-protocol/exchange prerequisites remain required.
+- **Author:** Codex on the owner's O13 Choice-C ruling; cut 2026-09-06 by claude
 - **Created:** 2026-08-27
 - **Design refs:** `design/02-product-shape.md` deployment axis; `design/03-product-breadth.md` B4/B8; `design/05-in-run-experience.md` assistance/source-risk boundary
 - **Exploration gate:** O13 / D616 selected the stronger appliance floor; R18 reproduced D609 by stopping Maia while `/capabilities` stayed green
 - **Depends on:** implemented `rfc/archive/evidence-contract-manifest.md` and
   `rfc/archive/engine-request-contract.md`; draft `rfc/provider-protocol-register.md` followed by
-  `rfc/provider-exchange-and-execution.md` for the shared operation declarations this RFC extends;
+  `rfc/provider-exchange-and-execution.md` for the shared operation declarations this RFC consumes;
   F12-A's deployment readiness boundary
 - **Parent / amends:** current `/capabilities`, `EngineCapabilities`, evidence-manifest availability, engine supervisor, opponent selector, corpus/tablebase/voice/TTS clients
 - **Supersedes / superseded by:** —
-- **Planning:** `planning/provider-health-degradation/` (once implementing)
+- **Planning:** `planning/provider-health-degradation/`
 
 ```tabiya-claims
-run-schema | lane 0.26 | $defs/opponentSelection.acquisition carries the sealed provider-exchange delivery (new, optional for pre-0.26 reads and required on every new opponent.move_selected write); DrillRunEvent gains opponent.selection_failed and opponent.recovery_requested
+none
 ```
 
 ## Summary
@@ -38,6 +38,10 @@ the consuming operation's declared F1 deadline, changes live capability state, a
 learner as an honest unavailable/degraded module or paused opponent choice—never as silent
 Stockfish-for-Maia, corpus-for-theory, or LLM-authored chess truth.
 
+**This RFC is live state only.** Persisting a failure or a mid-run opponent change is
+`rfc/opponent-recovery-journey.md`. Until that lands, a provider failure is honest in the run and
+absent from Review and export; §10 says so in the interface rather than implying it.
+
 ## Motivation
 
 R18 stopped the Maia sidecar after a successful request. `/capabilities` continued to advertise
@@ -45,20 +49,30 @@ Maia and all dependent modes. The exact cached request returned in 2 ms, while a
 zero bytes before the ten-second client probe stopped waiting. The capability response remained
 green. D609 records that production-boundary failure.
 
-The source makes the cause explicit:
+The source makes the cause explicit, and all five facts reproduce at HEAD:
 
 1. `EngineCapabilities` converts configured engine identities and constructor flags directly into
-   availability. External voice, TTS, Explorer and tablebase can therefore be “available” before a
-   request has ever succeeded.
+   availability (`apps/server/src/capabilities.ts:282-317`; `corpus`, `tts`, `tablebase` and
+   `llmAvailable` are constructor options that become advertised providers). External voice, TTS,
+   Explorer and tablebase can therefore be "available" before a request has ever succeeded.
 2. `evidenceManifestCapabilities` converts those static strings into F1 producer availability. A
    manifest binding is exact, but its runtime premise is not.
-3. `OpponentSelector` retains an unbounded process-lifetime promise cache. Its key omits engine/model
-   generation, and its response does not distinguish cache from live inference (D1848).
-4. Maia receives a 60-second request timeout. Voice makes two independently timed provider calls,
-   so its operation can spend two provider budgets before deterministic fallback.
+3. `OpponentSelector` retains an unbounded process-lifetime promise cache
+   (`apps/server/src/opponent-selector.ts:468`, `new Map<string, Promise<OpponentSelection>>()`).
+   Its key omits engine/model generation, and its response does not distinguish cache from live
+   inference (D1848).
+4. Maia receives a 60-second request timeout (`apps/server/src/opponent-selector.ts:612`). Voice
+   makes two independently timed provider calls, so its operation can spend two provider budgets
+   before deterministic fallback.
 5. Existing corpus and tablebase clients already have useful queue, timeout, typed-error and
    bounded-cache pieces, but neither reports request outcomes to the capability authority. A cache
    hit can hide a dead upstream.
+
+The client half is the same failure in the interface: `apps/web/src/lib/DrillScreen.svelte:978,981,983`,
+`apps/web/src/lib/AssistanceSettings.svelte:65` and `apps/web/src/App.svelte:1318,1327,1364` gate on
+`capabilities?.providers.*`, and several of them **remove** the control rather than render it with a
+reason. The repo's honest-absence invariant is enforced today only for *disabled* controls
+([[D1469]]); a control that silently disappears when a provider is absent explains nothing.
 
 The repair must preserve two distinctions that are evidence semantics, not operator decoration:
 
@@ -66,6 +80,11 @@ The repair must preserve two distinctions that are evidence semantics, not opera
   domain or has insufficient data**;
 - **a cached answer for this exact request exists** is different from **the provider can answer a
   new request**.
+
+The owner's capability ruling is the shape of the state model: *"during runtime capas can get
+missing right... or reappear? … so it would be a 'temporarily unavailable' if it's a runtime issue
+or outright unsupported if the server is started without the capa outright."* `not_configured` is
+outright-unsupported; every other arm is a runtime state that can change back.
 
 The Lichess API asks clients to make one request at a time and, after HTTP 429, wait a full minute
 before resuming: <https://lichess.org/api#section/Introduction/Rate-limiting>. The implementation
@@ -84,11 +103,15 @@ This RFC owns:
 4. generation-aware bounded caches for opponent selection and integration of existing provider
    caches;
 5. live `/capabilities` output and the F1 availability join;
-6. honest client behavior for opponent selection, evidence modules, external voice and TTS;
+6. honest, in-run client behavior for opponent selection, evidence modules, external voice and TTS;
 7. liveness/readiness/capability semantics and production-boundary failure/recovery tests.
 
 ### Non-goals
 
+- **persisting** a provider failure, a retry or an opponent change — `rfc/opponent-recovery-journey.md`;
+- declaring provider-exchange operations, request/result maps, digest constructors, acquisition
+  receipts or deliveries — `rfc/provider-exchange-and-execution.md` owns them and this RFC consumes
+  them sealed ([[D2578]]);
 - choosing or grading chess moves, ranking evidence, creating hints, or adding a detector;
 - deciding presets, assistance ceilings, bot personalities, or campaign encounters;
 - making an optional Internet provider mandatory for a core 1.0 journey;
@@ -106,157 +129,86 @@ process/upstream instance whose generation and health can change independently:
 
 ```ts
 type ProviderFamilyId =
-  | "stockfish"
-  | "maia"
-  | "tablebase"
-  | "explorer"
-  | "voice"
-  | "tts";
+  | "stockfish" | "maia" | "tablebase" | "explorer" | "voice" | "tts";
 
 type ProviderInstanceId =
-  | "stockfish-play"
-  | "stockfish-analysis"
-  | "maia-inference"
-  | "tablebase-primary"
-  | "explorer-primary"
-  | "external-voice"
-  | "external-tts";
+  | "stockfish-play" | "stockfish-analysis" | "maia-inference"
+  | "tablebase-primary" | "explorer-primary" | "external-voice" | "external-tts";
 
 type ApplicationProviderOperationId =
-  | "opponent.stockfish_play"
-  | "opponent.maia_inference"
-  | "evidence.stockfish_analysis"
-  | "evidence.tablebase_probe"
-  | "evidence.explorer_query"
-  | "render.voice"
-  | "render.voice_compare"
-  | "render.voice_story"
-  | "review.reasoning"
-  | "render.speech";
+  | "opponent.stockfish_play" | "opponent.maia_inference"
+  | "evidence.stockfish_analysis" | "evidence.tablebase_probe" | "evidence.explorer_query"
+  | "render.voice" | "render.voice_compare" | "render.voice_story"
+  | "review.reasoning" | "render.speech";
 
-type ProviderBackoffGroupId =
-  | "lichess-api"
-  | "external-voice-api"
-  | "external-tts-api";
+type ProviderBackoffGroupId = "lichess-api" | "external-voice-api" | "external-tts-api";
 
 type ProviderImplementation =
-  | "uci_sidecar"
-  | "lichess_http"
-  | "external_http"
-  | "local_service"
-  | "local_fixture";
+  | "uci_sidecar" | "lichess_http" | "external_http" | "local_service" | "local_fixture";
 ```
 
 `PROVIDER_INSTANCE_DECLARATIONS` is one closed literal tuple of
 `{instanceId, familyId, allowedImplementations, backoffGroup}` rows. `backoffGroup` is null for
 process-local UCI instances, `lichess-api` for both remote Explorer and tablebase instances, and
-the corresponding external group for voice/TTS. The configured-instance value selects
-exactly one member and the generation digest binds that selection. `local_fixture` is admitted only
-by the test factory and the release compiler rejects it; `local_service` is the production-local
-member. This is the durable route for [[D2362]]. `stockfish-play` and `stockfish-analysis` are two
-rows with independent options, workloads, handshakes, circuits and generations. A family is only a
+the corresponding external group for voice/TTS. The configured-instance value selects exactly one
+member and the generation digest binds that selection. `local_fixture` is admitted only by the test
+factory and the release compiler rejects it; `local_service` is the production-local member. This is
+the durable route for [[D2362]]. `stockfish-play` and `stockfish-analysis` are two rows with
+independent options, workloads, handshakes, circuits and generations. A family is only a
 display/grouping identity; health is never stored or inferred at family level. Maia is the
 `maia-inference` instance. Tablebase and Explorer name their current upstream instances; a later
 local implementation changes the configured implementation within the instance's allowed set and
 moves generation rather than reusing remote health. Voice and TTS are operational instances but
 never chess-evidence producers.
 
-`APPLICATION_PROVIDER_EXECUTION` is the compiler-owned application-operation→provider-exchange
-authority described in §8. `ProviderOperationId`, `ProviderAcquisitionReceipt`, normalized request
-identity, parsed payload and retained delivery remain owned by
-`provider-exchange-and-execution`; this RFC does not redeclare or reconstruct them. Every health
-admission and stage settlement retains the sealed provider-exchange operation and delivery beside
-the concrete instance and application operation. Ordinary copy may group failures by family, but no operation asks “is Stockfish healthy?”
-without selecting play or analysis. Independent death/restart fixtures cross both Stockfish
-instances: analysis failure cannot disable `opponent.stockfish_play`, and play recovery cannot mark
-`live.stockfish` analysis available.
+Every group membership, every provider→group binding and every configured row is **derived from
+this tuple**. A second hand-written map is a closure failure, not a convenience ([[D2942]]).
+Configuration is parsed against the tuple before the registry is constructed: an unknown instance
+fails rather than being dropped, and a configured snapshot retains the exact family and
+implementation whose generation it names ([[D2846]]).
+
+Every health admission and stage settlement retains the sealed provider-exchange operation and
+delivery beside the concrete instance and application operation. Ordinary copy may group failures by
+family, but no operation asks "is Stockfish healthy?" without selecting play or analysis. Independent
+death/restart fixtures cross both Stockfish instances: analysis failure cannot disable
+`opponent.stockfish_play`, and play recovery cannot mark `live.stockfish` analysis available.
 
 Mock/test providers use `local_fixture` and publish that implementation literally. They must never
 be serialized as `maia`, `stockfish`, `lichess_http`, or `external_http`, including in development
 screenshots and production smoke tests.
 
-Configuration answers only whether a provider exists and which implementation is intended. It
-does not answer health. The current `CapabilityProviders` strings may remain during migration only
-as a projection of the registry snapshot; no server or client branch may continue to use
-constructor presence as authority after criterion 7.
+Configuration answers only whether a provider exists and which implementation is intended. It does
+not answer health. The current `CapabilityProviders` strings may remain during migration only as a
+projection of the registry snapshot; no server or client branch may continue to use constructor
+presence as authority after criterion 18.
 
 ### 2. State model
 
 ```ts
 type ProviderFailureReason =
-  | "startup"
-  | "process_exit"
-  | "timeout"
-  | "network"
-  | "rate_limited"
-  | "overloaded"
-  | "authentication"
-  | "protocol"
-  | "cancelled_by_shutdown";
+  | "startup" | "process_exit" | "timeout" | "network" | "rate_limited"
+  | "overloaded" | "authentication" | "protocol" | "cancelled_by_shutdown";
 
 interface ProviderTimes {
   readonly checkedAt: string;
   readonly lastSuccessAt: string | null;
   readonly lastFailureAt: string | null;
 }
+```
 
-type ProviderHealthSnapshot =
-  | {
-      readonly instanceId: ProviderInstanceId;
-      readonly familyId: ProviderFamilyId;
-      readonly state: "not_configured";
-    }
-  | {
-      readonly instanceId: ProviderInstanceId;
-      readonly familyId: ProviderFamilyId;
-      readonly state: "unverified";
-      readonly implementation: ProviderImplementation;
-      readonly generation: string;
-      readonly retryAfterMs: null;
-    }
-  | ({
-      readonly instanceId: ProviderInstanceId;
-      readonly familyId: ProviderFamilyId;
-      readonly state: "recovering";
-      readonly implementation: ProviderImplementation;
-      readonly generation: string;
-      readonly priorReason: ProviderFailureReason;
-      readonly consecutiveSuccesses: 1;
-      readonly requiredSuccesses: 2;
-      readonly retryAfterMs: null;
-    } & ProviderTimes)
-  | ({
-      readonly instanceId: ProviderInstanceId;
-      readonly familyId: ProviderFamilyId;
-      readonly state: "available";
-      readonly implementation: ProviderImplementation;
-      readonly generation: string;
-      readonly reason: null;
-      readonly retryAfterMs: null;
-    } & ProviderTimes)
-  | ({
-      readonly instanceId: ProviderInstanceId;
-      readonly familyId: ProviderFamilyId;
-      readonly state: "degraded_cached_only";
-      readonly implementation: ProviderImplementation;
-      readonly generation: string;
-      readonly reason: ProviderFailureReason;
-      readonly retryAfterMs: number | null;
-      readonly cacheScope: "exact_request";
-      readonly validExactEntries: number;
-      readonly cacheRevision: number;
-    } & ProviderTimes)
-  | ({
-      readonly instanceId: ProviderInstanceId;
-      readonly familyId: ProviderFamilyId;
-      readonly state: "unavailable";
-      readonly implementation: ProviderImplementation;
-      readonly generation: string;
-      readonly reason: ProviderFailureReason;
-      readonly retryAfterMs: number | null;
-      readonly cacheScope: "none";
-    } & ProviderTimes);
+`ProviderHealthSnapshot` is a **state-specific discriminated union**, one arm per state, with no
+field that is meaningless for its arm:
 
+| state | required beyond instance/family | forbidden |
+|---|---|---|
+| `not_configured` | — | implementation, generation, times, reason, cache fields |
+| `unverified` | implementation, generation, `retryAfterMs: null` | times, reason, cache fields |
+| `recovering` | implementation, generation, `priorReason`, `consecutiveSuccesses: 1`, `requiredSuccesses: 2`, times | reason, cache fields |
+| `available` | implementation, generation, `reason: null`, times | cache fields |
+| `degraded_cached_only` | implementation, generation, reason, `retryAfterMs`, `cacheScope: "exact_request"`, `validExactEntries`, `cacheRevision`, times | — |
+| `unavailable` | implementation, generation, reason, `retryAfterMs`, `cacheScope: "none"`, times | cache inventory counts |
+
+```ts
 type ProviderOperationAvailability =
   | { readonly state: "available"; readonly instanceIds: readonly ProviderInstanceId[] }
   | { readonly state: "requestable_unverified"; readonly instanceIds: readonly ProviderInstanceId[] }
@@ -283,15 +235,13 @@ The transitions are closed:
 - live failure with at least one valid exact-request cache entry → `degraded_cached_only`;
 - live failure with no valid exact-request cache entry → `unavailable`.
 
-`not_configured` has no implementation, generation, timestamps, reason or invented cache state.
-Every other arm exposes only fields meaningful for that state; illegal combinations do not parse.
 `unverified` is deliberate. Voice/TTS/Explorer/tablebase are not probed with invented chess data,
 learner text, or billable prompts merely to paint a green badge. Their first real request verifies
 them. A local UCI `uci`/`isready` handshake is an actual protocol operation and may establish
 availability before the first chess request.
 
 `requestable_unverified` is the clean-start operation state. It keeps the ordinary control enabled
-with neutral copy (“Ready to try”) and allows exactly the learner's real request through the normal
+with neutral copy ("Ready to try") and allows exactly the learner's real request through the normal
 deadline/circuit path. It never advertises a verified live provider. Success or failure moves the
 next snapshot to a corresponding total arm. `/capabilities` itself never triggers that request.
 
@@ -306,18 +256,19 @@ same generation reaches `available`; an intervening failure returns to degraded/
 zeros recovery; generation change returns to clean `unverified`; restart reconstructs clean-start
 state rather than claiming an old recovery streak. Cache hits never advance it.
 
-`checkedAt` exists only after a real outcome and changes only on a real handshake/request outcome. Reading `/capabilities`, reading a
-cache entry, rendering deterministic text, and a browser polling the server do not refresh it.
+`checkedAt` exists only after a real outcome and changes only on a real handshake/request outcome.
+Reading `/capabilities`, reading a cache entry, rendering deterministic text, and a browser polling
+the server do not refresh it.
 
-An internal registry snapshot also retains sealed `stateRevision` and
-`observedAtMonotonic` authority. Currentness is not object identity: any number of snapshots
-issued over the same revision and equal time-derived state remain valid concurrently. Every
-admission, selector and release-receipt operation receives the current injected monotonic sample
-and recomputes the time-derived projection. A health/cache/generation mutation, or crossing a
-retry/cache-expiry boundary that changes projected state, refuses the old snapshot and requires a
-new one. Merely issuing another equal read-only snapshot revokes nothing.
-`observedAtMonotonic` is process-local authority and is never serialized on
-`/capabilities`; `generatedAt` remains display-only civil time.
+An internal registry snapshot also retains sealed `stateRevision` and `observedAtMonotonic`
+authority. Currentness is not object identity: any number of snapshots issued over the same revision
+and equal time-derived state remain valid concurrently. Every admission, selector and
+release-receipt operation receives the current injected monotonic sample and recomputes the
+time-derived projection. A health/cache/generation mutation, or crossing a retry/cache-expiry
+boundary that changes projected state, refuses the old snapshot and requires a new one. Merely
+issuing another equal read-only snapshot revokes nothing. Monotonic and civil clocks are **separate
+operands**: `observedAtMonotonic` is process-local, never serialized, and never interpreted as Unix
+time; `generatedAt` is display-only civil time and never decides duration.
 
 ### 3. Generation and identity
 
@@ -339,59 +290,58 @@ Generation is per `ProviderInstanceId`, never per family. Generation change atom
 1. moves the provider to `unverified` (external) or `startup`/unavailable until UCI handshake;
 2. cancels or lets finish—but never publishes—old-generation in-flight work;
 3. invalidates every cache entry whose key names the old generation;
-4. causes a late old-generation result to be discarded rather than healing the new generation.
+4. causes a late old-generation result to be discarded rather than healing the new generation;
+5. invalidates any live backoff-group claim naming the old member image before admission.
 
-The generation-change operation refuses an equal generation string even when implementation also
-changes. Its configured identity is derived by the composition root rather than accepted as an
-arbitrary opaque label. Backoff-group member images retain instance, implementation and generation,
-so a behavior-affecting configuration change cannot inherit an old upstream claim.
+The generation string is **derived by the composition root** from the configured identity above; it
+is never accepted as an arbitrary opaque label from a caller, and there is no public operation that
+changes it without a changed configuration, artifact or supervisor start. The generation-change
+operation refuses an equal generation string even when implementation also changes.
 
-### 4. Provider-exchange input and application settlement
+### 4. What this RFC consumes from provider exchange
 
-Provider exchange owns the low-level operation id, normalized request digest, acquisition receipt,
-parsed payload receipt and live/retained delivery. Provider health consumes those sealed values and
-adds only application-stage state. The provider-protocol successor must add the three external
-exchange operations `external_voice.render@1`, `external_voice.reasoning_review@1` and
-`external_tts.synthesize@1` beside the five chess-source operations already specified by
-`provider-exchange-and-execution`. Their request/result maps are exact; no generic HTTP payload or
-health-owned acquisition receipt exists.
+`provider-exchange-and-execution` owns `ProviderOperationId`, `ProviderAcquisitionReceipt`,
+normalized request identity, parsed payload and retained delivery. Provider health **consumes those
+sealed values and adds only application-stage state**; it does not redeclare or structurally
+reconstruct them ([[D2578]]). The provider-protocol successor must add the three external exchange
+operations `external_voice.render@1`, `external_voice.reasoning_review@1` and
+`external_tts.synthesize@1` beside the five chess-source operations already specified there. Their
+request/result maps are exact; no generic HTTP payload and no health-owned acquisition receipt
+exists.
+
+Each application operation has exactly one provider stage (§8), so its settlement is singular:
 
 ```ts
-type ProviderStageSettlement<K extends ProviderOperationId, T> =
-  | { readonly kind: "success"; readonly stageId: string;
-      readonly delivery: ProviderDelivery<T, K> }
-  | { readonly kind: "local_domain"; readonly stageId: string;
-      readonly result: ProviderLocalDomainResult<K> }
-  | { readonly kind: "failed"; readonly stageId: string;
-      readonly result: ProviderSourceFailure<K> }
-  | { readonly kind: "cancelled"; readonly stageId: string;
-      readonly reason: "caller" | "superseded" | "shutdown" };
+type ProviderStageSettlement =
+  | { readonly kind: "success"; readonly stageId: string; readonly delivery: ProviderDelivery<unknown, ProviderOperationId> }
+  | { readonly kind: "local_domain"; readonly stageId: string; readonly result: ProviderLocalDomainResult<ProviderOperationId> }
+  | { readonly kind: "failed"; readonly stageId: string; readonly result: ProviderSourceFailure<ProviderOperationId> }
+  | { readonly kind: "cancelled"; readonly stageId: string; readonly reason: "caller" | "superseded" | "shutdown" };
 
 type ApplicationProviderOutcome<T> =
-  | { readonly kind: "complete"; readonly value: T;
-      readonly settlement: ProviderStageSettlement<ProviderOperationId, unknown> }
+  | { readonly kind: "complete"; readonly value: T; readonly settlement: ProviderStageSettlement }
   | { readonly kind: "fallback"; readonly value: T;
       readonly source: "deterministic_renderer" | "browser_speech_or_text";
-      readonly settlement: ProviderStageSettlement<ProviderOperationId, unknown> }
-  | { readonly kind: "unavailable";
-      readonly settlement: ProviderStageSettlement<ProviderOperationId, unknown> }
-  | { readonly kind: "cancelled"; readonly reason: "caller" | "superseded" | "shutdown";
-      readonly settlement: ProviderStageSettlement<ProviderOperationId, unknown> };
+      readonly settlement: ProviderStageSettlement }
+  | { readonly kind: "unavailable"; readonly settlement: ProviderStageSettlement }
+  | { readonly kind: "cancelled"; readonly reason: "caller" | "superseded" | "shutdown"; readonly settlement: ProviderStageSettlement };
 ```
 
-`settleOperation` accepts `unknown` and crosses one exact discriminated-union parser before
-reading or mutating application state. Every arm rejects missing and extra keys. The
-`local_domain` arm contains a sealed `ProviderLocalDomainResult<K>` issued by provider exchange
-from the same request; an application caller cannot author its value or reconstruct it
-structurally. Operation, instance, implementation, generation and normalized-request identity are
-equal across request, result and compiled stage before the application outcome is formed.
+`settleOperation` accepts `unknown` and crosses one exact discriminated-union parser before reading
+or mutating application state. Every arm rejects missing and extra keys. The `local_domain` arm
+contains a sealed `ProviderLocalDomainResult` issued by provider exchange from the same request; an
+application caller cannot author its value or reconstruct it structurally. Operation, instance,
+implementation, generation and normalized-request identity are equal across request, result and
+compiled stage before the application outcome is formed. **Only a sealed current-generation exchange
+settlement may change health or shared-backoff state** — a structural clone, a plain success enum, a
+caller-authored state value or a forged delivery naming another operation is refused before any
+transition.
 
-The compiler fixes exactly one settlement to the selected application declaration. Voice rendering
-and speech are two independent application operations. Speech consumes a sealed reference to text
-that was already rendered and displayed; it does not execute voice or retain a synthetic earlier
-stage. A TTS failure therefore returns the speech operation's browser-speech/text fallback while
-the earlier rendering operation keeps its own outcome. A failed no-fallback operation is
-unavailable. Caller/superseded cancellation never heals or damages provider health. Provider
+Voice rendering and speech are two independent application operations. Speech consumes a sealed
+reference to text that was already rendered and displayed; it does not execute voice or retain a
+synthetic earlier stage. A TTS failure therefore returns the speech operation's browser-speech/text
+fallback while the earlier rendering operation keeps its own outcome. A failed no-fallback operation
+is unavailable. Caller/superseded cancellation never heals or damages provider health. Provider
 failures update only the instance named by their sealed exchange result. This resolves [[D2583]] by
 preserving both real operation outcomes rather than inventing a mixed pipeline the request graph
 does not have.
@@ -443,10 +393,11 @@ only admission concurrency, `retryAfter` and backoff sequence are group-shared:
 - timeout, network failure or overload opens it for new interactive work immediately after the
   failing operation; existing exact cache entries remain readable;
 - Lichess HTTP 429 opens `lichess-api` for both `tablebase-primary` and `explorer-primary` for at
-  least 60 seconds. `Retry-After`, when valid and
-  longer, wins. Only one request at a time is sent to that upstream;
+  least 60 seconds. `Retry-After`, when valid and longer, wins and is carried through settlement
+  rather than collapsed to the floor. Only one request at a time is sent to that upstream;
 - other HTTP 5xx/network failures use 5 s, 15 s, then 60 s delays, capped at 60 s; successful live
-  work resets the sequence;
+  work resets the sequence. The projection a snapshot reads and the coordinator that admits requests
+  are the **same** authority and the same sequence;
 - authentication/protocol failures remain open until generation/configuration changes or an
   explicit operator retry starts one half-open request.
 
@@ -460,22 +411,25 @@ progress. Every transition receives an injected monotonic sample. Before any tra
 `now - openedAt >= 300_000` are removed. Only timeout, network, rate-limit and overload opens enter
 that vector. Authentication/protocol opens carry `retryAtMonotonic:null` and require an explicit
 operator claim or generation change. A process/application restart reconstructs unverified state;
-generation change clears the vector and every claim. Civil timestamps are projection-only and
-never decide duration. This is the complete operand set for [[D2579]].
+generation change clears the vector and every claim. Civil timestamps are projection-only and never
+decide duration. This is the complete operand set for [[D2579]].
 
-Each backoff group has exactly one immutable `{blockedUntilMonotonic, claim}` state. A claim is
-`{groupGenerationImage, claimToken, leaseExpiresAtMonotonic}`. The image is the sorted exact set
-of configured `{instanceId, implementation, generation}` members in that compiled group and its
-digest; it carries no whole-registry or unrelated-cache revision. `acquire` first expires an elapsed claim,
-then returns exactly `blocked`, `claimed`, or a newly tokenized claim. `renew` and `settle` require
-the equal live token and group image before expiry; stale/expired calls fail and cannot clear or
-extend a successor. `settle(rate_limited)` clears the claim and advances the block to at least
-`now + 60_000` or a longer valid Retry-After. Abort/throw/crash leaves the lease to expire, after
-which one successor is admitted. A generation-set change invalidates the claim before admission.
-A 429 from Explorer therefore delays a new tablebase request while their instance snapshots remain
-distinct. Null-group UCI instances never share a coordinator. Group membership is compiled from
-`PROVIDER_INSTANCE_DECLARATIONS`; an undeclared string or second hand map fails closure
-([[D2417]], [[D2580]]).
+Each backoff group has exactly one immutable `{blockedUntilMonotonic, claim}` state owned by one
+coordinator constructed by, and belonging to, the registry that declares it. A claim is
+`{groupGenerationImage, claimToken, leaseExpiresAtMonotonic}`. The image is the sorted exact set of
+configured `{instanceId, implementation, generation}` members in **that compiled group** and its
+digest; it carries no whole-registry or unrelated-cache revision, so cache or health traffic outside
+the group leaves a live claim valid. `acquire` first expires an elapsed claim, then returns exactly
+`blocked`, `claimed`, or a newly tokenized claim. `renew` and `settle` require the equal live token
+and group image before expiry; stale/expired calls fail and cannot clear or extend a successor.
+`settle(rate_limited)` clears the claim and advances the block to at least `now + 60_000` or a longer
+valid `Retry-After`. Abort/throw/crash leaves the lease to expire, after which one successor is
+admitted. A generation-set change invalidates the claim before admission, and the generation set is
+issued only from the exact current snapshot of the owning registry — never from a caller array or a
+cross-registry snapshot. A 429 from Explorer therefore delays a new tablebase request while their
+instance snapshots remain distinct. Null-group UCI instances never share a coordinator. Group
+membership is compiled from `PROVIDER_INSTANCE_DECLARATIONS`; an undeclared string or second hand
+map fails closure ([[D2417]], [[D2580]]).
 
 One successful half-open request normally changes `unavailable` to `available`. After two transient
 opens inside the retained five-minute window, the matching token's first live success produces
@@ -489,20 +443,22 @@ registry-issued capability derived from one compiled application declaration, it
 one sealed provider-exchange request. The issuer binds application operation, stage, exchange
 operation, instance, implementation, generation, normalized request and cache digest. `put` and
 `resolveExact` require that same issued object and owning registry; a spread, JSON round-trip,
-structurally equal object or application/stage relabel fails before touching cache state. The opponent cache is
-changed from an unbounded `Map<string, Promise<OpponentSelection>>` to:
+structurally equal object or application/stage relabel fails before touching cache state. The
+opponent cache is changed from an unbounded `Map<string, Promise<OpponentSelection>>` to:
 
-- maximum 512 settled entries plus at most the bounded in-flight population;
+- maximum 512 settled entries plus at most the bounded in-flight population, evicted least-recently
+  **used** — a hit updates recency, so a hot oldest row survives the 513th insertion;
 - a key containing current request/policy/history identity **and** the exact provider generations
   used by the selected mode;
 - in-flight coalescing separate from settled entries, so a rejected promise is never retained;
-- an explicit TTL chosen per mode during implementation and no longer than 24 hours; the release
-  resource matrix may lower size/TTL, never remove the bound;
+- an explicit TTL chosen per mode during implementation and no longer than 24 hours, enforced at
+  insertion rather than only at read; the release resource matrix may lower size/TTL, never remove
+  the bound;
 - a receipt on every result distinguishing `live` from `cached_exact`;
-- invalidation on generation change.
+- invalidation on generation change, and refusal of a late old-generation insertion.
 
-Every settled cache implements one registry-owned read interface; the registry never trusts a
-cached boolean copied at request time:
+Every settled cache implements one registry-owned read interface; the registry never trusts a cached
+boolean copied at request time:
 
 ```ts
 interface ProviderCacheInventory {
@@ -544,15 +500,16 @@ interface ProviderCacheInventory {
 current instance generation. Insert, TTL expiry, LRU eviction, explicit invalidation and generation
 cleanup monotonically advance `revision`. `ProviderRegistry.snapshot()` joins its last real outcome
 with this current inventory on every read. It may report conditional exact-cache service when any
-current row exists, but request admission calls `resolveExact` with all six identities; a count
-never enables a different operation or key. A failed instance is `degraded_cached_only` only as a
-global conditional capability; the exact operation result is `cached_exact_only` only after
-`resolveExact` atomically returns the immutable payload, its original sealed exchange delivery and
-the current cache-service receipt. There is no second lookup and no caller may assemble or replace
-the origin after admission ([[D2581]]). The join is in-memory and cannot call a provider or refresh `checkedAt`.
-Thus removal of the last entry changes `/capabilities` even when no new provider outcome occurred, and
-three voice operations sharing `external-voice` remain disjoint by operation/request digest
-([[D2414]]).
+current row exists, but request admission calls `resolveExact` with all six identities; a count never
+enables a different operation or key. A failed instance is `degraded_cached_only` only as a global
+conditional capability; the exact operation result is `cached_exact_only` only after `resolveExact`
+atomically returns the immutable payload, its original sealed exchange delivery and the current
+cache-service receipt. There is no second lookup and no caller may assemble or replace the origin
+after admission ([[D2581]]). Retained payloads are recursively immutable, so a shallow-frozen
+descendant cannot change beneath an unchanged response digest. The join is in-memory and cannot call
+a provider or refresh `checkedAt`. Thus removal of the last entry changes `/capabilities` even when
+no new provider outcome occurred, and three voice operations sharing `external-voice` remain disjoint
+by operation/request digest ([[D2414]]).
 
 The existing 512-entry Explorer/tablebase caches become registry-aware. Their present no-data,
 failure and successful-result TTLs may remain only if fixtures prove:
@@ -565,8 +522,7 @@ failure and successful-result TTLs may remain only if fixtures prove:
 5. an open circuit never prevents an exact valid cached read, but does prevent a new live request.
 
 Cached Stockfish/Maia selections are replayable opponent choices, not current provider evidence.
-They preserve the original engine/model receipt inside the current cache-acquisition receipt. Review
-and export can therefore say what actually selected the move without claiming the provider is live.
+They preserve the original engine/model receipt inside the current cache-acquisition receipt.
 
 ### 8. F1 availability join
 
@@ -585,29 +541,12 @@ All other F1 producers remain local/recorded/build-time and are unaffected. Voic
 already declared `guidance.voice`, `guidance.voice_compare`, and `guidance.voice_story` rendering
 operations; they do not acquire evidence-producer ids.
 
-The attachment is one runtime/compiler authority, not a server map:
+The attachment is one compiled authority, not a server map. Each application operation declares its
+consumer, its **one** provider stage and a `consumer_budget` deadline; there is no `dependsOn`, `when`,
+multi-stage or `skipped` axis, because no operation in the product has one ([[D2850]]). The literal
+declaration contains exactly these ten application operations:
 
-```ts
-interface ProviderExecutionStage {
-  readonly stageId: string;
-  readonly instanceId: ProviderInstanceId;
-  readonly exchangeOperation: ProviderOperationId;
-  readonly fallback: "none" | "deterministic_renderer" | "browser_speech_or_text";
-}
-
-interface ProviderExecutionDeclaration {
-  readonly operationId: ApplicationProviderOperationId;
-  readonly consumer: { readonly id: string; readonly version: number };
-  readonly stage: ProviderExecutionStage;
-  readonly deadline: "consumer_budget";
-}
-```
-
-The literal declaration contains exactly these ten application operations. Each operation has one
-stage whose id is part of every health/cache join; provider-exchange identity stays in
-the sealed delivery rather than being reconstructed:
-
-| operation | stages in order |
+| operation | stage → exchange operation |
 |---|---|
 | `opponent.stockfish_play` | `select:stockfish-play` → `stockfish.legal_root_table@1` |
 | `opponent.maia_inference` | `select:maia-inference` → `maia.policy_page@1` |
@@ -620,27 +559,21 @@ the sealed delivery rather than being reconstructed:
 | `review.reasoning` | `review:external-voice` → `external_voice.reasoning_review@1` |
 | `render.speech` | `audio:external-tts` → `external_tts.synthesize@1` |
 
-Speech is a first-class HTTP/application operation because production requests it independently.
-Its request contains a brand-sealed rendered-text reference—text digest, run, node and all five
-voice scopes, including Compare—issued by the voice/deterministic renderer operation. It never calls
+Speech is a first-class HTTP/application operation because production requests it independently. Its
+request contains a brand-sealed rendered-text reference—text digest, run, node and all five voice
+scopes, including Compare—issued by the voice/deterministic renderer operation. It never calls
 external voice again. A plain/spread/JSON/cross-run reference fails before TTS. Thus audio cannot
-silently differ from displayed text and voice/TTS do not receive fresh nested deadlines
-([[D2576]]). `review.reasoning` is an independent non-evidence egress with a typed valid-empty arm;
-provider failure is unavailable, never rewritten to an external empty answer ([[D2575]]).
+silently differ from displayed text and voice/TTS do not receive fresh nested deadlines ([[D2576]]).
+`review.reasoning` is an independent non-evidence egress with a typed valid-empty arm; provider
+failure is unavailable, never rewritten to an external empty answer ([[D2575]]).
 
 `APPLICATION_PROVIDER_EXECUTION` is compiled beside the F1 manifest and keyed to operations in the
-provider-protocol resource. An independent ten-member obligation tuple is set-equal to it. The
+provider-protocol resource. Its obligation set is **derived from committed consumers and the
+provider-exchange declarations**, not from a second hand-written list beside it ([[D2754]]); the
 compiler consumes the candidate declaration passed to it and rejects missing, extra, duplicate and
 count-preserving replacement operations; crossed instance/exchange mappings; unknown consumers;
-illegal fallbacks; and absent consumer-budget deadlines.
-The web/server import only the compiled image. This is the executable closure required by [[D2577]].
-
-The compiler rejects an unknown instance/operation/consumer, missing or duplicate operation,
-an unknown or crossed stage, absent total-deadline source, and a fallback not legal for that stage.
-It also proves every
-provider-backed F1 producer and each of the three voice consumers has exactly one execution path.
-Server wrappers and the web capabilities parser consume the compiled image; neither owns a copied
-provider list. Because this tuple consumes and extends the provider-protocol resource, this RFC cannot be
+illegal fallbacks; and absent consumer-budget deadlines. The web/server import only the compiled
+image. Because this tuple consumes and extends the provider-protocol resource, this RFC cannot be
 accepted until `provider-protocol-register` lands, provider exchange lands lane 1, and this RFC
 atomically claims the next provider-protocol lane for the three external exchange identities plus
 the ten application execution members.
@@ -649,22 +582,25 @@ Producer availability preserves operational state and derives the consumer resul
 compiled `providerOff` behavior:
 
 - `available` provider → projection may be requested;
-- `unverified` → request may be attempted within its deadline, but a consumer is never advertised
-  as already live;
+- `unverified` → request may be attempted within its deadline, but a consumer is never advertised as
+  already live;
 - `recovering` → request may be attempted one-at-a-time within its deadline, while the consumer is
   labelled recovering rather than verified;
 - `degraded_cached_only` → only an exact-key lookup can be available; otherwise apply `providerOff`;
 - `not_configured` / `unavailable` → apply the consumer's existing `available`, `honest_empty`, or
-  `unavailable` behavior.
+  `unavailable` behavior;
+- a group block reaches the consumer as `temporarily_blocked` with its retry delay, for every member
+  of the group, even when that member's own health is unchanged.
 
-`honest_empty` remains a **consumer rendering outcome**, not provider health. Tablebase
-out-of-range and Explorer `no_data_at_band` are typed domain outcomes with a healthy provider.
-Provider-off cannot be worded as “no games found” or “outside tablebase range.”
+`honest_empty` remains a **consumer rendering outcome**, not provider health. Tablebase out-of-range
+and Explorer `no_data_at_band` are typed domain outcomes with a healthy provider. Provider-off cannot
+be worded as "no games found" or "outside tablebase range."
 
 The compiler gets a closure assertion: every provider-backed F1 producer maps exactly once; every
-mapping names a real registry provider; no provider-backed producer can default to local available;
-and voice/TTS dependencies are attached to their real rendering operations. The existing static
-provider branches in `apps/web` are migration failures once this assertion lands.
+mapping names a real registry provider; every configured non-null backoff group contributes exactly
+one coordinator; no provider-backed producer can default to local available; and voice/TTS
+dependencies are attached to their real rendering operations. The existing static provider branches
+in `apps/web` are migration failures once this assertion lands.
 
 ### 9. `/capabilities`, liveness and readiness
 
@@ -683,9 +619,11 @@ interface RuntimeCapabilities {
 ```
 
 This exact closed wire type and its strict unknown-input parser live in runtime and are imported by
-both the server producer and web client. `requestable_unverified` is preserved on the wire; it is
-not widened to `available` or collapsed into `unavailable`. Unknown states, instance ids, reasons,
-extra fields and a server-only mode addition fail the shared parser/producer set-equality fixture.
+both the server producer and web client. Every availability arm carries its declared `instanceIds`
+population and, where the arm requires one, its reason. `requestable_unverified` and `recovering` are
+preserved on the wire; neither is widened to `available` or collapsed into `unavailable`. Unknown
+states, instance ids, reasons, extra fields and a server-only mode addition fail the shared
+parser/producer set-equality fixture.
 
 The route does not probe providers. It may therefore become stale between request start and the
 operation; the operation receipt is authoritative for that operation, and its outcome updates the
@@ -693,11 +631,11 @@ next snapshot. Static frontend checks such as `providers.opponent !== "none"` ar
 remain visible where the workflow needs them but show unavailable/degraded state, reason and retry;
 they do not disappear and rearrange the board when a provider drops.
 
-`/healthz` remains process liveness and never fails because an optional provider is absent.
-F12-A's `/readyz` reports core storage/runtime readiness. Optional provider loss is included in its
-body but does not change readiness to failure. A configured provider marked required by a later
-deployment contract may affect readiness only through that explicit profile; no such required
-optional provider exists in Choice-C core 1.0.
+`/healthz` remains process liveness and never fails because an optional provider is absent. F12-A's
+`/readyz` reports core storage/runtime readiness. Optional provider loss is included in its body but
+does not change readiness to failure. A configured provider marked required by a later deployment
+contract may affect readiness only through that explicit profile; no such required optional provider
+exists in Choice-C core 1.0.
 
 ### 10. Learner and operator behavior
 
@@ -707,12 +645,12 @@ Ordinary learner surfaces translate state into the task, not infrastructure pros
   offers Retry or Change opponent; it never auto-plays Stockfish, a random legal move, or a stale
   different-position answer;
 - an exact cached opponent reply may continue only with its `cached_exact` receipt retained. The
-  compact learner copy is “Using a saved response for this position”; Inspector names generation,
+  compact learner copy is "Using a saved response for this position"; Inspector names generation,
   source and time;
-- Support/Review evidence modules render their compiled honest-empty/unavailable state in place.
-  The board and primary action keep stable geometry; raw failure strings never enter the module;
-- Explorer no-data, tablebase out-of-range, provider unavailable and cache-only are four different
-  states and use different copy/actions;
+- Support/Review evidence modules render their compiled honest-empty/unavailable state in place. The
+  board and primary action keep stable geometry; raw failure strings never enter the module;
+- Explorer no-data, tablebase out-of-range, provider unavailable, temporarily blocked and cache-only
+  are five different states and use different copy/actions;
 - external voice failure falls back to the accepted deterministic renderer when available and
   identifies the result as deterministic. It never claims the provider spoke or adds a chess
   assertion;
@@ -721,734 +659,97 @@ Ordinary learner surfaces translate state into the task, not infrastructure pros
 - settings and mode pickers show what the deployment can currently serve, while Advanced Inspector
   exposes timestamps/generation/reason. Ordinary play never dumps provider JSON.
 
-No provider transition changes an assistance ceiling. A recovered provider makes a module
-available only when the active preset, session kind, role and disclosure state already permit it.
+**Honest absence applies to offered surfaces, not only disabled ones.** A control the deployment
+cannot currently serve is rendered with its reason and its retry affordance; it is never removed from
+the layout. Every `{#if capabilities?.providers.* }` block that deletes a control is replaced by a
+shared selector that renders the honest state instead ([[D1469]]).
 
-Opponent failure is a run transition, not a controller string. When selection fails after the
-learner move was committed, the server appends `opponent.selection_failed` with the exact learner
-move event sequence, sealed normalized request digest and closed safe failure reason. The client
-enters an in-place `opponent_failed` state keyed by that event and shows Retry/Change opponent
-without moving or resizing the board.
+No provider transition changes an assistance ceiling. A recovered provider makes a module available
+only when the active preset, session kind, role and disclosure state already permit it.
 
-`POST /runs/:id/opponent-recovery` accepts exactly one of:
-
-```ts
-type OpponentRecoveryRequest =
-  | { readonly action: "retry"; readonly failureEventSeq: number;
-      readonly idempotencyKey: string; readonly requestDigest: ProviderRequestDigest }
-  | { readonly action: "change"; readonly failureEventSeq: number;
-      readonly idempotencyKey: string; readonly opponentPolicy: RunOpponentPolicy };
-```
-
-The route resolves the failure against the current branch/cursor and requires that its named
-learner ply is still the last committed move with no later opponent selection. Retry must retain
-the equal request/policy identity. Change validates a genuinely different policy, derives its new
-policy-config digest server-side and appends `opponent.recovery_requested` with before/after policy
-digests. That event changes the run's **effective** opponent policy from its sequence onward; it
-does not rewrite the original `run.started`, root `opponentPolicy` or `sessionDigest`. Review/export
-show both the initial identity and the recorded change. The subsequent selection request starts
-from the existing after-learner FEN and history, so the learner move is never replayed. Equal
-idempotency keys return the same recovery event/result; a crossed failure, moved cursor, duplicate
-opponent ply, changed retry digest or reused key with unequal input fails. This is the durable
-journey required by [[D2582]].
+**The pause is live state only.** Retry re-issues the same selection request; Change opponent
+switches the mode for the remainder of the session in memory. Neither is written to the run, so
+Review and export do not show that a failure or a change occurred. That gap is
+`rfc/opponent-recovery-journey.md` and the surface says so: the Inspector line for a recovered run
+reads "this session changed opponent after a provider failure; the run record does not retain it."
 
 ### 11. Logging and privacy
 
-Each transition logs a structured event with family id, instance id, generation prefix, previous/new state,
-reason, operation id, duration, cache source and retry delay. It excludes FEN, PGN, learner text,
-voice prompt/output, token, endpoint query string, account id and full model path. Provider-specific
-debug logging remains opt-in and outside the default release profile.
+Each transition logs a structured event with family id, instance id, generation prefix, previous/new
+state, reason, operation id, duration, cache source and retry delay. It excludes FEN, PGN, learner
+text, voice prompt/output, token, endpoint query string, account id and full model path.
+Provider-specific debug logging remains opt-in and outside the default release profile.
 
-No persistent health history is required for 1.0. Process-restart state begins from configuration
-and real handshakes/outcomes; it does not claim yesterday's provider is currently healthy. Aggregate
+No persistent health history is required for 1.0. Process-restart state begins from configuration and
+real handshakes/outcomes; it does not claim yesterday's provider is currently healthy. Aggregate
 metrics may be added later without changing this state authority.
-
-## Second fresh independent return (2026-08-31)
-
-The first repair survives at its named seams, but the complete operation still returns six
-buildability blockers. Exact evidence and executable controls are in
-`planning/provider-health-degradation/second-fresh-independent-buildability-review-2026-08-31.md`.
-
-1. **[[D2412]]:** result, operation, instance, generation and cached-origin identities are not
-   correlated by the normative type or parser contract.
-2. **[[D2413]]:** `unverified` represents both never-tried and a successful first recovery probe,
-   while carrying none of the outcome/recovery state needed for the second-success rule.
-3. **[[D2414]]:** instance-wide cache counts cannot establish operation- or request-specific cache
-   availability, especially for the three operations sharing `external-voice`.
-4. **[[D2415]]:** `local_service` is a production implementation with no origin-receipt
-   representation.
-5. **[[D2416]]:** the nine-id operation union has only eight described execution members;
-   `render.tts` is orphaned.
-6. **[[D2417]]:** per-upstream rate-limit coordination has no upstream/backoff-group identity.
-
-`make provider-health-second-fresh-review` passes 6/6. Neither the claim-free runtime checkpoint nor
-the lane-0.26 persistence checkpoint may land until an author repair inverts these controls and
-another fresh review passes.
-
-## Third author repair (2026-09-02)
-
-The six returned seams are now one compiler-owned contract rather than six prose exceptions:
-
-1. **[[D2412]]:** `ProviderOperationStageRoute` is derived from the literal execution declaration.
-   Every result, origin and cached origin carries the same route, configured implementation,
-   generation and request digest; the unknown-input parser rejects any crossed identity.
-2. **[[D2413]]:** `recovering` is an explicit outcome-bearing state. It retains the prior reason,
-   first-success timestamps and `1/2` progress; only the second consecutive live success heals.
-3. **[[D2414]]:** cache inventory and lookup use exact
-   operation/stage/instance/generation/request/key identity. Global capability may say exact-cache
-   service exists, but only the operation lookup may say this request is served.
-4. **[[D2415]]:** origins preserve the configured implementation and distinguish
-   `provider_live`, `local_service` and test-only `local_fixture`; cached originals retain it.
-5. **[[D2416]]:** the registry contains eight operations and eleven execution stages. TTS is the
-   conditional `audio` stage of each of the three voice operations; orphan `render.tts` is deleted.
-6. **[[D2417]]:** instance declarations carry a separate `ProviderBackoffGroupId`. Explorer and
-   tablebase share `lichess-api` admission/backoff while retaining independent health/generation.
-
-`make provider-health-third-author-repair` preserves the original eight controls and passes nine
-new able-to-fail arms plus strict TypeScript over the complete route/result/recovery/cache/backoff
-model. This is author repair, not acceptance or implementation. Fresh independent review remains
-required.
-
-## Fourth fresh independent return (2026-09-04)
-
-The D2412–D2417 repair decisions survive at their stated seams. A fresh join against production
-provider call sites and the provider-exchange RFC returns nine blockers:
-
-1. [[D2575]] — the live reasoning-review external call is absent from the operation census;
-2. [[D2576]] — independently requested `/speech` contradicts the declared voice→TTS graph;
-3. [[D2577]] — the author closure passes count-preserving operation replacement and omits the
-   proposed compiler fields;
-4. [[D2578]] — provider health redeclares provider-exchange operation/receipt authority with
-   incompatible identities and no stage→exchange mapping;
-5. [[D2579]] — the five-minute recovery rule has no timed reducer operands;
-6. [[D2580]] — shared backoff names a lease but implements/specifies no tokenized lifecycle;
-7. [[D2581]] — exact cache lookup returns provenance without the cached value;
-8. [[D2582]] — Retry/Change opponent has no typed route, state or resume semantics; and
-9. [[D2583]] — a union of single-stage results cannot settle a multi-stage voice/audio pipeline.
-
-Exact evidence and required repair are recorded in
-`planning/provider-health-degradation/fourth-fresh-independent-buildability-review-2026-09-04.md`.
-Neither implementation checkpoint is authorized until one bounded author repair inverts these
-controls and another genuinely fresh review passes.
-
-## Fourth author repair (2026-09-04)
-
-The nine returned seams now close as one exchange-backed application contract:
-
-1. [[D2575]] adds `review.reasoning` and its distinct
-   `external_voice.reasoning_review@1` exchange operation; valid empty and provider failure are
-   different results.
-2. [[D2576]] makes `/speech` a first-class TTS operation over a brand-sealed prior text reference,
-   covers Compare, and forbids a second voice request.
-3. [[D2577]] compiles an independently declared ten-operation obligation set and rejects missing,
-   extra, duplicate, count-preserving replacement, crossed exchange/instance, dependency, fallback
-   and deadline mutations.
-4. [[D2578]] renames the health layer's identity to `ApplicationProviderOperationId` and maps every
-   stage to the one provider-exchange operation whose sealed delivery it consumes. The health layer
-   defines no acquisition receipt.
-5. [[D2579]] gives recovery an immutable monotonic-time state, transient open window, half-open
-   token, generation reset and restart rule.
-6. [[D2580]] defines acquire/renew/settle/expire over tokenized generation-set group leases and
-   makes stale settlement fail.
-7. [[D2581]] makes exact-cache resolution atomically return immutable value, original sealed
-   exchange delivery and current cache-service receipt.
-8. [[D2582]] persists selection failure and retry/change recovery after the committed learner ply,
-   preserving initial session identity while projecting a recorded effective policy.
-9. [[D2583]] retains one ordered settlement per declared stage and derives complete, fallback,
-   unavailable or cancelled without erasing mixed stage outcomes.
-
-`make provider-health-fourth-author-repair` retains 17 prior author controls and passes 6/6 new
-behavioral controls plus strict TypeScript. Exact receipt:
-`planning/provider-health-degradation/fourth-author-repair-2026-09-04.md`. This is author repair,
-not acceptance or implementation; another genuinely fresh independent review remains required.
-
-### Fifth author repair — exact checkpoint authority
-
-The 2026-09-05 repair makes the claim-free checkpoint one executable boundary rather than a list of
-promised names. It exports exact `ProviderRegistrySnapshot`, `ApplicationProviderOutcome`,
-`selectProfileAvailability` and `ProviderReleaseReceipt` authorities. Application operations compile
-with no caller population from a separate exact consumer declaration module; production replaces
-that author fixture with declarations imported by the live consumers, never a second obligations
-list. Every stage carries the provider-exchange request and sealed delivery/failure, and settlement
-joins operation, instance, generation and normalized request before deriving an outcome.
-
-Displayed speech text now begins at a registered F1 renderer and gains its identity only when the
-same item is recorded as displayed. The exact cache stores the sealed delivery as both value and
-origin, enforces same-subject keys, TTL, generation invalidation and a 512-entry LRU. Health state is
-registry-private and changes only from a sealed current-generation exchange result at safe
-monotonic time. Shared backoff consumes a sealed generation set derived from a registry snapshot;
-caller strings cannot clear an upstream block.
-
-Opponent recovery crosses a real SQLite transaction: failure resolves the already-committed learner
-ply, appends the failure event and recovery image atomically, and retry/change reload after restart.
-Idempotent replay joins run, action and operands rather than treating global key existence as
-success. Self-audit also binds release receipts to the issuing registry's exact current snapshot;
-stale and cross-registry snapshots fail.
-
-`make provider-health-fifth-author-repair` retains all previous author and fresh-review controls,
-passes 8/8 new behavioral groups plus strict TypeScript, and is enrolled in `verify-governance`.
-Exact receipt: `planning/provider-health-degradation/fifth-author-repair-2026-09-05.md`. This remains
-author contract work, not acceptance or implementation.
-
-## Sixth fresh independent return (2026-09-05)
-
-The newest checkpoint is not one executable refinement of the prior contract. Eight independent
-attacks return it on [[D2815]]–[[D2822]]:
-
-1. the exported snapshot omits three normative states and heals after the first success following
-   repeated opens instead of entering `recovering(1/2)`;
-2. shallow-mutable consumer rows admit arbitrary consumer, stage and fallback semantics into the
-   branded compiled image;
-3. the compiler forces every operation into one unconditional stage, making its dependency,
-   conditional-stage and multi-stage criteria unrepresentable;
-4. the group coordinator has no `renew` operation despite the required lease lifecycle;
-5. exact cache state never joins the health snapshot and survives generation change;
-6. a provider failure can attach to an old learner ply even after a newer ply is committed;
-7. retry omits failure-sequence and request identity, so an old idempotency key succeeds against a
-   newer failure; and
-8. change accepts caller-written policy/request digests instead of deriving both from a parsed
-   policy and current run state.
-
-`make provider-health-sixth-fresh-review` passes 8/8 falsifiers and remains in ordinary verification.
-Exact evidence:
-`planning/provider-health-degradation/sixth-fresh-independent-buildability-review-2026-09-05.md`.
-A bounded repair must produce one current authority rather than leaving the fourth and fifth models
-to disagree. Implementation remains unauthorized.
-
-## Sixth author repair (2026-09-05)
-
-One replacement checkpoint closes [[D2815]]–[[D2822]] rather than treating the fifth model as a
-parallel authority. The exported reducer represents all six state arms and joins exact current
-cache inventory before projecting degraded versus unavailable. Consumer declarations are deeply
-immutable and compared by complete semantics; the compiler executes dependency/condition grammar
-before accepting the exact ten-member image. Generation leases now acquire, renew, settle and
-expire. Durable failure/retry/change commands execute against the current run tail inside one
-immediate transaction; retry crosses failure and request identity, while change parses policy and
-derives both policy and next-request digests server-side.
-
-The executable closure is explicit: [[D2815]] state arms and recovery; [[D2816]] immutable semantic
-declarations; [[D2817]] dependency grammar; [[D2818]] renewable leases; [[D2819]] cache/health
-joining; [[D2820]] current-tail failure; [[D2821]] exact retry identity; and [[D2822]] server-derived
-change identity.
-
-The repair self-audit found and closed [[D2823]]–[[D2827]] before publication: only an
-authority-issued snapshot can produce a generation set; recovery preimages are read after the write
-lock; late old-generation deliveries cannot repopulate cache; hits update real LRU order; and a
-generation change releases an old live group claim.
-
-Those self-audit controls are individually owned here: [[D2823]] sealed snapshots, [[D2824]] locked
-preimages, [[D2825]] stale-insertion refusal, [[D2826]] recency-on-hit and [[D2827]] generation-bound
-claim release.
-
-`make provider-health-sixth-author-repair` retains every predecessor and the 8/8 fresh attacks,
-passes 13/13 repair groups and strict TypeScript, and is the sole verify-owned current target. Exact
-receipt: `planning/provider-health-degradation/sixth-author-repair-2026-09-05.md`. This is author
-contract evidence, not acceptance or implementation; another genuinely fresh review remains
-required.
-
-## Seventh fresh independent return (2026-09-05)
-
-The sixth replacement closes [[D2815]]–[[D2827]] locally but does not compose the normative
-checkpoint it claims to replace. Six independent attacks return it:
-
-1. [[D2846]] — configuration accepts and silently drops an unknown instance, while every configured
-   snapshot omits the required family and implementation identity;
-2. [[D2847]] — any old or cross-registry sealed snapshot can mint a generation set and clear a live
-   lease; the set is bound to neither the issuing registry's current revision nor one backoff group;
-3. [[D2848]] — the coordinator has no blocked-until/result/Retry-After state, so settling a Lichess
-   429 admits the next Explorer/tablebase request immediately;
-4. [[D2849]] — exact-cache lookup omits application operation, stage and cache-key identity and
-   returns no current cache-service receipt, regressing the atomic provenance contract;
-5. [[D2850]] — all ten exact declarations remain one unconditional dependency-free stage, so the
-   dependency/condition grammar and mixed-stage outcome criteria are green without one live case;
-6. [[D2851]] — the replacement exports none of the fifth checkpoint's
-   `ApplicationProviderOutcome`, profile-availability selector, release receipt or settlement
-   authority.
-
-`make provider-health-seventh-fresh-review` retains every predecessor/repair and passes 6/6
-falsifiers. Exact evidence:
-`planning/provider-health-degradation/seventh-fresh-independent-buildability-review-2026-09-05.md`.
-The next repair must compose the fifth and sixth authorities into one current checkpoint rather
-than satisfying only the newest finding list. Implementation remains unauthorized.
-
-## Seventh author repair (2026-09-05)
-
-The six returned seams now close in one replacement authority:
-
-1. [[D2846]] parses configuration against the exact seven instance declarations and each row's
-   allowed implementation set before registry construction; every configured snapshot retains
-   family, implementation and generation;
-2. [[D2847]] binds snapshots, release receipts and group generation sets to the issuing registry's
-   exact current revision and group. Old, copied, cross-registry and cross-group authorities fail;
-3. [[D2848]] gives the group coordinator acquire/renew/settle/expire plus owned blocked-until state,
-   bounded transient backoff and the Lichess 429 minimum of 60 seconds;
-4. [[D2849]] keys exact cache at application-operation/stage/exchange-operation/instance/
-   implementation/generation/request/cache-key grain and atomically returns the value, original
-   delivery and current cache-service receipt;
-5. [[D2850]] deletes the unused dependency/condition/multi-stage grammar. Production has ten real
-   one-stage operations; `render.speech` consumes sealed already-displayed text as an independent
-   request. A fabricated voice→TTS DAG would contradict the route and deadline boundary rather than
-   improve it; and
-6. [[D2851]] composes full health state, application outcome, availability selection, settlement,
-   exact cache, release and backoff authority while re-exporting the sixth repair's durable
-   recovery authority.
-
-During the repair, the focused gate caught and fixed an authority-composition error where a sealed
-delivery was rejected because registry currency accepted only the original request object's brand.
-The composed boundary now accepts only authority-sealed request/delivery/failure subjects while
-still rejecting structural copies. Availability and release receipts also require the exact current
-snapshot, so a later health or cache transition invalidates them.
-
-`make provider-health-seventh-author-repair` retains every predecessor and the 6/6 seventh-review
-attacks, passes 6/6 composed repair groups and strict TypeScript. Exact receipt:
-`planning/provider-health-degradation/seventh-author-repair-2026-09-05.md`. This is author contract
-evidence, not acceptance or implementation. Another genuinely fresh review and the provider-
-protocol/exchange prerequisites still gate both implementation checkpoints.
-
-## Eighth fresh independent return (2026-09-05)
-
-The seventh repair composes the named surfaces, but three authority seams fail under ordinary
-consumer-shaped inputs:
-
-1. [[D2857]] — `assertGenerationSet` issues and installs a new snapshot while checking the supplied
-   generation set. A successful `BackoffCoordinator.acquire` therefore makes the unchanged snapshot
-   that created the set fail the later F1 availability selector, although registry revision,
-   provider health, cache inventory and generation did not change;
-2. [[D2858]] — `BackoffCoordinator.settle` does not parse its unknown input against the closed
-   settlement algebra. Every unrecognized `kind` falls through as a transient failure, and known
-   variants admit extra contradictory fields, so attacker-shaped bytes can clear the live lease and
-   alter shared upstream admission; and
-3. [[D2859]] — the recursive freezer stops at an already-frozen outer payload. A caller can supply a
-   shallow-frozen object with mutable descendants, receive a sealed delivery, cache it, mutate the
-   retained value and obtain different atomic bytes under the same response digest and cache key.
-
-`make provider-health-eighth-fresh-review` retains the complete predecessor/repair chain and passes
-3/3 committed-program falsifiers. Exact evidence:
-`planning/provider-health-degradation/eighth-fresh-independent-buildability-review-2026-09-05.md`.
-The bounded author repair must preserve one snapshot authority across read-only admission checks,
-parse settlement before consuming a claim, and recursively seal or independently validate the
-complete payload graph with digest correspondence. Another genuinely fresh review remains required;
-production implementation is unauthorized.
-
-## Eighth author repair (2026-09-05)
-
-The three returned seams are repaired inside the composed authority:
-
-1. [[D2857]] recomputes the current backoff-group member image directly from the registry's current
-   circuits. It compares that image and digest without calling `snapshot()` or issuing another
-   generation set, so a successful acquire leaves the exact operation/F1 snapshot current;
-2. [[D2858]] accepts settlement as unknown input and parses the exact four-arm union, including
-   exact keys and Retry-After domain, before it validates or clears the lease. Unknown, missing and
-   extra fields fail without consuming the current claim or changing blocked-until state; and
-3. [[D2859]] defensively clones the supplied provider payload, recursively traverses descendants
-   even beneath an already-frozen parent, seals the retained graph and records its canonical
-   `payloadDigest` beside the transport response digest. Later mutation of the caller's graph cannot
-   change delivery or cache bytes.
-
-`make provider-health-eighth-author-repair` retains every predecessor and all 3/3 eighth-review
-attacks, passes 9/9 composed repair groups and strict TypeScript. Exact receipt:
-`planning/provider-health-degradation/eighth-author-repair-2026-09-05.md`. This is author contract
-evidence, not acceptance or production implementation. Another genuinely fresh review plus the
-provider-protocol/exchange prerequisites still gate both implementation checkpoints.
-
-## Ninth fresh independent return (2026-09-06)
-
-The eighth repair pays its three immediate debts but leaves five composition failures:
-
-1. [[D2869]] — a second `snapshot()` at the same revision and state replaces the sole current
-   snapshot object and revokes the first without any transition;
-2. [[D2870]] — `CacheKey` is unsealed and `put` ignores its application/stage grain, permitting a
-   valid provider delivery to be relabelled under an unrelated application operation;
-3. [[D2871]] — generation-set validity is coupled to global registry revision, so unrelated
-   provider/cache traffic prevents an already-acquired group claim from settling;
-4. [[D2872]] — `settleOperation` accepts extra fields and caller-authored `local_domain` values
-   instead of parsing the exact arms and requiring provider-exchange authority; and
-5. [[D2873]] — `changeGeneration` accepts a changed implementation with the same generation string,
-   preserving the old group digest and claim across the configuration change.
-
-`make provider-health-ninth-fresh-review` retains the full chain and passes 5/5 executable
-falsifiers. Exact evidence:
-`planning/provider-health-degradation/ninth-fresh-independent-buildability-review-2026-09-06.md`.
-The RFC remained returned at that checkpoint; production implementation was unauthorized.
-
-## Ninth author repair (2026-09-06)
-
-The five returned seams are repaired as one current authority boundary:
-
-1. [[D2869]] replaces latest-object currentness with owner, state-revision and current
-   time-derived-state validation, so equal concurrent reads coexist while actual retry/expiry
-   transitions still stale old authority;
-2. [[D2870]] brands cache keys to the issuing registry, compiled application/stage and sealed exact
-   request, and checks that authority on both insertion and resolution;
-3. [[D2871]] removes global registry revision from group-lease validity and compares the sorted
-   group-only instance/implementation/generation image;
-4. [[D2872]] parses every settlement from unknown input with exact keys and admits local-domain
-   completion only through a same-request provider-exchange-issued result; and
-5. [[D2873]] refuses equal-generation configuration changes and includes implementation in the
-   group image, so old claims cannot survive a remote/local swap.
-
-The executable checkpoint composes these repairs over the prior health reducer, bounded exact LRU,
-availability selector and release receipt rather than replacing them. `make
-provider-health-ninth-author-repair` retains all predecessor repairs and the 5/5 ninth-review
-reproductions, passes 5/5 direct inversions plus one whole-checkpoint composition group, and runs
-strict TypeScript. Exact receipt:
-`planning/provider-health-degradation/ninth-author-repair-2026-09-06.md`. This is author-contract
-evidence, not acceptance or production implementation; another genuinely fresh review remains
-required.
-
-## Tenth fresh independent return (2026-09-06)
-
-The ninth repair pays its five immediate debts but leaves four authority joins inconsistent:
-
-1. [[D2912]] maps an instance-wide nonzero cache count to `cached_exact_only` even though the
-   selector has no exact request or issued cache key and the requested key may miss;
-2. [[D2913]] validates release receipts without a current monotonic sample, so an old receipt remains
-   valid after its source snapshot's retry/expiry projection is stale;
-3. [[D2914]] keeps shared backoff entirely inside `BackoffCoordinator`, leaving a sibling operation
-   `requestable_unverified` while that exact coordinator refuses admission; and
-4. [[D2915]] issues generation rows in declaration order but validates them in locale order, making
-   an untouched receipt for two providers immediately reject itself.
-
-`make provider-health-tenth-fresh-review` retains the whole predecessor chain and passes 4/4
-executable reproductions. Exact evidence:
-`planning/provider-health-degradation/tenth-fresh-independent-buildability-review-2026-09-06.md`.
-The RFC remains returned; both implementation checkpoints are unauthorized pending one coherent
-repair, another genuinely fresh review and the provider-protocol/exchange prerequisites.
-
-## Tenth author repair (2026-09-06)
-
-The four returned joins and three adjacent closure defects are repaired as one composed authority:
-
-1. [[D2912]] makes request-free cache inventory `conditional_exact_cache`; only an atomic exact-key
-   hit can produce `cached_exact_only` service;
-2. [[D2913]] binds every release assertion to current injected monotonic time and revalidates the
-   exact source snapshot rather than only its revision/generation labels;
-3. [[D2914]] joins the coordinator's current group claim/block projection into both availability and
-   admission without merging distinct instance-health state;
-4. [[D2915]] uses one byte-sorted instance/implementation/generation image for both receipt issue and
-   validation;
-5. [[D2917]] carries `recovering` as a distinct operation-availability arm;
-6. [[D2918]] refuses snapshot, release and selection authority unless every configured non-null
-   backoff group has exactly one registered coordinator projection; and
-7. [[D2919]] retains the coordinator's declared 5/15/60-second transient sequence in the exact
-   snapshot-facing projection, resetting it only on success or generation change.
-
-`make provider-health-tenth-author-repair` retains every predecessor and the 4/4 tenth-review
-reproductions, then passes 8/8 direct/composition groups plus strict TypeScript. Exact receipt:
-`planning/provider-health-degradation/tenth-author-repair-2026-09-06.md`. This is author-contract
-evidence, not acceptance or production implementation; another genuinely fresh review remains
-required.
-
-## Eleventh fresh independent return (2026-09-06)
-
-The tenth repair closes its named cache/time/group/recovery seams, but the composed authority is
-returned on eight new boundaries:
-
-1. [[D2942]] — `GROUP_BY_INSTANCE` is a second partial hand map rather than a derivation of the
-   canonical provider declarations;
-2. [[D2943]] — public `registry.prior()` permits health/generation mutation outside wrapper revision,
-   configured-generation and coordinator authority; a snapshot at `g2` can receive an asserted
-   release generation image at `g1`;
-3. [[D2944]] — public coordinator registration accepts a coordinator owned by another registry;
-4. [[D2945]] — public `generationChanged()` clears a live rate-limit block with no generation or
-   registry-state transition;
-5. [[D2946]] — coordinator settlement accepts a caller enum unrelated to any sealed provider
-   exchange, so real instance failure and fake group success can coexist;
-6. [[D2947]] — the composed operation result cannot represent the promised request-specific
-   `cached_exact_only` arm;
-7. [[D2948]] — the projection exposes singular identity and omits the required block/unavailable
-   reasons from the normative operation-availability wire shape; and
-8. [[D2949]] — the monotonic process clock is converted directly into display civil time.
-
-`make provider-health-eleventh-fresh-review` retains every predecessor review and repair and passes
-8/8 fresh counterexamples plus repository-compatible TypeScript. Exact receipt:
-`planning/provider-health-degradation/eleventh-fresh-independent-buildability-review-2026-09-06.md`.
-The RFC remains draft and neither implementation checkpoint is authorized.
-
-## Eleventh author repair (2026-09-06)
-
-The provider registry, shared backoff and exact cache are now exposed only through one private
-composition. Its provider/group relation is derived from `PROVIDER_INSTANCE_DECLARATIONS`; there is
-no second map, predecessor escape, public coordinator registration or direct reset. A group resets
-only when the registry accepts a distinct generation for one of its declared members.
-
-Settlement is one operation over the current group claim, exact request and sealed exchange
-delivery/failure. The same outcome advances instance health and group backoff, so a plain success
-enum, crossed registry, wrong member, wrong request or stale generation fails before mutation. One
-strict operation-availability parser emits the complete plural/reason-bearing union. Request-free
-inventory can emit only `conditional_exact_cache`; `cached_exact_only` is created solely beside the
-value, original delivery and cache-service receipt returned by one atomic exact-key lookup.
-
-Snapshot construction accepts a monotonic duration and canonical civil instant as separate
-operands. Group admission, retry, expiry and release currentness consume the former; only display
-bytes consume the latter.
-
-`make provider-health-eleventh-author-repair` retains every predecessor return/repair and passes
-8/8 direct repair groups plus strict TypeScript. Exact receipt:
-`planning/provider-health-degradation/eleventh-author-repair-2026-09-06.md`. This remains
-author-contract evidence, not acceptance or production implementation; another genuinely fresh
-review and the provider protocol/exchange dependencies remain.
-
-## Twelfth fresh independent return (2026-09-06)
-
-The eleventh repair closes [[D2942]]–[[D2949]], but its private composition still accepts public or
-incomplete authorities on six boundaries:
-
-1. [[D2966]] — exported, publicly constructible `ExchangeAuthority` lets any caller mint a request
-   and success/failure without executing a provider, then mutate instance and group health;
-2. [[D2967]] — public `changeGeneration(instanceId, string)` accepts an arbitrary relabel rather
-   than a transition derived from configuration, model, endpoint, engine or supervisor truth, and
-   that relabel clears real backoff;
-3. [[D2968]] — the composed interface drops `renew` and `expire`, regressing the closed lease
-   lifecycle repaired under [[D2818]] and still required by criteria 26/32;
-4. [[D2969]] — `ExchangeFailure` has no parsed `Retry-After` operand, so every rate limit becomes
-   exactly 60 seconds and a longer upstream instruction cannot be honored;
-5. [[D2970]] — `local_fixture` configuration can produce a valid release receipt despite the
-   explicit production-release refusal; and
-6. [[D2971]] — cache insertion admits a 48-hour expiry and serves it after the RFC's 24-hour maximum.
-
-`make provider-health-twelfth-fresh-review` retains the complete predecessor chain and passes all
-six executable counterexamples plus strict TypeScript. Exact receipt:
-`planning/provider-health-degradation/twelfth-fresh-independent-buildability-review-2026-09-06.md`.
-This is a return, not acceptance or production implementation. The repair must consume opaque
-provider-execution and derived-generation transitions, restore the complete lease lifecycle, carry
-bounded upstream retry delay, separate release/test composition and enforce operation-selected TTL.
 
 ## Implementation plan
 
-**Staged dependency rule ([[D2364]]).** This RFC may remain `implementing` across two checked
-checkpoints because its run-schema claim is lane 0.26 while `bot-policy.md` owns lane 0.18 and
-consumes the health authority. The **claim-free runtime-authority checkpoint** lands Phases 1–3
-items 1–11 plus the exact
-`ProviderRegistrySnapshot`, `ApplicationProviderOutcome`, profile-availability selector and
-generation-bound release-receipt types, with no persisted run-shape change. `bot-policy` may then
-consume those production symbols and land lane 0.18. Item 12's acquisition persistence and every
-criterion that depends on it remain open until lanes 0.19–0.25 and this RFC's lane 0.26 land. The
-first checkpoint does not archive this RFC, claim its durable receipt complete, or permit a copied
-bot-private health projection.
+One checkpoint. There is no run-schema claim, so there is no staged second checkpoint and no
+lane-ordering rule to re-derive; `bot-policy.md` consumes the exported runtime authority at its own
+lane 0.18 without waiting behind this RFC's persistence.
 
-### Phase 1 — runtime authority
+**Phase 1 — runtime authority.** Add `provider-health.ts` with the closed declarations, the
+state-specific snapshot union, derived generations, monotonic clock handling, circuit and
+coordinator behavior, and the immutable snapshot. Bind `EngineSupervisor` startup/exit/request
+outcomes for both Stockfish instances and Maia. Add the compiled `APPLICATION_PROVIDER_EXECUTION`
+extension and the common operation wrapper (one total deadline, abort, one same-provider retry,
+closed settlement, registry update); adapt tablebase, corpus, external voice, reasoning review and
+TTS onto provider-exchange deliveries. Preserve caller cancellation as an operation outcome without
+provider-health damage.
 
-1. Add `provider-health.ts` with closed family/instance ids, the state-specific snapshot union,
-   monotonic clock handling, generation changes, circuit behavior and immutable snapshot.
-2. Bind `EngineSupervisor` startup/exit/request outcomes for Stockfish/Maia.
-3. Add the compiled `APPLICATION_PROVIDER_EXECUTION` extension and common operation wrapper for one
-   total deadline, abort, one same-provider retry, closed result and registry update; adapt
-   tablebase, corpus, external voice, reasoning review and TTS onto provider-exchange deliveries.
-4. Preserve caller cancellation as operation outcome without provider-health damage.
+**Phase 2 — caches and selectors.** Split opponent in-flight coalescing from a 512-entry
+generation-keyed settled LRU with issued keys and recency on hit. Replace Maia's 60-second timeout
+and every nested fresh timeout with the remaining F1 operation budget. Join the generation-valid
+cache inventories to snapshot derivation and coordinate per-upstream 429 backoff. Make
+`availableModes` request-aware through the registry and delete identity/config presence as
+availability authority.
 
-### Phase 2 — caches and selectors
+**Phase 3 — F1, API and client.** Compile the four provider-backed F1 producers from the registry
+snapshot and attach the three voice, reasoning-review and sealed-text speech operations. Replace
+`/capabilities.providers` flags with the shared parsed snapshot and typed mode summaries, including
+`requestable_unverified` and `temporarily_blocked`; send `Cache-Control: no-store`. Replace every web
+`providers.* !== "none"` branch with shared selectors that preserve layout and render honest
+retry/change/fallback behavior; delete the speech route's second voice call; add Inspector detail and
+compact learner copy without changing assistance permissions.
 
-5. Split opponent in-flight coalescing from a 512-entry generation-keyed settled LRU and return
-   receipts on every selection.
-6. Replace Maia's 60-second timeout and every nested fresh timeout with the remaining F1 operation
-   budget.
-7. Join opponent/tablebase/corpus generation-valid cache inventories to registry snapshot derivation
-   and coordinate per-upstream 429 backoff.
-8. Make `availableModes` request-aware through the registry; delete identity/config presence as
-   availability authority.
-
-### Phase 3 — F1/API/client
-
-9. Compile the four provider-backed F1 producers from the registry snapshot; attach three voice,
-   reasoning-review and sealed-text speech operations.
-10. Replace the current `/capabilities.providers` flags with the shared parsed runtime snapshot and
-    typed mode summaries, including `requestable_unverified`; send `Cache-Control: no-store`.
-11. Replace every web `providers.* !== "none"` branch with shared selectors that preserve layout and
-    expose honest retry/change/fallback behavior; delete the speech route's second voice call.
-12. Add Inspector detail and compact learner copy without changing assistance permissions. Apply
-    run-schema lane 0.26: new opponent selections persist the sealed exchange delivery; failures
-    and retry/change commands append the two recovery events; old selections without acquisition
-    remain readable as explicit `legacy_unrecorded` trust state.
-
-### Phase 4 — production-boundary proof
-
-13. Run the engine-on release profile, warm one Maia position, stop Maia, and prove cached exact/new
-    position divergence inside the compiled deadline.
-14. Restart Maia and prove generation/cache invalidation plus recovery.
-15. Fault the HTTP providers for timeout, 429, 401, 5xx, malformed payload and recovery; prove one
-    coordinated retry path and no herd.
-16. Exercise the same paths through the real browser modules and opponent chooser at phone/tablet/
-    desktop layouts.
+**Phase 4 — production-boundary proof.** Run the engine-on release profile: warm one Maia position,
+stop Maia, prove cached-exact/new-position divergence inside the compiled deadline; restart Maia and
+prove generation/cache invalidation plus recovery; fault the HTTP providers for timeout, 429, 401,
+5xx, malformed payload and recovery, proving one coordinated retry path and no herd; exercise the
+same paths through the real browser modules and opponent chooser at phone/tablet/desktop layouts.
 
 ## Acceptance criteria
 
-1. The registry has exactly six family ids, seven concrete instance ids, eight provider-exchange
-   operation ids and ten application operation ids;
-   unknown/crossed family-instance-operation tuples fail rather than defaulting to available.
-   Independent `stockfish-play` and `stockfish-analysis` death/restart fixtures never change the
-   other's state or consumers.
-2. The state-specific snapshot union rejects invented fields on `not_configured`, missing required
-   fields on outcome-bearing arms and every illegal reason/cache combination. Constructor/config
-   presence alone produces only `not_configured` or `unverified`; only a real current-generation
-   handshake/request produces `available`. A clean external provider is
-   `requestable_unverified`, makes its first real learner request without a probe, then reaches both
-   success and failure fixtures.
-   Clean start and recovering are distinct arms: repeat-open → first live success produces
-   `recovering(1/2)` with times/prior reason, second success produces available, intervening failure
-   resets recovery, and generation change/restart returns clean unverified.
-3. The permanent R18 fixture warms one Maia selection, stops the sidecar, receives the same request
-   as `cached_exact`, and receives a typed bounded unavailable result for a new position. The next
-   `/capabilities` snapshot is `degraded_cached_only`, not available.
-4. Maia, both Stockfish instances, Explorer, tablebase, voice render, reasoning review and TTS each
-   have timeout, cancellation, malformed-response, configured-off and recovery fixtures. Caller
-   cancellation does not open a circuit; reasoning-review failure cannot become valid external empty.
-5. No provider operation, including queue, retry, rendering, TTS and fallback, can exceed its compiled F1 consumer deadline.
-   A source guard fails on Maia's old `60_000` timeout and on per-attempt voice deadline reset.
-6. Lichess 429 opens the shared `lichess-api` coordinator for Explorer and tablebase for at least
-   60 seconds, permits no concurrent cross-instance retry herd, and honors a longer valid
-   `Retry-After` without merging their health snapshots.
-7. All former `CapabilityProviders` presence branches are deleted or mechanically proven derived
-   from `ProviderRegistrySnapshot`; the client has zero direct `providers.* !== "none"` feature
-   gates.
-8. The compiled execution closure maps exactly `live.stockfish`→`stockfish-analysis`,
-   `live.syzygy`→`tablebase-primary`, `human.maia`→`maia-inference`, and
-   `human.explorer`→`explorer-primary`; opponent Stockfish maps only to `stockfish-play`. The three
-   voice consumers compile voice rendering, reasoning review has its own operation, and speech
-   compiles only TTS over a sealed prior-text identity. The application set is exactly ten and the
-   exchange set exactly eight; an orphan, missing or substituted operation fails.
-   Missing/duplicate/reset-deadline declarations fail. Every provider-off consumer produces
-   its declared state.
-9. Explorer `no_data_at_band` and tablebase out-of-range keep their providers healthy and render
-   differently from unavailable. Negative fixtures fail if either is collapsed.
-10. The opponent settled cache is a maximum 512-entry LRU, keys every provider-instance generation,
-    separates in-flight work, invalidates on generation change and emits closed live/local/cached
-    exchange deliveries. Lane 0.26 save→reload→Review/export fixtures retain them and both recovery
-    events exactly; an old event is explicitly `legacy_unrecorded` and every new writer omitting
-    acquisition fails.
-11. A late result from an old generation cannot heal health, populate the new-generation cache or
-    reach a response.
-12. External voice failure returns only the deterministic renderer's sealed evidence through the
-    `fallback` result arm, retains the provider failure separately, and leaves `external-voice`
-    unavailable; no LLM output is cached or presented as evidence.
-13. No mode silently substitutes a different provider. Human-common/theory-strict/practical modes
-    never become Stockfish/random; perfect-tablebase never becomes engine search; corpus never
-    becomes authored theory; TTS never changes the text.
-14. `/capabilities` is `no-store`, does not probe, contains only state-valid fields and shares the
-    same parsed registry snapshot used for operation admission and F1 availability. Server and web
-    import one wire/parser authority; a server-only field/state/mode fails.
-15. `/healthz` remains green during optional-provider loss; `/readyz` remains core-ready while
-    naming the degraded optional provider in its body.
-16. Browser production-boundary tests prove paused-opponent retry/change, exact-cache disclosure,
-    stable module geometry, honest-empty versus unavailable, deterministic voice fallback, and
-    recovery at phone/tablet/desktop widths without raw provider strings in ordinary play.
-17. Resource tests prove all settled caches and queues remain inside their declared bounds under
-    10× capacity pressure; release-tier heap/RSS verdict remains F12-E/F12-H.
-18. `make verify`, `make test-browser`, provider fault-injection, release-container smoke,
-    register/status/roadmap checks and the local/GitHub required CI commands are green on the exact
-    committed bytes.
-19. Every compiled `ApplicationProviderOutcome<T>` has the exact single stage settlement and one
-    legal complete/fallback/unavailable/cancelled arm. A missing, duplicate, crossed or erased
-    settlement fails. The health reducer consumes sealed provider-exchange results exhaustively;
-    cached/fallback/caller-cancel arms cannot heal or damage health incorrectly.
-20. Cache inventory is live state authority at operation/stage/instance/generation/request/key
-    grain. Removing the last valid entry by TTL expiry, LRU
-    eviction, explicit invalidation or generation cleanup changes the next snapshot from
-    `degraded_cached_only` to `unavailable` with no provider call and no `checkedAt` change. Adding a
-    current-generation exact entry permits cache-only; stale-generation entries never count.
-21. The provider-protocol dependency is explicit: after lane 1 lands, this RFC claims the next lane
-    for the three external exchange operations and ten application execution members before acceptance. A copied server/web operation map
-    or an implementation attempted while the resource is absent fails register/buildability gates.
-22. Configured implementation is a checked member of the instance declaration's closed
-    `allowedImplementations` set ([[D2362]]). Switching tablebase/Explorer remote→local changes the
-    generation and invalidates old cache/health. Release compilation rejects `local_fixture`; a
-    local production service is labeled `local_service` in both configured implementation and
-    origin receipt and never impersonates Lichess. Cached originals preserve that implementation
-    and exact generation/request identity.
-23. The staged dependency receipt proves the claim-free runtime-authority checkpoint changes no
-    run-schema byte and exports the exact snapshot/result/release types consumed by bot policy.
-    Bot policy has zero parallel health state. Provider health remains implementing until lane 0.26
-    makes every new opponent selection persist the exchange delivery and the two recovery events. *Fails if* either RFC
-    claims the other fully implemented before its registered lane can land, or if lane 0.26 is
-    renumbered to conceal the dependency.
-24. The compiler-generated application map is the only application/provider identity authority. All ten
-    application operations map to one of eight provider-exchange operations and every stage crosses
-    the strict unknown-input parser. Crossed application operation/stage/instance/exchange
-    operation, implementation, generation, request digest or cached origin fails; count-preserving
-    operation and instance swaps fail. No handwritten subset can satisfy this gate.
-25. Recovery decisions use injected monotonic time. Two transient opens inside 300,000 ms require
-    two successes; two outside it do not. Authentication/protocol never auto-retry, generation and
-    restart clear history, and stale half-open tokens cannot heal.
-26. Backoff-group acquire/renew/settle/expire fixtures cover crash, abort, expiry race, generation
-    change and stale completion. Only the current token/generation set may renew or settle; 429
-    blocks for at least 60 seconds.
-27. Exact-cache hit is one atomic immutable value containing payload, original sealed exchange
-    delivery and current cache-service receipt. Expiry/eviction between availability and use cannot
-    cross provenance because no second lookup exists.
-28. Retry and Change opponent cross route, wire, reducer, persistence and browser fixtures. Neither
-    replays the committed learner ply; retry preserves request identity; change records before/after
-    policy digests and effective-policy projection without rewriting the initial session digest.
-29. Speech accepts only a sealed displayed-text identity for all five scopes, including Compare,
-    and never calls external voice. Rendering success and later TTS failure remain two independently
-    settled operations; speech falls back without relabeling browser speech as provider audio.
-30. [[D2846]] Configuration is parsed against the closed instance/family/allowed-implementation
-    declarations before registry construction. Unknown rows fail; configured snapshots retain the
-    exact family and implementation whose generation they name.
-31. [[D2847]] A generation set is issued only from the exact current snapshot of its owning registry
-    and exact compiled backoff group. Old, cross-registry and cross-group sealed snapshots fail and
-    cannot release, renew or settle a live claim.
-32. [[D2848]] The same coordinator that owns acquire/renew/settle/expire also owns blocked-until,
-    backoff sequence and result settlement. A Lichess 429 blocks both group members for at least
-    60,000 ms and honors a longer valid Retry-After.
-33. [[D2849]] Exact-cache resolution retains application operation, stage, instance, generation,
-    normalized request and cache-key identity and atomically returns value, original delivery and a
-    current cache-service receipt.
-34. [[D2850]] The declared application population has exactly one real provider stage per operation.
-    The unused `dependsOn`, `when`, `stages` and `skipped` axes do not exist. `render.speech` remains a
-    separate exact operation over a sealed displayed-text input, so adding an invented voice→TTS
-    dependency graph or collapsing both outcomes into one settlement fails.
-35. [[D2851]] The one replacement checkpoint exports the exact registry snapshot, closed application
-    outcome, profile-availability selector, release receipt and settlement authorities together;
-    retained predecessor tests cannot substitute for exports absent from the current authority.
-36. [[D2869]] Two read-only snapshots at the same revision and monotonic sample are independently
-    valid for selectors and release-receipt issuance. A real state revision or current monotonic
-    sample whose retry/expiry projection differs rejects both old snapshots. Creating an equal
-    snapshot alone never revokes either.
-37. [[D2870]] Cache insertion and lookup accept only a cache-key capability issued by the owning
-    registry from the exact compiled application declaration and sealed exchange request. A
-    structural clone, JSON round-trip, application/stage relabel or cross-registry key fails.
-38. [[D2871]] Backoff acquire/renew/settle currentness depends only on the exact compiled group
-    member image. Cache or health traffic outside the group leaves a live claim valid; changing any
-    member's implementation/generation invalidates it before stale settlement can mutate state.
-39. [[D2872]] Every application settlement arm is exact-key parsed before use. `local_domain`
-    accepts only a same-request sealed provider-exchange domain result; arbitrary caller values,
-    crossed results and invented fields fail.
-40. [[D2873]] Every behavior-affecting configuration/implementation change requires a distinct
-    derived generation. Reusing the prior generation fails before cache, health or group claims
-    change; a valid new generation invalidates all three together.
-41. [[D2912]] Instance-level conditional cache capability and exact-operation service are distinct
-    types. An operation may become `cached_exact_only` only from the atomic hit returned for its
-    exact registry-issued request/cache key; a different request on the same failed instance misses
-    and remains unavailable for cache service.
-42. [[D2913]] Every release-receipt assertion receives current injected monotonic time and rejects
-    when the retry/cache-expiry projection of its source snapshot differs, even if registry revision
-    and configured generations are unchanged.
-43. [[D2914]] The operation availability and admission authority consumes the exact current
-    backoff-group block/claim projection. A Lichess 429 makes both Explorer and tablebase
-    non-requestable for the shared delay while retaining their distinct instance-health snapshots.
-44. [[D2915]] One canonical sorted generation-image projection is used verbatim for snapshot release
-    issuance and currentness validation. A freshly issued multi-provider receipt validates before
-    any transition; a member, implementation, generation, order or time-state mismatch fails.
-45. [[D2917]] The first success after the repeat-open threshold projects `recovering`, never
-    `available`, until the second current-generation live success completes.
-46. [[D2918]] Every configured non-null backoff group contributes exactly one coordinator projection
-    before a snapshot, release receipt or operation selection can become authority. Missing or
-    duplicate coordinators fail closed.
-47. [[D2919]] The snapshot-facing group projection and admission coordinator share the exact
-    5/15/60-second repeated-transient sequence. The second transient failure blocks both for fifteen
-    seconds; success or generation change resets the sequence.
-48. [[D2942]]–[[D2944]] One private composition derives provider/group membership from
-    `PROVIDER_INSTANCE_DECLARATIONS`, owns coordinator construction and exposes no predecessor
-    registry. A copied map, public/cross-registry coordinator or direct predecessor mutation fails.
-49. [[D2945]]–[[D2946]] Group reset and settlement consume the exact registry-owned generation
-    transition or sealed provider exchange. A same-generation reset, plain success enum,
-    wrong-member result or contradictory health/group outcome fails before state changes.
-50. [[D2947]]–[[D2948]] One strict `ProviderOperationAvailability` parser/projector supplies the
-    normative population/reason fields, and only the atomic exact-key resolution can return
-    `cached_exact_only`. Request-free counts, other-request hits and reasonless arms fail.
-51. [[D2949]] Snapshot construction receives monotonic and civil-clock operands separately.
-    Changing civil time changes display bytes only; changing monotonic time can change retry/expiry
-    state but is never interpreted as Unix epoch time.
+Each criterion below can fail against a real implementation, and each names the blocked ledger rows
+it discharges. A criterion that no row needs, or that no implementation can fail, does not belong
+here ([[D444]], [[D984]], [[D1274]]).
+
+| # | criterion | rows |
+|---|---|---|
+| 1 | The registry has exactly six family ids, seven concrete instance ids and ten application operation ids, all derived from `PROVIDER_INSTANCE_DECLARATIONS` with no second map. Configuration is parsed against the tuple before construction: an unknown row fails rather than being dropped, and configured snapshots retain the exact family and implementation whose generation they name. Independent `stockfish-play`/`stockfish-analysis` death and restart fixtures never change the other's state or consumers. | D1910, D2846, D2942 |
+| 2 | The state-specific snapshot union rejects invented fields on `not_configured`, missing required fields on outcome-bearing arms, and every illegal reason/cache combination. Constructor/config presence alone produces only `not_configured` or `unverified`; only a real current-generation handshake or request produces `available`. A clean external provider is `requestable_unverified`, makes its first real learner request without a probe, and reaches both success and failure. Repeat-open → first live success produces `recovering(1/2)` with times and prior reason; second success produces `available`; an intervening failure resets it; generation change or restart returns clean `unverified`. Monotonic and civil operands are separate: changing civil time changes display bytes only. | D1911, D2815, D2917, D2949 |
+| 3 | The permanent R18 fixture warms one Maia selection, stops the sidecar, receives the same request as `cached_exact`, and receives a typed bounded unavailable result for a new position. The next `/capabilities` snapshot is `degraded_cached_only`, not available. | D609 |
+| 4 | Maia, both Stockfish instances, Explorer, tablebase, voice render, reasoning review and TTS each have timeout, cancellation, malformed-response, configured-off and recovery fixtures. Caller cancellation does not open a circuit; reasoning-review failure cannot become a valid external empty answer. | D1913, D2575 |
+| 5 | No provider operation — queue, retry, rendering, TTS or fallback — can exceed its compiled F1 consumer deadline. A source guard fails on `apps/server/src/opponent-selector.ts:612`'s `timeoutMs: 60_000` and on any per-attempt voice deadline reset. | D1912 |
+| 6 | One authority owns blocked-until, the backoff sequence and result settlement, and the snapshot projection reads that same authority. A Lichess 429 blocks Explorer and tablebase for at least 60,000 ms, honors a longer valid `Retry-After` rather than collapsing it to the floor, escalates repeated transient failures 5 s → 15 s → 60 s, forms no cross-instance retry herd, and leaves the two instance snapshots distinct. | D2417, D2848, D2919, D2914, D2969 |
+| 7 | Backoff acquire/renew/settle/expire fixtures cover crash, abort, expiry race, generation change and stale completion. All four operations exist. Only the current token and the exact compiled group member image may renew or settle; an old-generation claim cannot block a new generation; a stale or cross-registry claim cannot clear or extend a successor. | D2580, D2818, D2759, D2827, D2968, D2871 |
+| 8 | Only a sealed current-generation provider-exchange settlement may change instance health or group state. A caller-authored health value, a plain success enum, an unknown settlement kind, an arbitrary `local_domain` value, a structurally forged delivery naming another operation/generation/request, a publicly constructible exchange authority, and a same-generation group reset each fail before any state changes. Every settlement arm is exact-key parsed. | D2758, D2872, D2946, D2966, D2945, D2858, D2757 |
+| 9 | Every behavior-affecting configuration or implementation change requires a distinct derived generation; no public operation mints one from a caller string. Reuse fails before cache, health or claim state changes; a valid new generation invalidates all three together. Configured implementation is a checked member of the declaration's `allowedImplementations`; switching tablebase/Explorer remote→local changes generation. Release compilation rejects `local_fixture` and refuses to issue a release receipt over a snapshot containing it; `local_service` is labelled honestly in both configured implementation and origin receipt and never impersonates Lichess. No caller-supplied generation string can clear a live claim or a 429 block. | D2873, D2967, D2763, D2362, D2970, D2415 |
+| 10 | The opponent settled cache is a maximum 512-entry LRU whose recency updates on a hit, keys every provider-instance generation, separates in-flight work, enforces its ≤24-hour TTL at insertion, refuses a late old-generation insertion, and invalidates on generation change. Insertion and lookup accept only a cache-key capability issued by the owning registry from the exact compiled declaration and sealed request; a structural clone, JSON round-trip, application/stage relabel or cross-registry key fails. Retained payloads are recursively immutable. | D2756, D2826, D2971, D2825, D2870, D2849, D2859 |
+| 11 | Exact-cache resolution is one atomic immutable result carrying the payload, its original sealed exchange delivery and a current cache-service receipt. Expiry or eviction between availability and use cannot cross provenance because no second lookup exists. | D2581, D2849 |
+| 12 | Cache inventory is live state authority at operation/stage/instance/generation/request/key grain. Removing the last valid entry by TTL expiry, LRU eviction, explicit invalidation or generation cleanup changes the next snapshot from `degraded_cached_only` to `unavailable` with no provider call and no `checkedAt` change. Adding a current-generation exact entry permits cache-only; stale-generation entries never count. An operation reaches `cached_exact_only` only from the atomic hit for its own request/cache key — a different request on the same failed instance misses. | D1915, D2819, D2912, D2947 |
+| 13 | Two equal read-only snapshots at one revision and monotonic sample are independently valid for selectors and receipts; issuing one never revokes the other, and a read-only validation never installs a new snapshot. A real revision change, or a current monotonic sample whose retry/expiry projection differs, rejects both. Release receipts are bound to the issuing registry's exact current revision and to one canonical sorted generation image used verbatim for both issuance and validation, so a freshly issued multi-provider receipt validates before any transition. | D2869, D2857, D2762, D2913, D2915, D2847, D2943 |
+| 14 | The compiled execution closure maps exactly `live.stockfish`→`stockfish-analysis`, `live.syzygy`→`tablebase-primary`, `human.maia`→`maia-inference`, `human.explorer`→`explorer-primary`, and opponent Stockfish only to `stockfish-play`. The application set is exactly ten, each with one real provider stage; the unused `dependsOn`/`when`/`stages`/`skipped` axes do not exist. The three voice consumers compile voice rendering, reasoning review has its own operation, and speech compiles only TTS. The obligation set is derived from committed consumers and provider-exchange declarations; an orphan, missing, duplicate, substituted or count-preserving replacement operation fails, and no handwritten subset satisfies the gate. | D1912, D2577, D2754, D2816, D2817, D2850, D2583 |
+| 15 | Every configured non-null backoff group contributes exactly one coordinator, owned by the registry that declares it, before a snapshot, release receipt or operation selection is authority. A missing or duplicate coordinator, a coordinator belonging to another registry, and any public predecessor-registry mutation each fail. One composed authority exports the snapshot, application outcome, availability selector, release receipt and settlement operation together. | D2918, D2944, D2943, D2851, D2753 |
+| 16 | Speech accepts only a sealed displayed-text identity covering all five scopes, including Compare, and never calls external voice. The seal is issued by the rendering/display authority and cannot be minted by a caller. Rendering success followed by TTS failure remains two independently settled operations; speech falls back without relabelling browser speech as provider audio. | D2576, D2755 |
+| 17 | `/capabilities` is `no-store`, does not probe, and contains only state-valid fields. Server and web import one wire type and one strict parser; every availability arm carries its declared `instanceIds` population and required reason; `requestable_unverified`, `recovering` and `temporarily_blocked` survive the round trip; a server-only field, state or mode fails the set-equality fixture. A group block makes both members non-requestable while their instance health snapshots stay distinct. | D2947, D2948, D1911, D2914 |
+| 18 | All former `CapabilityProviders` presence branches are deleted or mechanically proven derived from `ProviderRegistrySnapshot`, and the client has zero direct `providers.* !== "none"` feature gates. Every surface the deployment cannot currently serve renders its reason and retry affordance rather than being removed from the layout — a guard fails on any `{#if capabilities?.providers.*}` that deletes a control. | D1469 |
+| 19 | A late result from an old generation cannot heal health, populate the new-generation cache, or reach a response. | D1910, D2825 |
+| 20 | External voice failure returns only the deterministic renderer's sealed evidence through the `fallback` arm, retains the provider failure separately, and leaves `external-voice` unavailable; no LLM output is cached or presented as evidence. No mode silently substitutes a different provider: human-common/theory-strict/practical never become Stockfish or random, perfect-tablebase never becomes engine search, corpus never becomes authored theory, and TTS never changes the text. | D2575, D609 |
+| 21 | Explorer `no_data_at_band` and tablebase out-of-range keep their providers healthy and render differently from unavailable, temporarily blocked and cache-only. Negative fixtures fail if any two are collapsed. | D1912 |
+| 22 | Browser production-boundary tests prove the paused-opponent surface, exact-cache disclosure, stable module geometry, honest-empty versus unavailable, deterministic voice fallback, and recovery at phone/tablet/desktop widths, with no raw provider strings in ordinary play. Settled caches and queues stay inside their declared bounds under 10× capacity pressure; the release-tier heap/RSS verdict remains F12-E/F12-H. | D1469, D2756 |
 
 ## Falsifiers and negative fixtures
 
@@ -1460,52 +761,42 @@ The implementation is rejected if any of these can pass:
 - a cache hit changes `checkedAt` or closes a circuit;
 - the last exact cache row expires or is evicted while the snapshot remains cache-only;
 - the warmed Maia position succeeds after sidecar death and thereby keeps a new position enabled;
-- a provider-off Explorer response is rendered as “no games at this rating”;
+- a provider-off Explorer response is rendered as "no games at this rating";
 - an eight-second two-attempt voice path satisfies a four-second consumer budget;
 - stopping Maia causes a human-common run to commit a Stockfish or random reply;
 - restarting the same Maia binary leaves old-generation selections readable;
 - `/capabilities` itself calls a provider or mutates health;
+- `/healthz` fails, or `/readyz` reports not-ready, because an optional provider is absent;
 - a browser hides a disappearing control and reflows/shrinks the active board instead of preserving
   the module's unavailable state;
-- a deterministic fallback is labelled external voice or permitted to add a sentence absent from
-  the sealed F1 view;
+- a deterministic fallback is labelled external voice or permitted to add a sentence absent from the
+  sealed F1 view;
 - a cached acquisition carries a failure reason or omits its original live/local origin;
-- `stockfish-play` failure disables `live.stockfish` analysis, or analysis recovery enables the
-  play opponent;
+- `stockfish-play` failure disables `live.stockfish` analysis, or analysis recovery enables the play
+  opponent;
 - reasoning-review provider failure returns a valid external empty answer;
 - speech re-requests voice, rejects Compare, or accepts a caller-built text string/reference;
 - two transient opens more than five minutes apart enter two-success recovery;
 - an expired/stale group claim clears or renews its successor;
 - cache availability and value/origin require two reads;
-- Retry or Change opponent replays the committed learner ply, loses the failure identity, or
-  rewrites the initial session digest; or
-- a failed TTS stage disappears when text/browser fallback succeeds.
+- a failed TTS stage disappears when text/browser fallback succeeds; or
+- the in-session opponent change is presented as if the run record retained it.
 
 ## Rollout and compatibility
 
-This is a pre-1.0 API and run-schema correction. The server and bundled web client change together.
-During one implementation commit, tests may construct the legacy `CapabilityProviders` adapter,
-but the production application must expose only the live snapshot when the RFC closes. No pack,
-database-migration, evidence-kind or unrelated schema lane changes solely because health is live.
+This is a pre-1.0 API correction with **no run-schema change**. The server and bundled web client
+change together. During one implementation commit, tests may construct the legacy
+`CapabilityProviders` adapter, but the production application must expose only the live snapshot when
+the RFC closes. No pack, database-migration, evidence-kind, run-schema or unrelated lane changes
+because health became live.
 
-Run-schema lane 0.26 adds the optional sealed provider-exchange delivery to
-`opponentSelection.acquisition` plus `opponent.selection_failed` and
-`opponent.recovery_requested` events. Acquisition optionality is read compatibility only: every
-newly appended `opponent.move_selected` event must carry it, and the writer/parser fixture refuses
-a new event without it. Pre-0.26 events remain byte-readable and project to explicit Review/export
-state `legacy_unrecorded`; they are never relabeled live/retained/local. No historical acquisition,
-failure or recovery is invented. Save→reload→Review/export fixtures cross live, local-fixture,
-retained-exact, failure, retry and policy-change journeys. A failed/fallback provider result cannot
-enter `OpponentSelection` because no opponent move is committed on those arms.
-
-The earlier claim-free runtime-authority checkpoint is forward-compatible with this widening: its
-release receipt and operation result are the acquisition field's source authority, but it writes
-no placeholder field and infers no historical receipt. This is a staged implementation of one
-accepted RFC, not a second schema owner; [[D2364]] exists specifically to keep lane 0.18→0.26
-ordering executable.
+Durable acquisition and the two recovery events were run-schema lane 0.26 in this document until
+2026-09-06. The lane and its `changes` text moved intact to `rfc/opponent-recovery-journey.md`; this
+RFC now claims `none`. Nothing about the persisted run shape is decided here or left to
+implementation — it is decided in a named successor.
 
 Rollback may remove the new API fields only before a release claims F12-H. It may never restore the
-60-second Maia wait, unbounded cache, or static green capability behavior as a compatibility fix.
+60-second Maia wait, the unbounded cache, or static green capability behavior as a compatibility fix.
 
 ## Discharges
 
@@ -1513,149 +804,24 @@ Rollback may remove the new API fields only before a release claims F12-H. It ma
 |---|---|---|---|---|
 | D1 | Run Maia/Stockfish/HTTP-provider failure, exact-cache divergence and recovery on the final digest-pinned CPU release profile rather than a source-only fixture | `planning/platform-alignment/release-platform/` F12-H | final release-proof receipt and exploration-log entry | |
 
-## Independent-review routing
-
-| finding | returned blocker | repaired contract |
-|---|---|---|
-| [[D1910]] | one Stockfish health key cannot represent play and analysis instances | six families, seven instances and distinct exchange/application operations in §§1–3/8; criterion 1 |
-| [[D1911]] | not-configured/unverified states are not total across snapshot and mode API | state-specific snapshot union plus `requestable_unverified` in §§2/9; criteria 2/14 |
-| [[D1912]] | F1 has no rendering-provider dependency/pipeline contract for voice/TTS | compiled application execution graph with one consumer deadline in §§5/8; criteria 5/8/21 |
-| [[D1913]] | receipt permits contradictory success/failure/fallback combinations | provider-exchange delivery plus closed application settlement algebra in §4; criterion 19 |
-| [[D1914]] | durable opponent receipt contradicts the `none` run-schema claim | run-schema lane 0.26 plus old/new write/read contract in rollout; criterion 10 |
-| [[D1915]] | cache-only global state has no cache-inventory transition | generation-valid inventory joined at snapshot time in §§2/7; criterion 20 |
-| [[D2362]] | one fixed implementation contradicts remote→local instance evolution | declared allowed set plus generation-bound configured member in §1; criterion 22 |
-| [[D2364]] | bot policy needs health before its lane 0.18 while health's durable field is lane 0.26 | claim-free runtime-authority checkpoint before bot 0.18; acquisition persistence remains the later lane-0.26 checkpoint; criterion 23 |
-| [[D2412]] | independent result fields allow crossed operation/origin identity | sealed provider-exchange delivery plus generated application-stage mapping in §4; criteria 19/24 |
-| [[D2413]] | `unverified` cannot retain first-success recovery evidence | explicit `recovering` state and two-success reducer in §2/6; criteria 2/24 |
-| [[D2414]] | instance-wide cache inventory cannot prove an exact operation/request hit | exact operation/stage/instance/generation/request/key inventory and lookup in §7; criteria 20/24 |
-| [[D2415]] | production-local service identity disappears from origins | configured implementation plus correlated live/local origin in §§1/4; criteria 22/24 |
-| [[D2416]] | orphan ninth `render.tts` operation has no execution | ten-member application closure with first-class sealed-text speech in §§1/8; criteria 1/21/24/29 |
-| [[D2417]] | shared-upstream 429 policy has no coordination identity | separate backoff-group declaration and coordinator semantics in §§1/6; criteria 4/24 |
-| [[D2575]] | reasoning-review egress absent | distinct application/exchange operation and non-empty-vs-failure result in §§4/8; criteria 4/24 |
-| [[D2576]] | voice/TTS graph contradicts `/speech` | first-class speech over sealed prior text in §8; criterion 29 |
-| [[D2577]] | closure passes without its compiler | independent ten-obligation compiler and mutation set in §8; criterion 24 |
-| [[D2578]] | competing exchange/health receipt authority | provider exchange owns delivery; health owns only application settlement in §4; criteria 19/24 |
-| [[D2579]] | recovery has no timed operands | monotonic open-history reducer in §6; criterion 25 |
-| [[D2580]] | shared lease is a boolean latch | token/generation acquire-renew-settle-expire algebra in §6; criterion 26 |
-| [[D2581]] | cache admission/value split | one atomic immutable cache resolution in §7; criterion 27 |
-| [[D2582]] | opponent recovery is prose | durable failure/recovery route and effective-policy projection in §10; criterion 28 |
-| [[D2583]] | one-stage result was asked to erase a synthetic voice/TTS pipeline | separate real rendering and speech operation outcomes in §§4/8; criteria 19/29/34 |
-| [[D2753]] | checkpoint promises authorities the model does not export | return: exact snapshot/outcome/selector/release exports remain absent or renamed |
-| [[D2754]] | local obligation and declaration lists move together | return: no live consumer or provider-exchange-derived census exists |
-| [[D2755]] | public caller mints a prior-displayed-text seal | return: no renderer/display/source authority is required |
-| [[D2756]] | cache accepts crossed provenance and retains 513 entries | return: no sealed same-subject delivery join or 512-entry LRU exists |
-| [[D2757]] | crossed structural provider delivery settles complete | return: settlement validates labels rather than exact declared delivery identity |
-| [[D2758]] | structural unverified state heals without a live success | return: health state and monotonic operands are caller authority |
-| [[D2759]] | old-generation group lease blocks a new generation | return: generation change and parsed lease authority are incomplete |
-| [[D2760]] | JSON-round-tripped opponent state authorizes recovery | return: no storage/event/committed-ply authority participates |
-| [[D2761]] | cited author gate is absent from ordinary verification | repaired in review: the independent review target is now enrolled in `verify-governance` |
-| [[D2762]] | stale/cross-registry snapshot mints a release receipt | current issuing registry revision/generation image is required |
-| [[D2763]] | caller generation string clears shared backoff | coordinator consumes only a registry-snapshot-derived sealed generation set |
-| [[D2764]] | cross-run idempotency key skips opponent recovery | durable replay joins exact run/action/operands before returning success |
-| [[D2846]] | unknown configuration is dropped and configured identity omitted | closed configuration parser plus family/implementation/generation-bearing snapshots; criteria 1/22/30 |
-| [[D2847]] | stale/cross-registry snapshot clears a live lease | registry-current snapshot, release and group-generation authorities; criteria 26/31 |
-| [[D2848]] | coordinator cannot establish shared backoff | owned blocked-until/result settlement and 60-second Lichess minimum; criteria 6/32 |
-| [[D2849]] | exact cache loses application grain and service receipt | full-grain key plus atomic value/original/current service receipt; criteria 20/27/33 |
-| [[D2850]] | unused pipeline grammar is vacuously green | dead DAG axes deleted; ten exact one-stage operations retain independent speech; criteria 8/19/29/34 |
-| [[D2851]] | replacement drops prior public authorities | one composed snapshot/outcome/selector/release/settlement checkpoint; criterion 35 |
-| [[D2869]] | read-only snapshots revoke equal concurrent snapshots | revision plus current time-derived state authorizes concurrent snapshots; criterion 36 |
-| [[D2870]] | cache application/stage grain is caller-mintable | registry/application/request-issued key authority on put and resolve; criterion 37 |
-| [[D2871]] | unrelated cache traffic invalidates a live group lease | group-only instance/implementation/generation image; criterion 38 |
-| [[D2872]] | structural and caller-authored settlements bypass strict parsing | exact settlement parser plus sealed same-request local-domain authority; criterion 39 |
-| [[D2873]] | implementation change reuses generation and predecessor claim | distinct generation required before configuration change; criterion 40 |
-| [[D2912]] | request-free instance cache inventory impersonates an exact request hit | conditional capability is distinct from atomic exact-key service; criterion 41 |
-| [[D2913]] | release authority outlives its monotonic source snapshot | every assertion revalidates the exact source snapshot at current injected time; criterion 42 |
-| [[D2914]] | shared backoff blocks admission while sibling availability remains requestable | one current group projection drives admission and capability; criterion 43 |
-| [[D2915]] | issuance and validation order make a fresh multi-provider receipt self-reject | one byte-sorted generation-image function serves both; criterion 44 |
-| [[D2917]] | operation availability cannot represent recovering | exact recovering arm; criterion 45 |
-| [[D2918]] | a configured group disappears when composition omits its coordinator | total configured-group/coordinator closure; criterion 46 |
-| [[D2919]] | projection collapses repeated transient backoff to five seconds | exact 5/15/60 sequence in the shared authority; criterion 47 |
-
-`make provider-health-fourth-author-repair` retains the previous 17 author controls, executes 6/6
-new able-to-fail behavioral groups plus strict TypeScript, and remains an author contract rather
-than implementation or review.
-
 ## Changelog
 
-- 2026-09-06 — eleventh fresh independent review returned the tenth repair on [[D2942]]–
-  [[D2949]]. A copied group map, public predecessor/coordinator/reset authorities, unsealed group
-  settlement, missing exact-cache operation result, incomplete reason-bearing wire projection and
-  conflated civil/monotonic clocks reproduce under `make provider-health-eleventh-fresh-review`
-  (8/8 plus repository-compatible TypeScript). Neither implementation checkpoint is authorized.
-
-- 2026-09-06 — ninth author repair closed [[D2869]]–[[D2873]] at contract tier. Concurrent equal
-  snapshots share revision/time-state authority; cache keys and local-domain settlements are
-  sealed; group leases ignore unrelated traffic; and configuration changes require new generation
-  identity. `make provider-health-ninth-author-repair` passes 6/6 plus strict TypeScript; fresh
-  review remains.
-- 2026-09-06 — returned by ninth fresh independent buildability review on [[D2869]]–[[D2873]].
-  Equal read-only snapshots revoke one another; cache keys admit forged application grain; unrelated
-  cache traffic invalidates group leases; application settlements bypass exact parsing; and an
-  implementation change can reuse a generation and predecessor claim. `make
-  provider-health-ninth-fresh-review` passes 5/5 reproductions; author repair and another fresh
-  review are required.
-- 2026-09-05 — eighth author repair closed [[D2857]]–[[D2859]] at contract tier. Generation-set
-  validation is read-only, backoff settlement is parsed before claim mutation, and retained payloads
-  are copied, recursively sealed and payload-digest bound. `make
-  provider-health-eighth-author-repair` passes 9/9 plus strict TypeScript; fresh review remains.
-- 2026-09-05 — returned by eighth fresh independent buildability review on [[D2857]]–[[D2859]].
-  Read-only generation-set validation invalidates the issuing snapshot; unknown/inexact settlements
-  mutate shared backoff; and shallow-frozen payload descendants mutate beneath sealed delivery,
-  digest and cache identity. `make provider-health-eighth-fresh-review` passes 3/3; bounded repair
-  and another fresh review are required.
-- 2026-09-05 — seventh author repair closed [[D2846]]–[[D2851]] at contract tier. One composed
-  authority now retains closed configuration identity, current registry/group authority, real
-  shared backoff, full-grain atomic cache provenance and the outcome/availability/release surface.
-  The unused dependency/condition grammar was removed because `/speech` is an independent
-  operation over sealed displayed text. `make provider-health-seventh-author-repair` retains the
-  chain and passes 6/6 repair groups plus strict TypeScript. Fresh review remains required.
-- 2026-09-05 — returned by seventh fresh independent buildability review on
-  [[D2846]]–[[D2851]]. The sixth model fixes its local return list while dropping earlier
-  configured identity, backoff, cache provenance, pipeline and exported-checkpoint contracts.
-  `make provider-health-seventh-fresh-review` passes 6/6; one composed repair and another fresh
-  review are required.
-- 2026-08-31 — author-repaired [[D1910]]–[[D1915]]. Split provider families from concrete
-  instances/operations; made clean-start state and requestability total; added a compiler-owned
-  voice/TTS execution DAG with one deadline; replaced the loose receipt with a closed operation
-  result; claimed run-schema lane 0.26 for durable acquisition; and joined cache-only state to live
-  generation-valid inventory. The provider execution extension remains dependency-blocked on the
-  provider-protocol register/exchange landing. Second fresh review remains required.
-- 2026-08-31 — self-audit repaired [[D2362]] before closeout: instance declarations now own a
-  closed allowed-implementation set while configured state selects one generation-bound member;
-  `local_fixture` is test-only and `local_service` is the honest production-local label.
-- 2026-08-31 — repaired [[D2364]]: the claim-free runtime snapshot/result/release authority is an
-  explicit first implementation checkpoint; bot policy consumes it at lane 0.18, while durable
-  acquisition remains this RFC's later lane-0.26 checkpoint. The RFC remains implementing between
-  checkpoints and no schema claim or dependency is misstated.
-- 2026-08-31 — second fresh independent review returned the repair on [[D2412]]–[[D2417]]:
-  correlated receipt identity, recovery state, operation/request cache grain, local-service
-  provenance, the ninth operation and shared-upstream coordination remain unbuildable. Exact
-  review: `planning/provider-health-degradation/second-fresh-independent-buildability-review-2026-08-31.md`.
-- 2026-09-02 — third author repair closed [[D2412]]–[[D2417]] at contract tier: one generated
-  operation-stage route correlates receipts and cache origins; `recovering` retains first-success
-  state; cache inventory is exact-request authority; production-local origins preserve configured
-  implementation; TTS is a conditional stage of the three voice operations; and shared backoff
-  groups coordinate upstream admission without merging health. The original eight controls and
-  nine new falsifiers pass with strict TypeScript. Fresh independent review remains required.
-- 2026-09-04 — fourth author repair closed [[D2575]]–[[D2583]] at contract tier: ten application
-  operations compile onto eight provider-exchange operations; reasoning review and sealed-text
-  speech match the live route graph; monotonic recovery, tokenized group leases, atomic exact-cache
-  hits, durable opponent recovery and ordered stage settlement are executable. The retained 17
-  prior controls and 6/6 new behavioral groups pass with strict TypeScript. Fresh independent
-  review and provider-protocol/exchange prerequisites remain required.
-- 2026-09-05 — fifth fresh independent review returned the fourth repair on [[D2753]]–[[D2761]].
-  The executable checkpoint omits three promised exports and renames the fourth; two local lists
-  substitute for a live consumer census; public structural values mint displayed-text, delivery,
-  health, lease and opponent-recovery authority; the cache is unbounded; and its cited target was
-  outside ordinary verification. Exact review:
-  `planning/provider-health-degradation/fifth-fresh-independent-buildability-review-2026-09-05.md`.
-- 2026-09-05 — fifth author repair closed [[D2753]]–[[D2760]] and self-audit [[D2762]]–[[D2764]]
-  at contract tier. The exact named checkpoint exports are present; separate consumer declarations,
-  sealed exchange/render/health/generation subjects, a 512-entry exact LRU and restart-stable
-  opponent recovery execute. Release receipt and recovery idempotency cross-subject bypasses found
-  during the repair are negative fixtures rather than deferred debt. Fresh review remains required.
-- 2026-08-27 — independent buildability review returned the first draft on [[D1910]]–[[D1915]].
-  Exact return: `planning/provider-health-degradation/independent-buildability-review-2026-08-27.md`.
+- 2026-09-06 — **cut from 1,666 lines to its blocking obligation.** All 75 items carrying this RFC as
+  their blocker were defect rows against its own twelve-round author model, not downstream product
+  work. The review-round history, routing table, round-by-round changelog and the twenty-two
+  harness-pinned acceptance criteria moved to
+  `planning/provider-health-degradation/round-history-and-cut-2026-09-06.md`; durable opponent
+  recovery and run-schema lane 0.26 moved to `rfc/opponent-recovery-journey.md`; the provider-exchange
+  type re-declaration in §4 collapsed to the consumption rule that
+  `rfc/provider-exchange-and-execution.md` already owns. The `make provider-health-*` targets remain
+  on disk and in `verify-governance` as retained exploration evidence, but they are no longer this
+  RFC's acceptance authority, and no further harness round is a prerequisite for anything. Acceptance
+  criteria are now 22, each mapped to the rows it discharges.
+- 2026-09-06 — twelfth fresh independent review returned the eleventh repair on [[D2966]]–[[D2971]].
+  With the eleven preceding rounds it is indexed in the planning note above.
+- 2026-08-27 — created on the owner's O13 Choice-C ruling after R18 reproduced D609 by stopping Maia
+  while `/capabilities` stayed green. First independent buildability review:
+  `planning/provider-health-degradation/independent-buildability-review-2026-08-27.md`.
 
 ## Open questions
 

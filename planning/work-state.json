@@ -14627,7 +14627,7 @@
       "sourceDigest": "sha256:fd146f4773035c2be1a7a52c99078e3ea0b72dba49a85f66f97ee918f2b159e6",
       "uxItems": [],
       "owner": "release-engineering",
-      "blocker": "rfc:provider-health-degradation.md"
+      "blocker": "rfc:opponent-recovery-journey.md"
     },
     {
       "id": "D1915",
@@ -20614,7 +20614,7 @@
       "sourceDigest": "sha256:a646c8c73b9730a51a792e7e20539b8d77d21fcbf669dd042fc272a2854a2e9d",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:provider-health-degradation.md"
+      "blocker": "rfc:opponent-recovery-journey.md"
     },
     {
       "id": "D2583",
@@ -22216,7 +22216,7 @@
       "sourceDigest": "sha256:bf7d1b7abc93ee31406398615fdae2708e6753641f7a35ebc07e10e3c0dd46c3",
       "uxItems": [],
       "owner": "release-engineering",
-      "blocker": "rfc:provider-health-degradation.md"
+      "blocker": "rfc:opponent-recovery-journey.md"
     },
     {
       "id": "D2761",
@@ -22252,7 +22252,7 @@
       "sourceDigest": "sha256:6b4984fff6024a934d37d33c4dbe430a8d43bc6f6e38b5f782969ab99b551ef2",
       "uxItems": [],
       "owner": "release-engineering",
-      "blocker": "rfc:provider-health-degradation.md"
+      "blocker": "rfc:opponent-recovery-journey.md"
     },
     {
       "id": "D2765",
@@ -22756,7 +22756,7 @@
       "sourceDigest": "sha256:2a6eaa79e0f8baebf678e18dc1496e79ad0b84e453d13f5fe45539bb1e2e6dc1",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:provider-health-degradation.md"
+      "blocker": "rfc:opponent-recovery-journey.md"
     },
     {
       "id": "D2821",
@@ -22765,7 +22765,7 @@
       "sourceDigest": "sha256:71fc895b80157a41ac391c5dc3eccaae09d66734dfb27e76c5c0faf2766a83e1",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:provider-health-degradation.md"
+      "blocker": "rfc:opponent-recovery-journey.md"
     },
     {
       "id": "D2822",
@@ -22774,7 +22774,7 @@
       "sourceDigest": "sha256:8d00939b2b2fff159c4f287c69bcf8c6d96ffe81c5ce9c5cb44b760ae4626ce1",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:provider-health-degradation.md"
+      "blocker": "rfc:opponent-recovery-journey.md"
     },
     {
       "id": "D2823",
@@ -22792,7 +22792,7 @@
       "sourceDigest": "sha256:22a73546112336b4b4a501311c057cc57ce9088874c968afa2f0ece5e3a28cc7",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:provider-health-degradation.md"
+      "blocker": "rfc:opponent-recovery-journey.md"
     },
     {
       "id": "D2825",
