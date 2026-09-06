@@ -17324,3 +17324,21 @@ dedicated Node-24 latency budget changed.
 
 **Evidence/next:** rerun the candidate-packet chain and the complete canonical gate. The checkpoint
 cannot commit until both pass.
+
+## 2026-09-06 — Promotion collectors sixteenth fresh independent return
+
+**What landed:** a fresh executable review returns the fifteenth installation repair on
+[[D3018]]–[[D3024]]. Artifact grammar, production parser use and single-flight survive; the
+semantic promotion operation does not.
+
+**What changed:** `semantic-collectors.md` remains implementing at 12/14. Any caller path still
+mints application authority; geometry/no-race is absent; the collector has no live/provider/domain
+transaction; its reading drops geometry and `promotionFirst`; it locally mints both recorded and
+derived evidence; duplicate durable records publish; and its result union differs from normative
+§3.7. The RFC's a2-versus-b7 hard negative emits a false promotion-race reading.
+
+**Evidence/next:**
+`planning/evidence-foundation-ux/semantic-collectors-promotion-sixteenth-fresh-independent-buildability-review-2026-09-06.md`;
+`make semantic-collectors-promotion-sixteenth-fresh-review` retains every predecessor and passes
+6/6 fresh groups plus strict TypeScript. Complete one bounded composed repair, then obtain another
+genuinely fresh review and land the central provider/value dependencies before implementation.

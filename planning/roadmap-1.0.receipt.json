@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:fd65d312ce5d4300f6cd73ea87d308838aef398e4a0b475bc070126567b09f5c",
+    "roadmap": "sha256:160715bb41046b70f641985e2a99ba7c9612b995829ad91e42de5778189af185",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:ab42e58cbc2c07deda4fcb4f55824d4ef1f7085ed314df8e69d0e57529d2efb0",
-    "rfcRegister": "sha256:6cebcfbd5850339c26f88a7ccc114804e8227fd1d9680d5d5c7686fd63d83e00",
+    "workState": "sha256:5a1743c4409c17aac411af09e82e090881891db8d9b41c4aa6d7c770fb9b5061",
+    "rfcRegister": "sha256:de08abffa180b505ee99911025842eff2d2d3025071efeee6cbafef981e39563",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 651,
       "doing": 0,
-      "blocked": 1270,
+      "blocked": 1277,
       "done": 842,
       "refused": 3
     },
@@ -151,22 +151,22 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Complete bounded author repairs for the returned candidate-packet and pack-capability authorities, freshly review both plus the repaired promotion installation, then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+      "nextAction": "Complete bounded author repairs for the returned candidate-packet, pack-capability and promotion authorities; freshly review all three; then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
         "at": "2026-09-06",
-        "summary": "The candidate-packet fourteenth fresh review returns its public/private contract: hidden dependency outcomes are exposed, product options accept authority extras, failure and stats algebras disagree, graph/receipt closure is incomplete, scope typing is erased and the collector fault seam is absent.",
+        "summary": "The promotion sixteenth fresh review returns the fifteenth installation repair: caller paths still mint authority, geometry/no-race and live/domain source selection are absent, required output/value authorities are dropped, duplicate durable records publish and the result algebra differs from the RFC.",
         "impact": "regressed",
         "evidence": [
-          "planning/evidence-foundation-ux/shared-candidate-packet-fourteenth-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d3009-candidate-packet-fourteenth-fresh-review/review.test.ts",
-          "rfc/shared-candidate-evidence-packet.md",
+          "planning/evidence-foundation-ux/semantic-collectors-promotion-sixteenth-fresh-independent-buildability-review-2026-09-06.md",
+          "tools/d3018-semantic-collectors-promotion-sixteenth-fresh-review/review.test.ts",
+          "rfc/semantic-collectors.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
-            "id": "shared-candidate-evidence-packet.md",
-            "digest": "sha256:0a54e70e563921dab038f14b92e4a194426f80a3675864996efa97f2785e4c2f"
+            "id": "semantic-collectors.md",
+            "digest": "sha256:33e5de793636f503f692c25a4008325efdaa4586b1e77d2b11c6ab54192d65d5"
           }
         ]
       },

@@ -24519,6 +24519,69 @@
       "uxItems": [],
       "evidence": "tools/d2934-candidate-packet-thirteenth-author-repair/vitest.config.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3018",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ca6d92eef8c226499173c708504a6e0fc202b668990d8d9d57a67735c8cc0d2b",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D3019",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d93a9d8036acb456a88116f3abc5c99f1042662943bdbce0185b0cc206ea426c",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D3020",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:75c7879b50d3b2c598f6872682bfb2955787e423ddbb378f6050d09f79234f4c",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D3021",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e0f1910d4c51d186dc50b87e1bea29271ad15ea7cd3ddf8e7ab663580da19efb",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D3022",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c215a21caee0c0eee5619035490f35baa84ba180aea5cc247beb9e9874d25cec",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D3023",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:c2907573c731b0663ac558a4f91775c0ac5435d132322f112e167543dfe6f714",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
+    },
+    {
+      "id": "D3024",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:63094b4d51d9f45f199da0e394884059afac7de2c546271abc3ef5f5fce68008",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:semantic-collectors.md"
     }
   ]
 }

@@ -7,16 +7,15 @@
   that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
   unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
   retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair's fifteenth author repair closes [[D2929]]–[[D2933]] at contract tier
-  (2026-09-06).** One application-composition closure owns configuration loading and issues one
-  application; no exported mutable issuer or test-only positive path remains. Registry publication
-  retains production-validated pack, source, evidence, Syzygy response and exact legal-map values.
-  The resulting typed store restores recorded/legal lookup, and store-bound requests, collector
-  results and durable receipts remain on one current application→registry→store lineage. `make
-  semantic-collectors-promotion-fifteenth-author-repair` retains the complete history and passes
-  5/5 direct repairs plus strict TypeScript. Another genuinely fresh review and provider/value
-  dependency landing still gate both held projections; no held projection implementation is
-  authorized. The preceding author model claimed one
+  promotion pair's sixteenth fresh review returns the fifteenth repair on [[D3018]]–[[D3024]]
+  (2026-09-06).** Installation parsing and single-flight survive, but configuration remains a
+  caller-selected path, geometry/no-race is absent, the collector is recorded-only and incompatible
+  with normative §3.7, the reading drops required operands and central value authority, duplicate
+  durable subjects publish, and the result algebra differs. `make
+  semantic-collectors-promotion-sixteenth-fresh-review` retains the complete history and passes
+  6/6 runtime/source groups plus strict TypeScript. A bounded sixteenth author repair, another fresh
+  review and provider/value dependency landing still gate both held projections; no held projection
+  implementation is authorized. The preceding author model claimed one
   asynchronous transaction owned recorded-first lookup, the exact
   scheduler digest and invocation, cancellation/domain/failure outcomes, success-only legal move
   resolution, sealed ledger/live source creation and total input abstention. The maintained target
@@ -1665,6 +1664,24 @@ then passes 5/5 current groups plus the repository TypeScript contract. Exact re
 Another genuinely fresh review and the existing provider/value dependencies remain mandatory; the
 spine stays 12/14 and no held projection is authorized.
 
+The same-day sixteenth fresh independent review returns that repair on [[D3018]]–[[D3024]]. The
+exported composition factory still turns any caller-selected installation path into product
+authority. More importantly, the repair restores an installation/store mechanism by replacing the
+semantic operation: promotion geometry and its completed/no-race gate are absent; the tablebase
+request accepts a store/FEN instead of geometry/provider scope; there is no recorded-first/live/
+domain dependency transaction; the output drops geometry and `promotionFirst`; and local generic
+evidence constructors impersonate the mandatory central value-authority routes. The RFC's own
+a2-versus-b7 no-race hard negative consequently emits a tablebase reading. Duplicate durable
+tablebase subjects also publish because validation selects the first match, and the sealed result
+union invents cancellation while omitting completed/no-race and outside-domain authority.
+
+`make semantic-collectors-promotion-sixteenth-fresh-review` retains every predecessor return and
+repair, then passes 6/6 fresh runtime/source groups plus strict TypeScript. Exact receipt:
+`planning/evidence-foundation-ux/semantic-collectors-promotion-sixteenth-fresh-independent-buildability-review-2026-09-06.md`.
+The next bounded repair must compose the validated installation with the complete existing §3.7
+operation rather than replacing it; another genuinely fresh review and provider/value dependency
+landing remain mandatory. The spine stays 12/14.
+
 | row | live repair owner in this RFC |
 |---|---|
 | [[D2141]] | require the exact pawn-contact value receipt and reject generic, rebuilt or value-mutated contact evidence |
@@ -1718,6 +1735,13 @@ spine stays 12/14 and no held projection is authorized.
 | [[D2931]] | returned: canonical JSON and matching digests admit pack/provider artifacts rejected by their production validators |
 | [[D2932]] | returned: the replacement artifact store exposes declarations but no recorded lookup or legal-status operations |
 | [[D2933]] | returned: the replacement deletes the current request, collector, result assertion and recorded receipt chain |
+| [[D3018]] | returned: caller-selected installation paths still mint product application authority |
+| [[D3019]] | returned: restore the geometry projection and make completed/no-race an executable hard negative |
+| [[D3020]] | returned: compose installation authority with the complete normative request/dependency/source-selection operation |
+| [[D3021]] | returned: retain exact geometry, tied promotion-first pawn identities and the registered derived-value receipt |
+| [[D3022]] | returned: consume the central recorded-tablebase value-authority chain instead of minting a local generic receipt |
+| [[D3023]] | returned: require the durable tablebase-record subjects to be unique and set-equal to response declarations |
+| [[D3024]] | returned: restore the normative total result arms, precedence and retained upstream/provider authorities |
 | [[D2469]] | author-repaired: provider preflight/domain and provider-failure arms execute before the lazy success-only legal-map resolver |
 | [[D2470]] | author-repaired: one request, dependency interface, sealed recorded resolver and exact collector signature fix source precedence |
 | [[D2471]] | author-repaired: specialized assertion failure throws `EvidenceInvariantError`; only typed unavailable inputs abstain, and invalid recorded bytes never permit live fallback |
@@ -1759,6 +1783,13 @@ is a spec change with a changelog line.
 
 ## Changelog
 
+- 2026-09-06: sixteenth fresh promotion review returns the fifteenth repair on [[D3018]]–[[D3024]].
+  Caller-selected paths still mint application authority; geometry/no-race and the recorded/live/
+  domain ABI are absent; output operands and central value receipts are dropped; duplicate durable
+  subjects publish; and the result algebra drifted. `make
+  semantic-collectors-promotion-sixteenth-fresh-review` retains the chain and passes 6/6 groups plus
+  strict TypeScript. Bounded author repair, another fresh review and provider/value dependencies
+  remain mandatory; the held pair stays unimplemented.
 - 2026-09-06: fifteenth author repair closes [[D2929]]–[[D2933]] at contract tier. One private
   application-composition closure owns configuration and memoizes the exact application; complete
   production pack/source/evidence/response/legal validation precedes registry publication and

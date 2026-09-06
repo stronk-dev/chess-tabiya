@@ -2276,6 +2276,18 @@ passes 5/5 current groups plus the repository TypeScript contract. The evidence 
 genuinely fresh reviews of this repair and candidate-packet, then the value-authority/provider
 dependencies; the held pair remains unimplemented at 12/14.
 
+### 2026-09-06 evidence-spine checkpoint — promotion semantics lost behind the installation repair
+
+The sixteenth fresh promotion review preserves the fifteenth repair's complete artifact validation
+and single-flight gains, but returns the held pair on [[D3018]]–[[D3024]]. The exported composition
+still accepts any caller path; the model deletes geometry/no-race, live provider/domain resolution,
+required geometry/pawn operands and central value receipts; duplicate durable records publish; and
+its result algebra no longer matches §3.7. The executable hard negative is decisive: a2 versus b7,
+where neither pawn is passed, emits `promotion_race_tablebase` instead of completed/no-evidence.
+`make semantic-collectors-promotion-sixteenth-fresh-review` retains the full chain and passes 6/6
+groups plus strict TypeScript. The spine remains 12/14 pending one composed author repair, another
+fresh review and the provider/value dependencies.
+
 ### 2026-09-06 foundation checkpoint — provider obligation authority returned at lifecycle boundary
 
 The sixth fresh provider-protocol review preserves the fifth repair's exact accepted receipt but
