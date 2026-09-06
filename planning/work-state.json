@@ -17490,7 +17490,7 @@
       "id": "D2234",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:444c424a0d1958391758b3732e30128e9214a2bc8204b3df53a71e44bc61c945",
+      "sourceDigest": "sha256:4967f26bcad0ab2eb29793381ca0aad4252d24d2a442fb11edaafeb59620c9da",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-roster.md"
@@ -17499,7 +17499,7 @@
       "id": "D2235",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:050b5b29ecf8892489bf5c29f2844ff63fe940ae4ead697eb8a3f1db96367eb8",
+      "sourceDigest": "sha256:966d1626365ed0805f0eb29b24815b3cfa2971dbf68130659491732408aea605",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-roster.md"
@@ -17508,7 +17508,7 @@
       "id": "D2236",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e99c1c2aed36d798041e66c536bebbbf4c0b0a299ad266fee3801bf39e559f64",
+      "sourceDigest": "sha256:876848168a6bb3ab52c22a5b7ad99b136de46ff0b5110bad3dfb7f3ca9cb6de0",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-roster.md"
@@ -17517,7 +17517,7 @@
       "id": "D2237",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:88ac11ab60b23ded1894106064848352efe48c2848483f70b06f0824fa7d6cb1",
+      "sourceDigest": "sha256:f1c8baccb4967f2ff7fd213ed3cd7acbe1cfe5668bd80a68dea16c34572ec018",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-roster.md"

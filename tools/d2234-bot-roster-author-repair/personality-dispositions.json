@@ -1,0 +1,148 @@
+{
+  "schema": "tabiya.rfc.bot-roster.personality-dispositions.v1",
+  "launchFloor": {
+    "bands": [1000, 1400, 1800, 2200],
+    "families": ["human-baseline", "guarded-human", "pawn-forward"],
+    "claim": "four bands across three disclosed policy mechanisms; not twelve behavioral personalities"
+  },
+  "mechanisms": [
+    {
+      "id": "pawn_move_global_x4",
+      "disposition": "measured_pass",
+      "profilePath": "pawn-forward",
+      "source": "design/research/bot-guard-and-trait-contract.md"
+    },
+    {
+      "id": "extended_center_pawn_global_x4",
+      "disposition": "refused_exact_transform",
+      "profilePath": null,
+      "source": "design/research/shared-style-atoms-as-bot-traits.md"
+    },
+    {
+      "id": "early_queen_global_x4",
+      "disposition": "refused_exact_transform",
+      "profilePath": null,
+      "source": "design/research/shared-style-atoms-as-bot-traits.md"
+    },
+    {
+      "id": "castle_global_x4",
+      "disposition": "refused_exact_transform",
+      "profilePath": null,
+      "source": "design/research/shared-style-atoms-as-bot-traits.md"
+    },
+    {
+      "id": "fianchetto_completion_global_x4",
+      "disposition": "refused_exact_transform",
+      "profilePath": null,
+      "source": "design/research/shared-style-atoms-as-bot-traits.md"
+    },
+    {
+      "id": "fianchetto_knight_screen_global_x4",
+      "disposition": "refused_exact_transform",
+      "profilePath": null,
+      "source": "design/research/shared-style-atoms-as-bot-traits.md"
+    },
+    {
+      "id": "phase_scoped_fianchetto_target_x4",
+      "disposition": "refused_exact_transform",
+      "profilePath": null,
+      "source": "design/research/state-directed-bot-profile.md"
+    },
+    {
+      "id": "finite_state_maia_window_route",
+      "disposition": "refused_exact_transform",
+      "profilePath": null,
+      "source": "design/research/finite-state-bot-route-controller.md"
+    },
+    {
+      "id": "monotone_maia_window_route",
+      "disposition": "refused_exact_transform",
+      "profilePath": null,
+      "source": "design/research/monotone-bot-route-controller.md"
+    },
+    {
+      "id": "generated_route_source",
+      "disposition": "mechanism_pass_personality_unproven",
+      "profilePath": "rfc/bot-route-source.md",
+      "source": "design/research/generated-bot-route-source.md"
+    },
+    {
+      "id": "evidence_conditional_selector",
+      "disposition": "refused_exact_transform",
+      "profilePath": null,
+      "source": "design/research/evidence-to-move-proper-score-repair.md"
+    },
+    {
+      "id": "evidence_guard_composition",
+      "disposition": "refused_exact_transform",
+      "profilePath": null,
+      "source": "design/research/evidence-to-move-guard-composition.md"
+    },
+    {
+      "id": "minor_piece_global_x4",
+      "disposition": "research_required",
+      "profilePath": null,
+      "source": "rfc/bot-roster.md#5.3"
+    },
+    {
+      "id": "central_destination_global_x4",
+      "disposition": "research_required",
+      "profilePath": null,
+      "source": "rfc/bot-roster.md#5.3"
+    },
+    {
+      "id": "long_move_global_x4",
+      "disposition": "research_required",
+      "profilePath": null,
+      "source": "rfc/bot-roster.md#5.3"
+    },
+    {
+      "id": "piece_repeat_global_x0_25",
+      "disposition": "research_required",
+      "profilePath": null,
+      "source": "rfc/bot-roster.md#5.3"
+    },
+    {
+      "id": "rim_destination_global_x0_25",
+      "disposition": "research_required",
+      "profilePath": null,
+      "source": "rfc/bot-roster.md#5.3"
+    },
+    {
+      "id": "capture_global_x4",
+      "disposition": "research_required",
+      "profilePath": null,
+      "source": "rfc/bot-roster.md#5.3"
+    },
+    {
+      "id": "check_global_x4",
+      "disposition": "research_required",
+      "profilePath": null,
+      "source": "rfc/bot-roster.md#5.3"
+    },
+    {
+      "id": "rank_advance_global_x3",
+      "disposition": "research_required",
+      "profilePath": null,
+      "source": "rfc/bot-roster.md#5.3"
+    },
+    {
+      "id": "king_activity_endgame",
+      "disposition": "population_blocked",
+      "profilePath": null,
+      "source": "design/research/bot-candidate-sharpness.md"
+    },
+    {
+      "id": "clock_history_behavior",
+      "disposition": "research_required",
+      "profilePath": null,
+      "source": "design/research/human-like-opponents.md"
+    },
+    {
+      "id": "phase_specific_endgame_behavior",
+      "disposition": "research_required",
+      "profilePath": null,
+      "source": "design/research/human-like-opponents.md"
+    }
+  ]
+}

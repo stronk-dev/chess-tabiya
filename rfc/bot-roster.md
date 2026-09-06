@@ -1,12 +1,14 @@
 # RFC: Bot roster
 
-- **Status:** draft — **RETURNED by fresh independent review 2026-08-30 on
-  [[D2233]]–[[D2237]].** The measured 4×3 base stands, but its policy dependency is returned; display
-  bytes incorrectly invalidate behavior calibration; the experiment totals are false; distribution
-  gates have no executable bounds; and twelve persona identities still collapse to three behavior
-  policies while proposed/shared-evidence traits have no roster path. `make bot-roster-fresh-review`
-  passes 5/5. `BOT_POLICY_PROFILES` remains correctly empty; no implementation or calibration is
-  authorized.
+- **Status:** draft — **PARTIALLY AUTHOR-REPAIRED 2026-09-06 on [[D2234]]–[[D2237]];
+  still dependency-blocked on [[D2233]].** Behavior and presentation identities are separate; one
+  literal manifest owns the 17-arm/13,200-game ladder; the human-comparison contract now has exact
+  populations, statistics, reference limits, multiplicity and three independent verdicts; and
+  every researched/proposed behavior mechanism has a closed disposition. The 4×3 roster is the
+  required launch floor, not a claim of twelve behavioral personalities. `make
+  bot-roster-author-repair` passes the author checkpoint. `BOT_POLICY_PROFILES` remains correctly
+  empty; no implementation or calibration is authorized until `bot-policy` survives a genuinely
+  fresh review and this RFC receives another independent review.
 - **Author:** claude (drafted from `planning/bot-roster/roster.md`, which assembled the dossier numbers for the first time)
 - **Created:** 2026-08-23
 - **Design refs:** `design/00-thesis.md` (*"a human-like opponent while truly applying an opening/middlegame/endgame"*); `design/03-product-breadth.md` §Just Play (*"choose a side/position/opponent"*). The bot lane has no design-tier section; its intent authority is the owner ideation [[D810]]–[[D812]] and the O8 ruling, quoted in `bot-policy` §0. A `design/` bot section remains owner work under law 5.
@@ -25,23 +27,29 @@ run-schema | lane 0.22 | ErrorGuardLayer.searchBound.kind admits "depth" (schema
 ## Summary
 
 The installed `bot-policy` foundation specifies a seven-layer composition **grammar** and ships **no
-compositions**. This RFC registers **twelve profiles** — four measured bands × three families — as
-the instances that grammar exists to carry, each spelled out layer by layer against the shipped
-contracts, each with the measured basis for every literal.
+compositions**. This RFC registers the required **4×3 launch floor** — four measured bands × three
+currently qualified policy families — as the first instances that grammar exists to carry, each
+spelled out layer by layer against the eventual accepted policy contract and with the measured
+basis for every literal.
 
 Band, behavior family and persona are independently declared projections (§2). This is structural,
 not a claim that family has zero strength effect: the guard deliberately changes the severe tail,
-and exact-digest calibration must report any outcome shift without comparing centipawns to Elo.
+and exact-`behaviorDigest` calibration must report any outcome shift without comparing centipawns
+to Elo.
 
-Twelve is the 1.0 roster. Registration is atomic at the roster boundary: no “four first” catalogue
-state counts as completion. Depth-8 guard vocabulary, the sealed receipt, registered pawn view,
-production route, provider availability, final identity and grounded card must all exist before a
-profile ships. Calibration may follow registration only as a visibly uncalibrated state; it remains
-a hard RFC/1.0 discharge rather than the permanent finish line.
+The twelve entries are a 1.0 **population floor**, not twelve personality claims: across one band
+they expose three behavior mechanisms—baseline Maia sampling, the disclosed severe-error guard,
+and guard-dependent pawn weighting. Registration is atomic at the roster boundary: no “four first”
+catalogue state counts as completion. Depth-8 guard vocabulary, the sealed receipt, registered pawn
+view, production route, provider availability, final identity and grounded card must all exist
+before a profile ships. Calibration may follow registration only as a visibly uncalibrated state;
+it remains a hard RFC/1.0 discharge rather than the permanent finish line. The broader personality
+programme in §5 remains part of full 1.0 rather than being silently descoped to decorative names.
 
 Every profile registers `uncalibrated` and shows **no strength number**, per [[D819]]. The
-calibration ladder is specified (§5) and **is not funded**: Gate 0 ran on 2026-08-23 and
-**abstained** on a failed positive control ([[D1184]]).
+replacement calibration contract is preregistered in §6; its expensive human-reference and
+13,200-game runs have not started. Gate 0's 2026-08-23 failed positive control remains historical
+evidence and is not reused ([[D1184]]).
 
 ## Motivation
 
@@ -60,8 +68,11 @@ deferral):
 | an opening book | measured out at **79.2%** fallthrough on both arms against a 25% ceiling | `bot-policy` §8 | — (refused, not deferred) |
 | cross-game memory | `assertLayer` fails any `memory` layer; ruled off by O8.3 | `bot-policy` §2.6 | — (refused) |
 | a variant-portable human base | Maia cannot parse a 960 position at all ([[D1161]]) | `rfc/evidence-move-selector.md` | codex |
-| Stage-B `features` driving traits | `features` rides the record and never enters the composition ([[D1162]]) | Discharge D4 | OWNER |
 | endgame guard behaviour | the R11 population stops at ply 20; zero endgame cells measured | `bot-policy` Open question 4 | claude |
+
+Evidence-driven registered policies are explicitly **in scope** for full 1.0 under §5 and Discharge
+D4. Raw `features` bytes remain unusable until a named adapter and exact policy pass research,
+acceptance and calibration; this is a dependency, not a descope.
 
 ## Specification
 
@@ -101,7 +112,7 @@ The measured ladder, all three adjacent 95% CIs disjoint, 1,020 games per rung `
 
 Span **346.8 Elo** [315.2, 378.3] corpus-wide; **479.8** [454.9, 504.7] at ≥21 pieces `[V]` (§5).
 
-### §2 — Three independent declarations, not a false orthogonality claim
+### §2 — Three independent declarations and two non-interchangeable digests
 
 | projection | what it owns | equality rule |
 |---|---|---|
@@ -114,11 +125,29 @@ orthogonal: no cp↔Elo conversion exists, and the guard intentionally removes t
 tail. Every exact digest remains uncalibrated until a time-control-scoped receipt reports the
 outcome distribution and any band-relative shift.
 
-The two structural fixtures remain useful after their domain is corrected: a family cannot hide a
-band change in its model, and a band cannot silently get a different guard/trait mechanism. The
-family projection excludes presentation, so [[D1566]]'s one-persona-per-profile rule is compatible
-with equality. Cross-family projections must differ. `compileBotPolicyCatalog` continues to refuse
-one layer `id@version` carrying conflicting canonical declarations.
+Two digests bind those declarations without laundering one authority into the other ([[D2234]]):
+
+```text
+behaviorDigest = sha256(rfc8785({ model, sampler, repertoire, guard, traits, memory,
+                                  route, clock, fallback, policyVersions }))
+profileDigest  = sha256(rfc8785({ behaviorDigest, presentationId, presentationRevision,
+                                  name, avatarDigest, taglineKey }))
+```
+
+A calibration receipt keys `behaviorDigest` plus its exact provider/model, engine, experiment,
+human-reference and runtime receipts. A rendered card keys `profileDigest` and may cite a
+calibration only when the embedded `behaviorDigest` is identical. Changing an avatar, name,
+translation or tagline changes `profileDigest` but preserves behavior calibration; changing any
+move-affecting byte changes `behaviorDigest` and invalidates it. Neither digest is accepted from a
+caller: the catalogue compiler derives both from registered declarations.
+
+The structural fixtures cross the two directions. An avatar-only mutation must change
+`profileDigest` and preserve `behaviorDigest`; a policy-layer mutation must change both. A
+family cannot hide a band change in its model, and a band cannot silently get a different
+guard/trait mechanism. The family projection excludes presentation, so [[D1566]]'s
+one-persona-per-profile rule is compatible with equality. Cross-family projections must differ.
+`compileBotPolicyCatalog` continues to refuse one layer `id@version` carrying conflicting canonical
+declarations.
 
 ### §3 — Shared layers and the production authorities every profile depends on
 
@@ -226,14 +255,14 @@ The `> 1` arm rejects `12.28` outright, and the field name states its unit. **No
 roster's proposed obligation is withdrawn here rather than carried into an RFC that would have
 specified work already done.
 
-### §4 — The twelve profiles
+### §4 — The required 4×3 launch floor
 
 Ledger: [[D1375]] — the adoption row this roster answers is stale in both halves; its *declared repertoire* is refused on measurement here (§6), and its five-to-nine rung figure is refused as a method at §1.
 
 Persona names below are **fixture placeholders only**. D1610 must choose the final twelve closed
-identity assets before any shipping profile digest or calibration exists. A name is display-tier
-and carries zero policy content, but it participates in exact profile identity; placeholder bytes
-may not become product defaults by inertia.
+identity assets before any shipping `profileDigest` exists. A name is display-tier and carries zero
+policy content; it does not block or invalidate calibration of the matching `behaviorDigest`.
+Placeholder bytes may not become product defaults by inertia.
 
 **Family A — Human baseline.** `HumanPolicyModel → sampler → presentation`. No curator, no trait.
 It still waits on the shared atomic route, card/availability projection and final identity; a pure
@@ -310,51 +339,75 @@ class holds intermediate mass, not its mean share.** ⊕
 (0.05, 0.80), and simulate the multiplier by pure arithmetic over captured rows `[V]`. No trait
 below is proposed on intuition.
 
-#### 5.3 The proposed set, with predicted gate outcomes
+#### 5.3 Closed disposition matrix ([[D2237]])
 
-All Stage A — pure arithmetic on root position and UCI move.
+The required launch floor and the full personality programme are now separate obligations. The
+machine-readable authority is
+`tools/d2234-bot-roster-author-repair/personality-dispositions.json`; prose below summarizes it but
+does not invent another registry.
 
-| id | classifier | mult | biases | predicted | why |
-|---|---|--:|---|---|---|
-| `trait.pawn_preference@1` | `pawn_move` | ×4 | pawn advances and captures | **MEASURED PASS** | +12.28 pp at depth 8 `[V]` |
-| `trait.minor_piece_preference@1` | `minor_piece_move` | ×4 | knights and bishops stay busy | **LIKELY PASS** | closest structural analogue to pawn — a large class spread over several candidates, intermediate-mass in most positions (Law A). Screen first |
-| `trait.central_destination_preference@1` | `central_destination` | ×4 | play aimed at the middle | **UNKNOWN — screen** | base rate and spread unmeasured; only intermediate-mass share matters |
-| `trait.long_move_preference@1` | `long_move` | ×4 | sweeping slider moves | **UNKNOWN — screen** | correlation with engine loss unknown; the ≤35 cp arm is the one at risk |
-| `trait.piece_repeat_avoidance@1` | `moved_piece_repeat` | ×0.25 | stops shuffling one piece | **UNKNOWN — screen, Law S first** | R11's repeat ×0.25 moved its named rate 25.5% but on a same-position metric R11 explicitly refuses as a personality result `[V]`. If the piece-repeat base rate is under 10 pp, Law S kills it before any run |
-| `trait.rim_destination_avoidance@1` | `rim_destination` | ×0.25 | keeps pieces off the edge | **LIKELY FAIL** | suppression; Law S caps the delta at the base rate |
-| `trait.capture_preference@1` | `capture` | ×4 | grabs material | **LIKELY FAIL** | strict subset of `forcing`, which failed at ×3 (+3.02 pp) and **still failed at ×8 (+5.94 pp)** `[V]`; a subset cannot beat its superset's ceiling |
-| `trait.check_preference@1` | `gives_check` | ×4 | chases the king | **LIKELY FAIL** | the other, smaller half of `forcing` |
-| `trait.rank_advance_preference@1` | `forward_move` | ×3 | pushes forward | **LIKELY FAIL** | ceiling-bound like quiet ×3 |
-| `trait.king_activity@1` | `king_move` | ×4 | walks the king up | **FAIL ON THIS POPULATION** | the R11 corpus stops at ply 20 and `bot-candidate-sharpness.md` measured **zero endgame cells**. A trait whose domain is unrepresented cannot be measured — the gate working |
+| mechanism | exact disposition | roster consequence |
+|---|---|---|
+| general `pawn_move@1` ×4 after the guard | **measured pass**: +12.28 pp, −1.01 cp, zero severe rise, 0.988 Explorer retention | the only measured Stage-A trait in the 4×3 floor |
+| extended-centre pawn, early queen, castling, fianchetto completion, fianchetto-with-knight completion ×4 | **refused at this global one-ply transform**: +5.63/+1.94/+1.62/+0.05/+0.14 pp | remain shared learner/review primitives; may not acquire bot-personality names |
+| phase-scoped fianchetto target ×4 | **refused**: 17.9% opportunity reach but only +4.85 pp behavior change | exact target remains reusable; multiplier profile forbidden |
+| finite-state Maia-window route filter | **refused**: 1/12 completion, 86.1% fallthrough | cannot register as a route personality |
+| monotone Maia-window route filter | **refused**: 1/12 completion and two forced regressions | no further shortlist filter/multiplier variant |
+| separately identified generated route source | **mechanism pass, personality unproven**: 9/12 completion, 41 route selections, 55 guard refusals, max admitted loss 234 cp | enter through `bot-route-source`; it needs registered route content, the §6 calibration contract and owner-use before personality copy |
+| evidence-to-move conditional selector | **refused as a standalone base and as the measured guard composition**: proper score improved, severe-tail/guard-retention gates failed | evidence signal remains valid for Support/Review/drills; this fitted selector cannot register a bot |
+| minor-piece, central-destination, long-move and piece-repeat transforms | **research required** on the fixed captured screen | no profile id, name or card claim until measured |
+| rim avoidance, capture/check preference and rank advance | **research required; prior “likely fail” is not evidence** | remain unregistered; prediction text is not a refusal |
+| king activity | **population blocked**: the fixed corpus has zero endgame cells | requires an endgame population before any screen |
+| clock/history behavior and phase-specific endgame behavior | **research required** | full 1.0 bot depth remains open even when the launch floor registers |
 
-#### 5.4 Traits that must not be proposed
+The first five refusals are scoped to their exact mechanisms, not to the evidence primitives. A
+fianchetto event may still power Review, a drill condition or longitudinal style count; it simply
+cannot become a global bot identity through the failed ×4 transform. Conversely, the generated
+route result proves a source boundary, not that the route is fun, coherent across a repertoire or
+human-like. `[V]` (`shared-style-atoms-as-bot-traits.md`, `state-directed-bot-profile.md`,
+`finite-state-bot-route-controller.md`, `monotone-bot-route-controller.md`,
+`generated-bot-route-source.md`, `evidence-to-move-proper-score-repair.md`,
+`evidence-to-move-guard-composition.md`)
+
+#### 5.4 Full 1.0 personality depth cannot be replaced by names
+
+The 4×3 floor ships only the claims it has earned: four model bands and three disclosed mechanisms.
+Full bot depth additionally requires the registered route/phase/clock/endgame paths above to reach
+measured policies, then pass §6 per exact `behaviorDigest`. A display persona may make an earned
+policy memorable; it may not supply the missing chess behavior. Bot tournaments remain blocked
+until their entrant cards can identify the actual policy difference being compared.
+
+The following permanent refusals still apply:
 
 | refused | measurement |
 |---|---|
 | `forcing` ×3/×8, `quiet` ×3 | permanent negative fixtures; registration must be attempted and fail `[V]` |
 | salience-shaped (threat-just-created) | [[D815]] refused: stationary-created class covered 7 positions; the augmented model *worsened* RMSE `[V]` |
 | multi-band Maia disagreement | [[D817]] refused: Pearson **0.021–0.044**, sign agreement **47.2–52.0%** `[V]` |
-| anything keyed on `features` | `features` rides the record and never enters the composition `[V]` ([[D1162]]) |
+| undeclared raw `features` bytes | a registered evidence-to-policy adapter is required; record presence is not authority ([[D1162]]) |
 | temperature or top-p as a personality dial | **it is a strength dial**: T=5.0 scored 0.9368 → **+468.3 Elo** [417.9, 536.0] `[V]` — larger than the entire band range |
 | any delay effect | `assertLayer` fails `effect: "delay"` `[V]`; [[D820]] |
 | any learner-derived input **or parameter** | `LEARNER_INPUT` regex, extended to parameter provenance by `bot-policy` §3 |
 
-### §6 — Calibration, and why the ladder is not funded
+### §6 — Calibration: one manifest, three verdicts
 
-**The rule** ([[D819]], `bot-policy` §7): *a bot's stated Elo is a measured claim with its
-measurement cited, or it is not stated.* The digest is an RFC-8785 SHA-256 over the whole canonical
-composition `[V]` (`:241-273`), so **changing any layer voids the calibration by construction**.
+**The rule** ([[D819]], `bot-policy` §7): *a bot's stated strength is a measured claim with its
+measurement cited, or it is not stated.* Calibration keys §2's `behaviorDigest`, never the assembled
+`profileDigest`; a presentation-only change cannot erase or manufacture a chess measurement.
 
 **Gate 0 ran and abstained.** On 2026-08-23 the D1163 harness replayed the surviving capture (268
 positions, bands 1400/1600/1800, zero engine calls). Its **Maia positive control failed** the
 declared band-identity test — 1400/1600/1800 profiles peaked on human 1600/1800/1800 — while
 Stockfish argmax and all four cp-Boltzmann profiles peaked on human 1800. The adverse direction is
 consistent with the fail shape, but **a failed positive control bars the formal refutation**.
-[[D1184]] requires a new preregistered statistic and population before this gate is reused `[V]`.
-**Do not reinterpret the result and do not rerun a duplicate instrument.** The ladder below is
-specified and **blocked on D1184**.
+[[D1184]] required a new preregistered statistic and population before this gate could be reused
+`[V]`. [[D2236]] now supplies that replacement in
+`design/research/bot-calibration-verdict-contract.md` and its literal manifest. **Do not reinterpret
+the old result or rerun a duplicate instrument.** Only the replacement contract below may decide a
+new calibration.
 
-**The arms**, common reference raw Maia band 1400 at MultiPV 1:
+**The arms**, common reference raw Maia band 1400 at MultiPV 1, are read from
+`tools/d2236-bot-calibration-verdict-contract/manifest.json`:
 
 | # | arm | games | answers |
 |---|---|--:|---|
@@ -367,9 +420,11 @@ specified and **blocked on D1184**.
 | G1 | `guarded-human-1400` vs `human-baseline-1400`, paired | 800 | **prices the guard** |
 | G2 | `pawn-forward-1400` vs `guarded-human-1400`, paired | 800 | **prices the trait** |
 
-**Total 12,400 games across 16 arms; ≈4–5 h** on the D333 host (13 Maia + 13 Stockfish
-oversubscribe 14 cores, so the guarded portion runs at 7 paired workers) ⊕. D333 itself ran 16,660
-games in 2 h 16 m — the same order of magnitude, not a new scale.
+The manifest derives **17 arms and 13,200 games**: sixteen 800-game arms plus the 400-game C2
+control. Runner, progress, checkpoint and result receipt must consume the manifest; 17/13,200 in
+this paragraph are drift tripwires, not a second authority ([[D2235]]). The old ≈4–5-hour estimate
+was calculated from the false population and is withdrawn; only an instrumented run may publish a
+replacement duration.
 
 **A2 is not redundant with C1** and is the arm nobody has run: the reference draws from Maia's
 internal unseeded RNG at MultiPV 1, while A2 draws from **our seeded sampler over the full-width
@@ -391,24 +446,33 @@ Distinct seed per worker; **odd** worker count; count distinct move lists; **a z
 is a defect, not a result**; `Elo` on every request ([[D58]]); `SelfElo`/`OppoElo` **before** `Elo`
 ([[D91]]); paired openings colour-swapped; cluster-robust SE; no engine adjudication.
 
-**The distribution acceptance test — never mean Elo alone**, predeclared before results are read:
+**The replacement human-comparison contract — never mean Elo alone** ([[D2236]]):
 
-| # | test | bound |
+| metric | exact population/statistic | pass authority |
 |---|---|---|
-| 1 | eval-loss histogram vs band-binned human games | shape agreement, bounds fixed before reading |
-| 2 | **Regan–Haworth (s, c) fit** | **both** parameters inside the band envelope. *s* falls .078 @2700 → **.165 @1600**; *c* stays **0.430–0.545** `[V]`. An arm can match a 1400 mean while carrying an (s,c) split no human 1400 has |
-| 3 | blunder-rate-by-magnitude tail | Chabris: **5.02 / 6.85 / 7.63** per 1,000 moves classical/rapid/blindfold `[V]` — tail *shape*, not the GM rate |
-| 4 | move-match rate | band-peaked (Maia 46–52%) not rating-rising (search 33–41%) `[V]` |
+| candidate-loss distribution | two-sample KS over all three declared ply windows | bot-vs-target clustered-bootstrap q95 ≤ the target-human split q95 |
+| Regan `(s,c)` | bounded maximum likelihood plus bootstrap Mahalanobis | bot-vs-target q95 ≤ the target-human split q95; no low-band extrapolation |
+| severe-tail vector | simultaneous standardized rate difference at 50/100/150/250 cp plus a separate mate-loss arm | bot-vs-target max-statistic q95 ≤ the target-human split q95 |
+| opening band identity | mean negative log probability on 128 exact FENs with ≥100 observations in every band | target band is unique minimum and Holm-adjusted q05 margin over runner-up > 0 |
 
-**Three gaps stated here rather than discovered in results:**
+The comparator is 24,000 CC0 Lichess blitz decisions: 2,000 distinct-game decisions for each of
+four rating bands × three fixed ply windows, selected from the hash-pinned June 2026 source before
+engine analysis. Every decision uses the same complete-legal-move Stockfish 18 depth-8 authority;
+centipawn and mate domains never coerce. Reference limits come from 999 deterministic game-clustered
+human-split replicates. Holm–Bonferroni controls every claimed profile × required metric at
+family-wise alpha .05. A missing metric, insufficient cell or post-result metric edit fails closed.
 
-1. ⚠ **The guarded family cannot pass test 3 above 250 cp, by construction** — the guard removes
-   **100%** of measured ≥250 cp mass. This is a predictable structural failure; the honest response
-   is that the guarded card **states its tail is truncated at 250 cp**, not that the test is relaxed.
-2. ⚠ **Regan's table starts at 1600**, so bands 1000 and 1400 have no published envelope — they must
-   be fitted from our own band-binned corpus, not extrapolated.
-3. ⚠ **The explorer reference dies at ply ~20** (zero games from ply 27), so tests 1–4 over full
-   games need the frozen game corpus, not the explorer.
+The receipt carries three separate verdicts:
+
+- `strength`: `calibrated_relative | unresolved | invalid`;
+- `distribution`: `human_reference_equivalent | controlled_divergence | rejected | insufficient`;
+- `bandIdentity`: `supported | refuted | insufficient`.
+
+Only `calibrated_relative + human_reference_equivalent + supported` permits a **human-like** label.
+A guarded or pawn-forward policy may report `controlled_divergence` only by naming every failed
+metric and the exact responsible layer; that authorizes mechanism copy, never human-like or
+personality-equivalence copy. This makes the guard's deliberately truncated tail representable
+without relaxing the comparison after reading results.
 
 #### 6.1 Registration is not completion
 
@@ -419,28 +483,31 @@ duplicate-request, resume and digest-mismatch arms are required. The client cann
 per move or echo evidence-bearing selection bytes back into storage.
 
 Visible `uncalibrated` is a legal short-lived registration state, not the 1.0 exit. Completion also
-requires the replacement preregistration and exact-digest band-relative outcome/distribution,
-clock/time-control, severe-tail, trait-observability, latency, reproducibility and provider-off
-receipts. The learner-facing picker/card/identity outcome is owned by `opponent-experience.md` and
-ships as one unit.
+requires executing the frozen replacement manifest and publishing exact-`behaviorDigest`
+band-relative strength, human-distribution, band-identity, clock/time-control,
+trait-observability, latency, reproducibility and provider-off receipts. The learner-facing
+picker/card/identity outcome is owned by `opponent-experience.md` and ships as one unit.
 
 ### §7 — Grounded card and calibration states
 
 The card compiler accepts only a compiled profile, live provider availability and an optional
-calibration receipt for that exact digest. It accepts no behavior sentence or free `bio`. Each
-rendered statement carries closed source ids.
+calibration receipt for that exact `behaviorDigest`. It accepts no behavior sentence or free
+`bio`. Each rendered statement carries closed source ids, and the assembled card retains the
+`profileDigest` independently.
 
 All cards render the Maia band as a model control—not FIDE/Lichess/Chess.com Elo—the sampler, no
-opening book, no cross-game memory, endgame scope, clock/time-control scope and exact-digest
-calibration or absence. Guarded cards add Stockfish 18/depth 8/250 cp plus provider/deadline/
+opening book, no cross-game memory, endgame scope, clock/time-control scope and exact-behavior-
+digest calibration or absence. Guarded cards add Stockfish 18/depth 8/250 cp plus provider/deadline/
 incomplete/bounded/mixed-domain abstention. Pawn cards add `dependsOn: error_guard`, ×4 and the
 +12.28-percentage-point measured result with both guard and trait sources. Decorative identity is a
 separate slot and reaches none of these statements.
 
-An uncalibrated profile shows no strength number. A matching receipt may render only its
-band-relative figure, 95% CI, harness, date, game count and time-control scope. A wrong digest fails;
-changing any policy or identity asset invalidates the receipt. Absolute human Elo remains behind
-Discharge D5, and only the exact calibrated value—not `targetElo`—may feed rating.
+An uncalibrated behavior shows no strength number and no human-like label. A matching receipt may
+render only its three §6 verdicts, band-relative figure, 95% CI, harness, date, game count,
+human-reference scope and time-control scope. A wrong behavior digest fails; a presentation-only
+change preserves the measurement while changing the assembled profile/card identity. Absolute
+human Elo remains behind Discharge D5, and only an exact calibrated value—not `targetElo`—may feed
+rating.
 
 ### §8 — Honest gaps
 
@@ -448,7 +515,7 @@ Discharge D5, and only the exact calibrated value—not `targetElo`—may feed r
 |---|---|
 | **Chess960 has no human-trained policy net** | the blocker is **absent weights**, not an absent instrument — Maia-1 is an Lc0 net and lc0 has supported `UCI_Chess960` since v0.23/v0.25 `[V]` ([[D1160]]). Worse: the pinned sidecar builds `chess.Board(fen)` with **no `chess960=True`**, so it cannot *parse* 960 and the failure is silent castling deletion `[V]` ([[D1161]]). Route: `rfc/evidence-move-selector.md` ([[D1271]]) |
 | **Repertoire and Memory** | ⟳ **[[D1182]] corrects [[D1142]]**: `RepertoireLayer` (`:65`) and `MemoryLayer` (`:87`) both exist, are union members, and are executed/refused. The RFC's *prose* names were absent; the interfaces are not. Repertoire is measured out; memory is compile-refused |
-| **Personalities are bounded by Stage A arithmetic** | the vocabulary is what a pure function of (position, move) can label. Binding `features` into the composition is Discharge D4, owner-owned |
+| **The launch floor has three behavior mechanisms, not twelve personalities** | §5 records every current disposition. Full 1.0 retains route/phase/clock/endgame and registered evidence-adapter work; raw `features` bytes never become move authority by presence alone |
 | **Absolute human Elo** | Discharge D5. Until ruled, band-relative with citation is the ceiling of what any card may show |
 | **Perceptual human-likeness** | zero human judgements exist; the 42-branch blind packet is an **owner-use** instrument that can reject a profile but cannot clear H5/C5 as a population claim |
 
@@ -475,6 +542,26 @@ Final identities [[D1610]] and the new-learner default [[D1611]] remain genuine 
 but D2234 removes the false reason they must block behavior calibration. No policy, profile,
 provider, schema, route, client, asset or calibration byte is authorized by this return.
 
+## Partial author repair (2026-09-06)
+
+[[D2234]]–[[D2237]] are repaired at the author boundary:
+
+1. **Identity:** §2 publishes separate compiler-derived `behaviorDigest` and `profileDigest`
+   authorities plus opposite-direction mutation controls. Calibration follows behavior only.
+2. **Population:** §6 consumes the literal D2236 manifest. The derived population is 17 arms and
+   13,200 games; runner, progress and receipt may not hand-copy either number.
+3. **Verdict:** the frozen 24,000-decision CC0 comparator and four exact metrics produce separate
+   strength, human-distribution and band-identity results with clustered uncertainty and Holm
+   multiplicity. No current profile is claimed to pass.
+4. **Breadth:** §5 names the 4×3 floor honestly, records every measured refusal/pass/research debt,
+   and retains route/phase/clock/endgame/evidence-adapter work as full-1.0 obligations. Shared
+   learner evidence is not discarded merely because one bot transform failed.
+
+[[D2233]] deliberately remains open. This pass does not copy shapes from the returned
+`bot-policy`; after that dependency survives a genuinely fresh review, the roster must refresh its
+profile, card, provider, decision and retry bindings and itself receive another independent review.
+`make bot-roster-author-repair` checks this repaired boundary without pretending to be that review.
+
 ## Deviations from design
 
 One. `design/` has no bot section, so this RFC's intent authority is owner ideation plus the O8
@@ -487,12 +574,15 @@ here.
    `BANDS × FAMILIES` and asserts `BOT_POLICY_PROFILES` set-equal by `(id, version)`. *Wrong
    implementation that passes a count-only check:* one that registers twelve profiles with a
    duplicated band and a missing one. The count 12 is a drift tripwire only.
-2. **Independent axes.** Same-band profiles have byte-identical model layers; same-family profiles
-   have byte-identical policy-affecting layers after excluding model and presentation; cross-family
-   projections differ. No fixture converts cp to Elo or assumes zero family strength effect.
+2. **Independent axes and digests.** Same-band profiles have byte-identical model layers;
+   same-family profiles have byte-identical policy-affecting layers after excluding model and
+   presentation; cross-family projections differ. An avatar-only mutation changes `profileDigest`
+   but preserves `behaviorDigest`; a policy-layer mutation changes both and invalidates calibration.
+   No fixture converts cp to Elo or assumes zero family strength effect.
 3. **Final identity is display-only.** The shipping registry is exact and owner-authored before
-   digest calibration; name/avatar/tagline reaches no behavior text or move policy. Placeholder
-   identities fail a release fixture. D1610 remains red until the exact asset set is supplied.
+   `profileDigest` release; name/avatar/tagline reaches no behavior text, move policy or calibration
+   key. Placeholder identities fail a release fixture. D1610 remains red until the exact asset set
+   is supplied but does not block behavior calibration.
 4. **Grounded cards, no caller prose.** Baseline/guard/pawn cards compile from registered layers,
    measurements, abstentions, absences and optional matching calibration only. Wrong digest,
    malformed family, absent source, decorative leakage and caller sentence all fail.
@@ -515,17 +605,25 @@ here.
     operation chain through atomic persistence, capability and card; provider-off, deadline,
     stale-node, duplicate-request, exact resume and digest-mismatch arms pass. A catalogue-only
     registration fails.
-11. **Gate 0 is not reused without a new preregistration.** A fixture asserts the D1163 harness
-    cannot be rerun against the same statistic and population; [[D1184]] requires new ones.
-12. **Calibration/observability completion.** Exact-digest runs report band-relative distribution,
-    G1/G2 upper bounds rather than nulls, clock/time-control, severe-tail, trait observability,
-    reproducibility, provider-off and release-route latency. All twelve may register visibly
-    uncalibrated, but this criterion and Discharge D6 block RFC/1.0 completion.
+11. **One calibration authority.** Runner, progress, checkpoint and receipt parse the committed
+    D2236 manifest and derive 17 arms/13,200 games. A copied count, removed metric, changed human
+    split, mate coercion or reuse of D1163's failed statistic/population fails.
+12. **Calibration/observability completion.** Exact-`behaviorDigest` runs report separate relative
+    strength, human-distribution and band-identity verdicts, G1/G2 upper bounds rather than nulls,
+    clock/time-control, trait observability, reproducibility, provider-off and release-route
+    latency. `humanLikeLabelAllowed` requires all three favorable verdicts; controlled divergence
+    cannot grant it. All twelve may register visibly uncalibrated, but this criterion and Discharge
+    D6 block RFC/1.0 completion.
 13. **New-learner default is explicit.** Create uses the owner-ruled D1611 profile and prints it in
     the picker/card; no provider fallback or hidden Maia-1500 default can choose silently.
 14. **Complete learner outcome.** `opponent-experience.md` proves picker, card and fixed identity bar
     together across responsive/keyboard/resume/rematch/provider-off journeys; a generic strength
     dropdown does not discharge the roster.
+15. **Behavior breadth is honest and remains funded.** The machine-readable §5 disposition set is
+    exact: measured refusals cannot register, research-required mechanisms cannot acquire copy,
+    and the generated route source cannot claim personality before its own policy/calibration/use
+    receipts. The 4×3 floor is never rendered as twelve behavior personalities. Full 1.0 cannot
+    close while route/phase/clock/endgame personality work is merely absent from the queue.
 
 ## Discharges
 
@@ -533,10 +631,10 @@ here.
 | --- | --- | --- | --- | --- |
 | D1 | Sealed `stockfish-guard@1` whole-set receipt plus closed `pawn_move@1` legal-board trait view; bare loss/trait strings deleted from the production composer and dependent abstention enforced | `bot-policy` | atomic-route implementation and D1602 fixture matrix | |
 | D2 | The `searchBound` `"depth"` widening across the derived site set, including the run-schema enum (§3.2) | codex | this RFC's implementing commit | |
-| D3 | The trait screen over the R11/D815 capture for the four UNKNOWN candidates in §5.3 | claude | `planning/bot-roster/` | |
-| D4 | Whether Stage-B `features` may bind into the composition, making personalities richer than board arithmetic (§8) | OWNER | `planning/platform-alignment/decision-queue.md` | |
+| D3 | The fixed-capture screens and endgame-population work for every `research_required`/`population_blocked` §5 disposition | `planning/bot-roster/` | registered result artifacts | |
+| D4 | Registered evidence-to-policy adapters and route/phase/clock/endgame policies required for full 1.0 personality depth; raw `features` bytes remain forbidden | `planning/bot-roster/` | accepted consumer RFCs plus exact policy/calibration receipts | |
 | D5 | Whether any card may ever show an absolute human-scale Elo — anchor accounts, learner Glicko, or stay band-relative (§7) | OWNER | `planning/platform-alignment/decision-queue.md` | |
-| D6 | Replacement-preregistered exact-digest calibration/observability for all twelve profiles, including distribution, clock/time-control, severe tail, trait visibility, reproducibility, provider-off and release-route latency | claude | calibration dossier + exact digest receipts + ledger/register flips | |
+| D6 | Execute the D2236 manifest for every launch `behaviorDigest`, including the three verdicts, clock/time-control, trait visibility, reproducibility, provider-off and release-route latency | codex after acceptance | calibration dossier + exact digest receipts + ledger/register flips | |
 | D7 | Server-owned atomic opponent operation traverses create/resume through persisted decision, capability and card; all nine absent route operations invert | `bot-policy` | non-test route census and release journey | |
 | D8 | Final twelve names/avatar/tagline assets selected before shipping digests | OWNER ([[D1610]]) | closed presentation registry | |
 | D9 | New-learner default selected explicitly; hidden Maia-1500/provider fallback removed | OWNER ([[D1611]]) | create/default fixture | |
@@ -544,8 +642,9 @@ here.
 
 ## Open questions
 
-1. **Persona naming.** The twelve placeholder names are claude's. Changing one voids that profile's
-   calibration by digest, so the owner or design tier should pick before the ladder runs, not after.
+1. **Persona naming.** The twelve placeholder names are claude's. The owner or design tier must pick
+   the shipping names/assets before `profileDigest` release; §2 permits behavior calibration to run
+   before that choice without coupling chess evidence to cosmetics.
 2. **Default profile.** [[D1566]] fixes the picker, roster, visible identity and persona grain but
    does not choose the profile a new learner meets. The accidental hidden Maia-1500 default is not
    one of the measured rungs and may not survive as an implicit answer.
@@ -588,3 +687,9 @@ Proposed — id assigned at landing; head was **D1293** at drafting.
   policy dependency, presentation/calibration identity collision, false experiment totals,
   non-executable distribution gates and persona/behavior breadth mismatch. Exact review and 5-arm
   reproduction landed; catalogue remains empty and no implementation is authorized.
+- 2026-09-06 — partial author repair closes the four roster-local returns [[D2234]]–[[D2237]]:
+  splits behavior/presentation digests; consumes one 17-arm/13,200-game manifest; replaces vague
+  distribution prose with the 24,000-decision, four-metric, three-verdict calibration contract; and
+  publishes a closed disposition for every researched/proposed personality mechanism. The 4×3
+  roster is an honest launch floor while route/phase/clock/endgame/evidence-adapter work remains a
+  full-1.0 obligation. [[D2233]] still blocks acceptance pending genuinely fresh bot-policy review.

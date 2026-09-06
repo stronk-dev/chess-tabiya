@@ -16713,3 +16713,21 @@ The prior arithmetic is corrected by derivation: 17 arms and 13,200 games, not 1
 [[D2234]]–[[D2237]] into `rfc/bot-roster.md`; [[D2233]] remains honestly dependency-blocked until
 bot-policy survives fresh review. No bot, schema, API, client, content or protected-design byte
 changed and no profile has been calibrated.
+
+## 2026-09-06 — bot-roster D2234–D2237 partial author repair
+
+**What landed:** amended `rfc/bot-roster.md` at the four roster-local return seams. Separate
+compiler-derived behavior/presentation digests replace the calibration collision; the literal
+17-arm/13,200-game manifest replaces hand arithmetic; D2236's exact 24,000-decision comparator and
+three-verdict algebra replace vague distribution prose; and a machine-readable disposition matrix
+routes every measured/proposed personality mechanism.
+
+**What changed:** the 4×3 roster is now explicitly the required launch floor—four bands over three
+disclosed mechanisms—not twelve behavioral personalities. Full 1.0 still owns measured
+route/phase/clock/endgame/evidence-adapter policies, and failed bot transforms do not discard their
+shared Support/Review/drill primitives.
+
+**Boundary/next:** `make bot-roster-author-repair` is an author checkpoint, not independent review.
+[[D2233]] stays dependency-blocked until `bot-policy` survives genuinely fresh review; the roster
+then refreshes its consumed authorities and returns to independent review. The production catalogue
+remains empty and no implementation is authorized.
