@@ -126,6 +126,7 @@
   let runArtifactError = $state<string | undefined>();
   let attempts: readonly ProgressAttempt[] = $state([]);
   let dueSchedules: readonly ProgressSchedule[] = $state([]);
+  let returnActionError: string | undefined = $state();
   let milestones: readonly ProgressMilestone[] = $state([]);
   let derivations: RunDerivationPage | undefined = $state();
   let drafts: readonly PackDraft[] = $state([]);
@@ -473,6 +474,24 @@
         [key]: { status: "error", items: [], message: error instanceof Error ? error.message : String(error) },
       };
     }
+  }
+
+  async function startDueSchedule(schedule: ProgressSchedule): Promise<void> {
+    returnActionError = undefined;
+    if (schedule.packId !== null) {
+      await controller.startPack(schedule.packId, schedule.id);
+      return;
+    }
+    if (schedule.sourceRunId === null) {
+      returnActionError = "This position return no longer has a source run to duplicate.";
+      return;
+    }
+    await controller.startDuplicate(schedule.sourceRunId, schedule.id);
+  }
+
+  async function retryAttempt(attempt: ProgressAttempt): Promise<void> {
+    returnActionError = undefined;
+    await controller.startDuplicate(attempt.runId);
   }
 
   async function loadRoute(next: AppRoute): Promise<void> {
@@ -1333,6 +1352,7 @@
         onEnterSimulation={(branchIndex) => controller.enterSimulation(branchIndex)}
         onCloseSimulation={() => controller.closeSimulation()}
         onStory={session.runState.run.events.some((event) => event.type === "outcome.reached") ? () => navigate(routePath({ name: "story", runId: session.runState!.run.id })) : undefined}
+        onScheduleReturn={() => controller.scheduleReturn(session.runState!.run.activeCursor.nodeId)}
         onFlip={(nodeId) => flipRun(session.runState!.run.id, nodeId)}
         onSelectPack={(packId) => controller.startPack(packId)}
         onFirstRehearsalComplete={completeFirstRehearsal}
@@ -1395,6 +1415,7 @@
     <main class="shell-view" aria-labelledby="learn-title">
       <p class="eyebrow">Learn / return loop</p>
       <h1 id="learn-title">Return to the positions that need another attempt.</h1>
+      {#if returnActionError ?? session.error}<p role="alert">{returnActionError ?? session.error}</p>{/if}
       <section aria-labelledby="assigned-title">
         <h2 id="assigned-title">Assigned</h2>
         <div class="item-list">
@@ -1468,6 +1489,8 @@
                 <p>{schedule.kind === "blocked" ? "Repeat the blocked attempt" : "Try a varied repetition"} · {readableDate(schedule.dueAt)}</p>
               </div>
               <div class="row-actions">
+                <button class="primary" type="button" disabled={session.busy || (schedule.packId === null && schedule.sourceRunId === null)} aria-describedby={schedule.packId === null && schedule.sourceRunId === null ? `due-source-missing-${schedule.id}` : undefined} onclick={() => void startDueSchedule(schedule)}>Start due attempt</button>
+                {#if schedule.packId === null && schedule.sourceRunId === null}<span id={`due-source-missing-${schedule.id}`} class="honest">This position return has no surviving source run.</span>{/if}
                 {#if schedule.sourceRunId}<button type="button" onclick={() => navigate(routePath({ name: "run", runId: schedule.sourceRunId! }))}>Open source</button>{/if}
                 <button type="button" onclick={async () => { await api.dismissSchedule?.(schedule.id); dueSchedules = dueSchedules.filter((item) => item.id !== schedule.id); }}>Dismiss</button>
               </div>
@@ -1489,6 +1512,7 @@
                 <div class="row-actions">
                   <button type="button" aria-expanded={related !== undefined} onclick={() => void toggleRelatedAttempts(attempt)}>{related === undefined ? "Related attempts" : "Hide related"}</button>
                   <button type="button" onclick={() => navigate(routePath({ name: "run", runId: attempt.runId }))}>Open run</button>
+                  <button type="button" disabled={session.busy} onclick={() => void retryAttempt(attempt)}>Try this again</button>
                 </div>
               </div>
               {#if related?.status === "loading"}<p role="status">Finding your nearest related attempts…</p>

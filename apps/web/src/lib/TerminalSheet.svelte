@@ -9,6 +9,7 @@
   import type { DrillRun } from "@chess-tabiya/runtime";
   import { theoryVerdictSentence, UNKNOWN_THEORY_NOTE } from "./theory-presentation.js";
   import { claimProvenance } from "./claim-presentation.js";
+  import HonestControl from "./HonestControl.svelte";
 
   export interface AssignmentSubmissionOffer {
     readonly id: string;
@@ -33,15 +34,21 @@
     onStory?: (() => void) | undefined;
     onFlip?: (() => void | Promise<void>) | undefined;
     onInspectEvidence?: (() => void) | undefined;
+    canScheduleReturn?: boolean | undefined;
+    scheduleUnavailableReason?: string | undefined;
+    onScheduleReturn?: (() => boolean | void | Promise<boolean | void>) | undefined;
     assignmentOffers?: readonly AssignmentSubmissionOffer[] | undefined;
     onSubmitAssignment?: ((assignmentId: string) => Promise<void>) | undefined;
   }
 
-  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop, assessment, resistance = [], grade, run, shapes = [], onStory, onFlip, onInspectEvidence, assignmentOffers = [], onSubmitAssignment }: Props = $props();
+  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop, assessment, resistance = [], grade, run, shapes = [], onStory, onFlip, onInspectEvidence, canScheduleReturn = false, scheduleUnavailableReason = "Return scheduling is unavailable.", onScheduleReturn, assignmentOffers = [], onSubmitAssignment }: Props = $props();
   let heading: HTMLHeadingElement;
   let selectedAssignmentId: string | undefined = $state();
   let submissionBusy = $state(false);
   let submissionError: string | undefined = $state();
+  let returnBusy = $state(false);
+  let returnScheduled = $state(false);
+  let returnError: string | undefined = $state();
   let selectedAssignment = $derived(assignmentOffers.find((assignment) => assignment.id === selectedAssignmentId));
   onMount(() => heading?.focus());
 
@@ -56,6 +63,20 @@
       submissionError = error instanceof Error ? error.message : String(error);
     } finally {
       submissionBusy = false;
+    }
+  }
+
+  async function scheduleReturn(): Promise<void> {
+    if (!canScheduleReturn || onScheduleReturn === undefined || returnBusy || returnScheduled) return;
+    returnBusy = true;
+    returnError = undefined;
+    try {
+      const accepted = await onScheduleReturn();
+      if (accepted !== false) returnScheduled = true;
+    } catch (error) {
+      returnError = error instanceof Error ? error.message : String(error);
+    } finally {
+      returnBusy = false;
     }
   }
 </script>
@@ -79,8 +100,18 @@
       </div>
       <div class="primary-actions">
         <button class="primary" type="button" disabled={!canRewind} onclick={onRewind}>Play it again from here</button>
+        <HonestControl
+          disabled={!canScheduleReturn || returnBusy || returnScheduled}
+          reasonId="terminal-schedule-unavailable"
+          reason={returnScheduled ? "This position is now in your return queue." : returnBusy ? "Saving this return…" : scheduleUnavailableReason}
+        >
+          {#snippet children(describedBy)}
+            <button type="button" disabled={!canScheduleReturn || returnBusy || returnScheduled} aria-describedby={describedBy} onclick={() => void scheduleReturn()}>{returnScheduled ? "Added to return queue" : returnBusy ? "Saving return…" : "Schedule a retry from here"}</button>
+          {/snippet}
+        </HonestControl>
         {#if onStory}<button type="button" onclick={onStory}>Review the whole game</button>{/if}
       </div>
+      {#if returnError}<p role="alert">{returnError}</p>{/if}
     </section>
 
     {#if authoredItems.length > 0}

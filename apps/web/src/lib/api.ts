@@ -626,6 +626,11 @@ export interface ProgressSchedule {
   readonly sourceRunId: string | null;
 }
 
+export interface ScheduledReturnResult {
+  readonly schedule: ProgressSchedule;
+  readonly result: MutationResult;
+}
+
 export interface RelatedProgressAttempt {
   readonly relation: "same_position" | "same_pack" | "same_concept_in_pack";
   readonly runId: string;
@@ -811,6 +816,7 @@ export interface RunApi {
   createGroup(runId: string, input: CreateGroupRequest, writerId: string): Promise<CreateGroupResult>;
   groupReply(runId: string, groupId: string, writerId: string): Promise<GroupReplyResult>;
   analysis(runId: string, nodeIds: readonly string[], writerId: string): Promise<{ readonly jobs: readonly { readonly id: string }[] }>;
+  scheduleReturn?(runId: string, input: { readonly nodeId: string; readonly kind: "blocked" | "varied"; readonly variant?: string; readonly dueAt?: string }, writerId: string): Promise<ScheduledReturnResult>;
   simulate?(runId: string, writerId: string): Promise<SimulationResult>;
   enterSimulation?(runId: string, simulationId: string, branchIndex: number, writerId: string): Promise<MutationResult>;
 }
@@ -1288,6 +1294,10 @@ export class DrillApi implements DrillClientApi {
     return this.#json(`/runs/${encoded(runId)}/analysis`, {
       method: "POST", writerId, body: { nodeIds, kind: "bestline", multiPv: 1, movetime: 100 },
     });
+  }
+
+  scheduleReturn(runId: string, input: { readonly nodeId: string; readonly kind: "blocked" | "varied"; readonly variant?: string; readonly dueAt?: string }, writerId: string): Promise<ScheduledReturnResult> {
+    return this.#json(`/runs/${encoded(runId)}/schedule`, { method: "POST", writerId, body: input });
   }
 
   simulate(runId: string, writerId: string): Promise<SimulationResult> {

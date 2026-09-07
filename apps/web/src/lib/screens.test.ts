@@ -652,6 +652,7 @@ describe("Layer 3 screens", () => {
     ).run;
     const outcome = run.events.find((event) => event.type === "outcome.reached")!;
     const onRewind = vi.fn();
+    const onScheduleReturn = vi.fn(async () => true);
     const component = mount(DrillScreen, {
       target: target(),
       props: {
@@ -687,6 +688,7 @@ describe("Layer 3 screens", () => {
         onContinueCheckpoint: vi.fn(),
         onExport: vi.fn(),
         onStop: vi.fn(),
+        onScheduleReturn,
         registerKeyboardRegion,
       },
     });
@@ -699,7 +701,7 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain("Your completed attempt stays saved.");
     expect(document.body.textContent).toContain("Rewinds are free in rehearsals");
     const primaryActions = [...document.querySelectorAll<HTMLButtonElement>(".primary-actions button")];
-    expect(primaryActions.map((button) => button.textContent)).toEqual(["Play it again from here"]);
+    expect(primaryActions.map((button) => button.textContent)).toEqual(["Play it again from here", "Schedule a retry from here"]);
     expect(document.querySelector('[role="dialog"]')?.textContent).not.toMatch(/accuracy|grade count|rating movement|great move/i);
     expect(document.querySelector('[role="dialog"]')?.textContent).not.toContain("Engine evidence recorded");
     const inspect = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("Inspect recorded evidence"))!;
@@ -710,6 +712,9 @@ describe("Layer 3 screens", () => {
     await tick();
     [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Play it again from here")!.click();
     expect(onRewind).toHaveBeenCalledWith({ nodeId: run.nodes[0]!.id });
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Schedule a retry from here")!.click();
+    await vi.waitFor(() => expect(onScheduleReturn).toHaveBeenCalledOnce());
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Added to return queue"));
     await unmount(component);
   });
 

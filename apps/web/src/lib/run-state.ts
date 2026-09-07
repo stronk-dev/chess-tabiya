@@ -255,6 +255,16 @@ export class RunStateStore {
     }
   }
 
+  async scheduleReturn(input: { readonly nodeId: string; readonly kind: "blocked" | "varied"; readonly variant?: string; readonly dueAt?: string }) {
+    if (this.#snapshot.access === "read_only") {
+      throw new ApiError(409, "NOT_ACTIVE_WRITER", "Run is read-only");
+    }
+    if (this.#api.scheduleReturn === undefined) throw new Error("Return scheduling is unavailable");
+    const response = await this.#api.scheduleReturn(this.#session.runId, input, this.#session.writerId);
+    this.#applyMutation(response.result);
+    return response.schedule;
+  }
+
   simulate(): Promise<SimulationResult> {
     if (this.#snapshot.access === "read_only") {
       throw new ApiError(409, "NOT_ACTIVE_WRITER", "Run is read-only");

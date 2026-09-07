@@ -240,7 +240,7 @@ export class DrillSessionController {
     }
   }
 
-  async startPack(packId: string): Promise<void> {
+  async startPack(packId: string, scheduleId?: string): Promise<void> {
     this.#projectionOnly = false;
     this.#matchMode = undefined;
     this.#patch({ busy: true, error: undefined, simulation: undefined });
@@ -259,12 +259,45 @@ export class DrillSessionController {
           session: { kind: "pack", packId },
           policyConfig: policyConfig(document, capabilities),
           seed,
+          ...(scheduleId === undefined ? {} : { intent: { origin: "fresh" as const, scheduleId } }),
         },
         session.writerId,
       );
       this.#capabilities = capabilities;
       const store = this.#newStore(session, run);
       this.#attachStore(store, document, digest, await this.#loadShapes(document.shapes));
+      await this.#playOpponentIfNeeded();
+      await this.#refreshAuthoredFeedback();
+      this.#onRunStarted?.({ runId });
+    } catch (error) {
+      this.#fail(error);
+    }
+  }
+
+  async startDuplicate(sourceRunId: string, scheduleId?: string): Promise<void> {
+    this.#projectionOnly = false;
+    this.#matchMode = undefined;
+    this.#patch({ busy: true, error: undefined, simulation: undefined });
+    try {
+      if (this.#api.duplicateRun === undefined) throw new Error("Starting another attempt is unavailable");
+      const runId = this.#runId();
+      const session = WriterSession.claimFor(runId, this.#storage);
+      const [run, capabilities] = await Promise.all([
+        this.#api.duplicateRun(sourceRunId, {
+          id: runId,
+          seed: this.#seed(),
+          ...(scheduleId === undefined ? {} : { scheduleId }),
+        }, session.writerId),
+        this.#api.capabilities(),
+      ]);
+      this.#capabilities = capabilities;
+      if (run.sessionKind === "pack") {
+        if (run.packId === null) throw new TypeError("Duplicated pack run is missing its pack id");
+        const { document, digest } = await this.#api.pack(run.packId);
+        this.#attachStore(this.#newStore(session, run), document, digest, await this.#loadShapes(document.shapes));
+      } else {
+        this.#attachStore(this.#newStore(session, run), undefined, undefined, await this.#loadShapes());
+      }
       await this.#playOpponentIfNeeded();
       await this.#refreshAuthoredFeedback();
       this.#onRunStarted?.({ runId });
@@ -451,6 +484,18 @@ export class DrillSessionController {
     this.#patch({ busy: true, error: undefined });
     try {
       await this.#requiredStore().analysis(nodeIds);
+      this.#patch({ busy: false });
+      return true;
+    } catch (error) {
+      this.#fail(error);
+      return false;
+    }
+  }
+
+  async scheduleReturn(nodeId: string): Promise<boolean> {
+    this.#patch({ busy: true, error: undefined });
+    try {
+      await this.#requiredStore().scheduleReturn({ nodeId, kind: "blocked" });
       this.#patch({ busy: false });
       return true;
     } catch (error) {

@@ -111,6 +111,7 @@
     onEnterSimulation?: ((branchIndex: number) => void | Promise<void>) | undefined;
     onCloseSimulation?: (() => void) | undefined;
     onStory?: (() => void) | undefined;
+    onScheduleReturn?: (() => boolean | void | Promise<boolean | void>) | undefined;
     onFlip?: ((nodeId: string) => void | Promise<void>) | undefined;
     onSelectPack?: ((packId: string) => void | Promise<void>) | undefined;
     onFirstRehearsalComplete?: (() => void) | undefined;
@@ -168,6 +169,7 @@
     onEnterSimulation,
     onCloseSimulation,
     onStory,
+    onScheduleReturn,
     onFlip,
     onSelectPack,
     onFirstRehearsalComplete,
@@ -1385,6 +1387,9 @@
     {onStory}
     onFlip={onFlip === undefined ? undefined : () => onFlip(run.nodes[0]!.id)}
     onInspectEvidence={() => (inspectorOpen = true)}
+    canScheduleReturn={canWrite && run.sessionKind !== "imported" && onScheduleReturn !== undefined}
+    scheduleUnavailableReason={!canWrite ? "This read-only view cannot change your return queue." : run.sessionKind === "imported" ? "Choose a story moment and start a rehearsal before scheduling its return." : "Return scheduling is unavailable from this deployment."}
+    {onScheduleReturn}
     {assignmentOffers}
     {onSubmitAssignment}
     {onStop}

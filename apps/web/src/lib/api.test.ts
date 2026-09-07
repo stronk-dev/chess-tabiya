@@ -202,6 +202,10 @@ describe("DrillApi", () => {
       }
       if (url.endsWith("/group-reply")) return json({ selection, reusedFromNodeId: null });
       if (url.endsWith("/analysis")) return json({ jobs: [{ id: "analysis-one" }] }, { status: 202 });
+      if (url.endsWith("/schedule")) return json({
+        schedule: { id: "schedule-one", sessionKind: "pack", packId: run.packId, kind: "blocked", variant: null, dueAt: "2026-08-12T20:00:00.000Z", sourceRunId: run.id },
+        result: { run, emitted: [] },
+      }, { status: 201 });
       if (url.endsWith("/simulate")) return json({ simulationId: "simulation-one", comparison: { forkNodeId: run.nodes[0]!.id, columns: [], rows: [], consequences: {}, objectiveTimelines: {}, checkpointHits: {}, evidence: {}, lines: {}, machineFeedback: "available" }, branches: [] });
       if (url.includes("/events")) return json({ events: [], nextSeq: 1 });
       if (url.includes("/authored-feedback")) {
@@ -256,6 +260,7 @@ describe("DrillApi", () => {
     await api.createGroup(run.id, { source: "hand_picked", candidates: ["a2a3", "b2b3"] }, "writer-one");
     await api.groupReply(run.id, "group-one", "writer-one");
     await api.analysis(run.id, [run.nodes[0]!.id], "writer-one");
+    await api.scheduleReturn(run.id, { nodeId: run.nodes[0]!.id, kind: "blocked" }, "writer-one");
     const simulation = await api.simulate(run.id, "writer-one");
     await api.enterSimulation(run.id, simulation.simulationId, 0, "writer-one");
     await api.graph(run.id);
@@ -295,6 +300,7 @@ describe("DrillApi", () => {
       "/runs/run%20%2F%20one/group",
       "/runs/run%20%2F%20one/group-reply",
       "/runs/run%20%2F%20one/analysis",
+      "/runs/run%20%2F%20one/schedule",
       "/runs/run%20%2F%20one/simulate",
       "/runs/run%20%2F%20one/simulate-enter",
       "/runs/run%20%2F%20one/graph",
@@ -307,7 +313,7 @@ describe("DrillApi", () => {
       "/runs/run%20%2F%20one/pgn",
     ]);
     const writerCalls = calls.filter((call) =>
-      ["/runs", "/moves", "/rewind", "/fork", "/group", "/group-reply", "/analysis", "/simulate", "/simulate-enter", "/evidence"].some((suffix) =>
+      ["/runs", "/moves", "/rewind", "/fork", "/group", "/group-reply", "/analysis", "/schedule", "/simulate", "/simulate-enter", "/evidence"].some((suffix) =>
         new URL(call.url).pathname.endsWith(suffix),
       ),
     );

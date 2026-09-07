@@ -143,6 +143,8 @@ class FakeApi implements DrillClientApi {
   activeWriterId = "writer-a";
   authoredFeedbackCalls = 0;
   groupReplyCalls = 0;
+  duplicateRequests: Array<{ readonly sourceRunId: string; readonly id: string; readonly seed: number; readonly scheduleId?: string; readonly writerId: string }> = [];
+  scheduledNodes: string[] = [];
   capabilitiesValue: Capabilities = capabilities;
   runSessionDigest = digest;
   moveError: Error | undefined;
@@ -280,6 +282,36 @@ class FakeApi implements DrillClientApi {
     return { selection: await this.selectMove({ startFen: "", historyUci: [], policy: { mode: "human_common", policyConfigDigest: digest }, seed: 1 }), reusedFromNodeId: null };
   }
   async analysis(): Promise<{ readonly jobs: readonly { readonly id: string }[] }> { return { jobs: [] }; }
+
+  async duplicateRun(sourceRunId: string, input: { readonly id: string; readonly seed: number; readonly scheduleId?: string }, writerId: string): Promise<DrillRun> {
+    this.duplicateRequests.push({ sourceRunId, ...input, writerId });
+    this.writerIds.push(writerId);
+    const source = this.requiredRun();
+    this.activeWriterId = writerId;
+    this.run = createRun({
+      id: input.id,
+      session: source.sessionKind === "pack"
+        ? { kind: "pack", packId: source.packId!, packDigest: source.packDigest!, start: source.start, feedbackPolicy: source.feedbackPolicy as "delayed_checkpoint" | "segment_end" | "immediate_guard", opponentPolicy: source.opponentPolicy }
+        : { kind: "position", start: source.start, feedbackPolicy: "attempt_end", opponentPolicy: source.opponentPolicy as import("@chess-tabiya/runtime").PositionOpponentPolicy },
+      sessionDigest: source.sessionDigest,
+      policyConfig: source.policyConfig,
+      seed: input.seed,
+      createdAt: at,
+    });
+    return this.run;
+  }
+
+  async scheduleReturn(_runId: string, input: { readonly nodeId: string; readonly kind: "blocked" | "varied" }, writerId: string) {
+    this.writerIds.push(writerId);
+    this.scheduledNodes.push(input.nodeId);
+    const before = this.requiredRun().events.length;
+    const scheduleId = `schedule-${this.scheduledNodes.length}`;
+    this.run = appendEvents(this.requiredRun(), [{ type: "transfer.scheduled", at, data: { nodeId: input.nodeId, scheduleId } }]);
+    return {
+      schedule: { id: scheduleId, sessionKind: this.run.sessionKind as "pack" | "position", packId: this.run.packId, kind: input.kind, variant: null, dueAt: at, sourceRunId: this.run.id },
+      result: { run: this.run, emitted: this.run.events.slice(before) },
+    };
+  }
 
   async move(
     _runId: string,
@@ -534,6 +566,45 @@ describe("DrillSessionController", () => {
       },
     });
     expect(environment.started).toEqual([{ runId: "screen-run" }]);
+  });
+
+  it("starts due packs and position retries with durable return provenance", async () => {
+    const packEnvironment = controller();
+    await packEnvironment.controller.startPack(pack.id, "schedule-pack");
+    expect(packEnvironment.api.created?.intent).toEqual({ origin: "fresh", scheduleId: "schedule-pack" });
+
+    const api = new FakeApi();
+    await api.createRun({
+      id: "source-position",
+      session: { kind: "position", start: { fen: pack.start.fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 9,
+    }, "source-writer");
+    const environment = controller(api);
+    await environment.controller.startDuplicate("source-position", "schedule-position");
+
+    expect(api.duplicateRequests).toEqual([{
+      sourceRunId: "source-position",
+      id: "screen-run",
+      seed: 23,
+      scheduleId: "schedule-position",
+      writerId: expect.any(String),
+    }]);
+    expect(environment.controller.state.runState?.run.id).toBe("screen-run");
+    expect(environment.started).toEqual([{ runId: "screen-run" }]);
+  });
+
+  it("adds the current terminal position to the learner return queue", async () => {
+    const environment = controller();
+    await environment.controller.startPack(pack.id);
+    const nodeId = environment.controller.state.runState!.run.activeCursor.nodeId;
+
+    expect(await environment.controller.scheduleReturn(nodeId)).toBe(true);
+    expect(environment.api.scheduledNodes).toEqual([nodeId]);
+    expect(environment.controller.state.runState?.run.events.at(-1)).toMatchObject({
+      type: "transfer.scheduled",
+      data: { nodeId },
+    });
   });
 
   it("requests and writer-appends an initial opponent ply when the authored side does not move first", async () => {

@@ -47,6 +47,12 @@ resolved server-side. Foreign schedules are indistinguishable from missing ones.
 
 `/learn` is a real surface and deployment capability. It lists due work and recorded
 attempts, names ungraded work honestly, links back to source runs, and permits dismissal.
+Its primary due action starts the scheduled attempt itself: pack returns create a current-pack
+run carrying the schedule id, while position returns duplicate their recorded source with the same
+id. *Try this again* creates a separately owned run from a recorded attempt and never mutates the
+source. At an attempt's terminal sheet, *Schedule a retry from here* writes an immediate blocked
+return for the exact terminal node; the button reports read-only/unavailable states and confirms
+when the position entered the queue.
 It deliberately presents no mastery percentage: the stored data is an attempt history and
 a return queue, not proof of mastery. It also lists derived event-shaped milestones linking
 to preserved runs. Those record firsts and one explicit attempt-count event; they never add

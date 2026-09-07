@@ -17977,3 +17977,17 @@ exact current node, exposes an in-flight state, and offers the inspector when re
 evidence exists. Every unavailable state keeps its reason adjacent through `HonestControl`.
 `make verify-software` passes 1,117/1,117 tests. The larger hint-distance and evidence-presentation
 RFCs still own graduated nudges and structured rendering; this repair does not impersonate either.
+
+## 2026-09-07 — The return loop gained its three learner entry points
+
+**What changed:** [[D314]] arm (a) is closed. *Start due attempt* now consumes a schedule from
+`/learn`; pack schedules create through the current pack and position schedules duplicate their
+source, both carrying the authoritative schedule id. *Try this again* duplicates any preserved
+attempt into a separately owned run. *Schedule a retry from here* on the terminal sheet persists an
+immediate blocked return for that exact node and projects `transfer.scheduled` into the live run.
+
+**Evidence/next:** API transport tests bind `/schedule`; controller tests bind pack and position
+schedule provenance, new writer ownership and the emitted transfer; shell tests exercise the two
+Learn actions; terminal UI tests exercise the completed state. `make test-software` passes
+1,120/1,120. [[D314]] remains open only for arm (b): Just Play contributes no concept identity, a
+longitudinal evidence decision this client pass deliberately did not invent.

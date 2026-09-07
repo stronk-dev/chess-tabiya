@@ -1048,6 +1048,15 @@ describe("application shell", () => {
       { relation: "same_position" as const, runId: "earlier-run", branchId: "main", attemptCount: 2 },
       { relation: "same_pack" as const, runId: "pack-run", branchId: "main", attemptCount: 1 },
     ]);
+    const duplicateRun = vi.fn(async (_sourceRunId: string, input: { readonly id: string; readonly seed: number }) => createRun({
+      id: input.id,
+      packId: pack.id,
+      packDigest: digest,
+      policyConfig: run.policyConfig,
+      startFen: pack.start.fen,
+      seed: input.seed,
+      createdAt: "2026-08-23T13:00:00.000Z",
+    }));
     const learnApi: DrillClientApi = {
       ...base,
       async progress() {
@@ -1067,6 +1076,7 @@ describe("application shell", () => {
         }];
       },
       relatedProgress,
+      duplicateRun,
     };
     const component = mount(App, {
       target: target(),
@@ -1079,6 +1089,56 @@ describe("application shell", () => {
     expect(document.body.textContent).toContain("Same pack, different position · 1 attempt on that material");
     expect(relatedProgress).toHaveBeenCalledWith(run.id, run.branches[0]!.forkNodeId);
     expect(document.body.textContent).toContain("not a mastery score");
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Try this again")!.click();
+    await vi.waitFor(() => expect(duplicateRun).toHaveBeenCalledWith(
+      run.id,
+      expect.objectContaining({ id: expect.stringMatching(/^run-/u), seed: expect.any(Number) }),
+      expect.any(String),
+    ));
+    await unmount(component);
+  });
+
+  it("starts a due return directly instead of sending the learner back to its source", async () => {
+    history.replaceState(null, "", "/learn");
+    const schedule = {
+      id: "schedule-due",
+      sessionKind: "pack" as const,
+      packId: pack.id,
+      kind: "blocked" as const,
+      variant: null,
+      dueAt: "2026-08-23T12:00:00.000Z",
+      sourceRunId: run.id,
+    };
+    const createRunRequest = vi.fn(async (input: import("./api.js").CreateRunRequest) => createRun({
+      id: input.id,
+      packId: pack.id,
+      packDigest: digest,
+      policyConfig: input.policyConfig,
+      startFen: pack.start.fen,
+      seed: input.seed,
+      createdAt: "2026-08-23T13:00:00.000Z",
+    }));
+    const learnApi: DrillClientApi = {
+      ...api(),
+      async dueProgress() { return [schedule]; },
+      createRun: createRunRequest,
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: learnApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    const start = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Start due attempt");
+      expect(button).toBeDefined();
+      return button!;
+    });
+    expect(document.body.textContent).toContain("Repeat the blocked attempt");
+    start.click();
+    await vi.waitFor(() => expect(createRunRequest).toHaveBeenCalledWith(
+      expect.objectContaining({ intent: { origin: "fresh", scheduleId: schedule.id } }),
+      expect.any(String),
+    ));
     await unmount(component);
   });
 
