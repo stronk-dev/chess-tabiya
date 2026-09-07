@@ -60,7 +60,7 @@ test("the seed demonstrates the data-row shape without claiming an executed exte
   const extended = [
     ...seed.resources,
     {
-      id: "synthetic-schema",
+      id: "synthetic2-schema",
       claimKind: "schema_lane",
       source: {
         kind: "json_schema",
@@ -75,8 +75,9 @@ test("the seed demonstrates the data-row shape without claiming an executed exte
       .map((row) => [row.source.schemaSlug, row.id]),
   );
 
-  assert.equal(bySlug.get("synthetic"), "synthetic-schema");
-  assert.equal(checker.includes("synthetic-schema"), false);
+  assert.equal(bySlug.get("synthetic"), "synthetic2-schema");
+  assert.match(bySlug.get("synthetic"), /\d/u);
+  assert.equal(checker.includes("synthetic2-schema"), false);
   assert.match(rfc, /synthetic \*\*already-present\*\* schema/u);
   assert.match(rfc, /implementation contract proves the executable\s+extension property/u);
 });
@@ -84,8 +85,21 @@ test("the seed demonstrates the data-row shape without claiming an executed exte
 test("the repaired contract closes source aliases, lane spelling and id grammar", () => {
   const sourceIdentity = ({ source }) => source.kind === "json_schema"
     ? `schema:${source.schemaSlug}`
-    : `${source.kind}:${path.relative(process.cwd(), fs.realpathSync(source.path))}:${source.exportName ?? source.headExport}`;
+    : `path:${path.relative(process.cwd(), fs.realpathSync(source.path))}:${source.exportName ?? source.headExport}`;
   assert.equal(new Set(seed.resources.map(sourceIdentity)).size, seed.resources.length);
+  const crossKindAlias = [
+    seed.resources.find(({ id }) => id === "migration"),
+    {
+      id: "storage-version-members",
+      claimKind: "members",
+      source: {
+        kind: "string_tuple",
+        path: "apps/server/src/storage.ts",
+        exportName: "STORAGE_VERSION",
+      },
+    },
+  ];
+  assert.equal(new Set(crossKindAlias.map(sourceIdentity)).size, 1);
   assert.match(rfc, /canonical source identity/u);
   assert.match(rfc, /no leading-zero component/u);
   assert.match(rfc, /exported claim\/register id pattern/u);

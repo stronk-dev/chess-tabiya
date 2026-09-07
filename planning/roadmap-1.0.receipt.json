@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:9f1b300799cb4de10a73bab6fd247d99be712ed9ebf056bf9a64fdd0561485f3",
+    "roadmap": "sha256:909bcac2f02e01cbba5aa98fd74b2ec81416c57b2b296b5d9e657b035085375c",
     "workItems": "sha256:983e2f3a517cfd73cdddab99412d3ec51f03803642923436f30454b5bf0f0b7d",
-    "workState": "sha256:96ccaaf60e2c5e2b48f3d5168a4e345640f3d35b31f9f5a9f17daf8e1290b462",
-    "rfcRegister": "sha256:be4f862495c14b69f497038f6a167d14bc8aea703bed820f2b36fb851c9cd467",
+    "workState": "sha256:63df93fea7174de8ef66cb283942fe9f83a44cbf11b84698249b7766858d82e4",
+    "rfcRegister": "sha256:b0630a8a2e1dcdc7672bf2600d8859a742dac47d7804a8852508ab3703cecf7c",
     "uxIndex": "sha256:5ca3e23500716997bf5a89e941981f81f59244826bf9983b8a0d358294519080",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -30,7 +30,7 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 641,
+      "todo": 644,
       "doing": 2,
       "blocked": 1226,
       "done": 901,
@@ -121,20 +121,30 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Run the bounded fresh acceptance check on repaired pack capability so claim-semantic-anchors and truthful feedback binding can proceed; repair the independently-owned evidence-job successor later without reattaching it to F3; independently fresh-review shared-resource bootstrap.",
+      "nextAction": "Run genuinely fresh acceptance checks on repaired pack capability and the bounded shared-resource bootstrap; after acceptance, implement the seven-row register catalogue and rebase its three staged consumers before returning to product RFCs.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "The bounded F3 repair closes all four post-cut seams without regrowing the durable-job system: operation effects moved wholly to the registered successor, the initial schema migration has one same-commit sequence, the storage claim follows its DDL, and 92 is explicitly 86 production packs plus 6 browser fixtures.",
+        "summary": "The generic register bootstrap's second bounded author repair closes three executable seams without widening scope: canonical path/export identity ignores reader-kind aliases, catalogue parsing receives the repository root explicitly, and the extension fixture genuinely exercises a digit-bearing resource id.",
         "impact": "advanced",
         "evidence": [
-          "planning/pack-capability-contract/post-cut-author-repair-2026-09-07.md",
-          "tools/d3120-pack-capability-cut-fresh-review/review.test.mjs"
+          "planning/shared-resource-register-bootstrap/collision-core-second-author-repair-2026-09-07.md",
+          "tools/d3131-shared-resource-bootstrap-collision-core-author-repair/contract.test.mjs"
         ],
         "anchors": [
           {
             "kind": "work_state",
-            "id": "D3120",
-            "digest": "sha256:4338e51e9a530e392fd30e404f9fa33e90bddf1b50a6529a977d60ae9f44cb4a"
+            "id": "D3131",
+            "digest": "sha256:5be8891a358a8635b4db9f183173041a9c12354036f734a4022028ec2014d0a3"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3132",
+            "digest": "sha256:003ff2387cbd7d639241d766f0969f437de7557a0f209c545b0085d0124bf19a"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3133",
+            "digest": "sha256:487880545ffd3bcafc3d8f0add35e0ba2b5b795fcdcc3be53da338710cd9188a"
           }
         ]
       },

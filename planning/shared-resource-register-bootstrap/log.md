@@ -52,3 +52,12 @@ canonical and TypeScript semantics mutate after their digest is fixed.
 `make shared-resource-bootstrap-seventh-fresh-review` passes 5/5. No engine, catalogue, register,
 product or protected-design byte landed. A bounded seventh author repair and another genuinely
 fresh review are required before acceptance.
+
+## 2026-09-07 — Second bounded collision-core author repair
+
+An author audit found and repaired [[D3131]]–[[D3133]] without widening the seven-resource cut.
+Path-source identity no longer includes the reader-kind label; catalogue parsing receives an
+explicit repository root; and the synthetic extension fixture now genuinely exercises a digit in
+the resource id. `make shared-resource-bootstrap-collision-core-second-author-repair` retains the
+predecessor chain and passes three focused controls. Fresh independent review still gates
+acceptance and implementation.

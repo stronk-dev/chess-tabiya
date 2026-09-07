@@ -12,6 +12,7 @@ test("D3116 canonical source identities are normative and executable in the auth
   assert.match(rfc, /realpath plus export/u);
   assert.match(author, /const sourceIdentity/u);
   assert.match(author, /fs\.realpathSync/u);
+  assert.doesNotMatch(author, /`\$\{source\.kind\}:\$\{path\.relative/u);
 });
 
 test("D3117 lane components have one canonical spelling", () => {
@@ -22,6 +23,8 @@ test("D3117 lane components have one canonical spelling", () => {
 test("D3118 one id grammar spans catalogue claims and README registers", () => {
   assert.match(rfc, /exported claim\/register id pattern/u);
   assert.match(rfc, /digit-bearing synthetic/u);
+  assert.match(author, /id: "synthetic2-schema"/u);
+  assert.match(author, /assert\.match\(bySlug\.get\("synthetic"\), \/\\d\/u\)/u);
 });
 
 test("D3119 every live versionExport is joined to the schema index and schema version", () => {

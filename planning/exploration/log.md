@@ -18306,3 +18306,12 @@ unit tests, while the pre-commit hook ran the real index snapshot and caught a p
 log. The Makefile now exposes that real runner as `staged-process-contracts` and makes
 `verify-awake` depend on it. Scaffold verification binds the dependency so local verification and
 the commit hook cannot silently diverge again.
+
+## 2026-09-07 — Shared-resource bootstrap second bounded author repair
+
+The next foundation audit found [[D3131]]–[[D3133]] before the generic register bootstrap could
+land: its source identity still distinguished reader kinds, its parser signature hid the root
+needed for containment checks, and its supposedly digit-bearing extension fixture contained no
+digit. The bounded repair corrects all three while retaining the seven-resource/three-reader cut.
+Fresh independent review remains the acceptance boundary; no production register or checker byte
+changed.

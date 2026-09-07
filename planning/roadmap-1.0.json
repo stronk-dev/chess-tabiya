@@ -333,14 +333,16 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Run the bounded fresh acceptance check on repaired pack capability so claim-semantic-anchors and truthful feedback binding can proceed; repair the independently-owned evidence-job successor later without reattaching it to F3; independently fresh-review shared-resource bootstrap.",
+        "nextAction": "Run genuinely fresh acceptance checks on repaired pack capability and the bounded shared-resource bootstrap; after acceptance, implement the seven-row register catalogue and rebase its three staged consumers before returning to product RFCs.",
         "latestCheckpoint": {
           "at": "2026-09-07",
-          "summary": "The bounded F3 repair closes all four post-cut seams without regrowing the durable-job system: operation effects moved wholly to the registered successor, the initial schema migration has one same-commit sequence, the storage claim follows its DDL, and 92 is explicitly 86 production packs plus 6 browser fixtures.",
+          "summary": "The generic register bootstrap's second bounded author repair closes three executable seams without widening scope: canonical path/export identity ignores reader-kind aliases, catalogue parsing receives the repository root explicitly, and the extension fixture genuinely exercises a digit-bearing resource id.",
           "impact": "advanced",
-          "evidence": ["planning/pack-capability-contract/post-cut-author-repair-2026-09-07.md", "tools/d3120-pack-capability-cut-fresh-review/review.test.mjs"],
+          "evidence": ["planning/shared-resource-register-bootstrap/collision-core-second-author-repair-2026-09-07.md", "tools/d3131-shared-resource-bootstrap-collision-core-author-repair/contract.test.mjs"],
           "anchors": [
-            {"kind": "work_state", "id": "D3120", "digest": "sha256:4338e51e9a530e392fd30e404f9fa33e90bddf1b50a6529a977d60ae9f44cb4a"}
+            {"kind": "work_state", "id": "D3131", "digest": "sha256:5be8891a358a8635b4db9f183173041a9c12354036f734a4022028ec2014d0a3"},
+            {"kind": "work_state", "id": "D3132", "digest": "sha256:003ff2387cbd7d639241d766f0969f437de7557a0f209c545b0085d0124bf19a"},
+            {"kind": "work_state", "id": "D3133", "digest": "sha256:487880545ffd3bcafc3d8f0add35e0ba2b5b795fcdcc3be53da338710cd9188a"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

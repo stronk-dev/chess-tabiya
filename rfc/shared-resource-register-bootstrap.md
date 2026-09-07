@@ -1,6 +1,6 @@
 # RFC: Shared-resource register catalogue bootstrap
 
-- **Status:** draft — bounded [[D3116]]–[[D3119]] repair complete; fresh review required before acceptance/implementation
+- **Status:** draft — bounded [[D3116]]–[[D3119]] and [[D3131]]–[[D3133]] repairs complete; fresh review required before acceptance/implementation
 - **Author:** Codex
 - **Created:** 2026-08-31; cut to the owner-ruled scope 2026-09-06
 - **Design refs:** none; this is repository process and changes no learner or product behavior
@@ -88,12 +88,12 @@ register sections. The bootstrap neither discovers nor invents another resource.
 
 ### 1.1 Catalogue validation
 
-`tools/register-check.mjs` exports `parseResourceCatalogue(value)` and fails closed before reading
+`tools/register-check.mjs` exports `parseResourceCatalogue(value, { root })` ([[D3132]]) and fails closed before reading
 claims or registers when:
 
 - the envelope, row keys, source keys, enum values or literals differ;
 - ids duplicate, are malformed/unsorted, or disagree with the exported claim/register id pattern;
-- two rows share a canonical source identity: schema slug, or realpath plus export for path sources;
+- two rows share a canonical source identity: schema slug, or root-resolved realpath plus export for path sources, independent of which source reader claims it ([[D3131]]);
 - a `schema_lane` row does not use `json_schema`, a `migration_position` row does not use
   `storage_migrations`, or a `members` row does not use `string_tuple`;
 - a path is absolute, contains `..`, escapes the repository after `realpath`, or does not name a
@@ -224,7 +224,7 @@ implementation must execute all of these controls:
 3. a duplicate schema slug or normalized/symlink-equivalent path/export identity fails;
 4. every current claim/register/tree test remains green against the catalogue-driven checker;
 5. deleting either former code inventory does not change the result because neither exists;
-6. a digit-bearing synthetic **already-present** schema becomes known through one catalogue row
+6. a digit-bearing synthetic **already-present** schema ([[D3133]]) becomes known through one catalogue row
    and register fixture, with no checker-source edit and one id grammar at every boundary;
 7. that synthetic schema without its row fails C7, and its row without a schema fails C7;
 8. an unknown claim resource fails even if a README section uses the same unknown name;
@@ -287,7 +287,7 @@ when a concrete resource proves one necessary.
 
 ## Changelog
 
-- 2026-09-07: bounded repair closes [[D3116]]–[[D3119]] in the contract/author gate; fresh review remains.
+- 2026-09-07: bounded repairs close [[D3116]]–[[D3119]] and [[D3131]]–[[D3133]] in the contract/author gate; fresh review remains.
 - 2026-09-07: fresh review returned source aliases, non-canonical lanes, mismatched id grammars and unchecked exports; the seven-resource cut survives.
 - 2026-09-07: author self-audit narrowed absent-source claims and repaired [[D3082]]–[[D3087]].
 - 2026-09-06: owner-directed [[D3034]] cut. Replaced the 1,330-line catalogue/projection/lifecycle/
