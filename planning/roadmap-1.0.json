@@ -435,7 +435,7 @@
         "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-09-07",
-          "summary": "The in-run Support doorway keeps raw evidence-channel controls behind Advanced in the Inspector, and related-rehearsal return doors now speak titles and legal SAN rather than registry ids or UCI. Full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
+          "summary": "The in-run Support doorway keeps raw evidence-channel controls behind Advanced in the Inspector, related-rehearsal return doors speak titles and legal SAN, and Learn recommendations, due work, attempt history and accessible labels now resolve catalogue titles instead of registry ids with an honest unavailable fallback. Full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
           "impact": "advanced",
           "evidence": ["planning/ux-implementation-index.md", "rfc/play-composition.md"],
           "anchors": [{"kind": "rfc", "id": "play-composition.md", "digest": "sha256:2584fcb3f47535662d294ac9d442e432a97ad70dd537ce389929285e9b4fa628"}]

@@ -46,7 +46,9 @@ resolved server-side. Foreign schedules are indistinguishable from missing ones.
 ## Client surface
 
 `/learn` is a real surface and deployment capability. It lists due work and recorded
-attempts, names ungraded work honestly, links back to source runs, and permits dismissal.
+attempts, names pack work through catalogue titles rather than registry ids, names ungraded work
+honestly, links back to source runs, and permits dismissal. If a recorded pack is no longer in the
+catalogue, the surface says **Unavailable rehearsal** without leaking its internal id.
 Its primary due action starts the scheduled attempt itself: pack returns create a current-pack
 run carrying the schedule id, while position returns duplicate their recorded source with the same
 id. *Try this again* creates a separately owned run from a recorded attempt and never mutates the

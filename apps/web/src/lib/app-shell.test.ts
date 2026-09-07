@@ -1083,7 +1083,8 @@ describe("application shell", () => {
       props: { api: learnApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
     });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · attempt 1`));
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`${packSummary.title} · attempt 1`));
+    expect(document.body.textContent).not.toContain(pack.id);
     document.querySelector<HTMLButtonElement>("button[aria-expanded='false']")!.click();
     await vi.waitFor(() => expect(document.body.textContent).toContain("Same position · 2 attempts on that material"));
     expect(document.body.textContent).toContain("Same pack, different position · 1 attempt on that material");
@@ -1134,11 +1135,45 @@ describe("application shell", () => {
       return button!;
     });
     expect(document.body.textContent).toContain("Repeat the blocked attempt");
+    expect(document.body.textContent).toContain(packSummary.title);
+    expect(document.body.textContent).not.toContain(pack.id);
     start.click();
     await vi.waitFor(() => expect(createRunRequest).toHaveBeenCalledWith(
       expect.objectContaining({ intent: { origin: "fresh", scheduleId: schedule.id } }),
       expect.any(String),
     ));
+    await unmount(component);
+  });
+
+  it("uses pack titles across Learn recommendations and refuses unknown registry ids", async () => {
+    history.replaceState(null, "", "/learn");
+    const unknownPackId = "missing-in-catalogue";
+    const learnApi: DrillClientApi = {
+      ...api(),
+      async recommendations() {
+        return [{
+          kind: "shape_encounter" as const,
+          shapeId: "shape-one",
+          shapeName: "Open file",
+          runCount: 1,
+          runIds: [run.id],
+          packIds: [pack.id],
+          sentence: "You recorded this shape in one preserved run.",
+        }];
+      },
+      async dueProgress() {
+        return [{ id: "unknown-schedule", sessionKind: "pack" as const, packId: unknownPackId, kind: "blocked" as const, variant: null, dueAt: "2026-08-23T12:00:00.000Z", sourceRunId: run.id }];
+      },
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: learnApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain(`Find ${packSummary.title}`));
+    expect(document.body.textContent).toContain("Unavailable rehearsal");
+    expect(document.body.textContent).not.toContain(pack.id);
+    expect(document.body.textContent).not.toContain(unknownPackId);
     await unmount(component);
   });
 

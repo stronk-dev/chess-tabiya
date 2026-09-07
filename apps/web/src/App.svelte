@@ -389,7 +389,7 @@
     return Number.isNaN(date.valueOf()) ? value : date.toLocaleString();
   }
 
-  function packTitle(packId:string):string{return packs.find((pack)=>pack.id===packId)?.title??packId;}
+  function packTitle(packId:string):string{return packs.find((pack)=>pack.id===packId)?.title??"Unavailable rehearsal";}
   function isOverdue(dueAt:string|null):boolean{return dueAt!==null&&Date.parse(dueAt)<Date.now();}
   function classroomMemberHandle(learnerId:string):string{return classroomDetail?.members.find((member)=>member.learnerId===learnerId)?.handle??"former member";}
   function assignmentSubmissions(assignmentId:string,learnerId:string){return classroomDetail?.submissions.filter((submission)=>submission.assignmentId===assignmentId&&submission.learnerId===learnerId)??[];}
@@ -1451,7 +1451,7 @@
       </section>
       {#if recommendations.length>0}
         <section aria-labelledby="recommended-title"><h2 id="recommended-title">Recommended next</h2><div class="item-list">
-          {#each recommendations as item}<article><p>{item.sentence}</p>{#if item.kind==="repertoire_gap"}<button type="button" onclick={()=>void enterRepertoireGap(item.repertoireId,item.gapKey)}>Enter gap</button>{:else if item.packIds[0]}<button type="button" onclick={()=>navigate("/play")}>Find {item.packIds[0]}</button>{/if}</article>{/each}
+          {#each recommendations as item}<article><p>{item.sentence}</p>{#if item.kind==="repertoire_gap"}<button type="button" onclick={()=>void enterRepertoireGap(item.repertoireId,item.gapKey)}>Enter gap</button>{:else if item.packIds[0]}<button type="button" onclick={()=>navigate("/play")}>Find {packTitle(item.packIds[0])}</button>{/if}</article>{/each}
         </div></section>
       {/if}
       <section aria-labelledby="repertoire-title">
@@ -1500,7 +1500,7 @@
           {#each dueSchedules as schedule}
             <article>
               <div>
-                <h3>{schedule.packId ?? "Position rehearsal"}</h3>
+                <h3>{schedule.packId === null ? "Position rehearsal" : packTitle(schedule.packId)}</h3>
                 <p>{schedule.kind === "blocked" ? "Repeat the blocked attempt" : "Try a varied repetition"} · {readableDate(schedule.dueAt)}</p>
               </div>
               <div class="row-actions">
@@ -1521,7 +1521,7 @@
             <article class="recorded-attempt">
               <div class="recorded-attempt-header">
                 <div>
-                  <h3>{attempt.packId ?? "Position rehearsal"} · attempt {attempt.attemptNo || "—"}</h3>
+                  <h3>{attempt.packId === null ? "Position rehearsal" : packTitle(attempt.packId)} · attempt {attempt.attemptNo || "—"}</h3>
                   <p>{attempt.graded ? attemptVerdictLabel(attempt.verdict) : "Not graded"} · {attempt.userPlyCount} learner plies · {readableDate(attempt.endedAt)}</p>
                 </div>
                 <div class="row-actions">
@@ -1533,7 +1533,7 @@
               {#if related?.status === "loading"}<p role="status">Finding your nearest related attempts…</p>
               {:else if related?.status === "error"}<p role="alert">{related.message}</p>
               {:else if related?.status === "loaded"}
-                <ul class="related-attempts" aria-label={`Related attempts for ${attempt.packId ?? "this position"}`}>
+                <ul class="related-attempts" aria-label={`Related attempts for ${attempt.packId === null ? "this position" : packTitle(attempt.packId)}`}>
                   {#each related.items as item}
                     <li><span><strong>{relatedAttemptLabel(item.relation)}</strong> · {item.attemptCount} {item.attemptCount === 1 ? "attempt" : "attempts"} on that material</span><button type="button" onclick={() => navigate(routePath({ name: "run", runId: item.runId }))}>Open</button></li>
                   {:else}<li>No other recorded attempts match this position or pack yet.</li>{/each}

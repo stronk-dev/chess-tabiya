@@ -18344,3 +18344,11 @@ The real App loads `philidor-passive-rook-convert`, resolves its sibling through
 renders “After Rh8” plus the Philidor source title while refusing both stored internal strings. A
 route-generation guard also prevents a late sibling response from relabelling a newer run. The full
 browser suite passes 62 journeys with one optional Maia latency probe skipped.
+
+## 2026-09-07 — Learn resolves pack identity into learner vocabulary
+
+The implemented return-and-progression contract says Due and recorded work show pack titles, but
+the client printed `packId` in recommendations, due work, attempt headings and related-attempt
+labels. All four now resolve through the already-loaded catalogue. A missing historical pack says
+“Unavailable rehearsal” rather than exposing its registry id. Route-level component coverage
+asserts the known and missing cases; `make test-software` passes 1,126 tests / 182 files.
