@@ -1,13 +1,13 @@
 # RFC: Review evidence compiler
 
-- **Status:** draft — **RETURNED BY FOURTH FRESH INDEPENDENT REVIEW 2026-09-07 on
-  [[D3109]]–[[D3115]].** The third repair's local seals and set checks survive, but the executable
-  model authorizes caller-described prefixes, invents nine generic adapters, admits arbitrary
-  evidence digests and then discards them, emits count-only node packets, drops completion and
-  required Story fields, hashes with a lossy private serializer and leaves the attempt lifecycle
-  unimplemented. `make review-evidence-fourth-fresh-review` retains the chain and reproduces 7/7.
-  No production implementation is authorised before a bounded fourth author repair, another fresh
-  review and the declared dependencies land.
+- **Status:** draft — **FOURTH AUTHOR REPAIR COMPLETE 2026-09-07 on
+  [[D3109]]–[[D3115]].** The executable model now derives prefixes from sealed run/path/import
+  authorities, compiles a literal projection/adapter relation against manifest eligibility,
+  retains sealed typed evidence in complete node packets, carries the orthogonal completion fold
+  into the complete Story wire, uses the shared RFC-8785 serializer and executes bounded
+  retry/cancel/success-release transitions. `make review-evidence-fourth-author-repair` retains all
+  predecessor controls and passes six repair groups plus repository TypeScript. No production
+  implementation is authorised before another fresh review and the declared dependencies land.
 - **Author:** codex, on the D717 evidence-foundation routing and the completed Wave-C C4 research
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` Review/Analyze surfaces;
@@ -784,6 +784,48 @@ in opt-in `verify-rfc-evidence`, not release governance. This is an author retur
 protected-design change is authorised. Exact receipt:
 `planning/evidence-foundation-ux/review-evidence-compiler-fourth-fresh-independent-buildability-review-2026-09-07.md`.
 
+## Fourth author repair (2026-09-07)
+
+The fourth return is repaired as one composed compiler boundary rather than seven isolated shape
+checks:
+
+1. [[D3109]] — the public prefix input has exactly `run`, `branchId` and `importedRecord`. The author
+   model admits only a sealed run, invokes `recordedSemanticPath`, follows the authorized branch tip,
+   takes the highest contiguous event head, derives learner side and outcome, and retains a private
+   path snapshot beside the issued receipt. A caller cannot supply or overwrite a receipt field.
+2. [[D3110]] — each adapter row is literal
+   `{id, projection, family, operation, parser, input}` and names a real declared projection rather
+   than `review.${family}@1`. Compilation rejects duplicates and requires projection-set equality
+   with the supplied Review-eligible manifest population. The author fixture exercises all nine
+   families; the production population remains correctly blocked on D921's accepted literal
+   eligibility list instead of being forecast here.
+3. [[D3111]]/[[D3112]] — an available source contains one private-sealed, projection-typed evidence
+   item whose digest is computed from its exact payload. Adapter, projection, node and subject must
+   agree. The compiler retains the item and digest in the exact `ReviewNodePacket` alongside ply,
+   `Node.transposeKey`, incoming move, links and all nine family states. Family item counts are
+   derived from retained items, never synthesized as `1` from an arbitrary string.
+4. [[D3113]] — `foldReviewCompletion` is a retained packet field. Story construction copies the
+   exact subject, manifest and packet identities plus progress, degradation, family folds, sealed
+   title receipt, full moments and closed rank; none can be supplied through an independent story
+   context.
+5. [[D3114]] — every author-model identity uses the shared
+   `@chess-tabiya/schema/drill-pack` `canonicalizeJson` implementation with a literal domain prefix.
+   Non-finite numbers, lone surrogates and unsupported values fail before hashing; key order is
+   canonical.
+6. [[D3115]] — settlement parses the closed retryable/non-retryable/success/cancel union. Equal
+   concurrent requests share one promise; retryable failures consume the exact bounded attempt
+   count; cancellation releases a pending slot; exhaustion refuses provider work; and a success may
+   leave the bounded in-process store only after `releaseSucceeded` receives its exact attached
+   delivery digest. The durable evidence row then owns idempotence—removing an in-process success
+   before attachment or retaining it forever both fail.
+
+`make review-evidence-fourth-author-repair` retains the original, second and third author controls,
+executes the six repair groups and compiles the model under the repository TypeScript dialect.
+Exact receipt:
+`planning/evidence-foundation-ux/review-evidence-compiler-fourth-author-repair-2026-09-07.md`.
+Another genuinely fresh review must attack the authority composition before acceptance or product
+work.
+
 ## 8. Acceptance criteria
 
 1. **Typed shared delivery:** White/Black cp and mate fixtures compile into the one
@@ -895,6 +937,12 @@ The existing Story order is preserved only as a labelled compatibility conventio
 
 ## Changelog
 
+- 2026-09-07 fourth author repair ([[D3109]]–[[D3115]]): exact recorded-prefix derivation, literal
+  projection adapters, retained typed evidence and complete node packets, retained completion and
+  complete Story wire, shared fail-closed canonicalization and bounded retry/cancel/success-release
+  now execute together. `make review-evidence-fourth-author-repair` retains every predecessor and
+  passes six repair groups plus strict TypeScript. Fresh review and declared dependencies still
+  gate production.
 - 2026-09-05 third author repair ([[D2685]]–[[D2692]]): executable deep prefix/packet authority,
   exact node/family folds, single-flight terminal settlement, source-plan compilation and sealed
   presentation termination replace the prior prose/shallow models. The live module contract is

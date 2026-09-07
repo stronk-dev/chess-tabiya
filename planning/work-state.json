@@ -25356,7 +25356,7 @@
       "state": "blocked",
       "owner": "review-and-return",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f4a513bd2330a5bb52e9d33e805ca1542f39ea81164299df38cc7f81f6d62c68",
+      "sourceDigest": "sha256:660ee6336588ad36296490bb8b2298b3133326c63de7e794583a911f1e76a468",
       "uxItems": [],
       "blocker": "rfc:review-evidence-compiler.md"
     },
@@ -25365,7 +25365,7 @@
       "state": "blocked",
       "owner": "review-and-return",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5d5f310238030c448a05b9ce1f5c290dad6c55ebd53b1256de01697701fb0ae8",
+      "sourceDigest": "sha256:9818bcade1a9147d3625c6a793885a1a1d89b8408256533c1fb76eee2ad440c0",
       "uxItems": [],
       "blocker": "rfc:review-evidence-compiler.md"
     },
@@ -25374,7 +25374,7 @@
       "state": "blocked",
       "owner": "review-and-return",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:cf48193ab57edc0bef6abb64c5ab7658a08a95c1800c9c9a4f7cd18aad629d94",
+      "sourceDigest": "sha256:1437a341133f7e593817ee1b094f33f76899886014d482c23378baad8d200721",
       "uxItems": [],
       "blocker": "rfc:review-evidence-compiler.md"
     },
@@ -25383,7 +25383,7 @@
       "state": "blocked",
       "owner": "review-and-return",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2c41ecfc49cbe4d5290d9b580614ed98add9f9b492946e05b34317f8b721527f",
+      "sourceDigest": "sha256:9c960e3b31aa5e6c441a6972f5012130234f1ab290f6b27c858871a1ca6f2fb0",
       "uxItems": [],
       "blocker": "rfc:review-evidence-compiler.md"
     },
@@ -25392,7 +25392,7 @@
       "state": "blocked",
       "owner": "review-and-return",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4c7a08841ceee286ff957ba542970d80ac964f6fa893924c1638feefc59e55a0",
+      "sourceDigest": "sha256:386846ce4d8033c371fe422fae15fe018a763c3e36be6485953c58c0e079f670",
       "uxItems": [],
       "blocker": "rfc:review-evidence-compiler.md"
     },
@@ -25401,7 +25401,7 @@
       "state": "blocked",
       "owner": "review-and-return",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9f45bb38cbb1d3f768fcd5b3696df45bd56da3f923e97b4559a932b19b361352",
+      "sourceDigest": "sha256:f93c4173b1588d42ce009b3fb1df4d6dc27c8128237c6ac9926a729cee3991bd",
       "uxItems": [],
       "blocker": "rfc:review-evidence-compiler.md"
     },
@@ -25410,7 +25410,7 @@
       "state": "blocked",
       "owner": "review-and-return",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ae7c5b013c2c9113eeb1a623d727c14e6f0bd49a7daa41a01d7d0861e61b2949",
+      "sourceDigest": "sha256:e8e66cfcd443b6220e911c2e828cfd60baaec254cfd9e3728ab0e92454314c9f",
       "uxItems": [],
       "blocker": "rfc:review-evidence-compiler.md"
     },

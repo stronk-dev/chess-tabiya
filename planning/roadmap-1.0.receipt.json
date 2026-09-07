@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:47a0ea0886ded3a6601daf1f7a4edfeac30b0135c16fbd7da4e6babd1eb13729",
+    "roadmap": "sha256:a86141fb38423cab8a5b3780c0c8d865c4e2c2f53782c3579693a284c3db88c0",
     "workItems": "sha256:983e2f3a517cfd73cdddab99412d3ec51f03803642923436f30454b5bf0f0b7d",
-    "workState": "sha256:13b107675f1d73ebfbe1b59400a104ef5f1f6e179d74b176b5ee8ccd3a2f6a4d",
-    "rfcRegister": "sha256:1f7a8688a2b740ace8cfcde0d91e53d77e49db5445a4a74c638940b766f8a004",
+    "workState": "sha256:15858a6910f7f1cac3bf8a31b2e635019abb59ab6d5e50bd9055f4948434bd4c",
+    "rfcRegister": "sha256:a4f700e83bd78f3295f07c652c0457ff5dda8110c7eac29071fc6e3c69712ec6",
     "uxIndex": "sha256:5ca3e23500716997bf5a89e941981f81f59244826bf9983b8a0d358294519080",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -155,33 +155,32 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Freshly review and land the generic shared-resource bootstrap, then freshly review the eight-criterion provider-protocol population, claim provider lane 1, and review/implement the provider-exchange durable parser before bot replay or the 127 module operations consume provider evidence.",
+      "nextAction": "Freshly review and land the generic shared-resource bootstrap, then the eight-criterion provider-protocol population and provider-exchange durable parser. In parallel, freshly review the repaired Review compiler and land D921's exact manifest eligibility so typed evidence packets can seed Review and mistake-return decks.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "The provider-protocol process RFC is cut to eight active criteria for one absent generic catalogue/register population; six rounds of provider-local Git and acceptance machinery are retained only as history. Provider exchange now owns one operation-specific save/reload parser for full delivery reconstruction, routing the bot D3030 durable-authority blocker to the shared evidence spine.",
+        "summary": "The fourth Review compiler repair replaces caller testimony, generic family placeholders, arbitrary digest counts and incomplete Story bytes with sealed recorded-prefix derivation, literal manifest-equal adapters, retained typed evidence in complete node packets, shared canonical identities and a bounded retry/cancel/success-release lifecycle. This is the packet foundation for trustworthy Review and mistake-derived return decks; fresh review and declared producer dependencies still gate production.",
         "impact": "advanced",
         "evidence": [
-          "planning/provider-protocol-register/cut-author-repair-2026-09-07.md",
-          "tools/d3128-provider-protocol-cut-contract/contract.test.mjs",
-          "rfc/provider-protocol-register.md",
-          "rfc/provider-exchange-and-execution.md",
+          "planning/evidence-foundation-ux/review-evidence-compiler-fourth-author-repair-2026-09-07.md",
+          "tools/d3109-review-evidence-fourth-author-repair/contract.test.ts",
+          "rfc/review-evidence-compiler.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
-            "id": "D3128",
-            "digest": "sha256:e9007016cd22a364c4b3f7da88b182cec3df0420c2c776915a26b9831b043f1e"
+            "id": "D3109",
+            "digest": "sha256:660ee6336588ad36296490bb8b2298b3133326c63de7e794583a911f1e76a468"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3115",
+            "digest": "sha256:e8e66cfcd443b6220e911c2e828cfd60baaec254cfd9e3728ab0e92454314c9f"
           },
           {
             "kind": "rfc",
-            "id": "provider-protocol-register.md",
-            "digest": "sha256:69f82804e59fcd1ae0d7eb9959da95526e39eff5961e20a80d1b1d39e036a046"
-          },
-          {
-            "kind": "rfc",
-            "id": "provider-exchange-and-execution.md",
-            "digest": "sha256:0af61c7afebab5d18c078a00591be9981efe02df7817b4efdac5c02d08245e8a"
+            "id": "review-evidence-compiler.md",
+            "digest": "sha256:95440044a52d70d395540e4d6f067b2dae88b7a44123af7c874d6222212cd256"
           }
         ]
       },

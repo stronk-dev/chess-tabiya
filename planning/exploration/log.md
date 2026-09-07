@@ -18269,3 +18269,18 @@ envelope.
 descriptor, bounded active section, parser handoff and CI tier. One fresh review of the cut plus the
 accepted/implemented shared bootstrap still precede process implementation; provider exchange then
 claims lane 1 and must freshly review the durable parser before production work.
+
+## 2026-09-07 — Review evidence compiler fourth author repair
+
+**What changed:** [[D3109]]–[[D3115]] are repaired together at author tier. Review subject fields now
+derive from sealed run/path/import authorities; literal real-projection adapters are checked against
+manifest eligibility; available results retain typed evidence in complete node packets; completion
+survives into the complete Story image; all identities use the shared fail-closed RFC-8785
+serializer; and the attempt store implements parsed outcomes, shared completion, bounded retry,
+cancellation, exhaustion and exact post-attachment success release.
+
+**Evidence/next:** `make review-evidence-fourth-author-repair` retains 17 predecessor controls,
+passes six new repair groups and compiles under the repository TypeScript dialect. D921 still owns
+the final production adapter population rather than this author fixture forecasting it. Another
+genuinely fresh review and the recorded-path/provider/candidate-packet/presentation dependencies
+still precede implementation. No product, API, schema, client or content byte changed.

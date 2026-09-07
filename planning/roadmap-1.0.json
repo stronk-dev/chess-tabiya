@@ -351,16 +351,16 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Freshly review and land the generic shared-resource bootstrap, then freshly review the eight-criterion provider-protocol population, claim provider lane 1, and review/implement the provider-exchange durable parser before bot replay or the 127 module operations consume provider evidence.",
+        "nextAction": "Freshly review and land the generic shared-resource bootstrap, then the eight-criterion provider-protocol population and provider-exchange durable parser. In parallel, freshly review the repaired Review compiler and land D921's exact manifest eligibility so typed evidence packets can seed Review and mistake-return decks.",
         "latestCheckpoint": {
           "at": "2026-09-07",
-          "summary": "The provider-protocol process RFC is cut to eight active criteria for one absent generic catalogue/register population; six rounds of provider-local Git and acceptance machinery are retained only as history. Provider exchange now owns one operation-specific save/reload parser for full delivery reconstruction, routing the bot D3030 durable-authority blocker to the shared evidence spine.",
+          "summary": "The fourth Review compiler repair replaces caller testimony, generic family placeholders, arbitrary digest counts and incomplete Story bytes with sealed recorded-prefix derivation, literal manifest-equal adapters, retained typed evidence in complete node packets, shared canonical identities and a bounded retry/cancel/success-release lifecycle. This is the packet foundation for trustworthy Review and mistake-derived return decks; fresh review and declared producer dependencies still gate production.",
           "impact": "advanced",
-          "evidence": ["planning/provider-protocol-register/cut-author-repair-2026-09-07.md", "tools/d3128-provider-protocol-cut-contract/contract.test.mjs", "rfc/provider-protocol-register.md", "rfc/provider-exchange-and-execution.md", "rfc/README.md"],
+          "evidence": ["planning/evidence-foundation-ux/review-evidence-compiler-fourth-author-repair-2026-09-07.md", "tools/d3109-review-evidence-fourth-author-repair/contract.test.ts", "rfc/review-evidence-compiler.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "work_state", "id": "D3128", "digest": "sha256:e9007016cd22a364c4b3f7da88b182cec3df0420c2c776915a26b9831b043f1e"},
-            {"kind": "rfc", "id": "provider-protocol-register.md", "digest": "sha256:69f82804e59fcd1ae0d7eb9959da95526e39eff5961e20a80d1b1d39e036a046"},
-            {"kind": "rfc", "id": "provider-exchange-and-execution.md", "digest": "sha256:0af61c7afebab5d18c078a00591be9981efe02df7817b4efdac5c02d08245e8a"}
+            {"kind": "work_state", "id": "D3109", "digest": "sha256:660ee6336588ad36296490bb8b2298b3133326c63de7e794583a911f1e76a468"},
+            {"kind": "work_state", "id": "D3115", "digest": "sha256:e8e66cfcd443b6220e911c2e828cfd60baaec254cfd9e3728ab0e92454314c9f"},
+            {"kind": "rfc", "id": "review-evidence-compiler.md", "digest": "sha256:95440044a52d70d395540e4d6f067b2dae88b7a44123af7c874d6222212cd256"}
           ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."
