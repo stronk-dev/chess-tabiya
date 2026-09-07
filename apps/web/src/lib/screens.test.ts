@@ -613,9 +613,11 @@ describe("Layer 3 screens", () => {
     await tick();
     const reveal = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Show support for this position")!;
     expect(reveal.disabled).toBe(false);
+    expect(reveal.getAttribute("aria-describedby")).toBe("temporary-help-cost");
+    expect(document.getElementById("temporary-help-cost")?.textContent).toContain("closes again after your next committed move");
     reveal.click();
     expect(onReveal).toHaveBeenCalledTimes(1);
-    expect(document.body.textContent).toContain("It closes again after your next move.");
+    expect(document.body.textContent).toContain("closes again after your next committed move");
     expect(document.body.textContent).not.toContain("Recorded on the run as a disclosure");
     await unmount(component);
 
@@ -623,6 +625,32 @@ describe("Layer 3 screens", () => {
     component = mount(DrillScreen, { target: target(), props: { snapshot: { run, access: "read_only", pendingEvidence: 0, withheld: false }, onReveal, ...shared } });
     await tick();
     expect(document.body.textContent).not.toContain("Show support for this position");
+    await unmount(component);
+  });
+
+  it("turns an unrecognized structure into continue-or-rewind loop actions", async () => {
+    const run = createRun({
+      id: "support-empty-screen",
+      session: { kind: "position", start: { fen: "8/8/8/8/8/4k3/8/R3K3 w - - 0 1", side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"d".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1,
+      createdAt: at,
+    });
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+
+    const empty = document.querySelector<HTMLElement>('.support-empty[aria-labelledby="support-empty-title"]')!;
+    expect(empty.textContent).toContain("Nothing recognizes this structure yet");
+    expect(empty.textContent).toContain("Play it and see what the consequence exposes");
+    expect(empty.textContent).not.toContain("Rewind to a decision");
+    empty.querySelector<HTMLButtonElement>("button")!.click();
+    await tick();
+    expect(document.activeElement).toBe(document.querySelector("[data-board-input-grid]"));
     await unmount(component);
   });
 

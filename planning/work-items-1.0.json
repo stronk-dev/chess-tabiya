@@ -5570,17 +5570,21 @@
     {
       "id": "INR-a2",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-in-run.md",
       "sourceSection": "§1.3",
       "sourceHeading": "The in-run experience — `ux-in-run.md`",
       "summary": "The help door states its disclosure cost in the same breath as the offer, **before** the click",
       "legacyRoute": "none",
       "note": "the shipped disclosure copy is the template",
-      "sourceDigest": "sha256:871f11fe16940d09057862695d4d8e085d5d13f5173a37540e368d85644971c2"
+      "sourceDigest": "sha256:871f11fe16940d09057862695d4d8e085d5d13f5173a37540e368d85644971c2",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "apps/web/src/lib/DrillScreen.svelte"
+      }
     },
     {
       "id": "INR-a3",
@@ -5600,17 +5604,21 @@
     {
       "id": "INR-a4",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-in-run.md",
       "sourceSection": "§2.3",
       "sourceHeading": "The in-run experience — `ux-in-run.md`",
       "summary": "The honest empty carries the loop: *\"Nothing recognizes this structure — play it and see, or rewind.\"*",
       "legacyRoute": "ledger",
       "note": "[[D1456]], called the strongest product idea in the wave, and in no queue",
-      "sourceDigest": "sha256:7ec82cd795dc690c86bdb56f0d78476e0797b28422c58f02674b2e38aaaaf185"
+      "sourceDigest": "sha256:7ec82cd795dc690c86bdb56f0d78476e0797b28422c58f02674b2e38aaaaf185",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "apps/web/src/lib/DrillScreen.svelte"
+      }
     },
     {
       "id": "INR-a5",

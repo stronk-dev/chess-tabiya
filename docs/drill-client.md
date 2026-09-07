@@ -140,11 +140,18 @@ disclosed. Until disclosure:
 - `/evidence` withholds staged results, while attempts to apply them return the
   typed `FEEDBACK_WITHHELD` error.
 
-The run's Support region exposes **Open evidence for this position** only for a writable
-`attempt_end` run. Opening it records `feedback.revealed`; while open the control states that the
-window closes on the next committed move. Read-only viewers and other feedback policies do not see
-the control. A live-match refusal remains server-authoritative and reaches the existing visible
-alert; the client does not guess whether the match is paused.
+The run's Support region exposes **Show support for this position** only for a writable
+`attempt_end` run. Before the action, its bound disclosure says that opening it reveals grounded
+position help and that the window closes on the next committed move. Opening it records
+`feedback.revealed`; while open a status repeats the boundary. Read-only viewers and other feedback
+policies do not see the control. A live-match refusal remains server-authoritative and reaches the
+existing visible alert; the client does not guess whether the match is paused.
+
+An unrecognized current structure is a loop state rather than a blank card or evidence dump. The
+Support seat says that no structure is recognized yet and offers **Keep playing**, which restores
+focus to the semantic board. It offers **Rewind to a decision** only when the active history
+contains a destination already admitted by the timeline's runtime-derived rewind set. Read-only,
+terminal, and busy states retain their disabled action with a visible reason.
 
 The same region owns the ordinary on-request calculation workflow. **Calculate this position**
 requests one bounded recorded line for the current node without requiring a branch group or an

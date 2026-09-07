@@ -1385,7 +1385,7 @@ Primary RFCs: `play-composition`, `pack-training-forms`. UX owners: ARR and CLP 
 
 <!-- roadmap-capability: support -->
 
-**State: stable composition shipped; evidence-backed ordinary UX missing.** The goal is not rated engine moves. Modules
+**State: stable composition shipped; first honest-empty/action path shipped; compiled modules still missing.** The goal is not rated engine moves. Modules
 translate selected evidence at controlled disclosure distance: theory breadcrumb, pattern,
 relevant square/piece, threat/defence relation, prevention highlight, or an explicit move only when
 the workflow permits. The board/companion shell now provides stable seats, but the eleven typed
@@ -1400,6 +1400,11 @@ renderers over sealed items, never graders, selectors, chess authorities, or ava
 
 Primary RFCs: `learner-modules`, `module-registration`, `hint-distance`, `assistance-config-register`,
 `evidence-presentation`, `intent-presets`. UX owners: INR and SET items.
+The first ordinary Support closeout now makes the disclosure cost visible before temporary help is
+opened and turns an unrecognized structure into two legitimate loop actions: return focus to the
+board, or rewind only to a runtime-admitted earlier decision. This closes INR-a2/a4 without
+claiming INR-a7's all-module coverage, the still-missing compiled module rail, preset pill, or
+producer-backed hint ladder.
 The 2026-08-26 independent presentation review returns the thirteen-component landing on
 [[D1664]]–[[D1672]]. The component vocabulary is still the required layer, but manifest strings
 cannot seal typed visual operands; conventions are caller-writable; citation/enum/abstention and

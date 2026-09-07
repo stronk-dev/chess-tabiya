@@ -18413,3 +18413,14 @@ position. A production service fixture now submits Chess960 both without FEN and
 and castling bytes; both return `IMPORT_INVALID_PGN`, and the storage list remains empty. D1033 and
 IMP-a11 close as a refuted defect with executable evidence. This does not add Chess960 support;
 rules-aware variant identity remains owned by the returned `variants.md` contract.
+
+## 2026-09-07 — Support emptiness now carries the rehearsal loop
+
+Temporary position help now states its disclosure boundary before activation and binds that copy
+to the action. When neither the named-structure detector nor an active authored shape recognizes
+the current position, Support renders an ordinary learner card rather than raw evidence: keep
+playing restores focus to the semantic board, while rewind appears only for a prior decision in
+the runtime-derived timeline rewind set. Disabled actions retain visible reasons. This completes
+INR-a2 and INR-a4. INR-a7's requirement to give every declared module empty a next action, the
+compiled eleven-module rail, preset promise and evidence-backed hint stages remain open rather than
+being inferred from this composition slice.

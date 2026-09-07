@@ -415,6 +415,12 @@
     }
     return ids;
   });
+  let previousSupportRewindNodeId = $derived(
+    [...historyFrom(run, run.activeCursor.nodeId)]
+      .reverse()
+      .find((node) => node.id !== run.activeCursor.nodeId && timelineRewindNodeIds.has(node.id))
+      ?.id,
+  );
   let entries = $derived(timelineEntries(run, pack));
   let path = $derived(historyFrom(run, run.activeCursor.nodeId));
   let firings = $derived(shapeFiringEvidence(shapeFirings(shapes, path)));
@@ -754,6 +760,10 @@
     await onRewind(target);
   }
 
+  function focusBoardFromSupport(): void {
+    mainElement?.querySelector<HTMLElement>("[data-board-input-grid]")?.focus();
+  }
+
   async function switchRunBranch(nodeId: string, branchId: string): Promise<void> {
     selectedSquare = undefined;
     await onSwitchBranch(nodeId, branchId);
@@ -1073,7 +1083,7 @@
         <details class="assistance-control" bind:open={assistanceMenuOpen}>
           <summary>Support</summary>
           <div class="support-menu">
-            <p>Open the help available in this workflow. Detailed evidence controls stay in the Inspector.</p>
+            <p>Open the help available in this workflow. This does not reveal a move. Temporary position help must be opened explicitly and closes after your next move.</p>
             <button type="button" onclick={(event) => { assistanceMenuOpen = false; openAssistance(event); }}>Open support</button>
             <button type="button" onclick={openAdvancedSupport}>Advanced support controls</button>
           </div>
@@ -1204,9 +1214,9 @@
             {/if}
             {#if run.feedbackPolicy === "attempt_end" && canWrite && onReveal !== undefined}
               <section class="evidence-reveal" aria-label="Temporary help">
-                <button type="button" disabled={feedbackDeliveryOpen(run) || busy} onclick={() => void onReveal?.()}>Show support for this position</button>
-                {#if feedbackDeliveryOpen(run)}<p>Support is available for this position until you commit your next move.</p>{/if}
-                <p>It closes again after your next move.</p>
+                <p id="temporary-help-cost">Opening this reveals grounded help for this position. It closes again after your next committed move.</p>
+                <button type="button" disabled={feedbackDeliveryOpen(run) || busy} aria-describedby="temporary-help-cost" onclick={() => void onReveal?.()}>Show support for this position</button>
+                {#if feedbackDeliveryOpen(run)}<p role="status">Support is available for this position until you commit your next move.</p>{/if}
               </section>
             {/if}
             <section class="analysis-request" aria-labelledby="analysis-request-title">
@@ -1247,6 +1257,21 @@
             {/if}
             {#if overlayCaption.length > 0}<div class="overlay-caption" role="status" aria-live="polite" aria-atomic="true" data-evidence-consumer="board.selected_square_sight">{#each overlayCaption as sentence}<p>{sentence}</p>{/each}</div>{/if}
             {#if assistance.boardLighting === "evidence" && !feedbackDeliveryOpen(run)}<p class="overlay-caption honest">No disclosed evidence exists here; structural sight remains available.</p>{/if}
+            {#if rawStructure.structures.length === 0 && !firings.some((firing) => firing.openEnded && firing.lastNodeId === currentNode.id)}
+              <section class="support-empty" aria-labelledby="support-empty-title">
+                <p>Position pattern</p>
+                <h2 id="support-empty-title">Nothing recognizes this structure yet</h2>
+                <p>That is not a dead end. Play it and see what the consequence exposes, or return to an earlier decision and try another idea.</p>
+                <div class="support-empty-actions">
+                  <button class="primary" type="button" disabled={busy || !canWrite || terminalEvent !== undefined} aria-describedby={busy || !canWrite || terminalEvent !== undefined ? "support-keep-playing-disabled" : undefined} onclick={focusBoardFromSupport}>Keep playing</button>
+                  {#if busy || !canWrite || terminalEvent !== undefined}<span id="support-keep-playing-disabled" class="honest">{!canWrite ? "This read-only view cannot play a move." : terminalEvent !== undefined ? "This line has ended; rewind to keep exploring." : "Wait for the current move to finish."}</span>{/if}
+                  {#if previousSupportRewindNodeId !== undefined}
+                    <button type="button" disabled={busy || !canWrite} aria-describedby={busy || !canWrite ? "support-rewind-disabled" : undefined} onclick={() => void rewindRun({ nodeId: previousSupportRewindNodeId! })}>Rewind to a decision</button>
+                    {#if busy || !canWrite}<span id="support-rewind-disabled" class="honest">{!canWrite ? "This read-only view cannot rewind the run." : "Wait for the current move to finish."}</span>{/if}
+                  {/if}
+                </div>
+              </section>
+            {/if}
             <OutcomeContext {assessment} {resistance} grade={pack === undefined ? undefined : objectiveGradeSentence(pack.objective.type, currentNode.objectiveState)} />
             {#if banner !== undefined}<WhyBanner model={banner} />{/if}
           </section>
@@ -1780,6 +1805,14 @@
   .analysis-request-actions button { padding:.5rem .65rem; border:1px solid var(--line); border-radius:.6rem; background:var(--paper); color:inherit; }
   .analysis-request-actions button:first-child:not(:disabled) { border-color:var(--accent); color:var(--accent); }
   .analysis-ready { color:var(--accent)!important; }
+  .evidence-reveal, .support-empty { display:grid; gap:.45rem; padding:.75rem; border:1px solid var(--line); border-radius:.8rem; background:var(--panel); }
+  .evidence-reveal p, .support-empty > p, .support-empty h2 { margin:0; }
+  .evidence-reveal p, .support-empty > p:last-of-type { color:var(--muted); font-size:.76rem; line-height:1.4; }
+  .support-empty > p:first-child { color:var(--accent); font:700 .62rem ui-monospace,monospace; letter-spacing:.08em; text-transform:uppercase; }
+  .support-empty h2 { font:600 1rem/1.2 var(--display-font); }
+  .support-empty-actions { display:flex; flex-wrap:wrap; gap:.4rem; }
+  .evidence-reveal button, .support-empty-actions button { justify-self:start; padding:.5rem .65rem; border:1px solid var(--line); border-radius:.6rem; background:var(--paper); color:inherit; }
+  .evidence-reveal button:not(:disabled), .support-empty-actions button.primary:not(:disabled) { border-color:var(--accent); color:var(--accent); }
   .assistance-control summary { cursor:pointer; }
   .support-menu { position:absolute; top:calc(100% + .4rem); right:0; z-index:4; display:grid; width:min(19rem,calc(100vw - 2rem)); gap:.45rem; padding:.7rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); box-shadow:var(--shadow); }
   .support-menu p { margin:0; color:var(--muted); font-size:.75rem; }
