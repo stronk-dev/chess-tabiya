@@ -25633,6 +25633,42 @@
       ],
       "evidence": "apps/web/src/App.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3140",
+      "state": "done",
+      "evidence": "apps/web/src/lib/DrillScreen.svelte",
+      "evidenceKind": "path",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f58ce6abd6161e39aee08b482a49fd1a66832b1953418ab45d9db60cd0a04770",
+      "uxItems": []
+    },
+    {
+      "id": "D3141",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:77532e2122cec5f5345bcae4a45739b4dcdffc7ab12eda626fe7ab555382bce3",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3142",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c94cae11462789f326185c064c625b7278cd85e53b970197828f9dff669c58f1",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3143",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:52f7eac275ecc96beaf7f83cf7b6a70a6bd41ec31b1da6e40b6bcd9f565650ae",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

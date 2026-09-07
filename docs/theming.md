@@ -28,6 +28,8 @@ The Settings preview composes scoped real chrome with the actual Chessground
 board and piece assets. Its representative position exposes every piece role in
 both colors, check, history, legal destinations, and the registered mark brushes;
 previewing one axis never mutates another or changes the document-level choice.
+The small board explanation uses the normal foreground token rather than muted
+copy because its measured Warm Light pairing otherwise falls below 4.5:1.
 
 ## Preference and resolution
 

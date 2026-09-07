@@ -18492,3 +18492,37 @@ page. Those four surfaces state the shown/total count and load additional bounde
 duplicates; Home intentionally requests one run for its one Continue action. Storage and API
 censuses plus a mounted Review transition bind the contract. D3139 closes, and the combined
 Story, Learn and run-history repairs complete INR-a11.
+
+## 2026-09-08 — Short-viewport palettes preserve the board they depend on
+
+The branch-group creator asked learners to choose moves on the shared board while its fixed
+palette could cover that board at the supported 320×256 reflow floor. It also had no focus entry
+and could not close from the semantic grid because the board controller legitimately bounded the
+Escape event. The palette is now explicitly non-modal, enters the drill's vertical flow on short
+viewports, owns bounded overflow, focuses its heading, offers a named route back to the board and
+closes through a capture-phase Escape boundary with focus restoration. A mounted 320×256 journey
+selects e2-e4 on the real board and observes the uncommitted candidate in the still-open palette.
+The named-structure detail overlay receives the same viewport-bound overflow and one-column short
+composition. D3140 closes this in-run slice of A11-a29; the aggregate surface audit remains open.
+
+The same full browser-gate run exposed D3141: two journeys still target the removed Settings
+deletion-preview action and sixteen locate the explicitly served browser fixture through the raw
+`schema_example` wire token that the learner-copy boundary correctly removed. That is test debt,
+not product proof; the gate must bind to current copy and stable accessible identity before it can
+be used as release evidence. The repair also updated Live, phase and unknown-phase assertions to
+their current learner copy. A forced-colours check had a separate renderer race: it mutated a
+Chessground-owned square and sometimes lost the class before reading computed style. The ordinary
+destination remains a live-board proof; synthetic `.oc` and `.check` combinations now use a stable
+probe inside the real board styling scope. `make test-browser-smoke` completes with 39 passed and
+one optional Maia measurement skipped. D3141 closes without a timing retry or product regression.
+
+The browser matrix then found one product defect and two stale harness assumptions. The Appearance
+preview's 11.52px explanation measured 4.14:1 in Warm Light; it now uses the normal foreground
+token and the real axe scan is green. The keyboard helper still stripped the deleted global
+`board-square-` prefix, so scoped ids produced invalid navigation origins; it now parses the exact
+square suffix and verifies the active descendant is owned by the current grid. Finally, the shell
+test mistook a hidden root's intrinsic `scrollHeight` for user-visible document scrolling and
+rejected Settings for correctly owning long content in `.shell-view`; it now asserts the actual
+root/app/shell clipping boundary and viewport fit. `make test-browser-matrix` passes 19/19 across
+desktop, tablet, mobile, accessibility, all permanent input modes and post-gesture states. D3142
+and D3143 close.

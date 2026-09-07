@@ -189,6 +189,7 @@
   let checkpointPickerInvoker: HTMLElement | undefined;
   let compareInvoker: HTMLElement | undefined;
   let shapeInvoker: HTMLElement | undefined;
+  let groupInvoker: HTMLElement | undefined;
   let forkOpen = $state(false);
   let checkpointPickerOpen = $state(false);
   let replaying = $state(false);
@@ -218,6 +219,7 @@
   let mainElement = $state<HTMLElement>();
   let forkIntentInput = $state<HTMLTextAreaElement>();
   let pickerHeading = $state<HTMLHeadingElement>();
+  let groupHeading = $state<HTMLHeadingElement>();
   let regionElement = $state<HTMLElement>();
   let unregisterKeyboard: (() => void) | undefined;
   let speechAvailable = $state(false);
@@ -259,10 +261,29 @@
     companionInvoker = undefined;
   }
 
-  function toggleGroupCreator(): void {
-    const opening = !groupOpen;
-    groupOpen = opening;
-    if (opening && phoneSheetModal) closeCompanion();
+  function openGroupCreator(event: Event): void {
+    groupInvoker = invoker(event);
+    groupOpen = true;
+    if (phoneSheetModal) closeCompanion();
+    void tick().then(() => groupHeading?.focus());
+  }
+
+  function closeGroupCreator(): void {
+    groupOpen = false;
+    groupCandidates = [];
+    restoreFocus(compactViewport ? mainElement : groupInvoker);
+    groupInvoker = undefined;
+  }
+
+  function focusBoardForGroup(): void {
+    mainElement?.querySelector<HTMLElement>("[data-board-input-grid]")?.focus();
+  }
+
+  function groupPaletteKeydown(event: KeyboardEvent): void {
+    if (!groupOpen || event.key !== "Escape") return;
+    event.preventDefault();
+    event.stopPropagation();
+    closeGroupCreator();
   }
 
   function openAssistance(event: Event): void {
@@ -628,6 +649,8 @@
     groupCandidates = [];
     compactTab = "branches";
     sheetOpen = !compactViewport;
+    restoreFocus(compactViewport ? mainElement : groupInvoker);
+    groupInvoker = undefined;
   }
 
   async function nextGroupMember(group: BranchGroup): Promise<void> {
@@ -882,6 +905,7 @@
     if (event.key === "Escape") {
       if (helpOpen) closeHelp();
       else if (forkOpen) closeFork();
+      else if (groupOpen) closeGroupCreator();
       else if (checkpointPickerOpen) closeCheckpointPicker();
       else if (comparison !== undefined) closeCompare();
       else if (phoneSheetModal) closeCompanion();
@@ -1041,6 +1065,8 @@
     }
   });
 </script>
+
+<svelte:window onkeydowncapture={groupPaletteKeydown} />
 
 <div class="drill-region" class:reflow={reflowViewport} data-keyboard-region="drill" tabindex="-1" bind:this={regionElement}>
 
@@ -1321,7 +1347,7 @@
             {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-label="Fork branch" aria-describedby={describedBy} onclick={(event) => { forkInvoker = invoker(event); forkOpen = true; }}>Fork <kbd>B</kbd></button>{/snippet}
           </HonestControl>
           <HonestControl disabled={!canWrite} reasonId="drill-group-readonly" reason="This read-only view cannot create a branch group.">
-            {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-describedby={describedBy} onclick={toggleGroupCreator}>Branch group</button>{/snippet}
+            {#snippet children(describedBy)}<button type="button" disabled={!canWrite} aria-describedby={describedBy} onclick={openGroupCreator}>Branch group</button>{/snippet}
           </HonestControl>
           <HonestControl
             disabled={cards.length < 2}
@@ -1359,8 +1385,8 @@
       </aside>
     </div>
     {#if groupOpen}
-      <section class="group-creator" aria-labelledby="group-create-title">
-        <div><p>Parallel experiment</p><h2 id="group-create-title">Create a branch group</h2></div>
+      <div class="group-creator" role="dialog" aria-modal="false" aria-labelledby="group-create-title" aria-describedby="group-create-description">
+        <div><p>Parallel experiment</p><h2 id="group-create-title" tabindex="-1" bind:this={groupHeading}>Create a branch group</h2></div>
         <label>Source
           <select bind:value={groupSource}>
             <option value="hand_picked">My candidate moves</option>
@@ -1373,14 +1399,16 @@
           <select bind:value={groupResistance}><option value="fixed">Fixed</option><option value="per_branch">Varied</option></select>
         </label>
         {#if groupSource === "hand_picked"}
-          <p class="capture-help">Move pieces on the board to capture candidates. The run is not changed until Create group.</p>
+          <p id="group-create-description" class="capture-help">Choose legal moves on the board. This palette stays open and the run is not changed until you create the group.</p>
+          <button class="board-return" type="button" onclick={focusBoardForGroup}>Choose moves on the board</button>
           <div class="candidate-chips">{#each groupCandidates as uci}<button type="button" onclick={() => (groupCandidates = groupCandidates.filter((move) => move !== uci))}>{moveSanFromUci(displayedNode.fen, uci) ?? "Legal candidate"} ×</button>{:else}<span>No candidates captured yet.</span>{/each}</div>
         {:else}
+          <p id="group-create-description" class="capture-help">Choose how this parallel experiment is populated. The run is not changed until you create the group.</p>
           <label>Members <input type="number" min="2" max="8" bind:value={groupSize} /></label>
         {/if}
-        <div class="creator-actions"><button type="button" onclick={() => { groupOpen = false; groupCandidates = []; }}>Cancel</button><button type="button" disabled={groupSource === "hand_picked" && groupCandidates.length < 2} aria-describedby={groupSource === "hand_picked" && groupCandidates.length < 2 ? "group-candidates-needed" : undefined} onclick={() => void createGroup()}>Create group</button></div>
+        <div class="creator-actions"><button type="button" onclick={closeGroupCreator}>Cancel</button><button type="button" disabled={groupSource === "hand_picked" && groupCandidates.length < 2} aria-describedby={groupSource === "hand_picked" && groupCandidates.length < 2 ? "group-candidates-needed" : undefined} onclick={() => void createGroup()}>Create group</button></div>
         {#if groupSource === "hand_picked" && groupCandidates.length < 2}<span id="group-candidates-needed" class="honest">Capture at least two distinct legal moves.</span>{/if}
-      </section>
+      </div>
     {/if}
   </main>
 {/if}
@@ -1895,7 +1923,7 @@
   .companion-scroll { min-height: 0; display: grid; padding: .65rem; overflow: hidden; }
   .companion-section { min-width: 0; min-height: 0; display: none; gap: .55rem; overflow-y: auto; overscroll-behavior: contain; }
   .companion-section.compact-active { display: grid; }
-  .next-member{justify-self:start;padding:.4rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--panel);color:inherit}.group-creator{position:fixed;z-index:24;left:50%;bottom:1rem;width:min(60rem,calc(100% - 2rem));transform:translateX(-50%);display:flex;align-items:end;gap:.65rem;flex-wrap:wrap;padding:.65rem;border:1px solid var(--accent);border-radius:.75rem;background:var(--panel);box-shadow:var(--shadow)}.group-creator p,.group-creator h2{margin:0}.group-creator h2{font:600 1rem var(--display-font)}.group-creator label{display:grid;gap:.2rem;font-size:.7rem;color:var(--muted)}.group-creator select,.group-creator input,.group-creator button{padding:.45rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--paper);color:inherit}.capture-help{flex-basis:100%;color:var(--muted);font-size:.72rem}.candidate-chips{display:flex;gap:.35rem;flex-wrap:wrap}.creator-actions{display:flex;gap:.35rem}.group-creator .honest{flex-basis:100%;color:var(--muted);font-size:.68rem}
+  .next-member{justify-self:start;padding:.4rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--panel);color:inherit}.group-creator{position:fixed;z-index:24;left:50%;bottom:1rem;width:min(60rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);transform:translateX(-50%);display:flex;align-items:end;align-content:start;gap:.65rem;flex-wrap:wrap;overflow:auto;overscroll-behavior:contain;padding:.65rem;border:1px solid var(--accent);border-radius:.75rem;background:var(--panel);box-shadow:var(--shadow)}.group-creator p,.group-creator h2{margin:0}.group-creator h2{font:600 1rem var(--display-font)}.group-creator label{display:grid;gap:.2rem;font-size:.7rem;color:var(--muted)}.group-creator select,.group-creator input,.group-creator button{min-height:2rem;padding:.45rem .55rem;border:1px solid var(--line);border-radius:.55rem;background:var(--paper);color:inherit}.capture-help{flex-basis:100%;color:var(--muted);font-size:.72rem}.board-return{flex-basis:auto}.candidate-chips{display:flex;gap:.35rem;flex-wrap:wrap}.creator-actions{display:flex;gap:.35rem}.group-creator .honest{flex-basis:100%;color:var(--muted);font-size:.68rem}
   .mark-controls { display: grid; gap: .35rem; padding: .55rem; border: 1px solid var(--line); border-radius: .65rem; color: var(--muted); font-size: .72rem; }
   .mark-controls label { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
   .mark-controls button, .mark-controls select { padding: .35rem .45rem; border: 1px solid var(--line); border-radius: .45rem; background: var(--paper); color: inherit; }
@@ -2071,6 +2099,13 @@
   .drill.reflow .position-column {
     min-height: calc(var(--board-edge) + var(--strip-h) + var(--objective-h));
     overflow: visible;
+  }
+  .drill.reflow .group-creator {
+    position: static;
+    width: calc(100% - 1rem);
+    max-height: calc(100dvh - 1rem);
+    margin: .5rem auto 1rem;
+    transform: none;
   }
 
   @media (max-width: 719px) {

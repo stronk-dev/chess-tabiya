@@ -411,7 +411,14 @@ On a phone, opening the hand-picked creator from the modal Actions drawer closes
 that drawer before asking for board gestures, so the board cannot remain inert
 while candidate capture is active. The completed candidate cards, header and
 controls stack vertically at the compact breakpoint; no group comparison unit
-is placed behind a horizontal pan.
+is placed behind a horizontal pan. The creator itself is a labelled non-modal
+palette because its move picker is the shared board: opening it focuses the
+palette heading, “Choose moves on the board” returns focus to the semantic grid,
+and Escape closes it even when focus is inside the board controller. At the
+320×256 reflow floor it participates in the drill's vertical flow and owns its
+overflow, so it cannot cover the squares it asks the learner to use. Cancelling
+clears uncommitted candidates and restores the invoking control on wide layouts
+or the drill region in compact composition.
 
 Sequential advance is the default; lockstep is an optional local preference.
 Switching a group member follows the ordinary rewind contract and requests an
@@ -438,6 +445,9 @@ and available height so it cannot overlap the timeline. Below 680 CSS pixels tal
 including phone landscape and the 320×256 WCAG reflow projection, the compact drill
 region becomes the explicit vertical scroller. The board remains width-bound and
 at least 192px, while horizontal scrolling remains refused below 320px.
+Board-adjacent detail overlays share that floor: named-structure details are
+bounded to the viewport with contained vertical overflow and collapse their
+two-column plan lists to one column on narrow or short projections.
 
 ## Keyboard and focus contract
 
@@ -465,9 +475,11 @@ remain available for every shortcut.
 ## Browser acceptance
 
 `make test-browser` runs the Playwright acceptance flow against the same
-production bundle and default `PackRegistry` used by the packaged server. The
-test first proves the living Najdorf fixture was actually served with its
-honest `schema_example` status and selectable `human_common` policy. It then
+production bundle and `PackRegistry` used by the packaged server. The test-only
+development input explicitly serves the living Najdorf fixture; the HTTP
+contract proves its internal `schema_example` status and selectable
+`human_common` policy while catalogue journeys locate it through its accessible
+title and learner-facing “Example content” copy. It then
 plays against the deterministic mock opponent, crosses checkpoints, rewinds,
 creates and switches an alternative branch, compares both lines, and downloads
 a legal variation PGN. This lives in a separate browser CI job rather than

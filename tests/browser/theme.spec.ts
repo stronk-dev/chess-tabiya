@@ -173,9 +173,15 @@ test("system display preferences keep board semantics visible without colour alo
   await expect.poll(() => destination.evaluate((element) => getComputedStyle(element).outlineStyle)).toBe("dotted");
   expect(await destination.evaluate((element) => getComputedStyle(element).backgroundImage)).not.toContain("gradient");
 
-  await destination.evaluate((element) => element.classList.add("oc"));
-  expect(await destination.evaluate((element) => getComputedStyle(element).outlineStyle)).toBe("double");
-  expect(await destination.evaluate((element) => {
+  await board.evaluate((element) => {
+    const square = document.createElement("square");
+    square.dataset.forcedColorsProbe = "true";
+    square.setAttribute("class", "move-dest oc");
+    element.querySelector("cg-board")?.append(square);
+  });
+  const forcedColorsProbe = board.locator("square[data-forced-colors-probe]");
+  expect(await forcedColorsProbe.evaluate((element) => getComputedStyle(element).outlineStyle)).toBe("double");
+  expect(await forcedColorsProbe.evaluate((element) => {
     element.setAttribute("class", "check");
     return {
       style: getComputedStyle(element).outlineStyle,

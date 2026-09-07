@@ -4,6 +4,14 @@ import { randomUUID } from "node:crypto";
 import { expect, test, type Locator, type Page, type TestInfo } from "@playwright/test";
 import { playBoardEdge } from "../../apps/web/src/lib/play-composition.js";
 
+const SCHEMA_PACK_TITLE = "Najdorf: choose a setup and cross the theory boundary";
+
+function schemaPackCard(page: Page): Locator {
+  return page.getByRole("article").filter({
+    has: page.getByRole("heading", { name: SCHEMA_PACK_TITLE, exact: true }),
+  });
+}
+
 async function register(page: Page): Promise<string> {
   await page.goto("/play");
   let handle = "existing";
@@ -253,8 +261,9 @@ test("account lifecycle downloads data, deletes one run, and clears this browser
   await expect(page.getByRole("status").filter({ hasText: "download has started" })).toBeVisible();
   await expect(page.getByLabel("Current password")).toHaveValue("");
 
-  await page.getByRole("button", { name: "Review deletion effects" }).click();
-  await expect(page.getByRole("heading", { name: "Deletion effects" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Your data and privacy" })).toBeVisible();
+  await expect(page.locator(".deletion-preview")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Refresh data summary" })).toBeVisible();
   await expect(page.getByText("Live data is removed immediately", { exact: false })).toBeVisible();
   await page.getByLabel("Re-enter password").fill("browser-test-password");
   await page.getByRole("button", { name: "Delete account" }).click();
@@ -293,9 +302,18 @@ test("Just Play reaches a Carlsbad and opens a guided shape marker without mutat
   await expect(panel).not.toContainText("shape trigger");
   for (const label of ["Minority attack", "Achieve e3-e4", "Land h4-h5 against a hook", "Reach a queenless position with the c-pawn sound", "Get the pawn to a5 with b4 still empty", "Central counter-break"]) await expect(panel.getByText(label, { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Carlsbad structure" })).toBeFocused();
+  await page.setViewportSize({ width: 320, height: 256 });
+  const shapeBounds = await panel.boundingBox();
+  if (shapeBounds === null) throw new TypeError("Named-structure dialog has no rendered bounds");
+  expect(shapeBounds.x).toBeGreaterThanOrEqual(0);
+  expect(shapeBounds.y).toBeGreaterThanOrEqual(0);
+  expect(shapeBounds.x + shapeBounds.width).toBeLessThanOrEqual(320);
+  expect(shapeBounds.y + shapeBounds.height).toBeLessThanOrEqual(256);
+  expect(await panel.evaluate((element) => getComputedStyle(element).overflowY)).toBe("auto");
   await page.keyboard.press("Escape");
   await expect(panel).toHaveCount(0);
   await expect(marker).toBeFocused();
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await marker.click();
   await panel.getByRole("button", { name: "Inspect trigger and sources" }).click();
   await expect(page.getByRole("region", { name: "Named structure evidence" })).toContainText("CC-BY-SA-4.0");
@@ -532,7 +550,7 @@ test("stated reasoning reveals attributed key points only after recording and ke
 });
 
 test("Live turns a run into a session and exposes a chrome-free overlay", async ({ page }) => {
-  const card = page.getByRole("article").filter({ hasText: "schema example" }).first();
+  const card = schemaPackCard(page);
   await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await page.goto("/live");
@@ -571,7 +589,7 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
   await page.goto("/live");
   const wallCard = page.locator(".live-wall article").filter({ hasText: "academy session" });
   await expect(wallCard).toContainText("White to move");
-  await expect(wallCard).toContainText("Objective state: active");
+  await expect(wallCard).toContainText("Objective: In progress");
   await expect(wallCard).toContainText("No move committed yet");
   await expect(page.getByText("never ordered or labelled by engine evaluation")).toBeVisible();
   await wallCard.getByRole("button", { name: "Open" }).click();
@@ -586,7 +604,7 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
 });
 
 test("an academy host can identify and play a participant's proposed move", async ({ page, browser }) => {
-  const card = page.getByRole("article").filter({ hasText: "schema example" }).first();
+  const card = schemaPackCard(page);
   await card.getByRole("button", { name: /Rehearse this position/ }).click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
   await page.goto("/live");
@@ -778,10 +796,10 @@ test("library exposes phase honestly and survives a malformed pack response", as
   page,
 }) => {
   const expected = [
-    ["Carlsbad structure", "middlegame"],
-    ["Rook endings", "endgame"],
-    ["Caro-Kann Advance", "opening"],
-    ["Trajectory: QGD Exchange", "cross phase"],
+    ["Carlsbad structure", "Middlegame"],
+    ["Rook endings", "Endgame"],
+    ["Caro-Kann Advance", "Opening"],
+    ["Trajectory: QGD Exchange", "Across phases"],
   ] as const;
   for (const [name, phase] of expected) {
     const card = page.getByRole("article").filter({ hasText: name }).first();
@@ -805,7 +823,7 @@ test("library exposes phase honestly and survives a malformed pack response", as
     await route.fulfill({ response, json: body });
   });
   await page.reload();
-  await expect(page.getByRole("article").filter({ hasText: "Unclassified browser fixture" })).toContainText("phase not recorded");
+  await expect(page.getByRole("article").filter({ hasText: "Unclassified browser fixture" })).toContainText("Phase not recorded");
 
   const pageErrors: Error[] = [];
   page.on("pageerror", (error) => pageErrors.push(error));
@@ -1093,7 +1111,8 @@ async function liveInputMove(
     await grid.focus();
     const active = await grid.getAttribute("aria-activedescendant");
     if (active === null) throw new Error("Semantic board has no active descendant");
-    const activeSquare = active.replace("board-square-", "");
+    const activeSquare = /-square-([a-h][1-8])$/u.exec(active)?.[1];
+    if (activeSquare === undefined) throw new Error(`Semantic board has an invalid active descendant: ${active}`);
     await navigateGrid(page, activeSquare, uci.slice(0, 2), orientation);
     await page.keyboard.press("Enter");
     await navigateGrid(page, uci.slice(0, 2), uci.slice(2, 4), orientation);
@@ -1114,7 +1133,11 @@ async function liveInputMove(
         : { owner: "modal", valid: modal.contains(active) && element.closest("[inert]") !== null };
     });
     expect(focusState.valid, `${focusState.owner} must own focus after keyboard submission`).toBe(true);
-    await expect(grid).toHaveAttribute("aria-activedescendant", `board-square-${uci.slice(2, 4)}`);
+    await expect(grid).toHaveAttribute("aria-activedescendant", new RegExp(`-square-${uci.slice(2, 4)}$`, "u"));
+    expect(await grid.evaluate((element) => {
+      const id = element.getAttribute("aria-activedescendant");
+      return id !== null && element.querySelector(`#${CSS.escape(id)}`) !== null;
+    })).toBe(true);
   } else {
     const board = page.getByLabel("Chessboard");
     await expect(board).toBeVisible();
@@ -1162,11 +1185,9 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
     "Schema example only; classification requires review.",
   );
 
-  await expect(page.getByText("schema example")).toBeVisible();
+  await expect(schemaPackCard(page)).toContainText("Example content");
   const boardStart = await page.evaluate(() => performance.now());
-  await page
-    .getByRole("article")
-    .filter({ hasText: "schema example" })
+  await schemaPackCard(page)
     .getByRole("button", { name: /Rehearse this position/ })
     .click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
@@ -1351,9 +1372,7 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
 });
 
 test("branch group captures three candidates, rotates, recovers evidence, compares, and exports", async ({ page }) => {
-  await page
-    .getByRole("article")
-    .filter({ hasText: "schema example" })
+  await schemaPackCard(page)
     .getByRole("button", { name: /Rehearse this position/ })
     .click();
   await move(page, "c1", "e3");
@@ -1548,9 +1567,7 @@ test("@matrix every shell route owns the viewport at supported desktop and table
   for (const viewport of projections) {
     await page.setViewportSize(viewport);
     await page.goto("/play");
-    await page
-      .getByRole("article")
-      .filter({ hasText: "schema example" })
+    await schemaPackCard(page)
     .getByRole("button", { name: /Rehearse this position/ })
       .click();
     await expect(page.getByLabel("Chessboard")).toBeVisible();
@@ -1570,17 +1587,20 @@ test("@matrix every shell route owns the viewport at supported desktop and table
     for (const route of routes) {
       await page.goto(route);
       await expect(page.getByText("Loading Tabiya…")).toHaveCount(0);
-      // At <=719px #app is fixed to the viewport, so document scrolling is
-      // structurally constant. Retain this as a desktop/tablet global-overflow
-      // guard; compact containment is proved separately by assertRunViewport.
+      // The shell clips the document and each long route owns its own scroll.
+      // A scrollHeight larger than the viewport is expected for Settings; it
+      // is not document scrolling while the root and shell boundary are hidden.
       const dimensions = await page.evaluate(() => ({
-        scrollHeight: document.scrollingElement!.scrollHeight,
-        clientHeight: document.scrollingElement!.clientHeight,
+        rootOverflow: getComputedStyle(document.documentElement).overflowY,
+        appOverflow: getComputedStyle(document.querySelector<HTMLElement>("#app")!).overflowY,
+        shellOverflow: getComputedStyle(document.querySelector<HTMLElement>(".shell")!).overflowY,
+        shellHeight: document.querySelector<HTMLElement>(".shell")!.getBoundingClientRect().height,
+        viewportHeight: window.innerHeight,
       }));
-      expect(
-        dimensions.scrollHeight,
-        `${route} at ${viewport.width}x${viewport.height}`,
-      ).toBeLessThanOrEqual(dimensions.clientHeight + 1);
+      expect(dimensions.rootOverflow, `${route} root overflow`).toBe("hidden");
+      expect(dimensions.appOverflow, `${route} app overflow`).toBe("hidden");
+      expect(dimensions.shellOverflow, `${route} shell overflow`).toBe("hidden");
+      expect(dimensions.shellHeight, `${route} shell height`).toBeLessThanOrEqual(dimensions.viewportHeight + 1);
 
       if (route === runPath) {
         await assertRunViewport(page, viewport);
@@ -1608,9 +1628,7 @@ test("@matrix play composition keeps one exact board rectangle through reachable
   for (const viewport of projections) {
     await page.setViewportSize(viewport);
     await page.goto("/play");
-    await page
-      .getByRole("article")
-      .filter({ hasText: "schema example" })
+    await schemaPackCard(page)
       .getByRole("button", { name: /Rehearse this position/ })
       .click();
     await assertRunViewport(page, viewport);
@@ -1678,9 +1696,7 @@ test("@matrix play composition keeps one exact board rectangle through reachable
 
 test("selected-square support clears with the visible selection and displayed position", async ({ page }) => {
   await page.goto("/play");
-  await page
-    .getByRole("article")
-    .filter({ hasText: "schema example" })
+  await schemaPackCard(page)
     .getByRole("button", { name: /Rehearse this position/ })
     .click();
 
@@ -1822,9 +1838,7 @@ test("@matrix rewind, fork re-entry, and comparison remain composed at every vie
   for (const viewport of projections) {
     await page.setViewportSize(viewport);
     await page.goto("/play");
-    await page
-      .getByRole("article")
-      .filter({ hasText: "schema example" })
+    await schemaPackCard(page)
       .getByRole("button", { name: /Rehearse this position/ })
       .click();
     await assertRunViewport(page, viewport);
@@ -1876,7 +1890,7 @@ test("@matrix rewind, fork re-entry, and comparison remain composed at every vie
 test("branch intent names the saved line and Compare replays the same decision at a chosen rung", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/play");
-  const card = page.getByRole("article").filter({ hasText: "schema example" });
+  const card = schemaPackCard(page);
   await expect(card).toContainText("Consequence · up to 4 plies");
   await card.getByRole("button", { name: /Rehearse this position/ }).click();
 
@@ -2041,9 +2055,7 @@ test("@matrix served endgame packs submit the exact drawn move through every per
 
 test("@matrix the semantic board remains complete and yields focus to a checkpoint after a keyboard move", async ({ page }) => {
   await page.goto("/play");
-  await page
-    .getByRole("article")
-    .filter({ hasText: "schema example" })
+  await schemaPackCard(page)
     .getByRole("button", { name: /Rehearse this position/ })
     .click();
   const grid = page.getByRole("grid", { name: /Board input/u });
@@ -2057,15 +2069,17 @@ test("@matrix the semantic board remains complete and yields focus to a checkpoi
   await expect(checkpoint).toBeVisible();
   expect(await checkpoint.evaluate((element) => element.contains(document.activeElement))).toBe(true);
   expect(await grid.evaluate((element) => element.closest("[inert]") !== null)).toBe(true);
-  await expect(grid).toHaveAttribute("aria-activedescendant", "board-square-e3");
+  await expect(grid).toHaveAttribute("aria-activedescendant", /-square-e3$/u);
+  expect(await grid.evaluate((element) => {
+    const id = element.getAttribute("aria-activedescendant");
+    return id !== null && element.querySelector(`#${CSS.escape(id)}`) !== null;
+  })).toBe(true);
   await expect(page.locator(".input-status")).toContainText("Move committed:");
 });
 
 test("@matrix @mobile comparison stacks complete branch cards without hidden horizontal content", async ({ page }) => {
   await page.goto("/play");
-  await page
-    .getByRole("article")
-    .filter({ hasText: "schema example" })
+  await schemaPackCard(page)
     .getByRole("button", { name: /Rehearse this position/ })
     .click();
 
@@ -2140,10 +2154,7 @@ test("@matrix @mobile comparison stacks complete branch cards without hidden hor
 
 test("@matrix @mobile live session and overlay keep controls and board inside the viewport", async ({ page }) => {
   await page.goto("/play");
-  await page
-    .getByRole("article")
-    .filter({ hasText: "schema example" })
-    .first()
+  await schemaPackCard(page)
     .getByRole("button", { name: /Rehearse this position/ })
     .click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
@@ -2273,9 +2284,7 @@ test("@matrix @mobile classroom standing uses learner cards instead of a sideway
 
 test("@matrix @mobile branch group stacks complete candidate cards without sideways panning", async ({ page }) => {
   await page.goto("/play");
-  await page
-    .getByRole("article")
-    .filter({ hasText: "schema example" })
+  await schemaPackCard(page)
     .getByRole("button", { name: /Rehearse this position/ })
     .click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
@@ -2343,11 +2352,42 @@ test("the drill keyboard map remains contained and scrollable at the supported p
   await expect(close).toBeFocused();
 });
 
+test("@mobile the branch-group palette stays bounded while the board remains its move picker", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 256 });
+  await page.goto("/play");
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await page.getByRole("button", { name: "Actions" }).click();
+  const open = page.getByRole("button", { name: "Branch group" });
+  await open.click();
+
+  const palette = page.getByRole("dialog", { name: "Create a branch group" });
+  await expect(palette).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Create a branch group" })).toBeFocused();
+  await expect(palette).toHaveAttribute("aria-modal", "false");
+  await palette.scrollIntoViewIfNeeded();
+  const paletteBounds = await palette.boundingBox();
+  if (paletteBounds === null) throw new TypeError("Branch-group palette has no rendered bounds");
+  expect(paletteBounds.x).toBeGreaterThanOrEqual(0);
+  expect(paletteBounds.y).toBeGreaterThanOrEqual(0);
+  expect(paletteBounds.x + paletteBounds.width).toBeLessThanOrEqual(320);
+  expect(paletteBounds.y + paletteBounds.height).toBeLessThanOrEqual(257);
+  expect(await palette.evaluate((element) => getComputedStyle(element).overflowY)).toBe("auto");
+
+  await palette.getByRole("button", { name: "Choose moves on the board" }).click();
+  await expect(page.locator("[data-board-input-grid]")).toBeFocused();
+  await move(page, "e2", "e4");
+  await expect(palette.locator(".candidate-chips")).toContainText("e4");
+  await expect(page.getByLabel("Chessboard")).toBeVisible();
+
+  await page.keyboard.press("Escape");
+  await expect(palette).toHaveCount(0);
+  await expect(page.locator("main.drill")).toBeFocused();
+});
+
 test("drill shortcuts keep native controls and never leak a shell chord from the board", async ({ page }) => {
   await page.goto("/play");
-  await page
-    .getByRole("article")
-    .filter({ hasText: "schema example" })
+  await schemaPackCard(page)
     .getByRole("button", { name: /Rehearse this position/ })
     .click();
 
@@ -2375,9 +2415,7 @@ test("drill shortcuts keep native controls and never leak a shell chord from the
 
 test("@matrix normal Tab traversal reaches every drill region in both directions and exits", async ({ page }) => {
   await page.goto("/play");
-  await page
-    .getByRole("article")
-    .filter({ hasText: "schema example" })
+  await schemaPackCard(page)
     .getByRole("button", { name: /Rehearse this position/ })
     .click();
   await page.getByText("Enter a move", { exact: true }).click();

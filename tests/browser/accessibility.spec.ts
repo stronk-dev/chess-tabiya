@@ -48,9 +48,9 @@ test("@matrix automated WCAG scan covers catalogue, settings, and a live rehears
 
   await page.goto("/settings");
   await expect(page.getByRole("heading", { name: "Settings", exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Review deletion effects" }).click();
   await expect(page.locator(".deletion-preview")).toBeVisible();
-  await expect(page.locator(".deletion-preview [data-status-announcement]")).toContainText("Deletion effects loaded");
+  await expect(page.locator(".deletion-preview [data-status-announcement]")).toContainText("Account data summary loaded");
+  await expect(page.getByRole("button", { name: "Refresh data summary" })).toBeVisible();
   await expectNoWcagViolations(page, "settings");
   await expectSafeLiveRegions(page, "settings");
 

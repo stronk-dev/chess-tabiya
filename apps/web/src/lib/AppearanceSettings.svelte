@@ -122,7 +122,7 @@
   .chrome-preview header span,.chrome-preview article>p{color:var(--muted)}
   .chrome-preview article{margin-top:.8rem;padding:.8rem;border-radius:.6rem;background:var(--panel)}
   .chrome-preview h3,.chrome-preview p{margin:.25rem 0}.chrome-preview button{margin-top:.75rem;background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
-  .preview-eyebrow{text-transform:uppercase;letter-spacing:.08em;font-size:.68rem}.board-preview{min-width:0}.board-preview :global(.appearance-link),.board-preview :global(.text-move){display:none}.board-preview p{margin:.5rem 0 0;color:var(--muted);font-size:.72rem;line-height:1.4}
+  .preview-eyebrow{text-transform:uppercase;letter-spacing:.08em;font-size:.68rem}.board-preview{min-width:0}.board-preview :global(.appearance-link),.board-preview :global(.text-move){display:none}.board-preview p{margin:.5rem 0 0;color:var(--ink);font-size:.72rem;line-height:1.4}
   label{display:grid;gap:.3rem;font-size:.82rem;color:var(--muted)}
   select{color:var(--ink);background:var(--surface)}
   .honest,.credit,.current,.theme-contrast{font-size:.8rem;color:var(--muted)}

@@ -251,7 +251,10 @@ Tabiya icon. No service worker or offline mutation queue ships, so installed
 use remains an online client to server-authoritative lease and grant checks.
 
 Playwright projects every route at 1280×720, 1440×900, and 768×1024. It asserts
-`document.scrollingElement.scrollHeight <= clientHeight + 1`; on a run it also
+that the document root, application root, and shell clip overflow while the
+shell remains within `window.innerHeight`; long content such as Settings owns
+an inner `.shell-view` scroll rather than forcing its intrinsic height onto the
+document. On a run it also
 asserts the board is inside both the viewport and the non-scrolling drill region
 within one pixel, is at least 192px square, and ends above the timeline outside
 the compact tier. A corpus regression runs that invariant against all six served
