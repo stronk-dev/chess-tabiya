@@ -18236,3 +18236,18 @@ serializer and its Unicode refusal domain.
 `planning/graduation-clearance/author-repair-2026-09-07.md` records the bounded scope and retirement
 rule. The RFC remains returned/implementing and no schema, corpus or production evaluator changed.
 A genuinely fresh review is still required before the schema-0.28 implementation slice.
+
+## 2026-09-07 — Bot policy fifth author repair closes the local half
+
+**What changed:** [[D3025]]–[[D3029]], [[D3032]] and concurrent sibling [[D3127]] are repaired at
+author tier. Complete catalog equality owns profile semantics; durable decisions reconstruct from
+independently loaded sealed authorities; both replay phases parse storage bytes; the route request
+is an exact closed grammar; duplicate Stockfish rows refuse; and the author programs inherit the
+repository TypeScript dialect.
+
+**Evidence/next:** `make bot-policy-fifth-author-repair` passes 38 canonical controls, six retained
+fourth-author groups and both repository compiler checkpoints. [[D3030]] remains dependency-blocked
+on the shared durable provider parser, while [[D3031]] is narrowed to the current accepted health
+checkpoint. Another genuinely fresh review still gates acceptance; no production/schema/content
+byte changed. [[D3126]] also repairs the provider-health cut test to the approved CI tier split:
+present in opt-in `verify-rfc-evidence`, absent from stable `verify-governance`.

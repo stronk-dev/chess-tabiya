@@ -391,16 +391,16 @@
         "dependsOn": ["foundation-contracts"],
         "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
         "latestCheckpoint": {
-          "at": "2026-09-06",
-          "summary": "Bot policy's fifth fresh review returns its profile, durable decision, replay, request, guard-row, provider, health-currentness and repository-compiler authorities; a coordinated stored rewrite can select a sampler-excluded move. Longitudinal state, storage recovery, safe deployment and Campaign remain separately returned.",
-          "impact": "regressed",
-          "evidence": ["planning/platform-alignment/bot-policy/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d3025-bot-policy-fifth-fresh-review/review.test.ts", "rfc/bot-policy.md", "planning/longitudinal-store/tenth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2994-longitudinal-tenth-fresh-review/review.test.ts", "rfc/longitudinal-store.md", "planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md", "tools/d2986-campaign-seventh-fresh-review/review.test.ts", "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts", "rfc/safe-deployment-profiles.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts", "rfc/storage-backup-recovery.md", "rfc/social-play.md"],
+          "at": "2026-09-07",
+          "summary": "Bot policy's bounded fifth author repair closes complete-profile identity, independent durable reconstruction, both replay paths, closed request grammar, duplicate guard rows and repository compiler parity. Shared durable provider parsing and the current accepted health checkpoint remain explicit dependencies; longitudinal state, storage recovery, safe deployment and Campaign remain separately returned.",
+          "impact": "advanced",
+          "evidence": ["planning/platform-alignment/bot-policy/fifth-author-repair-2026-09-07.md", "rfc/bot-policy.md", "planning/longitudinal-store/tenth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2994-longitudinal-tenth-fresh-review/review.test.ts", "rfc/longitudinal-store.md", "planning/campaign/seventh-fresh-independent-buildability-review-2026-09-06.md", "tools/d2986-campaign-seventh-fresh-review/review.test.ts", "planning/safe-deployment-profiles/fourth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2978-safe-deployment-fourth-fresh-review/review.test.ts", "rfc/safe-deployment-profiles.md", "rfc/campaign-core.md", "planning/storage-backup-recovery/fifth-fresh-independent-buildability-review-2026-09-06.md", "tools/d2972-storage-backup-fifth-fresh-review/review.test.ts", "rfc/storage-backup-recovery.md", "rfc/social-play.md"],
           "anchors": [
             {"kind": "rfc", "id": "safe-deployment-profiles.md", "digest": "sha256:eb0101bd1192696724407b752b4cfd2771aae0c9814e8834727e18542aa16131"},
             {"kind": "rfc", "id": "campaign-core.md", "digest": "sha256:f9cd84da95a0d6d367c943e8560936b58fb86c3eb94358d6b4ec6a9919ae0e86"},
             {"kind": "rfc", "id": "storage-backup-recovery.md", "digest": "sha256:418c43b100179f09ea6838114bc3525763c32d358314a8c7e0855fc31127a11d"},
             {"kind": "rfc", "id": "longitudinal-store.md", "digest": "sha256:d6c2798b7b33d17cd80d2d31c471e0e74f7e175ca76203a30bab16752db2acff"},
-            {"kind": "rfc", "id": "bot-policy.md", "digest": "sha256:8a1d26c9dc08c687ae5ea8805514ff5262b8137f9ecaf989698b6ad9eb8ee740"},
+            {"kind": "rfc", "id": "bot-policy.md", "digest": "sha256:0d7bcc6d02dfa4b3cdadca0c5141e41207588372b7d28a3fb8837abe04e61e9f"},
             {"kind": "rfc", "id": "social-play.md", "digest": "sha256:3f81a29ba056944e9b54a9b56b5af9eb5bd5415253aada5eac6c9f862cb39a6b"}
           ]
         },
@@ -447,10 +447,10 @@
         "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
         "latestCheckpoint": {
           "at": "2026-09-07",
-          "summary": "The graduation writer, read-only plan and centralized emitter templates ship, but no official pack is graduated. D3033 licenses the foundation/schema slice before Gate F. The total 436-entry plan exposed 104 contract-blocked candidate entries and two false ready predicates; the author amendment now models 204 ready / 232 author-required / 0 contract-blocked without resolving content. Fresh buildability review still gates schema 0.28 implementation.",
+          "summary": "The graduation writer, read-only plan and centralized emitter templates ship, but no official pack is graduated. The bounded author repair now executes all nine emitter shapes, exact registry-plan rejoin, digest-bound repository declarations and the shared fail-closed canonicalizer; the 436-entry plan remains 204 ready / 232 author-required / 0 contract-blocked without resolving content. Fresh buildability review still gates schema 0.28 implementation.",
           "impact": "held",
-          "evidence": ["planning/content-era/plan.md", "rfc/graduation-clearance.md"],
-          "anchors": [{"kind": "rfc", "id": "graduation-clearance.md", "digest": "sha256:ebbe88c29d365ad8f757aa3a1ddf9543fb248f8e35034decd51e2f091654c39b"}]
+          "evidence": ["planning/content-era/plan.md", "planning/graduation-clearance/author-repair-2026-09-07.md", "rfc/graduation-clearance.md"],
+          "anchors": [{"kind": "rfc", "id": "graduation-clearance.md", "digest": "sha256:95fe5e3870a074989e417df1f5534da467c3bb5f2f691284e73c4475f340b85f"}]
         },
         "exit": "The release contains an allow-listed official corpus exercising every important handshake, counter-case, honest-empty state and complete campaign without blind mass rewrites."
       },

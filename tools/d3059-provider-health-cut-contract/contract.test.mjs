@@ -45,9 +45,11 @@ test("durable opponent recovery owns the removed run-schema lane", () => {
   assert.match(register, /\| `opponent-recovery-journey\.md` \|[^\n]+run-schema lane 0\.26/u);
 });
 
-test("canonical governance runs the cut contract, not a retired author chain", () => {
+test("opt-in RFC evidence runs the cut contract, not stable governance or a retired author chain", () => {
   const governance = makefile.split("\n").filter((line) => line.startsWith("verify-governance:")).join("\n");
-  assert.match(governance, /\bprovider-health-cut-contract\b/u);
+  const rfcEvidence = makefile.split("\n").filter((line) => line.startsWith("verify-rfc-evidence:")).join("\n");
+  assert.doesNotMatch(governance, /\bprovider-health-cut-contract\b/u);
+  assert.match(rfcEvidence, /\bprovider-health-cut-contract\b/u);
 
   const dependencies = new Map();
   for (const line of makefile.split("\n")) {

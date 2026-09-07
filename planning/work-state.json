@@ -24602,7 +24602,7 @@
       "id": "D3025",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:187af39b70cbfb8be5abb03ba4e866de584f2efce5ca9e0777d79a441ccb4ff1",
+      "sourceDigest": "sha256:a7744fc63c20d8ac32e63e2f7ceeb36cab352d05813eb5f6b481fb788df8c12d",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-policy.md"
@@ -24611,7 +24611,7 @@
       "id": "D3026",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d9baefdbe634499bab85da045f3286fd9f3990efd3e16ab5bd296a84b2908118",
+      "sourceDigest": "sha256:bcaa81e46f921afb5fb9490b2f3114607d8fbfe58dc4525b18c418a8fa97b362",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-policy.md"
@@ -24620,7 +24620,7 @@
       "id": "D3027",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8889b083bf858a3896b8c617a185bf5ec731c8a229dd06a17d5b448a03301b67",
+      "sourceDigest": "sha256:ec4a31343b77a061398fc56b139f46e5bfa1d3a6b914e8cb78fc4cb029024e2e",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-policy.md"
@@ -24629,7 +24629,7 @@
       "id": "D3028",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ccedac4719e5ed0af486fa9c1dba3c0d0afc1793738cdf61653ebdbc23aa6f09",
+      "sourceDigest": "sha256:47de49752a50d5df5cce29f31cc6ce8f7cbe43da0e40b533940bca9f68de7ab8",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-policy.md"
@@ -24638,7 +24638,7 @@
       "id": "D3029",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ae7a0f7b32786d0913711414f551ef5df65edb5eaec0c6fbff80ce6bcb97ef5e",
+      "sourceDigest": "sha256:822b7c16b5774b6dc39075301712d46c1abdcbee01214a335f039c3b39c109b3",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-policy.md"
@@ -24656,7 +24656,7 @@
       "id": "D3031",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:069c8ee3a7a6a67f9b57338a97cbc92574c1b34d5565e8740fd727ebd162d35b",
+      "sourceDigest": "sha256:043de20df91b4ea098c13593ff9f17f93b3a88fe15f53b5496263c960940c2f2",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-policy.md"
@@ -24665,7 +24665,7 @@
       "id": "D3032",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:929780a0e93d25bece0ceb048a673c64ccf00da5916004ffaab5c634885776ac",
+      "sourceDigest": "sha256:c22a87e61cf726654aa6cb45a0427bd99a95da88dde301933bbaac6baef20695",
       "uxItems": [],
       "owner": "bot-play",
       "blocker": "rfc:bot-policy.md"
@@ -25502,6 +25502,24 @@
       "sourceDigest": "sha256:0adfe4a82c328a4cf8ad1df8f044ad12a8471df14738a4bfb984a92fbeabefb5",
       "uxItems": [],
       "evidence": "design/BACKLOG.md#D3125",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3126",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b98fbaa38fa5909ad6c4f77b1967012375b56473116bc99acbcc6f3ea42fa8a0",
+      "uxItems": [],
+      "evidence": "design/BACKLOG.md#D3126",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3127",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0927e4e77f1ec20b5d70b15cf2b545584c6373bdec3d9d5522e66cbab390dca1",
+      "uxItems": [],
+      "evidence": "design/BACKLOG.md#D3127",
       "evidenceKind": "path"
     }
   ]

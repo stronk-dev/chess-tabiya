@@ -15,6 +15,7 @@ import {
   deriveBotSourceView,
   digest,
   makeBotRootAuthority,
+  makeBotPolicyReplayAuthority,
   makeExactLegalMoveMap,
   parseBotOpponentPlyRequest,
   parseBotPolicyEventEnvelope,
@@ -36,7 +37,7 @@ import {
 } from "../d2846-provider-health-seventh-author-repair/contract.js";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-const sha = (value: string): Sha => `sha256:${value.padEnd(64, "0").slice(0, 64)}`;
+const sha = (value: string): Sha => digest(value);
 const identity: BotRootIdentity = {
   runId: "run-fourth-author", branchId: "main", nodeId: "node-1",
   preCommitEventHeadDigest: sha("head"), beforeFenDigest: digest(START_FEN), historyDigest: digest([]),
@@ -71,10 +72,13 @@ const decision = (options: { timing?: Timing; response?: string } = {}) => {
   const source = deriveBotSourceView({ root, legal, classifiers: compileLegalBoardClassifiers(root, legal), profile, maia });
   if (source.kind !== "ready") throw new Error("fixture source unavailable");
   const result = projectBotPolicyDecisionRecord(compileBotPolicyExecution({ source: source.source, profile }));
-  return { root, profile, result };
+  const replayAuthority = makeBotPolicyReplayAuthority({ root, legal,
+    classifiers: compileLegalBoardClassifiers(root, legal), profileId: profile.id, maia });
+  return { root, profile, result, replayAuthority };
 };
 
-const envelope = (): BotPolicyEventEnvelope => {
+const envelope = (): Readonly<{ envelope: BotPolicyEventEnvelope;
+  replayAuthority: ReturnType<typeof makeBotPolicyReplayAuthority> }> => {
   const value = decision();
   const request = parseBotOpponentPlyRequest({ requestId: "botreq_1234567890abcdef", expectedNodeId: identity.nodeId,
     expectedBranchId: identity.branchId, expectedEventHeadDigest: identity.preCommitEventHeadDigest });
@@ -84,7 +88,7 @@ const envelope = (): BotPolicyEventEnvelope => {
     writerLeaseDigest: sha("lease"), preProviderOperandDigest: begun.preProviderOperandDigest, eventSequence: 2,
     timingMs: { total: 30, maia: 20, guard: 0, composition: 10 } });
   if (committed.kind !== "committed") throw new Error("fixture operation did not commit");
-  return committed.envelope;
+  return { envelope: committed.envelope, replayAuthority: value.replayAuthority };
 };
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
@@ -114,7 +118,7 @@ describe("D2408 deterministic source image", () => {
 
 describe("D2409 durable unknown-byte parser", () => {
   it("rejects stale digests across every deterministic decision family", () => {
-    const original = envelope();
+    const { envelope: original, replayAuthority } = envelope();
     const mutations: Array<(value: any) => void> = [
       (value) => { value.decision.root.nodeId = "forged"; },
       (value) => { value.decision.profile.digest = sha("profile"); },
@@ -128,12 +132,12 @@ describe("D2409 durable unknown-byte parser", () => {
     ];
     for (const mutate of mutations) {
       const forged = clone(original); mutate(forged);
-      expect(() => parseBotPolicyEventEnvelope(forged)).toThrow();
+      expect(() => parseBotPolicyEventEnvelope(forged, replayAuthority)).toThrow();
     }
   });
 
   it("rejects stale digests across operation families while allowing non-deterministic timing", () => {
-    const original = envelope();
+    const { envelope: original, replayAuthority } = envelope();
     const mutations: Array<(value: any) => void> = [
       (value) => { value.operation.root.nodeId = "forged"; },
       (value) => { value.operation.writerLeaseDigest = sha("other-lease"); },
@@ -149,11 +153,11 @@ describe("D2409 durable unknown-byte parser", () => {
     ];
     for (const mutate of mutations) {
       const forged = clone(original); mutate(forged);
-      expect(() => parseBotPolicyEventEnvelope(forged)).toThrow();
+      expect(() => parseBotPolicyEventEnvelope(forged, replayAuthority)).toThrow();
     }
     const observedLater: any = clone(original);
     observedLater.operation.timingMs.total = 31;
-    expect(parseBotPolicyEventEnvelope(observedLater).operation.timingMs.total).toBe(31);
+    expect(parseBotPolicyEventEnvelope(observedLater, replayAuthority).operation.timingMs.total).toBe(31);
   });
 });
 

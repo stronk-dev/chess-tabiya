@@ -1,15 +1,16 @@
 # RFC: Bot policy
 
-- **Status:** **draft — fifth fresh independent review returned the fourth repair on
-  [[D3025]]–[[D3032]] (2026-09-06).** Exact profile semantics remain substitutable under a genuine
-  id/digest; durable parsing accepts coordinated decision rewrites; replay returns unparsed caller
-  envelopes; the route request grammar is open; duplicate Stockfish rows apply; persisted provider
-  truth is a bot-local self-digest; availability trusts substituted profiles and an obsolete health
-  checkpoint; and the model fails the repository TypeScript dialect. `make
-  bot-policy-fifth-fresh-review` retains the 31+6 author controls and passes 8/8 fresh falsifiers
-  plus its TypeScript checkpoints.
-  **Acceptance and implementation remain blocked** on a bounded fifth author repair, another fresh review,
-  accepted provider health, and the shared-resource bootstrap/register claim. No
+- **Status:** **draft — bounded fifth author repair completed for the six locally owned returns
+  [[D3025]]–[[D3029]] and [[D3032]] plus the concurrent sibling [[D3127]] (2026-09-07).** Exact
+  catalog members now own every profile value; durable decisions are reconstructed from sealed
+  storage root/legal/profile/provider authorities; both replay paths load unknown bytes through that
+  parser; the route grammar is closed; duplicate Stockfish rows refuse; and both author checkpoints
+  inherit the repository TypeScript dialect. `make bot-policy-fifth-author-repair` passes 38 canonical
+  controls plus the six retained fourth-author groups and both repository compiler checkpoints.
+  [[D3030]] remains open on the shared durable operation-specific provider parser, and [[D3031]] is
+  narrowed to the current accepted provider-health checkpoint; neither dependency is simulated here.
+  **Acceptance and implementation remain blocked** on another genuinely fresh review, accepted
+  provider health, the shared durable provider authority, and the shared-resource bootstrap/register claim. No
   implementation is authorized. Claims 0.18/migration remain held. *(Prior checkpoints:
   implementing; accepted 2026-08-22; draft; D1601–D1609 author-amended; D1970–D1976
   author-amended.)*
@@ -488,6 +489,13 @@ they are not invented fields on `ProviderDelivery`. `ExactLegalMoveMap` is deriv
 canonical root by the shared legal-board boundary and is the baseline legality authority even when
 Stockfish is absent.
 
+Every profile-bearing boundary resolves `profile.id` through the immutable catalog and requires
+structural equality with that complete catalog member — family, band, version, digest, model,
+sampler and ordered layers. A matching id/digest with substituted family or layers is not a weaker
+profile; it is an invalid value. Every population equality is also unique equality: duplicates on
+either side refuse before any row lookup, so repeated Stockfish identities cannot choose which
+score becomes guard truth.
+
 The bot imports the dependency's exact `ProviderDelivery`, `ProviderEvidenceDelivery`,
 `TypedProviderResult`, `MaiaPolicyPage` and `StockfishLegalRootTable` types and assertions. It never
 redeclares a delivery. A bot-local `ExactProviderSourceIdentity` retains the literal shared
@@ -573,8 +581,12 @@ POST /runs/:runId/opponent-ply
 ```
 
 The browser supplies no FEN, history, seed, policy/profile, candidate evidence or selected move.
-The exported `parseBotOpponentPlyRequest`/constructor is the sole request-id authority and enforces
-`^botreq_[A-Za-z0-9_-]{16,128}$`; routes and services cannot accept a cast string. Before provider
+The exported `parseBotOpponentPlyRequest`/constructor is the sole request authority. It accepts
+exactly `requestId`, `expectedNodeId`, `expectedBranchId`, and `expectedEventHeadDigest`; enforces
+`^botreq_[A-Za-z0-9_-]{16,128}$`; requires bounded non-empty node/branch identities; and requires a
+canonical lowercase `sha256:` digest for the event head. Extra browser fields — including FEN,
+history, seed, profile or candidate bytes — refuse rather than being discarded. Routes and services
+cannot accept a cast string. Before provider
 work, the server derives and seals `BotOperationRootAuthority`, seed, exact profile reference and
 writer-lease digest. It then computes `preProviderOperandDigest` over the request id, public root,
 writer lease, profile reference and seed. The event log is checked for the request id **before any
@@ -585,6 +597,17 @@ transaction. **After** those awaits, it re-reads the run and either performs one
 compare-and-swap/per-run serialized commit against the whole root identity or returns `stale_root`;
 checking only a node id is forbidden because a node may be visited on another branch or after later
 events.
+
+The event lookup returns unknown storage bytes, never a caller-supplied `BotPolicyEventEnvelope`.
+One `BotPolicyReplayAuthority` joins the independently read run root, exact legal map, classifier
+view, catalog profile identity and operation-specific provider results. The durable parser reruns
+source admission, normalized top-p, guard, trait transforms and the seeded draw from those
+authorities and requires exact equality with the stored decision projection before it checks the
+operation envelope. Self-consistent re-hashing of caller bytes is insufficient. Both the
+pre-provider retry and serialized concurrent-winner path use this same lookup and parser; neither
+accepts a `previous`/`existingAtCommit` envelope parameter. The provider-result members of this
+authority must come from the shared durable operation-specific parser owned by [[D3030]]; the local
+author model proves reconstruction but cannot discharge that external authority.
 
 The operation has the closed outcomes `committed | replayed_idempotent |
 replayed_concurrent_winner | concurrent_commit_conflict | stale_root |
@@ -1164,7 +1187,7 @@ one authority chain:
    post-provider commit identity: same bytes replay the advanced-head winner, different bytes
    conflict and write nothing ([[D2226]]).
 
-`make bot-policy-author-contract` passes 31/31 plus strict TypeScript. This is still an author checkpoint, not an
+`make bot-policy-author-contract` passes 38/38 plus the repository TypeScript contract. This is still an author checkpoint, not an
 acceptance: provider health must survive review and land its claim-free [[D2364]] checkpoint, the
 shared-resource bootstrap must register `bot-profile-catalog` as absent and this RFC must add the
 unique first-lane claim, then a fresh independent buildability review must attack the composed
@@ -1189,7 +1212,8 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
   wrong-writer and reused-request/different-operands arms refuse; an identical retry returns the
   durable committed event envelope without provider calls. Concurrent first flights replay only a
   byte-identical commit winner and return a typed conflict for different delivered bytes. *Fails if* `/select-move` selection bytes cross the browser, provider
-  work is held inside a transaction, or the append does not re-read the root after the awaits.
+  work is held inside a transaction, the append does not re-read the root after the awaits, or the
+  request parser ignores any extra key/empty identity/non-canonical digest.
 - **A3 — exact shared source and optional guard authority.** Positive, provider-off, deadline, missing,
   duplicate, mixed-domain, all-mate, bounded, wrong-history, wrong-root, candidate-set mismatch and
   forged-delivery fixtures prove whole-source/guard behavior. The selector imports the exact shared
@@ -1197,7 +1221,8 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
   survives every optional Stockfish failure. The persisted decision retains each admitted delivery
   and validates it after save/reload; it creates no provider request, private receipt, cache
   or bare loss. *Fails if* a structurally matching plain object or one candidate annotation can
-  apply the guard, or if baseline requires Stockfish.
+  apply the guard, a duplicate move row survives population admission, the durable read does not
+  cross the shared operation-specific provider parser, or baseline requires Stockfish.
 - **A4 — registered trait authority and dependency.** `pawn_move@1` proves both colours/all files,
   ordinary/double/capture/en-passant/four-promotion positives and castling/non-pawn negatives at the legal-board boundary. Caller strings,
   illegal/duplicate candidates and unregistered classifiers fail. Guard success applies pawn ×4;
@@ -1216,7 +1241,9 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
   commit digest additionally binds derivation and exact provider identities. *Fails if* elapsed
   time changes the decision digest, a resulting event-head digest creates a circular image, or a
   retry recomputes instead of replaying the committed envelope. It also fails if an advanced-head
-  concurrent winner is reported stale before the request winner is compared.
+  concurrent winner is reported stale before the request winner is compared, if either replay path
+  accepts caller envelope bytes, or if a self-consistent stored rewrite survives independent
+  root/profile/provider reconstruction.
 - **A7 — sampler positive control.** The committed R11 captured production sample remains within
   0.5 cp and 0.1 pp of reconstruction; the raw display vector breaks the loss bound by >30 cp. The
   fixture reads the artifact, not restated expected numbers. A second fixture executes the actual
@@ -1281,6 +1308,15 @@ Each criterion names its failure mode; none can pass while measuring nothing ([[
   and a real degraded provider registry with an unrelated exact cache that remains conditional.
   It fails if a bot-private provider-health declaration returns, a structural snapshot is accepted,
   or either digest is validated against caller-supplied comparison bytes.
+- **A17 — fifth-return inversion.** `make bot-policy-fifth-author-repair` executes complete-profile
+  substitution, coordinated durable-decision rewrite, malformed pre-provider and concurrent replay,
+  extra/empty/non-digest request fields, duplicate Stockfish rows, and both programs under the
+  repository compiler configuration. The accepted provider dependency must add a copied/mutated
+  durable Maia delivery that its operation-specific parser rejects; the accepted health dependency
+  must prove current availability without importing any retired author checkpoint. *Fails if* an
+  id/digest is treated as the whole profile, stored digests authorize a different compiler result,
+  either replay API accepts an envelope object, set equality deduplicates inputs, a private
+  TypeScript dialect returns, or the two dependency-owned arms are replaced with local stand-ins.
 
 ## Third fresh independent return (2026-08-31)
 
@@ -1351,6 +1387,35 @@ groups plus its TypeScript checkpoints. A bounded fifth author repair, another g
 review, accepted current provider health and the shared-resource bootstrap still gate acceptance;
 no catalog, schema, migration, route, roster, client, tournament or production bot implementation
 is authorized.
+
+## Fifth author repair (2026-09-07)
+
+The author-owned half of the return is closed without inventing either missing shared dependency:
+
+1. **[[D3025]]:** source admission, policy compilation, replay and roster availability resolve and
+   compare the complete immutable catalog member; an id/digest cannot carry substituted semantics.
+2. **[[D3026]]:** `parseBotPolicyEventEnvelope` receives a sealed replay authority assembled from
+   independently loaded root, legal, classifier, catalog-profile and provider authorities, reruns
+   the compiler and requires exact stored-projection equality. A coordinated mass/move/digest
+   rewrite now fails even when its private hashes agree.
+3. **[[D3027]] / [[D3127]]:** pre-provider and concurrent-winner replay load unknown bytes by
+   request id and pass them through the same reconstruction parser. The operation API no longer
+   accepts caller `previous` or `existingAtCommit` envelopes.
+4. **[[D3028]]:** the request parser is an exact four-field grammar with bounded non-empty root ids
+   and a canonical SHA-256 event-head digest; forbidden position/profile extras fail.
+5. **[[D3029]]:** complete-set checks require unique identities and the Stockfish guard explicitly
+   rejects a duplicate move row before lookup.
+6. **[[D3032]]:** both retained bot author TypeScript programs extend `tsconfig.base.json`; the
+   guard-score and feature-subset objects omit absent optional fields rather than assigning
+   `undefined` under `exactOptionalPropertyTypes`.
+
+`make bot-policy-fifth-author-repair` runs 38 canonical controls, six retained fourth-author groups
+and both repository compiler checkpoints. The historical fifth-review target remains the falsifier
+that motivated this repair and is not a release gate. [[D3030]] remains dependency-blocked on one
+shared durable operation-specific provider parser/receipt. [[D3031]] now refuses profile
+substitution but remains dependency-blocked on the currently accepted provider-health checkpoint.
+Another genuinely fresh review must test the repaired boundaries and the two eventual dependency
+joins before acceptance; no production/schema/migration/content byte is authorized by this round.
 
 ## Discharges
 
@@ -1471,3 +1536,9 @@ as a named future measured layer (Open question 4).
   route request, guard population, provider authority, health-currentness and repository compiler
   boundaries remain open. `make bot-policy-fifth-fresh-review` passes 8/8 fresh falsifiers plus the
   retained chain; bounded repair and another fresh review remain mandatory.
+- 2026-09-07: fifth author repair closes the six locally owned returns [[D3025]]–[[D3029]] and
+  [[D3032]], plus the concurrent replay sibling [[D3127]]. Complete catalog equality, independent
+  durable reconstruction, storage-owned replay, closed request grammar, unique Stockfish rows and
+  the repository TypeScript dialect are executable under `make bot-policy-fifth-author-repair`.
+  [[D3030]] and the remaining health half of [[D3031]] stay dependency-blocked; another fresh review
+  still gates acceptance and no production byte changed.

@@ -23,14 +23,17 @@ import {
   deriveCandidateFeatureSubset,
   digest,
   makeBotRootAuthority,
+  makeBotPolicyReplayAuthority,
   makeExactLegalMoveMap,
   parseBotOpponentPlyResult,
   parseBotOpponentPlyRequest,
+  parseBotPolicyEventEnvelope,
   profileAvailability,
   projectBotPolicyDecisionRecord,
   resolveBotProfile,
   saveReloadEnvelope,
   type BotOperationRootAuthority,
+  type BotPolicyReplayAuthority,
   type BotPolicyEventEnvelope,
   type BotRootIdentity,
   type Sha,
@@ -44,7 +47,7 @@ import {
 } from "../d2846-provider-health-seventh-author-repair/contract.js";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-const sha = (value: string): Sha => `sha256:${value.padEnd(64, "0").slice(0, 64)}`;
+const sha = (value: string): Sha => digest(value);
 const rootIdentity = (overrides: Partial<BotRootIdentity> = {}): BotRootIdentity => ({
   runId: "run-1", branchId: "main", nodeId: "n-4", preCommitEventHeadDigest: sha("head"),
   beforeFenDigest: digest(START_FEN), historyDigest: digest([]), ...overrides,
@@ -98,13 +101,15 @@ const maiaResult = (authority = root(), mass = 0.99, overrides: MaiaOverrides = 
 };
 
 const stockfishResult = (authority = root(), scoreFor: (moveUci: string) => ProviderScore = (moveUci) =>
-  ({ kind: "centipawns", value: moveUci === "b2b3" ? 100 : moveUci === "a2a4" ? -300 : 0 })):
+  ({ kind: "centipawns", value: moveUci === "b2b3" ? 100 : moveUci === "a2a4" ? -300 : 0 }), duplicateFirst = false):
   TypedProviderResult<"stockfish.legal_root_table@1"> => {
   const moves = exactLegalMoves(authority.beforeFen).map((move) => move.uci);
+  const rows = moves.map((moveUci) => ({ moveUci, reachedDepth: 8, score: scoreFor(moveUci), pv: [moveUci] }));
+  if (duplicateFirst) rows.push({ ...rows[0]!, pv: [...rows[0]!.pv] });
   const payload = { request: { fen: authority.beforeFen, bound: { kind: "depth" as const, value: 8 },
     requestedWidth: "all_legal" as const, moveIdentity: "chessops-king-takes-rook@1" as const,
     requestedEngine: { id: "stockfish", version: "18" }, timeoutMs: 500 }, scoreFrame: "root_side_to_move" as const,
-    rows: moves.map((moveUci) => ({ moveUci, reachedDepth: 8, score: scoreFor(moveUci), pv: [moveUci] })) };
+    rows };
   const delivery = makeProviderDelivery({ operation: "stockfish.legal_root_table@1", provider: "stockfish",
     endpoint: { kind: "uci_supervisor", engineId: "stockfish-analysis" },
     requestedIdentity: { request: payload.request, command: { commands: ["position fen", "go depth 8"], commandsDigest: sha("commands") } },
@@ -121,13 +126,17 @@ const ready = (family: "human-baseline" | "guarded-human" | "pawn-forward" = "gu
   const profile = resolveBotProfile(`${family}.1400@1`);
   const legalMap = legal(authority);
   const classifiers = compileLegalBoardClassifiers(authority, legalMap);
+  const maia = options.maia ?? maiaResult(authority, options.mass);
   const result = deriveBotSourceView({ root: authority, legal: legalMap, classifiers, profile,
-    maia: options.maia ?? maiaResult(authority, options.mass), ...(options.stockfish !== undefined ? { stockfish: options.stockfish } : {}) });
+    maia, ...(options.stockfish !== undefined ? { stockfish: options.stockfish } : {}) });
   if (result.kind !== "ready") throw new Error("expected ready source");
-  return { authority, profile, source: result.source };
+  const replayAuthority = makeBotPolicyReplayAuthority({ root: authority, legal: legalMap, classifiers,
+    profileId: profile.id, maia, ...(options.stockfish === undefined ? {} : { stockfish: options.stockfish }) });
+  return { authority, profile, source: result.source, replayAuthority };
 };
 
-const committedEnvelope = (): { envelope: BotPolicyEventEnvelope; authority: BotOperationRootAuthority; request: ReturnType<typeof parseBotOpponentPlyRequest> } => {
+const committedEnvelope = (): { envelope: BotPolicyEventEnvelope; authority: BotOperationRootAuthority;
+  replayAuthority: BotPolicyReplayAuthority; request: ReturnType<typeof parseBotOpponentPlyRequest> } => {
   const value = ready("guarded-human", { stockfish: stockfishResult() });
   const decision = projectBotPolicyDecisionRecord(compileBotPolicyExecution({ source: value.source, profile: value.profile }));
   const request = parseBotOpponentPlyRequest({ requestId: "botreq_1234567890abcdef", expectedNodeId: "n-4",
@@ -138,7 +147,7 @@ const committedEnvelope = (): { envelope: BotPolicyEventEnvelope; authority: Bot
     preProviderOperandDigest: begun.preProviderOperandDigest, eventSequence: 22,
     timingMs: { total: 120, maia: 40, guard: 70, composition: 10 } });
   if (committed.kind !== "committed") throw new Error("expected commit");
-  return { envelope: committed.envelope, authority: value.authority, request };
+  return { envelope: committed.envelope, authority: value.authority, replayAuthority: value.replayAuthority, request };
 };
 
 describe("D2088 immutable family × band roster", () => {
@@ -218,16 +227,17 @@ describe("D2091 compiler-owned transforms and sample", () => {
 describe("D2092/D2087 parsed idempotency and durable non-circular envelope", () => {
   it("refuses invalid ids and distinguishes writer/seed operands", () => {
     expect(() => parseBotOpponentPlyRequest({ requestId: "botreq_123", expectedNodeId: "n", expectedBranchId: "b", expectedEventHeadDigest: sha("h") })).toThrow(/invalid/u);
-    const { envelope, authority, request } = committedEnvelope();
+    const { envelope, authority, replayAuthority, request } = committedEnvelope();
     const profile = resolveBotProfile("guarded-human.1400@1");
-    expect(beginBotOperation({ request, root: authority.identity, writerLeaseDigest: sha("lease"), profile, seed: 7, previous: envelope }).kind).toBe("replayed_idempotent");
-    expect(beginBotOperation({ request, root: authority.identity, writerLeaseDigest: sha("other-lease"), profile, seed: 7, previous: envelope }).kind).toBe("request_reused_with_different_operands");
-    expect(beginBotOperation({ request, root: authority.identity, writerLeaseDigest: sha("lease"), profile, seed: 8, previous: envelope }).kind).toBe("request_reused_with_different_operands");
+    const eventReader = { replayAuthority, load: () => envelope };
+    expect(beginBotOperation({ request, root: authority.identity, writerLeaseDigest: sha("lease"), profile, seed: 7, eventReader }).kind).toBe("replayed_idempotent");
+    expect(beginBotOperation({ request, root: authority.identity, writerLeaseDigest: sha("other-lease"), profile, seed: 7, eventReader }).kind).toBe("request_reused_with_different_operands");
+    expect(beginBotOperation({ request, root: authority.identity, writerLeaseDigest: sha("lease"), profile, seed: 8, eventReader }).kind).toBe("request_reused_with_different_operands");
   });
 
   it("survives save/reload byte-identically and has no resulting-head self reference", () => {
-    const { envelope } = committedEnvelope();
-    const reloaded = saveReloadEnvelope(envelope);
+    const { envelope, replayAuthority } = committedEnvelope();
+    const reloaded = saveReloadEnvelope(envelope, replayAuthority);
     expect(reloaded).toEqual(envelope);
     expect(reloaded.operation).not.toHaveProperty("committedEventHeadDigest");
     expect(reloaded.operation.preProviderOperandDigest).toBeTruthy();
@@ -353,8 +363,8 @@ describe("D2220 exact legal-board pawn classifier", () => {
 
 describe("D2221 retained provider delivery authority", () => {
   it("persists the exact admitted deliveries through decision save/reload", () => {
-    const { envelope } = committedEnvelope();
-    const reloaded = saveReloadEnvelope(envelope);
+    const { envelope, replayAuthority } = committedEnvelope();
+    const reloaded = saveReloadEnvelope(envelope, replayAuthority);
     expect(reloaded.decision.sources.maia.delivery).toEqual(envelope.decision.sources.maia.delivery);
     expect(reloaded.decision.sources.stockfish?.delivery).toEqual(envelope.decision.sources.stockfish?.delivery);
     expect(reloaded.operation.providerDeliveryDigests).toEqual([
@@ -456,9 +466,10 @@ describe("D2224/D2225 registered catalog and closed decision grammar", () => {
 
 describe("D2226 pre-provider retry and serialized concurrent commit", () => {
   it("replays an exact prior request before providers regardless of later provider state", () => {
-    const { envelope, authority, request } = committedEnvelope();
+    const { envelope, authority, replayAuthority, request } = committedEnvelope();
     const profile = resolveBotProfile("guarded-human.1400@1");
-    expect(beginBotOperation({ request, root: authority.identity, writerLeaseDigest: sha("lease"), profile, seed: 7, previous: envelope }))
+    expect(beginBotOperation({ request, root: authority.identity, writerLeaseDigest: sha("lease"), profile, seed: 7,
+      eventReader: { replayAuthority, load: () => envelope } }))
       .toEqual({ kind: "replayed_idempotent", envelope });
     const registry = new ProviderRegistry([
       { instanceId: "maia-inference", implementation: "local_service", generation: "later" },
@@ -471,11 +482,12 @@ describe("D2226 pre-provider retry and serialized concurrent commit", () => {
   });
 
   it("replays a byte-identical concurrent winner and conflicts on changed delivered bytes", () => {
-    const { envelope, authority, request } = committedEnvelope();
+    const { envelope, authority, replayAuthority, request } = committedEnvelope();
     const rootAfterWinner = root({ nodeId: "n-5", preCommitEventHeadDigest: sha("advanced-head") });
     const same = commitBotOperation({ request, currentRoot: rootAfterWinner, decision: envelope.decision,
       writerLeaseDigest: sha("lease"), preProviderOperandDigest: envelope.operation.preProviderOperandDigest,
-      eventSequence: 23, timingMs: { total: 121, maia: 41, guard: 70, composition: 10 }, existingAtCommit: envelope });
+      eventSequence: 23, timingMs: { total: 121, maia: 41, guard: 70, composition: 10 },
+      eventReader: { replayAuthority, load: () => envelope } });
     expect(same).toEqual({ kind: "replayed_concurrent_winner", envelope });
 
     const changedReady = ready("guarded-human", { authority, stockfish: stockfishResult(authority),
@@ -483,7 +495,120 @@ describe("D2226 pre-provider retry and serialized concurrent commit", () => {
     const changedDecision = projectBotPolicyDecisionRecord(compileBotPolicyExecution({ source: changedReady.source, profile: changedReady.profile }));
     const changed = commitBotOperation({ request, currentRoot: rootAfterWinner, decision: changedDecision,
       writerLeaseDigest: sha("lease"), preProviderOperandDigest: envelope.operation.preProviderOperandDigest,
-      eventSequence: 23, timingMs: { total: 121, maia: 41, guard: 70, composition: 10 }, existingAtCommit: envelope });
+      eventSequence: 23, timingMs: { total: 121, maia: 41, guard: 70, composition: 10 },
+      eventReader: { replayAuthority, load: () => envelope } });
     expect(changed).toEqual({ kind: "concurrent_commit_conflict" });
+  });
+});
+
+const semanticPersistedProvider = (source: any): unknown => {
+  const { servedAt: _servedAt, acquisition, ...delivery } = source.delivery;
+  const { requestedAt: _requestedAt, retrievedAt: _retrievedAt, ...semanticAcquisition } = acquisition;
+  return { operation: source.operation, delivery: { ...delivery, acquisition: semanticAcquisition } };
+};
+
+const rehashForgedEnvelope = (envelope: any): void => {
+  const decision = envelope.decision;
+  decision.derivationDigest = digest({
+    root: decision.root,
+    profile: decision.profile,
+    seed: decision.seed,
+    sources: {
+      maia: semanticPersistedProvider(decision.sources.maia),
+      ...(decision.sources.stockfish === undefined ? {} : {
+        stockfish: semanticPersistedProvider(decision.sources.stockfish),
+      }),
+      ...(decision.sources.candidateSubsetDigest === undefined ? {} : {
+        candidateSubsetDigest: decision.sources.candidateSubsetDigest,
+      }),
+    },
+    returnedProbabilityMass: decision.returnedProbabilityMass,
+    coverage: decision.coverage,
+    layers: decision.layers,
+    considered: decision.considered,
+    chosenMoveUci: decision.chosenMoveUci,
+  });
+  envelope.operation.derivationDigest = decision.derivationDigest;
+  envelope.operation.chosenMoveUci = decision.chosenMoveUci;
+  envelope.operation.commitOperandDigest = digest({
+    preProviderOperandDigest: envelope.operation.preProviderOperandDigest,
+    derivationDigest: envelope.operation.derivationDigest,
+    providerDeliveryDigests: envelope.operation.providerDeliveryDigests,
+  });
+  const { operationDigest: _operationDigest, timingMs: _timingMs, ...image } = envelope.operation;
+  envelope.operation.operationDigest = digest(image);
+};
+
+describe("D3025-D3029/D3032 fifth-review author repair", () => {
+  it("binds a profile id to its exact catalog family, sampler and layers", () => {
+    const value = ready("human-baseline");
+    const substituted = {
+      ...value.profile,
+      family: "guarded-human",
+      orderedLayers: ["sampler.maia_reconstruction@1", "guard.severe_error@1"],
+    } as unknown as typeof value.profile;
+    expect(() => deriveBotSourceView({ root: value.authority, legal: value.source.legal,
+      classifiers: value.source.classifiers, profile: substituted, maia: maiaResult(value.authority) }))
+      .toThrow(/uncompiled profile/u);
+    expect(() => compileBotPolicyExecution({ source: value.source, profile: substituted }))
+      .toThrow(/uncompiled profile/u);
+  });
+
+  it("reconstructs a durable decision from independent root/profile/provider authority", () => {
+    const { envelope, replayAuthority } = committedEnvelope();
+    const forged: any = JSON.parse(JSON.stringify(envelope));
+    const excluded = forged.decision.considered.find((row: any) => row.finalMass === 0);
+    expect(excluded).toBeDefined();
+    for (const row of forged.decision.considered) row.finalMass = row === excluded ? 1 : 0;
+    forged.decision.chosenMoveUci = excluded.moveUci;
+    rehashForgedEnvelope(forged);
+    expect(() => parseBotPolicyEventEnvelope(forged, replayAuthority)).toThrow(/does not reconstruct/u);
+  });
+
+  it("loads and parses an idempotent replay instead of accepting caller envelope bytes", () => {
+    const { envelope, authority, replayAuthority, request } = committedEnvelope();
+    const forged: any = JSON.parse(JSON.stringify(envelope));
+    forged.decision.chosenMoveUci = "h2h4";
+    expect(() => beginBotOperation({ request, root: authority.identity, writerLeaseDigest: sha("lease"),
+      profile: resolveBotProfile("guarded-human.1400@1"), seed: 7,
+      eventReader: { replayAuthority, load: () => forged } })).toThrow();
+  });
+
+  it("loads and parses the concurrent winner through the same durable authority", () => {
+    const { envelope, replayAuthority, request } = committedEnvelope();
+    const forged: any = JSON.parse(JSON.stringify(envelope));
+    forged.operation.chosenMoveUci = "h2h4";
+    expect(() => commitBotOperation({ request,
+      currentRoot: root({ nodeId: "n-after", preCommitEventHeadDigest: sha("after") }),
+      decision: envelope.decision,
+      writerLeaseDigest: sha("lease"),
+      preProviderOperandDigest: envelope.operation.preProviderOperandDigest,
+      eventSequence: 23,
+      timingMs: { total: 30, maia: 20, guard: 0, composition: 10 },
+      eventReader: { replayAuthority, load: () => forged },
+    })).toThrow();
+  });
+
+  it("closes the request grammar over exact non-empty ids and a real digest", () => {
+    const valid = { requestId: "botreq_1234567890abcdef", expectedNodeId: "node-1",
+      expectedBranchId: "main", expectedEventHeadDigest: sha("head") };
+    expect(parseBotOpponentPlyRequest(valid)).toEqual(valid);
+    expect(() => parseBotOpponentPlyRequest({ ...valid, suppliedFen: START_FEN })).toThrow(/invalid/u);
+    expect(() => parseBotOpponentPlyRequest({ ...valid, expectedNodeId: "" })).toThrow(/invalid/u);
+    expect(() => parseBotOpponentPlyRequest({ ...valid, expectedBranchId: "" })).toThrow(/invalid/u);
+    expect(() => parseBotOpponentPlyRequest({ ...valid, expectedEventHeadDigest: "not-a-digest" })).toThrow(/invalid/u);
+  });
+
+  it("refuses duplicate Stockfish rows before the guard can select one", () => {
+    const authority = root();
+    expect(() => ready("guarded-human", { authority, stockfish: stockfishResult(authority, undefined, true) }))
+      .toThrow(/duplicate Stockfish move identity/u);
+  });
+
+  it("inherits the repository compiler contract", () => {
+    const config = JSON.parse(readFileSync("tools/d1970-bot-policy-author-repair/tsconfig.contract.json", "utf8")) as {
+      extends?: string;
+    };
+    expect(config.extends).toBe("../../tsconfig.base.json");
   });
 });

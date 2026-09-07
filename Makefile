@@ -905,7 +905,7 @@ bot-policy-fresh-review:
 bot-policy-second-fresh-review:
 	node --test tools/d2219-bot-policy-second-fresh-review/contract.test.mjs
 
-.PHONY: bot-policy-third-fresh-review bot-policy-fourth-author-repair bot-policy-fifth-fresh-review
+.PHONY: bot-policy-third-fresh-review bot-policy-fourth-author-repair bot-policy-fifth-fresh-review bot-policy-fifth-author-repair
 bot-policy-third-fresh-review:
 	./node_modules/.bin/vitest run --config tools/d2407-bot-policy-third-fresh-review/vitest.config.ts --reporter=verbose
 
@@ -916,6 +916,12 @@ bot-policy-fourth-author-repair: provider-health-cut-contract bot-policy-author-
 bot-policy-fifth-fresh-review: bot-policy-fourth-author-repair
 	./node_modules/.bin/vitest run --config tools/d3025-bot-policy-fifth-fresh-review/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/tsc -p tools/d3025-bot-policy-fifth-fresh-review/tsconfig.json --noEmit
+
+# Current author checkpoint. It deliberately bypasses the historical provider-health
+# review chain: D3030/D3031 remain dependency-blocked rather than locally simulated.
+bot-policy-fifth-author-repair: bot-policy-author-contract
+	./node_modules/.bin/vitest run --config tools/d2407-bot-policy-fourth-author-repair/vitest.config.ts --reporter=verbose
+	./node_modules/.bin/tsc -p tools/d2407-bot-policy-fourth-author-repair/tsconfig.json --noEmit
 
 bot-trait-screen-contract:
 	./node_modules/.bin/vitest run --config tools/d2237-bot-trait-screen/vitest.config.ts --reporter=verbose
@@ -1401,7 +1407,7 @@ verify-governance: register-check status-parity work-index work-state work-item-
 # historical source images, author models, and counterexamples whose job is to inform an RFC review;
 # they do not establish repository, product, or release correctness. Run the relevant narrow target
 # while editing an RFC, or this aggregate when intentionally auditing the whole active RFC portfolio.
-verify-rfc-evidence: evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review concept-registry-fourth-author-repair concept-registry-fifth-author-repair concept-registry-sixth-fresh-review longitudinal-store-tenth-fresh-review storage-backup-fourth-author-repair storage-backup-fifth-fresh-review safe-deployment-third-author-repair safe-deployment-fourth-fresh-review campaign-two-horizon-sixth-author-repair campaign-two-horizon-seventh-fresh-review pack-capability-seventeenth-fresh-review pack-capability-cut-fresh-review graduation-clearance-author-repair semantic-collector-cut-contract bounded-target-fifth-fresh-review provider-health-cut-contract provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review provider-protocol-sixth-fresh-review live-sources-author-repair review-evidence-fourth-fresh-review evidence-presentation-seventh-fresh-review bot-policy-fifth-fresh-review bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract shared-resource-bootstrap-collision-core-author-contract shared-resource-bootstrap-collision-core-fresh-review shared-resource-bootstrap-collision-core-author-repair bounded-target-sixth-author-repair module-discharge-coverage-contract
+verify-rfc-evidence: evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review concept-registry-fourth-author-repair concept-registry-fifth-author-repair concept-registry-sixth-fresh-review longitudinal-store-tenth-fresh-review storage-backup-fourth-author-repair storage-backup-fifth-fresh-review safe-deployment-third-author-repair safe-deployment-fourth-fresh-review campaign-two-horizon-sixth-author-repair campaign-two-horizon-seventh-fresh-review pack-capability-seventeenth-fresh-review pack-capability-cut-fresh-review graduation-clearance-author-repair semantic-collector-cut-contract bounded-target-fifth-fresh-review provider-health-cut-contract provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review provider-protocol-sixth-fresh-review live-sources-author-repair review-evidence-fourth-fresh-review evidence-presentation-seventh-fresh-review bot-policy-fifth-fresh-review bot-policy-fifth-author-repair bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract shared-resource-bootstrap-collision-core-author-contract shared-resource-bootstrap-collision-core-fresh-review shared-resource-bootstrap-collision-core-author-repair bounded-target-sixth-author-repair module-discharge-coverage-contract
 
 .PHONY: feedback-delivery-measurement feedback-binding-audit capability-watch-check
 feedback-delivery-measurement:

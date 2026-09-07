@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:981539ddfdb877e3600b7d5e5c85f236da92c5b26b753d7819169afd1594d9ec",
+    "roadmap": "sha256:4b811bc86f9e00b9b106e59a4093f91b84cff2a76bec1dc363cf9e3c38c90d08",
     "workItems": "sha256:983e2f3a517cfd73cdddab99412d3ec51f03803642923436f30454b5bf0f0b7d",
-    "workState": "sha256:cbb3278a3c5e1dbd8ae46b7e060e7b1c698a522a0860f36cabd47f3211cad489",
-    "rfcRegister": "sha256:cd56fd706d26f889efd8352b0af13dc35e73aecd5083336c31ecf78543f33b7d",
+    "workState": "sha256:a81a0aa28f5b6ce68a5ce88b9b580060d5ddb55e40686697f6cc3bd253537a2d",
+    "rfcRegister": "sha256:f73e26e086d53cda54ace7f01a07c24b65412643d8bf274b7ec27653d2a5aff6",
     "uxIndex": "sha256:5ca3e23500716997bf5a89e941981f81f59244826bf9983b8a0d358294519080",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -33,7 +33,7 @@
       "todo": 641,
       "doing": 0,
       "blocked": 1226,
-      "done": 898,
+      "done": 900,
       "refused": 109
     },
     "workItems": {
@@ -240,12 +240,11 @@
       ],
       "nextAction": "Repair and freshly review the returned storage, safe-deployment, Campaign, longitudinal and bot-policy real-boundary authorities; then land accepted migrations in register order: longitudinal jobs/observations, bot policy/roster state, campaign state, clocks/variants/social results.",
       "latestCheckpoint": {
-        "at": "2026-09-06",
-        "summary": "Bot policy's fifth fresh review returns its profile, durable decision, replay, request, guard-row, provider, health-currentness and repository-compiler authorities; a coordinated stored rewrite can select a sampler-excluded move. Longitudinal state, storage recovery, safe deployment and Campaign remain separately returned.",
-        "impact": "regressed",
+        "at": "2026-09-07",
+        "summary": "Bot policy's bounded fifth author repair closes complete-profile identity, independent durable reconstruction, both replay paths, closed request grammar, duplicate guard rows and repository compiler parity. Shared durable provider parsing and the current accepted health checkpoint remain explicit dependencies; longitudinal state, storage recovery, safe deployment and Campaign remain separately returned.",
+        "impact": "advanced",
         "evidence": [
-          "planning/platform-alignment/bot-policy/fifth-fresh-independent-buildability-review-2026-09-06.md",
-          "tools/d3025-bot-policy-fifth-fresh-review/review.test.ts",
+          "planning/platform-alignment/bot-policy/fifth-author-repair-2026-09-07.md",
           "rfc/bot-policy.md",
           "planning/longitudinal-store/tenth-fresh-independent-buildability-review-2026-09-06.md",
           "tools/d2994-longitudinal-tenth-fresh-review/review.test.ts",
@@ -285,7 +284,7 @@
           {
             "kind": "rfc",
             "id": "bot-policy.md",
-            "digest": "sha256:8a1d26c9dc08c687ae5ea8805514ff5262b8137f9ecaf989698b6ad9eb8ee740"
+            "digest": "sha256:0d7bcc6d02dfa4b3cdadca0c5141e41207588372b7d28a3fb8837abe04e61e9f"
           },
           {
             "kind": "rfc",
@@ -395,17 +394,18 @@
       "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "The graduation writer, read-only plan and centralized emitter templates ship, but no official pack is graduated. D3033 licenses the foundation/schema slice before Gate F. The total 436-entry plan exposed 104 contract-blocked candidate entries and two false ready predicates; the author amendment now models 204 ready / 232 author-required / 0 contract-blocked without resolving content. Fresh buildability review still gates schema 0.28 implementation.",
+        "summary": "The graduation writer, read-only plan and centralized emitter templates ship, but no official pack is graduated. The bounded author repair now executes all nine emitter shapes, exact registry-plan rejoin, digest-bound repository declarations and the shared fail-closed canonicalizer; the 436-entry plan remains 204 ready / 232 author-required / 0 contract-blocked without resolving content. Fresh buildability review still gates schema 0.28 implementation.",
         "impact": "held",
         "evidence": [
           "planning/content-era/plan.md",
+          "planning/graduation-clearance/author-repair-2026-09-07.md",
           "rfc/graduation-clearance.md"
         ],
         "anchors": [
           {
             "kind": "rfc",
             "id": "graduation-clearance.md",
-            "digest": "sha256:ebbe88c29d365ad8f757aa3a1ddf9543fb248f8e35034decd51e2f091654c39b"
+            "digest": "sha256:95fe5e3870a074989e417df1f5534da467c3bb5f2f691284e73c4475f340b85f"
           }
         ]
       },

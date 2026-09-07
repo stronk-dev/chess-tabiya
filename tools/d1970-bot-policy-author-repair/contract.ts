@@ -55,7 +55,10 @@ const stable = (value: unknown): string => {
 };
 export const digest = (value: unknown): Sha => `sha256:${createHash("sha256").update(stable(value)).digest("hex")}`;
 const sameSet = (left: readonly string[], right: readonly string[]): boolean =>
-  stable([...new Set(left)].sort()) === stable([...new Set(right)].sort());
+  left.length === new Set(left).size
+  && right.length === new Set(right).size
+  && left.length === right.length
+  && stable([...left].sort()) === stable([...right].sort());
 const normalized = (rows: readonly Readonly<{ moveUci: string; mass: number }>[]) => {
   const total = rows.reduce((sum, row) => sum + row.mass, 0);
   if (!(total > 0)) throw new TypeError("empty distribution");
@@ -130,6 +133,13 @@ const FEATURE_SUBSETS = new WeakSet<object>();
 const EXECUTIONS = new WeakSet<object>();
 const DECISIONS = new WeakSet<object>();
 const PACKETS = new WeakSet<object>();
+const REPLAY_AUTHORITIES = new WeakSet<object>();
+
+const exactCatalogProfile = (candidate: BotProfileReference): BotProfileReference => {
+  const catalog = resolveBotProfile(candidate.id);
+  if (stable(catalog) !== stable(candidate)) throw new TypeError("uncompiled profile");
+  return catalog;
+};
 
 export function makeBotRootAuthority(input: BotOperationRootAuthority): BotOperationRootAuthority {
   if (digest(input.beforeFen) !== input.identity.beforeFenDigest || digest(input.historyUci) !== input.identity.historyDigest) {
@@ -234,6 +244,7 @@ export function deriveBotSourceView(input: {
   readonly maia: TypedProviderResult<"maia.policy_page@1">;
   readonly stockfish?: TypedProviderResult<"stockfish.legal_root_table@1">;
 }): BotSourceResult {
+  const profile = exactCatalogProfile(input.profile);
   if (!ROOTS.has(input.root) || !LEGAL_MAPS.has(input.legal) || !CLASSIFIER_VIEWS.has(input.classifiers)
     || input.classifiers.legalMapDigest !== input.legal.digest || stable(input.legal.root) !== stable(input.root.identity)) {
     throw new TypeError("unsealed root/legal authority");
@@ -244,12 +255,12 @@ export function deriveBotSourceView(input: {
   assertProviderDelivery("maia.policy_page@1", input.maia.delivery);
   const page = input.maia.delivery.payload;
   const actual = input.maia.delivery.acquisition.actualIdentity;
-  if (!maiaMatchesRoot(page, input.root) || page.appliedBand !== input.profile.band || page.candidates.length === 0
-    || page.request.requestedModel.id !== input.profile.model.id || page.request.requestedModel.version !== input.profile.model.version
-    || actual.modelId !== input.profile.model.id || actual.version !== input.profile.model.version
-    || page.request.temperature !== input.profile.sampler.temperature || page.temperature !== input.profile.sampler.temperature
-    || page.request.topP !== input.profile.sampler.topP || page.topP !== input.profile.sampler.topP
-    || page.request.requestedWidth !== input.profile.sampler.requestedWidth || page.requestedWidth !== input.profile.sampler.requestedWidth) {
+  if (!maiaMatchesRoot(page, input.root) || page.appliedBand !== profile.band || page.candidates.length === 0
+    || page.request.requestedModel.id !== profile.model.id || page.request.requestedModel.version !== profile.model.version
+    || actual.modelId !== profile.model.id || actual.version !== profile.model.version
+    || page.request.temperature !== profile.sampler.temperature || page.temperature !== profile.sampler.temperature
+    || page.request.topP !== profile.sampler.topP || page.topP !== profile.sampler.topP
+    || page.request.requestedWidth !== profile.sampler.requestedWidth || page.requestedWidth !== profile.sampler.requestedWidth) {
     throw new TypeError("Maia profile/source mismatch");
   }
   const maiaMoves = page.candidates.map((row) => row.moveUci);
@@ -258,7 +269,7 @@ export function deriveBotSourceView(input: {
   }
 
   let guard: BotGuardView = Object.freeze({ kind: "not_requested" });
-  if (input.profile.family !== "human-baseline") {
+  if (profile.family !== "human-baseline") {
     if (input.stockfish === undefined) {
       guard = Object.freeze({ kind: "abstained", reason: "guard_unavailable", rows: Object.freeze([]) });
     } else if (input.stockfish.kind !== "success") {
@@ -268,6 +279,9 @@ export function deriveBotSourceView(input: {
       assertProviderDelivery("stockfish.legal_root_table@1", input.stockfish.delivery);
       const table = input.stockfish.delivery.payload;
       const stockMoves = table.rows.map((row) => row.moveUci);
+      if (new Set(stockMoves).size !== stockMoves.length) {
+        throw new TypeError("duplicate Stockfish move identity");
+      }
       if (table.request.fen !== input.root.beforeFen || !sameSet(stockMoves, input.legal.moves)) {
         guard = Object.freeze({ kind: "abstained", reason: "guard_candidate_mismatch",
           source: registeredProviderInput(input.stockfish.delivery),
@@ -397,20 +411,20 @@ export function compileBotPolicyExecution(input: {
   readonly featureSubset?: CandidateFeatureSubset;
 }): BotPolicyExecution {
   if (!SOURCES.has(input.source)) throw new TypeError("unsealed bot source");
-  if (resolveBotProfile(input.profile.id).digest !== input.profile.digest) throw new TypeError("uncompiled profile");
+  const profile = exactCatalogProfile(input.profile);
   if (input.featureSubset !== undefined && (!FEATURE_SUBSETS.has(input.featureSubset)
     || input.featureSubset.maiaPopulationDigest !== digest(input.source.maiaPage.candidates.map((row) => row.moveUci)))) {
     throw new TypeError("feature population mismatch");
   }
   const transformed = normalized(input.source.maiaPage.candidates.map((row) => ({
     moveUci: row.moveUci,
-    mass: row.probability ** (1 / input.profile.sampler.temperature),
+    mass: row.probability ** (1 / profile.sampler.temperature),
   })));
   const ranked = [...transformed].sort((left, right) => right.mass - left.mass || digest([input.source.root.identity, left.moveUci]).localeCompare(digest([input.source.root.identity, right.moveUci])));
   const topP: typeof ranked = [];
   let cumulative = 0;
   for (const row of ranked) {
-    if (topP.length === 0 || cumulative + row.mass <= input.profile.sampler.topP) {
+    if (topP.length === 0 || cumulative + row.mass <= profile.sampler.topP) {
       topP.push(row);
       cumulative += row.mass;
     }
@@ -424,7 +438,7 @@ export function compileBotPolicyExecution(input: {
       rows: Object.freeze(input.source.guard.rows.map((row) => ({ moveUci: row.moveUci, sourceScore: row.sourceScore }))) });
     admitted = base;
   }
-  const pawnTraitApplied = input.profile.family === "pawn-forward" && guard.kind === "applied";
+  const pawnTraitApplied = profile.family === "pawn-forward" && guard.kind === "applied";
   const classifierMap = new Map(input.source.classifiers.rows.map((row) => [row.moveUci, row.classifiers] as const));
   const weighted = normalized(admitted.map((row) => ({ ...row, mass: row.mass * (pawnTraitApplied && classifierMap.get(row.moveUci)?.includes("pawn_move@1") ? 4 : 1) })));
   const chosenMoveUci = sample(weighted, input.source.root.seed, input.source.root.identity);
@@ -434,8 +448,11 @@ export function compileBotPolicyExecution(input: {
     const finalRow = weighted.find((item) => item.moveUci === row.moveUci);
     const consideredGuard: BotPolicyExecution["considered"][number]["guard"] = (() => {
       if (guard.kind === "not_requested") return Object.freeze({ kind: "not_requested" as const });
-      if (guard.kind === "abstained") return Object.freeze({ kind: "abstained" as const, reason: guard.reason,
-        sourceScore: guard.rows.find((item) => item.moveUci === row.moveUci)?.sourceScore });
+      if (guard.kind === "abstained") {
+        const sourceScore = guard.rows.find((item) => item.moveUci === row.moveUci)?.sourceScore;
+        return Object.freeze({ kind: "abstained" as const, reason: guard.reason,
+          ...(sourceScore === undefined ? {} : { sourceScore }) });
+      }
       const guardRow = guard.rows.find((item) => item.moveUci === row.moveUci);
       if (guardRow === undefined) throw new TypeError("applied guard omitted admitted Maia row");
       return Object.freeze({ kind: "applied" as const, sourceScore: guardRow.sourceScore,
@@ -448,15 +465,16 @@ export function compileBotPolicyExecution(input: {
       features: Object.freeze([...(featureMap.get(row.moveUci) ?? [])]) });
   });
   const layers: BotLayerAction[] = [Object.freeze({ id: "sampler.maia_reconstruction@1",
-    action: input.source.maiaPage.returnedProbabilityMass < input.profile.sampler.returnedMassFloor ? "degraded" : "applied",
-    ...(input.source.maiaPage.returnedProbabilityMass < input.profile.sampler.returnedMassFloor ? { reason: "returned_mass_below_profile_floor" as const } : {}) })];
-  if (input.profile.family !== "human-baseline") layers.push(Object.freeze({ id: "guard.severe_error@1",
+    action: input.source.maiaPage.returnedProbabilityMass < profile.sampler.returnedMassFloor ? "degraded" : "applied",
+    ...(input.source.maiaPage.returnedProbabilityMass < profile.sampler.returnedMassFloor ? { reason: "returned_mass_below_profile_floor" as const } : {}) })];
+  if (profile.family !== "human-baseline") layers.push(Object.freeze({ id: "guard.severe_error@1",
     action: guard.kind === "applied" ? "applied" : "abstained", ...(guard.kind === "abstained" ? { reason: guard.reason } : {}) }));
-  if (input.profile.family === "pawn-forward") layers.push(Object.freeze({ id: "trait.pawn_preference@1",
+  if (profile.family === "pawn-forward") layers.push(Object.freeze({ id: "trait.pawn_preference@1",
     action: pawnTraitApplied ? "applied" : "abstained", ...(!pawnTraitApplied ? { reason: "guard_dependency_abstained" } : {}) }));
-  if (layers.map((layer) => layer.id).join("\0") !== input.profile.orderedLayers.join("\0")) throw new TypeError("compiled profile layer mismatch");
-  const value = Object.freeze({ source: input.source, profile: input.profile, layers: Object.freeze(layers),
-    considered: Object.freeze(considered), chosenMoveUci, featureSubsetDigest: input.featureSubset?.digest });
+  if (layers.map((layer) => layer.id).join("\0") !== profile.orderedLayers.join("\0")) throw new TypeError("compiled profile layer mismatch");
+  const value = Object.freeze({ source: input.source, profile, layers: Object.freeze(layers),
+    considered: Object.freeze(considered), chosenMoveUci,
+    ...(input.featureSubset === undefined ? {} : { featureSubsetDigest: input.featureSubset.digest }) });
   EXECUTIONS.add(value);
   return value;
 }
@@ -535,6 +553,53 @@ export function assertBotPolicyDecisionRecord(value: unknown): asserts value is 
   if (typeof value !== "object" || value === null || !DECISIONS.has(value)) throw new TypeError("unsealed policy decision");
 }
 
+export interface BotPolicyReplayAuthority {
+  readonly root: BotOperationRootAuthority;
+  readonly legal: ExactLegalMoveMap;
+  readonly classifiers: LegalBoardClassifierView;
+  readonly profileId: BotProfileId;
+  readonly maia: TypedProviderResult<"maia.policy_page@1">;
+  readonly stockfish?: TypedProviderResult<"stockfish.legal_root_table@1">;
+  readonly featureSubset?: CandidateFeatureSubset;
+}
+
+export function makeBotPolicyReplayAuthority(input: BotPolicyReplayAuthority): BotPolicyReplayAuthority {
+  if (!ROOTS.has(input.root) || !LEGAL_MAPS.has(input.legal) || !CLASSIFIER_VIEWS.has(input.classifiers)) {
+    throw new TypeError("unsealed replay authority");
+  }
+  resolveBotProfile(input.profileId);
+  const value = Object.freeze({
+    root: input.root,
+    legal: input.legal,
+    classifiers: input.classifiers,
+    profileId: input.profileId,
+    maia: input.maia,
+    ...(input.stockfish === undefined ? {} : { stockfish: input.stockfish }),
+    ...(input.featureSubset === undefined ? {} : { featureSubset: input.featureSubset }),
+  });
+  REPLAY_AUTHORITIES.add(value);
+  return value;
+}
+
+function reconstructBotPolicyDecision(authority: BotPolicyReplayAuthority): BotPolicyDecisionRecord {
+  if (!REPLAY_AUTHORITIES.has(authority)) throw new TypeError("unsealed replay authority");
+  const profile = resolveBotProfile(authority.profileId);
+  const source = deriveBotSourceView({
+    root: authority.root,
+    legal: authority.legal,
+    classifiers: authority.classifiers,
+    profile,
+    maia: authority.maia,
+    ...(authority.stockfish === undefined ? {} : { stockfish: authority.stockfish }),
+  });
+  if (source.kind !== "ready") throw new TypeError("replay source unavailable");
+  return projectBotPolicyDecisionRecord(compileBotPolicyExecution({
+    source: source.source,
+    profile,
+    ...(authority.featureSubset === undefined ? {} : { featureSubset: authority.featureSubset }),
+  }));
+}
+
 export interface BotOpponentPlyRequest {
   readonly requestId: `botreq_${string}`;
   readonly expectedNodeId: string;
@@ -543,11 +608,16 @@ export interface BotOpponentPlyRequest {
 }
 
 export function parseBotOpponentPlyRequest(value: unknown): BotOpponentPlyRequest {
-  if (typeof value !== "object" || value === null) throw new TypeError("invalid bot request");
+  if (!plainRecord(value) || !exactObjectKeys(value, ["expectedBranchId", "expectedEventHeadDigest", "expectedNodeId", "requestId"])) {
+    throw new TypeError("invalid bot request");
+  }
   const request = value as Record<string, unknown>;
   if (typeof request.requestId !== "string" || !/^botreq_[A-Za-z0-9_-]{16,128}$/u.test(request.requestId)
-    || typeof request.expectedNodeId !== "string" || typeof request.expectedBranchId !== "string"
-    || typeof request.expectedEventHeadDigest !== "string") throw new TypeError("invalid bot request");
+    || typeof request.expectedNodeId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/u.test(request.expectedNodeId)
+    || typeof request.expectedBranchId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/u.test(request.expectedBranchId)
+    || typeof request.expectedEventHeadDigest !== "string" || !/^sha256:[0-9a-f]{64}$/u.test(request.expectedEventHeadDigest)) {
+    throw new TypeError("invalid bot request");
+  }
   return Object.freeze({ requestId: request.requestId as `botreq_${string}`, expectedNodeId: request.expectedNodeId,
     expectedBranchId: request.expectedBranchId, expectedEventHeadDigest: request.expectedEventHeadDigest as Sha });
 }
@@ -574,21 +644,29 @@ export function preProviderOperandDigest(input: { request: BotOpponentPlyRequest
     profile: input.profile, seed: input.seed });
 }
 
+export interface BotPolicyEventReader {
+  readonly replayAuthority: BotPolicyReplayAuthority;
+  load(requestId: `botreq_${string}`): unknown | undefined;
+}
+
 export function beginBotOperation(input: { request: BotOpponentPlyRequest; root: BotRootIdentity; writerLeaseDigest: Sha;
-  profile: BotProfileReference; seed: number; previous?: BotPolicyEventEnvelope }):
+  profile: BotProfileReference; seed: number; eventReader?: BotPolicyEventReader }):
   Readonly<{ kind: "proceed"; preProviderOperandDigest: Sha }> | Readonly<{ kind: "replayed_idempotent"; envelope: BotPolicyEventEnvelope }> |
   Readonly<{ kind: "request_reused_with_different_operands" }> {
-  const pre = preProviderOperandDigest(input);
-  if (input.previous === undefined) return Object.freeze({ kind: "proceed", preProviderOperandDigest: pre });
-  if (input.previous.operation.requestId !== input.request.requestId || input.previous.operation.preProviderOperandDigest !== pre) {
+  const profile = exactCatalogProfile(input.profile);
+  const pre = preProviderOperandDigest({ ...input, profile });
+  const stored = input.eventReader?.load(input.request.requestId);
+  if (stored === undefined) return Object.freeze({ kind: "proceed", preProviderOperandDigest: pre });
+  const previous = parseBotPolicyEventEnvelope(stored, input.eventReader!.replayAuthority);
+  if (previous.operation.requestId !== input.request.requestId || previous.operation.preProviderOperandDigest !== pre) {
     return Object.freeze({ kind: "request_reused_with_different_operands" });
   }
-  return Object.freeze({ kind: "replayed_idempotent", envelope: input.previous });
+  return Object.freeze({ kind: "replayed_idempotent", envelope: previous });
 }
 
 export function commitBotOperation(input: { request: BotOpponentPlyRequest; currentRoot: BotOperationRootAuthority;
   decision: BotPolicyDecisionRecord; writerLeaseDigest: Sha; preProviderOperandDigest: Sha; eventSequence: number;
-  timingMs: BotOperationRecord["timingMs"]; existingAtCommit?: BotPolicyEventEnvelope }):
+  timingMs: BotOperationRecord["timingMs"]; eventReader?: BotPolicyEventReader }):
   Readonly<{ kind: "committed"; envelope: BotPolicyEventEnvelope }>
   | Readonly<{ kind: "replayed_concurrent_winner"; envelope: BotPolicyEventEnvelope }>
   | Readonly<{ kind: "concurrent_commit_conflict" }>
@@ -598,10 +676,12 @@ export function commitBotOperation(input: { request: BotOpponentPlyRequest; curr
     ...(input.decision.sources.stockfish === undefined ? [] : [input.decision.sources.stockfish.deliveryDigest])]);
   const commitOperandDigest = digest({ preProviderOperandDigest: input.preProviderOperandDigest,
     derivationDigest: input.decision.derivationDigest, providerDeliveryDigests });
-  if (input.existingAtCommit !== undefined) {
-    const winner = input.existingAtCommit.operation;
+  const existingAtCommit = input.eventReader?.load(input.request.requestId);
+  if (existingAtCommit !== undefined) {
+    const parsedWinner = parseBotPolicyEventEnvelope(existingAtCommit, input.eventReader!.replayAuthority);
+    const winner = parsedWinner.operation;
     if (winner.requestId === input.request.requestId && winner.preProviderOperandDigest === input.preProviderOperandDigest
-      && winner.commitOperandDigest === commitOperandDigest) return Object.freeze({ kind: "replayed_concurrent_winner", envelope: input.existingAtCommit });
+      && winner.commitOperandDigest === commitOperandDigest) return Object.freeze({ kind: "replayed_concurrent_winner", envelope: parsedWinner });
     return Object.freeze({ kind: "concurrent_commit_conflict" });
   }
   const root = input.currentRoot.identity;
@@ -643,7 +723,11 @@ const persistedOperationKeys = [
   "requestId", "root", "seed", "timingMs", "writerLeaseDigest",
 ] as const;
 
-export function parseBotPolicyEventEnvelope(value: unknown): BotPolicyEventEnvelope {
+export function parseBotPolicyEventEnvelope(
+  value: unknown,
+  replayAuthority: BotPolicyReplayAuthority,
+): BotPolicyEventEnvelope {
+  if (!REPLAY_AUTHORITIES.has(replayAuthority)) throw new TypeError("unsealed replay authority");
   if (!plainRecord(value) || !exactObjectKeys(value, ["decision", "operation"])
     || !plainRecord(value.decision) || !exactObjectKeys(value.decision, persistedDecisionKeys)
     || !plainRecord(value.operation) || !exactObjectKeys(value.operation, persistedOperationKeys)) {
@@ -716,14 +800,22 @@ export function parseBotPolicyEventEnvelope(value: unknown): BotPolicyEventEnvel
   const { operationDigest: _operationDigest, timingMs: _timingMs, ...operationImage } = operation;
   if (operation.operationDigest !== digest(operationImage)) throw new TypeError("persisted operation digest mismatch");
 
+  const reconstructed = reconstructBotPolicyDecision(replayAuthority);
+  if (stable(reconstructed) !== stable(decision)) {
+    throw new TypeError("persisted decision does not reconstruct from storage authority");
+  }
+
   const parsedDecision = deepFreezeValue(structuredClone(decision));
   const parsedOperation = deepFreezeValue(structuredClone(operation));
   DECISIONS.add(parsedDecision);
   return Object.freeze({ decision: parsedDecision, operation: parsedOperation });
 }
 
-export function saveReloadEnvelope(envelope: BotPolicyEventEnvelope): BotPolicyEventEnvelope {
-  return parseBotPolicyEventEnvelope(JSON.parse(JSON.stringify(envelope)));
+export function saveReloadEnvelope(
+  envelope: BotPolicyEventEnvelope,
+  replayAuthority: BotPolicyReplayAuthority,
+): BotPolicyEventEnvelope {
+  return parseBotPolicyEventEnvelope(JSON.parse(JSON.stringify(envelope)), replayAuthority);
 }
 
 export type BotProfileAvailability =
@@ -750,6 +842,7 @@ const conditionalAvailability = (
 };
 
 export function profileAvailability(profile: BotProfileReference, snapshot: ProviderRegistrySnapshot, receipt?: ProviderReleaseReceipt): BotProfileAvailability {
+  profile = exactCatalogProfile(profile);
   const maia = selectProfileAvailability(snapshot, "opponent.maia_inference");
   const maiaBoundary = conditionalAvailability(maia, "maia", snapshot.revision);
   if (maiaBoundary !== null) return maiaBoundary;
