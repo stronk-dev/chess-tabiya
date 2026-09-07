@@ -38,6 +38,15 @@ does not deliver deviations, feedback claims, checkpoint triggers, plan
 classes, concepts, or spine annotations. The stored document—not this
 projection—remains authoritative for orchestration, PGN export, and digesting.
 
+The web catalogue owns one display boundary for phase and publication fields.
+`opening`, `middlegame`, `endgame`, and `cross_phase` become learner-facing
+phase labels; origin plus review state becomes `Official`, `Community draft`,
+or `Community publication`, with publisher attribution when present. An
+unknown future value renders neutral copy rather than exposing a wire token.
+Home phase starters reuse the same phase vocabulary, and live-session cards
+reuse the shared objective-progress vocabulary rather than printing
+`ObjectiveState` values.
+
 Classroom assignments reuse this pack projection rather than defining a second
 content format. Learn renders assigned packs before the ordinary catalogue; starting one
 creates the same hosted run as any other pack start. Submission is a separate explicit

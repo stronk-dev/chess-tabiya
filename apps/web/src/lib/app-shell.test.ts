@@ -593,7 +593,8 @@ describe("application shell", () => {
     expect(card.textContent).toContain("Classroom: Thursday endgames");
     expect(card.textContent).toContain("Match session · Two players share the match board");
     expect(card.textContent).toContain("paused since");
-    expect(card.textContent).toContain("Objective state: active");
+    expect(card.textContent).toContain("Objective: In progress");
+    expect(card.textContent).not.toContain("Objective state: active");
     expect(card.textContent).toContain("Last move");
     expect(document.body.textContent).toContain("never ordered or labelled by engine evaluation");
     expect(card.textContent).not.toContain("struggling");

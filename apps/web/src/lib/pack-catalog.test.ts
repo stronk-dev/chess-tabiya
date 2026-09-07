@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { PackSummary } from "./api.js";
-import { filterPacks, packDifficultyCopy, packModeCopy } from "./pack-catalog.js";
+import { filterPacks, packDifficultyCopy, packModeCopy, packPhaseCopy, packPublicationCopy } from "./pack-catalog.js";
 
 function pack(input: Partial<PackSummary> & Pick<PackSummary, "id" | "title">): PackSummary {
   return {
@@ -37,5 +37,17 @@ describe("pack catalogue", () => {
     expect(packDifficultyCopy(packs[0]!)).toBe("Club player");
     expect(packDifficultyCopy(packs[1]!)).toBe("Recorded for online rapid 1000–1600");
     expect(packDifficultyCopy(pack({ id: "unknown", title: "Unknown", difficulty: null }))).toBe("No difficulty window is recorded");
+  });
+
+  it("keeps phase and publication wire values behind one learner-copy boundary", () => {
+    expect(["opening", "middlegame", "endgame", "cross_phase"].map(packPhaseCopy)).toEqual([
+      "Opening", "Middlegame", "Endgame", "Across phases",
+    ]);
+    expect(packPhaseCopy(undefined)).toBe("Phase not recorded");
+    expect(packPhaseCopy("future_phase")).toBe("Other phase");
+    expect(packPublicationCopy(pack({ id: "draft", title: "Draft", publisherHandle: "alice" }))).toBe("Community draft · @alice");
+    expect(packPublicationCopy(pack({ id: "published", title: "Published", reviewStatus: "published" }))).toBe("Community publication");
+    expect(packPublicationCopy(pack({ id: "official", title: "Official", channel: "official", reviewStatus: "schema_example" }))).toBe("Official");
+    expect(packPublicationCopy(pack({ id: "future", title: "Future", reviewStatus: "future_state" }))).toBe("Community content");
   });
 });

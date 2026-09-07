@@ -18376,3 +18376,11 @@ so a learner can see which records are removed, retained as shared history, revo
 published work without approaching the delete control. Loading and retrying never call deletion, and
 a failed refresh clears the stale digest before confirmation. This completes IMP-a13. D1484 remains
 open for IMP-a12: the twelve inventory-derived learner labels still need their recorded owner ruling.
+
+## 2026-09-07 — Catalogue and live cards stop formatting wire tokens as copy
+
+One learner-copy boundary now maps all four pack phases and the three pack publication states,
+including neutral fallbacks for future values. Play cards preserve the required official/community
+origin and optional publisher attribution without exposing `cross_phase` or `schema_example`; Home
+reuses the phase labels, and the live wall reuses objective-progress copy instead of printing the
+runtime state. Mounted catalogue and shell fixtures cover the learner-visible paths.

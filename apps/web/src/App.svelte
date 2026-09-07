@@ -11,6 +11,7 @@
   import JustPlayStarter from "./lib/JustPlayStarter.svelte";
   import GameStoryScreen from "./lib/GameStoryScreen.svelte";
   import { attemptVerdictLabel, corpusPopulationLabel } from "./lib/learner-copy.js";
+  import { packPhaseCopy } from "./lib/pack-catalog.js";
   import { objectiveStateLabel } from "./lib/run-copy.js";
   import RatingScreen from "./lib/RatingScreen.svelte";
   import CohortStanding from "./lib/CohortStanding.svelte";
@@ -1290,10 +1291,10 @@
           <div><p class="eyebrow">Pick up a thread</p><h2 id="phase-starters-title">Start from the phase you are working on.</h2></div>
           {#each phaseStarters as pack}
             <article>
-              <span>{pack.phase?.replaceAll("_", " ")}</span>
+              <span>{packPhaseCopy(pack.phase)}</span>
               <h3>{pack.title}</h3>
               <p>{pack.objectiveSummary}</p>
-              <button type="button" onclick={() => controller.startPack(pack.id)}>Start {pack.phase}</button>
+              <button type="button" onclick={() => controller.startPack(pack.id)}>Start this {packPhaseCopy(pack.phase).toLocaleLowerCase()}</button>
             </article>
           {/each}
         </section>
@@ -1707,7 +1708,7 @@
         {/if}
         {#if !liveTitle.trim()}<p id="live-title-required" class="honest">Give the session a title viewers will recognize.</p>{/if}
       </div>
-      <section><h2>Your sessions</h2><p class="honest">Wall cards show rules facts and the pack's recorded objective state; they are never ordered or labelled by engine evaluation.</p><div class="item-list live-wall">{#each liveSessions as item}<article><div class="mini-board"><Chessboard fen={item.board.activeFen} startSide="white" disabled={true} onMove={()=>{}}/></div><div><h3>{item.title}</h3><p>{liveKindLabel(item.kind)} · {liveBoardControlLabel(item.boardControl)}</p>{#if item.classroom}<p>Classroom: <strong>{item.classroom.name}</strong></p>{/if}<p><strong>{liveTurnLabel(item)}</strong>{item.board.pausedAt ? ` · paused since ${readableDate(item.board.pausedAt)}` : ""}</p>{#if item.board.players}<p>{item.board.players.white?`@${item.board.players.white.handle}`:"open"} vs {item.board.players.black?`@${item.board.players.black.handle}`:"open"}</p>{/if}<p>Objective state: {item.board.objectiveState.replaceAll("_", " ")}</p><p>{item.board.lastMoveAt ? `Last move ${readableDate(item.board.lastMoveAt)}` : "No move committed yet"}</p><p>@{item.board.leaseHeldBy.handle} holds the board · {item.board.plyCount} plies</p></div><button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:item.id}))}>Open</button></article>{:else}<p>No live sessions yet.</p>{/each}</div></section>
+      <section><h2>Your sessions</h2><p class="honest">Wall cards show rules facts and the pack's recorded objective state; they are never ordered or labelled by engine evaluation.</p><div class="item-list live-wall">{#each liveSessions as item}<article><div class="mini-board"><Chessboard fen={item.board.activeFen} startSide="white" disabled={true} onMove={()=>{}}/></div><div><h3>{item.title}</h3><p>{liveKindLabel(item.kind)} · {liveBoardControlLabel(item.boardControl)}</p>{#if item.classroom}<p>Classroom: <strong>{item.classroom.name}</strong></p>{/if}<p><strong>{liveTurnLabel(item)}</strong>{item.board.pausedAt ? ` · paused since ${readableDate(item.board.pausedAt)}` : ""}</p>{#if item.board.players}<p>{item.board.players.white?`@${item.board.players.white.handle}`:"open"} vs {item.board.players.black?`@${item.board.players.black.handle}`:"open"}</p>{/if}<p>Objective: {objectiveStateLabel(item.board.objectiveState)}</p><p>{item.board.lastMoveAt ? `Last move ${readableDate(item.board.lastMoveAt)}` : "No move committed yet"}</p><p>@{item.board.leaseHeldBy.handle} holds the board · {item.board.plyCount} plies</p></div><button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:item.id}))}>Open</button></article>{:else}<p>No live sessions yet.</p>{/each}</div></section>
       <section><h2>Choose the source run</h2><div class="item-list">{#each runs as item}{@const disabledReason=liveCreateDisabledReason(item)}<article><div><h3>{item.title}</h3><p>{liveSourceIneligibility(item)??(item.viewerRole === "host" ? "Ready for this workflow" : "Only the run host can start a session")}</p><p class="honest">{item.sessionKind} run · {item.recordedMoveCount} recorded {item.recordedMoveCount===1?"move":"moves"}</p></div><button type="button" disabled={disabledReason!==undefined} aria-describedby={disabledReason===undefined?undefined:`live-disabled-${item.id}`} onclick={()=>void createLive(item)}>{liveCreateBusy?"Creating…":`Create ${liveKind}`}</button>{#if disabledReason}<span id={`live-disabled-${item.id}`} class="honest">{disabledReason}</span>{/if}</article>{/each}</div>{#if liveCreateBusy}<p id="live-create-busy" role="status">Creating the session…</p>{/if}{#if liveCreateError}<p role="alert">{liveCreateError}</p>{/if}</section>
       <p class="honest">Vote tallies are advisory. Chat identity is only as trustworthy as the configured adapter.</p>
     </main>

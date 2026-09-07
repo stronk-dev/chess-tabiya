@@ -781,9 +781,9 @@ describe("Layer 3 screens", () => {
     });
 
     expect(document.body.textContent).toContain("advanced club");
-    expect(document.body.textContent).toContain("draft");
+    expect(document.querySelector(".provenance")?.textContent).toBe("Community draft");
     expect(document.body.textContent).toContain(summary.objectiveSummary);
-    expect(document.body.textContent).toContain("opening");
+    expect(document.querySelector(".phase")?.textContent).toBe("Opening");
     const open = document.querySelector<HTMLButtonElement>(".pack-card button")!;
     expect(open.getAttribute("aria-label")).toBe(`Rehearse this position: ${summary.title}`);
     open.click();

@@ -4,6 +4,8 @@
     filterPacks,
     packDifficultyCopy,
     packModeCopy,
+    packPhaseCopy,
+    packPublicationCopy,
     type PackBandFilter,
     type PackPhaseFilter,
     type PackSort,
@@ -76,14 +78,14 @@
         <article class="pack-card">
           <div class="card-meta">
             <span>{packModeCopy(pack.mode)}</span>
-            <span class="phase">{pack.phase?.replaceAll("_", " ") ?? "phase not recorded"}</span>
+            <span class="phase">{packPhaseCopy(pack.phase)}</span>
           </div>
           <h2>{pack.title}</h2>
           <p class="objective">{pack.objectiveSummary}</p>
           <p class="horizon">{pack.consequenceHorizon === null || pack.consequenceHorizon === undefined ? "Consequence length not recorded" : `Consequence · up to ${pack.consequenceHorizon.plies} ${pack.consequenceHorizon.plies === 1 ? "ply" : "plies"}`}</p>
           <p class="difficulty">{packDifficultyCopy(pack)}</p>
           <button class="open-pack" type="button" aria-label={`${actionLabel}: ${pack.title}`} onclick={() => onSelect(pack.id)}>{actionLabel} <span aria-hidden="true">→</span></button>
-          <p class="provenance">{pack.channel === "official" ? "Official" : "Community"}{pack.publisherHandle ? ` · @${pack.publisherHandle}` : ""} · {pack.reviewStatus.replaceAll("_", " ")}</p>
+          <p class="provenance">{packPublicationCopy(pack)}</p>
         </article>
       {:else}
         <div class="empty">

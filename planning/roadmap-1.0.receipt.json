@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:331fc740b00c3821e963d24ccb2b9567d0d7d196269c0a64cc1f3f3f4fb87860",
+    "roadmap": "sha256:6ff9989ddb3247afbee4ae2b801a90fe781c2af21d84d9bc8081efa7254e5ac0",
     "workItems": "sha256:613dab9f72a9868520f7fb723c911731089f2ab4f30a5927cac6d7aab255e6ee",
     "workState": "sha256:9b6d0bc53566f183c60b8d8ff3627ea144ca87759f6c1e32e8f283afffda35a2",
     "rfcRegister": "sha256:f3efd2307d62a39be86513e01b399cbc2979dbf6a0f0b413f8baea33399b1ea8",
@@ -216,12 +216,13 @@
       "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell and completed related-rehearsal vocabulary path, then land the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "The stable board now reaches the 320×256 WCAG reflow floor, iPhone SE-class portrait heights and phone landscape. Short viewports use the compact single-column composition with a width-bound board, vertical drill scrolling, no horizontal overflow and one truthful selected companion region. Ordinary play opens Support without exposing individual evidence switches, while a served-corpus journey proves related rehearsals resolve a learner-facing title and legal SAN instead of registry ids or UCI; advanced controls remain available through the explicit Inspector.",
+        "summary": "The stable board reaches the 320×256 WCAG reflow floor, iPhone SE-class portrait heights and phone landscape. Short viewports use the compact single-column composition with a width-bound board, vertical drill scrolling, no horizontal overflow and one truthful selected companion region. Ordinary play opens Support without exposing individual evidence switches; related rehearsals resolve title and legal SAN; and catalogue/live cards translate phase, publication and objective wire states through shared learner-copy boundaries. Advanced controls remain available through the explicit Inspector.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/play-composition.ts",
           "apps/web/src/lib/viewport-support.ts",
           "apps/web/src/lib/DrillScreen.svelte",
+          "apps/web/src/lib/pack-catalog.ts",
           "tests/browser/drill.spec.ts",
           "docs/drill-client.md",
           "rfc/play-composition.md",

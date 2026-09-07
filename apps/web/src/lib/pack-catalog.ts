@@ -20,6 +20,27 @@ export const PACK_MODE_COPY: Readonly<Record<string, string>> = Object.freeze({
   trajectory: "Play the position across its phases",
 });
 
+export const PACK_PHASE_COPY: Readonly<Record<string, string>> = Object.freeze({
+  opening: "Opening",
+  middlegame: "Middlegame",
+  endgame: "Endgame",
+  cross_phase: "Across phases",
+});
+
+export function packPhaseCopy(phase: string | null | undefined): string {
+  return phase === null || phase === undefined ? "Phase not recorded" : PACK_PHASE_COPY[phase] ?? "Other phase";
+}
+
+/** Learner-facing origin and publication state; internal review vocabulary never crosses this boundary. */
+export function packPublicationCopy(pack: Pick<PackSummary, "channel" | "publisherHandle" | "reviewStatus">): string {
+  const publisher = pack.publisherHandle === undefined ? "" : ` · @${pack.publisherHandle}`;
+  if (pack.channel === "official") return `Official${publisher}`;
+  if (pack.reviewStatus === "draft") return `Community draft${publisher}`;
+  if (pack.reviewStatus === "published") return `Community publication${publisher}`;
+  if (pack.reviewStatus === "schema_example") return "Example content";
+  return `Community content${publisher}`;
+}
+
 export function packModeCopy(mode: string): string {
   return PACK_MODE_COPY[mode] ?? "Rehearse the position and its consequence";
 }
