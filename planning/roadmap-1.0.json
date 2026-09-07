@@ -332,15 +332,15 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Freshly review the completed D3034 collision-core bootstrap cut, accept and implement the seven-row catalogue, then reduce the convention/provider registrations to concrete readers and continue the returned provider, concept, health, storage, deployment, Campaign and longitudinal authority repairs.",
+        "nextAction": "Independently review the D3034 collision-core bootstrap after its D3082–D3087 author self-audit, accept and implement the seven-row catalogue, then specify the narrow absent-source successor and reduce the assistance/provider/semantic registrations to concrete readers.",
         "latestCheckpoint": {
           "at": "2026-09-06",
-          "summary": "The D3034 author cut reduced the shared-resource bootstrap from 1,330 to 282 lines: seven existing resources become checked data, while projection/lifecycle/Git-history engines and speculative roots are withdrawn. Fresh independent review now gates acceptance.",
+          "summary": "The D3034 author cut is now a 294-line, self-audited collision core: seven existing resources become checked data, absent-source admission stays open under D3082, and projection/lifecycle/Git-history engines remain withdrawn. Fresh independent review gates acceptance.",
           "impact": "advanced",
-          "evidence": ["design/BACKLOG.md", "rfc/shared-resource-register-bootstrap.md", "planning/shared-resource-register-bootstrap/collision-core-author-cut-2026-09-06.md"],
+          "evidence": ["design/BACKLOG.md", "rfc/shared-resource-register-bootstrap.md", "planning/shared-resource-register-bootstrap/author-self-audit-2026-09-07.md"],
           "anchors": [
-            {"kind": "work_state", "id": "D3034", "digest": "sha256:dffca84d4c580756395a0843adac86308e8ceefdba21d6aaaeb99c0edc08b535"},
-            {"kind": "rfc", "id": "shared-resource-register-bootstrap.md", "digest": "sha256:8312c11663933bfceb08164d1f43f05a34331378084dac69be3b3729a475e789"}
+            {"kind": "work_state", "id": "D3034", "digest": "sha256:dc0f1e0120e17a1db86baae9647b4df80d4a928a5982d54b813f5ea2d7f943fc"},
+            {"kind": "rfc", "id": "shared-resource-register-bootstrap.md", "digest": "sha256:b0b8379059756e046ecfe5f1727af450e4ba01763f48a4d20e5957753ef910e2"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

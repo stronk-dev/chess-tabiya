@@ -18654,7 +18654,7 @@
       "id": "D2363",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:25a54704feb33d01c53c7f12a58076434b50fc973216d8de6794117f0d8e8038",
+      "sourceDigest": "sha256:3b7538bde56bf8c314683230705ef7812d16f31143911ddcdd0a505b41d503b9",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md"
@@ -24671,7 +24671,7 @@
       "id": "D3034",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:dffca84d4c580756395a0843adac86308e8ceefdba21d6aaaeb99c0edc08b535",
+      "sourceDigest": "sha256:dc0f1e0120e17a1db86baae9647b4df80d4a928a5982d54b813f5ea2d7f943fc",
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md"
@@ -25089,6 +25089,60 @@
       ],
       "evidence": "design/research/ux-core-loop.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3082",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6171d8714ade0746a4d3a55825984f3a5ffa59b2d187cdb3ce6f5676b9b8fcb0",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D3083",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4b91c636d55ae296d5717d6ab199db9d6bb31197449c1c5bc5ed8a8dd7356205",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D3084",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:331f285497c46217494efbb8a35b077e6a7ccfdc420da5e7b0792c44cb662f27",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D3085",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e061d8c110bf3754897adafa3ad5acf77003bb79e536424ab542f4db88e913e7",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D3086",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:310fd24ddbccdf90031728785692f8b2f603c8d60e48d975642e018b854c7f61",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D3087",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:6ad371533c957cd3fa61c14e8042965e8178b89d048b9aa0d9f3b24b4743157f",
+      "uxItems": [],
+      "owner": "coordinator",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
     }
   ]
 }

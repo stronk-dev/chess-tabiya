@@ -55,7 +55,7 @@ test("the seed is equal to both hard-coded inventories it will replace", () => {
   );
 });
 
-test("a schema resource is added by one data row rather than a resource-name branch", () => {
+test("the seed demonstrates the data-row shape without claiming an executed extension", () => {
   const extended = [
     ...seed.resources,
     {
@@ -76,6 +76,8 @@ test("a schema resource is added by one data row rather than a resource-name bra
 
   assert.equal(bySlug.get("synthetic"), "synthetic-schema");
   assert.equal(checker.includes("synthetic-schema"), false);
+  assert.match(rfc, /synthetic \*\*already-present\*\* versioned schema/u);
+  assert.match(rfc, /implementation contract proves the executable\s+extension property/u);
 });
 
 test("the owner cut removed speculative roots and the old declaration blocks", () => {
@@ -86,6 +88,8 @@ test("the owner cut removed speculative roots and the old declaration blocks", (
   }
   assert.match(rfc, /former projection, lifecycle and Git-history\s+engines are withdrawn/u);
   assert.match(rfc, /does \*\*not\*\* introduce absent roots/u);
+  assert.match(rfc, /does not solve\s+\[\[D2363\]\]'s separate absent-source admission deadlock/u);
+  assert.doesNotMatch(rfc, /regular tracked\s+file/u);
 });
 
 test("every configured live source resolves without inventing product bytes", () => {
@@ -103,4 +107,8 @@ test("every configured live source resolves without inventing product bytes", ()
       );
     }
   }
+  for (const id of ["D2454", "D2455", "D2466"]) {
+    assert.match(rfc, new RegExp(`\\[\\[${id}\\]\\].*2026-09-08.*item:D3034`, "u"));
+  }
+  assert.match(rfc, /work-state records do\s+not grow a forbidden date field/u);
 });

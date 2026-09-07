@@ -17812,3 +17812,22 @@ superseded rather than left as a timeless “no hands-on” claim; [[D3080]] and
 ARR-a25 also closes as tracker residue because its required coverage row has already landed. The
 next 1.0 unit returns to dependency-clear product/research work rather than buying access merely to
 turn explicit abstentions into yes/no cells.
+
+## 2026-09-07 — Collision-core bootstrap self-audit narrowed its claim before review
+
+**What changed:** the owner-cut `shared-resource-register-bootstrap` remains a small catalogue for
+the seven existing resources, but no longer claims to solve absent-source admission. The audit
+recorded [[D3082]]–[[D3087]], repaired the impossible blocked-item date requirement, enumerated the
+three staged discharges, reconciled file validation with the no-Git-reader fence and added the
+duplicate-schema-file control. The author gate now calls its synthetic `Map` what it is: a shape
+demonstration, not executed checker behavior.
+
+**Why it matters:** accepting the prior wording would have closed [[D2363]] while its original first
+claim still could not pass, and would have required work-state metadata its own validator rejects.
+The roadmap now reports the narrower truth: collision prevention for already-present sources moves
+first; a minimal absent-source successor remains explicit.
+
+**Evidence/next:** `make shared-resource-bootstrap-collision-core-author-contract`, `make
+work-state`, `make work-index`, `make register-check`, `make status-parity` and `make roadmap-check`
+are green over the amended 294-line RFC. This is Codex author work, not the independent review;
+Claude still owns that review before acceptance and implementation.
