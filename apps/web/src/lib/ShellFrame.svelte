@@ -27,7 +27,7 @@
     ["Home", "/", "home"],
     ["Play", "/play", "play"],
     ["Learn", "/learn", "learn"],
-    ["Review", "/review", "review"],
+    ["Review & import", "/review", "review"],
     ["Rating", "/rating", "rating"],
     ["Live", "/live", "live"],
     ["Create", "/create", "create"],

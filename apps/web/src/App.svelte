@@ -1408,7 +1408,7 @@
     {:else}<main class="shell-view"><h1>Story unavailable.</h1><p role="alert">{routeError ?? "The imported game has no story payload."}</p></main>{/if}
   {:else if route.name === "review"}
     <main class="shell-view" aria-labelledby="review-title">
-      <p class="eyebrow">Review</p><h1 id="review-title">Run history</h1>
+      <p class="eyebrow">Review & import</p><h1 id="review-title">Your games and rehearsals</h1>
       <p>Open a run to replay, branch, compare, or export it. Import one finished game when you want its moments to become rehearsal doors.</p>
       <form class="import-game" onsubmit={(event) => { event.preventDefault(); void importGame(); }}>
         <h2>Import one game</h2>

@@ -19,7 +19,7 @@ an explicit not-found view rather than crashing the application.
 | `/` | Public product explanation and catalogue before sign-in; authenticated Home adds the lease-aware Continue card, due/open counts, direct first start, and one opening/middlegame/endgame thread |
 | `/play` | Public searchable phase/band pack catalogue; authenticated Play adds the named human-choice resistance ladder, strong-engine alternative, and optional FEN |
 | `/play/run/:runId` | Live drill, branch, compare, and export context |
-| `/review` | Stored run history; opening a row returns to its live run context |
+| `/review` | Review and import; stored game/rehearsal history plus the finished-game importer |
 | `/rating` | Server-shaped band-equivalent publication, permanent rated-win marks, disclosures, and whole-game result history |
 | `/learn` | Assigned classroom packs above the return queue and phase-based catalogue |
 | `/live` | Classroom roster/assignment management, consented classroom standings, scheduled pack nights, live-session index, native-match simul wall, and creation from hosted runs |

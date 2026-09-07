@@ -5039,16 +5039,20 @@
     {
       "id": "IMP-a21",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§7-1",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Split reading the inventory from starting deletion — same query, two entry points",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:812c4d595a8230c7c661f5c4b26899ff0919587a593e3efe238dec33cd99d943"
+      "sourceDigest": "sha256:812c4d595a8230c7c661f5c4b26899ff0919587a593e3efe238dec33cd99d943",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "apps/web/src/lib/AssistanceSettings.svelte,apps/web/src/lib/ShellFrame.svelte,apps/web/src/App.svelte"
+      }
     },
     {
       "id": "IMP-a22",
@@ -5161,17 +5165,21 @@
     {
       "id": "IMP-a28",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§2.3-3",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "None of the nine nav destinations is called Import; the importer lives under *\"Run history\"*",
       "legacyRoute": "none",
       "note": "the routing half needs a ruling; the naming does not",
-      "sourceDigest": "sha256:a70fbe6099186f4efbfc93f61030e5cf34832a1f919be4163e47d50fb74209cb"
+      "sourceDigest": "sha256:a70fbe6099186f4efbfc93f61030e5cf34832a1f919be4163e47d50fb74209cb",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "apps/web/src/lib/AssistanceSettings.svelte,apps/web/src/lib/ShellFrame.svelte,apps/web/src/App.svelte"
+      }
     },
     {
       "id": "IMP-a29",

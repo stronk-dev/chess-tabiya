@@ -447,8 +447,9 @@ describe("application shell", () => {
       props: { api: api(), router, storage },
     });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain("Run history"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Your games and rehearsals"));
     expect(document.querySelectorAll("nav a")).toHaveLength(9);
+    expect(document.querySelector<HTMLAnchorElement>('nav a[href="/review"]')?.textContent).toBe("Review & import");
     document.querySelector<HTMLButtonElement>(".item-list button")!.click();
 
     await vi.waitFor(() => expect(document.querySelector("main.drill")).not.toBeNull());

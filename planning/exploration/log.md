@@ -18395,3 +18395,12 @@ story-link lifetime and verbatim-PGN import notices, so all four just-in-time st
 present where the learner acts. Mounted fixtures bind the three new notices to their buttons with
 `aria-describedby`. This completes IMP-a15 and IMP-a16 while leaving IMP-a12/IMP-a14's complete
 inventory vocabulary and IMP-a17's cross-surface storage-only projection guard open.
+
+## 2026-09-07 — Import becomes a named learner destination
+
+The primary navigation now calls the combined destination “Review & import”, and the route calls its
+contents “Your games and rehearsals” instead of exposing the storage-centric “Run history” label.
+The existing finished-game importer and stored game list remain one coherent destination; no route
+or duplicate import form was added. This completes IMP-a28's naming arm. The automatic Account data
+summary shipped at `86688634` also completes IMP-a21's split between reading the inventory and
+starting deletion; this pass records that previously unclosed consequence rather than duplicating it.
