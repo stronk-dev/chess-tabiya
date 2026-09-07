@@ -9792,11 +9792,12 @@
     },
     {
       "id": "D1302",
-      "state": "todo",
+      "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:23c3ff175d3736e737922326e15b90937bd3aa48f0e18aef0a94262d3cf0ee23",
+      "sourceDigest": "sha256:80afa1ba2178f8ab78ddbf2e55e5e2dbaaa03dc822de9682bb11869a48f93146",
       "uxItems": [],
-      "owner": "review-and-return"
+      "owner": "review-and-return",
+      "blocker": "rfc:return-scheduling.md"
     },
     {
       "id": "D1303",
@@ -9877,11 +9878,12 @@
     },
     {
       "id": "D1325",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:04ac2b9d44bbb0372d5a4756cc87990ee68ecc0fc7d14a95b834ca26ddb3cf48",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e09c622a3eb3a69bfd380851860dbdbb95c463f6d39a3e450531e5fce97c23f7",
       "uxItems": [],
-      "owner": "review-and-return"
+      "evidence": "apps/server/src/progress.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1326",

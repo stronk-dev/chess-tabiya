@@ -24,7 +24,10 @@ intent cannot make a prompted return look voluntary.
 
 The automatic scheduler owns at most one pending item per learner and root. An ungraded
 attempt is varied; two consecutive stable graded attempts are varied; other histories are
-blocked. Varied repetitions use the 1, 3, 7, 16, and 35 day ladder. Learners may also
+blocked. Varied repetitions use the 1, 3, 7, 16, and 35 day ladder. Ungraded histories advance
+that ladder by countable-attempt count; graded histories advance it only by the current trailing
+stable streak, with two stable attempts earning the first rung. A prior lapse therefore cannot
+inflate the next interval. Learners may also
 schedule a node explicitly. That operation persists a schedule and appends
 `transfer.scheduled`; callers without the writer lease cannot create either.
 

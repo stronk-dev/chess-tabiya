@@ -28,7 +28,7 @@ import {
   type TaggedAccountRecord,
   type DeletionPreviewV1,
 } from "./account-data.js";
-import { projectAttempts, type AttemptRow, type ConceptTagRow } from "./progress.js";
+import { automaticScheduleDecision, projectAttempts, type AttemptRow, type AttemptVerdict, type ConceptTagRow } from "./progress.js";
 import {
   BOARD_CONTROLS,
   SESSION_JOURNAL_KINDS,
@@ -2918,14 +2918,12 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
     ).all(learnerId, rootKey) as readonly Record<string, unknown>[];
     if (history.length === 0) return;
     const latest = history.at(-1)!;
-    const previous = history.at(-2);
-    const varied = latest.graded === 0 || (latest.verdict === "stable" && previous?.verdict === "stable");
-    const trailingStable = varied && latest.graded === 1
-      ? [...history].reverse().findIndex((row) => row.verdict !== "stable")
-      : 0;
-    const ladder = [1, 3, 7, 16, 35];
-    const days = varied ? ladder[Math.min(Math.max(trailingStable - 1, history.length - 1, 0), 4)]! : 0;
-    const dueAt = new Date(Date.parse(String(latest.ended_at)) + days * 86_400_000).toISOString();
+    const decision = automaticScheduleDecision(history.map((row) => Object.freeze({
+      graded: row.graded === 1,
+      verdict: String(row.verdict) as AttemptVerdict,
+    })));
+    if (decision === undefined) return;
+    const dueAt = new Date(Date.parse(String(latest.ended_at)) + decision.days * 86_400_000).toISOString();
     this.#database.prepare(`
       INSERT INTO schedules (id, learner_id, root_key, session_kind, pack_id,
         root_transpose_key, kind, variant, origin, state, due_at, created_at,
@@ -2936,7 +2934,7 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
         source_run_id=excluded.source_run_id, source_node_id=excluded.source_node_id
     `).run(randomUUID(), learnerId, rootKey, String(latest.session_kind),
       latest.pack_id === null ? null : String(latest.pack_id),
-      String(latest.root_transpose_key), varied ? "varied" : "blocked", dueAt, this.#now(),
+      String(latest.root_transpose_key), decision.kind, dueAt, this.#now(),
       String(latest.run_id), String(latest.root_node_id));
   }
 

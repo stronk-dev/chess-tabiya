@@ -1,7 +1,7 @@
 import { commitMove, createRun, fork } from "@chess-tabiya/runtime";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { projectAttempts } from "./progress.js";
+import { automaticScheduleDecision, projectAttempts, type AttemptRow } from "./progress.js";
 import { EvidenceJobQueue } from "./evidence-queue.js";
 import { RunService } from "./service.js";
 import { SQLiteRunStorage } from "./storage.js";
@@ -65,6 +65,58 @@ describe("return and progression projection", () => {
       kind: "varied",
       origin: "auto",
       state: "pending",
+    });
+  });
+
+  it("schedules graded histories by their stable streak and ungraded histories by attempt count", () => {
+    type Result = "stable" | "unstable" | "ungraded";
+    const histories: readonly { readonly name: string; readonly results: readonly Result[]; readonly expectedDays: number }[] = [
+      { name: "two stable", results: ["stable", "stable"], expectedDays: 1 },
+      { name: "three stable", results: ["stable", "stable", "stable"], expectedDays: 3 },
+      { name: "six stable", results: Array<Result>(6).fill("stable"), expectedDays: 35 },
+      { name: "four lapses then two stable", results: ["unstable", "unstable", "unstable", "unstable", "stable", "stable"], expectedDays: 1 },
+      { name: "one lapse then two stable", results: ["unstable", "stable", "stable"], expectedDays: 1 },
+      { name: "five stable then lapse", results: ["stable", "stable", "stable", "stable", "stable", "unstable"], expectedDays: 0 },
+      { name: "three ungraded", results: Array<Result>(3).fill("ungraded"), expectedDays: 7 },
+      { name: "eight ungraded", results: Array<Result>(8).fill("ungraded"), expectedDays: 35 },
+    ];
+
+    for (const history of histories) {
+      const storage = new SQLiteRunStorage();
+      stores.push(storage);
+      let latestEndedAt = at;
+      for (const [index, result] of history.results.entries()) {
+        latestEndedAt = new Date(Date.parse(at) + index * 60_000).toISOString();
+        const played = commitMove(run(`ladder-${history.name.replaceAll(" ", "-")}-${index}`), "e2e4", { at: latestEndedAt }).run;
+        storage.create(played, `writer-${index}`, "Progress pack");
+        const base = projectAttempts({ run: played, learnerId: "__legacy" }).attempts[0]!;
+        const attempt: AttemptRow = Object.freeze({
+          ...base,
+          countable: true,
+          graded: result !== "ungraded",
+          objectiveState: result === "stable" ? "achieved" : result === "unstable" ? "failed" : "active",
+          verdict: result === "ungraded" ? "open" : result,
+          startedAt: latestEndedAt,
+          endedAt: latestEndedAt,
+        });
+        storage.upsertAttempts([attempt], []);
+      }
+      const schedule = storage.pendingScheduleForRoot("__legacy", projectAttempts({
+        run: commitMove(run(`probe-${history.name.replaceAll(" ", "-")}`), "e2e4", { at: latestEndedAt }).run,
+        learnerId: "__legacy",
+      }).attempts[0]!.rootKey)!;
+      expect({ name: history.name, kind: schedule.kind, days: (Date.parse(schedule.dueAt) - Date.parse(latestEndedAt)) / 86_400_000 }).toEqual({
+        name: history.name,
+        kind: history.expectedDays === 0 ? "blocked" : "varied",
+        days: history.expectedDays,
+      });
+    }
+
+    expect(automaticScheduleDecision(Array.from({ length: 6 }, () => ({ graded: true, verdict: "stable" as const })))).toMatchObject({
+      kind: "varied",
+      days: 35,
+      ladderIndex: 4,
+      trailingStable: 6,
     });
   });
 

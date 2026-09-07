@@ -6,6 +6,35 @@ import { objectiveRules, type PlanSignatureResolver } from "./pack-orchestrator.
 export type AttemptVerdict = "stable" | "unstable" | "open";
 export type AttemptOrigin = "fresh" | "duplicate" | "scheduled" | "in_run_retry";
 
+export const VARIED_LADDER_DAYS = Object.freeze([1, 3, 7, 16, 35] as const);
+
+export interface AutoScheduleDecision {
+  readonly kind: "blocked" | "varied";
+  readonly days: number;
+  readonly ladderIndex: number | null;
+  readonly trailingStable: number;
+}
+
+export function automaticScheduleDecision(
+  history: readonly { readonly graded: boolean; readonly verdict: AttemptVerdict }[],
+): AutoScheduleDecision | undefined {
+  if (history.length === 0) return undefined;
+  let trailingStable = 0;
+  for (let index = history.length - 1; index >= 0 && history[index]!.verdict === "stable"; index -= 1) {
+    trailingStable += 1;
+  }
+  const latest = history.at(-1)!;
+  const previous = history.at(-2);
+  const ladderIndex = latest.graded === false
+    ? Math.min(Math.max(history.length - 1, 0), VARIED_LADDER_DAYS.length - 1)
+    : latest.verdict === "stable" && previous?.verdict === "stable"
+      ? Math.min(Math.max(trailingStable - 2, 0), VARIED_LADDER_DAYS.length - 1)
+      : null;
+  return ladderIndex === null
+    ? Object.freeze({ kind: "blocked", days: 0, ladderIndex, trailingStable })
+    : Object.freeze({ kind: "varied", days: VARIED_LADDER_DAYS[ladderIndex]!, ladderIndex, trailingStable });
+}
+
 export interface AttemptRow {
   readonly runId: string;
   readonly branchId: string;

@@ -17935,3 +17935,17 @@ voice assembly expression in `rest.ts` and refuses mark-derived arguments withou
 numbers. `make test-software` passes 1,113/1,113 tests. The broader evidence-to-consumer spine still
 waits on its foundation RFC acceptance; this repair prevents that future module layer from inheriting
 a learner-authored evidence side channel.
+
+## 2026-09-07 — Return intervals follow learning signal again
+
+**What changed:** [[D1325]] is closed against the already-accepted return contract. One pure
+`automaticScheduleDecision` now separates the ungraded attempt-count arm from the graded
+stable-streak arm and counts a wholly stable history correctly. `#refreshAutoSchedule` consumes
+that decision instead of merging the two indices with `max`.
+
+**Evidence/next:** the real SQLite projection runs all eight recorded histories and asserts exact
+day deltas; the masked all-stable control separately requires six trailing stable attempts, ladder
+index 4 and 35 days. `make test-software` passes 1,114/1,114. [[D1302]] remains open only for the
+dead `retryVariants` rotation, now explicitly blocked on `rfc/return-scheduling.md`; the broader
+lapse-aware step-down and queue features in that draft were not implemented under cover of this
+defect repair.
