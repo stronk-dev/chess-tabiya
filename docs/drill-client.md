@@ -285,8 +285,8 @@ The drill screen composes three regions:
 
 - a centered Chessground board with the authored objective, status, and typed
   why-banner;
-- a bottom active-line timeline whose checkpoint markers support a
-  click-preview followed by explicit rewind confirmation; and
+- a bottom active-line timeline whose entries always support inspection, while only recorded
+  consequence boundaries support explicit rewind confirmation; and
 - a right branch rail with branch label, first divergent move, optional intent,
   live learner-facing objective-progress chip, branch switching, and compare selection. A switch carries
   both the leaf node and branch id, so an empty fork or another shared-node state remains
@@ -296,8 +296,10 @@ The designated first rehearsal adds no fourth region. Its narration occupies the
 seat beside the board (or the existing compact sheet) and derives its step only from committed run
 events. It cannot offer rewind before a checkpoint, segment, guard, or outcome boundary; after the
 rewind it cannot claim a second attempt until `branch.forked` exists. The compare action uses the
-two recorded branch ids and retires the client-only guide. Any timeline rewind preview states that
-the current attempt survives before confirmation.
+two recorded branch ids and retires the client-only guide. A timeline preview that is not a
+checkpoint, guard-return target, or terminal-return target is explicitly preview-only. At a
+recorded consequence boundary the rewind offer states that the current attempt survives before
+confirmation.
 
 The checkpoint sheet takes focus and exposes continue, rewind, compare when
 the authored checkpoint allows it, and stop. Objective transitions are never

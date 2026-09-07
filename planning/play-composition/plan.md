@@ -53,6 +53,11 @@ remain in their owning RFCs.
     board rectangle, and keyboard traversal proves each queued region remains reachable in both
     directions. Learner-visible move labels also fail closed when SAN is absent rather than exposing
     raw UCI from the run or authored anchor.
+15. Timeline navigation is inspect-first instead of an always-present undo path. The client derives
+    rewindable timeline nodes from recorded checkpoint, guard-return and terminal-return events;
+    arbitrary historical plies remain previewable but carry no rewind control. Consequence sheets
+    retain the primary preserved-attempt offer, and positive/negative component fixtures keep the
+    distinction able to fail.
 
 ## Remaining before archive
 

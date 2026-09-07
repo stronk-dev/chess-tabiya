@@ -17700,3 +17700,20 @@ computed destination, history and check paint to change.
 **Evidence/next:** [[D1461]] and SET-c1 close. `make test-software` passes 181 files / 1,110 tests,
 and `make test-browser-smoke` passes 37 production journeys with the optional Maia probe skipped.
 The theming RFC's owner-use felt-quality discharge remains deliberately separate.
+
+## 2026-09-07 — Timeline rewind became consequence-owned
+
+**What changed:** timeline entries remain available for move-by-move inspection, but an arbitrary
+historical ply no longer presents a rewind action. `DrillScreen` derives the exact rewindable set
+from recorded checkpoint boundaries, immediate-guard return targets and terminal return targets;
+only those nodes may expose the preserved-attempt confirmation. Other previews state that rewind is
+offered when a consequence closes. The checkpoint, guard and terminal sheets remain the primary
+offers, so this changes the timing from undo-during-play to retry-after-consequence without deleting
+history navigation.
+
+**Evidence/next:** CLP-a9 is complete and [[D1465]] narrows to its final, separate withheld-feedback
+explanation. `Timeline.test.ts` contains both a non-consequence negative fixture and a consequence
+positive fixture; the read-only browser checkpoint fixture proves that a legitimate offer is
+disabled with its reason rather than disappearing. `make verify-awake` passes, including 182
+software files / 1,112 tests and 17 real-content files / 173 tests. `make test-browser-ci` passes
+37 core journeys (one optional Maia probe skipped), 4 content journeys and all 19 matrix journeys.

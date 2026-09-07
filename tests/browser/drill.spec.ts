@@ -1516,7 +1516,10 @@ test("a granted spectator follows a run without receiving a write control", asyn
   await move(page, "g1", "f3");
   await expect(page.getByText("Active line 3 plies")).toBeVisible();
   await expect(spectator.getByText("Active line 3 plies")).toBeVisible({ timeout: 4_000 });
-  await spectator.getByRole("button", { name: /^Ply 1:/ }).click();
+  await move(page, "f1", "e2");
+  await expect(page.getByRole("heading", { name: "Choose your plan before the break lands" })).toBeVisible();
+  await expect(spectator.getByText("Active line 4 plies")).toBeVisible({ timeout: 4_000 });
+  await spectator.getByRole("button", { name: /^Ply 4:/ }).click();
   await expect(spectator.getByText("Your attempt is kept. Going back makes a second one.")).toBeVisible();
   const rewind = spectator.getByRole("button", { name: /^Rewind to preview/ });
   await expect(rewind).toBeDisabled();

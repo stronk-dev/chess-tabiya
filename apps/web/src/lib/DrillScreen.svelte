@@ -326,6 +326,23 @@
         event.type === "outcome.reached" && event.data.nodeId === currentNode.id,
     ),
   );
+  let timelineRewindNodeIds = $derived.by(() => {
+    const ids = new Set<string>();
+    for (const event of run.events) {
+      if (event.type === "checkpoint.reached") ids.add(event.data.nodeId);
+      if (event.type === "feedback.generated") {
+        const consequence = run.nodes.find((node) => node.id === event.data.nodeId);
+        const learnerMove = run.nodes.find((node) => node.id === consequence?.parentId);
+        const decision = run.nodes.find((node) => node.id === learnerMove?.parentId);
+        if (decision !== undefined) ids.add(decision.id);
+      }
+      if (event.type === "outcome.reached") {
+        const outcomeNode = run.nodes.find((node) => node.id === event.data.nodeId);
+        if (outcomeNode?.parentId !== null && outcomeNode?.parentId !== undefined) ids.add(outcomeNode.parentId);
+      }
+    }
+    return ids;
+  });
   let entries = $derived(timelineEntries(run, pack));
   let path = $derived(historyFrom(run, run.activeCursor.nodeId));
   let firings = $derived(shapeFiringEvidence(shapeFirings(shapes, path)));
@@ -1034,6 +1051,7 @@
             onPreview={preview}
             onConfirm={confirmPreview}
             canConfirm={canWrite}
+            rewindableNodeIds={timelineRewindNodeIds}
             {authoredSpineNodeIds}
             rootNodeId={run.nodes[0]?.id}
             {shapeMarkers}

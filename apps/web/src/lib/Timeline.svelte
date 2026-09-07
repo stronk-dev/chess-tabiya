@@ -9,6 +9,7 @@
     onPreview: (nodeId: string) => void;
     onConfirm: (nodeId: string) => void | Promise<void>;
     canConfirm?: boolean;
+    rewindableNodeIds?: ReadonlySet<string>;
     authoredSpineNodeIds?: ReadonlySet<string>;
     rootNodeId?: string | undefined;
     shapeMarkers?: readonly { readonly nodeId: string; readonly entryId: string; readonly label: string; readonly channel: "official" | "community" }[];
@@ -26,6 +27,7 @@
     onPreview,
     onConfirm,
     canConfirm = true,
+    rewindableNodeIds = new Set<string>(),
     authoredSpineNodeIds = new Set<string>(),
     rootNodeId,
     shapeMarkers = [],
@@ -93,7 +95,7 @@
       </li>
     {/each}
   </ol>
-  {#if previewNodeId}
+  {#if previewNodeId && rewindableNodeIds.has(previewNodeId)}
     <div class="rewind-offer">
       <span>Your attempt is kept. Going back makes a second one.</span>
       <HonestControl
@@ -113,6 +115,8 @@
         {/snippet}
       </HonestControl>
     </div>
+  {:else if previewNodeId}
+    <p class="preview-only">Preview only. Rewind is offered when a consequence closes.</p>
   {/if}
 </section>
 
@@ -141,6 +145,12 @@
   .timeline-heading span {
     color: var(--muted);
     font-size: 0.75rem;
+  }
+
+  .preview-only {
+    margin: 0.75rem 0 0;
+    color: var(--muted);
+    font-size: 0.8rem;
   }
 
   ol {

@@ -3543,17 +3543,21 @@
     {
       "id": "CLP-a9",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§4 R1",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "Move the rewind **offer** to the consequence of finishing rather than an always-present control",
       "legacyRoute": "ledger",
       "note": "[[D945]] context; see the objection recorded in §What a dossier got wrong",
-      "sourceDigest": "sha256:1f2c4b7fe5f4e4c44a99bba90ad0a991d2ba8dab046242def24c5592d3d5abac"
+      "sourceDigest": "sha256:1f2c4b7fe5f4e4c44a99bba90ad0a991d2ba8dab046242def24c5592d3d5abac",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "timeline derives checkpoint, guard-return, and terminal-return rewind boundaries; arbitrary history is preview-only; positive/negative component fixtures"
+      }
     },
     {
       "id": "CLP-b1",
