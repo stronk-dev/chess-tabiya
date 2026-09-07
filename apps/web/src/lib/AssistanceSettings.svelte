@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AssistanceConfig } from "@chess-tabiya/runtime";
+  import { permittedAssistance, workflowContextPolicy, type AssistanceConfig, type AssistancePermission, type RunSessionKind } from "@chess-tabiya/runtime";
   import { onMount } from "svelte";
 
   import type { Capabilities, DeletionEffect, DeletionPreview, Learner } from "./api.js";
@@ -32,6 +32,29 @@
   });
 
   function storage(): Storage | undefined { try { return globalThis.localStorage; } catch { return undefined; } }
+  function profileSessionKind(kind: AssistanceProfile): RunSessionKind {
+    if (kind === "position") return "position";
+    if (kind === "imported" || kind === "match" || kind === "stream") return "imported";
+    return "pack";
+  }
+  function profilePermissions(kind: AssistanceProfile): Readonly<Record<keyof Omit<AssistanceConfig, "version">, AssistancePermission>> {
+    return permittedAssistance({
+      sessionKind: profileSessionKind(kind),
+      workflowContext: kind,
+      deliveryOpen: true,
+      role: kind === "match" ? "participant" : "solo",
+      seatedInContest: kind === "match",
+      reviewing: kind === "imported",
+    });
+  }
+  function profileRefusal(kind: AssistanceProfile): string | undefined {
+    return workflowContextPolicy(kind).moduleCeiling.length === 1
+      ? "Match play permits legal board interaction only. These saved support preferences do not apply during a match."
+      : undefined;
+  }
+  function disabledInProfile(kind: AssistanceProfile, field: keyof Omit<AssistanceConfig, "version">): boolean {
+    return profileRefusal(kind) !== undefined || profilePermissions(kind)[field] === "locked_off";
+  }
   function set<Key extends keyof Omit<AssistanceConfig, "version">>(kind: AssistanceProfile, key: Key, value: AssistanceConfig[Key]): void {
     const next = Object.freeze({ ...configs[kind], [key]: value });
     configs = { ...configs, [kind]: next };
@@ -69,17 +92,20 @@
   <p class="honest">Saved in this browser only. Deployment providers are controlled by the server environment.</p>
   <div class="context-grid">
     {#each ASSISTANCE_PROFILES as kind}
+      {@const refusal = profileRefusal(kind)}
+      {@const permissions = profilePermissions(kind)}
       <fieldset>
         <legend>{labels[kind]}</legend>
-        <label>Board lighting <select value={configs[kind].boardLighting} onchange={(event) => set(kind, "boardLighting", event.currentTarget.value as AssistanceConfig["boardLighting"])}><option value="off">Off</option><option value="legal">Legal moves</option><option value="sight">Structural sight</option><option value="evidence">Disclosed evidence</option></select></label>
-        <label>Arrows <select value={configs[kind].arrows} onchange={(event) => set(kind, "arrows", event.currentTarget.value as AssistanceConfig["arrows"])}><option value="off">Off</option><option value="sight">Structural sight</option><option value="evidence">Disclosed evidence</option></select></label>
-        <label>Spoken guidance <select value={configs[kind].spoken} onchange={(event) => set(kind, "spoken", event.currentTarget.value as AssistanceConfig["spoken"])}><option value="off">Off</option><option value="browser">Browser voice</option>{#if capabilities?.providers.tts === "external"}<option value="provider">Configured provider</option>{/if}</select></label>
-        <label><input type="checkbox" checked={configs[kind].ambient === "on"} onchange={(event) => set(kind, "ambient", event.currentTarget.checked ? "on" : "off")} /> Ambient presence</label>
-        <label><input type="checkbox" checked={configs[kind].markers === "live"} onchange={(event) => set(kind, "markers", event.currentTarget.checked ? "live" : "off")} /> Passive markers</label>
-        <label><input type="checkbox" checked={configs[kind].guided === "live"} onchange={(event) => set(kind, "guided", event.currentTarget.checked ? "live" : "off")} /> Named-pattern guidance</label>
-        <label><input type="checkbox" checked={configs[kind].humanSplit === "on_request"} onchange={(event) => set(kind, "humanSplit", event.currentTarget.checked ? "on_request" : "off")} /> Human move split on request</label>
-        <label><input type="checkbox" checked={configs[kind].corpus === "on_request"} onchange={(event) => set(kind, "corpus", event.currentTarget.checked ? "on_request" : "off")} /> Corpus counts on request</label>
-        <label><input type="checkbox" checked={configs[kind].voice === "persona"} disabled={capabilities?.providers.llm !== "external"} aria-describedby={capabilities?.providers.llm !== "external" ? "external-voice-unavailable" : undefined} onchange={(event) => set(kind, "voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>
+        {#if refusal}<p id={`assistance-profile-refusal-${kind}`} class="honest">{refusal}</p>{/if}
+        <label>Board lighting <select value={configs[kind].boardLighting} disabled={refusal !== undefined} aria-describedby={refusal ? `assistance-profile-refusal-${kind}` : undefined} onchange={(event) => set(kind, "boardLighting", event.currentTarget.value as AssistanceConfig["boardLighting"])}><option value="off">Off</option><option value="legal">Legal moves</option><option value="sight">Structural sight</option><option value="evidence" disabled={refusal === undefined && permissions.boardLighting !== "evidence"}>Disclosed evidence</option></select></label>
+        <label>Arrows <select value={configs[kind].arrows} disabled={refusal !== undefined} aria-describedby={refusal ? `assistance-profile-refusal-${kind}` : undefined} onchange={(event) => set(kind, "arrows", event.currentTarget.value as AssistanceConfig["arrows"])}><option value="off">Off</option><option value="sight">Structural sight</option><option value="evidence" disabled={refusal === undefined && permissions.arrows !== "evidence"}>Disclosed evidence</option></select></label>
+        <label>Spoken guidance <select value={configs[kind].spoken} disabled={disabledInProfile(kind, "spoken")} aria-describedby={refusal ? `assistance-profile-refusal-${kind}` : undefined} onchange={(event) => set(kind, "spoken", event.currentTarget.value as AssistanceConfig["spoken"])}><option value="off">Off</option><option value="browser">Browser voice</option>{#if capabilities?.providers.tts === "external"}<option value="provider">Configured provider</option>{/if}</select></label>
+        <label><input type="checkbox" checked={configs[kind].ambient === "on"} disabled={disabledInProfile(kind, "ambient")} aria-describedby={refusal ? `assistance-profile-refusal-${kind}` : undefined} onchange={(event) => set(kind, "ambient", event.currentTarget.checked ? "on" : "off")} /> Ambient presence</label>
+        <label><input type="checkbox" checked={configs[kind].markers === "live"} disabled={disabledInProfile(kind, "markers")} aria-describedby={refusal ? `assistance-profile-refusal-${kind}` : undefined} onchange={(event) => set(kind, "markers", event.currentTarget.checked ? "live" : "off")} /> Passive markers</label>
+        <label><input type="checkbox" checked={configs[kind].guided === "live"} disabled={disabledInProfile(kind, "guided")} aria-describedby={refusal ? `assistance-profile-refusal-${kind}` : undefined} onchange={(event) => set(kind, "guided", event.currentTarget.checked ? "live" : "off")} /> Named-pattern guidance</label>
+        <label><input type="checkbox" checked={configs[kind].humanSplit === "on_request"} disabled={disabledInProfile(kind, "humanSplit")} aria-describedby={refusal ? `assistance-profile-refusal-${kind}` : undefined} onchange={(event) => set(kind, "humanSplit", event.currentTarget.checked ? "on_request" : "off")} /> Human move split on request</label>
+        <label><input type="checkbox" checked={configs[kind].corpus === "on_request"} disabled={disabledInProfile(kind, "corpus")} aria-describedby={refusal ? `assistance-profile-refusal-${kind}` : undefined} onchange={(event) => set(kind, "corpus", event.currentTarget.checked ? "on_request" : "off")} /> Corpus counts on request</label>
+        <label><input type="checkbox" checked={configs[kind].voice === "persona"} disabled={disabledInProfile(kind, "voice") || capabilities?.providers.llm !== "external"} aria-describedby={refusal ? `assistance-profile-refusal-${kind}` : capabilities?.providers.llm !== "external" ? "external-voice-unavailable" : undefined} onchange={(event) => set(kind, "voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>
       </fieldset>
     {/each}
   </div>

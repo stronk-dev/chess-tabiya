@@ -88,15 +88,19 @@ describe("assistance preference", () => {
     expect(legends).toEqual(["Curated drill", "Just Play", "Imported game", "Match / Arena", "Streamed session", "Academy", "On-ramp", "Campaign"]);
     expect(document.querySelectorAll('input[type="checkbox"]')).toHaveLength(ASSISTANCE_PROFILES.length * 6);
     for (const fieldset of document.querySelectorAll("fieldset")) {
+      const match = fieldset.querySelector("legend")?.textContent === "Match / Arena";
       const control = [...fieldset.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')]
         .find((input) => input.parentElement?.textContent?.includes("External voice"))!;
       expect(control.disabled).toBe(true);
       const reasonId = control.getAttribute("aria-describedby")!;
       const reason = document.getElementById(reasonId)!;
-      expect(reason.textContent).toContain("External voice is unavailable");
+      expect(reason.textContent).toContain(match ? "legal board interaction only" : "External voice is unavailable");
       expect(reason.hidden).toBe(false);
       expect(reason.getAttribute("aria-hidden")).toBeNull();
     }
+    const match = [...document.querySelectorAll("fieldset")].find((fieldset) => fieldset.querySelector("legend")?.textContent === "Match / Arena")!;
+    expect([...match.querySelectorAll("select, input")].every((control) => (control as HTMLInputElement | HTMLSelectElement).disabled)).toBe(true);
+    expect(new Set([...match.querySelectorAll("select, input")].map((control) => control.getAttribute("aria-describedby")))).toEqual(new Set(["assistance-profile-refusal-match"]));
     expect(document.querySelectorAll("#external-voice-unavailable")).toHaveLength(1);
     await unmount(component);
   });

@@ -7986,17 +7986,21 @@
     {
       "id": "SET-a7",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§5.2d / §9",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
       "summary": "**Settings never calls `permittedAssistance()`**, so Match/Arena renders nine live controls that are all inert. `HonestControl` is used 7× in run screens and **0×** here",
       "legacyRoute": "ledger",
       "note": "[[D1462]]",
-      "sourceDigest": "sha256:529a5ad7a8bd6b66785f6ce3bb9fd318ad25cf907c75c16f821c716cf74cc184"
+      "sourceDigest": "sha256:529a5ad7a8bd6b66785f6ce3bb9fd318ad25cf907c75c16f821c716cf74cc184",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "apps/web/src/lib/AssistanceSettings.svelte"
+      }
     },
     {
       "id": "SET-a8",

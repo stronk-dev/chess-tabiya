@@ -1405,6 +1405,10 @@ opened and turns an unrecognized structure into two legitimate loop actions: ret
 board, or rewind only to a runtime-admitted earlier decision. This closes INR-a2/a4 without
 claiming INR-a7's all-module coverage, the still-missing compiled module rail, preset pill, or
 producer-backed hint ladder.
+Advanced Settings now applies the shipped workflow ceiling and assistance permission authority:
+Match / Arena's rules-only profile retains its stored preferences but presents all nine optional
+support controls as unavailable with one visible, action-bound explanation. This closes SET-a7;
+the 8×9 mechanism matrix still belongs behind the unfinished preset/Advanced hierarchy.
 The 2026-08-26 independent presentation review returns the thirteen-component landing on
 [[D1664]]–[[D1672]]. The component vocabulary is still the required layer, but manifest strings
 cannot seal typed visual operands; conventions are caller-writable; citation/enum/abstention and

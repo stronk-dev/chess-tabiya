@@ -18424,3 +18424,13 @@ the runtime-derived timeline rewind set. Disabled actions retain visible reasons
 INR-a2 and INR-a4. INR-a7's requirement to give every declared module empty a next action, the
 compiled eleven-module rail, preset promise and evidence-backed hint stages remain open rather than
 being inferred from this composition slice.
+
+## 2026-09-07 — Settings no longer offers inert match assistance
+
+The advanced assistance matrix now consumes the same workflow ceiling and `permittedAssistance`
+authority used by play. Match / Arena's rules-only policy disables all nine optional controls,
+keeps their stored values unchanged, and binds every disabled input to a visible explanation that
+only legal board interaction applies during a match. Other profiles retain their available
+controls and source-specific provider refusal. This completes SET-a7; replacing the 8×9 mechanism
+matrix with preset-led ordinary flows remains open under `intent-presets` rather than being claimed
+by this honesty repair.

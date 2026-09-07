@@ -167,6 +167,10 @@ and listens for browser `storage` events so a Settings change from another tab u
 mounted run. The ordinary topbar Support menu opens the workflow's Support region; individual
 evidence-channel switches remain available through **Advanced support controls** in the explicit
 Inspector and update the same profile immediately. They do not render as the ordinary play menu.
+The Settings copy of those advanced preferences consumes both the workflow module ceiling and
+`permittedAssistance`. A Match / Arena profile, whose ceiling is rules-only, keeps all nine saved
+values but disables their controls and binds each one to the visible reason that optional support
+does not apply during a match. It no longer presents inert controls as available behavior.
 
 A pack relation is resolved to the related pack document when a run opens. The companion link uses
 the related rehearsal's title rather than its registry id. A `root_after_move` relation is converted
