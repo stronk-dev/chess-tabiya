@@ -212,6 +212,16 @@ the unsupported minimum and its reason; it does not silently clip or shrink the
 board past the target floor. This floor applies to run play, not the surrounding
 catalogue and settings routes.
 
+The current arrival instrument separates navigation from the catalogue hop. On
+2026-09-07, desktop Chromium at 1440×1000 over the production build measured a
+fresh browser-context `/play` open through the first automated selection to an
+actionable board at 252.8 ms median (n=5), and a warm catalogue click to that
+same boundary at 86.5 ms median / 145.3 ms p95 (n=5). “Actionable” requires
+visible board geometry and the enabled 64-cell semantic input surface after two
+animation frames; it is not merely a mounted board element. The instrument is
+`tests/browser/arrival-latency.spec.ts`, and the warm result is inside the
+research protocol's <250 ms budget.
+
 `/settings` is the learner-facing Settings surface, with a sticky section index
 for Appearance, Playing, Account, and About. It edits the same per-browser
 assistance records used by the in-run popover for pack, position, and imported

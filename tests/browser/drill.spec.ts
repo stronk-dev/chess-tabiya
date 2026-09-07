@@ -1162,6 +1162,8 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
     .getByRole("button", { name: /Rehearse this position/ })
     .click();
   await expect(page.getByLabel("Chessboard")).toBeVisible();
+  const boardReadyMs =
+    (await page.evaluate(() => performance.now())) - boardStart;
   await page.getByRole("button", { name: "Inspector" }).click();
   const structuralReading = page.getByRole("button", { name: "Position structure" });
   await expect(structuralReading).toHaveAttribute("aria-expanded", "false");
@@ -1171,8 +1173,6 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
   await expect(page.locator(".structural-facts p").first()).toBeVisible();
   await structuralReading.click();
   await page.getByRole("button", { name: "Return to play" }).click();
-  const boardReadyMs =
-    (await page.evaluate(() => performance.now())) - boardStart;
 
   await move(page, "c1", "e3");
   await expect(page.getByRole("heading", { name: "Choose the setup" })).toBeVisible();

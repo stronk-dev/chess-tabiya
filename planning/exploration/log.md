@@ -17732,3 +17732,20 @@ the action and that the action still claims the writer lease, forks, plays and e
 test-software` passes 182 files / 1,113 tests; `make test-browser-ci` passes 37 core journeys (one
 optional Maia probe skipped), 4 content journeys and all 19 matrix journeys. `make verify-awake`
 passes on the final implementation and tracking bytes, including 17 real-content files / 173 tests.
+
+## 2026-09-07 — Arrival latency measured at the playable-input boundary
+
+**What changed:** ARR-a9 now has a permanent production-browser instrument separating fresh-context
+URL open → first playable board from warm catalogue click → playable board. Readiness requires
+visible board geometry, all 64 semantic grid cells, an enabled input grid and two completed paint
+frames. The old `boardReadyMs` timer now stops when the board appears instead of after an unrelated
+Inspector expand/collapse tour.
+
+**Evidence:** desktop Chromium at 1440×1000 measured cold 252.8 ms median (n=5, 985.5 ms retained
+maximum) and warm 86.5 ms median / 145.3 ms p95 (n=5). The warm arm passes the preregistered <250 ms
+budget. The CET comparison remains directional because its remote DOM/load and “under 2 s” board
+observations use different endpoints. The run also corrected the arrival dossier's stale claim that
+Tabiya had never measured catalogue-to-board: K9 had already measured the endgame arm historically.
+
+**Next:** no product latency change is licensed by a passing result. Keep the cold tail visible in
+future runs and continue the 1.0 queue at the next executable, dependency-clear item.

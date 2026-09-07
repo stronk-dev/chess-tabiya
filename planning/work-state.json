@@ -25056,6 +25056,15 @@
       "sourceDigest": "sha256:d374dc4ed0621b63fae7410ae758fef4d7f84acc52c0beb664330575785eceb2",
       "uxItems": [],
       "owner": "evidence-foundation"
+    },
+    {
+      "id": "D3079",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:637b12c26c12c834eedd7230b4d8004dfff569dbfc164c442fd0360a3e5f0ed8",
+      "uxItems": [],
+      "evidence": "tests/browser/arrival-latency.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

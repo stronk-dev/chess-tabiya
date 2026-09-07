@@ -1263,17 +1263,21 @@
     {
       "id": "ARR-a9",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§4.8",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
       "summary": "**Measure our own cold start and catalogue-to-board time.** The protocol is written (`teardown-protocols.md:20-25`), the budget stated, the competitor number exists, and nothing has ever been run against Tabiya",
       "legacyRoute": "none",
       "note": "cheapest missing measurement in the dossier",
-      "sourceDigest": "sha256:e65ba571cf41edd8e566bef8c0901ca4bc1ddb48665f8b5898aa368c713a062c"
+      "sourceDigest": "sha256:e65ba571cf41edd8e566bef8c0901ca4bc1ddb48665f8b5898aa368c713a062c",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "D3079; permanent production-browser instrument: cold URL-to-playable-board 252.8 ms median and warm catalogue-to-playable-board 86.5 ms median / 145.3 ms p95 across five samples; warm <250 ms budget met"
+      }
     },
     {
       "id": "ARR-b1",

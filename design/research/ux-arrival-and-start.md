@@ -649,9 +649,9 @@ it is unexecuted for every product except CET: *"**Cold start: time from URL ope
 playable**"*, and *"time tap-to-board-ready for retry. Repeat 5×, note median. (Our budget to beat:
 effectively instant; <250 ms warm.)"* `[V]` as a stated protocol.
 
-**We have never measured our own cold start or catalogue-to-board time.** That is recorded in §12
-and is the cheapest missing measurement in this dossier: the protocol is written, the competitor
-number exists, and nothing has been run against ourselves.
+**Correction, 2026-09-07:** this was already stale when written. The K9 endgame pass had measured
+catalogue-to-board readiness over 20 samples, but not the full fresh-context URL-to-playable-board
+path. ARR-a9 now measures both on the current ordinary rehearsal surface; see §14.
 
 ---
 
@@ -1048,10 +1048,9 @@ Evidence in §4.7 and §4.8.
 **On latency and the catalogue-to-board hop**, the corpus contains exactly one measurement and it is
 ours to beat: CET, hands-on, **cold load 593 ms / 672 ms; catalogue list → playable board under 2 s,
 "subjectively immediate"; first opponent reply ~2.1 s, subsequent 150–300 ms** `[V]` observed. The
-same session recorded the field report of *"slow, poor UX"* **not reproducing** on desktop. **We have
-never run the equivalent measurement on ourselves** (§12), and `teardown-protocols.md:20-25` already
-specifies it: *"Cold start: time from URL open → first position playable"*, with a stated budget of
-*"effectively instant; <250 ms warm"*.
+same session recorded the field report of *"slow, poor UX"* **not reproducing** on desktop. At this
+dossier's source-read point the equivalent current-product measurement was still open. ARR-a9 has
+since executed `teardown-protocols.md:20-25`; §14 records the result and its comparability limits.
 
 **On the board's first sentence**, CET's one hands-on usability finding transfers directly: illegal
 moves are rejected **silently**, *"which briefly confused even us"* `[V]`. Silence at the board
@@ -1249,10 +1248,8 @@ pre-run preset surface (O-E1), the Just Play band picker (D1), and the theme pre
 - **I did not check whether `SuppressionRecord` is populated at HEAD** — E4 assumes it is, and
   `rfc/intent-presets.md` is *implementing*, not landed.
 - **I did not exercise Create, Live, or the campaign** (unbuilt).
-- **I did not measure our own cold start or catalogue-to-board time**, which is the cheapest missing
-  measurement here: `teardown-protocols.md:20-25` already specifies the procedure and states the
-  budget (*"effectively instant; <250 ms warm"*), and CET's hands-on numbers exist to compare against
-  (§4.8). Nothing has ever been run against Tabiya.
+- **ARR-a9 later discharged the cold-start and catalogue-to-board limitation.** The original pass
+  did not measure it; §14 preserves that chronology and records the later instrument and result.
 - **I did not measure how long the loop in A1 actually takes.** "Ninety seconds" is `[M]`.
 
 ---
@@ -1268,5 +1265,51 @@ dossier's commit**, because two sibling UX dossiers (`ux-after-the-run.md`,
 `| Area | Feeds | Status | Report |` format:
 
 ```
-| UX — arrival and getting into a session (first run, home, choosing a drill/opponent/preset, into the board) — owner ask 2026-08-24 *"from a user perspective per feature… PROPER UX"* | [[D484]], [[D494]], [[D1427]] Q6, [[D1451]], [[D1452]], `rfc/intent-presets.md` §7/§8.1, `rfc/bot-roster.md`, `rfc/theming.md`, B1/B7 | covered `[V]` for our own surfaces (source read at `8a65a34`, `make graduation-report`, `content/` census) + `[P]` desk for every competitor claim — **no competitor was used hands-on except CET**; four owner rulings requested (first-run legality, guest-then-claim, unreviewed-content disclosure, pre-run preset/opponent surface ownership); DESIGN-GAP on `03` §Learn and return's unbuilt phase navigation | `ux-arrival-and-start.md` |
+| UX — arrival and getting into a session (first run, home, choosing a drill/opponent/preset, into the board) — owner ask 2026-08-24 *"from a user perspective per feature… PROPER UX"* | [[D484]], [[D494]], [[D1427]] Q6, [[D1451]], [[D1452]], `rfc/intent-presets.md` §7/§8.1, `rfc/bot-roster.md`, `rfc/theming.md`, B1/B7 | covered `[V]` for our own surfaces (source read at `8a65a34`, `make graduation-report`, `content/` census, ARR-a9 browser measurement) + `[P]` desk for every competitor claim — **ARR-a9: cold URL→playable board 252.8 ms median; warm catalogue→playable board 86.5 ms median / 145.3 ms p95 (n=5), passing <250 ms**. No competitor was used hands-on except CET; four owner rulings requested; DESIGN-GAP on `03` §Learn and return's unbuilt phase navigation | `ux-arrival-and-start.md` |
 ```
+
+---
+
+## 14. ARR-a9 — Tabiya arrival latency (2026-09-07)
+
+### Method
+
+`tests/browser/arrival-latency.spec.ts` is a permanent, able-to-fail browser instrument over the
+production build and ordinary `/play` surface at product HEAD `beacd628` plus the instrument diff.
+It runs desktop Chromium at 1440×1000 against the local production server and an in-memory store.
+Each **cold** sample creates a browser context with an empty HTTP cache but an authenticated storage
+state, opens `/play`, chooses the first available position as soon as the catalogue exposes it, and
+stops only when the board has visible non-zero square geometry plus an enabled 8×8 / 64-cell
+semantic input grid after two animation frames. This excludes registration and human choice time,
+but includes navigation, application boot, catalogue fetch/render, pack projection, run creation
+and board render. Each **warm** sample starts at an already-rendered catalogue in one browser
+context and times the same click-to-actionable-board boundary. Both arms take five samples; the
+percentile convention is the repository's sorted median and nearest-rank p95. `[V]`
+
+This definition repairs [[D3079]]. The previous `boardReadyMs` in `drill.spec.ts` stopped only after
+an Inspector round-trip and therefore measured a scripted UI tour; it now stops at board visibility,
+while the dedicated instrument binds “ready” to the semantic input surface rather than visibility
+alone. `[V]`
+
+### Result
+
+| Arm | n | min | **median** | p95 / max | Written budget |
+|---|---:|---:|---:|---:|---|
+| Fresh browser context: URL open → first playable board | 5 | 231.5 ms | **252.8 ms** | 985.5 ms | no cold budget |
+| Warm catalogue click → playable board | 5 | 74.5 ms | **86.5 ms** | 145.3 ms | **<250 ms — met** |
+
+The complete sorted samples were cold `[231.5, 251.5, 252.8, 284.5, 985.5]` ms and warm
+`[74.5, 76.2, 86.5, 94.4, 145.3]` ms. The single cold 985.5 ms tail is retained rather than
+discarded; with n=5 it is both p95 and maximum. `[V]`
+
+The CET comparison is directional, not controlled. CET's observed 593 ms DOMContentLoaded / 672 ms
+load events do not end at a playable board, while its catalogue-to-board observation was only
+“under 2 s” on a remote service. Tabiya's 252.8 ms median URL-to-board path is encouraging and the
+86.5 ms warm path clears the preregistered budget, but local loopback versus a remote service does
+not establish a product-level speed advantage. The historical K9 result (39.9 ms warm median on an
+endgame harness) remains valid for its commit and fixture; differing pack, build and readiness
+boundaries make it evidence of the same order of magnitude, not a regression baseline. `[V]`
+
+**Verdict:** ARR-a9 is complete. No latency fix is licensed by this result. The warm acceptance gate
+passes; cold-tail monitoring remains useful, but no cold threshold was preregistered and one is not
+invented after seeing the data.
