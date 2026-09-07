@@ -59,6 +59,13 @@ Large content expansion is admitted only when all are true:
 The D560 **content hold is active by owner ruling**. This checklist is the proposed proof for
 lifting it; the owner may amend the proof without weakening the hold by accident.
 
+**Acyclic migration boundary — owner ruling [[D3033]], 2026-09-06.** Gate F holds scale
+authored-content and claim-binding waves; it does **not** hold foundation implementation or schema
+migrations. Those may land before Gate F so the format can represent the evidence and clearance
+state the gate will inspect. Clause 1 remains a prerequisite for beginning the scale content wave:
+the relevant schema lanes must have landed and closed by then. A schema migration does not publish,
+graduate, or bless any pack.
+
 ## Workstreams and dependency order
 
 ### 0. Reconcile what is already claimed

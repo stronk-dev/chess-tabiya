@@ -17875,3 +17875,25 @@ request/retrospective module.
 remove weak interpretations from unsolicited UI. The full Maia distribution and exact
 option-count sequence remain usable by Review, bots, research and future requested guidance; the
 learner no longer gets their raw strings merely because live markers are enabled.
+
+## 2026-09-07 — The owner queue now names only unanswered decisions
+
+**What changed:** [[D3093]] reconciles four misclassified rows. [[D2475]] and [[D2852]] are closed
+by their later owner rulings; [[D1639]] and [[D3090]] now carry explicit owner questions instead
+of hiding behind RFC dependencies.
+
+**Why it matters:** the owner queue is a working surface, not history. Its remaining decisions are
+now the actual product forks: Guided Hint's per-preset/context disclosure ceilings, and whether
+graduation records an honest process-enforced content declaration or introduces authenticated
+author identity. No already-answered question can keep the roadmap artificially owner-blocked.
+
+## 2026-09-07 — Gate F now states its ruled acyclic migration boundary
+
+**What changed:** [[D3033]] and [[D3094]] are applied to both authoritative gate surfaces.
+Foundation implementation and schema migrations may land before Gate F; the ten-clause gate still
+holds every scale authored-content and claim-binding wave, and schema work alone cannot publish or
+graduate a pack.
+
+**Why it matters:** pack schema 0.28 is no longer blocked by a sentence that required Gate F to pass
+before the schema needed to pass Gate F could exist. Clause 1 still protects the content wave by
+requiring those lanes to be landed and closed before expansion begins.

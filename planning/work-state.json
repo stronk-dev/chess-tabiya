@@ -12738,8 +12738,9 @@
       "sourceGlyph": "⚖️",
       "sourceDigest": "sha256:f8ca05acf47fe5b45f4ba69dc3788e09a0d6469584676b3a3d74104a539d56a0",
       "uxItems": [],
-      "owner": "assistance-and-presentation",
-      "blocker": "rfc:assistance-config-register.md"
+      "owner": "OWNER",
+      "blocker": "owner-ruling",
+      "question": "Approve or amend the five-preset, eight-context and role/contest Guided Hint ceiling table in rfc/hint-distance.md section 5?"
     },
     {
       "id": "D1640",
@@ -19650,13 +19651,12 @@
     },
     {
       "id": "D2475",
-      "state": "blocked",
-      "sourceGlyph": "⚖️",
-      "sourceDigest": "sha256:9d6335163c5de3d776254ead0aec4725abffc7c491660fe87921d0f0fc9baabe",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3bac3bc6d49b78920eddc395b10d7a4a34f13135ef14357d695d35c2f3c90cba",
       "uxItems": [],
-      "owner": "OWNER",
-      "blocker": "owner-ruling",
-      "question": "May a foundation mechanism land without one real exercising content or product consumer, or must it remain implementing with an owned staged discharge?"
+      "evidence": "design/BACKLOG.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2476",
@@ -23042,13 +23042,12 @@
     },
     {
       "id": "D2852",
-      "state": "blocked",
-      "owner": "OWNER",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:675da04d063abce4efad378b49168ba64be209f91662697e416318b28d649d74",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2f3e11b8309108f236665192f08c01fa0371f8fd83e6736e7eb7084f1eabb57f",
       "uxItems": [],
-      "blocker": "owner-ruling",
-      "question": "May foundation/schema migrations land before Gate F while authored and claim-binding content waves remain held?"
+      "evidence": "design/BACKLOG.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D2853",
@@ -24660,11 +24659,12 @@
     },
     {
       "id": "D3033",
-      "state": "todo",
-      "sourceGlyph": "⚖️",
-      "sourceDigest": "sha256:2808691a3576d69e100b9817d963bfc600087bd5448fe4b438abab5f1f231427",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b222522254fcd3d217682bd68eb19599a995b429fa23a6fa7086072c157e0377",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "planning/platform-alignment/plan.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3034",
@@ -25169,7 +25169,8 @@
       "sourceDigest": "sha256:45821eb0af92c52e9d5db4a8e0790e874e779183219dc33911a3f0ef4214e075",
       "uxItems": [],
       "owner": "OWNER",
-      "blocker": "rfc:graduation-clearance.md"
+      "blocker": "owner-ruling",
+      "question": "Should graduation use a process-enforced explicit human-authored content declaration, or add authenticated author identity and signed time?"
     },
     {
       "id": "D3091",
@@ -25187,6 +25188,24 @@
       "sourceDigest": "sha256:3003ee9d3964a63e0900848d8a2600ecb63fce9d5b3663f1ecdaac7b9b6c4812",
       "uxItems": [],
       "evidence": "planning/work-state.json",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3093",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c9310fa8e00ba97d0bec18e1bb912d89a6119413bfb4eeab3209d123571286e6",
+      "uxItems": [],
+      "evidence": "design/BACKLOG.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3094",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f6d88f69098ec36a67667d6a68ae23aa0de28c099d53b0a8feeb44f0e5466e73",
+      "uxItems": [],
+      "evidence": "planning/platform-alignment/plan.md",
       "evidenceKind": "path"
     }
   ]

@@ -441,6 +441,11 @@ was unmet from the moment each ruling landed until now.
   have been frozen since the packs were written, it is 41% pure script and 0% chess judgement, and
   one pack goes from 1 of 4 claims to 4 of 4. The graduation arm remains held behind lane 0.28's
   breaking change. **The line: the binding arm may retire binding debt, never graduation state.**
+- **[[D3033]] — the Gate-F migration cycle is BROKEN without weakening the content hold.**
+  Foundation implementation and schema migrations may land before Gate F; scale authored-content
+  and claim-binding waves remain held. Clause 1 still gates the scale wave, so the relevant schema
+  claims must have landed and closed before content expansion begins. Schema migration alone never
+  publishes or graduates a pack.
 - **[[D953]] — the campaign-RFC gate is WAIVED.** `planning/campaign-research-queue.md`'s *"no
   campaign RFC may be drafted until the narrowed R6–R8 experiential closure"* no longer holds. R6's
   design half was ruled the same day ([[D945]], earned rewinds); R7/R8 remain open and experiential,
@@ -450,6 +455,7 @@ was unmet from the moment each ruling landed until now.
   constitute the owner ruling RFC-0000's exploration gate requires. **Product-surface RFCs in those
   ruled lanes may be drafted.** Three RFCs cite this as their licence; it belongs here.
 
-**Gate F itself** (`planning/platform-alignment/plan.md`) is unchanged by these except clause 7,
-amended on [[D996]] to *"measured and ruled per release"*, and clause 2, recorded as passing on
-[[D992]].
+**Gate F itself** (`planning/platform-alignment/plan.md`) retains all ten clauses. Clause 7 is
+amended on [[D996]] to *"measured and ruled per release"*, clause 2 is recorded as passing on
+[[D992]], and [[D3033]] changes the hold's timing boundary: foundation/schema migration may precede
+the gate, while clause 1 still must pass before the scale content wave.
