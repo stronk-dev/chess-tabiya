@@ -17682,3 +17682,21 @@ ratings publish BCS. The item is now RFC-blocked instead of becoming false perso
 `make test-browser-smoke` passes 37 with the optional Maia probe skipped; and
 `make test-browser-matrix` passes all 19 responsive/accessibility cases. Full Review selection and
 module evidence remain in their owning foundation/RFC lanes.
+
+## 2026-09-07 — Board interaction paint joined the application theme
+
+**What changed:** the last literal colour island in ordinary board interaction paint is gone.
+Legal destinations, capture rings, selection, premove, last-move and check paint now consume
+semantic variables derived from the active app palette. Light themes anchor interaction colours
+against `ink`; dark themes anchor them against `surface`, while the board skin remains an
+independent axis.
+
+**Why the gate changed:** the old skin-switch assertion could pass while the paint ignored themes
+entirely. The permanent test now removes `interaction-paint.css` from the literal allowlist and
+checks the derived formulas across every app-theme/mode × both board skins × both square colours.
+The production browser fixture holds the Olive board fixed, changes only the app theme, and requires
+computed destination, history and check paint to change.
+
+**Evidence/next:** [[D1461]] and SET-c1 close. `make test-software` passes 181 files / 1,110 tests,
+and `make test-browser-smoke` passes 37 production journeys with the optional Maia probe skipped.
+The theming RFC's owner-use felt-quality discharge remains deliberately separate.

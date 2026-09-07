@@ -8021,16 +8021,20 @@
     {
       "id": "SET-c1",
       "sourceState": "blocked_rfc",
-      "state": "blocked_rfc",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "settings §2.3b / §8.4-5",
       "sourceHeading": "Selection (F2/F5), `rfc/tactical-collectors.md`, `rfc/theming.md`, `rfc/play-composition.md` and others",
       "summary": "Drive `interaction-paint.css` from tokens — it contains **zero `var()`**, fifteen literals in a file the RFC calls token-driven, and criterion 6's byte-identity test **cannot see it**",
       "legacyRoute": "ledger",
-      "sourceDigest": "sha256:fe7573dd74b5309634433373390a732513fb278275d15c5993f3a70fab054b60"
+      "sourceDigest": "sha256:fe7573dd74b5309634433373390a732513fb278275d15c5993f3a70fab054b60",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "palette-derived interaction paint with exhaustive theme/mode/board-square contrast and production computed-style proof"
+      }
     },
     {
       "id": "SET-c2",

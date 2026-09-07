@@ -11111,14 +11111,15 @@
     },
     {
       "id": "D1461",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5eafff4af49b142a70a63664f66b0a7b3ccc1694bd0d4b4f26d0f15d4b3d294c",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:58381b655497de1a01d5034476d36be2a9aa1b81f0001f02c16cd14ba1978feb",
       "uxItems": [
         "A11-a20",
         "SET-a22"
       ],
-      "owner": "client-platform"
+      "evidence": "apps/web/src/lib/theme/interaction-paint.css",
+      "evidenceKind": "path"
     },
     {
       "id": "D1462",

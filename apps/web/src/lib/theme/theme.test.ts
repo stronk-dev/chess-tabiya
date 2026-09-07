@@ -53,6 +53,9 @@ function rgb(hex: string): Rgb {
 function composite(foreground: readonly [number, number, number, number], background: Rgb): Rgb {
   return foreground.slice(0, 3).map((channel, index) => channel! * foreground[3] + background[index]! * (1 - foreground[3])) as unknown as Rgb;
 }
+function mix(first: Rgb, second: Rgb, firstShare: number): Rgb {
+  return first.map((channel, index) => channel * firstShare + second[index]! * (1 - firstShare)) as unknown as Rgb;
+}
 function lab(value: Rgb): Rgb {
   const [red, green, blue] = value.map((channel) => {
     const normalized = channel / 255;
@@ -239,14 +242,18 @@ describe("theme foundation", () => {
       }
     }
     const boards = [boardSquares("brown"), boardSquares("olive")];
-    const paints = [
-      [155, 199, 0, 0.41],
-      [20, 85, 30, 0.5],
-      [20, 30, 85, 0.5],
-      [20, 85, 0, 0.55], // occupied destination: the capture ring criterion used to omit
-    ] as const;
-    for (const board of boards) for (const square of board) for (const paint of paints) {
-      expect(deltaE(composite(paint, rgb(square)), rgb(square))).toBeGreaterThanOrEqual(20);
+    for (const theme of Object.values(APP_THEMES)) for (const mode of theme.modes) {
+      const palette = theme.palettes[mode]!;
+      const anchor = rgb(mode === "dark" ? palette.surface : palette.ink);
+      const paints = [
+        [...mix(rgb(palette.warning), anchor, 0.1), 0.75],
+        [...mix(rgb(palette.accent), anchor, 0.2), 0.65],
+        [...mix(rgb(palette.muted), anchor, 0.3), 0.65],
+        [...mix(rgb(palette.accent), anchor, 0.2), 0.75], // occupied destination ring
+      ] as readonly (readonly [number, number, number, number])[];
+      for (const board of boards) for (const square of board) for (const paint of paints) {
+        expect(deltaE(composite(paint, rgb(square)), rgb(square)), `${theme.id}/${mode} on ${square}`).toBeGreaterThanOrEqual(20);
+      }
     }
     for (const theme of Object.values(APP_THEMES)) for (const mode of theme.modes) {
       const palette = theme.palettes[mode]!;
@@ -282,7 +289,6 @@ describe("theme foundation", () => {
 
     const literalAuthorities = new Set([
       join(themeDirectory, "base.css"),
-      join(themeDirectory, "interaction-paint.css"), // D1461/SET-c1: explicitly held by the paint RFC.
       ...filesBelow(join(themeDirectory, "board-skins")),
       ...filesBelow(join(themeDirectory, "piece-skins")),
     ]);
@@ -300,6 +306,11 @@ describe("theme foundation", () => {
     }
     for (const file of filesBelow(join(themeDirectory, "board-skins"))) {
       expect(readFileSync(file, "utf8")).not.toMatch(/last-move|selected|move-dest|check|premove/u);
+    }
+    const interactionPaint = readFileSync(join(themeDirectory, "interaction-paint.css"), "utf8");
+    expect(interactionPaint).not.toMatch(COLOR_LITERAL);
+    for (const token of ["interaction-move", "interaction-history", "interaction-premove", "interaction-check", "interaction-contrast", "interaction-dark-anchor"]) {
+      expect(interactionPaint).toContain(`var(--${token})`);
     }
     expect(Object.keys(MARK_BRUSHES)).toEqual(["green", "red", "blue", "yellow"]);
     const manifest = JSON.parse(readFileSync(join(sourceDirectory, "..", "public", "manifest.webmanifest"), "utf8")) as Record<string, unknown>;

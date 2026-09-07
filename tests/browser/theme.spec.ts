@@ -95,6 +95,22 @@ test("Settings exposes independent persisted pickers and inherited contrast disc
   const stored = await page.evaluate(() => JSON.parse(localStorage.getItem("tabiya.theme") ?? "{}"));
   expect(stored).toEqual({ appTheme: "tokyo-night", boardTheme: "olive", pieceSet: "mono", modeOverride: "light", animation: "fast" });
   expect(stored).not.toHaveProperty("version");
+
+  const interactionBefore = await preview.evaluate((element) => ({
+    move: getComputedStyle(element.querySelector("square.move-dest")!).backgroundImage,
+    history: getComputedStyle(element.querySelector("square.last-move")!).backgroundColor,
+    check: getComputedStyle(element.querySelector("square.check")!).backgroundImage,
+  }));
+  await appearance.getByLabel("App theme", { exact: false }).selectOption("paper");
+  await expect(page.locator("html")).toHaveAttribute("data-app-theme", "paper");
+  await expect(previewShell).toHaveAttribute("data-board-theme", "olive");
+  const interactionAfter = await preview.evaluate((element) => ({
+    move: getComputedStyle(element.querySelector("square.move-dest")!).backgroundImage,
+    history: getComputedStyle(element.querySelector("square.last-move")!).backgroundColor,
+    check: getComputedStyle(element.querySelector("square.check")!).backgroundImage,
+  }));
+  expect(interactionAfter).not.toEqual(interactionBefore);
+
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(appearance.getByLabel("Piece movement")).toBeDisabled();
   await expect(appearance.getByText("Your device requests reduced motion")).toBeVisible();

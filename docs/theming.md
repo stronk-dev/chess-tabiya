@@ -51,8 +51,9 @@ Application components consume those tokens; a permanent sweep covers both
 Svelte and CSS sources and rejects phantom tokens, retired surface aliases,
 hex/rgb/hsl literals, named colors, and CSS system colors. Its literal
 authorities are enumerated rather than directory-wide: palette defaults,
-registered board and piece artwork, forced-colors paint, and the separately
-tracked interaction-paint contract. Ordinary rendering does not inherit
+registered board and piece artwork, and forced-colors paint. The shared
+interaction stylesheet is no longer a literal authority: it consumes palette-derived
+custom properties and is covered by the same sweep as application CSS. Ordinary rendering does not inherit
 `Canvas` or `CanvasText` from the operating system.
 
 `theme/controls.css` is the shared native-control baseline. It gives text
@@ -65,7 +66,9 @@ Board CSS is split into two layers:
 
 - `board-skins/` paints only light and dark squares;
 - `interaction-paint.css` paints destinations, selection, last move, premove,
-  check, and other interaction state exactly once for every board skin.
+  check, and other interaction state exactly once for every board skin. Its
+  move/history/premove/check colours derive from the active application palette;
+  changing the app theme recolours these states without changing the board skin.
 
 Critical states do not depend on hue alone. Last move and check retain inset-ring
 geometry in ordinary palettes. In forced-colors mode the browser-facing layer
@@ -88,8 +91,9 @@ uses the visible board position.
 
 The permanent tests cover catalog totality and cross-product selection, device
 and stored-mode resolution, reduced motion, palette contrast, exact inherited
-palette bytes, source-derived board-square colors, evidence-paint color
-separation, asset registration, token and literal sweeps, assistance/theme type
+palette bytes, source-derived board-square colors, palette-driven evidence-paint
+color separation across the complete app-theme/mode and board-square product,
+asset registration, token and literal sweeps, assistance/theme type
 and import separation, the one-time shared-control import and its production
 computed styles, live cross-tab
 application, stable board identity and position, real post-gesture movement

@@ -14,5 +14,20 @@
   --shadow: 0 0.8rem 2.5rem var(--shadow-color);
   --scrim: color-mix(in srgb, var(--ink) 55%, transparent);
   --scrim-strong: color-mix(in srgb, var(--ink) 88%, transparent);
+  /*
+   * Board interaction paint follows the active app palette while retaining a
+   * dark anchor against both bundled board skins.  The percentages are
+   * contrast-tested across every app-theme/mode x board-square combination.
+   */
+  --interaction-dark-anchor: var(--ink);
+  --interaction-move: color-mix(in srgb, var(--accent) 20%, var(--interaction-dark-anchor));
+  --interaction-history: color-mix(in srgb, var(--warning) 10%, var(--interaction-dark-anchor));
+  --interaction-premove: color-mix(in srgb, var(--muted) 30%, var(--interaction-dark-anchor));
+  --interaction-check: color-mix(in srgb, var(--danger) 40%, var(--interaction-dark-anchor));
+  --interaction-contrast: var(--on-accent);
   --display-font: Iowan Old Style, Palatino Linotype, Book Antiqua, Palatino, Georgia, serif;
+}
+
+:root[data-mode="dark"] {
+  --interaction-dark-anchor: var(--surface);
 }
