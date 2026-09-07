@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:69533a4e9db9d74e030cb036d2034812ce9440aab637bc44f88f67de1c8d8048",
+    "roadmap": "sha256:51f8da25258f7d3848c7f4f48f379acb217a1481d91559a7ac2f02da3b5da89b",
     "workItems": "sha256:983e2f3a517cfd73cdddab99412d3ec51f03803642923436f30454b5bf0f0b7d",
-    "workState": "sha256:c1cfd56c0897e2ceea42e97166f9cb428ab46e6b633108d6c88bd3dfcb97d6c6",
-    "rfcRegister": "sha256:1f1df32eb391bde804c1f1b6e6420e0210ff865f5a87d3b5f182f96d8ed3a31d",
+    "workState": "sha256:c507010c1ac919130d632b5c25fc56b6cf6c2ff83d4718a7a99714ef19a136c9",
+    "rfcRegister": "sha256:91772d9bf3919a37898428e43aad108a137b0bb6d28a23e0e4940c150e2de513",
     "uxIndex": "sha256:5ca3e23500716997bf5a89e941981f81f59244826bf9983b8a0d358294519080",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 641,
       "doing": 0,
-      "blocked": 1222,
+      "blocked": 1226,
       "done": 896,
       "refused": 109
     },
@@ -121,26 +121,20 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Run a genuinely fresh review of the bounded D3116–D3119 collision-core repair, then accept/implement the seven-row catalogue and rebase the three staged concrete registers.",
+      "nextAction": "Repair pack capability D3120–D3123, promote and transfer the evidence-job successor claim, then run the bounded acceptance check so claim-semantic-anchors and truthful feedback binding can proceed; independently fresh-review the shared-resource bootstrap repair.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "The bounded author repair closes the four returned collision-core seams without restoring the withdrawn generic engine: canonical source identities, canonical lane spelling, one resource-id grammar and exact schema-export joins are now normative and executable.",
-        "impact": "advanced",
+        "summary": "The first review of the cut pack-capability contract kept its twelve-dependent boundary but returned four bounded seams: an orphaned operation type/consumer registry, contradictory migration timing, a storage claim owned by the wrong document, and a hidden 86-production/6-fixture split.",
+        "impact": "regressed",
         "evidence": [
-          "planning/shared-resource-register-bootstrap/collision-core-author-repair-2026-09-07.md",
-          "tools/d3116-shared-resource-bootstrap-collision-core-author-repair/contract.test.mjs",
-          "rfc/shared-resource-register-bootstrap.md"
+          "planning/pack-capability-contract/post-cut-fresh-independent-buildability-review-2026-09-07.md",
+          "tools/d3120-pack-capability-cut-fresh-review/review.test.mjs"
         ],
         "anchors": [
           {
             "kind": "work_state",
-            "id": "D3116",
-            "digest": "sha256:a1b3d8a4ac17387b2688db406fe7edd33f75629c952d84002da8471825c856cc"
-          },
-          {
-            "kind": "rfc",
-            "id": "shared-resource-register-bootstrap.md",
-            "digest": "sha256:a818cb973431d0b3fd8792d638882102b03bafbd6eb99aa35daad77e5838eea7"
+            "id": "D3120",
+            "digest": "sha256:124900c0ca08ae2ac8887ad65d5bbc385366891d3e6a1ed3f1c07ae39f793637"
           }
         ]
       },

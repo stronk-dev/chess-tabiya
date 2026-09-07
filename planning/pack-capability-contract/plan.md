@@ -2,18 +2,19 @@
 
 - **RFC:** `rfc/pack-capability-contract.md`
 - **Reviewer:** codex
-- **Started:** 2026-08-26; latest review completed 2026-09-04
-- **State:** twelfth author repair **complete** on [[D2587]]–[[D2592]]; another genuinely fresh
-  independent review required; no implementation authorised
+- **Started:** 2026-08-26; post-cut fresh review completed 2026-09-07
+- **State:** the 1,526-line cut contract is **returned** on [[D3120]]–[[D3123]]; bounded repair,
+  successor registration/claim transfer and one fresh acceptance check remain. No implementation
+  is authorised
 
 ## Current objective
 
-Submit the [[D2587]]–[[D2592]] repair to genuinely fresh review without weakening the retained
-durable-job gains. The repair now carries complete guarded run effects, recursively exact objective
-requests, actual run transition/snapshot operands, all three origin mappings and never-reused
-durable result order. Exact receipt: `twelfth-author-repair-2026-09-04.md`; executable author gate:
-`make pack-capability-twelfth-author-repair`. This remains specification work, not lane-0.30
-implementation or a corpus wave.
+Repair only the four seams found by
+`planning/pack-capability-contract/post-cut-fresh-independent-buildability-review-2026-09-07.md`:
+remove or relocate the orphaned operation/consumer contract, make the schema migration one
+same-commit sequence under [[D3033]], promote the evidence-job successor while transferring its
+storage claim, and state the 86-production/6-browser-fixture population. This remains specification
+work, not lane-0.30 implementation or a content wave.
 
 ## Author-repair order
 
@@ -37,9 +38,15 @@ implementation or a corpus wave.
 10. ✅ Repair [[D2587]]–[[D2592]] with one transaction-owned run/application receipt, recursively
     exact objective parsing, run-branded node lookup, origin-derived consumer mapping and a durable
     monotone result allocator; retain every earlier gate and request another fresh review.
+11. ✅ Cut the durable job/HTTP-operation model and seventeen-round narrative into their named homes;
+    keep only the twelve real F3 dependents.
+12. ✅ Run the first genuinely fresh review of the cut surface; return on [[D3120]]–[[D3123]].
+13. ☐ Apply the bounded four-seam repair and register/claim transfer.
+14. ☐ Run one fresh acceptance check against the repaired cut contract; do not revisit the successor's
+    inherited durable-job defects here.
 
 ## Exit
 
-The RFC may return to acceptance review only after [[D2587]]–[[D2592]] are repaired and an
-independent pass can reconstruct the complete durable request/admission/lease/settlement/
-application/replay behavior from one authority. The D560 corpus hold stays whole after acceptance.
+The RFC may return to acceptance review after [[D3120]]–[[D3123]] are repaired and the successor's
+storage claim has moved to its truthful owner. The D560 authored-content/claim-binding hold stays
+whole; [[D3033]] separately permits the mechanical schema migration.

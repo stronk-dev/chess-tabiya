@@ -1,6 +1,10 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **cut to its blocking obligation 2026-09-06.** The durable evidence-job
+- **Status:** draft — **post-cut fresh independent review returned it on 2026-09-07
+  ([[D3120]], [[D3121]], [[D3122]], [[D3123]]).**
+  The cut remains valid, but the smaller contract retains an orphaned operation type/consumer seam,
+  two incompatible schema-migration sequences, the moved storage migration under the wrong owner,
+  and an unnamed 86-production/6-browser-fixture population split. The durable evidence-job
   model, the HTTP capability-operation census and every asynchronous-settlement criterion left this
   document for successor draft `planning/pack-capability-contract/evidence-job-durability.md`,
   which inherits [[D2429]]–[[D3008]] **unresolved**; §4.1a's D560 compatibility reader was cut on
@@ -26,6 +30,13 @@
 pack-schema | lane 0.30 | requires (new, required array of capability requirement objects on the pack root); $defs/capabilityRequirement (new, closed object: id, version)
 migration | position behind longitudinal-store | evidence_job_batches + evidence_jobs durable admission, lease, retry, settlement, staged result and consumption rows + evidence_result_sequences never-reused per-run allocator
 ```
+
+## Post-cut review obligations
+
+Acceptance is blocked until the bounded repair closes all four findings without restoring the
+moved durable-job model: [[D3120]] owns the orphaned operation/consumer seam; [[D3121]] owns the
+single schema-migration sequence; [[D3122]] owns successor registration plus storage-claim
+transfer; and [[D3123]] owns the explicit 86-production/6-browser-fixture population convention.
 
 ## Summary
 

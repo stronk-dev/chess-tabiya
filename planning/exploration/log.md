@@ -18190,3 +18190,16 @@ integer-word and spelled-number rates are refused, while ordinary count prose re
 proof for all four rate forms and both count controls. [[D421]] remains a separate live authored-
 prose/provider boundary; this reconciliation neither claims nor changes it. Continue the accepted
 Stage-2 mechanical binding work without weakening the production guard to satisfy stale RFC text.
+
+## 2026-09-07 — Post-cut pack capability review finds four bounded seams
+
+The fresh review read the 1,526-line cut contract against its twelve real dependents and did not
+restore the moved asynchronous job system. It returns F3 on [[D3120]]–[[D3123]]: the cut left an
+undefined operation type plus consumer criteria owned only by the successor; schema migration is
+both same-commit and deferred; the storage register still names the parent after its DDL moved; and
+the 92-row transition silently mixes 86 production documents with six browser fixtures.
+
+`make pack-capability-cut-fresh-review` passes four independent falsifiers. The repair is bounded:
+close the orphaned operation seam, apply the already-ruled same-commit migration sequence, promote
+and transfer the successor claim, and name the fixture convention. Claim anchors and Feedback
+Stage 2 remain correctly blocked until F3 reaches accepted bytes.
