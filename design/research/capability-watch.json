@@ -3,7 +3,7 @@
   "asOf": "2026-08-20",
   "sourcePopulation": {
     "matrix": "design/research/competitor-matrix.csv",
-    "matrixRows": 63,
+    "matrixRows": 62,
     "synthesis": "design/research/integrated-platform-alignment.md"
   },
   "products": [

@@ -96,23 +96,21 @@ discriminator better than the repo had managed before, from a live example:
 only place a surviving attempt pays off. It is also, measured at HEAD, the weakest surface we
 ship (§1). §7 is the long answer.
 
-Two honesty items must be attached to that discriminator before any UX decision leans on it,
-because both are open contradictions **inside our own corpus**:
+Two honesty items were attached to that discriminator because both began as contradictions **inside
+our own corpus**. The Chessiverse record is now reconciled; chessfeed.ai remains open:
 
-1. **Chessiverse — a three-way contradiction, and the matrix is carrying two rows for it.**
-   `competitor-love-hate-sweep.md` §1 cites the vendor page `[V]` as claiming *"preservation of
-   abandoned continuations as clickable branches, PGN export with variations"* and draws a
-   `DESIGN-GAP:` conclusion that *"any claim that rewind + branch preservation + theory handoff is
-   itself unique is now **false**."* Against that, verified in the matrix this pass `[V]`:
-   **row 58** (label `[V] vendor docs + [P] owner hands-on`) records persistent branch attempts as
-   **`N`**, checkpoint rewind as **`P support/takeback`**, and names the main gap as *"No preserved
-   branch comparison or transparent grounding"*; **row 16** — a **duplicate Chessiverse row** never
-   merged — instead records branch attempts `P` and rewind `Y restart` at confidence
-   `Medium-High`. So the corpus holds three incompatible readings, and **the one backed by owner
-   hands-on is the one that says the branches are not preserved.** The sweep's own method rule
-   downgrades its evidence: *"a vendor page establishes what a feature **claims** to do."* Nothing
-   was reconciled.
-2. **chessfeed.ai.** Verified this pass `[V]`: `competitor-matrix.csv` line 27 records *both*
+1. **Chessiverse — reconciled 2026-09-07 at the vendor-claim boundary.** The current first-party
+   Guided Play page `[V]` explicitly says every abandoned continuation is retained as a clickable
+   move-list branch and the session exports as PGN variations. The public `/learn` surface was also
+   reached without an account and exposes Guided Play, its assistance levels and branch-oriented
+   progress language, but starting a game is disabled; **the branch interaction was not driven
+   hands-on**. The matrix's former `N` was not independent counterevidence: a row-wide
+   `[V] vendor docs + [P] owner hands-on` label had incorrectly made the owner's bot-feel
+   observation appear to support every capability cell. The two rows are now one, with
+   `Y claimed` for retention/rewind and `[P]` scoped only to *"better than Chess.com, still off"*
+   bot feel. Therefore branch retention is not defensible uniqueness; preserved **N-way consequence
+   comparison with explicit attempt semantics and inspectable grounding** remains unclaimed.
+2. **chessfeed.ai.** Verified this pass `[V]`: its canonical `competitor-matrix.csv` row records *both*
    "Persistent branch attempts" and "Checkpoint rewind" as **"Y claimed"**, primary unit *"AI
    branch exploration"*, closest strength *"Saved branch exploration"*, main gap *"Depth and active
    replay need hands-on verification"*, confidence word `Medium` — **not an evidence label**.
@@ -469,9 +467,10 @@ mechanic whose ruled purpose is the opposite.
   `[V]` **hands-on**.
 - **Free and fused with a hint** — Noctie `[V]`. Worth noticing: it treats going back and being
   told as the same gesture, which is exactly the conflation our disclosure model separates.
-- **Preserved as variations** — Chessiverse claims rewound lines persist as move-list branches
-  with PGN variation export `[V]` vendor page, **contradicted by the matrix** (§0.1). Note where
-  it lives if true: **in the move list**, not a separate rail.
+- **Preserved as variations** — Chessiverse claims rewound lines persist as clickable move-list
+  branches with PGN variation export `[V]` current vendor page (§0.1). The merged matrix records
+  that exact vendor claim and keeps the absent hands-on proof visible. Note where it lives:
+  **in the move list**, not a separate rail.
 - **Metered as a business model** — chess.com `[V]`; Dr. Wolf `[V]`.
 - **Nobody earns a rewind through play.** No product in the corpus grants retries as a reward. The
   nearest analogues are outside chess — Hades' Death Defiance, StS potions — which is why
@@ -1123,11 +1122,16 @@ Per the commission's instruction. Nothing in the competitor pass was hands-on th
 `competitor-play-ux.md:8-13` says the same of its own, and `teardown-cet.md` remains the corpus's
 only hands-on session.
 
+**Resolved after this pass:** Chessiverse's current vendor claim is no longer internally
+contradicted. On 2026-09-07 the duplicate rows were merged and the public Guided Play surface was
+rechecked: retained clickable branches and PGN variations are explicit first-party claims; the
+signed-in interaction remains unobserved. That is sufficient to retire branch retention as a
+uniqueness claim, but not to claim its implementation quality.
+
 | Claim | Load it bears | Settled by |
 |---|---|---|
 | **Chessigma's Bot Challenge does not preserve a second attempt** `[P]` — inferred from silence across every fetched surface plus the aggregate-metric orientation (`teardown-chessigma-desk.md:136,450`) | **The discriminator in §0.1**, and therefore §7's urgency | One €12 month, two attempts at one position, checking whether the first is retrievable. The teardown's own §9 residual 1 |
-| **Chessiverse does / does not preserve rewound lines as branches** — vendor page `[V]`-fetched says yes and `competitor-love-hate-sweep.md` declares our uniqueness false on it; **matrix row 58 (`[V]` vendor docs + `[P]` owner hands-on) records `N`, and duplicate row 16 records `P`** | **Whether "preserved attempts" is a differentiator at all.** Three of our own readings disagree, and the duplicate row is itself a matrix defect | 20 minutes of guided play, plus merging rows 16 and 58. **This should be resolved before any positioning leans on preservation** |
-| **chessfeed.ai claims saved-branch exploration and checkpoint rewind** — matrix line 27, both cells *"Y claimed"*, unlabelled confidence `Medium`; open verification item since 2026-08-10 | Same as above. `competitor-value-props.md` calls it *"the closest claimed overlap with our core branch mechanic"* | A desk pass at minimum; hands-on to settle. **Never closed** |
+| **chessfeed.ai claims saved-branch exploration and checkpoint rewind** — canonical matrix row, both cells *"Y claimed"*, unlabelled confidence `Medium`; open verification item since 2026-08-10 | Same as above. `competitor-value-props.md` calls it *"the closest claimed overlap with our core branch mechanic"* | A desk pass at minimum; hands-on to settle. **Never closed** |
 | **"Bot at your level" is not a human model** `[P]` (`teardown-chessigma-desk.md:296-298,455-458`) | §6's differentiation argument | ~20 moves at a stated level, logging FENs — the Noctie protocol, `teardown-protocols.md` §2.1 |
 | **Dr. Wolf's undo erases the attempt** `[V]`-as-evidence-of-absence across fetched assets | §0's framing of the reflex we are refusing | Hands-on, 5 minutes |
 | **Noctie preserves nothing across a takeback** — the teardown's own header says *"Unresolved — needs hands-on. Signal leans 'destroyed/not surfaced'"* | §4's claim that the field conflates going back with being told and keeps neither | Hands-on |
@@ -1213,17 +1217,13 @@ Ids assigned at landing; head was **D1448** at drafting. Not written by this pas
   `docs/branch-runtime.md:225` — under `attempt_end` an outcome opens delivery, rewind leaves it
   open, the next committed move closes it. Correct design, undisclosed consequence: the retry is
   knowingly contaminated. §10 decision 2.
-- 🐞 **Three of our own readings disagree about whether Chessiverse preserves rewound lines as
-  branches, the matrix is carrying a duplicate row for it, and the disagreement sits directly under
-  our positioning.** `competitor-love-hate-sweep.md` §1 cites the vendor page `[V]` and declares
-  the rewind + branch + theory combination no longer unique; `competitor-matrix.csv` **row 58**
-  (`[V]` vendor docs + `[P]` owner hands-on) records persistent branch attempts `N` and the gap
-  *"No preserved branch comparison"*; **row 16**, an unmerged duplicate, records `P` and
-  `Y restart` at `Medium-High`. The owner-hands-on reading is the one saying they are not
-  preserved. Compounded by **chessfeed.ai** (row 27, *"Y claimed"* on both branch preservation and
-  checkpoint rewind, confidence word `Medium`, primary unit *"AI branch exploration"*), open as a
-  verification item since 2026-08-10 and never closed. Two actions: merge the duplicate rows, and
-  close the chessfeed.ai item before any positioning leans on preservation.
+- ✅ **Chessiverse's contradictory records were reconciled on 2026-09-07.** The current first-party
+  page explicitly claims retained clickable branches and PGN variation export; the single matrix
+  row records those as `Y claimed`, not hands-on proof, and scopes the owner's observation to bot
+  feel. Branch retention therefore cannot carry uniqueness. **chessfeed.ai** remains unresolved
+  (row 26 after the merge, *"Y claimed"* on branch preservation and checkpoint rewind, primary unit
+  *"AI branch exploration"*), open as a verification item since 2026-08-10. Close that item before
+  any positioning leans on preserved **comparison**.
 - 💡 **The shipped resistance ladder is four rungs where our own measurement licenses five to
   nine.** `App.svelte:391` offers 1000 / 1400 / 1800 / 2200 — steps of 400 against a measured
   minimum usable step of ≈150–208 (`maia-band-outcome-transfer.md`, 16,660 games) over a

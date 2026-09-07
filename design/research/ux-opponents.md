@@ -1322,10 +1322,10 @@ the coordinator's to land, routed to the durable section that specifies each rep
    (`design/research/README.md`) would answer them properly. **Two protocols already exist for it**:
    the Noctie protocol (~20 moves at a stated level, logging FENs — `teardown-chessigma-desk.md:457`)
    and the 30-minute hands-on incumbent pass (`competitor-play-ux.md:351-355`).
-   **Two corpus hygiene items found in this pass and not repaired here:** Chessiverse has **two
-   conflicting rows in `competitor-matrix.csv`** (`:16` and `:58`) that disagree on its human-likeness
-   cell, so *"the matrix says"* is ambiguous for the one vendor most relevant to this dossier; and
-   `human-like-opponents.md` — the source of much of §§2, 5 and 6 here — is desk-only and **discloses
+   **One corpus hygiene item remains from this pass.** The two conflicting Chessiverse rows were
+   merged on 2026-09-07: the current row separates the vendor's branch/human-model claims from the
+   owner's hands-on bot-feel observation. `human-like-opponents.md` — the source of much of §§2, 5
+   and 6 here — is desk-only and **discloses
    a summarizer fabrication incident** on the Chabris numbers, with its own instruction to
    *"spot-check any `[P]` number against its PDF before it becomes load-bearing in an RFC."* I did
    not re-fetch any of its primary sources.

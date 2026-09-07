@@ -17749,3 +17749,24 @@ Tabiya had never measured catalogue-to-board: K9 had already measured the endgam
 
 **Next:** no product latency change is licensed by a passing result. Keep the cold tail visible in
 future runs and continue the 1.0 queue at the next executable, dependency-clear item.
+
+## 2026-09-07 — Chessiverse's duplicate capability record was reconciled
+
+**What changed:** the two Chessiverse rows in the competitor matrix are now one canonical row.
+The current first-party Guided Play page explicitly claims that abandoned continuations remain as
+clickable move-list branches and export in one PGN with variations. The public `/learn` surface was
+reached and exposes the guided workflow, assistance levels and branch-oriented progress language,
+but starting a game is disabled without an account/opponent, so the interaction itself was not
+misreported as hands-on proof.
+
+**Why the conclusion changed:** the former negative branch cell was not independent evidence. Its
+row-wide `[V] vendor docs + [P] owner hands-on` label had made the owner's observation about bot
+feel (better than Chess.com, still off) appear to govern unrelated capability cells. The merged row
+now marks rewind and retention as `Y claimed`, scopes the owner observation to bot feel, and records
+the missing signed-in observation. Branch retention therefore cannot carry Tabiya's uniqueness;
+preserved N-way consequence comparison with explicit attempt semantics and inspectable grounding
+remains the narrower discriminator.
+
+**Evidence/next:** CLP-a22 is complete and the living matrix contains 62 canonical products. [[D1468]]
+remains open only for chessfeed.ai's saved-branch/checkpoint claim, which is CLP-a23 and must be
+settled before positioning leans on preserved comparison.

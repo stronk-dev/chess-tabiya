@@ -3,7 +3,7 @@
 **Question:** D554–D556 — how can a fast-moving app field improve the roadmap without making every
 clone, alias or launch post a new feature request?
 
-**Verdict:** use the checked capability-first register. The current run reduces a 63-product matrix to
+**Verdict:** use the checked capability-first register. The current run reduces a 62-product matrix to
 19 learner capabilities represented by 22 canonical products and 29 evidence rows. It covers 17 of
 21 families in the 1.0 map while keeping product identity, love/hate evidence, transformation,
 producer/consumer dependencies and route queryable. `[V]`
@@ -18,15 +18,19 @@ explicit `not_found` rather than being counted as approval. `[V]` same summary;
 
 ## 1. Population and identity
 
-The frozen input is the living 63-row competitor matrix plus the integrated-platform synthesis.
+The input is the living 62-product competitor matrix (63 before the duplicate Chessiverse rows were
+merged on 2026-09-07) plus the integrated-platform synthesis.
 The representative register includes every product the owner named on 2026-08-20: Chessiverse,
 Beacon, Quackmate, ChessLab at `trychesslab.com`, ChessLabHQ at `chesslabhq.com`, Qchess.net and RepCheck/RookHub, plus Chess.com,
 Lichess, Chessable, an open workbench and adjacent specialist products. `[V]`
 `planning/platform-alignment/capability-watch/plan.md`; register `products`.
 
-Canonical identity is deliberate. The source matrix contains Chessiverse twice because an older
-row and a richer resweep row coexist; the watch contains one product and several capability links.
-The follow-up caught that the first register had silently treated the owner's ChessLabHQ reference
+Canonical identity is deliberate. The source matrix now contains one canonical Chessiverse row;
+the older row and richer resweep row were merged on 2026-09-07 after their branch cells were found
+to disagree. The current first-party Guided Play page explicitly claims clickable retained branches
+and PGN variation export, while hands-on interaction remains unperformed; the owner's observation is
+scoped to bot feel rather than used as evidence about branches. The watch contains one product and
+several capability links. The follow-up caught that the first register had silently treated the owner's ChessLabHQ reference
 as TryChessLab; they now have separate product ids and evidence. Qchess.net is not silently merged with QuChess; RepCheck
 and RookHub are aliases only because the cited extension itself makes that relationship. A clone or
 alias does not increase capability coverage, while a new capability id does; both controls run in

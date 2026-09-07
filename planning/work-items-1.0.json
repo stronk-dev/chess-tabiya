@@ -3400,17 +3400,21 @@
     {
       "id": "CLP-a22",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§0.1",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "**Merge the two conflicting Chessiverse rows in `competitor-matrix.csv` (`:16` and `:58`)** and settle whether rewound lines persist as branches",
       "legacyRoute": "ledger",
       "note": "[[D1468]] — law 6 territory: a confirmed competitor with preserved branches is kill-criterion evidence",
-      "sourceDigest": "sha256:667021f4e660c9b162140c0f1f1b3d7edbff224f4d63e1fb70c339e8ed158be9"
+      "sourceDigest": "sha256:667021f4e660c9b162140c0f1f1b3d7edbff224f4d63e1fb70c339e8ed158be9",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "one canonical competitor row; current first-party Guided Play branch/PGN claim scoped as vendor evidence; owner observation limited to bot feel; signed-in interaction remains explicitly unobserved"
+      }
     },
     {
       "id": "CLP-a23",

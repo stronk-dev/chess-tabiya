@@ -221,7 +221,7 @@ existing free tools (Lichess puzzles + low-Elo Maia sparring). Escalate via
    theory? (queue 3)
 4. Chess.com Practice: multi-move redo + color switching ergonomics. (queue 4)
 5. chessfeed.ai: claimed saved-branch exploration and checkpoint rewind — closest claimed
-   overlap with our core mechanic; depth unknown. (matrix row 27)
+   overlap with our core mechanic; depth unknown. (canonical matrix row)
 6. DecodeChess: alive or dead? (403 on this pass; classification above assumes archive
    description.)
 7. Aimchess/GrindChess current feature state vs matrix rows 25/28.

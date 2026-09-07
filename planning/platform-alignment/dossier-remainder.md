@@ -168,7 +168,7 @@ row 3).
 | # | Artifact | Why genuinely inert |
 |---:|---|---|
 | 1 | `capability-watch.json` | The register itself — 19 capabilities × 22 products. An instrument, maintained by `capability-watch/plan.md`. Makes no build claim |
-| 2 | `competitor-matrix.csv` | The 63-product feature matrix. Superseded as the *watch* instrument by the JSON; retained as evidence |
+| 2 | `competitor-matrix.csv` | The 62-product feature matrix. Superseded as the *watch* instrument by the JSON; retained as evidence |
 | 3 | `source-index.md` | The living R46+ source register. Law-3 infrastructure |
 | 4 | `capability-watch.md` | Verdict `:6-9` is *"use the checked capability-first register"* — a **method** conclusion whose instrument exists. `:90` *"This closes D556's missing instrument and D554's targeted desk/forum arm"* |
 | 5 | `competitor-love-hate-sweep.md` | Its four consequences (`:170-177`) change **language and confidence**, never the build: *"D623 changes the uniqueness language"*, *"D624 strengthens, but does not validate, the R3 presets"*, *"D625 reinforces R12's refusal"* |

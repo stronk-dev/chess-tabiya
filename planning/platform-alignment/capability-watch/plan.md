@@ -14,9 +14,13 @@ Tabiya without turning every clone or ambiguous product name into roadmap churn?
 
 ## Frozen input population
 
-The first run uses the 63-row living `design/research/competitor-matrix.csv` plus every product/capability
+The first run used the then-63-row living `design/research/competitor-matrix.csv` plus every product/capability
 already cited in `design/research/integrated-platform-alignment.md`. It does not claim a fresh census
 of the whole web. Products added after this plan enter a later dated run.
+
+**Population correction 2026-09-07:** the source now contains 62 canonical product rows after the
+two contradictory Chessiverse rows were reconciled and merged. No product or capability was removed;
+one duplicate identity was removed.
 
 The initial representative set must include the owner's named 2026-08-20 products (Chessiverse,
 Beacon, Quackmate, ChessLab, Qchess/QuChess and RookHub/RepCheck), the incumbent anchors (Lichess,
