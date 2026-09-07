@@ -348,15 +348,15 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Freshly review the repaired bounded-target authority and cut pack-capability contract, obtain owner acceptance for the cut candidate packet, then land evidence-value-authority/provider dependencies before the separately tracked promotion successor, selectors, grades, Review and learner modules.",
+        "nextAction": "Land the evidence-value-authority/provider dependencies and hint-distance registry, then resolve the 127 exact operations and 224 presentation pairs so the repaired module requirements can become production bindings without bypassing the evidence spine.",
         "latestCheckpoint": {
           "at": "2026-09-07",
-          "summary": "The semantic-collector cut closes the twelve-projection Wave-C implementation without pretending the two absent promotion projections ship: 64 shadow-model blockers leave the live queue, canonical governance stops commissioning a seventeenth round, and D1699/D1700 retain the real post-foundation obligation.",
+          "summary": "The D3065 module repair gives every completed collector, mobility and opening discharge an exact learner home or explicit internal-predicate refusal: 127 requirements now map to 224 blocked module pairs, including requested legal sight, pawn-harassment and durable-fork nudges, opening Review, and full advanced inspection.",
           "impact": "advanced",
-          "evidence": ["planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md", "tools/d3069-semantic-collector-cut-contract/contract.test.mjs", "rfc/semantic-collectors.md", "rfc/README.md"],
+          "evidence": ["planning/learner-modules/discharge-coverage-repair-2026-09-07.md", "tools/d3065-module-discharge-coverage-contract/contract.test.ts", "rfc/module-registration.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "work_state", "id": "D3069", "digest": "sha256:2c17a2c02ae13917cce40ecbbda5ce6f8ec29120d022b269ad3e78c8511bfd44"},
-            {"kind": "rfc", "id": "semantic-collectors.md", "digest": "sha256:32c5d3899c4858a0bc0f22f745d01fd5b53d28d4f880a259b088ee6e24ed162f"}
+            {"kind": "work_state", "id": "D3065", "digest": "sha256:18dec4a6a1a08c1e4cc0b71b51f5beb1550d2aafc0c57371451ed14ea85b73d9"},
+            {"kind": "rfc", "id": "module-registration.md", "digest": "sha256:75df6e31e658a477e1c202ee2303bb3b303f7a418cda477cdd03bc52569a9c6d"}
           ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."

@@ -17535,3 +17535,38 @@ moves from 1,926 to 1,860 and blocked items from 1,258 to 1,194; untriaged remai
 `planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md`. Discharge D1 now
 joins the module-registration keystone; D4 remains authored-content work. Promotion resumes only
 from the shared authorities, never from a seventeenth local model.
+
+## 2026-09-07 — Module-registration discharge coverage repaired
+
+**What landed:** [[D3065]] replaces the incomplete 117/205 author image with 127 unique evidence
+requirements and 224 module bindings, while retaining `requirements_only` and
+`blocked_dependencies` on every row. Exact legal mobility, all runtime-opening facts, six omitted
+breadth primitives and the durable-fork consequence now have explicit module homes; the internal
+`legal_exchange@1` machine predicate is the sole recorded non-module refusal.
+
+**What changed:** requested Sight can carry exact legal destinations without calling them good;
+the owner's `...Bg4 h3 ...Bh5` harassment family reaches Nudge and Review; low-lift square-control
+and mobility churn remain explicit-Inspector-only; deepest opening reached becomes a retrospective
+Review fact rather than a sticky live label. The historical direct-call subsection is bounded, so
+its prohibition no longer contradicts the normative module query and Review paging contract.
+
+**Evidence/next:** `planning/learner-modules/discharge-coverage-repair-2026-09-07.md`; `make
+module-registration-author-contract module-evidence-assembly module-discharge-coverage-contract`.
+The author image is now complete, but production remains blocked on evidence-value/provider,
+hint-distance and exact operation/presentation resolution; upstream D1 rows close only with the
+eventual binding commit.
+
+## 2026-09-07 — Generated Review packet ABI restored
+
+**What landed:** [[D3070]] updates the module-requirements generator from the obsolete pre-repair
+Review packet placeholder to the exact `ReviewEvidenceInput` / `compileReviewEvidence(input)` /
+`assertReviewEvidencePacket(value)` contract already published by `review-evidence-compiler.md`.
+
+**What changed:** regenerating `module-execution-plan-v1.json` can no longer erase the Review input,
+aggregate assertion or private packet seal. The maintained downstream Review contract caught the
+regression during the canonical full gate, and now reads the same generated artifact as the module
+author and discharge-coverage contracts.
+
+**Evidence/next:** `make review-evidence-second-author-repair module-registration-author-contract
+module-discharge-coverage-contract`; rerun the complete `make verify-awake` gate before the module
+repair checkpoint is committed.

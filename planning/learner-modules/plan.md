@@ -72,22 +72,23 @@ that have landed since the accepted parent table was written (**completed 2026-0
 - restore the owner-ruled `outpost` row now that [[D566]] is fixed; and
 - activate both rows that awaited the now-shipped `derived.grade.move_quality@1`.
 
-The reconciled non-hint implementation image is 207 declared / 205 compiled / 2 exact-awaiting:
+The reconciled non-hint implementation image is 226 declared / 224 compiled / 2 exact-awaiting:
 Explorer population summary and authored classifier. It includes 21 observed-tactic pairs, runtime
 opening identity, owner-ruled `outpost`, owner-ruled `pawn_safe_square` and both grade uses.
 `make module-evidence-assembly` binds the RFC text to this source-derived image.
 
 The repeat-review production-join returns [[D1863]]–[[D1869]] were author-amended on 2026-08-30:
 the query carries a typed untrusted requested-assistance receipt and the server re-clamps it;
-presentation is exact pair/form keyed; a 117-projection execution plan owns assembly and typed
+presentation is exact pair/form keyed; a 127-projection execution plan owns assembly and typed
 source receipts; revealing pre-/at-commit output carries a narrowly non-persisted disclosure
 receipt; the redundant `assistance.arrows` evidence consumer is retired while its Advanced clamp
 stays; every module publishes literal answer capabilities; and square/UCI/checkpoint/rung tokens
 are validated against authoritative state before producer work. The disposition transfer is now a
-source-derived 23-member set ([[D2044]]), not the stale 16-row prose list. Fresh independent review
-is the next gate; this author amendment is not acceptance.
+source-derived 27-member set ([[D2044]]), not the stale 16-row prose list. [[D3065]] also closes
+the inherited-discharge coverage gap without making any binding executable.
 
-- Independent re-review resolves every row above to exact types/symbols and able-to-fail fixtures.
+- Land the value/provider and hint-distance dependencies, then resolve the exact operation and
+  presentation pairs; the requirements-only artifacts cannot substitute for that production work.
 - Accept only after the rebuilt `hint-distance` producer registries it imports are independently
   accepted; no generic hint wrapper or raw PV binding substitutes.
 - Implement registry/manifest/reducer reseal and the named server operation before seats.

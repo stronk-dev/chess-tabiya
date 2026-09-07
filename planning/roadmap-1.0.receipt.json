@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:95c1a88d92dd4a9fe0992c4b9c9ba4bc893ecaf110f2745f68a0d9483a12c185",
+    "roadmap": "sha256:467620320c9cded81a72bf2636df441c0e040b10702bd60791b579754840e3ee",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:056a1044a98b596243fc1c733967a77fe396aee53633017fd60eb2713f406d1e",
-    "rfcRegister": "sha256:288b1b034d83909170fc5d2747f691d961ce03bbc8bd7db45d83ceb4bdb076f4",
+    "workState": "sha256:d89f5ccc371d7f1491967004fcec263d91ce6cb2e41963d9823acb513357daff",
+    "rfcRegister": "sha256:0d83a4a7a0931032c340dc66146d1311a3f2f7e1f65522507b5e610d7b7ea3be",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,8 +32,8 @@
       "untriaged": 0,
       "todo": 666,
       "doing": 0,
-      "blocked": 1194,
-      "done": 850,
+      "blocked": 1193,
+      "done": 852,
       "refused": 108
     },
     "workItems": {
@@ -155,27 +155,27 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Freshly review the repaired bounded-target authority and cut pack-capability contract, obtain owner acceptance for the cut candidate packet, then land evidence-value-authority/provider dependencies before the separately tracked promotion successor, selectors, grades, Review and learner modules.",
+      "nextAction": "Land the evidence-value-authority/provider dependencies and hint-distance registry, then resolve the 127 exact operations and 224 presentation pairs so the repaired module requirements can become production bindings without bypassing the evidence spine.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "The semantic-collector cut closes the twelve-projection Wave-C implementation without pretending the two absent promotion projections ship: 64 shadow-model blockers leave the live queue, canonical governance stops commissioning a seventeenth round, and D1699/D1700 retain the real post-foundation obligation.",
+        "summary": "The D3065 module repair gives every completed collector, mobility and opening discharge an exact learner home or explicit internal-predicate refusal: 127 requirements now map to 224 blocked module pairs, including requested legal sight, pawn-harassment and durable-fork nudges, opening Review, and full advanced inspection.",
         "impact": "advanced",
         "evidence": [
-          "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
-          "tools/d3069-semantic-collector-cut-contract/contract.test.mjs",
-          "rfc/semantic-collectors.md",
+          "planning/learner-modules/discharge-coverage-repair-2026-09-07.md",
+          "tools/d3065-module-discharge-coverage-contract/contract.test.ts",
+          "rfc/module-registration.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
-            "id": "D3069",
-            "digest": "sha256:2c17a2c02ae13917cce40ecbbda5ce6f8ec29120d022b269ad3e78c8511bfd44"
+            "id": "D3065",
+            "digest": "sha256:18dec4a6a1a08c1e4cc0b71b51f5beb1550d2aafc0c57371451ed14ea85b73d9"
           },
           {
             "kind": "rfc",
-            "id": "semantic-collectors.md",
-            "digest": "sha256:32c5d3899c4858a0bc0f22f745d01fd5b53d28d4f880a259b088ee6e24ed162f"
+            "id": "module-registration.md",
+            "digest": "sha256:75df6e31e658a477e1c202ee2303bb3b303f7a418cda477cdd03bc52569a9c6d"
           }
         ]
       },

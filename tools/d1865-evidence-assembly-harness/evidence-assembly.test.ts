@@ -45,6 +45,7 @@ const ASSEMBLY_STAGE_BY_PRODUCER = Object.freeze({
   "derived.king": "derived_after_inputs",
   "derived.activity": "derived_after_inputs",
   "derived.semantic_avoidance": "derived_after_inputs",
+  "derived.opening": "derived_after_inputs",
 } as const);
 
 const projectionById = new Map(PRIMARY_EVIDENCE_MANIFEST.projections.map((projection) => [projection.id, projection]));
@@ -61,20 +62,20 @@ describe("D1865 complete non-hint module assembly closure", () => {
     expect(MODULE_ACCEPTS).toEqual(AUTHOR_MODULE_ACCEPTS);
   });
 
-  it("reconciles the owner-ruled dependency image to exactly 207 consumer/projection pairs", () => {
+  it("reconciles the dependency image to exactly 226 declared consumer/projection pairs", () => {
     expect(Object.fromEntries(Object.entries(MODULE_ACCEPTS).map(([module, projections]) => [module, projections.length]))).toEqual({
-      sight_on_request: 22,
+      sight_on_request: 23,
       blunder_prevention: 3,
       threat_radar: 7,
-      postcommit_nudge: 50,
+      postcommit_nudge: 52,
       structure_nudge: 6,
       theory_breadcrumb: 4,
       guided_hint: 0,
       compare_coach: 8,
-      review_map: 60,
-      full_inspector: 47,
+      review_map: 66,
+      full_inspector: 57,
     });
-    expect(pairs).toHaveLength(207);
+    expect(pairs).toHaveLength(226);
   });
 
   it("includes the owner-ruled pawn-safe-square pair without widening any other module", () => {
@@ -103,10 +104,10 @@ describe("D1865 complete non-hint module assembly closure", () => {
     }, {});
     expect(histogram).toEqual({
       position_local: 46,
-      position_or_edge_local: 42,
-      derived_after_inputs: 64,
+      position_or_edge_local: 46,
+      derived_after_inputs: 78,
       edge_local: 24,
-      catalogue_local: 4,
+      catalogue_local: 5,
       pack_local: 1,
       awaiting: 2,
       run_local: 9,
@@ -166,10 +167,10 @@ describe("D1865 complete non-hint module assembly closure", () => {
     expect([...allProjectionIds].filter((id) => id.startsWith("derived.hint.disclosure."))).toEqual([]);
   });
 
-  it("binds the author-amended module RFC to the reconciled 207-pair image", () => {
+  it("binds the author-amended module RFC to the reconciled 226-pair image", () => {
     const rfc = readFileSync(new URL("../../rfc/module-registration.md", import.meta.url), "utf8");
     const accepts = rfc.match(/#### 1\.3 `accepts`[\s\S]*?#### 1\.4/u)?.[0] ?? "";
-    expect(accepts).toContain("declared **`207 + R`**, compiled **`205 + R`**, and declared-awaiting **2**");
+    expect(accepts).toContain("declared **`226 + R`**, compiled **`224 + R`**, and declared-awaiting **2**");
     expect(accepts).toContain("`theory.opening.current_endpoint`");
     expect(accepts).not.toContain("`theory.opening_identity.record` | 4");
     expect(accepts).toContain("all seven `SEMANTIC_WAVE_EVENT_PROJECTION_IDS`");
@@ -187,11 +188,14 @@ describe("D1865 complete non-hint module assembly closure", () => {
     expect(acceptedWithDisposition).toEqual([
       "derived.grade.move_quality",
       "derived.material.reading.role_signature",
+      "derived.opening.deepest_reached",
+      "derived.tactic.fork_survives_reply",
       "derived.tactic.promotion_pressure",
       "human.maia.candidate_wdl",
       "rules.castling.reading.legality",
       "rules.castling.reading.rights",
       "rules.king.reading.zone_state",
+      "rules.mobility.reading.legal_moves",
       "rules.mobility.reading.piece_destinations",
       "rules.pawn.reading.candidate_majority",
       "rules.pawn.reading.contacts",
@@ -207,6 +211,7 @@ describe("D1865 complete non-hint module assembly closure", () => {
       "rules.tactic.reading.ray_classification",
       "rules.tactic.reading.rook_on_seventh",
       "rules.tactic.reading.trapped_piece",
+      "theory.opening.catalogue_membership",
       "theory.opening.current_endpoint",
     ]);
   });
@@ -217,7 +222,7 @@ describe("D1865 complete non-hint module assembly closure", () => {
       [...new Set(projections.flatMap((projection) => projectionById.get(projection)?.answerContent ?? []))].sort(),
     ]));
     expect(answerUnion).toEqual({
-      sight_on_request: ["fact", "pattern"],
+      sight_on_request: ["candidate_moves", "fact", "pattern"],
       blunder_prevention: ["fact", "threat"],
       threat_radar: ["fact", "pattern", "threat"],
       postcommit_nudge: ["evaluation", "fact", "threat"],
@@ -225,13 +230,13 @@ describe("D1865 complete non-hint module assembly closure", () => {
       theory_breadcrumb: ["fact", "pattern", "plan", "principle", "theory"],
       guided_hint: [],
       compare_coach: ["evaluation", "fact", "move"],
-      review_map: ["evaluation", "fact", "threat"],
+      review_map: ["evaluation", "fact", "theory", "threat"],
       full_inspector: ["candidate_moves", "evaluation", "fact", "move", "pattern", "plan", "principal_variation", "theory", "threat"],
     });
   });
 
   it("derives the unique compiled projection population the assembler must execute", () => {
     const compiled = [...new Set(pairs.map(({ projection }) => projection).filter((projection) => projectionById.has(projection)))].sort();
-    expect(compiled).toHaveLength(117);
+    expect(compiled).toHaveLength(127);
   });
 });

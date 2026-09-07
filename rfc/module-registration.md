@@ -1,16 +1,14 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
-- **Status:** **draft — normative contract complete; not acceptable.** The artifacts are
-  `completionClaim: requirements_only` and all 205 binding rows are `blocked_dependencies`, so no
+- **Status:** **draft — bounded discharge-coverage repair complete; not acceptable.** The artifacts are
+  `completionClaim: requirements_only` and all 224 binding rows are `blocked_dependencies`, so no
   module becomes executable and no implementation is authorised. Standing blockers: the
   `evidence-value-authority` successor rebase (§1.3.1), the `hint-distance` measured family×rung
-  registry (D7), and the exact-operation resolution receipt (D8). **Two named acceptance blockers,
-  both measured 2026-09-07:** (1) the coverage section — this document does not cover the four
-  `awaiting` RFCs' discharges it exists to free, missing nine ids including the one
-  `exact-legal-mobility` D1 names literally; (2) §2.5.0 is marked *must not be implemented* while
-  carrying the query route, decision stamp and Review paging that A16/A19/A20 require. The
-  maintained author contract is **10/11 at HEAD**, not 11/11: the D2170 artifact digest fails on
-  committed bytes, independently of this document. Repair history is indexed at
+  registry (D7), and the exact-operation resolution receipt (D8). **The two acceptance blockers
+  measured on 2026-09-07 are repaired in this author image:** the four awaiting RFCs now have an
+  exact cover-or-refuse disposition for every projection, and §2.5.0's historical direct-call
+  draft is separated from the normative query, decision-stamp and Review-paging contract. The
+  maintained author contract is green on the regenerated 127/224 requirements image. Repair history is indexed at
   `planning/learner-modules/author-repair-and-review-chain.md`; no further round of self-review is
   commissioned ([[D3057]]).
 - **Author:** claude (drafted on the [[D1430]] audit, re-verified line by line at HEAD `f0d5460`)
@@ -244,7 +242,8 @@ total with a derivation command, per [[D1240]].
 were excluded because their matcher consumed the D566-defective pawn-safety result. [[D566]] is
 closed, and the owner's [[D906]](2) ruling names `outpost`: *"just fix the foundation and then keep
 it in"*. The owner then answered yes to the isolated `pawn_safe_square` question on 2026-08-30.
-The declaration therefore restores both (Sight 20 → 22) and the complete non-hint image is 207.
+The declaration therefore restores both (Sight 20 → 22); [[D3065]] then adds exact legal mobility
+as row 23 and brings the complete non-hint image to 226.
 [[D632]]'s measured zero firings remain an honest-empty availability fact; inclusion does not make
 the reading proactive or interesting by default.
 
@@ -252,10 +251,13 @@ the reading proactive or interesting by default.
 `review_map` a `principal_variation` ceiling while noting *"no accepted projection here carries a
 PV"*. Verified: none of its 48 rows declares `candidate_moves`, `move`, `ranked_moves` or
 `principal_variation`. A permission nothing can exercise cannot fail a test, so it is corrected to
-the `threat, evaluation` capability pair (§1.1). `sight_on_request`'s `fact` ceiling is corrected upward to `pattern`, because
-the literal 22-row set derives an exact `fact + pattern` answer union. `rook_on_seventh` is the
+the `threat, evaluation` capability pair (§1.1). `sight_on_request`'s `fact` ceiling is corrected
+to the branched `pattern + candidates` image, because the literal 23-row set derives an exact
+`fact + pattern + candidate_moves` answer union. `rook_on_seventh` is the
 sole pattern witness; `space` and `pawn_connectivity` are separate Structure rows and never part of
-Sight. The compiler derives this union from the accepted projection declarations rather than
+Sight; `legal_moves` is the sole candidate-set witness and remains an on-request legality map,
+never a recommendation. `review_map` gains the orthogonal `theory` capability because its exact
+opening-history row carries `fact + theory`. The compiler derives these unions from the accepted projection declarations rather than
 preserving either prose claim by memory.
 
 #### 0.3 Four dependency facts that moved since `learner-modules` was accepted
@@ -297,7 +299,7 @@ Table caption — unit: **module id**; total: **11**, set-equal to `MODULE_IDS`
 | # | id | timings (initiative) | seat | declared answer capabilities (§2.3a) | facts / words / marks / arrows | novelty | empty |
 |---:|---|---|---|---|---|---:|---|
 | 1 | `rules_floor` | pre_commit (ambient) | board_input | none | 0 / 0 / — / 0 | 0 | silent |
-| 2 | `sight_on_request` | pre_commit (on_request) **· post_commit (on_request)** | rail | **pattern** | 1 / 30 / 6 / 1 | 0 | stated_absence |
+| 2 | `sight_on_request` | pre_commit (on_request) **· post_commit (on_request)** | rail | **pattern, candidates** | 1 / 30 / 6 / 1 | 0 | stated_absence |
 | 3 | `blunder_prevention` | at_commit (proactive) | board_adjacent | threat | 1 / 20 / 1 / 1 | 0 | silent |
 | 4 | `threat_radar` | pre_commit (on_request) · post_commit (on_request) | rail | **pattern, threat** | 3 / 60 / 4 / 2 | 0 | stated_absence |
 | 5 | `postcommit_nudge` | post_commit (proactive) | rail | **threat, evaluation** | 2 / 50 / 2 / 1 | 3 | silent |
@@ -305,7 +307,7 @@ Table caption — unit: **module id**; total: **11**, set-equal to `MODULE_IDS`
 | 7 | `theory_breadcrumb` | post_commit (on_request) | rail | **theory** | 1 / 60 / 0 / 0 | **0** | stated_absence |
 | 8 | `guided_hint` | checkpoint (on_request, progressive disclosure) | rail | **move, through `guided_hint@1` disclosure** | 1 / 40 / 2 / 1 per rung | 0 | unavailable_source |
 | 9 | `compare_coach` | checkpoint (on_request) · review (on_request) | rail | **move, evaluation** | 2 / 60 / 2 / 2 | 0 | stated_absence |
-| 10 | `review_map` | review (proactive) | timeline | **threat, evaluation** | 3 / 80 / 3 / 2 per moment | 0 | stated_absence |
+| 10 | `review_map` | review (proactive) | timeline | **threat, theory, evaluation** | 3 / 80 / 3 / 2 per moment | 0 | stated_absence |
 | 11 | `full_inspector` | review (explicit_mode) | explicit_surface | **threat, theory, evaluation, principal_variation** | 20 / 400 / 20 / 8 | 0 | stated_absence |
 
 Four changes need their argument stated rather than assumed:
@@ -415,20 +417,20 @@ the declarations.
 | module consumer | accepted projection ids (all `@1`) | n |
 |---|---|---:|
 | `rules_floor` | — (`accepts: { kind: "none" }`; registers no consumer, per `module-contract.ts:159,179`) | 0 |
-| `module.sight_on_request` | the `rules.structural.reading.*` kinds derived from `STRUCTURAL_FEATURE_KINDS` minus retired `pawn_count`, **including owner-ruled `outpost` and owner-ruled `pawn_safe_square` per C5**; `rules.castling.reading.{rights, legality}`; `rules.tactic.reading.rook_on_seventh`; `rules.square.reading.control`; `rules.pawn.reading.contacts` | 22 |
+| `module.sight_on_request` | the `rules.structural.reading.*` kinds derived from `STRUCTURAL_FEATURE_KINDS` minus retired `pawn_count`, **including owner-ruled `outpost` and owner-ruled `pawn_safe_square` per C5**; `rules.castling.reading.{rights, legality}`; `rules.tactic.reading.rook_on_seventh`; `rules.square.reading.control`; `rules.pawn.reading.contacts`; `rules.mobility.reading.legal_moves` | 23 |
 | `module.blunder_prevention` | `rules.tactic.consequence.{threat, mate_in_one}`; `rules.tactic.reading.loose_piece` — all three evaluated on the staged-move result position | 3 |
 | `module.threat_radar` | the blunder three; `rules.tactic.reading.{back_rank, trapped_piece, ray_classification}`; `derived.tactic.defender_exposure` | 7 |
-| `module.postcommit_nudge` | 8 `rules.structural.event.*` (the 11 `STRUCTURAL_EVENT_FAMILIES` minus `piece_count`, `direct_attack_count`, `line_blockers`); all 5 `TRANSITION_GEOMETRY_EVENT_FAMILIES`; 7 `rules.transition.event.*` (`TRANSITION_RULE_EVENT_FAMILIES` minus `clock_reset`); `rules.castling.event.rights_lost`, `rules.tactic.event.{double_attack, check, loose_piece}`, `derived.exchange.{capture_class, trade_completed}`, `rules.structural.event.pawn_islands`; the compiled structural plus tactical avoidance sets; `rules.pawn.event.dynamics`, `derived.pawn.event.transitions`, `rules.king.event.zone_state`, `derived.king.captured_zone_defender`, `derived.activity.event.open_file_occupancy`; `derived.grade.move_quality`; all seven `SEMANTIC_WAVE_EVENT_PROJECTION_IDS` whose ids begin `derived.tactic.` | 50 |
+| `module.postcommit_nudge` | 8 `rules.structural.event.*` (the 11 `STRUCTURAL_EVENT_FAMILIES` minus `piece_count`, `direct_attack_count`, `line_blockers`); all 5 `TRANSITION_GEOMETRY_EVENT_FAMILIES`; 7 `rules.transition.event.*` (`TRANSITION_RULE_EVENT_FAMILIES` minus `clock_reset`); `rules.castling.event.rights_lost`, `rules.tactic.event.{double_attack, check, loose_piece}`, `derived.exchange.{capture_class, trade_completed}`, `rules.structural.event.pawn_islands`; the compiled structural plus tactical avoidance sets; `rules.pawn.event.dynamics`, `derived.pawn.event.transitions`, `rules.king.event.zone_state`, `derived.king.captured_zone_defender`, `derived.activity.event.open_file_occupancy`; `derived.grade.move_quality`; `derived.tactic.fork_survives_reply`; `derived.pawn.sequence.harassment_pressure`; all seven `SEMANTIC_WAVE_EVENT_PROJECTION_IDS` whose ids begin `derived.tactic.` | 52 |
 | `module.structure_nudge` | `theory.shapes.firing`; `rules.structural.reading.{named_structure, space, pawn_connectivity}`; `rules.phase.reading`; `rules.endgame.reading` | 6 |
 | `module.theory_breadcrumb` | `pack.authored.claim`; `theory.shapes.firing`; `derived.explorer.population_summary`; `theory.opening.current_endpoint` | 4 |
 | `module.guided_hint` | the literal ordered expansion `...HINT_DISCLOSURE_PROJECTION_IDS` (one sealed `derived.hint.disclosure.<family>.<rung>@1` per measured family/rung pair; never raw PV or the internal horizon) | `R` |
 | `module.compare_coach` | `derived.compare.{structure_delta, eval_delta, engine_trajectory, piece_route}`; `run.record.{fork, consequence, objective_transition, checkpoint_hit}` | 8 |
-| `module.review_map` | the complete 50-row Post-commit Nudge set; `rules.pivotal.marker`, `rules.phase.reading`, `rules.endgame.reading`; `recorded.engine.eval`, `recorded.tablebase.result`; `live.stockfish.{eval, wdl}`; `run.record.{objective_transition, consequence, imported_result}` | 60 |
-| `module.full_inspector` | `rules.tactic.reading.{loose_piece, ray_classification, rook_on_seventh, trapped_piece, back_rank, discovered_latency}`, `rules.tactic.consequence.{threat, mate_in_one, reply_breadth}`, `rules.structural.reading.{space, pawn_connectivity}`, `rules.phase.development`, `rules.castling.reading.{rights, legality}`, `derived.tactic.{discovered_executed, promotion_pressure}` (16); `rules.square.reading.control`, `rules.mobility.reading.piece_destinations`, `rules.pawn.reading.{contacts, candidate_majority}`, `derived.material.reading.role_signature`, `rules.king.reading.zone_state` (6); `live.stockfish.{eval, wdl, pv}`, `human.maia.{policy, candidate_wdl}`, `human.explorer.population`, `live.syzygy.{result, category, distance}`, `recorded.engine.eval`, `recorded.tablebase.result`, `theory.shapes.firing` (12); `rules.phase.reading`, `rules.pivotal.marker`, `derived.compare.{structure_delta, eval_delta}`, `derived.story.rank` (5); all seven observed semantic-tactic projections; ◇ `pack.authored.classifier` (1) | 47 |
+| `module.review_map` | the complete 52-row Post-commit Nudge set; `rules.pivotal.marker`, `rules.phase.reading`, `rules.endgame.reading`; `recorded.engine.eval`, `recorded.tablebase.result`; `live.stockfish.{eval, wdl}`; `run.record.{objective_transition, consequence, imported_result}`; `derived.pawn.sequence.contact_timing`; `derived.tactic.sequence.defender_consequence`; `derived.material.event.role_asymmetry`; `derived.opening.deepest_reached` | 66 |
+| `module.full_inspector` | the prior 47-row explicit-analysis image, including all seven observed semantic-tactic projections; `rules.mobility.reading.legal_moves`; `rules.square.event.control`; `rules.mobility.event.piece_destinations`; `derived.pawn.sequence.{contact_timing, harassment_pressure}`; `derived.tactic.{fork_survives_reply, sequence.defender_consequence}`; `derived.material.event.role_asymmetry`; `theory.opening.catalogue_membership`; `derived.opening.deepest_reached` | 57 |
 
 #### 1.3.1 Mandatory successor rebase before acceptance ([[D2373]])
 
-The table above and the checked-in 117/205 artifacts are a truthful snapshot of the compiled
+The table above and the checked-in 127/224 artifacts are a truthful snapshot of the compiled
 manifest at the fourth author repair. They are not the acceptance image: `evidence-value-authority`
 retires four families and the module requirements cannot accept retired refs. After that dependency
 lands, the generator—not a hand edit—applies this exact set replacement:
@@ -441,8 +443,8 @@ lands, the generator—not a hand edit—applies this exact set replacement:
 | `rules.pivotal.marker@1` | `derived.pivotal.irreversibility@1`; `derived.pivotal.phase_change@1`; `derived.pivotal.human_divergence@1`; `derived.pivotal.option_collapse@1` | Review Map, Full Inspector | +6 |
 
 The replacement is set-equal over the four retired and eight successor refs. No v1/v2 pair may
-coexist in one module. The post-dependency drift tripwires are **declared `215 + R` / compiled
-`213 + R` / awaiting `2`**, and the unique requirement projection population is **121**, not 117.
+coexist in one module. The post-dependency drift tripwires are **declared `234 + R` / compiled
+`232 + R` / awaiting `2`**, and the unique requirement projection population is **131**, not 127.
 The two awaiting rows are unchanged; successor availability cannot be hidden as a third awaiting
 wildcard. The generated execution/binding JSON, digests, family witness, D1865 assembly fixture and
 all counts regenerate in one author-repair commit before fresh review. Until then the current
@@ -451,7 +453,7 @@ artifacts remain evidence of the old manifest and cannot authorize implementatio
 Here `H = HINT_HORIZON_PROJECTION_IDS.length` and
 `R = HINT_DISCLOSURE_PROJECTION_IDS.length = H × HINT_RUNGS.length`; both are derived from the
 final measured family registry and the closed rung vocabulary, not pinned to hand counts. Landing
-tripwires are therefore declared **`207 + R`**, compiled **`205 + R`**, and declared-awaiting **2**
+tripwires are therefore declared **`226 + R`**, compiled **`224 + R`**, and declared-awaiting **2**
 (`derived.explorer.population_summary@1` and `pack.authored.classifier@1`). The horizon rows are compile-time dependencies, not
 awaiting placeholders. Both grade uses, runtime opening identity and the 21 observed-tactic pairs
 compile (§0.3). The dated `f0d5460` census is historical; `make module-evidence-assembly` is the
@@ -570,8 +572,8 @@ from the barrel today.
 
 In `evidence-catalog.ts`, append ten `module.*` ids to `EVIDENCE_CONSUMER_IDS`, one
 closed consumer declaration per evidence-bearing module, and the exact adapters that bind each
-compiled §1.3 acceptance pair. The module acceptance/binding closure is declared **`207 + R`**,
-compiled **`205 + R`**, awaiting **2**; these are derived drift tripwires over
+compiled §1.3 acceptance pair. The module acceptance/binding closure is declared **`226 + R`**,
+compiled **`224 + R`**, awaiting **2**; these are derived drift tripwires over
 `MODULE_DECLARATIONS`, consumer `accepts`, and compiled bindings, never hand-maintained manifest
 counts.
 
@@ -624,15 +626,15 @@ compiler derives the exact accepted answer-content union independently, requires
 of the declared capability image, and requires every declared capability to have at least one
 accepted witness outside the common `fact` member. This is stricter than a hand-written singular
 label without pretending that the `theory` capability's common vocabulary must all occur in every
-theory module. Sight's confirmed 22 rows derive exactly `fact + pattern`, with
-`rook_on_seventh` as the sole pattern witness.
+theory module. Sight's confirmed 23 rows derive exactly `fact + pattern + candidate_moves`, with
+`rook_on_seventh` as the sole pattern witness and `legal_moves` as the sole candidate-set witness.
 
 The literal population required by [[D1868]] is:
 
 | module | declared capabilities | source-derived accepted answer-content union |
 |---|---|---|
 | `rules_floor` | `none` | — |
-| `sight_on_request` | `pattern` | `fact, pattern` |
+| `sight_on_request` | `pattern, candidates` | `fact, pattern, candidate_moves` |
 | `blunder_prevention` | `threat` | `fact, threat` |
 | `threat_radar` | `pattern, threat` | `fact, pattern, threat` |
 | `postcommit_nudge` | `threat, evaluation` | `fact, threat, evaluation` |
@@ -640,10 +642,10 @@ The literal population required by [[D1868]] is:
 | `theory_breadcrumb` | `theory` | `fact, pattern, plan, principle, theory` |
 | `guided_hint` | exact `guided_hint@1` rung contract | derived from the sealed family×rung registry; no broad fallback |
 | `compare_coach` | `move, evaluation` | `fact, move, evaluation` |
-| `review_map` | `threat, evaluation` | `fact, threat, evaluation` |
+| `review_map` | `threat, theory, evaluation` | `fact, threat, theory, evaluation` |
 | `full_inspector` | `threat, theory, evaluation, principal_variation` | `fact, pattern, threat, theory, plan, evaluation, candidate_moves, move, principal_variation` |
 
-`make module-evidence-assembly` derives these nine non-empty unions from the same 207-pair image;
+`make module-evidence-assembly` derives these nine non-empty unions from the same 226-pair image;
 changing a projection's `answerContent` therefore fails before a stale table can silently widen a
 module. Crossed fixtures keep Theory/Evaluation, Move/Ranking and Guided-Hint rung authority
 incomparable.
@@ -689,7 +691,7 @@ D1865 acceptance image derives twenty-three module-accepted dispositions. Bindin
 without deleting the disposition is a build failure; deleting a disposition without binding is
 also a build failure. So the two edits are the same edit.
 
-Deleted (23), derived from the exact 207-pair image rather than maintained as a second list:
+Deleted, derived from the exact 226-pair image rather than maintained as a second list:
 `rules.tactic.consequence.{threat, mate_in_one}`,
 `rules.tactic.reading.{loose_piece, back_rank, trapped_piece, ray_classification,
 rook_on_seventh, discovered_latency}`, `rules.castling.reading.{rights, legality}`,
@@ -698,7 +700,9 @@ rook_on_seventh, discovered_latency}`, `rules.castling.reading.{rights, legality
 `rules.mobility.reading.piece_destinations`, `rules.pawn.reading.{contacts, candidate_majority}`,
 `rules.king.reading.zone_state`, `derived.material.reading.role_signature`,
 `derived.tactic.promotion_pressure`, `derived.grade.move_quality`, `human.maia.candidate_wdl`,
-and `theory.opening.current_endpoint`. Most say so themselves — the
+`rules.mobility.reading.legal_moves`, `derived.tactic.fork_survives_reply`,
+`theory.opening.{current_endpoint, catalogue_membership}` and `derived.opening.deepest_reached`.
+Most say so themselves — the
 threat row's reason is literally *"D794 measured threat presence near background; module admission
 waits on Phase 3"* (`evidence-catalog.ts:396`) and the grade row's is *"Awaits learner-module
 consumer compilation for postcommit_nudge and review_map"* (`:822`). **Deleting a disposition does
@@ -707,7 +711,6 @@ not delete its warning**: each row's `limitations` array retains the measured ca
 `:395`), which is where a caveat belongs once a consumer exists.
 
 Named non-module dispositions retained at the original decision boundary include
-`derived.tactic.fork_survives_reply`,
 `derived.tactic.overloaded_defender_response_conflict`,
 `rules.tactic.consequence.forced_mate_after_move`, `rules.tactic.reading.defender_duty_set`,
 `rules.exchange.predicate.legal_exchange`, `derived.story.title`. Named so that the deletion set is
@@ -899,7 +902,7 @@ declare function assertModuleExactOperationResolutionReceipt(
 
 The compiler cannot run successfully until every source blocker and exact presentation-pair
 dependency is discharged. Its receipt must be set-equal to the generated artifact's
-`exactOperationResolution.requiredProjectionKeys` (**117 now**) and `requiredPairKeys` (**205
+`exactOperationResolution.requiredProjectionKeys` (**127 now**) and `requiredPairKeys` (**224
 now**), with exactly one non-null projection operation and exactly one non-empty occurrence/timing
 intersection for every key and no extras. A module-private
 `WeakSet<ModuleExactOperationResolutionReceipt>` is populated only after those checks complete; the
@@ -910,25 +913,14 @@ call `assertModuleExactOperationResolutionReceipt` before reading any row; the a
 its sole legal resolution input. Dependency landing triggers regeneration and this compiler; no
 upstream RFC is expected to know module-specific occurrence-view names.
 
-#### 2.5.0 — Withdrawn direct-call draft, and the normative contract still trapped inside it
+#### 2.5.0 — Historical direct-call assembler draft — non-normative through this subsection
 
-**The blanket withdrawal below is wrong and blocks acceptance until it is split.** The
-**direct-call** parts of this section — the assembler's callable-operation requirements,
-source-family execution tests and direct assembly instructions — are deleted from the
-implementation contract and **must not be implemented**; they are retained as the evidence that
-produced [[D2165]] and [[D2399]], and where they conflict with §2.5 the requirements-only
-sealed-pool contract is the sole authority.
-
-But the same block also carries the **module query route, its typed request union, the four
-boundary validations, the decision stamp, the Review paging contract and the `ModuleQueryPage`
-response** — and criteria A16, A19 and A20 depend on all of them. A20 requires *"Review crosses a
->32-subject frozen prefix through multiple pages"*; the only definition of that prefix, its cursor
-and its staleness refusal is here, under a heading that says not to implement it. `prefixDigest`,
-`ReviewCursor` and `MODULE_REVIEW_PREFIX_STALE` occur nowhere else in this RFC.
-
-No implementer can act on a section that is simultaneously forbidden and load-bearing. The split is
-an owner-or-author decision, not a review finding, and it is named in the coverage section as a
-second acceptance blocker rather than left for an eleventh round to rediscover.
+Only this numbered subsection is withdrawn. Its assembler callable requirements, source-family
+execution tests and direct assembly instructions are retained as the evidence that produced
+[[D2165]] and [[D2399]]; they **must not be implemented** and cannot override §2.5's sealed-pool
+contract. Normative specification resumes at §2.5.1. The module query route, typed request union,
+boundary validations, decision stamp, Review paging and `ModuleQueryPage` response below are
+normative and remain the contract exercised by A16, A19 and A20.
 
 `apps/server/src/module-evidence-assembler.ts` (new) owns the operation missing in [[D1865]]. Its
 input is one authoritative, timing-specific subject frame; its output is a frozen declared pool
@@ -937,8 +929,8 @@ plus one typed execution receipt per demanded source family. It is not inferred 
 `guidance.ts:evidencePacket` helper into a universal collector.
 
 `MODULE_EVIDENCE_EXECUTION_PLAN` assigns every distinct compiled projection accepted by a module
-to exactly one callable operation and assembly stage. At the reconciled image this is **117 unique
-compiled projections** serving **205 compiled consumer pairs**; the two declared-awaiting rows have
+to exactly one callable operation and assembly stage. At the reconciled image this is **127 unique
+compiled projections** serving **224 compiled consumer pairs**; the two declared-awaiting rows have
 no operation and cannot masquerade as no-witness. The compiler derives both sets from §1.3 and
 requires exact equality. Every operation declaration carries `{ projection, stage,
 operationSymbol, operation, subjectKind, sourceFamily }`; `operation` must be callable, and the
@@ -972,6 +964,9 @@ declared projection ids each fail separately. The two awaiting projections are p
 separate exact list and may not enter the plan.
 
 ##### 2.5.1 The derived-input DAG is part of the same plan
+
+**Normative specification resumes here.** Nothing in §2.5.0's historical direct-call draft
+withdraws this DAG, §2.5.2's compiler, or the query/paging boundary that follows it.
 
 For a non-derived row `derivation` is `null`. Every row at `derived_after_inputs` carries exactly
 one of:
@@ -1600,7 +1595,7 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
    `EVIDENCE_MANIFEST.bindings`; the test asserts exact set-equality across all three **and exact
    object equality to `module-binding-plan-v1.json` for producer, adapter, timing, roles, sessions,
    forms, answer content, latency and budget**, with
-   **declared `207 + R` / compiled `205 + R` / awaiting `2`** baked only as derived drift
+   **declared `226 + R` / compiled `224 + R` / awaiting `2`** baked only as derived drift
    tripwires. The 67 research eligibility rows and sole research selection policy are
    byte-identical. **RED at HEAD:** no module consumer or binding exists. **Negatives:**
    `pack.authored.classifier@1` is absent from the compiled manifest and present in
@@ -1621,8 +1616,9 @@ deleting one disclosure id from the family×rung product fails;
    images, every declared capability has a non-`fact` witness, and the source-derived union is
    exactly the §2.3 table. A grade admitted to a threat-only module is refused. Crossed negatives prove Theory
    refuses evaluation, Evaluation refuses theory/principle/plan, and Principal Variation admits
-   move bytes without implying either branch. Sight's confirmed 22 rows derive exactly
-   `fact + pattern`, and only `rook_on_seventh` witnesses pattern. **RED at HEAD:** the singleton
+   move bytes without implying either branch. Sight's confirmed 23 rows derive exactly
+   `fact + pattern + candidate_moves`; only `rook_on_seventh` witnesses pattern and only
+   `legal_moves` witnesses candidates. **RED at HEAD:** the singleton
    images cannot represent even `fact + threat`, and no image contains evaluation.
 5. **A5 — Presentation coverage, by exact pair and form set-equality.** Every compiled
    `module consumer × projection × bound form` has one or more registered
@@ -1726,7 +1722,7 @@ deleting one disclosure id from the family×rung product fails;
     possible — the exact defect the return refused to fake.
 19. **A19 — The module operation is closed end to end.** One production-boundary matrix traverses
     authenticated route → `RunService.queryModules` → strict request parser → module compiler and
-    117-projection assembler → reducer → exact pair-keyed presentation → strict sealed-component
+    127-projection assembler → reducer → exact pair-keyed presentation → strict sealed-component
     response parser → occupied seat for every timing arm. It proves one positive reach fixture per
     accepted source family, no-witness versus unavailable/failed/broken-boundary receipts,
     provider demand/cancellation and shared collector invocation, plus a post-commit packet bound
@@ -1738,7 +1734,7 @@ deleting one disclosure id from the family×rung product fails;
     collector or provider call**.
     **RED at HEAD:** the route, service operation and client parser/store do not exist, so no
     module id can reach a seat.
-20. **A20 — Sealed-pool acquisition, derivation, paging and role closure.** The 117-row
+20. **A20 — Sealed-pool acquisition, derivation, paging and role closure.** The 127-row
     requirement population is set-equal to compiled accepted projections. Acceptance remains red
     until every row resolves through one of the five upstream sealed-pool operations and a positive
     fixture emits its declared sealed projection; the module layer itself calls no detector or
@@ -1751,8 +1747,8 @@ deleting one disclosure id from the family×rung product fails;
     author and operator route values; both module and F1 checks consume its output.
 21. **A21 — Successor image is current and set-equal** ([[D2373]]). After
     `evidence-value-authority` lands, regeneration removes exactly the four retired refs, adds
-    exactly the eight successors in §1.3.1, produces 121 unique requirements and the derived
-    `215 + R` / `213 + R` / `2` pair image, and leaves no v1/v2 coexistence. Removing one successor,
+    exactly the eight successors in §1.3.1, produces 131 unique requirements and the derived
+    `234 + R` / `232 + R` / `2` pair image, and leaves no v1/v2 coexistence. Removing one successor,
     retaining one retired ref, hand-editing either sealed JSON file or treating an unavailable
     technique candidate as an awaiting wildcard fails independently. **RED now:** the dependency
     has not landed and the checked artifacts correctly describe the pre-successor manifest.
@@ -1763,7 +1759,7 @@ deleting one disclosure id from the family×rung product fails;
 23. **A23 — Exact-operation successor is total and refuses partial closure** ([[D2508]]).
     `compileModuleExactOperationResolution` accepts no null operation, empty timing intersection,
     unresolved source blocker or missing presentation pair. Its projection keys are set-equal to
-    all 117 execution requirements and its pair keys to all 205 binding requirements at this
+    all 127 execution requirements and its pair keys to all 224 binding requirements at this
     image, with no duplicates or extras. Deleting any one key, supplying one extra, resolving only
     an occurrence or only timing, or substituting an upstream-owned candidate view fails before a
     final F1 row is emitted. **RED now:** dependencies are deliberately unresolved.
@@ -1773,7 +1769,7 @@ deleting one disclosure id from the family×rung product fails;
     and per-request applicability identities in §2.5; eval delta is edge-grained and joins two
     consecutive same-branch points; deflection declares common inputs plus per-alternative inputs,
     with its check arm using the implemented sealed check authority while the recorded-path
-    occurrence source remains blocked; every one of 205 row pointers is a member of the receipt's exact pair-key set;
+    occurrence source remains blocked; every one of 224 row pointers is a member of the receipt's exact pair-key set;
     and forged, copied or serialized resolution receipts fail at final F1 emission. Wrong operation,
     crossed catalogue input, branch-pair eval authority, missing/extra alternative input, unprefixed
     pair key and unsealed receipt fixtures fail independently. **RED now:** the upstream pool
@@ -1807,39 +1803,34 @@ deleting one disclosure id from the family×rung product fails;
 | D5 | Durable per-learner module-delivery records — §2.5's ephemeral receipt deliberately cannot reconstruct pre-/at-commit disclosure, earn novelty/hint/campaign credit or feed history; durable capture is `longitudinal-store`'s declared grain and becomes mandatory before any such consumer | longitudinal-store | the longitudinal-store commit adding a module-delivery projection | |
 | D6 | Per-timing role narrowing — `ModuleTimingDeclaration` carries timing and initiative only, so `compare_coach` takes the narrower role set across both its arms (§1.2). A spectator loses nothing reachable today, but the contract cannot express what it should | learner-modules | the learner-modules amendment commit | |
 | D7 | `HINT_HORIZON_PROJECTION_IDS`, `HINT_DISCLOSURE_PROJECTION_IDS` and the sealed rung compiler — one internal projection per measured family and one learner projection per family/rung, each retaining only its exact evidence inputs, relation polarity, answer image, abstention and scope. The module imports only the literal disclosure set and remains RED while either registry differs from the measured family×rung product | hint-distance | the accepted producer amendment and implementation commit | |
-| D8 | Exact source/view/timing/presentation resolution for the current 117 projections and 205 module pairs. `compileModuleExactOperationResolution` is the sole successor: it remains blocked while any source ABI/assertion or presentation pair is absent and emits one set-equal receipt before final F1 rows exist | module-registration | the implementation commit whose receipt key sets equal both generated `exactOperationResolution` sets | |
+| D8 | Exact source/view/timing/presentation resolution for the current 127 projections and 224 module pairs. `compileModuleExactOperationResolution` is the sole successor: it remains blocked while any source ABI/assertion or presentation pair is absent and emits one set-equal receipt before final F1 rows exist | module-registration | the implementation commit whose receipt key sets equal both generated `exactOperationResolution` sets | |
 
 ## Coverage of the four `awaiting` RFCs' discharges — measured, and short
 
 This RFC is the document four completed implementations wait on. That claim is testable, so it is
 tested here rather than assumed. Coverage is derived from `rfc/contracts/module-binding-plan-v1.json`
-(205 rows, 117 unique projections) against each RFC's literal discharge text; regenerate with
+(224 rows, 127 unique projections) against each RFC's literal discharge text; regenerate with
 `make module-evidence-assembly`.
 
 | upstream discharge | its literal demand | covered | uncovered ids | state |
 |---|---|---:|---|---|
-| `tactical-collectors` D1 | production-module eligibility for **every §3 collector** (30 ids) | 28/30 | `rules.exchange.predicate.legal_exchange@1`, `derived.tactic.fork_survives_reply@1` | both are deliberate — §2.4 retains them as non-module dispositions. Discharges **only if** `tactical-collectors` accepts a recorded refusal for the two; as written its D1 says *every* |
-| `breadth-collectors` D1 | production-module eligibility for **the admitted breadth projections** (18 ids) | 12/18 | `rules.square.event.control@1`, `rules.mobility.event.piece_destinations@1`, `derived.pawn.sequence.contact_timing@1`, `derived.pawn.sequence.harassment_pressure@1`, `derived.tactic.sequence.defender_consequence@1`, `derived.material.event.role_asymmetry@1` | **not discharged.** The six are neither bound nor refused anywhere in this document |
-| `exact-legal-mobility` D1 | *"compile `legal_moves@1` into the selected-square/requested-sight module under the accepted per-module ceilings"* | 0/1 | `rules.mobility.reading.legal_moves@1` | **not discharged.** The id occurs nowhere in this RFC or the binding plan; `module.sight_on_request`'s 22 rows do not include it. `rules.mobility.reading.piece_destinations@1` is a different projection that `exact-legal-mobility` explicitly declines to redefine |
-| `runtime-opening-identity` D1 | learner-facing theory/Review/module bindings **over the three ids** | 1/3 | `theory.opening.catalogue_membership@1` (present only as a derivation *input*, not a module binding), `derived.opening.deepest_reached@1` (absent) | **not discharged** |
+| `tactical-collectors` D1 | production-module eligibility for its learner-facing §3 collectors | 29/29 plus 1 recorded refusal | — | `fork_survives_reply` now reaches Nudge, Review and Inspector. `legal_exchange` is the one explicit refusal: an internal predicate with `machine_condition` only, still available as a producer operand and advanced-inventory fact but never rendered as a learner module |
+| `breadth-collectors` D1 | production-module eligibility for the admitted breadth projections (18 ids) | 18/18 | — | the six previously absent ids reach Full Inspector; selected high-information sequence/change rows also reach Nudge or Review without promoting low-lift control/mobility churn into default guidance |
+| `exact-legal-mobility` D1 | *"compile `legal_moves@1` into the selected-square/requested-sight module under the accepted per-module ceilings"* | 1/1 | — | exact legal destinations reach requested Sight under the `candidates` capability; the projection's limitation still forbids quality, likelihood or recommendation language |
+| `runtime-opening-identity` D1 | learner-facing theory/Review/module bindings **over the three ids** | 3/3 | — | current endpoint reaches Theory Breadcrumb, catalogue membership reaches Full Inspector, and deepest reached reaches Review Map plus Full Inspector |
 | `runtime-opening-identity` D2 | runtime-artifact rights/inventory in the F12 release proof | — | — | out of scope; owned by `planning/platform-alignment/`. Unaffected by this landing either way |
 
-Three of the five are unmet on ids this document simply never names. Closing them is either nine
-acceptance rows plus their regenerated artifacts, or an explicit recorded refusal negotiated with
-each upstream owner — a bounded decision, not a review round.
-
-**The second acceptance blocker, for completeness.** §2.5.0 forbids its own implementation while
-holding the only definition of the module query route, its request union and boundary validations,
-the decision stamp, `prefixDigest`/`ReviewCursor` and `MODULE_REVIEW_PREFIX_STALE` — all of which
-A16, A19 and A20 assert against. The section must be split into its withdrawn direct-call half and
-its normative route/paging half before any implementer can act on it.
+The coverage difference is now empty. This is author-contract coverage, not a false completion:
+all 224 rows remain `blocked_dependencies`, and the four upstream D1 rows close only in the eventual
+binding commit. §2.5.0 is likewise bounded to historical direct-call prose; §2.5.1 onward and the
+query/paging boundary are explicitly normative.
 
 
 ## Open questions
 
 1. **Answered 2026-08-30 — yes, `pawn_safe_square` returns to requested Sight alongside
    `outpost`.** The owner accepted the isolated one-row fork after [[D566]] closed its defective
-   basis. The confirmed §1.3 image is therefore 207 pairs and Sight 22; the D1865 instrument fails
+   basis. The confirmed §1.3 image is therefore 226 pairs and Sight 23; the D1865 instrument fails
    if the row disappears or widens another module.
 2. **Answered 2026-08-25 — activate arrows.** [[D1564]] rejects retirement of the learner feature
    and requires the producer→typed relation→module→board path. [[D1867]] distinguishes that ruling
@@ -1871,7 +1862,7 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   names. Found by attempting to write the declarations, which is the only way it could have been
   found.
 - **The original draft found fifteen projection dispositions that had to transfer with their
-  bindings.** The live 207-pair derivation now finds twenty-three (§2.4), proving why the transfer
+  bindings.** The repaired 226-pair derivation now finds twenty-seven (§2.4), proving why the transfer
   set must be computed from acceptance rather than kept in prose or an implementer's head.
 - **`pack.authored.classifier@1` was added to an accepted RFC by amendment and has never
   existed.** Repo-wide it appears at `rfc/learner-modules.md:766` and nowhere else. The [[D523]]
@@ -1931,6 +1922,13 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-09-07 (D3065 bounded discharge-coverage repair): regenerated the requirements-only image
+  from 117/205 to 127/224. Exact legal moves now reach requested Sight; the six omitted breadth
+  facts reach Full Inspector with harassment/contact/defender/material sequences selectively added
+  to Nudge or Review; the durable fork reaches Nudge/Review/Inspector; all three runtime-opening
+  facts have exact homes. `legal_exchange@1` is recorded upstream as the sole internal-predicate
+  refusal. §2.5.0 now ends before the normative DAG/query/paging contract. No binding becomes
+  executable and no upstream D1 is closed early.
 - 2026-09-07 (bounded repair, no review round commissioned): repaired [[D1445]]'s surviving
   residue — §1.1's declaration table and §0.2's C6 now carry the §2.3 capability unions instead of
   the singleton ceiling tokens, so `threat_radar`, `postcommit_nudge`, `compare_coach`, `review_map`

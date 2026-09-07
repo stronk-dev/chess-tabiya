@@ -19,7 +19,7 @@ describe("module-registration sealed-pool author repair", () => {
     const { digest: sealed, ...body } = bindings;
     expect(sealed).toBe(digest(body));
     expect(bindings.schemaVersion).toBe(2);
-    expect(bindings.population).toBe(205);
+    expect(bindings.population).toBe(224);
     for (const row of bindings.rows) {
       const module = row.consumer.id.slice("module.".length);
       const policy = AUTHOR_MODULE_POLICIES[module as keyof typeof AUTHOR_MODULE_POLICIES];
@@ -81,6 +81,7 @@ describe("module-registration sealed-pool author repair", () => {
       "rules.structural.predicate.direct_attack_count@1:edge",
       "rules.structural.predicate.line_blockers@1:edge", "rules.structural.predicate.passed_pawn@1:edge",
       "rules.tactic.reading.defender_duty_set@1:position", "run.record.move@1:edge",
+      "run.record.position@1:position",
     ]);
     const rows = new Map(execution.rows.map((row:any) => [key(row.projection), row]));
     for (const row of execution.rows) {
@@ -117,12 +118,12 @@ describe("module-registration sealed-pool author repair", () => {
     }
   });
 
-  it("D2170 refuses to claim any of the 117 outputs executable before source operations land", () => {
+  it("D2170 refuses to claim any of the 127 outputs executable before source operations land", () => {
     const { digest: sealed, ...body } = execution;
     expect(sealed).toBe(digest(body));
-    expect(execution.population).toBe(117);
-    expect(execution.rows).toHaveLength(117);
-    expect(new Set(execution.rows.map((row:any) => key(row.projection))).size).toBe(117);
+    expect(execution.population).toBe(127);
+    expect(execution.rows).toHaveLength(127);
+    expect(new Set(execution.rows.map((row:any) => key(row.projection))).size).toBe(127);
     expect(execution.completionClaim).toBe("requirements_only");
     expect(bindings.completionClaim).toBe("requirements_only");
     const manifestIds = new Set(PRIMARY_EVIDENCE_MANIFEST.projections.map((row) => key(row)));

@@ -24932,12 +24932,12 @@
     },
     {
       "id": "D3065",
-      "state": "blocked",
-      "owner": "assistance-and-presentation",
-      "blocker": "rfc:module-registration.md",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ad57669b43d9624f17e448200eb125bf530e18050e6210155a7a28a57279e5f6",
-      "uxItems": []
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:18dec4a6a1a08c1e4cc0b71b51f5beb1550d2aafc0c57371451ed14ea85b73d9",
+      "uxItems": [],
+      "evidence": "planning/learner-modules/discharge-coverage-repair-2026-09-07.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3066",
@@ -24971,6 +24971,15 @@
       "sourceDigest": "sha256:2c17a2c02ae13917cce40ecbbda5ce6f8ec29120d022b269ad3e78c8511bfd44",
       "uxItems": [],
       "evidence": "tools/d3069-semantic-collector-cut-contract/contract.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3070",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:90b229168791f877bc4b3e95288b4bdc57bb773752d15bdfdc1f141ed3a14d6d",
+      "uxItems": [],
+      "evidence": "tools/d2120-module-registration-author-contract/generate.ts",
       "evidenceKind": "path"
     }
   ]

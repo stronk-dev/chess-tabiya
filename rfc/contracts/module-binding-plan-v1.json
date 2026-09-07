@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "module_binding_requirements",
   "completionClaim": "requirements_only",
-  "population": 205,
+  "population": 224,
   "guidedHint": {
     "status": "owner_blocked",
     "blocker": "D1639",
@@ -30,8 +30,12 @@
       "derived.exchange.trade_completed@1",
       "derived.grade.move_quality@1",
       "derived.king.captured_zone_defender@1",
+      "derived.material.event.role_asymmetry@1",
       "derived.material.reading.role_signature@1",
+      "derived.opening.deepest_reached@1",
       "derived.pawn.event.transitions@1",
+      "derived.pawn.sequence.contact_timing@1",
+      "derived.pawn.sequence.harassment_pressure@1",
       "derived.semantic_avoidance.backward_pawn@1",
       "derived.semantic_avoidance.doubled_pawn@1",
       "derived.semantic_avoidance.half_open_file@1",
@@ -48,10 +52,12 @@
       "derived.tactic.defender_exposure@1",
       "derived.tactic.deflection_observed@1",
       "derived.tactic.discovered_executed@1",
+      "derived.tactic.fork_survives_reply@1",
       "derived.tactic.interference_observed@1",
       "derived.tactic.line_blocker_clearance_observed@1",
       "derived.tactic.overload_exploitation_observed@1",
       "derived.tactic.promotion_pressure@1",
+      "derived.tactic.sequence.defender_consequence@1",
       "derived.tactic.square_clearance_observed@1",
       "human.explorer.population@1",
       "human.maia.candidate_wdl@1",
@@ -71,6 +77,8 @@
       "rules.endgame.reading@1",
       "rules.king.event.zone_state@1",
       "rules.king.reading.zone_state@1",
+      "rules.mobility.event.piece_destinations@1",
+      "rules.mobility.reading.legal_moves@1",
       "rules.mobility.reading.piece_destinations@1",
       "rules.pawn.event.dynamics@1",
       "rules.pawn.reading.candidate_majority@1",
@@ -78,6 +86,7 @@
       "rules.phase.development@1",
       "rules.phase.reading@1",
       "rules.pivotal.marker@1",
+      "rules.square.event.control@1",
       "rules.square.reading.control@1",
       "rules.structural.event.backward_pawn@1",
       "rules.structural.event.doubled_pawn@1",
@@ -136,6 +145,7 @@
       "run.record.fork@1",
       "run.record.imported_result@1",
       "run.record.objective_transition@1",
+      "theory.opening.catalogue_membership@1",
       "theory.opening.current_endpoint@1",
       "theory.shapes.firing@1"
     ],
@@ -153,16 +163,22 @@
       "module.compare_coach@1\u0000run.record.objective_transition@1",
       "module.full_inspector@1\u0000derived.compare.eval_delta@1",
       "module.full_inspector@1\u0000derived.compare.structure_delta@1",
+      "module.full_inspector@1\u0000derived.material.event.role_asymmetry@1",
       "module.full_inspector@1\u0000derived.material.reading.role_signature@1",
+      "module.full_inspector@1\u0000derived.opening.deepest_reached@1",
+      "module.full_inspector@1\u0000derived.pawn.sequence.contact_timing@1",
+      "module.full_inspector@1\u0000derived.pawn.sequence.harassment_pressure@1",
       "module.full_inspector@1\u0000derived.story.rank@1",
       "module.full_inspector@1\u0000derived.tactic.attraction_observed@1",
       "module.full_inspector@1\u0000derived.tactic.check_zwischenzug_observed@1",
       "module.full_inspector@1\u0000derived.tactic.deflection_observed@1",
       "module.full_inspector@1\u0000derived.tactic.discovered_executed@1",
+      "module.full_inspector@1\u0000derived.tactic.fork_survives_reply@1",
       "module.full_inspector@1\u0000derived.tactic.interference_observed@1",
       "module.full_inspector@1\u0000derived.tactic.line_blocker_clearance_observed@1",
       "module.full_inspector@1\u0000derived.tactic.overload_exploitation_observed@1",
       "module.full_inspector@1\u0000derived.tactic.promotion_pressure@1",
+      "module.full_inspector@1\u0000derived.tactic.sequence.defender_consequence@1",
       "module.full_inspector@1\u0000derived.tactic.square_clearance_observed@1",
       "module.full_inspector@1\u0000human.explorer.population@1",
       "module.full_inspector@1\u0000human.maia.candidate_wdl@1",
@@ -178,12 +194,15 @@
       "module.full_inspector@1\u0000rules.castling.reading.legality@1",
       "module.full_inspector@1\u0000rules.castling.reading.rights@1",
       "module.full_inspector@1\u0000rules.king.reading.zone_state@1",
+      "module.full_inspector@1\u0000rules.mobility.event.piece_destinations@1",
+      "module.full_inspector@1\u0000rules.mobility.reading.legal_moves@1",
       "module.full_inspector@1\u0000rules.mobility.reading.piece_destinations@1",
       "module.full_inspector@1\u0000rules.pawn.reading.candidate_majority@1",
       "module.full_inspector@1\u0000rules.pawn.reading.contacts@1",
       "module.full_inspector@1\u0000rules.phase.development@1",
       "module.full_inspector@1\u0000rules.phase.reading@1",
       "module.full_inspector@1\u0000rules.pivotal.marker@1",
+      "module.full_inspector@1\u0000rules.square.event.control@1",
       "module.full_inspector@1\u0000rules.square.reading.control@1",
       "module.full_inspector@1\u0000rules.structural.reading.pawn_connectivity@1",
       "module.full_inspector@1\u0000rules.structural.reading.space@1",
@@ -196,6 +215,7 @@
       "module.full_inspector@1\u0000rules.tactic.reading.ray_classification@1",
       "module.full_inspector@1\u0000rules.tactic.reading.rook_on_seventh@1",
       "module.full_inspector@1\u0000rules.tactic.reading.trapped_piece@1",
+      "module.full_inspector@1\u0000theory.opening.catalogue_membership@1",
       "module.full_inspector@1\u0000theory.shapes.firing@1",
       "module.postcommit_nudge@1\u0000derived.activity.event.open_file_occupancy@1",
       "module.postcommit_nudge@1\u0000derived.exchange.capture_class@1",
@@ -203,6 +223,7 @@
       "module.postcommit_nudge@1\u0000derived.grade.move_quality@1",
       "module.postcommit_nudge@1\u0000derived.king.captured_zone_defender@1",
       "module.postcommit_nudge@1\u0000derived.pawn.event.transitions@1",
+      "module.postcommit_nudge@1\u0000derived.pawn.sequence.harassment_pressure@1",
       "module.postcommit_nudge@1\u0000derived.semantic_avoidance.backward_pawn@1",
       "module.postcommit_nudge@1\u0000derived.semantic_avoidance.doubled_pawn@1",
       "module.postcommit_nudge@1\u0000derived.semantic_avoidance.half_open_file@1",
@@ -216,6 +237,7 @@
       "module.postcommit_nudge@1\u0000derived.tactic.attraction_observed@1",
       "module.postcommit_nudge@1\u0000derived.tactic.check_zwischenzug_observed@1",
       "module.postcommit_nudge@1\u0000derived.tactic.deflection_observed@1",
+      "module.postcommit_nudge@1\u0000derived.tactic.fork_survives_reply@1",
       "module.postcommit_nudge@1\u0000derived.tactic.interference_observed@1",
       "module.postcommit_nudge@1\u0000derived.tactic.line_blocker_clearance_observed@1",
       "module.postcommit_nudge@1\u0000derived.tactic.overload_exploitation_observed@1",
@@ -252,7 +274,11 @@
       "module.review_map@1\u0000derived.exchange.trade_completed@1",
       "module.review_map@1\u0000derived.grade.move_quality@1",
       "module.review_map@1\u0000derived.king.captured_zone_defender@1",
+      "module.review_map@1\u0000derived.material.event.role_asymmetry@1",
+      "module.review_map@1\u0000derived.opening.deepest_reached@1",
       "module.review_map@1\u0000derived.pawn.event.transitions@1",
+      "module.review_map@1\u0000derived.pawn.sequence.contact_timing@1",
+      "module.review_map@1\u0000derived.pawn.sequence.harassment_pressure@1",
       "module.review_map@1\u0000derived.semantic_avoidance.backward_pawn@1",
       "module.review_map@1\u0000derived.semantic_avoidance.doubled_pawn@1",
       "module.review_map@1\u0000derived.semantic_avoidance.half_open_file@1",
@@ -266,9 +292,11 @@
       "module.review_map@1\u0000derived.tactic.attraction_observed@1",
       "module.review_map@1\u0000derived.tactic.check_zwischenzug_observed@1",
       "module.review_map@1\u0000derived.tactic.deflection_observed@1",
+      "module.review_map@1\u0000derived.tactic.fork_survives_reply@1",
       "module.review_map@1\u0000derived.tactic.interference_observed@1",
       "module.review_map@1\u0000derived.tactic.line_blocker_clearance_observed@1",
       "module.review_map@1\u0000derived.tactic.overload_exploitation_observed@1",
+      "module.review_map@1\u0000derived.tactic.sequence.defender_consequence@1",
       "module.review_map@1\u0000derived.tactic.square_clearance_observed@1",
       "module.review_map@1\u0000live.stockfish.eval@1",
       "module.review_map@1\u0000live.stockfish.wdl@1",
@@ -309,6 +337,7 @@
       "module.review_map@1\u0000run.record.objective_transition@1",
       "module.sight_on_request@1\u0000rules.castling.reading.legality@1",
       "module.sight_on_request@1\u0000rules.castling.reading.rights@1",
+      "module.sight_on_request@1\u0000rules.mobility.reading.legal_moves@1",
       "module.sight_on_request@1\u0000rules.pawn.reading.contacts@1",
       "module.sight_on_request@1\u0000rules.square.reading.control@1",
       "module.sight_on_request@1\u0000rules.structural.reading.backward_pawn@1",
@@ -1964,6 +1993,116 @@
         "version": 1
       },
       "projection": {
+        "id": "derived.material.event.role_asymmetry",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.material.event.role_asymmetry",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000derived.material.event.role_asymmetry@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "panel",
+        "lit_squares",
+        "arrows",
+        "piece_halo"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 4
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000derived.material.event.role_asymmetry@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "derived.material",
+        "version": 1
+      },
+      "projection": {
         "id": "derived.material.reading.role_signature",
         "version": 1
       },
@@ -2058,6 +2197,333 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.full_inspector@1\u0000derived.material.reading.role_signature@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "derived.opening",
+        "version": 1
+      },
+      "projection": {
+        "id": "derived.opening.deepest_reached",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.opening.deepest_reached",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000derived.opening.deepest_reached@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "sentence",
+        "panel"
+      ],
+      "answerContent": [
+        "fact",
+        "theory"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 2
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000derived.opening.deepest_reached@1",
+        "requiredForms": [
+          "sentence",
+          "panel"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "derived.pawn",
+        "version": 1
+      },
+      "projection": {
+        "id": "derived.pawn.sequence.contact_timing",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.pawn.sequence.contact_timing",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000derived.pawn.sequence.contact_timing@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "panel",
+        "lit_squares",
+        "arrows",
+        "piece_halo"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 4
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000derived.pawn.sequence.contact_timing@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "derived.pawn",
+        "version": 1
+      },
+      "projection": {
+        "id": "derived.pawn.sequence.harassment_pressure",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.pawn.sequence.harassment_pressure",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000derived.pawn.sequence.harassment_pressure@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "panel",
+        "lit_squares",
+        "arrows",
+        "piece_halo"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 4
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000derived.pawn.sequence.harassment_pressure@1",
         "requiredForms": [
           "panel",
           "lit_squares",
@@ -2614,6 +3080,110 @@
         "version": 1
       },
       "projection": {
+        "id": "derived.tactic.fork_survives_reply",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.tactic.fork_survives_reply",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000derived.tactic.fork_survives_reply@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "panel"
+      ],
+      "answerContent": [
+        "threat"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 1
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000derived.tactic.fork_survives_reply@1",
+        "requiredForms": [
+          "panel"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "projection": {
         "id": "derived.tactic.interference_observed",
         "version": 1
       },
@@ -3033,6 +3603,114 @@
         "requiredForms": [
           "panel",
           "lit_squares"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "projection": {
+        "id": "derived.tactic.sequence.defender_consequence",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.tactic.sequence.defender_consequence",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000derived.tactic.sequence.defender_consequence@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "panel",
+        "lit_squares",
+        "arrows"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 3
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000derived.tactic.sequence.defender_consequence@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows"
         ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
@@ -4715,6 +5393,225 @@
         "version": 1
       },
       "projection": {
+        "id": "rules.mobility.event.piece_destinations",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "rules.mobility.event.piece_destinations",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000rules.mobility.event.piece_destinations@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "panel",
+        "lit_squares",
+        "arrows",
+        "piece_halo"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 4
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000rules.mobility.event.piece_destinations@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "rules.mobility",
+        "version": 1
+      },
+      "projection": {
+        "id": "rules.mobility.reading.legal_moves",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_position",
+            "subjectKind": "position",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_position",
+            "subjectKind": "position",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "rules.mobility.reading.legal_moves",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000rules.mobility.reading.legal_moves@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "lit_squares",
+        "piece_halo",
+        "panel"
+      ],
+      "answerContent": [
+        "fact",
+        "candidate_moves"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 3
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000rules.mobility.reading.legal_moves@1",
+        "requiredForms": [
+          "lit_squares",
+          "piece_halo",
+          "panel"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "rules.mobility",
+        "version": 1
+      },
+      "projection": {
         "id": "rules.mobility.reading.piece_destinations",
         "version": 1
       },
@@ -5449,6 +6346,116 @@
           "panel",
           "sentence"
         ]
+      }
+    },
+    {
+      "producer": {
+        "id": "rules.square",
+        "version": 1
+      },
+      "projection": {
+        "id": "rules.square.event.control",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "rules.square.event.control",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000rules.square.event.control@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "panel",
+        "lit_squares",
+        "arrows",
+        "piece_halo"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 4
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000rules.square.event.control@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
       }
     },
     {
@@ -6747,6 +7754,110 @@
     },
     {
       "producer": {
+        "id": "theory.opening.runtime",
+        "version": 1
+      },
+      "projection": {
+        "id": "theory.opening.catalogue_membership",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "catalogue_evidence_packet@1",
+            "view": "applicable_catalogue_position",
+            "subjectKind": "position",
+            "selector": {
+              "kind": "applicability_identity",
+              "suppliedBy": "sealed_catalogue_adapter"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "catalogue_evidence_packet@1",
+            "view": "applicable_catalogue_position",
+            "subjectKind": "position",
+            "selector": {
+              "kind": "applicability_identity",
+              "suppliedBy": "sealed_catalogue_adapter"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "theory.opening.catalogue_membership",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000theory.opening.catalogue_membership@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "panel"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 1
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000theory.opening.catalogue_membership@1",
+        "requiredForms": [
+          "panel"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
         "id": "theory.shapes",
         "version": 1
       },
@@ -7468,6 +8579,108 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.postcommit_nudge@1\u0000derived.pawn.event.transitions@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "derived.pawn",
+        "version": 1
+      },
+      "projection": {
+        "id": "derived.pawn.sequence.harassment_pressure",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.postcommit_nudge",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "postcommit",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.pawn.sequence.harassment_pressure",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.postcommit_nudge@1\u0000derived.pawn.sequence.harassment_pressure@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "academy",
+        "onramp",
+        "campaign"
+      ],
+      "forms": [
+        "list",
+        "panel",
+        "lit_squares",
+        "arrows",
+        "piece_halo"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 2,
+        "maxForms": 5
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.postcommit_nudge@1\u0000derived.pawn.sequence.harassment_pressure@1",
         "requiredForms": [
           "list",
           "panel",
@@ -8734,6 +9947,102 @@
           "panel",
           "lit_squares",
           "arrows"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "projection": {
+        "id": "derived.tactic.fork_survives_reply",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.postcommit_nudge",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "postcommit",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.tactic.fork_survives_reply",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.postcommit_nudge@1\u0000derived.tactic.fork_survives_reply@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "academy",
+        "onramp",
+        "campaign"
+      ],
+      "forms": [
+        "list",
+        "panel"
+      ],
+      "answerContent": [
+        "threat"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 2,
+        "maxForms": 2
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.postcommit_nudge@1\u0000derived.tactic.fork_survives_reply@1",
+        "requiredForms": [
+          "list",
+          "panel"
         ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
@@ -12303,6 +13612,233 @@
     },
     {
       "producer": {
+        "id": "derived.material",
+        "version": 1
+      },
+      "projection": {
+        "id": "derived.material.event.role_asymmetry",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.review_map",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.material.event.role_asymmetry",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.review_map@1\u0000derived.material.event.role_asymmetry@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host",
+        "participant",
+        "spectator"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "academy",
+        "campaign"
+      ],
+      "forms": [
+        "list",
+        "panel",
+        "lit_squares",
+        "arrows",
+        "piece_halo"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 3,
+        "maxForms": 5
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.review_map@1\u0000derived.material.event.role_asymmetry@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "derived.opening",
+        "version": 1
+      },
+      "projection": {
+        "id": "derived.opening.deepest_reached",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.review_map",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.opening.deepest_reached",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.review_map@1\u0000derived.opening.deepest_reached@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host",
+        "participant",
+        "spectator"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "academy",
+        "campaign"
+      ],
+      "forms": [
+        "sentence",
+        "list",
+        "panel"
+      ],
+      "answerContent": [
+        "fact",
+        "theory"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 3,
+        "maxForms": 3
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.review_map@1\u0000derived.opening.deepest_reached@1",
+        "requiredForms": [
+          "sentence",
+          "list",
+          "panel"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
         "id": "derived.pawn",
         "version": 1
       },
@@ -12405,6 +13941,236 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.pawn.event.transitions@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "derived.pawn",
+        "version": 1
+      },
+      "projection": {
+        "id": "derived.pawn.sequence.contact_timing",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.review_map",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.pawn.sequence.contact_timing",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.review_map@1\u0000derived.pawn.sequence.contact_timing@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host",
+        "participant",
+        "spectator"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "academy",
+        "campaign"
+      ],
+      "forms": [
+        "list",
+        "panel",
+        "lit_squares",
+        "arrows",
+        "piece_halo"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 3,
+        "maxForms": 5
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.review_map@1\u0000derived.pawn.sequence.contact_timing@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows",
+          "piece_halo"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "derived.pawn",
+        "version": 1
+      },
+      "projection": {
+        "id": "derived.pawn.sequence.harassment_pressure",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.review_map",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.pawn.sequence.harassment_pressure",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.review_map@1\u0000derived.pawn.sequence.harassment_pressure@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host",
+        "participant",
+        "spectator"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "academy",
+        "campaign"
+      ],
+      "forms": [
+        "list",
+        "panel",
+        "lit_squares",
+        "arrows",
+        "piece_halo"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 3,
+        "maxForms": 5
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.review_map@1\u0000derived.pawn.sequence.harassment_pressure@1",
         "requiredForms": [
           "list",
           "panel",
@@ -13851,6 +15617,115 @@
         "version": 1
       },
       "projection": {
+        "id": "derived.tactic.fork_survives_reply",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.review_map",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.tactic.fork_survives_reply",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.review_map@1\u0000derived.tactic.fork_survives_reply@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host",
+        "participant",
+        "spectator"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "academy",
+        "campaign"
+      ],
+      "forms": [
+        "list",
+        "panel"
+      ],
+      "answerContent": [
+        "threat"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 3,
+        "maxForms": 2
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.review_map@1\u0000derived.tactic.fork_survives_reply@1",
+        "requiredForms": [
+          "list",
+          "panel"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "projection": {
         "id": "derived.tactic.interference_observed",
         "version": 1
       },
@@ -14174,6 +16049,119 @@
       "presentationRequirement": {
         "status": "awaiting_exact_module_pair_adapter",
         "requiredPair": "module.review_map@1\u0000derived.tactic.overload_exploitation_observed@1",
+        "requiredForms": [
+          "list",
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "projection": {
+        "id": "derived.tactic.sequence.defender_consequence",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.review_map",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "frozen_run_prefix",
+            "subjectKind": "run_prefix",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.tactic.sequence.defender_consequence",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.review_map@1\u0000derived.tactic.sequence.defender_consequence@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host",
+        "participant",
+        "spectator"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "academy",
+        "campaign"
+      ],
+      "forms": [
+        "list",
+        "panel",
+        "lit_squares",
+        "arrows"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 3,
+        "maxForms": 4
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.review_map@1\u0000derived.tactic.sequence.defender_consequence@1",
         "requiredForms": [
           "list",
           "panel",
@@ -18785,6 +20773,120 @@
     },
     {
       "producer": {
+        "id": "rules.mobility",
+        "version": 1
+      },
+      "projection": {
+        "id": "rules.mobility.reading.legal_moves",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.sight_on_request",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "precommit",
+            "source": "candidate_population@1",
+            "view": "candidate_child_position_by_uci",
+            "subjectKind": "position",
+            "selector": {
+              "kind": "canonical_candidate_uci",
+              "suppliedBy": "authoritative_module_moment",
+              "committedEdgeForbidden": true
+            }
+          },
+          {
+            "timing": "postcommit",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_position",
+            "subjectKind": "position",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "rules.mobility.reading.legal_moves",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "precommit",
+          "postcommit"
+        ],
+        "sourceCeiling": [
+          "precommit",
+          "postcommit"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.sight_on_request@1\u0000rules.mobility.reading.legal_moves@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "academy",
+        "onramp",
+        "campaign"
+      ],
+      "forms": [
+        "list",
+        "lit_squares",
+        "piece_halo",
+        "panel"
+      ],
+      "answerContent": [
+        "fact",
+        "candidate_moves"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 1,
+        "maxForms": 4
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.sight_on_request@1\u0000rules.mobility.reading.legal_moves@1",
+        "requiredForms": [
+          "list",
+          "lit_squares",
+          "piece_halo",
+          "panel"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
         "id": "rules.pawn",
         "version": 1
       },
@@ -23236,5 +25338,5 @@
       }
     }
   ],
-  "digest": "sha256:4b21842a73c5f32cc62afe19c317f94f485936ed11bfcfcd251870f9b6a95d99"
+  "digest": "sha256:adb44fa817cc27499b76683545fd9b692070ff0924d21df4e0d1a398f7d9ab82"
 }

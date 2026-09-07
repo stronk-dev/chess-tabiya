@@ -974,7 +974,7 @@ fallback; every other contrary measurement is escalated per law 6, not shipped a
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Production-module eligibility for every §3 collector — this RFC lands research/inspector-only by design; without promotion these projections join the class-9 wall the gap matrix measured | `planning/evidence-foundation-ux/plan.md` | the Phase-3 RFC's landing commit | |
+| D1 | Production-module eligibility for every learner-facing §3 collector — this RFC lands research/inspector-only by design; `rules.exchange.predicate.legal_exchange@1` is the explicit exception because it is an internal `machine_condition` prerequisite with no sentence form, retained in the advanced producer inventory rather than rendered as guidance. The other 29 projections, including rare `fork_survives_reply@1`, require a module binding or an explicit later refusal | `planning/evidence-foundation-ux/plan.md` | the Phase-3 RFC's landing commit | |
 | D2 | Learner-facing wiring of the D745 negative reading — ruled admissible post-commit/review; the *wiring* into modules is Phase-3 work over these producers | `planning/evidence-foundation-ux/plan.md` | the Phase-3 RFC's landing commit | |
 
 The prose rationale for each row lives in the owning §3 section and §Open questions; the table is
@@ -1074,6 +1074,10 @@ total stays 30 and the swap is recorded in the changelog and the landing log ent
 
 ## Changelog
 
+- 2026-09-07: narrowed D1 from the mechanically over-broad *every §3 collector* to every
+  learner-facing collector. `rules.exchange.predicate.legal_exchange@1` is the one explicit
+  internal-machine-predicate refusal; `derived.tactic.fork_survives_reply@1` remains learner-facing
+  and is covered by the module-registration requirements. No projection or implementation changed.
 - 2026-08-22: owner accepted the repaired contract and opened implementation. No open product
   question was inferred: the accepted scope is the closed 30-projection research/inspector wave;
   module promotion, presets, authored vocabulary and opening identity remain outside it.
