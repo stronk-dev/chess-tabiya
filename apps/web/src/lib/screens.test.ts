@@ -603,6 +603,11 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain("The terminal authored explanation.");
     expect(document.body.textContent).toContain("The terminal authored claim.");
     expect(document.body.textContent).toContain("No machine record is attached.");
+    expect(document.body.textContent).toContain("Your completed attempt stays saved.");
+    expect(document.body.textContent).toContain("Rewinds are free in rehearsals");
+    const primaryActions = [...document.querySelectorAll<HTMLButtonElement>(".primary-actions button")];
+    expect(primaryActions.map((button) => button.textContent)).toEqual(["Play it again from here"]);
+    expect(document.querySelector('[role="dialog"]')?.textContent).not.toMatch(/accuracy|grade count|rating movement|great move/i);
     expect(document.querySelector('[role="dialog"]')?.textContent).not.toContain("Engine evidence recorded");
     const inspect = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("Inspect recorded evidence"))!;
     inspect.click();
@@ -610,7 +615,7 @@ describe("Layer 3 screens", () => {
     expect(document.querySelector('[aria-label="Terminal evidence"]')?.textContent).toContain("Engine evidence recorded");
     [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Return to play")!.click();
     await tick();
-    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Rewind and branch")!.click();
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Play it again from here")!.click();
     expect(onRewind).toHaveBeenCalledWith({ nodeId: run.nodes[0]!.id });
     await unmount(component);
   });

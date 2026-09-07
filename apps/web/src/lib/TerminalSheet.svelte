@@ -71,6 +71,18 @@
       <OutcomeContext {assessment} {resistance} {grade} />
     {/if}
 
+    <section class="next-step" aria-labelledby="terminal-next-step-title">
+      <div>
+        <p class="eyebrow">What next</p>
+        <h3 id="terminal-next-step-title">Keep the attempt, then choose where to return.</h3>
+        <p>Your completed attempt stays saved. Rewinds are free in rehearsals; going back creates another branch without replacing this one.</p>
+      </div>
+      <div class="primary-actions">
+        <button class="primary" type="button" disabled={!canRewind} onclick={onRewind}>Play it again from here</button>
+        {#if onStory}<button type="button" onclick={onStory}>Review the whole game</button>{/if}
+      </div>
+    </section>
+
     {#if authoredItems.length > 0}
       <section aria-labelledby="terminal-commentary">
         <h3 id="terminal-commentary">Authored commentary</h3>
@@ -118,11 +130,9 @@
       </section>
     {/if}
 
-    <div class="actions">
-      {#if onStory}<button type="button" onclick={onStory}>Story of this run</button>{/if}
+    <div class="actions" aria-label="More completed-attempt actions">
       {#if onFlip}<button type="button" onclick={onFlip}>Replay this as {run.start.side === "white" ? "Black" : "White"}</button>{/if}
       {#if evidence.length > 0 && onInspectEvidence}<button type="button" onclick={onInspectEvidence}>Inspect recorded evidence <span aria-hidden="true">({evidence.length})</span></button>{/if}
-      <button type="button" disabled={!canRewind} onclick={onRewind}>Rewind and branch</button>
       <button type="button" onclick={onStop}>Stop session</button>
     </div>
   </div>
@@ -163,7 +173,11 @@
   .assignment-hand-in article + article { margin-top: 0.75rem; }
   .assignment-hand-in p { margin: 0.35rem 0; }
   .submission-confirm { margin-top: 0.8rem; padding: 0.9rem; border: 2px solid var(--accent); border-radius: 0.8rem; background: var(--panel); }
-  .actions { display: flex; gap: 0.5rem; margin-top: 1.3rem; }
+  .next-step { display: grid; grid-template-columns: minmax(0, 1fr) minmax(12rem, auto); gap: 1rem; align-items: end; margin-top: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--paper); }
+  .next-step h3 { margin: .25rem 0 .4rem; font: 500 1.3rem/1.1 var(--display-font); }
+  .next-step p { margin: 0; line-height: 1.45; }
+  .primary-actions { display: grid; gap: .5rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.3rem; }
   button {
     padding: 0.7rem 0.9rem;
     border: 1px solid var(--line);
@@ -172,5 +186,8 @@
     color: inherit;
     cursor: pointer;
   }
+  button.primary { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+  button.primary:hover, button.primary:focus-visible { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
   button:disabled { opacity: 0.4; cursor: not-allowed; }
+  @media (max-width: 36rem) { .next-step { grid-template-columns: 1fr; } }
 </style>

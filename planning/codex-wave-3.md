@@ -575,3 +575,17 @@ job boundary. The import/re-entry browser journey waits on a branch/node census 
 the tested move, so it can export the original PGN while the move request is still in flight. Bind
 the journey to the exact `POST /moves` request and the resulting branch bytes; no timeout increase,
 sleep or retry is an acceptable repair.
+
+## Post-run primary return and rating-scale refusal — [[D3078]], 2026-09-07
+
+The completed-attempt sheet has one bounded, foundation-independent learner module: put the two
+real return doors first, state what survives, and leave inspection/export/side-flip as secondary
+actions. Close ATR-a12, ATR-a13 and ATR-a23 only when component, production browser and responsive
+matrix checks prove the action order, the absence of forbidden pseudo-review summaries, and the
+board rectangle through terminal state.
+
+ARR-a13 is not part of that implementation. Its research premise compares pack
+`minOnlineRapid`/`maxOnlineRapid` values with the learner's BCS publication, despite the rating
+contract explicitly saying BCS is not an online-platform rating. Keep the absolute authored pack
+window and mark ARR-a13 blocked on [[D3078]] until one accepted same-scale observation or conversion
+exists. Passing a bare point estimate into `packDifficultyCopy` is explicitly not a fix.

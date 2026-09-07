@@ -837,7 +837,9 @@ test("terminal outcome reveals authored commentary, a native story, and a revoca
   await page.getByRole("button", { name: "Return to play" }).click();
   await expect(page.getByRole("dialog", { name: "You lost." })).toBeVisible();
   await expect(page.getByText("Thinking…")).toHaveCount(0);
-  await page.getByRole("button", { name: "Story of this run" }).click();
+  await expect(terminal.getByText("Your completed attempt stays saved.", { exact: false })).toBeVisible();
+  await expect(terminal.getByRole("button", { name: "Play it again from here" })).toBeVisible();
+  await terminal.getByRole("button", { name: "Review the whole game" }).click();
   await expect(page).toHaveURL(/\/review\/game\//);
   await expect(page.getByRole("heading", { name: "Story of this run" })).toBeVisible();
   await expect(page.getByText("A public story link does not expire.", { exact: false })).toBeVisible();

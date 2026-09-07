@@ -3,8 +3,8 @@
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
     "roadmap": "sha256:e6a6283bf6817f6e88bc46bfeea5c73a40170325145e0cf7cbea78eb76047584",
-    "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:4203f409d3803a10fce5873e6c7484ef6cda15043d2d051a3f2ff97d8359ef41",
+    "workItems": "sha256:ffd3e0df9c569686afc82e0ed83b5a21a79a3594c0ccca501fbc9b0f3d4bac07",
+    "workState": "sha256:1d4f976bf51291af57f03521a91f51206abca3771bb4d60213313c4f27b6e6b2",
     "rfcRegister": "sha256:5d21721c327cc0fb5150fedfde60e62cd29a7cab45770641257da5308ec9d5e9",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
@@ -30,17 +30,17 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 663,
+      "todo": 664,
       "doing": 1,
       "blocked": 1197,
       "done": 857,
       "refused": 108
     },
     "workItems": {
-      "queued": 153,
+      "queued": 149,
       "blocked_owner": 61,
-      "blocked_rfc": 120,
-      "completed": 211,
+      "blocked_rfc": 121,
+      "completed": 214,
       "retired": 24
     },
     "dimensionStates": {
@@ -585,9 +585,9 @@
       "owner": "core-loop",
       "rfcCount": 2,
       "workItems": {
-        "queued": 15,
+        "queued": 14,
         "blocked_owner": 15,
-        "blocked_rfc": 11,
+        "blocked_rfc": 12,
         "completed": 39,
         "retired": 4
       },
@@ -703,10 +703,10 @@
       "owner": "review-and-return",
       "rfcCount": 5,
       "workItems": {
-        "queued": 19,
+        "queued": 16,
         "blocked_owner": 4,
         "blocked_rfc": 25,
-        "completed": 15,
+        "completed": 18,
         "retired": 4
       },
       "routes": {

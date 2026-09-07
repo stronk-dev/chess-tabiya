@@ -17664,3 +17664,21 @@ schema 0.28 or production evaluator work begins.
 - `make schema-check` passes 9 tests plus scaffold/packaging/Lefthook validation. The standard
   `make test-browser-smoke` passes 37/37 with one optional Maia latency probe skipped. [[D3077]] is
   closed; [[D3076]] stays live until a pushed GitHub run proves the remote topology.
+
+## 2026-09-07 — Completed-attempt return choices promoted above implementation actions
+
+**What changed:** `TerminalSheet` now leads with the two learner decisions the after-run dossier
+specified: **Play it again from here** and **Review the whole game**. It states once that the
+completed attempt stays saved and rehearsal rewinds are free; opposite-side replay, evidence
+inspection and session exit remain available as secondary actions. The layout stacks at the phone
+floor and leaves the protected board rectangle unchanged.
+
+**What did not ship:** ARR-a13's relative-difficulty label. [[D3078]] shows its supposed two
+compatible declarations use different scales: pack windows are Online Rapid Elo while learner
+ratings publish BCS. The item is now RFC-blocked instead of becoming false personalization.
+
+**Evidence/next:** ATR-a12, ATR-a13 and ATR-a23 are complete in
+`planning/work-items-1.0.json`. `make test-software` passes 181 files / 1,110 tests;
+`make test-browser-smoke` passes 37 with the optional Maia probe skipped; and
+`make test-browser-matrix` passes all 19 responsive/accessibility cases. Full Review selection and
+module evidence remain in their owning foundation/RFC lanes.

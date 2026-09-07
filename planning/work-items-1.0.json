@@ -913,7 +913,7 @@
     {
       "id": "ARR-a13",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "blocked_rfc",
       "capability": "rehearsal",
       "owner": "core-loop",
       "assignment": "capability:rehearsal",
@@ -1507,30 +1507,38 @@
     {
       "id": "ATR-a12",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
-      "assignment": "capability:review",
+      "assignment": "closed",
       "sourceDocument": "ux-after-the-run.md",
       "sourceSection": "§2.3",
       "sourceHeading": "After the run — `ux-after-the-run.md`",
       "summary": "Terminal sheet: order the two doors *Play it again from here* then *Review the whole game*",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:d21ba77d9e448e0ced07ac530ebb7b1e1ddf0789f098a17358c1f8c8448fdeed"
+      "sourceDigest": "sha256:d21ba77d9e448e0ced07ac530ebb7b1e1ddf0789f098a17358c1f8c8448fdeed",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "TerminalSheet primary-return module with component, browser, and 19-cell responsive matrix proof"
+      }
     },
     {
       "id": "ATR-a13",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
-      "assignment": "capability:review",
+      "assignment": "closed",
       "sourceDocument": "ux-after-the-run.md",
       "sourceSection": "§2.3",
       "sourceHeading": "After the run — `ux-after-the-run.md`",
       "summary": "Four terminal-sheet prohibitions, written down: no accuracy figure, no grade counts, no rating movement on an unrated run, no praise class",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:79c0f18cd57c1800a7eec4b91d4dc8d28a6a6b932e34af7ad97cd4b3f8ece61b"
+      "sourceDigest": "sha256:79c0f18cd57c1800a7eec4b91d4dc8d28a6a6b932e34af7ad97cd4b3f8ece61b",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "TerminalSheet primary-return module with component, browser, and 19-cell responsive matrix proof"
+      }
     },
     {
       "id": "ATR-a14",
@@ -1684,17 +1692,21 @@
     {
       "id": "ATR-a23",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
-      "assignment": "capability:review",
+      "assignment": "closed",
       "sourceDocument": "ux-after-the-run.md",
       "sourceSection": "§5.3",
       "sourceHeading": "After the run — `ux-after-the-run.md`",
       "summary": "The first rewind outside a campaign says once that it is free",
       "legacyRoute": "none",
       "note": "can land today on the drill surface",
-      "sourceDigest": "sha256:91f640cfbad3e21f3af23c9aae4b1464bc625c7b563d8f061a19e0e1f31e441f"
+      "sourceDigest": "sha256:91f640cfbad3e21f3af23c9aae4b1464bc625c7b563d8f061a19e0e1f31e441f",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "TerminalSheet primary-return module with component, browser, and 19-cell responsive matrix proof"
+      }
     },
     {
       "id": "ATR-a24",
