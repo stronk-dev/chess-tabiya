@@ -18178,3 +18178,15 @@ every non-null `versionExport` to the exact schema-index literal and matching sc
 **Evidence/next:** `make shared-resource-bootstrap-collision-core-author-repair` retains the nine
 predecessor controls and passes four repair controls. Another genuinely fresh review and owner
 acceptance still gate implementation and the three staged consumer rebases.
+
+## 2026-09-07 — Feedback criterion follows the repaired rate guard
+
+**What changed:** [[D1811]] closes. `feedback-delivery` criterion 19 and its Stage-1 matrix no
+longer require the historical D417 escape in which an integer percentage passed as authored
+judgement. They now name the shipped regression boundary: decimal, integer-symbol,
+integer-word and spelled-number rates are refused, while ordinary count prose remains legal.
+
+**Evidence/next:** `apps/server/src/sourcing/claim-binding.test.ts` is the inherited executable
+proof for all four rate forms and both count controls. [[D421]] remains a separate live authored-
+prose/provider boundary; this reconciliation neither claims nor changes it. Continue the accepted
+Stage-2 mechanical binding work without weakening the production guard to satisfy stale RFC text.

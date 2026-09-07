@@ -30,7 +30,7 @@ assertion cover each accepted obligation?
 | 16 | pass after D526 repair | Eight-ply constructed N=8 admits 70/450 (15.6%), below the 90% reopening threshold; the original 100% one-ply result is preserved as instrument failure. |
 | 17 | pass | D97/D98 are untouched. |
 | 18 | pass | The explicit derived-feature default is delivered with empty earned/spans/principles, and the corpus population/characters are re-derived in the measurement. |
-| 19 | pass in inherited binding suite | The current 90.9%-versus-integer-rate hole remains explicitly pinned by `claim-binding.test.ts`. |
+| 19 | pass in inherited binding suite | `claim-binding.test.ts` refuses decimal, integer `%`, numeric `percent`, and spelled-number `percent` forms while preserving ordinary count prose; this is D417's repaired D166 rate-versus-count boundary. |
 | 20 | pass after D644 author correction | The corpus-wide boundary assertion covers all 67 projected rows: all authored principle inputs survive byte-for-byte, 46 rows contain authored prohibited vocabulary, zero contain a template-owned prohibited token, and the injected template-owned negative fails. C8 and the claim sentence are unchanged. |
 | 20a | pass | Every admitted corpus claim is checked for earned-only recorded clauses, and a bound-machine-plus-hypothesis negative proves the declaration cannot leak into that clause. |
 

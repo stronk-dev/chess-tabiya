@@ -13742,11 +13742,12 @@
     },
     {
       "id": "D1811",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:73cc00ce1cb58e938d61b688cf577ceb1621f193fd1bfa9ea668ec6e23ca5360",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:489cdd97ab559c80722d1cc576f13e47ad050db65d02d1dac40b905f8b0ece99",
       "uxItems": [],
-      "owner": "review-and-return"
+      "evidence": "rfc/feedback-delivery.md criterion 19 and planning/feedback-delivery/stage-1-criteria.md row 19",
+      "evidenceKind": "path"
     },
     {
       "id": "D1812",

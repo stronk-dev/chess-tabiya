@@ -39,8 +39,9 @@
   RFC's cross-review, both **closed by `rfc/archive/claim-backing.md`** on 2026-08-16, and both
   re-verified closed in this round (§1.2). **D79 🐞** stays open and is annotated rather than
   closed (criterion 11). **D167 🔨** is `claim-backing`'s request against *this* RFC's `binding`
-  field and is discharged by §2.5 in this round. **D417 🐞** and **D421 🐞**, both found 2026-08-16,
-  are read as constraints on §3.4 and C9 respectively (§3.5) and neither is claimed here.
+  field and is discharged by §2.5 in this round. **D417 ✅** and **D421 🐞**, both found 2026-08-16,
+  are read as constraints on §3.4 and C9 respectively (§3.5). D417 was closed on 2026-08-26 and
+  criterion 19 now requires the repaired rate refusal; D421 remains open and is not claimed here.
   **Six further rows were produced by this RFC's rounds, landed in the ledger by claude, and are
   reflected here rather than re-derived — all open, none claimed** `[final author pass 2026-08-16]`:
   **D430** (*`explorer_frequency` is a dead alternative inside a live map*, §1.2d, and it shapes
@@ -1620,43 +1621,33 @@ states the successor rule for whoever widens the packet later: **instrument-attr
 only**, which `validateClaimBindings`'s segment cut is the first thing in this repository able to
 identify.
 
-#### 3.6 Two live holes this RFC leans on, both found 2026-08-16, neither claimed here
+#### 3.6 One closed constraint and one live hole, both found 2026-08-16
 
-**Both are `claim-backing`'s to fix or a successor's; this RFC records them because C6 and C8 rest
-on them and a reader must not infer a guarantee neither guard supplies.**
+**This RFC records both because C6 and C8 rest on them. D417 is now a closed regression boundary;
+D421 remains a live hole whose guarantee must not be inferred.**
 
-**(a) [[D417]] — the rate refusal is decimal-only, so an integer percentage routes as authored
-judgement.** `claim-backing` §3.4a step 3(3) refuses a **rate** inside an author-attributed segment
-and says *"no label lifts it"*, on the asymmetry that **a rate hides its denominator and a count
-carries it**. The shipped guard is `RATE_TOKEN = /(?:[+-]?\d+\.\d+%?)/`
-(`apps/server/src/sourcing/claim-binding.ts`), raised at `CLAIM_READING_UNATTRIBUTED`. It requires a
-literal decimal point between two digit runs. Probed against the shipped validator `[V]`:
+**(a) [[D417]] — closed 2026-08-26: author-attributed rates are refused across the supported
+numeric forms while counts remain legal.** `claim-backing` §3.4a step 3(3) refuses a **rate** inside
+an author-attributed segment and says *"no label lifts it"*, on the asymmetry that **a rate hides
+its denominator and a count carries it**. This RFC originally documented a decimal-only guard;
+that observation is historical. The shipped validator and `claim-binding.test.ts` now establish
+the current boundary `[V]`:
 
 | span | raised |
 |---|---|
 | *"f5 scores 90.9% for White"* | `CLAIM_READING_UNATTRIBUTED` |
-| ***"f5 scores 91% for White"*** | **nothing** |
-| *"f5 scores ninety-one percent"* | nothing |
-| *"reached 44,467,486 times"* | nothing |
-
-**And the escape is not caught by the second net.** `CLAIM_ASSERTION_UNDECLARED` sweeps
-`MACHINE_TOKEN` over the *remainder*, and the remainder has already had every declared span removed
-— **including `authored: true` spans**. So an author who declares *"f5 scores 91%"* as an authored
-span passes the sweep (nothing left to sweep), passes `RATE_TOKEN` (no decimal), and the claim
-validates clean with `disposition: "author_attributed"`. The existing test
-(`claim-binding.test.ts`) pins the decimal form exactly; changing `90.9%` to `91%` in that fixture
-makes the assertion fail.
+| *"f5 scores 91% for White"* | `CLAIM_READING_UNATTRIBUTED` |
+| *"f5 scores 91 percent for White"* | `CLAIM_READING_UNATTRIBUTED` |
+| *"f5 scores ninety-one percent for White"* | `CLAIM_READING_UNATTRIBUTED` |
+| *"The sample contains 91 games"* | nothing |
+| *"The move appeared 44,467,486 times"* | nothing |
 
 **Why it bears on this RFC.** C8's `author_attributed` line reads *"The rest is the author's
-judgement…"* — which is a **true sentence about a laundered measurement** in exactly the case D166
-says must be refused. The corpus already contains the shape: `anti-scandinavian-white`'s
-`just-take-it`, labelled `corpus_observed, engine_validated`, reads *"2.exd5 is played in **74%** of
-games at band and is the **best** of the five second moves measured…"* — an integer percentage
-`RATE_TOKEN` cannot see, in a claim that also carries two `BANNED_JUDGEMENTS` words. **This RFC does
-not widen the guard** (that is a `claim-backing` successor's change to a frozen table) and it does
-not narrow C8. What it does is refuse to *claim* the guarantee: **§6 criterion 19 asserts the hole
-rather than asserting its absence**, so the day D417 is fixed the criterion changes with it instead
-of silently having been wrong.
+judgement…"*. The repaired guard prevents that attribution from laundering a percentage while
+preserving D166's rate-versus-count distinction. The live `anti-scandinavian-white/just-take-it`
+claim remains input to the separately owned content-binding wave; the repair does not manufacture
+an authored replacement. **§6 criterion 19 therefore flips with D417, as this RFC originally
+required: every supported rate form is refused and the two count controls stay admitted.**
 
 **(b) [[D421]] — `BANNED_JUDGEMENTS` is enforced only over LLM output, so authored prose has no gate
 at all.** Verified exhaustively `[V]`: `voiceCheck` is a **containment** test over LLM output;
@@ -2383,8 +2374,8 @@ used as-is.
     **D97** and **D98** are **already ✅** (closed by `claim-backing`) and are **not touched** by this
     RFC's commit — criterion 17;
     **D167** flips to ✅, discharged by §2.5's three-valued `binding`;
-    **D417** and **D421** stay **open** and are annotated with §3.6's disposition — this RFC leans on
-    neither guard and claims neither fix;
+    **D417** is already ✅ and is not re-flipped; criterion 19 records its repaired boundary.
+    **D421** stays **open** and is annotated with §3.6's disposition — this RFC claims no fix;
     the *Four declared vocabularies have zero content usage* row is annotated. A dated entry lands in
     `planning/exploration/log.md`. **The ledger edits are proposed by the implementer and landed by
     claude**, per the standing note that concurrent agents collide on `design/BACKLOG.md`.
@@ -2431,13 +2422,12 @@ used as-is.
     `[2026-08-16]`** — is delivered with `binding: "self_declared"`, empty `authorSpans` and empty
     `principles`, and that this comes from C4's **explicit** default rather than from an absent map
     entry read as falsy (§2.6 C5(4)). The count is re-derived at implementation.
-19. **D417's hole is asserted, not assumed away.** A test asserts the *current* behaviour of the
-    shipped guard — that a claim whose author-attributed segment reads *"f5 scores 91% for White"*
-    raises **no** `CLAIM_READING_UNATTRIBUTED`, while *"90.9%"* does — with a comment naming
-    [[D417]]. **This is deliberately a test of a defect.** C8's `author_attributed` line would
-    otherwise be read as promising that no unattributed rate reaches a learner, and it does not
-    promise that. When D417 is fixed the test flips with it; today it stops the guarantee from being
-    silently assumed.
+19. **D417's repaired rate-versus-count boundary is executable.** The inherited
+    `claim-binding.test.ts` fixture asserts that author-attributed *"90.9%"*, *"91%"*,
+    *"91 percent"* and *"ninety-one percent"* all raise
+    **`CLAIM_READING_UNATTRIBUTED`**, while *"91 games"* and *"44,467,486 times"* do not. The
+    fixture names the semantic distinction from [[D166]] and is the regression proof for [[D417]];
+    weakening the guard to preserve this RFC's former defect-shaped expectation fails criterion 19.
 20. **C8's templates add no chess judgement; authored inputs remain attributable and unchanged.**
     For every projected `claimBackings` row, a boundary test identifies the byte ranges copied from
     the selected principle's `name`, `statement` and `counterCase`. Every one of those authored
@@ -2896,13 +2886,13 @@ used as-is.
   **third** provenance line naming the principle, its statement and its counter-case; C5 gains item
   (4), the explicit `self_declared` default for the **31 claims** that carry `derived_feature` alone
   and therefore have no `claimBackings` entry.
-  **Two live holes recorded and deliberately not papered over (§3.6):** **[[D417]]** — `RATE_TOKEN`
-  is `/(?:[+-]?\d+\.\d+%?)/`, so *"90.9%"* raises `CLAIM_READING_UNATTRIBUTED` and ***"91%" raises
-  nothing***, and the `MACHINE_TOKEN` sweep cannot catch it because declared `authored` spans are
-  removed from the remainder first; **[[D421]]** — `voiceCheck` is a containment test over LLM
+  **Two guard findings recorded without erasing their histories (§3.6):** **[[D417]]** was closed
+  2026-08-26; numeric and spelled-number rates now raise `CLAIM_READING_UNATTRIBUTED`, while counts
+  remain admissible, and criterion 19 carries the regression boundary. **[[D421]]** remains live —
+  `voiceCheck` is a containment test over LLM
   output and **authored prose has no gate at all**, and `evidencePacket` folds authored sentences
-  into `packet.sentences`, so authored prose *widens* the renderer's licence. Criteria 19 and 20
-  assert the holes rather than assuming them away.
+  into `packet.sentences`, so authored prose *widens* the renderer's licence. Criterion 19 asserts
+  D417's repaired boundary; criterion 20 continues to expose D421 rather than assuming it away.
   **Re-measurements** `[V]`: **D78** re-run on the unmodified Q8 harness — 754 transitions (was
   634), 6,659 entries (5,266), **8.83/ply** (8.31), 99.9% firing (99.8%), 99.4454% of 18,470 quiet
   alternatives (99.3% of 14,463), **lift 1.004× (was 1.005×)**, same-kind lift 1.09× (1.11×); the
