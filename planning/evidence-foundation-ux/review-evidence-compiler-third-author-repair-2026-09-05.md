@@ -39,9 +39,9 @@ crossed node receipts and unparsed public inputs fail.
 Finally, the live module execution image now records `ReviewEvidenceInput`,
 `compileReviewEvidence(input)`, `assertReviewEvidencePacket(value)` and the private aggregate seal.
 It remains honestly `blocked_upstream_dependencies`: this is a buildable contract repair, not a
-claim that its recorded-path, provider, value, presentation or module dependencies ship. The new
-target is a dependency of `verify-governance`, closing the failure where a named author target was
-already red yet ordinary verification stayed green.
+claim that its recorded-path, provider, value, presentation or module dependencies ship. The named
+target is retained by opt-in `verify-rfc-evidence`; [[D3076]] correctly keeps draft-RFC models out
+of required release governance.
 
 ## Evidence
 

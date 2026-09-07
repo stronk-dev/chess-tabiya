@@ -18135,3 +18135,22 @@ repair is semantic rather than cosmetic: exact evidence values must construct pr
 real production operations; strings, copied unions and caller-sealed objects cannot stand in for
 those operations. Receipt:
 `planning/platform-alignment/evidence-presentation/seventh-fresh-independent-buildability-review-2026-09-07.md`.
+
+### 2026-09-07 — Review compiler returns a count-only shadow instead of evidence
+
+The fourth fresh independent `review-evidence-compiler` review first repairs one stale process
+assertion: [[D3108]] moves its draft author target from required governance to the opt-in RFC
+evidence aggregate, as [[D3076]] already requires. The repaired predecessor target is green.
+
+The substantive review then returns the RFC on [[D3109]]–[[D3115]]. Its executable prefix is
+caller testimony rather than a recorded-path derivation; its registry is nine generic family
+placeholders; an available source result is any nonempty digest; and compilation throws that digest
+away into `itemCount: 1`. The resulting node has no position, incoming move, evidence items or
+links. Completion is calculated and discarded, the Story receipt omits its progress/degradation
+and other normative fields, canonical bytes collide `NaN` with `null`, and the attempt store accepts
+arbitrary terminal objects without the stated retry lifecycle.
+
+`make review-evidence-fourth-fresh-review` retains 17 predecessor controls and passes 7/7 fresh
+falsifiers. This is the exact foundation blocker for Review-driven return decks: a count-only packet
+cannot explain, cite, select or compile a source-bound exercise. Receipt:
+`planning/evidence-foundation-ux/review-evidence-compiler-fourth-fresh-independent-buildability-review-2026-09-07.md`.

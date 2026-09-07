@@ -494,7 +494,7 @@ test("D2691 source-plan/compiler/assertion execute exact set equality", () => {
   assert.throws(() => compileReviewEvidence({ subject, sources: [wrongNode, ...sources.slice(1)] }));
 });
 
-test("D2692 live execution image and ordinary verification retain the repaired ABI", () => {
+test("D2692 live execution image and opt-in RFC evidence retain the repaired ABI", () => {
   const execution = JSON.parse(readFileSync("rfc/contracts/module-execution-plan-v1.json", "utf8"));
   const source = execution.sourceContracts.find((row) => row.id === "review_evidence_packet@1");
   assert.ok(source);
@@ -504,6 +504,12 @@ test("D2692 live execution image and ordinary verification retain the repaired A
   assert.equal(source.assertion.appliesTo, "ReviewEvidencePacket");
   assert.match(source.seal, /private aggregate authority/u);
   const makefile = readFileSync("Makefile", "utf8");
-  const verifyLine = makefile.split("\n").find((line) => line.startsWith("verify-governance:"));
-  assert.match(verifyLine, /review-evidence-third-author-repair/u);
+  const dependencies = new Map(makefile.split("\n").flatMap((line) => {
+    const match = /^([a-z0-9-]+):\s*(.*)$/u.exec(line);
+    return match === null ? [] : [[match[1], match[2].trim().split(/\s+/u).filter(Boolean)]];
+  }));
+  const reaches = (current, target, seen = new Set()) => current === target || (!seen.has(current) && (
+    seen.add(current), (dependencies.get(current) ?? []).some((dependency) => reaches(dependency, target, seen))
+  ));
+  assert.ok(reaches("verify-rfc-evidence", "review-evidence-third-author-repair"));
 });

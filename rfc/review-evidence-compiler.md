@@ -1,12 +1,13 @@
 # RFC: Review evidence compiler
 
-- **Status:** draft — **third author repair completed 2026-09-05 on [[D2685]]–[[D2692]];
-  another genuinely fresh independent review is required.** One executable model now exercises
-  deeply sealed prefix and packet authorities, exact path/family populations, coalesced attempt
-  settlement, the complete source plan/compiler/assertion boundary and sealed presentation wire
-  termination. The live module execution image carries the callable ABI and ordinary verification
-  retains the repair target. No production implementation is authorised before fresh review and
-  the declared dependencies land.
+- **Status:** draft — **RETURNED BY FOURTH FRESH INDEPENDENT REVIEW 2026-09-07 on
+  [[D3109]]–[[D3115]].** The third repair's local seals and set checks survive, but the executable
+  model authorizes caller-described prefixes, invents nine generic adapters, admits arbitrary
+  evidence digests and then discards them, emits count-only node packets, drops completion and
+  required Story fields, hashes with a lossy private serializer and leaves the attempt lifecycle
+  unimplemented. `make review-evidence-fourth-fresh-review` retains the chain and reproduces 7/7.
+  No production implementation is authorised before a bounded fourth author repair, another fresh
+  review and the declared dependencies land.
 - **Author:** codex, on the D717 evidence-foundation routing and the completed Wave-C C4 research
 - **Created:** 2026-08-23
 - **Design refs:** `design/03-product-breadth.md` Review/Analyze surfaces;
@@ -755,13 +756,33 @@ The eight returned seams now execute together under one maintained contract targ
 6. [[D2692]] — `review_evidence_packet@1` in the module execution image now publishes
    `ReviewEvidenceInput`, `compileReviewEvidence(input)`,
    `assertReviewEvidencePacket(value)` and the private aggregate seal while retaining its honest
-   dependency block. `make verify` includes `review-evidence-third-author-repair`, so the contract
-   cannot silently drift red again.
+   dependency block. Opt-in `make verify-rfc-evidence` includes
+   `review-evidence-third-author-repair`; [[D3076]] deliberately keeps this draft model out of
+   required release governance.
 
 `make review-evidence-third-author-repair` retains the original and second-author controls and
 passes all six composed repair groups. Exact receipt:
 `planning/evidence-foundation-ux/review-evidence-compiler-third-author-repair-2026-09-05.md`.
 Another genuinely fresh review must attack this composition before acceptance or production.
+
+## Fourth fresh independent return (2026-09-07)
+
+The local sealing mechanics survive, but the executable image does not implement the normative
+compiler it claims to prove:
+
+1. [[D3109]] — prefix authority copies caller-selected game/path truth rather than deriving it;
+2. [[D3110]] — nine family placeholders stand in for the literal projection-adapter registry;
+3. [[D3111]] — an arbitrary nonempty evidence digest is admitted and discarded into an item count;
+4. [[D3112]] — node packets omit positions, moves, evidence items and links;
+5. [[D3113]] — completion is discarded and the Story wire omits seven required fields;
+6. [[D3114]] — private canonical bytes collide `NaN` with `null` and admit forbidden values; and
+7. [[D3115]] — attempt settlement accepts any object and implements no retry lifecycle.
+
+`make review-evidence-fourth-fresh-review` retains all 17 predecessor controls and passes 7/7
+fresh falsifiers. [[D3108]] separately reconciles the author target with [[D3076]] by retaining it
+in opt-in `verify-rfc-evidence`, not release governance. This is an author return: no production or
+protected-design change is authorised. Exact receipt:
+`planning/evidence-foundation-ux/review-evidence-compiler-fourth-fresh-independent-buildability-review-2026-09-07.md`.
 
 ## 8. Acceptance criteria
 

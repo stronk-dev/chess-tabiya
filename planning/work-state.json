@@ -25341,6 +25341,78 @@
       "sourceDigest": "sha256:215c7cd38d7abff8a651d3104f148a88856e1ca4636a2edb15da42639ba44b7c",
       "uxItems": [],
       "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D3108",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:84bcbfc3a1436921c70cd5e53956d508834f7d547125c2ee12b0cdf42d9d7287",
+      "uxItems": [],
+      "evidence": "tools/d2685-review-evidence-third-author-repair/contract.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3109",
+      "state": "blocked",
+      "owner": "review-and-return",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f4a513bd2330a5bb52e9d33e805ca1542f39ea81164299df38cc7f81f6d62c68",
+      "uxItems": [],
+      "blocker": "rfc:review-evidence-compiler.md"
+    },
+    {
+      "id": "D3110",
+      "state": "blocked",
+      "owner": "review-and-return",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:5d5f310238030c448a05b9ce1f5c290dad6c55ebd53b1256de01697701fb0ae8",
+      "uxItems": [],
+      "blocker": "rfc:review-evidence-compiler.md"
+    },
+    {
+      "id": "D3111",
+      "state": "blocked",
+      "owner": "review-and-return",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:cf48193ab57edc0bef6abb64c5ab7658a08a95c1800c9c9a4f7cd18aad629d94",
+      "uxItems": [],
+      "blocker": "rfc:review-evidence-compiler.md"
+    },
+    {
+      "id": "D3112",
+      "state": "blocked",
+      "owner": "review-and-return",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:2c41ecfc49cbe4d5290d9b580614ed98add9f9b492946e05b34317f8b721527f",
+      "uxItems": [],
+      "blocker": "rfc:review-evidence-compiler.md"
+    },
+    {
+      "id": "D3113",
+      "state": "blocked",
+      "owner": "review-and-return",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4c7a08841ceee286ff957ba542970d80ac964f6fa893924c1638feefc59e55a0",
+      "uxItems": [],
+      "blocker": "rfc:review-evidence-compiler.md"
+    },
+    {
+      "id": "D3114",
+      "state": "blocked",
+      "owner": "review-and-return",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:9f45bb38cbb1d3f768fcd5b3696df45bd56da3f923e97b4559a932b19b361352",
+      "uxItems": [],
+      "blocker": "rfc:review-evidence-compiler.md"
+    },
+    {
+      "id": "D3115",
+      "state": "blocked",
+      "owner": "review-and-return",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ae7c5b013c2c9113eeb1a623d727c14e6f0bd49a7daa41a01d7d0861e61b2949",
+      "uxItems": [],
+      "blocker": "rfc:review-evidence-compiler.md"
     }
   ]
 }
