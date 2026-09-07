@@ -65,15 +65,19 @@ remain in their owning RFCs.
     short portraits and phone landscapes use the single-column composition, keep the board at
     24px squares or larger, and scroll the drill region vertically without horizontal overflow.
     Browser fixtures cover 375×667, 844×390 and 320×256 and preserve one truthful selected region.
+18. Related-rehearsal chrome resolves the sibling document at run load, names the rehearsal by
+    title and renders `root_after_move` as legality-checked SAN against the sibling's start FEN.
+    Missing or stale responses fail to neutral copy; a served-corpus browser journey refuses the
+    pack id and UCI at the real App/API boundary.
 
 ## Remaining before archive
 
 1. Compile and seat the eleven learner modules once their collector dependencies land; extend the
    shipped one-expanded structural queue with the declared module seats and fact-count badges rather
    than treating Support/Branches/Actions as final module composition.
-2. Remove the remaining ordinary-surface vocabulary leaks named by §5. The related-pack relation
-   currently suppresses its raw UCI until an authoritative SAN projection exists; phase, compare,
-   tablebase and voice families still need their compiled module renderers.
+2. Remove the remaining ordinary-surface vocabulary leaks named by §5. Related-pack title/SAN
+   chrome is complete; phase, compare, tablebase and voice families still need their compiled
+   module renderers.
 3. Complete the five module-dependent acceptance states in the 7×16 matrix ([[D1834]]). States 1,
    2, 4, 7, 8, 10, 11, 12, 14, 15 and 16 now retain 77/112 successful screenshots. States 3, 5,
    6, 9 and 13 wait on accepted producer/module emission; do not count blocked cells as screenshots.

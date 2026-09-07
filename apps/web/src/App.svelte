@@ -576,9 +576,12 @@
         const relation = session.pack?.variantOf;
         if (relation !== undefined) {
           try {
-            relatedPack = (await api.pack(relation.packId)).document;
+            const document = (await api.pack(relation.packId)).document;
+            if (generation === loadGeneration && session.pack?.variantOf?.packId === relation.packId) {
+              relatedPack = document;
+            }
           } catch {
-            relatedPack = undefined;
+            if (generation === loadGeneration) relatedPack = undefined;
           }
         }
         derivations = await (api.runDerivations?.(next.runId) ?? Promise.resolve(undefined));

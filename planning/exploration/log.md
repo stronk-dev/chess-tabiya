@@ -18336,3 +18336,11 @@ learner copy rather than exposing a pack id or UCI. Component fixtures cover the
 root-after-move relations and refuse both internal forms. `make test-software` passes 1,125 tests /
 182 files; `make test-browser` passes 61 with one optional Maia latency probe skipped. Presets and
 typed module seats remain the next accepted composition work; this checkpoint does not claim them.
+
+## 2026-09-07 — Related-rehearsal path is proven at the production boundary
+
+The L3 checkpoint now has a served-corpus browser journey, not only a mounted component fixture.
+The real App loads `philidor-passive-rook-convert`, resolves its sibling through the pack API and
+renders “After Rh8” plus the Philidor source title while refusing both stored internal strings. A
+route-generation guard also prevents a late sibling response from relabelling a newer run. The full
+browser suite passes 62 journeys with one optional Maia latency probe skipped.

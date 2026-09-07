@@ -742,9 +742,10 @@ document's to rewrite). Rows proposed by the cross-review, from head+1, NOT writ
   through the existing pack API. The companion link renders the sibling's title, and a
   `root_after_move` relation renders legality-checked SAN against the sibling's authoritative start
   FEN. Failed sibling lookup degrades to neutral copy, never the stored pack id or UCI. Component
-  fixtures cover both objective and root-after-move relations and refuse both internal forms;
-  `make test-software` passes 1,125 tests / 182 files and `make test-browser` passes 61 with one
-  optional Maia probe skipped. This closes L3's dependency-free chrome work, not the remaining
+  fixtures cover both objective and root-after-move relations and refuse both internal forms; a
+  served-corpus browser journey crosses the real App/API boundary and a generation guard refuses a
+  late sibling response after navigation. `make test-software` passes 1,125 tests / 182 files and
+  `make test-browser` passes 62 with one optional Maia probe skipped. This closes L3's dependency-free chrome work, not the remaining
   typed module seats or preset contract.
 - 2026-09-07: advanced-support checkpoint. The topbar now offers the ordinary learner two actions:
   open the workflow's Support region or enter Advanced support controls. The seven individual

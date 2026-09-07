@@ -156,6 +156,8 @@ A pack relation is resolved to the related pack document when a run opens. The c
 the related rehearsal's title rather than its registry id. A `root_after_move` relation is converted
 to legal SAN against that related pack's starting position; if the related document is temporarily
 unavailable, the link keeps neutral learner copy instead of exposing the stored pack id or UCI.
+Late relation responses are generation-checked, so navigating to another run cannot relabel its
+companion with a sibling fetched for the previous run.
 
 `/authored-feedback` returns an honest empty page for position runs. An absent
 or stale registry entry never opens any engine-evidence surface.

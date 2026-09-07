@@ -1989,6 +1989,20 @@ test("@matrix served endgame packs keep the board above the timeline at supporte
   }
 });
 
+test("@content a served related rehearsal names its source and the move in SAN", async ({ page }) => {
+  await enableEndgamePolicies(page);
+  await page.goto("/play");
+  const card = page.getByRole("article").filter({ hasText: "Philidor family: punish the passive rook" });
+  await expect(card).toHaveCount(1);
+  await card.getByRole("button", { name: /Rehearse this position/ }).click();
+
+  const relation = page.getByRole("region", { name: "Related rehearsal" });
+  await expect(relation).toContainText("After Rh8");
+  await expect(relation.getByRole("button", { name: "Philidor: the third-rank fence holds the draw" })).toBeVisible();
+  await expect(relation).not.toContainText("h6h8");
+  await expect(relation).not.toContainText("philidor-third-rank-hold");
+});
+
 test("@matrix served endgame packs submit the exact drawn move through every permanent input projection", async ({
   page, browser,
 }) => {
