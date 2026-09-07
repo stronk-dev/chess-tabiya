@@ -90,6 +90,21 @@ describe("own-game import", () => {
     expect(storage.list(10, 0)).toEqual([]);
   });
 
+  it("refuses Chess960 before standard-chess state can be persisted", async () => {
+    const storage = new SQLiteRunStorage(":memory:", { onMigration: () => {} });
+    stores.push(storage);
+    const service = new RunService(storage);
+    const base = { side: "white" as const, opponentPolicy: { mode: "human_common" as const }, policyConfig, seed: 1 };
+    const withoutFen = `[Variant "Chess960"]\n[Result "*"]\n\n1. e4 *`;
+    const withFen = `[Variant "Chess960"]\n[SetUp "1"]\n[FEN "rkr3nr/pppppppp/8/8/8/8/PPPPPPPP/RKR3NR w CAca - 0 1"]\n[Result "*"]\n\n1. d4 *`;
+
+    await expect(service.importGame({ ...base, id: "chess960-no-fen", source: { kind: "pgn", pgn: withoutFen } }, "writer"))
+      .rejects.toMatchObject({ code: "IMPORT_INVALID_PGN", message: "Unsupported PGN variant: Chess960" });
+    await expect(service.importGame({ ...base, id: "chess960-with-fen", source: { kind: "pgn", pgn: withFen } }, "writer"))
+      .rejects.toMatchObject({ code: "IMPORT_INVALID_PGN", message: "Unsupported PGN variant: Chess960" });
+    expect(storage.list(10, 0)).toEqual([]);
+  });
+
   it("normalizes public lichess ids, fetches once without credentials, and rejects chess.com URLs", async () => {
     expect(normalizeLichessGameUrl("https://www.lichess.org/abcd1234WXYZ/black?foo=1#bar")).toEqual({ gameId: "abcd1234", url: "https://lichess.org/abcd1234" });
     const annotated = PGN.replace("1. e4 e5", "{Engine review} 1. e4! {Blunder. d4 was best. [%eval -1.2]} e5 $2");

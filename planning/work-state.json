@@ -8440,13 +8440,14 @@
     },
     {
       "id": "D1033",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0bd120dec1b431dedd24faa851a368edc38984cd1c7926d8198ffb412ad8139e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6edc450ccde174f7dd69be83893c6341f82a209336a8e4c1c77ce65ff1c953b9",
       "uxItems": [
         "IMP-a11"
       ],
-      "state": "todo",
-      "owner": "account-and-data"
+      "evidence": "apps/server/src/game-import.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1034",

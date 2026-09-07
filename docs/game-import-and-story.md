@@ -140,7 +140,11 @@ variations with their `Tabiya branch` comments.
 
 The client surfaces are an import form on `/review`, the story at
 `/review/game/:runId`, a Story control on imported run screens, and export from the
-story. Boards use the learner's declared orientation. Re-entry is browser-tested
+run or Library. Import currently admits Standard and From Position games only. The
+raw Variant allow-list runs before chessops constructs a position, so an explicit
+Chess960 PGN—with or without setup FEN—refuses without persisting a run; rules-aware
+variant support remains a separate contract.
+Boards use the learner's declared orientation. Re-entry is browser-tested
 end to end: paste, derive, reveal, select, branch, play, and export.
 
 ## Limits

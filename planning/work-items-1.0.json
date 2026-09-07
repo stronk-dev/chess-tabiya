@@ -4857,17 +4857,21 @@
     {
       "id": "IMP-a11",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§2.3-8",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Chess960 imports silently as standard chess when the `Variant` header is absent or misspelled",
       "legacyRoute": "ledger",
       "note": "[[D1033]]",
-      "sourceDigest": "sha256:629a174eecbc3dbe02efa7c077d442b6c07d06f5ba00fa2662f5288ab7d1ead2"
+      "sourceDigest": "sha256:629a174eecbc3dbe02efa7c077d442b6c07d06f5ba00fa2662f5288ab7d1ead2",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "apps/server/src/game-import.test.ts"
+      }
     },
     {
       "id": "IMP-a12",

@@ -1865,7 +1865,8 @@ Primary RFCs: `accessible-board-input`, `theming`. UX owner: A11 items.
 scoped links and object exports exist. Registration and the durable-record boundaries for rated
 games, classroom membership, public story links, and PGN import now disclose what starts being kept
 and its lifecycle at the action itself. The primary navigation names import instead of hiding it
-under an internal “run history” label. Guest claim, complete inventory-derived labels, portable
+under an internal “run history” label. Explicit Chess960 PGNs are regression-bound to refuse before
+standard-chess state can be persisted. Guest claim, complete inventory-derived labels, portable
 account import, conflicts, profile/social coverage, backup/restore and recovery UX remain.
 
 **1.0 exit:** learners understand stored/shared data and can export, import, delete and verify it;

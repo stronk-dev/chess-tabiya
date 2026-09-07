@@ -18404,3 +18404,12 @@ The existing finished-game importer and stored game list remain one coherent des
 or duplicate import form was added. This completes IMP-a28's naming arm. The automatic Account data
 summary shipped at `86688634` also completes IMP-a21's split between reading the inventory and
 starting deletion; this pass records that previously unclosed consequence rather than duplicating it.
+
+## 2026-09-07 — The reported silent Chess960 import is refuted and regression-bound
+
+The parser's actual call order contradicts D1033: the raw `Variant` allow-list runs before
+chessops' `startingPosition`, so explicit Chess960 cannot fall through to the standard initial
+position. A production service fixture now submits Chess960 both without FEN and with Chess960 FEN
+and castling bytes; both return `IMPORT_INVALID_PGN`, and the storage list remains empty. D1033 and
+IMP-a11 close as a refuted defect with executable evidence. This does not add Chess960 support;
+rules-aware variant identity remains owned by the returned `variants.md` contract.
