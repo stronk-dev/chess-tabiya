@@ -16,3 +16,5 @@ PGN export includes only the requester's marks and always states the filter with
 In a live session, a mark is relayed only when its author held the board lease when it was written and the session is not a match. Relay is shared across viewers and attributed to the author. Match-seat and spectator sketches remain private.
 
 Limits are 64 shapes at one scope key and 1,000 marks per learner per run. Deleting a learner deletes their marks; deleting a run cascades them.
+
+The evidence barrier is checked at the HTTP composition layer, not only inside the lower-level packet builder. Voice, Story voice, and Story speech keep their rendered evidence unchanged after marks are written, while a source-expression census makes every voice-assembly call an explicit review point. The same guard has a grounded-square positive control so a permanently inert assertion cannot pass.

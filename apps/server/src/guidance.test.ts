@@ -2,6 +2,8 @@ import { readFileSync } from "node:fs";
 
 import { classifyPhase, declareCompareDerivedEvidence, declarePhaseReadingEvidence, voiceCheck, type EvidencePacket, type RenderedEvidenceView } from "@chess-tabiya/runtime";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import type { SquareName } from "chessops/types";
+import * as ts from "typescript";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { HUMAN_COMMON_RESISTANCE_PROFILE, type CapabilitiesProvider } from "./capabilities.js";
@@ -44,6 +46,20 @@ function request(path: string, method = "GET", body?: unknown, cookie?: string):
 function fixturePacket(): EvidencePacket {
   const detected = classifyPhase(FEN);
   return Object.freeze({ fen: FEN, phase: { source: "detector" as const, value: detected.phase }, structures: [], observations: [], markers: [], endgame: null, plans: [], authored: [], readings: [], declared: [declarePhaseReadingEvidence(detected)] });
+}
+
+function voiceAssemblyCensus(sourceText: string): readonly { readonly name: string; readonly arguments: readonly string[] }[] {
+  const source = ts.createSourceFile("rest.ts", sourceText, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const names = new Set(["appendRecordedReadings", "renderedEvidenceItems", "renderVoice"]);
+  const calls: { name: string; arguments: string[] }[] = [];
+  const visit = (node: ts.Node): void => {
+    if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && names.has(node.expression.text)) {
+      calls.push({ name: node.expression.text, arguments: node.arguments.map((argument) => argument.getText(source)) });
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+  return calls;
 }
 
 describe("adaptive guidance server seams", () => {
@@ -107,6 +123,13 @@ describe("adaptive guidance server seams", () => {
         return deterministicText;
       },
     };
+    const spoken: string[] = [];
+    const tts: TtsProvider = {
+      async synthesize(text) {
+        spoken.push(text);
+        return { bytes: new TextEncoder().encode(text), contentType: "audio/test" };
+      },
+    };
     const handler = createRestHandler(
       service,
       undefined,
@@ -117,12 +140,16 @@ describe("adaptive guidance server seams", () => {
       undefined,
       undefined,
       provider,
+      undefined,
+      undefined,
+      undefined,
+      tts,
     );
     const body = { nodeId: run.activeCursor.nodeId, scope: "reading" };
     expect((await handler(request("/runs/guide/voice", "POST", body))).status).toBe(200);
     const source = packets[0]!.rendered.items.flatMap((item) => item.sentences).join("\n").toLowerCase();
     const markedSquare = Array.from({ length: 64 }, (_, index) =>
-      `${String.fromCharCode(97 + (index % 8))}${Math.floor(index / 8) + 1}`,
+      `${String.fromCharCode(97 + (index % 8))}${Math.floor(index / 8) + 1}` as SquareName,
     ).find((square) => !source.includes(square))!;
     const graph = service.graph("guide");
     const write = await handler(request("/runs/guide/marks", "PUT", {
@@ -134,12 +161,50 @@ describe("adaptive guidance server seams", () => {
     expect(write.status).toBe(200);
     expect((await handler(request("/runs/guide/voice", "POST", body))).status).toBe(200);
     expect(packets[1]!.rendered.items).toEqual(packets[0]!.rendered.items);
-    expect(voiceCheck(packets[1]!.rendered, markedSquare).violations).toContain(`square:${markedSquare}`);
+    const markIsSpeakable = (view: RenderedEvidenceView, square: SquareName): boolean =>
+      !voiceCheck(view, square).violations.includes(`square:${square}`);
+    expect(markIsSpeakable(packets[1]!.rendered, markedSquare)).toBe(false);
+
+    const groundedSquare = voiceEvidenceView(fixturePacket(), "compare", [declareCompareDerivedEvidence("structure_delta", {
+      observation: { kind: "piece_reach_count", color: "black", role: "knight", squares: [markedSquare], count: 1 },
+    })], false).rendered;
+    expect(groundedSquare.items.flatMap((item) => item.sentences).join("\n")).toContain(markedSquare);
+    expect(markIsSpeakable(groundedSquare, markedSquare)).toBe(true);
+
     expect(() => voiceCheck({ consumer: packets[1]!.rendered.consumer, items: [{ evidence: packets[1]!.rendered.items[0]!.evidence, sentences: [markedSquare] }] } as unknown as RenderedEvidenceView, markedSquare)).toThrowError(expect.objectContaining({ code: "EVIDENCE_GENERIC_BYPASS" }));
 
+    service.move("guide", "writer", "f2f3", { at });
+    service.opponentPly("guide", "writer", { moveUci: "e7e5", policyModeApplied: "human_common", engine: { id: "fixture", name: "Fixture", version: "1", seedHonored: true } }, { at });
+    service.move("guide", "writer", "g2g4", { at });
+    service.opponentPly("guide", "writer", { moveUci: "d8h4", policyModeApplied: "human_common", engine: { id: "fixture", name: "Fixture", version: "1", seedHonored: true } }, { at });
+    const terminal = service.graph("guide");
+    const storyBody = { nodeId: terminal.activeCursor.nodeId, scope: "story" };
+    expect((await handler(request("/runs/guide/voice", "POST", storyBody))).status).toBe(200);
+    const storyWithoutTerminalMark = packets.at(-1)!;
+    expect((await handler(request("/runs/guide/marks", "PUT", {
+      nodeId: terminal.activeCursor.nodeId,
+      branchId: terminal.activeCursor.branchId,
+      scope: "position",
+      shapes: [{ brush: "green", orig: markedSquare }],
+    }))).status).toBe(200);
+    expect((await handler(request("/runs/guide/voice", "POST", storyBody))).status).toBe(200);
+    const storyWithTerminalMark = packets.at(-1)!;
+    expect(storyWithTerminalMark.rendered.items).toEqual(storyWithoutTerminalMark.rendered.items);
+    expect(markIsSpeakable(storyWithTerminalMark.rendered, markedSquare)).toBe(false);
+    expect((await handler(request("/runs/guide/speech", "POST", storyBody))).status).toBe(200);
+    expect(markIsSpeakable(packets.at(-1)!.rendered, markedSquare)).toBe(false);
+    expect(spoken).toHaveLength(1);
+
     const restSource = readFileSync(new URL("./rest.ts", import.meta.url), "utf8");
-    expect(restSource).not.toContain("basePacket.sentences");
-    expect(restSource).not.toContain("narrative.groups.flatMap");
+    const assemblyCalls = voiceAssemblyCensus(restSource);
+    expect(assemblyCalls.map((call) => call.name)).toEqual([
+      "renderVoice",
+      "renderVoice",
+      "renderedEvidenceItems",
+      "appendRecordedReadings",
+      "renderVoice",
+    ]);
+    for (const call of assemblyCalls) expect(call.arguments.join(" ")).not.toMatch(/\b(?:mark|marks|runMarks|learnerMarks)\b/u);
   });
 
   it("keeps delivered claim prose outside evidence packets and the voice allowlist", async () => {

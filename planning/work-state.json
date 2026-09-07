@@ -2049,11 +2049,12 @@
     },
     {
       "id": "D248",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:61c6ff0012571ab710b5a8e5703ca8b1a7d12deee2f7efdd0be6513c9712bb37",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e170fde6c392249b2410f80733d7e3239cf5ad6a9f95cc83c995990d9ad230fc",
       "uxItems": [],
-      "owner": "release-engineering"
+      "evidence": "apps/server/src/guidance.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D249",

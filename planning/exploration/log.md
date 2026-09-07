@@ -17921,3 +17921,17 @@ and canonical client docs now state why BCS cannot be compared with that window.
 **Evidence/next:** the focused catalogue regression covers authored, absolute and absent difficulty.
 ARR-a13 remains blocked—not silently completed—until an accepted same-scale learner observation or
 conversion exists.
+
+## 2026-09-07 — Board marks cannot widen the voice evidence boundary
+
+**What changed:** [[D248]] is closed at the layer where its breach could occur. The production voice
+route is now exercised before and after a principal writes a square mark, and both terminal Story
+voice and Story speech repeat the check. Marks leave the admitted rendered items byte-identical and
+the chosen square remains refused by `voiceCheck`.
+
+**Evidence/next:** the identical predicate accepts a square emitted by a registered evidence
+renderer, proving the assertion can detect the opposite state. A TypeScript-AST census pins every
+voice assembly expression in `rest.ts` and refuses mark-derived arguments without relying on line
+numbers. `make test-software` passes 1,113/1,113 tests. The broader evidence-to-consumer spine still
+waits on its foundation RFC acceptance; this repair prevents that future module layer from inheriting
+a learner-authored evidence side channel.
