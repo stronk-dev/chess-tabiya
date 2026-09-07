@@ -41,13 +41,10 @@ export function packDifficultyWindow(value: unknown): {
   });
 }
 
-export function packDifficultyCopy(pack: PackSummary, learnerBand?: number): string {
+export function packDifficultyCopy(pack: PackSummary): string {
   const window = packDifficultyWindow(pack.difficulty);
   if (window === null) return "No difficulty window is recorded";
-  if (learnerBand === undefined) return window.label ?? `Recorded for online rapid ${window.min}–${window.max}`;
-  if (learnerBand >= window.min && learnerBand <= window.max) return "Sits at your measured band";
-  if (learnerBand < window.min) return "A rung above your measured band";
-  return "Below your measured band — technique practice";
+  return window.label ?? `Recorded for online rapid ${window.min}–${window.max}`;
 }
 
 function matchesBand(pack: PackSummary, band: PackBandFilter): boolean {

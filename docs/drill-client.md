@@ -277,9 +277,11 @@ committed learner move under a mode the server cannot execute.
 
 ## Screens and episode flow
 
-The pack library shows title, mode, difficulty band, and the registry's
-`reviewStatus`; the living Najdorf document therefore remains visibly labeled
-`schema_example`, not presented as reviewed content.
+The pack library shows title, mode, the pack's authored difficulty label or declared Online Rapid
+window, and the registry's `reviewStatus`. It does not compare that platform-oriented window with
+the learner's independent BCS rating; relative difficulty remains absent until a same-scale
+observation or accepted conversion exists. The living Najdorf document therefore remains visibly
+labeled `schema_example`, not presented as reviewed content.
 
 The drill screen composes three regions:
 

@@ -13,12 +13,11 @@
     packs: readonly PackSummary[];
     loading?: boolean;
     error?: string | undefined;
-    learnerBand?: number | undefined;
     actionLabel?: string;
     onSelect: (packId: string) => void | Promise<void>;
   }
 
-  let { packs, loading = false, error, learnerBand, actionLabel = "Rehearse this position", onSelect }: Props = $props();
+  let { packs, loading = false, error, actionLabel = "Rehearse this position", onSelect }: Props = $props();
   let phase: PackPhaseFilter = $state("all");
   let band: PackBandFilter = $state("all");
   let search = $state("");
@@ -82,7 +81,7 @@
           <h2>{pack.title}</h2>
           <p class="objective">{pack.objectiveSummary}</p>
           <p class="horizon">{pack.consequenceHorizon === null || pack.consequenceHorizon === undefined ? "Consequence length not recorded" : `Consequence · up to ${pack.consequenceHorizon.plies} ${pack.consequenceHorizon.plies === 1 ? "ply" : "plies"}`}</p>
-          <p class="difficulty">{packDifficultyCopy(pack, learnerBand)}</p>
+          <p class="difficulty">{packDifficultyCopy(pack)}</p>
           <button class="open-pack" type="button" aria-label={`${actionLabel}: ${pack.title}`} onclick={() => onSelect(pack.id)}>{actionLabel} <span aria-hidden="true">→</span></button>
           <p class="provenance">{pack.channel === "official" ? "Official" : "Community"}{pack.publisherHandle ? ` · @${pack.publisherHandle}` : ""} · {pack.reviewStatus.replaceAll("_", " ")}</p>
         </article>

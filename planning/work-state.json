@@ -25054,11 +25054,12 @@
     },
     {
       "id": "D3078",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d374dc4ed0621b63fae7410ae758fef4d7f84acc52c0beb664330575785eceb2",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7877acf380e06f4fb0b6866d5426d65aa7877fdd0c4f27168bd14d13ece223de",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "apps/web/src/lib/pack-catalog.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3079",

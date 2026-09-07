@@ -35,8 +35,7 @@ describe("pack catalogue", () => {
     expect(packModeCopy("line")).toBe("Recall the theory, then continue");
     expect(packModeCopy("outcome")).toBe("Convert, hold, save, or resist");
     expect(packDifficultyCopy(packs[0]!)).toBe("Club player");
-    expect(packDifficultyCopy(packs[0]!, 1800)).toBe("Sits at your measured band");
-    expect(packDifficultyCopy(packs[0]!, 1000)).toBe("A rung above your measured band");
-    expect(packDifficultyCopy(packs[0]!, 2200)).toBe("Below your measured band — technique practice");
+    expect(packDifficultyCopy(packs[1]!)).toBe("Recorded for online rapid 1000–1600");
+    expect(packDifficultyCopy(pack({ id: "unknown", title: "Unknown", difficulty: null }))).toBe("No difficulty window is recorded");
   });
 });

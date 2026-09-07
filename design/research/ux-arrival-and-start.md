@@ -720,14 +720,14 @@ meaning: recall the theory and continue past the book; commit to a plan and play
 convert / hold / save / resist; play all three phases in one session. Those are the words. The enum
 is a storage detail.
 
-**C4 — Difficulty relative to the learner, not as an absolute band.** Each pack declares an
-`minOnlineRapid`/`maxOnlineRapid` window, and the product knows the learner's measured band from
-`/rating` when they have one. *"Sits at your band"* / *"a rung above you"* / *"below your band —
-technique practice"* is more decision-useful than *"1400–2000"*, and it is arithmetic over two
-declared numbers, so it manufactures nothing. Where there is no measured band, the honest form is
-the declared window plus the pack's own `difficulty.label`, which is already a full sentence
-authored for exactly this purpose (*"Club player who reaches rook endings a pawn up and must convert
-the textbook win"*) `[V]`.
+**C4 — Do not compare unlike rating scales.** Each pack declares an Online Rapid
+`minOnlineRapid`/`maxOnlineRapid` window, while `/rating` publishes the independently calibrated
+Band-Calibrated Scale and explicitly says it is not FIDE, Lichess, or Chess.com. A bare BCS point
+estimate therefore cannot ground *"sits at your band"*, *"a rung above you"*, or *"below your
+band"*. Until an accepted conversion or same-scale learner observation exists, the honest form is
+the pack's authored `difficulty.label`, falling back to *"Recorded for online rapid 1400–2000"*;
+relative copy abstains entirely ([[D3078]]; `apps/web/src/lib/pack-catalog.ts`;
+`apps/web/src/lib/rating-surfaces.test.ts`) `[V]`.
 
 **C5 — The provenance stamp moves off the primary line, and the corpus's real status is stated
 once instead of 56 times.** This is the arrival half of `planning/ux-work-lane.md` Q2 and it does

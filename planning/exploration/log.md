@@ -17910,3 +17910,14 @@ to `item:D3034`; their due dates remain in the RFC rather than violating blocked
 contract pass. [[D3083]]/[[D3084]] close; the shared-resource bootstrap still requires its genuinely
 fresh independent review before acceptance, and the three staged consumers remain blocked until
 that foundation lands.
+
+## 2026-09-07 — Pack difficulty refuses a crossed rating scale
+
+**What changed:** [[D3078]] is closed at the production copy boundary. `packDifficultyCopy` no
+longer accepts an untyped learner number, `PackList` exposes no such prop, and catalogue cards render
+only the pack's authored label or explicit Online Rapid interval. The maintained arrival research
+and canonical client docs now state why BCS cannot be compared with that window.
+
+**Evidence/next:** the focused catalogue regression covers authored, absolute and absent difficulty.
+ARR-a13 remains blocked—not silently completed—until an accepted same-scale learner observation or
+conversion exists.
