@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:be5b0ca14973f2c6b223ab668bfb9fb4d494f4bdafa56dad58b3333d74b54ee8",
+    "roadmap": "sha256:413210f067bb4c9432f387b07769ef88cb6afcbbf31943a5d1fae30b36c5f5c8",
     "workItems": "sha256:983e2f3a517cfd73cdddab99412d3ec51f03803642923436f30454b5bf0f0b7d",
-    "workState": "sha256:37a4a5a61de6cd271c65f61c1f43fec9d8dc92c37ea5ab1bacb4a9bee1eefe17",
-    "rfcRegister": "sha256:9d084fe3e5711368c85b35c9522ca615359e759a08e52154df8554f9d40bd3e6",
+    "workState": "sha256:69f8bc582d0840f3b92603c3cbebfb4fd9fe74c290ea0f91d82ae3c9c3efbb2b",
+    "rfcRegister": "sha256:eb214f0a32d35a83a51f7884fb515b53d979183c0d6fbfe369b95eba1a738640",
     "uxIndex": "sha256:5ca3e23500716997bf5a89e941981f81f59244826bf9983b8a0d358294519080",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 642,
       "doing": 0,
-      "blocked": 1218,
+      "blocked": 1222,
       "done": 895,
       "refused": 109
     },
@@ -121,26 +121,27 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Independently review the D3034 collision-core bootstrap after its D3082–D3087 author self-audit, accept and implement the seven-row catalogue, then specify the narrow absent-source successor and reduce the assistance/provider/semantic registrations to concrete readers.",
+      "nextAction": "Repair D3116–D3119 in the seven-row collision core without restoring the withdrawn generic engine, run another fresh review, then accept/implement the catalogue and rebase the three staged concrete registers.",
       "latestCheckpoint": {
-        "at": "2026-09-06",
-        "summary": "The D3034 author cut is now a 294-line, self-audited collision core: seven existing resources become checked data, absent-source admission stays open under D3082, and projection/lifecycle/Git-history engines remain withdrawn. Fresh independent review gates acceptance.",
-        "impact": "advanced",
+        "at": "2026-09-07",
+        "summary": "Fresh review retained the narrow seven-resource cut and returned four collision-core seams: aliased sources, non-canonical lane identities, mismatched catalogue/register id grammars and an author gate blind to version-export bindings.",
+        "impact": "regressed",
         "evidence": [
-          "design/BACKLOG.md",
+          "planning/shared-resource-register-bootstrap/collision-core-fresh-independent-buildability-review-2026-09-07.md",
+          "tools/d3116-shared-resource-bootstrap-collision-core-fresh-review/review.test.mjs",
           "rfc/shared-resource-register-bootstrap.md",
-          "planning/shared-resource-register-bootstrap/author-self-audit-2026-09-07.md"
+          "design/BACKLOG.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
-            "id": "D3034",
-            "digest": "sha256:dc0f1e0120e17a1db86baae9647b4df80d4a928a5982d54b813f5ea2d7f943fc"
+            "id": "D3116",
+            "digest": "sha256:a1b3d8a4ac17387b2688db406fe7edd33f75629c952d84002da8471825c856cc"
           },
           {
             "kind": "rfc",
             "id": "shared-resource-register-bootstrap.md",
-            "digest": "sha256:b0b8379059756e046ecfe5f1727af450e4ba01763f48a4d20e5957753ef910e2"
+            "digest": "sha256:93523b6cbd5292516e7c9d6c270856d16e9e2f90fbeecfca1d75ffd9f51ad716"
           }
         ]
       },

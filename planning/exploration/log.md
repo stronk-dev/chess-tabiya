@@ -18154,3 +18154,16 @@ arbitrary terminal objects without the stated retry lifecycle.
 falsifiers. This is the exact foundation blocker for Review-driven return decks: a count-only packet
 cannot explain, cite, select or compile a source-bound exercise. Receipt:
 `planning/evidence-foundation-ux/review-evidence-compiler-fourth-fresh-independent-buildability-review-2026-09-07.md`.
+## 2026-09-07 — Collision-core bootstrap returned on four identity seams
+
+**What changed:** a genuinely fresh review retained the owner-directed seven-resource cut and
+returned `shared-resource-register-bootstrap` on [[D3116]]–[[D3119]]. Tuple/migration source
+aliases can split one authority across two non-colliding ids; equivalent schema versions can split
+their collision keys with leading zeros; the catalogue's digit-bearing id grammar is wider than
+the retained README marker reader; and the author gate never checks the seed's live
+`versionExport` bindings.
+
+**Evidence/next:** `make shared-resource-bootstrap-collision-core-fresh-review` first retains the
+5/5 owner-cut author controls and then passes four executable falsifiers. Repair these bounded
+identity/grammar checks without restoring projection, lifecycle or Git-history machinery, then run
+another fresh review. Implementation and the three staged consumer rebases remain unauthorized.

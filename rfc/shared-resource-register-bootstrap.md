@@ -1,7 +1,7 @@
 # RFC: Shared-resource register catalogue bootstrap
 
-- **Status:** draft — owner-directed collision-core cut complete for [[D3034]]; fresh independent
-  buildability review is required before acceptance or implementation
+- **Status:** draft — collision-core cut **returned by fresh review** on [[D3116]]–[[D3119]];
+  bounded author repair and another fresh review required before acceptance/implementation
 - **Author:** Codex
 - **Created:** 2026-08-31; cut to the owner-ruled scope 2026-09-06
 - **Design refs:** none; this is repository process and changes no learner or product behavior
@@ -217,7 +217,8 @@ foundation item terminal.
 
 ## 7. Able-to-fail contract
 
-Fresh review and implementation must execute all of these controls:
+After repairing [[D3116]], [[D3117]], [[D3118]] and [[D3119]], another fresh review and
+implementation must execute all of these controls:
 
 1. the exact seven-row seed parses and is ASCII-sorted with seven unique ids;
 2. deleting, duplicating, renaming or adding an extra key to a row fails catalogue admission;
@@ -287,6 +288,7 @@ when a concrete resource proves one necessary.
 
 ## Changelog
 
+- 2026-09-07: fresh review returned source aliases, non-canonical lanes, mismatched id grammars and unchecked `versionExport` bindings ([[D3116]]–[[D3119]]); the seven-resource cut survives.
 - 2026-09-07: author self-audit narrowed absent-source claims and repaired [[D3082]]–[[D3087]].
 - 2026-09-06: owner-directed [[D3034]] cut. Replaced the 1,330-line catalogue/projection/lifecycle/
   history architecture with the seven-row collision catalogue and three existing reader shapes.
