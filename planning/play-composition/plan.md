@@ -61,6 +61,10 @@ remain in their owning RFCs.
 16. Story return is framed from recorded history instead of implementation vocabulary. The selected
     moment states the learner-relative recorded result and exact move number, reveals no evaluation,
     and offers “Pick it up from here”; `story-reentry` remains an internal branch kind.
+17. Compact reflow no longer deletes the run below 360×680. The supported floor is 320×256;
+    short portraits and phone landscapes use the single-column composition, keep the board at
+    24px squares or larger, and scroll the drill region vertically without horizontal overflow.
+    Browser fixtures cover 375×667, 844×390 and 320×256 and preserve one truthful selected region.
 
 ## Remaining before archive
 

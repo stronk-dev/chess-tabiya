@@ -1,4 +1,7 @@
-export const MINIMUM_RUN_VIEWPORT = Object.freeze({ width: 360, height: 680 });
+// WCAG 1.4.10's 320 CSS-pixel reflow width at 400% zoom commonly presents
+// roughly 320 x 256. The run scrolls vertically at short heights rather than
+// deleting the board.
+export const MINIMUM_RUN_VIEWPORT = Object.freeze({ width: 320, height: 256 });
 
 export interface RunViewportSupport {
   readonly supported: boolean;
@@ -15,6 +18,6 @@ export function runViewportSupport(width: number, height: number): RunViewportSu
     height,
     reason: supported
       ? null
-      : `The run board needs at least ${MINIMUM_RUN_VIEWPORT.width} × ${MINIMUM_RUN_VIEWPORT.height} CSS pixels. Below that, 24-pixel chess-square targets and a fully visible board cannot both fit. Enlarge the window or rotate the device.`,
+      : `The run board needs at least ${MINIMUM_RUN_VIEWPORT.width} × ${MINIMUM_RUN_VIEWPORT.height} CSS pixels. Below that, 24-pixel chess-square targets cannot fit without horizontal scrolling. Enlarge the window or rotate the device.`,
   });
 }

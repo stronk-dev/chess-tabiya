@@ -373,12 +373,12 @@
         "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, then land the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
         "latestCheckpoint": {
           "at": "2026-09-07",
-          "summary": "The owner-ruled appearance catalog now ships all ten known schemes plus two gated Tabiya defaults. Every inherited palette/mode is byte-pinned, every below-floor pair is independently measured and published, and the stale contrast hold is reconciled to its already-shipped non-hue and forced-color repair.",
+          "summary": "The stable board now reaches the 320×256 WCAG reflow floor, iPhone SE-class portrait heights and phone landscape. Short viewports use the compact single-column composition with a width-bound board, vertical drill scrolling, no horizontal overflow and one truthful selected companion region.",
           "impact": "advanced",
-          "evidence": ["apps/web/src/lib/theme/catalog.ts", "apps/web/src/lib/theme/theme.test.ts", "docs/theming.md", "rfc/theming.md", "rfc/README.md"],
+          "evidence": ["apps/web/src/lib/play-composition.ts", "apps/web/src/lib/viewport-support.ts", "apps/web/src/lib/DrillScreen.svelte", "tests/browser/drill.spec.ts", "docs/drill-client.md", "rfc/play-composition.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "work_state", "id": "D3062", "digest": "sha256:bffd317e6f2f2afd8e75214754fd003f486a17ea821facc837bf38831837c580"},
-            {"kind": "rfc", "id": "theming.md", "digest": "sha256:5cb1b42935d859e683789dbc1dfb5c112b0deff5ecc9fe3c0aafe33f338a26db"}
+            {"kind": "work_state", "id": "D1493", "digest": "sha256:f966d65301b42b98fbc5feb65bcf637d350fa8c22448cd87e2f5b7127c752981"},
+            {"kind": "rfc", "id": "play-composition.md", "digest": "sha256:4c086f45c9f9d1398c1865e6a1ee2dc3ac02b55ca5406b9766c35a7e844a4c24"}
           ]
         },
         "exit": "Quiet, Guided, Support, Drill, Review, Campaign, Academy and Stream open useful by default; the board never shrinks or moves; every primitive remains available under Advanced."
@@ -434,7 +434,7 @@
           "summary": "The in-run shell advanced, but full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
           "impact": "held",
           "evidence": ["planning/ux-implementation-index.md", "rfc/play-composition.md"],
-          "anchors": [{"kind": "rfc", "id": "play-composition.md", "digest": "sha256:726d752b1a23dda4cb2fdc874c85482f6d8537454757f3453d1035bea7e63a61"}]
+          "anchors": [{"kind": "rfc", "id": "play-composition.md", "digest": "sha256:4c086f45c9f9d1398c1865e6a1ee2dc3ac02b55ca5406b9766c35a7e844a4c24"}]
         },
         "exit": "Every route has opinionated defaults, loading/empty/error/recovery, responsive and accessible behavior, return doors, and no raw enum/JSON/cp or settings-first workflow."
       },

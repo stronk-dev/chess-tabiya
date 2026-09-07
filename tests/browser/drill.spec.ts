@@ -2488,8 +2488,45 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
   expect(manifest.status()).toBe(200); expect((await manifest.json()).display).toBe("standalone");
   expect(await page.locator('link[rel="manifest"]').getAttribute("href")).toBe("/manifest.webmanifest");
   expect(await page.evaluate(async () => "serviceWorker" in navigator ? (await navigator.serviceWorker.getRegistrations()).length : 0)).toBe(0);
-  await page.setViewportSize({ width: 360, height: 679 });
-  await expect(page.getByRole("alert")).toContainText("needs at least 360 × 680 CSS pixels");
-  await expect(page.getByRole("alert")).toContainText("24-pixel chess-square targets and a fully visible board cannot both fit");
+
+  for (const viewport of [
+    { width: 375, height: 667 },
+    { width: 844, height: 390 },
+    { width: 320, height: 256 },
+  ] as const) {
+    await page.setViewportSize(viewport);
+    await expect(page.getByRole("alert")).toHaveCount(0);
+    const board = page.getByLabel("Chessboard");
+    await expect(board).toBeVisible();
+    const boardBox = await board.boundingBox();
+    expect(boardBox).not.toBeNull();
+    expect(boardBox!.width).toBe(playBoardEdge(viewport.width, viewport.height));
+    expect(boardBox!.width).toBeGreaterThanOrEqual(192);
+    expect(boardBox!.x).toBeGreaterThanOrEqual(-1);
+    expect(boardBox!.x + boardBox!.width).toBeLessThanOrEqual(viewport.width + 1);
+    const reflow = await page.locator(".drill-region").evaluate((element) => ({
+      clientHeight: element.clientHeight,
+      clientWidth: element.clientWidth,
+      scrollHeight: element.scrollHeight,
+      scrollWidth: element.scrollWidth,
+    }));
+    expect(reflow.scrollWidth).toBeLessThanOrEqual(reflow.clientWidth + 1);
+    if (viewport.height === 256) expect(reflow.scrollHeight).toBeGreaterThan(reflow.clientHeight);
+    await expect(page.locator("main.drill")).toHaveClass(/compact/);
+    const regions = page.getByRole("navigation", { name: "Run regions" });
+    await regions.scrollIntoViewIfNeeded();
+    const regionTabs = ["Support", "Branches", "Actions"].map((name) => regions.getByRole("button", { name, exact: true }));
+    const selected = await Promise.all(regionTabs.map((tab) => tab.getAttribute("aria-pressed")));
+    expect(selected.filter((value) => value === "true")).toHaveLength(1);
+    await regions.getByRole("button", { name: "Branches", exact: true }).click();
+    await expect(regions.getByRole("button", { name: "Branches", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await expect(regions.getByRole("button", { name: "Support", exact: true })).toHaveAttribute("aria-pressed", "false");
+    await expect(regions.getByRole("button", { name: "Actions", exact: true })).toHaveAttribute("aria-pressed", "false");
+    await page.getByRole("button", { name: "Collapse companion" }).click();
+  }
+
+  await page.setViewportSize({ width: 319, height: 844 });
+  await expect(page.getByRole("alert")).toContainText("needs at least 320 × 256 CSS pixels");
+  await expect(page.getByRole("alert")).toContainText("24-pixel chess-square targets cannot fit without horizontal scrolling");
   await expect(page.locator('[aria-label="Chessboard"]')).toHaveCount(0);
 });

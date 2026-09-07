@@ -1489,11 +1489,12 @@
     },
     {
       "id": "D167",
-      "state": "todo",
-      "sourceGlyph": "🔨",
-      "sourceDigest": "sha256:63be8e4db9151960b7f5c23cf58257ae7033905193d73150d6048730ec30f659",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3fd05eebd253b3bc0059af7493fd7d7f7eb4cf56dd025e79585d1fedbf5ca481",
       "uxItems": [],
-      "owner": "review-and-return"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D168",
@@ -2110,11 +2111,12 @@
     },
     {
       "id": "D259",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:be6bd6313b79ae7df46efa29929f9f0d033a7b67312acf12bf3c7b1966c407ac",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:736ba5a4499eacf447878be6444e118eb762bcc5d18e0dbbe561dd41f2f0a170",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D260",
@@ -6906,13 +6908,14 @@
     },
     {
       "id": "D840",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b8d670e904f9439922ed11d22507251528665a45b07655ec92965dc33daf5065",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:cabab89079c624b2f3de31e13435e8b9dd4d49013d00c4f16aafe228a3a882ba",
       "uxItems": [
         "INR-a8"
       ],
-      "owner": "core-loop"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D841",
@@ -7336,11 +7339,12 @@
     },
     {
       "id": "D895",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1f486926118c8ddd9c0d4613c0ad174c6688abfbb307a06e5bd93de99290d34f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2c45f6deb50e97a148c074e8b425477dd27f94b806617e05a90ee2a39e78b8e6",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D896",
@@ -11449,13 +11453,14 @@
     },
     {
       "id": "D1493",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5d74610b59570f081bc5e69e924871cffd41cc74c90b59753888efca2fe3b40e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f966d65301b42b98fbc5feb65bcf637d350fa8c22448cd87e2f5b7127c752981",
       "uxItems": [
         "A11-a26"
       ],
-      "state": "todo",
-      "owner": "client-platform"
+      "evidence": "planning/exploration/log.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D1494",

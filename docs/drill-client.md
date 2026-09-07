@@ -388,11 +388,13 @@ are honest empty states naming the breadth-program item that will implement
 them rather than pretending the capability exists.
 
 The application shell owns exactly one viewport: a fixed-height top bar above
-a `minmax(0, 1fr)` content region. The document does not scroll on desktop;
-lists, the branch rail, and timeline own their overflow. The drill is a fitted
-grid, and its square board is bounded by both available width and available
-height so it cannot overlap the timeline. On narrower layouts the drill region
-itself becomes the explicit scroller and the panes stack.
+a `minmax(0, 1fr)` content region. The document does not scroll on fitted desktop,
+tablet, or phone layouts; lists, the branch rail, and timeline own their overflow.
+The drill is a fitted grid, and its square board is bounded by both available width
+and available height so it cannot overlap the timeline. Below 680 CSS pixels tall,
+including phone landscape and the 320×256 WCAG reflow projection, the compact drill
+region becomes the explicit vertical scroller. The board remains width-bound and
+at least 192px, while horizontal scrolling remains refused below 320px.
 
 ## Keyboard and focus contract
 
@@ -448,6 +450,13 @@ long objective prose scrolls inside a labelled, keyboard-focusable bounded regio
 the board's interaction area. Compact runs bound that prose more tightly so the
 same 192px board floor remains inside the position region rather than underneath
 Timeline.
+
+The compact reflow journey additionally mounts at 375×667, 844×390 and 320×256.
+It requires a 352px, 560px and 304px board respectively, no horizontal overflow,
+an explicit vertical scroller when the composed chrome is taller than the viewport,
+and unchanged board geometry while Support, Branches, or Actions opens. The run is
+refused only below 320×256, where 24px chess-square targets would require horizontal
+scrolling.
 
 Selection can reveal a structural caption and move the rendered board without
 resizing it. The Chessground wrapper therefore refreshes its cached bounds on

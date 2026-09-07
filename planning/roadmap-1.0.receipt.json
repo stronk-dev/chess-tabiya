@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ac258076e2a583482e617df5b1161cc87c390001b2a2d8dd185856bbb80e0119",
+    "roadmap": "sha256:dc82ed56e3595ff87b809afa0e57f1898ea70b5450017c78815a8a8aab82467d",
     "workItems": "sha256:f48f89daa6e262f06caf4b7b7154b09b1dc3009f1bfeaf5dd9bbb5760201b49a",
-    "workState": "sha256:a9c81687e2a29b102e4409671e34bba9f06bb7706a72d60b852fdef1bf6623ec",
-    "rfcRegister": "sha256:9604cf7c27e4f4f38af7b8dbf38db859a0c5d47916d28e6980f15cfeeff77965",
+    "workState": "sha256:0811e550aa1bfde7f69fbb144c72b135ed9a565e46fcad137306615cade39e16",
+    "rfcRegister": "sha256:5ac870ea317aae3aa1ed97b43ed11e8d0402140a15c13b0213dafe92614651c8",
     "uxIndex": "sha256:5ca3e23500716997bf5a89e941981f81f59244826bf9983b8a0d358294519080",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 649,
+      "todo": 644,
       "doing": 1,
       "blocked": 1203,
-      "done": 881,
+      "done": 886,
       "refused": 109
     },
     "workItems": {
@@ -201,25 +201,27 @@
       "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, then land the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "The owner-ruled appearance catalog now ships all ten known schemes plus two gated Tabiya defaults. Every inherited palette/mode is byte-pinned, every below-floor pair is independently measured and published, and the stale contrast hold is reconciled to its already-shipped non-hue and forced-color repair.",
+        "summary": "The stable board now reaches the 320×256 WCAG reflow floor, iPhone SE-class portrait heights and phone landscape. Short viewports use the compact single-column composition with a width-bound board, vertical drill scrolling, no horizontal overflow and one truthful selected companion region.",
         "impact": "advanced",
         "evidence": [
-          "apps/web/src/lib/theme/catalog.ts",
-          "apps/web/src/lib/theme/theme.test.ts",
-          "docs/theming.md",
-          "rfc/theming.md",
+          "apps/web/src/lib/play-composition.ts",
+          "apps/web/src/lib/viewport-support.ts",
+          "apps/web/src/lib/DrillScreen.svelte",
+          "tests/browser/drill.spec.ts",
+          "docs/drill-client.md",
+          "rfc/play-composition.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
-            "id": "D3062",
-            "digest": "sha256:bffd317e6f2f2afd8e75214754fd003f486a17ea821facc837bf38831837c580"
+            "id": "D1493",
+            "digest": "sha256:f966d65301b42b98fbc5feb65bcf637d350fa8c22448cd87e2f5b7127c752981"
           },
           {
             "kind": "rfc",
-            "id": "theming.md",
-            "digest": "sha256:5cb1b42935d859e683789dbc1dfb5c112b0deff5ecc9fe3c0aafe33f338a26db"
+            "id": "play-composition.md",
+            "digest": "sha256:4c086f45c9f9d1398c1865e6a1ee2dc3ac02b55ca5406b9766c35a7e844a4c24"
           }
         ]
       },
@@ -369,7 +371,7 @@
           {
             "kind": "rfc",
             "id": "play-composition.md",
-            "digest": "sha256:726d752b1a23dda4cb2fdc874c85482f6d8537454757f3453d1035bea7e63a61"
+            "digest": "sha256:4c086f45c9f9d1398c1865e6a1ee2dc3ac02b55ca5406b9766c35a7e844a4c24"
           }
         ]
       },

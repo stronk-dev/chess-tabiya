@@ -11,8 +11,11 @@ describe("play composition geometry", () => {
     [430, 932, "phone", 408],
     [390, 844, "phone", 368],
     [360, 680, "phone", 344],
+    [375, 667, "phone", 352],
+    [320, 256, "phone", 304],
+    [844, 390, "phone", 560],
   ] as const)("maps %d×%d to the %s %dpx board", (width, height, viewportClass, edge) => {
-    expect(playViewportClass(width)).toBe(viewportClass);
+    expect(playViewportClass(width, height)).toBe(viewportClass);
     expect(playBoardEdge(width, height)).toBe(edge);
     expect(edge % 8).toBe(0);
   });

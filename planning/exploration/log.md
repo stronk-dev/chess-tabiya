@@ -18003,3 +18003,19 @@ authority; the client neither infers withholding from an empty array nor exposes
 **Evidence/next:** the focused comparison regression requires the region-level explanation, its
 machine-readable abstention identity, zero engine-trajectory consumers and no hidden mate score in
 the same withheld fixture. Available comparisons retain their existing recorded engine table.
+
+## 2026-09-07 — Compact runs reflow instead of disappearing
+
+**What changed:** [[D1493]] is closed. The 360×680 hard refusal is replaced by a 320×256
+horizontal floor. Short portraits and phone landscapes enter the same compact composition as a
+phone, keep the board width-bound at 24px squares or larger, and make the drill region the explicit
+vertical scroller. The region selector retains exactly one `aria-pressed` state and its overlay
+does not resize the board.
+
+**Evidence/next:** geometry and support unit fixtures pin 375×667 → 352px, 844×390 → 560px and
+320×256 → 304px. The permanent browser journey checks all three against horizontal overflow,
+selected-region truth and stable overlay geometry. The same reconciliation verified and closes
+three older completed obligations: [[D167]] claim backing renders at checkpoints and outcomes;
+[[D259]] reasoning review uses its evidence-free typed provider path; [[D895]]'s five collector
+convention repairs all have runtime/harness fixtures. [[D840]] was already closed in the ledger;
+its execution state is synchronized in this checkpoint.

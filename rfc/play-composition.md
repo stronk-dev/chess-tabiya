@@ -1,6 +1,6 @@
 # RFC: Play composition
 
-- **Status:** implementing — shell checkpoint landed 2026-08-22; the 2026-08-26 comparison checkpoint removes raw objective/engine/detector/route records from the ordinary comparison; the 2026-08-31 queue checkpoint makes Support/Branches/Actions one-expanded at every viewport, selects the relevant seat on critical/branch transitions, and fails learner move labels closed instead of exposing UCI. Exact seven-viewport geometry, stable board identity and the permanent browser gates are live. Module seats/badges, remaining vocabulary cleanup and the five module-dependent columns of the 7×16 matrix remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
+- **Status:** implementing — shell checkpoint landed 2026-08-22; the 2026-08-26 comparison checkpoint removes raw objective/engine/detector/route records from the ordinary comparison; the 2026-08-31 queue checkpoint makes Support/Branches/Actions one-expanded at every viewport, selects the relevant seat on critical/branch transitions, and fails learner move labels closed instead of exposing UCI. The 2026-09-07 reflow checkpoint extends the stable board to 320×256, iPhone SE-class portrait heights and phone landscape through an explicit vertical-scroll composition rather than a refusal or sub-24px squares. Exact fitted and reflow geometry, stable board identity and the permanent browser gates are live. Module seats/badges, remaining vocabulary cleanup and the five module-dependent columns of the 7×16 matrix remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
 - **Author:** claude (drafted on the D717 program routing, Phase 4)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §1 (invariants), §2 (the five regions),
@@ -283,10 +283,16 @@ gaps). The closed form yields:
 | 430×932 | phone | min(414, 724) | **408** | width-bound; 552 ≤ 932 vertical |
 | 390×844 | phone | min(374, 636) | **368** | width-bound |
 | 360×680 | phone | min(344, 472) | **344** | 56+344+40+32+48+32 = 552 ≤ 680 |
+| 375×667 | phone/reflow | width-bound | **352** | fits without scrolling; reflow is active below 680px |
+| 844×390 | phone-landscape/reflow | min(828, 560 cap) | **560** | vertical scroll; no horizontal overflow |
+| 320×256 | WCAG reflow | width-bound | **304** | 38px squares; vertical scroll; no horizontal overflow |
 
-Every edge is 8-divisible, ≥ the retained 192 px sanity floor, and fits both axes with the
-strip, objective line, band/rim and topbar all present — including the degenerate ends:
-360×680 with the sheet rim in layout, and both sides of the 1024 boundary (1024×768 takes
+Every edge is 8-divisible and ≥ the retained 192 px sanity floor. Fitted projections fit both axes
+with the strip, objective line, band/rim and topbar all present. Below 680px height, compact reflow
+keeps the board width-bound and moves the complete composition into the drill region's vertical
+scroll rather than refusing the run or introducing horizontal scrolling. This includes 320×256
+at 400% zoom and phone landscape. At the fitted boundary, 360×680 retains the sheet rim in layout,
+and both sides of the 1024 boundary remain explicit (1024×768 takes
 the rail form at 640; 1023×768 the band form at 432 under these tokens — the class-switch
 discontinuity OQ1 already owns). Implementers may move any token; the exhibit proves a
 legal assignment exists, so A1 is satisfiable rather than aspirational.
@@ -732,6 +738,11 @@ document's to rewrite). Rows proposed by the cross-review, from head+1, NOT writ
 
 ## Changelog
 
+- 2026-09-07: D1493 reflow checkpoint. The old 360×680 hard refusal is narrowed to the
+  horizontal 320×256 floor. Short viewports and phone landscapes use the compact composition,
+  retain a width-bound board with at least 24px squares and scroll the drill region vertically.
+  Unit fixtures pin 375×667, 844×390 and 320×256; the browser journey proves mounting, no
+  horizontal overflow, stable board geometry and truthful region-tab state at all three.
 - 2026-08-31: the structural companion now obeys §2.2 instead of stacking Support, Branches and
   Actions on desktop. Exactly one structural seat is expanded; Support is the ordinary default;
   consequence guards select Support; branch/group creation selects Branches without forcing the

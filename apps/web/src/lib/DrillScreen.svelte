@@ -51,7 +51,7 @@
   import { consequenceHorizon, phaseLabel, phaseSummary } from "./run-copy.js";
   import { assistanceProfile, loadAssistance, saveAssistance, type PreferenceStorage } from "./assistance-preference.js";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
-  import { playBoardEdge } from "./play-composition.js";
+  import { playBoardEdge, playViewportClass } from "./play-composition.js";
   import { HUMAN_MODEL_RUNG_DISCLAIMER, humanModelMaterialLimit, opponentStatus } from "./opponent-copy.js";
   import { moveSanFromUci } from "./board-input.js";
   import { checkpointAuthoredItems as selectCheckpointAuthoredItems } from "./checkpoint-authored-items.js";
@@ -267,8 +267,10 @@
   }
 
   let run = $derived(snapshot.run);
+  let compactViewport = $derived(playViewportClass(viewportSupport.width, viewportSupport.height) === "phone");
+  let reflowViewport = $derived(compactViewport && viewportSupport.height > 0 && viewportSupport.height < 680);
   let boardEdge = $derived(playBoardEdge(viewportSupport.width, viewportSupport.height));
-  let phoneSheetModal = $derived(viewportSupport.width > 0 && viewportSupport.width <= 719 && sheetOpen);
+  let phoneSheetModal = $derived(viewportSupport.width > 0 && compactViewport && sheetOpen);
   let canWrite = $derived(snapshot.access === "writer");
   let currentNode = $derived(activeNode(run));
   let recordedEngineEvidence = $derived(
@@ -605,7 +607,7 @@
     groupOpen = false;
     groupCandidates = [];
     compactTab = "branches";
-    sheetOpen = viewportSupport.width > 719;
+    sheetOpen = !compactViewport;
   }
 
   async function nextGroupMember(group: BranchGroup): Promise<void> {
@@ -834,7 +836,7 @@
     forkLabel = "";
     forkIntent = "";
     compactTab = "branches";
-    sheetOpen = viewportSupport.width > 719;
+    sheetOpen = !compactViewport;
   }
 
   async function continueFromCheckpoint(): Promise<void> {
@@ -1007,7 +1009,7 @@
   });
 </script>
 
-<div class="drill-region" data-keyboard-region="drill" tabindex="-1" bind:this={regionElement}>
+<div class="drill-region" class:reflow={reflowViewport} data-keyboard-region="drill" tabindex="-1" bind:this={regionElement}>
 
 {#if !viewportSupport.supported}
   <section class="viewport-refusal" role="alert" aria-labelledby="viewport-refusal-title">
@@ -1028,7 +1030,7 @@
     onVoice={onCompareVoice === undefined ? undefined : async () => (await onCompareVoice()).text}
   />
 {:else}
-  <main class="drill" tabindex="-1" bind:this={mainElement} aria-labelledby="drill-title" style={`--board-edge: ${boardEdge}px`}>
+  <main class="drill" class:compact={compactViewport} class:reflow={reflowViewport} tabindex="-1" bind:this={mainElement} aria-labelledby="drill-title" style={`--board-edge: ${boardEdge}px`}>
     <header class="topbar">
       <button class="wordmark" type="button" onclick={onStop}>Tabiya</button>
       <StatusAnnouncement message={`${pack?.title ?? "Just Play"}. ${opponentStatus(run.opponentPolicy.mode, run.opponentPolicy.targetElo)}. ${run.opponentPolicy.mode === "human_common" ? HUMAN_MODEL_RUNG_DISCLAIMER : ""} ${consequenceHorizon(pack)}. ${snapshot.access === "read_only" ? "Read-only follower" : busy ? "Writer, thinking" : "Writer, your move"}${authoredFeedback?.hasWithheldAuthoredContent ? ". Authored commentary withheld until checkpoints" : ""}`} />
@@ -1546,6 +1548,8 @@
     overflow: hidden;
   }
 
+  .drill-region.reflow { overflow-y: auto; }
+
   .viewport-refusal {
     width: min(32rem, calc(100% - 2rem));
     margin: auto;
@@ -1576,6 +1580,8 @@
     overflow: hidden;
     outline: none;
   }
+
+  .drill.reflow { height: auto; min-height: 100%; overflow: visible; }
 
   .topbar {
     flex: 0 0 var(--topbar-h);
@@ -1955,40 +1961,52 @@
     .companion-section.compact-active { display: grid; }
   }
 
-  @media (max-width: 719px) {
-    .drill {
+  .drill.compact {
       --stage-pad: 8px;
       width: 100%;
-    }
+  }
 
-    .topbar {
+  .drill.compact .topbar {
       grid-template-columns: 1fr auto auto;
       padding: 0 .5rem;
-    }
+  }
 
-    .workspace {
+  .drill.compact .workspace {
       grid-template-columns: 1fr;
       grid-template-rows: minmax(0, 1fr) var(--rim-h);
-    }
-    .position-column {
+  }
+  .drill.compact .position-column {
       grid-row: 1;
       grid-template-rows: var(--board-edge) var(--strip-h) var(--objective-h);
       padding: 0 var(--stage-pad);
-    }
-    .objective-line { width: var(--board-edge); height: var(--objective-h); display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: .4rem; align-items: center; padding: 0 .45rem; border: 0; background: var(--panel); color: inherit; text-align: left; }
-    .objective-line span, .objective-line small { color: var(--muted); font: 600 .58rem ui-monospace,monospace; text-transform: uppercase; }
-    .objective-line strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .76rem; }
-    .rail-stack { grid-row: 2; grid-template-rows: var(--rim-h) minmax(0,1fr); border: 0; border-top: 1px solid var(--line); }
-    .rail-stack.sheet-open { position: fixed; z-index: 20; right: 0; bottom: 0; left: 0; height: min(68dvh, 38rem); grid-template-rows: var(--rim-h) minmax(0,1fr); border-radius: 1rem 1rem 0 0; box-shadow: var(--shadow); }
-    .companion-identity { display: none; }
-    .compact-tabs { height: var(--rim-h); align-items: center; justify-content: center; padding: .3rem .5rem; border: 0; }
-    .sheet-handle { position: absolute; top: .25rem; left: 50%; width: 2.5rem; height: .2rem; transform: translateX(-50%); border-radius: 999px; background: var(--line); }
-    .sheet-close { display: none; }
-    .sheet-open .sheet-close { display: block; }
-    .rail-stack:not(.sheet-open) .companion-scroll { display: none; }
-    .companion-scroll { overflow: hidden; }
-    .companion-section { display: none; height: 100%; overflow-y: auto; }
-    .companion-section.compact-active { display: grid; }
+  }
+  .drill.compact .objective-line { width: var(--board-edge); height: var(--objective-h); display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: .4rem; align-items: center; padding: 0 .45rem; border: 0; background: var(--panel); color: inherit; text-align: left; }
+  .drill.compact .objective-line span, .drill.compact .objective-line small { color: var(--muted); font: 600 .58rem ui-monospace,monospace; text-transform: uppercase; }
+  .drill.compact .objective-line strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .76rem; }
+  .drill.compact .rail-stack { grid-row: 2; grid-template-rows: var(--rim-h) minmax(0,1fr); border: 0; border-top: 1px solid var(--line); }
+  .drill.compact .rail-stack.sheet-open { position: fixed; z-index: 20; right: 0; bottom: 0; left: 0; height: min(68dvh, 38rem); grid-template-rows: var(--rim-h) minmax(0,1fr); border-radius: 1rem 1rem 0 0; box-shadow: var(--shadow); }
+  .drill.compact .companion-identity { display: none; }
+  .drill.compact .compact-tabs { height: var(--rim-h); align-items: center; justify-content: center; padding: .3rem .5rem; border: 0; }
+  .drill.compact .sheet-handle { position: absolute; top: .25rem; left: 50%; width: 2.5rem; height: .2rem; transform: translateX(-50%); border-radius: 999px; background: var(--line); }
+  .drill.compact .sheet-close { display: none; }
+  .drill.compact .sheet-open .sheet-close { display: block; }
+  .drill.compact .rail-stack:not(.sheet-open) .companion-scroll { display: none; }
+  .drill.compact .companion-scroll { overflow: hidden; }
+  .drill.compact .companion-section { display: none; height: 100%; overflow-y: auto; }
+  .drill.compact .companion-section.compact-active { display: grid; }
+
+  .drill.reflow .workspace {
+    flex: none;
+    min-height: calc(var(--board-edge) + var(--strip-h) + var(--objective-h) + var(--rim-h));
+    grid-template-rows: auto var(--rim-h);
+    overflow: visible;
+  }
+  .drill.reflow .position-column {
+    min-height: calc(var(--board-edge) + var(--strip-h) + var(--objective-h));
+    overflow: visible;
+  }
+
+  @media (max-width: 719px) {
     .inspector-grid { grid-template-columns: 1fr; }
   }
 </style>
