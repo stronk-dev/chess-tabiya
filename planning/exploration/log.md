@@ -18360,3 +18360,11 @@ carry `packId` as their captured title. The shell now uses the already-shipped o
 vocabulary and one run-title boundary across resume, history, assignment, Library and deletion
 flows. A route fixture starts from the able-to-fail `title === packId` plus `degraded` state and
 proves that both internal strings are absent from Home and Review.
+
+## 2026-09-07 — Story results become learner-relative product copy
+
+The after-game Story header rendered the PGN tag and outcome-kind enum (`1-0 · recorded result`)
+instead of saying what happened to the learner. One exhaustive display reducer now distinguishes
+recorded PGN, board-terminal and unfinished outcomes and renders win/loss from the learner's side.
+A mounted Story fixture proves a Black learner sees “You lost · recorded PGN result” while the raw
+tag and wire enum are absent.

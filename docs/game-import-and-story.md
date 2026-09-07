@@ -65,6 +65,11 @@ A resignation, agreement, or flag remains only the PGN's recorded result; the
 server never fabricates a terminal event for a playable board. `Result "*"` is
 reported as unfinished.
 
+The Story header translates both forms at the presentation boundary. It says **You won**, **You
+lost**, or **Game drawn** from the declared learner side and identifies whether that is a recorded
+PGN result or a board-terminal result. `1-0`, `0-1`, `recorded_result`, and `board_terminal` remain
+wire/export values; an unfinished import says that no final result was recorded.
+
 After persistence, the server enqueues one evaluation job per mainline node,
 including the root. An 80-ply game therefore requests 81 jobs; the 300-ply import
 cap bounds the pass at 301. The pass is idempotent-completing: story reads inspect

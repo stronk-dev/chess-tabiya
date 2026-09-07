@@ -2,7 +2,7 @@
   import { reviewStoryTitle, selectedStoryMoments, storyEvidenceSourceLabels } from "@chess-tabiya/runtime";
   import type { GameStory, StoryShare } from "./api.js";
   import Chessboard from "./Chessboard.svelte";
-  import { recordedEvaluationTrajectory, storyMomentLabel, storyReentryCopy } from "./learner-copy.js";
+  import { recordedEvaluationTrajectory, storyMomentLabel, storyOutcomeLabel, storyReentryCopy } from "./learner-copy.js";
   import { storyCardDocument } from "./story-card.js";
 
   interface Props {
@@ -86,7 +86,7 @@
 
 <main class="story" aria-labelledby="story-title" data-evidence-consumer="review.story">
   <header>
-    <div><p class="eyebrow">{imported ? "Imported game" : "Played run"} / grounded story</p><h1 id="story-title">{imported ? `${imported.headers.White ?? "White"} – ${imported.headers.Black ?? "Black"}` : "Story of this run"}</h1><p>{imported?.result ?? story.outcome.result ?? "finished"} · {story.outcome.kind.replaceAll("_", " ")}</p></div>
+    <div><p class="eyebrow">{imported ? "Imported game" : "Played run"} / grounded story</p><h1 id="story-title">{imported ? `${imported.headers.White ?? "White"} – ${imported.headers.Black ?? "Black"}` : "Story of this run"}</h1><p>{storyOutcomeLabel(story.side, story.outcome)}</p></div>
     <div class="actions"><button type="button" onclick={() => onExport()}>Export game + branches</button>{#if onShare}<button type="button" disabled={shareBusy} aria-describedby="story-share-lifetime" onclick={() => void createShare()}>Share story</button>{/if}<a href="/review">Back to review</a></div>
   </header>
   {#if onShare}

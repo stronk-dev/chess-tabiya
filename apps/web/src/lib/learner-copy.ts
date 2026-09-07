@@ -34,6 +34,21 @@ export function recordedEvaluationTrajectory(beforeCentipawns: number, afterCent
 }
 
 type StoryResult = "1-0" | "0-1" | "1/2-1/2" | "*" | "win" | "loss" | "draw";
+type StoryOutcome = {
+  readonly kind: "board_terminal" | "recorded_result" | "unfinished";
+  readonly result?: StoryResult;
+};
+
+export function storyOutcomeLabel(side: "white" | "black", outcome: StoryOutcome): string {
+  const result = outcome.result;
+  if (outcome.kind === "unfinished" || result === undefined || result === "*") {
+    return "Game unfinished · no final result recorded";
+  }
+  const context = outcome.kind === "recorded_result" ? "recorded PGN result" : "board-terminal result";
+  if (result === "draw" || result === "1/2-1/2") return `Game drawn · ${context}`;
+  const learnerWon = result === "win" || (side === "white" ? result === "1-0" : result === "0-1");
+  return `${learnerWon ? "You won" : "You lost"} · ${context}`;
+}
 
 export function storyReentryCopy(
   side: "white" | "black",

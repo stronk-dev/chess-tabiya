@@ -8,6 +8,7 @@ import {
   recordedEvaluationTrajectory,
   storyReentryCopy,
   storyMomentLabel,
+  storyOutcomeLabel,
 } from "./learner-copy.js";
 
 describe("learner-facing domain copy", () => {
@@ -38,6 +39,14 @@ describe("learner-facing domain copy", () => {
     expect(storyReentryCopy("white", undefined, 3)).toBe(
       "Pick this game up at move 2 and play the consequence.",
     );
+  });
+
+  it("renders story outcomes from the learner's side without PGN or runtime tokens", () => {
+    expect(storyOutcomeLabel("white", { kind: "recorded_result", result: "1-0" })).toBe("You won · recorded PGN result");
+    expect(storyOutcomeLabel("black", { kind: "recorded_result", result: "1-0" })).toBe("You lost · recorded PGN result");
+    expect(storyOutcomeLabel("black", { kind: "recorded_result", result: "1/2-1/2" })).toBe("Game drawn · recorded PGN result");
+    expect(storyOutcomeLabel("white", { kind: "board_terminal", result: "loss" })).toBe("You lost · board-terminal result");
+    expect(storyOutcomeLabel("white", { kind: "unfinished", result: "*" })).toBe("Game unfinished · no final result recorded");
   });
 
   it("turns the explorer population into a readable disclosure", () => {
