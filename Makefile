@@ -220,10 +220,13 @@ provider-protocol-fifth-author-repair: provider-protocol-fifth-fresh-review
 	./node_modules/.bin/vitest run --config tools/d2950-provider-protocol-fifth-author-repair/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/tsc -p tools/d2950-provider-protocol-fifth-author-repair/tsconfig.json
 
-.PHONY: provider-protocol-sixth-fresh-review
+.PHONY: provider-protocol-sixth-fresh-review provider-protocol-cut-contract
 provider-protocol-sixth-fresh-review: provider-protocol-fifth-author-repair
 	./node_modules/.bin/vitest run --config tools/d2956-provider-protocol-sixth-fresh-review/vitest.config.ts --reporter=verbose
 	./node_modules/.bin/tsc -p tools/d2956-provider-protocol-sixth-fresh-review/tsconfig.json
+
+provider-protocol-cut-contract:
+	node --test tools/d3128-provider-protocol-cut-contract/contract.test.mjs
 
 .PHONY: provider-health-sixth-fresh-review
 provider-health-sixth-fresh-review:
@@ -1407,7 +1410,7 @@ verify-governance: register-check status-parity work-index work-state work-item-
 # historical source images, author models, and counterexamples whose job is to inform an RFC review;
 # they do not establish repository, product, or release correctness. Run the relevant narrow target
 # while editing an RFC, or this aggregate when intentionally auditing the whole active RFC portfolio.
-verify-rfc-evidence: evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review concept-registry-fourth-author-repair concept-registry-fifth-author-repair concept-registry-sixth-fresh-review longitudinal-store-tenth-fresh-review storage-backup-fourth-author-repair storage-backup-fifth-fresh-review safe-deployment-third-author-repair safe-deployment-fourth-fresh-review campaign-two-horizon-sixth-author-repair campaign-two-horizon-seventh-fresh-review pack-capability-seventeenth-fresh-review pack-capability-cut-fresh-review graduation-clearance-author-repair semantic-collector-cut-contract bounded-target-fifth-fresh-review provider-health-cut-contract provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review provider-protocol-sixth-fresh-review live-sources-author-repair review-evidence-fourth-fresh-review evidence-presentation-seventh-fresh-review bot-policy-fifth-fresh-review bot-policy-fifth-author-repair bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract shared-resource-bootstrap-collision-core-author-contract shared-resource-bootstrap-collision-core-fresh-review shared-resource-bootstrap-collision-core-author-repair bounded-target-sixth-author-repair module-discharge-coverage-contract
+verify-rfc-evidence: evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review concept-registry-fourth-author-repair concept-registry-fifth-author-repair concept-registry-sixth-fresh-review longitudinal-store-tenth-fresh-review storage-backup-fourth-author-repair storage-backup-fifth-fresh-review safe-deployment-third-author-repair safe-deployment-fourth-fresh-review campaign-two-horizon-sixth-author-repair campaign-two-horizon-seventh-fresh-review pack-capability-seventeenth-fresh-review pack-capability-cut-fresh-review graduation-clearance-author-repair semantic-collector-cut-contract bounded-target-fifth-fresh-review provider-health-cut-contract provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review provider-protocol-sixth-fresh-review provider-protocol-cut-contract live-sources-author-repair review-evidence-fourth-fresh-review evidence-presentation-seventh-fresh-review bot-policy-fifth-fresh-review bot-policy-fifth-author-repair bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract shared-resource-bootstrap-collision-core-author-contract shared-resource-bootstrap-collision-core-fresh-review shared-resource-bootstrap-collision-core-author-repair bounded-target-sixth-author-repair module-discharge-coverage-contract
 
 .PHONY: feedback-delivery-measurement feedback-binding-audit capability-watch-check
 feedback-delivery-measurement:

@@ -23981,37 +23981,37 @@
       "id": "D2956",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:48489cb8cbd6ce2bc287bcf8b0187afd13db75c32a01c35665bbc23810ddb901",
+      "sourceDigest": "sha256:0c830d7e22de755b811ae401082c444099510499d6bec95deee5958ef62fb351",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:provider-protocol-register.md"
+      "owner": "release-engineering",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
     },
     {
       "id": "D2957",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:75e28b26ec9e66a8ddeaf1522583a8e7460efead7d5551d284bde61b2c5bca68",
+      "sourceDigest": "sha256:3b82a62dd9e90118ad3c0171419310d47b6dd13add65f592560a96fa32ecbbfd",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:provider-protocol-register.md"
+      "owner": "release-engineering",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
     },
     {
       "id": "D2958",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:937bcf83a232d463d18c39e9f3b7f127bdbf6df1618a3ae99610fefa579cfb33",
+      "sourceDigest": "sha256:91f5cb91205a0b2ac7f0c6b925683dadd632f27887bb625a5ef62aecf8950a55",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:provider-protocol-register.md"
+      "owner": "release-engineering",
+      "blocker": "rfc:shared-resource-register-bootstrap.md"
     },
     {
       "id": "D2959",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ff81bf45030a3163b6af1cb9f14bca1bc39169ba22a67d154d0c557494134580",
+      "sourceDigest": "sha256:d7cdb4c7574de55f782b91a9a8bb5ce7516a7cb05ba9705a59c48c2c08944195",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:provider-protocol-register.md"
+      "blocker": "rfc:provider-exchange-and-execution.md"
     },
     {
       "id": "D2960",
@@ -24647,10 +24647,10 @@
       "id": "D3030",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b0cfaeda678f687f74b19e2cc99130bc78d9328d9932057daf8b108edf888c6e",
+      "sourceDigest": "sha256:f0c301d3546caefc27893ec8a0fc694259013c22aaa9114211d11622bacfdcd2",
       "uxItems": [],
-      "owner": "bot-play",
-      "blocker": "rfc:bot-policy.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:provider-exchange-and-execution.md"
     },
     {
       "id": "D3031",
@@ -25521,6 +25521,15 @@
       "uxItems": [],
       "evidence": "design/BACKLOG.md#D3127",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3128",
+      "state": "blocked",
+      "owner": "release-engineering",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:e9007016cd22a364c4b3f7da88b182cec3df0420c2c776915a26b9831b043f1e",
+      "uxItems": [],
+      "blocker": "rfc:provider-protocol-register.md"
     }
   ]
 }

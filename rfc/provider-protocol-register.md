@@ -1,12 +1,13 @@
 # RFC: Provider-protocol shared-resource catalogue population
 
-- **Status:** draft — **sixth fresh independent review returned the fifth repair on [[D2956]]–[[D2959]].**
-  Exact accepted receipt bytes now survive their earlier attacks, but the reader rejects legal
-  implementing/archive successors, ignores staged source-lifecycle drift, accepts an arbitrary
-  lookalike repository and validates a caller-built resource while the staged product root is
-  absent. `make provider-protocol-sixth-fresh-review` retains the complete chain and passes 5/5
-  executable counterexamples plus strict TypeScript. Another author repair, fresh review and the
-  generic bootstrap dependency remain required. Implementation is unauthorized.
+- **Status:** draft — **owner-approved process cut authored on [[D3128]] after the sixth review
+  returned [[D2956]]–[[D2959]].** The active obligation is now only one absent descriptor/register
+  population through the generic bootstrap. The provider-local Git/acceptance/resource validator
+  and its six-round author chain are retained as historical evidence but removed as acceptance
+  authority. [[D2956]]–[[D2958]] belong to the generic staged-transition dependency; [[D2959]] and
+  durable operation-specific provider parsing belong to `provider-exchange-and-execution.md`.
+  `make provider-protocol-cut-contract` checks the bounded active surface. One fresh review of this
+  cut and accepted/implemented generic bootstrap still precede implementation.
 - **Author:** Codex
 - **Created:** 2026-08-30
 - **Design refs:** none. This is repository process and changes no provider behavior or learner UX.
@@ -42,6 +43,39 @@ This process document does not create provider bytes, add C11, edit the generic 
 second Git history reader or decide provider semantics. It applies the accepted generic
 `sequential/canonical_resource@1` profile.
 
+## Active cut contract and acceptance criteria
+
+This section is the complete active contract. The historical product/receipt designs and review
+rounds below remain evidence for why the cut exists; they are not implementation or acceptance
+authority.
+
+1. `planning/provider-protocol-register/catalogue-additions.v1.json` contributes exactly one
+   `provider-protocol` descriptor with lifecycle `sequential`, adapter `canonical_resource@1`,
+   introduction `absent`, claim mode `whole_projection` and the exact atomic selector declared in
+   the metadata root above.
+2. The human-owned `rfc/README.md` register gains exactly `provider-protocol head=absent`, an empty
+   Landed table and an empty Live-claims table. It is checked, never generated.
+3. The generic bootstrap's accepted catalogue, projection and staged-transition operations are the
+   only authorities. This RFC adds no provider-specific Git reader, status parser, canonicalizer,
+   acceptance receipt, resource issuer or validation hook.
+4. The process landing changes only the descriptor source, checked README register, its focused
+   population fixture, docs and required ledger/log/roadmap closeout. It creates no runtime provider
+   resource, type, API, schema, migration, content or web byte.
+5. The generic engine must already be accepted, implemented and archived. The focused fixture uses
+   its opaque staged `canonical_resource@1` projection and build-composition-owned repository
+   authority; no raw repository path or caller-built resource is accepted here ([[D2956]]–[[D2959]]).
+6. The exact absent image, unrelated-export absence, malformed atomic root, same-transition process
+   introduction plus product claim, wrong first claimant and landed-to-missing regression all fail
+   through the generic engine. No process-local duplicate of those semantics counts.
+7. After this RFC implements and archives, `provider-exchange-and-execution.md` atomically claims
+   `provider-protocol | first lane 1 | whole projection` and owns the literal resource, type
+   relations, complete operation/digest-domain populations, durable operation-specific provider
+   parsers and consumer closure. That product landing, not this process row, discharges [[D2959]]
+   and bot-policy [[D3030]].
+8. `make provider-protocol-cut-contract` proves the exact bounded source/register/handoff and
+   exclusion of the retired provider-local authority from stable governance. Full normal
+   verification must pass before implementation and archival.
+
 ## 1. Exact descriptor and absent image
 
 The catalogue entry is:
@@ -76,7 +110,11 @@ provider-protocol | first lane 1 | whole projection
 The generic transition reader owns staged index-vs-HEAD, committed first-parent history, required
 CI base/depth and fail-closed missing-parent behavior ([[D2458]]).
 
-## 2. Future atomic product image
+## Historical product-image design (non-normative; transferred)
+
+Everything in this section is retained review history. The active criterion 7 transfers the real
+product obligations to `provider-exchange-and-execution.md`; none of the following receipt or
+repository mechanisms may be implemented from this process RFC.
 
 The product landing creates exactly:
 
@@ -145,7 +183,7 @@ This distinction is exact: the register seals runtime identity and version; Type
 request/result relations; provider able-to-fail fixtures prove parser/transport semantics. No
 function is mislabeled as a literal field.
 
-## 3. Independent population obligation
+## Historical independent-population design (non-normative; transferred)
 
 The resource tuple cannot validate its own intended members. A coordinated swap of the tuple and
 all derived consumers would otherwise remain internally consistent ([[D2457]]).
@@ -269,7 +307,7 @@ Order:
 implemented by the generic absent lifecycle and atomic selector boundary rather than a bespoke
 provider state machine. It closes only after this population's executable criteria pass.
 
-## Acceptance criteria
+## Superseded pre-cut acceptance criteria (non-normative)
 
 1. `provider-protocol` exists once in the generic catalogue/register and nowhere in a parallel
    resource-name list.
@@ -503,6 +541,17 @@ passes 5/5 new executable counterexamples plus the repository TypeScript contrac
 `planning/provider-protocol-register/sixth-fresh-independent-buildability-review-2026-09-06.md`.
 The RFC remains draft; no catalogue, register, receipt or provider product byte is authorized.
 
+## Owner-approved process cut (2026-09-07)
+
+The sixth return established that the remaining failures are not provider-register semantics. The
+document had recreated repository identity, RFC lifecycle authority, staged projection and product
+validation around one absent catalogue member. [[D3128]] therefore cuts acceptance to the eight
+criteria at the top of this document. [[D2956]]–[[D2958]] are obligations of the generic
+`shared-resource-register-bootstrap` transition authority; [[D2959]] transfers to the product
+landing in `provider-exchange-and-execution`, which also owns durable operation-specific parsing
+for bot-policy [[D3030]]. The historical review chain remains executable evidence, but it cannot
+require a seventh provider-local repository model or widen this process landing.
+
 ## Open questions
 
 None for the owner. The five operations, providers and ten digest domains are existing product-RFC
@@ -510,6 +559,11 @@ semantics, not choices made by this process document.
 
 ## Changelog
 
+- 2026-09-07: owner-approved process cut on [[D3128]]. The active contract is eight criteria for
+  one absent generic catalogue/register population. [[D2956]]–[[D2958]] route to the shared generic
+  transition engine; [[D2959]] and durable provider parsing route to
+  `provider-exchange-and-execution`. The six review rounds are retained as historical evidence and
+  removed from acceptance authority. `make provider-protocol-cut-contract` checks the boundary.
 - 2026-09-06: sixth fresh independent review returned the fifth repair on [[D2956]]–[[D2959]]:
   post-accept lifecycle states fail, current source drift is unobserved, repository identity remains
   caller-selected and the product resource is not a staged generic projection. `make

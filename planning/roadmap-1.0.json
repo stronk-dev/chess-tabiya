@@ -351,15 +351,16 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Land the evidence-value-authority/provider dependencies and hint-distance registry, then resolve the 127 exact operations and 224 presentation pairs so the repaired module requirements can become production bindings without bypassing the evidence spine.",
+        "nextAction": "Freshly review and land the generic shared-resource bootstrap, then freshly review the eight-criterion provider-protocol population, claim provider lane 1, and review/implement the provider-exchange durable parser before bot replay or the 127 module operations consume provider evidence.",
         "latestCheckpoint": {
           "at": "2026-09-07",
-          "summary": "The D3065 module repair gives every completed collector, mobility and opening discharge an exact learner home or explicit internal-predicate refusal: 127 requirements map to 224 blocked module pairs. D3066 then sealed the ten evidence-bearing answer-capability sets as one emitted authority and made both implementer-facing RFC tables set-equal to it.",
+          "summary": "The provider-protocol process RFC is cut to eight active criteria for one absent generic catalogue/register population; six rounds of provider-local Git and acceptance machinery are retained only as history. Provider exchange now owns one operation-specific save/reload parser for full delivery reconstruction, routing the bot D3030 durable-authority blocker to the shared evidence spine.",
           "impact": "advanced",
-          "evidence": ["planning/learner-modules/discharge-coverage-repair-2026-09-07.md", "tools/d3065-module-discharge-coverage-contract/contract.test.ts", "tools/d2120-module-registration-author-contract/contract.test.ts", "rfc/module-registration.md", "rfc/README.md"],
+          "evidence": ["planning/provider-protocol-register/cut-author-repair-2026-09-07.md", "tools/d3128-provider-protocol-cut-contract/contract.test.mjs", "rfc/provider-protocol-register.md", "rfc/provider-exchange-and-execution.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "work_state", "id": "D3066", "digest": "sha256:998675b9d6c542b742b01488d4849a943f043ca5d1ffc2792af29f44b7d80930"},
-            {"kind": "rfc", "id": "module-registration.md", "digest": "sha256:7bcd91f15527d974103907fec358d5e8aacaf103b4cb01ba8bf5b6f87df0b57b"}
+            {"kind": "work_state", "id": "D3128", "digest": "sha256:e9007016cd22a364c4b3f7da88b182cec3df0420c2c776915a26b9831b043f1e"},
+            {"kind": "rfc", "id": "provider-protocol-register.md", "digest": "sha256:69f82804e59fcd1ae0d7eb9959da95526e39eff5961e20a80d1b1d39e036a046"},
+            {"kind": "rfc", "id": "provider-exchange-and-execution.md", "digest": "sha256:0af61c7afebab5d18c078a00591be9981efe02df7817b4efdac5c02d08245e8a"}
           ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."

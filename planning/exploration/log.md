@@ -18251,3 +18251,21 @@ on the shared durable provider parser, while [[D3031]] is narrowed to the curren
 checkpoint. Another genuinely fresh review still gates acceptance; no production/schema/content
 byte changed. [[D3126]] also repairs the provider-health cut test to the approved CI tier split:
 present in opt-in `verify-rfc-evidence`, absent from stable `verify-governance`.
+
+## 2026-09-07 — Provider-protocol process cut and durable-parser handoff
+
+**What changed:** [[D3128]] cuts `provider-protocol-register.md` from a 555-line product/process
+authority with six review rounds to eight active criteria for one absent generic catalogue and
+README population. The historical models remain evidence but cannot authorize a seventh
+provider-local Git, lifecycle, canonicalization or product-validation engine. [[D2956]]–[[D2958]]
+route to the shared bootstrap; [[D2959]] routes to the product landing.
+
+`provider-exchange-and-execution.md` now owns [[D3030]] explicitly: one operation-specific
+save/reload parser reconstructs and rechecks the complete provider delivery before issuing fresh
+process-local seals. Bot replay consumes that shared result instead of a bot-local persisted digest
+envelope.
+
+**Evidence/next:** `make provider-protocol-cut-contract` passes four focused controls over the exact
+descriptor, bounded active section, parser handoff and CI tier. One fresh review of the cut plus the
+accepted/implemented shared bootstrap still precede process implementation; provider exchange then
+claims lane 1 and must freshly review the durable parser before production work.

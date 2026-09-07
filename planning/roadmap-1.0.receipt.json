@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:4b811bc86f9e00b9b106e59a4093f91b84cff2a76bec1dc363cf9e3c38c90d08",
+    "roadmap": "sha256:47a0ea0886ded3a6601daf1f7a4edfeac30b0135c16fbd7da4e6babd1eb13729",
     "workItems": "sha256:983e2f3a517cfd73cdddab99412d3ec51f03803642923436f30454b5bf0f0b7d",
-    "workState": "sha256:a81a0aa28f5b6ce68a5ce88b9b580060d5ddb55e40686697f6cc3bd253537a2d",
-    "rfcRegister": "sha256:f73e26e086d53cda54ace7f01a07c24b65412643d8bf274b7ec27653d2a5aff6",
+    "workState": "sha256:13b107675f1d73ebfbe1b59400a104ef5f1f6e179d74b176b5ee8ccd3a2f6a4d",
+    "rfcRegister": "sha256:1f7a8688a2b740ace8cfcde0d91e53d77e49db5445a4a74c638940b766f8a004",
     "uxIndex": "sha256:5ca3e23500716997bf5a89e941981f81f59244826bf9983b8a0d358294519080",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 641,
       "doing": 0,
-      "blocked": 1226,
+      "blocked": 1227,
       "done": 900,
       "refused": 109
     },
@@ -155,28 +155,33 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Land the evidence-value-authority/provider dependencies and hint-distance registry, then resolve the 127 exact operations and 224 presentation pairs so the repaired module requirements can become production bindings without bypassing the evidence spine.",
+      "nextAction": "Freshly review and land the generic shared-resource bootstrap, then freshly review the eight-criterion provider-protocol population, claim provider lane 1, and review/implement the provider-exchange durable parser before bot replay or the 127 module operations consume provider evidence.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "The D3065 module repair gives every completed collector, mobility and opening discharge an exact learner home or explicit internal-predicate refusal: 127 requirements map to 224 blocked module pairs. D3066 then sealed the ten evidence-bearing answer-capability sets as one emitted authority and made both implementer-facing RFC tables set-equal to it.",
+        "summary": "The provider-protocol process RFC is cut to eight active criteria for one absent generic catalogue/register population; six rounds of provider-local Git and acceptance machinery are retained only as history. Provider exchange now owns one operation-specific save/reload parser for full delivery reconstruction, routing the bot D3030 durable-authority blocker to the shared evidence spine.",
         "impact": "advanced",
         "evidence": [
-          "planning/learner-modules/discharge-coverage-repair-2026-09-07.md",
-          "tools/d3065-module-discharge-coverage-contract/contract.test.ts",
-          "tools/d2120-module-registration-author-contract/contract.test.ts",
-          "rfc/module-registration.md",
+          "planning/provider-protocol-register/cut-author-repair-2026-09-07.md",
+          "tools/d3128-provider-protocol-cut-contract/contract.test.mjs",
+          "rfc/provider-protocol-register.md",
+          "rfc/provider-exchange-and-execution.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
-            "id": "D3066",
-            "digest": "sha256:998675b9d6c542b742b01488d4849a943f043ca5d1ffc2792af29f44b7d80930"
+            "id": "D3128",
+            "digest": "sha256:e9007016cd22a364c4b3f7da88b182cec3df0420c2c776915a26b9831b043f1e"
           },
           {
             "kind": "rfc",
-            "id": "module-registration.md",
-            "digest": "sha256:7bcd91f15527d974103907fec358d5e8aacaf103b4cb01ba8bf5b6f87df0b57b"
+            "id": "provider-protocol-register.md",
+            "digest": "sha256:69f82804e59fcd1ae0d7eb9959da95526e39eff5961e20a80d1b1d39e036a046"
+          },
+          {
+            "kind": "rfc",
+            "id": "provider-exchange-and-execution.md",
+            "digest": "sha256:0af61c7afebab5d18c078a00591be9981efe02df7817b4efdac5c02d08245e8a"
           }
         ]
       },

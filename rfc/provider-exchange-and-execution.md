@@ -1,12 +1,13 @@
 # RFC: Provider exchange and projection execution
 
-- **Status:** draft — request-digest dependency author-repaired 2026-09-04 on [[D2548]] atop the
-  2026-08-30 [[D2184]]–[[D2188]] repair; [[D2189]] is routed to
-  draft prerequisite `provider-protocol-register.md`. Runtime subjects now close node/edge/prefix
-  grains; engine digests have launched-byte/handshake authorities; operation-keyed parsers bind
-  payloads and HTTP metadata to captured bytes; and all five traversals end at sole evidence
-  factories. Fresh independent review and implementation remain forbidden until the register
-  prerequisite lands and this RFC declares its lane-1 claim.
+- **Status:** draft — durable-delivery parsing author-amended 2026-09-07 on [[D3030]], atop the
+  request-digest repair on [[D2548]] and the 2026-08-30 [[D2184]]–[[D2188]] repair. [[D2189]] is
+  routed to the bounded process prerequisite `provider-protocol-register.md`. Runtime subjects now
+  close node/edge/prefix grains; engine digests have launched-byte/handshake authorities;
+  operation-keyed parsers bind both live captures and stored delivery images to their exact
+  operation; and all five traversals end at sole evidence factories. Fresh independent review and
+  implementation remain forbidden until the register prerequisite lands and this RFC declares its
+  lane-1 claim.
 - **Author:** codex, from the D1652–D1658 and D1699–D1709 author-repair handoffs
 - **Created:** 2026-08-27
 - **Design refs:** `design/03-product-breadth.md` evidence architecture and provider-backed
@@ -577,6 +578,10 @@ function assertProviderParsedPayloadReceipt<K extends ProviderOperationId>(
   payload: ProviderOperationResultMap[K],
   value: unknown,
 ): asserts value is ProviderParsedPayloadReceipt<K>;
+function parsePersistedProviderDelivery<K extends ProviderOperationId>(
+  operation: K,
+  value: unknown,
+): ProviderEvidenceDelivery<ProviderOperationResultMap[K], K>;
 ```
 
 The operation maps are the identity authority: neither requested nor actual identity contains an
@@ -590,6 +595,18 @@ JSON round-trip, wrong-operation receipt or delivery, and `as unknown as` double
 runtime. Every operation-keyed value-authority source factory calls `assertProviderDelivery` and
 `assertProviderParsedPayloadReceipt` before `declareEvidence`; TypeScript shape compatibility alone
 is never admission.
+
+`parsePersistedProviderDelivery(operation, value)` is the sole save/reload boundary for provider
+deliveries. It does not attempt to restore process-local `WeakSet` membership from a locally
+computed digest. It closes the complete JSON image, reconstructs the operation-keyed normalized
+request and response identities, runs the exact `K` payload parser again, recomputes acquisition,
+response, payload and retained-cache digests under the registered domains, verifies the literal
+provider/endpoint/actual identity/generation relation, and only then creates new process-local
+seals. Unknown, extra or missing fields; crossed operations or providers; copied receipts;
+self-rehashed lookalikes; and bare payloads fail. Every durable downstream consumer—including bot
+decision replay before provider execution and after concurrently persisted results arrive—accepts
+stored bytes only through this parser. No consumer may define a second persisted-delivery envelope
+or digest. This is the shared remedy for [[D3030]].
 
 `makeProviderAcquisitionReceipt<K>()` is a module-private constructor owned by
 `provider-exchange.ts`. It receives an admitted descriptor, its normalized request, the identity
@@ -1790,6 +1807,10 @@ The seven preceding repairs remain required. A new author pass must additionally
 - [[D2189]] — **routed prerequisite:** `provider-protocol-register.md` owns the pre-landing resource,
   lane grammar and derived protocol artifact. This RFC remains unacceptably unclaimed until that
   process RFC lands and its exact lane-1 claim replaces `none` atomically.
+- [[D3030]] — **author-repaired in this RFC:** durable provider inputs cross one operation-specific
+  parser that reconstructs every shared identity, digest, receipt and seal from unknown stored
+  bytes before bot decision reconstruction. Bot policy consumes the result and owns no parallel
+  persisted-provider authority.
 
 The author repair must invert `make provider-exchange-second-fresh-review`, preserve all earlier
 contracts, run full verification and request another independent review. It may not implement the
@@ -1819,7 +1840,12 @@ provider scheduler, source projections or learner bindings in the authoring comm
    adapter seals `ProviderEvidenceDelivery<T, K>` rather than bare `T`; stripping acquisition/delivery
    provenance fails. Each provider projection's compiled `own.providerOperation` equals that `K`;
    local/recorded/build-time projections reject one. The operation maps, registered descriptors,
-   source declarations and application callers are set-equal.
+   source declarations and application callers are set-equal. The sole durable parser closes and
+   reparses the full stored image for the requested operation, recomputes all registered digests,
+   and reseals only after the operation/provider/endpoint/identity/generation chain agrees. JSON
+   round-trips pass only through that boundary; missing/extra fields, crossed operations/providers,
+   copied receipts, self-rehashed lookalikes and bare payloads fail before any durable consumer can
+   reconstruct a decision.
 7. Stockfish positives cover ordinary play, both castling identities and four promotions. Missing,
    duplicate, extra, equal-count replacement, short-depth, `upperbound`, `lowerbound`, score-less-PV
    and PV-less-score tables fail. A capability-register test authorizes only the named all-legal
@@ -1984,6 +2010,11 @@ returns to author instead of accepting a placeholder.
 
 ## Changelog
 
+- 2026-09-07: author-amended the shared durable-delivery boundary for [[D3030]]. One
+  operation-specific parser now owns save/reload reconstruction of request, response, payload,
+  acquisition, cache and engine-generation authority and then issues fresh process-local seals.
+  Bot replay consumes that parser rather than validating a bot-local digest envelope. The bounded
+  provider-protocol process RFC remains the lane prerequisite; it no longer owns product parsing.
 - 2026-09-04: closed [[D2548]]'s shared request-identity dependency. The previously referenced but
   undefined `ProviderRequestDigestImage` is now a closed operation-keyed type, and the scheduler
   exposes one `normalizedRequestDigest(request)` operation backed by the same descriptor/provider
