@@ -209,10 +209,12 @@ to the rehearsal runtime, low overlap).
 - **Live structural naming** — no product detects pawn structures/position types in-run and
   teaches the plans of the *kind* without recommending a move for the *instance* (§3b
   whitespace holds; Play Coach is adjacent but recommends).
-- **Branch/rewind/compare runtime** — beyond matrix row chessfeed.ai (still unverified
-  claims), searching "branch attempts rewind compare play out consequences" surfaced only
-  analysis-board workflows and ChessTempo's train-branch SRS. E1's core whitespace — the
-  preserved-attempt branch runtime — remains unoccupied.
+- **Branch/rewind/compare runtime** — corrected 2026-09-07: chessfeed.ai's current first-party
+  feature map confirms saved study branches and candidate comparison, but no opponent consequence,
+  checkpoint rewind or played-attempt persistence. Searching "branch attempts rewind compare play
+  out consequences" otherwise surfaced analysis-board workflows and ChessTempo's train-branch SRS.
+  Chessiverse now claims retained what-if continuations in Guided Play, so branch persistence alone
+  is occupied; preserved **N-way played-consequence comparison** remains unclaimed.
 
 ## Honest limits
 

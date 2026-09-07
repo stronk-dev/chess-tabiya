@@ -17770,3 +17770,21 @@ remains the narrower discriminator.
 **Evidence/next:** CLP-a22 is complete and the living matrix contains 62 canonical products. [[D1468]]
 remains open only for chessfeed.ai's saved-branch/checkpoint claim, which is CLP-a23 and must be
 settled before positioning leans on preserved comparison.
+
+## 2026-09-07 — Chessfeed's study tree was separated from played attempts
+
+**What changed:** the oldest open competitor verification item is closed. Chessfeed.ai's current
+first-party feature map and public feature surface confirm that its saved studies retain candidate
+branches, comparisons, notes, coach responses and position context. They also locate every one of
+those features inside a position-study/workbook flow. The signed-in workspace was not entered.
+
+**Why the matrix changed:** no current first-party surface claims an opponent consequence,
+checkpoint rewind, active replay or preservation of a played attempt. The old row had marked both
+attempt persistence and checkpoint rewind `Y claimed`, turning analysis-tree navigation into a
+runtime claim the source never made. Those cells now read `N` with the distinction stated, while
+saved analysis branches remain the product's closest strength.
+
+**Evidence/next:** CLP-a23 and [[D1468]] close. E1 remains met and narrowed: Chessiverse occupies
+vendor-claimed Guided Play branch retention, while chessfeed occupies saved analysis branching;
+neither checked record establishes Tabiya's preserved N-way played-consequence comparison with
+explicit attempt semantics and inspectable grounding.

@@ -97,7 +97,7 @@ only place a surviving attempt pays off. It is also, measured at HEAD, the weake
 ship (§1). §7 is the long answer.
 
 Two honesty items were attached to that discriminator because both began as contradictions **inside
-our own corpus**. The Chessiverse record is now reconciled; chessfeed.ai remains open:
+our own corpus**. Both are now reconciled at the exact evidence boundary:
 
 1. **Chessiverse — reconciled 2026-09-07 at the vendor-claim boundary.** The current first-party
    Guided Play page `[V]` explicitly says every abandoned continuation is retained as a clickable
@@ -110,13 +110,15 @@ our own corpus**. The Chessiverse record is now reconciled; chessfeed.ai remains
    `Y claimed` for retention/rewind and `[P]` scoped only to *"better than Chess.com, still off"*
    bot feel. Therefore branch retention is not defensible uniqueness; preserved **N-way consequence
    comparison with explicit attempt semantics and inspectable grounding** remains unclaimed.
-2. **chessfeed.ai.** Verified this pass `[V]`: its canonical `competitor-matrix.csv` row records *both*
-   "Persistent branch attempts" and "Checkpoint rewind" as **"Y claimed"**, primary unit *"AI
-   branch exploration"*, closest strength *"Saved branch exploration"*, main gap *"Depth and active
-   replay need hands-on verification"*, confidence word `Medium` — **not an evidence label**.
-   `competitor-value-props.md` §Open verification items #5 calls it *"the closest claimed overlap
-   with our core branch mechanic; depth unknown"* — **open since 2026-08-10 and never closed.**
-   This is the single largest hole under any "nobody else preserves attempts" sentence.
+2. **chessfeed.ai — reconciled 2026-09-07 as analysis branching, not attempt branching.** Its
+   current first-party feature map `[V]` claims a position-study workspace: try candidate moves,
+   compare branches from the same position, retain branches/notes/coach responses in a saved study,
+   and return to that workbook. The public feature surface confirms that vocabulary and routes the
+   workspace behind login. It claims **no opponent consequence, checkpoint rewind, active replay or
+   persistence of played attempts**. The old row's `Y claimed` in both attempt/rewind columns was a
+   category error: it had promoted ordinary analysis-tree navigation into the product's runtime
+   discriminator. The corrected row records `N` in both columns while retaining saved analysis
+   branches as its closest strength.
 
 And the repo has already ruled that no single mechanic carries the claim.
 `competitor-love-hate-sweep.md` §Verdict `[M]`: *"Tabiya **cannot** claim uniqueness from rewind,
@@ -1123,15 +1125,16 @@ Per the commission's instruction. Nothing in the competitor pass was hands-on th
 only hands-on session.
 
 **Resolved after this pass:** Chessiverse's current vendor claim is no longer internally
-contradicted. On 2026-09-07 the duplicate rows were merged and the public Guided Play surface was
-rechecked: retained clickable branches and PGN variations are explicit first-party claims; the
-signed-in interaction remains unobserved. That is sufficient to retire branch retention as a
-uniqueness claim, but not to claim its implementation quality.
+contradicted, and chessfeed.ai's analysis tree is no longer misclassified as played attempts. On
+2026-09-07 the Chessiverse duplicate rows were merged and both public feature surfaces were
+rechecked. Chessiverse's retained Guided Play continuations remain a vendor claim whose signed-in
+interaction is unobserved; chessfeed's saved branches are explicitly a position-study workbook.
+Branch persistence alone is not unique, while preserved N-way played-consequence comparison remains
+unclaimed. Neither conclusion asserts implementation quality.
 
 | Claim | Load it bears | Settled by |
 |---|---|---|
 | **Chessigma's Bot Challenge does not preserve a second attempt** `[P]` — inferred from silence across every fetched surface plus the aggregate-metric orientation (`teardown-chessigma-desk.md:136,450`) | **The discriminator in §0.1**, and therefore §7's urgency | One €12 month, two attempts at one position, checking whether the first is retrievable. The teardown's own §9 residual 1 |
-| **chessfeed.ai claims saved-branch exploration and checkpoint rewind** — canonical matrix row, both cells *"Y claimed"*, unlabelled confidence `Medium`; open verification item since 2026-08-10 | Same as above. `competitor-value-props.md` calls it *"the closest claimed overlap with our core branch mechanic"* | A desk pass at minimum; hands-on to settle. **Never closed** |
 | **"Bot at your level" is not a human model** `[P]` (`teardown-chessigma-desk.md:296-298,455-458`) | §6's differentiation argument | ~20 moves at a stated level, logging FENs — the Noctie protocol, `teardown-protocols.md` §2.1 |
 | **Dr. Wolf's undo erases the attempt** `[V]`-as-evidence-of-absence across fetched assets | §0's framing of the reflex we are refusing | Hands-on, 5 minutes |
 | **Noctie preserves nothing across a takeback** — the teardown's own header says *"Unresolved — needs hands-on. Signal leans 'destroyed/not surfaced'"* | §4's claim that the field conflates going back with being told and keeps neither | Hands-on |
@@ -1217,13 +1220,12 @@ Ids assigned at landing; head was **D1448** at drafting. Not written by this pas
   `docs/branch-runtime.md:225` — under `attempt_end` an outcome opens delivery, rewind leaves it
   open, the next committed move closes it. Correct design, undisclosed consequence: the retry is
   knowingly contaminated. §10 decision 2.
-- ✅ **Chessiverse's contradictory records were reconciled on 2026-09-07.** The current first-party
-  page explicitly claims retained clickable branches and PGN variation export; the single matrix
-  row records those as `Y claimed`, not hands-on proof, and scopes the owner's observation to bot
-  feel. Branch retention therefore cannot carry uniqueness. **chessfeed.ai** remains unresolved
-  (row 26 after the merge, *"Y claimed"* on branch preservation and checkpoint rewind, primary unit
-  *"AI branch exploration"*), open as a verification item since 2026-08-10. Close that item before
-  any positioning leans on preserved **comparison**.
+- ✅ **Both contradictory competitor records were reconciled on 2026-09-07.** Chessiverse's current
+  first-party page claims retained Guided Play continuations and PGN variations, recorded as vendor
+  claims rather than hands-on proof. Chessfeed.ai claims saved analysis branches and comparison in a
+  position-study workbook, not opponent consequences, checkpoint rewind or played-attempt
+  persistence. Branch storage is occupied; preserved N-way **played-consequence comparison** with
+  explicit attempt semantics and grounding remains the defensible discriminator.
 - 💡 **The shipped resistance ladder is four rungs where our own measurement licenses five to
   nine.** `App.svelte:391` offers 1000 / 1400 / 1800 / 2200 — steps of 400 against a measured
   minimum usable step of ≈150–208 (`maia-band-outcome-transfer.md`, 16,660 games) over a
@@ -1242,4 +1244,4 @@ Ids assigned at landing; head was **D1448** at drafting. Not written by this pas
 
 | Area | Feeds | Status | Report |
 |---|---|---|---|
-| Core-loop UX from the user's side — commit, consequence, rewind, branch, compare, replay-at-resistance; the expectation-versus-doctrine tension; the compare-visualisation answer and its selection gate | owner commission 2026-08-24, B1/B3 residuals, `rfc/evidence-presentation.md`, `rfc/module-registration.md`, [[D945]], [[D78]]/[[D542]], [[D687]]–[[D689]] | covered `[V]` shipped-state (read at `f2ddba55`) + `[P]` competitor (desk, inherited; no hands-on this pass); **no participant evidence**; surfaces two unreconciled corpus contradictions (Chessiverse, chessfeed.ai) | `ux-core-loop.md` |
+| Core-loop UX from the user's side — commit, consequence, rewind, branch, compare, replay-at-resistance; the expectation-versus-doctrine tension; the compare-visualisation answer and its selection gate | owner commission 2026-08-24, B1/B3 residuals, `rfc/evidence-presentation.md`, `rfc/module-registration.md`, [[D945]], [[D78]]/[[D542]], [[D687]]–[[D689]] | covered `[V]` shipped-state (read at `f2ddba55`) + `[P]` competitor (desk, inherited; no signed-in hands-on); **no participant evidence**; Chessiverse/chessfeed.ai contradiction pair reconciled 2026-09-07 at vendor-claim/category boundaries | `ux-core-loop.md` |

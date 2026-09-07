@@ -3419,17 +3419,21 @@
     {
       "id": "CLP-a23",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§0.1",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "Close verification item #5 (chessfeed.ai's claimed saved-branch exploration and checkpoint rewind), open since 2026-08-10",
       "legacyRoute": "none",
       "note": "same law-6 exposure",
-      "sourceDigest": "sha256:eff44bdfa3d94d682402c108a5830ac09f5eeb17966e1c34fac5db0904b1cf6b"
+      "sourceDigest": "sha256:eff44bdfa3d94d682402c108a5830ac09f5eeb17966e1c34fac5db0904b1cf6b",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "current first-party feature map and public surface confirm saved analysis-tree branches, while refuting opponent consequence, checkpoint rewind and played-attempt persistence"
+      }
     },
     {
       "id": "CLP-a24",

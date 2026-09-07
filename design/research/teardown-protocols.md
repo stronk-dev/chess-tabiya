@@ -91,5 +91,6 @@ preserved branches / compare) with ✅/partial/❌ *as observed*, plus latency m
 Then write the E1 verdict paragraph: is the integrated-loop whitespace confirmed,
 narrowed, or refuted? Land it in `gates.md` E1 and flip Q1a's status accordingly.
 
-Also close (or keep open with reason) the two dossier verification items:
-chessfeed.ai's claimed saved-branch exploration, and DecodeChess's status.
+Also close (or keep open with reason) the dossier verification items. Chessfeed.ai closed on
+2026-09-07: its saved branches are a position-study tree, not checkpointed played attempts.
+DecodeChess's status remains open.

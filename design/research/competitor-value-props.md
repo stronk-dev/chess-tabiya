@@ -148,13 +148,13 @@ version of our loop; our job is to industrialize it (instant partner, preserved 
 objective tracking). Its paid-community model is not a conflict — the *method* is public.
 
 ### ChessMood + long tail (Chessiverse, SparringChess, Chessload, Opening Thingy, DrillChess, chessfeed.ai, GrindChess, CPT legacy)
-`[P]` (rows 8, 16–17, 20, 23–24, 27–29): scattered single-prop proofs — GM-authored
+`[P]` (canonical matrix rows): scattered single-prop proofs — GM-authored
 conceptual courses (ChessMood), bot personality variety (Chessiverse), stats-realistic
 opening deviations (SparringChess, Opening Thingy — adopt: deviations weighted by what
-humans actually play), attack/defend tasks (Chessload), claimed saved-branch exploration
-(chessfeed.ai — unverified, watch item), own-games grinding (GrindChess). Nothing here
-changes the picture; chessfeed.ai is the only one whose claim overlaps our core branch
-mechanic and it needs hands-on verification.
+humans actually play), attack/defend tasks (Chessload), saved analysis branches and comparisons
+(chessfeed.ai), own-games grinding (GrindChess). Chessfeed's current feature map resolves the old
+watch item: it preserves a **study tree**, not played attempts—no opponent consequence, checkpoint
+rewind or replay loop is claimed.
 
 ## Value props mapped to the 1000→2000 journey
 
@@ -220,10 +220,13 @@ existing free tools (Lichess puzzles + low-Elo Maia sparring). Escalate via
 3. Chessable: does bot-from-position work on strategic/middlegame chapters or only sharp
    theory? (queue 3)
 4. Chess.com Practice: multi-move redo + color switching ergonomics. (queue 4)
-5. chessfeed.ai: claimed saved-branch exploration and checkpoint rewind — closest claimed
-   overlap with our core mechanic; depth unknown. (canonical matrix row)
-6. DecodeChess: alive or dead? (403 on this pass; classification above assumes archive
+5. DecodeChess: alive or dead? (403 on this pass; classification above assumes archive
    description.)
-7. Aimchess/GrindChess current feature state vs matrix rows 25/28.
-8. Lucas Chess: which of our four modes it can already approximate locally, and how badly
+6. Aimchess/GrindChess current feature state vs their canonical matrix rows.
+7. Lucas Chess: which of our four modes it can already approximate locally, and how badly
    the orchestration hurts.
+
+**Closed 2026-09-07:** chessfeed.ai's current first-party feature map and public feature surface
+confirm persistent saved-study branches and candidate comparison, but classify them as a position
+study/workbook. They do not claim active opponent play, checkpoint rewind or preserved played
+attempts. The former matrix overlap was a category error, not an unverified core-loop competitor.

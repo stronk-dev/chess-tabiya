@@ -11184,13 +11184,14 @@
     },
     {
       "id": "D1468",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1f5ae744fa4708047e3b9747f625ab1ad31262eeab080428d62494efbf3f21d8",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b7fb680af0c1033dd10e054b5acfa0d7ce97ce1ec7988808fa6b7414c763f486",
       "uxItems": [
         "CLP-a22"
       ],
-      "state": "todo",
-      "owner": "core-loop"
+      "evidence": "design/research/ux-core-loop.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D1469",
