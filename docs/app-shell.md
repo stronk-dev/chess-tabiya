@@ -99,6 +99,12 @@ replaying each run and without consulting the current pack registry. The REST
 binding exposes it as `GET /runs?limit=&offset=`; the default limit is 50 and
 the maximum is 100.
 
+Home, Review, assignment selection, Library and deletion confirmation all pass those summaries
+through the same learner display boundary. Runtime objective-state values use the shared progress
+vocabulary, and a legacy summary whose captured title is only its `packId` resolves the current
+catalogue title (or **Unavailable rehearsal** when that pack no longer exists). Internal enum and
+registry identities therefore remain storage/export data rather than ordinary navigation copy.
+
 SQLite stores a denormalized summary beside each run snapshot:
 
 - pack title and ID;

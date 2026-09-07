@@ -457,6 +457,35 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("renders saved run identity and progress in learner vocabulary", async () => {
+    const legacySummary: RunSummary = {
+      ...runSummary,
+      title: pack.id,
+      objectiveState: "degraded",
+    };
+    const legacyApi: DrillClientApi = {
+      ...api(),
+      async runs() { return [legacySummary]; },
+    };
+    const router = new HistoryRouter(window);
+    const component = mount(App, {
+      target: target(),
+      props: { api: legacyApi, router, storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.querySelector("#resume-title")?.textContent).toBe(packSummary.title));
+    expect(document.querySelector(".resume-card")?.textContent).toContain("Objective weakened");
+    expect(document.querySelector(".resume-card")?.textContent).not.toContain(pack.id);
+    expect(document.querySelector(".resume-card")?.textContent).not.toContain("degraded");
+
+    router.navigate("/review");
+    await vi.waitFor(() => expect(document.querySelector(".item-list h2")?.textContent).toBe(packSummary.title));
+    expect(document.querySelector(".item-list")?.textContent).toContain("Objective weakened");
+    expect(document.querySelector(".item-list")?.textContent).not.toContain(pack.id);
+    expect(document.querySelector(".item-list")?.textContent).not.toContain("degraded");
+    await unmount(component);
+  });
+
   it("renders a writer-aware Home resume card and every reserved shell route", async () => {
     const storage = new MemoryStorage();
     WriterSession.claimFor(run.id, storage, () => "writer-a");

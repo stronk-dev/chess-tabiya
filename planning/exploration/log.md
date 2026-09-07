@@ -18352,3 +18352,11 @@ the client printed `packId` in recommendations, due work, attempt headings and r
 labels. All four now resolve through the already-loaded catalogue. A missing historical pack says
 “Unavailable rehearsal” rather than exposing its registry id. Route-level component coverage
 asserts the known and missing cases; `make test-software` passes 1,126 tests / 182 files.
+
+## 2026-09-07 — Saved-run chrome stops exposing storage vocabulary
+
+Home and Review printed the runtime `objectiveState` enum directly, while legacy run summaries can
+carry `packId` as their captured title. The shell now uses the already-shipped objective-progress
+vocabulary and one run-title boundary across resume, history, assignment, Library and deletion
+flows. A route fixture starts from the able-to-fail `title === packId` plus `degraded` state and
+proves that both internal strings are absent from Home and Review.

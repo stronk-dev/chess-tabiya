@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:1b0b2740c5921e2692c4744b4a26473f8ca024ff912670cd8b91baa3bff2c927",
+    "roadmap": "sha256:f709d10416ddd8d696ae7e4959a7a32c48a20a6671f501f1780d2b755cca3309",
     "workItems": "sha256:983e2f3a517cfd73cdddab99412d3ec51f03803642923436f30454b5bf0f0b7d",
     "workState": "sha256:63df93fea7174de8ef66cb283942fe9f83a44cbf11b84698249b7766858d82e4",
     "rfcRegister": "sha256:f3efd2307d62a39be86513e01b399cbc2979dbf6a0f0b413f8baea33399b1ea8",
@@ -375,7 +375,7 @@
       "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "The in-run Support doorway keeps raw evidence-channel controls behind Advanced in the Inspector, related-rehearsal return doors speak titles and legal SAN, and Learn recommendations, due work, attempt history and accessible labels now resolve catalogue titles instead of registry ids with an honest unavailable fallback. Full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
+        "summary": "The in-run Support doorway keeps raw evidence-channel controls behind Advanced in the Inspector; related-rehearsal return doors speak titles and legal SAN; and saved-run chrome across Home, Review, Learn, assignments, Library and deletion resolves titles plus shared objective-progress language instead of registry ids and runtime enums. Full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
         "impact": "advanced",
         "evidence": [
           "planning/ux-implementation-index.md",

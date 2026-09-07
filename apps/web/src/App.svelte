@@ -11,6 +11,7 @@
   import JustPlayStarter from "./lib/JustPlayStarter.svelte";
   import GameStoryScreen from "./lib/GameStoryScreen.svelte";
   import { attemptVerdictLabel, corpusPopulationLabel } from "./lib/learner-copy.js";
+  import { objectiveStateLabel } from "./lib/run-copy.js";
   import RatingScreen from "./lib/RatingScreen.svelte";
   import CohortStanding from "./lib/CohortStanding.svelte";
   import ShellFrame from "./lib/ShellFrame.svelte";
@@ -390,6 +391,7 @@
   }
 
   function packTitle(packId:string):string{return packs.find((pack)=>pack.id===packId)?.title??"Unavailable rehearsal";}
+  function runTitle(run:RunSummary):string{return run.packId!==null&&run.title===run.packId?packTitle(run.packId):run.title;}
   function isOverdue(dueAt:string|null):boolean{return dueAt!==null&&Date.parse(dueAt)<Date.now();}
   function classroomMemberHandle(learnerId:string):string{return classroomDetail?.members.find((member)=>member.learnerId===learnerId)?.handle??"former member";}
   function assignmentSubmissions(assignmentId:string,learnerId:string){return classroomDetail?.submissions.filter((submission)=>submission.assignmentId===assignmentId&&submission.learnerId===learnerId)??[];}
@@ -1241,8 +1243,8 @@
       {#if recentRun}
         <section class="resume-card" aria-labelledby="resume-title">
           <p class="eyebrow">Continue</p>
-          <h2 id="resume-title">{recentRun.title}</h2>
-          <p>{recentRun.branchCount} {recentRun.branchCount === 1 ? "branch" : "branches"} · {recentRun.objectiveState} · {readableDate(recentRun.updatedAt)}</p>
+          <h2 id="resume-title">{runTitle(recentRun)}</h2>
+          <p>{recentRun.branchCount} {recentRun.branchCount === 1 ? "branch" : "branches"} · {objectiveStateLabel(recentRun.objectiveState)} · {readableDate(recentRun.updatedAt)}</p>
           <p class="access">
             {boardStance(recentRun) === "you" ? "You hold the board." : boardStance(recentRun) === "unclaimed" ? "No one holds the board." : `@${recentRun.leaseHeldBy.handle} holds the board.`}
             {recentRun.viewerRole === "spectator" ? " You can follow read-only." : " You may take the board."}
@@ -1420,7 +1422,7 @@
       <div class="item-list">
         {#each runs as run}
           <article>
-            <div><h2>{run.title}</h2><p>{readableDate(run.updatedAt)} · {run.branchCount} {run.branchCount === 1 ? "branch" : "branches"} · {run.objectiveState}</p></div>
+            <div><h2>{runTitle(run)}</h2><p>{readableDate(run.updatedAt)} · {run.branchCount} {run.branchCount === 1 ? "branch" : "branches"} · {objectiveStateLabel(run.objectiveState)}</p></div>
             <button type="button" onclick={() => navigate(routePath({ name: run.sessionKind === "imported" ? "story" : "run", runId: run.id }))}>{run.sessionKind === "imported" ? "Open story" : "Open run"}</button>
           </article>
         {:else}<p>No runs to review yet.</p>{/each}
@@ -1443,11 +1445,11 @@
                 {#if assignment.note}<blockquote><p>{assignment.note}</p><footer>— @{assignment.assignedByHandle}, your teacher</footer></blockquote>{/if}
                 {#each assignment.submissions as submission}<div class="submission-record"><p>{submission.withdrawnAt ? "Submission withdrawn" : `Submitted ${readableDate(submission.submittedAt)} · access until ${readableDate(submission.accessExpiresAt)}`}</p>{#if !submission.withdrawnAt}<p>{submission.grantedTeacherHandles.length>0?`Currently shared with ${submission.grantedTeacherHandles.map((handle)=>`@${handle}`).join(", ")}.`:"No teacher currently holds access."}</p><button type="button" onclick={()=>void withdrawAssignedRun(assignment.id,submission.runId)}>Stop future teacher access</button><p class="honest">Revoking stops future reads. It cannot undo what a teacher already saw.</p>{/if}</div>{/each}
               </div>
-              <div class="row-actions"><button type="button" onclick={()=>void controller.startPack(assignment.packId)}>Start pack</button>{#if eligibleRuns.length>0}<label>Completed run <select value={assignmentRunSelection[assignment.id]??""} onchange={(event)=>chooseAssignmentRun(assignment.id,event.currentTarget.value)}><option value="">Choose a run</option>{#each eligibleRuns as run}<option value={run.id}>{run.title} · {readableDate(run.updatedAt)} · {run.branchCount} {run.branchCount===1?"branch":"branches"}</option>{/each}</select></label><button type="button" disabled={!assignmentRunSelection[assignment.id]} aria-describedby={!assignmentRunSelection[assignment.id]?`submission-run-required-${assignment.id}`:undefined} onclick={()=>prepareAssignedRun(assignment.id)}>Share with teachers</button>{#if !assignmentRunSelection[assignment.id]}<p id={`submission-run-required-${assignment.id}`} class="honest">Choose one of your runs of this pack.</p>{/if}{:else}<p class="honest">Play this assignment before sharing an attempt.</p>{/if}</div>
+              <div class="row-actions"><button type="button" onclick={()=>void controller.startPack(assignment.packId)}>Start pack</button>{#if eligibleRuns.length>0}<label>Completed run <select value={assignmentRunSelection[assignment.id]??""} onchange={(event)=>chooseAssignmentRun(assignment.id,event.currentTarget.value)}><option value="">Choose a run</option>{#each eligibleRuns as run}<option value={run.id}>{runTitle(run)} · {readableDate(run.updatedAt)} · {run.branchCount} {run.branchCount===1?"branch":"branches"}</option>{/each}</select></label><button type="button" disabled={!assignmentRunSelection[assignment.id]} aria-describedby={!assignmentRunSelection[assignment.id]?`submission-run-required-${assignment.id}`:undefined} onclick={()=>prepareAssignedRun(assignment.id)}>Share with teachers</button>{#if !assignmentRunSelection[assignment.id]}<p id={`submission-run-required-${assignment.id}`} class="honest">Choose one of your runs of this pack.</p>{/if}{:else}<p class="honest">Play this assignment before sharing an attempt.</p>{/if}</div>
             </article>
           {:else}<p>No open assignments.</p>{/each}
         </div>
-        {#if submissionIntent}{@const assignment=assignedPacks.find((candidate)=>candidate.id===submissionIntent!.assignmentId)}{@const run=runs.find((candidate)=>candidate.id===submissionIntent!.runId)}{#if assignment&&run}<aside class="consent-card" aria-labelledby="submission-confirm-title"><h3 id="submission-confirm-title">Share {run.title}?</h3><p>{assignment.teacherHandles.length>0?`${assignment.teacherHandles.map((handle)=>`@${handle}`).join(", ")} will be able to read this run for up to 90 days.`:"No active teacher is available to receive this run."}</p><p class="honest">They receive this run only, including its moves and the evidence or reveals already recorded in it. They do not gain access to your other runs.</p><div class="row-actions"><button type="button" disabled={assignment.teacherHandles.length===0} aria-describedby={assignment.teacherHandles.length===0?"submission-no-teacher":undefined} onclick={()=>void confirmAssignedRun()}>Confirm sharing</button><button type="button" onclick={()=>submissionIntent=undefined}>Cancel</button></div>{#if assignment.teacherHandles.length===0}<p id="submission-no-teacher" class="honest">An active teacher must be present before this run can be shared.</p>{/if}</aside>{/if}{/if}
+        {#if submissionIntent}{@const assignment=assignedPacks.find((candidate)=>candidate.id===submissionIntent!.assignmentId)}{@const run=runs.find((candidate)=>candidate.id===submissionIntent!.runId)}{#if assignment&&run}<aside class="consent-card" aria-labelledby="submission-confirm-title"><h3 id="submission-confirm-title">Share {runTitle(run)}?</h3><p>{assignment.teacherHandles.length>0?`${assignment.teacherHandles.map((handle)=>`@${handle}`).join(", ")} will be able to read this run for up to 90 days.`:"No active teacher is available to receive this run."}</p><p class="honest">They receive this run only, including its moves and the evidence or reveals already recorded in it. They do not gain access to your other runs.</p><div class="row-actions"><button type="button" disabled={assignment.teacherHandles.length===0} aria-describedby={assignment.teacherHandles.length===0?"submission-no-teacher":undefined} onclick={()=>void confirmAssignedRun()}>Confirm sharing</button><button type="button" onclick={()=>submissionIntent=undefined}>Cancel</button></div>{#if assignment.teacherHandles.length===0}<p id="submission-no-teacher" class="honest">An active teacher must be present before this run can be shared.</p>{/if}</aside>{/if}{/if}
       </section>
       {#if recommendations.length>0}
         <section aria-labelledby="recommended-title"><h2 id="recommended-title">Recommended next</h2><div class="item-list">
@@ -1783,12 +1785,12 @@
       <section><h2>My games</h2>
         <p>Download a game as standard PGN for chess tools, or open it to choose particular branches.</p>
         <p class="honest">Deleting a run removes Tabiya's live copy immediately. Shared runs may remain as read-only history for collaborators, and deployment backups may retain an older copy until their configured retention period ends.</p>
-        <ul>{#each runs as run}<li><button class="link-button" type="button" onclick={() => navigate(routePath({ name: "run", runId: run.id }))}>{run.title}</button> <small>{run.branchCount} branches</small> <button type="button" onclick={() => void exportRunPgn(run.id)}>Download PGN</button> {#if run.viewerRole === "host"}<button type="button" onclick={() => void reviewRunDeletion(run)}>Delete this run</button>{/if}</li>{:else}<li>No saved games yet.</li>{/each}</ul>
+        <ul>{#each runs as run}<li><button class="link-button" type="button" onclick={() => navigate(routePath({ name: "run", runId: run.id }))}>{runTitle(run)}</button> <small>{run.branchCount} branches</small> <button type="button" onclick={() => void exportRunPgn(run.id)}>Download PGN</button> {#if run.viewerRole === "host"}<button type="button" onclick={() => void reviewRunDeletion(run)}>Delete this run</button>{/if}</li>{:else}<li>No saved games yet.</li>{/each}</ul>
         {#if runArtifactError}<p role="alert">{runArtifactError}</p>{/if}
         {#if runDeletion}
           <aside class="deletion-card">
-            <StatusAnnouncement message={`Deletion effects loaded for ${runDeletion.run.title}. Review the listed permanent, retained, and revoked records before confirming.`} />
-            <h3>Delete {runDeletion.run.title}?</h3>
+            <StatusAnnouncement message={`Deletion effects loaded for ${runTitle(runDeletion.run)}. Review the listed permanent, retained, and revoked records before confirming.`} />
+            <h3>Delete {runTitle(runDeletion.run)}?</h3>
             {#each runDeletion.preview.hardDelete as effect}<p>{effect.label}</p>{/each}
             {#each runDeletion.preview.tombstone as effect}<p>{effect.label}</p>{/each}
             {#each runDeletion.preview.revoke as effect}<p>{effect.label}</p>{/each}
