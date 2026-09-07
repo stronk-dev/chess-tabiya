@@ -9,6 +9,18 @@ import type { GameStory } from "./api.js";
 afterEach(() => document.body.replaceChildren());
 
 describe("game story screen", () => {
+  const moment = (index: number): GameStory["moments"][number] => ({
+    nodeId: `moment-${index}`,
+    entryNodeId: `entry-${index}`,
+    ply: index,
+    san: index % 2 === 0 ? "e5" : "e4",
+    fen: "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+    kinds: ["eval_pivot"],
+    sentences: [`Recorded moment ${index}.`],
+    evidence: [],
+    phase: "opening",
+  });
+
   it("uses the shared semantic board for a selected story moment", async () => {
     const story: GameStory = {
       ready: true,
@@ -69,6 +81,31 @@ describe("game story screen", () => {
     expect(header.textContent).not.toContain("1-0");
     expect(header.textContent).not.toContain("recorded_result");
     expect(header.textContent).not.toContain("recorded result");
+    await unmount(component);
+  });
+
+  it("states the selected and total moment counts when the story rail is bounded", async () => {
+    const moments = Array.from({ length: 9 }, (_, index) => moment(index + 1));
+    const story: GameStory = {
+      ready: true,
+      pendingEvidence: 0,
+      branchId: "main",
+      side: "white",
+      source: { kind: "native" },
+      outcome: { kind: "unfinished" },
+      moments,
+      rank: moments.map((item) => item.nodeId).reverse(),
+    };
+    const component = mount(GameStoryScreen, {
+      target: document.body,
+      props: { story, onEnter: vi.fn(), onExport: vi.fn() },
+    });
+
+    const rail = document.querySelector<HTMLOListElement>(".rail")!;
+    const budget = document.querySelector<HTMLElement>("#story-moment-budget")!;
+    expect(rail.querySelectorAll("li")).toHaveLength(8);
+    expect(budget.textContent).toBe("Showing 8 of 9 recorded moments selected for this story.");
+    expect(rail.getAttribute("aria-describedby")).toBe(budget.id);
     await unmount(component);
   });
 });

@@ -1585,6 +1585,12 @@ code audit also finds [[D3100]]: current non-terminal eval-pivot re-entry starts
 Review cannot call that door a retry until the node identities split. Three product defaults are
 isolated in [[D3101]]; they do not block collector, bot or Review foundation work.
 
+The 2026-09-07 Story selection repair closes one deceptive-completeness defect without calling the
+partial Story a full Review. [[D3137]] moves the eight-moment bound into one shared selection
+contract with exact eligible and shown counts. Private Story renders the denominator and binds it
+to the rail; public JSON and HTML expose the same truth; unresolved rank identities cannot consume
+the budget. INR-a11 remains open for the other learner-facing capped projections.
+
 **1.0 exit:** native, bot, imported, social and campaign games compile to one Review Map: opening
 and phase arc; navigable move timeline; bounded grounded moments; separate grade, human rarity,
 theory, semantic change and exact endgame facts; correct learner-side result; decided-position

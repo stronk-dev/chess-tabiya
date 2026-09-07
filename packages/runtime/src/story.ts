@@ -29,6 +29,7 @@ export interface StoryMoment {
   readonly endgame?: EndgameReading;
 }
 export interface StoryProjection { readonly moments: readonly StoryMoment[]; readonly rank: readonly string[]; readonly evidence: readonly DeclaredEvidence<unknown>[]; }
+export interface StoryMomentSelection { readonly moments: readonly StoryMoment[]; readonly shown: number; readonly total: number; readonly limit: number; }
 export interface StoryTitleInput { readonly side: "white" | "black"; readonly outcome: { readonly kind: "board_terminal" | "recorded_result" | "unfinished"; readonly result?: RunOutcome | "1-0" | "0-1" | "1/2-1/2" | "*" }; readonly moments: readonly StoryMoment[]; readonly rank: readonly string[]; }
 export const STORY_MATE_CP = 1000;
 export const STORY_PIVOT_CP = 150;
@@ -92,16 +93,25 @@ export function reviewStoryTitle(story: StoryTitleInput): string {
   return reviewStoryEvidence([titleEvidence]).items[0]!.sentences[0]!;
 }
 
-/** Selects the bounded ranked set, then restores game chronology for rendering. */
+/** Selects the bounded ranked set, reports its denominator, then restores game chronology for rendering. */
+export function storyMomentSelection(
+  story: Pick<StoryProjection, "moments" | "rank">,
+  limit = 8,
+): StoryMomentSelection {
+  if (!Number.isSafeInteger(limit) || limit < 0) throw new TypeError("Story moment limit must be a non-negative integer");
+  const byId = new Map(story.moments.map((moment) => [moment.nodeId, moment]));
+  const eligible = story.rank.flatMap((nodeId) => byId.get(nodeId) ?? []);
+  const moments = Object.freeze(eligible.slice(0, limit)
+    .sort((left, right) => left.ply - right.ply || left.nodeId.localeCompare(right.nodeId)));
+  return Object.freeze({ moments, shown: moments.length, total: eligible.length, limit });
+}
+
+/** Compatibility projection for consumers that only need the selected moments. */
 export function selectedStoryMoments(
   story: Pick<StoryProjection, "moments" | "rank">,
   limit = 8,
 ): readonly StoryMoment[] {
-  if (!Number.isSafeInteger(limit) || limit < 0) throw new TypeError("Story moment limit must be a non-negative integer");
-  const byId = new Map(story.moments.map((moment) => [moment.nodeId, moment]));
-  return Object.freeze(story.rank.slice(0, limit)
-    .flatMap((nodeId) => byId.get(nodeId) ?? [])
-    .sort((left, right) => left.ply - right.ply || left.nodeId.localeCompare(right.nodeId)));
+  return storyMomentSelection(story, limit).moments;
 }
 
 const STORY_SOURCE_LABELS = Object.freeze({

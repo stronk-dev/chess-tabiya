@@ -105,8 +105,9 @@ Every moment contains deterministic attributed sentences, FEN, ply/SAN, phase,
 and separate `nodeId` and `entryNodeId`. A terminal fact stays grounded at its
 terminal node but enters its playable parent. The payload returns all moments plus
 a deterministic rank. One shared reducer selects the ranked eight for both the
-private and public story, then restores game chronology for display; sharing can
-therefore neither omit a reviewed moment nor promote an unrelated early moment.
+private and public story, reports the exact selected and eligible counts, then restores game
+chronology for display. Both surfaces state the denominator whenever the selection is bounded;
+sharing can therefore neither silently omit a reviewed moment nor promote an unrelated early moment.
 Optional story voice uses the existing evidence-packet checker and deterministic
 fallback. It may phrase the packet but cannot add chess claims.
 

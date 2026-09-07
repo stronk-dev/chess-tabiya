@@ -989,7 +989,8 @@ export function createRestHandler(
         const escape = escapeHtml;
         try{
           const card=service.publicStory(token),moments=card.moments.map((moment) => `<li>${escape(moment.sentences.join(" "))}</li>`).join("");
-          return new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escape(card.title)}</title></head><body><main><h1>${escape(card.title)}</h1><p>${escape(String(card.outcome.result ?? card.outcome.kind))}</p>${card.moments[0] === undefined ? "" : `<pre aria-label="Chessboard">${escape(card.moments[0].fen)}</pre>`}<ol>${moments}</ol><a href="${escape(card.productLink)}">Rehearse positions in Tabiya</a></main></body></html>`, { status: 200, headers: { "cache-control": "no-store", "content-type": "text/html; charset=utf-8" } });
+          const budget=card.selection.shown<card.selection.total?`<p>Showing ${card.selection.shown} of ${card.selection.total} recorded moments selected for this story.</p>`:"";
+          return new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escape(card.title)}</title></head><body><main><h1>${escape(card.title)}</h1><p>${escape(String(card.outcome.result ?? card.outcome.kind))}</p>${card.moments[0] === undefined ? "" : `<pre aria-label="Chessboard">${escape(card.moments[0].fen)}</pre>`}${budget}<ol>${moments}</ol><a href="${escape(card.productLink)}">Rehearse positions in Tabiya</a></main></body></html>`, { status: 200, headers: { "cache-control": "no-store", "content-type": "text/html; charset=utf-8" } });
         }catch{
           try{if(live===undefined)throw new Error();return sessionJoinPage(token,live.publicJoin(token));}catch{return json(404,{error:{code:"NOT_FOUND",message:"Route not found"}});}
         }

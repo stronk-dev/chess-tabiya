@@ -18463,3 +18463,12 @@ one exact description reference and applies it to both the Chessground surface a
 the Live overlay points both at the same visible attribution node. A mounted overlay journey loads
 a real run/session projection, renders a relayed arrow and proves both references resolve to
 `@coach`. INR-a6 and D3136 close.
+
+## 2026-09-07 — Story selection states its denominator
+
+Private and public stories used the same ranked-eight reducer but neither surface disclosed that
+later eligible moments were omitted. The reducer now returns one frozen selection contract with
+`shown`, `total`, `limit` and the chronological moments; missing rank identities do not consume a
+seat. The private rail visibly states and references the denominator when bounded, while the public
+JSON and HTML carry the same counts. D3137 closes this Story instance; INR-a11 remains queued for a
+systematic audit of other learner-facing caps.

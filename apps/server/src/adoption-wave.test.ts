@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { selectedStoryMoments } from "@chess-tabiya/runtime";
+import { storyMomentSelection } from "@chess-tabiya/runtime";
 
 import { EvidenceJobQueue, type EvidenceExecutor } from "./evidence-queue.js";
 import { RunService } from "./service.js";
@@ -43,14 +43,41 @@ describe("adoption wave server contracts", () => {
     const card = service.publicStory(share.token);
     expect(card).toMatchObject({ title: expect.any(String), outcome: { kind: "board_terminal" } });
     expect(card.productLink).toBe("/play");
-    expect(Object.keys(card).sort()).toEqual(["moments", "outcome", "productLink", "title"]);
-    expect(card.moments.map((moment) => moment.nodeId)).toEqual(selectedStoryMoments(story).map((moment) => moment.nodeId));
+    expect(Object.keys(card).sort()).toEqual(["moments", "outcome", "productLink", "selection", "title"]);
+    const storySelection = storyMomentSelection(story);
+    expect(card.selection).toEqual({ shown: storySelection.shown, total: storySelection.total });
+    expect(card.moments.map((moment) => moment.nodeId)).toEqual(storySelection.moments.map((moment) => moment.nodeId));
     const milestones = service.milestones(principal);
     expect(milestones.map((item) => item.kind)).toContain("first_attempt");
     expect(new Set(milestones.map((item) => item.kind)).size).toBe(milestones.length);
     expect(milestones.map((item) => item.sentence).join(" ")).not.toMatch(/%|score|streak|rating|ranking/i);
     service.revokeShare("native", principal, share.id);
     expect(() => service.publicStory(share.token)).toThrowError(expect.objectContaining({ code: "RUN_NOT_FOUND" }));
+  });
+
+  it("carries a bounded story denominator through public JSON and HTML", async () => {
+    const moments = Array.from({ length: 8 }, (_, index) => Object.freeze({
+      nodeId: `moment-${index + 1}`,
+      ply: index + 1,
+      san: "e4",
+      fen: FEN,
+      sentences: Object.freeze([`Moment ${index + 1}.`]),
+    }));
+    const service = {
+      publicStory: () => Object.freeze({
+        title: "A bounded story",
+        outcome: Object.freeze({ kind: "recorded_result", result: "1-0" }),
+        selection: Object.freeze({ shown: 8, total: 12 }),
+        moments: Object.freeze(moments),
+        productLink: "/play",
+      }),
+    } as unknown as RunService;
+    const handler = createRestHandler(service);
+
+    const jsonResponse = await handler(new Request("http://tabiya.test/api/shared/token/story"));
+    expect(await jsonResponse.json()).toMatchObject({ selection: { shown: 8, total: 12 } });
+    const htmlResponse = await handler(new Request("http://tabiya.test/shared/token"));
+    expect(await htmlResponse.text()).toContain("Showing 8 of 12 recorded moments selected for this story.");
   });
 
   it("creates an opposite-side position run atomically without changing the source", async () => {

@@ -5567,9 +5567,9 @@
       "sourceSection": "§4.3",
       "sourceHeading": "The in-run experience — `ux-in-run.md`",
       "summary": "Stated caps rather than silent truncation (*\"top 5 of 23 recorded moves\"*)",
-      "legacyRoute": "none",
-      "note": "a stated cap is trustworthy; a silent one sends the learner to the raw view",
-      "sourceDigest": "sha256:5771f9b5c6b4cf84e993c85fd714eaa310778672713c258d6cae67cd5d023819"
+      "legacyRoute": "ledger",
+      "note": "[[D3137]] closes private/public Story selection; remaining learner-facing capped projections still need the same denominator audit",
+      "sourceDigest": "sha256:38854a5f5ef6ff9be292be4cea386176c1ef165cbff01b0824c537b2dccc26f3"
     },
     {
       "id": "INR-a2",

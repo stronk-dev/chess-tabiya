@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { attachEvidence, commitMove, createRun, PRIMARY_EVIDENCE_MANIFEST, renderReviewStoryEvidence, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMoments, suggestTitle, type StoryMoment } from "./index.js";
+import { attachEvidence, commitMove, createRun, PRIMARY_EVIDENCE_MANIFEST, renderReviewStoryEvidence, selectedStoryMoments, storyDeclaredEvidence, storyEvidenceSourceLabels, storyMomentSelection, storyMoments, suggestTitle, type StoryMoment } from "./index.js";
 
 if (false) {
   // @ts-expect-error review story rendering consumes only a compiled evidence view.
@@ -61,6 +61,12 @@ describe("grounded game story", () => {
     });
     const moments = [moment("early", 2), moment("unranked", 3), moment("late", 8), moment("middle", 5)];
     expect(selectedStoryMoments({ moments, rank: ["late", "middle", "early", "unranked"] }, 3).map((item) => item.nodeId)).toEqual(["early", "middle", "late"]);
+    expect(storyMomentSelection({ moments, rank: ["missing", "late", "middle", "early", "unranked"] }, 3)).toMatchObject({
+      shown: 3,
+      total: 4,
+      limit: 3,
+      moments: [{ nodeId: "early" }, { nodeId: "middle" }, { nodeId: "late" }],
+    });
     expect(() => selectedStoryMoments({ moments, rank: [] }, -1)).toThrow(/non-negative/u);
   });
 });
