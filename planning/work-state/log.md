@@ -85,3 +85,16 @@ directly; hand-maintained roadmap prose no longer copies that mutable count.
 
 The two repair rows were visible as `doing` during implementation and become `done` at closeout,
 so the tracking mechanism also exercised the state its earlier census had never used.
+
+## 2026-09-07 — Enforceable staged discharges
+
+Implemented the owner's [[D3047]] ruling without adding a second state registry. An active RFC that
+lands a foundation ahead of its consumers now declares the complete set in one `Staged discharges`
+table; `make work-state` parses the item, foundation, roadmap owner and ISO due date and joins each
+row to the exact blocked work-state record. Prose-only, malformed, duplicate, missing, stale-owner,
+wrong-state and wrong-blocker declarations fail closed. The existing live-blocker rule forces every
+dependant to transition in the same landing that makes its foundation terminal.
+
+The first real population exercises the rule: [[D2454]], [[D2455]] and [[D2466]] now all block on
+`item:D3034`, while the shared-resource bootstrap RFC owns their dates. This closes [[D3083]] and
+[[D3084]] as executable behavior rather than another process promise.

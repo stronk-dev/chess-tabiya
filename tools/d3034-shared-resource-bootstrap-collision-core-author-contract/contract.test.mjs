@@ -107,8 +107,13 @@ test("every configured live source resolves without inventing product bytes", ()
       );
     }
   }
-  for (const id of ["D2454", "D2455", "D2466"]) {
-    assert.match(rfc, new RegExp(`\\[\\[${id}\\]\\].*2026-09-08.*item:D3034`, "u"));
+  const ownerByItem = new Map([
+    ["D2454", "assistance-and-presentation"],
+    ["D2455", "release-engineering"],
+    ["D2466", "release-engineering"],
+  ]);
+  for (const [id, owner] of ownerByItem) {
+    assert.match(rfc, new RegExp(`\\[\\[${id}\\]\\].*\\[\\[D3034\\]\\].*${owner}.*2026-09-08`, "u"));
   }
-  assert.match(rfc, /work-state records do\s+not grow a forbidden date field/u);
+  assert.match(rfc, /work-state\s+records do\s+not grow a forbidden date field/u);
 });

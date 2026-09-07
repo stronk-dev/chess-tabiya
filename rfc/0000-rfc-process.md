@@ -96,6 +96,16 @@ separator is the required pointer to an undischarged row; no other prose is mach
    replacing (`assert old in s`), or rewrites the file whole. Anchored patching is not used on a
    file another agent also edits. Before a commit message describes an edit, verify it with
    `git diff --stat`.
+9. **A staged discharge is tracked work, not a promise.** When an RFC is allowed to land before a
+   named consumer or follow-on obligation, it carries a `Staged discharges` subsection containing
+   exactly one Markdown table with the columns `item`, `foundation`, `owner`, and `due`. Each row
+   names one ledger item and the foundation item with `[[D<n>]]`, a roadmap capability owner in
+   backticks, and an ISO `YYYY-MM-DD` date. While the foundation is live, that ledger item exists in
+   `planning/work-state.json` as `blocked`, with the same owner and `blocker: "item:D<n>"` naming
+   the foundation. `make work-state` parses every such table in the active RFC set and fails missing,
+   duplicate, malformed, stale-owner, wrong-state, or wrong-blocker rows. The declaration is removed
+   only when the RFC leaves the active set; its landing must transition every row before making the
+   foundation terminal.
 
 ## Planning docs & the job log
 
@@ -128,6 +138,8 @@ none
 
 ## Changelog
 
+- 2026-09-07: recorded the [[D3047]] owner ruling as rule 9 and made staged discharges an exact
+  active-RFC-table-to-work-state join instead of RFC prose.
 - 2026-08-09: created, adapted from cloud-clicker's RFC-0000 with the exploration gate
   added and `docs/` deferred until code exists.
 - 2026-08-10: reconciled the exploration-to-slice gate with the post-slice continuation

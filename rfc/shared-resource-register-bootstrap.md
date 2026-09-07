@@ -200,17 +200,20 @@ They do not become implementable merely because this collision catalogue lands. 
 round must reduce each registration to the smallest concrete source/claim shape it needs, adding a
 new reader only if the three retained readers genuinely cannot express it.
 
-Under [[D3047]]/[[D3084]], the complete staged-discharge population is:
+Under [[D3047]]/[[D3084]], the complete staged-discharge population follows.
 
-| item | owner | due | pre-landing work-state |
+### Staged discharges
+
+| item | foundation | owner | due |
 |---|---|---|---|
-| [[D2454]] assistance register rebase | `assistance-and-presentation` | 2026-09-08 | `blocked`, `item:D3034` |
-| [[D2455]] provider register rebase | `release-engineering` | 2026-09-08 | `blocked`, `item:D3034` |
-| [[D2466]] semantic register rebase | `release-engineering` | 2026-09-08 | `blocked`, `item:D3034` |
+| [[D2454]] assistance register rebase | [[D3034]] collision-core bootstrap | `assistance-and-presentation` | 2026-09-08 |
+| [[D2455]] provider register rebase | [[D3034]] collision-core bootstrap | `release-engineering` | 2026-09-08 |
+| [[D2466]] semantic register rebase | [[D3034]] collision-core bootstrap | `release-engineering` | 2026-09-08 |
 
-The focused gate joins the dates above to each exact work-state item; blocked work-state records do
-not grow a forbidden date field ([[D3083]]). Missing rows, metadata, or an extra claimed discharge
-fail. The items may leave `item:D3034` only when this RFC's landing makes that blocker terminal.
+The generic work-state gate joins the dates above to each exact work-state item; blocked work-state
+records do not grow a forbidden date field ([[D3083]]). Missing rows, metadata, or an extra claimed
+discharge fail. The items may leave `item:D3034` only in the same landing that makes this RFC's
+foundation item terminal.
 
 ## 7. Able-to-fail contract
 

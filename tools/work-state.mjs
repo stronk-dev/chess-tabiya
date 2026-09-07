@@ -31,6 +31,67 @@ function references(value) {
   return [...String(value ?? "").matchAll(/\[\[(D\d+[a-z]?)\]\]/giu)].map((match) => match[1]);
 }
 
+function isIsoDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/u.test(value)) return false;
+  const parsed = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(parsed.valueOf()) && parsed.toISOString().slice(0, 10) === value;
+}
+
+function markdownCells(line) {
+  const trimmed = line.trim();
+  if (!trimmed.startsWith("|") || !trimmed.endsWith("|")) return undefined;
+  return trimmed.slice(1, -1).split("|").map((cell) => cell.trim());
+}
+
+export function parseStagedDischarges(documents = []) {
+  const declarations = [];
+  const errors = [];
+  for (const document of documents) {
+    const name = document.name ?? "<unknown RFC>";
+    const text = String(document.text ?? "");
+    const lines = text.split("\n");
+    const headings = lines.flatMap((line, index) => /^#{2,6}\s+Staged discharges\s*$/u.test(line) ? [index] : []);
+    if (/staged[- ]discharge/iu.test(text) && headings.length === 0) {
+      errors.push(`W10 ${name}: staged-discharge prose has no Staged discharges table`);
+    }
+    if (headings.length > 1) errors.push(`W10 ${name}: multiple Staged discharges sections`);
+    for (const heading of headings) {
+      let cursor = heading + 1;
+      while (cursor < lines.length && lines[cursor].trim() === "") cursor += 1;
+      if (lines[cursor]?.trim() !== "| item | foundation | owner | due |" ||
+          lines[cursor + 1]?.trim() !== "|---|---|---|---|") {
+        errors.push(`W10 ${name}: Staged discharges requires exact item/foundation/owner/due table`);
+        continue;
+      }
+      cursor += 2;
+      let rowCount = 0;
+      while (cursor < lines.length && lines[cursor].trim().startsWith("|")) {
+        rowCount += 1;
+        const cells = markdownCells(lines[cursor]);
+        const itemRefs = references(cells?.[0]);
+        const foundationRefs = references(cells?.[1]);
+        const owner = /^`([a-z][a-z0-9-]*)`$/u.exec(cells?.[2] ?? "")?.[1];
+        const due = cells?.[3] ?? "";
+        if (cells?.length !== 4 || itemRefs.length !== 1 || foundationRefs.length !== 1 || owner === undefined || !isIsoDate(due)) {
+          errors.push(`W10 ${name}:${cursor + 1}: malformed staged-discharge row`);
+        } else if (itemRefs[0] === foundationRefs[0]) {
+          errors.push(`W10 ${name}:${cursor + 1}: discharge item cannot be its own foundation`);
+        } else {
+          declarations.push(Object.freeze({ item: itemRefs[0], foundation: foundationRefs[0], owner, due, rfc: name }));
+        }
+        cursor += 1;
+      }
+      if (rowCount === 0) errors.push(`W10 ${name}: Staged discharges table is empty`);
+    }
+  }
+  const seen = new Set();
+  for (const declaration of declarations) {
+    if (seen.has(declaration.item)) errors.push(`W10 duplicate staged-discharge item ${declaration.item}`);
+    seen.add(declaration.item);
+  }
+  return Object.freeze({ declarations: Object.freeze(declarations), errors: Object.freeze(errors) });
+}
+
 export function buildUxJoin(workItems) {
   const byLedger = new Map();
   for (const item of workItems.items ?? []) {
@@ -105,7 +166,7 @@ function previousCeiling(root) {
   }
 }
 
-export function validateWorkState({ registry, ledger, roadmap, workItems, activeRfcs = [], priorCeiling }) {
+export function validateWorkState({ registry, ledger, roadmap, workItems, activeRfcs = [], activeRfcDocuments = [], priorCeiling }) {
   const errors = [];
   const rows = parseLedgerSourceRows(ledger);
   const rowsById = new Map(rows.map((row) => [row.id, row]));
@@ -124,6 +185,8 @@ export function validateWorkState({ registry, ledger, roadmap, workItems, active
   owners.add("OWNER");
   owners.add("unowned");
   const active = new Set(activeRfcs);
+  const staged = parseStagedDischarges(activeRfcDocuments);
+  errors.push(...staged.errors);
   const uxJoin = buildUxJoin(workItems);
   let liveUxToTerminal = 0;
   for (const item of registry.items ?? []) {
@@ -179,6 +242,21 @@ export function validateWorkState({ registry, ledger, roadmap, workItems, active
     const expectedUx = (uxJoin.get(item.id) ?? []).map((reference) => reference.id);
     if (!sameArray(item.uxItems ?? [], expectedUx)) errors.push(`W8 ${item.id}: uxItems disagree; expected=[${expectedUx.join(", ")}]`);
     if (TERMINAL_STATES.has(item.state)) liveUxToTerminal += (uxJoin.get(item.id) ?? []).filter((reference) => UX_LIVE_STATES.has(reference.state)).length;
+  }
+
+  for (const declaration of staged.declarations) {
+    const item = itemsById.get(declaration.item);
+    const foundation = itemsById.get(declaration.foundation);
+    if (item === undefined) {
+      errors.push(`W10 ${declaration.rfc}: staged-discharge item ${declaration.item} is absent from work-state`);
+      continue;
+    }
+    if (foundation === undefined || !LIVE_STATES.has(foundation.state)) {
+      errors.push(`W10 ${declaration.rfc}: foundation ${declaration.foundation} is not live`);
+    }
+    if (item.state !== "blocked") errors.push(`W10 ${declaration.item}: staged discharge must be blocked`);
+    if (item.owner !== declaration.owner) errors.push(`W10 ${declaration.item}: owner must be ${declaration.owner}`);
+    if (item.blocker !== `item:${declaration.foundation}`) errors.push(`W10 ${declaration.item}: blocker must be item:${declaration.foundation}`);
   }
 
   const untriaged = (registry.items ?? []).filter((item) => item.state === "untriaged").length;
@@ -284,7 +362,11 @@ export function main(root = process.cwd()) {
     registry = setWorkState({ registry, ledger, workItems, ids: setId.split(",").filter(Boolean), state, values, ceilingEligibleIds });
   }
   const readme = read("rfc/README.md");
-  const result = validateWorkState({ registry, ledger, roadmap, workItems, activeRfcs: parseActiveRfcRows(readme), priorCeiling: previousCeiling(root) });
+  const activeRfcs = parseActiveRfcRows(readme);
+  const activeRfcDocuments = activeRfcs
+    .filter((name) => name !== "0000-rfc-process.md")
+    .map((name) => ({ name, text: read(`rfc/${name}`) }));
+  const result = validateWorkState({ registry, ledger, roadmap, workItems, activeRfcs, activeRfcDocuments, priorCeiling: previousCeiling(root) });
   if (process.argv.includes("--json")) console.log(JSON.stringify(result, null, 2));
   else printCensus(result.census);
   if (result.errors.length) {

@@ -19467,7 +19467,7 @@
       "sourceDigest": "sha256:6be42f8a3fa1418e764195cd6c72f399435f07912a69d234d697240249dde461",
       "uxItems": [],
       "owner": "assistance-and-presentation",
-      "blocker": "rfc:assistance-config-register.md"
+      "blocker": "item:D3034"
     },
     {
       "id": "D2455",
@@ -19476,7 +19476,7 @@
       "sourceDigest": "sha256:025a966887cb772581cf832c08cc0d6175abfd92add419a735f4b203104912eb",
       "uxItems": [],
       "owner": "release-engineering",
-      "blocker": "rfc:provider-protocol-register.md"
+      "blocker": "item:D3034"
     },
     {
       "id": "D2456",
@@ -19575,7 +19575,7 @@
       "sourceDigest": "sha256:483f598cefaf8dd21d51d8d088093ecd200d73ea5509ba3bca6c443e0368ae2c",
       "uxItems": [],
       "owner": "release-engineering",
-      "blocker": "rfc:shared-resource-register-bootstrap.md"
+      "blocker": "item:D3034"
     },
     {
       "id": "D2467",
@@ -24785,11 +24785,12 @@
     },
     {
       "id": "D3047",
-      "state": "todo",
-      "owner": "coordinator",
-      "sourceGlyph": "⚖️",
-      "sourceDigest": "sha256:cf041c8384e062ae96e8358c1606193f8549c1e7ffd5386dc82cf9639a7c1d89",
-      "uxItems": []
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3c97c73ec8f0b7aa062f243a529a6134d2164fdd77f720804713112dfed1518e",
+      "uxItems": [],
+      "evidence": "tools/work-state.mjs",
+      "evidenceKind": "path"
     },
     {
       "id": "D3048",
@@ -25101,21 +25102,21 @@
     },
     {
       "id": "D3083",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4b91c636d55ae296d5717d6ab199db9d6bb31197449c1c5bc5ed8a8dd7356205",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:28314a15db969b56aa07eca050c38e16468d01ab7f937796a4ca7d18fc39fd69",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:shared-resource-register-bootstrap.md"
+      "evidence": "tools/work-state.mjs",
+      "evidenceKind": "path"
     },
     {
       "id": "D3084",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:331f285497c46217494efbb8a35b077e6a7ccfdc420da5e7b0792c44cb662f27",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7504a39c842f029de55d059080fe3cf030b3daea5d228e46cec6ed4c403fe9ec",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:shared-resource-register-bootstrap.md"
+      "evidence": "tools/work-state.mjs",
+      "evidenceKind": "path"
     },
     {
       "id": "D3085",

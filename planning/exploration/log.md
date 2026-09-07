@@ -17897,3 +17897,16 @@ graduate a pack.
 **Why it matters:** pack schema 0.28 is no longer blocked by a sentence that required Gate F to pass
 before the schema needed to pass Gate F could exist. Clause 1 still protects the content wave by
 requiring those lanes to be landed and closed before expansion begins.
+
+## 2026-09-07 — Staged foundation discharge became executable
+
+**What changed:** RFC-0000 rule 9 and `make work-state` now make [[D3047]] enforceable. Every active
+RFC using staged discharge carries one exact item/foundation/owner/due table; W10 joins it to live
+blocked work-state rows and refuses prose-only, malformed, duplicate, missing or mismatched
+declarations. [[D2454]], [[D2455]] and [[D2466]] are the first production population and now point
+to `item:D3034`; their due dates remain in the RFC rather than violating blocked-state algebra.
+
+**Evidence/next:** focused positive and negative work-state tests plus the collision-core author
+contract pass. [[D3083]]/[[D3084]] close; the shared-resource bootstrap still requires its genuinely
+fresh independent review before acceptance, and the three staged consumers remain blocked until
+that foundation lands.

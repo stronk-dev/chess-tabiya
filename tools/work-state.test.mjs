@@ -5,6 +5,7 @@ import {
   buildInitialWorkState,
   buildUxJoin,
   LEDGER_GLYPHS,
+  parseStagedDischarges,
   setWorkState,
   synchronizeWorkState,
   validateWorkState,
@@ -136,4 +137,34 @@ test("a persisted post-zero sync can be assigned without manufacturing a negativ
 
 test("the production glyph vocabulary remains an explicit closed set", () => {
   assert.deepEqual(LEDGER_GLYPHS, ["🐞", "✅", "📊", "💡", "🛠", "⚖️", "🔬", "📝", "📜", "🔨", "⛔", "🏗", "⚠️"]);
+});
+
+test("staged discharges join one active-RFC table to exact live work-state rows", () => {
+  const stagedLedger = `${ledger}\n| D6 🐞 | live foundation | open |\n| D7 🐞 | staged consumer | open |`;
+  const registry = structuredClone(buildInitialWorkState({ ledger: stagedLedger, roadmap, workItems }));
+  Object.assign(registry.items.find(({ id }) => id === "D6"), { state: "todo", owner: "assistance-and-presentation" });
+  Object.assign(registry.items.find(({ id }) => id === "D7"), { state: "blocked", owner: "review-and-return", blocker: "item:D6" });
+  const document = {
+    name: "feature.md",
+    text: "## Staged discharges\n\n| item | foundation | owner | due |\n|---|---|---|---|\n| [[D7]] consumer | [[D6]] foundation | `review-and-return` | 2026-09-08 |\n",
+  };
+  const parsed = parseStagedDischarges([document]);
+  assert.deepEqual(parsed.errors, []);
+  assert.deepEqual(parsed.declarations, [{ item: "D7", foundation: "D6", owner: "review-and-return", due: "2026-09-08", rfc: "feature.md" }]);
+  assert.deepEqual(validateWorkState({ registry, ledger: stagedLedger, roadmap, workItems, activeRfcDocuments: [document] }).errors, []);
+
+  registry.items.find(({ id }) => id === "D7").owner = "assistance-and-presentation";
+  assert.match(validateWorkState({ registry, ledger: stagedLedger, roadmap, workItems, activeRfcDocuments: [document] }).errors.join("\n"), /W10 D7: owner must be review-and-return/u);
+});
+
+test("staged-discharge prose and malformed or duplicate declarations fail closed", () => {
+  const prose = { name: "prose.md", text: "A staged discharge will happen later." };
+  assert.match(parseStagedDischarges([prose]).errors.join("\n"), /has no Staged discharges table/u);
+  const malformed = {
+    name: "bad.md",
+    text: "## Staged discharges\n\n| item | foundation | owner | due |\n|---|---|---|---|\n| [[D7]] | [[D6]] | `review-and-return` | 2026-02-30 |\n| [[D8]] | [[D5]] | `review-and-return` | 2026-09-08 |\n| [[D8]] | [[D6]] | `review-and-return` | 2026-09-09 |\n",
+  };
+  const errors = parseStagedDischarges([malformed]).errors.join("\n");
+  assert.match(errors, /malformed staged-discharge row/u);
+  assert.match(errors, /duplicate staged-discharge item D8/u);
 });
