@@ -285,7 +285,13 @@ queen/rook/bishop/knight choice. The semantic grid carries position and
 legality facts only. In particular, it inherits `showDests` from visible board
 lighting: when the graphical board withholds destinations, it withholds their
 semantic enumeration too. Illegal-move refusal remains available in every
-lighting mode.
+lighting mode. Every component instance scopes its 64 semantic-cell ids, so
+multi-board Compare keeps each grid's `aria-activedescendant` inside that grid.
+Compare, Story and the spectator-safe live overlay all consume this same board
+primitive rather than maintaining visual-only position renderers. Explicitly
+read-only instances omit move-entry chrome entirely; an otherwise-playable
+board waiting on the other side keeps the text form disabled with a visible
+reason.
 
 ## Evidence sentences
 

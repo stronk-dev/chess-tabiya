@@ -3,8 +3,8 @@
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
     "roadmap": "sha256:6ff9989ddb3247afbee4ae2b801a90fe781c2af21d84d9bc8081efa7254e5ac0",
-    "workItems": "sha256:05ab0d8361472bfc16fce653ed2aa4615f6170f1484aa878243475593df07947",
-    "workState": "sha256:fa9a73c68b4aa56e367d2bc893e3b521582dbaecdd1a268e42ee7898a07ac9e9",
+    "workItems": "sha256:467d8c7e0ce29a81bf7ddcfc164cc114dee17d4bc420b0ab1643aa68833ad8a3",
+    "workState": "sha256:2227e0e4a227d6948c747c76d50f8b3cdbf4a895ff570a0bcf7a1b1258401d61",
     "rfcRegister": "sha256:f3efd2307d62a39be86513e01b399cbc2979dbf6a0f0b413f8baea33399b1ea8",
     "uxIndex": "sha256:5ca3e23500716997bf5a89e941981f81f59244826bf9983b8a0d358294519080",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
@@ -33,14 +33,14 @@
       "todo": 643,
       "doing": 2,
       "blocked": 1226,
-      "done": 902,
+      "done": 904,
       "refused": 109
     },
     "workItems": {
-      "queued": 128,
+      "queued": 127,
       "blocked_owner": 61,
       "blocked_rfc": 120,
-      "completed": 236,
+      "completed": 237,
       "retired": 24
     },
     "dimensionStates": {
@@ -1136,10 +1136,10 @@
       "owner": "client-platform",
       "rfcCount": 2,
       "workItems": {
-        "queued": 9,
+        "queued": 8,
         "blocked_owner": 0,
         "blocked_rfc": 1,
-        "completed": 36,
+        "completed": 37,
         "retired": 4
       },
       "routes": {

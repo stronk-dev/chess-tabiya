@@ -213,6 +213,7 @@ function occupant(piece: Piece | undefined): string {
 export function semanticBoardRows(
   input: BoardInputPosition,
   state: BoardInputState,
+  idPrefix = "board",
 ): readonly (readonly SemanticCell[])[] {
   const chess = positionFromFen(input.fen);
   const destinations = new Set(state.legalDestinations);
@@ -227,7 +228,7 @@ export function semanticBoardRows(
     if (lastDestination === name) statuses.push("last move destination");
     if (checkedSquare === name) statuses.push("king in check");
     return Object.freeze({
-      id: `board-square-${name}`,
+      id: `${idPrefix}-square-${name}`,
       square: name,
       label: [name, occupant(parsed === undefined ? undefined : chess.board.get(parsed)), ...statuses].join(", "),
       active: state.activeSquare === name,

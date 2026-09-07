@@ -460,16 +460,20 @@
     {
       "id": "A11-a32",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§2.3 gap-shared",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
       "summary": "The non-visual layer is not shared: Compare, Story and the Live overlay have no semantic layer at all",
       "legacyRoute": "none",
-      "sourceDigest": "sha256:e836d124f2be18e302d85a9a73b47c51d0fd8512fc203b387d16915852e8a4b7"
+      "sourceDigest": "sha256:e836d124f2be18e302d85a9a73b47c51d0fd8512fc203b387d16915852e8a4b7",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "CompareView, GameStoryScreen and the live overlay all consume Chessboard's semantic grid; component and multi-board tests prove unique active-descendant ownership"
+      }
     },
     {
       "id": "A11-a33",

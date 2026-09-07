@@ -1048,6 +1048,14 @@ describe("Layer 3 screens", () => {
     expect(document.body.textContent).toContain("Opponent and authored-line context");
     expect(document.querySelector(".boards")?.getAttribute("data-zoom")).toBe("near");
     expect(document.querySelectorAll("[aria-label='Chessboard']")).toHaveLength(2);
+    const semanticGrids = [...document.querySelectorAll<HTMLElement>("[data-board-input-grid]")];
+    expect(semanticGrids).toHaveLength(2);
+    const semanticCellIds = semanticGrids.flatMap((grid) => [...grid.querySelectorAll<HTMLElement>("[role=gridcell]")].map((cell) => cell.id));
+    expect(new Set(semanticCellIds).size).toBe(128);
+    for (const grid of semanticGrids) {
+      const activeId = grid.getAttribute("aria-activedescendant");
+      expect([...grid.querySelectorAll<HTMLElement>("[role=gridcell]")].some((cell) => cell.id === activeId)).toBe(true);
+    }
     expect(chessground.configs[0]!.drawable!.autoShapes).toHaveLength(2);
     document.querySelector<HTMLButtonElement>(".zoom-control button")!.click();
     await tick();

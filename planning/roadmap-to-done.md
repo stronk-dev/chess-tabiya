@@ -1858,6 +1858,14 @@ responsive in-run companion regions are real. The app still has route-wide dead 
 focus/skip issues, unsupported devices, overflow, post-gesture gaps, weak contrast/animation
 instruments, and no coherent PWA/offline/update journey.
 
+The earlier A11-a32 audit claim that Compare, Story and Live were visual-only is now closed against
+the production component tree: all three render the shared `Chessboard` semantic grid. That audit
+also exposed and repaired the remaining multi-board seam—semantic cell ids are instance-scoped, so
+two Compare boards own 128 unique cells and each active descendant resolves within its own grid
+([[D3134]]). The same primitive now omits its move-entry disclosure on explicitly read-only
+Compare, Story, Live and wall positions instead of advertising an action that can never succeed;
+waiting-on-opponent boards retain the action with an exact visible refusal ([[D3135]]).
+
 **1.0 exit:** board occupies one stable region; nothing grows in its column; adjacent regions
 scroll and become drawers/tabs on small screens; every route works with pointer, touch, keyboard,
 screen reader, zoom, reduced motion, phone, tablet and desktop; highlights have touch/focus parity;

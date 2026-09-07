@@ -18434,3 +18434,22 @@ only legal board interaction applies during a match. Other profiles retain their
 controls and source-specific provider refusal. This completes SET-a7; replacing the 8×9 mechanism
 matrix with preset-led ordinary flows remains open under `intent-presets` rather than being claimed
 by this honesty repair.
+
+## 2026-09-07 — Semantic position access is shared and multi-board safe
+
+The A11-a32 source observation was stale: Compare, Game Story and the spectator-safe Live overlay
+all render the shared `Chessboard`, so each already receives the same 8×8 semantic grid and rules-
+only position labels. Reconciliation found one live defect behind the favorable verdict: every
+board instance reused the same 64 DOM ids, making Compare's active-descendant ownership ambiguous.
+The shared primitive now scopes cell ids per component instance; a two-board component fixture
+proves 128 unique ids, the mounted Compare fixture proves each active descendant belongs to its own
+grid, and Story proves its selected moment mounts the same semantic model. A11-a32 and D3134 close;
+board query vocabulary and user-selectable non-visual presentation remain separate open work.
+
+## 2026-09-07 — Read-only boards stopped advertising move entry
+
+The shared board rendered “Enter a move” on every explicitly read-only Compare, Story, Live and
+wall-card position, then exposed only a disabled input and disabled submit action. `Chessboard`
+now omits that dead disclosure for read-only instances. The distinct state where the board is
+interactive in principle but it is the other side's turn retains the form, disabled controls and
+an instance-scoped visible reason. Component fixtures bind both arms. D3135 closes.

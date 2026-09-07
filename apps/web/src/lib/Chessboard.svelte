@@ -90,6 +90,7 @@
   }: Props = $props();
   let boardElement: HTMLDivElement;
   let gridElement: HTMLDivElement;
+  const semanticBoardId = $props.id();
   let promotionPicker = $state<HTMLDivElement>();
   let board: Api | undefined;
   let redrawTimer: ReturnType<typeof setTimeout> | undefined;
@@ -123,7 +124,7 @@
   let boardState = $derived(boardModel(fen, startSide, lastMove));
   let inputDisabled = $derived(disabled || boardState.turnColor !== startSide);
   let inputPosition = $derived(boardInputPosition(fen, startSide, inputDisabled, showDests, lastMove));
-  let semanticRows = $derived(semanticBoardRows(inputPosition, inputState));
+  let semanticRows = $derived(semanticBoardRows(inputPosition, inputState, semanticBoardId));
   let boardLabel = $derived.by(() => {
     const moveNumber = fen.trim().split(/\s+/u)[5] ?? "unknown";
     const state = inputDisabled ? "read-only" : "playable";
@@ -355,14 +356,16 @@
 
 <div class="board-shell" data-board-theme={boardTheme ?? resolvedTheme.preference.boardTheme} data-piece-set={pieceSet ?? resolvedTheme.preference.pieceSet} data-animation={resolvedTheme.animation}>
   {#if !disabled}<a class="appearance-link" href="/settings#appearance-settings">Appearance</a>{/if}
-  <details class="text-move">
-    <summary>Enter a move</summary>
-    <form onsubmit={submitText}>
-      <label>Move in chess notation <input bind:value={moveText} disabled={inputDisabled} aria-describedby={inputDisabled ? "text-move-disabled" : undefined} autocomplete="off" /></label>
-      <button type="submit" disabled={inputDisabled} aria-describedby={inputDisabled ? "text-move-disabled" : undefined}>Submit move</button>
-      {#if inputDisabled}<span id="text-move-disabled">This board is not accepting moves.</span>{/if}
-    </form>
-  </details>
+  {#if !disabled}
+    <details class="text-move">
+      <summary>Enter a move</summary>
+      <form onsubmit={submitText}>
+        <label>Move in chess notation <input bind:value={moveText} disabled={inputDisabled} aria-describedby={inputDisabled ? `${semanticBoardId}-text-move-disabled` : undefined} autocomplete="off" /></label>
+        <button type="submit" disabled={inputDisabled} aria-describedby={inputDisabled ? `${semanticBoardId}-text-move-disabled` : undefined}>Submit move</button>
+        {#if inputDisabled}<span id={`${semanticBoardId}-text-move-disabled`}>This board is waiting for the other side to move.</span>{/if}
+      </form>
+    </details>
+  {/if}
   <div class="board-surface">
     <!-- svelte-ignore a11y_no_static_element_interactions (Chessground owns the interactive board subtree) -->
     <div class="board" bind:this={boardElement} aria-label="Chessboard"></div>
@@ -375,7 +378,7 @@
       aria-rowcount="8"
       aria-colcount="8"
       aria-readonly={inputDisabled ? "true" : undefined}
-      aria-activedescendant={`board-square-${inputState.activeSquare}`}
+      aria-activedescendant={`${semanticBoardId}-square-${inputState.activeSquare}`}
       data-board-input-grid
       onkeydown={gridKeydown}
     >

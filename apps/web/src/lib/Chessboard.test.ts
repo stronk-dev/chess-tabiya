@@ -38,6 +38,73 @@ afterEach(() => {
 });
 
 describe("Chessboard", () => {
+  it("scopes semantic cell ids to each mounted board", async () => {
+    const firstTarget = document.createElement("div");
+    const secondTarget = document.createElement("div");
+    document.body.append(firstTarget, secondTarget);
+    const props = {
+      fen: "8/8/8/8/8/8/4P3/4K2k w - - 0 1",
+      startSide: "white" as const,
+      disabled: true,
+      onMove: vi.fn(),
+    };
+    const first = mount(Chessboard, { target: firstTarget, props });
+    const second = mount(Chessboard, { target: secondTarget, props });
+    await tick();
+
+    const cells = [...document.querySelectorAll<HTMLElement>("[role=gridcell]")];
+    expect(cells).toHaveLength(128);
+    expect(new Set(cells.map((cell) => cell.id)).size).toBe(128);
+    for (const target of [firstTarget, secondTarget]) {
+      const grid = target.querySelector<HTMLElement>("[data-board-input-grid]")!;
+      const activeId = grid.getAttribute("aria-activedescendant")!;
+      expect([...grid.querySelectorAll<HTMLElement>("[role=gridcell]")].some((cell) => cell.id === activeId)).toBe(true);
+      expect(cells.filter((cell) => cell.id === activeId)).toHaveLength(1);
+    }
+
+    await unmount(first);
+    await unmount(second);
+  });
+
+  it("omits dead move-entry chrome from read-only boards", async () => {
+    const target = document.createElement("div");
+    document.body.append(target);
+    const component = mount(Chessboard, {
+      target,
+      props: {
+        fen: "8/8/8/8/8/8/4P3/4K2k w - - 0 1",
+        startSide: "white",
+        disabled: true,
+        onMove: vi.fn(),
+      },
+    });
+    await tick();
+
+    expect(target.querySelector(".text-move")).toBeNull();
+    expect(target.querySelector("[data-board-input-grid]")?.getAttribute("aria-readonly")).toBe("true");
+    await unmount(component);
+  });
+
+  it("explains text-entry refusal while the playable board waits for the other side", async () => {
+    const target = document.createElement("div");
+    document.body.append(target);
+    const component = mount(Chessboard, {
+      target,
+      props: {
+        fen: "8/8/8/8/8/8/4P3/4K2k b - - 0 1",
+        startSide: "white",
+        onMove: vi.fn(),
+      },
+    });
+    await tick();
+
+    const input = target.querySelector<HTMLInputElement>(".text-move input")!;
+    const reasonId = input.getAttribute("aria-describedby")!;
+    expect(input.disabled).toBe(true);
+    expect(target.querySelector(`[id="${reasonId}"]`)?.textContent).toBe("This board is waiting for the other side to move.");
+    await unmount(component);
+  });
+
   it("configures chessground from the pack side with legal/check/last-move highlights", async () => {
     const target = document.createElement("div");
     document.body.append(target);

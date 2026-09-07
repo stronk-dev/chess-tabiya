@@ -25573,6 +25573,24 @@
       "sourceDigest": "sha256:487880545ffd3bcafc3d8f0add35e0ba2b5b795fcdcc3be53da338710cd9188a",
       "uxItems": [],
       "owner": "review-and-return"
+    },
+    {
+      "id": "D3134",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:06256fceeb2a909c3c775408158ae5e9925b78f62e2101ed85594843311a1ebe",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/Chessboard.svelte",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3135",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e6641e5f55ee11ae5e67195269ab1a78b130444043a7de74290fd9aad4ce3e2b",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/Chessboard.svelte",
+      "evidenceKind": "path"
     }
   ]
 }
