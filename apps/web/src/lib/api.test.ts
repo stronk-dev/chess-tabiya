@@ -163,7 +163,7 @@ describe("DrillApi", () => {
       if (url.endsWith("/runs") && init?.method === "POST") {
         return json({ run }, { status: 201 });
       }
-      if (url.includes("/runs?")) return json({ runs: [] });
+      if (url.includes("/runs?")) return json({ runs: [], selection: { shown: 5, total: 12 } });
       if (url.endsWith("/select-move")) return json(selection);
       if (url.includes("/human-split")) return json({ nodeId: run.nodes[0]!.id, engine: selection.engine, targetElo: 1600, candidates: [] });
       if (url.includes("/corpus")) return json({ nodeId: run.nodes[0]!.id, committedMoveSan: null, result: { kind: "abstention", reason: "no_data_at_band", detail: "total 37 < 100", population: { source: "lichess-explorer", ratings: [1400], speeds: ["rapid"], since: "2023-09", until: "2026-08" } } });
@@ -240,6 +240,7 @@ describe("DrillApi", () => {
     await api.principles();
     expect((await api.pack("pack-one")).digest).toBe(run.packDigest);
     await api.createRun(createInput, "writer-one");
+    await expect(api.runPage(20, 5)).resolves.toEqual({ runs: [], selection: { shown: 5, total: 12 } });
     await api.runs(20, 5);
     await expect(api.selectMove({
       startFen: run.nodes[0]!.fen,
@@ -288,6 +289,7 @@ describe("DrillApi", () => {
       "/shapes",
       "/principles",
       "/packs/pack-one",
+      "/runs",
       "/runs",
       "/runs",
       "/select-move",

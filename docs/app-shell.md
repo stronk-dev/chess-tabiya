@@ -97,13 +97,17 @@ surface; it does not itself settle whether `/library` becomes that surface.
 `RunStorage.list(limit, offset)` returns newest-first summaries without
 replaying each run and without consulting the current pack registry. The REST
 binding exposes it as `GET /runs?limit=&offset=`; the default limit is 50 and
-the maximum is 100.
+the maximum is 100. The response also carries the exact access-scoped total from a count query
+with the same current-grant and schema-version predicates as the page.
 
 Home, Review, assignment selection, Library and deletion confirmation all pass those summaries
 through the same learner display boundary. Runtime objective-state values use the shared progress
 vocabulary, and a legacy summary whose captured title is only its `packId` resolves the current
 catalogue title (or **Unavailable rehearsal** when that pack no longer exists). Internal enum and
 registry identities therefore remain storage/export data rather than ordinary navigation copy.
+Home requests one newest run because it renders one Continue action. Review, Learn assignment
+matching, Live source selection and Library state their shown/total counts and page forward in
+bounded 50-run requests; none present the first page as the complete saved history.
 
 SQLite stores a denormalized summary beside each run snapshot:
 

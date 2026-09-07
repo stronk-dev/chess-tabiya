@@ -18482,3 +18482,13 @@ shown/total count, and shape encounters page across all preserved runs before se
 pass removes a separate five-attempt search cutoff that could report no previous reasoning even
 when a sixth matching run carried a transcript. D3138 closes those instances; INR-a11 remains open
 for the route-level 50-run lists and any further learner-facing caps.
+
+## 2026-09-07 — Saved-run pages expose and traverse their full population
+
+Every authenticated route loaded the newest 50 run summaries, but Review, Library, Live source
+selection and Learn assignment matching presented that page as the complete history. `/runs` now
+returns the exact access-scoped total using the same active-grant and schema predicates as the
+page. Those four surfaces state the shown/total count and load additional bounded pages without
+duplicates; Home intentionally requests one run for its one Continue action. Storage and API
+censuses plus a mounted Review transition bind the contract. D3139 closes, and the combined
+Story, Learn and run-history repairs complete INR-a11.

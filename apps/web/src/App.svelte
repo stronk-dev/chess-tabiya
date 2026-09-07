@@ -33,6 +33,7 @@
     type DrillClientApi,
     type PackSummary,
     type RunSummary,
+    type RunPage,
     type SurfaceId,
     type Learner,
     type ProgressAttempt,
@@ -250,6 +251,9 @@
   let repertoireError:string|undefined=$state();
   let recommendations:readonly ProgressRecommendation[]=$state([]);
   let recommendationSelection:ProgressRecommendationPage["selection"]=$state({shown:0,total:0});
+  let runSelection:RunPage["selection"]=$state({shown:0,total:0});
+  let runPageBusy=$state(false);
+  let runPageError:string|undefined=$state();
   let relatedAttempts: Record<string, { readonly status: "loading" | "loaded" | "error"; readonly items: readonly RelatedProgressAttempt[]; readonly message?: string }> = $state({});
 
   const keyboardDispatcher = new ShellKeyboardDispatcher({
@@ -501,10 +505,36 @@
     await controller.startDuplicate(attempt.runId);
   }
 
+  async function initialRunPage(limit = 50): Promise<RunPage> {
+    if (api.runPage !== undefined) return api.runPage(limit, 0);
+    const loaded = await api.runs(limit, 0);
+    return { runs: loaded, selection: { shown: loaded.length, total: loaded.length } };
+  }
+
+  async function loadMoreRuns(): Promise<void> {
+    if (runPageBusy || runs.length >= runSelection.total) return;
+    runPageBusy = true;
+    runPageError = undefined;
+    try {
+      const page = api.runPage === undefined
+        ? { runs: await api.runs(50, runs.length), selection: { shown: runs.length, total: runs.length } }
+        : await api.runPage(50, runs.length);
+      const byId = new Map(runs.map((run) => [run.id, run]));
+      for (const run of page.runs) byId.set(run.id, run);
+      runs = [...byId.values()];
+      runSelection = { shown: runs.length, total: page.selection.total };
+    } catch (error) {
+      runPageError = error instanceof Error ? error.message : String(error);
+    } finally {
+      runPageBusy = false;
+    }
+  }
+
   async function loadRoute(next: AppRoute): Promise<void> {
     const generation = ++loadGeneration;
     routeLoading = true;
     routeError = undefined;
+    runPageError = undefined;
     relatedPack = undefined;
     if (
       next.name !== "run" ||
@@ -514,14 +544,17 @@
     }
     try {
       if (next.name === "home") {
-        [runs, packs, dueSchedules, assignedPacks] = await Promise.all([
-          api.runs(50, 0),
+        const loaded = await Promise.all([
+          initialRunPage(1),
           api.packs(),
           api.dueProgress?.() ?? Promise.resolve([]),
           api.assignments?.() ?? Promise.resolve([]),
         ]);
+        [packs, dueSchedules, assignedPacks] = [loaded[1], loaded[2], loaded[3]];
+        runs = loaded[0].runs;
+        runSelection = loaded[0].selection;
       } else if (next.name === "review") {
-        runs = await api.runs(50, 0);
+        const page = await initialRunPage(); runs = page.runs; runSelection = page.selection;
       } else if (next.name === "story") {
         const loaded = await Promise.all([
           refreshStory(next.runId, true),
@@ -533,7 +566,7 @@
       } else if (next.name === "play") {
         packs = await api.packs();
       } else if (next.name === "library") {
-        [packs, runs] = await Promise.all([api.packs(), api.runs(50, 0)]);
+        const loaded = await Promise.all([api.packs(), initialRunPage()]); packs = loaded[0]; runs = loaded[1].runs; runSelection = loaded[1].selection;
       } else if (next.name === "settings") {
         capabilities = await api.capabilities();
       } else if (next.name === "learn") {
@@ -545,10 +578,12 @@
           api.repertoires?.() ?? Promise.resolve([]),
           api.recommendations?.() ?? Promise.resolve({ recommendations: [], selection: { shown: 0, total: 0 } }),
           api.assignments?.() ?? Promise.resolve([]),
-          api.runs(50, 0),
+          initialRunPage(),
           api.packs(),
         ]);
-        [attempts, dueSchedules, milestones, repertoires, assignedPacks, runs, packs] = [loaded[0], loaded[1], loaded[2], loaded[3], loaded[5], loaded[6], loaded[7]];
+        [attempts, dueSchedules, milestones, repertoires, assignedPacks, packs] = [loaded[0], loaded[1], loaded[2], loaded[3], loaded[5], loaded[7]];
+        runs = loaded[6].runs;
+        runSelection = loaded[6].selection;
         recommendations = loaded[4].recommendations;
         recommendationSelection = loaded[4].selection;
         const pages=await Promise.all(repertoires.map(async(item)=>[item.id,await api.repertoireGaps?.(item.id)] as const));repertoirePages=Object.fromEntries(pages.filter((entry)=>entry[1]!==undefined)) as Record<string,RepertoireGapPage>;
@@ -561,7 +596,8 @@
           api.capabilities(),
         ]);
       } else if (next.name === "live") {
-        [liveSessions,runs,classrooms,packs]=await Promise.all([api.liveSessions?.()??Promise.resolve([]),api.runs(50,0),api.classrooms?.()??Promise.resolve([]),api.packs()]);
+        const loaded=await Promise.all([api.liveSessions?.()??Promise.resolve([]),initialRunPage(),api.classrooms?.()??Promise.resolve([]),api.packs()]);
+        [liveSessions,classrooms,packs]=[loaded[0],loaded[2],loaded[3]];runs=loaded[1].runs;runSelection=loaded[1].selection;
       } else if (next.name === "live-session") {
         liveReclaimIntent=false;
         liveReclaimError=undefined;
@@ -856,6 +892,7 @@
       await api.deleteRun(runDeletion.run.id, runDeletion.preview.digest);
       try { clearRunLocalData(globalThis.localStorage, runDeletion.run.id); } catch { /* storage can be unavailable */ }
       runs = runs.filter((run) => run.id !== runDeletion!.run.id);
+      runSelection = { shown: runs.length, total: Math.max(0, runSelection.total - 1) };
       runDeletion = undefined;
     } catch (error) { runDeletionError = error instanceof Error ? error.message : String(error); }
   }
@@ -1434,6 +1471,8 @@
           </article>
         {:else}<p>No runs to review yet.</p>{/each}
       </div>
+      {#if runSelection.shown<runSelection.total}<p id="run-history-budget" class="honest">Showing {runSelection.shown} of {runSelection.total} saved games and rehearsals.</p><button type="button" disabled={runPageBusy} aria-describedby="run-history-budget" onclick={()=>void loadMoreRuns()}>{runPageBusy?"Loading…":"Load more"}</button>{/if}
+      {#if runPageError}<p role="alert">{runPageError}</p>{/if}
     </main>
   {:else if route.name === "learn"}
     <main class="shell-view" aria-labelledby="learn-title">
@@ -1457,6 +1496,8 @@
           {:else}<p>No open assignments.</p>{/each}
         </div>
         {#if submissionIntent}{@const assignment=assignedPacks.find((candidate)=>candidate.id===submissionIntent!.assignmentId)}{@const run=runs.find((candidate)=>candidate.id===submissionIntent!.runId)}{#if assignment&&run}<aside class="consent-card" aria-labelledby="submission-confirm-title"><h3 id="submission-confirm-title">Share {runTitle(run)}?</h3><p>{assignment.teacherHandles.length>0?`${assignment.teacherHandles.map((handle)=>`@${handle}`).join(", ")} will be able to read this run for up to 90 days.`:"No active teacher is available to receive this run."}</p><p class="honest">They receive this run only, including its moves and the evidence or reveals already recorded in it. They do not gain access to your other runs.</p><div class="row-actions"><button type="button" disabled={assignment.teacherHandles.length===0} aria-describedby={assignment.teacherHandles.length===0?"submission-no-teacher":undefined} onclick={()=>void confirmAssignedRun()}>Confirm sharing</button><button type="button" onclick={()=>submissionIntent=undefined}>Cancel</button></div>{#if assignment.teacherHandles.length===0}<p id="submission-no-teacher" class="honest">An active teacher must be present before this run can be shared.</p>{/if}</aside>{/if}{/if}
+        {#if runSelection.shown<runSelection.total}<p id="assigned-run-budget" class="honest">Showing {runSelection.shown} of {runSelection.total} saved runs when matching completed assignments.</p><button type="button" disabled={runPageBusy} aria-describedby="assigned-run-budget" onclick={()=>void loadMoreRuns()}>{runPageBusy?"Loading…":"Load more saved runs"}</button>{/if}
+        {#if runPageError}<p role="alert">{runPageError}</p>{/if}
       </section>
       {#if recommendations.length>0}
         <section aria-labelledby="recommended-title" aria-describedby={recommendationSelection.shown<recommendationSelection.total?"recommendation-budget":undefined}><h2 id="recommended-title">Recommended next</h2>{#if recommendationSelection.shown<recommendationSelection.total}<p id="recommendation-budget" class="honest">Showing {recommendationSelection.shown} of {recommendationSelection.total} grounded recommendations.</p>{/if}<div class="item-list">
@@ -1715,7 +1756,7 @@
         {#if !liveTitle.trim()}<p id="live-title-required" class="honest">Give the session a title viewers will recognize.</p>{/if}
       </div>
       <section><h2>Your sessions</h2><p class="honest">Wall cards show rules facts and the pack's recorded objective state; they are never ordered or labelled by engine evaluation.</p><div class="item-list live-wall">{#each liveSessions as item}<article><div class="mini-board"><Chessboard fen={item.board.activeFen} startSide="white" disabled={true} onMove={()=>{}}/></div><div><h3>{item.title}</h3><p>{liveKindLabel(item.kind)} · {liveBoardControlLabel(item.boardControl)}</p>{#if item.classroom}<p>Classroom: <strong>{item.classroom.name}</strong></p>{/if}<p><strong>{liveTurnLabel(item)}</strong>{item.board.pausedAt ? ` · paused since ${readableDate(item.board.pausedAt)}` : ""}</p>{#if item.board.players}<p>{item.board.players.white?`@${item.board.players.white.handle}`:"open"} vs {item.board.players.black?`@${item.board.players.black.handle}`:"open"}</p>{/if}<p>Objective: {objectiveStateLabel(item.board.objectiveState)}</p><p>{item.board.lastMoveAt ? `Last move ${readableDate(item.board.lastMoveAt)}` : "No move committed yet"}</p><p>@{item.board.leaseHeldBy.handle} holds the board · {item.board.plyCount} plies</p></div><button type="button" onclick={()=>navigate(routePath({name:"live-session",sessionId:item.id}))}>Open</button></article>{:else}<p>No live sessions yet.</p>{/each}</div></section>
-      <section><h2>Choose the source run</h2><div class="item-list">{#each runs as item}{@const disabledReason=liveCreateDisabledReason(item)}<article><div><h3>{item.title}</h3><p>{liveSourceIneligibility(item)??(item.viewerRole === "host" ? "Ready for this workflow" : "Only the run host can start a session")}</p><p class="honest">{item.sessionKind} run · {item.recordedMoveCount} recorded {item.recordedMoveCount===1?"move":"moves"}</p></div><button type="button" disabled={disabledReason!==undefined} aria-describedby={disabledReason===undefined?undefined:`live-disabled-${item.id}`} onclick={()=>void createLive(item)}>{liveCreateBusy?"Creating…":`Create ${liveKind}`}</button>{#if disabledReason}<span id={`live-disabled-${item.id}`} class="honest">{disabledReason}</span>{/if}</article>{/each}</div>{#if liveCreateBusy}<p id="live-create-busy" role="status">Creating the session…</p>{/if}{#if liveCreateError}<p role="alert">{liveCreateError}</p>{/if}</section>
+      <section><h2>Choose the source run</h2><div class="item-list">{#each runs as item}{@const disabledReason=liveCreateDisabledReason(item)}<article><div><h3>{item.title}</h3><p>{liveSourceIneligibility(item)??(item.viewerRole === "host" ? "Ready for this workflow" : "Only the run host can start a session")}</p><p class="honest">{item.sessionKind} run · {item.recordedMoveCount} recorded {item.recordedMoveCount===1?"move":"moves"}</p></div><button type="button" disabled={disabledReason!==undefined} aria-describedby={disabledReason===undefined?undefined:`live-disabled-${item.id}`} onclick={()=>void createLive(item)}>{liveCreateBusy?"Creating…":`Create ${liveKind}`}</button>{#if disabledReason}<span id={`live-disabled-${item.id}`} class="honest">{disabledReason}</span>{/if}</article>{/each}</div>{#if runSelection.shown<runSelection.total}<p id="live-run-budget" class="honest">Showing {runSelection.shown} of {runSelection.total} saved runs.</p><button type="button" disabled={runPageBusy} aria-describedby="live-run-budget" onclick={()=>void loadMoreRuns()}>{runPageBusy?"Loading…":"Load more source runs"}</button>{/if}{#if runPageError}<p role="alert">{runPageError}</p>{/if}{#if liveCreateBusy}<p id="live-create-busy" role="status">Creating the session…</p>{/if}{#if liveCreateError}<p role="alert">{liveCreateError}</p>{/if}</section>
       <p class="honest">Vote tallies are advisory. Chat identity is only as trustworthy as the configured adapter.</p>
     </main>
   {:else if route.name === "live-session"}
@@ -1794,6 +1835,8 @@
         <p>Download a game as standard PGN for chess tools, or open it to choose particular branches.</p>
         <p class="honest">Deleting a run removes Tabiya's live copy immediately. Shared runs may remain as read-only history for collaborators, and deployment backups may retain an older copy until their configured retention period ends.</p>
         <ul>{#each runs as run}<li><button class="link-button" type="button" onclick={() => navigate(routePath({ name: "run", runId: run.id }))}>{runTitle(run)}</button> <small>{run.branchCount} branches</small> <button type="button" onclick={() => void exportRunPgn(run.id)}>Download PGN</button> {#if run.viewerRole === "host"}<button type="button" onclick={() => void reviewRunDeletion(run)}>Delete this run</button>{/if}</li>{:else}<li>No saved games yet.</li>{/each}</ul>
+        {#if runSelection.shown<runSelection.total}<p id="library-run-budget" class="honest">Showing {runSelection.shown} of {runSelection.total} saved games and rehearsals.</p><button type="button" disabled={runPageBusy} aria-describedby="library-run-budget" onclick={()=>void loadMoreRuns()}>{runPageBusy?"Loading…":"Load more"}</button>{/if}
+        {#if runPageError}<p role="alert">{runPageError}</p>{/if}
         {#if runArtifactError}<p role="alert">{runArtifactError}</p>{/if}
         {#if runDeletion}
           <aside class="deletion-card">

@@ -114,6 +114,7 @@ export interface RunSummary {
   readonly viewerRole: RunRole;
   readonly leaseHeldBy: LeaseIdentity;
 }
+export interface RunPage { readonly runs: readonly RunSummary[]; readonly selection: { readonly shown: number; readonly total: number }; }
 
 export type RunRole = "host" | "participant" | "spectator";
 
@@ -840,6 +841,7 @@ export interface DrillClientApi extends RunApi {
   principles?(): Promise<readonly PrincipleSummary[]>;
   shape(shapeId: string): Promise<ShapeDocument>;
   runs(limit?: number, offset?: number): Promise<readonly RunSummary[]>;
+  runPage?(limit?: number, offset?: number): Promise<RunPage>;
   runDeletionPreview?(runId: string): Promise<DeletionPreview>;
   deleteRun?(runId: string, previewDigest: string): Promise<void>;
   selectMove(input: SelectMoveRequest): Promise<OpponentSelection>;
@@ -1094,14 +1096,15 @@ export class DrillApi implements DrillClientApi {
   async chooseRepertoireAnswer(id:string,input:{readonly positionKey:string;readonly moveUci:string;readonly ifMatch:string}):Promise<RepertoireView>{const body=await this.#json<{readonly repertoire:RepertoireView}>(`/repertoires/${encoded(id)}/answers`,{method:"POST",body:input});return body.repertoire;}
 
   async runs(limit = 50, offset = 0): Promise<readonly RunSummary[]> {
+    return (await this.runPage(limit, offset)).runs;
+  }
+
+  async runPage(limit = 50, offset = 0): Promise<RunPage> {
     const query = new URLSearchParams({
       limit: String(limit),
       offset: String(offset),
     });
-    const body = await this.#json<{ readonly runs: readonly RunSummary[] }>(
-      `/runs?${query}`,
-    );
-    return body.runs;
+    return this.#json<RunPage>(`/runs?${query}`);
   }
 
   async progress(): Promise<readonly ProgressAttempt[]> {

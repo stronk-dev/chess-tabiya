@@ -5559,17 +5559,21 @@
     {
       "id": "INR-a11",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-in-run.md",
       "sourceSection": "§4.3",
       "sourceHeading": "The in-run experience — `ux-in-run.md`",
       "summary": "Stated caps rather than silent truncation (*\"top 5 of 23 recorded moves\"*)",
       "legacyRoute": "ledger",
-      "note": "[[D3137]] closes private/public Story; [[D3138]] closes Learn recommendations and prior-reasoning search; the 50-run route lists remain",
-      "sourceDigest": "sha256:9387cb7511837dbc17f28171309fc99d64aee3cf26116f6466aa8d2c054e6915"
+      "note": "[[D3137]] Story + [[D3138]] Learn + [[D3139]] paginated run history close every learner-visible cap found by the production audit",
+      "sourceDigest": "sha256:10e883f18cf08a4db57a8369a807e46de1cd78e2aa3d39aebd6a4b9bb1a6e38c",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "apps/web/src/App.svelte"
+      }
     },
     {
       "id": "INR-a2",

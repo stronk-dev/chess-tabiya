@@ -1277,6 +1277,33 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("states the saved-run denominator and loads the next page", async () => {
+    history.replaceState(null, "", "/review");
+    const older = { ...runSummary, id: "older-run", title: "Older rehearsal", updatedAt: "2026-08-10T21:00:00.000Z" };
+    const pages: number[] = [];
+    const pagedApi: DrillClientApi = {
+      ...api(),
+      async runPage(_limit = 50, offset = 0) {
+        pages.push(offset);
+        return offset === 0
+          ? { runs: [runSummary], selection: { shown: 1, total: 2 } }
+          : { runs: [older], selection: { shown: 2, total: 2 } };
+      },
+    };
+    const component = mount(App, {
+      target: target(),
+      props: { api: pagedApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Showing 1 of 2 saved games and rehearsals."));
+    const loadMore = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Load more")!;
+    loadMore.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Older rehearsal"));
+    expect(document.body.textContent).not.toContain("Showing 1 of 2");
+    expect(pages).toEqual([0, 1]);
+    await unmount(component);
+  });
+
   it("saves and starts a validation-clean Studio draft without authoring run policy", async () => {
     history.replaceState(null, "", "/create");
     const draft = { id: "draft-one", packId: pack.id, document: pack, digest, state: "draft" as const, validation: { valid: true, issues: [] } };

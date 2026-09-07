@@ -355,6 +355,7 @@ export interface RunStorage {
   create(run: DrillRun, lease: LeaseHolder, title?: string): void;
   read(runId: string): StoredRun | undefined;
   list(learnerId: string, limit: number, offset: number): readonly RunSummary[];
+  runCount(learnerId: string): number;
   save(run: DrillRun, lease: LeaseHolder): void;
   createImportedRun?(run: DrillRun, lease: LeaseHolder, title: string, record: ImportedGameRecord): void;
   importedGame?(runId: string): ImportedGameRecord | undefined;
@@ -1844,6 +1845,23 @@ export class SQLiteRunStorage implements RunStorage, ProgressStorage, LiveSessio
       );
     } catch (error) {
       throw storageFailure("Stored run summary is invalid", error);
+    }
+  }
+
+  runCount(learnerId: string): number {
+    try {
+      const row = this.#database.prepare(
+        `SELECT count(*) AS total
+         FROM drill_runs r
+         JOIN run_grants g ON g.run_id = r.id AND g.learner_id = ?
+           AND (g.expires_at IS NULL OR g.expires_at > ?)
+         WHERE r.schema_version = ?`,
+      ).get(learnerId, this.#now(), DRILL_RUN_SCHEMA_VERSION) as { readonly total?: unknown };
+      const total = Number(row.total ?? 0);
+      if (!Number.isSafeInteger(total) || total < 0) throw new TypeError("Stored run count is invalid");
+      return total;
+    } catch (error) {
+      throw storageFailure("Could not count runs", error);
     }
   }
 

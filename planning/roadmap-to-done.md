@@ -1727,6 +1727,12 @@ bounded repertoire and shape recommendations, scans all preserved runs for shape
 bounded pages, and removes the five-run cutoff that could falsely report no previous reasoning.
 The separate 50-run route lists remain open under INR-a11.
 
+The subsequent [[D3139]] run-index repair closes that remaining cap. One exact access-scoped count
+now accompanies each bounded `/runs` page. Review, Learn assignment matching, Live source selection
+and Library render the denominator and Load More; Home requests one newest run explicitly for its
+single Continue action. With [[D3137]] and [[D3138]], INR-a11 is complete without replacing bounded
+queries with a larger undocumented constant.
+
 **1.0 exit:** owned immutable events rebuild idempotent observations/aggregates; metrics show
 occurrence/opportunity, phase/decision class, revision, uncertainty, examples and abstention;
 rating stays isolated from move feedback; style is continuous evidence, not a manufactured type;

@@ -393,6 +393,7 @@ describe("SQLite run-storage migrations and summaries", () => {
         leaseHeldBy: { learnerId: "__legacy", handle: "__legacy" },
       }),
     ]);
+    expect(storage.runCount("__legacy")).toBe(2);
     storage.close();
   });
 

@@ -1375,6 +1375,11 @@ export class RunService {
     return this.#storage.list(principal.learnerId, limit, offset);
   }
 
+  runPage(principal: Principal, limit: number, offset: number) {
+    const runs = this.#storage.list(principal.learnerId, limit, offset);
+    return Object.freeze({ runs, selection: Object.freeze({ shown: offset + runs.length, total: this.#storage.runCount(principal.learnerId) }) });
+  }
+
   compare(runId: string, principalOrBranches: Principal | readonly string[], maybeBranches?: readonly string[]): BranchComparison {
     const principal = Array.isArray(principalOrBranches)
       ? this.#principal("legacy-reader")

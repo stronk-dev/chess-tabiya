@@ -1203,7 +1203,7 @@ export function createRestHandler(
       if (request.method === "GET" && url.pathname === "/runs") {
         const principal = authenticate();
         const { limit, offset } = parsePagination(url);
-        return json(200, { runs: service.runs(principal, limit, offset) });
+        return json(200, service.runPage(principal, limit, offset));
       }
       if (request.method === "GET" && url.pathname === "/progress") {
         return json(200, { attempts: service.progress(authenticate()) });
