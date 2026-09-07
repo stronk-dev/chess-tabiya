@@ -696,6 +696,21 @@ export interface GroupReplyResult {
   readonly reusedFromNodeId: string | null;
 }
 
+export interface SimulationBranch {
+  readonly index: number;
+  readonly label: string;
+  readonly leafFen: string;
+  readonly plies: number;
+  readonly truncatedAt?: string;
+  readonly subvariationsSkipped?: number;
+}
+
+export interface SimulationResult {
+  readonly simulationId: string;
+  readonly comparison: BranchComparison;
+  readonly branches: readonly SimulationBranch[];
+}
+
 export interface MoveOptions {
   readonly at?: string;
   readonly clockState?: Readonly<Record<string, unknown>>;
@@ -796,6 +811,8 @@ export interface RunApi {
   createGroup(runId: string, input: CreateGroupRequest, writerId: string): Promise<CreateGroupResult>;
   groupReply(runId: string, groupId: string, writerId: string): Promise<GroupReplyResult>;
   analysis(runId: string, nodeIds: readonly string[], writerId: string): Promise<{ readonly jobs: readonly { readonly id: string }[] }>;
+  simulate?(runId: string, writerId: string): Promise<SimulationResult>;
+  enterSimulation?(runId: string, simulationId: string, branchIndex: number, writerId: string): Promise<MutationResult>;
 }
 
 export interface DrillClientApi extends RunApi {
@@ -1270,6 +1287,16 @@ export class DrillApi implements DrillClientApi {
   analysis(runId: string, nodeIds: readonly string[], writerId: string): Promise<{ readonly jobs: readonly { readonly id: string }[] }> {
     return this.#json(`/runs/${encoded(runId)}/analysis`, {
       method: "POST", writerId, body: { nodeIds, kind: "bestline", multiPv: 1, movetime: 100 },
+    });
+  }
+
+  simulate(runId: string, writerId: string): Promise<SimulationResult> {
+    return this.#json(`/runs/${encoded(runId)}/simulate`, { method: "POST", writerId, body: {} });
+  }
+
+  enterSimulation(runId: string, simulationId: string, branchIndex: number, writerId: string): Promise<MutationResult> {
+    return this.#json(`/runs/${encoded(runId)}/simulate-enter`, {
+      method: "POST", writerId, body: { simulationId, branchIndex },
     });
   }
 

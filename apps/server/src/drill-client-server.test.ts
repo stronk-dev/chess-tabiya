@@ -7,6 +7,7 @@ import {
   engineEvidenceRef,
   reachCheckpoint,
   rulesEvidenceRef,
+  readBackReplay,
   transitionObjective,
   type EvidencePayload,
   type PolicyConfig,
@@ -264,6 +265,56 @@ describe("pack-aware run orchestration", () => {
 
   afterEach(() => {
     for (const storage of stores.splice(0)) storage.close();
+  });
+
+  it("previews authored consequences without mutating the run, then enters exactly one line", async () => {
+    const environment = await setup(fixture);
+    stores.push(environment.storage);
+    expect((await request(environment.handler, "POST", "/runs", runBody("simulation-run"))).status).toBe(201);
+    for (const uci of ["c1e3", "e7e6"]) {
+      const moved = await request(environment.handler, "POST", "/runs/simulation-run/moves", { uci, actor: "system", at });
+      expect(moved.status, await moved.clone().text()).toBe(200);
+    }
+
+    const before = environment.storage.read("simulation-run")!.run;
+    const beforeBytes = JSON.stringify(before);
+    const evidenceJobCount = environment.executor.jobs.length;
+    const preview = await request(environment.handler, "POST", "/runs/simulation-run/simulate", {});
+    expect(preview.status, await preview.clone().text()).toBe(200);
+    const simulation = await preview.json() as {
+      simulationId: string;
+      branches: { index: number; label: string; leafFen: string; plies: number }[];
+      comparison: { columns: { label: string; origin: string }[] };
+    };
+    expect(simulation.branches).toEqual([
+      expect.objectContaining({ index: 0, label: "f3", plies: 2, leafFen: expect.any(String) }),
+      expect.objectContaining({ index: 1, label: "Be2", plies: 1, leafFen: expect.any(String) }),
+    ]);
+    expect(simulation.comparison.columns.map((column) => [column.label, column.origin])).toEqual([["f3", "simulated"], ["Be2", "simulated"]]);
+    expect(JSON.stringify(environment.storage.read("simulation-run")!.run)).toBe(beforeBytes);
+    expect(environment.executor.jobs).toHaveLength(evidenceJobCount);
+
+    const entered = await request(environment.handler, "POST", "/runs/simulation-run/simulate-enter", {
+      simulationId: simulation.simulationId,
+      branchIndex: 1,
+      at,
+    });
+    expect(entered.status, await entered.clone().text()).toBe(200);
+    const result = await entered.json() as { run: import("@chess-tabiya/runtime").DrillRun };
+    expect(result.run.branches.filter((branch) => branch.origin === "simulated")).toEqual([
+      expect.objectContaining({ label: "Be2", origin: "simulated" }),
+    ]);
+    expect(result.run.activeCursor.branchId).toBe(result.run.branches.find((branch) => branch.origin === "simulated")!.id);
+    expect(result.run.nodes.find((node) => node.id === result.run.activeCursor.nodeId)?.moveSan).toBe("Be2");
+    expect(() => readBackReplay(result.run.events)).not.toThrow();
+    expect(environment.executor.jobs).toHaveLength(evidenceJobCount);
+
+    const reused = await request(environment.handler, "POST", "/runs/simulation-run/simulate-enter", {
+      simulationId: simulation.simulationId,
+      branchIndex: 0,
+    });
+    expect(reused.status).toBe(410);
+    expect(await reused.json()).toMatchObject({ error: { code: "SIMULATION_EXPIRED" } });
   });
 
   it("keeps pack-owned start and policy fields authoritative at creation", async () => {

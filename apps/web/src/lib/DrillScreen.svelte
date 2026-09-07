@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
-  import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, ReasoningReviewPage, RunRole, SessionKind, ShapeEntryView, VoicePage } from "./api.js";
-  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, liveMarkers, moveTransitionEvidence, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, renderEndgameReading, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, shapeFirings, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type RunMark } from "@chess-tabiya/runtime";
+  import type { Capabilities, CorpusPage, HumanSplitPage, ReasoningPage, ReasoningReviewPage, RunRole, SessionKind, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
+  import { BRANCH_COLLAPSE_FLOOR, MARK_BRUSHES, MAX_COMPARISON_BRANCHES, SILENT_ASSISTANCE, branchPath, classifyPhase, collapsedBranchIds, endgameReading, feedbackDeliveryOpen, groupsFromEvents, historyFrom, lineMembership, liveMarkers, moveTransitionEvidence, permittedAssistance, pivotalMarkerEvidence, positionStructureEvidence, renderEndgameReading, renderPhaseReading, renderPivotalMarker, selectedSquareSightEvidence, shapeFiringEvidence, shapeFirings, structuralReading, transitionReading, trajectoryVerdict, type AssistanceConfig, type BranchComparison, type BranchGroup, type Decidedness, type RunMark } from "@chess-tabiya/runtime";
   import type { DrawShape } from "@lichess-org/chessground/draw";
   import { onDestroy, onMount, tick } from "svelte";
 
@@ -56,6 +56,7 @@
   import { moveSanFromUci } from "./board-input.js";
   import { checkpointAuthoredItems as selectCheckpointAuthoredItems } from "./checkpoint-authored-items.js";
   import { rehearsalGuideStep } from "./rehearsal-guide.js";
+  import SimulationPreview from "./SimulationPreview.svelte";
 
   type RewindTarget =
     | { readonly nodeId: string; readonly branchId?: string }
@@ -70,6 +71,7 @@
     reasoning?: ReasoningPage | undefined;
     comparison?: BranchComparison | undefined;
     comparisonBranchIds?: readonly string[] | undefined;
+    simulation?: SimulationResult | undefined;
     busy?: boolean;
     error?: string | undefined;
     capabilities?: Capabilities | undefined;
@@ -105,6 +107,9 @@
     onSpeech?: (nodeId: string, scope: VoicePage["scope"]) => Promise<Blob>;
     onCreateGroup?: (input: CreateGroupRequest) => void | Promise<unknown>;
     onAnalyzeMissing?: (nodeIds: readonly string[]) => void | Promise<void>;
+    onSimulate?: (() => void | Promise<void>) | undefined;
+    onEnterSimulation?: ((branchIndex: number) => void | Promise<void>) | undefined;
+    onCloseSimulation?: (() => void) | undefined;
     onStory?: (() => void) | undefined;
     onFlip?: ((nodeId: string) => void | Promise<void>) | undefined;
     onSelectPack?: ((packId: string) => void | Promise<void>) | undefined;
@@ -123,6 +128,7 @@
     reasoning,
     comparison,
     comparisonBranchIds,
+    simulation,
     busy = false,
     error,
     capabilities,
@@ -158,6 +164,9 @@
     onSpeech,
     onCreateGroup,
     onAnalyzeMissing,
+    onSimulate,
+    onEnterSimulation,
+    onCloseSimulation,
     onStory,
     onFlip,
     onSelectPack,
@@ -259,6 +268,29 @@
   let phoneSheetModal = $derived(viewportSupport.width > 0 && viewportSupport.width <= 719 && sheetOpen);
   let canWrite = $derived(snapshot.access === "writer");
   let currentNode = $derived(activeNode(run));
+  let simulationInvoker = $state<HTMLElement>();
+  function findSpineNode(nodes: NonNullable<DrillPackDefinition["spine"]>, id: string): NonNullable<DrillPackDefinition["spine"]>[number] | undefined {
+    for (const node of nodes) {
+      if (node.id === id) return node;
+      const child = findSpineNode(node.children, id);
+      if (child !== undefined) return child;
+    }
+    return undefined;
+  }
+  let simulationChoiceCount = $derived.by(() => {
+    if (pack === undefined) return 0;
+    if (currentNode.parentId === null) return pack.spine?.length ?? 0;
+    const spineNodeId = lineMembership(pack, run, currentNode.id).at(-1)?.spineNodeId;
+    return spineNodeId === undefined ? 0 : findSpineNode(pack.spine ?? [], spineNodeId)?.children.length ?? 0;
+  });
+  async function openSimulation(event: Event): Promise<void> {
+    simulationInvoker = invoker(event);
+    await onSimulate?.();
+  }
+  function closeSimulation(): void {
+    onCloseSimulation?.();
+    void tick().then(() => simulationInvoker?.focus());
+  }
   let comparisonForkNode = $derived(comparison === undefined ? undefined : run.nodes.find((node) => node.id === comparison.forkNodeId));
   let guide = $derived(firstRehearsal ? rehearsalGuideStep(run) : undefined);
   let objectiveSentence = $derived(
@@ -1214,6 +1246,17 @@
               >Compare <kbd>Alt+C</kbd></button>
             {/snippet}
           </HonestControl>
+          {#if pack !== undefined}
+            <HonestControl
+              disabled={!canWrite || simulationChoiceCount < 2 || onSimulate === undefined}
+              reasonId="drill-simulation-unavailable"
+              reason={!canWrite ? "This read-only view cannot preview authored lines." : "This position needs at least two authored continuations before it can be previewed side by side."}
+            >
+              {#snippet children(describedBy)}
+                <button type="button" disabled={!canWrite || simulationChoiceCount < 2 || onSimulate === undefined} aria-describedby={describedBy} onclick={(event) => void openSimulation(event)}>Preview authored lines</button>
+              {/snippet}
+            </HonestControl>
+          {/if}
           <button type="button" aria-label={replaying ? "Pause replay" : "Replay"} aria-pressed={replaying} onclick={toggleReplay}>
             {replaying ? "Pause" : "Replay"} <kbd>Space</kbd>
           </button>
@@ -1248,6 +1291,10 @@
       </section>
     {/if}
   </main>
+{/if}
+
+{#if simulation !== undefined && onEnterSimulation !== undefined}
+  <SimulationPreview {simulation} {startSide} {busy} onEnter={onEnterSimulation} onClose={closeSimulation} />
 {/if}
 
 {#if viewportSupport.supported && checkpoint}

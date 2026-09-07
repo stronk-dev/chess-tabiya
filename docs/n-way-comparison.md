@@ -39,10 +39,15 @@ deterministic causal template. Optional `compare` voice may rephrase only that
 packet after the ordinary disclosure gate, and never receives learner branch
 labels or intent text.
 
-Forward simulation is scratch. `/simulate` walks at most four authored
-variations for at most twelve plies in memory and writes no events, evidence, or
-attempts. `/simulate-enter` explicitly promotes one result to a real branch with
-origin `simulated`; only then does it enter replay, progress, compare, and PGN.
+Forward simulation is scratch. At a pack position with at least two authored
+continuations, **Preview authored lines** opens a responsive grid of their final
+positions. `/simulate` walks at most eight variations and forty total plies in
+memory and writes no events, evidence, or attempts. Each card names the authored
+move, shown horizon, truncation, and skipped nested alternatives when present.
+**Enter this line** calls `/simulate-enter` and explicitly promotes only that
+result to a real branch with origin `simulated`; only then does it enter replay,
+progress, compare, and PGN. Preview ids are writer-scoped, expire after ten
+minutes, and are consumed after one successful entry.
 
 Prediction checkpoints record the learner's move before selecting the reply.
 The atomic endpoint persists the exact policy distribution, mass, rank, and

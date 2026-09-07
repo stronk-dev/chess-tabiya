@@ -2397,11 +2397,12 @@
     },
     {
       "id": "D313",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:818ba3fd02030fdcf4f95826d6113022db4c167638bb4f4efcbce1b556571032",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:647f57177df6b0a7527edfa47204ec2d4685507ce8cb1e51b23f4c2bca9d9f21",
       "uxItems": [],
-      "owner": "client-platform"
+      "evidence": "apps/web/src/lib/SimulationPreview.svelte",
+      "evidenceKind": "path"
     },
     {
       "id": "D314",
@@ -11103,14 +11104,15 @@
     },
     {
       "id": "D1460",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:aa4df20c3f1798aa9c34332bb2ef1f37feeacceb3614ee603041ed46033d0d29",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:0f2f8da525c1b7a0316d6d5678f2f8d4d60a1b3f6a721a791cc057918d5eb81c",
       "uxItems": [
         "SET-a25",
         "SET-a6"
       ],
-      "state": "todo",
-      "owner": "assistance-and-presentation"
+      "state": "refused",
+      "ruling": "Accepted theming §4 deliberately preserves effective mode and uses MODE_DEFAULT; reduced-motion honesty already ships",
+      "rulingKind": "source-row"
     },
     {
       "id": "D1461",

@@ -202,6 +202,7 @@ describe("DrillApi", () => {
       }
       if (url.endsWith("/group-reply")) return json({ selection, reusedFromNodeId: null });
       if (url.endsWith("/analysis")) return json({ jobs: [{ id: "analysis-one" }] }, { status: 202 });
+      if (url.endsWith("/simulate")) return json({ simulationId: "simulation-one", comparison: { forkNodeId: run.nodes[0]!.id, columns: [], rows: [], consequences: {}, objectiveTimelines: {}, checkpointHits: {}, evidence: {}, lines: {}, machineFeedback: "available" }, branches: [] });
       if (url.includes("/events")) return json({ events: [], nextSeq: 1 });
       if (url.includes("/authored-feedback")) {
         return json({ items: [], hasWithheldAuthoredContent: true });
@@ -255,6 +256,8 @@ describe("DrillApi", () => {
     await api.createGroup(run.id, { source: "hand_picked", candidates: ["a2a3", "b2b3"] }, "writer-one");
     await api.groupReply(run.id, "group-one", "writer-one");
     await api.analysis(run.id, [run.nodes[0]!.id], "writer-one");
+    const simulation = await api.simulate(run.id, "writer-one");
+    await api.enterSimulation(run.id, simulation.simulationId, 0, "writer-one");
     await api.graph(run.id);
     await api.compare(run.id, ["a", "b"]);
     await api.events(run.id, 1);
@@ -292,6 +295,8 @@ describe("DrillApi", () => {
       "/runs/run%20%2F%20one/group",
       "/runs/run%20%2F%20one/group-reply",
       "/runs/run%20%2F%20one/analysis",
+      "/runs/run%20%2F%20one/simulate",
+      "/runs/run%20%2F%20one/simulate-enter",
       "/runs/run%20%2F%20one/graph",
       "/runs/run%20%2F%20one/compare",
       "/runs/run%20%2F%20one/events",
@@ -302,7 +307,7 @@ describe("DrillApi", () => {
       "/runs/run%20%2F%20one/pgn",
     ]);
     const writerCalls = calls.filter((call) =>
-      ["/runs", "/moves", "/rewind", "/fork", "/group", "/group-reply", "/analysis", "/evidence"].some((suffix) =>
+      ["/runs", "/moves", "/rewind", "/fork", "/group", "/group-reply", "/analysis", "/simulate", "/simulate-enter", "/evidence"].some((suffix) =>
         new URL(call.url).pathname.endsWith(suffix),
       ),
     );

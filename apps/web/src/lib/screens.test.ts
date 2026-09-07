@@ -43,7 +43,7 @@ import DrillScreen from "./DrillScreen.svelte";
 import JustPlayStarter from "./JustPlayStarter.svelte";
 import PackList from "./PackList.svelte";
 import WhyBanner from "./WhyBanner.svelte";
-import type { Capabilities, PackSummary, ShapeEntryView } from "./api.js";
+import type { Capabilities, PackSummary, ShapeEntryView, SimulationResult } from "./api.js";
 import type {
   RegionKeyboardHandler,
   RegisterKeyboardRegion,
@@ -238,6 +238,67 @@ describe("Layer 3 screens", () => {
 
     expect(onCompare).toHaveBeenCalledWith(run.branches.slice(0, 2).map((branch) => branch.id));
     expect(onFirstRehearsalComplete).toHaveBeenCalledOnce();
+    await unmount(component);
+  });
+
+  it("previews authored consequences as scratch positions and offers explicit entry", async () => {
+    let run = createRun({
+      id: "simulation-ui",
+      packId: pack.id,
+      packDigest: `sha256:${"8".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      startFen: pack.start.fen,
+      seed: 8,
+      createdAt: at,
+    });
+    run = commitMove(run, "c1e3", { actor: "system", at }).run;
+    run = commitMove(run, "e7e6", { actor: "system", at }).run;
+    const onSimulate = vi.fn();
+    let component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), onSimulate,
+      registerKeyboardRegion,
+    } });
+    await tick();
+    const previewButton = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Preview authored lines")!;
+    expect(previewButton.disabled).toBe(false);
+    previewButton.click();
+    await tick();
+    expect(onSimulate).toHaveBeenCalledOnce();
+    await unmount(component);
+
+    document.body.replaceChildren();
+    const simulation: SimulationResult = {
+      simulationId: "simulation-one",
+      comparison: { machineFeedback: "available", forkNodeId: run.activeCursor.nodeId, columns: [], rows: [], objectiveTimelines: {}, checkpointHits: {}, evidence: {}, lines: {}, consequences: {} },
+      branches: [
+        { index: 0, label: "f3", leafFen: run.nodes.at(-1)!.fen, plies: 2 },
+        { index: 1, label: "Be2", leafFen: run.nodes.at(-1)!.fen, plies: 1 },
+      ],
+    };
+    const onEnterSimulation = vi.fn();
+    const onCloseSimulation = vi.fn();
+    component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      simulation,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), onSimulate,
+      onEnterSimulation, onCloseSimulation, registerKeyboardRegion,
+    } });
+    await tick();
+    const dialog = document.querySelector<HTMLElement>('[aria-labelledby="simulation-title"]')!;
+    expect(dialog.textContent).toContain("These are demonstrations from the drill, not moves added to your attempt");
+    expect(dialog.textContent).toContain("f3");
+    expect(dialog.textContent).toContain("Be2");
+    expect(dialog.querySelectorAll(":scope > .line-grid > article > .board")).toHaveLength(2);
+    const enter = [...dialog.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Enter this line")!;
+    enter.click();
+    expect(onEnterSimulation).toHaveBeenCalledWith(0);
+    dialog.querySelector<HTMLButtonElement>('button[aria-label="Close authored line preview"]')!.click();
+    expect(onCloseSimulation).toHaveBeenCalledOnce();
     await unmount(component);
   });
 

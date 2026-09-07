@@ -259,7 +259,7 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 | SET-a22 | §8.3f / §8.4-6 | Close the theming sweep's three holes — named colours, `.css` files excluded, the by-name exemption | ledger | [[D1433]], [[D1461]] | |
 | SET-a23 | §8.3g | `theme.test.ts:182` pins `#c0ae91`, a hand-computed constant absent from `brown.css` and recomputed by no test | none | | |
 | SET-a24 | §8.2a | There is no global stylesheet: 20+ component-scoped style blocks plus one `:global` section | none | | |
-| SET-a25 | §4.5 | `theme.test.ts:97-99` asserts the **wrong** behaviour, so repairing the fallback means editing a green test | ledger | [[D1460]] | |
+| SET-a25 | §4.5 | Preserve the accepted mode-first fallback; the proposed inversion is refused because `rfc/theming.md` §4 and its green test intentionally require the current behavior | ledger | [[D1460]] | 🏆 |
 | SET-a26 | §7.3 | The product ships a preview for deleting your account and none for changing its colours | ledger | [[D1463]] | |
 | SET-a27 | §Res R1 | A 20-minute browser pass over lichess's dasher and chess.com's *Boards & Pieces* — the highest-value follow-up, never run | ledger | [[D1458]] | |
 

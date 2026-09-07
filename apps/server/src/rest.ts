@@ -669,6 +669,7 @@ export function errorResponse(error: unknown): Response {
                     || error.code === "TOO_MANY_BRANCHES"
                     || error.code === "NO_AUTHORED_VARIATIONS"
                     || error.code === "SIMULATE_TOO_LARGE"
+                    || error.code === "SIMULATE_BUDGET_EXCEEDED"
                     || error.code === "GROUP_SEEDS_UNAVAILABLE"
                     || error.code === "TABLEBASE_OUT_OF_RANGE"
                     || error.code === "PERFECT_TABLEBASE_OUT_OF_RANGE"

@@ -18,6 +18,7 @@ import {
   type CreateGroupResult,
   type RewindRequest,
   type RunApi,
+  type SimulationResult,
 } from "./api.js";
 import { WriterSession } from "./writer-session.js";
 
@@ -252,6 +253,24 @@ export class RunStateStore {
       this.#analysisInFlight = false;
       this.#syncPolling();
     }
+  }
+
+  simulate(): Promise<SimulationResult> {
+    if (this.#snapshot.access === "read_only") {
+      throw new ApiError(409, "NOT_ACTIVE_WRITER", "Run is read-only");
+    }
+    if (this.#api.simulate === undefined) throw new Error("Authored-line preview is unavailable");
+    return this.#api.simulate(this.#session.runId, this.#session.writerId);
+  }
+
+  enterSimulation(simulationId: string, branchIndex: number): Promise<MutationResult> {
+    if (this.#api.enterSimulation === undefined) throw new Error("Authored-line entry is unavailable");
+    return this.#mutate(() => this.#api.enterSimulation!(
+      this.#session.runId,
+      simulationId,
+      branchIndex,
+      this.#session.writerId,
+    ));
   }
 
   rewind(input: RewindRequest): Promise<MutationResult> {

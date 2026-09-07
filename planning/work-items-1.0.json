@@ -7808,17 +7808,22 @@
     {
       "id": "SET-a25",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-settings-and-identity.md",
       "sourceSection": "§4.5",
       "sourceHeading": "Settings, appearance and identity — `ux-settings-and-identity.md`",
-      "summary": "`theme.test.ts:97-99` asserts the **wrong** behaviour, so repairing the fallback means editing a green test",
+      "summary": "Preserve the accepted mode-first fallback; the proposed inversion is refused because `rfc/theming.md` §4 and its green test intentionally require the current behavior",
       "legacyRoute": "ledger",
       "note": "[[D1460]]",
-      "sourceDigest": "sha256:4aa2a175a7200a9c786c541b18ace5800270b9538da03d1a40de23054f3cf94e"
+      "tournamentReady": true,
+      "sourceDigest": "sha256:7952b01db6d53d08955f87af7f178a36152c7a9aa70e6f4745ddfdf2ecd7bd9c",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "Refused: accepted rfc/theming.md §4 intentionally preserves effective mode; the green fallback test is correct"
+      }
     },
     {
       "id": "SET-a26",

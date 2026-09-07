@@ -21,6 +21,7 @@ import {
   type CreateGroupRequest,
   type CreateGroupResult,
   type ReasoningPage,
+  type SimulationResult,
 } from "./api.js";
 import { boardModel } from "./board-model.js";
 import {
@@ -47,6 +48,7 @@ export interface DrillSessionState {
   readonly comparisonBranchIds?: readonly string[];
   readonly authoredFeedback?: AuthoredFeedbackPage;
   readonly reasoning?: ReasoningPage;
+  readonly simulation?: SimulationResult;
   readonly viewer?: RunGraph["viewer"];
 }
 
@@ -201,7 +203,7 @@ export class DrillSessionController {
   }
 
   async resume(runId: string, options: { readonly matchMode?: MatchMode; readonly projectionOnly?: boolean } = {}): Promise<void> {
-    this.#patch({ busy: true, error: undefined });
+    this.#patch({ busy: true, error: undefined, simulation: undefined });
     try {
       this.#matchMode = options.matchMode;
       this.#projectionOnly = options.projectionOnly === true;
@@ -241,7 +243,7 @@ export class DrillSessionController {
   async startPack(packId: string): Promise<void> {
     this.#projectionOnly = false;
     this.#matchMode = undefined;
-    this.#patch({ busy: true, error: undefined });
+    this.#patch({ busy: true, error: undefined, simulation: undefined });
     try {
       const [{ document, digest }, capabilities] = await Promise.all([
         this.#api.pack(packId),
@@ -450,6 +452,32 @@ export class DrillSessionController {
     try {
       await this.#requiredStore().analysis(nodeIds);
       this.#patch({ busy: false });
+    } catch (error) {
+      this.#fail(error);
+    }
+  }
+
+  async simulateAuthoredLines(): Promise<void> {
+    this.#patch({ busy: true, error: undefined });
+    try {
+      const simulation = await this.#requiredStore().simulate();
+      this.#patch({ busy: false, simulation });
+    } catch (error) {
+      this.#fail(error);
+    }
+  }
+
+  closeSimulation(): void {
+    this.#patch({ simulation: undefined });
+  }
+
+  async enterSimulation(branchIndex: number): Promise<void> {
+    const simulation = this.#state.simulation;
+    if (simulation === undefined) return;
+    this.#patch({ busy: true, error: undefined });
+    try {
+      await this.#requiredStore().enterSimulation(simulation.simulationId, branchIndex);
+      this.#patch({ busy: false, simulation: undefined, comparison: undefined, comparisonBranchIds: undefined });
     } catch (error) {
       this.#fail(error);
     }

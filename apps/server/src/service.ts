@@ -365,10 +365,10 @@ export class RunService {
   readonly #tablebase: TablebaseSource | undefined;
   readonly #simulations = new Map<string, {
     readonly runId: string;
+    readonly writerId: string;
     readonly sourceNodeId: string;
-    readonly scratch: DrillRun;
-    readonly branchIds: readonly string[];
     readonly moves: readonly (readonly string[])[];
+    readonly labels: readonly string[];
     readonly createdAt: number;
   }>();
 
@@ -1652,16 +1652,25 @@ export class RunService {
   ): {
     readonly simulationId: string;
     readonly comparison: BranchComparison;
-    readonly branches: readonly { index: number; label: string; leafFen: string; plies: number }[];
+    readonly branches: readonly {
+      index: number;
+      label: string;
+      leafFen: string;
+      plies: number;
+      truncatedAt?: string;
+      subvariationsSkipped?: number;
+    }[];
   } {
     const { stored } = this.#forWrite(runId, principal, writerId);
     this.#refuseWhileMatchLive(runId,stored.run);
     const pack = this.#requiredRegisteredPack(stored.run);
     if (pack === undefined) throw new ServerError("NO_AUTHORED_VARIATIONS", "Position sessions have no authored variations");
-    const maxBranches = options.maxBranches ?? 4;
-    const maxPlies = options.maxPlies ?? 12;
-    if (!Number.isSafeInteger(maxBranches) || maxBranches < 1 || maxBranches > 4 || !Number.isSafeInteger(maxPlies) || maxPlies < 1 || maxPlies > 12) {
-      throw new ServerError("SIMULATE_TOO_LARGE", "Simulation is limited to 4 branches and 12 plies");
+    const maxBranches = options.maxBranches ?? 8;
+    const maxPlies = options.maxPlies ?? 40;
+    if (!Number.isSafeInteger(maxBranches) || maxBranches < 1 || maxBranches > 8 || !Number.isSafeInteger(maxPlies) || maxPlies < 1 || maxPlies > 40) {
+      throw new ServerError("SIMULATE_TOO_LARGE", "Simulation is limited to 8 branches and 40 total plies", {
+        details: { variations: maxBranches, plies: maxPlies },
+      });
     }
     const find = (nodes: readonly import("@chess-tabiya/schema/drill-pack").SpineNode[], id: string): import("@chess-tabiya/schema/drill-pack").SpineNode | undefined => {
       for (const node of nodes) {
@@ -1681,36 +1690,66 @@ export class RunService {
       current.id,
     );
     const currentSpineId = memberships.at(-1)?.spineNodeId;
+    if (current.parentId !== null && currentSpineId === undefined) {
+      throw new ServerError("NO_AUTHORED_VARIATIONS", "The current position is outside the authored line");
+    }
     const choices = (currentSpineId === undefined ? pack.document.spine : find(pack.document.spine ?? [], currentSpineId)?.children) ?? [];
     if (choices.length < 2) throw new ServerError("NO_AUTHORED_VARIATIONS", "This position has fewer than two authored variations");
     const selected = choices.slice(0, maxBranches);
     let scratch = stored.run;
     const branchIds: string[] = [];
     const moves: string[][] = [];
+    const labels: string[] = [];
+    const branchDetails: Array<{ truncatedAt?: string; subvariationsSkipped?: number }> = [];
+    let totalPlies = 0;
     const sourceNodeId = current.id;
     for (const [choiceIndex, choice] of selected.entries()) {
       if (choiceIndex > 0) scratch = rewind(scratch, sourceNodeId, options.at).run;
       scratch = fork(scratch, sourceNodeId, {
-        label: `simulation-${choiceIndex + 1}`,
+        label: choice.moveSan,
+        intent: `Authored variation ${choice.id}`,
         origin: "simulated",
         ...(options.at === undefined ? {} : { at: options.at }),
       }).run;
       const branchId = scratch.activeCursor.branchId;
       const line: string[] = [];
       let node: import("@chess-tabiya/schema/drill-pack").SpineNode | undefined = choice;
+      let truncatedAt: string | undefined;
+      let subvariationsSkipped = 0;
       while (node !== undefined && line.length < maxPlies) {
-        scratch = commitMove(scratch, node.moveUci, {
-          actor: "system",
-          ...(options.at === undefined ? {} : { at: options.at }),
-        }).run;
+        if (totalPlies >= 40) {
+          throw new ServerError("SIMULATE_TOO_LARGE", "Simulation is limited to 8 branches and 40 total plies", {
+            details: { variations: selected.length, plies: totalPlies + 1 },
+          });
+        }
+        try {
+          const beforeCommit = scratch;
+          const committed = commitMove(scratch, node.moveUci, {
+            actor: "system",
+            ...(options.at === undefined ? {} : { at: options.at }),
+          });
+          scratch = orchestratePackMove(pack.document, beforeCommit, committed, planSignatureResolver(pack.document, this.#shapes)).run;
+        } catch (error) {
+          if (!(error instanceof RuntimeError) || error.code !== "RUN_TERMINATED") throw error;
+          truncatedAt = node.id;
+          break;
+        }
         line.push(node.moveUci);
+        totalPlies += 1;
+        if (node.children.length > 1) subvariationsSkipped += node.children.length - 1;
         node = node.children.length === 1 ? node.children[0] : undefined;
       }
+      if (node !== undefined && truncatedAt === undefined) truncatedAt = node.id;
       branchIds.push(branchId);
       moves.push(line);
+      labels.push(choice.moveSan);
+      branchDetails.push({
+        ...(truncatedAt === undefined ? {} : { truncatedAt }),
+        ...(subvariationsSkipped === 0 ? {} : { subvariationsSkipped }),
+      });
     }
     const simulationId = randomUUID();
-    this.#simulations.set(simulationId, { runId, sourceNodeId, scratch, branchIds, moves, createdAt: Date.now() });
+    this.#simulations.set(simulationId, { runId, writerId, sourceNodeId, moves, labels, createdAt: Date.now() });
     return Object.freeze({
       simulationId,
       comparison: compareBranches(scratch, branchIds, {
@@ -1724,6 +1763,7 @@ export class RunService {
         label: scratch.branches.find((branch) => branch.id === branchId)!.label,
         leafFen: branchPath(scratch, branchId).at(-1)!.fen,
         plies: moves[indexValue]!.length,
+        ...branchDetails[indexValue],
       }))),
     });
   }
@@ -1737,7 +1777,7 @@ export class RunService {
     at?: string,
   ): MutationResult {
     const simulation = this.#simulations.get(simulationId);
-    if (!simulation || simulation.runId !== runId || Date.now() - simulation.createdAt > 10 * 60_000) {
+    if (!simulation || simulation.runId !== runId || simulation.writerId !== writerId || Date.now() - simulation.createdAt > 10 * 60_000) {
       throw new ServerError("SIMULATION_EXPIRED", "Simulation is missing or expired");
     }
     const moves = simulation.moves[branchIndex];
@@ -1745,7 +1785,8 @@ export class RunService {
     const { stored, lease } = this.#forWrite(runId, principal, writerId);
     this.#refuseWhileMatchLive(runId,stored.run);
     let result = fork(stored.run, simulation.sourceNodeId, {
-      label: `simulation-${branchIndex + 1}`,
+      label: simulation.labels[branchIndex]!,
+      intent: `Entered authored variation ${simulation.labels[branchIndex]!}`,
       origin: "simulated",
       ...(at === undefined ? {} : { at }),
     });
@@ -1758,8 +1799,14 @@ export class RunService {
       result = committed;
       emitted.push(...committed.emitted);
     }
+    if (result.run.events.length > 800) {
+      throw new ServerError("SIMULATE_BUDGET_EXCEEDED", "Entering this line would leave too little room to continue", {
+        details: { plies: moves.length, events: result.run.events.length, limit: 800 },
+      });
+    }
     this.#storage.save(result.run, lease);
     this.#project(result.run, lease.learnerId);
+    this.#simulations.delete(simulationId);
     return { run: result.run, emitted: Object.freeze(emitted) };
   }
 

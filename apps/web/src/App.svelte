@@ -1293,6 +1293,7 @@
         reasoning={session.reasoning}
         comparison={session.comparison}
         comparisonBranchIds={session.comparisonBranchIds}
+        simulation={session.simulation}
         busy={session.busy}
         error={session.error}
         {capabilities}
@@ -1328,6 +1329,9 @@
         onSpeech={(nodeId, scope) => api.speech(session.runState!.run.id, nodeId, scope)}
         onCreateGroup={(input) => controller.createGroup(input)}
         onAnalyzeMissing={(nodeIds) => controller.analyzeMissingEvidence(nodeIds)}
+        onSimulate={() => controller.simulateAuthoredLines()}
+        onEnterSimulation={(branchIndex) => controller.enterSimulation(branchIndex)}
+        onCloseSimulation={() => controller.closeSimulation()}
         onStory={session.runState.run.events.some((event) => event.type === "outcome.reached") ? () => navigate(routePath({ name: "story", runId: session.runState!.run.id })) : undefined}
         onFlip={(nodeId) => flipRun(session.runState!.run.id, nodeId)}
         onSelectPack={(packId) => controller.startPack(packId)}

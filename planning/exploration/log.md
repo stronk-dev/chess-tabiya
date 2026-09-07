@@ -17949,3 +17949,18 @@ index 4 and 35 days. `make test-software` passes 1,114/1,114. [[D1302]] remains 
 dead `retryVariants` rotation, now explicitly blocked on `rfc/return-scheduling.md`; the broader
 lapse-aware step-down and queue features in that draft were not implemented under cover of this
 defect repair.
+
+## 2026-09-07 — Authored consequences gained their missing learner workflow
+
+**What changed:** [[D313]] closes end to end. A pack position with at least two authored
+continuations now offers *Preview authored lines*, opening a responsive modal grid of final
+positions. The preview is explicitly scratch; only *Enter this line* promotes one authored
+continuation into the recorded run. The API, run store, session controller, responsive component,
+focus boundary and route-level error vocabulary are all bound to the shipped server operations.
+
+**Evidence/next:** server integration proves preview leaves stored run bytes and evidence-job count
+unchanged, while entry creates exactly one replay-safe `origin: simulated` branch and consumes the
+writer-scoped preview. The pass also restored the accepted eight-variation/forty-total-ply and
+800-event bounds, authored move labels, off-line refusal, and one-use semantics. [[D1460]] was
+refused after re-derivation: its proposed mode fallback is the inverse of accepted `rfc/theming.md`
+§4, and its separate reduced-motion honesty issue already ships through `HonestControl`.
