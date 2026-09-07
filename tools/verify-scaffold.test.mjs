@@ -81,3 +81,14 @@ test("governance and draft-RFC evidence remain separate Make targets", () => {
     { ruleFound: true, missing: [] },
   );
 });
+
+test("verify-awake cannot omit the actual staged process-contract runner", () => {
+  assert.deepEqual(
+    missingMakeDependencies("verify-awake: staged-process-contracts\n", "verify-awake", ["staged-process-contracts"]),
+    { ruleFound: true, missing: [] },
+  );
+  assert.deepEqual(
+    missingMakeDependencies("verify-awake:\n", "verify-awake", ["staged-process-contracts"]),
+    { ruleFound: false, missing: ["staged-process-contracts"] },
+  );
+});

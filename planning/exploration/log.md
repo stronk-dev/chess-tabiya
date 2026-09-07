@@ -18298,3 +18298,11 @@ can carry candidate information safely.
 checks and five amendment controls. The requirements-only implementation image derives 132 unique
 projection requirements / 229 compiled module pairs, all still dependency-blocked. Fresh review is
 next; no production, API, schema, client or content byte changed.
+
+## 2026-09-07 — Local release gate now executes staged process contracts
+
+The refused Wave-C commit proved [[D3130]]: `make verify-awake` exercised only the staged-runner's
+unit tests, while the pre-commit hook ran the real index snapshot and caught a prepended append-only
+log. The Makefile now exposes that real runner as `staged-process-contracts` and makes
+`verify-awake` depend on it. Scaffold verification binds the dependency so local verification and
+the commit hook cannot silently diverge again.

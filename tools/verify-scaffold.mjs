@@ -169,6 +169,10 @@ const reviewEvidenceInGovernance = governanceRule.split(/\s+/u).filter((dependen
 if (reviewEvidenceInGovernance.length > 0) {
   failures.push(`Makefile: draft-RFC evidence must stay outside verify-governance: ${reviewEvidenceInGovernance.join(", ")}`);
 }
+const awakeDependencies = missingMakeDependencies(makefile, "verify-awake", ["staged-process-contracts"]);
+if (!awakeDependencies.ruleFound || awakeDependencies.missing.length > 0) {
+  failures.push("Makefile: verify-awake must validate the actual staged process contracts before the full gate");
+}
 const rfcEvidenceDependencies = missingMakeDependencies(makefile, "verify-rfc-evidence", [
   "concept-registry-sixth-fresh-review",
   "longitudinal-store-tenth-fresh-review",
