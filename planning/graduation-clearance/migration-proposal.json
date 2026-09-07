@@ -7289,12 +7289,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7304,7 +7304,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:a39a5a622b369ec6dd398d86e649e3cccc1a7d3c3302061191157512d9ef028d"
+            "value": "sha256:47dc6411b99c587f0eb6f6a4db2c9ba6789cbe0322c6a68b9f58860b2f82d14c"
           }
         }
       },
@@ -7320,12 +7320,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7335,7 +7335,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:b9e542098a8030f540bd4153f1c47042cb1c1a2efe669842cf6876be3755962d"
+            "value": "sha256:a4e6c371cf6d004514670e8c653f4ab46caff980d64cccaad93fe1bfdf828e8d"
           }
         }
       },
@@ -7351,12 +7351,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7366,7 +7366,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:a49e705f3b7a68e618bf69b928b320d1b900821b402ea0ae5b550a70ff43f05c"
+            "value": "sha256:c74d5ff67d0213b003c73be3ec6689b9723581245f0e54c27586fe3902c69769"
           }
         }
       },
@@ -7382,12 +7382,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7397,7 +7397,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:0dad901cdce20f99e3addbf3284ce8fb8cdca0095209dbbc3613941084f2b4ca"
+            "value": "sha256:7d7ecf7f804db70be88cc8c62ca910122ab064b36016dd847fa7c7c09217debc"
           }
         }
       },
@@ -7413,12 +7413,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7428,7 +7428,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:d1b98113d0d736c79538e1b6a12316b52b8f6b685b79458c4b92cd5a775d8c28"
+            "value": "sha256:52620feebb73e844ef3f8dd91c3706ae955dcc1e22e3b2ad133aa5bf33bd671b"
           }
         }
       },
@@ -7444,12 +7444,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7459,7 +7459,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:aa901b57e819d2a62030079f55631ac18e4a470e842fc858eb2fd3794448f91f"
+            "value": "sha256:d64a641c299e25e520fe516c1db4a23333ea2c3562fda85c2d7d212304f09374"
           }
         }
       },
@@ -7475,12 +7475,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7490,7 +7490,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:960530c96bf41db02753ad76eaea9cf7814ce2aee1a80faacda4704585e4c88c"
+            "value": "sha256:ac0a58973c7ccc56ba70974379c707ed5703fd10c545115e03d9d989608db60a"
           }
         }
       },
@@ -7506,12 +7506,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7521,7 +7521,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:460cfbab04ae3d0adca1649e313037e86c4b5c84cd1d8e8069177da04a9c3250"
+            "value": "sha256:81dc9c3371197fc6f135bd4f8821af9bc9bbf3851dd624f25590b30f8b56d716"
           }
         }
       },
@@ -7537,12 +7537,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7552,7 +7552,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:45d476daaeb6a6d9f54f593640ecad63fbe1936d8d15a31407a4b9b820117b0e"
+            "value": "sha256:75e88dcf8ab3c422bce45b6f9a5c1c6f61aa756c435f196f6b3958d4d5ee8bf8"
           }
         }
       },
@@ -7568,12 +7568,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7583,7 +7583,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:27fd38ab0b60740da07735be3afab6973376c33e2bfac2d0570154a571969d19"
+            "value": "sha256:4b07da00a271f58c36726ce02c32c0611c02ecef8a5f946214778d08fdf75497"
           }
         }
       },
@@ -7599,12 +7599,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template opponent-policy-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template opponent-policy-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7677,12 +7677,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7692,7 +7692,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:265c81fa6fd1c3499d1798cce93fce0ca346c98a49c9cd4b72b334a454375765"
+            "value": "sha256:2e259cdc8ce4c7c8a55b09b4b8fd77215d5fdbf2dc7c7f3263dd16448d05fe1b"
           }
         }
       },
@@ -7723,12 +7723,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7749,12 +7749,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7827,12 +7827,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7842,7 +7842,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:83b910daa4e6e76ba698fabfeaf069510c0864d80afc07fa82fa35b2586b7df3"
+            "value": "sha256:0164fb7d02e3b68dd17759695ef7847372de8e70cd8eaf0ee5a359bbc8b471a5"
           }
         }
       },
@@ -7873,12 +7873,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7899,12 +7899,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7977,12 +7977,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -7992,7 +7992,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:1563983c215929550cf34961abe2174958d8ab83bfddf023cc666177ba16973f"
+            "value": "sha256:1e24db8fdad45df90c1e921b440663c25c1aadb7b030f87e0b0956674dec488c"
           }
         }
       },
@@ -8008,12 +8008,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8034,12 +8034,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8112,12 +8112,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8127,7 +8127,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:d07d54d892701dde922a3b134519a2090f9025666066bd5e2ba097ed1ca251f6"
+            "value": "sha256:0f76a0b4a25a03a702e018e89f6e535c55925bda61dc05e21394d9e7935dc330"
           }
         }
       },
@@ -8143,12 +8143,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8169,12 +8169,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8247,12 +8247,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8262,7 +8262,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:fd9bc0fc1d1ceced265e32024fa6cb50f8a01889b09910588c86d8dd2f70fae1"
+            "value": "sha256:8e3bb023a066a231199c246547a62e14dc2f28850ddf31c079137dc71b2a3cbc"
           }
         }
       },
@@ -8278,12 +8278,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8304,12 +8304,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8382,12 +8382,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8397,7 +8397,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:4e3fbe31bd70c33d4753d50b4e51dca8aa88eda0805a8723a37ed34fd78431ca"
+            "value": "sha256:19da7e321d4e838a9d4a071499939f52319e33418adbf8c84b7bb467aeb8c312"
           }
         }
       },
@@ -8413,12 +8413,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8439,12 +8439,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8517,12 +8517,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8532,7 +8532,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:625c49bb0adea2d6410f6cbd32ac92d112754b7f06b5d9d457d85f681eef1720"
+            "value": "sha256:fbb104038ff503d3d222e33943dea906518f2f328dbcc5cb5d7ea6585dfba529"
           }
         }
       },
@@ -8548,12 +8548,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8574,12 +8574,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8652,12 +8652,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8667,7 +8667,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:273f0f5832fdbd6670bc97b41ad7efbadfce3adae3bbf65638b44c076e50489e"
+            "value": "sha256:1a2c84a4a27425099b3735e1c2133c61a3448be727d2016799f2bb9b8f16eaea"
           }
         }
       },
@@ -8683,12 +8683,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8709,12 +8709,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8787,12 +8787,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8802,7 +8802,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:bec0e07051bf4230b7506ab3153db03e43fb25f2f3feb08900c89196a6df7984"
+            "value": "sha256:e23e387f092d6bdcb299ecdcbb1db762b6d84134ec599249b442f09f2219d843"
           }
         }
       },
@@ -8818,12 +8818,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8844,12 +8844,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8922,12 +8922,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8937,7 +8937,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:639f59b589bc630cac0aa4707979a62151fea636f804ed670a97e1d6a7c9f39d"
+            "value": "sha256:f1783d14197e4b7784940e65d3ca10758fc2d72c4b395320560fa95e3d552e0b"
           }
         }
       },
@@ -8953,12 +8953,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -8979,12 +8979,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9057,12 +9057,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9072,7 +9072,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:644ae7ade689c441df4e667f3eaf0264b490114d19db2ebf6911de685bed0e65"
+            "value": "sha256:795a26753f520fadbd5dad23e1571fb17ec0f981b14254d80121a24bdad192e5"
           }
         }
       },
@@ -9088,12 +9088,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9114,12 +9114,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9192,12 +9192,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9207,7 +9207,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:67c29d28a0225a087c7a146c5b76e8aea3714e7c048bdf06223377b1a3410ede"
+            "value": "sha256:382b8a06009f73f1deccb7e0904df766c7bfa5ad447025cf312dffa5d6440d30"
           }
         }
       },
@@ -9223,12 +9223,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9249,12 +9249,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9327,12 +9327,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9342,7 +9342,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:22dbdf4ffcd105f1d7f2532aefcf48f12145736753c243c97dc7105af3384feb"
+            "value": "sha256:74d731ad7f25be4e5eec5367cfdee6675bec48f44daa047132f28f3e429ecfc3"
           }
         }
       },
@@ -9358,12 +9358,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9384,12 +9384,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9462,12 +9462,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9477,7 +9477,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:95aaaf82dd0beb5b2249d3a7eac6592d922f8512ad883a9fa41f2210f8c86cbb"
+            "value": "sha256:f7790714d5008843d3fd7b3d57ae4c7a807d54ee6f1d09cb70948db7a39497f3"
           }
         }
       },
@@ -9493,12 +9493,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9519,12 +9519,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9597,12 +9597,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9612,7 +9612,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:8216dbd3346ccfe31ffa19a0bcb670d681291e1091574dac798d0db6e9559aad"
+            "value": "sha256:b2f09c6fe3afec39d98437018458cfef246c3124878916fdb47cb27ef1160e6c"
           }
         }
       },
@@ -9628,12 +9628,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9654,12 +9654,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9732,12 +9732,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9747,7 +9747,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:6efd1605587654a0d6ad13b91488c7620ea6cca8cf1cf5787ea15edd9137ce82"
+            "value": "sha256:3d1d3d6ec7a146b524278d5cd1ddbf2f707de421e42b051bd4d15730c0c80dfb"
           }
         }
       },
@@ -9763,12 +9763,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9789,12 +9789,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9867,12 +9867,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9882,7 +9882,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:ccfc8c1b321922e6bab64a4e3b2b1e3750d643979f5f58689102adda93f796cf"
+            "value": "sha256:0d05a8f39455398ee2319371c6ddd7c8e8339484e0c2f291e6d28e27684e55af"
           }
         }
       },
@@ -9898,12 +9898,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -9924,12 +9924,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10002,12 +10002,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10017,7 +10017,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:489888b12e9387f76977c6b88443e3e724765a271ad1869c038a8f0d863a15bd"
+            "value": "sha256:5f18dcedcbd19f33a1bcdb93d78ddcbad82c8dc69dba9bb0f04210903fe96786"
           }
         }
       },
@@ -10033,12 +10033,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10059,12 +10059,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10137,12 +10137,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10152,7 +10152,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:a6004f36f8f4846d60177de96585b144b9286c04dc09da89d51a5a073b365fa4"
+            "value": "sha256:953b5045999c51a1876274f50601ae07b7d8aff63dfa28efbaa52aa777e959a0"
           }
         }
       },
@@ -10168,12 +10168,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10194,12 +10194,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10272,12 +10272,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10287,7 +10287,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:5b5ba1324532138f9a9ba3b9ff40f197395196e1b996915a6568a8a4cff0a739"
+            "value": "sha256:fa1a17dd3aee246437367131d10cc6fde38b9b9f955a15358fc6bad99cadce61"
           }
         }
       },
@@ -10303,12 +10303,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10329,12 +10329,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10407,12 +10407,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10422,7 +10422,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:60e48cbaa7d1881eb567965f5a5ee62d0ec55db636f06e33b1ad4795b6143898"
+            "value": "sha256:a1fec5d6cac769e77c84e78fc6d26cbd9bc1480dcf91accad243ca4707cf60e1"
           }
         }
       },
@@ -10438,12 +10438,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10464,12 +10464,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10542,12 +10542,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10557,7 +10557,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:437f2a1b6cb3d164309ecb8e4c9e949bc154a58edf211b445e2e47188e5b0029"
+            "value": "sha256:ff3d028b326686dfe312087d3f1d02f9ec51cbcac429167d27f4d21a62c9d861"
           }
         }
       },
@@ -10573,12 +10573,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10599,12 +10599,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10677,12 +10677,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10692,7 +10692,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:bc1361c8e432638b6d9f5a2fa81527e45c658d9dda4fe29842435c3ff56a2556"
+            "value": "sha256:cd4644a79e28d59c7c600efb6ad8d59bde993c6113e979fa55d31c7a9e33a87c"
           }
         }
       },
@@ -10708,12 +10708,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10734,12 +10734,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10812,12 +10812,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10827,7 +10827,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:8839f85102ee50ccaffac4e7fd508126d99d084fa2440d11ff7b508cf24107e9"
+            "value": "sha256:8ec212fb55360370b60faa8f06797b033401f910427cfbd921e75f18c1590d82"
           }
         }
       },
@@ -10843,12 +10843,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10869,12 +10869,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10947,12 +10947,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -10962,7 +10962,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:985a1cf67820ad4882dc3b563baecc355a972216a37c21786a7e7c15ef86c757"
+            "value": "sha256:45f0122069e3eb823e2a5b9933c22f0a0d4fe5340529c20f86e653ad48fe07a2"
           }
         }
       },
@@ -10978,12 +10978,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -11004,12 +11004,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -11082,12 +11082,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -11097,7 +11097,7 @@
           "clearance.emittedPayloadDigest": {
             "status": "derived",
             "source": "canonical emitted payload for template mechanical-objective-placeholder",
-            "value": "sha256:08ad6997a251e9fe42cdf6523bbf42a45763fcbcb5027eb2c2e22ec3baed4255"
+            "value": "sha256:534504c3d1c57c83da2240132c68f8ee2e76c290e18c18b967f202b242d8c05a"
           }
         }
       },
@@ -11113,12 +11113,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template target-elo-authored",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",
@@ -11139,12 +11139,12 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "author_attested"
+            "value": "content_declared"
           },
           "clearance.instrument": {
             "status": "derived",
             "source": "emitter template authored-teaching-absent",
-            "value": "human_chess_author"
+            "value": "repository_content_declaration"
           },
           "clearance.templateId": {
             "status": "derived",

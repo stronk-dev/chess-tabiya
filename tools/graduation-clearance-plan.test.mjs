@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  authorAttestationMaterial,
+  contentDeclarationPayload,
+  digestCanonicalSync,
   assertKnownPlan,
   buildGraduationPlan,
   classifyDraftEntry,
@@ -75,14 +76,14 @@ test("all nine template proposals carry the exact amended predicate without auth
   const plan = buildGraduationPlan();
   const placeholder = plan.migration.rows.find((row) => row.file === "content/candidates/a87-dutch-defense-leningrad-variation/pack.json");
   assert.equal(placeholder.status, "ready");
-  assert.equal(placeholder.fields["clearance.kind"].value, "author_attested");
+  assert.equal(placeholder.fields["clearance.kind"].value, "content_declared");
   assert.equal(placeholder.fields["clearance.templateId"].value, "mechanical-objective-placeholder");
   assert.match(placeholder.fields["clearance.emittedPayloadDigest"].value, /^sha256:[0-9a-f]{64}$/u);
-  assert.equal(placeholder.fields["clearance.attestation"], undefined);
+  assert.equal(placeholder.fields["clearance.declaration"], undefined);
 
   const targetElo = plan.migration.rows.find((row) => row.entryId === "target-elo-authored");
   assert.equal(targetElo.status, "ready");
-  assert.equal(targetElo.fields["clearance.kind"].value, "author_attested");
+  assert.equal(targetElo.fields["clearance.kind"].value, "content_declared");
   assert.equal(targetElo.fields["clearance.templateId"].value, "target-elo-authored");
   assert.equal(targetElo.fields["clearance.subject"], undefined);
 
@@ -99,9 +100,9 @@ test("all nine template proposals carry the exact amended predicate without auth
   assert.equal(assessment.fields["clearance.subject"].value, "/objective/grading/assessedBy");
 });
 
-test("the closed registry owns six attestation payloads and exact mechanical predicates", () => {
+test("the closed registry owns six declaration payloads and exact mechanical predicates", () => {
   assert.deepEqual(Object.keys(TEMPLATE_CLEARANCE_PLANS).sort(), [...EMITTER_TEMPLATE_IDS].sort());
-  assert.equal(Object.values(TEMPLATE_CLEARANCE_PLANS).filter((plan) => plan.kind === "author_attested").length, 6);
+  assert.equal(Object.values(TEMPLATE_CLEARANCE_PLANS).filter((plan) => plan.kind === "content_declared").length, 6);
   assert.deepEqual(TEMPLATE_CLEARANCE_PLANS["tablebase-opponent-not-selected"], {
     kind: "pointer_equals",
     subject: "/opponentPolicy/mode",
@@ -119,26 +120,34 @@ test("the closed registry owns six attestation payloads and exact mechanical pre
   assert.throws(() => TEMPLATE_CLEARANCE_PLANS["authored-teaching-absent"].payloadPointers.push("/shapes"), TypeError);
 });
 
-test("attestation material binds pack, entry, template, pointers, values, and absent sentinels", () => {
+test("content-declaration payload binds pack, entry, template, pointers, values, and absent sentinels", () => {
   const document = {
     id: "pack-one",
     opponentPolicy: { mode: "human_common", targetElo: 1500 },
   };
-  const target = authorAttestationMaterial(document, "target-elo-authored", TEMPLATE_CLEARANCE_PLANS["target-elo-authored"]);
+  const target = contentDeclarationPayload(document, "target-elo-authored", TEMPLATE_CLEARANCE_PLANS["target-elo-authored"]);
   assert.deepEqual(target, {
-    schema: "tabiya.graduation.author-attestation.v1",
+    schema: "tabiya.graduation.content-declaration-payload.v1",
     packId: "pack-one",
     entryId: "target-elo-authored",
     templateId: "target-elo-authored",
     payload: [{ pointer: "/opponentPolicy/targetElo", value: 1500 }],
   });
-  const teaching = authorAttestationMaterial(document, "authored-teaching-absent", TEMPLATE_CLEARANCE_PLANS["authored-teaching-absent"]);
+  const teaching = contentDeclarationPayload(document, "authored-teaching-absent", TEMPLATE_CLEARANCE_PLANS["authored-teaching-absent"]);
   assert.deepEqual(teaching.payload, [
     { pointer: "/planClasses", value: null },
     { pointer: "/deviations", value: null },
     { pointer: "/feedbackClaims", value: null },
   ]);
-  assert.throws(() => authorAttestationMaterial(document, "outcome-ungraded", TEMPLATE_CLEARANCE_PLANS["outcome-ungraded"]), /not an author-attested template/u);
+  assert.throws(() => contentDeclarationPayload(document, "outcome-ungraded", TEMPLATE_CLEARANCE_PLANS["outcome-ungraded"]), /not a content-declared template/u);
+});
+
+test("planner uses the shared RFC-8785 refusal domain", () => {
+  const document = { id: "pack-\ud800", opponentPolicy: { targetElo: 1500 } };
+  assert.throws(
+    () => digestCanonicalSync(contentDeclarationPayload(document, "target-elo-authored", TEMPLATE_CLEARANCE_PLANS["target-elo-authored"])),
+    /lone high surrogate/u,
+  );
 });
 
 test("accepted prose is preserved as migration input rather than regenerated as chess truth", () => {

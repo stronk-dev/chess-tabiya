@@ -25026,7 +25026,7 @@
       "id": "D3073",
       "state": "blocked",
       "sourceGlyph": "📜",
-      "sourceDigest": "sha256:b841c185e7951dd9092834af64cfba2bf4a9ac22850996a38f899362b1c80ca6",
+      "sourceDigest": "sha256:290795ad423e45991bf8a5c7bfc64e73caa81af1dbca78709e67e79b6a3d134a",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:graduation-clearance.md"
@@ -25044,7 +25044,7 @@
       "id": "D3075",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d4613b9ce9ed11658dfab4d51fa30c142ede589794da81d152f23c7a0370078e",
+      "sourceDigest": "sha256:b8203eda6a82a3ac879b49118a0aad54b7caf706569f55c0bacd3bc1ee5c116b",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:graduation-clearance.md"
@@ -25164,8 +25164,8 @@
     {
       "id": "D3088",
       "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:aaf453e22e815eacebce6a290a492ab858e2f23a1168a06f9d97e9e24dcb2b77",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:1ab6649bb1fb05cfaf230f6b9e06a7cd49b859659f0030fb6cc329d57dd43c6d",
       "uxItems": [],
       "owner": "content-and-theory",
       "blocker": "rfc:graduation-clearance.md"
@@ -25173,8 +25173,8 @@
     {
       "id": "D3089",
       "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ed547b57027894d8e0d18ec44168a705cba7f893f8d0dc2ba36a4ed4804a6361",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:8ec588d981678cb9e6c9e80e261d5cdad94c40ee903cd6d6961205fdc2161c11",
       "uxItems": [],
       "owner": "content-and-theory",
       "blocker": "rfc:graduation-clearance.md"
@@ -25182,18 +25182,17 @@
     {
       "id": "D3090",
       "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:45821eb0af92c52e9d5db4a8e0790e874e779183219dc33911a3f0ef4214e075",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:eebdaf612434be52f7092c85b3c59d542da55713491f74df9c83cb4c4410cc34",
       "uxItems": [],
-      "owner": "OWNER",
-      "blocker": "owner-ruling",
-      "question": "Should graduation use a process-enforced explicit human-authored content declaration, or add authenticated author identity and signed time?"
+      "owner": "content-and-theory",
+      "blocker": "rfc:graduation-clearance.md"
     },
     {
       "id": "D3091",
       "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:41b4705516a7600e6105732b5311880925de1940b1fdccab8ea6f140aff8fee5",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:c4482518445a5b6569cc66e08001036a40ab367d49279df7288ca42fe1007de2",
       "uxItems": [],
       "owner": "content-and-theory",
       "blocker": "rfc:graduation-clearance.md"

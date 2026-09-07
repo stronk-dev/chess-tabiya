@@ -5,6 +5,7 @@ import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "n
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { EMITTER_TEMPLATE_IDS } from "../apps/server/src/graduation-blocker-templates.mjs";
+import { canonicalizeJson } from "../packages/schema/src/drill-pack/digest.ts";
 
 export const CLEARANCE_RULES = Object.freeze([
   { rule: "unbuilt", kind: "unbuilt", keywords: [
@@ -77,15 +78,15 @@ function templatePlan(value) {
 }
 
 export const TEMPLATE_CLEARANCE_PLANS = Object.freeze({
-  "mechanical-objective-placeholder": templatePlan({ kind: "author_attested", templateId: "mechanical-objective-placeholder", instrument: "human_chess_author", payloadPointers: ["/objective/summary"], captureEmittedPayload: true }),
+  "mechanical-objective-placeholder": templatePlan({ kind: "content_declared", templateId: "mechanical-objective-placeholder", instrument: "repository_content_declaration", payloadPointers: ["/objective/summary"], captureEmittedPayload: true }),
   "outcome-ungraded": templatePlan({ kind: "objective_graded", subject: "/objective", instrument: "objectiveRules" }),
   "start-assessment-absent": templatePlan({ kind: "assessment_grounded", subject: "/objective/grading/assessedBy", instrument: "make sourcing-check", deferredSubject: true }),
-  "target-elo-authored": templatePlan({ kind: "author_attested", templateId: "target-elo-authored", instrument: "human_chess_author", payloadPointers: ["/opponentPolicy/targetElo"] }),
-  "authored-teaching-absent": templatePlan({ kind: "author_attested", templateId: "authored-teaching-absent", instrument: "human_chess_author", payloadPointers: ["/planClasses", "/deviations", "/feedbackClaims"], requireNonEmptyCollection: true }),
-  "opponent-policy-authored": templatePlan({ kind: "author_attested", templateId: "opponent-policy-authored", instrument: "human_chess_author", payloadPointers: ["/opponentPolicy"] }),
+  "target-elo-authored": templatePlan({ kind: "content_declared", templateId: "target-elo-authored", instrument: "repository_content_declaration", payloadPointers: ["/opponentPolicy/targetElo"] }),
+  "authored-teaching-absent": templatePlan({ kind: "content_declared", templateId: "authored-teaching-absent", instrument: "repository_content_declaration", payloadPointers: ["/planClasses", "/deviations", "/feedbackClaims"], requireNonEmptyCollection: true }),
+  "opponent-policy-authored": templatePlan({ kind: "content_declared", templateId: "opponent-policy-authored", instrument: "repository_content_declaration", payloadPointers: ["/opponentPolicy"] }),
   "tablebase-opponent-not-selected": templatePlan({ kind: "pointer_equals", subject: "/opponentPolicy/mode", expected: "perfect_tablebase", instrument: "make pack-check" }),
-  "recorded-play-needs-authoring": templatePlan({ kind: "author_attested", templateId: "recorded-play-needs-authoring", instrument: "human_chess_author", payloadPointers: ["/spine"], requireNonEmptyCollection: true }),
-  "mechanical-objective-needs-grounding": templatePlan({ kind: "author_attested", templateId: "mechanical-objective-needs-grounding", instrument: "human_chess_author", payloadPointers: ["/objective"] }),
+  "recorded-play-needs-authoring": templatePlan({ kind: "content_declared", templateId: "recorded-play-needs-authoring", instrument: "repository_content_declaration", payloadPointers: ["/spine"], requireNonEmptyCollection: true }),
+  "mechanical-objective-needs-grounding": templatePlan({ kind: "content_declared", templateId: "mechanical-objective-needs-grounding", instrument: "repository_content_declaration", payloadPointers: ["/objective"] }),
 });
 
 const SIDECAR = /\.(?:evidence|graduation|job|sources)\.json$/u;
@@ -122,20 +123,14 @@ function pointerValue(document, pointer) {
   return value;
 }
 
-function canonical(value) {
-  if (value === null || typeof value !== "object") return JSON.stringify(value);
-  if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
-  return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonical(value[key])}`).join(",")}}`;
+export function digestCanonicalSync(value) {
+  return `sha256:${createHash("sha256").update(canonicalizeJson(value)).digest("hex")}`;
 }
 
-function digest(value) {
-  return `sha256:${createHash("sha256").update(canonical(value)).digest("hex")}`;
-}
-
-export function authorAttestationMaterial(document, entryId, plan) {
-  if (plan.kind !== "author_attested") throw new TypeError(`${entryId} is not an author-attested template`);
+export function contentDeclarationPayload(document, entryId, plan) {
+  if (plan.kind !== "content_declared") throw new TypeError(`${entryId} is not a content-declared template`);
   return Object.freeze({
-    schema: "tabiya.graduation.author-attestation.v1",
+    schema: "tabiya.graduation.content-declaration-payload.v1",
     packId: document.id,
     entryId,
     templateId: plan.templateId,
@@ -161,7 +156,7 @@ function templateMigration(document, entry) {
     fields["clearance.emittedPayloadDigest"] = field(
       "derived",
       `canonical emitted payload for template ${entry.id}`,
-      digest(authorAttestationMaterial(document, entry.id, plan)),
+      digestCanonicalSync(contentDeclarationPayload(document, entry.id, plan)),
     );
   }
   return {

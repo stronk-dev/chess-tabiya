@@ -18221,3 +18221,18 @@ Two verification corrections landed in the same repair. [[D3124]] removes twelve
 unrelated ids from the successor's “unresolved” status instead of reopening them during ownership
 transfer. [[D3125]] updates the retained concept-registry author test to the [[D3057]] tier split:
 present in opt-in `verify-rfc-evidence`, absent from stable `verify-governance`.
+
+## 2026-09-07 — Graduation clearance four-defect author repair
+
+**What changed:** [[D3088]]–[[D3091]] are repaired without implementing schema 0.28. A bounded
+contract now evaluates the real nine emitter shapes through false → true → stale-false, rejoins each
+entry id to its exact registry plan, and rejects every pack-side plan mutation. The unsupported
+human-authentication claim is narrowed to a repository content declaration: its exact content and
+self-declared timestamp are digest-bound, while actor identity and chess truth remain outside the
+machine claim. The planner's private canonicalizer is deleted in favor of the shared RFC-8785
+serializer and its Unicode refusal domain.
+
+**Evidence/next:** `make graduation-clearance-author-repair graduation-plan-check` is green;
+`planning/graduation-clearance/author-repair-2026-09-07.md` records the bounded scope and retirement
+rule. The RFC remains returned/implementing and no schema, corpus or production evaluator changed.
+A genuinely fresh review is still required before the schema-0.28 implementation slice.

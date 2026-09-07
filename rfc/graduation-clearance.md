@@ -9,6 +9,12 @@
   receipt cannot prove a human actor/time, and the planner does not use the shared RFC-8785
   authority it claims. The shipped writer and template registry remain valid;
   no corpus entry has been migrated under the returned contract.
+  **Bounded author repair completed 2026-09-07; awaiting a genuinely fresh review.**
+  `make graduation-clearance-author-repair` now executes the nine registered emitter shapes through
+  the complete false → true → false contract, rejects pack-side plan weakening, and shares the
+  production RFC-8785 serializer. [[D3090]] is resolved on the narrow process-authority option:
+  the receipt is an exact, timestamp-bound repository content declaration, not authentication of a
+  person's identity or the truth of the chess judgement.
   **Accepted 2026-08-17 by the register owner; status token
   reconciled 2026-08-20.**
   **[author round 3, 2026-08-17]** D503 is closed, and it is closed as an
@@ -3017,7 +3023,7 @@ supply its own pointer list or weaken a precondition.
 ```ts
 type Sha256 = `sha256:${string}`;
 
-type AuthorAttestedTemplate =
+type ContentDeclaredTemplate =
   | "mechanical-objective-placeholder"
   | "opponent-policy-authored"
   | "target-elo-authored"
@@ -3038,34 +3044,41 @@ type GraduationClearanceAmendment =
       readonly instrument: "objectiveRules";
     }
   | {
-      readonly kind: "author_attested";
-      readonly templateId: AuthorAttestedTemplate;
-      readonly instrument: "human_chess_author";
+      readonly kind: "content_declared";
+      readonly templateId: ContentDeclaredTemplate;
+      readonly instrument: "repository_content_declaration";
       readonly emittedPayloadDigest?: Sha256;
-      readonly attestation?: {
-        readonly authority: "human_chess_author";
-        readonly payloadDigest: Sha256;
-        readonly authoredAt: string; // RFC 3339 date-time
+      readonly declaration?: {
+        readonly authority: "repository_content_declaration";
+        readonly declarationDigest: Sha256;
+        readonly declaredAt: string; // RFC 3339 date-time; self-declared and digest-bound
       };
     };
 ```
 
-`author_attested` ([[D3073]]) does **not** reinstate the struck second-party reviewer in §3. The author is the
-actor already required by law 8 to supply chess judgement; the receipt makes that act addressable
-and stale-able. It proves only “a human author explicitly adopted this exact payload.” It does not
-prove that the payload is good chess, does not change `accepted`, and cannot be written by an LLM
-under law 8. The machine verifies identity and byte agreement, never chess correctness.
+`content_declared` ([[D3073]], [[D3090]]) does **not** reinstate the struck second-party reviewer in
+§3 and does not authenticate a human identity. The actor already required by law 8 supplies the
+chess judgement through the repository's authoring process; the persisted declaration makes the
+exact content and its declared time addressable and stale-able. The machine proves only that the
+current payload and `declaredAt` match the checked-in declaration. It does not prove who acted,
+that the declared time came from a trusted clock, or that the payload is good chess. Law 8 and
+review enforce authorship; the clearance evaluator enforces byte identity. Authenticated author
+identity or signed time is a separate security feature and is not smuggled into this format.
 
-The attestation digest is `digestCanonicalJson` (RFC 8785, the existing pack digest primitive) over
-this exact material:
+`declarationDigest` is SHA-256 over the shared `canonicalizeJson` RFC-8785 bytes for this exact
+material (the async production helper `digestCanonicalJson` hashes the same bytes):
 
 ```ts
 {
-  schema: "tabiya.graduation.author-attestation.v1",
-  packId,
-  entryId,
-  templateId,
-  payload: [{ pointer, value }, ...]
+  schema: "tabiya.graduation.content-declaration.v1",
+  declaredAt,
+  payload: {
+    schema: "tabiya.graduation.content-declaration-payload.v1",
+    packId,
+    entryId,
+    templateId,
+    payload: [{ pointer, value }, ...]
+  }
 }
 ```
 
@@ -3073,7 +3086,8 @@ The registry supplies the ordered pointer list; the compiler reads the values fr
 constructs the array. Absent optional values are represented as `null`, not dropped. Including
 `packId`, `entryId`, pointer names and template identity means a receipt cannot be copied to another
 pack, another blocker or another template whose visible value happens to match. Mutating any
-payload byte makes the receipt stale. `emittedPayloadDigest` is legal only on
+payload byte or the declared timestamp makes the receipt stale. `emittedPayloadDigest` hashes only
+the nested content-declaration payload and is legal only on
 `mechanical-objective-placeholder`; that predicate additionally requires the current payload digest
 to differ from the emitted digest, so signing the unchanged generated placeholder cannot clear it.
 
@@ -3081,15 +3095,15 @@ to differ from the emitted digest, so signing the unchanged generated placeholde
 
 | emitter template | clearance | registry-owned payload / standing predicate | why it can fail honestly |
 |---|---|---|---|
-| `mechanical-objective-placeholder` | `author_attested` | payload `/objective/summary`; non-blank, current digest differs from `emittedPayloadDigest`, attestation matches current payload | emitted blocker has no attestation and its current digest equals the emitted digest |
+| `mechanical-objective-placeholder` | `content_declared` | payload `/objective/summary`; non-blank, current digest differs from `emittedPayloadDigest`, declaration matches current payload | emitted blocker has no declaration and its current digest equals the emitted digest |
 | `outcome-ungraded` | `objective_graded` | `/objective`; `objective.type` is one of `win \| hold \| save \| resist`, `objective.grading` exists, and `objectiveRules` compiles at least one result rule | emitted `play_until_checkpoint` is excluded even though its bare checkpoint condition compiles |
 | `start-assessment-absent` | existing `assessment_grounded` | fixed subject `/objective/grading/assessedBy`; `assessmentGrounding(...) === "ledger_verified"` | the emitted node is absent and evaluates `unverified` |
-| `target-elo-authored` | `author_attested` | payload `/opponentPolicy/targetElo`; finite integer admitted by the pack schema, attestation matches | the number may remain unchanged; absence of a receipt is the failing state |
-| `authored-teaching-absent` | `author_attested` | payloads `/planClasses`, `/deviations`, `/feedbackClaims`, with absent values encoded `null`; at least one collection is non-empty and the receipt matches all three | an empty/absent triple fails even with a forged matching receipt |
-| `opponent-policy-authored` | `author_attested` | payload `/opponentPolicy`; the complete valid policy object is attested, not only its mode | changing the mode is neither required nor sufficient |
+| `target-elo-authored` | `content_declared` | payload `/opponentPolicy/targetElo`; finite integer admitted by the pack schema, declaration matches | the number may remain unchanged; absence of a declaration is the failing state |
+| `authored-teaching-absent` | `content_declared` | payloads `/planClasses`, `/deviations`, `/feedbackClaims`, with absent values encoded `null`; at least one collection is non-empty and the declaration matches all three | an empty/absent triple fails even with a matching digest |
+| `opponent-policy-authored` | `content_declared` | payload `/opponentPolicy`; the complete valid policy object is declared, not only its mode | changing the mode is neither required nor sufficient |
 | `tablebase-opponent-not-selected` | `pointer_equals` | `/opponentPolicy/mode === "perfect_tablebase"` | `human_common`, `strong_engine` and `practical_resistance` all fail |
-| `recorded-play-needs-authoring` | `author_attested` | payload `/spine`; spine is non-empty and the receipt matches the complete nested recorded line | changing any recorded move invalidates the receipt |
-| `mechanical-objective-needs-grounding` | `author_attested` | payload `/objective`; the complete valid objective is attested | changing only unrelated pack prose cannot affect it |
+| `recorded-play-needs-authoring` | `content_declared` | payload `/spine`; spine is non-empty and the declaration matches the complete nested recorded line | changing any recorded move invalidates the declaration |
+| `mechanical-objective-needs-grounding` | `content_declared` | payload `/objective`; the complete valid objective is declared | changing only unrelated pack prose cannot affect it |
 
 The first two position-seed blockers intentionally converge on one authoring act without collapsing
 their predicates. Converting the mechanical seed to an outcome objective with a declared grading
@@ -3111,26 +3125,34 @@ Only `assessment_grounded` uses that exception in this amendment. Its subject re
 `assessmentGrounding` already returns `unverified` when the node is absent. Once present, the full
 engine/Syzygy ledger join still decides the predicate. `pointer_authored`, `pointer_equals`,
 `ledger_record`, `claim_bound` and `shape_firing` retain their resolving-subject requirement.
-`author_attested` has no caller-supplied `subject` at all; its payload comes from the template
+`content_declared` has no caller-supplied `subject` at all; its payload comes from the template
 registry.
+
+For every registered emitter entry, evaluation first joins `entry.id` back to the closed template
+registry and requires the persisted plan fields to be set-equal to that plan. `pointer_equals` and
+`objective_graded` therefore need no public `templateId`: the enclosing blocker id is their join
+key. A changed `kind`, `subject`, `expected`, `instrument` or `templateId`, an omitted required
+field, or any extra caller-selected predicate field is invalid input rather than a false predicate.
+Only the registry-declared state slots (`declaration`, and `emittedPayloadDigest` on the one capture
+template) may accompany the exact plan.
 
 ### Writer, schema and non-vacuity consequences
 
 The schema-0.28 migration extends the clearance union with the three shapes above. The template
 registry gains one total `clearancePlan` per id, and every emitter writes that plan with no
-attestation. Stage 0 backfills the same objects. This remains mechanical: the migration records a
-predicate that is false now; it does not create the human receipt or the missing chess content.
+declaration. Stage 0 backfills the same objects. This remains mechanical: the migration records a
+predicate that is false now; it does not create the content declaration or the missing chess content.
 
 `clearGraduationEntries` adds three evaluators:
 
 - `pointer_equals` resolves its subject and uses JSON scalar identity against `expected`;
 - `objective_graded` requires the closed outcome type, a grading object, and compiled result rules;
-- `author_attested` recomputes the registry-owned payload, checks its template precondition and
-  compares the canonical digest to the receipt.
+- `content_declared` recomputes the registry-owned payload, checks its template precondition and
+  compares the shared-canonical declaration digest, including `declaredAt`, to the declaration.
 
 All three join `MECHANICAL_KINDS` because the writer can evaluate them deterministically. That name
-means *machine-decidable predicate*, not *machine-authored truth*. Missing attestation, missing
-future subject, unmet precondition and digest mismatch return `holds: false`; malformed receipt,
+means *machine-decidable predicate*, not *machine-authored truth*. Missing declaration, missing
+future subject, unmet precondition and digest mismatch return `holds: false`; malformed declaration,
 wrong template/entry identity, illegal `emittedPayloadDigest`, unresolvable required pointer or
 wrong value type are validation errors. The existing non-vacuity rule remains: every one of the nine
 emitter plans must evaluate false on the exact emitted document before it may be written.
@@ -3142,12 +3164,14 @@ emitter plans must evaluate false on the exact emitted document before it may be
     or chess content; the current 104 contract-blocked rows move to mechanically migratable
     blocking clearances, not to `resolved`.
 21. The three formerly labelled ready controls fail in the dangerous direction: `strong_engine`
-    cannot clear `tablebase-opponent-not-selected`; changing a policy without an attestation cannot
+    cannot clear `tablebase-opponent-not-selected`; changing a policy without a declaration cannot
     clear `opponent-policy-authored`; signing the unchanged generated objective cannot clear
     `mechanical-objective-placeholder`.
-22. The author-attestation evaluator rejects a copied pack id, copied entry id, wrong template,
-    altered pointer, altered value, stale payload, malformed timestamp and receipt written for a
+22. The content-declaration evaluator rejects a copied pack id, copied entry id, wrong template,
+    altered pointer, altered value, stale payload, malformed timestamp and declaration written for a
     different canonical payload. An exact control clears. No caller supplies the payload pointers.
+    The declared timestamp is inside `declarationDigest`; the machine makes no actor or trusted-clock
+    claim beyond that byte agreement.
 23. `authored-teaching-absent` stays blocking when all three collections are absent/empty even if
     the digest matches; `recorded-play-needs-authoring` stays blocking on an empty spine; both clear
     only after their precondition and exact receipt hold.
@@ -3168,10 +3192,10 @@ emitter plans must evaluate false on the exact emitted document before it may be
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | [[D3088]] execute criteria 21–25 in one bounded nine-emitter author model that is retired into production tests | claude author repair | author-contract target plus fresh-review receipt | |
-| D2 | [[D3089]] bind every registered entry id to its exact registry plan and reject altered persisted fields | claude author repair | able-to-fail subject/expected/instrument/template controls | |
-| D3 | [[D3090]] state only the authority the receipt can prove, or consume an authentic author issuer; reconcile `authoredAt` | OWNER/claude on ruling | explicit ruling and exact receipt fixtures | |
-| D4 | [[D3091]] use one shared RFC-8785 canonicalization authority for emitted and current payloads | claude author repair | shared-serializer identity and refusal fixtures | |
+| D1 | [[D3088]] execute criteria 21–25 in one bounded nine-emitter author model that is retired into production tests | claude author repair | `make graduation-clearance-author-repair`; fresh review still required | **discharged 2026-09-07** |
+| D2 | [[D3089]] bind every registered entry id to its exact registry plan and reject altered persisted fields | claude author repair | same target mutates every persisted plan field and rejects extras | **discharged 2026-09-07** |
+| D3 | [[D3090]] state only the authority the receipt can prove, or consume an authentic author issuer; reconcile the timestamp | author repair (unsupported security claims cannot survive by preference) | narrow process-authority branch; `declaredAt` included in digest | **discharged 2026-09-07** |
+| D4 | [[D3091]] use one shared RFC-8785 canonicalization authority for emitted and current payloads | claude author repair | planner and model import `canonicalizeJson`; surrogate refusal pinned | **discharged 2026-09-07** |
 
 ## Open questions
 
