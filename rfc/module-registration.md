@@ -8,7 +8,9 @@
   measured on 2026-09-07 are repaired in this author image:** the four awaiting RFCs now have an
   exact cover-or-refuse disposition for every projection, and §2.5.0's historical direct-call
   draft is separated from the normative query, decision-stamp and Review-paging contract. The
-  maintained author contract is green on the regenerated 127/224 requirements image. Repair history is indexed at
+  maintained author contract is green on the regenerated 127/224 requirements image. Its checked-in
+  capability authority is set-equal to both implementer-facing tables, so a one-section repair now
+  fails the same target instead of reading as complete. Repair history is indexed at
   `planning/learner-modules/author-repair-and-review-chain.md`; no further round of self-review is
   commissioned ([[D3057]]).
 - **Author:** claude (drafted on the [[D1430]] audit, re-verified line by line at HEAD `f0d5460`)
@@ -1922,6 +1924,12 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-09-07 ([[D3066]] declaration-table closure): moved the ten non-floor capability sets into
+  the existing author-policy authority, emitted that image once in the binding requirements, and
+  made the maintained author contract parse both §1.1 and §2.3(a). Either table drifting from the
+  executable image now fails `make module-registration-author-contract`. A repo-wide repeated-table
+  header census found only intentional family/schema partitions and retained historical amendment
+  tables elsewhere; no second active RFC copied this repaired capability image.
 - 2026-09-07 (D3065 bounded discharge-coverage repair): regenerated the requirements-only image
   from 117/205 to 127/224. Exact legal moves now reach requested Sight; the six omitted breadth
   facts reach Full Inspector with harassment/contact/defender/material sequences selectively added

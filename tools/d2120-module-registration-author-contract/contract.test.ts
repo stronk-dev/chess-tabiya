@@ -14,6 +14,22 @@ const canonical = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
 const digest = (value: unknown) => `sha256:${createHash("sha256").update(canonical(value)).digest("hex")}`;
 const key = (value: {id:string;version:number}) => `${value.id}@${value.version}`;
 
+const cleanCell = (value: string) => value
+  .replaceAll("**", "")
+  .replaceAll("`", "")
+  .trim();
+
+const markdownTable = (heading: string) => {
+  const start = rfc.indexOf(heading);
+  expect(start).toBeGreaterThanOrEqual(0);
+  const tail = rfc.slice(start);
+  const tableStart = tail.indexOf("| module |");
+  expect(tableStart).toBeGreaterThanOrEqual(0);
+  const lines = tail.slice(tableStart).split("\n");
+  const tableEnd = lines.findIndex((line, index) => index > 1 && line.trim() === "");
+  return lines.slice(0, tableEnd).filter((line) => line.startsWith("| `"));
+};
+
 describe("module-registration sealed-pool author repair", () => {
   it("D2164 derives policy and sessions from their actual authorities", () => {
     const { digest: sealed, ...body } = bindings;
@@ -37,6 +53,36 @@ describe("module-registration sealed-pool author repair", () => {
       expect(row.budget.maxFacts).toBe(policy.maxFacts);
       expect(row.sessions).toEqual(WORKFLOW_CONTEXT_POLICIES.filter((context) => context.moduleCeiling.includes(module as never)).map((context) => context.id));
     }
+  });
+
+  it("D3066 keeps both implementer-facing capability tables set-equal to the author authority", () => {
+    const expected = new Map(Object.entries(AUTHOR_MODULE_POLICIES).map(([module, policy]) => [
+      module,
+      policy.answerCapabilities.join(", "),
+    ]));
+    expected.set("rules_floor", "none");
+    expect(bindings.moduleAnswerCapabilities).toEqual(Object.fromEntries(
+      Object.entries(AUTHOR_MODULE_POLICIES).map(([module, policy]) => [module, policy.answerCapabilities]),
+    ));
+
+    const summaryStart = rfc.indexOf("#### 1.1 The summary table");
+    const summaryEnd = rfc.indexOf("#### 1.2", summaryStart);
+    const summaryRows = rfc.slice(summaryStart, summaryEnd).split("\n").filter((line) => /^\| \d+ \|/u.test(line));
+    const summary = new Map(summaryRows.map((line) => {
+      const cells = line.split("|").slice(1, -1).map(cleanCell);
+      const module = cells[1];
+      const capability = module === "guided_hint" ? "guided_hint@1" : cells[4].split(", through")[0];
+      return [module, capability];
+    }));
+
+    const detail = new Map(markdownTable("The literal population required by [[D1868]] is:").map((line) => {
+      const cells = line.split("|").slice(1, -1).map(cleanCell);
+      const capability = cells[0] === "guided_hint" ? "guided_hint@1" : cells[1];
+      return [cells[0], capability];
+    }));
+
+    expect(summary).toEqual(expected);
+    expect(detail).toEqual(expected);
   });
 
   it("D2165 publishes complete typed upstream source contracts and no direct detector operation", () => {

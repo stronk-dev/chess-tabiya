@@ -124,16 +124,16 @@ export const GUIDED_HINT_AUTHORITY = Object.freeze({
  * absent because they are derived from WORKFLOW_CONTEXT_POLICIES.
  */
 export const AUTHOR_MODULE_POLICIES = Object.freeze({
-  sight_on_request: Object.freeze({ timings: ["precommit", "postcommit"], roles: ["learner", "host"], forms: ["sentence", "card", "square", "arrow"], maxFacts: 1 }),
-  blunder_prevention: Object.freeze({ timings: ["at_commit"], roles: ["learner", "host"], forms: ["sentence", "card", "square", "arrow"], maxFacts: 1 }),
-  threat_radar: Object.freeze({ timings: ["precommit", "postcommit"], roles: ["learner", "host"], forms: ["sentence", "card", "square", "arrow"], maxFacts: 3 }),
-  postcommit_nudge: Object.freeze({ timings: ["postcommit"], roles: ["learner", "host"], forms: ["sentence", "card", "square", "arrow"], maxFacts: 2 }),
-  structure_nudge: Object.freeze({ timings: ["postcommit"], roles: ["learner", "host"], forms: ["card", "timeline_mark"], maxFacts: 1 }),
-  theory_breadcrumb: Object.freeze({ timings: ["postcommit"], roles: ["learner", "host"], forms: ["sentence", "card"], maxFacts: 1 }),
-  guided_hint: Object.freeze({ timings: ["checkpoint"], roles: ["learner", "host"], forms: ["sentence", "square", "arrow"], maxFacts: 1 }),
-  compare_coach: Object.freeze({ timings: ["checkpoint", "attempt_end", "review", "analysis"], roles: ["learner", "host"], forms: ["sentence", "card", "arrow"], maxFacts: 2 }),
-  review_map: Object.freeze({ timings: ["review", "analysis"], roles: ["learner", "host", "participant", "spectator"], forms: ["timeline_mark", "card", "sentence", "square", "arrow"], maxFacts: 3 }),
-  full_inspector: Object.freeze({ timings: ["review", "analysis"], roles: ["learner", "host"], forms: ["panel", "sentence", "square", "arrow"], maxFacts: 20 }),
+  sight_on_request: Object.freeze({ answerCapabilities: ["pattern", "candidates"], timings: ["precommit", "postcommit"], roles: ["learner", "host"], forms: ["sentence", "card", "square", "arrow"], maxFacts: 1 }),
+  blunder_prevention: Object.freeze({ answerCapabilities: ["threat"], timings: ["at_commit"], roles: ["learner", "host"], forms: ["sentence", "card", "square", "arrow"], maxFacts: 1 }),
+  threat_radar: Object.freeze({ answerCapabilities: ["pattern", "threat"], timings: ["precommit", "postcommit"], roles: ["learner", "host"], forms: ["sentence", "card", "square", "arrow"], maxFacts: 3 }),
+  postcommit_nudge: Object.freeze({ answerCapabilities: ["threat", "evaluation"], timings: ["postcommit"], roles: ["learner", "host"], forms: ["sentence", "card", "square", "arrow"], maxFacts: 2 }),
+  structure_nudge: Object.freeze({ answerCapabilities: ["theory"], timings: ["postcommit"], roles: ["learner", "host"], forms: ["card", "timeline_mark"], maxFacts: 1 }),
+  theory_breadcrumb: Object.freeze({ answerCapabilities: ["theory"], timings: ["postcommit"], roles: ["learner", "host"], forms: ["sentence", "card"], maxFacts: 1 }),
+  guided_hint: Object.freeze({ answerCapabilities: ["guided_hint@1"], timings: ["checkpoint"], roles: ["learner", "host"], forms: ["sentence", "square", "arrow"], maxFacts: 1 }),
+  compare_coach: Object.freeze({ answerCapabilities: ["move", "evaluation"], timings: ["checkpoint", "attempt_end", "review", "analysis"], roles: ["learner", "host"], forms: ["sentence", "card", "arrow"], maxFacts: 2 }),
+  review_map: Object.freeze({ answerCapabilities: ["threat", "theory", "evaluation"], timings: ["review", "analysis"], roles: ["learner", "host", "participant", "spectator"], forms: ["timeline_mark", "card", "sentence", "square", "arrow"], maxFacts: 3 }),
+  full_inspector: Object.freeze({ answerCapabilities: ["threat", "theory", "evaluation", "principal_variation"], timings: ["review", "analysis"], roles: ["learner", "host"], forms: ["panel", "sentence", "square", "arrow"], maxFacts: 20 }),
 } as const);
 
 /**

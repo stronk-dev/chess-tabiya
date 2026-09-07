@@ -17609,3 +17609,21 @@ occupied-destination population, non-hue history/check geometry and forced-color
 `docs/theming.md`; `make test-software` is green at 181 files / 1110 tests. Theming D5 remains the
 owner's felt-quality discharge; the delegated second-piece and additional-board choices are
 non-blocking follow-ons.
+
+## 2026-09-07 — Module capability half-repair made unable to recur
+
+**What landed:** [[D3066]] moves the ten evidence-bearing module capability sets into the existing
+author-policy authority and emits the image once in the module binding requirements. The maintained
+author contract now parses both implementer-facing RFC tables (§1.1 and §2.3(a)) and requires each
+to equal that authority, including the special Guided Hint disclosure contract and the floor's
+explicit `none`.
+
+**What changed:** the earlier repair corrected both prose tables but left no reader capable of
+detecting the same split on the next amendment. The new negative boundary makes changing either
+table alone fail. A repo-wide repeated-table-header census found only intentional family/schema
+partitions and retained historical amendment tables elsewhere, not another active capability copy.
+
+**Evidence/next:** `make module-registration-author-contract` passes 12/12 over the regenerated
+127-requirement / 224-binding image. The RFC remains draft and requirements-only; exact upstream
+operations, `evidence-value-authority`, and the measured Hint family×rung registry remain its named
+acceptance blockers.

@@ -15,6 +15,47 @@
       "cartesianSetEquality": true
     }
   },
+  "moduleAnswerCapabilities": {
+    "sight_on_request": [
+      "pattern",
+      "candidates"
+    ],
+    "blunder_prevention": [
+      "threat"
+    ],
+    "threat_radar": [
+      "pattern",
+      "threat"
+    ],
+    "postcommit_nudge": [
+      "threat",
+      "evaluation"
+    ],
+    "structure_nudge": [
+      "theory"
+    ],
+    "theory_breadcrumb": [
+      "theory"
+    ],
+    "guided_hint": [
+      "guided_hint@1"
+    ],
+    "compare_coach": [
+      "move",
+      "evaluation"
+    ],
+    "review_map": [
+      "threat",
+      "theory",
+      "evaluation"
+    ],
+    "full_inspector": [
+      "threat",
+      "theory",
+      "evaluation",
+      "principal_variation"
+    ]
+  },
   "exactOperationResolution": {
     "owner": "module-registration",
     "operation": "compileModuleExactOperationResolution(input)",
@@ -25338,5 +25379,5 @@
       }
     }
   ],
-  "digest": "sha256:adb44fa817cc27499b76683545fd9b692070ff0924d21df4e0d1a398f7d9ab82"
+  "digest": "sha256:3cf518ba5c2ad5738fc1eca797413d83659ae301376b50c4d230189aabb3bd3b"
 }

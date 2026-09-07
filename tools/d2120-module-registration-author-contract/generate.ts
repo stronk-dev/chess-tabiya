@@ -326,7 +326,9 @@ const exactOperationResolution = Object.freeze({
   completion: "set_equal_non_null_operations_and_timing_intersections",
 });
 const execution = { schemaVersion: 2, kind: "module_evidence_requirements", completionClaim: "requirements_only", population: requirementRows.length, awaiting: [...awaiting].sort(), sourceContracts: SOURCE_CONTRACTS, sourceInputs: SOURCE_INPUTS, guidedHint: GUIDED_HINT_AUTHORITY, exactOperationResolution, rows: requirementRows };
-const bindings = { schemaVersion: 2, kind: "module_binding_requirements", completionClaim: "requirements_only", population: bindingRows.length, guidedHint: GUIDED_HINT_AUTHORITY, exactOperationResolution, rows: bindingRows };
+const moduleAnswerCapabilities = Object.freeze(Object.fromEntries(Object.entries(AUTHOR_MODULE_POLICIES)
+  .map(([module, policy]) => [module, policy.answerCapabilities])));
+const bindings = { schemaVersion: 2, kind: "module_binding_requirements", completionClaim: "requirements_only", population: bindingRows.length, guidedHint: GUIDED_HINT_AUTHORITY, moduleAnswerCapabilities, exactOperationResolution, rows: bindingRows };
 writeFileSync("rfc/contracts/module-execution-plan-v1.json", canonical({ ...execution, digest: digest(execution) }));
 writeFileSync("rfc/contracts/module-binding-plan-v1.json", canonical({ ...bindings, digest: digest(bindings) }));
 console.log(`module-registration requirements: ${requirementRows.length} evidence rows / ${bindingRows.length} binding rows; final emission refused`);

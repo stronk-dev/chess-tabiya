@@ -24943,11 +24943,12 @@
     },
     {
       "id": "D3066",
-      "state": "todo",
-      "owner": "coordinator",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d299b0be4f16858bdc7a7339d3e62c807a61246c5ae1d4bd0e4cc84d7c869528",
-      "uxItems": []
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:998675b9d6c542b742b01488d4849a943f043ca5d1ffc2792af29f44b7d80930",
+      "uxItems": [],
+      "evidence": "tools/d2120-module-registration-author-contract/contract.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3067",

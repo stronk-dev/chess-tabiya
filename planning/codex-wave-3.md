@@ -532,8 +532,11 @@ is `blocked_dependencies` / `requirements_only`, so **acceptance alone authorise
 Secondary blocker: §2.5.0 is marked *"must not be implemented"* while holding the module query
 route, request union, boundary validations, decision stamp and Review paging that A16/A19/A20 assert
 against — because its withdrawal names a **heading range** rather than a **set of clauses**.
-[[D3066]] owns the remaining cross-document sweep for declaration tables that lag their own repaired
-normative sections.
+[[D3066]] is closed: the ten non-floor capability sets now live in one author-policy authority,
+the binding plan emits that image once, and `make module-registration-author-contract` parses both
+§1.1 and §2.3(a) and requires set equality. A repo-wide repeated-table census found the remaining
+duplicates were intentional family/schema partitions or retained amendment history, not a second
+copy of this repaired capability image.
 
 ## Work-index route repair — [[D3068]], 2026-09-07
 
