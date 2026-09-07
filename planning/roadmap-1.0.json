@@ -37,6 +37,7 @@
       "owner": "evidence-foundation",
       "rfcs": [
         "pack-capability-contract.md",
+        "evidence-job-durability.md",
         "claim-semantic-anchors.md",
         "tactical-collectors.md",
         "semantic-collectors.md",
@@ -332,14 +333,14 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Repair pack capability D3120–D3123, promote and transfer the evidence-job successor claim, then run the bounded acceptance check so claim-semantic-anchors and truthful feedback binding can proceed; independently fresh-review the shared-resource bootstrap repair.",
+        "nextAction": "Run the bounded fresh acceptance check on repaired pack capability so claim-semantic-anchors and truthful feedback binding can proceed; repair the independently-owned evidence-job successor later without reattaching it to F3; independently fresh-review shared-resource bootstrap.",
         "latestCheckpoint": {
           "at": "2026-09-07",
-          "summary": "The first review of the cut pack-capability contract kept its twelve-dependent boundary but returned four bounded seams: an orphaned operation type/consumer registry, contradictory migration timing, a storage claim owned by the wrong document, and a hidden 86-production/6-fixture split.",
-          "impact": "regressed",
-          "evidence": ["planning/pack-capability-contract/post-cut-fresh-independent-buildability-review-2026-09-07.md", "tools/d3120-pack-capability-cut-fresh-review/review.test.mjs"],
+          "summary": "The bounded F3 repair closes all four post-cut seams without regrowing the durable-job system: operation effects moved wholly to the registered successor, the initial schema migration has one same-commit sequence, the storage claim follows its DDL, and 92 is explicitly 86 production packs plus 6 browser fixtures.",
+          "impact": "advanced",
+          "evidence": ["planning/pack-capability-contract/post-cut-author-repair-2026-09-07.md", "tools/d3120-pack-capability-cut-fresh-review/review.test.mjs"],
           "anchors": [
-            {"kind": "work_state", "id": "D3120", "digest": "sha256:124900c0ca08ae2ac8887ad65d5bbc385366891d3e6a1ed3f1c07ae39f793637"}
+            {"kind": "work_state", "id": "D3120", "digest": "sha256:4338e51e9a530e392fd30e404f9fa33e90bddf1b50a6529a977d60ae9f44cb4a"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

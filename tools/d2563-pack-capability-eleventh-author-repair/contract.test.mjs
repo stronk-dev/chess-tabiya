@@ -20,7 +20,7 @@ import {
 // 20-30 were cut out of rfc/pack-capability-contract.md byte-for-byte into the successor
 // draft; the review narrative moved to review-history.md. This reproducer asserts nothing
 // new -- it reads the same bytes in their new homes.
-const rfc = readFileSync("planning/pack-capability-contract/evidence-job-durability.md", "utf8") + readFileSync("planning/pack-capability-contract/review-history.md", "utf8");
+const rfc = readFileSync("rfc/evidence-job-durability.md", "utf8") + readFileSync("planning/pack-capability-contract/review-history.md", "utf8");
 const section = rfc.match(/#### §5\.2 Queued evidence([\s\S]*?)\n## §3\./u)?.[1] ?? "";
 const ddl = section.match(/```sql\n([\s\S]*?)\n```/u)?.[1] ?? "";
 

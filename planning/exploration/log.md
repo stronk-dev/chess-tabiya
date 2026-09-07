@@ -18203,3 +18203,21 @@ the 92-row transition silently mixes 86 production documents with six browser fi
 close the orphaned operation seam, apply the already-ruled same-commit migration sequence, promote
 and transfer the successor claim, and name the fixture convention. Claim anchors and Feedback
 Stage 2 remain correctly blocked until F3 reaches accepted bytes.
+
+## 2026-09-07 — Pack capability post-cut author repair stays bounded
+
+**What changed:** [[D3120]]–[[D3123]] are repaired at author tier. F3 no longer refers to the
+successor-owned operation id or consumer-effect registry; its initial sealed schema migration is
+one same-commit sequence under [[D3033]]; `rfc/evidence-job-durability.md` is registered with the
+storage claim its DDL owns; and the 92-document population is explicitly 86 production packs plus
+six browser schema fixtures.
+
+**Evidence/next:** `make pack-capability-cut-fresh-review` now retains the four returned falsifiers
+and checks the repaired living split. F3 stays draft pending one bounded fresh acceptance check.
+The successor's inherited durable-job defects stay open against that successor and do not block
+acceptance of the smaller capability/pack contract.
+
+Two verification corrections landed in the same repair. [[D3124]] removes twelve closed or
+unrelated ids from the successor's “unresolved” status instead of reopening them during ownership
+transfer. [[D3125]] updates the retained concept-registry author test to the [[D3057]] tier split:
+present in opt-in `verify-rfc-evidence`, absent from stable `verify-governance`.

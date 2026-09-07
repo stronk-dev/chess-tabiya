@@ -19254,8 +19254,8 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:3dcb7e6eb5ec3b9d882bd3a225d470d1e65ebb0cf41a7b70518e2c2d8c1143e4",
       "uxItems": [],
-      "owner": "content-and-theory",
-      "blocker": "rfc:pack-capability-contract.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2430",
@@ -19973,7 +19973,7 @@
       "sourceDigest": "sha256:907bf597d4b2e87a77a27c2d5407b0bf7f3391c1fd20b02449aa267cb48dbee3",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2510",
@@ -19982,7 +19982,7 @@
       "sourceDigest": "sha256:5eb4d5a90543e6a434bc87fe9dc416fbe495ebef8b53fc6d4b630fa29ca3a61e",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2511",
@@ -19991,7 +19991,7 @@
       "sourceDigest": "sha256:75b6636f756d87bb0dc1b651e437fd1ddf649e7562909a14f10570dd8ca466bb",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2512",
@@ -20000,7 +20000,7 @@
       "sourceDigest": "sha256:397d2cb951de6e91e02a85679e9eca9fc6a4eb3c4ff36bb6cc9e4bcd1c31fce7",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2513",
@@ -20009,7 +20009,7 @@
       "sourceDigest": "sha256:755867e5839ebfd57a3681281867078aaddd076cc3ecaa983b3f1488fef678ec",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2514",
@@ -20671,56 +20671,56 @@
     {
       "id": "D2587",
       "state": "blocked",
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:54ddf64b67d9d7b5ad37ca71dc36c3a1cbbe1378ac472cd08a2d75188597d833",
-      "uxItems": []
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2588",
       "state": "blocked",
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:04ed23877ca9f6088f281fd2f50233ceb917254a06b1089cdc4861468d8aa1a4",
-      "uxItems": []
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2589",
       "state": "blocked",
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:bb32f2b855a46205b17996bf4bc47cac8a2f8bcc10448899f56766a3575b24ce",
-      "uxItems": []
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2590",
       "state": "blocked",
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:1cd6d34326afecbfd13b661bea0ec0df696f4418fd3968ed6d8a666c80ab52c1",
-      "uxItems": []
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2591",
       "state": "blocked",
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:4ce945e2a89d835f42e6809305c97bdb6e9bccd360d0789c6d55c40f33f4d811",
-      "uxItems": []
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2592",
       "state": "blocked",
-      "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:98cd1ea4937d69acbc99a590c940e3edd101141d8df8df1fccd830e532ebe059",
-      "uxItems": []
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2593",
@@ -21445,47 +21445,47 @@
     {
       "id": "D2673",
       "state": "blocked",
-      "owner": "coordinator",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:45fa269a30558007caf9bc2b11fa246da3b2b9cdf8555d3311d692d759881617",
       "uxItems": [],
-      "blocker": "rfc:pack-capability-contract.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2674",
       "state": "blocked",
-      "owner": "coordinator",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:045805b52b9f2d1f35cd1d24740864ad9b1c4fa173f97db025d6629b6db7d858",
       "uxItems": [],
-      "blocker": "rfc:pack-capability-contract.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2675",
       "state": "blocked",
-      "owner": "coordinator",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:f4f844b6d1f860c873d7d81b4586691a7e05e9bfe1f561cd6ba8ad881e1a19a4",
       "uxItems": [],
-      "blocker": "rfc:pack-capability-contract.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2676",
       "state": "blocked",
-      "owner": "coordinator",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:3ccdc48cecc53092af613b6c306f8c2a778f5f32724742414ef27d1f155018a1",
       "uxItems": [],
-      "blocker": "rfc:pack-capability-contract.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2677",
       "state": "blocked",
-      "owner": "coordinator",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:923b69e2f494edc36f88bd78121e7634a2d2a644b6e54ffca8d23acbab3c5782",
       "uxItems": [],
-      "blocker": "rfc:pack-capability-contract.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2678",
@@ -22070,7 +22070,7 @@
       "sourceDigest": "sha256:d950d20aec538866a42445a52a152b6f9be6f63c5e8031a62a861efb049c7472",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2743",
@@ -22079,7 +22079,7 @@
       "sourceDigest": "sha256:39d22adf51782780bfe8ba5f6f7fa4a4f74ad7fc53653ef6cfd07e1019e1690d",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2744",
@@ -22088,7 +22088,7 @@
       "sourceDigest": "sha256:a854c2cdf0e36fde2bd7ca48c93b6065b6afd44cd07963bb07a98ebe7fdb5ecf",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2745",
@@ -22097,7 +22097,7 @@
       "sourceDigest": "sha256:f728e26fc9b387701c206563c9df23983858a34eb15d15785ff3c345020325a4",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2746",
@@ -22106,7 +22106,7 @@
       "sourceDigest": "sha256:48699e36d253fb359325189fccf80af8e1769c3781e56e5a957c7a9e68503e7e",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2747",
@@ -22115,7 +22115,7 @@
       "sourceDigest": "sha256:c096e3d779470cbabd4a341a336359da082b3e2c418e3cb330a1b194dac006a4",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2748",
@@ -22330,8 +22330,8 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:8af3cdc1d9206c1749a9727ff8b09501ff688d96f5ace61707d90b47bfd87639",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2772",
@@ -22339,8 +22339,8 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:ff362660c8efd9f79e4610e0f0d3d6a99f46eb1676af8e5ed3116b69738add5d",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2773",
@@ -22348,8 +22348,8 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:75fbdc8db277cd23d848f0de2cd7215d166b0c397ff64376245da17fe3a8fc5f",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2774",
@@ -22357,8 +22357,8 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:901afdfca7a7d81dcb5faa03057b74f6609c5514e96c976a13fbc471c3acbe52",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2775",
@@ -22366,8 +22366,8 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:bc0cf323889b57c17c31c1f5d8819bcdc394b271e64ec0adfbb6f1d78a99819f",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2776",
@@ -22375,8 +22375,8 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:1ae6fc1258503208e43bf9e017d94cc8603fc260560df8a3913f7ef8cb9163c3",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2777",
@@ -22384,8 +22384,8 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:563063b9e50e40e0afc7638e128391d5224e0eab8cfb39ea636c2e66b0441d4f",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2778",
@@ -22393,8 +22393,8 @@
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:bfdb5669474d04e262beee246948772d655dec0f3b74516b231a1a0088c33f5c",
       "uxItems": [],
-      "owner": "coordinator",
-      "blocker": "rfc:pack-capability-contract.md"
+      "owner": "evidence-foundation",
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2779",
@@ -22610,7 +22610,7 @@
       "sourceDigest": "sha256:c3a956f100b096447628cb84177f5087b2e414ddfa9dfcf3bcef0b0af950f073",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2803",
@@ -22619,7 +22619,7 @@
       "sourceDigest": "sha256:742d3860af0671a9a6ea2d0e0a69b47d76bb3b23ef5e9105f98bf8fe90800a49",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2804",
@@ -22628,7 +22628,7 @@
       "sourceDigest": "sha256:c402b930c3c81ccbdf124964a06b0ae34d6f34cc6755da1d9a24da848275ddec",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2805",
@@ -22637,7 +22637,7 @@
       "sourceDigest": "sha256:e0ecacb588f1ec0bc537e414a0d403cdd91dfbb39a20281ed34b836bd42fb8e4",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2806",
@@ -22646,7 +22646,7 @@
       "sourceDigest": "sha256:23678d2dc791729a7e08cea0e41e0c795e0e1438e2339d3bcc9a0c3809103818",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2807",
@@ -22655,7 +22655,7 @@
       "sourceDigest": "sha256:53b0a6f7a2525433b1cafa12a139fa172a3cd5e9616b61154c7af81a574a972b",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2808",
@@ -22664,7 +22664,7 @@
       "sourceDigest": "sha256:3f9ad3ba0368f3d28cb22c0746f30c87e2971bbd2600cf0d8ac4768442295170",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D2809",
@@ -24398,7 +24398,7 @@
       "sourceDigest": "sha256:6dc54bfa3b45ec752d12c803d6642a407810c66bea643f1837e9f6802fddc146",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D3003",
@@ -24407,7 +24407,7 @@
       "sourceDigest": "sha256:872349ab71eff63685265c02ef15e7f34be6d223c0ba6959a85652a11396a260",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D3004",
@@ -24416,7 +24416,7 @@
       "sourceDigest": "sha256:92805495f9b2c2e5ec5cffe1a7896415a34413363405c394ed6a0fb29de26cad",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D3005",
@@ -24425,7 +24425,7 @@
       "sourceDigest": "sha256:33e85bf15e58cace0e8e5c24e15cda7df3ecd99f459c45db959520f29f5d6608",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D3006",
@@ -24434,7 +24434,7 @@
       "sourceDigest": "sha256:95c2686263f38465c5489e595ad53f600c7d7fdddf01c1e11c65c48ccd73a87f",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D3007",
@@ -24443,7 +24443,7 @@
       "sourceDigest": "sha256:4238387b15ec3078a51ea4f9e7e088f99e6243a96992d1ee9a2e560a592eba25",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D3008",
@@ -24452,7 +24452,7 @@
       "sourceDigest": "sha256:310b7b79ed7eb91b9db3b8b9ac88b9925cb7bdfc0c0594864ab59a122b073aa6",
       "uxItems": [],
       "owner": "evidence-foundation",
-      "blocker": "rfc:pack-capability-contract.md"
+      "blocker": "rfc:evidence-job-durability.md"
     },
     {
       "id": "D3009",
@@ -25455,7 +25455,7 @@
       "id": "D3120",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:124900c0ca08ae2ac8887ad65d5bbc385366891d3e6a1ed3f1c07ae39f793637",
+      "sourceDigest": "sha256:4338e51e9a530e392fd30e404f9fa33e90bddf1b50a6529a977d60ae9f44cb4a",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:pack-capability-contract.md"
@@ -25464,7 +25464,7 @@
       "id": "D3121",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:93d876e488772d2478b66333d8f93a40b47da171c0ce467acb45ea571b013f94",
+      "sourceDigest": "sha256:662bfcb15bc08168c33001ae53f36803d82ed3a6685b7587d2ddf65378b969e1",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:pack-capability-contract.md"
@@ -25473,7 +25473,7 @@
       "id": "D3122",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:837d9a98162edf316064c8a5a2f73ad98765b4ced3e31367d15b491aae0794fa",
+      "sourceDigest": "sha256:10fab2bf18606892efabdd17220005354d7e01c5353eefa853ca5e27b2d3ab34",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:pack-capability-contract.md"
@@ -25482,10 +25482,28 @@
       "id": "D3123",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ea2c28e3a07488118fc623fd1e0ff40b1c480afaddeba1d630f4df24861bbf5e",
+      "sourceDigest": "sha256:5230118501f7ca7bf2808ee64becccf80247ee3d73aeca15cdcef52b8b2d2eae",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:pack-capability-contract.md"
+    },
+    {
+      "id": "D3124",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c8a07bfbba9a10e5dc5223b0d6b7a2a1616f01d0c62447e6d0ab17d72bd709c7",
+      "uxItems": [],
+      "evidence": "design/BACKLOG.md#D3124",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3125",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0adfe4a82c328a4cf8ad1df8f044ad12a8471df14738a4bfb984a92fbeabefb5",
+      "uxItems": [],
+      "evidence": "design/BACKLOG.md#D3125",
+      "evidenceKind": "path"
     }
   ]
 }

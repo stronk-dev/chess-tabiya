@@ -1,13 +1,12 @@
 # RFC: Pack capability contract — semantic versions, handshake, deprecation and migration
 
-- **Status:** draft — **post-cut fresh independent review returned it on 2026-09-07
-  ([[D3120]], [[D3121]], [[D3122]], [[D3123]]).**
-  The cut remains valid, but the smaller contract retains an orphaned operation type/consumer seam,
-  two incompatible schema-migration sequences, the moved storage migration under the wrong owner,
-  and an unnamed 86-production/6-browser-fixture population split. The durable evidence-job
+- **Status:** draft — **bounded post-cut author repair complete 2026-09-07 on
+  [[D3120]], [[D3121]], [[D3122]] and [[D3123]]; one fresh acceptance check remains.**
+  The smaller contract now owns only capability identity, pack declaration, deployment
+  reachability and the same-commit 86-production/6-browser-fixture schema migration. The durable evidence-job
   model, the HTTP capability-operation census and every asynchronous-settlement criterion left this
-  document for successor draft `planning/pack-capability-contract/evidence-job-durability.md`,
-  which inherits [[D2429]]–[[D3008]] **unresolved**; §4.1a's D560 compatibility reader was cut on
+  document for registered successor draft `rfc/evidence-job-durability.md`,
+  whose exact open inherited set is named in its Status line; §4.1a's D560 compatibility reader was cut on
   the [[D3033]] ruling; seventeen rounds of review narrative moved to
   `planning/pack-capability-contract/review-history.md`. What remains is the contract the twelve
   non-self-referential dependents are waiting on. No implementation is authorised and D560 stays
@@ -23,20 +22,19 @@
   adopt F3's generic identity only after F3 is accepted.
 - **Parent / amends:** — (this is F3 in `planning/platform-alignment/rfc-graph.md:70`)
 - **Supersedes / superseded by:** — **Cut into:** successor draft
-  `planning/pack-capability-contract/evidence-job-durability.md` (2026-09-06)
+  `rfc/evidence-job-durability.md` (2026-09-06; registered 2026-09-07)
 - **Planning:** `planning/platform-alignment/` (`f3-derivation.md`)
 
 ```tabiya-claims
 pack-schema | lane 0.30 | requires (new, required array of capability requirement objects on the pack root); $defs/capabilityRequirement (new, closed object: id, version)
-migration | position behind longitudinal-store | evidence_job_batches + evidence_jobs durable admission, lease, retry, settlement, staged result and consumption rows + evidence_result_sequences never-reused per-run allocator
 ```
 
 ## Post-cut review obligations
 
-Acceptance is blocked until the bounded repair closes all four findings without restoring the
-moved durable-job model: [[D3120]] owns the orphaned operation/consumer seam; [[D3121]] owns the
-single schema-migration sequence; [[D3122]] owns successor registration plus storage-claim
-transfer; and [[D3123]] owns the explicit 86-production/6-browser-fixture population convention.
+The bounded repair keeps all four findings visible until fresh acceptance without restoring the
+moved durable-job model: [[D3120]] removes the operation/consumer seam; [[D3121]] establishes one
+same-commit schema-migration sequence; [[D3122]] registers the successor and transfers its storage
+claim; and [[D3123]] makes the 86-production/6-browser-fixture population explicit.
 
 ## Summary
 
@@ -120,8 +118,7 @@ primitives; authored-content and claim-binding waves (the [[D560]] hold stands w
 and [[D3033]], which licensed only foundation and schema migrations); lifting Gate F; detector
 semantics v1 (clause 4 of the gate, a separate document); the 14 F1 declared-vs-consumed mismatch
 rows; and — since 2026-09-06 — the durable evidence-job boundary and the HTTP capability-operation
-census, both owned by successor draft
-`planning/pack-capability-contract/evidence-job-durability.md`.
+census, both owned by successor draft `rfc/evidence-job-durability.md`.
 
 ## Specification
 
@@ -1005,7 +1002,6 @@ export interface CapabilityDeploymentBinding {
   readonly availability: "local" | "recorded" | "provider" | "build_time";
   readonly configured: boolean;
   readonly providerId?: string;
-  readonly operationIds: readonly CapabilityOperationId[];
 }
 
 export interface CapabilityHistory {
@@ -1160,25 +1156,16 @@ right thing with no new field.
   wrongly unavailable for the process's lifetime. It is a per-request condition on the 503 arm,
   retryable, and the run survives it.
 
-**This section resolves request-synchronous operations only.** Provider work that is admitted now
-and settled later — `POST /runs/:runId/analysis`'s 202, Story completion and automatic move
-enrichment — cannot be governed by a rule that runs inside the admitting request. [[D2520]] measured
-that. The durable admission/settlement boundary answering it, together with the closed HTTP
-capability-operation census that binds each route and queued gateway to its capability source, is
-specified by successor draft `planning/pack-capability-contract/evidence-job-durability.md`; that
-document inherits [[D2429]]–[[D3008]] unresolved. This RFC states the two ruled causes and their
-request-synchronous effects, and nothing about asynchronous settlement.
-
-Reachability cause and consumer effect remain orthogonal. On request-synchronous operations, an
-`unavailable` consumer returns the retryable HTTP 503 envelope and writes nothing. An `honest_empty` consumer returns its typed empty
-or unresolved result—corpus empty, Story pending evidence, reasoning proposals `[]`, or per-branch
-`provider_unavailable`—without pretending the provider answered. An `available` consumer follows
-its declared deterministic/local fallback; voice, for example, renders the sealed deterministic
-sentences. These effects are derived from the compiled consumer registry and must equal the
-digest-pinned composed author image; copying
-`providerOff` into a route row is forbidden. Boot without a configured provider still takes the
-static 422/listing-exclusion path. Criteria cover boot absence, all three transient effects, death
-after registration, recovery in-process, and the impossible local/build-time transient.
+**This section resolves cause and publication reachability, not operation-specific effects.**
+Provider work that is admitted now and settled later — `POST /runs/:runId/analysis`'s 202, Story
+completion and automatic move enrichment — cannot be governed by a rule that runs inside the
+admitting request. [[D2520]] measured that. The closed HTTP/queued-operation population, each
+consumer's `ProviderOffBehavior`, and the durable admission/settlement boundary all live in
+registered successor draft `rfc/evidence-job-durability.md`; that document's Status line owns the
+exact unresolved set. This RFC establishes only the two ruled causes, the public
+reachability projection, and the static unsupported behavior: 422 registration refusal, listing
+exclusion, and boot survival. A configured provider may become unavailable and recover in-process;
+the successor decides what each operation does during that interval.
 
 **Gate F clause 5 — what it now needs, stated because it was blocked on this question.** Clause 5
 (*"pack capabilities and deprecations have a compatibility policy"*) is **unblocked**: the policy is
@@ -1219,10 +1206,14 @@ runs that exact readiness predicate and writes nothing on failure. O6.2's own se
 a plan *"never becomes an automatic content wave"*; criterion 11 crosses empty, mechanical and
 judgement plans, distinct shape/readiness exit codes, and zero writes.
 
-The first software landing emits all 92 frozen legacy documents as mechanical target rows but does
-not apply them. The later D560-authorized invocation may apply only when `judgement[]` is empty and
-the plan's source population still equals the sealed legacy image. A stale byte or added document
-invalidates the plan before readiness is considered.
+The implementing software landing emits all 92 frozen legacy documents as mechanical target rows
+and applies them in that same commit, after `migration-apply-ready` proves `judgement[]` is empty
+and the plan's source population still equals the sealed legacy image. This initial 0.27→0.30
+schema stamp is the owner-qualified mechanical migration licensed by [[D3033]]; it is not the
+authored-content or claim-binding wave still held by [[D560]]. A stale byte or added document
+invalidates the plan before readiness is considered. Later semantic capability-version migrations
+remain read-only until the per-release [[D996]] decision authorizes their independently measured
+mechanical and judgement populations.
 
 **This is what D996's per-release ruling reads.** The owner declined a standing budget in favour of
 deciding per release, so the plan's job is to be *rulable*: mechanical and judgement work separated,
@@ -1247,7 +1238,7 @@ exhaustively with **no property filter**:
 
 | Root | Documents at HEAD |
 |---|---|
-| `content/drafts/` pack documents | 56 |
+| `content/drafts/` pack documents | **56 = 50 production packs + 6 `*.browser.json` schema fixtures** |
 | `content/candidates/*/pack.json` | 36 |
 | `content/drafts/` sidecars (`*.evidence/sources/job.json`) | 96 |
 | `content/candidates/` sourcing documents | 126 |
@@ -1280,9 +1271,8 @@ Seventeen author-repair / fresh-independent-review rounds ran between 2026-08-26
 The round-by-round narrative — what each round accepted and what each fresh review returned — moved
 on 2026-09-06 to `planning/pack-capability-contract/review-history.md`; the per-round evidence and
 executable reproducers were already homed in `planning/pack-capability-contract/*.md` and are
-unchanged. The findings from the fifth round onward ([[D2429]]–[[D3008]]) are about material that
-left this document in the same commit; they travel to the successor draft and are **not** discharged
-here.
+unchanged. The successor's Status line names the exact still-open review findings about material
+that left this document. Closed and unrelated rows are not reopened by the cut ([[D3124]]).
 
 ## Acceptance criteria
 
@@ -1305,7 +1295,7 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
    by the author authority; helper-only edits in structural, transition and objective families move
    the intended closed digest, while unused and unreachable same-name symbols do not.
 3. **Declared equals applicable closure, in one gate ([[D3033]]).** `pack-capability-check` requires
-   every one of the 92 authored `requires` arrays to byte-equal the read-only projection derived
+   every one of the **86 production-pack plus 6 browser-fixture** `requires` arrays to byte-equal the read-only projection derived
    from that document's own content, and requires that no second drill-pack reader exists. The
    outpost/default fixture derives exactly `guard.defaults`, `objective.state_machine`,
    `structuralFeature.outpost` and `structuralFeature.pawn_safe_square`; omitting the helper and
@@ -1380,8 +1370,7 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     field, stage migration and refusal code after F3 acceptance. *Wrong implementation from the
     returned draft:* one that implements a draft consumer while pretending to supply only a generic
     primitive, creating a circular acceptance dependency.
-16. **Unavailability resolves to exactly one of two states by cause and one compiled effect by
-    consumer ([[D1077]], §5.1).** An
+16. **Unavailability resolves to exactly one of two states by cause ([[D1077]], §5.1).** An
     `unsupported` capability is **absent** from `/capabilities`' `packCapabilities` set (the
     [[D509]] rule), so a pack requiring it is refused at registration with
     `PACK_CAPABILITY_UNSUPPORTED` on the 422 arm and excluded from the listing **without failing
@@ -1392,11 +1381,10 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     *Wrong implementation that passes criteria 1–15 and fails this:* one resolving both states at
     registration, which makes a pack permanently unavailable for the process lifetime because a
     provider was down for two minutes — the precise flexibility the ruling exists to preserve.
-    Three transient fixtures prove distinct request-synchronous outcomes: an `unavailable` consumer
-    produces a retryable 503 envelope with no write, `honest_empty` produces the consumer's typed
-    empty/unresolved response, and `available` produces the declared deterministic fallback.
-    Changing only the compiled consumer registry changes the effect; a stale `providerOff` value
-    copied into a route row fails.
+    Provider death after registration changes only reachability, recovery restores it in-process,
+    and neither event mutates the pack declaration or destroys the run. Operation-specific
+    `unavailable`/`honest_empty`/`available` effects are deliberately absent here and are tested by
+    `rfc/evidence-job-durability.md` against its closed operation/consumer registry.
 17. **Instruments stay green.** `make verify` passes with shape-only `migration-plan-check`,
     `capability-census` and `capability-check` wired in; CI invokes the same Make targets.
 18. **The staged schema transition is exact ([[D2070]]–[[D2074]], [[D2152]], [[D3033]]).**
@@ -1406,7 +1394,7 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
     any graduation/provenance member fails before the 0.30 stage is considered. `/requires` and its
     two grammar definitions emit zero applicability rows. Branch reorder and `$defs` relocation
     preserve stable ids; a real member rename changes identity and requires a successor. The
-    migrating commit rewrites the exact sealed 92-document population — an unmigrated document, a
+    migrating commit rewrites the exact sealed **86 production-pack + 6 browser-fixture** population — an unmigrated document, a
     missing row, an edited path or an otherwise-valid 93rd fails — and one fixture proves that no
     second drill-pack reader and no legacy path allowlist exists anywhere in the tree afterwards.
 19. **Author authorities are inspectable and externally closed ([[D2153]]–[[D2155]]).**
@@ -1419,7 +1407,7 @@ can fail is the [[D444]] class and one nothing can satisfy is the [[D984]] class
 Criteria 20–30 of the pre-cut document — the public-card scope census, the closed queued-operation
 population, and every durable admission, lease, retry, settlement, consumption and provider-receipt
 assertion ([[D2518]]–[[D3008]]) — moved with their specification to
-`planning/pack-capability-contract/evidence-job-durability.md`. They are not satisfied by this RFC
+`rfc/evidence-job-durability.md`. They are not satisfied by this RFC
 and are not claimed by it.
 
 ## Discharges
@@ -1428,9 +1416,9 @@ and are not claimed by it.
 |---|---|---|---|---|
 | D1 | Open question 1 — what a capability refusal *does*. **Reframed and ruled by [[D1077]]** 2026-08-23: the question is not what we do to the pack but *why the capability is missing*, and there are exactly two causes (§5.1). Gate F clause 5 is **unblocked** | OWNER | the ruling's landing commit | **discharged 2026-08-23 — [[D1077]], `cc98fcb`** |
 | D2 | The sacrificial pilot must exercise every **required** 1.0 capability. Membership and proof are owned by the existing F7 node and Phase-8 Gate-F procedure | `planning/platform-alignment/rfc-graph.md` F7 | `planning/platform-alignment/execution-queue.md` Phase 8 proof commit | |
-| D3 | Re-stamp every affected evidence-ledger `packDigest` after lane-0.30 churn; the planner derives the population. [[D3033]] released the schema migration from the Gate F wait; [[D949]] still holds every authored-content wave | codex | the implementing/apply commit | |
+| D3 | Re-stamp every affected evidence-ledger `packDigest` after lane-0.30 churn across the 86 production packs and 6 browser fixtures; the planner derives the population. [[D3033]] released this schema migration from the Gate F wait; [[D949]] still holds every authored-content wave | codex | the implementing/apply commit | |
 | D4 | `EVIDENCE_KINDS` remains the checked membership register in `rfc/README.md`; it is provenance vocabulary, not evaluator semantics. An evaluator over a kind gets its own capability | `archive/shared-resource-registers.md` | this amendment | **discharged 2026-08-28** |
-| D5 | Implement the registry, census, checks, handshake, 0.30 schema and planner, and apply the 92-document schema migration in the same commit ([[D3033]] licensed it; no authored-content or claim-binding wave rides along) | codex | the implementing commit | |
+| D5 | Implement the registry, census, checks, handshake, 0.30 schema and planner, and apply the 86-production/6-browser-fixture schema migration in the same commit ([[D3033]] licensed it; no authored-content or claim-binding wave rides along) | codex | the implementing commit | |
 | D6 | Close [[D576]] when declared-vs-derived pack requirements ship | codex | the implementing commit | |
 | D7 | Close [[D632]] when D566 dependants appear as judgement debt | codex | the implementing commit | |
 | D8 | Close [[D1003]] when the no-property-filter migration population ships | codex | the implementing commit | |
@@ -1498,16 +1486,15 @@ Proposed at the 2026-09-06 cut (unnumbered per [[D1503]]; renumber at landing):
 - 🛠 **The `migration` register row must move with the tables it names.** `rfc/README.md:380`
   records `position behind longitudinal-store` against `pack-capability-contract.md` for
   `evidence_job_batches` + `evidence_jobs` + `evidence_result_sequences`. Those tables left this
-  document for `planning/pack-capability-contract/evidence-job-durability.md` on 2026-09-06. The
-  row, the claim line in this RFC's `tabiya-claims` block, and `rfc/README.md:381`'s
-  `position behind pack-capability-contract` (held by `concept-registry.md`) must be re-pointed in
-  one edit or `register-check` C3 breaks. Not made in the cutting commit because a concurrent
-  writer held `rfc/README.md`; the transfer is the successor's Active-registration commit.
+  document for `rfc/evidence-job-durability.md` on 2026-09-06. The
+  row, the claim line in this RFC's `tabiya-claims` block, and the concept registry's following
+  position had to move in one edit or `register-check` C3 would break. [[D3122]] performs that
+  transfer: the successor owns `position behind longitudinal-store`, and `concept-registry.md`
+  follows `evidence-job-durability`.
 - 🛠 **The successor draft has no `## Active` row and therefore cannot live under `rfc/`.**
   `status-parity` P3 set-equals `## Active` rows to `rfc/*.md` files, so
-  `rfc/evidence-job-durability.md` cannot be created without editing `rfc/README.md`. The successor
-  is held at `planning/pack-capability-contract/evidence-job-durability.md` until one commit can
-  write the Active row, the register transfer above, and the file move together.
+  `rfc/evidence-job-durability.md` could not be created without editing `rfc/README.md`. [[D3122]]
+  performs that atomic Active-row registration, register transfer and file move.
 - 🐞 **83 blocked rows named this RFC and 71 of them were its own review findings.** The blocker
   count that made this the repository's top hold was measuring the document against itself:
   [[D2050]]–[[D3008]] are defects raised on material the document had grown, not dependents waiting
@@ -1527,7 +1514,7 @@ Entries before 2026-09-06 are at `planning/pack-capability-contract/review-histo
 - 2026-09-06 (**cut to the blocking obligation**): §4.1a's D560 compatibility reader cut on
   [[D3033]]; §5.1's HTTP capability-operation census and §5.2's durable evidence-job model moved,
   with criteria 20–30, to successor draft
-  `planning/pack-capability-contract/evidence-job-durability.md`; seventeen rounds of review
+  `rfc/evidence-job-durability.md`; seventeen rounds of review
   narrative and the pre-cut changelog moved to
   `planning/pack-capability-contract/review-history.md`. Criteria 3, 16 and 18 were rewritten to the
   smaller surface; every other surviving criterion keeps its bytes. The cut record, the register
@@ -1535,3 +1522,7 @@ Entries before 2026-09-06 are at `planning/pack-capability-contract/review-histo
   `planning/pack-capability-contract/cut-2026-09-06.md`.
 - 2026-09-06 (**seventeenth fresh independent return**): returned the sixteenth repair on
   [[D3002]]–[[D3008]]. Those seven rows are unresolved and travel to the successor.
+- 2026-09-07 (**bounded post-cut author repair**): removed the orphaned operation id/effect seam,
+  made the initial schema migration same-commit under [[D3033]], registered the evidence-job
+  successor with its truthful storage claim, and named the 86-production/6-browser-fixture split.
+  [[D3120]]–[[D3123]] remain open pending one fresh acceptance check.

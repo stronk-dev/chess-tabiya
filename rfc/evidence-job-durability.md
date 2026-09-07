@@ -1,31 +1,25 @@
-# Successor draft: Evidence job durability — admission, lease, settlement, and the HTTP capability-operation census
+# RFC: Evidence job durability — admission, lease, settlement, and the HTTP capability-operation census
 
 - **Status:** draft — **carried out of `rfc/pack-capability-contract.md` on 2026-09-06, returned and
-  unrepaired.** It inherits [[D2429]], [[D2509]]–[[D2513]], [[D2518]]–[[D2529]], [[D2587]]–[[D2592]],
+  unrepaired.** It inherits [[D2429]], [[D2509]]–[[D2513]], [[D2587]]–[[D2592]],
   [[D2673]]–[[D2677]], [[D2742]]–[[D2747]], [[D2771]]–[[D2778]], [[D2802]]–[[D2808]] and
   [[D3002]]–[[D3008]] **unresolved**. No implementation is authorised.
 - **Author:** claude (cut, not drafted — every specification byte below is the parent RFC's, moved
   verbatim; only this preamble is new)
 - **Created:** 2026-09-06
-- **Held in `planning/`, not `rfc/`, and why:** `status-parity` P3 set-equals `rfc/README.md`'s
-  `## Active` rows to the `rfc/*.md` files on disk, so a new RFC file cannot exist until its Active
-  row is written. A concurrent writer held `rfc/README.md` at the cutting commit. Promotion to
-  `rfc/evidence-job-durability.md` is one commit that writes the Active row, moves this file, and
-  transfers the `migration` register row (see Scope, below).
+- **Registered:** 2026-09-07 under [[D3122]], in the same change that adds its Active row and
+  transfers the storage migration claim from the parent.
 - **Parent:** `rfc/pack-capability-contract.md` — see its §4.1a, §5.1 and Changelog for the cut.
-- **Claims on registration** (deliberately not a `tabiya-claims` fence, because an unregistered file
-  must not be parsed as a live claim): `migration | position behind longitudinal-store |
-  evidence_job_batches + evidence_jobs durable admission, lease, retry, settlement, staged result
-  and consumption rows + evidence_result_sequences never-reused per-run allocator`. That claim and
-  its `rfc/README.md:380` register row transfer together from the parent; `rfc/README.md:381`'s
-  `position behind pack-capability-contract` (held by `concept-registry.md`) re-points in the same
-  edit.
 
-## Scope, in one paragraph
+```tabiya-claims
+migration | position behind longitudinal-store | evidence_job_batches + evidence_jobs durable admission, lease, retry, settlement, staged result and consumption rows + evidence_result_sequences never-reused per-run allocator
+```
+
+## Summary
 
 A pack capability may be unmet for exactly two ruled causes ([[D1077]]), and the parent RFC states
-both plus their request-synchronous effects. This document owns the part the parent could not: the
-population of operations those effects apply to, and what happens when the provider work is admitted
+both plus deployment reachability and static unsupported behavior. This document owns the
+population of operations and their request-synchronous effects, plus what happens when provider work is admitted
 now and settled later. Concretely — the closed HTTP and queued-gateway operation census that binds
 every route to one capability source, and the durable `evidence_job_batches` / `evidence_jobs` /
 `evidence_result_sequences` admission, lease, retry, settlement, cancellation and consumption model
@@ -792,16 +786,21 @@ so the inherited ledger rows still resolve. Renumber at promotion.)*
     legal. Independent fixtures cross each operand, reorder equal JSON, invent retry/terminal
     fields, cross routing, finish after expiry, and coherently rewrite/delete history; each fails.
 
+## Discharges
+
+none
+
 ## Ledger rows
 
 Unnumbered per [[D1503]]; renumber at landing.
 
-- 🛠 **Promote this file to `rfc/evidence-job-durability.md`.** One commit writes the `## Active`
-  row, moves the file, transfers the `migration` register row from
-  `rfc/pack-capability-contract.md`, and re-points `rfc/README.md:381`. Blocked only on
-  `rfc/README.md` being free of a concurrent writer.
+- ✅ **Promotion and truthful claim ownership are complete under [[D3122]].** The Active row, file
+  move, migration claim transfer and concept-registry re-point land atomically. This closes only
+  registration/ownership; every inherited durable-job defect in the Status line remains open.
 
 ## Changelog
 
 - 2026-09-06: cut out of `rfc/pack-capability-contract.md` at `c37c6eb8`. Specification bytes are
   unchanged; the preamble, scope and section numbering are new. No defect was repaired by the cut.
+- 2026-09-07: registered under [[D3122]] and received the storage migration claim its DDL owns.
+  No inherited operation/durability defect was repaired by registration.

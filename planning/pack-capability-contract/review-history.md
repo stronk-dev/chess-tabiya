@@ -11,9 +11,9 @@ Nothing here is superseded and nothing here is discharged. The per-round evidenc
 reproducers already had homes as sibling files in this directory
 (`fresh-independent-review-2026-08-30.md` through
 `seventeenth-fresh-independent-buildability-review-2026-09-06.md`), and this file is the index over
-them. **The findings from the fifth round onward ([[D2429]]–[[D3008]]) are about material that left
-the parent RFC in the same commit** and are now open against
-`planning/pack-capability-contract/evidence-job-durability.md`, not against the parent.
+them. **The still-open findings named by the successor Status line are about material that left the
+parent RFC in the same commit** and are now open against `rfc/evidence-job-durability.md`, not
+against the parent. [[D3124]] prevents that transfer from reopening closed or unrelated rows.
 
 Bytes below are verbatim from `rfc/pack-capability-contract.md` at `c37c6eb8` — review sections from
 lines 1884–2503, changelog entries from lines 2816–3022.
@@ -855,4 +855,3 @@ accepted provider-exchange dependency.
   criterion 16, and discharged D1. The ruled model reuses the shipped `ProviderOffBehavior` /
   `AvailabilityMode` types and the [[D509]] not-configured-means-not-advertised precedent rather
   than adding parallel machinery. **Gate F clause 5 is unblocked** and needs no further ruling.
-

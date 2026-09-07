@@ -20,7 +20,7 @@ import {
 // The durable evidence-job model was cut out of rfc/pack-capability-contract.md on 2026-09-06 and
 // carried, byte for byte, into the successor draft below. This reproducer is repointed and asserts
 // nothing new: D3002-D3008 remain open against the same bytes in their new home.
-const rfc = readFileSync("planning/pack-capability-contract/evidence-job-durability.md", "utf8") + readFileSync("planning/pack-capability-contract/review-history.md", "utf8");
+const rfc = readFileSync("rfc/evidence-job-durability.md", "utf8") + readFileSync("planning/pack-capability-contract/review-history.md", "utf8");
 const section = rfc.match(/#### §5\.2 Queued evidence([\s\S]*?)\n## §3\./u)?.[1] ?? "";
 const ddl = section.match(/```sql\n([\s\S]*?)\n```/u)?.[1] ?? "";
 const fen = "8/8/8/8/8/8/8/K6k w - - 0 1";

@@ -26,7 +26,7 @@ test("pack references have an exact identity-only evidence projection", () => {
 });
 
 test("legacy migration is total, atomic and cross-pack", () => {
-  has("position behind pack-capability-contract", "parses only the exact legacy", "same_concept_in_pack");
+  has("position behind evidence-job-durability", "parses only the exact legacy", "same_concept_in_pack");
 });
 
 test("lifecycle and account behavior preserve historical identity", () => {
@@ -35,5 +35,5 @@ test("lifecycle and account behavior preserve historical identity", () => {
 
 test("active register and roadmap own the draft", () => {
   assert.match(readme, /`concept-registry\.md`/);
-  assert.match(readme, /position behind pack-capability-contract[^\n]*`concept-registry\.md`/);
+  assert.match(readme, /position behind evidence-job-durability[^\n]*`concept-registry\.md`/);
 });

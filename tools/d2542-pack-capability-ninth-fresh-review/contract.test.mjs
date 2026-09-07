@@ -10,7 +10,7 @@ const read = (path) => readFileSync(path, "utf8");
 // 20-30 were cut out of rfc/pack-capability-contract.md byte-for-byte into the successor
 // draft; the review narrative moved to review-history.md. This reproducer asserts nothing
 // new -- it reads the same bytes in their new homes.
-const rfc = read("planning/pack-capability-contract/evidence-job-durability.md") + read("planning/pack-capability-contract/review-history.md");
+const rfc = read("rfc/evidence-job-durability.md") + read("planning/pack-capability-contract/review-history.md");
 const authorTest = read("tools/d2524-pack-capability-ninth-author-repair/contract.test.mjs");
 const authority = JSON.parse(read("tools/d2524-pack-capability-ninth-author-repair/admission-authority.json"));
 const queueSection = rfc.match(/#### §5\.2 Queued evidence([\s\S]*?)\n## §3\./u)?.[1] ?? "";

@@ -22,7 +22,7 @@ structured identity; the later consumer owns its binding grammar and migration.
 
 `CapabilityDeploymentBinding.operationIds` is still typed as
 `readonly CapabilityOperationId[]`, while the only `type CapabilityOperationId` definition moved
-to `planning/pack-capability-contract/evidence-job-durability.md`. The same split survives in prose:
+to `rfc/evidence-job-durability.md` (promoted by the subsequent author repair). The same split survives in prose:
 §5.1 and criterion 16 require effects to come from a “compiled consumer registry”, but the closed
 operation population and its capability-source mapping are explicitly successor-owned. An
 implementer must either recreate an undeclared subset in F3 or import a returned draft.

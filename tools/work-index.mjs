@@ -23,7 +23,7 @@ const ROUTE_EXACT = new Set([
   // review history is the index over rounds five to seventeen. Between them they carry every
   // [[D2050]]-[[D3008]] row that used to route through the RFC body; without these entries the
   // cut silently unroutes 83 open rows.
-  "planning/pack-capability-contract/evidence-job-durability.md",
+  "rfc/evidence-job-durability.md",
   "planning/pack-capability-contract/review-history.md",
   "planning/pack-capability-contract/cut-2026-09-06.md",
   // Added 2026-09-07 with the module-registration cut, on the same evidence and for the same

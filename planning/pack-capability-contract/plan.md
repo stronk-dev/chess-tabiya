@@ -3,9 +3,8 @@
 - **RFC:** `rfc/pack-capability-contract.md`
 - **Reviewer:** codex
 - **Started:** 2026-08-26; post-cut fresh review completed 2026-09-07
-- **State:** the 1,526-line cut contract is **returned** on [[D3120]]–[[D3123]]; bounded repair,
-  successor registration/claim transfer and one fresh acceptance check remain. No implementation
-  is authorised
+- **State:** bounded author repair **complete** on [[D3120]]–[[D3123]]; the successor is registered
+  with its truthful claim and one fresh acceptance check remains. No implementation is authorised
 
 ## Current objective
 
@@ -41,7 +40,7 @@ work, not lane-0.30 implementation or a content wave.
 11. ✅ Cut the durable job/HTTP-operation model and seventeen-round narrative into their named homes;
     keep only the twelve real F3 dependents.
 12. ✅ Run the first genuinely fresh review of the cut surface; return on [[D3120]]–[[D3123]].
-13. ☐ Apply the bounded four-seam repair and register/claim transfer.
+13. ✅ Apply the bounded four-seam repair and register/claim transfer.
 14. ☐ Run one fresh acceptance check against the repaired cut contract; do not revisit the successor's
     inherited durable-job defects here.
 

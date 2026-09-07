@@ -26,7 +26,7 @@ function catalogue() {
 }
 
 test("D2661 the maintained baseline follows the live migration position", () => {
-  assert.match(rfc, /migration \| position behind pack-capability-contract/u);
+  assert.match(rfc, /migration \| position behind evidence-job-durability/u);
   assert.doesNotMatch(rfc.slice(0, rfc.indexOf("Fresh independent review return")), /position behind longitudinal-store/u);
 });
 
@@ -66,9 +66,11 @@ test("D2664 six landing consumers close independently of two successor discharge
   assert.throws(() => assertConsumerClosure(LIVE_CONSUMERS.slice(1)), /not closed/u);
 });
 
-test("D2665 repaired author coverage is enrolled in the GitHub governance tier", () => {
+test("D2665 repaired author coverage stays in the opt-in draft-evidence tier", () => {
   const governance = /^verify-governance:.*$/mu.exec(makefile)?.[0] ?? "";
-  assert.match(governance, /concept-registry-author-repair/u);
+  const draftEvidence = /^verify-rfc-evidence:.*$/mu.exec(makefile)?.[0] ?? "";
+  assert.doesNotMatch(governance, /concept-registry-author-repair/u);
+  assert.match(draftEvidence, /concept-registry-author-repair/u);
   assert.match(makefile, /^concept-registry-author-repair: concept-registry-author-contract$/mu);
 });
 
