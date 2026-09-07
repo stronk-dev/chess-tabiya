@@ -1563,6 +1563,19 @@ cannot silently become red outside CI again. Fresh independent review and the na
 dependencies still precede acceptance and production. Receipt:
 `planning/evidence-foundation-ux/review-evidence-compiler-third-author-repair-2026-09-05.md`.
 
+The 2026-09-07 Noctie/Lichess return-deck pass adds the missing **Review → durable practice**
+boundary without treating a competitor claim as a contract. Noctie validates automatic continuity
+and bounded Smart Decks, while its own roadmap still admits duplicate/quality and pattern-review
+gaps. Lichess's open code supplies the stricter counterexample: Learn From Your Mistakes retries the
+pre-move decision and accepts plural engine/master moves, while its durable puzzle generator admits
+only bounded, solution-proved tactical lines. [[D3099]] therefore requires a source-bound derived
+exercise—not a Story export—with separate decision/evidence/stop nodes, objective and accepted-set
+authorities, opponent constraint, exact provenance, semantic dedupe and hard intake bounds.
+Structural moments without an authored/cited objective remain useful **ungraded scenarios**. The
+code audit also finds [[D3100]]: current non-terminal eval-pivot re-entry starts after the move, so
+Review cannot call that door a retry until the node identities split. Three product defaults are
+isolated in [[D3101]]; they do not block collector, bot or Review foundation work.
+
 **1.0 exit:** native, bot, imported, social and campaign games compile to one Review Map: opening
 and phase arc; navigable move timeline; bounded grounded moments; separate grade, human rarity,
 theory, semantic change and exact endgame facts; correct learner-side result; decided-position

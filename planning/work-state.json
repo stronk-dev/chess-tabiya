@@ -25259,6 +25259,34 @@
       "uxItems": [],
       "evidence": "tools/feedback-binding-wave/candidate-audit.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3099",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:378d66f6fc1af981ebdbfe87e1fe43233c2b3b08a32aa23cb6f8584437a83dad",
+      "uxItems": [],
+      "evidence": "design/research/mistake-derived-return-decks.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3100",
+      "state": "blocked",
+      "owner": "review-and-return",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:b77b7af0d32474449172a6e14840f2b87e081065b12f8d2664e2750ad80b56fc",
+      "uxItems": [],
+      "blocker": "rfc:review-map.md"
+    },
+    {
+      "id": "D3101",
+      "state": "blocked",
+      "owner": "OWNER",
+      "sourceGlyph": "⚖️",
+      "sourceDigest": "sha256:b5d680ceabe02e9715c34cfb77b05ba1c69f3a9e756d7bba03b02b1d5d8c3012",
+      "uxItems": [],
+      "blocker": "owner-ruling",
+      "question": "Choose automatic bounded intake, one queue versus Explore-again lane, and official-pack routing defaults."
     }
   ]
 }

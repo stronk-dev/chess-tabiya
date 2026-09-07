@@ -166,4 +166,17 @@ Every entry: URL, Use, Caveat. Evidence labels per `design/research/README.md`
   no subscription flow was driven, effectiveness and human-likeness are not independently validated,
   and the public sources do not expose reproducible grade/selection equations.
 
-*(next: R66)*
+### R66 — Lichess mistake retry and open puzzle-generation mechanics
+
+- URLs: https://lichess.org/@/lichess/blog/learn-from-your-mistakes/WFvLpiQA ·
+  https://github.com/lichess-org/lila/blob/master/ui/analyse/src/retrospect/retroCtrl.ts ·
+  https://database.lichess.org/#puzzles ·
+  https://github.com/ornicar/lichess-puzzler/blob/master/generator/generator.py
+- Use: separates an in-session retry-before-reveal loop from a durable generated exercise and pins
+  the stricter eligibility, alternative-move, bounded-line and dedupe requirements used by Lichess's
+  tactical puzzle generator.
+- Caveat: `[V]` current primary/open-source mechanism and public data contract; this pass did not run
+  Lichess or reproduce its engine workload, and tactical generator rules do not transfer to
+  strategic/structural objectives without a separate authority.
+
+*(next: R67)*

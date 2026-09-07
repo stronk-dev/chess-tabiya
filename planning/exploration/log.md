@@ -18100,3 +18100,21 @@ unit or referent.
 whole-corpus research target an explicit 120-second budget. D1007/D1008, the semantic-anchor dossier
 and the Stage-2 work order now carry the refreshed count. The decision does not move: zero automatic
 bindings are lawful before proposition-first rendering lands.
+
+### 2026-09-07 — A Review moment is separated from a return exercise
+
+The Noctie workflow comparison is carried through the actual Tabiya Review→branch→schedule path and
+the open Lichess mistake-retry and puzzle-generator implementations. [[D3099]] is answered: Noctie
+validates the outer continuity and bounded-queue problem, but neither its vendor claims nor a raw
+evaluation swing establish an exercise. A machine-derived return needs immutable source,
+decision/evidence/stop nodes, learner side, objective and accepted-alternative authorities,
+opponent constraint, exact evidence, semantic dedupe and intake bounds. Tactical/tablebase and
+source-bound opening arms can automate; structural events join an existing authored/cited
+objective or become honest ungraded scenarios.
+
+The code pass also finds [[D3100]]: `eval_pivot` lives on the post-move node and non-terminal
+`entryNodeId` repeats that node, so the current story door resumes after the mistake. It is a valid
+“play from the consequence” entry and cannot be called “retry the decision.” The future Review
+contract must carry distinct decision, evidence and consequence identities. [[D3101]] isolates the
+three owner defaults before RFC drafting; collector, bot and Review foundation work remains open.
+Evidence: `design/research/mistake-derived-return-decks.md`, R66.
