@@ -55,6 +55,9 @@ describe("learner rating surfaces", () => {
     } as unknown as DrillClientApi, onStart: start } });
     await vi.waitFor(() => expect(document.body.textContent).toContain("No rated-game result has been recorded"));
     expect(document.body.textContent).toContain("Start rated game");
+    expect(document.body.textContent).toContain("opponent band, your side, result or abandonment");
+    expect(document.body.textContent).toContain("included in your account download and removed when you delete your account");
+    expect(document.querySelector("button[type=submit]")?.getAttribute("aria-describedby")).toBe("rated-game-data-disclosure");
     const selects = [...document.querySelectorAll<HTMLSelectElement>("select")];
     selects[0]!.value = "1800"; selects[0]!.dispatchEvent(new Event("change", { bubbles: true }));
     selects[1]!.value = "black"; selects[1]!.dispatchEvent(new Event("change", { bubbles: true }));

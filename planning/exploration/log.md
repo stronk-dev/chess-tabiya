@@ -18384,3 +18384,14 @@ including neutral fallbacks for future values. Play cards preserve the required 
 origin and optional publisher attribution without exposing `cross_phase` or `schema_example`; Home
 reuses the phase labels, and the live wall reuses objective-progress copy instead of printing the
 runtime state. Mounted catalogue and shell fixtures cover the learner-visible paths.
+
+## 2026-09-07 — Durable account records state their lifecycle before creation
+
+Registration now names the saved games, rehearsal progress, and authored or published work tied to
+an account without repeating the dossier's false claim that recovery or unrestricted export exists.
+The rated-game start action names its per-game behavioral record and deletion/export fate; classroom
+acceptance names shared-history retention and identity scrubbing. These join the already-shipped
+story-link lifetime and verbatim-PGN import notices, so all four just-in-time storage boundaries are
+present where the learner acts. Mounted fixtures bind the three new notices to their buttons with
+`aria-describedby`. This completes IMP-a15 and IMP-a16 while leaving IMP-a12/IMP-a14's complete
+inventory vocabulary and IMP-a17's cross-surface storage-only projection guard open.

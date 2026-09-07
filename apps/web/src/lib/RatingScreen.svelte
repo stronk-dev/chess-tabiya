@@ -88,6 +88,7 @@
           <p class="eyebrow">Play a measured game</p>
           <h2 id="start-rated-title">Choose the opponent; keep the game clean.</h2>
           <p>One full game from the normal starting position. Rewinds and live assistance void the rating result, but never delete the game.</p>
+          <p id="rated-game-data-disclosure" class="honest">Starting keeps a per-game rating record: opponent band, your side, result or abandonment, and any reason the result was voided. It is included in your account download and removed when you delete your account.</p>
         </div>
         <form onsubmit={(event) => { event.preventDefault(); void start(); }}>
           <label>Opponent
@@ -104,7 +105,7 @@
               <option value="black">Black</option>
             </select>
           </label>
-          <button type="submit" disabled={starting}>{starting ? "Starting…" : "Start rated game"}</button>
+          <button type="submit" disabled={starting} aria-describedby="rated-game-data-disclosure">{starting ? "Starting…" : "Start rated game"}</button>
         </form>
         <p class="honest">{HUMAN_MODEL_RUNG_DISCLAIMER}</p>
         {#if startError}<p role="alert" class="error">{startError}</p>{/if}

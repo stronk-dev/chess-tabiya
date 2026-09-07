@@ -1862,8 +1862,10 @@ Primary RFCs: `accessible-board-input`, `theming`. UX owner: A11 items.
 <!-- roadmap-capability: account_data -->
 
 **State: strong primitives, incomplete lifecycle.** Identity/authorization, leases, export/delete,
-scoped links and object exports exist. First-run account timing, guest claim, complete disclosure,
-portable account import, conflicts, profile/social coverage, backup/restore and recovery UX remain.
+scoped links and object exports exist. Registration and the durable-record boundaries for rated
+games, classroom membership, public story links, and PGN import now disclose what starts being kept
+and its lifecycle at the action itself. Guest claim, complete inventory-derived labels, portable
+account import, conflicts, profile/social coverage, backup/restore and recovery UX remain.
 
 **1.0 exit:** learners understand stored/shared data and can export, import, delete and verify it;
 links/teacher access are explicit and revocable; isolation/destructive previews pass; self-hosts

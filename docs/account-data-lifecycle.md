@@ -26,6 +26,11 @@ board-view preferences, assistance preferences, and workflow presets are named a
 exclusion because another device's copy is neither account data nor recoverable by the
 server. There is no account-import endpoint.
 
+Registration states this storage boundary before account creation: saved games and
+rehearsals, learning progress, and authored or published work are tied to the account.
+It points to the password-confirmed account download and deletion paths without
+claiming recovery or a server-side account-import path that does not exist.
+
 The account download is a Tabiya archive for safekeeping and inspection, not a
 chess-interchange file: neither Tabiya nor other chess products import it. The
 Account region states that boundary before download and links to Library, where
@@ -66,3 +71,13 @@ retention as a read-only privacy summary. Loading or refreshing the summary cann
 start deletion; a refresh failure removes the stale digest from the confirmation
 form and remains retryable. The delete form reuses the current visible summary
 instead of maintaining a second description of its effects.
+
+The client also states storage consequences at the action that creates each less-obvious
+durable record. Starting a rated game names the per-game opponent, side, outcome or
+abandonment, and void-reason record, plus its export and account-deletion fate. Accepting
+a classroom invitation names the shared membership history and its possible read-only,
+identity-scrubbed survival. Creating a public story link states that it has no automatic
+expiry and remains readable until revocation or account deletion. Import states that the
+original PGN, including third-party identifiers and annotations, is retained, exported,
+and removed with the run or account subject to backup retention. Each notice is linked to
+its action with `aria-describedby`; none interprets the behavioral record.

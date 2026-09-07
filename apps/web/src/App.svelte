@@ -1207,13 +1207,14 @@
       <form onsubmit={(event) => { event.preventDefault(); void authenticate(); }}>
         <label>Handle <input autocomplete="username" bind:value={authHandle} required /></label>
         <label>Password <input type="password" autocomplete={authRegister ? "new-password" : "current-password"} bind:value={authPassword} minlength="10" maxlength="256" required /></label>
-        <button class="primary" type="submit">{authRegister ? "Register" : "Sign in"}</button>
+        <button class="primary" type="submit" aria-describedby={authRegister ? "registration-data-disclosure registration-password-warning" : undefined}>{authRegister ? "Register" : "Sign in"}</button>
       </form>
       {#if authError}<p role="alert">{authError}</p>{/if}
       <button type="button" onclick={() => { authRegister = !authRegister; authError = undefined; }}>
         {authRegister ? "Use an existing account" : "Create an account"}
       </button>
-      <p class="honest">There is no password recovery yet. Keep your password somewhere safe.</p>
+      {#if authRegister}<p id="registration-data-disclosure" class="honest">Creating an account keeps the games and rehearsals you save, your learning progress, and anything you author or publish. After you confirm your password, Account settings lets you download your record and preview what deletion removes, anonymizes, or keeps as shared or published history.</p>{/if}
+      <p id="registration-password-warning" class="honest">There is no password recovery yet. Keep your password somewhere safe.</p>
     </section>
     <PackList
       {packs}
@@ -1670,8 +1671,8 @@
         <form class="row-actions" onsubmit={(event)=>{event.preventDefault();void createClassroom();}}><label>New classroom <input required bind:value={classroomName} /></label><button type="submit">Create</button></form>
         <div class="item-list">
           {#each classrooms as classroom}
-            <article><div><h3>{classroom.name}</h3><p>{classroom.memberRole} · {classroom.memberState}{classroom.archivedAt ? " · archived read-only" : ""}</p>{#if classroom.memberState==="invited"}<p>{classroom.invitation?.invitedBy ? `Invited by @${classroom.invitation.invitedBy.handle}` : "Invited by a classroom teacher"}{classroom.invitation ? ` · ${readableDate(classroom.invitation.invitedAt)}` : ""}</p>{#if classroom.memberRole==="teacher"}<p class="honest">Accepting makes you a classroom teacher: you can invite members, assign packs, and schedule sessions. It does not grant access to anyone's runs; learners share attempts one at a time and can withdraw them.</p>{:else}<p class="honest">Accepting lets teachers assign packs to you and schedule sessions. It does not let them see your runs; you share attempts one at a time and can withdraw them.</p>{/if}{/if}</div>
-              {#if classroom.memberState==="invited"}<div class="row-actions"><button type="button" onclick={()=>void respondClassroom(classroom.id,"accept")}>Accept</button><button type="button" onclick={()=>void respondClassroom(classroom.id,"decline")}>Decline</button></div>{:else}<button type="button" onclick={()=>void openClassroom(classroom.id)}>Open</button>{/if}
+            <article><div><h3>{classroom.name}</h3><p>{classroom.memberRole} · {classroom.memberState}{classroom.archivedAt ? " · archived read-only" : ""}</p>{#if classroom.memberState==="invited"}<p>{classroom.invitation?.invitedBy ? `Invited by @${classroom.invitation.invitedBy.handle}` : "Invited by a classroom teacher"}{classroom.invitation ? ` · ${readableDate(classroom.invitation.invitedAt)}` : ""}</p>{#if classroom.memberRole==="teacher"}<p class="honest">Accepting makes you a classroom teacher: you can invite members, assign packs, and schedule sessions. It does not grant access to anyone's runs; learners share attempts one at a time and can withdraw them.</p>{:else}<p class="honest">Accepting lets teachers assign packs to you and schedule sessions. It does not let them see your runs; you share attempts one at a time and can withdraw them.</p>{/if}<p id={`classroom-retention-${classroom.id}`} class="honest">Accepting keeps your membership as shared classroom history. If other active members remain when you delete your account, that history can stay read-only with your identity removed.</p>{/if}</div>
+              {#if classroom.memberState==="invited"}<div class="row-actions"><button type="button" aria-describedby={`classroom-retention-${classroom.id}`} onclick={()=>void respondClassroom(classroom.id,"accept")}>Accept</button><button type="button" onclick={()=>void respondClassroom(classroom.id,"decline")}>Decline</button></div>{:else}<button type="button" onclick={()=>void openClassroom(classroom.id)}>Open</button>{/if}
             </article>
           {:else}<p>No classrooms yet.</p>{/each}
         </div>

@@ -269,6 +269,9 @@ describe("application shell", () => {
     document.querySelector<HTMLButtonElement>(".open-pack")!.click();
     await vi.waitFor(() => expect(document.body.textContent).toContain("Create an account or sign in to keep"));
     expect(document.body.textContent).toContain("Create your learner account.");
+    expect(document.body.textContent).toContain("Creating an account keeps the games and rehearsals you save");
+    expect(document.body.textContent).toContain("preview what deletion removes, anonymizes, or keeps as shared or published history");
+    expect(document.querySelector<HTMLButtonElement>(".auth-gate button[type=submit]")?.getAttribute("aria-describedby")).toBe("registration-data-disclosure registration-password-warning");
     const inputs = document.querySelectorAll<HTMLInputElement>(".auth-gate input");
     inputs[0]!.value = "new_learner";
     inputs[0]!.dispatchEvent(new Event("input", { bubbles: true }));
@@ -1028,7 +1031,11 @@ describe("application shell", () => {
     expect(classroomSection.textContent).toContain("Invited by @coach");
     expect(classroomSection.textContent).toContain("Accepting lets teachers assign packs to you and schedule sessions");
     expect(classroomSection.textContent).toContain("you share attempts one at a time and can withdraw them");
-    [...classroomSection.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Accept")!.click();
+    expect(classroomSection.textContent).toContain("keeps your membership as shared classroom history");
+    expect(classroomSection.textContent).toContain("stay read-only with your identity removed");
+    const accept = [...classroomSection.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Accept")!;
+    expect(accept.getAttribute("aria-describedby")).toBe("classroom-retention-classroom-invite");
+    accept.click();
     await vi.waitFor(() => expect(respondClassroomInvite).toHaveBeenCalledWith("classroom-invite", "accept"));
     await unmount(component);
   });

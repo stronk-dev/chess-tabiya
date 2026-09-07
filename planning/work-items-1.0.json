@@ -4921,32 +4921,40 @@
     {
       "id": "IMP-a15",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§5.4i",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "One data sentence on the registration screen beside the credential sentence",
       "legacyRoute": "none",
       "note": "see §What a dossier got wrong — the proposed wording is false",
-      "sourceDigest": "sha256:5716864076108ca1f2f810388f18aded19c067f2244b69186f5d34cb27c1d01a"
+      "sourceDigest": "sha256:5716864076108ca1f2f810388f18aded19c067f2244b69186f5d34cb27c1d01a",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "apps/web/src/App.svelte,apps/web/src/lib/RatingScreen.svelte,apps/web/src/lib/GameStoryScreen.svelte"
+      }
     },
     {
       "id": "IMP-a16",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§5.4iii-a…d",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Four just-in-time notices, each seated where the shipped pattern is already proven: first rated game, first classroom join, first share link, first import",
       "legacyRoute": "none",
       "note": "generalises two shipped publication notices",
-      "sourceDigest": "sha256:ff6e5c873af322ce6a1789e9d1c02f1c9c9e6938bf8a4667fde4f69f3edf01cc"
+      "sourceDigest": "sha256:ff6e5c873af322ce6a1789e9d1c02f1c9c9e6938bf8a4667fde4f69f3edf01cc",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "apps/web/src/App.svelte,apps/web/src/lib/RatingScreen.svelte,apps/web/src/lib/GameStoryScreen.svelte"
+      }
     },
     {
       "id": "IMP-a17",
