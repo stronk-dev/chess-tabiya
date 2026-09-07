@@ -2973,6 +2973,23 @@ completion: the pack-0.28 grammar and its corpus application have not shipped, a
 slice remains held by Gate F. The RFC therefore reads **implementing**, while its historical
 acceptance record remains intact.
 
+**2026-09-07 correction — [[D3071]].** The last sentence above is superseded by the owner's later
+[[D3033]] ruling: foundation and schema migrations may proceed before Gate F; authored-content and
+claim-binding waves remain held. The next implementation slice is therefore a total migration
+proposal over all 436 entries which marks every field as derived or author-required and refuses an
+incomplete or ambiguous proposal. Pack schema 0.28 and the atomic 92-document restamp may follow only
+when that proposal proves the migration has no hidden authored chess judgement. This corrects the
+authority boundary without weakening §6.2's explicit authoring boundary or Gate F's publication
+hold.
+
+The total proposal walk returned criterion 7 rather than guessing through it ([[D3072]]): only
+three of nine emitter templates have mechanically representable clearances; six templates covering
+104 current candidate entries are contract-blocked. Their missing joins are outcome grading,
+engine-versus-tablebase record-kind choice, numeric `targetElo`, absent authored collections, an
+array of recorded lines, and objective grounding that a prose-change predicate cannot prove. The
+0.28 apply therefore remains blocked on an RFC amendment that makes those six template predicates
+representable; substituting unrelated string pointers is explicitly not an implementation option.
+
 ## Discharges
 
 none

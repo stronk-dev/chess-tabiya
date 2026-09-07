@@ -35,7 +35,10 @@ test("planner re-derives the accepted RFC population without mutating it", () =>
   assert.equal(plan.classifier.candidateUnrecognised.length, 2);
   assert.equal(EMITTER_TEMPLATE_IDS.length, 9);
   assert.equal(plan.mode, "read_only");
-  assert.deepEqual(plan.hold.forbidden, ["schema v0.28 apply", "corpus mutation", "sidecar restamp", "RFC archival"]);
+  assert.equal(plan.schema, "tabiya.graduation.clearance-plan.v2");
+  assert.equal(plan.hold.ruling, "D3033");
+  assert.deepEqual(plan.hold.allowed, ["foundation implementation", "schema v0.28 migration", "atomic corpus and sidecar restamp"]);
+  assert.deepEqual(plan.hold.forbidden, ["authored chess truth", "claim-binding wave", "official publication", "RFC archival before all criteria pass"]);
 });
 
 test("planner names rather than erases judgement debt", () => {
@@ -45,4 +48,47 @@ test("planner names rather than erases judgement debt", () => {
   assert.equal(plan.judgementDebt.candidateNonTemplateEntries, 2);
   assert.equal(plan.judgementDebt.resolvedClearanceBackfills, 30);
   assert.equal(plan.judgementDebt.acceptedUnreachabilityBackfills, 43);
+});
+
+test("migration proposal covers every entry and separates derivation, authoring, and contract blockers", () => {
+  const plan = assertKnownPlan(buildGraduationPlan());
+  assert.equal(plan.migration.entries, 436);
+  assert.deepEqual(plan.migration.statuses, { ready: 100, requires_author: 232, blocked_contract: 104 });
+  assert.equal(plan.migration.rows.length, plan.corpus.entries);
+  assert.equal(new Set(plan.migration.rows.map((row) => row.key)).size, plan.corpus.entries);
+  assert.deepEqual(plan.migration.templateContracts, {
+    "mechanical-objective-placeholder": "ready",
+    "opponent-policy-authored": "ready",
+    "tablebase-opponent-not-selected": "ready",
+    "outcome-ungraded": "blocked_contract",
+    "start-assessment-absent": "blocked_contract",
+    "target-elo-authored": "blocked_contract",
+    "authored-teaching-absent": "blocked_contract",
+    "recorded-play-needs-authoring": "blocked_contract",
+    "mechanical-objective-needs-grounding": "blocked_contract",
+  });
+});
+
+test("ready template proposals bind the actual current value while unrepresentable templates stay red", () => {
+  const plan = buildGraduationPlan();
+  const placeholder = plan.migration.rows.find((row) => row.file === "content/candidates/a87-dutch-defense-leningrad-variation/pack.json");
+  assert.equal(placeholder.status, "ready");
+  assert.deepEqual(placeholder.fields["clearance.subject"].value, "/objective/summary");
+  assert.equal(placeholder.fields["clearance.placeholder"].value, "Play the recorded line to its end: 7 plies from this position.");
+
+  const targetElo = plan.migration.rows.find((row) => row.entryId === "target-elo-authored");
+  assert.equal(targetElo.status, "blocked_contract");
+  assert.match(targetElo.fields.clearance.source, /numeric targetElo/u);
+
+  const authoredTeaching = plan.migration.rows.find((row) => row.entryId === "authored-teaching-absent");
+  assert.equal(authoredTeaching.status, "blocked_contract");
+  assert.match(authoredTeaching.fields.clearance.source, /no required clearance subject resolves/u);
+});
+
+test("accepted prose is preserved as migration input rather than regenerated as chess truth", () => {
+  const plan = buildGraduationPlan();
+  const accepted = plan.migration.rows.find((row) => row.currentState === "accepted");
+  assert.equal(accepted.status, "ready");
+  assert.equal(accepted.fields["accepted.unreachableBecause"].value, "Owner ruling 2026-08-13: only a citable source or mechanical validation that bears on a claim can ground it; no second-party review workflow will exist.");
+  assert.match(accepted.fields["accepted.unreachableBecause"].source, /existing accepted\.ruling/u);
 });

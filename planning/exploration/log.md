@@ -17570,3 +17570,22 @@ author and discharge-coverage contracts.
 **Evidence/next:** `make review-evidence-second-author-repair module-registration-author-contract
 module-discharge-coverage-contract`; rerun the complete `make verify-awake` gate before the module
 repair checkpoint is committed.
+
+## 2026-09-07 — Graduation-clearance migration boundary made executable
+
+**What landed:** [[D3071]] replaces the superseded D560 planner boundary with the owner's [[D3033]]
+split and checks in a typed migration proposal for all 436 graduation entries. Each required field
+is recorded as derived, author-required or contract-blocked with its derivation/source; changed
+populations, duplicate entry addresses, invalid field provenance and emitter-registry drift refuse
+the canonical check.
+
+**What changed:** the coarse claim that all 220 draft subjects are simply “judgement” is replaced by
+an exact executable split: **100 ready / 232 author-required / 104 contract-blocked** across the full
+corpus. The proposal found [[D3072]]: six of nine emitter templates cannot receive truthful reusable
+clearances under the accepted grammar, so schema 0.28 remains blocked on an RFC amendment rather
+than receiving unrelated green-by-construction pointers.
+
+**Evidence/next:** `planning/graduation-clearance/migration-proposal.json`; `make
+graduation-plan-check`. Continue on buildable evidence-foundation work while the six-template
+contract return is amended; authored chess truth, claim binding and official publication remain
+held.

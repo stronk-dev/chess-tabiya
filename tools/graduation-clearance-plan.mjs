@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { EMITTER_TEMPLATE_IDS } from "../apps/server/src/graduation-blocker-templates.mjs";
@@ -68,8 +68,21 @@ export const KNOWN_CANDIDATE_EXCEPTIONS = Object.freeze([
   "immediate-blunder-guard-is-not-selectable-defect-d8-dela",
 ]);
 
+const TEMPLATE_CLEARANCE_PLANS = Object.freeze({
+  "mechanical-objective-placeholder": Object.freeze({ status: "ready", kind: "pointer_authored" }),
+  "opponent-policy-authored": Object.freeze({ status: "ready", kind: "pointer_authored" }),
+  "tablebase-opponent-not-selected": Object.freeze({ status: "ready", kind: "pointer_authored" }),
+  "outcome-ungraded": Object.freeze({ status: "blocked_contract", blocker: "No shipped standing predicate grades the resulting position or outcome." }),
+  "start-assessment-absent": Object.freeze({ status: "blocked_contract", blocker: "The template permits engine or tablebase grounding but carries no record-kind choice." }),
+  "target-elo-authored": Object.freeze({ status: "blocked_contract", blocker: "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate." }),
+  "authored-teaching-absent": Object.freeze({ status: "blocked_contract", blocker: "The required authored collections are absent, so no required clearance subject resolves." }),
+  "recorded-play-needs-authoring": Object.freeze({ status: "blocked_contract", blocker: "The array of recorded lines cannot satisfy the string-only pointer_authored predicate." }),
+  "mechanical-objective-needs-grounding": Object.freeze({ status: "blocked_contract", blocker: "Changing objective prose does not prove the grounding condition named by this blocker." }),
+});
+
 const SIDECAR = /\.(?:evidence|graduation|job|sources)\.json$/u;
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const PROPOSAL = resolve(ROOT, "planning/graduation-clearance/migration-proposal.json");
 
 function files(root) {
   const result = [];
@@ -86,6 +99,160 @@ function documents(root) {
     const document = JSON.parse(readFileSync(file, "utf8"));
     return Array.isArray(document?.provenance?.graduationBlockers) ? [{ file, document }] : [];
   });
+}
+
+function field(status, source, value) {
+  return Object.freeze({ status, source, ...(value === undefined ? {} : { value }) });
+}
+
+function pointerValue(document, pointer) {
+  let value = document;
+  for (const token of pointer.slice(1).split("/")) {
+    if (value === null || typeof value !== "object" || !(token in value)) return undefined;
+    value = value[token];
+  }
+  return value;
+}
+
+function templateMigration(document, entry) {
+  const plan = TEMPLATE_CLEARANCE_PLANS[entry.id];
+  if (plan === undefined) return {
+    status: "requires_author",
+    proposedState: "blocking",
+    fields: { clearance: field("requires_author", "Entry id is not an emitter template; an author must select its predicate.") },
+  };
+  if (plan.status === "blocked_contract") return {
+    status: "blocked_contract",
+    proposedState: "blocking",
+    fields: { clearance: field("blocked_contract", plan.blocker) },
+  };
+  const subject = plan.kind === "pointer_authored" && entry.id.includes("opponent")
+    ? "/opponentPolicy/mode"
+    : "/objective/summary";
+  const placeholder = pointerValue(document, subject);
+  if (typeof placeholder !== "string" || placeholder.trim() === "") return {
+    status: "blocked_contract",
+    proposedState: "blocking",
+    fields: { clearance: field("blocked_contract", `Template subject ${subject} does not resolve to a non-empty string.`) },
+  };
+  return {
+    status: "ready",
+    proposedState: "blocking",
+    fields: {
+      "clearance.kind": field("derived", `emitter template ${entry.id}`, "pointer_authored"),
+      "clearance.subject": field("derived", `emitter template ${entry.id}`, subject),
+      "clearance.instrument": field("derived", "graduation-clearance §1.2 kind E", "author"),
+      "clearance.placeholder": field("derived", `current value at ${subject}`, placeholder),
+    },
+  };
+}
+
+function draftBlockingMigration(file, entry) {
+  const packKey = basename(file, ".json");
+  const classification = classifyDraftEntry(packKey, entry);
+  const kindSource = classification.source === "hand_table"
+    ? `published hand assignment ${packKey}/${entry.id}`
+    : `classifier ${classification.rule ?? "unclassified"}; author review required`;
+  const fields = {
+    "clearance.kind": field(classification.source === "hand_table" ? "derived" : "requires_author", kindSource, classification.kind ?? undefined),
+  };
+  switch (classification.kind) {
+    case "assessment_grounded":
+      fields["clearance.subject"] = field("derived", "kind A fixed subject grammar", "/objective/grading/assessedBy");
+      fields["clearance.instrument"] = field("derived", "kind A deciding command", "make verify-draft");
+      break;
+    case "ledger_record":
+      fields["clearance.subject"] = field("requires_author", "The evidence claim must be joined to one supported pack pointer.");
+      fields["clearance.recordKind"] = field("requires_author", "The author must choose the evidence-record kind that bears on the statement.");
+      fields["clearance.instrument"] = field("derived", "kind B deciding command", "make sourcing-check");
+      break;
+    case "claim_bound":
+      fields["clearance.subject"] = field("requires_author", "The author must choose one /feedbackClaims/<i>/text pointer.");
+      fields["clearance.instrument"] = field("derived", "kind C deciding command", "make sourcing-check");
+      break;
+    case "shape_firing":
+      fields["clearance.subject"] = field("requires_author", "The author must choose the exact /shapes/<i> or /planClasses/<i>/shapePlan pointer.");
+      fields["clearance.instrument"] = field("derived", "kind D deciding command", "make expression-census");
+      break;
+    case "pointer_authored":
+      fields["clearance.subject"] = field("requires_author", "The author must choose the exact string pointer the statement names.");
+      fields["clearance.placeholder"] = field("requires_author", "The placeholder must be copied from the chosen subject before migration.");
+      fields["clearance.instrument"] = field("derived", "kind E deciding actor", "author");
+      break;
+    case "unbuilt":
+      fields["clearance.subject"] = field("requires_author", "The author must choose the pack node whose missing instrument blocks clearance.");
+      fields["clearance.blockedBy"] = field("requires_author", "The author must name the living RFC or backlog owner of the missing instrument.");
+      break;
+    case "unreachable":
+      fields["clearance.subject"] = field("requires_author", "The author must name the pack node no source or instrument can reach.");
+      break;
+    default:
+      fields.clearance = field("requires_author", "No candidate kind was produced.");
+  }
+  return { status: "requires_author", proposedState: "blocking", fields };
+}
+
+function resolvedMigration(entry) {
+  if (entry.id.startsWith("engine-evidence-now-")) return {
+    status: "ready",
+    proposedState: "resolved",
+    fields: {
+      "resolved.clearance.kind": field("derived", "resolved family engine-evidence-now", "assessment_grounded"),
+      "resolved.clearance.subject": field("derived", "kind A fixed subject grammar", "/objective/grading/assessedBy"),
+      "resolved.clearance.instrument": field("derived", "kind A deciding command", "make verify-draft"),
+    },
+  };
+  if (entry.id.startsWith("refuted-and-deleted-")) return {
+    status: "ready",
+    proposedState: "resolved",
+    fields: {
+      "resolved.clearance.kind": field("derived", "graduation-clearance §2.2a named special case", "referent_removed"),
+      "resolved.clearance.subject": field("derived", "graduation-clearance §2.2a named special case", "/spine"),
+      "resolved.clearance.absentIds": field("derived", "graduation-clearance §2.2a named special case", ["bxc5-recoup", "bxc5-trade"]),
+    },
+  };
+  return {
+    status: "requires_author",
+    proposedState: "resolved",
+    fields: { "resolved.clearance": field("requires_author", "The historical resolution needs an exact standing predicate and subject pointer.") },
+  };
+}
+
+function acceptedMigration(entry) {
+  const reason = entry.accepted?.ruling;
+  if (typeof reason !== "string" || reason.trim() === "") return {
+    status: "blocked_contract",
+    proposedState: "accepted",
+    fields: { "accepted.unreachableBecause": field("blocked_contract", "The accepted entry has no existing ruling text to preserve as its reason.") },
+  };
+  return {
+    status: "ready",
+    proposedState: "accepted",
+    fields: { "accepted.unreachableBecause": field("derived", "existing accepted.ruling; no new claim", reason) },
+  };
+}
+
+function migrationRows(root) {
+  return ["content/drafts", "content/candidates"].flatMap((tier) => documents(join(root, tier)).flatMap(({ file, document }) =>
+    document.provenance.graduationBlockers.map((entry, index) => {
+      let proposal;
+      if (entry.state === "accepted") proposal = acceptedMigration(entry);
+      else if (entry.state === "resolved") proposal = resolvedMigration(entry);
+      else if (tier === "content/candidates") proposal = templateMigration(document, entry);
+      else proposal = draftBlockingMigration(file, entry);
+      return Object.freeze({
+        key: `${relative(root, file)}#/provenance/graduationBlockers/${index}`,
+        file: relative(root, file),
+        packId: document.id,
+        entryId: entry.id,
+        currentState: entry.state,
+        ...proposal,
+      });
+    })));
+}
+
+function countStatuses(rows) {
+  return Object.freeze(Object.fromEntries(["ready", "requires_author", "blocked_contract"].map((status) => [status, rows.filter((row) => row.status === status).length])));
 }
 
 export function classifyDraftEntry(packKey, entry) {
@@ -142,14 +309,15 @@ export function buildGraduationPlan(root = ROOT) {
   const drafts = scanDrafts(join(root, "content/drafts"));
   const candidates = scanCandidates(join(root, "content/candidates"));
   const ruleSuggested = drafts.blocking.filter((row) => row.source === "rule").length;
+  const rows = migrationRows(root);
   return {
-    schema: "tabiya.graduation.clearance-plan.v1",
+    schema: "tabiya.graduation.clearance-plan.v2",
     generatedFrom: "working-tree",
     mode: "read_only",
     hold: {
-      ruling: "D560",
-      allowed: "classifier and migration plan",
-      forbidden: ["schema v0.28 apply", "corpus mutation", "sidecar restamp", "RFC archival"],
+      ruling: "D3033",
+      allowed: ["foundation implementation", "schema v0.28 migration", "atomic corpus and sidecar restamp"],
+      forbidden: ["authored chess truth", "claim-binding wave", "official publication", "RFC archival before all criteria pass"],
     },
     corpus: {
       documents: drafts.documents + candidates.documents,
@@ -177,6 +345,12 @@ export function buildGraduationPlan(root = ROOT) {
       fixtureTransitions: 5,
       note: "Rules produce reviewable candidate kinds only. They do not choose subject pointers, recordKind, placeholder, blockedBy, absentIds, or acceptance rationale.",
     },
+    migration: {
+      entries: rows.length,
+      statuses: countStatuses(rows),
+      templateContracts: Object.freeze(Object.fromEntries(Object.entries(TEMPLATE_CLEARANCE_PLANS).map(([id, value]) => [id, value.status]))),
+      rows: Object.freeze(rows),
+    },
   };
 }
 
@@ -186,6 +360,13 @@ export function assertKnownPlan(plan) {
   const unknownIds = [...new Set(plan.classifier.candidateUnrecognised.map((entry) => entry.entryId))].sort();
   if (JSON.stringify(unknownIds) !== JSON.stringify([...KNOWN_CANDIDATE_EXCEPTIONS].sort())) errors.push(`candidate exceptions changed: ${unknownIds.join(", ") || "(none)"}`);
   if (plan.corpus.documents !== 92) errors.push(`corpus document count changed: ${plan.corpus.documents}`);
+  if (plan.migration.entries !== plan.corpus.entries) errors.push(`migration coverage changed: ${plan.migration.entries}/${plan.corpus.entries}`);
+  if (new Set(plan.migration.rows.map((row) => row.key)).size !== plan.migration.entries) errors.push("migration keys are not unique");
+  for (const row of plan.migration.rows) {
+    if (Object.keys(row.fields).length === 0) errors.push(`migration row has no field plan: ${row.key}`);
+    if (!Object.values(row.fields).every((value) => ["derived", "requires_author", "blocked_contract"].includes(value.status) && typeof value.source === "string" && value.source !== "")) errors.push(`migration row has invalid field provenance: ${row.key}`);
+  }
+  if (Object.keys(plan.migration.templateContracts).sort().join("\n") !== [...EMITTER_TEMPLATE_IDS].sort().join("\n")) errors.push("template migration contracts do not equal the emitter registry");
   if (errors.length > 0) throw new Error(`Graduation plan refused:\n- ${errors.join("\n- ")}`);
   return plan;
 }
@@ -200,14 +381,24 @@ function markdown(plan) {
     `Candidate inventory: ${c.candidateTemplateMatched} recognised emitter entries; ${c.candidateUnrecognised.length} non-template entries requiring judgement.`,
     `Existing-state backfill: ${j.resolvedClearanceBackfills} resolved + ${j.acceptedUnreachabilityBackfills} accepted; ${j.removedReferentSpecialCases} removed-referent special case; ${j.fixtureTransitions} fixture transitions.`,
     "", `Judgement boundary: ${j.note}`, "",
-    "D560 hold: no schema, content, sidecar, or archive write was performed.", "",
+    `Migration proposal: ${plan.migration.statuses.ready} ready / ${plan.migration.statuses.requires_author} author-required / ${plan.migration.statuses.blocked_contract} contract-blocked; ${plan.migration.entries} of ${plan.corpus.entries} entries covered.`,
+    "", "D3033 boundary: foundation/schema migration is licensed; authored chess truth, claim binding, publication and premature archival remain held.", "",
   ].join("\n");
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     const plan = assertKnownPlan(buildGraduationPlan());
-    process.stdout.write(process.argv.includes("--json") ? `${JSON.stringify(plan, null, 2)}\n` : markdown(plan));
+    const serialized = `${JSON.stringify(plan, null, 2)}\n`;
+    if (process.argv.includes("--write")) {
+      mkdirSync(dirname(PROPOSAL), { recursive: true });
+      writeFileSync(PROPOSAL, serialized, "utf8");
+      process.stdout.write(`wrote ${relative(ROOT, PROPOSAL)} (${plan.migration.entries} entries)\n`);
+    } else if (process.argv.includes("--check")) {
+      const committed = readFileSync(PROPOSAL, "utf8");
+      if (committed !== serialized) throw new Error(`Graduation plan refused:\n- ${relative(ROOT, PROPOSAL)} is stale; run make graduation-plan-update`);
+      process.stdout.write(`graduation migration proposal current: ${plan.migration.entries} entries\n`);
+    } else process.stdout.write(process.argv.includes("--json") ? serialized : markdown(plan));
   } catch (error) {
     process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
     process.exitCode = 1;

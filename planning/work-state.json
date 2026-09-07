@@ -24981,6 +24981,24 @@
       "uxItems": [],
       "evidence": "tools/d2120-module-registration-author-contract/generate.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3071",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1408f37725ccda1a5d5c918529966ed92105081013a83c4a0b2687d765885917",
+      "uxItems": [],
+      "evidence": "planning/graduation-clearance/migration-proposal.json",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3072",
+      "state": "blocked",
+      "owner": "evidence-foundation",
+      "blocker": "rfc:graduation-clearance.md",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:442043be632a92742c9d8e2059d70e462dbc6d69c52d4c08329de7ae10167dbe",
+      "uxItems": []
     }
   ]
 }
