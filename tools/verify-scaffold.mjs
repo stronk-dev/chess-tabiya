@@ -37,6 +37,21 @@ export function missingRequiredText(text, required) {
   return required.filter((value) => !text.includes(value));
 }
 
+export function workflowJob(text, name) {
+  const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const start = text.search(new RegExp(`^  ${escapedName}:\\s*$`, "m"));
+  if (start < 0) return undefined;
+  const remainder = text.slice(start);
+  const next = remainder.slice(remainder.indexOf("\n") + 1).search(/^  [A-Za-z0-9_-]+:\s*$/m);
+  return next < 0 ? remainder : remainder.slice(0, remainder.indexOf("\n") + 1 + next);
+}
+
+export function checkoutFetchDepth(job) {
+  const checkout = job.match(/^\s+- uses:\s*actions\/checkout@[^\n]+\n(?<config>(?:^\s{8,}[^\n]*\n?)*)/mu);
+  const depth = checkout?.groups?.config.match(/^\s+fetch-depth:\s*(\d+)\s*$/mu)?.[1];
+  return depth === undefined ? undefined : Number(depth);
+}
+
 async function requirePath(path) {
   try {
     await access(resolve(root, path));
@@ -146,6 +161,10 @@ const missingVerifyTiers = missingRequiredText(workflow, [
 ]);
 if (!workflow.includes("pnpm install --frozen-lockfile") || missingVerifyTiers.length > 0) {
   failures.push(`CI workflow: missing named verification tiers: ${missingVerifyTiers.join(", ")}`);
+}
+const governanceJob = workflowJob(workflow, "repository-governance");
+if (governanceJob === undefined || checkoutFetchDepth(governanceJob) !== 0) {
+  failures.push("CI workflow: repository-governance must fetch full history for retained historical review contracts");
 }
 
 const browserWorkflow = await readText(".github/workflows/browser.yml");

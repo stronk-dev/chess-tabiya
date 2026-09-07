@@ -25029,6 +25029,24 @@
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:graduation-clearance.md"
+    },
+    {
+      "id": "D3076",
+      "state": "doing",
+      "sourceGlyph": "🛠",
+      "sourceDigest": "sha256:29fca3770e9b006f5edea110abce8c7157a81a63968708e3ddbb8294e8f6ddb4",
+      "uxItems": [],
+      "owner": "release-engineering",
+      "since": "2026-09-07"
+    },
+    {
+      "id": "D3077",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:257208b195cc96f48931ad4ec03fbdd954345fa75f3635d83f0f416d6b37ba03",
+      "uxItems": [],
+      "evidence": "tests/browser/drill.spec.ts",
+      "evidenceKind": "path"
     }
   ]
 }

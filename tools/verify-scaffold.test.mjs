@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { missingMakeDependencies, missingRequiredText } from "./verify-scaffold.mjs";
+import { checkoutFetchDepth, missingMakeDependencies, missingRequiredText, workflowJob } from "./verify-scaffold.mjs";
 
 const required = ["verify-software", "verify-governance", "verify-content"];
 
@@ -48,4 +48,24 @@ test("hook command guard distinguishes the staged process-contract runner", () =
     ]),
     ["run: node tools/staged-process-contracts.mjs"],
   );
+});
+
+test("workflow job extraction does not borrow checkout policy from another job", () => {
+  const workflow = `jobs:
+  software:
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+  repository-governance:
+    steps:
+      - uses: actions/checkout@v7
+  content:
+    steps: []
+`;
+  assert.match(workflowJob(workflow, "software") ?? "", /fetch-depth:\s*0/u);
+  assert.doesNotMatch(workflowJob(workflow, "repository-governance") ?? "", /fetch-depth/u);
+  assert.equal(workflowJob(workflow, "missing"), undefined);
+  assert.equal(checkoutFetchDepth(workflowJob(workflow, "software") ?? ""), 0);
+  assert.equal(checkoutFetchDepth(workflowJob(workflow, "repository-governance") ?? ""), undefined);
 });

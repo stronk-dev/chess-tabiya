@@ -17648,3 +17648,19 @@ move only to mechanically migratable *blocking predicates*, never to resolved co
 This is author repair, not acceptance: a fresh buildability review must attack the three union arms,
 template-owned payloads, preconditions, deferred-subject exception and negative fixtures before
 schema 0.28 or production evaluator work begins.
+
+### 2026-09-07 — CI topology and import/export synchronization repaired
+
+- Re-read the actual latest GitHub pair instead of inheriting an older green report. Runs
+  `34054036991` and `34054036990` both failed at `78be38f0`: repository governance could not read a
+  retained historical review image from a depth-1 checkout, and the import/re-entry browser journey
+  exported before its tested move committed.
+- The governance job now requests full history because its canonical contract executes `git show`
+  against a named historical commit. `verify-scaffold` extracts the exact job and refuses a missing
+  `fetch-depth: 0`; a fixture proves another job cannot lend it the setting.
+- The browser journey now waits for the exact successful `POST /runs/:id/moves`, requires the fifth
+  committed move rather than a pre-existing four-ply census, and then checks the exported branch.
+  No timeout, sleep or retry was added.
+- `make schema-check` passes 9 tests plus scaffold/packaging/Lefthook validation. The standard
+  `make test-browser-smoke` passes 37/37 with one optional Maia latency probe skipped. [[D3077]] is
+  closed; [[D3076]] stays live until a pushed GitHub run proves the remote topology.

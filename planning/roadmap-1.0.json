@@ -310,16 +310,19 @@
       {
         "id": "release-truth",
         "wave": 0,
-        "state": "complete",
+        "state": "active",
         "capabilities": ["governance", "operations"],
         "dependsOn": [],
-        "nextAction": "Keep every new live row assigned at creation, maintain the separately named verification tiers, and refresh the source-sealed receipt whenever a joined authority changes.",
+        "nextAction": "Keep every new live row assigned at creation, then require one paired green GitHub verify/browser run on the exact pushed revision before restoring this milestone to complete; the local topology and browser repairs are implemented but not remotely discharged.",
         "latestCheckpoint": {
-          "at": "2026-09-05",
-          "summary": "Every milestone checkpoint now pins an exact live RFC-register or work-state source row. Changing, returning or removing that authority fails roadmap-check even after receipt regeneration; every cited active RFC must be anchored.",
-          "impact": "advanced",
-          "evidence": ["tools/roadmap-check.mjs", "tools/roadmap-check.test.mjs", "tools/status-parity.mjs", "planning/work-state.json", "tools/roadmap-receipt.mjs", "tools/roadmap-progress.mjs", "docs/progress-tracking.md"],
-          "anchors": [{"kind": "work_state", "id": "D2840", "digest": "sha256:30d929e49319ced993b677e0738e10620f6ef2588bd13cdde6d886022ee86cf1"}]
+          "at": "2026-09-07",
+          "summary": "The latest pushed verify/browser pair was red: governance required history absent from its checkout, and the import/re-entry journey raced its move commit. Both local contracts are repaired without retries, and the exact local browser/scaffold targets pass; remote proof remains pending until these bytes are pushed.",
+          "impact": "regressed",
+          "evidence": [".github/workflows/verify.yml", "tests/browser/drill.spec.ts", "tools/verify-scaffold.mjs", "tools/verify-scaffold.test.mjs", "planning/work-state.json", "planning/exploration/log.md"],
+          "anchors": [
+            {"kind": "work_state", "id": "D3076", "digest": "sha256:29fca3770e9b006f5edea110abce8c7157a81a63968708e3ddbb8294e8f6ddb4"},
+            {"kind": "work_state", "id": "D3077", "digest": "sha256:257208b195cc96f48931ad4ec03fbdd954345fa75f3635d83f0f416d6b37ba03"}
+          ]
         },
         "exit": "Every required check has one owner and failure meaning; all live 1.0 work is assigned; local parity matches GitHub; no planning census masquerades as a product contract."
       },

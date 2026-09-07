@@ -189,10 +189,17 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
   await enter.click();
   await expect(page).toHaveURL(new RegExp(`/play/run/${runId}$`));
   await expect(page.getByLabel("Chessboard")).toBeVisible();
+  const committedMove = page.waitForResponse((response) => {
+    const request = response.request();
+    return request.method() === "POST" &&
+      new URL(request.url()).pathname === `/runs/${runId}/moves` &&
+      response.ok();
+  });
   await move(page, "f1", "b5", "white");
+  await committedMove;
   const graph = await (await page.request.get(`/runs/${runId}/graph`)).json() as { graph: { branches: unknown[]; nodes: { moveUci: string | null }[] } };
   expect(graph.graph.branches.length).toBeGreaterThanOrEqual(2);
-  expect(graph.graph.nodes.filter((node) => node.moveUci !== null).length).toBeGreaterThanOrEqual(4);
+  expect(graph.graph.nodes.filter((node) => node.moveUci !== null).length).toBeGreaterThanOrEqual(5);
   const exported = await page.request.get(`/runs/${runId}/pgn`);
   const text = await exported.text();
   expect(text).toContain('[White "Alice"]');

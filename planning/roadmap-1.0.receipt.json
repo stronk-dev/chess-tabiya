@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:cb50af087ba27d1a07f0a0502981d79c58bbf069fbbf80bd9a1f5c20b5c85b43",
+    "roadmap": "sha256:e6a6283bf6817f6e88bc46bfeea5c73a40170325145e0cf7cbea78eb76047584",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:d4fcf72c2fe16ee04e464276fa965aebf5a068042161666e912fd476a3688f63",
+    "workState": "sha256:4203f409d3803a10fce5873e6c7484ef6cda15043d2d051a3f2ff97d8359ef41",
     "rfcRegister": "sha256:5d21721c327cc0fb5150fedfde60e62cd29a7cab45770641257da5308ec9d5e9",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
@@ -31,9 +31,9 @@
     "workState": {
       "untriaged": 0,
       "todo": 663,
-      "doing": 0,
+      "doing": 1,
       "blocked": 1197,
-      "done": 856,
+      "done": 857,
       "refused": 108
     },
     "workItems": {
@@ -67,31 +67,35 @@
     {
       "id": "release-truth",
       "wave": 0,
-      "state": "complete",
+      "state": "active",
       "capabilities": [
         "governance",
         "operations"
       ],
       "dependsOn": [],
-      "nextAction": "Keep every new live row assigned at creation, maintain the separately named verification tiers, and refresh the source-sealed receipt whenever a joined authority changes.",
+      "nextAction": "Keep every new live row assigned at creation, then require one paired green GitHub verify/browser run on the exact pushed revision before restoring this milestone to complete; the local topology and browser repairs are implemented but not remotely discharged.",
       "latestCheckpoint": {
-        "at": "2026-09-05",
-        "summary": "Every milestone checkpoint now pins an exact live RFC-register or work-state source row. Changing, returning or removing that authority fails roadmap-check even after receipt regeneration; every cited active RFC must be anchored.",
-        "impact": "advanced",
+        "at": "2026-09-07",
+        "summary": "The latest pushed verify/browser pair was red: governance required history absent from its checkout, and the import/re-entry journey raced its move commit. Both local contracts are repaired without retries, and the exact local browser/scaffold targets pass; remote proof remains pending until these bytes are pushed.",
+        "impact": "regressed",
         "evidence": [
-          "tools/roadmap-check.mjs",
-          "tools/roadmap-check.test.mjs",
-          "tools/status-parity.mjs",
+          ".github/workflows/verify.yml",
+          "tests/browser/drill.spec.ts",
+          "tools/verify-scaffold.mjs",
+          "tools/verify-scaffold.test.mjs",
           "planning/work-state.json",
-          "tools/roadmap-receipt.mjs",
-          "tools/roadmap-progress.mjs",
-          "docs/progress-tracking.md"
+          "planning/exploration/log.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
-            "id": "D2840",
-            "digest": "sha256:30d929e49319ced993b677e0738e10620f6ef2588bd13cdde6d886022ee86cf1"
+            "id": "D3076",
+            "digest": "sha256:29fca3770e9b006f5edea110abce8c7157a81a63968708e3ddbb8294e8f6ddb4"
+          },
+          {
+            "kind": "work_state",
+            "id": "D3077",
+            "digest": "sha256:257208b195cc96f48931ad4ec03fbdd954345fa75f3635d83f0f416d6b37ba03"
           }
         ]
       },
