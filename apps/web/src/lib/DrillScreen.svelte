@@ -49,7 +49,7 @@
     resistanceSummary,
   } from "./outcome-presentation.js";
   import { consequenceHorizon, phaseLabel, phaseSummary } from "./run-copy.js";
-  import { assistanceProfile, loadAssistance, saveAssistance, type PreferenceStorage } from "./assistance-preference.js";
+  import { assistanceKey, assistanceProfile, loadAssistance, saveAssistance, type AssistanceProfile, type PreferenceStorage } from "./assistance-preference.js";
   import { runViewportSupport, type RunViewportSupport } from "./viewport-support.js";
   import { playBoardEdge, playViewportClass } from "./play-composition.js";
   import { HUMAN_MODEL_RUNG_DISCLAIMER, humanModelMaterialLimit, opponentStatus } from "./opponent-copy.js";
@@ -491,7 +491,8 @@
   });
   let detectedPhase = $derived(classifyPhase(displayedNode.fen));
   let endgame = $derived(endgameReading(displayedNode.fen));
-  let assistanceContext = $derived({ sessionKind: run.sessionKind, workflowContext: assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }), deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole, seatedInContest, reviewing });
+  let activeAssistanceProfile = $derived(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }));
+  let assistanceContext = $derived({ sessionKind: run.sessionKind, workflowContext: activeAssistanceProfile, deliveryOpen: feedbackDeliveryOpen(run), role: viewerRole, seatedInContest, reviewing });
   let assistancePermission = $derived(permittedAssistance(assistanceContext));
   let effectiveLighting = $derived(assistance.boardLighting === "evidence" && assistancePermission.boardLighting !== "evidence" ? "sight" : assistance.boardLighting);
   let selectedObservations = $derived(selectedSquare === undefined ? [] : sightFeatures.filter((item) => item.squares.some((square) => square === selectedSquare)));
@@ -507,9 +508,14 @@
     try { return globalThis.localStorage ?? undefined; } catch { return undefined; }
   }
 
+  function refreshAssistancePreference(event: StorageEvent): void {
+    if (event.key !== null && event.key !== assistanceKey(activeAssistanceProfile)) return;
+    assistance = loadAssistance(activeAssistanceProfile, preferenceStorage());
+  }
+
   function setAssistance<Key extends keyof Omit<AssistanceConfig, "version">>(key: Key, value: AssistanceConfig[Key]): void {
     assistance = Object.freeze({ ...assistance, [key]: value });
-    saveAssistance(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }), assistance, preferenceStorage());
+    saveAssistance(activeAssistanceProfile, assistance, preferenceStorage());
     if (key === "markers" && value === "off") {
       openPivotalNodeId = undefined;
       pivotalDialogOpen = false;
@@ -941,8 +947,9 @@
   onMount(() => {
     measureViewport();
     globalThis.addEventListener("resize", measureViewport);
+    globalThis.addEventListener("storage", refreshAssistancePreference);
     speechAvailable = typeof globalThis.speechSynthesis !== "undefined" && typeof globalThis.SpeechSynthesisUtterance !== "undefined" && globalThis.speechSynthesis.getVoices().length > 0;
-    assistance = loadAssistance(assistanceProfile({ sessionKind: run.sessionKind, feedbackPolicy: run.feedbackPolicy, liveKind: liveSessionKind }), preferenceStorage());
+    assistance = loadAssistance(activeAssistanceProfile, preferenceStorage());
     if (onLoadMarks !== undefined) void onLoadMarks().then((marks)=>ownMarks=marks);
     try { const saved=globalThis.localStorage?.getItem(`tabiya:mark-scope:${run.id}`);if(saved==="branch")markScope="branch"; } catch { /* local preference only */ }
     try {
@@ -959,9 +966,17 @@
   });
   onDestroy(() => {
     globalThis.removeEventListener("resize", measureViewport);
+    globalThis.removeEventListener("storage", refreshAssistancePreference);
     unregisterKeyboard?.();
     if (replayTimer !== undefined) clearInterval(replayTimer);
     if (markTimer !== undefined) clearTimeout(markTimer);
+  });
+
+  let loadedAssistanceProfile: AssistanceProfile | undefined;
+  $effect(() => {
+    if (loadedAssistanceProfile === activeAssistanceProfile) return;
+    loadedAssistanceProfile = activeAssistanceProfile;
+    assistance = loadAssistance(activeAssistanceProfile, preferenceStorage());
   });
 
   $effect(() => {

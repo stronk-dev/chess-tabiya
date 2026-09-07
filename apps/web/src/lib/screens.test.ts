@@ -381,6 +381,14 @@ describe("Layer 3 screens", () => {
     const component = mount(DrillScreen, { target: target(), props: { snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false }, assistanceStorage, capabilities, onVoice, onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion } });
     await tick();
     expect(document.querySelector(".pivotal-marker")).not.toBeNull();
+    preferences.set(assistanceKey("position"), JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }));
+    globalThis.dispatchEvent(new StorageEvent("storage", { key: assistanceKey("position") }));
+    await tick();
+    expect(document.querySelector(".pivotal-marker")).toBeNull();
+    preferences.set(assistanceKey("position"), JSON.stringify({ version: 4, markers: "live", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }));
+    globalThis.dispatchEvent(new StorageEvent("storage", { key: assistanceKey("position") }));
+    await tick();
+    expect(document.querySelector(".pivotal-marker")).not.toBeNull();
     expect(document.querySelector('.guidance-panel[role="dialog"]')).toBeNull();
     document.querySelector<HTMLButtonElement>(".pivotal-marker")!.click(); await tick();
     expect(document.querySelector(".guidance-panel")?.textContent).toContain("This move changed something concrete");

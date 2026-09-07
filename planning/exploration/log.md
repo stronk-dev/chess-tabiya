@@ -18019,3 +18019,16 @@ three older completed obligations: [[D167]] claim backing renders at checkpoints
 [[D259]] reasoning review uses its evidence-free typed provider path; [[D895]]'s five collector
 convention repairs all have runtime/harness fixtures. [[D840]] was already closed in the ledger;
 its execution state is synchronized in this checkpoint.
+
+## 2026-09-07 — Mounted runs follow assistance preference changes
+
+**What changed:** [[D311]] arm (b) is closed. `DrillScreen` no longer treats assistance as a
+mount-time snapshot: it derives the active workflow profile, reloads when that profile changes,
+and listens for browser `storage` events so a Settings write in another tab updates the mounted
+run. In-run controls continue to update their local state and persist through the same key.
+
+**Evidence/next:** the component fixture changes the position profile from live markers to off and
+back through storage events; the browser journey writes ambient presence after the board has
+mounted and requires the assistance affordance to appear. `make test-software` passes 1,123/1,123.
+[[D311]] remains open only for the two evidence-production residues: arrows have no producer, and
+`boardLighting: "evidence"` has no disclosed-evidence overlay distinct from structural sight.

@@ -2425,6 +2425,13 @@ test("@matrix mobile shell, settings, and install manifest preserve the run regi
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await expect(page).toHaveTitle("Rehearsal · Tabiya");
   await expect(page.getByLabel("Chessboard")).toBeVisible();
+  await page.evaluate(() => {
+    const key = "tabiya.assistance.v1.position";
+    const current = JSON.parse(localStorage.getItem(key) ?? "{}") as Record<string, unknown>;
+    localStorage.setItem(key, JSON.stringify({ ...current, ambient: "on" }));
+    dispatchEvent(new StorageEvent("storage", { key }));
+  });
+  await expect(page.getByRole("button", { name: "Open assistance" })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Run regions" })).toBeVisible();
   const runContext = page.locator("main.drill [data-status-announcement]").first();
   await expect(runContext).toHaveAttribute("aria-live", "polite");

@@ -336,10 +336,10 @@
     {
       "id": "A11-a26",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "§3.7 fallout-3",
       "sourceHeading": "Accessibility and small screens — `ux-accessibility-and-mobile.md`",
@@ -347,7 +347,11 @@
       "legacyRoute": "ledger",
       "note": "[[D1493]]; nobody has opened this app on a phone",
       "tournamentReady": true,
-      "sourceDigest": "sha256:b6dd60ad05c24c26818c0ad3339d63d9fdbf5c5eb7bbfe5c93593196a5f06d85"
+      "sourceDigest": "sha256:b6dd60ad05c24c26818c0ad3339d63d9fdbf5c5eb7bbfe5c93593196a5f06d85",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "ebcf18f8: compact reflow browser matrix covers iPhone-class portrait, phone landscape, 320x256 WCAG reflow, and an explicit below-floor refusal"
+      }
     },
     {
       "id": "A11-a27",
@@ -626,32 +630,40 @@
     {
       "id": "A11-b2",
       "sourceState": "blocked_owner",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "a11y §5 Q2",
       "sourceHeading": "Intent-tier sentences that are false, and gate rows that outran the client",
       "summary": "**What is the minimum supported viewport and what happens below it?** Three priced options. The refusal's own 24px rationale supports a floor ~1.7× smaller, and the refusal is a product promise",
       "legacyRoute": "ledger",
       "tournamentReady": true,
-      "sourceDigest": "sha256:22dc1bb033f302eecabb99bfb37ccdefd5403a77f6d0bc8ba849935a95a1dc22"
+      "sourceDigest": "sha256:22dc1bb033f302eecabb99bfb37ccdefd5403a77f6d0bc8ba849935a95a1dc22",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "ebcf18f8: compact reflow browser matrix covers iPhone-class portrait, phone landscape, 320x256 WCAG reflow, and an explicit below-floor refusal"
+      }
     },
     {
       "id": "A11-b3",
       "sourceState": "blocked_owner",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "a11y §5 Q3",
       "sourceHeading": "Intent-tier sentences that are false, and gate rows that outran the client",
       "summary": "Is portrait-only the phone posture? The manifest declares no orientation, and every phone in landscape is refused *and misclassified as a tablet*",
       "legacyRoute": "ledger",
       "tournamentReady": true,
-      "sourceDigest": "sha256:f4715913ff442120ae1a75cfd4b52e7ec0e91014403b4fc1b3867f9bc653f169"
+      "sourceDigest": "sha256:f4715913ff442120ae1a75cfd4b52e7ec0e91014403b4fc1b3867f9bc653f169",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "ebcf18f8: compact reflow browser matrix covers iPhone-class portrait, phone landscape, 320x256 WCAG reflow, and an explicit below-floor refusal"
+      }
     },
     {
       "id": "A11-b4",
@@ -698,17 +710,21 @@
     {
       "id": "A11-b7",
       "sourceState": "blocked_owner",
-      "state": "queued",
+      "state": "completed",
       "capability": "accessibility",
       "owner": "client-platform",
-      "assignment": "capability:accessibility",
+      "assignment": "closed",
       "sourceDocument": "ux-accessibility-and-mobile.md",
       "sourceSection": "a11y §3.7 dev-*",
       "sourceHeading": "Intent-tier sentences that are false, and gate rows that outran the client",
       "summary": "The five refused device classes as separate decisions under Q2: iPhone SE (fails the height floor by 13px) · iPhone 12/13/14 · iPhone 15/16 Pro · Galaxy Fold closed · **1280px desktop at 400% zoom, which is a WCAG Reflow failure by construction**",
       "legacyRoute": "ledger",
       "tournamentReady": true,
-      "sourceDigest": "sha256:0f47bb1112d0190c1e468fed6d915e77603edd651fe3a1b8ce59f4adcb05f413"
+      "sourceDigest": "sha256:0f47bb1112d0190c1e468fed6d915e77603edd651fe3a1b8ce59f4adcb05f413",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "ebcf18f8: compact reflow browser matrix covers iPhone-class portrait, phone landscape, 320x256 WCAG reflow, and an explicit below-floor refusal"
+      }
     },
     {
       "id": "A11-c1",

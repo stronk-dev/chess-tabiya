@@ -145,6 +145,11 @@ window, another in-flight action, and an already-requested calculation each disa
 a visible reason. Once engine evidence is recorded, Support reports availability and links to the
 advanced inspector; it does not print raw provider output into the play surface.
 
+Device-local assistance preferences are live inputs, not mount-time configuration. The drill
+derives its active profile from the current workflow context, reloads when that context changes,
+and listens for browser `storage` events so a Settings change from another tab updates an already
+mounted run. The run's own assistance controls update the same profile immediately.
+
 `/authored-feedback` returns an honest empty page for position runs. An absent
 or stale registry entry never opens any engine-evidence surface.
 
