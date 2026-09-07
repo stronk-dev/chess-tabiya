@@ -67,17 +67,17 @@ export function pivotalMarkers(run: DrillRun, branchId: string): readonly Pivota
 
 export function liveAdmitted(
   marker: PivotalMarker,
-  permission: ReturnType<typeof permittedAssistance>,
+  _permission: ReturnType<typeof permittedAssistance>,
 ): boolean {
   switch (marker.kind) {
     case "irreversibility":
       return (marker.detail as IrreversibilityDetail).subkind === "last_of_role";
     case "human_divergence":
-      // Grandfathered-unmeasured (§3.1), but never allowed around the rung-3 gate.
-      return permission.humanSplit === "free";
-    case "phase_change":
     case "option_collapse":
-      // Grandfathered-unmeasured (§3.1); measurement, not argument, decides demotion.
+      // D3048: measured evidence remains available to explicit requests and retrospective
+      // consumers, but these two signals never appear as unsolicited live markers.
+      return false;
+    case "phase_change":
       return true;
     default: {
       const exhaustive: never = marker.kind;

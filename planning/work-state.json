@@ -492,23 +492,21 @@
     },
     {
       "id": "D52",
-      "state": "blocked",
-      "sourceGlyph": "📊",
-      "sourceDigest": "sha256:28efb19a27ea34efa19ff30ca6ed209e9f9cfbb648fdcd8d613f07dfb390ec3d",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:47ca766f3eab591b3522f010ebb3d8939bf4e80817d975774588f52f6113e59a",
       "uxItems": [],
-      "owner": "OWNER",
-      "blocker": "owner-ruling",
-      "question": "Approve the R9 human-choice population as L2(ii) substitute and demote human_divergence from unasked live to on-request/retrospective under L6?"
+      "evidence": "packages/runtime/src/pivotal.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D53",
-      "state": "blocked",
-      "sourceGlyph": "📊",
-      "sourceDigest": "sha256:338f2df3eda8253e66f18820306b95f3dde6e90cbda76b16747a03f2bb01e57e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:9c28425f3777ae8bb725ff729818272aa4feabdc89c11b8b0ed0986b250b0272",
       "uxItems": [],
-      "owner": "OWNER",
-      "blocker": "owner-ruling",
-      "question": "Approve the alternative-continuation population as the L2(ii) substitute and demote option_collapse from unasked live to on-request/retrospective under L6?"
+      "evidence": "packages/runtime/src/pivotal.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D54",
@@ -10732,13 +10730,14 @@
     },
     {
       "id": "D1421",
+      "state": "blocked",
       "sourceGlyph": "🐞",
       "sourceDigest": "sha256:c5bb4aee412412911217b6528046a8406eb0204bfefad8fa0fe78ebd13f442ce",
       "uxItems": [
         "ATR-a20"
       ],
-      "state": "todo",
-      "owner": "review-and-return"
+      "owner": "review-and-return",
+      "blocker": "rfc:move-quality-grades.md"
     },
     {
       "id": "D1422",
@@ -24794,11 +24793,12 @@
     },
     {
       "id": "D3048",
-      "state": "todo",
-      "owner": "assistance-and-presentation",
-      "sourceGlyph": "⚖️",
-      "sourceDigest": "sha256:49106392a16b4cc7a72f6a0dc7caac005cf215393d281147f144de10861866df",
-      "uxItems": []
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:515beb66c8b64491ccc17e5318b1702d58c9512b6febc12dd14ba8bc5681c138",
+      "uxItems": [],
+      "evidence": "packages/runtime/src/pivotal.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3049",
@@ -25179,6 +25179,15 @@
       "uxItems": [],
       "owner": "content-and-theory",
       "blocker": "rfc:graduation-clearance.md"
+    },
+    {
+      "id": "D3092",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:3003ee9d3964a63e0900848d8a2600ecb63fce9d5b3663f1ecdaac7b9b6c4812",
+      "uxItems": [],
+      "evidence": "planning/work-state.json",
+      "evidenceKind": "path"
     }
   ]
 }

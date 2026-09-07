@@ -17852,3 +17852,26 @@ is the bounded review receipt. The next author pass needs one disposable nine-em
 contract, exact registry-plan equality, an honest attestation authority claim and the shared
 canonical serializer. Another fresh review remains mandatory; production/schema implementation is
 still unauthorized.
+
+## 2026-09-07 — Accepted grade semantics restored as the work-state boundary
+
+**What changed:** the 1.0 work registry had classified [[D1421]] as a directly executable defect,
+but its proposed already-decided-position suppression contradicts explicit fixtures in accepted
+`move-quality-grades.md`. [[D3092]] records the conflict, and D1421 now waits on that RFC rather
+than inviting an implementer to change accepted semantics without an amendment.
+
+**Why it matters:** zero-untriaged work is only useful if `todo` means authorized work. This repair
+preserves the learner-facing problem while restoring the RFC boundary; it does not decide whether
+the accepted grading examples or the later suppression research should win.
+
+## 2026-09-07 — Two noisy live markers moved behind learner intent
+
+**What changed:** [[D3048]] now executes the owner's disposition of [[D52]] and [[D53]].
+`human_divergence` and `option_collapse` remain computed, typed and renderable, but `liveAdmitted`
+refuses them in every context, so the run screen cannot surface either without a future explicit
+request/retrospective module.
+
+**Why it matters:** this is the evidence/module separation in production: retain rich primitives,
+remove weak interpretations from unsolicited UI. The full Maia distribution and exact
+option-count sequence remain usable by Review, bots, research and future requested guidance; the
+learner no longer gets their raw strings merely because live markers are enabled.

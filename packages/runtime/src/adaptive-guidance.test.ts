@@ -105,7 +105,7 @@ describe("adaptive guidance runtime", () => {
     expect(markers).toHaveLength(1);
     expect(renderPivotalMarker(markers[0]!)[0]).toMatch(/Maia-1500.*31%.*24%.*19%.*recorded mass/);
     expect(liveMarkers(run([start], [event]), "main", { sessionKind: "position", workflowContext: "position", deliveryOpen: false, role: "solo", seatedInContest: false, reviewing: false }).filter((item) => item.kind === "human_divergence")).toEqual([]);
-    expect(liveMarkers(run([start], [event]), "main", { sessionKind: "position", workflowContext: "position", deliveryOpen: true, role: "host", seatedInContest: false, reviewing: false }).filter((item) => item.kind === "human_divergence")).toHaveLength(1);
+    expect(liveMarkers(run([start], [event]), "main", { sessionKind: "position", workflowContext: "position", deliveryOpen: true, role: "host", seatedInContest: false, reviewing: false }).filter((item) => item.kind === "human_divergence")).toEqual([]);
     expect(liveMarkers(run([start], [event]), "main", { sessionKind: "position", workflowContext: "position", deliveryOpen: true, role: "participant", seatedInContest: false, reviewing: false }).filter((item) => item.kind === "human_divergence")).toEqual([]);
     expect(liveMarkers(run([start], [event]), "main", { sessionKind: "position", workflowContext: "position", deliveryOpen: true, role: "spectator", seatedInContest: false, reviewing: false }).filter((item) => item.kind === "human_divergence")).toEqual([]);
     expect(pivotalMarkers(run([start], [{ ...event, data: { ...event.data, selection: { ...selection, policyModeApplied: "strong_engine" as const } } }]), "main").filter((item) => item.kind === "human_divergence")).toEqual([]);
@@ -131,10 +131,10 @@ describe("adaptive guidance runtime", () => {
     const free = permittedAssistance({ sessionKind: "position", workflowContext: "position", deliveryOpen: true, role: "solo", seatedInContest: false, reviewing: false });
     const locked = permittedAssistance({ sessionKind: "position", workflowContext: "position", deliveryOpen: false, role: "solo", seatedInContest: false, reviewing: false });
     expect(fixtures.filter(([item]) => liveAdmitted(item, free)).map(([item]) => item.kind)).toEqual([
-      "phase_change", "human_divergence", "option_collapse", "option_collapse", "irreversibility", "irreversibility",
+      "phase_change", "irreversibility", "irreversibility",
     ]);
     expect(fixtures.filter(([item]) => liveAdmitted(item, locked)).map(([item]) => item.kind)).toEqual([
-      "phase_change", "option_collapse", "option_collapse", "irreversibility", "irreversibility",
+      "phase_change", "irreversibility", "irreversibility",
     ]);
   });
 
