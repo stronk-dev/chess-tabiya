@@ -25611,6 +25611,17 @@
       ],
       "evidence": "packages/runtime/src/story.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3138",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a240c882cf4d2f60f8d0370fbde788d877fff793d719b46f567993913c71d480",
+      "uxItems": [
+        "INR-a11"
+      ],
+      "evidence": "apps/web/src/App.svelte",
+      "evidenceKind": "path"
     }
   ]
 }

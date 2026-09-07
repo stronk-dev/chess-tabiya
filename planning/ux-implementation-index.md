@@ -144,7 +144,7 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 | INR-a8 | §6.6 | Animation preference with a **None** option and a Normal default | ledger | [[D840]]; without it a commit and a rewind are visually indistinguishable | |
 | INR-a9 | §8.1 | **Narrow `guided_hint`'s stage-3 admission now**: remove `live.stockfish.pv@1` from its accepts list and drop the ceiling to a single `move`. Today three documents jointly permit a guidance module to print an engine PV against that producer's own declared refusal | ledger | [[D1455]]; the edit only ever *narrows*, so it does not wait for `hint-distance`'s redraft | |
 | INR-a10 | §2.3 | The hint-reach harness must report **per rung**, not per family | ledger | [[D1457]]; a ladder whose top rungs are usually empty is a different product | |
-| INR-a11 | §4.3 | Stated caps rather than silent truncation (*"top 5 of 23 recorded moves"*) | ledger | [[D3137]] closes private/public Story selection; remaining learner-facing capped projections still need the same denominator audit | |
+| INR-a11 | §4.3 | Stated caps rather than silent truncation (*"top 5 of 23 recorded moves"*) | ledger | [[D3137]] closes private/public Story; [[D3138]] closes Learn recommendations and prior-reasoning search; the 50-run route lists remain | |
 
 ### The core loop — `ux-core-loop.md`
 

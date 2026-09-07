@@ -1721,6 +1721,12 @@ credits, opening performance, drill-down, privacy/sharing and recommendations do
 product. [[D1532]] repaired the five rating/marks/standing families at the production boundary;
 longitudinal/profile APIs remain absent.
 
+The 2026-09-07 cap audit fixes two existing learner-history projections without mistaking them for
+the missing longitudinal product. [[D3138]] gives Learn the exact shown/eligible count for its
+bounded repertoire and shape recommendations, scans all preserved runs for shape encounters in
+bounded pages, and removes the five-run cutoff that could falsely report no previous reasoning.
+The separate 50-run route lists remain open under INR-a11.
+
 **1.0 exit:** owned immutable events rebuild idempotent observations/aggregates; metrics show
 occurrence/opportunity, phase/decision class, revision, uncertainty, examples and abstention;
 rating stays isolated from move feedback; style is continuous evidence, not a manufactured type;

@@ -28,5 +28,7 @@ named authored point, and reports honest empty output when the provider proposes
 
 Transcripts are grant-scoped run data. They do not enter public story cards, PGN, pack
 projection, or match-opponent surfaces. Previous-attempt comparison is owner-only and
-requires the same pack ID and digest. Run deletion is the retention boundary because no
+requires the same pack ID and digest. The lookup examines every matching prior attempt until a
+recorded transcript is found; an arbitrary recent-run budget cannot manufacture the honest-empty
+state. Run deletion is the retention boundary because no
 separate transcript table exists.

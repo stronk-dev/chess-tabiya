@@ -361,6 +361,13 @@ describe("DrillApi", () => {
     expect(calls).toEqual(["http://tabiya.test/progress/related?runId=run+%2F+one&nodeId=node+%3F+one"]);
   });
 
+  it("preserves recommendation selection counts", async () => {
+    const page = { recommendations: [], selection: { shown: 10, total: 23 } };
+    const api = new DrillApi("http://tabiya.test", async () => json(page));
+
+    await expect(api.recommendations()).resolves.toEqual(page);
+  });
+
   it("keeps Pack Studio playtest assembly server-owned and binds withdrawal", async () => {
     const calls: { readonly url: string; readonly init?: RequestInit }[] = [];
     const api = new DrillApi("http://tabiya.test", async (input, init) => {

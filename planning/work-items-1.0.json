@@ -5568,8 +5568,8 @@
       "sourceHeading": "The in-run experience — `ux-in-run.md`",
       "summary": "Stated caps rather than silent truncation (*\"top 5 of 23 recorded moves\"*)",
       "legacyRoute": "ledger",
-      "note": "[[D3137]] closes private/public Story selection; remaining learner-facing capped projections still need the same denominator audit",
-      "sourceDigest": "sha256:38854a5f5ef6ff9be292be4cea386176c1ef165cbff01b0824c537b2dccc26f3"
+      "note": "[[D3137]] closes private/public Story; [[D3138]] closes Learn recommendations and prior-reasoning search; the 50-run route lists remain",
+      "sourceDigest": "sha256:9387cb7511837dbc17f28171309fc99d64aee3cf26116f6466aa8d2c054e6915"
     },
     {
       "id": "INR-a2",

@@ -18472,3 +18472,13 @@ later eligible moments were omitted. The reducer now returns one frozen selectio
 seat. The private rail visibly states and references the denominator when bounded, while the public
 JSON and HTML carry the same counts. D3137 closes this Story instance; INR-a11 remains queued for a
 systematic audit of other learner-facing caps.
+
+## 2026-09-07 — Learn caps no longer alter the evidence population
+
+The cap audit found that Learn returned up to ten repertoire gaps and ten shape encounters without
+a denominator, while shape evidence silently ignored every run after the newest 50. The two
+producers now return bounded items plus their full eligible counts; Learn states the combined
+shown/total count, and shape encounters page across all preserved runs before selection. The same
+pass removes a separate five-attempt search cutoff that could report no previous reasoning even
+when a sixth matching run carried a transcript. D3138 closes those instances; INR-a11 remains open
+for the route-level 50-run lists and any further learner-facing caps.

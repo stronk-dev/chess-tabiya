@@ -1140,7 +1140,7 @@ export class RunService {
   }
 
   shapeRecommendations(principal: Principal) {
-    if (this.#shapes === undefined || this.#packRegistry === undefined || this.#progress === undefined) return Object.freeze([]);
+    if (this.#shapes === undefined || this.#packRegistry === undefined || this.#progress === undefined) return Object.freeze({ recommendations: Object.freeze([]), total: 0 });
     const attemptedShapes = new Set<string>();
     for (const attempt of this.#progress.progress(principal.learnerId)) {
       if (!attempt.countable || attempt.packId === null) continue;
@@ -1148,16 +1148,21 @@ export class RunService {
     }
     const triggers = this.#shapes.list().map((summary) => ({ id: summary.id, trigger: this.#shapes!.required(summary.id).document.trigger }));
     const encountered = new Map<string, Set<string>>();
-    for (const summary of this.#storage.list(principal.learnerId, 50, 0)) {
-      const run = this.#storage.read(summary.id)?.run; if (run === undefined) continue;
-      const ids = new Set(run.branches.flatMap((branch) => shapeFirings(triggers, branchPath(run, branch.id)).map((firing) => firing.entryId)));
-      for (const id of ids) { const runs = encountered.get(id) ?? new Set<string>(); runs.add(run.id); encountered.set(id, runs); }
+    for (let offset = 0; ; offset += 100) {
+      const page = this.#storage.list(principal.learnerId, 100, offset);
+      for (const summary of page) {
+        const run = this.#storage.read(summary.id)?.run; if (run === undefined) continue;
+        const ids = new Set(run.branches.flatMap((branch) => shapeFirings(triggers, branchPath(run, branch.id)).map((firing) => firing.entryId)));
+        for (const id of ids) { const runs = encountered.get(id) ?? new Set<string>(); runs.add(run.id); encountered.set(id, runs); }
+      }
+      if (page.length < 100) break;
     }
-    return Object.freeze([...encountered].filter(([id]) => !attemptedShapes.has(id)).map(([id, runIds]) => {
+    const eligible = [...encountered].filter(([id]) => !attemptedShapes.has(id)).map(([id, runIds]) => {
       const shape = this.#shapes!.required(id).summary;
       const packIds = this.#packRegistry!.list().filter((pack) => normalizeShapeReferences(this.#packRegistry!.get(pack.id)?.document.shapes).some((shape) => shape.shape === id)).map((pack) => pack.id).sort();
       return Object.freeze({ kind: "shape_encounter" as const, shapeId: id, shapeName: shape.name, runCount: runIds.size, runIds: Object.freeze([...runIds].sort()), packIds: Object.freeze(packIds), sentence: `You met ${shape.name} in ${runIds.size} of your preserved runs and have no countable attempt recorded in any pack that names it.` });
-    }).sort((left, right) => right.runCount - left.runCount || left.shapeId.localeCompare(right.shapeId)).slice(0, 10));
+    }).sort((left, right) => right.runCount - left.runCount || left.shapeId.localeCompare(right.shapeId));
+    return Object.freeze({ recommendations: Object.freeze(eligible.slice(0, 10)), total: eligible.length });
   }
 
   async createGroup(
@@ -1618,7 +1623,7 @@ export class RunService {
       previous = Object.freeze({ runId, eventSeq: event.seq, skipped: event.data.skipped, transcript: event.data.transcript, detections: event.data.detections });
     } else if (this.#storage.ownerLearnerId?.(runId) === principal.learnerId && run.packId !== null && run.packDigest !== null) {
       const candidates = this.#progress?.progress(principal.learnerId).filter((attempt) => attempt.runId !== runId && attempt.packId === run.packId && attempt.packDigest === run.packDigest) ?? [];
-      for (const candidateRunId of [...new Set(candidates.map((attempt) => attempt.runId))].slice(0, 5)) {
+      for (const candidateRunId of new Set(candidates.map((attempt) => attempt.runId))) {
         const candidate = this.#storage.read(candidateRunId)?.run;
         if (candidate === undefined) continue;
         const event = reasoningEvents(candidate, checkpointId).at(-1);

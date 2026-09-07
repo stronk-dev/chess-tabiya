@@ -58,6 +58,25 @@ describe("stated reasoning service", () => {
     expect(oversize.storage.read(oversize.run.id)?.run.events.some((event) => event.type === "reasoning.recorded")).toBe(false);
   });
 
+  it("finds previous reasoning beyond five more recent attempts", async () => {
+    const { service, run } = await setup("reasoning-current");
+    for (const id of ["prior-a", "prior-b", "prior-c", "prior-d", "prior-e", "prior-f"]) {
+      await service.create({ id, session: { kind: "pack", packId: document.id }, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, seed: 1, createdAt: at }, `writer-${id}`);
+      const moved = service.move(id, `writer-${id}`, "h2h3", { at });
+      if (id === "prior-f") {
+        const checkpoint = moved.run.events.find((event) => event.type === "checkpoint.reached")!;
+        service.recordReasoning(id, principal, `writer-${id}`, {
+          nodeId: moved.run.activeCursor.nodeId,
+          checkpointEventSeq: checkpoint.seq,
+          transcript: { candidates: ["Keep the queen"], plan: "protect the queen", fears: "a rook on the d-file" },
+          at,
+        });
+      }
+    }
+
+    expect(service.reasoning(run.id, principal, "reasoning").previous).toMatchObject({ runId: "prior-f" });
+  });
+
   it("refuses a segment-end reasoning checkpoint that cannot be proven to close a segment", () => {
     const candidate = structuredClone(document) as DrillPackDefinition;
     (candidate as unknown as { feedbackPolicy: string }).feedbackPolicy = "segment_end";

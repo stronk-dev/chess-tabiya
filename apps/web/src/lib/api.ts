@@ -528,6 +528,7 @@ export interface RepertoireView extends RepertoireSummary {readonly rootFen:stri
 export interface RepertoireGap {readonly key:string;readonly representativeFen:string;readonly replySan:string;readonly replyUci:string;readonly line:readonly string[];readonly mass?:number;readonly gamesUntilSeen?:number;readonly state:"open"|"addressed"|"answered";readonly runId:string|null}
 export interface RepertoireGapPage {readonly status:"pending"|"never_scanned"|"ready";readonly repertoire:RepertoireSummary;readonly scan:null|{readonly population:CorpusPopulation;readonly gaps:readonly RepertoireGap[];readonly alternateGaps:readonly RepertoireGap[];readonly unknown:readonly {readonly key:string;readonly line:readonly string[];readonly reason:string;readonly detail:string;readonly gamesUntilPosition:number}[];readonly uncoveredMass:number;readonly truncated:boolean;readonly sourceFailures:number;readonly queriesUsed:number;readonly unreachedKeys:number;readonly guard:string;readonly partiality:string|null}}
 export type ProgressRecommendation = {readonly kind:"repertoire_gap";readonly repertoireId:string;readonly repertoireName:string;readonly gapKey:string;readonly sentence:string}|{readonly kind:"shape_encounter";readonly shapeId:string;readonly shapeName:string;readonly runCount:number;readonly runIds:readonly string[];readonly packIds:readonly string[];readonly sentence:string};
+export interface ProgressRecommendationPage { readonly recommendations: readonly ProgressRecommendation[]; readonly selection: { readonly shown: number; readonly total: number }; }
 export interface DistillResult {readonly draft:PackDraft;readonly proposals:readonly Record<string,unknown>[];readonly dropped:readonly string[]}
 
 export interface VoicePage { readonly text: string; readonly source: "provider" | "deterministic"; readonly scope: "marker" | "reading" | "steering" | "story" | "compare"; }
@@ -869,7 +870,7 @@ export interface DrillClientApi extends RunApi {
   flipRun?(runId: string, nodeId: string, resistance?: "human_common" | "strong_engine"): Promise<{ readonly run: DrillRun; readonly writerId: string; readonly derivation: RunDerivation }>;
   runDerivations?(runId: string): Promise<RunDerivationPage>;
   milestones?(): Promise<readonly ProgressMilestone[]>;
-  recommendations?(): Promise<readonly ProgressRecommendation[]>;
+  recommendations?(): Promise<ProgressRecommendationPage>;
   distillRun?(runId:string,input:{readonly packId:string;readonly title:string;readonly branchId?:string}):Promise<DistillResult>;
   progress?(): Promise<readonly ProgressAttempt[]>;
   dueProgress?(): Promise<readonly ProgressSchedule[]>;
@@ -1271,7 +1272,7 @@ export class DrillApi implements DrillClientApi {
     return response.blob();
   }
 
-  async recommendations():Promise<readonly ProgressRecommendation[]>{const body=await this.#json<{recommendations:readonly ProgressRecommendation[]}>("/progress/recommendations");return body.recommendations;}
+  recommendations():Promise<ProgressRecommendationPage>{return this.#json<ProgressRecommendationPage>("/progress/recommendations");}
   distillRun(runId:string,input:{readonly packId:string;readonly title:string;readonly branchId?:string}):Promise<DistillResult>{return this.#json(`/runs/${encoded(runId)}/distill`,{method:"POST",body:input});}
 
   prediction(runId: string, input: PredictionRequest, writerId: string): Promise<PredictionResult> {

@@ -1247,15 +1247,18 @@ describe("application shell", () => {
     const learnApi: DrillClientApi = {
       ...api(),
       async recommendations() {
-        return [{
-          kind: "shape_encounter" as const,
-          shapeId: "shape-one",
-          shapeName: "Open file",
-          runCount: 1,
-          runIds: [run.id],
-          packIds: [pack.id],
-          sentence: "You recorded this shape in one preserved run.",
-        }];
+        return {
+          recommendations: [{
+            kind: "shape_encounter" as const,
+            shapeId: "shape-one",
+            shapeName: "Open file",
+            runCount: 1,
+            runIds: [run.id],
+            packIds: [pack.id],
+            sentence: "You recorded this shape in one preserved run.",
+          }],
+          selection: { shown: 1, total: 4 },
+        };
       },
       async dueProgress() {
         return [{ id: "unknown-schedule", sessionKind: "pack" as const, packId: unknownPackId, kind: "blocked" as const, variant: null, dueAt: "2026-08-23T12:00:00.000Z", sourceRunId: run.id }];
@@ -1267,6 +1270,7 @@ describe("application shell", () => {
     });
 
     await vi.waitFor(() => expect(document.body.textContent).toContain(`Find ${packSummary.title}`));
+    expect(document.body.textContent).toContain("Showing 1 of 4 grounded recommendations.");
     expect(document.body.textContent).toContain("Unavailable rehearsal");
     expect(document.body.textContent).not.toContain(pack.id);
     expect(document.body.textContent).not.toContain(unknownPackId);

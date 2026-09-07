@@ -1039,7 +1039,10 @@ export function createRestHandler(
       }
       if (request.method === "GET" && url.pathname === "/progress/recommendations") {
         const principal = authenticate();
-        return json(200, { recommendations: Object.freeze([...(repertoires?.recommendations(principal) ?? []), ...service.shapeRecommendations(principal)]) });
+        const repertoirePage = repertoires?.recommendations(principal) ?? Object.freeze({ recommendations: Object.freeze([]), total: 0 });
+        const shapePage = service.shapeRecommendations(principal);
+        const recommendations = Object.freeze([...repertoirePage.recommendations, ...shapePage.recommendations]);
+        return json(200, { recommendations, selection: Object.freeze({ shown: recommendations.length, total: repertoirePage.total + shapePage.total }) });
       }
       const repertoireRoute=/^\/repertoires\/([^/]+)(?:\/(scan|gaps|answers))?(?:\/(enter))?$/.exec(url.pathname);
       if(repertoireRoute!==null){if(repertoires===undefined)throw new ServerError("STORAGE_FAILURE","Repertoire service is not configured");const principal=authenticate(),id=decodeURIComponent(repertoireRoute[1]!),resource=repertoireRoute[2],tail=repertoireRoute[3];

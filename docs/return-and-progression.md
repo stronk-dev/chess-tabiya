@@ -68,7 +68,11 @@ may name an unaddressed stored repertoire gap or a shape encountered in a
 preserved run but absent from every countable attempt. Its closed sentences
 state only those events and corpus population counts; they never infer weakness,
 mastery, rating, or what other learners struggle with. Empty history produces no
-section, and reading recommendations writes no schedule or attempt.
+section, and reading recommendations writes no schedule or attempt. Repertoire and shape
+recommendations each have a deterministic ten-item display budget. The endpoint returns their
+combined shown and eligible counts, and Learn states that denominator whenever eligible grounded
+recommendations exceed the visible set. Shape eligibility scans every preserved run in bounded
+storage pages; the display budget does not become an evidence-population cutoff.
 
 ## Pack format 0.6
 

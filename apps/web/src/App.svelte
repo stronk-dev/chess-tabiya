@@ -55,6 +55,7 @@
     type RepertoireSummary,
     type RepertoireGapPage,
     type ProgressRecommendation,
+    type ProgressRecommendationPage,
     type ClassroomSummary,
     type ClassroomDetail,
     type AssignedPack,
@@ -248,6 +249,7 @@
   let repertoireStudyUrl=$state("");
   let repertoireError:string|undefined=$state();
   let recommendations:readonly ProgressRecommendation[]=$state([]);
+  let recommendationSelection:ProgressRecommendationPage["selection"]=$state({shown:0,total:0});
   let relatedAttempts: Record<string, { readonly status: "loading" | "loaded" | "error"; readonly items: readonly RelatedProgressAttempt[]; readonly message?: string }> = $state({});
 
   const keyboardDispatcher = new ShellKeyboardDispatcher({
@@ -536,16 +538,19 @@
         capabilities = await api.capabilities();
       } else if (next.name === "learn") {
         relatedAttempts = {};
-        [attempts, dueSchedules, milestones, repertoires, recommendations, assignedPacks, runs, packs] = await Promise.all([
+        const loaded = await Promise.all([
           api.progress?.() ?? Promise.resolve([]),
           api.dueProgress?.() ?? Promise.resolve([]),
           api.milestones?.() ?? Promise.resolve([]),
           api.repertoires?.() ?? Promise.resolve([]),
-          api.recommendations?.() ?? Promise.resolve([]),
+          api.recommendations?.() ?? Promise.resolve({ recommendations: [], selection: { shown: 0, total: 0 } }),
           api.assignments?.() ?? Promise.resolve([]),
           api.runs(50, 0),
           api.packs(),
         ]);
+        [attempts, dueSchedules, milestones, repertoires, assignedPacks, runs, packs] = [loaded[0], loaded[1], loaded[2], loaded[3], loaded[5], loaded[6], loaded[7]];
+        recommendations = loaded[4].recommendations;
+        recommendationSelection = loaded[4].selection;
         const pages=await Promise.all(repertoires.map(async(item)=>[item.id,await api.repertoireGaps?.(item.id)] as const));repertoirePages=Object.fromEntries(pages.filter((entry)=>entry[1]!==undefined)) as Record<string,RepertoireGapPage>;
       } else if (next.name === "create") {
         [drafts, shapeDrafts, authoringShapes, authoringPrinciples, capabilities] = await Promise.all([
@@ -1454,7 +1459,7 @@
         {#if submissionIntent}{@const assignment=assignedPacks.find((candidate)=>candidate.id===submissionIntent!.assignmentId)}{@const run=runs.find((candidate)=>candidate.id===submissionIntent!.runId)}{#if assignment&&run}<aside class="consent-card" aria-labelledby="submission-confirm-title"><h3 id="submission-confirm-title">Share {runTitle(run)}?</h3><p>{assignment.teacherHandles.length>0?`${assignment.teacherHandles.map((handle)=>`@${handle}`).join(", ")} will be able to read this run for up to 90 days.`:"No active teacher is available to receive this run."}</p><p class="honest">They receive this run only, including its moves and the evidence or reveals already recorded in it. They do not gain access to your other runs.</p><div class="row-actions"><button type="button" disabled={assignment.teacherHandles.length===0} aria-describedby={assignment.teacherHandles.length===0?"submission-no-teacher":undefined} onclick={()=>void confirmAssignedRun()}>Confirm sharing</button><button type="button" onclick={()=>submissionIntent=undefined}>Cancel</button></div>{#if assignment.teacherHandles.length===0}<p id="submission-no-teacher" class="honest">An active teacher must be present before this run can be shared.</p>{/if}</aside>{/if}{/if}
       </section>
       {#if recommendations.length>0}
-        <section aria-labelledby="recommended-title"><h2 id="recommended-title">Recommended next</h2><div class="item-list">
+        <section aria-labelledby="recommended-title" aria-describedby={recommendationSelection.shown<recommendationSelection.total?"recommendation-budget":undefined}><h2 id="recommended-title">Recommended next</h2>{#if recommendationSelection.shown<recommendationSelection.total}<p id="recommendation-budget" class="honest">Showing {recommendationSelection.shown} of {recommendationSelection.total} grounded recommendations.</p>{/if}<div class="item-list">
           {#each recommendations as item}<article><p>{item.sentence}</p>{#if item.kind==="repertoire_gap"}<button type="button" onclick={()=>void enterRepertoireGap(item.repertoireId,item.gapKey)}>Enter gap</button>{:else if item.packIds[0]}<button type="button" onclick={()=>navigate("/play")}>Find {packTitle(item.packIds[0])}</button>{/if}</article>{/each}
         </div></section>
       {/if}
