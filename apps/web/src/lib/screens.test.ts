@@ -845,17 +845,44 @@ describe("Layer 3 screens", () => {
 
   it("renders a derived sibling-pack link at the rehearsal entry point", async () => {
     const related = { ...structuredClone(pack), variantOf: { packId: "related-pack", relation: { kind: "same_root_other_objective" as const } } };
+    const relatedPack = { ...structuredClone(pack), id: "related-pack", title: "Bishop and knight mate" };
     const run = createRun({ id: "variant-run", packId: related.id, packDigest: `sha256:${"b".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, startFen: related.start.fen, seed: 1, createdAt: at });
     const onSelectPack = vi.fn();
     const component = mount(DrillScreen, { target: target(), props: {
       pack: related,
+      relatedPack,
       snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
       onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), onSelectPack, registerKeyboardRegion,
     } });
     await tick();
     expect(document.querySelector(".variant-link")?.textContent).toContain("Same position, other objective");
+    expect(document.querySelector(".variant-link")?.textContent).toContain("Bishop and knight mate");
+    expect(document.querySelector(".variant-link")?.textContent).not.toContain("related-pack");
     document.querySelector<HTMLButtonElement>(".variant-link button")!.click();
     expect(onSelectPack).toHaveBeenCalledWith("related-pack");
+    await unmount(component);
+  });
+
+  it("renders a root-after-move sibling relation in SAN from the sibling position", async () => {
+    const related = { ...structuredClone(pack), variantOf: { packId: "philidor-hold", relation: { kind: "root_after_move" as const, moveUci: "h6h8" } } };
+    const relatedPack = {
+      ...structuredClone(pack),
+      id: "philidor-hold",
+      title: "Philidor: hold the third rank",
+      start: { ...pack.start, fen: "4k3/R7/7r/4K3/4P3/8/8/8 b - - 0 1", side: "black" as const },
+    };
+    const run = createRun({ id: "root-after-move-run", packId: related.id, packDigest: `sha256:${"c".repeat(64)}`, policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } }, startFen: related.start.fen, seed: 1, createdAt: at });
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack: related,
+      relatedPack,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), onSelectPack: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    expect(document.querySelector(".variant-link")?.textContent).toContain("After Rh8");
+    expect(document.querySelector(".variant-link")?.textContent).toContain("Philidor: hold the third rank");
+    expect(document.querySelector(".variant-link")?.textContent).not.toContain("h6h8");
+    expect(document.querySelector(".variant-link")?.textContent).not.toContain("philidor-hold");
     await unmount(component);
   });
 

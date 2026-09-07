@@ -1,6 +1,6 @@
 # RFC: Play composition
 
-- **Status:** implementing — shell checkpoint landed 2026-08-22; the 2026-08-26 comparison checkpoint removes raw objective/engine/detector/route records from the ordinary comparison; the 2026-08-31 queue checkpoint makes Support/Branches/Actions one-expanded at every viewport, selects the relevant seat on critical/branch transitions, and fails learner move labels closed instead of exposing UCI. The 2026-09-07 reflow checkpoint extends the stable board to 320×256, iPhone SE-class portrait heights and phone landscape through an explicit vertical-scroll composition rather than a refusal or sub-24px squares. The same-day advanced-support checkpoint removes the individual evidence switches from the ordinary topbar menu and keeps them configurable in the explicit Inspector. Exact fitted and reflow geometry, stable board identity and the permanent browser gates are live. Module seats/badges, preset-driven defaults, remaining vocabulary cleanup and the five module-dependent columns of the 7×16 matrix remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
+- **Status:** implementing — shell checkpoint landed 2026-08-22; the 2026-08-26 comparison checkpoint removes raw objective/engine/detector/route records from the ordinary comparison; the 2026-08-31 queue checkpoint makes Support/Branches/Actions one-expanded at every viewport, selects the relevant seat on critical/branch transitions, and fails learner move labels closed instead of exposing UCI. The 2026-09-07 reflow checkpoint extends the stable board to 320×256, iPhone SE-class portrait heights and phone landscape through an explicit vertical-scroll composition rather than a refusal or sub-24px squares. Same-day checkpoints move the individual evidence switches behind Advanced and make related-rehearsal chrome resolve a human title plus legal SAN instead of pack-id/UCI internals. Exact fitted and reflow geometry, stable board identity and the permanent browser gates are live. Module seats/badges, preset-driven defaults, remaining vocabulary cleanup and the five module-dependent columns of the 7×16 matrix remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
 - **Author:** claude (drafted on the D717 program routing, Phase 4)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §1 (invariants), §2 (the five regions),
@@ -738,6 +738,14 @@ document's to rewrite). Rows proposed by the cross-review, from head+1, NOT writ
 
 ## Changelog
 
+- 2026-09-07: related-rehearsal vocabulary checkpoint. A run resolves its declared sibling pack
+  through the existing pack API. The companion link renders the sibling's title, and a
+  `root_after_move` relation renders legality-checked SAN against the sibling's authoritative start
+  FEN. Failed sibling lookup degrades to neutral copy, never the stored pack id or UCI. Component
+  fixtures cover both objective and root-after-move relations and refuse both internal forms;
+  `make test-software` passes 1,125 tests / 182 files and `make test-browser` passes 61 with one
+  optional Maia probe skipped. This closes L3's dependency-free chrome work, not the remaining
+  typed module seats or preset contract.
 - 2026-09-07: advanced-support checkpoint. The topbar now offers the ordinary learner two actions:
   open the workflow's Support region or enter Advanced support controls. The seven individual
   evidence-channel controls moved intact to the explicit Inspector, so every primitive remains

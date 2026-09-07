@@ -18326,3 +18326,13 @@ preset/module pipeline. A component regression refuses checkboxes in the ordinar
 real browser suite exercises the new doorway while retaining the seven-viewport board geometry
 matrix. `make test-software` passes 1,124 tests / 182 files; `make test-browser` passes 61 with one
 optional Maia latency probe skipped.
+
+## 2026-09-07 — Related rehearsals stop exposing registry internals
+
+The accepted play-composition RFC's L3 path now resolves the related pack document when a run
+opens. Its companion link renders the related rehearsal's title, and `root_after_move` is converted
+to legal SAN against that pack's authoritative start FEN. Missing related data fails to neutral
+learner copy rather than exposing a pack id or UCI. Component fixtures cover the objective and
+root-after-move relations and refuse both internal forms. `make test-software` passes 1,125 tests /
+182 files; `make test-browser` passes 61 with one optional Maia latency probe skipped. Presets and
+typed module seats remain the next accepted composition work; this checkpoint does not claim them.

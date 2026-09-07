@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:ca05dd1559440ad2b90183bd19d9a421ad919de3d3c60ddc35d7777bfe6e8503",
+    "roadmap": "sha256:6679543965ecc24b9610832271e5178b8fb405245a1bfef997e29f09c455626d",
     "workItems": "sha256:983e2f3a517cfd73cdddab99412d3ec51f03803642923436f30454b5bf0f0b7d",
     "workState": "sha256:63df93fea7174de8ef66cb283942fe9f83a44cbf11b84698249b7766858d82e4",
-    "rfcRegister": "sha256:6095ebc9b72236510e709fb89a8c805f820962b60afd9fd0da8012a81ea5f512",
+    "rfcRegister": "sha256:f3efd2307d62a39be86513e01b399cbc2979dbf6a0f0b413f8baea33399b1ea8",
     "uxIndex": "sha256:5ca3e23500716997bf5a89e941981f81f59244826bf9983b8a0d358294519080",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -213,10 +213,10 @@
       "dependsOn": [
         "evidence-to-consumer-spine"
       ],
-      "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, then land the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
+      "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell and completed related-rehearsal vocabulary path, then land the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "The stable board now reaches the 320×256 WCAG reflow floor, iPhone SE-class portrait heights and phone landscape. Short viewports use the compact single-column composition with a width-bound board, vertical drill scrolling, no horizontal overflow and one truthful selected companion region. Ordinary play now opens Support without exposing individual evidence switches; those controls remain available through the explicit Inspector.",
+        "summary": "The stable board now reaches the 320×256 WCAG reflow floor, iPhone SE-class portrait heights and phone landscape. Short viewports use the compact single-column composition with a width-bound board, vertical drill scrolling, no horizontal overflow and one truthful selected companion region. Ordinary play opens Support without exposing individual evidence switches, while related rehearsals resolve a learner-facing title and legal SAN instead of registry ids or UCI; advanced controls remain available through the explicit Inspector.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/play-composition.ts",
@@ -236,7 +236,7 @@
           {
             "kind": "rfc",
             "id": "play-composition.md",
-            "digest": "sha256:b97051ffff66db97041eed060776853dcaa00716bfc94e9b477d883131a4f2f6"
+            "digest": "sha256:2584fcb3f47535662d294ac9d442e432a97ad70dd537ce389929285e9b4fa628"
           }
         ]
       },
@@ -375,7 +375,7 @@
       "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "The in-run Support doorway now keeps raw evidence-channel controls behind Advanced in the Inspector, while full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
+        "summary": "The in-run Support doorway keeps raw evidence-channel controls behind Advanced in the Inspector, and related-rehearsal return doors now speak titles and legal SAN rather than registry ids or UCI. Full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
         "impact": "advanced",
         "evidence": [
           "planning/ux-implementation-index.md",
@@ -385,7 +385,7 @@
           {
             "kind": "rfc",
             "id": "play-composition.md",
-            "digest": "sha256:b97051ffff66db97041eed060776853dcaa00716bfc94e9b477d883131a4f2f6"
+            "digest": "sha256:2584fcb3f47535662d294ac9d442e432a97ad70dd537ce389929285e9b4fa628"
           }
         ]
       },

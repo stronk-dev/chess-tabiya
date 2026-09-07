@@ -3,6 +3,7 @@
 
   import { onDestroy, onMount, tick, untrack } from "svelte";
   import { DRILL_PACK_SCHEMA_VERSION } from "@chess-tabiya/schema";
+  import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 
   import DrillScreen from "./lib/DrillScreen.svelte";
   import Chessboard from "./lib/Chessboard.svelte";
@@ -120,6 +121,7 @@
   let route: AppRoute = $state(router.route);
   let session: DrillSessionState = $state(controller.state);
   let packs: readonly PackSummary[] = $state([]);
+  let relatedPack: DrillPackDefinition | undefined = $state();
   let runs: readonly RunSummary[] = $state([]);
   let runDeletion = $state<{ readonly run: RunSummary; readonly preview: DeletionPreview } | undefined>();
   let runDeletionError = $state<string | undefined>();
@@ -498,6 +500,7 @@
     const generation = ++loadGeneration;
     routeLoading = true;
     routeError = undefined;
+    relatedPack = undefined;
     if (
       next.name !== "run" ||
       session.runState?.run.id !== next.runId
@@ -570,6 +573,14 @@
         activeLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
         const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";
         await controller.resume(next.runId,{...(matchMode===undefined?{}:{matchMode})});
+        const relation = session.pack?.variantOf;
+        if (relation !== undefined) {
+          try {
+            relatedPack = (await api.pack(relation.packId)).document;
+          } catch {
+            relatedPack = undefined;
+          }
+        }
         derivations = await (api.runDerivations?.(next.runId) ?? Promise.resolve(undefined));
       }
     } catch (error) {
@@ -1305,6 +1316,7 @@
       {/if}
       <DrillScreen
         pack={session.pack}
+        {relatedPack}
         shapes={session.shapes}
         snapshot={session.runState}
         checkpoint={session.checkpoint}
