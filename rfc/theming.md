@@ -1,6 +1,6 @@
 # RFC: Theming — three axes, schemes inherited whole
 
-- **Status:** awaiting D1 — implementation complete 2026-08-23; criteria 1–13 are green and D4 is discharged. **D3 discharged 2026-08-23**: the owner-tier Settings intent amendment is written into `design/03-product-breadth.md` by claude under that row's own "claude may write it on the ruling" clause ([[D976]]/[[D982]]), owner-vetoable in place. The remaining holds are both owner-tier and neither is unfinished implementation: **D1**, the roster pick from the licensed candidate lists (second piece set, any additional board theme, the `--warning` repair variant, the olive-square repair), and **D5**, the felt-quality pass that rides the owner's own session ([[D840]]'s flip). Accepted 2026-08-22 by claude after three author/review passes; the full acceptance history remains in the changelog and RFC index.
+- **Status:** awaiting D5 — implementation complete 2026-08-23 and the owner-ruled ten-scheme expansion landed 2026-09-07; criteria 1–13 are green, D1/D3/D4 are discharged. **D3 discharged 2026-08-23**: the owner-tier Settings intent amendment is written into `design/03-product-breadth.md` by claude under that row's own "claude may write it on the ruling" clause ([[D976]]/[[D982]]), owner-vetoable in place. The sole remaining hold is **D5**, the felt-quality pass that rides the owner's own session ([[D840]]'s flip); the delegated piece/board additions are non-blocking. Accepted 2026-08-22 by claude after three author/review passes; the full acceptance history remains in the changelog and RFC index.
 - **Author:** claude (drafted from `planning/theming/rfc-derivation.md`, restructured on [[D982]] after two cross-review passes — see the changelog)
 - **Created:** 2026-08-22
 - **Design refs:** `design/03-product-breadth.md` shell table (Settings row — amendment owed, Deviation 1); `design/05-in-run-experience.md` §3a (assistance silence is untouched by any theme); ledger rows [[D839]] (the commission), [[D840]] (the animation defect), [[D875]] (the measured floor), [[D976]]/[[D977]]/[[D982]] (the three owner rulings this RFC encodes)
@@ -229,7 +229,7 @@ export interface AppThemeDef {
 }
 ```
 
-#### §3.2 The v1 catalog (unit: catalog entries; total: 3 themes / 4 palettes)
+#### §3.2 The v1 catalog (unit: catalog entries; total: 12 themes / 16 palettes)
 
 > **[[D1425]] 2026-08-23 — this line is an undeclared cut and the catalog is owed the ruled set.**
 > §3.1 counts **ten** schemes in the owner's own registries and adopts their shape as the evidence
@@ -260,7 +260,14 @@ export interface AppThemeDef {
    row C). Every value above is now a transcription with no Tabiya judgement in it, which is
    exactly what makes §3.3's policy honest. Picker prose: *"after folke/tokyonight.nvim"* —
    courtesy only; **no license criterion attaches to a palette** ([[D977]]).
-3. **`warm-dark`** — `origin: "tabiya"`, dark. The FullDark canvas candidate, committed here as
+3. **The remaining known schemes** — `dracula`, `nord`, `catppuccin`, `gruvbox`, `one-dark`,
+   `github-dark`, `rose-pine`, `solarized`, and `ayu-mirage` — are `origin: "inherited"` and are
+   transcribed through the same 12-token mapping from the owner's registry under [[D3062]].
+   `catppuccin`, `gruvbox`, and `solarized` carry both modes; the other six are dark-only. Their
+   exact 14 palette/mode byte sequences and the complete below-floor measurement population are
+   pinned independently in `apps/web/src/lib/theme/theme.test.ts`; Settings publishes every
+   committed notice rather than silently editing a known scheme.
+4. **`warm-dark`** — `origin: "tabiya"`, dark. The FullDark canvas candidate, committed here as
    its durable record (the artboard is uncommitted scratchpad; dossier §5): `paper #16140f`,
    `panel #1e1b15`, `surface #2a2720`, `ink #e8e4d8`, `muted #97917f`, `accent #8fa4e8`,
    `warning #df9d32`. Demonstrates [[D839]]'s *"not an inversion"*: temperature carried, accent
@@ -618,10 +625,10 @@ owner's felt pass (D5) and may trail the code landing.
 
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
-| D1 | Owner picks the shipped roster from the licensed candidate lists — the second piece set, any additional board theme, the `--warning` repair variant, and the olive-square repair choice (Open questions 1–3 resolve here) | OWNER | logged rulings after real sessions, the [[D649]] owner-use gate | |
+| D1 | Owner picks the shipped roster from the licensed candidate lists — the second piece set, any additional board theme, the `--warning` repair variant, and the olive-square repair choice (Open questions 1–3 resolve here) | OWNER | logged rulings after real sessions, the [[D649]] owner-use gate | **DISCHARGED 2026-09-07 — [[D3062]] rules all ten known app schemes; the three smaller delegated cosmetic additions are non-blocking** |
 | D2 | Cosmetic-reward gating — the campaign consumes these catalogs **by id** as its evidence-dark payout pool ([[D887]]/[[D893]]); nothing here builds earning | `campaign-core.md` | the campaign cosmetics slice's landing commit | |
 | D3 | The design/03 Settings-row amendment naming appearance (row B, law 5) | OWNER | the ruling's landing commit (claude may write it on the ruling) | **DISCHARGED 2026-08-23** — written by claude on the [[D976]]/[[D982]] rulings under the row's own "claude may write it on the ruling" clause, and marked owner-vetoable in place. `design/03-product-breadth.md`'s shell table Settings row now names **appearance**, with the three-axis shape (app theme / board theme / piece set) and the not-assistance boundary stated beneath it |
-| D4 | Implementation — tokens, three catalogs, the split, the preference, the sweeps; flips [[D839]]/[[D983]]/[[D875]] and records play-composition D3 discharged in the same commit | codex | the implementing commit | **2026-08-23 — complete; 3 app themes / 2 boards / 2 piece sets, live validated preference, split skin/paint, animation, sweeps, Settings, docs and browser gates** |
+| D4 | Implementation — tokens, three catalogs, the split, the preference, the sweeps; flips [[D839]]/[[D983]]/[[D875]] and records play-composition D3 discharged in the same commit | codex | the implementing commit | **2026-09-07 — complete; 12 app themes / 2 boards / 2 piece sets, live validated preference, split skin/paint, animation, sweeps, Settings, docs and browser gates** |
 | D5 | Felt-quality verification — [[D840]]'s flip rides the owner's own session, plus the inherited play-composition OQ3 echo decision made in that pass | OWNER | the play-session log entry | |
 | D6 | Criterion 10(c) — the assistance compiler does not exist at HEAD ([[D985]]); when it lands under whatever name [[D971]]'s amendment gives it, its input type joins criterion 10(a)'s no-shared-key assertion | `intent-presets.md` | the commit that builds the compiler | |
 
@@ -758,3 +765,9 @@ in the ledger: they are gaps left by the id-block renumbering whose convention
   real Chessground destination projection, forced colors and reduced motion in Chromium. This
   closes the concrete [[D1494]] failures without claiming [[D1461]]'s broader token-driven-paint
   defect or [[D1460]]'s separate owner choice about OS motion override.
+- 2026-09-07 (**owner roster ruling [[D3062]] implemented; D1 discharged**): added Dracula,
+  Nord, Catppuccin, Gruvbox, One Dark, GitHub Dark, Rosé Pine, Solarized and Ayu Mirage from the
+  owner's existing ten-scheme registry. The catalog now ships all ten known schemes plus the two
+  gated Tabiya defaults. All 14 inherited palette/mode byte sequences and their independently
+  recomputed below-floor notice populations are pinned. [[D3063]] is closed as a stale duplicate
+  of the criterion-7 repair already shipped under [[D1494]]. D5 remains the sole hold.

@@ -370,10 +370,13 @@
         "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, then land the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
         "latestCheckpoint": {
           "at": "2026-09-07",
-          "summary": "Evidence presentation's sixth author repair closes all seven returned author-model seams while preserving the exact 112-pair component boundary; fresh review and two independent dependency discharges still gate acceptance and production.",
+          "summary": "The owner-ruled appearance catalog now ships all ten known schemes plus two gated Tabiya defaults. Every inherited palette/mode is byte-pinned, every below-floor pair is independently measured and published, and the stale contrast hold is reconciled to its already-shipped non-hue and forced-color repair.",
           "impact": "advanced",
-          "evidence": ["planning/platform-alignment/evidence-presentation/sixth-author-repair-2026-09-07.md", "tools/d3035-evidence-presentation-sixth-author-repair/contract.test.ts", "rfc/evidence-presentation.md", "rfc/README.md", "docs/play-composition.md"],
-          "anchors": [{"kind": "rfc", "id": "evidence-presentation.md", "digest": "sha256:02d3a9a5085e8d4eaf1508b10430bd82b06897e35e3dbe68ae98c9b17f2a5e7f"}]
+          "evidence": ["apps/web/src/lib/theme/catalog.ts", "apps/web/src/lib/theme/theme.test.ts", "docs/theming.md", "rfc/theming.md", "rfc/README.md"],
+          "anchors": [
+            {"kind": "work_state", "id": "D3062", "digest": "sha256:bffd317e6f2f2afd8e75214754fd003f486a17ea821facc837bf38831837c580"},
+            {"kind": "rfc", "id": "theming.md", "digest": "sha256:5cb1b42935d859e683789dbc1dfb5c112b0deff5ecc9fe3c0aafe33f338a26db"}
+          ]
         },
         "exit": "Quiet, Guided, Support, Drill, Review, Campaign, Academy and Stream open useful by default; the board never shrinks or moves; every primitive remains available under Advanced."
       },

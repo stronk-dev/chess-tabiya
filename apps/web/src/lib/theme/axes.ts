@@ -1,4 +1,17 @@
-export const APP_THEME_IDS = ["paper", "tokyo-night", "warm-dark"] as const;
+export const APP_THEME_IDS = [
+  "paper",
+  "tokyo-night",
+  "dracula",
+  "nord",
+  "catppuccin",
+  "gruvbox",
+  "one-dark",
+  "github-dark",
+  "rose-pine",
+  "solarized",
+  "ayu-mirage",
+  "warm-dark",
+] as const;
 export type AppThemeId = (typeof APP_THEME_IDS)[number];
 
 export const BOARD_THEME_IDS = ["brown", "olive"] as const;

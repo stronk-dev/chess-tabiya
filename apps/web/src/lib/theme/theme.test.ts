@@ -17,14 +17,13 @@ import {
 import { THEME_ARTWORK_ASSETS } from "./assets.js";
 import {
   APP_THEMES,
+  INHERITED_CONTRAST_NOTICES,
   MARK_BRUSHES,
   MODE_DEFAULT,
-  TOKYO_NIGHT_DARK,
-  TOKYO_NIGHT_LIGHT,
 } from "./catalog.js";
 import { animationConfig, resolveTheme, ThemeController } from "./controller.js";
 import { loadThemePreference, THEME_STORAGE_KEY } from "./preference.js";
-import { DERIVED_TOKENS, THEME_TOKENS } from "./tokens.js";
+import { DERIVED_TOKENS, THEME_TOKENS, type Palette } from "./tokens.js";
 
 const themeDirectory = dirname(fileURLToPath(import.meta.url));
 const sourceDirectory = join(themeDirectory, "..", "..");
@@ -149,10 +148,13 @@ describe("theme foundation", () => {
   });
 
   it("ships total catalogs and a complete cross-product", () => {
-    expect(APP_THEME_IDS).toHaveLength(3);
+    expect(APP_THEME_IDS).toEqual([
+      "paper", "tokyo-night", "dracula", "nord", "catppuccin", "gruvbox",
+      "one-dark", "github-dark", "rose-pine", "solarized", "ayu-mirage", "warm-dark",
+    ]);
     expect(BOARD_THEME_IDS).toHaveLength(2);
     expect(PIECE_SET_IDS).toHaveLength(2);
-    expect(APP_THEME_IDS.length * BOARD_THEME_IDS.length * PIECE_SET_IDS.length).toBe(12);
+    expect(APP_THEME_IDS.length * BOARD_THEME_IDS.length * PIECE_SET_IDS.length).toBe(48);
     for (const theme of Object.values(APP_THEMES)) {
       for (const mode of theme.modes) {
         const palette = theme.palettes[mode];
@@ -176,17 +178,56 @@ describe("theme foundation", () => {
     }
   });
 
-  it("pins inherited palette bytes and all published contrast measurements", () => {
-    expect(TOKYO_NIGHT_DARK).toEqual({ paper: "#1a1b26", panel: "#1f2335", surface: "#15161e", ink: "#c0caf5", muted: "#a9b1d6", line: "#414868", accent: "#7aa2f7", "on-accent": "#1a1b26", "accent-soft": "#292e42", warning: "#e0af68", danger: "#f7768e", "shadow-color": "rgb(0 0 0 / 40%)" });
-    expect(TOKYO_NIGHT_LIGHT).toEqual({ paper: "#e1e2e7", panel: "#d5d6db", surface: "#c8c9ce", ink: "#3b4261", muted: "#4e5772", line: "#b4b5b9", accent: "#2e7de9", "on-accent": "#ffffff", "accent-soft": "#c8c9ce", warning: "#8c6c3e", danger: "#f52a65", "shadow-color": "rgb(0 0 0 / 12%)" });
-    const expected = {
-      dark: [10.5870, 9.6350, 8.0955, 7.3676, 6.7867, 6.7867, 6.1765, 8.5468, 7.7783, 6.4596, 5.8788],
-      light: [7.5936, 6.7688, 5.5402, 4.9385, 4.0182, 3.1062, 2.7689, 3.7495, 3.3422, 3.0054, 2.6790],
+  it("pins every inherited palette and derives complete low-contrast disclosures", () => {
+    const values = (palette: Palette): readonly string[] => [
+      palette.paper, palette.panel, palette.surface, palette.ink, palette.muted, palette.line,
+      palette.accent, palette["on-accent"], palette["accent-soft"], palette.warning,
+      palette.danger, palette["shadow-color"],
+    ];
+    const expected: Readonly<Record<string, readonly string[]>> = {
+      "tokyo-night/dark": ["#1a1b26", "#1f2335", "#15161e", "#c0caf5", "#a9b1d6", "#414868", "#7aa2f7", "#1a1b26", "#292e42", "#e0af68", "#f7768e", "rgb(0 0 0 / 40%)"],
+      "tokyo-night/light": ["#e1e2e7", "#d5d6db", "#c8c9ce", "#3b4261", "#4e5772", "#b4b5b9", "#2e7de9", "#ffffff", "#c8c9ce", "#8c6c3e", "#f52a65", "rgb(0 0 0 / 12%)"],
+      "dracula/dark": ["#282a36", "#44475a", "#1e1f29", "#f8f8f2", "#bd93f9", "#6272a4", "#bd93f9", "#282a36", "#383a4a", "#f1fa8c", "#ff5555", "rgb(0 0 0 / 50%)"],
+      "nord/dark": ["#2e3440", "#3b4252", "#272c36", "#eceff4", "#d8dee9", "#4c566a", "#88c0d0", "#2e3440", "#434c5e", "#ebcb8b", "#bf616a", "rgb(0 0 0 / 40%)"],
+      "catppuccin/dark": ["#1e1e2e", "#313244", "#181825", "#cdd6f4", "#bac2de", "#585b70", "#cba6f7", "#1e1e2e", "#45475a", "#f9e2af", "#f38ba8", "rgb(0 0 0 / 40%)"],
+      "catppuccin/light": ["#eff1f5", "#ccd0da", "#dce0e8", "#4c4f69", "#5c5f77", "#9ca0b0", "#8839ef", "#ffffff", "#ccd0da", "#df8e1d", "#d20f39", "rgb(0 0 0 / 10%)"],
+      "gruvbox/dark": ["#282828", "#3c3836", "#1d2021", "#ebdbb2", "#d5c4a1", "#665c54", "#d79921", "#282828", "#504945", "#fabd2f", "#fb4934", "rgb(0 0 0 / 50%)"],
+      "gruvbox/light": ["#fbf1c7", "#ebdbb2", "#f2e5bc", "#3c3836", "#504945", "#a89984", "#d79921", "#282828", "#ebdbb2", "#b57614", "#cc241d", "rgb(0 0 0 / 12%)"],
+      "one-dark/dark": ["#282c34", "#2c313a", "#21252b", "#abb2bf", "#9da5b4", "#3e4451", "#61afef", "#282c34", "#3a3f4b", "#e5c07b", "#e06c75", "rgb(0 0 0 / 50%)"],
+      "github-dark/dark": ["#0d1117", "#161b22", "#010409", "#e6edf3", "#8b949e", "#30363d", "#58a6ff", "#0d1117", "#21262d", "#d29922", "#f85149", "rgb(0 0 0 / 60%)"],
+      "rose-pine/dark": ["#191724", "#1f1d2e", "#13111e", "#e0def4", "#908caa", "#524f67", "#c4a7e7", "#191724", "#26233a", "#f6c177", "#eb6f92", "rgb(0 0 0 / 50%)"],
+      "solarized/dark": ["#002b36", "#073642", "#00212b", "#839496", "#93a1a1", "#586e75", "#2aa198", "#002b36", "#0a4050", "#b58900", "#dc322f", "rgb(0 0 0 / 40%)"],
+      "solarized/light": ["#fdf6e3", "#eee8d5", "#f5efdc", "#657b83", "#586e75", "#93a1a1", "#2aa198", "#fdf6e3", "#eee8d5", "#b58900", "#dc322f", "rgb(0 0 0 / 10%)"],
+      "ayu-mirage/dark": ["#242936", "#1f2430", "#1a1e29", "#cccac2", "#707a8c", "#565b70", "#ffad66", "#242936", "#2d3441", "#ffd580", "#f28779", "rgb(0 0 0 / 50%)"],
     };
-    for (const mode of ["dark", "light"] as const) {
-      const palette = APP_THEMES["tokyo-night"].palettes[mode]!;
-      const pairs = [[palette.ink, palette.paper], [palette.ink, palette.panel], [palette.muted, palette.paper], [palette.muted, palette.panel], [palette["on-accent"], palette.accent], [palette.accent, palette.paper], [palette.accent, palette.panel], [palette.warning, palette.paper], [palette.warning, palette.panel], [palette.danger, palette.paper], [palette.danger, palette.panel]];
-      expect(pairs.map(([a, b]) => contrast(a!, b!))).toEqual(expected[mode].map((value) => expect.closeTo(value, 3)));
+    const inherited = Object.values(APP_THEMES).filter((theme) => theme.origin === "inherited");
+    expect(inherited.flatMap((theme) => theme.modes.map((mode) => `${theme.id}/${mode}`)).sort())
+      .toEqual(Object.keys(expected).sort());
+    for (const theme of inherited) for (const mode of theme.modes) {
+      const palette = theme.palettes[mode]!;
+      expect(values(palette), `${theme.id}/${mode}`).toEqual(expected[`${theme.id}/${mode}`]);
+      const pairs = [
+        ["text / page", palette.ink, palette.paper, 4.5],
+        ["text / panel", palette.ink, palette.panel, 4.5],
+        ["muted text / page", palette.muted, palette.paper, 4.5],
+        ["muted text / panel", palette.muted, palette.panel, 4.5],
+        ["accent text / accent", palette["on-accent"], palette.accent, 4.5],
+        ["accent / page", palette.accent, palette.paper, 3],
+        ["accent / panel", palette.accent, palette.panel, 3],
+        ["warning / page", palette.warning, palette.paper, 3],
+        ["warning / panel", palette.warning, palette.panel, 3],
+        ["danger / page", palette.danger, palette.paper, 3],
+        ["danger / panel", palette.danger, palette.panel, 3],
+      ] as const;
+      const expectedNotices = pairs.flatMap(([pair, foreground, background, minimum]) => {
+        const ratio = contrast(foreground, background);
+        return ratio < minimum ? [{ pair, ratio, minimum }] : [];
+      });
+      const actualNotices = INHERITED_CONTRAST_NOTICES[theme.id]?.[mode];
+      expect(actualNotices?.map(({ pair, minimum }) => ({ pair, minimum })), `${theme.id}/${mode} notice population`)
+        .toEqual(expectedNotices.map(({ pair, minimum }) => ({ pair, minimum })));
+      expect(actualNotices?.map(({ ratio }) => ratio), `${theme.id}/${mode} notice measurements`)
+        .toEqual(expectedNotices.map(({ ratio }) => expect.closeTo(ratio, 3)));
     }
   });
 

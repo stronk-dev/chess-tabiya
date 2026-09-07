@@ -17589,3 +17589,23 @@ than receiving unrelated green-by-construction pointers.
 graduation-plan-check`. Continue on buildable evidence-foundation work while the six-template
 contract return is amended; authored chess truth, claim binding and official publication remain
 held.
+
+## 2026-09-07 — Owner-ruled application-theme catalog completed
+
+**What landed:** [[D3062]] expands the application-color catalog from one inherited scheme to all
+ten names in the owner's existing registries: Tokyo Night, Dracula, Nord, Catppuccin, Gruvbox, One
+Dark, GitHub Dark, Rosé Pine, Solarized and Ayu Mirage. Paper and Warm Dark remain the gated
+no-preference defaults, producing 12 app themes × 2 board themes × 2 piece sets. Settings exposes
+the complete catalog without adding another in-run settings surface.
+
+**What changed:** all 14 inherited palette/mode variants are total under the same 12-token type and
+byte-pinned in an independent test. A committed WCAG measurement table covers every below-floor
+text and non-text pair for every inherited mode, and the picker publishes those limitations beside
+the selected scheme. [[D3063]] closes as a stale duplicate: [[D1494]] had already repaired the
+occupied-destination population, non-hue history/check geometry and forced-color projections on
+2026-08-26.
+
+**Evidence/next:** `apps/web/src/lib/theme/catalog.ts`, `apps/web/src/lib/theme/theme.test.ts`, and
+`docs/theming.md`; `make test-software` is green at 181 files / 1110 tests. Theming D5 remains the
+owner's felt-quality discharge; the delegated second-piece and additional-board choices are
+non-blocking follow-ons.

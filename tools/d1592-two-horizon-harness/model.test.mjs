@@ -45,7 +45,7 @@ test("censuses real reward authorities instead of inventing ids", () => {
   assert.deepEqual(census.currentNodeRewardKinds, ["module_unlock"]);
   assert.equal(census.moduleIds.length, 11);
   assert.equal(census.serverRuntimeTheoryAuthority, false);
-  assert.deepEqual(Object.fromEntries(Object.entries(census.browserAppearanceIds).map(([key, values]) => [key, values.length])), { appTheme: 3, boardTheme: 2, pieceSet: 2 });
+  assert.deepEqual(Object.fromEntries(Object.entries(census.browserAppearanceIds).map(([key, values]) => [key, values.length])), { appTheme: 12, boardTheme: 2, pieceSet: 2 });
   assert.equal(census.sharedServerAppearanceAuthority, false);
 });
 

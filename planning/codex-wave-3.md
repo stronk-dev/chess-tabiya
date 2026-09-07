@@ -494,11 +494,12 @@ Discharge D1 is **closed**. The implementation has been complete since **2026-08
 missing input was the list. `rfc/theming.md:209-212` already verified all ten carry the 12 tokens and
 called adding a scheme *"a copy, not a design exercise"* — so this is transcription, not design.
 
-**The three delegated picks are claude's, and they wait on one repair** ([[D3063]]): criterion 7 is
-**chroma-only and blind to luminance** — `last-move` passes at ΔE 36.3 while measuring **1.02:1
-luminance** and greyscale distance **3 of 441**; the capture indicator is not in its population at
-all; and check-red vanishes for tritanopes. **Repair the criterion, then pick against it.** Picking
-now would ratify the same blindness three more times.
+**The ten-scheme app catalog is implemented** ([[D3062]]): the nine missing inherited schemes join
+Tokyo Night, with Paper and Warm Dark retained as the gated no-preference defaults. Every inherited
+palette/mode is byte-pinned and its below-floor pairs are independently measured and published in
+Settings. [[D3063]] was a stale duplicate: [[D1494]] had already repaired the capture population,
+non-hue last-move/check geometry and forced-color projection on 2026-08-26. The three delegated
+piece/board cosmetic additions remain non-blocking follow-ons, not a contrast-criterion hold.
 
 **[[D3064]] is the topology that matters.** Codex has been building — 316 `apps/web`, 156
 `apps/server`, 65 `packages/runtime` file-touches in fourteen days — and **six RFCs are `awaiting`

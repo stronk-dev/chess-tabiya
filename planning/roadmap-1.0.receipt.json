@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:467620320c9cded81a72bf2636df441c0e040b10702bd60791b579754840e3ee",
+    "roadmap": "sha256:814ee2360aca6f04269c50a01b1a46800f0a08d77389a352d72c98b221823ff2",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:74b04dc4fdc11ed537080a05da292a09deb3bb257e85affe450d28f6e3e1d567",
-    "rfcRegister": "sha256:0d83a4a7a0931032c340dc66146d1311a3f2f7e1f65522507b5e610d7b7ea3be",
+    "workState": "sha256:85a7334fd8b80a8cae3ca1274578a05039b8e326190dd15257cad382f8c8d1f6",
+    "rfcRegister": "sha256:db188738d220026921ac581586a232a7767ae868fe8c8b747962362254ceeb26",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 666,
+      "todo": 664,
       "doing": 0,
       "blocked": 1194,
-      "done": 853,
+      "done": 855,
       "refused": 108
     },
     "workItems": {
@@ -196,20 +196,25 @@
       "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, then land the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "Evidence presentation's sixth author repair closes all seven returned author-model seams while preserving the exact 112-pair component boundary; fresh review and two independent dependency discharges still gate acceptance and production.",
+        "summary": "The owner-ruled appearance catalog now ships all ten known schemes plus two gated Tabiya defaults. Every inherited palette/mode is byte-pinned, every below-floor pair is independently measured and published, and the stale contrast hold is reconciled to its already-shipped non-hue and forced-color repair.",
         "impact": "advanced",
         "evidence": [
-          "planning/platform-alignment/evidence-presentation/sixth-author-repair-2026-09-07.md",
-          "tools/d3035-evidence-presentation-sixth-author-repair/contract.test.ts",
-          "rfc/evidence-presentation.md",
-          "rfc/README.md",
-          "docs/play-composition.md"
+          "apps/web/src/lib/theme/catalog.ts",
+          "apps/web/src/lib/theme/theme.test.ts",
+          "docs/theming.md",
+          "rfc/theming.md",
+          "rfc/README.md"
         ],
         "anchors": [
           {
+            "kind": "work_state",
+            "id": "D3062",
+            "digest": "sha256:bffd317e6f2f2afd8e75214754fd003f486a17ea821facc837bf38831837c580"
+          },
+          {
             "kind": "rfc",
-            "id": "evidence-presentation.md",
-            "digest": "sha256:02d3a9a5085e8d4eaf1508b10430bd82b06897e35e3dbe68ae98c9b17f2a5e7f"
+            "id": "theming.md",
+            "digest": "sha256:5cb1b42935d859e683789dbc1dfb5c112b0deff5ecc9fe3c0aafe33f338a26db"
           }
         ]
       },

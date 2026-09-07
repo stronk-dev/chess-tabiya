@@ -24908,19 +24908,21 @@
     },
     {
       "id": "D3062",
-      "state": "todo",
-      "owner": "client-platform",
-      "sourceGlyph": "⚖️",
-      "sourceDigest": "sha256:4580a5c9da319aad28a5f830b30a12ac0ab5ef095fcc569a5b1ce50462dbe449",
-      "uxItems": []
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:bffd317e6f2f2afd8e75214754fd003f486a17ea821facc837bf38831837c580",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/theme/theme.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3063",
-      "state": "todo",
-      "owner": "client-platform",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2a5fba9b01123585ee466c3db2e899ee0a271c964461de6399452a5c80881ee2",
-      "uxItems": []
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:98271493188fc77bce6aaddaa562fcd6bc79edf5676894fda40f7783facde8a5",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/theme/theme.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D3064",
