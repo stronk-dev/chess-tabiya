@@ -106,7 +106,7 @@
     onCompareVoice?: (() => Promise<VoicePage>) | undefined;
     onSpeech?: (nodeId: string, scope: VoicePage["scope"]) => Promise<Blob>;
     onCreateGroup?: (input: CreateGroupRequest) => void | Promise<unknown>;
-    onAnalyzeMissing?: (nodeIds: readonly string[]) => void | Promise<void>;
+    onAnalyzeMissing?: (nodeIds: readonly string[]) => boolean | void | Promise<boolean | void>;
     onSimulate?: (() => void | Promise<void>) | undefined;
     onEnterSimulation?: ((branchIndex: number) => void | Promise<void>) | undefined;
     onCloseSimulation?: (() => void) | undefined;
@@ -234,6 +234,7 @@
   let markScope: "position" | "branch" = $state("position");
   let markTimer: ReturnType<typeof setTimeout> | undefined;
   let guideOpenedForRunId: string | undefined = $state();
+  let analysisRequestedNodeId: string | undefined = $state();
 
   function measureViewport(): void {
     viewportSupport = runViewportSupport(globalThis.innerWidth, globalThis.innerHeight);
@@ -268,6 +269,33 @@
   let phoneSheetModal = $derived(viewportSupport.width > 0 && viewportSupport.width <= 719 && sheetOpen);
   let canWrite = $derived(snapshot.access === "writer");
   let currentNode = $derived(activeNode(run));
+  let recordedEngineEvidence = $derived(
+    currentNode.evidenceRefs
+      .map((reference) => renderEvidenceRef(reference, pack))
+      .filter((sentence) => sentence.sourceLabel === "Engine"),
+  );
+  let analysisUnavailableReason = $derived.by(() => {
+    if (!canWrite) return "This read-only view cannot request a new calculation.";
+    if (onAnalyzeMissing === undefined || capabilities?.providers.judge === "none") {
+      return "A calculation engine is not available from this deployment.";
+    }
+    if (!feedbackDeliveryOpen(run)) {
+      return run.feedbackPolicy === "attempt_end"
+        ? "Open support for this position before requesting a calculation."
+        : "This rehearsal opens calculated evidence at its next feedback point.";
+    }
+    if (busy) return "Another run action is still finishing.";
+    if (analysisRequestedNodeId === currentNode.id) return "The calculation is being prepared for this position.";
+    return undefined;
+  });
+
+  async function requestCurrentAnalysis(): Promise<void> {
+    if (analysisUnavailableReason !== undefined || onAnalyzeMissing === undefined) return;
+    const nodeId = currentNode.id;
+    analysisRequestedNodeId = nodeId;
+    const accepted = await onAnalyzeMissing([nodeId]);
+    if (accepted === false) analysisRequestedNodeId = undefined;
+  }
   let simulationInvoker = $state<HTMLElement>();
   function findSpineNode(nodes: NonNullable<DrillPackDefinition["spine"]>, id: string): NonNullable<DrillPackDefinition["spine"]>[number] | undefined {
     for (const node of nodes) {
@@ -1164,6 +1192,28 @@
                 <p>It closes again after your next move.</p>
               </section>
             {/if}
+            <section class="analysis-request" aria-labelledby="analysis-request-title">
+              <p>Deeper analysis</p>
+              <h2 id="analysis-request-title">Calculate this position</h2>
+              <p>Ask for one calculated line when structural sight is not enough. The result is recorded evidence—not a lesson, a grade, or a move you must play.</p>
+              <div class="analysis-request-actions">
+                <HonestControl
+                  disabled={analysisUnavailableReason !== undefined}
+                  reasonId="analysis-request-unavailable"
+                  reason={analysisUnavailableReason ?? ""}
+                >
+                  {#snippet children(describedBy)}
+                    <button type="button" disabled={analysisUnavailableReason !== undefined} aria-describedby={describedBy} onclick={() => void requestCurrentAnalysis()}>
+                      {analysisRequestedNodeId === currentNode.id ? "Preparing calculation…" : "Calculate this position"}
+                    </button>
+                  {/snippet}
+                </HonestControl>
+                {#if recordedEngineEvidence.length > 0}
+                  <button type="button" onclick={() => (inspectorOpen = true)}>Inspect recorded calculation</button>
+                {/if}
+              </div>
+              {#if recordedEngineEvidence.length > 0}<p class="analysis-ready" role="status">A recorded calculation is available for this position.</p>{/if}
+            </section>
             {#if guardEvent?.type === "feedback.generated"}
               <section class="guard-prompt" aria-label="Consequence to review">
                 <StatusAnnouncement message={`The consequence exposed something concrete. ${guardGrounds.map((sentence) => sentence.text).join(" ")} Your played line stays preserved.`} />
@@ -1194,7 +1244,7 @@
             onAdvanceMode={(mode) => setGroupPreference(activeGroup!.groupId, mode)}
             onEnter={switchRunBranch}
             onCompare={() => onCompare(activeGroup!.members.map((member) => member.branchId))}
-            onAnalyze={(nodeIds) => onAnalyzeMissing?.(nodeIds)}
+            onAnalyze={(nodeIds) => { void onAnalyzeMissing?.(nodeIds); }}
           />
           <button class="next-member" type="button" onclick={() => void nextGroupMember(activeGroup!)}>Next member</button>
         {/if}
@@ -1678,6 +1728,15 @@
   .guide-progress { display:grid; grid-template-columns:repeat(4,1fr); gap:.25rem; }
   .guide-progress span { height:.2rem; border-radius:999px; background:var(--line); }
   .guide-progress span.reached { background:var(--accent); }
+  .analysis-request { display:grid; gap:.45rem; padding:.75rem; border:1px solid var(--line); border-radius:.8rem; background:var(--panel); }
+  .analysis-request > p, .analysis-request h2 { margin:0; }
+  .analysis-request > p:first-child { color:var(--accent); font:700 .62rem ui-monospace,monospace; letter-spacing:.08em; text-transform:uppercase; }
+  .analysis-request h2 { font:600 1rem/1.2 var(--display-font); }
+  .analysis-request > p:not(:first-child) { color:var(--muted); font-size:.76rem; line-height:1.4; }
+  .analysis-request-actions { display:flex; flex-wrap:wrap; gap:.4rem; }
+  .analysis-request-actions button { padding:.5rem .65rem; border:1px solid var(--line); border-radius:.6rem; background:var(--paper); color:inherit; }
+  .analysis-request-actions button:first-child:not(:disabled) { border-color:var(--accent); color:var(--accent); }
+  .analysis-ready { color:var(--accent)!important; }
   .assistance-control summary { cursor:pointer; }
   .assistance-grid { position:absolute; top:calc(100% + .4rem); right:0; display:grid; width:min(23rem,calc(100vw - 2rem)); gap:.45rem; padding:.7rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); box-shadow:var(--shadow); }
   .assistance-grid label { display:flex; gap:.4rem; align-items:center; }

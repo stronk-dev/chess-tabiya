@@ -17964,3 +17964,16 @@ writer-scoped preview. The pass also restored the accepted eight-variation/forty
 800-event bounds, authored move labels, off-line refusal, and one-use semantics. [[D1460]] was
 refused after re-derivation: its proposed mode fallback is the inverse of accepted `rfc/theming.md`
 §4, and its separate reduced-motion honesty issue already ships through `HonestControl`.
+
+## 2026-09-07 — On-request calculation moved into ordinary Support
+
+**What changed:** [[D312]] is closed end to end. A learner no longer has to create and enter a
+branch group to request rung-2 evidence: *Calculate this position* is a first-class Support module
+for the current node. It names its boundary before the click and sends recorded results to the
+advanced inspector instead of turning the board rail into an engine dump.
+
+**Evidence/next:** the component test proves the action exists with no active group, submits the
+exact current node, exposes an in-flight state, and offers the inspector when recorded engine
+evidence exists. Every unavailable state keeps its reason adjacent through `HonestControl`.
+`make verify-software` passes 1,117/1,117 tests. The larger hint-distance and evidence-presentation
+RFCs still own graduated nudges and structured rendering; this repair does not impersonate either.

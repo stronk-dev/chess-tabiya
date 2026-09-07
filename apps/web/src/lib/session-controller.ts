@@ -446,14 +446,16 @@ export class DrillSessionController {
     }
   }
 
-  async analyzeMissingEvidence(nodeIds: readonly string[]): Promise<void> {
-    if (nodeIds.length === 0) return;
+  async analyzeMissingEvidence(nodeIds: readonly string[]): Promise<boolean> {
+    if (nodeIds.length === 0) return false;
     this.#patch({ busy: true, error: undefined });
     try {
       await this.#requiredStore().analysis(nodeIds);
       this.#patch({ busy: false });
+      return true;
     } catch (error) {
       this.#fail(error);
+      return false;
     }
   }
 

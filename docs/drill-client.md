@@ -137,6 +137,14 @@ window closes on the next committed move. Read-only viewers and other feedback p
 the control. A live-match refusal remains server-authoritative and reaches the existing visible
 alert; the client does not guess whether the match is paused.
 
+The same region owns the ordinary on-request calculation workflow. **Calculate this position**
+requests one bounded recorded line for the current node without requiring a branch group or an
+assistance setting. Its copy distinguishes calculation evidence from a lesson, move grade, or
+prescription before the request. Read-only ownership, an unavailable judge, a closed feedback
+window, another in-flight action, and an already-requested calculation each disable the action with
+a visible reason. Once engine evidence is recorded, Support reports availability and links to the
+advanced inspector; it does not print raw provider output into the play surface.
+
 `/authored-feedback` returns an honest empty page for position runs. An absent
 or stale registry entry never opens any engine-evidence surface.
 

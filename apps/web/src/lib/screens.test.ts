@@ -584,6 +584,38 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("offers calculated evidence from Support without requiring a branch group", async () => {
+    const run = branchedRun();
+    const onAnalyzeMissing = vi.fn(async () => true);
+    const capabilities = {
+      providers: { opponent: "mock", judge: "stockfish", llm: "none", corpus: "none", tts: "none", tablebase: "none" },
+    } as Capabilities;
+    const component = mount(DrillScreen, { target: target(), props: {
+      pack,
+      capabilities,
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(),
+      onAnalyzeMissing, registerKeyboardRegion,
+    } });
+    await tick();
+
+    expect(document.querySelector(".group-panel")).toBeNull();
+    const module = document.querySelector<HTMLElement>('.analysis-request[aria-labelledby="analysis-request-title"]')!;
+    expect(module.textContent).toContain("recorded evidence—not a lesson, a grade, or a move you must play");
+    expect(module.textContent).toContain("A recorded calculation is available for this position.");
+    const request = [...module.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "Calculate this position")!;
+    expect(request.disabled).toBe(false);
+    request.click();
+    await tick();
+
+    expect(onAnalyzeMissing).toHaveBeenCalledWith([run.activeCursor.nodeId]);
+    expect(module.textContent).toContain("Preparing calculation…");
+    expect(module.textContent).toContain("Inspect recorded calculation");
+    await unmount(component);
+  });
+
   it("presents terminal authored commentary and recorded engine evidence", async () => {
     const terminalPack = {
       ...pack,

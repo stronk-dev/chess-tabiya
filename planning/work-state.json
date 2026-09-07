@@ -2389,11 +2389,12 @@
     },
     {
       "id": "D312",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:04ac344c0c6f169615c946bd0e1a24a153c2ae3e6129d619ab8204b258ed8f6e",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4ee383153f0e939e186024c3e5865d811d441f308ad1811d69958ef3292b4893",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "apps/web/src/lib/DrillScreen.svelte",
+      "evidenceKind": "path"
     },
     {
       "id": "D313",
