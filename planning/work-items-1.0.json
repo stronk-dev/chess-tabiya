@@ -3324,17 +3324,21 @@
     {
       "id": "CLP-a19",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§3 P4",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
       "summary": "Adopt Conversion Trainer's entry copy without exposing an evaluation before play",
       "legacyRoute": "none",
       "note": "cheapest adoption in its teardown",
-      "sourceDigest": "sha256:f8e411fb1a934045190e4a157d10a07be1d9bc5005139cebe0328835b09237e5"
+      "sourceDigest": "sha256:f8e411fb1a934045190e4a157d10a07be1d9bc5005139cebe0328835b09237e5",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "Story return frames the learner-relative recorded result and exact move number without evaluation; Pick it up from here action; unit and production browser fixtures"
+      }
     },
     {
       "id": "CLP-a2",

@@ -33,6 +33,23 @@ export function recordedEvaluationTrajectory(beforeCentipawns: number, afterCent
   return `Recorded evaluation from White's side: ${signedPawns(beforeCentipawns)} → ${signedPawns(afterCentipawns)} pawns`;
 }
 
+type StoryResult = "1-0" | "0-1" | "1/2-1/2" | "*" | "win" | "loss" | "draw";
+
+export function storyReentryCopy(
+  side: "white" | "black",
+  result: StoryResult | undefined,
+  ply: number,
+): string {
+  const move = Math.max(1, Math.ceil(ply / 2));
+  const learnerLost = result === "loss" || (side === "white" ? result === "0-1" : result === "1-0");
+  const learnerWon = result === "win" || (side === "white" ? result === "1-0" : result === "0-1");
+  const drawn = result === "draw" || result === "1/2-1/2";
+  if (learnerLost) return `You lost this game. Pick it up at move ${move} and play the consequence another way.`;
+  if (learnerWon) return `You won this game. Pick it up at move ${move} and test another continuation.`;
+  if (drawn) return `This game was drawn. Pick it up at move ${move} and test another continuation.`;
+  return `Pick this game up at move ${move} and play the consequence.`;
+}
+
 function readableSpeed(speed: string): string {
   if (speed === "ultraBullet") return "ultrabullet";
   return speed.replaceAll("_", " ");

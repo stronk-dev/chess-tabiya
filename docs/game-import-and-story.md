@@ -122,6 +122,12 @@ is opened on a different device. The learner then plays through
 the ordinary opponent, evidence, structural-reading, rewind, comparison, and
 branch-group machinery.
 
+Before that action, the selected moment frames the return from only the recorded game result,
+the learner's declared side, and the exact ply. It says whether the learner won, lost, drew, or
+has no recorded result and invites them to pick the game up at that move. It never reveals or
+infers an evaluation. The action is learner-facing “Pick it up from here”; `story-reentry` remains
+an internal branch kind rather than interface vocabulary.
+
 Imported-run PGN export defaults to all branches. It retains Tabiya's run/session
 headers, restores the original White, Black, Date, and Result, records the original
 Event/Site as `SourceEvent`/`SourceSite`, and writes rehearsal branches as legal PGN

@@ -182,7 +182,8 @@ test("imports one game, opens a grounded story, re-enters play, and exports orig
   await expect(page).toHaveURL(/\/review\/game\/import-/);
   await expect(page.getByRole("heading", { name: "Alice – Bob" })).toBeVisible();
   await expect(page.getByText("grounded story", { exact: false })).toBeVisible();
-  const enter = page.getByRole("button", { name: "Re-enter and play from here" });
+  await expect(page.getByText(/You won this game\. Pick it up at move \d+ and test another continuation\./)).toBeVisible();
+  const enter = page.getByRole("button", { name: "Pick it up from here" });
   await expect(enter).toBeEnabled({ timeout: 15_000 });
   const runId = page.url().split("/").at(-1)!;
   await page.evaluate((id) => localStorage.removeItem(`chess-tabiya:run:${id}:writer-id`), runId);

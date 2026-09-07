@@ -17717,3 +17717,18 @@ positive fixture; the read-only browser checkpoint fixture proves that a legitim
 disabled with its reason rather than disappearing. `make verify-awake` passes, including 182
 software files / 1,112 tests and 17 real-content files / 173 tests. `make test-browser-ci` passes
 37 core journeys (one optional Maia probe skipped), 4 content journeys and all 19 matrix journeys.
+
+## 2026-09-07 — Story return gained grounded entry framing
+
+**What changed:** the selected post-game moment now frames return from the learner-relative recorded
+result and exact move number, then offers “Pick it up from here.” Imported and native wins, losses
+and draws have distinct copy; an unfinished result remains honest absence. The framing consumes no
+engine value and does not infer that the learner was winning, so the internal `story-reentry` branch
+kind and raw evaluation stay out of the entry action.
+
+**Evidence/next:** CLP-a19 is complete. The copy algebra has positive fixtures for both sides, a
+draw and absent result. The production import journey proves the recorded White win appears before
+the action and that the action still claims the writer lease, forks, plays and exports. `make
+test-software` passes 182 files / 1,113 tests; `make test-browser-ci` passes 37 core journeys (one
+optional Maia probe skipped), 4 content journeys and all 19 matrix journeys. `make verify-awake`
+passes on the final implementation and tracking bytes, including 17 real-content files / 173 tests.

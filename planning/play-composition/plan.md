@@ -58,6 +58,9 @@ remain in their owning RFCs.
     arbitrary historical plies remain previewable but carry no rewind control. Consequence sheets
     retain the primary preserved-attempt offer, and positive/negative component fixtures keep the
     distinction able to fail.
+16. Story return is framed from recorded history instead of implementation vocabulary. The selected
+    moment states the learner-relative recorded result and exact move number, reveals no evaluation,
+    and offers “Pick it up from here”; `story-reentry` remains an internal branch kind.
 
 ## Remaining before archive
 

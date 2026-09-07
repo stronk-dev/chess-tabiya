@@ -6,6 +6,7 @@ import {
   publishedBandInterval,
   publishedBandLabel,
   recordedEvaluationTrajectory,
+  storyReentryCopy,
   storyMomentLabel,
 } from "./learner-copy.js";
 
@@ -21,6 +22,21 @@ describe("learner-facing domain copy", () => {
   it("renders recorded evaluations in pawn units and names their perspective", () => {
     expect(recordedEvaluationTrajectory(267, -34)).toBe(
       "Recorded evaluation from White's side: +2.67 → −0.34 pawns",
+    );
+  });
+
+  it("frames story re-entry from recorded outcome and ply without exposing an evaluation", () => {
+    expect(storyReentryCopy("white", "0-1", 17)).toBe(
+      "You lost this game. Pick it up at move 9 and play the consequence another way.",
+    );
+    expect(storyReentryCopy("black", "0-1", 8)).toBe(
+      "You won this game. Pick it up at move 4 and test another continuation.",
+    );
+    expect(storyReentryCopy("white", "1/2-1/2", 0)).toBe(
+      "This game was drawn. Pick it up at move 1 and test another continuation.",
+    );
+    expect(storyReentryCopy("white", undefined, 3)).toBe(
+      "Pick this game up at move 2 and play the consequence.",
     );
   });
 
