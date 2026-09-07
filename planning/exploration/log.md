@@ -18167,3 +18167,14 @@ the retained README marker reader; and the author gate never checks the seed's l
 5/5 owner-cut author controls and then passes four executable falsifiers. Repair these bounded
 identity/grammar checks without restoring projection, lifecycle or Git-history machinery, then run
 another fresh review. Implementation and the three staged consumer rebases remain unauthorized.
+
+## 2026-09-07 — Collision-core bootstrap bounded author repair
+
+**What changed:** the seven-resource cut repairs [[D3116]]–[[D3119]] without restoring any generic
+engine. Catalogue rows now have unique canonical source identities; lane components have one
+spelling; one id grammar spans catalogue, claims and register markers; and the author gate joins
+every non-null `versionExport` to the exact schema-index literal and matching schema version.
+
+**Evidence/next:** `make shared-resource-bootstrap-collision-core-author-repair` retains the nine
+predecessor controls and passes four repair controls. Another genuinely fresh review and owner
+acceptance still gate implementation and the three staged consumer rebases.

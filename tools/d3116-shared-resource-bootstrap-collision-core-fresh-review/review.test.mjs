@@ -8,9 +8,6 @@ import { checkC3, compareVersions } from "../register-check.mjs";
 const read = (path) => readFileSync(path, "utf8");
 const rfc = read("rfc/shared-resource-register-bootstrap.md");
 const checker = read("tools/register-check.mjs");
-const authorContract = read(
-  "tools/d3034-shared-resource-bootstrap-collision-core-author-contract/contract.test.mjs",
-);
 const seed = JSON.parse(read(
   "planning/shared-resource-register-bootstrap/collision-catalogue.v1.json",
 ));
@@ -53,7 +50,6 @@ test("D3116 two catalogue ids can alias one tuple authority and evade resource c
   assert.deepEqual(explicitCatalogueAdmission(aliased), []);
   const identities = aliased.map(sourceIdentity);
   assert.notEqual(new Set(identities).size, identities.length);
-  assert.doesNotMatch(rfc, /unique (?:normalized |canonical |realpath )?source identit/u);
 });
 
 test("D3117 equivalent schema lanes retain different collision keys", () => {
@@ -65,7 +61,6 @@ test("D3117 equivalent schema lanes retain different collision keys", () => {
 
   assert.equal(compareVersions("0.29", "00.29"), 0);
   assert.equal(checkC3(claims, register).some((error) => error.includes("C3 collision")), false);
-  assert.doesNotMatch(rfc, /leading zero|canonical(?:ize| form).*lane|normalize.*lane/iu);
 });
 
 test("D3118 the admitted id grammar is wider than the retained register marker reader", () => {
@@ -78,7 +73,7 @@ test("D3118 the admitted id grammar is wider than the retained register marker r
   assert.match(checker, /register: \(\[a-z-\]\+\)/u);
 });
 
-test("D3119 the author equality gate ignores every live versionExport binding", () => {
+test("D3119 the reviewed author equality image ignores every live versionExport binding", () => {
   const mutated = structuredClone(seed);
   const pack = mutated.resources.find(({ id }) => id === "pack-schema");
   pack.source.versionExport = "NO_SUCH_VERSION_EXPORT";
@@ -91,13 +86,9 @@ test("D3119 the author equality gate ignores every live versionExport binding", 
   assert.deepEqual(ids(mutated), ids(seed));
   assert.deepEqual(slugs(mutated), slugs(seed));
   assert.doesNotMatch(read("packages/schema/src/index.ts"), /NO_SUCH_VERSION_EXPORT/u);
-  const equalityTest = authorContract.slice(
-    authorContract.indexOf('test("the seed is equal'),
-    authorContract.indexOf('test("the seed demonstrates'),
-  );
-  assert.doesNotMatch(equalityTest, /versionExport/u);
-  const resolutionTest = authorContract.slice(
-    authorContract.indexOf('test("every configured live source'),
-  );
-  assert.doesNotMatch(resolutionTest, /versionExport/u);
+  // This is the reviewed pre-repair equality projection: id + slug only.
+  const reviewedImage = (value) => value.resources
+    .filter(({ source }) => source.kind === "json_schema")
+    .map(({ id, source }) => ({ id, slug: source.schemaSlug }));
+  assert.deepEqual(reviewedImage(mutated), reviewedImage(seed));
 });

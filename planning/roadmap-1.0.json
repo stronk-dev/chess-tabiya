@@ -332,15 +332,15 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Repair D3116–D3119 in the seven-row collision core without restoring the withdrawn generic engine, run another fresh review, then accept/implement the catalogue and rebase the three staged concrete registers.",
+        "nextAction": "Run a genuinely fresh review of the bounded D3116–D3119 collision-core repair, then accept/implement the seven-row catalogue and rebase the three staged concrete registers.",
         "latestCheckpoint": {
           "at": "2026-09-07",
-          "summary": "Fresh review retained the narrow seven-resource cut and returned four collision-core seams: aliased sources, non-canonical lane identities, mismatched catalogue/register id grammars and an author gate blind to version-export bindings.",
-          "impact": "regressed",
-          "evidence": ["planning/shared-resource-register-bootstrap/collision-core-fresh-independent-buildability-review-2026-09-07.md", "tools/d3116-shared-resource-bootstrap-collision-core-fresh-review/review.test.mjs", "rfc/shared-resource-register-bootstrap.md", "design/BACKLOG.md"],
+          "summary": "The bounded author repair closes the four returned collision-core seams without restoring the withdrawn generic engine: canonical source identities, canonical lane spelling, one resource-id grammar and exact schema-export joins are now normative and executable.",
+          "impact": "advanced",
+          "evidence": ["planning/shared-resource-register-bootstrap/collision-core-author-repair-2026-09-07.md", "tools/d3116-shared-resource-bootstrap-collision-core-author-repair/contract.test.mjs", "rfc/shared-resource-register-bootstrap.md"],
           "anchors": [
             {"kind": "work_state", "id": "D3116", "digest": "sha256:a1b3d8a4ac17387b2688db406fe7edd33f75629c952d84002da8471825c856cc"},
-            {"kind": "rfc", "id": "shared-resource-register-bootstrap.md", "digest": "sha256:93523b6cbd5292516e7c9d6c270856d16e9e2f90fbeecfca1d75ffd9f51ad716"}
+            {"kind": "rfc", "id": "shared-resource-register-bootstrap.md", "digest": "sha256:a818cb973431d0b3fd8792d638882102b03bafbd6eb99aa35daad77e5838eea7"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

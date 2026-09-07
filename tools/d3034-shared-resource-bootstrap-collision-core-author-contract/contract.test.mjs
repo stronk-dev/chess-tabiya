@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import path from "node:path";
 import test from "node:test";
 
 const read = (path) => fs.readFileSync(path, "utf8");
@@ -21,8 +22,8 @@ const removedRoots = [
 const checkerResourceNames = [...checker.matchAll(/^\s*"([a-z][a-z0-9-]*)",?$/gm)]
   .map((match) => match[1])
   .filter((value) => ids.includes(value));
-const checkerSchemaSlugs = [...checker.matchAll(/^\s*"?([a-z][a-z0-9-]*)"?: \["([a-z][a-z0-9-]*)"/gm)]
-  .map((match) => ({ slug: match[1], id: match[2] }));
+const checkerSchemaSlugs = [...checker.matchAll(/^\s*"?([a-z][a-z0-9-]*)"?: \["([a-z][a-z0-9-]*)", (null|"([A-Z][A-Z0-9_]*)")\],?$/gm)]
+  .map((match) => ({ slug: match[1], id: match[2], versionExport: match[3] === "null" ? null : match[4] }));
 const registerIds = [...readme.matchAll(/<!-- register: ([a-z-]+) (?:head|members)=/g)]
   .map((match) => match[1])
   .sort();
@@ -50,7 +51,7 @@ test("the seed is equal to both hard-coded inventories it will replace", () => {
   assert.deepEqual(
     checkerSchemaSlugs.sort((left, right) => left.slug.localeCompare(right.slug)),
     schemaRows
-      .map(({ id, source }) => ({ slug: source.schemaSlug, id }))
+      .map(({ id, source }) => ({ slug: source.schemaSlug, id, versionExport: source.versionExport }))
       .sort((left, right) => left.slug.localeCompare(right.slug)),
   );
 });
@@ -76,8 +77,19 @@ test("the seed demonstrates the data-row shape without claiming an executed exte
 
   assert.equal(bySlug.get("synthetic"), "synthetic-schema");
   assert.equal(checker.includes("synthetic-schema"), false);
-  assert.match(rfc, /synthetic \*\*already-present\*\* versioned schema/u);
+  assert.match(rfc, /synthetic \*\*already-present\*\* schema/u);
   assert.match(rfc, /implementation contract proves the executable\s+extension property/u);
+});
+
+test("the repaired contract closes source aliases, lane spelling and id grammar", () => {
+  const sourceIdentity = ({ source }) => source.kind === "json_schema"
+    ? `schema:${source.schemaSlug}`
+    : `${source.kind}:${path.relative(process.cwd(), fs.realpathSync(source.path))}:${source.exportName ?? source.headExport}`;
+  assert.equal(new Set(seed.resources.map(sourceIdentity)).size, seed.resources.length);
+  assert.match(rfc, /canonical source identity/u);
+  assert.match(rfc, /no leading-zero component/u);
+  assert.match(rfc, /exported claim\/register id pattern/u);
+  assert.equal(/^[a-z][a-z0-9-]*$/.test("schema2"), true);
 });
 
 test("the owner cut removed speculative roots and the old declaration blocks", () => {
@@ -93,12 +105,22 @@ test("the owner cut removed speculative roots and the old declaration blocks", (
 });
 
 test("every configured live source resolves without inventing product bytes", () => {
+  const schemaIndex = read("packages/schema/src/index.ts");
   for (const row of seed.resources) {
     if (row.source.kind === "json_schema") {
       const schemas = fs.readdirSync("schemas")
         .filter((name) => name.endsWith(".schema.json"))
-        .map((name) => JSON.parse(read(`schemas/${name}`)).$id);
-      assert.ok(schemas.some((id) => id.includes(`:${row.source.schemaSlug}:`)), row.id);
+        .map((name) => JSON.parse(read(`schemas/${name}`)).$id)
+        .map((id) => /^urn:chess-tabiya:schema:([a-z-]+):([0-9.]+)$/.exec(id))
+        .filter(Boolean);
+      const schema = schemas.find((match) => match[1] === row.source.schemaSlug);
+      assert.ok(schema, row.id);
+      if (row.source.versionExport !== null) {
+        const escaped = row.source.versionExport.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const matches = [...schemaIndex.matchAll(new RegExp(`export const ${escaped} = \"([0-9.]+)\"`, "g"))];
+        assert.equal(matches.length, 1, row.source.versionExport);
+        assert.equal(matches[0][1], schema[2], row.source.versionExport);
+      }
     } else {
       assert.equal(fs.statSync(row.source.path).isFile(), true, row.id);
       assert.match(

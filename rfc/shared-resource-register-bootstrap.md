@@ -1,7 +1,6 @@
 # RFC: Shared-resource register catalogue bootstrap
 
-- **Status:** draft — collision-core cut **returned by fresh review** on [[D3116]]–[[D3119]];
-  bounded author repair and another fresh review required before acceptance/implementation
+- **Status:** draft — bounded [[D3116]]–[[D3119]] repair complete; fresh review required before acceptance/implementation
 - **Author:** Codex
 - **Created:** 2026-08-31; cut to the owner-ruled scope 2026-09-06
 - **Design refs:** none; this is repository process and changes no learner or product behavior
@@ -93,8 +92,8 @@ register sections. The bootstrap neither discovers nor invents another resource.
 claims or registers when:
 
 - the envelope, row keys, source keys, enum values or literals differ;
-- ids are duplicated, malformed or not ASCII-sorted;
-- two `json_schema` rows name the same `schemaSlug`;
+- ids duplicate, are malformed/unsorted, or disagree with the exported claim/register id pattern;
+- two rows share a canonical source identity: schema slug, or realpath plus export for path sources;
 - a `schema_lane` row does not use `json_schema`, a `migration_position` row does not use
   `storage_migrations`, or a `members` row does not use `string_tuple`;
 - a path is absolute, contains `..`, escapes the repository after `realpath`, or does not name a
@@ -165,8 +164,8 @@ resource-id | claim | changes
 
 Grammar is selected from the catalogue row:
 
-- `schema_lane`: `lane <dotted-nonnegative-decimal>` with the same component depth as the landed
-  head and strictly greater than that head;
+- `schema_lane`: `lane <canonical-dotted-nonnegative-decimal>` with no leading-zero component,
+  the landed head's component depth and a value strictly greater than that head;
 - `migration_position`: `position next` or `position behind <rfc-stem>`; bare integers remain
   refused; and
 - `members`: `members <member>, ...`, with unique ASCII-lower-snake-case members.
@@ -221,18 +220,18 @@ After repairing [[D3116]], [[D3117]], [[D3118]] and [[D3119]], another fresh rev
 implementation must execute all of these controls:
 
 1. the exact seven-row seed parses and is ASCII-sorted with seven unique ids;
-2. deleting, duplicating, renaming or adding an extra key to a row fails catalogue admission;
-3. a duplicate schema slug fails even when ids differ;
+2. deleting, duplicating, renaming, adding an extra key or aliasing one canonical source fails;
+3. a duplicate schema slug or normalized/symlink-equivalent path/export identity fails;
 4. every current claim/register/tree test remains green against the catalogue-driven checker;
 5. deleting either former code inventory does not change the result because neither exists;
-6. a synthetic **already-present** versioned schema becomes known by adding one `json_schema`
-   catalogue row and one register fixture, with no checker-source edit;
+6. a digit-bearing synthetic **already-present** schema becomes known through one catalogue row
+   and register fixture, with no checker-source edit and one id grammar at every boundary;
 7. that synthetic schema without its row fails C7, and its row without a schema fails C7;
 8. an unknown claim resource fails even if a README section uses the same unknown name;
-9. two RFCs claiming one synthetic schema lane collide;
+9. two RFCs claiming one synthetic schema lane collide; a leading-zero lane is refused;
 10. a missing/extra register section fails catalogue/register set equality;
 11. two schema files with one `$id` slug fail before tree derivation;
-12. a missing tuple export, spread/computed tuple, duplicate member and non-string member each fail;
+12. missing/mismatched schema exports and invalid tuple exports/members each fail;
 13. caller mutation after catalogue admission leaves the admitted image unchanged; and
 14. a source scan proves the implementation contains none of §5 items or the three removed
     speculative root ids.
@@ -288,7 +287,8 @@ when a concrete resource proves one necessary.
 
 ## Changelog
 
-- 2026-09-07: fresh review returned source aliases, non-canonical lanes, mismatched id grammars and unchecked `versionExport` bindings ([[D3116]]–[[D3119]]); the seven-resource cut survives.
+- 2026-09-07: bounded repair closes [[D3116]]–[[D3119]] in the contract/author gate; fresh review remains.
+- 2026-09-07: fresh review returned source aliases, non-canonical lanes, mismatched id grammars and unchecked exports; the seven-resource cut survives.
 - 2026-09-07: author self-audit narrowed absent-source claims and repaired [[D3082]]–[[D3087]].
 - 2026-09-06: owner-directed [[D3034]] cut. Replaced the 1,330-line catalogue/projection/lifecycle/
   history architecture with the seven-row collision catalogue and three existing reader shapes.
