@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:a86141fb38423cab8a5b3780c0c8d865c4e2c2f53782c3579693a284c3db88c0",
+    "roadmap": "sha256:9f1b300799cb4de10a73bab6fd247d99be712ed9ebf056bf9a64fdd0561485f3",
     "workItems": "sha256:983e2f3a517cfd73cdddab99412d3ec51f03803642923436f30454b5bf0f0b7d",
-    "workState": "sha256:15858a6910f7f1cac3bf8a31b2e635019abb59ab6d5e50bd9055f4948434bd4c",
-    "rfcRegister": "sha256:a4f700e83bd78f3295f07c652c0457ff5dda8110c7eac29071fc6e3c69712ec6",
+    "workState": "sha256:3bd94290e249fa778fd3e4eb20f5f9eab7745c01a840de4907cb4aa8383100f4",
+    "rfcRegister": "sha256:be4f862495c14b69f497038f6a167d14bc8aea703bed820f2b36fb851c9cd467",
     "uxIndex": "sha256:5ca3e23500716997bf5a89e941981f81f59244826bf9983b8a0d358294519080",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -31,8 +31,8 @@
     "workState": {
       "untriaged": 0,
       "todo": 641,
-      "doing": 0,
-      "blocked": 1227,
+      "doing": 2,
+      "blocked": 1226,
       "done": 900,
       "refused": 109
     },
@@ -155,32 +155,37 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Freshly review and land the generic shared-resource bootstrap, then the eight-criterion provider-protocol population and provider-exchange durable parser. In parallel, freshly review the repaired Review compiler and land D921's exact manifest eligibility so typed evidence packets can seed Review and mistake-return decks.",
+      "nextAction": "Freshly review the D921 Wave-C module amendment, then the repaired Review compiler; independently land the generic shared-resource bootstrap, eight-criterion provider-protocol population and provider-exchange durable parser so typed evidence packets can seed Review and mistake-return decks.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "The fourth Review compiler repair replaces caller testimony, generic family placeholders, arbitrary digest counts and incomplete Story bytes with sealed recorded-prefix derivation, literal manifest-equal adapters, retained typed evidence in complete node packets, shared canonical identities and a bounded retry/cancel/success-release lifecycle. This is the packet foundation for trustworthy Review and mistake-derived return decks; fresh review and declared producer dependencies still gate production.",
+        "summary": "D921's false dependency cycle is removed and the twelve shipped Wave-C projections now have a literal 26-pair module contract: every primitive reaches Full Inspector, while only seven observed named tactics reach Post-commit Nudge and Review Map. The generated implementation image derives 132 projection requirements and 229 module pairs without admitting placeholders or making any dependency-blocked row executable.",
         "impact": "advanced",
         "evidence": [
-          "planning/evidence-foundation-ux/review-evidence-compiler-fourth-author-repair-2026-09-07.md",
-          "tools/d3109-review-evidence-fourth-author-repair/contract.test.ts",
-          "rfc/review-evidence-compiler.md",
-          "rfc/README.md"
+          "planning/learner-modules/wave-c-module-amendment-2026-09-07.md",
+          "tools/d3129-wave-c-module-amendment/contract.test.mjs",
+          "rfc/learner-modules.md",
+          "rfc/module-registration.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
-            "id": "D3109",
-            "digest": "sha256:660ee6336588ad36296490bb8b2298b3133326c63de7e794583a911f1e76a468"
+            "id": "D921",
+            "digest": "sha256:1fc9abaa8374d95429f25d553b04af6a1f5762ccf9464d32a7d907c2103e2548"
           },
           {
             "kind": "work_state",
-            "id": "D3115",
-            "digest": "sha256:e8e66cfcd443b6220e911c2e828cfd60baaec254cfd9e3728ab0e92454314c9f"
+            "id": "D3129",
+            "digest": "sha256:9a9d82ab03a717dc14f580f8afebbb573efcad0ea62fff3530a19c85acdbda86"
           },
           {
             "kind": "rfc",
-            "id": "review-evidence-compiler.md",
-            "digest": "sha256:95440044a52d70d395540e4d6f067b2dae88b7a44123af7c874d6222212cd256"
+            "id": "learner-modules.md",
+            "digest": "sha256:fc30412fc2c71aec3d9a4fd40df1a8ffc303f932b44bd37e95c30d40af21be18"
+          },
+          {
+            "kind": "rfc",
+            "id": "module-registration.md",
+            "digest": "sha256:d337fe08ad2fc4a56e0afa2e0edc0a984d2f91639b17eb67a316d25419a6cf77"
           }
         ]
       },

@@ -1,6 +1,6 @@
 # RFC: Learner modules
 
-- **Status:** implementing — the exported contract compiler landed at `2a54d057` and the semantic-reducer checkpoint at `6e52c99c`; production declarations and consumer bindings remain blocked on draft `module-registration.md`. Accepted 2026-08-22 by claude as register owner on the buildability test, after cross-review (nine blockers fixed in place) and the owner's three rulings (D906: radar pre-commit-in-Support; outpost gated on the priority D566 fix; **budgets demoted to backstops, semantic reducers the mechanism**). *The honesty note worked exactly as written: the reducer obligation entered AFTER cross-review on the budgets ruling, the implementer was told to return §OQ1 if underspecified, and codex did (`c4d3c8c`) — correctly, because the three reducers were named and none defined. **Amended 2026-08-23 (reducer amendment, §3a)**: one pipeline, `factIdentity@1`, the closed `SUBSUMPTION@1` table, `positionNovelty@1` as bounded recomputation with a true abstention, `reduction_quality@1` with sink/failure-rule/reader, the `maxFacts` contradiction resolved toward truncate-after-reducers (A9 rewritten), a 14th declaration field `noveltyWindow`, six able-to-fail fixtures (A18) and Discharge D4. Acceptance remains valid; the implementing state records the two shipped checkpoints without claiming the production registry.* *(Prior line for history: draft 2026-08-22 — the Phase-3 / F5 module-contract RFC. Drafted while 2c is)*
+- **Status:** implementing — the exported contract compiler landed at `2a54d057` and the semantic-reducer checkpoint at `6e52c99c`; production declarations and consumer bindings remain blocked on draft `module-registration.md`. Accepted 2026-08-22 by claude as register owner on the buildability test, after cross-review (nine blockers fixed in place) and the owner's three rulings (D906: radar pre-commit-in-Support; outpost gated on the priority D566 fix; **budgets demoted to backstops, semantic reducers the mechanism**). *The honesty note worked exactly as written: the reducer obligation entered AFTER cross-review on the budgets ruling, the implementer was told to return §OQ1 if underspecified, and codex did (`c4d3c8c`) — correctly, because the three reducers were named and none defined. **Amended 2026-08-23 (reducer amendment, §3a)**: one pipeline, `factIdentity@1`, the closed `SUBSUMPTION@1` table, `positionNovelty@1` as bounded recomputation with a true abstention, `reduction_quality@1` with sink/failure-rule/reader, the `maxFacts` contradiction resolved toward truncate-after-reducers (A9 rewritten), a 14th declaration field `noveltyWindow`, six able-to-fail fixtures (A18) and Discharge D4. **D921 Wave-C amendment authored 2026-09-07 (§4.12, A19):** the twelve shipped semantic projections have a literal 26-pair module delta; fresh review is required before that delta is accepted. Acceptance of the original contract remains valid; the implementing state records the two shipped checkpoints without claiming the production registry or the pending amendment.* *(Prior line for history: draft 2026-08-22 — the Phase-3 / F5 module-contract RFC. Drafted while 2c is)*
   implementing and 2d awaited independent acceptance (2d has since been accepted with its 18
   ids unchanged — Depends-on, §7, changelog); **implementation of this RFC is sequenced
   after both collector waves land** so every eligibility row binds a compiled projection id, per
@@ -771,6 +771,51 @@ closed enumeration.
 - Cap 20 facts / 400 words / 20 marks / 8 arrows. Empty: `stated_absence` per family. All
   rungs, everything attributed.
 
+#### 4.12 D921 — Wave-C literal module amendment (pending fresh review)
+
+The collector dependency is closed for the population this amendment names. The twelve
+projections below compile in `packages/runtime/src/evidence-catalog.ts`; the two promotion-race
+successors were removed from this RFC's dependency under [[D3069]] and remain independently owned
+by [[D1699]]/[[D1700]]. They are not forecast here.
+
+The literal Wave-C population is:
+
+1. `rules.tactic.reading.defender_duty_set@1`
+2. `rules.tactic.event.defender_removed@1`
+3. `rules.tactic.event.defender_duty_relocated@1`
+4. `derived.tactic.deflection_observed@1`
+5. `derived.tactic.attraction_observed@1`
+6. `derived.tactic.line_blocker_clearance_observed@1`
+7. `derived.tactic.square_clearance_observed@1`
+8. `derived.tactic.interference_observed@1`
+9. `derived.tactic.check_zwischenzug_observed@1`
+10. `derived.tactic.overloaded_defender_response_conflict@1`
+11. `derived.tactic.overload_exploitation_observed@1`
+12. `rules.tactic.consequence.forced_mate_after_move@1`
+
+Its module delta is exactly **26 literal `(projection id, module consumer id)` pairs**:
+
+| module consumer | added projection ids | n |
+|---|---|---:|
+| `module.postcommit_nudge` | the seven observed named events: `derived.tactic.{deflection_observed, attraction_observed, line_blocker_clearance_observed, square_clearance_observed, interference_observed, check_zwischenzug_observed, overload_exploitation_observed}@1` | 7 |
+| `module.review_map` | the same seven observed named events | 7 |
+| `module.full_inspector` | all twelve literal ids enumerated above | 12 |
+
+This is the owner's ordinary-versus-advanced split made executable. Every primitive remains
+deliberately inspectable; only the seven events that already establish an observed named
+consequence enter proactive Nudge and automatic Review. The five operand/predicate rows—duty set,
+defender removal, duty relocation, candidate-time overload conflict and bounded mate proof—do not
+enter a proactive learner module. Their own limitations say why: an operand does not establish the
+named tactic, the overload row contains a candidate-time relation, and the mate proof contains a
+candidate move. Moving any of those five into Support requires a separately typed disclosure and
+renderer contract; an eligibility edit may not silently reveal its candidate.
+
+Relative to Appendix B's accepted-time base image, the amendment arithmetic becomes **207 declared /
+205 compiled / 2 declared-awaiting**. This is not a fresh HEAD availability census:
+`module-registration.md` owns the current aggregate implementation image (**231 / 229 / 2**) and
+must include this exact delta without counting it twice. D921 is no longer blocked by the Review
+compiler: the Review compiler consumes this accepted population; it does not authorize it.
+
 ### §5 — Move-quality grades: a projection, not a module (the D879 decision)
 
 **Decision: grades are one derived projection (`derived.grade.move_quality@1`) consumed by
@@ -1007,6 +1052,15 @@ unit and total and match the tables they verify.
     (`evidence-catalog.ts:124`), so this fails against every family-name-based identity — and
     collapsing them would invert a fact's polarity in front of a learner.
 
+19. **A19 — Wave-C module delta** ([[D921]]/[[D3129]]). Derive the twelve-member population from
+    `SEMANTIC_WAVE_EVENT_PROJECTION_IDS` plus `rules.tactic.reading.defender_duty_set@1`,
+    `derived.tactic.overloaded_defender_response_conflict@1` and
+    `rules.tactic.consequence.forced_mate_after_move@1`; assert every id resolves in the compiled
+    catalogue. The seven `derived.tactic.*_observed@1` members bind to Nudge, Review and Inspector;
+    the other five bind only to Inspector. The exact pair set has cardinality 26. A missing pair,
+    an extra proactive pair, either withdrawn promotion projection, a placeholder string or a
+    disposition-only Wave-C primitive fails `make wave-c-module-amendment`.
+
 ## Discharges
 
 | id | the obligation | owner | recorded when discharged | discharged |
@@ -1090,6 +1144,12 @@ this document's to rewrite).
 
 ## Changelog
 
+- 2026-09-07: authored the pending [[D921]] Wave-C literal module amendment (§4.12, A19) after
+  [[D3069]] removed the held promotion pair from the collector dependency. All twelve shipped
+  projections receive an Advanced Inspector home; the seven observed named events additionally
+  enter Post-commit Nudge and Review Map. The exact delta is 26 pairs. The five operand/predicate
+  rows remain outside proactive modules so a candidate or lower-level relation cannot become a
+  hint by eligibility alone. Fresh review is required before accepting this amendment.
 - 2026-08-28: corrected the two normative thirteen-field residues after the reducer amendment
   added `noveltyWindow` as field fourteen ([[D1949]]). This changes no product ruling or
   implementation surface; it makes §1 and A1 agree with the accepted status line, numbered schema
@@ -1189,3 +1249,8 @@ the closed list A2 counts; adding or dropping a row is a spec change with a chan
 | `rules_floor` | — (registry-only; `evidence: none`) | 0 |
 
 Cross-check: 20+3+7+38+6+4+7+8+48+40 = **181**; minus the two ◇ rows = **179** compiled (inspector 34→40 per the D924 amendment).
+
+**D921 additive amendment (§4.12):** +7 `module.postcommit_nudge`, +7 `module.review_map`,
++12 `module.full_inspector` = **26** literal pairs. The accepted-base-plus-amendment image is
+**207 declared / 205 compiled / 2 declared-awaiting**. The aggregate implementation RFC may add
+other independently justified rows, but must retain this exact subset.

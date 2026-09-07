@@ -24,6 +24,12 @@ const avoidance = [
   ...TACTICAL_AVOIDANCE_EVENT_PROJECTION_IDS,
 ];
 const observed = SEMANTIC_WAVE_EVENT_PROJECTION_IDS.filter((id) => id.startsWith("derived.tactic."));
+export const WAVE_C_MODULE_PROJECTION_IDS = Object.freeze([
+  "rules.tactic.reading.defender_duty_set",
+  ...SEMANTIC_WAVE_EVENT_PROJECTION_IDS,
+  "derived.tactic.overloaded_defender_response_conflict",
+  "rules.tactic.consequence.forced_mate_after_move",
+] as const);
 
 const POSTCOMMIT = [
   ...structuralEvents, ...transitionGeometry, ...transitionRules,
@@ -104,7 +110,7 @@ export const AUTHOR_MODULE_ACCEPTS = Object.freeze({
     "recorded.tablebase.result", "theory.shapes.firing", "rules.phase.reading",
     "rules.pivotal.marker", "derived.compare.structure_delta", "derived.compare.eval_delta",
     "derived.story.rank", "pack.authored.classifier",
-    "theory.opening.catalogue_membership", "derived.opening.deepest_reached", ...observed,
+    "theory.opening.catalogue_membership", "derived.opening.deepest_reached", ...WAVE_C_MODULE_PROJECTION_IDS,
   ]),
 } as const);
 
@@ -178,6 +184,7 @@ export const AUTHOR_PROJECTION_SUBJECT_OVERRIDES = Object.freeze({
   "derived.tactic.interference_observed": "edge",
   "derived.tactic.line_blocker_clearance_observed": "edge",
   "derived.tactic.overload_exploitation_observed": "edge",
+  "derived.tactic.overloaded_defender_response_conflict": "edge",
   "derived.tactic.promotion_pressure": "edge",
   "derived.tactic.square_clearance_observed": "edge",
   "rules.castling.event.rights_lost": "edge",
@@ -202,13 +209,17 @@ export const AUTHOR_PROJECTION_SUBJECT_OVERRIDES = Object.freeze({
   "rules.structural.event.open_file": "edge",
   "rules.structural.event.passed_pawn": "edge",
   "rules.structural.event.pawn_islands": "edge",
+  "rules.tactic.consequence.forced_mate_after_move": "edge",
   "rules.tactic.consequence.mate_in_one": "edge",
   "rules.tactic.consequence.reply_breadth": "edge",
   "rules.tactic.consequence.threat": "edge",
   "rules.tactic.event.check": "edge",
+  "rules.tactic.event.defender_duty_relocated": "edge",
+  "rules.tactic.event.defender_removed": "edge",
   "rules.tactic.event.double_attack": "edge",
   "rules.tactic.event.loose_piece": "edge",
   "rules.tactic.reading.back_rank": "position",
+  "rules.tactic.reading.defender_duty_set": "position",
   "rules.tactic.reading.discovered_latency": "position",
   "rules.tactic.reading.loose_piece": "position",
   "rules.tactic.reading.ray_classification": "position",

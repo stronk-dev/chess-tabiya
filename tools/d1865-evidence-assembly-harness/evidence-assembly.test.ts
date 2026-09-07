@@ -6,7 +6,10 @@ import {
   PRIMARY_EVIDENCE_MANIFEST,
   SEMANTIC_WAVE_EVENT_PROJECTION_IDS,
 } from "../../packages/runtime/src/evidence-catalog.js";
-import { AUTHOR_MODULE_ACCEPTS } from "../d2120-module-registration-author-contract/module-plan-fixture.js";
+import {
+  AUTHOR_MODULE_ACCEPTS,
+  WAVE_C_MODULE_PROJECTION_IDS,
+} from "../d2120-module-registration-author-contract/module-plan-fixture.js";
 
 const observedSemanticTactics = SEMANTIC_WAVE_EVENT_PROJECTION_IDS.filter((id) => id.startsWith("derived.tactic."));
 const MODULE_ACCEPTS = AUTHOR_MODULE_ACCEPTS;
@@ -62,7 +65,7 @@ describe("D1865 complete non-hint module assembly closure", () => {
     expect(MODULE_ACCEPTS).toEqual(AUTHOR_MODULE_ACCEPTS);
   });
 
-  it("reconciles the dependency image to exactly 226 declared consumer/projection pairs", () => {
+  it("reconciles the dependency image to exactly 231 declared consumer/projection pairs", () => {
     expect(Object.fromEntries(Object.entries(MODULE_ACCEPTS).map(([module, projections]) => [module, projections.length]))).toEqual({
       sight_on_request: 23,
       blunder_prevention: 3,
@@ -73,9 +76,9 @@ describe("D1865 complete non-hint module assembly closure", () => {
       guided_hint: 0,
       compare_coach: 8,
       review_map: 66,
-      full_inspector: 57,
+      full_inspector: 62,
     });
-    expect(pairs).toHaveLength(226);
+    expect(pairs).toHaveLength(231);
   });
 
   it("includes the owner-ruled pawn-safe-square pair without widening any other module", () => {
@@ -104,8 +107,8 @@ describe("D1865 complete non-hint module assembly closure", () => {
     }, {});
     expect(histogram).toEqual({
       position_local: 46,
-      position_or_edge_local: 46,
-      derived_after_inputs: 78,
+      position_or_edge_local: 50,
+      derived_after_inputs: 79,
       edge_local: 24,
       catalogue_local: 5,
       pack_local: 1,
@@ -116,7 +119,7 @@ describe("D1865 complete non-hint module assembly closure", () => {
     });
   });
 
-  it("binds the seven observed semantic tactics to Nudge, Review and Inspector without importing operand events", () => {
+  it("binds all twelve Wave-C projections to Inspector and only observed motifs to Nudge and Review", () => {
     expect(observedSemanticTactics).toEqual([
       "derived.tactic.deflection_observed",
       "derived.tactic.attraction_observed",
@@ -129,7 +132,14 @@ describe("D1865 complete non-hint module assembly closure", () => {
     const semanticPairs = pairs.filter(({ projection }) => observedSemanticTactics.includes(projection as typeof observedSemanticTactics[number]));
     expect(semanticPairs).toHaveLength(21);
     expect(new Set(semanticPairs.map(({ module }) => module))).toEqual(new Set(Object.keys(semanticConsumerContract)));
-    expect(pairs.some(({ projection }) => ["rules.tactic.event.defender_removed", "rules.tactic.event.defender_duty_relocated"].includes(projection))).toBe(false);
+    expect(WAVE_C_MODULE_PROJECTION_IDS).toHaveLength(12);
+    for (const projection of WAVE_C_MODULE_PROJECTION_IDS) {
+      expect(pairs).toContainEqual({ module: "full_inspector", projection });
+    }
+    const inspectorOnly = WAVE_C_MODULE_PROJECTION_IDS.filter((projection) => !observedSemanticTactics.includes(projection as typeof observedSemanticTactics[number]));
+    expect(inspectorOnly).toHaveLength(5);
+    expect(pairs.filter(({ projection }) => inspectorOnly.includes(projection as typeof inspectorOnly[number])))
+      .toEqual(inspectorOnly.map((projection) => ({ module: "full_inspector", projection })));
 
     for (const [module, contract] of Object.entries(semanticConsumerContract)) {
       for (const projectionId of observedSemanticTactics) {
@@ -167,14 +177,15 @@ describe("D1865 complete non-hint module assembly closure", () => {
     expect([...allProjectionIds].filter((id) => id.startsWith("derived.hint.disclosure."))).toEqual([]);
   });
 
-  it("binds the author-amended module RFC to the reconciled 226-pair image", () => {
+  it("binds the author-amended module RFC to the reconciled 231-pair image", () => {
     const rfc = readFileSync(new URL("../../rfc/module-registration.md", import.meta.url), "utf8");
     const accepts = rfc.match(/#### 1\.3 `accepts`[\s\S]*?#### 1\.4/u)?.[0] ?? "";
-    expect(accepts).toContain("declared **`226 + R`**, compiled **`224 + R`**, and declared-awaiting **2**");
+    expect(accepts).toContain("declared **`231 + R`**, compiled **`229 + R`**, and declared-awaiting **2**");
     expect(accepts).toContain("`theory.opening.current_endpoint`");
     expect(accepts).not.toContain("`theory.opening_identity.record` | 4");
     expect(accepts).toContain("all seven `SEMANTIC_WAVE_EVENT_PROJECTION_IDS`");
     expect(accepts).toContain("all seven observed semantic-tactic projections");
+    expect(accepts).toContain("five Wave-C Inspector-only rows");
     expect(accepts).toContain("owner-ruled `pawn_safe_square`");
     expect(accepts).toContain("owner-ruled `outpost`");
   });
@@ -190,6 +201,7 @@ describe("D1865 complete non-hint module assembly closure", () => {
       "derived.material.reading.role_signature",
       "derived.opening.deepest_reached",
       "derived.tactic.fork_survives_reply",
+      "derived.tactic.overloaded_defender_response_conflict",
       "derived.tactic.promotion_pressure",
       "human.maia.candidate_wdl",
       "rules.castling.reading.legality",
@@ -203,9 +215,11 @@ describe("D1865 complete non-hint module assembly closure", () => {
       "rules.square.reading.control",
       "rules.structural.reading.pawn_connectivity",
       "rules.structural.reading.space",
+      "rules.tactic.consequence.forced_mate_after_move",
       "rules.tactic.consequence.mate_in_one",
       "rules.tactic.consequence.threat",
       "rules.tactic.reading.back_rank",
+      "rules.tactic.reading.defender_duty_set",
       "rules.tactic.reading.discovered_latency",
       "rules.tactic.reading.loose_piece",
       "rules.tactic.reading.ray_classification",
@@ -237,6 +251,6 @@ describe("D1865 complete non-hint module assembly closure", () => {
 
   it("derives the unique compiled projection population the assembler must execute", () => {
     const compiled = [...new Set(pairs.map(({ projection }) => projection).filter((projection) => projectionById.has(projection)))].sort();
-    expect(compiled).toHaveLength(127);
+    expect(compiled).toHaveLength(132);
   });
 });

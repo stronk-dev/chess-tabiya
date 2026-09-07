@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "module_evidence_requirements",
   "completionClaim": "requirements_only",
-  "population": 127,
+  "population": 132,
   "awaiting": [
     "derived.explorer.population_summary",
     "pack.authored.classifier"
@@ -419,6 +419,7 @@
       "derived.tactic.interference_observed@1",
       "derived.tactic.line_blocker_clearance_observed@1",
       "derived.tactic.overload_exploitation_observed@1",
+      "derived.tactic.overloaded_defender_response_conflict@1",
       "derived.tactic.promotion_pressure@1",
       "derived.tactic.sequence.defender_consequence@1",
       "derived.tactic.square_clearance_observed@1",
@@ -479,13 +480,17 @@
       "rules.structural.reading.piece_distance@1",
       "rules.structural.reading.piece_reach_count@1",
       "rules.structural.reading.space@1",
+      "rules.tactic.consequence.forced_mate_after_move@1",
       "rules.tactic.consequence.mate_in_one@1",
       "rules.tactic.consequence.reply_breadth@1",
       "rules.tactic.consequence.threat@1",
       "rules.tactic.event.check@1",
+      "rules.tactic.event.defender_duty_relocated@1",
+      "rules.tactic.event.defender_removed@1",
       "rules.tactic.event.double_attack@1",
       "rules.tactic.event.loose_piece@1",
       "rules.tactic.reading.back_rank@1",
+      "rules.tactic.reading.defender_duty_set@1",
       "rules.tactic.reading.discovered_latency@1",
       "rules.tactic.reading.loose_piece@1",
       "rules.tactic.reading.ray_classification@1",
@@ -540,6 +545,7 @@
       "module.full_inspector@1\u0000derived.tactic.interference_observed@1",
       "module.full_inspector@1\u0000derived.tactic.line_blocker_clearance_observed@1",
       "module.full_inspector@1\u0000derived.tactic.overload_exploitation_observed@1",
+      "module.full_inspector@1\u0000derived.tactic.overloaded_defender_response_conflict@1",
       "module.full_inspector@1\u0000derived.tactic.promotion_pressure@1",
       "module.full_inspector@1\u0000derived.tactic.sequence.defender_consequence@1",
       "module.full_inspector@1\u0000derived.tactic.square_clearance_observed@1",
@@ -569,10 +575,14 @@
       "module.full_inspector@1\u0000rules.square.reading.control@1",
       "module.full_inspector@1\u0000rules.structural.reading.pawn_connectivity@1",
       "module.full_inspector@1\u0000rules.structural.reading.space@1",
+      "module.full_inspector@1\u0000rules.tactic.consequence.forced_mate_after_move@1",
       "module.full_inspector@1\u0000rules.tactic.consequence.mate_in_one@1",
       "module.full_inspector@1\u0000rules.tactic.consequence.reply_breadth@1",
       "module.full_inspector@1\u0000rules.tactic.consequence.threat@1",
+      "module.full_inspector@1\u0000rules.tactic.event.defender_duty_relocated@1",
+      "module.full_inspector@1\u0000rules.tactic.event.defender_removed@1",
       "module.full_inspector@1\u0000rules.tactic.reading.back_rank@1",
+      "module.full_inspector@1\u0000rules.tactic.reading.defender_duty_set@1",
       "module.full_inspector@1\u0000rules.tactic.reading.discovered_latency@1",
       "module.full_inspector@1\u0000rules.tactic.reading.loose_piece@1",
       "module.full_inspector@1\u0000rules.tactic.reading.ray_classification@1",
@@ -4495,6 +4505,80 @@
     },
     {
       "projection": {
+        "id": "derived.tactic.overloaded_defender_response_conflict",
+        "version": 1
+      },
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "stage": "derived_after_inputs",
+      "subjectKind": "edge",
+      "subjectAuthority": {
+        "subjectKind": "edge",
+        "acquisition": "recorded_semantic_path@1",
+        "occurrenceView": "recorded_edge",
+        "adapter": "identity"
+      },
+      "acquisition": "recorded_semantic_path@1",
+      "derivation": {
+        "kind": "all",
+        "inputs": [
+          {
+            "id": "rules.tactic.reading.defender_duty_set",
+            "version": 1
+          },
+          {
+            "id": "rules.transition.event.capture",
+            "version": 1
+          },
+          {
+            "id": "rules.exchange.predicate.legal_exchange",
+            "version": 1
+          }
+        ],
+        "join": {
+          "subjectKind": "edge",
+          "rule": "same_edge_context"
+        },
+        "inputBindings": [
+          {
+            "projection": {
+              "id": "rules.tactic.reading.defender_duty_set",
+              "version": 1
+            },
+            "sourceSubjectKind": "position",
+            "relation": "edge_position_endpoints"
+          },
+          {
+            "projection": {
+              "id": "rules.transition.event.capture",
+              "version": 1
+            },
+            "sourceSubjectKind": "edge",
+            "relation": "same_edge"
+          },
+          {
+            "projection": {
+              "id": "rules.exchange.predicate.legal_exchange",
+              "version": 1
+            },
+            "sourceSubjectKind": "edge",
+            "relation": "same_edge"
+          }
+        ]
+      },
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "derived.tactic.overloaded_defender_response_conflict",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "projection": {
         "id": "derived.tactic.promotion_pressure",
         "version": 1
       },
@@ -6326,6 +6410,34 @@
     },
     {
       "projection": {
+        "id": "rules.tactic.consequence.forced_mate_after_move",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "subjectAuthority": {
+        "subjectKind": "edge",
+        "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
+        "adapter": "identity"
+      },
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.consequence.forced_mate_after_move",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "projection": {
         "id": "rules.tactic.consequence.mate_in_one",
         "version": 1
       },
@@ -6438,6 +6550,62 @@
     },
     {
       "projection": {
+        "id": "rules.tactic.event.defender_duty_relocated",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "subjectAuthority": {
+        "subjectKind": "edge",
+        "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
+        "adapter": "identity"
+      },
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.event.defender_duty_relocated",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.event.defender_removed",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "edge",
+      "subjectAuthority": {
+        "subjectKind": "edge",
+        "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_edge_by_uci",
+        "adapter": "identity"
+      },
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.event.defender_removed",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "projection": {
         "id": "rules.tactic.event.double_attack",
         "version": 1
       },
@@ -6515,6 +6683,34 @@
         "kind": "sealed_projection_item",
         "projection": {
           "id": "rules.tactic.reading.back_rank",
+          "version": 1
+        }
+      },
+      "status": "awaiting_upstream_sealed_operation"
+    },
+    {
+      "projection": {
+        "id": "rules.tactic.reading.defender_duty_set",
+        "version": 1
+      },
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "stage": "position_or_edge_local",
+      "subjectKind": "position",
+      "subjectAuthority": {
+        "subjectKind": "position",
+        "acquisition": "candidate_population@1",
+        "occurrenceView": "candidate_child_position_by_uci",
+        "adapter": "identity"
+      },
+      "acquisition": "candidate_population@1",
+      "derivation": null,
+      "requiredOutput": {
+        "kind": "sealed_projection_item",
+        "projection": {
+          "id": "rules.tactic.reading.defender_duty_set",
           "version": 1
         }
       },
@@ -7221,5 +7417,5 @@
       "status": "awaiting_upstream_sealed_operation"
     }
   ],
-  "digest": "sha256:60e12573e8b08671297f671b93342c0ca29c18baa9a88bfc56acf2b02bbeaff3"
+  "digest": "sha256:9e57075531f67d80c520dc8c94802d30987c54acbf658d234a90010eeb7fbf3d"
 }

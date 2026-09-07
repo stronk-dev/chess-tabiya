@@ -18284,3 +18284,17 @@ passes six new repair groups and compiles under the repository TypeScript dialec
 the final production adapter population rather than this author fixture forecasting it. Another
 genuinely fresh review and the recorded-path/provider/candidate-packet/presentation dependencies
 still precede implementation. No product, API, schema, client or content byte changed.
+
+## 2026-09-07 — D921 Wave-C module amendment authored
+
+**What changed:** [[D3129]] removes a false dependency cycle: D921 no longer waits on the Review
+compiler that consumes it. The twelve Wave-C projections already shipped after [[D3069]]'s
+promotion cut now have a literal 26-pair module amendment. All twelve remain reachable through Full
+Inspector; only the seven observed named tactics enter proactive Nudge and automatic Review. The
+five operand/predicate facts stay out of those learner surfaces until a typed disclosure contract
+can carry candidate information safely.
+
+**Evidence/next:** `make wave-c-module-amendment` passes 13 assembly checks, 12 generated-register
+checks and five amendment controls. The requirements-only implementation image derives 132 unique
+projection requirements / 229 compiled module pairs, all still dependency-blocked. Fresh review is
+next; no production, API, schema, client or content byte changed.

@@ -1,14 +1,14 @@
 # RFC: Module registration — the eleven declarations, the compile site, and the seats
 
 - **Status:** **draft — bounded discharge-coverage repair complete; not acceptable.** The artifacts are
-  `completionClaim: requirements_only` and all 224 binding rows are `blocked_dependencies`, so no
+  `completionClaim: requirements_only` and all 229 binding rows are `blocked_dependencies`, so no
   module becomes executable and no implementation is authorised. Standing blockers: the
   `evidence-value-authority` successor rebase (§1.3.1), the `hint-distance` measured family×rung
   registry (D7), and the exact-operation resolution receipt (D8). **The two acceptance blockers
   measured on 2026-09-07 are repaired in this author image:** the four awaiting RFCs now have an
   exact cover-or-refuse disposition for every projection, and §2.5.0's historical direct-call
   draft is separated from the normative query, decision-stamp and Review-paging contract. The
-  maintained author contract is green on the regenerated 127/224 requirements image. Its checked-in
+  maintained author contract is green on the regenerated 132/229 requirements image. Its checked-in
   capability authority is set-equal to both implementer-facing tables, so a one-section repair now
   fails the same target instead of reading as complete. Repair history is indexed at
   `planning/learner-modules/author-repair-and-review-chain.md`; no further round of self-review is
@@ -245,7 +245,8 @@ were excluded because their matcher consumed the D566-defective pawn-safety resu
 closed, and the owner's [[D906]](2) ruling names `outpost`: *"just fix the foundation and then keep
 it in"*. The owner then answered yes to the isolated `pawn_safe_square` question on 2026-08-30.
 The declaration therefore restores both (Sight 20 → 22); [[D3065]] then adds exact legal mobility
-as row 23 and brings the complete non-hint image to 226.
+as row 23 and brings the pre-D921 non-hint image to 226. The D921 amendment then adds the five
+Wave-C Inspector-only rows, producing the current 231-pair image without widening Nudge or Review.
 [[D632]]'s measured zero firings remain an honest-empty availability fact; inclusion does not make
 the reading proactive or interesting by default.
 
@@ -277,12 +278,15 @@ exact runtime projection and is the sole opening row for `theory_breadcrumb`; th
 is a permanent crossed negative. Its inspector-only disposition transfers atomically to the module
 binding (§2.4).
 
-**Seven observed semantic tactics exist and have exact consumer homes.** Deflection, attraction,
+**All twelve shipped Wave-C semantic projections have exact homes.** Deflection, attraction,
 line-blocker clearance, square clearance, interference, check zwischenzug and overload
 exploitation each bind to Post-commit Nudge, Review Map and Full Inspector: 21 exact pairs. Their
-lower operand events `defender_removed` and `defender_duty_relocated` are not learner facts. The
-recorded-path compiler is still a hard producer dependency; adding a consumer does not pretend the
-multi-edge producer executes today ([[D1870]]).
+five lower-level reading/event/predicate siblings—defender duty, defender removal, defender-duty
+relocation, candidate-time overload conflict and bounded forced-mate proof—bind to Full Inspector
+only. They do not become proactive learner facts or candidate-revealing Support hints. The exact
+Wave-C delta is therefore 26 pairs, set-equal to `learner-modules.md` §4.12/A19. The recorded-path
+compiler is still a hard producer dependency; adding a consumer does not pretend the multi-edge
+producer executes today ([[D1870]]).
 
 **`pack.authored.classifier@1` does not exist.** Added to `full_inspector` by the 2026-08-22 D924
 amendment as *"the `pack.authored.classifier@1` token"* for leak L12. Repo-wide it appears in
@@ -428,11 +432,11 @@ the declarations.
 | `module.guided_hint` | the literal ordered expansion `...HINT_DISCLOSURE_PROJECTION_IDS` (one sealed `derived.hint.disclosure.<family>.<rung>@1` per measured family/rung pair; never raw PV or the internal horizon) | `R` |
 | `module.compare_coach` | `derived.compare.{structure_delta, eval_delta, engine_trajectory, piece_route}`; `run.record.{fork, consequence, objective_transition, checkpoint_hit}` | 8 |
 | `module.review_map` | the complete 52-row Post-commit Nudge set; `rules.pivotal.marker`, `rules.phase.reading`, `rules.endgame.reading`; `recorded.engine.eval`, `recorded.tablebase.result`; `live.stockfish.{eval, wdl}`; `run.record.{objective_transition, consequence, imported_result}`; `derived.pawn.sequence.contact_timing`; `derived.tactic.sequence.defender_consequence`; `derived.material.event.role_asymmetry`; `derived.opening.deepest_reached` | 66 |
-| `module.full_inspector` | the prior 47-row explicit-analysis image, including all seven observed semantic-tactic projections; `rules.mobility.reading.legal_moves`; `rules.square.event.control`; `rules.mobility.event.piece_destinations`; `derived.pawn.sequence.{contact_timing, harassment_pressure}`; `derived.tactic.{fork_survives_reply, sequence.defender_consequence}`; `derived.material.event.role_asymmetry`; `theory.opening.catalogue_membership`; `derived.opening.deepest_reached` | 57 |
+| `module.full_inspector` | the prior 47-row explicit-analysis image, including all seven observed semantic-tactic projections; `rules.mobility.reading.legal_moves`; `rules.square.event.control`; `rules.mobility.event.piece_destinations`; `derived.pawn.sequence.{contact_timing, harassment_pressure}`; `derived.tactic.{fork_survives_reply, sequence.defender_consequence}`; `derived.material.event.role_asymmetry`; `theory.opening.catalogue_membership`; `derived.opening.deepest_reached`; plus the five Wave-C Inspector-only rows `rules.tactic.reading.defender_duty_set`, `rules.tactic.event.{defender_removed, defender_duty_relocated}`, `derived.tactic.overloaded_defender_response_conflict`, `rules.tactic.consequence.forced_mate_after_move` | 62 |
 
 #### 1.3.1 Mandatory successor rebase before acceptance ([[D2373]])
 
-The table above and the checked-in 127/224 artifacts are a truthful snapshot of the compiled
+The table above and the checked-in 132/229 artifacts are a truthful snapshot of the compiled
 manifest at the fourth author repair. They are not the acceptance image: `evidence-value-authority`
 retires four families and the module requirements cannot accept retired refs. After that dependency
 lands, the generator—not a hand edit—applies this exact set replacement:
@@ -445,8 +449,8 @@ lands, the generator—not a hand edit—applies this exact set replacement:
 | `rules.pivotal.marker@1` | `derived.pivotal.irreversibility@1`; `derived.pivotal.phase_change@1`; `derived.pivotal.human_divergence@1`; `derived.pivotal.option_collapse@1` | Review Map, Full Inspector | +6 |
 
 The replacement is set-equal over the four retired and eight successor refs. No v1/v2 pair may
-coexist in one module. The post-dependency drift tripwires are **declared `234 + R` / compiled
-`232 + R` / awaiting `2`**, and the unique requirement projection population is **131**, not 127.
+coexist in one module. The post-dependency drift tripwires are **declared `239 + R` / compiled
+`237 + R` / awaiting `2`**, and the unique requirement projection population is **136**, not 132.
 The two awaiting rows are unchanged; successor availability cannot be hidden as a third awaiting
 wildcard. The generated execution/binding JSON, digests, family witness, D1865 assembly fixture and
 all counts regenerate in one author-repair commit before fresh review. Until then the current
@@ -455,7 +459,7 @@ artifacts remain evidence of the old manifest and cannot authorize implementatio
 Here `H = HINT_HORIZON_PROJECTION_IDS.length` and
 `R = HINT_DISCLOSURE_PROJECTION_IDS.length = H × HINT_RUNGS.length`; both are derived from the
 final measured family registry and the closed rung vocabulary, not pinned to hand counts. Landing
-tripwires are therefore declared **`226 + R`**, compiled **`224 + R`**, and declared-awaiting **2**
+tripwires are therefore declared **`231 + R`**, compiled **`229 + R`**, and declared-awaiting **2**
 (`derived.explorer.population_summary@1` and `pack.authored.classifier@1`). The horizon rows are compile-time dependencies, not
 awaiting placeholders. Both grade uses, runtime opening identity and the 21 observed-tactic pairs
 compile (§0.3). The dated `f0d5460` census is historical; `make module-evidence-assembly` is the
@@ -574,8 +578,8 @@ from the barrel today.
 
 In `evidence-catalog.ts`, append ten `module.*` ids to `EVIDENCE_CONSUMER_IDS`, one
 closed consumer declaration per evidence-bearing module, and the exact adapters that bind each
-compiled §1.3 acceptance pair. The module acceptance/binding closure is declared **`226 + R`**,
-compiled **`224 + R`**, awaiting **2**; these are derived drift tripwires over
+compiled §1.3 acceptance pair. The module acceptance/binding closure is declared **`231 + R`**,
+compiled **`229 + R`**, awaiting **2**; these are derived drift tripwires over
 `MODULE_DECLARATIONS`, consumer `accepts`, and compiled bindings, never hand-maintained manifest
 counts.
 
@@ -647,7 +651,7 @@ The literal population required by [[D1868]] is:
 | `review_map` | `threat, theory, evaluation` | `fact, threat, theory, evaluation` |
 | `full_inspector` | `threat, theory, evaluation, principal_variation` | `fact, pattern, threat, theory, plan, evaluation, candidate_moves, move, principal_variation` |
 
-`make module-evidence-assembly` derives these nine non-empty unions from the same 226-pair image;
+`make module-evidence-assembly` derives these nine non-empty unions from the same 231-pair image;
 changing a projection's `answerContent` therefore fails before a stale table can silently widen a
 module. Crossed fixtures keep Theory/Evaluation, Move/Ranking and Guided-Hint rung authority
 incomparable.
@@ -693,7 +697,7 @@ D1865 acceptance image derives twenty-three module-accepted dispositions. Bindin
 without deleting the disposition is a build failure; deleting a disposition without binding is
 also a build failure. So the two edits are the same edit.
 
-Deleted, derived from the exact 226-pair image rather than maintained as a second list:
+Deleted, derived from the exact 231-pair image rather than maintained as a second list:
 `rules.tactic.consequence.{threat, mate_in_one}`,
 `rules.tactic.reading.{loose_piece, back_rank, trapped_piece, ray_classification,
 rook_on_seventh, discovered_latency}`, `rules.castling.reading.{rights, legality}`,
@@ -703,7 +707,11 @@ rook_on_seventh, discovered_latency}`, `rules.castling.reading.{rights, legality
 `rules.king.reading.zone_state`, `derived.material.reading.role_signature`,
 `derived.tactic.promotion_pressure`, `derived.grade.move_quality`, `human.maia.candidate_wdl`,
 `rules.mobility.reading.legal_moves`, `derived.tactic.fork_survives_reply`,
-`theory.opening.{current_endpoint, catalogue_membership}` and `derived.opening.deepest_reached`.
+`theory.opening.{current_endpoint, catalogue_membership}`, `derived.opening.deepest_reached`,
+`rules.tactic.reading.defender_duty_set`, `derived.tactic.overloaded_defender_response_conflict` and
+`rules.tactic.consequence.forced_mate_after_move`.
+The two defender event projections carry no disposition at HEAD; their Inspector bindings add no
+disposition-transfer row.
 Most say so themselves — the
 threat row's reason is literally *"D794 measured threat presence near background; module admission
 waits on Phase 3"* (`evidence-catalog.ts:396`) and the grade row's is *"Awaits learner-module
@@ -713,9 +721,7 @@ not delete its warning**: each row's `limitations` array retains the measured ca
 `:395`), which is where a caveat belongs once a consumer exists.
 
 Named non-module dispositions retained at the original decision boundary include
-`derived.tactic.overloaded_defender_response_conflict`,
-`rules.tactic.consequence.forced_mate_after_move`, `rules.tactic.reading.defender_duty_set`,
-`rules.exchange.predicate.legal_exchange`, `derived.story.title`. Named so that the deletion set is
+`rules.exchange.predicate.legal_exchange` and `derived.story.title`. Named so that the deletion set is
 a decision with a boundary rather than a sweep. The acceptance gate derives the complete retained
 complement from the manifest; this prose list is illustrative, not a second cardinality authority.
 
@@ -904,7 +910,7 @@ declare function assertModuleExactOperationResolutionReceipt(
 
 The compiler cannot run successfully until every source blocker and exact presentation-pair
 dependency is discharged. Its receipt must be set-equal to the generated artifact's
-`exactOperationResolution.requiredProjectionKeys` (**127 now**) and `requiredPairKeys` (**224
+`exactOperationResolution.requiredProjectionKeys` (**132 now**) and `requiredPairKeys` (**229
 now**), with exactly one non-null projection operation and exactly one non-empty occurrence/timing
 intersection for every key and no extras. A module-private
 `WeakSet<ModuleExactOperationResolutionReceipt>` is populated only after those checks complete; the
@@ -931,8 +937,8 @@ plus one typed execution receipt per demanded source family. It is not inferred 
 `guidance.ts:evidencePacket` helper into a universal collector.
 
 `MODULE_EVIDENCE_EXECUTION_PLAN` assigns every distinct compiled projection accepted by a module
-to exactly one callable operation and assembly stage. At the reconciled image this is **127 unique
-compiled projections** serving **224 compiled consumer pairs**; the two declared-awaiting rows have
+to exactly one callable operation and assembly stage. At the reconciled image this is **132 unique
+compiled projections** serving **229 compiled consumer pairs**; the two declared-awaiting rows have
 no operation and cannot masquerade as no-witness. The compiler derives both sets from §1.3 and
 requires exact equality. Every operation declaration carries `{ projection, stage,
 operationSymbol, operation, subjectKind, sourceFamily }`; `operation` must be callable, and the
@@ -1597,7 +1603,7 @@ defect class here ([[D444]]/[[D984]]/[[D1274]]), so each carries its falsifier.
    `EVIDENCE_MANIFEST.bindings`; the test asserts exact set-equality across all three **and exact
    object equality to `module-binding-plan-v1.json` for producer, adapter, timing, roles, sessions,
    forms, answer content, latency and budget**, with
-   **declared `226 + R` / compiled `224 + R` / awaiting `2`** baked only as derived drift
+   **declared `231 + R` / compiled `229 + R` / awaiting `2`** baked only as derived drift
    tripwires. The 67 research eligibility rows and sole research selection policy are
    byte-identical. **RED at HEAD:** no module consumer or binding exists. **Negatives:**
    `pack.authored.classifier@1` is absent from the compiled manifest and present in
@@ -1724,7 +1730,7 @@ deleting one disclosure id from the family×rung product fails;
     possible — the exact defect the return refused to fake.
 19. **A19 — The module operation is closed end to end.** One production-boundary matrix traverses
     authenticated route → `RunService.queryModules` → strict request parser → module compiler and
-    127-projection assembler → reducer → exact pair-keyed presentation → strict sealed-component
+    132-projection assembler → reducer → exact pair-keyed presentation → strict sealed-component
     response parser → occupied seat for every timing arm. It proves one positive reach fixture per
     accepted source family, no-witness versus unavailable/failed/broken-boundary receipts,
     provider demand/cancellation and shared collector invocation, plus a post-commit packet bound
@@ -1736,7 +1742,7 @@ deleting one disclosure id from the family×rung product fails;
     collector or provider call**.
     **RED at HEAD:** the route, service operation and client parser/store do not exist, so no
     module id can reach a seat.
-20. **A20 — Sealed-pool acquisition, derivation, paging and role closure.** The 127-row
+20. **A20 — Sealed-pool acquisition, derivation, paging and role closure.** The 132-row
     requirement population is set-equal to compiled accepted projections. Acceptance remains red
     until every row resolves through one of the five upstream sealed-pool operations and a positive
     fixture emits its declared sealed projection; the module layer itself calls no detector or
@@ -1749,8 +1755,8 @@ deleting one disclosure id from the family×rung product fails;
     author and operator route values; both module and F1 checks consume its output.
 21. **A21 — Successor image is current and set-equal** ([[D2373]]). After
     `evidence-value-authority` lands, regeneration removes exactly the four retired refs, adds
-    exactly the eight successors in §1.3.1, produces 131 unique requirements and the derived
-    `234 + R` / `232 + R` / `2` pair image, and leaves no v1/v2 coexistence. Removing one successor,
+    exactly the eight successors in §1.3.1, produces 136 unique requirements and the derived
+    `239 + R` / `237 + R` / `2` pair image, and leaves no v1/v2 coexistence. Removing one successor,
     retaining one retired ref, hand-editing either sealed JSON file or treating an unavailable
     technique candidate as an awaiting wildcard fails independently. **RED now:** the dependency
     has not landed and the checked artifacts correctly describe the pre-successor manifest.
@@ -1761,7 +1767,7 @@ deleting one disclosure id from the family×rung product fails;
 23. **A23 — Exact-operation successor is total and refuses partial closure** ([[D2508]]).
     `compileModuleExactOperationResolution` accepts no null operation, empty timing intersection,
     unresolved source blocker or missing presentation pair. Its projection keys are set-equal to
-    all 127 execution requirements and its pair keys to all 224 binding requirements at this
+    all 132 execution requirements and its pair keys to all 229 binding requirements at this
     image, with no duplicates or extras. Deleting any one key, supplying one extra, resolving only
     an occurrence or only timing, or substituting an upstream-owned candidate view fails before a
     final F1 row is emitted. **RED now:** dependencies are deliberately unresolved.
@@ -1771,7 +1777,7 @@ deleting one disclosure id from the family×rung product fails;
     and per-request applicability identities in §2.5; eval delta is edge-grained and joins two
     consecutive same-branch points; deflection declares common inputs plus per-alternative inputs,
     with its check arm using the implemented sealed check authority while the recorded-path
-    occurrence source remains blocked; every one of 224 row pointers is a member of the receipt's exact pair-key set;
+    occurrence source remains blocked; every one of 229 row pointers is a member of the receipt's exact pair-key set;
     and forged, copied or serialized resolution receipts fail at final F1 emission. Wrong operation,
     crossed catalogue input, branch-pair eval authority, missing/extra alternative input, unprefixed
     pair key and unsealed receipt fixtures fail independently. **RED now:** the upstream pool
@@ -1805,13 +1811,13 @@ deleting one disclosure id from the family×rung product fails;
 | D5 | Durable per-learner module-delivery records — §2.5's ephemeral receipt deliberately cannot reconstruct pre-/at-commit disclosure, earn novelty/hint/campaign credit or feed history; durable capture is `longitudinal-store`'s declared grain and becomes mandatory before any such consumer | longitudinal-store | the longitudinal-store commit adding a module-delivery projection | |
 | D6 | Per-timing role narrowing — `ModuleTimingDeclaration` carries timing and initiative only, so `compare_coach` takes the narrower role set across both its arms (§1.2). A spectator loses nothing reachable today, but the contract cannot express what it should | learner-modules | the learner-modules amendment commit | |
 | D7 | `HINT_HORIZON_PROJECTION_IDS`, `HINT_DISCLOSURE_PROJECTION_IDS` and the sealed rung compiler — one internal projection per measured family and one learner projection per family/rung, each retaining only its exact evidence inputs, relation polarity, answer image, abstention and scope. The module imports only the literal disclosure set and remains RED while either registry differs from the measured family×rung product | hint-distance | the accepted producer amendment and implementation commit | |
-| D8 | Exact source/view/timing/presentation resolution for the current 127 projections and 224 module pairs. `compileModuleExactOperationResolution` is the sole successor: it remains blocked while any source ABI/assertion or presentation pair is absent and emits one set-equal receipt before final F1 rows exist | module-registration | the implementation commit whose receipt key sets equal both generated `exactOperationResolution` sets | |
+| D8 | Exact source/view/timing/presentation resolution for the current 132 projections and 229 module pairs. `compileModuleExactOperationResolution` is the sole successor: it remains blocked while any source ABI/assertion or presentation pair is absent and emits one set-equal receipt before final F1 rows exist | module-registration | the implementation commit whose receipt key sets equal both generated `exactOperationResolution` sets | |
 
 ## Coverage of the four `awaiting` RFCs' discharges — measured, and short
 
 This RFC is the document four completed implementations wait on. That claim is testable, so it is
 tested here rather than assumed. Coverage is derived from `rfc/contracts/module-binding-plan-v1.json`
-(224 rows, 127 unique projections) against each RFC's literal discharge text; regenerate with
+(229 rows, 132 unique projections) against each RFC's literal discharge text; regenerate with
 `make module-evidence-assembly`.
 
 | upstream discharge | its literal demand | covered | uncovered ids | state |
@@ -1823,7 +1829,7 @@ tested here rather than assumed. Coverage is derived from `rfc/contracts/module-
 | `runtime-opening-identity` D2 | runtime-artifact rights/inventory in the F12 release proof | — | — | out of scope; owned by `planning/platform-alignment/`. Unaffected by this landing either way |
 
 The coverage difference is now empty. This is author-contract coverage, not a false completion:
-all 224 rows remain `blocked_dependencies`, and the four upstream D1 rows close only in the eventual
+all 229 rows remain `blocked_dependencies`, and the four upstream D1 rows close only in the eventual
 binding commit. §2.5.0 is likewise bounded to historical direct-call prose; §2.5.1 onward and the
 query/paging boundary are explicitly normative.
 
@@ -1832,7 +1838,8 @@ query/paging boundary are explicitly normative.
 
 1. **Answered 2026-08-30 — yes, `pawn_safe_square` returns to requested Sight alongside
    `outpost`.** The owner accepted the isolated one-row fork after [[D566]] closed its defective
-   basis. The confirmed §1.3 image is therefore 226 pairs and Sight 23; the D1865 instrument fails
+   basis. The confirmed pre-D921 §1.3 image is therefore 226 pairs and Sight 23; §4.12's five
+   Inspector-only Wave-C rows make the current image 231; the D1865 instrument fails
    if the row disappears or widens another module.
 2. **Answered 2026-08-25 — activate arrows.** [[D1564]] rejects retirement of the learner feature
    and requires the producer→typed relation→module→board path. [[D1867]] distinguishes that ruling
@@ -1864,7 +1871,7 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
   names. Found by attempting to write the declarations, which is the only way it could have been
   found.
 - **The original draft found fifteen projection dispositions that had to transfer with their
-  bindings.** The repaired 226-pair derivation now finds twenty-seven (§2.4), proving why the transfer
+  bindings.** The repaired 231-pair derivation now finds thirty (§2.4), proving why the transfer
   set must be computed from acceptance rather than kept in prose or an implementer's head.
 - **`pack.authored.classifier@1` was added to an accepted RFC by amendment and has never
   existed.** Repo-wide it appears at `rfc/learner-modules.md:766` and nowhere else. The [[D523]]
@@ -1924,6 +1931,11 @@ Proposed — ids assigned at landing; head was **D1444** at drafting (**D1434** 
 
 ## Changelog
 
+- 2026-09-07 ([[D3129]] / [[D921]] literal Wave-C rebase): imported the accepted-parent
+  amendment's exact 26-pair subset. The seven observed named tactics retain Nudge, Review and
+  Inspector homes; defender-duty reading/removal/relocation, strict overload conflict and bounded
+  forced-mate proof gain Inspector-only homes. The regenerated requirements-only image moves from
+  127/224 to 132/229 without making any row executable or widening a proactive module.
 - 2026-09-07 ([[D3066]] declaration-table closure): moved the ten non-floor capability sets into
   the existing author-policy authority, emitted that image once in the binding requirements, and
   made the maintained author contract parse both §1.1 and §2.3(a). Either table drifting from the

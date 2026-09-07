@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "module_binding_requirements",
   "completionClaim": "requirements_only",
-  "population": 224,
+  "population": 229,
   "guidedHint": {
     "status": "owner_blocked",
     "blocker": "D1639",
@@ -97,6 +97,7 @@
       "derived.tactic.interference_observed@1",
       "derived.tactic.line_blocker_clearance_observed@1",
       "derived.tactic.overload_exploitation_observed@1",
+      "derived.tactic.overloaded_defender_response_conflict@1",
       "derived.tactic.promotion_pressure@1",
       "derived.tactic.sequence.defender_consequence@1",
       "derived.tactic.square_clearance_observed@1",
@@ -157,13 +158,17 @@
       "rules.structural.reading.piece_distance@1",
       "rules.structural.reading.piece_reach_count@1",
       "rules.structural.reading.space@1",
+      "rules.tactic.consequence.forced_mate_after_move@1",
       "rules.tactic.consequence.mate_in_one@1",
       "rules.tactic.consequence.reply_breadth@1",
       "rules.tactic.consequence.threat@1",
       "rules.tactic.event.check@1",
+      "rules.tactic.event.defender_duty_relocated@1",
+      "rules.tactic.event.defender_removed@1",
       "rules.tactic.event.double_attack@1",
       "rules.tactic.event.loose_piece@1",
       "rules.tactic.reading.back_rank@1",
+      "rules.tactic.reading.defender_duty_set@1",
       "rules.tactic.reading.discovered_latency@1",
       "rules.tactic.reading.loose_piece@1",
       "rules.tactic.reading.ray_classification@1",
@@ -218,6 +223,7 @@
       "module.full_inspector@1\u0000derived.tactic.interference_observed@1",
       "module.full_inspector@1\u0000derived.tactic.line_blocker_clearance_observed@1",
       "module.full_inspector@1\u0000derived.tactic.overload_exploitation_observed@1",
+      "module.full_inspector@1\u0000derived.tactic.overloaded_defender_response_conflict@1",
       "module.full_inspector@1\u0000derived.tactic.promotion_pressure@1",
       "module.full_inspector@1\u0000derived.tactic.sequence.defender_consequence@1",
       "module.full_inspector@1\u0000derived.tactic.square_clearance_observed@1",
@@ -247,10 +253,14 @@
       "module.full_inspector@1\u0000rules.square.reading.control@1",
       "module.full_inspector@1\u0000rules.structural.reading.pawn_connectivity@1",
       "module.full_inspector@1\u0000rules.structural.reading.space@1",
+      "module.full_inspector@1\u0000rules.tactic.consequence.forced_mate_after_move@1",
       "module.full_inspector@1\u0000rules.tactic.consequence.mate_in_one@1",
       "module.full_inspector@1\u0000rules.tactic.consequence.reply_breadth@1",
       "module.full_inspector@1\u0000rules.tactic.consequence.threat@1",
+      "module.full_inspector@1\u0000rules.tactic.event.defender_duty_relocated@1",
+      "module.full_inspector@1\u0000rules.tactic.event.defender_removed@1",
       "module.full_inspector@1\u0000rules.tactic.reading.back_rank@1",
+      "module.full_inspector@1\u0000rules.tactic.reading.defender_duty_set@1",
       "module.full_inspector@1\u0000rules.tactic.reading.discovered_latency@1",
       "module.full_inspector@1\u0000rules.tactic.reading.loose_piece@1",
       "module.full_inspector@1\u0000rules.tactic.reading.ray_classification@1",
@@ -3549,6 +3559,110 @@
         "version": 1
       },
       "projection": {
+        "id": "derived.tactic.overloaded_defender_response_conflict",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "derived.tactic.overloaded_defender_response_conflict",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000derived.tactic.overloaded_defender_response_conflict@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "panel"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 1
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000derived.tactic.overloaded_defender_response_conflict@1",
+        "requiredForms": [
+          "panel"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "derived.tactic",
+        "version": 1
+      },
+      "projection": {
         "id": "derived.tactic.promotion_pressure",
         "version": 1
       },
@@ -6829,6 +6943,110 @@
         "version": 1
       },
       "projection": {
+        "id": "rules.tactic.consequence.forced_mate_after_move",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "rules.tactic.consequence.forced_mate_after_move",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000rules.tactic.consequence.forced_mate_after_move@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "panel"
+      ],
+      "answerContent": [
+        "candidate_moves"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 1
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000rules.tactic.consequence.forced_mate_after_move@1",
+        "requiredForms": [
+          "panel"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "projection": {
         "id": "rules.tactic.consequence.mate_in_one",
         "version": 1
       },
@@ -7141,6 +7359,222 @@
         "version": 1
       },
       "projection": {
+        "id": "rules.tactic.event.defender_duty_relocated",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "rules.tactic.event.defender_duty_relocated",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000rules.tactic.event.defender_duty_relocated@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "panel",
+        "lit_squares",
+        "arrows"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 3
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000rules.tactic.event.defender_duty_relocated@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "projection": {
+        "id": "rules.tactic.event.defender_removed",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_edge",
+            "subjectKind": "edge",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "rules.tactic.event.defender_removed",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000rules.tactic.event.defender_removed@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "panel",
+        "lit_squares",
+        "arrows"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 3
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000rules.tactic.event.defender_removed@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "projection": {
         "id": "rules.tactic.reading.back_rank",
         "version": 1
       },
@@ -7241,6 +7675,114 @@
           "lit_squares",
           "arrows",
           "piece_halo"
+        ],
+        "reusableBaseAdapters": [],
+        "componentFormCapabilityKnown": []
+      }
+    },
+    {
+      "producer": {
+        "id": "rules.tactic",
+        "version": 1
+      },
+      "projection": {
+        "id": "rules.tactic.reading.defender_duty_set",
+        "version": 1
+      },
+      "consumer": {
+        "id": "module.full_inspector",
+        "version": 1
+      },
+      "occurrenceRequirement": {
+        "byMoment": [
+          {
+            "timing": "review",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_position",
+            "subjectKind": "position",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          },
+          {
+            "timing": "analysis",
+            "source": "recorded_semantic_path@1",
+            "view": "recorded_position",
+            "subjectKind": "position",
+            "selector": {
+              "kind": "recorded_occurrence_identity",
+              "suppliedBy": "sealed_run_path"
+            }
+          }
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "projection": {
+            "id": "rules.tactic.reading.defender_duty_set",
+            "version": 1
+          }
+        },
+        "status": "awaiting_upstream_exact_occurrence_operation"
+      },
+      "timingRequirement": {
+        "moduleRequested": [
+          "review",
+          "analysis"
+        ],
+        "sourceCeiling": [
+          "review",
+          "analysis"
+        ],
+        "exactProjectionOperation": null,
+        "resolutionOwner": {
+          "owner": "module-registration",
+          "operation": "compileModuleExactOperationResolution(input)",
+          "receipt": "ModuleExactOperationResolutionReceipt",
+          "status": "blocked_until_all_source_dependencies_land",
+          "pair": "module.full_inspector@1\u0000rules.tactic.reading.defender_duty_set@1"
+        },
+        "status": "awaiting_upstream_exact_operation"
+      },
+      "roles": [
+        "learner",
+        "host"
+      ],
+      "sessions": [
+        "position",
+        "pack",
+        "imported",
+        "stream",
+        "campaign"
+      ],
+      "forms": [
+        "panel",
+        "lit_squares",
+        "arrows"
+      ],
+      "answerContent": [
+        "fact"
+      ],
+      "latency": {
+        "mode": "sync",
+        "maxMs": 50
+      },
+      "budget": {
+        "maxFacts": 20,
+        "maxForms": 3
+      },
+      "status": "blocked_dependencies",
+      "presentationRequirement": {
+        "status": "awaiting_exact_module_pair_adapter",
+        "requiredPair": "module.full_inspector@1\u0000rules.tactic.reading.defender_duty_set@1",
+        "requiredForms": [
+          "panel",
+          "lit_squares",
+          "arrows"
         ],
         "reusableBaseAdapters": [],
         "componentFormCapabilityKnown": []
@@ -25379,5 +25921,5 @@
       }
     }
   ],
-  "digest": "sha256:3cf518ba5c2ad5738fc1eca797413d83659ae301376b50c4d230189aabb3bd3b"
+  "digest": "sha256:11f516fbb0001266d959d454dd255c581b688ddfe65bc807a28ecc444f791124"
 }

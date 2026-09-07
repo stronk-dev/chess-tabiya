@@ -72,19 +72,21 @@ that have landed since the accepted parent table was written (**completed 2026-0
 - restore the owner-ruled `outpost` row now that [[D566]] is fixed; and
 - activate both rows that awaited the now-shipped `derived.grade.move_quality@1`.
 
-The reconciled non-hint implementation image is 226 declared / 224 compiled / 2 exact-awaiting:
-Explorer population summary and authored classifier. It includes 21 observed-tactic pairs, runtime
+The reconciled non-hint implementation image is 231 declared / 229 compiled / 2 exact-awaiting
+after the [[D921]] Wave-C amendment: every shipped Wave-C primitive reaches Full Inspector, while
+only the seven observed named tactics additionally reach Nudge and Review. The two exact-awaiting
+rows are Explorer population summary and authored classifier. It includes the 26-pair Wave-C subset, runtime
 opening identity, owner-ruled `outpost`, owner-ruled `pawn_safe_square` and both grade uses.
 `make module-evidence-assembly` binds the RFC text to this source-derived image.
 
 The repeat-review production-join returns [[D1863]]–[[D1869]] were author-amended on 2026-08-30:
 the query carries a typed untrusted requested-assistance receipt and the server re-clamps it;
-presentation is exact pair/form keyed; a 127-projection execution plan owns assembly and typed
+presentation is exact pair/form keyed; a 132-projection execution plan owns assembly and typed
 source receipts; revealing pre-/at-commit output carries a narrowly non-persisted disclosure
 receipt; the redundant `assistance.arrows` evidence consumer is retired while its Advanced clamp
 stays; every module publishes literal answer capabilities; and square/UCI/checkpoint/rung tokens
 are validated against authoritative state before producer work. The disposition transfer is now a
-source-derived 27-member set ([[D2044]]), not the stale 16-row prose list. [[D3065]] also closes
+source-derived 30-member set ([[D2044]]), not the stale 16-row prose list. [[D3065]] also closes
 the inherited-discharge coverage gap without making any binding executable.
 
 - Land the value/provider and hint-distance dependencies, then resolve the exact operation and

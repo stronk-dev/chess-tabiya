@@ -95,3 +95,14 @@ remains the next authority gate.
 - `make module-registration-tenth-fresh-review` reproduces 3/3. Exact review:
   `tenth-fresh-independent-buildability-review-2026-09-04.md`.
 - A bounded tenth author repair and another fresh review gate acceptance and implementation.
+
+## 2026-09-07 — D921 Wave-C literal amendment authored
+
+The false D921↔Review dependency cycle is removed. Twelve shipped Wave-C projections now have an
+exact 26-pair module contract: all twelve to Full Inspector, and the seven observed named tactics
+additionally to Nudge and Review. The five lower-level reading/event/predicate facts remain outside
+proactive modules until a typed disclosure contract can prevent candidate leakage.
+
+The requirements-only module image regenerates from 127/224 to 132/229. Every row remains
+dependency-blocked. `make wave-c-module-amendment` passes the existing assembly and register author
+contracts plus five exact boundary controls. Fresh review still gates acceptance and D921 closeout.

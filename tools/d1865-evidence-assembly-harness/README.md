@@ -2,7 +2,7 @@
 
 Disposable research instrument for D1865. It does not implement learner modules or add a
 production collector. It expands the nine non-empty, non-Guided-Hint module declarations into
-the reconciled 226 declared consumer/projection pairs (224 compiled plus two exact-awaiting), joins
+the reconciled 231 declared consumer/projection pairs (229 compiled plus two exact-awaiting), joins
 every compiled projection to its registered producer, and
 classifies the producer into the execution stage that must supply it. It also pins the seven by
 three observed-semantic-tactic consumer matrix and rejects authoring-only opening identity.
