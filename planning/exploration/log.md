@@ -18058,3 +18058,45 @@ verdict. D3095 keeps the performance tier and the 100/200 ms budgets intact, but
 five-operation samples as per-operation batch means, resetting storage state before every operation. This
 matches the amortization already used by the opening-catalogue microbenchmark: sustained regression still
 fails, while one shared-runner scheduler or GC pause does not. No retry was added and no threshold moved.
+
+### 2026-09-07 — Feedback owner-use tripwire stops joining unrelated log entries
+
+`make feedback-delivery-measurement` initially reported criterion 23 tripped. Re-derivation found
+no dated record containing both owner use and a claim-bearing pack: the harness concatenated all
+post-Stage-1 entries, matched generic “played” in semantic research, then matched a pack id in a
+different entry. D3096 evaluates each dated entry independently and retains a crossed-entry negative
+plus a same-entry positive. The current tripwire is green. The same pass corrected the Stage-2 work
+order: D1005 released bindings as policy, but D1007/D1008 later proved the purported 43 pure joins
+unsafe, so no automatic content edit resumes before `claim-semantic-anchors` lands.
+
+### 2026-09-07 — Noctie is indexed as a complete play-to-return competitor
+
+The current first-party Noctie surface was re-read as a workflow rather than a bot footnote. It
+joins adaptive play, optional human-perspective grading, finished-game Review, mistake-derived
+Smart Decks, a spaced queue, opening books, themes/scenarios and rank/progress. The important
+competitive primitive is automatic continuity: a normal game becomes a small organized reason to
+return without exposing engine/model settings. The vendor's own 2024 retrospective supplies the
+negative control—learners were overwhelmed by generated exercise volume before bounded decks and a
+smart queue were introduced.
+
+[[D3097]] is researched in `design/research/teardown-noctie-desk.md`; source R65 and the
+capability-first watch now carry the current evidence. A previously missing capability,
+`mistake_derived_return_decks`, makes the exact Tabiya gap explicit: an admitted Review moment must
+become a source-bound, deduplicated, pack-compatible consequence entry before scheduling. The
+current receipt validates 23 products, 20 capabilities and 31 evidence rows. This research does not
+authorize a generic auto-puzzle feed or claim Noctie's semantics are deeper: its live roadmap still
+lists pattern explanations, Review analysis and flashcard quality/deduplication as unfinished.
+
+### 2026-09-07 — The feedback semantic false-positive class grows from one to three
+
+The newly named `make feedback-binding-audit` target failed on its first maintained run. The
+candidate population remains 43, but three rows now pass the structural validator rather than one.
+The original false join survives (“the one common mate” → DTM 1); two Lucena claims also normalize
+“four ranks” and “the fourth” to the unrelated root count of four winning moves. All three have the
+right record kind, reachable position and matching number while denoting a different predicate,
+unit or referent.
+
+[[D3098]] updates the permanent negative to assert the exact three-row image and gives this
+whole-corpus research target an explicit 120-second budget. D1007/D1008, the semantic-anchor dossier
+and the Stage-2 work order now carry the refreshed count. The decision does not move: zero automatic
+bindings are lawful before proposition-first rendering lands.

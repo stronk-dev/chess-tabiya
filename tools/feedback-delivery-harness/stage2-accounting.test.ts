@@ -107,6 +107,14 @@ function appendedSinceBaseline(path: string): string {
   return current.slice(baseline.length);
 }
 
+function criterion23TripEntries(logs: readonly string[], claimBearingIds: readonly string[]): readonly string[] {
+  const entries = logs.flatMap((log) => log.split(/(?=^##+ \d{4}-\d{2}-\d{2}\b)/gmu));
+  return entries.filter((entry) => {
+    const recordsUse = /\b(?:play session|owner run|owner walkthrough)\b/iu.test(entry);
+    return recordsUse && claimBearingIds.some((id) => entry.includes(id));
+  });
+}
+
 describe("feedback-delivery Stage 2 accounting instruments", () => {
   it("names a refusal or supplying work for every withheld claim and measures the explorer-rationale split", () => {
     const result = accounting();
@@ -122,9 +130,20 @@ describe("feedback-delivery Stage 2 accounting instruments", () => {
       const pack = JSON.parse(readFileSync(file, "utf8")) as DrillPackDefinition;
       return (pack.feedbackClaims?.length ?? 0) > 0 ? [pack.id] : [];
     });
-    const appended = ["planning/exploration/log.md", "planning/content-era/log.md"].map(appendedSinceBaseline).join("\n");
-    const useLanguage = /(?:play(?:ed| session)|walkthrough|owner run)/iu.test(appended);
-    const namesClaimPack = claimBearingIds.some((id) => appended.includes(id));
-    expect(useLanguage && namesClaimPack, "criterion 23 tripped: escalate to the owner; do not fix in code").toBe(false);
+    const appended = ["planning/exploration/log.md", "planning/content-era/log.md"].map(appendedSinceBaseline);
+    expect(
+      criterion23TripEntries(appended, claimBearingIds),
+      "criterion 23 tripped: escalate to the owner; do not fix in code",
+    ).toEqual([]);
+  });
+
+  it("keeps owner use and pack identity on the same dated log record", () => {
+    const packId = "claim-pack";
+    expect(criterion23TripEntries([
+      "## 2026-08-24 — research\nPlayed alternatives were measured.\n## 2026-08-25 — corpus\nclaim-pack was indexed.",
+    ], [packId])).toEqual([]);
+    expect(criterion23TripEntries([
+      "## 2026-08-24 — owner walkthrough\nAn owner walkthrough used claim-pack.",
+    ], [packId])).toHaveLength(1);
   });
 });

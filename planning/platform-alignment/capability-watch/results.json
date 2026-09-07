@@ -1,11 +1,11 @@
 {
   "schema": "tabiya.capability-watch-summary.v1",
-  "asOf": "2026-08-20",
+  "asOf": "2026-09-07",
   "sourceMatrixRows": 62,
-  "canonicalProducts": 22,
-  "representedProducts": 22,
-  "capabilities": 19,
-  "evidenceRows": 29,
+  "canonicalProducts": 23,
+  "representedProducts": 23,
+  "capabilities": 20,
+  "evidenceRows": 31,
   "coveredMapFamilies": [
     "Bot tournaments/social events",
     "Campaign and fun progression",
@@ -32,22 +32,22 @@
     "Semantic move understanding"
   ],
   "postureCounts": {
-    "transform": 22,
+    "transform": 24,
     "defer": 2,
     "research": 3,
     "adopt": 2
   },
   "tabiyaStatusCounts": {
-    "mechanical": 13,
+    "mechanical": 14,
     "absent": 4,
-    "claimed": 10,
+    "claimed": 11,
     "proven": 2
   },
   "missingSignals": {
     "loveNotChecked": 0,
     "loveNotFound": 8,
     "hateNotChecked": 0,
-    "hateNotFound": 12
+    "hateNotFound": 13
   },
   "routeCounts": {
     "C7": 1,
@@ -57,10 +57,10 @@
     "F3": 1,
     "F4": 4,
     "F5": 5,
-    "F6": 6,
-    "F7": 5,
-    "F8": 1,
-    "F9": 6,
+    "F6": 7,
+    "F7": 6,
+    "F8": 2,
+    "F9": 7,
     "K9": 1,
     "O10": 1,
     "O11": 2,
@@ -70,12 +70,12 @@
     "O4": 5,
     "O5": 4,
     "O6": 3,
-    "O7": 6,
-    "O8": 3,
+    "O7": 7,
+    "O8": 4,
     "O9": 8,
-    "R11": 4,
+    "R11": 5,
     "R12": 8,
-    "R13": 5,
+    "R13": 6,
     "R14": 1,
     "R15": 1,
     "R16": 1,
@@ -83,7 +83,7 @@
     "R3": 5,
     "R4": 1,
     "R5": 2,
-    "R7": 6,
+    "R7": 7,
     "R8": 5
   },
   "controls": {

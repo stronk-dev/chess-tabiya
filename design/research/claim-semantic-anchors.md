@@ -7,10 +7,11 @@ and evidence provenance before authored prose may be called machine-backed?
 and learner modules that render authored claims.
 
 **Verdict:** the current contract proves where a token came from, not what proposition the token
-expresses. Its only automatically discovered validator-green join binds the cardinal *one* in
-“the one common mate” to a later position's DTM of 1, even though the word modifies *mate* rather
-than distance-to-mate `[V]` (`tools/feedback-binding-wave/candidate-audit.test.ts:114-141`,
-`design/BACKLOG.md:D1008`). A selector, digest, record reference, or provenance chain cannot repair
+expresses. The refreshed 43-row audit finds three validator-green joins and all three bind a
+matching number to the wrong meaning: *one* in “the one common mate” becomes DTM 1; *four* ranks of
+checking distance and *fourth* rank become the count of tablebase-winning moves at the root `[V]`
+(`tools/feedback-binding-wave/candidate-audit.test.ts`, `design/BACKLOG.md:D1008,D3098`). A
+selector, digest, record reference, or provenance chain cannot repair
 this class because none identifies the sentence's subject-predicate-object relation. Automatic
 binding must begin with a typed proposition and render the machine-backed clause through a
 registered deterministic renderer. Existing arbitrary prose may migrate automatically only when
@@ -176,6 +177,7 @@ or the follow-up must claim it explicitly; it may not be a silent optional-field
 | Fixture | Required result |
 |---|---|
 | right value, wrong predicate: “the one common mate” → DTM 1 | refuse |
+| right value, wrong unit/referent: four ranks / fourth rank → four winning moves | refuse |
 | right predicate/value, wrong FEN or population | refuse |
 | right record kind, unsupported selector or qualifier | refuse |
 | right proposition, arbitrary unregistered paraphrase | refuse automatic binding; explicit reviewed author path only |

@@ -1,6 +1,6 @@
 # Feedback delivery — Stage 1 starting measurement
 
-Measured: 2026-08-21 recovery run (deterministic event timestamps remain 2026-08-17). Predicate: the `admittedFeedbackClaimIds` and `projectAuthoredFeedback` implementation landed at `a64e6c5`.
+Baseline measured 2026-08-21 (deterministic event timestamps remain 2026-08-17); refreshed 2026-09-07 against the current semantic projection. Predicate: the `admittedFeedbackClaimIds` and `projectAuthoredFeedback` implementation landed at `a64e6c5`.
 
 - Claim-bearing packs: 50.
 - Claims: 98/196 admitted; 26735/61531 characters admitted.
@@ -18,10 +18,10 @@ Measured: 2026-08-21 recovery run (deterministic event timestamps remain 2026-08
 ## Same-tree authored-fork strip measurement
 
 - Fork sets: 44/44 measured (skipped 0); column plies past forks: 473.
-- Unfiltered candidates: 4029; admitted after CR1: 3463 (86.0%); entries per ply: 7.32.
+- Unfiltered candidates: 4026; admitted after CR1: 3460 (85.9%); entries per ply: 7.32.
 - Plies with at least one admitted entry: 460/473 (97.3%).
-- Admitted entries per fork set: median 72; mean 78.7; max 344.
-- Lift = (played-move firing rate) / (within-position mean share of quiet alternatives that also fire): 1.017x; quiet-alternative mean 95.7%.
+- Admitted entries per fork set: median 72; mean 78.6; max 344.
+- Lift = (played-move firing rate) / (within-position mean share of quiet alternatives that also fire): 1.016x; quiet-alternative mean 95.7%.
 
 ## Preserved false start
 

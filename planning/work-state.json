@@ -8227,7 +8227,7 @@
       "id": "D1007",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e3201358efa7b4a9e169f7d6a6a5036f12fb8aee3b0af3d8527aabaa342d56fa",
+      "sourceDigest": "sha256:0b182208e39e6da3d684a1877c573063edb558a60371798cf377eca2408efa7c",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:claim-semantic-anchors.md"
@@ -8236,7 +8236,7 @@
       "id": "D1008",
       "state": "blocked",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8538fc26b708d45c3d338e2ad704e9a7ba509d3a663e4f6cc9bae076fe57b5a8",
+      "sourceDigest": "sha256:121a796d15e76a42b91580075db5e5933a7ee3cd219a22a1558b05817afd1e78",
       "uxItems": [],
       "owner": "evidence-foundation",
       "blocker": "rfc:claim-semantic-anchors.md"
@@ -25231,6 +25231,33 @@
       "sourceDigest": "sha256:ae0a1638a1d613611e38c777f6fc3f4ebdd4679e002c902d5a4b90869f6d11cd",
       "uxItems": [],
       "evidence": "apps/server/src/latency-performance.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3096",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:de013a7ccbdb808825a9ceff634747596be5d414134818c9e1cd0f4d112e296f",
+      "uxItems": [],
+      "evidence": "tools/feedback-delivery-harness/stage2-accounting.test.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3097",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:4ae207df9d99c89f6f9ee559f04b87b03a5f9344a4804f93a27b8c700f492c8c",
+      "uxItems": [],
+      "evidence": "design/research/teardown-noctie-desk.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3098",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2586eb343fcc7ad0bff809ac4ca4f0fb57762a1c529860684b225acb71e16ea1",
+      "uxItems": [],
+      "evidence": "tools/feedback-binding-wave/candidate-audit.test.ts",
       "evidenceKind": "path"
     }
   ]

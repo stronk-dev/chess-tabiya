@@ -1,6 +1,6 @@
 {
   "schema": "tabiya.capability-watch.v1",
-  "asOf": "2026-08-20",
+  "asOf": "2026-09-07",
   "sourcePopulation": {
     "matrix": "design/research/competitor-matrix.csv",
     "matrixRows": 62,
@@ -24,6 +24,7 @@
     { "id": "dr-wolf", "name": "Dr. Wolf", "url": "https://apps.apple.com/us/app/learn-chess-with-dr-wolf/id1353041020", "aliases": [] },
     { "id": "en-croissant", "name": "En Croissant", "url": "https://encroissant.org/", "aliases": [] },
     { "id": "lichess", "name": "Lichess", "url": "https://lichess.org/", "aliases": [] },
+    { "id": "noctie", "name": "Noctie", "url": "https://noctie.ai/", "aliases": ["Noctie.ai"] },
     { "id": "qchess-net", "name": "Qchess.net", "url": "https://www.reddit.com/r/chess/comments/1klwe28", "aliases": ["Qchess"] },
     { "id": "quackmate", "name": "Quackmate", "url": "https://apps.apple.com/us/app/quackmate/id6789064676", "aliases": [] },
     { "id": "repcheck-rookhub", "name": "RepCheck / RookHub", "url": "https://chromewebstore.google.com/detail/repcheck-%E2%80%94-opening-repert/mhddbldcaancdahlochjanpkkboaccpn", "aliases": ["RookHub", "RepCheck"] },
@@ -52,6 +53,16 @@
           "doesWell": "Turns a learner's own public games into a mirror-match novelty.", "limitation": "Vendor mechanism and sample/calibration contract are undisclosed.",
           "posture": "defer", "transformation": "Consider an opt-in personal-policy adapter only after transparent habit metrics and privacy controls exist.", "doNotCopy": "Do not make personal-history ingestion mandatory or call similarity coaching truth.",
           "producers": ["personal_game_corpus", "human_policy"], "consumer": "bot_policy", "tabiyaStatus": "absent", "route": ["R11", "R12", "O8", "O9"]
+        },
+        {
+          "productId": "noctie", "checkedOn": "2026-09-07", "label": "V", "source": "https://noctie.ai/chess-ai/", "handsOn": "none",
+          "love": { "state": "reported", "source": "https://noctie.ai/newsletter/everything-we-launched-in-2024/", "summary": "The vendor reports that mistake-derived flashcards became a popular part of its joined play-and-return loop." },
+          "hate": { "state": "not_found", "source": null, "summary": null },
+          "doesWell": "Makes one adaptive opponent the common execution surface for full games, chosen openings, arbitrary scenarios and lesson checks, while presenting human-shaped move choice and timing as the product identity.",
+          "limitation": "Training on human games and vendor rating labels do not independently establish per-band calibration, multi-ply coherence or personality; the public methodology is not reproducible.",
+          "posture": "transform", "transformation": "Keep base policy, strength, repertoire, phase behavior, clock rhythm, error character and memory as separately versioned and measured layers, then reuse the same opponent through play, Review and drills.",
+          "doNotCopy": "Do not treat a billion-game claim, a rank label or pleasant feel as proof of human-likeness.",
+          "producers": ["human_policy", "opening_identity", "clock_history", "engine_guard", "semantic_events"], "consumer": "bot_policy", "tabiyaStatus": "mechanical", "route": ["R11", "O8", "F8"]
         }
       ]
     },
@@ -124,6 +135,23 @@
           "doesWell": "Separates learner and bot takeback, accepts a replacement or resampled reply, retains abandoned continuations as branches and exports the main line plus variations.", "limitation": "The workflow still evaluates legal moves before commitment in stronger support modes, and no independent review of the new branch behavior was found.",
           "posture": "transform", "transformation": "Retain explicit attempt semantics, N-way consequence comparison and grounded re-entry while adopting the low-friction branch controls and theory handoff.", "doNotCopy": "Do not claim branch preservation itself as unique or let a retained branch become an engine-review timeline.",
           "producers": ["run_graph", "opening_identity", "theory_index", "bot_policy", "signed_evidence"], "consumer": "review_map", "tabiyaStatus": "mechanical", "route": ["R3", "R7", "R8", "O7", "F6", "F7"]
+        }
+      ]
+    },
+    {
+      "id": "mistake_derived_return_decks",
+      "learnerValue": "A finished game yields a small, organized set of its most useful replayable moments and brings them back at an appropriate time.",
+      "mapFamilies": ["Review Map", "Return and longitudinal coaching", "Drill/rehearsal modes"],
+      "evidence": [
+        {
+          "productId": "noctie", "checkedOn": "2026-09-07", "label": "V", "source": "https://noctie.ai/puzzles-from-your-games/", "handsOn": "none",
+          "love": { "state": "reported", "source": "https://noctie.ai/newsletter/everything-we-launched-in-2024/", "summary": "The vendor calls automatic mistake flashcards popular and describes them as a recurring reason to return." },
+          "hate": { "state": "reported", "source": "https://noctie.ai/newsletter/everything-we-launched-in-2024/", "summary": "The vendor reports that learners were overwhelmed by the number of unsolved exercises before bounded Smart Decks and a Smart Queue were introduced." },
+          "doesWell": "Turns Noctie and imported Chess.com/Lichess games into categorized mistake decks, mixes selected decks in one spaced queue and exposes progress without requiring manual pack authoring.",
+          "limitation": "The public surface does not disclose selection equations, deduplication, exact provenance, solution depth or whether structural/strategic claims are machine-validated; richer pattern explanations remain roadmap work.",
+          "posture": "transform", "transformation": "Compile only evidence-backed Review moments into bounded return-deck entries that retain the source game, exact position, reason, producer receipts and a branch/consequence objective; deduplicate and schedule those entries, and abstain when evidence cannot support a drill.",
+          "doNotCopy": "Do not emit an unlimited engine-loss puzzle feed, call generic centipawn loss instructive, or let an LLM invent the lesson or solution.",
+          "producers": ["review_moments", "move_grade", "semantic_events", "opening_identity", "run_graph", "return_scheduler"], "consumer": "mistake_return_decks", "tabiyaStatus": "claimed", "route": ["R7", "R13", "O7", "F6", "F7", "F9"]
         }
       ]
     },

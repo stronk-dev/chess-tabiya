@@ -1,18 +1,18 @@
 # Competitors collapse into capabilities; love/hate evidence is the real gap
 
-**Question:** D554–D556 — how can a fast-moving app field improve the roadmap without making every
+**Question:** D554–D556 and D3097 — how can a fast-moving app field improve the roadmap without making every
 clone, alias or launch post a new feature request?
 
 **Verdict:** use the checked capability-first register. The current run reduces a 62-product matrix to
-19 learner capabilities represented by 22 canonical products and 29 evidence rows. It covers 17 of
+20 learner capabilities represented by 23 canonical products and 31 evidence rows. It covers 17 of
 21 families in the 1.0 map while keeping product identity, love/hate evidence, transformation,
 producer/consumer dependencies and route queryable. `[V]`
 `design/research/capability-watch.json`;
 `planning/platform-alignment/capability-watch/results.json`.
 
 The targeted desk/forum pass is complete; hands-on and participant work is not. **No love/hate field
-remains `not_checked`.** Thirty-eight of 58 cells now contain reported/observed evidence; targeted
-search found no feature-specific independent signal for 20 cells (8 love, 12 hate), which remain
+remains `not_checked`.** Forty-one of 62 cells now contain reported/observed evidence; targeted
+search found no feature-specific independent signal for 21 cells (8 love, 13 hate), which remain
 explicit `not_found` rather than being counted as approval. `[V]` same summary;
 `design/research/competitor-love-hate-sweep.md`.
 
@@ -22,7 +22,9 @@ The input is the living 62-product competitor matrix (63 before the duplicate Ch
 merged on 2026-09-07) plus the integrated-platform synthesis.
 The representative register includes every product the owner named on 2026-08-20: Chessiverse,
 Beacon, Quackmate, ChessLab at `trychesslab.com`, ChessLabHQ at `chesslabhq.com`, Qchess.net and RepCheck/RookHub, plus Chess.com,
-Lichess, Chessable, an open workbench and adjacent specialist products. `[V]`
+Lichess, Chessable, Noctie, an open workbench and adjacent specialist products. Noctie's
+2026-09-07 refresh adds the previously missing capability joining a finished Review moment to a
+bounded scheduled return deck. `[V]`
 `planning/platform-alignment/capability-watch/plan.md`; register `products`.
 
 Canonical identity is deliberate. The source matrix now contains one canonical Chessiverse row;
@@ -40,18 +42,19 @@ the checker. `[V]` `tools/capability-watch-harness/check.mjs`.
 
 | Result | Count | Meaning |
 |---|---:|---|
-| transform | 22/29 | Keep the learner value, change the mechanism to preserve commitment, grounding, branches and self-hosting |
-| adopt | 2/29 | CET's focused instant outcome loop; En Croissant's open/local workbench expectation |
-| defer | 2/29 | personal clone opponent and scan-any-position until privacy/import/rights foundations exist |
-| research | 3/29 | bot events, human play and Qchess time feedback need workflow/hands-on evidence |
-| current Tabiya proven | 2/29 | narrow drill/human-play foundations only |
-| current Tabiya mechanical | 13/29 | primitives exist but the appreciated learner outcome is not integrated |
-| current Tabiya claimed/absent | 14/29 | design promise or no implementation |
+| transform | 24/31 | Keep the learner value, change the mechanism to preserve commitment, grounding, branches and self-hosting |
+| adopt | 2/31 | CET's focused instant outcome loop; En Croissant's open/local workbench expectation |
+| defer | 2/31 | personal clone opponent and scan-any-position until privacy/import/rights foundations exist |
+| research | 3/31 | bot events, human play and Qchess time feedback need workflow/hands-on evidence |
+| current Tabiya proven | 2/31 | narrow drill/human-play foundations only |
+| current Tabiya mechanical | 14/31 | primitives exist but the appreciated learner outcome is not integrated |
+| current Tabiya claimed/absent | 15/31 | design promise or no implementation |
 
 `[V]` summary result.
 
 This is the integration thesis in measured form. The majority is not missing backend machinery;
-it is a competitor-valued workflow sitting above partial Tabiya primitives. Guided Play needs the
+it is a competitor-valued workflow sitting above partial Tabiya primitives. Noctie's mistake decks
+need the Review-moment→exercise→schedule join; Guided Play needs the
 shared selector/modules, Beacon/Chessigma need Review Map re-entry, Chessiverse bots need composed
 policy layers, Sensei needs grounded aggregates, Quackmate needs a signed recap/profile packet,
 ChessLabHQ needs theory/metric provenance, and Qchess's thinking drill needs a non-grading scaffold.

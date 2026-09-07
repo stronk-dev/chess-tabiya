@@ -152,4 +152,18 @@ Every entry: URL, Use, Caveat. Evidence labels per `design/research/README.md`
 - Caveat: `[P]` anecdotal public reports, not prevalence or current-product proof. Chess.com
   reliability reports are from 2022–2023 and explicitly require current hands-on recheck.
 
-*(next: R65)*
+### R65 — Noctie joined play, Review, mistake-deck and return loop
+
+- URLs: https://noctie.ai/docs/blind-mode-guide/ · https://noctie.ai/puzzles-from-your-games/ ·
+  https://noctie.ai/newsletter/everything-we-launched-in-2024/ ·
+  https://noctie.ai/newsletter/improved-opening-training-in-noctie/ ·
+  https://noctie.ai/instant-move-feedback/ · https://noctie.ai/chess-ai/ ·
+  https://noctie.ai/roadmap/
+- Use: current first-party capability boundary for the human-policy opponent, optional live grading,
+  finished-game Review, mistake-derived Smart Decks/queue, opening-book play, themes/scenarios,
+  progression and the vendor's disclosed Review/flashcard residuals.
+- Caveat: `[V]` for current vendor-documented product shape and vendor-reported overload/popularity;
+  no subscription flow was driven, effectiveness and human-likeness are not independently validated,
+  and the public sources do not expose reproducible grade/selection equations.
+
+*(next: R66)*

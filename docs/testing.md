@@ -51,6 +51,14 @@ Make targets and through `make verify-rfc-evidence` for an intentional whole-por
 Changes to an RFC run its named target before `make verify-governance`; release CI stays valid on a
 normal shallow checkout and never depends on repository history solely for a draft review.
 
+Long-running research and migration instruments also receive named Make targets instead of requiring
+contributors to reconstruct environment-prefixed commands. For example,
+`make feedback-delivery-measurement` re-runs the accepted Feedback Stage 2 population and tripwire
+instrument, while `make feedback-binding-audit` retains the false semantic join that blocks blind
+content edits. `make capability-watch-check` validates and regenerates the capability-first
+competitor receipt after a product or capability is added. None is a release gate: their job is to
+measure and commission product or content work.
+
 Content is shipped product data and therefore still receives schema, provenance, compatibility and
 integration validation. Its exact prose is not pinned unless the wording itself is a declared public
 contract. Browser tests assert semantic labels and effects such as an `Alternative move` item being

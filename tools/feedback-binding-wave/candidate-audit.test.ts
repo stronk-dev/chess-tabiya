@@ -114,7 +114,7 @@ function candidateBinding(pack: DrillPackDefinition, ledger: EvidenceLedger, cla
 }
 
 describe("D1007/D1008 pure-join audit", () => {
-  it("distinguishes record-kind co-presence and exposes a validator-green semantic false join", () => {
+  it("distinguishes record-kind co-presence and exposes validator-green semantic false joins", () => {
     const rows: { packId: string; claimId: string; result: ReturnType<typeof candidateBinding> }[] = [];
     for (const name of readdirSync(DRAFTS).filter((entry) => entry.endsWith(".json") && !entry.endsWith(".browser.json") && !/\.(?:evidence|graduation|job|sources)\.json$/u.test(entry)).sort()) {
       const file = resolve(DRAFTS, name), evidence = file.replace(/\.json$/u, ".evidence.json");
@@ -130,14 +130,30 @@ describe("D1007/D1008 pure-join audit", () => {
     }
     const valid = rows.filter((row) => row.result.binding !== undefined);
     expect(rows).toHaveLength(43);
-    expect(valid).toHaveLength(1);
+    expect(valid).toHaveLength(3);
     expect(rows.some((row) => row.result.issues.includes("CLAIM_LABEL_UNEARNED"))).toBe(true);
-    expect(valid[0]).toMatchObject({
-      packId: "mate-two-bishops",
-      claimId: "result-not-moves",
-      result: { binding: { spans: expect.arrayContaining([
-        { span: "one", assertion: { kind: "tablebase.dtm@v1", args: { fen: "7k/8/6K1/2B5/8/8/B7/8 w - - 16 9" } } },
-      ]) } },
-    });
-  }, 60_000);
+    expect(valid).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        packId: "lucena-bridge-convert",
+        claimId: "bridge-not-squeeze",
+        result: expect.objectContaining({ binding: expect.objectContaining({ spans: expect.arrayContaining([
+          { span: "fourth", assertion: { kind: "tablebase.moveCensus@v1", args: { fen: "8/1P2k3/1K6/8/3R4/8/8/1r6 w - - 8 5" }, select: "win" } },
+        ]) }) }),
+      }),
+      expect.objectContaining({
+        packId: "lucena-bridge-convert",
+        claimId: "distance-decides-scheme",
+        result: expect.objectContaining({ binding: expect.objectContaining({ spans: expect.arrayContaining([
+          { span: "four", assertion: { kind: "tablebase.moveCensus@v1", args: { fen: "8/1P2k3/1K6/8/3R4/8/8/1r6 w - - 8 5" }, select: "win" } },
+        ]) }) }),
+      }),
+      expect.objectContaining({
+        packId: "mate-two-bishops",
+        claimId: "result-not-moves",
+        result: expect.objectContaining({ binding: expect.objectContaining({ spans: expect.arrayContaining([
+          { span: "one", assertion: { kind: "tablebase.dtm@v1", args: { fen: "7k/8/6K1/2B5/8/8/B7/8 w - - 16 9" } } },
+        ]) }) }),
+      }),
+    ]));
+  }, 120_000);
 });

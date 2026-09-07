@@ -3,8 +3,9 @@
 **Drafted 2026-08-22 at HEAD `a3b1e01`; refreshed 2026-08-23 after the executable split probe and
 owner ruling [[D1005]]. Every population below is re-derived from the tree, not inherited from the
 RFC** (criterion 22 rejects an inherited count; `rfc/feedback-delivery.md:2496-2499`). Status:
-**tooling landed at `bcb706e`; the binding arm is released now; the graduation arm and the 63–94
-authored decisions remain held.** [[D1005]] amends [[D949]] on the measured split. R2 is ruled too
+**tooling landed at `bcb706e`; the binding arm is policy-released, but automatic binding is blocked
+by [[D1007]]/[[D1008]] until `claim-semantic-anchors` supplies a proposition-level join; the
+graduation arm and the 63–94 authored decisions remain held.** [[D1005]] amends [[D949]] on the measured split. R2 is ruled too
 ([[D950]]: registry may grow, claude authors counterCases under owner veto), dormant until the
 authored arm is released.
 
@@ -286,14 +287,17 @@ but the choice is the owner's, and this order executes under any of the three.
 
 ---
 
-## HOLD SPLIT 2026-08-23 — owner ruling [[D1005]]: the binding arm is released
+## HOLD SPLIT 2026-08-23 — owner ruling [[D1005]]: the binding arm is policy-released
 
 [[D949]]'s whole-wave hold is **amended, not overturned**: the owner ruled the split on measurement
 that did not exist when D949 was made ([[D1001]]).
 
-**RELEASED — execute now (steps 3+, binding arm only):**
-- the **43 pure joins** — machine-label instances whose backing record already sits in the pack's
-  own ledger (14 packs); no new machine run required;
+**RELEASED IN POLICY; EXECUTION MUST STILL HONOUR THE LATER D1007/D1008 FINDING:**
+- the former **“43 pure joins”** are 43 record-kind outer joins, not valid claim bindings. The
+  refreshed candidate audit found three validator-green rows and proved all three semantically
+  false (“one common mate” joined to DTM 1 at a later position; “four ranks” and “the fourth”
+  joined to a root count of four winning moves). **Zero may be emitted mechanically until
+  `claim-semantic-anchors` lands.** Run `tools/feedback-binding-wave/` as the permanent negative;
 - the **60 `corpus_observed`** claims behind the single never-executed explorer census
   (`make candidate-emit PIPELINE=explorer`);
 - the **8 `engine_validated`** prose normalizations against the 391 existing `engine_eval` records;

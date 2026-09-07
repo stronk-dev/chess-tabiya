@@ -1383,6 +1383,16 @@ verify-governance: register-check status-parity work-index work-state work-item-
 # while editing an RFC, or this aggregate when intentionally auditing the whole active RFC portfolio.
 verify-rfc-evidence: evidence-value-authority-author-contract evidence-value-authority-route-map concept-registry-author-repair concept-registry-second-author-repair concept-registry-third-fresh-review concept-registry-third-author-repair concept-registry-fourth-fresh-review concept-registry-fourth-author-repair concept-registry-fifth-author-repair concept-registry-sixth-fresh-review longitudinal-store-tenth-fresh-review storage-backup-fourth-author-repair storage-backup-fifth-fresh-review safe-deployment-third-author-repair safe-deployment-fourth-fresh-review campaign-two-horizon-sixth-author-repair campaign-two-horizon-seventh-fresh-review pack-capability-seventeenth-fresh-review semantic-collector-cut-contract bounded-target-fifth-fresh-review provider-health-cut-contract provider-protocol-second-author-repair provider-protocol-third-author-repair provider-protocol-fourth-fresh-review provider-protocol-sixth-fresh-review live-sources-author-repair review-evidence-third-author-repair evidence-presentation-sixth-author-repair bot-policy-fifth-fresh-review bot-calibration-verdict-contract bot-roster-author-repair bot-trait-screen-contract bot-endgame-trait-screen-contract bot-human-endgame-reference-contract shared-resource-bootstrap-collision-core-author-contract bounded-target-sixth-author-repair module-discharge-coverage-contract
 
+.PHONY: feedback-delivery-measurement feedback-binding-audit capability-watch-check
+feedback-delivery-measurement:
+	UPDATE_FEEDBACK_DELIVERY="$(UPDATE)" ./node_modules/.bin/vitest run --config tools/feedback-delivery-harness/vitest.config.ts
+
+feedback-binding-audit:
+	./node_modules/.bin/vitest run --config tools/feedback-binding-wave/vitest.config.ts
+
+capability-watch-check:
+	$(CI_NODE) tools/capability-watch-harness/check.mjs design/research/capability-watch.json planning/platform-alignment/capability-watch/results.json
+
 verify-content: test-content
 
 verify: verify-software verify-governance verify-content
