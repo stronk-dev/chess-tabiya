@@ -450,7 +450,7 @@
           "summary": "The graduation writer, read-only plan and centralized emitter templates ship, but no official pack is graduated. D3033 licenses the foundation/schema slice before Gate F. The total 436-entry plan exposed 104 contract-blocked candidate entries and two false ready predicates; the author amendment now models 204 ready / 232 author-required / 0 contract-blocked without resolving content. Fresh buildability review still gates schema 0.28 implementation.",
           "impact": "held",
           "evidence": ["planning/content-era/plan.md", "rfc/graduation-clearance.md"],
-          "anchors": [{"kind": "rfc", "id": "graduation-clearance.md", "digest": "sha256:384b9787c686d3068ee5f975d6258e5d04bc65ec84f0fa8a6ebf35123c9d9a46"}]
+          "anchors": [{"kind": "rfc", "id": "graduation-clearance.md", "digest": "sha256:ebbe88c29d365ad8f757aa3a1ddf9543fb248f8e35034decd51e2f091654c39b"}]
         },
         "exit": "The release contains an allow-listed official corpus exercising every important handshake, counter-case, honest-empty state and complete campaign without blind mass rewrites."
       },

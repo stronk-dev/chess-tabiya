@@ -25143,6 +25143,42 @@
       "uxItems": [],
       "owner": "coordinator",
       "blocker": "rfc:shared-resource-register-bootstrap.md"
+    },
+    {
+      "id": "D3088",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:aaf453e22e815eacebce6a290a492ab858e2f23a1168a06f9d97e9e24dcb2b77",
+      "uxItems": [],
+      "owner": "content-and-theory",
+      "blocker": "rfc:graduation-clearance.md"
+    },
+    {
+      "id": "D3089",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:ed547b57027894d8e0d18ec44168a705cba7f893f8d0dc2ba36a4ed4804a6361",
+      "uxItems": [],
+      "owner": "content-and-theory",
+      "blocker": "rfc:graduation-clearance.md"
+    },
+    {
+      "id": "D3090",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:45821eb0af92c52e9d5db4a8e0790e874e779183219dc33911a3f0ef4214e075",
+      "uxItems": [],
+      "owner": "OWNER",
+      "blocker": "rfc:graduation-clearance.md"
+    },
+    {
+      "id": "D3091",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:41b4705516a7600e6105732b5311880925de1940b1fdccab8ea6f140aff8fee5",
+      "uxItems": [],
+      "owner": "content-and-theory",
+      "blocker": "rfc:graduation-clearance.md"
     }
   ]
 }

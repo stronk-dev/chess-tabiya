@@ -17831,3 +17831,24 @@ first; a minimal absent-source successor remains explicit.
 work-state`, `make work-index`, `make register-check`, `make status-parity` and `make roadmap-check`
 are green over the amended 294-line RFC. This is Codex author work, not the independent review;
 Claude still owns that review before acceptance and implementation.
+
+## 2026-09-07 — Graduation clearance returned at the schema-0.28 boundary
+
+**What changed:** a fresh independent buildability pass preserved the nine-template direction and
+reproduced the total 436-entry proposal, but returned the amendment on [[D3088]]–[[D3091]]. Its only
+executable checkpoint constructs migration fields; none of the required new predicates is evaluated,
+so criteria 21–25 cannot pass before re-acceptance. The pass also found that pack-stored equality
+fields are not normatively rejoined to their registry plans, the self-written receipt proves byte
+agreement rather than a human actor or mutable timestamp, and the planner's private serializer is
+not the shared RFC-8785 authority named by the RFC.
+
+**Why it matters:** schema 0.28 is the immediate predecessor of accepted pack-provenance 0.29 and
+the first honest graduated pack. Letting a pack choose its own expected value, or calling a public
+digest plus a literal authority an authenticated human act, would make the gate mechanically green
+without discharging the debt it records.
+
+**Evidence/next:** `planning/graduation-clearance/fresh-independent-buildability-review-2026-09-07.md`
+is the bounded review receipt. The next author pass needs one disposable nine-emitter evaluator
+contract, exact registry-plan equality, an honest attestation authority claim and the shared
+canonical serializer. Another fresh review remains mandatory; production/schema implementation is
+still unauthorized.

@@ -3,9 +3,11 @@
 - **Status:** **implementing 2026-09-05.** The writer and read-only planning checkpoint shipped in
   `bcb706e0` and was hardened in `ec52f61d`; the nine-template registry and all four emitter
   migrations shipped in `7918b582`. Pack schema 0.28 and its Gate-F-held corpus application remain.
-  **Returned at the 0.28 migration boundary on 2026-09-07 ([[D3072]], [[D3075]]); the amendment
-  below is authored but requires a fresh buildability review before its three new clearance kinds
-  or schema changes may be implemented.** The shipped writer and template registry remain valid;
+  **Returned again at the 0.28 migration boundary by fresh independent review on 2026-09-07
+  ([[D3088]]–[[D3091]]).** The nine-template direction survives, but the required pre-acceptance
+  evaluator proof is absent, registry-owned predicates remain caller-weakenable, the self-written
+  receipt cannot prove a human actor/time, and the planner does not use the shared RFC-8785
+  authority it claims. The shipped writer and template registry remain valid;
   no corpus entry has been migrated under the returned contract.
   **Accepted 2026-08-17 by the register owner; status token
   reconciled 2026-08-20.**
@@ -3164,7 +3166,12 @@ emitter plans must evaluate false on the exact emitted document before it may be
 
 ## Discharges
 
-none
+| id | the obligation | owner | recorded when discharged | discharged |
+|---|---|---|---|---|
+| D1 | [[D3088]] execute criteria 21–25 in one bounded nine-emitter author model that is retired into production tests | claude author repair | author-contract target plus fresh-review receipt | |
+| D2 | [[D3089]] bind every registered entry id to its exact registry plan and reject altered persisted fields | claude author repair | able-to-fail subject/expected/instrument/template controls | |
+| D3 | [[D3090]] state only the authority the receipt can prove, or consume an authentic author issuer; reconcile `authoredAt` | OWNER/claude on ruling | explicit ruling and exact receipt fixtures | |
+| D4 | [[D3091]] use one shared RFC-8785 canonicalization authority for emitted and current payloads | claude author repair | shared-serializer identity and refusal fixtures | |
 
 ## Open questions
 

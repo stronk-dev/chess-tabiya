@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:7a83994ece76287618e2cfc71d6104ec929b99e955ad804300a694431d513182",
+    "roadmap": "sha256:ac258076e2a583482e617df5b1161cc87c390001b2a2d8dd185856bbb80e0119",
     "workItems": "sha256:5e530607356ad0580e9b2bc6bd8a1386e89ae835c4448bf36b7d2a282fe3f7e3",
-    "workState": "sha256:90d989b1a056d05412390e16ac372ec3ceceeca3c40d53ad2c2632fff6cedf01",
-    "rfcRegister": "sha256:5b4f451f5f8d928d614613dc2b1f23c4949c7d86265a7ba6e86e0fa562aeb84f",
+    "workState": "sha256:e804523604ace97fba3fd5792af52e319149d48b1ba6d92270eb75f6833ed6d5",
+    "rfcRegister": "sha256:9604cf7c27e4f4f38af7b8dbf38db859a0c5d47916d28e6980f15cfeeff77965",
     "uxIndex": "sha256:f9b1666fa716b19afbfd2e8c36a7c33671edbc1372deb8249f1528bfadd5fc99",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 661,
       "doing": 1,
-      "blocked": 1203,
+      "blocked": 1207,
       "done": 863,
       "refused": 108
     },
@@ -407,7 +407,7 @@
           {
             "kind": "rfc",
             "id": "graduation-clearance.md",
-            "digest": "sha256:384b9787c686d3068ee5f975d6258e5d04bc65ec84f0fa8a6ebf35123c9d9a46"
+            "digest": "sha256:ebbe88c29d365ad8f757aa3a1ddf9543fb248f8e35034decd51e2f091654c39b"
           }
         ]
       },
