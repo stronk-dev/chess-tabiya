@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:de3d6493cac28b2593461fd386fbf7186e402dd4752f06362986b6ab2bfbb2ea",
+    "roadmap": "sha256:95c1a88d92dd4a9fe0992c4b9c9ba4bc893ecaf110f2745f68a0d9483a12c185",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:34ade75e36f2221e6342ae4e502c4c3da03daf6d56f12392082322e153081ee7",
-    "rfcRegister": "sha256:2512440436aaef7962dcb308e7c7d3382124ff3279eb1878306119fb857af432",
+    "workState": "sha256:056a1044a98b596243fc1c733967a77fe396aee53633017fd60eb2713f406d1e",
+    "rfcRegister": "sha256:288b1b034d83909170fc5d2747f691d961ce03bbc8bd7db45d83ceb4bdb076f4",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -22,19 +22,19 @@
     "activeRfcLifecycle": {
       "draft": 57,
       "accepted": 1,
-      "implementing": 7,
-      "awaiting": 6,
+      "implementing": 6,
+      "awaiting": 7,
       "implemented": 0,
       "superseded": 0,
       "withdrawn": 0
     },
     "workState": {
       "untriaged": 0,
-      "todo": 667,
-      "doing": 1,
-      "blocked": 1258,
-      "done": 847,
-      "refused": 44
+      "todo": 666,
+      "doing": 0,
+      "blocked": 1194,
+      "done": 850,
+      "refused": 108
     },
     "workItems": {
       "queued": 153,
@@ -155,22 +155,27 @@
       "dependsOn": [
         "foundation-contracts"
       ],
-      "nextAction": "Freshly review the repaired bounded-target authority and the cut pack-capability contract, obtain owner acceptance for the cut candidate packet, complete the promotion repair, then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+      "nextAction": "Freshly review the repaired bounded-target authority and cut pack-capability contract, obtain owner acceptance for the cut candidate packet, then land evidence-value-authority/provider dependencies before the separately tracked promotion successor, selectors, grades, Review and learner modules.",
       "latestCheckpoint": {
-        "at": "2026-09-06",
-        "summary": "Bounded targets' sixth author repair closes the five reproduced async-authority seams: complete declaration images, owned request snapshots, authority-exact dedup, a consumed public result assertion and digest-free malformed-input rejection now pass the retained chain.",
+        "at": "2026-09-07",
+        "summary": "The semantic-collector cut closes the twelve-projection Wave-C implementation without pretending the two absent promotion projections ship: 64 shadow-model blockers leave the live queue, canonical governance stops commissioning a seventeenth round, and D1699/D1700 retain the real post-foundation obligation.",
         "impact": "advanced",
         "evidence": [
-          "planning/bounded-policy-targets/sixth-author-repair-2026-09-06.md",
-          "tools/d3042-bounded-target-sixth-author-repair/contract.test.mjs",
-          "rfc/bounded-policy-targets.md",
+          "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+          "tools/d3069-semantic-collector-cut-contract/contract.test.mjs",
+          "rfc/semantic-collectors.md",
           "rfc/README.md"
         ],
         "anchors": [
           {
+            "kind": "work_state",
+            "id": "D3069",
+            "digest": "sha256:2c17a2c02ae13917cce40ecbbda5ce6f8ec29120d022b269ad3e78c8511bfd44"
+          },
+          {
             "kind": "rfc",
-            "id": "bounded-policy-targets.md",
-            "digest": "sha256:e3c1492733f284d1bec4e60fa7299bae40a47fba544c8557ac162c60eb476eee"
+            "id": "semantic-collectors.md",
+            "digest": "sha256:32c5d3899c4858a0bc0f22f745d01fd5b53d28d4f880a259b088ee6e24ed162f"
           }
         ]
       },

@@ -17517,3 +17517,21 @@ owners and states are explicit; the global untriaged ceiling remains zero.
 
 **Evidence/next:** `make work-index` and `make work-state`; continue each row from the existing
 Codex wave queue.
+
+## 2026-09-07 — Semantic collector promotion shadow chain cut
+
+**What landed:** [[D3069]] narrows `semantic-collectors.md` to the twelve Wave-C projections that
+have compiled since 2026-08-22 and moves the RFC to awaiting D1/D4. The two absent promotion-race
+projections remain explicit successor obligations under [[D1699]]/[[D1700]] after the shared
+provider/value foundations land; no capability is declared complete by implication.
+
+**What changed:** 64 findings against sixteen generations of disposable promotion author models are
+refused as obsolete-model rows, the 31 historical harness directories remain runnable on demand,
+and the chain leaves canonical governance. `make semantic-collector-cut-contract` binds the exact
+twelve-id Appendix, successor rows and terminal shadow population. The live work-state population
+moves from 1,926 to 1,860 and blocked items from 1,258 to 1,194; untriaged remains zero.
+
+**Evidence/next:**
+`planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md`. Discharge D1 now
+joins the module-registration keystone; D4 remains authored-content work. Promotion resumes only
+from the shared authorities, never from a seventeenth local model.

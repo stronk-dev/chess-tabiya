@@ -348,14 +348,15 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "bots", "learner_model", "theory_content"],
         "dependsOn": ["foundation-contracts"],
-        "nextAction": "Freshly review the repaired bounded-target authority and the cut pack-capability contract, obtain owner acceptance for the cut candidate packet, complete the promotion repair, then land evidence-value-authority/provider dependencies before selectors, grades, Review and learner modules.",
+        "nextAction": "Freshly review the repaired bounded-target authority and cut pack-capability contract, obtain owner acceptance for the cut candidate packet, then land evidence-value-authority/provider dependencies before the separately tracked promotion successor, selectors, grades, Review and learner modules.",
         "latestCheckpoint": {
-          "at": "2026-09-06",
-          "summary": "Bounded targets' sixth author repair closes the five reproduced async-authority seams: complete declaration images, owned request snapshots, authority-exact dedup, a consumed public result assertion and digest-free malformed-input rejection now pass the retained chain.",
+          "at": "2026-09-07",
+          "summary": "The semantic-collector cut closes the twelve-projection Wave-C implementation without pretending the two absent promotion projections ship: 64 shadow-model blockers leave the live queue, canonical governance stops commissioning a seventeenth round, and D1699/D1700 retain the real post-foundation obligation.",
           "impact": "advanced",
-          "evidence": ["planning/bounded-policy-targets/sixth-author-repair-2026-09-06.md", "tools/d3042-bounded-target-sixth-author-repair/contract.test.mjs", "rfc/bounded-policy-targets.md", "rfc/README.md"],
+          "evidence": ["planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md", "tools/d3069-semantic-collector-cut-contract/contract.test.mjs", "rfc/semantic-collectors.md", "rfc/README.md"],
           "anchors": [
-            {"kind": "rfc", "id": "bounded-policy-targets.md", "digest": "sha256:e3c1492733f284d1bec4e60fa7299bae40a47fba544c8557ac162c60eb476eee"}
+            {"kind": "work_state", "id": "D3069", "digest": "sha256:2c17a2c02ae13917cce40ecbbda5ce6f8ec29120d022b269ad3e78c8511bfd44"},
+            {"kind": "rfc", "id": "semantic-collectors.md", "digest": "sha256:32c5d3899c4858a0bc0f22f745d01fd5b53d28d4f880a259b088ee6e24ed162f"}
           ]
         },
         "exit": "Collector to fact to selector to typed module/bot/Review is closed at runtime; every path can abstain; raw producer strings are inspector-only; content compatibility is computable before pack edits."

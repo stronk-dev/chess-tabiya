@@ -7556,11 +7556,12 @@
     },
     {
       "id": "D925",
-      "state": "todo",
-      "sourceGlyph": "🔨",
-      "sourceDigest": "sha256:1f81a757f6acafe73d48156b96127a7485c2adea3f00a73d94a6bbfbb558cd19",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:f1a45f3979a39af19d7d843b8d8c6582bd47235f85972d7d8f3038e98238cda3",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D926",
@@ -16656,12 +16657,12 @@
     },
     {
       "id": "D2141",
-      "state": "blocked",
-      "sourceGlyph": "🛠",
-      "sourceDigest": "sha256:116dee1e12357b8a97b572f20a94e7c2d1358239021f094df7fd4c4055bc7585",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:a14e2703321ca8261b903bda741a9e17fc37fdfe0d6c2f71ffc2703dde799220",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2142",
@@ -17012,12 +17013,12 @@
     },
     {
       "id": "D2181",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2fc91fbfc89d822eadb5ca85b92d5161bdbd0c34058c82ea75a42a6964eca1e0",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:c7aa0111055ed05069b9cb1eca4c0a7729d0862dc936c348e79fc826af7954aa",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2182",
@@ -17029,12 +17030,12 @@
     },
     {
       "id": "D2183",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a02c66ed49474a523d66a847c3c3232d37e6f7297b9d5fdad4a81dcf667e0546",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:f993b0c7f81dfdbc66ff3539bdfbcb876ba283b5278bf06e76571ed84b973a4b",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2184",
@@ -19593,39 +19594,39 @@
     },
     {
       "id": "D2469",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:cd38c84c87ec98606ec82197b54da144a5419a0578b9c5431c496cd758437421",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:ef3848103b0802ac8e629198095194788df20c636135fbcdede3b2b8b3c767c2",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2470",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:89232c2398649dbf7eb81efd4c999247e97d492b63bb21af42cc27f4bdf0c19a",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:127b0debc40f2408f2edf0baa69149c51efb62dd3c574a4649339f902a9b3a10",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2471",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:16bb778378e0e6201da11294c150dadb6b786e37b82141ca5c92a32ec58bc265",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:78268dea108a64d8b80b7b3d5519302e05120edeb8e4925747456754fac9f0c7",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2472",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2b76766d87a8db319a96b694efd64fb3f2fa70e44f063e2a8f92687221d937ec",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:a050b1eb9a568f2da7a0816c5b7440207810cd38d243df5d79049d4b4f9e3e06",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2473",
@@ -20798,48 +20799,48 @@
     },
     {
       "id": "D2603",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:5afcbba05d65f441d74c1cc38053d73a071c38086c300b77424dc1a65d94b016",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:a71c2b6fe06982f4809cd8c7e888653b8c053500491e1fd87adb08f7f2b3d5eb",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2604",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:68b28293ccbbb163e6f0d9699cd0c842d13bf8c013a55998486eb51ad041ef00",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:82e32527c84530471038c1956b01d8470bb00c288ec66649fa67a4446401db86",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2605",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:75d63942932336fea26e4a0cf4284319b791df2b69b391b9820edde78120ae08",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:8d13f0ea3c2d28b03a25128c2a831e0fafb60f7c575b2d1831072ddb67c753c3",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2606",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:fc524012dcafa73a6cc4801c95e639ced393f9cc4c669c11401294beb9a321fc",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:c0efcd644e45cb95ccab1444f2d9a1299802a7b96b1532405c7a803cdc67c501",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2607",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c9944f48233b539d141aa6acb3916a668c20f0848247440051f17376d58bc7f1",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:c3debe1685c9b526be32331be125a8475a8f95f7b295684235f525a26e257208",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2608",
@@ -21221,48 +21222,48 @@
     },
     {
       "id": "D2650",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:7b5f97b68be204cdae9e600b1bae39965c61ffa5e36ec9ca6eb3f9c47eb5f64b",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:ef04f5035e7feb7a4d70acf2bfd2799cbfd1a66b93634e8ff0c3f8ab648d8e97",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2651",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3b3ed2a1548f7e72329a2af228d4e0d41510be5407a55feb9451a0d567aa4e29",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:2ee06052727bbe99e46e70304baa06f16782e1be29d9ad4c660793f750299363",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2652",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:21d7753eeabf2e1882791aa974112e0bafc82615a71cf7478c04d042d4b7b7c1",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:f72bf92b375105ef43acb7ec1821488a6c4ea5fe41ccba60ad89ec7f00607a62",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2653",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:fee41801c7748727a56ebe83c2ac23d103ccbabf2d4f9d69942232d3e193e400",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:1bdc041730006ec57753715d4eb6e2db814669b4eb6a5da58fe0f0372df26779",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2654",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:67844ad330bfe709fce6b5abe541091ff1f987e1abf65243c75a15c018c7c75f",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:434bd3fdd2357838125134e387181898828fca90ac4cfb15156abcd4a4ab3f12",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2655",
@@ -21608,75 +21609,75 @@
     },
     {
       "id": "D2693",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:562d59520256b8e4490dee112705a6c74902dfa8501254a851b91a2b9ad07c74",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:3b9ebdae37e84a48d614ce73b64de5aceae943ee4afcf5bfaa17669abc65a1f8",
       "uxItems": [],
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2694",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:28c09faa6189db8d45bf4bb187f848e9fe918e5fc3556c71179f6064309e72c7",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:636d8fa54190071b63f023fbb04c49fc75534e538262e37d856a11ce57e54578",
       "uxItems": [],
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2695",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c99b7749ede4651576fcf2f7b6db3396085be1d1ec870b99b35b60ca7df8bf3d",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:af48887b0ecff9e517f835303f9becfe5b74e31e29b323aa33985eb7a8446b56",
       "uxItems": [],
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2696",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0c46aeb811da5281bcd13a68f9dc23f37aaf1d4ff9ac92960bab247eec22bbef",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:3b013cb211308514346abe98b99a0b13c1ad0104a9fd073d09e554f841fad5e0",
       "uxItems": [],
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2697",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a81ee6d4367457e321965eb6e0767019c25f6ea40e04644fcff21e661707abab",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:d891b1e92974fa106574c44335df894d0c2a9df071657bf9670cb61bff947dd1",
       "uxItems": [],
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2698",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4aa8309b9a10118017f0b42335d98936063fce5467e31babc288bb82b7a2f5a6",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:b9b7a367dba7397afb2f00d30c9b2c4486f17ab673f3f1e668e1628766c5da79",
       "uxItems": [],
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2699",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ebc61b25a1af97291b3f2a066e91ba51baa436311de7c23a09adff351a17d5e6",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:b1e5336aba21611d7f492a920e9b481ec09c229eb1fac6924b842735674114ed",
       "uxItems": [],
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2700",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:02c0da9a9559eb07780b03590ef69bbb09c33f675413ac0159627e5ccf68dbe9",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:2db01b1def43ab0e778d9bbecf1c19e56a48a555574399ee893ef6015fc23e5b",
       "uxItems": [],
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2701",
@@ -22103,48 +22104,48 @@
     },
     {
       "id": "D2748",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:07ce5a768ef7a50bdcce7ba9c4d97a89be0fa986feb789b8cac85340fba52d28",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:da1886d0dfca4a092368e894f2a8f334d2a114090ee2349413af6bf5b3c70ba6",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2749",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b2ed12d2abc391cefd23da9904336de3990b017ea2b5963bf0b247247c704b23",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:fd60ea6c00b73731e15d47fe7b957e005684eced5b448f55c4c560fb03fb01a7",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2750",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4a50a27c256a3098be903f8ad018bee544b6e312fc698c69948bec1ee929723c",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:5c6321dac204eefce88464be71cf66bef66e16a1e866880920c3832b674a4d9a",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2751",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0ad74c07444f94208aa896e498307ca997f64914a2a8ac77bf66c55fef2d8237",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:9921ead3a86db12344eadbaa451fd008954b868f7859fe46953a55650894f7d1",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2752",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b90c9001bd8dc877ba34208cb3909ac15ac99b8d5d34f35893bfb6578e842d81",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:cd6d666d822c6b950b8b0145c4b2e331aa72a459fe9e76896761b7859074cc12",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2753",
@@ -22256,57 +22257,57 @@
     },
     {
       "id": "D2765",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9dc94245f68b06f4f9cc94dc4cbf5f13b77e2ff08437723a25a13299c2d52895",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:a8748e0c9c7e181baec344b9fe54826d07905e08f2ee682b59cc50ef3453836b",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2766",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3af845ff55ceb7731f9d0b52b3c3b8af498621edddc4aa12638f412dabb2b93c",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:ca337c8452b5e5ea6f9bfc60744af88527779b3c67425b1f680f2ff0b17d26f9",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2767",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:a8aa77a86b5e80169b0ec65118ac0de496027bc21b3e1475e90ca43cb354a115",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:06228226ae8ae9f07371a2cc7ffd047d025a409f2e3ef80bdf4ddba0642f51f4",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2768",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d4d2b6eb55e34bba819c34049f5aa3480abe9dc929d8e07fd84d6c54fc051274",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:e308c80bffbf5f1ecddc46d2bd2f005d2707d3b62ed94f34117a2596858fbf27",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2769",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8bf486853cb079dc1c4f384f4b27454c771f5d3023be42d577307d9c8848ac36",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:bc07c9f010424381553f38f9b2ac1c3c06b60083e964afb4c45ff5944b14a748",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2770",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c7fde192a75c1f9d1c3e1055ad975d5c607344c111173d87349d2fe82f7fc7b5",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:ca751dc4430a82e2c1ecd7db756f0ba3b97f5c5fd9f4c7260a015bb3963ca45f",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2771",
@@ -22472,57 +22473,57 @@
     },
     {
       "id": "D2789",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4b9d828729aceba39372ab53047707ddaebf80755d14aa09a9bf9a6e7ed7ab50",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:8881d75ee74b115a90becc9fc809f54a8474b3bec5eecd7d82377b9061be23cd",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2790",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c55779e02cd4ec2c5b504f8765dbb0bf9db18f95f1fcdafdd4763f10a10688fb",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:459f7ddbbf8a320e2d77e45e81643da30d7822929037f80a5cd60dcf1c40b627",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2791",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:8cacc74c52ff7dc9b362f2c5a1c3732c40e1de40f66cfc99b5dbfacb17c5229f",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:3b27c861b48f645dd649c5d21dd3d0b120da60a104f511e8eb4fa5dc5de0672a",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2792",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:92b08256dbfff268fc53eb7c00c5ad8fbc480e44a7412fdde9fa41aaa9497a9e",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:3bda31de03f9b9493b8219119036aca3cdec9d64faf8720898ac91eefbe644ae",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2793",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2ab9e4abf8f901b32823936ca653304853d7805b80fc39c6075ad244631dc282",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:7702e7346751d2c24acf63c4e3fa751b28d0ea025693ed6ea239e150f23a9764",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2794",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c84a7ced2f695aeefd6bb3ac1997505f0474954a39debe627512ce505222ab61",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:640de888cde0600b7f3062589ef693ba2a503f78bae3c365c08a92031d22dbdb",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2795",
@@ -22886,48 +22887,48 @@
     },
     {
       "id": "D2835",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2ebb544894f4414e1fb708799aef3feae544960f672d2ce6401af866098ca66a",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:f240126b5b14e46fa9477a5ec7aa23a9d6f9e6e58421627f9d6c25323da66cd7",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2836",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0a268311af58f64b1abee99f7454a802cf890e1368c06e969a6793d8b1f9fa0b",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:103f0b886beea38a13b0f2fbb6cb25f192f5f0b03ae3ab1d5841242dcd82f8a9",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2837",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:37a59f988de68d649d16dba59d19a50d4675cfd1447a7b6b5f5dae748e390828",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:86a1edfed7458520ce57c8c675c9f1cc7471032d8777b8aad7105e83424b1bb2",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2838",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:277a709a444ede76421c658285ada562c13e1867d9f3f4e6466d6d657bca3dd6",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:a40a55b2e6cf28cd4e8170e866acfc39a24d5093df886b1429b95cf07eb0432c",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2839",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:6b211c3eb101ca02913638f33a39733aea7ac80109d310578128ed6215067279",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:e7cc2d213b4d0f6dd36a95b943178a7bd4a00383d7e349bfa29204fc85b07209",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2840",
@@ -23391,48 +23392,48 @@
     },
     {
       "id": "D2892",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:4be9ab0333629053313e60559d97d961a48c67a97eb8d9f9013ca5ebca53a201",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:4b6eccc5a33edddffc65652a2a4147865fcbab815e41c7d6a96edee914cdf768",
       "uxItems": [],
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2893",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0d645f8d4850c99769bb5c4a638a29b0f66e5e014beded4a95382a901302d40a",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:e0b85cfca27507969c2024f0d9cbe40b2036048c77c1cdb004f30370acab29b0",
       "uxItems": [],
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2894",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:9240e703df95a51149099e790ba9f861610965e4f8c4e11449de34d26aff48ac",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:f7c3c159c3711cf178ffd019c263bfbf8531718b6a405f6f8b403e5a1c9d5db4",
       "uxItems": [],
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2895",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f8fd79afa3ef95c55441935654940ef83945b8e61712dfc22bf19bc6f8d98ba8",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:c2dd10f158cbbc2f42607c3d3e3d5fa0e9542e41b58973fc012acc566c7fc22b",
       "uxItems": [],
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2896",
-      "state": "blocked",
-      "owner": "evidence-foundation",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:250c27b8377dac71a75a0ad2daf52926be8d1f2f806258fb0d7b7fb128a57cc6",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:6ea23c6c6b3d78d1bbf752a7cbdcd20d444c7bf0ff213d9a6c989b4c767c701f",
       "uxItems": [],
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2897",
@@ -23721,48 +23722,48 @@
     },
     {
       "id": "D2929",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:af5e488cf0e2686bbe2a7c6c36da7b812d8ac11226ac9cf94c2e4f4db96e86b1",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:61a69a2771ceedc61a3da5807b2d0810609a9828beb0955aa31366ca2a65dfac",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2930",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e5539031db0f70067b611751306681037eec6d855c694e43f9e5116a8eff3012",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:9cf059525bb8f064ca7bcac497524b3ead13d44eff8b09d775c54eeb53fa7f7c",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2931",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:1805312b7d963ccac32a982d1cd9788c01024273676a0469472dcee7935b371b",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:deba2fd8d2292a8311155db92422b8cd285c2dc191ab458db9a90df3899133dc",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2932",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:f73e7a67d3d77bea204cd2aed0cd337ba9e9ee9b1818e034f7bc18c8bd921563",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:8e393243578eb70e6ac3e01b57bf519a8402c8c305b2c7c57d99c7719d444709",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2933",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c765a5fe1773ba0ecbc60ef2226f2df8232cbb2bd76cd1ca041ed5ce83364ea7",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:d0b675d4d6542676d6d70fccdbb49a08e64c0f155150f3f127475121424a4a7e",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D2934",
@@ -24522,66 +24523,66 @@
     },
     {
       "id": "D3018",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:ca6d92eef8c226499173c708504a6e0fc202b668990d8d9d57a67735c8cc0d2b",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:2bf8056441564126d234a16510483acebed0b602044b690d99bdb4a5e6d3a54f",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D3019",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:d93a9d8036acb456a88116f3abc5c99f1042662943bdbce0185b0cc206ea426c",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:5bc9879a14a51b6ff5d974b34270fb29e72da7c7a220410d8f1d94ba8ccb22d9",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D3020",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:75c7879b50d3b2c598f6872682bfb2955787e423ddbb378f6050d09f79234f4c",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:28c88fbc6c43c29eed1330bf6a7464e6597e0b53c5ee309e667c248f9b4c2153",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D3021",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:e0f1910d4c51d186dc50b87e1bea29271ad15ea7cd3ddf8e7ab663580da19efb",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:6f2c2ad31f5b3da05f41eb3ed05510a9399b14a9f39b22f63e24b623d125040a",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D3022",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c215a21caee0c0eee5619035490f35baa84ba180aea5cc247beb9e9874d25cec",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:2c42bd69644f8dcfb30fbb9a4c29963e6aa357e02f8c55fc49ca26ae705aec44",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D3023",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c2907573c731b0663ac558a4f91775c0ac5435d132322f112e167543dfe6f714",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:95f304424b2e185d278e4019913807402d44fa0fc0576f7fe7709d364e0a3766",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D3024",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:63094b4d51d9f45f199da0e394884059afac7de2c546271abc3ef5f5fce68008",
+      "state": "refused",
+      "sourceGlyph": "⛔",
+      "sourceDigest": "sha256:af95124f314e9d43c119e92924cebae0170eba3379403dfd5b6371e055c5c376",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:semantic-collectors.md"
+      "ruling": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "rulingKind": "source-row"
     },
     {
       "id": "D3025",
@@ -24798,12 +24799,12 @@
     },
     {
       "id": "D3049",
-      "state": "doing",
-      "owner": "coordinator",
-      "since": "2026-09-06",
-      "sourceGlyph": "📊",
-      "sourceDigest": "sha256:e70510299828f4b7740c42d807f6dacdcec9aa88a5d4438cac5d115dd5ea187c",
-      "uxItems": []
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a9ac01b4c3d9405d3053b781c40b288c9053ba886b2c7acf098eae91b44696da",
+      "uxItems": [],
+      "evidence": "planning/evidence-foundation-ux/semantic-collectors-promotion-cut-2026-09-07.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D3050",
@@ -24961,6 +24962,15 @@
       "sourceDigest": "sha256:d57f577d4bae1d20c31462ca7473857ac24d6879c4b76535256f921ea79fd287",
       "uxItems": [],
       "evidence": "tools/work-index.test.mjs",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3069",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:2c17a2c02ae13917cce40ecbbda5ce6f8ec29120d022b269ad3e78c8511bfd44",
+      "uxItems": [],
+      "evidence": "tools/d3069-semantic-collector-cut-contract/contract.test.mjs",
       "evidenceKind": "path"
     }
   ]

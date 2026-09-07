@@ -1,39 +1,18 @@
 # RFC: Semantic collectors — Wave-C basic tactics after Waves A/B
 
-- **Status:** implementing 2026-08-22 — 12 of 14 registered projections compile. **The bounded
-  [[D2536]]/[[D2552]]/[[D2553]] deflection check-authority amendment was implemented 2026-09-04.**
-  One shared induction selector chooses bait-capture before check-induced authority, one narrow
-  sealed check-event constructor serves broad and exact-source compilation, and the emitter requires
-  that exact edge-one event only on the check arm. Permanent check-only/dual-arm and copied,
-  unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source compilation
-  retains byte-identical event ids while staying below 500 ms through 80 plies. **The held
-  promotion pair's sixteenth fresh review returns the fifteenth repair on [[D3018]]–[[D3024]]
-  (2026-09-06).** Installation parsing and single-flight survive, but configuration remains a
-  caller-selected path, geometry/no-race is absent, the collector is recorded-only and incompatible
-  with normative §3.7, the reading drops required operands and central value authority, duplicate
-  durable subjects publish, and the result algebra differs. `make
-  semantic-collectors-promotion-sixteenth-fresh-review` retains the complete history and passes
-  6/6 runtime/source groups plus strict TypeScript. A bounded sixteenth author repair, another fresh
-  review and provider/value dependency landing still gate both held projections; no held projection
-  implementation is authorized. The preceding author model claimed one
-  asynchronous transaction owned recorded-first lookup, the exact
-  scheduler digest and invocation, cancellation/domain/failure outcomes, success-only legal move
-  resolution, sealed ledger/live source creation and total input abstention. The maintained target
-  retains every predecessor gate, passes five new repair groups and strict TypeScript; complete
-  durable ledger/manifest authority, reachable storage/legal unavailable arms and one shared
-  seven-piece boundary now precede recorded/live exact evidence;
-  no held projection implementation is authorized. The
-  request now owns a canonical full-FEN parser and total recorded lookup, uses the actual shared
-  provider scheduler plus operation-keyed source factory with deterministic request bytes, and
-  requires a module-sealed aggregate geometry completion before its zero-call fast path. Geometry and recorded tablebase inputs
-  from the prior repair still require their exact value-authority
-  factory receipts; the available outcome returns one sealed derivation receipt retaining geometry,
-  legal moves and the selected source; no-race is distinct from input failure; and the duplicate
-  `promotionWithCheck` operand is removed in favour of the existing exact check producer joined by
-  FEN/move identity. The third repair adds a closed request, sealed recorded-source resolution,
-  lazy success-only legal-map resolution, invariant failures and completed/no-output results.
-  `make semantic-collectors-promotion-third-author-repair` is the positive author contract. The original 12 projections remain
-  accepted/implemented; the amendment does not reopen or relabel their bytes. Accepted 2026-08-22
+- **Status:** awaiting D1/D4 2026-09-07 — all **12 projections owned by this RFC** compile. **The
+  bounded [[D2536]]/[[D2552]]/[[D2553]] deflection check-authority amendment was implemented
+  2026-09-04.** One shared induction selector chooses bait capture before check-induced authority,
+  one narrow sealed check-event constructor serves broad and exact-source compilation, and the
+  emitter requires that exact edge-one event only on the check arm. Permanent check-only/dual-arm
+  and copied, unnecessary, missing, crossed-edge and wrong-projection refusals pass; exact-source
+  compilation retains byte-identical event ids while staying below 500 ms through 80 plies.
+  **[[D3069]] withdraws the two held promotion projections from this RFC rather than commissioning a
+  seventeenth shadow-model round.** Their product obligations remain [[D1699]]/[[D1700]], already
+  blocked on the shared value/provider foundations. The 31 historical promotion harness directories
+  remain runnable evidence but are not acceptance authority. The twelve implemented projections are
+  unchanged and now wait only on production-module eligibility (D1) and authored witnesses (D4).
+  Accepted 2026-08-22
   by claude as register owner on the buildability test, after cross-review with corrections applied
   in place (seven blockers; all eight observed ids verified **checkable, not
   intention-inference**, after the causal-binding clauses were pinned from the measured bytes).
@@ -59,11 +38,10 @@
   `promotion_pressure@1` per D922), then `breadth-collectors.md`
   (the `derived.pawn` producer and `pawn-dynamics.ts` site, the recorded-path sequence
   compilation in `semantic-evidence.ts`, the §3.4 two/three-edge continuity rule, and the
-  disclosed D754 pass device with its `invalid_turn_clone` abstention). Draft
-  `evidence-value-authority.md` must be accepted and implemented with the exact pawn-contact,
-  legal-map and recorded-tablebase factory receipts consumed by §3.7; the live outcome also waits
-  on accepted/implemented `provider-exchange-and-execution.md`. Landing order is therefore
-  **2c → 2d → evidence-value/provider dependencies → 2e** and is normative
+  disclosed D754 pass device with its `invalid_turn_clone` abstention). Both dependencies have
+  landed for the twelve-projection implementation. The future promotion successor remains blocked
+  independently on `evidence-value-authority.md` and `provider-exchange-and-execution.md` under
+  [[D1699]]/[[D1700]]; those drafts no longer block this RFC.
 - **Parent / amends:** additively extends `archive/evidence-contract-manifest.md` (F1) and
   `archive/semantic-evidence-selection.md` (F2); sibling successor to `tactical-collectors.md`
   and `breadth-collectors.md`, an amendment of neither. Redefines no shipped identity
@@ -79,9 +57,8 @@ none
 projection identity declared in `packages/runtime/src/evidence-catalog.ts` through the existing
 `producer()`/`projection()` helpers — the F2 precedent both sibling collector RFCs already used.
 No member is added to the closed `EVIDENCE_PRODUCER_IDS` inventory (`evidence-catalog.ts:75-81`):
-the fourteen registered projections ride the existing `rules.tactic` (`:339`) and `derived.tactic`
-(`:408`) producers plus `breadth-collectors.md`'s `derived.pawn` producer, which that accepted RFC
-adds. No pack/run/shape/principle schema, migration, `EVIDENCE_KINDS` member, `EvidenceGrounding`
+the twelve registered projections ride the existing `rules.tactic` (`:339`) and `derived.tactic`
+(`:408`) producers. No pack/run/shape/principle schema, migration, `EVIDENCE_KINDS` member, `EvidenceGrounding`
 member, `EvidenceTiming` member (`at_commit` is `learner-modules.md`'s declared claim — not
 double-claimed here), or `content/` byte moves. Register heads verified with
 `node tools/register-check.mjs` at drafting HEAD `7181834`: pack 0.27 (next free 0.30), run 0.17,
@@ -91,9 +68,9 @@ derived, never persisted; no table is created.
 
 ## Summary
 
-This RFC turns the completed Wave-C research into the third, final bounded collector wave of the
+This RFC turns the completed Wave-C research into the third bounded collector wave of the
 1.0 foundation: the **basic semantic tactics** — defender removal, deflection, attraction,
-interference, clearance, zwischenzug, overload, bounded mating nets and promotion races — that
+interference, clearance, zwischenzug, overload and bounded mating nets — that
 `wave-c-foundation-closure.md` rules are *"basic product capabilities"*, not optional depth. The
 concepts are plain 1.0 chess semantics even where the bounded proof machinery beneath them
 (complete-reply enumeration, a 250,000-node legal-tree mate solver, a Syzygy outcome join) is
@@ -101,11 +78,12 @@ deeper than Wave A's one-ply arithmetic.
 
 It adjudicates all **20** candidate identities of the executable producer→consumer matrix
 (`tools/d872-semantic-tactics-harness/consumer-matrix.test.ts`, the D920 instrument — this RFC's
-Appendix source): **14 are registered here** (Appendix A); **1** — per-pawn promotion geometry —
+Appendix source): **12 are registered here** (Appendix A); **1** — per-pawn promotion geometry —
 is **bound to the already-amended sibling id** `derived.tactic.promotion_pressure@1` (the D922
 amendment) rather than duplicated; **3** opening/theory rows are **assigned to the runtime
 opening-identity RFC** (C3/F4/F7); **2** engine-Review rows are **assigned to the Review
-successor** (codex's order items 3–4, D917/D918). The closure's §6.7 rule — *"Do not combine
+successor** (codex's order items 3–4, D917/D918); and **2** promotion-race rows are **assigned to
+the post-foundation successor obligations [[D1699]]/[[D1700]]**. The closure's §6.7 rule — *"Do not combine
 source adapters, engine Review and tactical semantics merely because they all produce evidence"*
 — is why the last five are assigned, not absorbed.
 
@@ -114,8 +92,9 @@ theory 3, inspector 20, authoring 17 — and habit classification 0**, with pre-
 rules-grounded and exposing no move, line, or evaluation. Every projection lands
 **research/inspector-only**; production eligibility is `learner-modules.md`'s to grant through
 its literal-id amendment (Discharge D1). Key semantic decisions are pinned as measured, not
-reopened: **overload separated three ways** (§3.5, the `9f7112c` rejection), **mate-next exact at
-its bounded horizon** (§3.6, D908), and **promotion geometry never grades a race** (§3.7, D909).
+reopened: **overload separated three ways** (§3.5, the `9f7112c` rejection) and **mate-next exact at
+its bounded horizon** (§3.6, D908). The promotion research verdict remains attached to
+[[D1699]]/[[D1700]]; it is not weakened by leaving this RFC's acceptance population.
 
 ## Motivation
 
@@ -615,7 +594,13 @@ exist).
   between two authorities, not permission to merge them** — the exact proof and any
   engine reading remain separately cited forever.
 
-#### 3.7 Promotion races (D909/D963/D1699/D1700) — declared participants, exact source join, verdict refused
+#### 3.7 Historical promotion successor quarry (D909/D963/D1699/D1700) — non-normative
+
+**Withdrawn from this RFC's acceptance population by [[D3069]].** This section preserves the last
+specified operands and falsifiers as quarry for the post-foundation successor. It declares no
+projection here, authorizes no implementation, and none of C1–C15 reads it. The future contract is
+owned by [[D1699]]/[[D1700]] only after the shared value/provider authorities land; the historical
+author-model returns below are evidence of why an interim local implementation is forbidden.
 
 Both rows ride 2d's `derived.pawn` producer at `pawn-dynamics.ts`.
 
@@ -1179,10 +1164,13 @@ stays cited at its input id.
 
 Every criterion can fail (D451). Where a criterion quotes a measured number, the number is
 the predeclared direction; a contrary measurement is recorded and escalated per law 6, never
-shipped around — no criterion here carries a pre-authorized fallback.
+shipped around — no criterion here carries a pre-authorized fallback. References to historical
+§3.7 inside older criterion text are retained as quarry but are non-normative after [[D3069]];
+criteria C16 and C18 are withdrawn in full. The maintained acceptance population is Appendix A's
+twelve ids.
 
 1. **C1 — Registration completeness.** Every Appendix A id (unit: projection id; total:
-   **14**, the table's caption) exists in the compiled catalogue;
+   **12**, the table's caption) exists in the compiled catalogue;
    `make evidence-manifest-check semantic-evidence-check` passes; the §1.1 docs tuple moves
    in the same change. C1 counts the same unit as Appendix A.
 2. **C2 — Operand fidelity.** Declared `operands` match §3 verbatim; event families enforce
@@ -1282,7 +1270,7 @@ shipped around — no criterion here carries a pre-authorized fallback.
    their owners, and appends the `planning/exploration/log.md` entry — in the same commit
    (the CLAUDE.md ledger-and-log clause). C15 cannot close while the D925 collision
    stands unrepaired.
-16. **C16 — Promotion contract falsifiers.** The six D1699/D1700 disposable arms graduate to
+16. **C16 — WITHDRAWN to [[D1699]]/[[D1700]]; historical promotion contract falsifiers.** The six D1699/D1700 disposable arms graduate to
     permanent tests: contacts-based a2/b7 refusal; a2/h7 9/10 positive plus typed input abstention;
     current piece-count-only false-positive reproduction followed by repaired cross-FEN refusal;
     recorded and live same-position positives; provider absence distinct from outside-domain and
@@ -1303,7 +1291,7 @@ shipped around — no criterion here carries a pre-authorized fallback.
     each; `missing-check`, `crossed-edge-check`, `unnecessary-check`, wrong projection, unsealed
     event and duplicate-member fixtures fail before emission. The implementation diff changes no
     projection id, operands, learner eligibility or content bytes.
-18. **C18 — Installed promotion generations are closed and non-vacuous** ([[D2835]]–[[D2839]]).
+18. **C18 — WITHDRAWN to [[D1699]]/[[D1700]]; historical installed-generation closure** ([[D2835]]–[[D2839]]).
     Registry opening consumes only the application-issued installed-inventory authority; a raw,
     copied or caller-path value fails. Inventory/generation/file/response/legal objects reject extra
     or missing keys. Response and legal-map FEN populations are unique and set-equal, and every
@@ -1321,8 +1309,8 @@ shipped around — no criterion here carries a pre-authorized fallback.
 | D2 | The engine-Review lane: matrix rows `derived.review.eval_delta@1` / `derived.review.mate_transition@1` (typed C4 contract, stage-0 §12.2), the Story mate-type repair (D917, `story.ts:33/:104`) and the multi-source post-game compiler (D918) — codex's order items 3–4, cited here and absorbed by nothing in this RFC; `mate_transition` joins §3.6's proof by node/candidate identity when it lands | `planning/evidence-foundation-ux/plan.md` | the Review-successor RFC's drafting/landing commits | |
 | D3 | The runtime opening-identity trio: matrix rows `theory.opening.current_endpoint@1`, `theory.opening.catalogue_membership@1`, `derived.opening.deepest_reached@1` (D894/D902 evidence; the C3/F4/F7 handoff) — assigned to the runtime opening RFC exactly as `tactical-collectors.md` §3.15 split the same lane | `planning/evidence-foundation-ux/plan.md` | `44637013` — runtime opening compiler, artifact, projections, API and image boundary | ✅ 2026-08-24 |
 | D4 | Authored-corpus semantic-tactic witnesses: the authored spine holds zero observed-sequence witnesses for every §3.2–§3.5 family and zero overload conflicts — the learner copy of these families cannot be validated until a content wave authors or imports cited canonical lines (a content wave carrying the content-era closeout) | `planning/evidence-foundation-ux/plan.md` | the content wave's shipping commit | |
-| D5 | Promotion outcome provider execution: `live.syzygy.position_result@1`, exact request/source identity, same-exchange receipt and projection-effective latency come from one shared provider operation; this RFC must not create a pawn-local source or flatten recorded/live alternatives | `provider-exchange-and-execution` | accepted provider implementation commit + provider F1 census | |
-| D6 | Exact promotion input/value authority: pawn contacts, exact legal moves, recorded tablebase values and the derived promotion outcome require their named central factory receipts; generic declared-evidence sealing never satisfies them | `evidence-value-authority` | accepted implementation plus set-equal route/profile fixture | |
+| D5 | **Transferred by [[D3069]]; not a discharge on this RFC.** Promotion outcome provider execution remains part of [[D1699]]/[[D1700]] and must consume one shared provider operation rather than a pawn-local source | `provider-exchange-and-execution` | successor contract after the shared provider lands | transferred |
+| D6 | **Transferred by [[D3069]]; not a discharge on this RFC.** Exact promotion contacts, legal moves, recorded tablebase values and outcome authority remain part of [[D1699]]/[[D1700]] | `evidence-value-authority` | successor contract after the shared value authority lands | transferred |
 
 ## Open questions
 
@@ -1761,7 +1749,7 @@ landing remain mandatory. The spine stays 12/14.
 
 ## Appendix A — registered projection ids
 
-Unit: **projection id**; total: **14**. The closed list C1 counts; adding or dropping an id
+Unit: **projection id**; total: **12**. The closed list C1 counts; adding or dropping an id
 is a spec change with a changelog line.
 
 | # | projection id | §3 item | producer | role |
@@ -1778,8 +1766,6 @@ is a spec change with a changelog line.
 | 10 | `derived.tactic.overloaded_defender_response_conflict@1` | 3.5 | `derived.tactic` | predicate |
 | 11 | `derived.tactic.overload_exploitation_observed@1` | 3.5 | `derived.tactic` | event |
 | 12 | `rules.tactic.consequence.forced_mate_after_move@1` | 3.6 | `rules.tactic` | predicate |
-| 13 | `derived.pawn.promotion_race_geometry@1` | 3.7 | `derived.pawn` (2d) | reading |
-| 14 | `derived.pawn.promotion_race_tablebase@1` | 3.7 | `derived.pawn` (2d) | reading |
 
 ## Changelog
 
