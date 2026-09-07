@@ -128,7 +128,7 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 | ARR-a22 | §8.3 F1 | The objective region states the promise, not the absence — *"Nothing is authored about this position — Tabiya reads it as you play"* | none | 1 string; pivotal detection ships | |
 | ARR-a23 | §8.3 F2 | The consequence contract, said once, at the first board | none | 1 string | |
 | ARR-a24 | §8.3 F4 | **Appearance preview.** Five `<select>`s of text labels, zero rendered previews, one option labelled *"Cburnett"*. `<Chessboard>` already renders a FEN at arbitrary size in five places | ledger | [[D1451]], [[D1463]]; `rfc/theming.md` has 0 occurrences of preview/thumbnail/swatch | |
-| ARR-a25 | §13 | The coverage-matrix row this dossier owes `design/research/README.md` | none | written, not landed (shared worktree) | |
+| ARR-a25 | §13 | ✅ **Closed 2026-09-07:** the coverage matrix links the arrival dossier and records its measured latency/evidence boundary | closed | `design/research/README.md`; ARR-a9 result | 🏆 |
 
 ### The in-run experience — `ux-in-run.md`
 
@@ -172,7 +172,7 @@ Nothing here waits on an owner ruling, an RFC acceptance, or a document anybody 
 | CLP-a21 | §7.5 | ✅ **Closed 2026-08-29:** aligned positions render once per exact `ComparisonRow.groups` partition with a visible shared-attempt marker; ended branches remain explicit absence cells | closed | [[D2031]]; three-branch `[[X,Y],[Z]]` component contract plus production browser fork cells | 🏆 |
 | CLP-a22 | §0.1 | **Merge the two conflicting Chessiverse rows in `competitor-matrix.csv` (`:16` and `:58`)** and settle whether rewound lines persist as branches | ledger | [[D1468]] — law 6 territory: a confirmed competitor with preserved branches is kill-criterion evidence | |
 | CLP-a23 | §0.1 | Close verification item #5 (chessfeed.ai's claimed saved-branch exploration and checkpoint rewind), open since 2026-08-10 | none | same law-6 exposure | |
-| CLP-a24 | §11 | Seven named hands-on residuals: does Chessigma's Bot Challenge preserve a second attempt; does Chessiverse preserve rewound lines; is *"Bot at your level"* a human model; does Dr. Wolf's undo erase the attempt; does Noctie preserve anything across a takeback; is Chess.com's Retry one ply | ledger | [[D1458]] bounds all of them; none is scheduled | |
+| CLP-a24 | §11 | ✅ **Closed 2026-09-07 at the research-integrity boundary:** five remaining inaccessible interactions no longer masquerade as yes/no product facts; current public surfaces and exact paid/authenticated/native/rollout ceilings are recorded | closed | [[D1458]], [[D3080]], [[D3081]]; optional hands-on can upgrade confidence but does not gate 1.0 | 🏆 |
 
 ### After the run — `ux-after-the-run.md`
 

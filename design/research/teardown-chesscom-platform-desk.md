@@ -1,5 +1,11 @@
 # Teardown: Chess.com as a whole platform — desk research
 
+> **2026-09-07 correction (CLP-a24):** The one-ply Retry description was a dated surface, not a
+> timeless platform fact. Current official mobile help retains Retry + Hint, while the 2026 web
+> rollout is reported to replace the dedicated control with direct board variation. The public
+> signed-out review URL redirects to Analysis/account entry. Version future claims by
+> platform/surface/date; `ux-core-loop.md` §11 is the maintained boundary.
+
 - Date: 2026-08-14
 - Feeds: Q1a / E1 (the sweep-2 census flagged Game Review re-entry and Coach Practice as
   load-bearing unknowns); Q2 (paid-competitor pricing); `design/02` §Adoption posture.

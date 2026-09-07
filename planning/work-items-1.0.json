@@ -1140,17 +1140,22 @@
     {
       "id": "ARR-a25",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-arrival-and-start.md",
       "sourceSection": "§13",
       "sourceHeading": "Arrival and getting into a session — `ux-arrival-and-start.md`",
-      "summary": "The coverage-matrix row this dossier owes `design/research/README.md`",
-      "legacyRoute": "none",
-      "note": "written, not landed (shared worktree)",
-      "sourceDigest": "sha256:e28c93f3403670378f47ca3e5fa76f7d1d07439853a8be062bc4f8b97102c5b6"
+      "summary": "✅ **Closed 2026-09-07:** the coverage matrix links the arrival dossier and records its measured latency/evidence boundary",
+      "legacyRoute": "closed",
+      "note": "`design/research/README.md`; ARR-a9 result",
+      "tournamentReady": true,
+      "sourceDigest": "sha256:6cc2e7de465d84d7fbfa9d972c1c4e4e68ee1366aa80c74838c71125af602648",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "design/research/README.md coverage matrix row links ux-arrival-and-start.md and records its measured ARR-a9 status and evidence boundary"
+      }
     },
     {
       "id": "ARR-a3",
@@ -3438,17 +3443,22 @@
     {
       "id": "CLP-a24",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "rehearsal",
       "owner": "core-loop",
-      "assignment": "capability:rehearsal",
+      "assignment": "closed",
       "sourceDocument": "ux-core-loop.md",
       "sourceSection": "§11",
       "sourceHeading": "The core loop — `ux-core-loop.md`",
-      "summary": "Seven named hands-on residuals: does Chessigma's Bot Challenge preserve a second attempt; does Chessiverse preserve rewound lines; is *\"Bot at your level\"* a human model; does Dr. Wolf's undo erase the attempt; does Noctie preserve anything across a takeback; is Chess.com's Retry one ply",
-      "legacyRoute": "ledger",
-      "note": "[[D1458]] bounds all of them; none is scheduled",
-      "sourceDigest": "sha256:a086fbcc59aa1ac09c6b4c8646de6151f89b13c919244c4a29d7c3657b5337a8"
+      "summary": "✅ **Closed 2026-09-07 at the research-integrity boundary:** five remaining inaccessible interactions no longer masquerade as yes/no product facts; current public surfaces and exact paid/authenticated/native/rollout ceilings are recorded",
+      "legacyRoute": "closed",
+      "note": "[[D1458]], [[D3080]], [[D3081]]; optional hands-on can upgrade confidence but does not gate 1.0",
+      "tournamentReady": true,
+      "sourceDigest": "sha256:d6fc5a0fd3fa2d8d7ba9e61873338ffd97a4c2e077284ffbcd9098fdb26e880d",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "current public Chessigma, Noctie, Chess.com and Dr. Wolf surfaces inspected; unsupported erase, model-species and universal one-ply claims withdrawn; exact paid, authenticated, native and rollout ceilings recorded in ux-core-loop.md section 11"
+      }
     },
     {
       "id": "CLP-a3",

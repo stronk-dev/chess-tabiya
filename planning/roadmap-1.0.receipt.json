@@ -3,10 +3,10 @@
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
     "roadmap": "sha256:e6a6283bf6817f6e88bc46bfeea5c73a40170325145e0cf7cbea78eb76047584",
-    "workItems": "sha256:690871857c8d9f709b96c43244d27b2d40d7c2ba26091ff89b2550904af75b04",
-    "workState": "sha256:108a154f71bf4d9b667a5a00fb0a3710481088b20b3a8104f5457b368d38eab9",
+    "workItems": "sha256:5e530607356ad0580e9b2bc6bd8a1386e89ae835c4448bf36b7d2a282fe3f7e3",
+    "workState": "sha256:699058153f947fd4e845bcdbd3a64cc4c1d5c84fdba69885366b4f0d40dd093d",
     "rfcRegister": "sha256:5d21721c327cc0fb5150fedfde60e62cd29a7cab45770641257da5308ec9d5e9",
-    "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
+    "uxIndex": "sha256:f9b1666fa716b19afbfd2e8c36a7c33671edbc1372deb8249f1528bfadd5fc99",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
     "rest": "sha256:5106b32e848307e6739952224fc5a75d1f4ae62fe3c8325bd617c2d1395a83a7"
@@ -30,17 +30,17 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 662,
+      "todo": 661,
       "doing": 1,
       "blocked": 1197,
-      "done": 860,
+      "done": 863,
       "refused": 108
     },
     "workItems": {
-      "queued": 144,
+      "queued": 142,
       "blocked_owner": 61,
       "blocked_rfc": 120,
-      "completed": 220,
+      "completed": 222,
       "retired": 24
     },
     "dimensionStates": {
@@ -585,10 +585,10 @@
       "owner": "core-loop",
       "rfcCount": 2,
       "workItems": {
-        "queued": 9,
+        "queued": 7,
         "blocked_owner": 15,
         "blocked_rfc": 12,
-        "completed": 44,
+        "completed": 46,
         "retired": 4
       },
       "routes": {

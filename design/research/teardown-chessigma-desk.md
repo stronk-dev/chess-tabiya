@@ -1,5 +1,11 @@
 # Teardown: Chessigma — desk research
 
+> **2026-09-07 correction (CLP-a24):** This dossier correctly records that the paid module was
+> not run, but later promoted absence of a public retention claim into *“does not preserve”*.
+> Withdraw that product fact. The current public surface establishes exact-ply, same-clock,
+> level-matched-bot re-entry; attempt retention/comparison and bot model species/calibration remain
+> undisclosed. `ux-core-loop.md` §11 and the competitor matrix are the maintained boundary.
+
 - Date: 2026-08-16
 - Feeds: Q1a / E1; `design/02` §Adoption posture; the adoption audit
   (`adoption-audit.md`); `docs/game-import-and-story.md` (the companion workflow we

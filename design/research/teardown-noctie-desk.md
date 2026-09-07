@@ -1,5 +1,10 @@
 # Teardown: Noctie (noctie.ai) — desk research
 
+> **2026-09-07 boundary refresh (CLP-a24):** Current first party now documents Takeback, complete
+> move-list reading, finished-game Review and game history, while requiring an account and Club
+> subscription for play/save/training. It still does not state whether a replaced continuation
+> survives. Keep the join unverified; do not turn source silence into “destroyed/not surfaced.”
+
 - Date: 2026-08-11
 - Feeds: Q1a / E1
 - Method: desk / experience mining, no account. Sources: noctie.ai marketing pages, FAQ,
@@ -11,15 +16,16 @@
 
 ## Q1. Takeback semantics: is the original attempt preserved after a takeback?
 
-**Finding: takebacks exist; NO public evidence the original attempt is preserved anywhere.
-Unresolved — needs hands-on. Signal leans "destroyed/not surfaced."**
+**Finding, refreshed 2026-09-07: takebacks, full move-list review and game history exist; no
+public source binds them into a retained alternate attempt. Unresolved — needs subscribed
+hands-on. No directional inference is licensed.**
 
 - Takebacks confirmed as a first-class feature: "if you make a mistake, you can take it back
   and ask for a hint." [V] https://noctie.ai
 - Third-party feature writeup: "Hints and Move Takeback: request a hint or take back a move
   mid-game to explore alternatives." [V] https://aitoolsexplorer.com/ai-tools/noctie-chess-ai/
-- Evidence of absence: no mention of the taken-back move being kept (history, review,
-  variation tree) in any of: FAQ [V] https://noctie.ai/faq (13 questions, none on takebacks),
+- Original desk-search boundary: no mention of the taken-back move being kept as an alternate
+  attempt or variation tree in any of: FAQ [V] https://noctie.ai/faq (13 questions, none on takebacks),
   homepage [V], blog index + sparring/intro posts [V] https://noctie.ai/blog,
   [V] https://noctie.ai/chess/creating-sparring-positions-in-noctie/,
   [V] https://noctie.ai/chess/introducing-noctie-ai-chess-helper/,

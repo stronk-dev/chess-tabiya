@@ -1,5 +1,10 @@
 # Teardown: Dr. Wolf (Learn Chess with Dr. Wolf) — desk research
 
+> **2026-09-07 correction (CLP-a24):** Searches returning no branch-history claim did not prove
+> that Undo erases an attempt. Current first party establishes Undo plus later practice of retained
+> mistakes, but not the exact transition between them. Treat attempt retention as unverified until
+> the native app is run; `ux-core-loop.md` §11 and the competitor matrix supersede the erase claim.
+
 - Date: 2026-08-14
 - Feeds: Q1a / E1 (sweep 2's #1 teardown pick — the closest mainstream product to
   "it will rewind and explain", `design/00-thesis.md` §Why anyone would use it);

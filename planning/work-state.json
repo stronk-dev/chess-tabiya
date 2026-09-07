@@ -11077,9 +11077,9 @@
     },
     {
       "id": "D1458",
-      "state": "todo",
-      "sourceGlyph": "📊",
-      "sourceDigest": "sha256:4192035b349490cb4bc38fda58f4b68a87041a04c7fb664d201c5db74680ea36",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:fead0942a7ffc37e33b77dcb1a84a58e8d3702fc5b30e79341141c3e366db2ba",
       "uxItems": [
         "A11-a33",
         "AUT-a26",
@@ -11088,7 +11088,8 @@
         "OPP-a17",
         "SET-a27"
       ],
-      "owner": "assistance-and-presentation"
+      "evidence": "design/research/ux-core-loop.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D1459",
@@ -25065,6 +25066,28 @@
       "sourceDigest": "sha256:637b12c26c12c834eedd7230b4d8004dfff569dbfc164c442fd0360a3e5f0ed8",
       "uxItems": [],
       "evidence": "tests/browser/arrival-latency.spec.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3080",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1a3bf17683d3f0d83b32e94fec4ddc95a13efe620954a4cd317987b1675cb090",
+      "uxItems": [
+        "CLP-a24"
+      ],
+      "evidence": "design/research/ux-core-loop.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3081",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d72caf06a0fa6ef714c5c2d1be21a8902dbc23c627fb162168d607b39f99b22e",
+      "uxItems": [
+        "CLP-a24"
+      ],
+      "evidence": "design/research/ux-core-loop.md",
       "evidenceKind": "path"
     }
   ]

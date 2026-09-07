@@ -43,8 +43,9 @@ positions and endgame library without clock pressure; instant takeback + hint.
 any position is exactly Q5/Maia territory and the strongest proof of demand for our
 opponent layer. But its **move-level color labels (Excellent→Blunder) after every move**
 `[V]` are the pattern ADR-0006 rejects — the learner plays the label, not the position. Its
-€8–14/mo subscription `[V]` conflicts with the free posture. Takeback-vs-persistent-branch
-is Q1a queue 2.
+€8–14/mo subscription `[V]` conflicts with the free posture. Current first party also documents
+game history and finished-game review, but does not say whether Takeback retains the replaced
+continuation; that join remains an optional subscribed teardown, not an absence claim.
 
 ### Chess From Position (free web)
 Props `[P]` (matrix row 5; [R15](https://lichess.org/@/NishAz/blog/chess-from-position-dive-into-real-random-chess-positions/QgL93ERv)):
@@ -212,14 +213,16 @@ existing free tools (Lichess puzzles + low-Elo Maia sparring). Escalate via
 - **Mode-menu sprawl** (Lucas Chess `[P]`): free+local is necessary but not sufficient —
   without one protocol it decays into a toolbox.
 
-## Open verification items (stay [P] until Q1a hands-on)
+## Verification ledger (interaction claims stay `[P]` or unverified until actually run)
 
-1. Chess Endgame Training: actual latency/UX failure modes; does branch-continue preserve
-   attempts? (queue 1, K9)
-2. Noctie: is takeback a persisted branch or an eraser? exact feedback timing. (queue 2)
+1. Chess Endgame Training: **closed** — latency and destructive branching measured hands-on;
+   later K9 remeasurement owns regressions.
+2. Noctie: **public boundary closed; subscribed interaction optional** — Takeback, move list,
+   Review and history are documented; whether the replaced continuation survives is unverified.
 3. Chessable: does bot-from-position work on strategic/middlegame chapters or only sharp
    theory? (queue 3)
-4. Chess.com Practice: multi-move redo + color switching ergonomics. (queue 4)
+4. Chess.com Practice/Game Review: **public boundary refreshed** — mobile help and the 2026 web
+   rollout diverge; authenticated platform-pair teardown remains optional.
 5. DecodeChess: alive or dead? (403 on this pass; classification above assumes archive
    description.)
 6. Aimchess/GrindChess current feature state vs their canonical matrix rows.

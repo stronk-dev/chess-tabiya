@@ -17788,3 +17788,27 @@ saved analysis branches remain the product's closest strength.
 vendor-claimed Guided Play branch retention, while chessfeed occupies saved analysis branching;
 neither checked record establishes Tabiya's preserved N-way played-consequence comparison with
 explicit attempt semantics and inspectable grounding.
+
+## 2026-09-07 — Inaccessible competitor interactions stopped supplying negative facts
+
+**What changed:** CLP-a24 inspected the current public Chessigma, Noctie, Chess.com and Dr. Wolf
+entry surfaces and re-read their first-party descriptions. The work item itself was wrong before
+the research started: it said seven residuals, listed six, and still included Chessiverse after
+CLP-a22 had reconciled it. The five remaining claims are now independently bounded rather than
+treated as one generic “hands-on” debt.
+
+**Corrections:** Chessigma publicly claims exact-ply, same-clock bot re-entry but does not disclose
+attempt retention or model species; casual play could measure feel but could not identify its
+model. Dr. Wolf establishes Undo and later mistake practice but not their state join. Noctie
+establishes Takeback, move-list Review and game history but gates play/save/training on account and
+subscription. Chess.com's official mobile help still documents Retry + Hint, while its 2026 web
+rollout replaces the dedicated control with direct board variation for at least some users. The
+former universal one-ply, erase and non-human-model claims are withdrawn. Optional paid,
+authenticated or native runs may upgrade confidence later; none is a hidden 1.0 prerequisite.
+
+**Evidence/next:** the competitor matrix, four standing teardown headers, core-loop dossier,
+coverage matrix, E1 gate and verification protocol all carry the same boundary. [[D1458]] is
+superseded rather than left as a timeless “no hands-on” claim; [[D3080]] and [[D3081]] close.
+ARR-a25 also closes as tracker residue because its required coverage row has already landed. The
+next 1.0 unit returns to dependency-clear product/research work rather than buying access merely to
+turn explicit abstentions into yes/no cells.

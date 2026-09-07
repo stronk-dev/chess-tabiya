@@ -43,19 +43,20 @@ pressed ten thousand times everywhere else: **take it back**.
 Every tool they have used trains that reflex, and the field's variants are worth naming precisely
 because each one is a *different* promise:
 
-- **Undo that erases.** Dr. Wolf offers *"unlimited hints, unlimited undos"* `[V]` App Store —
-  and `teardown-drwolf-desk.md` §3's verdict is that *"undo here means the move **did not
-  happen**; the game continues as the single surviving line."*
+- **Undo whose branch semantics are undisclosed.** Dr. Wolf offers unlimited hints and undos
+  `[V]` App Store, while its current first-party site says mistakes are retained for later
+  isolated practice. Neither source says whether an undone continuation remains retrievable as
+  an attempt; the former erase verdict is withdrawn in §11.
 - **Undo that breaks the game.** Chess.com replaced bot-game review arrows with a single Undo
   that reverts the move pair and makes the bot recalculate; *"the original game is not
   preserved"* `[V]` forum. Practice-vs-Computer's takeback-then-branch is **reported broken** and
   moderator-acknowledged `[V]`: *"clicking the arrow moves my piece back but … the computer
   stubbornly just makes the original moves."* A user on the post-game case: *"This abrupt
   undoable event is beyond maddening."* `[V]`
-- **Retry as a one-ply puzzle.** Chess.com's Game Review Retry *"allows you to replay a specific
-  position and attempt to find the best move yourself"* `[V]` support 8584089;
-  `teardown-chesscom-platform-desk.md` §2's verdict is *"a one-ply puzzle stapled to the
-  review."*
+- **Retry/direct variation split by platform and rollout.** Chess.com's current mobile help
+  documents Retry, Hint and feedback on the submitted move `[V]`; its 2026 web rollout is reported
+  to replace the dedicated control with making another move directly on the board `[P]`. Neither
+  arm publishes a preserved attempt family or opponent consequence; §11 records the divergence.
 - **Takeback fused with a hint.** Noctie: *"if you make a mistake, you can take it back and ask
   for a hint"* `[V]` noctie.ai — going back and being told are **one gesture**.
 - **Branching that destroys the future.** The one hands-on observation in the corpus:
@@ -85,12 +86,14 @@ is unmet: [[D494]] already records that *"the app is silent about being silent."
 
 The rejected shape — *"an engine review screen with a rewind button"* — is not rejected because
 rewind is bad. It is rejected because there the rewind is a **navigation control**: you scrub to
-a ply and the engine tells you what was there. `teardown-chessigma-desk.md:139-143` states the
-discriminator better than the repo had managed before, from a live example:
+a ply and the engine tells you what was there. `teardown-chessigma-desk.md:139-143` states a useful
+discriminator, but its Chessigma premise was inferred from silence and is corrected in §11:
 
-> *"Chessigma re-enters the game; it does not preserve the re-entry… the line in AGENTS.md
-> §Rejected is not 'does it have a rewind button' — Chessigma has re-entry and is still not us.
-> **The line is whether the second attempt survives to be compared with the first.**"* `[V]` desk
+> Re-entry alone is not the product. **The line is whether a second played attempt survives to be
+> compared with the first.**
+
+That is Tabiya's product boundary, not an assertion that Chessigma deletes an attempt. The current
+public Chessigma surface claims exact-ply re-entry but does not disclose retention or comparison.
 
 **The whole product therefore rests on the compare surface being good**, because compare is the
 only place a surviving attempt pays off. It is also, measured at HEAD, the weakest surface we
@@ -378,17 +381,21 @@ Two secondary expectations, both legitimate and both unserved:
   moves or less"*, *"**Unfeasible mate**"* — fire on objective flips **without blocking the
   move**. The teardown calls it *"the closest thing to outcome-preservation feedback seen in any
   product. **But it never says *why*** — no concept, no evidence, no remediation."*
-- **Everything else releases you.** Chess.com's Retry is one ply `[V]`. Chessable restarts the
+- **Everything else releases you or leaves the continuation in analysis.** Chess.com's current
+  app/web behavior is platform-divergent (§11) and neither arm publishes a played consequence.
+  Chessable restarts the
   sequence on a wrong move and demotes the SRS card `[P]`; its soft-fail path gives *"you will not
   be penalised with a mistake. Instead, you get to try again"* `[V]` blog, but *"the drill still
-  converges on the single text move."* Dr. Wolf's undo erases `[P]`. Chess2Story's moment slides
-  are read-only `[V]` desk. ChessMind AI's retry keys are exercise-scoped `[V]`.
-- **Harvest-the-position, lose-the-attempt** is the corpus's dominant pattern and it is worth
-  naming because it is *adjacent* to what we do. Dr. Wolf `[V]`/`[P]`: mistakes become an isolated
-  position in a practice queue — *"**Nothing is comparable because only one thing is kept per
-  mistake**."* Chessbook `[V]`: own-game scan turns deviations into SRS cards, *"severed from the
-  game it happened in."* Chessigma `[V]`: *"their unit of truth is the aggregate metric, not the
-  attempt."*
+  converges on the single text move."* Dr. Wolf's undo retention is undisclosed (§11).
+  Chess2Story's moment slides are read-only `[V]` desk. ChessMind AI's retry keys are
+  exercise-scoped `[V]`.
+- **Harvest the position into a different learning unit** is the corpus's dominant pattern and it
+  is worth naming because it is *adjacent* to what we do. Dr. Wolf `[V]`: mistakes become later
+  practice positions; its Undo retention remains undisclosed. Chessbook `[V]`: own-game scan turns
+  deviations into SRS cards, severed from the played consequence. Chessigma `[V]`: the public
+  surface leads with aggregate metrics and derived drills, while attempt persistence is
+  undisclosed. None of those observations is promoted into a claim that the original bytes were
+  deleted.
 - **Conversion Trainer is the framing to steal** `[V]` `/supercoach`: *"Won the position, lost the
   game? Drill the moments you let it slip."* `teardown-chessigma-desk.md:371-375` rates it the
   strongest cheap adoption in that dossier, with **no invariant collision**, because we already
@@ -465,8 +472,9 @@ mechanic whose ruled purpose is the opposite.
 
 ### What competitors do
 
-- **Free and destructive** — Dr. Wolf `[P]`, Chess.com bot Undo `[V]`, CET move-list branching
-  `[V]` **hands-on**.
+- **Free and destructive** — Chess.com bot Undo `[V]` and CET move-list branching `[V]`
+  **hands-on**. Dr. Wolf no longer belongs in this bucket without observing its native Undo
+  transition (§11).
 - **Free and fused with a hint** — Noctie `[V]`. Worth noticing: it treats going back and being
   told as the same gesture, which is exactly the conflation our disclosure model separates.
 - **Preserved as variations** — Chessiverse claims rewound lines persist as clickable move-list
@@ -1120,9 +1128,12 @@ Genuine forks where the evidence is in and the call is the owner's.
 
 ## 11. Load-bearing `[P]` claims, and what would settle each
 
-Per the commission's instruction. Nothing in the competitor pass was hands-on this session;
-`competitor-play-ux.md:8-13` says the same of its own, and `teardown-cet.md` remains the corpus's
-only hands-on session.
+Per the commission's instruction. This 2026-09-07 follow-up drove the current public web entry
+surfaces for Chessigma, Noctie, Chess.com and Dr. Wolf `[V]`; it did **not** create an account,
+start a paid trial, install a native app or claim authenticated gameplay. `teardown-cet.md`
+therefore remains the corpus's only completed competitor play session. Public-surface observation
+can settle what the product currently offers and where the access boundary is; it cannot settle
+what a takeback retains behind that boundary.
 
 **Resolved after this pass:** Chessiverse's current vendor claim is no longer internally
 contradicted, and chessfeed.ai's analysis tree is no longer misclassified as played attempts. On
@@ -1134,12 +1145,17 @@ unclaimed. Neither conclusion asserts implementation quality.
 
 | Claim | Load it bears | Settled by |
 |---|---|---|
-| **Chessigma's Bot Challenge does not preserve a second attempt** `[P]` — inferred from silence across every fetched surface plus the aggregate-metric orientation (`teardown-chessigma-desk.md:136,450`) | **The discriminator in §0.1**, and therefore §7's urgency | One €12 month, two attempts at one position, checking whether the first is retrievable. The teardown's own §9 residual 1 |
-| **"Bot at your level" is not a human model** `[P]` (`teardown-chessigma-desk.md:296-298,455-458`) | §6's differentiation argument | ~20 moves at a stated level, logging FENs — the Noctie protocol, `teardown-protocols.md` §2.1 |
-| **Dr. Wolf's undo erases the attempt** `[V]`-as-evidence-of-absence across fetched assets | §0's framing of the reflex we are refusing | Hands-on, 5 minutes |
-| **Noctie preserves nothing across a takeback** — the teardown's own header says *"Unresolved — needs hands-on. Signal leans 'destroyed/not surfaced'"* | §4's claim that the field conflates going back with being told and keeps neither | Hands-on |
-| **Chess.com's Retry is one ply** `[V]` from support docs, not hands-on | §3's claim that the field releases the learner from the consequence | One game review with a blunder in it |
-| **Nobody earns a rewind through play** `[V]`-absence over the surveyed set | §4's statement that we design without precedent | Cannot be strengthened by desk research. `README.md` coverage limit 1 applies: the matrix is a snapshot, not a watch, and three real competitors were owner finds |
+| **Chessigma's Bot Challenge does not preserve a second attempt** — **withdrawn as a product fact.** The current public surface `[V]` repeats exact-ply re-entry, same clock and a level-matched bot, and makes no claim about attempt retention. The paid module is not publicly runnable. Silence cannot prove deletion | It no longer bears the discriminator in §0.1. The narrower evidenced statement is: *Chessigma publicly claims re-entry, while attempt persistence and comparison are undisclosed* | A paid run could upgrade the interaction record, but 1.0 does not depend on buying access: the matrix now records `unverified`, not `N` ([current surface](https://www.chessigma.com/supercoach)) |
+| **"Bot at your level" is not a human model** — **withdrawn as an inference.** Chessigma says its bots play like people but publishes no model species or calibration `[V]` | No differentiation claim may rest on the model being non-human-trained. Twenty observed moves can measure perceived behavior, but cannot identify the underlying model | Technical disclosure or a preregistered behavioral calibration can establish the claim; a casual game cannot ([current surface](https://www.chessigma.com/supercoach)) |
+| **Dr. Wolf's undo erases the attempt** — **unverified.** The current first-party site says mistakes are retained for later isolated practice, and the App Store says the coach remembers moves; neither describes the state transition when Undo is used `[V]` | §0 may contrast pre-commit interception and isolated mistake practice with preserved branch comparison, but may not claim that Undo deletes the attempt | Native-app execution of Undo followed by review/history inspection. The browser surface is informational only ([first-party site](https://www.learnchesswithdrwolf.com/), [App Store](https://apps.apple.com/us/app/learn-chess-with-dr-wolf/id1353041020)) |
+| **Noctie preserves nothing across a takeback** — **unverified, with a sharper boundary.** The current first-party accessibility guide documents Takeback, a full move list, finished-game Review and game history, while saying play/save/training require an account and subscription `[V]`. It never says whether the replaced attempt survives | §4 may say Noctie fuses live feedback, hint and takeback; it may not say the original continuation is destroyed or retained | One subscribed takeback followed by history/review inspection. Until then the matrix records both adjacent capabilities and abstains on their join ([first-party guide](https://noctie.ai/docs/blind-mode-guide/)) |
+| **Chess.com's Retry is one ply** — **not a stable cross-platform fact.** Current official mobile help still documents Retry, Hint and feedback on the submitted move; the current signed-out web review URL redirects to Analysis/account entry, while April–May 2026 web-rollout reports and a Chess.com staff response say the dedicated button was replaced by direct board variation `[V]`/`[P]` | §3's field comparison must be versioned by platform and surface. Neither current arm establishes preserved attempts or a played consequence, so the core distinction survives without the stale one-ply assertion | An authenticated web and mobile pair would measure current gestures. The dossier now records the divergence instead of selecting whichever source supports its argument ([official app help](https://support.chess.com/en/articles/10328363-how-do-i-use-game-review-on-the-app), [web rollout report](https://www.chess.com/forum/view/help-support/retry-missing-in-game-review)) |
+| **Nobody earns a rewind through play** — retained only as a dated coverage statement, not an exhaustive market fact | §4 designs without an observed precedent in the 62-row snapshot; it does not claim that no precedent exists | A repeatable watch may refute it later. `README.md` coverage limit 1 applies: the matrix is a snapshot, not an exhaustive market census |
+
+This closes the *research-integrity* part of CLP-a24: none of the five inaccessible interactions
+is allowed to remain a load-bearing yes/no claim. It does **not** relabel those products as
+hands-on. The optional paid/authenticated/native executions remain useful future teardowns, but
+they are no longer hidden prerequisites for the 1.0 core-loop contract.
 
 **Two claims that are already refuted and that this spec therefore does not make:** *"nobody
 re-enters a reviewed game into live play"* (Chessigma does, `[V]`) and *"opening → play it out
@@ -1244,4 +1260,4 @@ Ids assigned at landing; head was **D1448** at drafting. Not written by this pas
 
 | Area | Feeds | Status | Report |
 |---|---|---|---|
-| Core-loop UX from the user's side — commit, consequence, rewind, branch, compare, replay-at-resistance; the expectation-versus-doctrine tension; the compare-visualisation answer and its selection gate | owner commission 2026-08-24, B1/B3 residuals, `rfc/evidence-presentation.md`, `rfc/module-registration.md`, [[D945]], [[D78]]/[[D542]], [[D687]]–[[D689]] | covered `[V]` shipped-state (read at `f2ddba55`) + `[P]` competitor (desk, inherited; no signed-in hands-on); **no participant evidence**; Chessiverse/chessfeed.ai contradiction pair reconciled 2026-09-07 at vendor-claim/category boundaries | `ux-core-loop.md` |
+| Core-loop UX from the user's side — commit, consequence, rewind, branch, compare, replay-at-resistance; the expectation-versus-doctrine tension; the compare-visualisation answer and its selection gate | owner commission 2026-08-24, B1/B3 residuals, `rfc/evidence-presentation.md`, `rfc/module-registration.md`, [[D945]], [[D78]]/[[D542]], [[D687]]–[[D689]] | covered `[V]` shipped-state (read at `f2ddba55`) + current public competitor surfaces / `[P]` inaccessible interaction; **no participant evidence**. Chessiverse/chessfeed.ai contradictions are reconciled; CLP-a24 withdraws unsupported erase/non-human/one-ply claims and records exact account, subscription, native-app and rollout ceilings. No paid/authenticated competitor gameplay is claimed | `ux-core-loop.md` |

@@ -2,7 +2,9 @@
 
 - **Feeds:** Q1a → E1; K9 (Chess Endgame Training speed bar); Q9 (any branch UX seen
   in the wild); `competitor-value-props.md` open verification items.
-- **Date created:** 2026-08-11. **Status:** protocols ready, no teardown executed.
+- **Date created:** 2026-08-11. **Status 2026-09-07:** CET executed. Current public entry
+  surfaces for Chessigma, Noctie, Chess.com and Dr. Wolf inspected; their paid/authenticated/native
+  interaction arms remain unexecuted and are no longer allowed to supply yes/no product facts.
 - **Method rule:** these sessions produce `[V]` evidence — record what you *did and
   observed*, with timestamps/screenshots where possible, not what the product claims.
   Each teardown lands as its own dossier (`teardown-<product>.md`) and updates the
@@ -14,6 +16,12 @@
 
 Time budget: 30–60 min per product. Do not explore beyond the checklist; note
 serendipitous findings in a "misc" section and move on.
+
+**1.0 boundary.** These protocols are optional evidence upgrades, not hidden release gates. Where
+an interaction is account-, subscription-, or native-app-gated, the maintained matrix records the
+adjacent observed capabilities and abstains on their join. A missing teardown must never be
+converted into “the product does not preserve attempts,” “the bot is not human-trained,” or a
+timeless cross-platform behavior claim. `ux-core-loop.md` §11 records the current ceilings.
 
 ## 1. Chess Endgame Training (free, no account — https://chess-endgame-trainer.web.app / see R-entry in archive index)
 
