@@ -1865,6 +1865,9 @@ two Compare boards own 128 unique cells and each active descendant resolves with
 ([[D3134]]). The same primitive now omits its move-entry disclosure on explicitly read-only
 Compare, Story, Live and wall positions instead of advertising an action that can never succeed;
 waiting-on-opponent boards retain the action with an exact visible refusal ([[D3135]]).
+Live overlay now binds its persistent host-mark attribution to both projections of that shared
+board, rather than leaving source identity as unrelated nearby prose. The production overlay
+journey resolves the relationship and closes INR-a6 ([[D3136]]).
 
 **1.0 exit:** board occupies one stable region; nothing grows in its column; adjacent regions
 scroll and become drawers/tabs on small screens; every route works with pointer, touch, keyboard,

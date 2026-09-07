@@ -18453,3 +18453,13 @@ wall-card position, then exposed only a disabled input and disabled submit actio
 now omits that dead disclosure for read-only instances. The distinct state where the board is
 interactive in principle but it is the other side's turn retains the form, disabled controls and
 an instance-scoped visible reason. Component fixtures bind both arms. D3135 closes.
+
+## 2026-09-07 — Live marks carry their source into the semantic board
+
+Relayed host marks already painted read-only arrows/circles and printed a persistent visible
+“Marks drawn by @…” sentence. The sentence was not related to either exposed board projection, so
+non-visual board navigation could not discover the source of those marks. `Chessboard` now accepts
+one exact description reference and applies it to both the Chessground surface and semantic grid;
+the Live overlay points both at the same visible attribution node. A mounted overlay journey loads
+a real run/session projection, renders a relayed arrow and proves both references resolve to
+`@coach`. INR-a6 and D3136 close.

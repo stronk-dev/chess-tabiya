@@ -1766,12 +1766,13 @@
         {@const node=session.runState.run.nodes.find((candidate)=>candidate.id===session.runState!.run.activeCursor.nodeId)}
         {#if node}
           {@const objective=liveOverlayObjectiveCopy(session.pack,node.objectiveState)}
-          <Chessboard fen={node.fen} startSide={session.runState.run.start.side} overlays={relayedMarkShapes(activeLiveDetail)} disabled={true} onMove={()=>{}}/>
+          {@const attribution=activeLiveDetail===undefined?"":markAttribution(activeLiveDetail)}
+          <Chessboard fen={node.fen} startSide={session.runState.run.start.side} overlays={relayedMarkShapes(activeLiveDetail)} describedBy={attribution?"live-overlay-mark-attribution":undefined} disabled={true} onMove={()=>{}}/>
           <aside>
             <p class="eyebrow">Tabiya live</p>
             <h1>{objective.headline}</h1>
             <p>{objective.status} · {session.runState.run.branches.length} {session.runState.run.branches.length===1?"preserved attempt":"preserved attempts"}</p>
-            {#if activeLiveDetail && markAttribution(activeLiveDetail)}<p>{markAttribution(activeLiveDetail)}</p>{/if}
+            {#if attribution}<p id="live-overlay-mark-attribution">{attribution}</p>{/if}
             {#if activeLiveDetail?.vote}<p>{activeLiveDetail.vote.window.prompt}</p><ul>{#each activeLiveDetail.vote.tally as item}<li>{item.label}: {item.count}</li>{/each}</ul><p>{voteAttribution(activeLiveDetail)}</p>{/if}
             {#if session.runState.withheld}<p>Host is ahead; evidence is withheld until this run discloses.</p>{/if}
           </aside>

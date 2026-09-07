@@ -605,6 +605,64 @@ describe("application shell", () => {
     await unmount(component);
   });
 
+  it("keeps live overlay marks visibly and semantically attributed", async () => {
+    const session = {
+      id: "overlay-session",
+      runId: run.id,
+      kind: "stream" as const,
+      title: "Coach stream",
+      boardControl: "host_directed" as const,
+      rotationCursor: 0,
+      createdBy: "learner-coach",
+      createdAt: "2026-09-07T12:00:00.000Z",
+    };
+    const summary: LiveSessionSummary = {
+      ...session,
+      board: {
+        activeFen: run.nodes[0]!.fen,
+        objectiveState: "active",
+        sideToMove: "white",
+        plyCount: 0,
+        pausedAt: null,
+        leaseHeldBy: { learnerId: "learner-coach", handle: "coach" },
+        lastMoveAt: null,
+      },
+    };
+    const detail: LiveSessionDetail = {
+      session,
+      role: "spectator",
+      activeNodeId: run.activeCursor.nodeId,
+      leaseHeldBy: { learnerId: "learner-coach", handle: "coach" },
+      grants: [{ learnerId: "learner-coach", handle: "coach", role: "host", grantedAt: "2026-09-07T12:00:00.000Z" }],
+      moveAuthorship: [],
+      proposals: [],
+      invitations: [],
+      legs: [],
+      marks: [{ scope: "position", brush: "green", orig: "e2", dest: "e4", drawnBy: { learnerId: "learner-coach", handle: "coach" }, at: "2026-09-07T12:01:00.000Z" }],
+    };
+    const overlayApi: DrillClientApi = {
+      ...api(),
+      async liveSessions() { return [summary]; },
+      async liveSession() { return detail; },
+    };
+    history.replaceState(null, "", `/live/overlay/${run.id}`);
+    const component = mount(App, {
+      target: target(),
+      props: { api: overlayApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
+    });
+
+    const grid = await vi.waitFor(() => {
+      const candidate = document.querySelector<HTMLElement>(".live-overlay [data-board-input-grid]");
+      expect(candidate).not.toBeNull();
+      return candidate!;
+    });
+    const attributionId = grid.getAttribute("aria-describedby")!;
+    expect(attributionId).toBe("live-overlay-mark-attribution");
+    expect(document.getElementById(attributionId)?.textContent).toBe("Marks drawn by @coach.");
+    expect(document.querySelector(".live-overlay [aria-label=Chessboard]")?.getAttribute("aria-describedby")).toBe(attributionId);
+    await unmount(component);
+  });
+
   it("collects a named rotation, explains incomplete setup, and renders creation failures", async () => {
     history.replaceState(null, "", "/live");
     const createdSession = {

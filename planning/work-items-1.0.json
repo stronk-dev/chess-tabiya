@@ -5646,17 +5646,21 @@
     {
       "id": "INR-a6",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "support",
       "owner": "assistance-and-presentation",
-      "assignment": "capability:support",
+      "assignment": "closed",
       "sourceDocument": "ux-in-run.md",
       "sourceSection": "§3.5",
       "sourceHeading": "The in-run experience — `ux-in-run.md`",
       "summary": "Relayed (host-drawn) marks carry **visible attribution at all times**, not on hover",
       "legacyRoute": "none",
       "note": "a teaching arrow that looks like a product arrow launders opinion as arithmetic",
-      "sourceDigest": "sha256:755c422fa578735e9670c63efde4270d3f7c69b74696b31454208693c7dc0c1f"
+      "sourceDigest": "sha256:755c422fa578735e9670c63efde4270d3f7c69b74696b31454208693c7dc0c1f",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "Live overlay renders persistent mark attribution and binds it by aria-describedby to both visual and semantic Chessboard projections"
+      }
     },
     {
       "id": "INR-a7",

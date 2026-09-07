@@ -49,6 +49,7 @@
     activeSquare?: Square | undefined;
     onActiveSquareChange?: (square: Square) => void;
     lastMoveAnnouncement?: string | undefined;
+    describedBy?: string | undefined;
     onMoveCommitted?: (announcement: string) => void;
     focusAfterMove?: boolean;
     boardTheme?: BoardThemeId;
@@ -78,6 +79,7 @@
     activeSquare,
     onActiveSquareChange,
     lastMoveAnnouncement,
+    describedBy,
     onMoveCommitted,
     focusAfterMove = false,
     boardTheme,
@@ -368,7 +370,7 @@
   {/if}
   <div class="board-surface">
     <!-- svelte-ignore a11y_no_static_element_interactions (Chessground owns the interactive board subtree) -->
-    <div class="board" bind:this={boardElement} aria-label="Chessboard"></div>
+    <div class="board" bind:this={boardElement} aria-label="Chessboard" aria-describedby={describedBy}></div>
     <div
       class="semantic-grid"
       bind:this={gridElement}
@@ -378,6 +380,7 @@
       aria-rowcount="8"
       aria-colcount="8"
       aria-readonly={inputDisabled ? "true" : undefined}
+      aria-describedby={describedBy}
       aria-activedescendant={`${semanticBoardId}-square-${inputState.activeSquare}`}
       data-board-input-grid
       onkeydown={gridKeydown}

@@ -85,6 +85,28 @@ describe("Chessboard", () => {
     await unmount(component);
   });
 
+  it("binds caller-owned context to both visual and semantic board projections", async () => {
+    const target = document.createElement("div");
+    target.innerHTML = '<p id="board-source">Marks drawn by @coach.</p>';
+    document.body.append(target);
+    const component = mount(Chessboard, {
+      target,
+      props: {
+        fen: "8/8/8/8/8/8/4P3/4K2k w - - 0 1",
+        startSide: "white",
+        disabled: true,
+        describedBy: "board-source",
+        onMove: vi.fn(),
+      },
+    });
+    await tick();
+
+    expect(target.querySelector("[aria-label=Chessboard]")?.getAttribute("aria-describedby")).toBe("board-source");
+    expect(target.querySelector("[data-board-input-grid]")?.getAttribute("aria-describedby")).toBe("board-source");
+    expect(target.querySelector("#board-source")?.textContent).toBe("Marks drawn by @coach.");
+    await unmount(component);
+  });
+
   it("explains text-entry refusal while the playable board waits for the other side", async () => {
     const target = document.createElement("div");
     document.body.append(target);

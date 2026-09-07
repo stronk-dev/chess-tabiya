@@ -291,7 +291,10 @@ Compare, Story and the spectator-safe live overlay all consume this same board
 primitive rather than maintaining visual-only position renderers. Explicitly
 read-only instances omit move-entry chrome entirely; an otherwise-playable
 board waiting on the other side keeps the text form disabled with a visible
-reason.
+reason. A caller may also attach an exact visible description to both the
+graphical and semantic projections. Live overlay uses that boundary for
+relayed marks, so host-drawn arrows and circles remain bound to their visible
+author attribution for non-visual board navigation.
 
 ## Evidence sentences
 
