@@ -59,5 +59,10 @@ account cannot purge an existing backup artifact.
 
 Those limits are stated before a learner starts either destructive flow. Library
 warns that a shared run can remain as read-only collaborator history and that a
-backup may retain an older copy; Account names collaborator, publication and backup
-retention before it loads the exact deletion preview.
+backup may retain an older copy. The normal Account view automatically loads the
+same exact, digest-bound plan used by deletion and presents permanent removal,
+shared read-only history, revoked access, retained publications, and backup
+retention as a read-only privacy summary. Loading or refreshing the summary cannot
+start deletion; a refresh failure removes the stale digest from the confirmation
+form and remains retryable. The delete form reuses the current visible summary
+instead of maintaining a second description of its effects.

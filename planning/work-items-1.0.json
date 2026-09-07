@@ -4887,17 +4887,21 @@
     {
       "id": "IMP-a13",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "account_data",
       "owner": "account-and-data",
-      "assignment": "capability:account_data",
+      "assignment": "closed",
       "sourceDocument": "ux-import-and-account.md",
       "sourceSection": "§5.4ii3",
       "sourceHeading": "Import, account and data — `ux-import-and-account.md`",
       "summary": "Reading your own inventory currently requires approaching the destroy control",
       "legacyRoute": "ledger",
       "note": "[[D1484]]",
-      "sourceDigest": "sha256:d56c84a759865ac150d9b9dfa7cf407b7d2dc78757ca4c819b59946a9cfece5b"
+      "sourceDigest": "sha256:d56c84a759865ac150d9b9dfa7cf407b7d2dc78757ca4c819b59946a9cfece5b",
+      "completion": {
+        "completedOn": "2026-09-07",
+        "evidence": "apps/web/src/lib/AssistanceSettings.svelte"
+      }
     },
     {
       "id": "IMP-a14",

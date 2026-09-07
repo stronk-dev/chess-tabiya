@@ -18368,3 +18368,11 @@ instead of saying what happened to the learner. One exhaustive display reducer n
 recorded PGN, board-terminal and unfinished outcomes and renders win/loss from the learner's side.
 A mounted Story fixture proves a Black learner sees “You lost · recorded PGN result” while the raw
 tag and wire enum are absent.
+
+## 2026-09-07 — Account data is visible before destructive intent
+
+The normal Account view now loads the existing exact deletion plan as a read-only privacy summary,
+so a learner can see which records are removed, retained as shared history, revoked, or preserved as
+published work without approaching the delete control. Loading and retrying never call deletion, and
+a failed refresh clears the stale digest before confirmation. This completes IMP-a13. D1484 remains
+open for IMP-a12: the twelve inventory-derived learner labels still need their recorded owner ruling.

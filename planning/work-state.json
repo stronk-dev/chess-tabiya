@@ -11362,7 +11362,7 @@
     {
       "id": "D1484",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0e7b41075875342aece75ef6ac838fe47a96ea7ac955fe3b8c0a11130718cfe4",
+      "sourceDigest": "sha256:bb9f377116c206098883c49ce836232d970d585de1c346f4bd633e7e75b0b26b",
       "uxItems": [
         "IMP-a12",
         "IMP-a13"

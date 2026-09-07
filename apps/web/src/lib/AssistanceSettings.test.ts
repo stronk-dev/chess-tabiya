@@ -43,25 +43,26 @@ describe("account lifecycle panel", () => {
 
     expect(document.body.textContent).toContain("Tabiya cannot import it");
     expect(document.querySelector<HTMLAnchorElement>('a[href="/library"]')?.textContent).toContain("download them as PGN");
+    await vi.waitFor(() => expect(loadDeletionPreview).toHaveBeenCalledOnce());
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Your data and privacy"));
+    expect(onDelete).not.toHaveBeenCalled();
 
     const passwordInputs = [...document.querySelectorAll<HTMLInputElement>('input[type="password"]')];
-    expect(passwordInputs).toHaveLength(1);
+    expect(passwordInputs).toHaveLength(2);
     setInput(passwordInputs[0]!, "export-password");
     document.querySelector<HTMLButtonElement>('button[type="submit"]')!.click();
     await vi.waitFor(() => expect(onExport).toHaveBeenCalledWith("export-password"));
     await vi.waitFor(() => expect(passwordInputs[0]!.value).toBe(""));
-    expect(document.querySelector('[role="status"]')?.textContent).toContain("download has started");
+    expect([...document.querySelectorAll('[role="status"]')].some((status) => status.textContent?.includes("download has started"))).toBe(true);
 
-    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("Review deletion effects"))!.click();
-    await vi.waitFor(() => expect(loadDeletionPreview).toHaveBeenCalledOnce());
-    await vi.waitFor(() => expect(document.body.textContent).toContain("Deletion effects"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Private account data"));
     const deletionStatus = document.querySelector<HTMLElement>('.deletion-preview [data-status-announcement]')!;
-    expect(deletionStatus.textContent).toContain("2 permanently deleted");
-    expect(deletionStatus.textContent).toContain("3 access records revoked");
+    expect(deletionStatus.textContent).toContain("2 records would be permanently deleted");
+    expect(deletionStatus.textContent).toContain("3 records would have access revoked");
     expect(deletionStatus.querySelector("button, a, input, [tabindex]")).toBeNull();
     expect(document.querySelector(".deletion-preview")?.getAttribute("aria-live")).toBeNull();
     const text = document.body.textContent ?? "";
-    for (const heading of ["Permanently deleted", "Kept read-only for collaborators", "Access revoked", "Published work retained"]) expect(text).toContain(heading);
+    for (const heading of ["Private account data", "Shared history", "Revocable access", "Published work"]) expect(text).toContain(heading);
     expect(text).toContain(preview.backupNotice);
 
     const deletePassword = [...document.querySelectorAll<HTMLInputElement>('input[type="password"]')].at(-1)!;
@@ -85,16 +86,37 @@ describe("account lifecycle panel", () => {
     setInput(exportPassword, "not-retained");
     document.querySelector<HTMLButtonElement>('button[type="submit"]')!.click();
     await vi.waitFor(() => expect(exportPassword.value).toBe(""));
-    expect(document.querySelector('[role="status"]')?.textContent).toContain("temporarily unavailable");
+    expect([...document.querySelectorAll('[role="status"]')].some((status) => status.textContent?.includes("temporarily unavailable"))).toBe(true);
 
-    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("Review deletion effects"))!.click();
-    await vi.waitFor(() => expect(document.body.textContent).toContain("Deletion effects"));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Private account data"));
     const deletePassword = [...document.querySelectorAll<HTMLInputElement>('input[type="password"]')].at(-1)!;
     setInput(deletePassword, "still-present-for-retry");
     [...document.querySelectorAll<HTMLButtonElement>('button[type="submit"]')].find((button) => button.textContent?.includes("Delete account"))!.click();
     await vi.waitFor(() => expect(document.querySelector('[role="alert"]')?.textContent).toContain("became stale"));
-    expect(document.body.textContent).toContain("Deletion effects");
+    expect(document.body.textContent).toContain("Private account data");
     expect(deletePassword.value).toBe("still-present-for-retry");
+    await unmount(component);
+  });
+
+  it("keeps an automatic privacy-summary failure recoverable and non-destructive", async () => {
+    let attempts = 0;
+    const loadDeletionPreview = vi.fn(async () => {
+      attempts += 1;
+      if (attempts === 1) throw new Error("Summary temporarily unavailable");
+      return preview;
+    });
+    const onDelete = vi.fn(async () => {});
+    const component = mount(AssistanceSettings, { target: target(), props: {
+      learner: { id: "learner-a", handle: "alice", createdAt: "2026-08-23T00:00:00.000Z" },
+      onSignOut: vi.fn(), onExport: vi.fn(), onDelete, loadDeletionPreview,
+    } });
+
+    await vi.waitFor(() => expect(document.querySelector('[role="alert"]')?.textContent).toContain("temporarily unavailable"));
+    expect(onDelete).not.toHaveBeenCalled();
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Try loading again")!.click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain("Private account data"));
+    expect(loadDeletionPreview).toHaveBeenCalledTimes(2);
+    expect(onDelete).not.toHaveBeenCalled();
     await unmount(component);
   });
 });

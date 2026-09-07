@@ -280,7 +280,7 @@
         "evidence": ["not_applicable", "This slice transports provenance but creates no chess truth."],
         "state": ["partial", "Identity, authorization, account export/delete, and writer leases exist; guest/claim, complete bundle, and future profile/social coverage remain."],
         "api": ["partial", "Auth/export/delete work; account-level import, portability versioning, backup/restore, and complete object coverage remain."],
-        "experience": ["partial", "Login exists; first-run account timing, disclosure, destructive previews, download progress, import conflicts, and recovery are unfinished."],
+        "experience": ["partial", "Login, destructive previews, and a standing read-only account-data summary exist; first-run account timing, twelve-class inventory copy, download progress, import conflicts, and recovery remain unfinished."],
         "defaults": ["blocked", "Private self-hosting, data minimization, explicit sharing, and no ambient coach access are the defaults."],
         "content": ["not_applicable", "Fixtures cover account object classes rather than chess content."],
         "verification": ["partial", "Lifecycle tests exist; full export round-trip, deletion, restore, multi-user isolation, shared links, guest claim, and future schema fixtures remain."],
@@ -435,9 +435,9 @@
         "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
           "at": "2026-09-07",
-          "summary": "The in-run Support doorway keeps raw evidence-channel controls behind Advanced in the Inspector; related-rehearsal return doors speak titles and legal SAN; saved-run chrome resolves titles plus shared objective-progress language; and Story now renders recorded, terminal and unfinished results from the learner's side rather than exposing PGN/wire tokens. Full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
+          "summary": "The in-run Support doorway keeps raw evidence-channel controls behind Advanced in the Inspector; related-rehearsal return doors speak titles and legal SAN; saved-run chrome resolves titles plus shared objective-progress language; Story renders results from the learner's side; and Account now shows its exact data-retention effects before destructive intent. Full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
           "impact": "advanced",
-          "evidence": ["planning/ux-implementation-index.md", "rfc/play-composition.md"],
+          "evidence": ["planning/ux-implementation-index.md", "rfc/play-composition.md", "apps/web/src/lib/AssistanceSettings.svelte", "docs/account-data-lifecycle.md"],
           "anchors": [{"kind": "rfc", "id": "play-composition.md", "digest": "sha256:2584fcb3f47535662d294ac9d442e432a97ad70dd537ce389929285e9b4fa628"}]
         },
         "exit": "Every route has opinionated defaults, loading/empty/error/recovery, responsive and accessible behavior, return doors, and no raw enum/JSON/cp or settings-first workflow."
