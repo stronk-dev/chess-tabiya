@@ -377,12 +377,12 @@
         "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, then land the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
         "latestCheckpoint": {
           "at": "2026-09-07",
-          "summary": "The stable board now reaches the 320×256 WCAG reflow floor, iPhone SE-class portrait heights and phone landscape. Short viewports use the compact single-column composition with a width-bound board, vertical drill scrolling, no horizontal overflow and one truthful selected companion region.",
+          "summary": "The stable board now reaches the 320×256 WCAG reflow floor, iPhone SE-class portrait heights and phone landscape. Short viewports use the compact single-column composition with a width-bound board, vertical drill scrolling, no horizontal overflow and one truthful selected companion region. Ordinary play now opens Support without exposing individual evidence switches; those controls remain available through the explicit Inspector.",
           "impact": "advanced",
           "evidence": ["apps/web/src/lib/play-composition.ts", "apps/web/src/lib/viewport-support.ts", "apps/web/src/lib/DrillScreen.svelte", "tests/browser/drill.spec.ts", "docs/drill-client.md", "rfc/play-composition.md", "rfc/README.md"],
           "anchors": [
             {"kind": "work_state", "id": "D1493", "digest": "sha256:f966d65301b42b98fbc5feb65bcf637d350fa8c22448cd87e2f5b7127c752981"},
-            {"kind": "rfc", "id": "play-composition.md", "digest": "sha256:4c086f45c9f9d1398c1865e6a1ee2dc3ac02b55ca5406b9766c35a7e844a4c24"}
+            {"kind": "rfc", "id": "play-composition.md", "digest": "sha256:b97051ffff66db97041eed060776853dcaa00716bfc94e9b477d883131a4f2f6"}
           ]
         },
         "exit": "Quiet, Guided, Support, Drill, Review, Campaign, Academy and Stream open useful by default; the board never shrinks or moves; every primitive remains available under Advanced."
@@ -434,11 +434,11 @@
         "dependsOn": ["stable-board-and-presets", "production-api-closure"],
         "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
         "latestCheckpoint": {
-          "at": "2026-08-31",
-          "summary": "The in-run shell advanced, but full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
-          "impact": "held",
+          "at": "2026-09-07",
+          "summary": "The in-run Support doorway now keeps raw evidence-channel controls behind Advanced in the Inspector, while full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
+          "impact": "advanced",
           "evidence": ["planning/ux-implementation-index.md", "rfc/play-composition.md"],
-          "anchors": [{"kind": "rfc", "id": "play-composition.md", "digest": "sha256:4c086f45c9f9d1398c1865e6a1ee2dc3ac02b55ca5406b9766c35a7e844a4c24"}]
+          "anchors": [{"kind": "rfc", "id": "play-composition.md", "digest": "sha256:b97051ffff66db97041eed060776853dcaa00716bfc94e9b477d883131a4f2f6"}]
         },
         "exit": "Every route has opinionated defaults, loading/empty/error/recovery, responsive and accessible behavior, return doors, and no raw enum/JSON/cp or settings-first workflow."
       },

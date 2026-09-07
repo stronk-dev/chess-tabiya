@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:909bcac2f02e01cbba5aa98fd74b2ec81416c57b2b296b5d9e657b035085375c",
+    "roadmap": "sha256:ca05dd1559440ad2b90183bd19d9a421ad919de3d3c60ddc35d7777bfe6e8503",
     "workItems": "sha256:983e2f3a517cfd73cdddab99412d3ec51f03803642923436f30454b5bf0f0b7d",
     "workState": "sha256:63df93fea7174de8ef66cb283942fe9f83a44cbf11b84698249b7766858d82e4",
-    "rfcRegister": "sha256:b0630a8a2e1dcdc7672bf2600d8859a742dac47d7804a8852508ab3703cecf7c",
+    "rfcRegister": "sha256:6095ebc9b72236510e709fb89a8c805f820962b60afd9fd0da8012a81ea5f512",
     "uxIndex": "sha256:5ca3e23500716997bf5a89e941981f81f59244826bf9983b8a0d358294519080",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -216,7 +216,7 @@
       "nextAction": "Freshly review the completed evidence-presentation sixth author repair and discharge its two independent dependencies; retain the shipped stable board shell, then land the eleven typed module seats, preset composition, remaining vocabulary cleanup and five emitter-dependent viewport-matrix columns.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "The stable board now reaches the 320×256 WCAG reflow floor, iPhone SE-class portrait heights and phone landscape. Short viewports use the compact single-column composition with a width-bound board, vertical drill scrolling, no horizontal overflow and one truthful selected companion region.",
+        "summary": "The stable board now reaches the 320×256 WCAG reflow floor, iPhone SE-class portrait heights and phone landscape. Short viewports use the compact single-column composition with a width-bound board, vertical drill scrolling, no horizontal overflow and one truthful selected companion region. Ordinary play now opens Support without exposing individual evidence switches; those controls remain available through the explicit Inspector.",
         "impact": "advanced",
         "evidence": [
           "apps/web/src/lib/play-composition.ts",
@@ -236,7 +236,7 @@
           {
             "kind": "rfc",
             "id": "play-composition.md",
-            "digest": "sha256:4c086f45c9f9d1398c1865e6a1ee2dc3ac02b55ca5406b9766c35a7e844a4c24"
+            "digest": "sha256:b97051ffff66db97041eed060776853dcaa00716bfc94e9b477d883131a4f2f6"
           }
         ]
       },
@@ -374,9 +374,9 @@
       ],
       "nextAction": "Ship full vertical journeys for arrival/rehearsal, whole-game Review/return, theory/library, human-like bots/history, profile/style/skills, campaign, human play, coach/classroom/stream and account lifecycle; close their UX items by observed behavior, not component presence.",
       "latestCheckpoint": {
-        "at": "2026-08-31",
-        "summary": "The in-run shell advanced, but full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
-        "impact": "held",
+        "at": "2026-09-07",
+        "summary": "The in-run Support doorway now keeps raw evidence-channel controls behind Advanced in the Inspector, while full route-level journeys still wait on evidence modules, presets, durable state and production API closure.",
+        "impact": "advanced",
         "evidence": [
           "planning/ux-implementation-index.md",
           "rfc/play-composition.md"
@@ -385,7 +385,7 @@
           {
             "kind": "rfc",
             "id": "play-composition.md",
-            "digest": "sha256:4c086f45c9f9d1398c1865e6a1ee2dc3ac02b55ca5406b9766c35a7e844a4c24"
+            "digest": "sha256:b97051ffff66db97041eed060776853dcaa00716bfc94e9b477d883131a4f2f6"
           }
         ]
       },

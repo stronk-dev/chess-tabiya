@@ -399,10 +399,10 @@ describe("Layer 3 screens", () => {
     revoice.click(); await tick();
     expect(onVoice).toHaveBeenCalledOnce();
     await vi.waitFor(() => expect([...document.querySelectorAll("p")].filter((element) => element.textContent === RECORDED_READING_GUARD)).toHaveLength(1));
-    document.querySelector<HTMLButtonElement>(".inspector-surface header button")!.click(); await tick();
     const checkbox = document.querySelector<HTMLInputElement>('.assistance-grid input[type="checkbox"]')!;
     checkbox.click(); await tick();
     expect(document.querySelector(".pivotal-marker")).toBeNull();
+    document.querySelector<HTMLButtonElement>(".inspector-surface header button")!.click(); await tick();
     await unmount(component);
   });
 
@@ -447,6 +447,39 @@ describe("Layer 3 screens", () => {
     await unmount(component);
   });
 
+  it("keeps individual evidence controls out of the ordinary Support menu", async () => {
+    const run = createRun({
+      id: "advanced-support-controls",
+      session: { kind: "position", start: { fen: pack.start.fen, side: "white" }, feedbackPolicy: "attempt_end", opponentPolicy: { mode: "human_common" } },
+      sessionDigest: `sha256:${"7".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1,
+      createdAt: at,
+    });
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(),
+      onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+
+    const menu = document.querySelector<HTMLDetailsElement>("details.assistance-control")!;
+    menu.querySelector("summary")!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await tick();
+    expect(menu.querySelectorAll('input[type="checkbox"]')).toHaveLength(0);
+    expect(menu.textContent).toContain("Open support");
+    expect(menu.textContent).toContain("Advanced support controls");
+
+    [...menu.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "Advanced support controls")!
+      .click();
+    await tick();
+    expect(menu.open).toBe(false);
+    expect(document.querySelector('[aria-label="Advanced support controls"]')).not.toBeNull();
+    expect(document.querySelectorAll('.inspector-surface .assistance-grid input[type="checkbox"]').length).toBeGreaterThan(0);
+    await unmount(component);
+  });
+
   it("requests the human-model split without requiring pivotal markers", async () => {
     const initial = createRun({
       id: "split-without-marker",
@@ -481,12 +514,13 @@ describe("Layer 3 screens", () => {
     await tick();
 
     expect(document.querySelector(".pivotal-marker")).toBeNull();
+    document.querySelector<HTMLButtonElement>(".inspector-entry")!.click();
+    await tick();
     const request = [...document.querySelectorAll<HTMLButtonElement>(".assistance-grid button")]
-      .find((button) => button.textContent?.includes("Open human-model evidence inspector"));
+      .find((button) => button.textContent?.includes("Load human move-model evidence"));
     expect(request).toBeDefined();
     request!.click();
     expect(onHumanSplit).toHaveBeenCalledWith(run.activeCursor.nodeId);
-    document.querySelector<HTMLButtonElement>(".inspector-entry")!.click();
     await vi.waitFor(() => {
       const evidence = document.querySelector("[aria-label='Human-model evidence']")?.textContent;
       expect(evidence).toContain("human-model rung 1500 was requested but is not recorded as applied");

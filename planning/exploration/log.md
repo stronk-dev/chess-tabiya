@@ -18315,3 +18315,14 @@ needed for containment checks, and its supposedly digit-bearing extension fixtur
 digit. The bounded repair corrects all three while retaining the seven-resource/three-reader cut.
 Fresh independent review remains the acceptance boundary; no production register or checker byte
 changed.
+
+## 2026-09-07 — Play composition moves evidence switches behind Advanced
+
+The ordinary run topbar no longer opens a panel of individual evidence channels. Its Support menu
+opens the workflow's existing Support region and offers a separate Advanced support controls door;
+the complete channel controls remain configurable inside the explicit Inspector. This is a
+production checkpoint under the accepted `play-composition` RFC, not completion of the still-held
+preset/module pipeline. A component regression refuses checkboxes in the ordinary menu, and the
+real browser suite exercises the new doorway while retaining the seven-viewport board geometry
+matrix. `make test-software` passes 1,124 tests / 182 files; `make test-browser` passes 61 with one
+optional Maia latency probe skipped.

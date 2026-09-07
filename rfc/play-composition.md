@@ -1,6 +1,6 @@
 # RFC: Play composition
 
-- **Status:** implementing — shell checkpoint landed 2026-08-22; the 2026-08-26 comparison checkpoint removes raw objective/engine/detector/route records from the ordinary comparison; the 2026-08-31 queue checkpoint makes Support/Branches/Actions one-expanded at every viewport, selects the relevant seat on critical/branch transitions, and fails learner move labels closed instead of exposing UCI. The 2026-09-07 reflow checkpoint extends the stable board to 320×256, iPhone SE-class portrait heights and phone landscape through an explicit vertical-scroll composition rather than a refusal or sub-24px squares. Exact fitted and reflow geometry, stable board identity and the permanent browser gates are live. Module seats/badges, remaining vocabulary cleanup and the five module-dependent columns of the 7×16 matrix remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
+- **Status:** implementing — shell checkpoint landed 2026-08-22; the 2026-08-26 comparison checkpoint removes raw objective/engine/detector/route records from the ordinary comparison; the 2026-08-31 queue checkpoint makes Support/Branches/Actions one-expanded at every viewport, selects the relevant seat on critical/branch transitions, and fails learner move labels closed instead of exposing UCI. The 2026-09-07 reflow checkpoint extends the stable board to 320×256, iPhone SE-class portrait heights and phone landscape through an explicit vertical-scroll composition rather than a refusal or sub-24px squares. The same-day advanced-support checkpoint removes the individual evidence switches from the ordinary topbar menu and keeps them configurable in the explicit Inspector. Exact fitted and reflow geometry, stable board identity and the permanent browser gates are live. Module seats/badges, preset-driven defaults, remaining vocabulary cleanup and the five module-dependent columns of the 7×16 matrix remain. *(Accepted earlier 2026-08-22 by claude as register owner after cross-review.)*
 - **Author:** claude (drafted on the D717 program routing, Phase 4)
 - **Created:** 2026-08-22
 - **Design refs:** `design/05-in-run-experience.md` §1 (invariants), §2 (the five regions),
@@ -738,6 +738,13 @@ document's to rewrite). Rows proposed by the cross-review, from head+1, NOT writ
 
 ## Changelog
 
+- 2026-09-07: advanced-support checkpoint. The topbar now offers the ordinary learner two actions:
+  open the workflow's Support region or enter Advanced support controls. The seven individual
+  evidence-channel controls moved intact to the explicit Inspector, so every primitive remains
+  configurable without making provider/channel plumbing the ordinary play workflow. A component
+  fixture refuses checkboxes in the topbar menu; the browser journey exercises the new door and
+  the complete 7×16 geometry matrix keeps the board byte-stable. This does not claim Phase-5
+  presets or module delivery complete.
 - 2026-09-07: D1493 reflow checkpoint. The old 360×680 hard refusal is narrowed to the
   horizontal 320×256 floor. Short viewports and phone landscapes use the compact composition,
   retain a width-bound board with at least 24px squares and scroll the drill region vertically.

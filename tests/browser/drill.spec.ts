@@ -19,6 +19,12 @@ async function register(page: Page): Promise<string> {
   return handle;
 }
 
+async function openAdvancedSupport(page: Page): Promise<void> {
+  await page.locator("details.assistance-control summary").click();
+  await page.getByRole("button", { name: "Advanced support controls" }).click();
+  await expect(page.getByRole("dialog", { name: "Evidence inspector" })).toBeVisible();
+}
+
 async function enableEndgamePolicies(page: Page): Promise<void> {
   await page.route(/\/capabilities$/u, async (route) => {
     const response = await route.fetch();
@@ -374,9 +380,10 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   await expect(page.getByRole("region", { name: "Phase reading" })).toContainText("Middlegame");
   await expect(page.getByText("Detected by Tabiya's phase bands: middlegame.")).toHaveCount(0);
 
-  await page.getByText("Assistance", { exact: true }).click();
+  await openAdvancedSupport(page);
   await page.getByLabel("Passive pivotal markers").check();
   await page.getByLabel("Speak opened guidance").check();
+  await page.getByRole("button", { name: "Return to play" }).click();
   await expect(page.getByRole("dialog", { name: /Review/ })).toHaveCount(0);
 
   await move(page, "d1", "d8");
@@ -399,15 +406,16 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   const momentEvidence = page.getByRole("region", { name: "Recorded moment evidence" });
   await expect(momentEvidence).toContainText("middlegame → endgame, detected by Tabiya's phase bands.");
   await expect(momentEvidence).toContainText("material-census convention");
-  await page.getByRole("button", { name: "Return to play" }).click();
   await page.getByLabel("Passive pivotal markers").uncheck();
+  await page.getByRole("button", { name: "Return to play" }).click();
   await expect(page.getByRole("button", { name: /Open pivotal marker/ })).toHaveCount(0);
 });
 
 test("runtime corpus counts stay silent until reveal and render population facts on request", async ({ page }) => {
   await page.getByRole("button", { name: "Start and keep the game" }).click();
-  await page.getByText("Assistance", { exact: true }).click();
+  await openAdvancedSupport(page);
   await page.getByLabel("Passive pivotal markers").check();
+  await page.getByRole("button", { name: "Return to play" }).click();
   await move(page, "e2", "e4");
   await expect(page.getByText("Active line 2 plies")).toBeVisible();
   await expect(page.getByText("Thinking…")).toHaveCount(0);
@@ -417,10 +425,9 @@ test("runtime corpus counts stay silent until reveal and render population facts
   const reveal = await page.request.post(`/runs/${runId}/reveal`, { headers: { "x-writer-id": writerId! }, data: {} });
   expect(reveal.ok()).toBe(true);
   await page.reload();
-  await page.getByText("Assistance", { exact: true }).click();
-  await page.getByLabel("Evidence inspector: corpus counts").check();
-  await page.getByRole("button", { name: "Open corpus evidence inspector" }).click();
-  await page.getByRole("button", { name: "Inspector", exact: true }).click();
+  await openAdvancedSupport(page);
+  await page.getByLabel("Human-game corpus evidence").check();
+  await page.getByRole("button", { name: "Load human-game corpus evidence" }).click();
   const corpus = page.getByRole("region", { name: "Corpus evidence" });
   await expect(corpus).toContainText("Lichess explorer — rating buckets 1400; speeds blitz,rapid,classical");
   await expect(corpus).toContainText("These counts say what this population played, not what is good.");
@@ -452,8 +459,9 @@ test("@content Pack B references the Carlsbad entry while its pack prose stays s
   await expect(page.getByRole("button", { name: "Position structure" })).toHaveAttribute("aria-expanded", "false");
   await expect(page.locator(".structural-facts")).toHaveCount(0);
   await page.getByRole("button", { name: "Return to play" }).click();
-  await page.getByText("Assistance", { exact: true }).click();
+  await openAdvancedSupport(page);
   await page.getByLabel("Named-pattern guidance").check();
+  await page.getByRole("button", { name: "Return to play" }).click();
   const marker = page.getByRole("button", { name: /Carlsbad structure/ });
   await expect(marker).toBeVisible();
   await marker.click();
@@ -1622,11 +1630,11 @@ test("@matrix play composition keeps one exact board rectangle through reachable
       }
     }
 
-    await page.getByText("Assistance", { exact: true }).click();
+    await page.locator("details.assistance-control summary").click();
     await expect(page.locator("details.assistance-control")).toHaveAttribute("open", "");
     expect(await page.getByLabel("Chessboard").boundingBox()).toEqual(calm);
     await attachCompositionCell(page, testInfo, viewport, "07-menu-popover-open");
-    await page.getByText("Assistance", { exact: true }).click();
+    await page.locator("details.assistance-control summary").click();
 
     await attachCompositionCell(page, testInfo, viewport, "08-long-objective");
 

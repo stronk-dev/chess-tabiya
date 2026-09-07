@@ -198,6 +198,7 @@
   let openShapeId: string | undefined = $state();
   let inspectedShapeId: string | undefined = $state();
   let assistance: AssistanceConfig = $state(SILENT_ASSISTANCE);
+  let assistanceMenuOpen = $state(false);
   let openPivotalNodeId: string | undefined = $state();
   let pivotalDialogOpen = $state(false);
   let humanSplit: HumanSplitPage | undefined = $state();
@@ -264,6 +265,11 @@
 
   function openAssistance(event: Event): void {
     openCompanion("evidence", event);
+  }
+
+  function openAdvancedSupport(): void {
+    assistanceMenuOpen = false;
+    inspectorOpen = true;
   }
 
   let run = $derived(snapshot.run);
@@ -1062,22 +1068,12 @@
       </div>
       <div class="topbar-actions">
         {#if assistance.ambient === "on"}<button class="ambient" type="button" aria-label="Open assistance" aria-controls="run-support-region" title={busy ? "Thinking…" : snapshot.withheld ? "Waiting for disclosure" : guardEvent ? "A consequence is ready" : "Present"} onclick={openAssistance}>♟</button>{/if}
-        <details class="assistance-control">
-          <summary>Assistance</summary>
-          <div class="assistance-grid">
-            <label><input type="checkbox" checked={assistance.markers === "live"} onchange={(event) => setAssistance("markers", event.currentTarget.checked ? "live" : "off")} /> Passive pivotal markers</label>
-            <label><input type="checkbox" checked={assistance.guided === "live"} onchange={(event) => setAssistance("guided", event.currentTarget.checked ? "live" : "off")} /> Named-pattern guidance</label>
-            <label><input type="checkbox" checked={assistance.humanSplit === "on_request"} disabled={assistancePermission.humanSplit === "locked_off"} aria-describedby={assistancePermission.humanSplit === "locked_off" ? "human-split-locked" : undefined} onchange={(event) => setAssistance("humanSplit", event.currentTarget.checked ? "on_request" : "off")} /> Evidence inspector: human move split</label>
-            {#if assistancePermission.humanSplit === "locked_off"}<span id="human-split-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
-            {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" onclick={() => void requestHumanSplit()}>Open human-model evidence inspector</button>{/if}
-            {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit === undefined}<span class="honest">Recorded human-model splits are unavailable from this deployment.</span>{/if}
-            {#if capabilities?.providers.corpus !== "none"}<label><input type="checkbox" checked={assistance.corpus === "on_request"} disabled={assistancePermission.corpus === "locked_off"} aria-describedby={assistancePermission.corpus === "locked_off" ? "corpus-locked" : undefined} onchange={(event) => setAssistance("corpus", event.currentTarget.checked ? "on_request" : "off")} /> Evidence inspector: corpus counts</label>{/if}
-            {#if capabilities?.providers.corpus !== "none" && assistancePermission.corpus === "locked_off"}<span id="corpus-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
-            {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" onclick={() => void requestCorpus()}>Open corpus evidence inspector</button>{/if}
-            {#if capabilities?.providers.llm === "external"}<label><input type="checkbox" checked={assistance.voice === "persona"} onchange={(event) => setAssistance("voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>{/if}
-            {#if speechAvailable}<label><input type="checkbox" checked={assistance.spoken === "browser"} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "browser" : "off")} /> Speak opened guidance</label>{/if}
-            {#if capabilities?.providers.tts === "external"}<label><input type="checkbox" checked={assistance.spoken === "provider"} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "provider" : "off")} /> Use configured speech provider</label>{/if}
-            {#if !speechAvailable && capabilities?.providers.tts !== "external"}<span id="spoken-unavailable" class="honest">Speech synthesis is unavailable in this browser.</span>{/if}
+        <details class="assistance-control" bind:open={assistanceMenuOpen}>
+          <summary>Support</summary>
+          <div class="support-menu">
+            <p>Open the help available in this workflow. Detailed evidence controls stay in the Inspector.</p>
+            <button type="button" onclick={(event) => { assistanceMenuOpen = false; openAssistance(event); }}>Open support</button>
+            <button type="button" onclick={openAdvancedSupport}>Advanced support controls</button>
           </div>
         </details>
         <button class="inspector-entry" type="button" aria-haspopup="dialog" onclick={() => (inspectorOpen = true)}>Inspector</button>
@@ -1430,6 +1426,25 @@
     <div class="inspector-surface" role="dialog" aria-modal="true" aria-labelledby="inspector-title" use:modalBoundary>
       <header><div><p>Analysis surface</p><h2 id="inspector-title">Evidence inspector</h2></div><button type="button" onclick={() => (inspectorOpen = false)}>Return to play</button></header>
       <div class="inspector-grid">
+        <section aria-label="Advanced support controls" data-evidence-consumer="inspector.assistance_controls">
+          <h3>Advanced support controls</h3>
+          <p class="honest">These controls change individual evidence channels. Ordinary play uses the workflow's support defaults.</p>
+          <div class="assistance-grid">
+            <label><input type="checkbox" checked={assistance.markers === "live"} onchange={(event) => setAssistance("markers", event.currentTarget.checked ? "live" : "off")} /> Passive pivotal markers</label>
+            <label><input type="checkbox" checked={assistance.guided === "live"} onchange={(event) => setAssistance("guided", event.currentTarget.checked ? "live" : "off")} /> Named-pattern guidance</label>
+            <label><input type="checkbox" checked={assistance.humanSplit === "on_request"} disabled={assistancePermission.humanSplit === "locked_off"} aria-describedby={assistancePermission.humanSplit === "locked_off" ? "human-split-locked" : undefined} onchange={(event) => setAssistance("humanSplit", event.currentTarget.checked ? "on_request" : "off")} /> Human move-model evidence</label>
+            {#if assistancePermission.humanSplit === "locked_off"}<span id="human-split-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
+            {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit !== undefined}<button type="button" onclick={() => void requestHumanSplit()}>Load human move-model evidence</button>{/if}
+            {#if assistance.humanSplit === "on_request" && assistancePermission.humanSplit === "free" && onHumanSplit === undefined}<span class="honest">Recorded human-model splits are unavailable from this deployment.</span>{/if}
+            {#if capabilities?.providers.corpus !== "none"}<label><input type="checkbox" checked={assistance.corpus === "on_request"} disabled={assistancePermission.corpus === "locked_off"} aria-describedby={assistancePermission.corpus === "locked_off" ? "corpus-locked" : undefined} onchange={(event) => setAssistance("corpus", event.currentTarget.checked ? "on_request" : "off")} /> Human-game corpus evidence</label>{/if}
+            {#if capabilities?.providers.corpus !== "none" && assistancePermission.corpus === "locked_off"}<span id="corpus-locked" class="honest">Available only after this run opens feedback, and never to participants or spectators.</span>{/if}
+            {#if assistance.corpus === "on_request" && assistancePermission.corpus === "free" && capabilities?.providers.corpus !== "none" && onCorpus !== undefined}<button type="button" onclick={() => void requestCorpus()}>Load human-game corpus evidence</button>{/if}
+            {#if capabilities?.providers.llm === "external"}<label><input type="checkbox" checked={assistance.voice === "persona"} onchange={(event) => setAssistance("voice", event.currentTarget.checked ? "persona" : "authored")} /> External voice</label>{/if}
+            {#if speechAvailable}<label><input type="checkbox" checked={assistance.spoken === "browser"} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "browser" : "off")} /> Speak opened guidance</label>{/if}
+            {#if capabilities?.providers.tts === "external"}<label><input type="checkbox" checked={assistance.spoken === "provider"} onchange={(event) => setAssistance("spoken", event.currentTarget.checked ? "provider" : "off")} /> Use configured speech provider</label>{/if}
+            {#if !speechAvailable && capabilities?.providers.tts !== "external"}<span id="spoken-unavailable" class="honest">Speech synthesis is unavailable in this browser.</span>{/if}
+          </div>
+        </section>
         <section class="structural-reading" aria-label="Evidence inspector: position structure" data-evidence-consumer="inspector.position_structure">
           <button type="button" aria-expanded={structuralOpen} onclick={() => (structuralOpen = !structuralOpen)}>Position structure</button>
           {#if structuralOpen}<div class="structural-facts">{#if assistance.guided === "live" && firings.length === 0}<p>No named structure entry matches this line.</p>{/if}{#if structure.features.length === 0}<p>No rung-0 structural observations in this position.</p>{/if}{#each structure.features as observation}<p>{renderStructuralObservation(observation)}</p>{/each}</div>{/if}
@@ -1764,7 +1779,9 @@
   .analysis-request-actions button:first-child:not(:disabled) { border-color:var(--accent); color:var(--accent); }
   .analysis-ready { color:var(--accent)!important; }
   .assistance-control summary { cursor:pointer; }
-  .assistance-grid { position:absolute; top:calc(100% + .4rem); right:0; display:grid; width:min(23rem,calc(100vw - 2rem)); gap:.45rem; padding:.7rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); box-shadow:var(--shadow); }
+  .support-menu { position:absolute; top:calc(100% + .4rem); right:0; z-index:4; display:grid; width:min(19rem,calc(100vw - 2rem)); gap:.45rem; padding:.7rem; border:1px solid var(--line); border-radius:.6rem; background:var(--panel); box-shadow:var(--shadow); }
+  .support-menu p { margin:0; color:var(--muted); font-size:.75rem; }
+  .assistance-grid { display:grid; gap:.55rem; }
   .assistance-grid label { display:flex; gap:.4rem; align-items:center; }
   .assistance-grid .honest { color:var(--muted); font-size:.68rem; }
   .guidance-panel { max-height:min(38rem,calc(100dvh - 2rem)); overflow:auto; }
