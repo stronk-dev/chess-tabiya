@@ -17627,3 +17627,24 @@ partitions and retained historical amendment tables elsewhere, not another activ
 127-requirement / 224-binding image. The RFC remains draft and requirements-only; exact upstream
 operations, `evidence-value-authority`, and the measured Hint family×rung registry remain its named
 acceptance blockers.
+
+## 2026-09-07 — Graduation-clearance nine-template contract returned and repaired by the author
+
+**What landed in the authoring checkpoint:** [[D3072]]'s six unrepresentable emitter templates are
+replaced by a total nine-template contract in `rfc/graduation-clearance.md`. The repair uses three
+new machine-decidable predicates: exact scalar equality, compiled outcome grading, and a
+template-owned canonical-digest attestation for human-authored choices. [[D3074]] narrowly permits
+the existing fixed assessment subject to be absent while the blocker is still true; arbitrary
+caller-selected subjects still resolve when written.
+
+**What changed:** the second pass found [[D3075]]: two of the three templates previously labelled
+ready were semantically false, because any different opponent mode satisfied `pointer_authored`.
+The repaired plan requires exact `perfect_tablebase` equality and binds authored policy/objective,
+target-Elo, teaching collections and recorded lines to exact bytes instead. The read-only proposal
+now covers all 436 entries as **204 ready / 232 author-required / 0 contract-blocked**; the 104 rows
+move only to mechanically migratable *blocking predicates*, never to resolved content.
+
+**Evidence/next:** `make graduation-plan-check` passes 9/9 and the checked-in proposal is current.
+This is author repair, not acceptance: a fresh buildability review must attack the three union arms,
+template-owned payloads, preconditions, deferred-subject exception and negative fixtures before
+schema 0.28 or production evaluator work begins.

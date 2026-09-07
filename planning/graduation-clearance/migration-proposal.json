@@ -98,20 +98,20 @@
   "migration": {
     "entries": 436,
     "statuses": {
-      "ready": 100,
+      "ready": 204,
       "requires_author": 232,
-      "blocked_contract": 104
+      "blocked_contract": 0
     },
     "templateContracts": {
       "mechanical-objective-placeholder": "ready",
+      "outcome-ungraded": "ready",
+      "start-assessment-absent": "ready",
+      "target-elo-authored": "ready",
+      "authored-teaching-absent": "ready",
       "opponent-policy-authored": "ready",
       "tablebase-opponent-not-selected": "ready",
-      "outcome-ungraded": "blocked_contract",
-      "start-assessment-absent": "blocked_contract",
-      "target-elo-authored": "blocked_contract",
-      "authored-teaching-absent": "blocked_contract",
-      "recorded-play-needs-authoring": "blocked_contract",
-      "mechanical-objective-needs-grounding": "blocked_contract"
+      "recorded-play-needs-authoring": "ready",
+      "mechanical-objective-needs-grounding": "ready"
     },
     "rows": [
       {
@@ -7289,22 +7289,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play the recorded line to its end: 7 plies from this position."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:a39a5a622b369ec6dd398d86e649e3cccc1a7d3c3302061191157512d9ef028d"
           }
         }
       },
@@ -7320,22 +7320,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play the recorded line to its end: 2 plies from this position."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:b9e542098a8030f540bd4153f1c47042cb1c1a2efe669842cf6876be3755962d"
           }
         }
       },
@@ -7351,22 +7351,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play the recorded line to its end: 6 plies from this position."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:a49e705f3b7a68e618bf69b928b320d1b900821b402ea0ae5b550a70ff43f05c"
           }
         }
       },
@@ -7382,22 +7382,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play the recorded line to its end: 6 plies from this position."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:0dad901cdce20f99e3addbf3284ce8fb8cdca0095209dbbc3613941084f2b4ca"
           }
         }
       },
@@ -7413,22 +7413,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play the recorded line to its end: 3 plies from this position."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:d1b98113d0d736c79538e1b6a12316b52b8f6b685b79458c4b92cd5a775d8c28"
           }
         }
       },
@@ -7444,22 +7444,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play the recorded line to its end: 4 plies from this position."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:aa901b57e819d2a62030079f55631ac18e4a470e842fc858eb2fd3794448f91f"
           }
         }
       },
@@ -7475,22 +7475,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play the recorded line to its end: 6 plies from this position."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:960530c96bf41db02753ad76eaea9cf7814ce2aee1a80faacda4704585e4c88c"
           }
         }
       },
@@ -7506,22 +7506,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play the recorded line to its end: 6 plies from this position."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:460cfbab04ae3d0adca1649e313037e86c4b5c84cd1d8e8069177da04a9c3250"
           }
         }
       },
@@ -7537,22 +7537,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play the recorded line to its end: 12 plies from this position."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:45d476daaeb6a6d9f54f593640ecad63fbe1936d8d15a31407a4b9b820117b0e"
           }
         }
       },
@@ -7568,22 +7568,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play this endgame out for 17 plies from this position."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:27fd38ab0b60740da07735be3afab6973376c33e2bfac2d0570154a571969d19"
           }
         }
       },
@@ -7599,22 +7599,17 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template opponent-policy-authored",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template opponent-policy-authored",
-            "value": "/opponentPolicy/mode"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template opponent-policy-authored",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /opponentPolicy/mode",
-            "value": "strong_engine"
+            "source": "emitter template opponent-policy-authored",
+            "value": "opponent-policy-authored"
           }
         }
       },
@@ -7624,12 +7619,23 @@
         "packId": "onramp-00008",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -7639,12 +7645,23 @@
         "packId": "onramp-00008",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -7660,22 +7677,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 8 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:265c81fa6fd1c3499d1798cce93fce0ca346c98a49c9cd4b72b334a454375765"
           }
         }
       },
@@ -7700,12 +7717,23 @@
         "packId": "onramp-00008",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -7715,12 +7743,23 @@
         "packId": "onramp-00008",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -7730,12 +7769,23 @@
         "packId": "onramp-0000d",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -7745,12 +7795,23 @@
         "packId": "onramp-0000d",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -7766,22 +7827,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 8 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:83b910daa4e6e76ba698fabfeaf069510c0864d80afc07fa82fa35b2586b7df3"
           }
         }
       },
@@ -7806,12 +7867,23 @@
         "packId": "onramp-0000d",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -7821,12 +7893,23 @@
         "packId": "onramp-0000d",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -7836,12 +7919,23 @@
         "packId": "onramp-000lc",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -7851,12 +7945,23 @@
         "packId": "onramp-000lc",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -7872,22 +7977,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:1563983c215929550cf34961abe2174958d8ab83bfddf023cc666177ba16973f"
           }
         }
       },
@@ -7897,12 +8002,23 @@
         "packId": "onramp-000lc",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -7912,12 +8028,23 @@
         "packId": "onramp-000lc",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -7927,12 +8054,23 @@
         "packId": "onramp-001wr",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -7942,12 +8080,23 @@
         "packId": "onramp-001wr",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -7963,22 +8112,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:d07d54d892701dde922a3b134519a2090f9025666066bd5e2ba097ed1ca251f6"
           }
         }
       },
@@ -7988,12 +8137,23 @@
         "packId": "onramp-001wr",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -8003,12 +8163,23 @@
         "packId": "onramp-001wr",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -8018,12 +8189,23 @@
         "packId": "onramp-001xl",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -8033,12 +8215,23 @@
         "packId": "onramp-001xl",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -8054,22 +8247,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:fd9bc0fc1d1ceced265e32024fa6cb50f8a01889b09910588c86d8dd2f70fae1"
           }
         }
       },
@@ -8079,12 +8272,23 @@
         "packId": "onramp-001xl",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -8094,12 +8298,23 @@
         "packId": "onramp-001xl",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -8109,12 +8324,23 @@
         "packId": "onramp-003ep",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -8124,12 +8350,23 @@
         "packId": "onramp-003ep",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -8145,22 +8382,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:4e3fbe31bd70c33d4753d50b4e51dca8aa88eda0805a8723a37ed34fd78431ca"
           }
         }
       },
@@ -8170,12 +8407,23 @@
         "packId": "onramp-003ep",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -8185,12 +8433,23 @@
         "packId": "onramp-003ep",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -8200,12 +8459,23 @@
         "packId": "onramp-004mt",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -8215,12 +8485,23 @@
         "packId": "onramp-004mt",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -8236,22 +8517,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:625c49bb0adea2d6410f6cbd32ac92d112754b7f06b5d9d457d85f681eef1720"
           }
         }
       },
@@ -8261,12 +8542,23 @@
         "packId": "onramp-004mt",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -8276,12 +8568,23 @@
         "packId": "onramp-004mt",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -8291,12 +8594,23 @@
         "packId": "onramp-0050w",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -8306,12 +8620,23 @@
         "packId": "onramp-0050w",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -8327,22 +8652,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:273f0f5832fdbd6670bc97b41ad7efbadfce3adae3bbf65638b44c076e50489e"
           }
         }
       },
@@ -8352,12 +8677,23 @@
         "packId": "onramp-0050w",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -8367,12 +8703,23 @@
         "packId": "onramp-0050w",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -8382,12 +8729,23 @@
         "packId": "onramp-007tv",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -8397,12 +8755,23 @@
         "packId": "onramp-007tv",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -8418,22 +8787,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:bec0e07051bf4230b7506ab3153db03e43fb25f2f3feb08900c89196a6df7984"
           }
         }
       },
@@ -8443,12 +8812,23 @@
         "packId": "onramp-007tv",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -8458,12 +8838,23 @@
         "packId": "onramp-007tv",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -8473,12 +8864,23 @@
         "packId": "onramp-009fp",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -8488,12 +8890,23 @@
         "packId": "onramp-009fp",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -8509,22 +8922,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:639f59b589bc630cac0aa4707979a62151fea636f804ed670a97e1d6a7c9f39d"
           }
         }
       },
@@ -8534,12 +8947,23 @@
         "packId": "onramp-009fp",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -8549,12 +8973,23 @@
         "packId": "onramp-009fp",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -8564,12 +8999,23 @@
         "packId": "onramp-00aas",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -8579,12 +9025,23 @@
         "packId": "onramp-00aas",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -8600,22 +9057,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:644ae7ade689c441df4e667f3eaf0264b490114d19db2ebf6911de685bed0e65"
           }
         }
       },
@@ -8625,12 +9082,23 @@
         "packId": "onramp-00aas",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -8640,12 +9108,23 @@
         "packId": "onramp-00aas",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -8655,12 +9134,23 @@
         "packId": "onramp-00ab1",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -8670,12 +9160,23 @@
         "packId": "onramp-00ab1",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -8691,22 +9192,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:67c29d28a0225a087c7a146c5b76e8aea3714e7c048bdf06223377b1a3410ede"
           }
         }
       },
@@ -8716,12 +9217,23 @@
         "packId": "onramp-00ab1",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -8731,12 +9243,23 @@
         "packId": "onramp-00ab1",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -8746,12 +9269,23 @@
         "packId": "onramp-00adi",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -8761,12 +9295,23 @@
         "packId": "onramp-00adi",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -8782,22 +9327,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:22dbdf4ffcd105f1d7f2532aefcf48f12145736753c243c97dc7105af3384feb"
           }
         }
       },
@@ -8807,12 +9352,23 @@
         "packId": "onramp-00adi",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -8822,12 +9378,23 @@
         "packId": "onramp-00adi",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -8837,12 +9404,23 @@
         "packId": "onramp-00aho",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -8852,12 +9430,23 @@
         "packId": "onramp-00aho",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -8873,22 +9462,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:95aaaf82dd0beb5b2249d3a7eac6592d922f8512ad883a9fa41f2210f8c86cbb"
           }
         }
       },
@@ -8898,12 +9487,23 @@
         "packId": "onramp-00aho",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -8913,12 +9513,23 @@
         "packId": "onramp-00aho",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -8928,12 +9539,23 @@
         "packId": "onramp-00bts",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -8943,12 +9565,23 @@
         "packId": "onramp-00bts",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -8964,22 +9597,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:8216dbd3346ccfe31ffa19a0bcb670d681291e1091574dac798d0db6e9559aad"
           }
         }
       },
@@ -8989,12 +9622,23 @@
         "packId": "onramp-00bts",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -9004,12 +9648,23 @@
         "packId": "onramp-00bts",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -9019,12 +9674,23 @@
         "packId": "onramp-00cy1",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -9034,12 +9700,23 @@
         "packId": "onramp-00cy1",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -9055,22 +9732,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:6efd1605587654a0d6ad13b91488c7620ea6cca8cf1cf5787ea15edd9137ce82"
           }
         }
       },
@@ -9080,12 +9757,23 @@
         "packId": "onramp-00cy1",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -9095,12 +9783,23 @@
         "packId": "onramp-00cy1",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -9110,12 +9809,23 @@
         "packId": "onramp-00dnp",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -9125,12 +9835,23 @@
         "packId": "onramp-00dnp",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -9146,22 +9867,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:ccfc8c1b321922e6bab64a4e3b2b1e3750d643979f5f58689102adda93f796cf"
           }
         }
       },
@@ -9171,12 +9892,23 @@
         "packId": "onramp-00dnp",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -9186,12 +9918,23 @@
         "packId": "onramp-00dnp",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -9201,12 +9944,23 @@
         "packId": "onramp-00evs",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -9216,12 +9970,23 @@
         "packId": "onramp-00evs",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -9237,22 +10002,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:489888b12e9387f76977c6b88443e3e724765a271ad1869c038a8f0d863a15bd"
           }
         }
       },
@@ -9262,12 +10027,23 @@
         "packId": "onramp-00evs",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -9277,12 +10053,23 @@
         "packId": "onramp-00evs",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -9292,12 +10079,23 @@
         "packId": "onramp-00icz",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -9307,12 +10105,23 @@
         "packId": "onramp-00icz",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -9328,22 +10137,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:a6004f36f8f4846d60177de96585b144b9286c04dc09da89d51a5a073b365fa4"
           }
         }
       },
@@ -9353,12 +10162,23 @@
         "packId": "onramp-00icz",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -9368,12 +10188,23 @@
         "packId": "onramp-00icz",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -9383,12 +10214,23 @@
         "packId": "onramp-00jcd",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -9398,12 +10240,23 @@
         "packId": "onramp-00jcd",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -9419,22 +10272,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:5b5ba1324532138f9a9ba3b9ff40f197395196e1b996915a6568a8a4cff0a739"
           }
         }
       },
@@ -9444,12 +10297,23 @@
         "packId": "onramp-00jcd",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -9459,12 +10323,23 @@
         "packId": "onramp-00jcd",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -9474,12 +10349,23 @@
         "packId": "onramp-00jph",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -9489,12 +10375,23 @@
         "packId": "onramp-00jph",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -9510,22 +10407,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:60e48cbaa7d1881eb567965f5a5ee62d0ec55db636f06e33b1ad4795b6143898"
           }
         }
       },
@@ -9535,12 +10432,23 @@
         "packId": "onramp-00jph",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -9550,12 +10458,23 @@
         "packId": "onramp-00jph",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -9565,12 +10484,23 @@
         "packId": "onramp-00kzf",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -9580,12 +10510,23 @@
         "packId": "onramp-00kzf",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -9601,22 +10542,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:437f2a1b6cb3d164309ecb8e4c9e949bc154a58edf211b445e2e47188e5b0029"
           }
         }
       },
@@ -9626,12 +10567,23 @@
         "packId": "onramp-00kzf",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -9641,12 +10593,23 @@
         "packId": "onramp-00kzf",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -9656,12 +10619,23 @@
         "packId": "onramp-00nej",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -9671,12 +10645,23 @@
         "packId": "onramp-00nej",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -9692,22 +10677,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:bc1361c8e432638b6d9f5a2fa81527e45c658d9dda4fe29842435c3ff56a2556"
           }
         }
       },
@@ -9717,12 +10702,23 @@
         "packId": "onramp-00nej",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -9732,12 +10728,23 @@
         "packId": "onramp-00nej",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -9747,12 +10754,23 @@
         "packId": "onramp-00o8m",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -9762,12 +10780,23 @@
         "packId": "onramp-00o8m",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -9783,22 +10812,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:8839f85102ee50ccaffac4e7fd508126d99d084fa2440d11ff7b508cf24107e9"
           }
         }
       },
@@ -9808,12 +10837,23 @@
         "packId": "onramp-00o8m",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -9823,12 +10863,23 @@
         "packId": "onramp-00o8m",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -9838,12 +10889,23 @@
         "packId": "onramp-00pgi",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -9853,12 +10915,23 @@
         "packId": "onramp-00pgi",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -9874,22 +10947,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:985a1cf67820ad4882dc3b563baecc355a972216a37c21786a7e7c15ef86c757"
           }
         }
       },
@@ -9899,12 +10972,23 @@
         "packId": "onramp-00pgi",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -9914,12 +10998,23 @@
         "packId": "onramp-00pgi",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       },
@@ -9929,12 +11024,23 @@
         "packId": "onramp-00puc",
         "entryId": "outcome-ungraded",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "No shipped standing predicate grades the resulting position or outcome."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objective_graded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "objectiveRules"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template outcome-ungraded",
+            "value": "/objective"
           }
         }
       },
@@ -9944,12 +11050,23 @@
         "packId": "onramp-00puc",
         "entryId": "start-assessment-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The template permits engine or tablebase grounding but carries no record-kind choice."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "assessment_grounded"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "make sourcing-check"
+          },
+          "clearance.subject": {
+            "status": "derived",
+            "source": "emitter template start-assessment-absent",
+            "value": "/objective/grading/assessedBy"
           }
         }
       },
@@ -9965,22 +11082,22 @@
           "clearance.kind": {
             "status": "derived",
             "source": "emitter template mechanical-objective-placeholder",
-            "value": "pointer_authored"
-          },
-          "clearance.subject": {
-            "status": "derived",
-            "source": "emitter template mechanical-objective-placeholder",
-            "value": "/objective/summary"
+            "value": "author_attested"
           },
           "clearance.instrument": {
             "status": "derived",
-            "source": "graduation-clearance §1.2 kind E",
-            "value": "author"
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "human_chess_author"
           },
-          "clearance.placeholder": {
+          "clearance.templateId": {
             "status": "derived",
-            "source": "current value at /objective/summary",
-            "value": "Play on from this position for 6 plies, then compare the consequence."
+            "source": "emitter template mechanical-objective-placeholder",
+            "value": "mechanical-objective-placeholder"
+          },
+          "clearance.emittedPayloadDigest": {
+            "status": "derived",
+            "source": "canonical emitted payload for template mechanical-objective-placeholder",
+            "value": "sha256:08ad6997a251e9fe42cdf6523bbf42a45763fcbcb5027eb2c2e22ec3baed4255"
           }
         }
       },
@@ -9990,12 +11107,23 @@
         "packId": "onramp-00puc",
         "entryId": "target-elo-authored",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template target-elo-authored",
+            "value": "target-elo-authored"
           }
         }
       },
@@ -10005,12 +11133,23 @@
         "packId": "onramp-00puc",
         "entryId": "authored-teaching-absent",
         "currentState": "blocking",
-        "status": "blocked_contract",
+        "status": "ready",
         "proposedState": "blocking",
         "fields": {
-          "clearance": {
-            "status": "blocked_contract",
-            "source": "The required authored collections are absent, so no required clearance subject resolves."
+          "clearance.kind": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "author_attested"
+          },
+          "clearance.instrument": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "human_chess_author"
+          },
+          "clearance.templateId": {
+            "status": "derived",
+            "source": "emitter template authored-teaching-absent",
+            "value": "authored-teaching-absent"
           }
         }
       }

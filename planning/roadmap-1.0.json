@@ -443,11 +443,11 @@
         "dependsOn": ["evidence-to-consumer-spine", "complete-learner-journeys"],
         "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
         "latestCheckpoint": {
-          "at": "2026-08-31",
-          "summary": "The graduation writer, read-only plan and centralized emitter templates ship, but no official pack is graduated. Criteria 1–2 still couple pack schema 0.28 and all pack/candidate migrations in one commit, leaving that corpus slice Gate-F-held; D2852 records the cycle that requires an owner boundary ruling.",
+          "at": "2026-09-07",
+          "summary": "The graduation writer, read-only plan and centralized emitter templates ship, but no official pack is graduated. D3033 licenses the foundation/schema slice before Gate F. The total 436-entry plan exposed 104 contract-blocked candidate entries and two false ready predicates; the author amendment now models 204 ready / 232 author-required / 0 contract-blocked without resolving content. Fresh buildability review still gates schema 0.28 implementation.",
           "impact": "held",
           "evidence": ["planning/content-era/plan.md", "rfc/graduation-clearance.md"],
-          "anchors": [{"kind": "rfc", "id": "graduation-clearance.md", "digest": "sha256:362988e87de0751e51949fd994c141afb9b7a5a6db6059370dce247921b35c63"}]
+          "anchors": [{"kind": "rfc", "id": "graduation-clearance.md", "digest": "sha256:384b9787c686d3068ee5f975d6258e5d04bc65ec84f0fa8a6ebf35123c9d9a46"}]
         },
         "exit": "The release contains an allow-listed official corpus exercising every important handshake, counter-case, honest-empty state and complete campaign without blind mass rewrites."
       },

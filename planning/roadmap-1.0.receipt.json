@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:c430fdb039e65b00bf43775e49a002c874363d67ce0dc51cf1bfa3e2adfe0dac",
+    "roadmap": "sha256:cb50af087ba27d1a07f0a0502981d79c58bbf069fbbf80bd9a1f5c20b5c85b43",
     "workItems": "sha256:25d7ade91d024d3784661f64c77b549dfd7fbcbbb810376a12271f08849fe2e1",
-    "workState": "sha256:301e1c52105a23dffda5989b596d336416787e35ac191f967a0df8dd3d754101",
-    "rfcRegister": "sha256:14cb244ca709a5c4ae909e7a127029581d9e1ea0aa53f97f5d49e312054d53e1",
+    "workState": "sha256:d4fcf72c2fe16ee04e464276fa965aebf5a068042161666e912fd476a3688f63",
+    "rfcRegister": "sha256:5d21721c327cc0fb5150fedfde60e62cd29a7cab45770641257da5308ec9d5e9",
     "uxIndex": "sha256:cff4c6d142565c94a89cae9317b49f76c4108dba97d6d9ef26cda473f91bec2b",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 663,
       "doing": 0,
-      "blocked": 1194,
+      "blocked": 1197,
       "done": 856,
       "refused": 108
     },
@@ -392,8 +392,8 @@
       ],
       "nextAction": "Reground theory and principles, refresh manifests, graduate a varied pilot, then author the opening/middlegame/endgame/training-form/campaign/bot/Review matrix against stable capability declarations.",
       "latestCheckpoint": {
-        "at": "2026-08-31",
-        "summary": "The graduation writer, read-only plan and centralized emitter templates ship, but no official pack is graduated. Criteria 1–2 still couple pack schema 0.28 and all pack/candidate migrations in one commit, leaving that corpus slice Gate-F-held; D2852 records the cycle that requires an owner boundary ruling.",
+        "at": "2026-09-07",
+        "summary": "The graduation writer, read-only plan and centralized emitter templates ship, but no official pack is graduated. D3033 licenses the foundation/schema slice before Gate F. The total 436-entry plan exposed 104 contract-blocked candidate entries and two false ready predicates; the author amendment now models 204 ready / 232 author-required / 0 contract-blocked without resolving content. Fresh buildability review still gates schema 0.28 implementation.",
         "impact": "held",
         "evidence": [
           "planning/content-era/plan.md",
@@ -403,7 +403,7 @@
           {
             "kind": "rfc",
             "id": "graduation-clearance.md",
-            "digest": "sha256:362988e87de0751e51949fd994c141afb9b7a5a6db6059370dce247921b35c63"
+            "digest": "sha256:384b9787c686d3068ee5f975d6258e5d04bc65ec84f0fa8a6ebf35123c9d9a46"
           }
         ]
       },

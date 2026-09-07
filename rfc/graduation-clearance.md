@@ -3,6 +3,10 @@
 - **Status:** **implementing 2026-09-05.** The writer and read-only planning checkpoint shipped in
   `bcb706e0` and was hardened in `ec52f61d`; the nine-template registry and all four emitter
   migrations shipped in `7918b582`. Pack schema 0.28 and its Gate-F-held corpus application remain.
+  **Returned at the 0.28 migration boundary on 2026-09-07 ([[D3072]], [[D3075]]); the amendment
+  below is authored but requires a fresh buildability review before its three new clearance kinds
+  or schema changes may be implemented.** The shipped writer and template registry remain valid;
+  no corpus entry has been migrated under the returned contract.
   **Accepted 2026-08-17 by the register owner; status token
   reconciled 2026-08-20.**
   **[author round 3, 2026-08-17]** D503 is closed, and it is closed as an
@@ -2989,6 +2993,174 @@ engine-versus-tablebase record-kind choice, numeric `targetElo`, absent authored
 array of recorded lines, and objective grounding that a prose-change predicate cannot prove. The
 0.28 apply therefore remains blocked on an RFC amendment that makes those six template predicates
 representable; substituting unrelated string pointers is explicitly not an implementation option.
+
+## 2026-09-07 author amendment — a total and truthful nine-template clearance contract
+
+The first total migration proposal proved a useful but incomplete fact: six templates could not be
+encoded. Re-reading the three labelled `ready` found that two were only *syntactically* encodable
+([[D3075]]). `pointer_authored` asks whether a string differs from its captured placeholder. That is
+truthful for a historical blocker whose whole claim is “replace this placeholder”; it is not a
+predicate for either of these statements:
+
+- `tablebase-opponent-not-selected` requires the exact value `perfect_tablebase`, but any different
+  string — including `strong_engine` — satisfied the proposed predicate;
+- `opponent-policy-authored` requires a human author to adopt a policy choice, but changing one
+  unreviewed mode to another says nothing about that act.
+
+The amendment therefore repairs all nine templates together. It adds three kinds and keeps the
+existing eight kinds unchanged for already-classified draft blockers. The closed emitter-template
+registry is the authority for every template-specific payload and precondition; a pack cannot
+supply its own pointer list or weaken a precondition.
+
+```ts
+type Sha256 = `sha256:${string}`;
+
+type AuthorAttestedTemplate =
+  | "mechanical-objective-placeholder"
+  | "opponent-policy-authored"
+  | "target-elo-authored"
+  | "authored-teaching-absent"
+  | "recorded-play-needs-authoring"
+  | "mechanical-objective-needs-grounding";
+
+type GraduationClearanceAmendment =
+  | {
+      readonly kind: "pointer_equals";
+      readonly subject: string;
+      readonly expected: string | number | boolean | null;
+      readonly instrument: string;
+    }
+  | {
+      readonly kind: "objective_graded";
+      readonly subject: "/objective";
+      readonly instrument: "objectiveRules";
+    }
+  | {
+      readonly kind: "author_attested";
+      readonly templateId: AuthorAttestedTemplate;
+      readonly instrument: "human_chess_author";
+      readonly emittedPayloadDigest?: Sha256;
+      readonly attestation?: {
+        readonly authority: "human_chess_author";
+        readonly payloadDigest: Sha256;
+        readonly authoredAt: string; // RFC 3339 date-time
+      };
+    };
+```
+
+`author_attested` ([[D3073]]) does **not** reinstate the struck second-party reviewer in §3. The author is the
+actor already required by law 8 to supply chess judgement; the receipt makes that act addressable
+and stale-able. It proves only “a human author explicitly adopted this exact payload.” It does not
+prove that the payload is good chess, does not change `accepted`, and cannot be written by an LLM
+under law 8. The machine verifies identity and byte agreement, never chess correctness.
+
+The attestation digest is `digestCanonicalJson` (RFC 8785, the existing pack digest primitive) over
+this exact material:
+
+```ts
+{
+  schema: "tabiya.graduation.author-attestation.v1",
+  packId,
+  entryId,
+  templateId,
+  payload: [{ pointer, value }, ...]
+}
+```
+
+The registry supplies the ordered pointer list; the compiler reads the values from the pack and
+constructs the array. Absent optional values are represented as `null`, not dropped. Including
+`packId`, `entryId`, pointer names and template identity means a receipt cannot be copied to another
+pack, another blocker or another template whose visible value happens to match. Mutating any
+payload byte makes the receipt stale. `emittedPayloadDigest` is legal only on
+`mechanical-objective-placeholder`; that predicate additionally requires the current payload digest
+to differ from the emitted digest, so signing the unchanged generated placeholder cannot clear it.
+
+### The nine total plans
+
+| emitter template | clearance | registry-owned payload / standing predicate | why it can fail honestly |
+|---|---|---|---|
+| `mechanical-objective-placeholder` | `author_attested` | payload `/objective/summary`; non-blank, current digest differs from `emittedPayloadDigest`, attestation matches current payload | emitted blocker has no attestation and its current digest equals the emitted digest |
+| `outcome-ungraded` | `objective_graded` | `/objective`; `objective.type` is one of `win \| hold \| save \| resist`, `objective.grading` exists, and `objectiveRules` compiles at least one result rule | emitted `play_until_checkpoint` is excluded even though its bare checkpoint condition compiles |
+| `start-assessment-absent` | existing `assessment_grounded` | fixed subject `/objective/grading/assessedBy`; `assessmentGrounding(...) === "ledger_verified"` | the emitted node is absent and evaluates `unverified` |
+| `target-elo-authored` | `author_attested` | payload `/opponentPolicy/targetElo`; finite integer admitted by the pack schema, attestation matches | the number may remain unchanged; absence of a receipt is the failing state |
+| `authored-teaching-absent` | `author_attested` | payloads `/planClasses`, `/deviations`, `/feedbackClaims`, with absent values encoded `null`; at least one collection is non-empty and the receipt matches all three | an empty/absent triple fails even with a forged matching receipt |
+| `opponent-policy-authored` | `author_attested` | payload `/opponentPolicy`; the complete valid policy object is attested, not only its mode | changing the mode is neither required nor sufficient |
+| `tablebase-opponent-not-selected` | `pointer_equals` | `/opponentPolicy/mode === "perfect_tablebase"` | `human_common`, `strong_engine` and `practical_resistance` all fail |
+| `recorded-play-needs-authoring` | `author_attested` | payload `/spine`; spine is non-empty and the receipt matches the complete nested recorded line | changing any recorded move invalidates the receipt |
+| `mechanical-objective-needs-grounding` | `author_attested` | payload `/objective`; the complete valid objective is attested | changing only unrelated pack prose cannot affect it |
+
+The first two position-seed blockers intentionally converge on one authoring act without collapsing
+their predicates. Converting the mechanical seed to an outcome objective with a declared grading
+policy satisfies `objective_graded`; adding a matching engine/Syzygy record satisfies
+`assessment_grounded`. One edit wave may supply both, but deleting either fact reopens its own
+clearance.
+
+### Narrow deferred-subject rule [[D3074]]
+
+The existing subject-resolution lint is amended from “every clearance subject resolves when
+written” to this rule:
+
+> A caller-selected subject must resolve when the clearance is written. A kind whose subject
+> grammar is one exact constant may name that constant while it is absent if absence is a defined
+> false result of the predicate.
+
+Only `assessment_grounded` uses that exception in this amendment. Its subject remains exactly
+`/objective/grading/assessedBy`; the pack cannot choose another absent pointer, and the shipped
+`assessmentGrounding` already returns `unverified` when the node is absent. Once present, the full
+engine/Syzygy ledger join still decides the predicate. `pointer_authored`, `pointer_equals`,
+`ledger_record`, `claim_bound` and `shape_firing` retain their resolving-subject requirement.
+`author_attested` has no caller-supplied `subject` at all; its payload comes from the template
+registry.
+
+### Writer, schema and non-vacuity consequences
+
+The schema-0.28 migration extends the clearance union with the three shapes above. The template
+registry gains one total `clearancePlan` per id, and every emitter writes that plan with no
+attestation. Stage 0 backfills the same objects. This remains mechanical: the migration records a
+predicate that is false now; it does not create the human receipt or the missing chess content.
+
+`clearGraduationEntries` adds three evaluators:
+
+- `pointer_equals` resolves its subject and uses JSON scalar identity against `expected`;
+- `objective_graded` requires the closed outcome type, a grading object, and compiled result rules;
+- `author_attested` recomputes the registry-owned payload, checks its template precondition and
+  compares the canonical digest to the receipt.
+
+All three join `MECHANICAL_KINDS` because the writer can evaluate them deterministically. That name
+means *machine-decidable predicate*, not *machine-authored truth*. Missing attestation, missing
+future subject, unmet precondition and digest mismatch return `holds: false`; malformed receipt,
+wrong template/entry identity, illegal `emittedPayloadDigest`, unresolvable required pointer or
+wrong value type are validation errors. The existing non-vacuity rule remains: every one of the nine
+emitter plans must evaluate false on the exact emitted document before it may be written.
+
+### Amendment acceptance criteria
+
+20. The migration planner is total over all nine registered emitter ids and reports **zero
+    `blocked_contract`** rows. It derives every clearance configuration without authoring a receipt
+    or chess content; the current 104 contract-blocked rows move to mechanically migratable
+    blocking clearances, not to `resolved`.
+21. The three formerly labelled ready controls fail in the dangerous direction: `strong_engine`
+    cannot clear `tablebase-opponent-not-selected`; changing a policy without an attestation cannot
+    clear `opponent-policy-authored`; signing the unchanged generated objective cannot clear
+    `mechanical-objective-placeholder`.
+22. The author-attestation evaluator rejects a copied pack id, copied entry id, wrong template,
+    altered pointer, altered value, stale payload, malformed timestamp and receipt written for a
+    different canonical payload. An exact control clears. No caller supplies the payload pointers.
+23. `authored-teaching-absent` stays blocking when all three collections are absent/empty even if
+    the digest matches; `recorded-play-needs-authoring` stays blocking on an empty spine; both clear
+    only after their precondition and exact receipt hold.
+24. `outcome-ungraded` stays blocking for the emitted `play_until_checkpoint` plus reach-checkpoint
+    condition and for an outcome type without grading; the four closed outcome types with valid
+    grading compile result rules and satisfy it. `start-assessment-absent` is schema-valid while its
+    fixed subject is absent, evaluates false, and clears only after ledger-verified engine/Syzygy
+    grounding.
+25. A corpus check instantiates every registered template through its real emitter shape, evaluates
+    the emitted clearance and observes **9/9 false**. The same test performs the minimum truthful
+    mutation for each template and observes **9/9 true**, then mutates the decided subject and
+    observes false again.
+26. A fresh buildability review verifies the three new union arms, registry ownership, digest
+    material, evaluator inputs, schema/lint homes and all seven negative groups above before the
+    author amendment is re-accepted. Passing criteria 20–25 is necessary and not self-acceptance.
 
 ## Discharges
 

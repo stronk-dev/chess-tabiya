@@ -24997,11 +24997,38 @@
     {
       "id": "D3072",
       "state": "blocked",
-      "owner": "evidence-foundation",
-      "blocker": "rfc:graduation-clearance.md",
       "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:442043be632a92742c9d8e2059d70e462dbc6d69c52d4c08329de7ae10167dbe",
-      "uxItems": []
+      "sourceDigest": "sha256:6d1b09d9527170d3fe3c6b2b26b36b3c1b703dea446c7a61fb1299233bd03527",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:graduation-clearance.md"
+    },
+    {
+      "id": "D3073",
+      "state": "blocked",
+      "sourceGlyph": "📜",
+      "sourceDigest": "sha256:b841c185e7951dd9092834af64cfba2bf4a9ac22850996a38f899362b1c80ca6",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:graduation-clearance.md"
+    },
+    {
+      "id": "D3074",
+      "state": "blocked",
+      "sourceGlyph": "📜",
+      "sourceDigest": "sha256:6dacb77f6b6db300182178855c2cc8e0472b0a4be9b556f343ebd87291a582b9",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:graduation-clearance.md"
+    },
+    {
+      "id": "D3075",
+      "state": "blocked",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:d4613b9ce9ed11658dfab4d51fa30c142ede589794da81d152f23c7a0370078e",
+      "uxItems": [],
+      "owner": "evidence-foundation",
+      "blocker": "rfc:graduation-clearance.md"
     }
   ]
 }

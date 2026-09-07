@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { createHash } from "node:crypto";
 import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -68,16 +69,23 @@ export const KNOWN_CANDIDATE_EXCEPTIONS = Object.freeze([
   "immediate-blunder-guard-is-not-selectable-defect-d8-dela",
 ]);
 
-const TEMPLATE_CLEARANCE_PLANS = Object.freeze({
-  "mechanical-objective-placeholder": Object.freeze({ status: "ready", kind: "pointer_authored" }),
-  "opponent-policy-authored": Object.freeze({ status: "ready", kind: "pointer_authored" }),
-  "tablebase-opponent-not-selected": Object.freeze({ status: "ready", kind: "pointer_authored" }),
-  "outcome-ungraded": Object.freeze({ status: "blocked_contract", blocker: "No shipped standing predicate grades the resulting position or outcome." }),
-  "start-assessment-absent": Object.freeze({ status: "blocked_contract", blocker: "The template permits engine or tablebase grounding but carries no record-kind choice." }),
-  "target-elo-authored": Object.freeze({ status: "blocked_contract", blocker: "The numeric targetElo subject cannot satisfy the string-only pointer_authored predicate." }),
-  "authored-teaching-absent": Object.freeze({ status: "blocked_contract", blocker: "The required authored collections are absent, so no required clearance subject resolves." }),
-  "recorded-play-needs-authoring": Object.freeze({ status: "blocked_contract", blocker: "The array of recorded lines cannot satisfy the string-only pointer_authored predicate." }),
-  "mechanical-objective-needs-grounding": Object.freeze({ status: "blocked_contract", blocker: "Changing objective prose does not prove the grounding condition named by this blocker." }),
+function templatePlan(value) {
+  return Object.freeze({
+    ...value,
+    ...(value.payloadPointers === undefined ? {} : { payloadPointers: Object.freeze([...value.payloadPointers]) }),
+  });
+}
+
+export const TEMPLATE_CLEARANCE_PLANS = Object.freeze({
+  "mechanical-objective-placeholder": templatePlan({ kind: "author_attested", templateId: "mechanical-objective-placeholder", instrument: "human_chess_author", payloadPointers: ["/objective/summary"], captureEmittedPayload: true }),
+  "outcome-ungraded": templatePlan({ kind: "objective_graded", subject: "/objective", instrument: "objectiveRules" }),
+  "start-assessment-absent": templatePlan({ kind: "assessment_grounded", subject: "/objective/grading/assessedBy", instrument: "make sourcing-check", deferredSubject: true }),
+  "target-elo-authored": templatePlan({ kind: "author_attested", templateId: "target-elo-authored", instrument: "human_chess_author", payloadPointers: ["/opponentPolicy/targetElo"] }),
+  "authored-teaching-absent": templatePlan({ kind: "author_attested", templateId: "authored-teaching-absent", instrument: "human_chess_author", payloadPointers: ["/planClasses", "/deviations", "/feedbackClaims"], requireNonEmptyCollection: true }),
+  "opponent-policy-authored": templatePlan({ kind: "author_attested", templateId: "opponent-policy-authored", instrument: "human_chess_author", payloadPointers: ["/opponentPolicy"] }),
+  "tablebase-opponent-not-selected": templatePlan({ kind: "pointer_equals", subject: "/opponentPolicy/mode", expected: "perfect_tablebase", instrument: "make pack-check" }),
+  "recorded-play-needs-authoring": templatePlan({ kind: "author_attested", templateId: "recorded-play-needs-authoring", instrument: "human_chess_author", payloadPointers: ["/spine"], requireNonEmptyCollection: true }),
+  "mechanical-objective-needs-grounding": templatePlan({ kind: "author_attested", templateId: "mechanical-objective-needs-grounding", instrument: "human_chess_author", payloadPointers: ["/objective"] }),
 });
 
 const SIDECAR = /\.(?:evidence|graduation|job|sources)\.json$/u;
@@ -114,6 +122,27 @@ function pointerValue(document, pointer) {
   return value;
 }
 
+function canonical(value) {
+  if (value === null || typeof value !== "object") return JSON.stringify(value);
+  if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
+  return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonical(value[key])}`).join(",")}}`;
+}
+
+function digest(value) {
+  return `sha256:${createHash("sha256").update(canonical(value)).digest("hex")}`;
+}
+
+export function authorAttestationMaterial(document, entryId, plan) {
+  if (plan.kind !== "author_attested") throw new TypeError(`${entryId} is not an author-attested template`);
+  return Object.freeze({
+    schema: "tabiya.graduation.author-attestation.v1",
+    packId: document.id,
+    entryId,
+    templateId: plan.templateId,
+    payload: Object.freeze(plan.payloadPointers.map((pointer) => Object.freeze({ pointer, value: pointerValue(document, pointer) ?? null }))),
+  });
+}
+
 function templateMigration(document, entry) {
   const plan = TEMPLATE_CLEARANCE_PLANS[entry.id];
   if (plan === undefined) return {
@@ -121,29 +150,24 @@ function templateMigration(document, entry) {
     proposedState: "blocking",
     fields: { clearance: field("requires_author", "Entry id is not an emitter template; an author must select its predicate.") },
   };
-  if (plan.status === "blocked_contract") return {
-    status: "blocked_contract",
-    proposedState: "blocking",
-    fields: { clearance: field("blocked_contract", plan.blocker) },
+  const fields = {
+    "clearance.kind": field("derived", `emitter template ${entry.id}`, plan.kind),
+    "clearance.instrument": field("derived", `emitter template ${entry.id}`, plan.instrument),
   };
-  const subject = plan.kind === "pointer_authored" && entry.id.includes("opponent")
-    ? "/opponentPolicy/mode"
-    : "/objective/summary";
-  const placeholder = pointerValue(document, subject);
-  if (typeof placeholder !== "string" || placeholder.trim() === "") return {
-    status: "blocked_contract",
-    proposedState: "blocking",
-    fields: { clearance: field("blocked_contract", `Template subject ${subject} does not resolve to a non-empty string.`) },
-  };
+  if (plan.subject !== undefined) fields["clearance.subject"] = field("derived", `emitter template ${entry.id}`, plan.subject);
+  if (plan.expected !== undefined) fields["clearance.expected"] = field("derived", `emitter template ${entry.id}`, plan.expected);
+  if (plan.templateId !== undefined) fields["clearance.templateId"] = field("derived", `emitter template ${entry.id}`, plan.templateId);
+  if (plan.captureEmittedPayload === true) {
+    fields["clearance.emittedPayloadDigest"] = field(
+      "derived",
+      `canonical emitted payload for template ${entry.id}`,
+      digest(authorAttestationMaterial(document, entry.id, plan)),
+    );
+  }
   return {
     status: "ready",
     proposedState: "blocking",
-    fields: {
-      "clearance.kind": field("derived", `emitter template ${entry.id}`, "pointer_authored"),
-      "clearance.subject": field("derived", `emitter template ${entry.id}`, subject),
-      "clearance.instrument": field("derived", "graduation-clearance §1.2 kind E", "author"),
-      "clearance.placeholder": field("derived", `current value at ${subject}`, placeholder),
-    },
+    fields,
   };
 }
 
@@ -348,7 +372,7 @@ export function buildGraduationPlan(root = ROOT) {
     migration: {
       entries: rows.length,
       statuses: countStatuses(rows),
-      templateContracts: Object.freeze(Object.fromEntries(Object.entries(TEMPLATE_CLEARANCE_PLANS).map(([id, value]) => [id, value.status]))),
+      templateContracts: Object.freeze(Object.fromEntries(Object.keys(TEMPLATE_CLEARANCE_PLANS).map((id) => [id, "ready"]))),
       rows: Object.freeze(rows),
     },
   };
