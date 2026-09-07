@@ -147,6 +147,40 @@ if (!softwareDependencies.ruleFound || softwareDependencies.missing.length > 0) 
   failures.push("Makefile: verify-software must include the isolated performance tier");
 }
 
+const governanceDependencies = missingMakeDependencies(makefile, "verify-governance", [
+  "register-check",
+  "status-parity",
+  "work-index",
+  "work-state",
+  "work-item-check",
+  "roadmap-check",
+  "intent-parity",
+  "test-tier-check",
+  "docs-check",
+  "staged-process-contracts-test",
+]);
+if (!governanceDependencies.ruleFound || governanceDependencies.missing.length > 0) {
+  failures.push(`Makefile: verify-governance is missing stable repository checks: ${governanceDependencies.missing.join(", ") || "verify-governance rule"}`);
+}
+const governanceRule = makefile.match(/^verify-governance:\s*(.+)$/mu)?.[1] ?? "";
+const reviewEvidenceInGovernance = governanceRule.split(/\s+/u).filter((dependency) =>
+  /(?:fresh-review|author-repair|author-contract|cut-contract|trait-screen|calibration-verdict|route-map)/u.test(dependency),
+);
+if (reviewEvidenceInGovernance.length > 0) {
+  failures.push(`Makefile: draft-RFC evidence must stay outside verify-governance: ${reviewEvidenceInGovernance.join(", ")}`);
+}
+const rfcEvidenceDependencies = missingMakeDependencies(makefile, "verify-rfc-evidence", [
+  "concept-registry-sixth-fresh-review",
+  "longitudinal-store-tenth-fresh-review",
+  "pack-capability-seventeenth-fresh-review",
+  "provider-protocol-sixth-fresh-review",
+  "bot-policy-fifth-fresh-review",
+  "shared-resource-bootstrap-collision-core-author-contract",
+]);
+if (!rfcEvidenceDependencies.ruleFound || rfcEvidenceDependencies.missing.length > 0) {
+  failures.push(`Makefile: verify-rfc-evidence is missing retained review targets: ${rfcEvidenceDependencies.missing.join(", ") || "verify-rfc-evidence rule"}`);
+}
+
 const softwareConfig = await readText("vitest.software.config.ts");
 const performanceConfig = await readText("vitest.performance.config.ts");
 if (!softwareConfig.includes("...PERFORMANCE_CONTRACT_TESTS") || !performanceConfig.includes("include: [...PERFORMANCE_CONTRACT_TESTS]")) {
@@ -163,8 +197,8 @@ if (!workflow.includes("pnpm install --frozen-lockfile") || missingVerifyTiers.l
   failures.push(`CI workflow: missing named verification tiers: ${missingVerifyTiers.join(", ")}`);
 }
 const governanceJob = workflowJob(workflow, "repository-governance");
-if (governanceJob === undefined || checkoutFetchDepth(governanceJob) !== 0) {
-  failures.push("CI workflow: repository-governance must fetch full history for retained historical review contracts");
+if (governanceJob === undefined || checkoutFetchDepth(governanceJob) !== undefined) {
+  failures.push("CI workflow: repository-governance must remain valid on the default shallow checkout");
 }
 
 const browserWorkflow = await readText(".github/workflows/browser.yml");

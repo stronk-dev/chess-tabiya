@@ -21,6 +21,9 @@ const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const at = "2026-08-12T14:30:00.000Z";
 const writer = "latency-writer";
 const cycle = ["g1f3", "g8f6", "f3g1", "f6g8"] as const;
+const WARMUP_SAMPLES = 3;
+const MEASURED_SAMPLES = 20;
+const OPERATIONS_PER_SAMPLE = 5;
 
 interface Samples {
   readonly medianMs: number;
@@ -100,16 +103,22 @@ async function sample(
   prepare: () => void,
   operation: () => Promise<void>,
 ): Promise<Samples> {
-  for (let index = 0; index < 3; index += 1) {
-    prepare();
-    await operation();
+  for (let sampleIndex = 0; sampleIndex < WARMUP_SAMPLES; sampleIndex += 1) {
+    for (let operationIndex = 0; operationIndex < OPERATIONS_PER_SAMPLE; operationIndex += 1) {
+      prepare();
+      await operation();
+    }
   }
   const durations: number[] = [];
-  for (let index = 0; index < 20; index += 1) {
-    prepare();
-    const started = performance.now();
-    await operation();
-    durations.push(performance.now() - started);
+  for (let sampleIndex = 0; sampleIndex < MEASURED_SAMPLES; sampleIndex += 1) {
+    let elapsedMs = 0;
+    for (let operationIndex = 0; operationIndex < OPERATIONS_PER_SAMPLE; operationIndex += 1) {
+      prepare();
+      const started = performance.now();
+      await operation();
+      elapsedMs += performance.now() - started;
+    }
+    durations.push(elapsedMs / OPERATIONS_PER_SAMPLE);
   }
   durations.sort((left, right) => left - right);
   const rounded = (value: number): number => Math.round(value * 1_000) / 1_000;

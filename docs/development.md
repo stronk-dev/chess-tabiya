@@ -83,6 +83,10 @@ claims and deliberately preserved open questions; it reads those documents and n
 `make docs-check` requires every direct `docs/*.md` document to appear exactly once in the canonical
 index and keeps the repository README linked to the architecture, feature, extension and contributor
 entry points. It is part of `make verify-governance`.
+Draft RFCs keep their author models, historical review images and counterexamples under their named
+Make targets. Run the relevant target while changing that RFC; `make verify-rfc-evidence` is the
+optional whole-portfolio audit. These review artifacts are not part of `make verify` or required CI,
+because a passing model of an unaccepted document is not release evidence.
 `make test-browser` builds and starts the default mock-backed application and
 runs the full Playwright episode in a separate browser CI job.
 

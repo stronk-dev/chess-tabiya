@@ -34,7 +34,7 @@ At least one milestone checkpoint must change, and its evidence must name every 
 Only staged bytes are inspected, so another worker's dirty files cannot trigger or satisfy it.
 
 Use `make roadmap-receipt` only after intentionally changing a joined source. Use
-`make verify-governance` to exercise the complete governance tier, including negative fixtures for
+`make verify-governance` to exercise the complete stable governance tier, including negative fixtures for
 checkpoint shape, receipt drift and staged-flow-back refusal.
 
 Run `make work-state` for the assignment census. It always prints the complete ledger denominator,

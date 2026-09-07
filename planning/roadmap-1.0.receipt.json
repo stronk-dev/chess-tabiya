@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:dc82ed56e3595ff87b809afa0e57f1898ea70b5450017c78815a8a8aab82467d",
+    "roadmap": "sha256:be5b0ca14973f2c6b223ab668bfb9fb4d494f4bdafa56dad58b3333d74b54ee8",
     "workItems": "sha256:983e2f3a517cfd73cdddab99412d3ec51f03803642923436f30454b5bf0f0b7d",
-    "workState": "sha256:6eb2023a57230631306de2daedbb1e8ece8bb539f3735efc912f367e36db6286",
+    "workState": "sha256:95b4c901f34d60851c7266354b135fdde2eb8f6f3483362fb7da177eb1e64f9a",
     "rfcRegister": "sha256:5ac870ea317aae3aa1ed97b43ed11e8d0402140a15c13b0213dafe92614651c8",
     "uxIndex": "sha256:5ca3e23500716997bf5a89e941981f81f59244826bf9983b8a0d358294519080",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 644,
-      "doing": 1,
+      "todo": 642,
+      "doing": 0,
       "blocked": 1203,
-      "done": 886,
+      "done": 890,
       "refused": 109
     },
     "workItems": {
@@ -73,16 +73,18 @@
         "operations"
       ],
       "dependsOn": [],
-      "nextAction": "Keep every new live row assigned at creation, then require one paired green GitHub verify/browser run on the exact pushed revision before restoring this milestone to complete; the local topology and browser repairs are implemented but not remotely discharged.",
+      "nextAction": "Keep every new live row assigned at creation, then require one paired green GitHub verify/browser run on the exact pushed revision before restoring this milestone to complete; the browser repair and the narrowed stable-governance topology are implemented but not remotely discharged.",
       "latestCheckpoint": {
         "at": "2026-09-07",
-        "summary": "The latest pushed verify/browser pair was red: governance required history absent from its checkout, and the import/re-entry journey raced its move commit. Both local contracts are repaired without retries, and the exact local browser/scaffold targets pass; remote proof remains pending until these bytes are pushed.",
-        "impact": "regressed",
+        "summary": "Required governance is now the ten stable repository invariants rather than a 47-target aggregate containing 37 active-draft and historical review artifacts. Draft-RFC evidence remains available through an explicit opt-in target, the governance checkout is shallow again, and the scaffold prevents review-shaped gates from returning to required CI. The repaired browser journey and this topology still require one paired green GitHub run on the exact pushed revision.",
+        "impact": "advanced",
         "evidence": [
+          "Makefile",
           ".github/workflows/verify.yml",
           "tests/browser/drill.spec.ts",
           "tools/verify-scaffold.mjs",
           "tools/verify-scaffold.test.mjs",
+          "docs/testing.md",
           "planning/work-state.json",
           "planning/exploration/log.md"
         ],
@@ -90,7 +92,7 @@
           {
             "kind": "work_state",
             "id": "D3076",
-            "digest": "sha256:29fca3770e9b006f5edea110abce8c7157a81a63968708e3ddbb8294e8f6ddb4"
+            "digest": "sha256:ac92f80f050423d605513ffe32e607ceb379f1684f2ab466510402ce08a42871"
           },
           {
             "kind": "work_state",

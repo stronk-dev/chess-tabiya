@@ -10,6 +10,7 @@ is not proof that the production application routes an endpoint.
 | Software contracts | `make verify-software` | Types, framework-free reducers/selectors, server contracts, schemas and compiled runtime manifests | Real-corpus acceptance, process ledgers, browser behavior or deployed routing |
 | Performance contracts | `make test-performance` | Required latency/complexity envelopes in a single-worker process, also included by `verify-software` | Functional assertions or benchmarks sharing the generic parallel test pool |
 | Repository governance | `make verify-governance` | RFC/register/work/roadmap/intent consistency, a source-sealed 1.0 status receipt, documentation-index completeness, and test-tier ownership | Product behavior, content quality or release proof |
+| Draft-RFC evidence | `make verify-rfc-evidence` or the RFC's named target | Historical review images, author models and counterexamples used to review active RFCs | A required release gate or proof that product code ships |
 | Real-content contracts | `make verify-content` | Schema and application compatibility against committed draft/pack/candidate bytes, including the published-pack evidence-digest invariant | Authored chess judgement or software contracts already expressible with synthetic fixtures |
 | Browser journeys | `make test-browser-smoke` | Stable user journeys asserted through roles, state and outcomes | Mutable authored prose or exhaustive viewport coverage |
 | Real-content integration | `make test-browser-content` | Representative draft/pack integration with the application | Chess-truth validation or product behavior already expressible with a synthetic fixture |
@@ -17,6 +18,12 @@ is not proof that the production application routes an endpoint.
 | Complete browser gate | `make test-browser-ci` | The same three named browser tiers used by GitHub | Release-image, migration or backup proof |
 | Full non-browser gate | `make verify` | Software + governance + real-content targets, matching the three required GitHub jobs | Browser or release-image proof |
 | Exact local CI | `make ci-local` | Pinned Node/pnpm, Stockfish and Compose preflight, then all required non-browser and browser tiers | Ordinary development checks |
+
+Required microbenchmarks time bounded operation batches and report per-operation batch means. State is
+reset before every operation, so the production path still executes each time; batching prevents one
+shared-runner scheduler or garbage-collection pause from becoming a false product regression. Absolute
+budgets and sample populations remain explicit in the tests. User-perceived tail latency belongs to the
+browser and owner-use instruments, not a lucky or unlucky single Node timer observation.
 
 `make test-browser` remains a convenient single Playwright invocation for local debugging. GitHub
 runs the named browser tiers separately so the failing step says whether the regression is a core
@@ -35,6 +42,14 @@ snapshot. This makes the commit's staged bytes the unit under review and prevent
 unstaged schema, migration or planning edit from another worker from blocking it. Direct
 `make register-check`, `make status-parity`, and related commands continue to inspect the working
 tree during development.
+
+Draft-RFC evidence is deliberately outside `make verify` and GitHub's required jobs. A fresh-review
+counterexample proves that an RFC is not buildable; an author model can pin prose or a historical
+source image. Those are useful review artifacts, but repeatedly passing them does not prove current
+software, content, repository governance, or release behavior. They remain runnable by their named
+Make targets and through `make verify-rfc-evidence` for an intentional whole-portfolio audit.
+Changes to an RFC run its named target before `make verify-governance`; release CI stays valid on a
+normal shallow checkout and never depends on repository history solely for a draft review.
 
 Content is shipped product data and therefore still receives schema, provenance, compatibility and
 integration validation. Its exact prose is not pinned unless the wording itself is a declared public

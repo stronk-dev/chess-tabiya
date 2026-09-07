@@ -18032,3 +18032,29 @@ back through storage events; the browser journey writes ambient presence after t
 mounted and requires the assistance affordance to appear. `make test-software` passes 1,123/1,123.
 [[D311]] remains open only for the two evidence-production residues: arrows have no producer, and
 `boardLighting: "evidence"` has no disclosed-evidence overlay distinct from structural sight.
+
+## 2026-09-07 — Draft review evidence leaves the release gate
+
+**What changed:** [[D3057]], [[D3067]] and [[D3076]] are closed at the canonical boundary. The
+repository-governance aggregate had 47 dependencies; only 10 checked stable repository state.
+The other 37 were active-RFC author models, historical source images, research contracts or fresh
+review counterexamples. They remain individually runnable and are collected by the explicit,
+opt-in `make verify-rfc-evidence`, but no longer run as required CI or `make verify` evidence.
+
+**Why:** a passing model of an unaccepted RFC is not release proof, and a counterexample whose job
+is to keep an RFC returned is not repository correctness. Mixing those artifacts into required CI
+made prose snapshots and `git show` history into release dependencies and allowed an instrument to
+require that its own document demand another review. `verify-governance` now owns only registers,
+status/work/roadmap/intent joins, documentation/test-tier ownership and staged-process isolation.
+The scaffold check rejects review-shaped dependencies in that target and requires the GitHub job
+to work on the default shallow checkout. No software, browser, content or release-image check was
+removed or reclassified.
+
+### 2026-09-07 — Required latency samples stop promoting scheduler pauses to product failures
+
+The canonical pre-commit gate failed the 3,000-event rewind arm at 103.01 ms p95 while its median was
+11.03 ms. The prior twenty-sample design made the second-slowest single HTTP observation the release
+verdict. D3095 keeps the performance tier and the 100/200 ms budgets intact, but measures twenty bounded
+five-operation samples as per-operation batch means, resetting storage state before every operation. This
+matches the amortization already used by the opening-catalogue microbenchmark: sustained regression still
+fails, while one shared-runner scheduler or GC pause does not. No retry was added and no threshold moved.

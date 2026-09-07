@@ -69,3 +69,15 @@ test("workflow job extraction does not borrow checkout policy from another job",
   assert.equal(checkoutFetchDepth(workflowJob(workflow, "software") ?? ""), 0);
   assert.equal(checkoutFetchDepth(workflowJob(workflow, "repository-governance") ?? ""), undefined);
 });
+
+test("governance and draft-RFC evidence remain separate Make targets", () => {
+  const makefile = `verify-governance: register-check status-parity work-index\nverify-rfc-evidence: example-fresh-review example-author-repair\n`;
+  assert.deepEqual(
+    missingMakeDependencies(makefile, "verify-governance", ["register-check", "work-index"]),
+    { ruleFound: true, missing: [] },
+  );
+  assert.deepEqual(
+    missingMakeDependencies(makefile, "verify-rfc-evidence", ["example-fresh-review", "example-author-repair"]),
+    { ruleFound: true, missing: [] },
+  );
+});

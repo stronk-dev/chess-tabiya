@@ -24881,11 +24881,12 @@
     },
     {
       "id": "D3057",
-      "state": "todo",
-      "owner": "release-engineering",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:0c0892a884eb08ffdd10dbf244508edd426c3c79a3b6e1071a9062778621433e",
-      "uxItems": []
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c7041c889148024db2e6858fc86e5657c0d439589e5327148a5ec9243db39d44",
+      "uxItems": [],
+      "evidence": "Makefile",
+      "evidenceKind": "path"
     },
     {
       "id": "D3058",
@@ -24968,11 +24969,12 @@
     },
     {
       "id": "D3067",
-      "state": "todo",
-      "owner": "release-engineering",
-      "sourceGlyph": "📊",
-      "sourceDigest": "sha256:48a8a2a07369527a95dee071db131139bcf08a015383a34cdfa6b3fc41e6d510",
-      "uxItems": []
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7d44f76a9f37d0cf6db0c16492ec322447bf24d7c9274ffd251d42d2404e6eff",
+      "uxItems": [],
+      "evidence": "Makefile",
+      "evidenceKind": "path"
     },
     {
       "id": "D3068",
@@ -25048,12 +25050,12 @@
     },
     {
       "id": "D3076",
-      "state": "doing",
-      "sourceGlyph": "🛠",
-      "sourceDigest": "sha256:29fca3770e9b006f5edea110abce8c7157a81a63968708e3ddbb8294e8f6ddb4",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ac92f80f050423d605513ffe32e607ceb379f1684f2ab466510402ce08a42871",
       "uxItems": [],
-      "owner": "release-engineering",
-      "since": "2026-09-07"
+      "evidence": "Makefile",
+      "evidenceKind": "path"
     },
     {
       "id": "D3077",
@@ -25220,6 +25222,15 @@
       "sourceDigest": "sha256:f6d88f69098ec36a67667d6a68ae23aa0de28c099d53b0a8feeb44f0e5466e73",
       "uxItems": [],
       "evidence": "planning/platform-alignment/plan.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3095",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ae0a1638a1d613611e38c777f6fc3f4ebdd4679e002c902d5a4b90869f6d11cd",
+      "uxItems": [],
+      "evidence": "apps/server/src/latency-performance.test.ts",
       "evidenceKind": "path"
     }
   ]

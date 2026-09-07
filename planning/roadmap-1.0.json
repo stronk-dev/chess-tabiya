@@ -313,14 +313,14 @@
         "state": "active",
         "capabilities": ["governance", "operations"],
         "dependsOn": [],
-        "nextAction": "Keep every new live row assigned at creation, then require one paired green GitHub verify/browser run on the exact pushed revision before restoring this milestone to complete; the local topology and browser repairs are implemented but not remotely discharged.",
+        "nextAction": "Keep every new live row assigned at creation, then require one paired green GitHub verify/browser run on the exact pushed revision before restoring this milestone to complete; the browser repair and the narrowed stable-governance topology are implemented but not remotely discharged.",
         "latestCheckpoint": {
           "at": "2026-09-07",
-          "summary": "The latest pushed verify/browser pair was red: governance required history absent from its checkout, and the import/re-entry journey raced its move commit. Both local contracts are repaired without retries, and the exact local browser/scaffold targets pass; remote proof remains pending until these bytes are pushed.",
-          "impact": "regressed",
-          "evidence": [".github/workflows/verify.yml", "tests/browser/drill.spec.ts", "tools/verify-scaffold.mjs", "tools/verify-scaffold.test.mjs", "planning/work-state.json", "planning/exploration/log.md"],
+          "summary": "Required governance is now the ten stable repository invariants rather than a 47-target aggregate containing 37 active-draft and historical review artifacts. Draft-RFC evidence remains available through an explicit opt-in target, the governance checkout is shallow again, and the scaffold prevents review-shaped gates from returning to required CI. The repaired browser journey and this topology still require one paired green GitHub run on the exact pushed revision.",
+          "impact": "advanced",
+          "evidence": ["Makefile", ".github/workflows/verify.yml", "tests/browser/drill.spec.ts", "tools/verify-scaffold.mjs", "tools/verify-scaffold.test.mjs", "docs/testing.md", "planning/work-state.json", "planning/exploration/log.md"],
           "anchors": [
-            {"kind": "work_state", "id": "D3076", "digest": "sha256:29fca3770e9b006f5edea110abce8c7157a81a63968708e3ddbb8294e8f6ddb4"},
+            {"kind": "work_state", "id": "D3076", "digest": "sha256:ac92f80f050423d605513ffe32e607ceb379f1684f2ab466510402ce08a42871"},
             {"kind": "work_state", "id": "D3077", "digest": "sha256:257208b195cc96f48931ad4ec03fbdd954345fa75f3635d83f0f416d6b37ba03"}
           ]
         },

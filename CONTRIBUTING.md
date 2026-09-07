@@ -70,10 +70,13 @@ Use the narrowest useful command while developing, then the applicable aggregate
 | Documentation/index only | `make docs-check` |
 | TypeScript runtime/server/web | Relevant test file, then `make verify-software` |
 | Real committed content | Relevant authoring check, then `make verify-content` |
-| RFC/register/roadmap/process | Relevant targeted checker, then `make verify-governance` |
+| RFC/register/roadmap/process | The RFC's named evidence target when applicable, then `make verify-governance` |
 | Route or complete learner journey | `make test-browser-smoke`, `test-browser-content` or `test-browser-matrix` as applicable |
 | Release/package behavior | The named release or packaging proof; ordinary unit tests are insufficient |
 | Full local gate | `make verify` and, when the UI changed, `make test-browser` |
+
+`make verify-rfc-evidence` is an optional audit of every active draft's retained review artifacts;
+it is not a substitute for the targeted RFC check and is not a release gate.
 
 See `docs/testing.md` for what each tier proves and deliberately does not prove.
 
