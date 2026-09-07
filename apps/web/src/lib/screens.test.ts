@@ -992,6 +992,8 @@ describe("Layer 3 screens", () => {
 
     expect(document.querySelector('[aria-label="Recorded engine evaluation"]')).toBeNull();
     expect(document.querySelector('[data-evidence-consumer="compare.engine_trajectory"]')).toBeNull();
+    expect(document.querySelector('[data-abstention="feedback_withheld"]')?.textContent).toContain("withheld until this attempt reaches its disclosure boundary");
+    expect(document.body.textContent).toContain("Recorded paths, positions, and objective changes remain available");
     expect(document.body.textContent).not.toContain("M-2");
     document.querySelector<HTMLButtonElement>(".header-actions button")!.click();
     await tick();

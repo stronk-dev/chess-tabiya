@@ -19,8 +19,11 @@ machine-derived comparison fields. When feedback is withheld, the server removes
 machine evidence and lines, filters machine references from public timelines,
 and replaces every consequence summary score with `null`. The client admits no
 engine trajectory, sparkline, summary score, or engine-trajectory consumer in
-that state. It cannot infer availability from whether one of those collections
-happens to be empty.
+that state. The comparison itself renders a distinct `feedback_withheld`
+honest-empty state explaining that engine comparison waits for the disclosure
+boundary while recorded paths, positions, and objective changes remain usable.
+It cannot infer availability from whether one of those collections happens to
+be empty.
 
 The branch rail provides manual checkboxes and “compare all forked here.” The
 same selection drives branch-selective PGN export. The comparison screen renders

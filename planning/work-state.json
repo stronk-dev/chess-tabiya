@@ -11166,11 +11166,12 @@
     },
     {
       "id": "D1465",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:143cd59478722af58d9871d8919e2d5f74e32842e6012bd5a97e1bd25771391f",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6bd2cd93c1ef18fa57ffbd1a1199f29d545155d1f0af1ad8004a7ab9ea7c0ed0",
       "uxItems": [],
-      "owner": "review-and-return"
+      "evidence": "apps/web/src/lib/CompareView.svelte",
+      "evidenceKind": "path"
     },
     {
       "id": "D1466",

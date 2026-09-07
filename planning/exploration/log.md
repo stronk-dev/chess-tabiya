@@ -17991,3 +17991,15 @@ schedule provenance, new writer ownership and the emitted transfer; shell tests 
 Learn actions; terminal UI tests exercise the completed state. `make test-software` passes
 1,120/1,120. [[D314]] remains open only for arm (b): Just Play contributes no concept identity, a
 longitudinal evidence decision this client pass deliberately did not invent.
+
+## 2026-09-07 — Withheld comparison is an explicit state
+
+**What changed:** [[D1465]] is closed. Mid-run branch comparison no longer makes its intentionally
+absent engine layer look broken: the ordinary comparison renders a distinct `feedback_withheld`
+state explaining that engine comparison waits for the disclosure boundary while recorded paths,
+positions, and objective changes remain available. The server's existing stripping remains the
+authority; the client neither infers withholding from an empty array nor exposes a machine score.
+
+**Evidence/next:** the focused comparison regression requires the region-level explanation, its
+machine-readable abstention identity, zero engine-trajectory consumers and no hidden mate score in
+the same withheld fixture. Available comparisons retain their existing recorded engine table.
