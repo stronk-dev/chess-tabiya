@@ -18118,3 +18118,20 @@ The code pass also finds [[D3100]]: `eval_pivot` lives on the post-move node and
 contract must carry distinct decision, evidence and consequence identities. [[D3101]] isolates the
 three owner defaults before RFC drafting; collector, bot and Review foundation work remains open.
 Evidence: `design/research/mistake-derived-return-decks.md`, R66.
+
+### 2026-09-07 — Evidence presentation returns before raw prose can masquerade as grounding
+
+The seventh fresh independent review retains the sixth author's narrower serializer, UCI and
+closed-shape repairs but returns `evidence-presentation` on [[D3102]]–[[D3107]]. The decisive
+falsifier gives two unrelated citation sentences the same valid evidence binding and source; both
+parse. The other five arms show an incomplete Explorer fragment accepted as a full operation
+result, caller-picked workflow decisions gaining process authority, structure authority pointing
+at absent production exports while a tool-local copy executes, a Checkpoint-P fence satisfied by
+decoy strings, and a partial attribution image receiving a normal digest.
+
+`make evidence-presentation-seventh-fresh-review` retains the complete predecessor chain and
+passes 6/6. The RFC remains draft and no production implementation is authorised. The required
+repair is semantic rather than cosmetic: exact evidence values must construct presentation through
+real production operations; strings, copied unions and caller-sealed objects cannot stand in for
+those operations. Receipt:
+`planning/platform-alignment/evidence-presentation/seventh-fresh-independent-buildability-review-2026-09-07.md`.

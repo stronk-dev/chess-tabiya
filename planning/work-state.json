@@ -25287,6 +25287,60 @@
       "uxItems": [],
       "blocker": "owner-ruling",
       "question": "Choose automatic bounded intake, one queue versus Explore-again lane, and official-pack routing defaults."
+    },
+    {
+      "id": "D3102",
+      "state": "blocked",
+      "owner": "assistance-and-presentation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:56e8ad648b8268b70b535afd09988c8b1087f6ec6b5fdb4f0ba9a08f1222da6c",
+      "uxItems": [],
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D3103",
+      "state": "blocked",
+      "owner": "assistance-and-presentation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:f89f619cea1ae40e6d610edba31c0ab34ffcfcb461a53674af0bb6326f98dbea",
+      "uxItems": [],
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D3104",
+      "state": "blocked",
+      "owner": "assistance-and-presentation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:4af0b4cd32207dc84c7ed331278129c80a622eb8869aa1dda16e41d869915fb2",
+      "uxItems": [],
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D3105",
+      "state": "blocked",
+      "owner": "assistance-and-presentation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:13833c90af2cb47c8a9e2dde5614862761fd95cc0a80170be8cd04c200387940",
+      "uxItems": [],
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D3106",
+      "state": "blocked",
+      "owner": "assistance-and-presentation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:dd6589adb5ec1f731e90d6e4de82cf512d371b7d1101cc86bcd4566fa65abab3",
+      "uxItems": [],
+      "blocker": "rfc:evidence-presentation.md"
+    },
+    {
+      "id": "D3107",
+      "state": "blocked",
+      "owner": "assistance-and-presentation",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:215c7cd38d7abff8a651d3104f148a88856e1ca4636a2edb15da42639ba44b7c",
+      "uxItems": [],
+      "blocker": "rfc:evidence-presentation.md"
     }
   ]
 }

@@ -4,8 +4,8 @@
   "sourceDigests": {
     "roadmap": "sha256:be5b0ca14973f2c6b223ab668bfb9fb4d494f4bdafa56dad58b3333d74b54ee8",
     "workItems": "sha256:983e2f3a517cfd73cdddab99412d3ec51f03803642923436f30454b5bf0f0b7d",
-    "workState": "sha256:a1c833f71be20c9446a1530816927d0e03459ca065cb56010af4dbfc4d234e38",
-    "rfcRegister": "sha256:5ac870ea317aae3aa1ed97b43ed11e8d0402140a15c13b0213dafe92614651c8",
+    "workState": "sha256:743f0f1483a591f8e48d63ca39b9a0e46684dc7fd9488a08bbe99be8312af959",
+    "rfcRegister": "sha256:3a4db9818a0b88f03d450d39ed2f5196db165d25962ab6d1469519cde9e23154",
     "uxIndex": "sha256:5ca3e23500716997bf5a89e941981f81f59244826bf9983b8a0d358294519080",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
@@ -32,7 +32,7 @@
       "untriaged": 0,
       "todo": 642,
       "doing": 0,
-      "blocked": 1205,
+      "blocked": 1211,
       "done": 894,
       "refused": 109
     },

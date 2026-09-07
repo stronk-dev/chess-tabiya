@@ -1,14 +1,14 @@
 # RFC: evidence-presentation — the component vocabulary between a typed fact and a pixel
 
-- **Status:** draft — **SIXTH AUTHOR REPAIR COMPLETE 2026-09-07 on [[D3035]]–[[D3041]];
-  another genuinely fresh review is required.** The disposable author model now uses the shared
-  fail-closed canonical serializer; parses closed citation content, field binding, source, licence
-  and revision authorities; consumes the Explorer operation-result reason union without a synonym;
-  makes the owning workflow request/decision the only question issuer; executes one registered
-  named-structure expression/witness traversal; parses nullable committed UCI; and resolves an
-  operation plus executable pre/postimage anchors for all eight P repairs. `make
-  evidence-presentation-sixth-author-repair` retains the predecessor chain and passes 7/7 new
-  controls. [[D1672]] and [[D2401]] remain independent blockers. No implementation is authorised.
+- **Status:** draft — **RETURNED BY SEVENTH FRESH INDEPENDENT REVIEW 2026-09-07 on
+  [[D3102]]–[[D3107]].** The sixth author repair retained its narrower controls, but citation text
+  is not bound to the evidence value; Explorer abstention consumes an incomplete local copy;
+  workflow authority blesses caller-picked decisions; named-structure authority points at absent
+  production exports; Checkpoint P still checks strings rather than behavior; and the registry
+  digest accepts partial semantic images. `make evidence-presentation-seventh-fresh-review` retains
+  the chain and reproduces 6/6. No implementation is authorised; a bounded seventh author repair
+  and another genuinely fresh review are required. [[D1672]] and [[D2401]] remain independent
+  blockers.
   Landing remains three checkpoints (§2.1): manifest truth, sealed current consumers, then
   module/hint seats.
   Prior amendment 2026-08-26 on [[D1564]]/[[D1568]]/[[D1569]]/[[D1577]]/[[D1578]] —
@@ -297,6 +297,27 @@ The returned seams are closed in the disposable author model without widening Ch
 assertions plus lifecycle typecheck. The author fixture that constructs sealed workflow authority is
 explicitly disposable and has no production export analogue. Another genuinely fresh review must
 attack the repaired semantics before acceptance or implementation.
+
+## Seventh fresh independent return (2026-09-07)
+
+The sixth repair retains its narrower controls, but a fresh attack reproduces six remaining
+buildability failures:
+
+1. [[D3102]] — a registered digest/field/source can carry arbitrary caller-authored citation text;
+2. [[D3103]] — the Explorer reason parser accepts an incomplete object that is not a `CorpusResult`,
+   while its runtime reason tuple is still copied into presentation;
+3. [[D3104]] — the disposable workflow constructor seals arbitrary caller-selected request and
+   decision bytes, with no exact owning production operation;
+4. [[D3105]] — the named-structure authority names two absent production exports while running a
+   second predicate/evaluator copy in the author model;
+5. [[D3106]] — the Checkpoint-P fence passes files made only of its declared string needles and
+   resolves or executes no operation; and
+6. [[D3107]] — the source-attribution digest issues normal identities for partial caller-defined
+   semantic images.
+
+`make evidence-presentation-seventh-fresh-review` retains every predecessor and passes 6/6 fresh
+review arms. Exact evidence and repair requirements are in the seventh fresh-review dossier. This
+is an author return: no implementation or protected-design change is authorised.
 
 ## Summary
 
