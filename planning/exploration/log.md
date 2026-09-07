@@ -18526,3 +18526,15 @@ rejected Settings for correctly owning long content in `.shell-view`; it now ass
 root/app/shell clipping boundary and viewport fit. `make test-browser-matrix` passes 19/19 across
 desktop, tablet, mobile, accessibility, all permanent input modes and post-gesture states. D3142
 and D3143 close.
+
+## 2026-09-08 — Learn completes the recommendation and repertoire hand-offs
+
+Two accepted return journeys stopped one action short of their consequence. A shape encounter
+carried exact matching pack ids but Learn discarded them into the unfiltered catalogue. A played
+repertoire gap persisted distinct first moves and exposed a digest-guarded mutation, but the gap
+response and client never joined them. Learn now names the phase of every served matching pack and
+starts that exact rehearsal. Gap responses carry only first moves actually recorded in the linked
+run plus the current rank-zero answer; the learner must explicitly choose one, after which the card
+refreshes from `addressed` to `answered`. The corpus guard remains visible and no move is selected,
+recommended as best, or written automatically. `make typecheck`, all 1,143 software tests and the
+full mounted-browser gate (63 passed, one optional Maia measurement skipped) pass. D3144 closes.

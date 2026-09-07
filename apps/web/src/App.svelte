@@ -249,6 +249,8 @@
   let repertoirePgn=$state("");
   let repertoireStudyUrl=$state("");
   let repertoireError:string|undefined=$state();
+  let repertoireAnswerBusy:string|undefined=$state();
+  let repertoireAnswerErrors:Record<string,string>=$state({});
   let recommendations:readonly ProgressRecommendation[]=$state([]);
   let recommendationSelection:ProgressRecommendationPage["selection"]=$state({shown:0,total:0});
   let runSelection:RunPage["selection"]=$state({shown:0,total:0});
@@ -780,6 +782,8 @@
   async function createRepertoire():Promise<void>{repertoireError=undefined;try{if(api.createRepertoire===undefined)throw new Error("Repertoire import is unavailable");const created=await api.createRepertoire({name:repertoireName,side:repertoireSide,targetElo:1600,coverageDenominator:100,source:repertoireStudyUrl.trim()?{kind:"lichess_study",url:repertoireStudyUrl}:{kind:"pgn",pgn:repertoirePgn}});repertoires=[created,...repertoires];repertoireName="";repertoirePgn="";repertoireStudyUrl="";}catch(error){repertoireError=error instanceof Error?error.message:String(error);}}
   async function scanRepertoire(id:string):Promise<void>{await api.scanRepertoire?.(id);for(let index=0;index<50;index++){const page=await api.repertoireGaps?.(id);if(page!==undefined){repertoirePages={...repertoirePages,[id]:page};if(page.status==="ready")break;}await new Promise((resolve)=>setTimeout(resolve,100));}repertoires=await(api.repertoires?.()??Promise.resolve(repertoires));}
   async function enterRepertoireGap(id:string,gapKey:string):Promise<void>{const result=await api.enterRepertoireGap?.(id,gapKey);if(result===undefined)return;if(result.writerId!==null)WriterSession.claimFor(result.runId,storage,()=>result.writerId!);navigate(routePath({name:"run",runId:result.runId}));}
+  async function chooseRepertoireAnswer(id:string,gapKey:string,moveUci:string,ifMatch:string):Promise<void>{const actionKey=`${id}:${gapKey}:${moveUci}`;repertoireAnswerBusy=actionKey;repertoireAnswerErrors={...repertoireAnswerErrors,[gapKey]:""};try{if(api.chooseRepertoireAnswer===undefined)throw new Error("Choosing a repertoire answer is unavailable");const updated=await api.chooseRepertoireAnswer(id,{positionKey:gapKey,moveUci,ifMatch});repertoires=repertoires.map((item)=>item.id===id?updated:item);const page=await api.repertoireGaps?.(id);if(page!==undefined)repertoirePages={...repertoirePages,[id]:page};}catch(error){repertoireAnswerErrors={...repertoireAnswerErrors,[gapKey]:error instanceof Error?error.message:String(error)};}finally{repertoireAnswerBusy=undefined;}}
+  function recommendationPacks(item:ProgressRecommendation):readonly PackSummary[]{return item.kind==="shape_encounter"?item.packIds.flatMap((packId)=>{const pack=packs.find((candidate)=>candidate.id===packId);return pack===undefined?[]:[pack];}):[];}
   async function distillActiveRun(title: string): Promise<void> {
     const run = session.runState?.run;
     if (run === undefined || distillDraftRunId !== run.id) return;
@@ -1501,7 +1505,7 @@
       </section>
       {#if recommendations.length>0}
         <section aria-labelledby="recommended-title" aria-describedby={recommendationSelection.shown<recommendationSelection.total?"recommendation-budget":undefined}><h2 id="recommended-title">Recommended next</h2>{#if recommendationSelection.shown<recommendationSelection.total}<p id="recommendation-budget" class="honest">Showing {recommendationSelection.shown} of {recommendationSelection.total} grounded recommendations.</p>{/if}<div class="item-list">
-          {#each recommendations as item}<article><p>{item.sentence}</p>{#if item.kind==="repertoire_gap"}<button type="button" onclick={()=>void enterRepertoireGap(item.repertoireId,item.gapKey)}>Enter gap</button>{:else if item.packIds[0]}<button type="button" onclick={()=>navigate("/play")}>Find {packTitle(item.packIds[0])}</button>{/if}</article>{/each}
+          {#each recommendations as item}<article><div><p>{item.sentence}</p>{#if item.kind==="shape_encounter"}{@const matchingPacks=recommendationPacks(item)}{#if matchingPacks.length>0}<div class="recommendation-actions">{#each matchingPacks as pack}<button type="button" onclick={()=>void controller.startPack(pack.id)}>{packPhaseCopy(pack.phase)} · Rehearse {pack.title}</button>{/each}</div>{:else}<p class="honest">No matching rehearsal is currently served.</p>{/if}{/if}</div>{#if item.kind==="repertoire_gap"}<button type="button" onclick={()=>void enterRepertoireGap(item.repertoireId,item.gapKey)}>Enter gap</button>{/if}</article>{/each}
         </div></section>
       {/if}
       <section aria-labelledby="repertoire-title">
@@ -1528,7 +1532,14 @@
                   <p>{corpusPopulationLabel(page.scan.population)}</p><p class="honest">{page.scan.guard}.</p>
                   {#if page.scan.partiality}<p class="honest">{page.scan.partiality}</p>{/if}
                   {#each page.scan.gaps as gap,index}
-                    <div class="gap-row"><span>{gap.replySan||"First move"} · {gap.gamesUntilSeen?`about 1 in ${gap.gamesUntilSeen} games`:"frequency unavailable"} · {gap.state}</span>{#if index===0}<button type="button" onclick={()=>void enterRepertoireGap(repertoire.id,gap.key)}>Go to biggest gap</button>{/if}</div>
+                    <div class="gap-row">
+                      <div><span>{gap.replySan||"First move"} · {gap.gamesUntilSeen?`about 1 in ${gap.gamesUntilSeen} games`:"frequency unavailable"} · {gap.state}</span>
+                        {#if gap.firstMoves.length>0}<div class="gap-answer"><span>Moves you tried:</span>{#each gap.firstMoves as move}{#if gap.answer?.moveUci===move.moveUci}<strong>Current repertoire answer: {move.moveSan}</strong>{:else}<button type="button" disabled={repertoireAnswerBusy!==undefined} aria-describedby={repertoireAnswerBusy!==undefined?`gap-answer-status-${gap.key}`:undefined} onclick={()=>void chooseRepertoireAnswer(repertoire.id,gap.key,move.moveUci,repertoire.digest)}>{repertoireAnswerBusy===`${repertoire.id}:${gap.key}:${move.moveUci}`?"Saving…":`Use ${move.moveSan} as my repertoire answer`}</button>{/if}{/each}</div>{/if}
+                        {#if repertoireAnswerBusy!==undefined}<span id={`gap-answer-status-${gap.key}`} class="honest">Finish saving the current repertoire choice first.</span>{/if}
+                        {#if repertoireAnswerErrors[gap.key]}<p role="alert">{repertoireAnswerErrors[gap.key]}</p>{/if}
+                      </div>
+                      {#if index===0}<button type="button" onclick={()=>void enterRepertoireGap(repertoire.id,gap.key)}>Go to biggest gap</button>{/if}
+                    </div>
                   {:else}<p>No ranked gaps above this bound.</p>{/each}
                 </div>
               {/if}
@@ -1947,7 +1958,7 @@
   @media (max-width: 50rem) { .public-hero { grid-template-columns: 1fr; } .public-boundary { grid-column: 1; } }
   .repertoire-form{display:grid;gap:.65rem;max-width:44rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}
   .repertoire-form label{display:grid;gap:.25rem}.repertoire-form input,.repertoire-form select,.repertoire-form textarea{padding:.6rem;border:1px solid var(--line);border-radius:.4rem;background:var(--paper);color:var(--ink)}
-  .repertoire-card{display:grid;gap:.6rem}.gap-results{grid-column:1/-1;border-top:1px solid var(--line);padding-top:.6rem}.gap-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.4rem 0}
+  .repertoire-card{display:grid;gap:.6rem}.gap-results{grid-column:1/-1;border-top:1px solid var(--line);padding-top:.6rem}.gap-row{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;padding:.6rem 0}.gap-answer,.recommendation-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;margin-top:.5rem}.gap-answer strong{color:var(--accent)}
   .access, .honest { font-size: 0.88rem; }
   button { padding: 0.72rem 0.9rem; border: 1px solid var(--line); border-radius: 0.65rem; background: var(--panel); color: var(--ink); cursor: pointer; }
   button:hover, button:focus-visible, button.primary { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }

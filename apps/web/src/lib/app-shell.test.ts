@@ -1244,8 +1244,18 @@ describe("application shell", () => {
   it("uses pack titles across Learn recommendations and refuses unknown registry ids", async () => {
     history.replaceState(null, "", "/learn");
     const unknownPackId = "missing-in-catalogue";
+    const createRunRequest = vi.fn(async (input: import("./api.js").CreateRunRequest) => createRun({
+      id: "shape-recommendation-run",
+      packId: pack.id,
+      packDigest: digest,
+      policyConfig: input.policyConfig,
+      startFen: pack.start.fen,
+      seed: input.seed,
+      createdAt: "2026-08-23T13:00:00.000Z",
+    }));
     const learnApi: DrillClientApi = {
       ...api(),
+      createRun: createRunRequest,
       async recommendations() {
         return {
           recommendations: [{
@@ -1269,11 +1279,17 @@ describe("application shell", () => {
       props: { api: learnApi, router: new HistoryRouter(window), storage: new MemoryStorage() },
     });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain(`Find ${packSummary.title}`));
+    const rehearsal = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === `Opening · Rehearse ${packSummary.title}`);
+      expect(button).toBeDefined();
+      return button!;
+    });
     expect(document.body.textContent).toContain("Showing 1 of 4 grounded recommendations.");
     expect(document.body.textContent).toContain("Unavailable rehearsal");
     expect(document.body.textContent).not.toContain(pack.id);
     expect(document.body.textContent).not.toContain(unknownPackId);
+    rehearsal.click();
+    await vi.waitFor(() => expect(createRunRequest).toHaveBeenCalledWith(expect.objectContaining({ session: { kind: "pack", packId: pack.id } }), expect.any(String)));
     await unmount(component);
   });
 

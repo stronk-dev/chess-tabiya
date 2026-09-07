@@ -73,6 +73,10 @@ recommendations each have a deterministic ten-item display budget. The endpoint 
 combined shown and eligible counts, and Learn states that denominator whenever eligible grounded
 recommendations exceed the visible set. Shape eligibility scans every preserved run in bounded
 storage pages; the display budget does not become an evidence-population cutoff.
+Each shape recommendation resolves every currently served matching pack through the
+catalogue, names its phase, and starts that exact rehearsal. It does not discard the
+recommendation by sending the learner to an unfiltered pack shelf. A stale pack id is
+rendered only as an honest absence, never exposed as an internal identifier.
 
 ## Pack format 0.6
 

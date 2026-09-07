@@ -23,7 +23,12 @@ The biggest-gap action creates an ordinary pack-free position run after the unco
 opponent reply. Its run row, host grant, and repertoire link are one transaction. The
 learner plays, rewinds, branches, compares, and returns through the normal attempt
 scheduler. Playing never edits the repertoire automatically; an answer is added only
-through an explicit digest-guarded mutation.
+through an explicit digest-guarded mutation. Once a gap has a countable attempt, its
+Learn card lists the distinct first moves the learner actually tried. Choosing one is
+an explicit action; the refreshed card names it as the current repertoire answer and
+the gap moves to `answered`. The gap response therefore carries both `firstMoves` and
+the current rank-zero `answer`, rather than asking the client to infer either from run
+history.
 
 Repertoires are private to their owner. Foreign reads are indistinguishable from
 missing data. Study fetches are credential-free and serialized with ordinary Lichess

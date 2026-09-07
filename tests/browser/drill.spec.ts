@@ -381,6 +381,9 @@ test("imports a repertoire, enters its biggest corpus gap, and records an addres
   await page.getByRole("link", { name: "Learn" }).click();
   const refreshed=page.getByRole("article").filter({hasText:"Browser black repertoire"});
   await expect(refreshed.getByText(/e4 · about 1 in 2 games · addressed/)).toBeVisible({timeout:5_000});
+  await refreshed.getByRole("button",{name:"Use c5 as my repertoire answer"}).click();
+  await expect(refreshed.getByText(/e4 · about 1 in 2 games · answered/)).toBeVisible();
+  await expect(refreshed.getByText("Current repertoire answer: c5")).toBeVisible();
 });
 
 test("adaptive guidance keeps a queen-exchange phase change passive and removable", async ({ page }) => {
