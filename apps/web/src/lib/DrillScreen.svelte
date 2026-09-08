@@ -13,7 +13,7 @@
   import KeyboardHelp from "./KeyboardHelp.svelte";
   import { modalBoundary } from "./modal-boundary.js";
   import Timeline from "./Timeline.svelte";
-  import TerminalSheet, { type AssignmentSubmissionOffer } from "./TerminalSheet.svelte";
+  import TerminalSheet, { type AssignmentSubmissionOffer, type RepertoireAnswerOffer } from "./TerminalSheet.svelte";
   import WhyBanner from "./WhyBanner.svelte";
   import OutcomeContext from "./OutcomeContext.svelte";
   import ShapePanel from "./ShapePanel.svelte";
@@ -118,6 +118,10 @@
     onFirstRehearsalComplete?: (() => void) | undefined;
     assignmentOffers?: readonly AssignmentSubmissionOffer[] | undefined;
     onSubmitAssignment?: ((assignmentId: string) => Promise<void>) | undefined;
+    repertoireAnswerOffer?: RepertoireAnswerOffer | undefined;
+    repertoireAnswerBusy?: string | undefined;
+    repertoireAnswerError?: string | undefined;
+    onChooseRepertoireAnswer?: ((repertoireId:string,gapKey:string,moveUci:string,ifMatch:string)=>Promise<void>) | undefined;
     registerKeyboardRegion: RegisterKeyboardRegion;
   }
 
@@ -177,6 +181,10 @@
     onFirstRehearsalComplete,
     assignmentOffers = [],
     onSubmitAssignment,
+    repertoireAnswerOffer,
+    repertoireAnswerBusy,
+    repertoireAnswerError,
+    onChooseRepertoireAnswer,
     registerKeyboardRegion,
   }: Props = $props();
 
@@ -1460,6 +1468,10 @@
     {onScheduleReturn}
     {assignmentOffers}
     {onSubmitAssignment}
+    {repertoireAnswerOffer}
+    {repertoireAnswerBusy}
+    {repertoireAnswerError}
+    {onChooseRepertoireAnswer}
     {onStop}
   />
 {/if}

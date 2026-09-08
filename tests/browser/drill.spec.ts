@@ -368,22 +368,35 @@ test("imports a repertoire, enters its biggest corpus gap, and records an addres
   await page.getByRole("heading",{name:"Repertoire gaps"}).scrollIntoViewIfNeeded();
   await page.getByLabel("Name").fill("Browser black repertoire");
   await page.getByLabel("Your side").selectOption("black");
+  await page.getByLabel("Opponent rating band").fill("1800");
+  await page.getByLabel("Cover replies seen at least once in").fill("10");
   await page.getByLabel("Repertoire PGN").fill("1. d4 d5 *");
   await page.getByRole("button",{name:"Import repertoire"}).click();
   const card=page.getByRole("article").filter({hasText:"Browser black repertoire"});
+  await expect(card).toContainText("1800 band · cover replies seen at least 1 in 10 games");
   await card.getByRole("button",{name:"Scan gaps"}).click();
   await expect(card.getByText("These counts say what this population played, not what is good.")).toBeVisible();
+  await expect(card.getByText(/About \d+\.\d% of games contain replies above your 1-in-10 bound/)).toBeVisible();
   await expect(card.getByText(/e4 · about 1 in 2 games · open/)).toBeVisible();
-  await card.getByRole("button",{name:"Go to biggest gap"}).click();
+  await card.getByRole("button",{name:"Enter with human-like resistance"}).click();
   await expect(page).toHaveURL(/\/play\/run\/gap-/);await expect(page.getByLabel("Chessboard")).toBeVisible();
   await move(page,"c7","c5","black");
   await page.getByRole("button", { name: "Tabiya" }).click();
   await page.getByRole("link", { name: "Learn" }).click();
   const refreshed=page.getByRole("article").filter({hasText:"Browser black repertoire"});
   await expect(refreshed.getByText(/e4 · about 1 in 2 games · addressed/)).toBeVisible({timeout:5_000});
+  await expect(refreshed.getByRole("button",{name:"Open existing gap run"})).toBeVisible();
   await refreshed.getByRole("button",{name:"Use c5 as my repertoire answer"}).click();
   await expect(refreshed.getByText(/e4 · about 1 in 2 games · answered/)).toBeVisible();
   await expect(refreshed.getByText("Current repertoire answer: c5")).toBeVisible();
+  await expect(refreshed.getByText("These results predate your latest repertoire change.",{exact:false})).toBeVisible();
+  await refreshed.getByRole("button",{name:"Rescan"}).click();
+  await expect(refreshed.getByText("These results predate your latest repertoire change.",{exact:false})).toHaveCount(0);
+  await expect(refreshed.getByText(/e4 · about 1 in 2 games/)).toHaveCount(0);
+  await refreshed.getByRole("button",{name:"Delete repertoire"}).click();
+  await expect(refreshed.getByLabel("Delete Browser black repertoire")).toContainText("Rehearsal runs already created from gaps stay in your saved run history");
+  await refreshed.getByRole("button",{name:"Confirm deletion"}).click();
+  await expect(page.getByRole("article").filter({hasText:"Browser black repertoire"})).toHaveCount(0);
 });
 
 test("adaptive guidance keeps a queen-exchange phase change passive and removable", async ({ page }) => {

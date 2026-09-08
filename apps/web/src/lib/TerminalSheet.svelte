@@ -3,7 +3,7 @@
   import { modalBoundary } from "./modal-boundary.js";
 
   import type { RunOutcome } from "@chess-tabiya/runtime";
-  import type { AuthoredFeedbackItem, ShapeEntryView } from "./api.js";
+  import type { AuthoredFeedbackItem, RepertoireGap, ShapeEntryView } from "./api.js";
   import type { EvidenceSentence } from "./evidence-sentences.js";
   import OutcomeContext from "./OutcomeContext.svelte";
   import type { DrillRun } from "@chess-tabiya/runtime";
@@ -17,6 +17,13 @@
     readonly assignedByHandle: string;
     readonly teacherHandles: readonly string[];
     readonly note: string | null;
+  }
+
+  export interface RepertoireAnswerOffer {
+    readonly repertoireId: string;
+    readonly repertoireName: string;
+    readonly repertoireDigest: string;
+    readonly gap: RepertoireGap;
   }
 
   interface Props {
@@ -39,9 +46,13 @@
     onScheduleReturn?: (() => boolean | void | Promise<boolean | void>) | undefined;
     assignmentOffers?: readonly AssignmentSubmissionOffer[] | undefined;
     onSubmitAssignment?: ((assignmentId: string) => Promise<void>) | undefined;
+    repertoireAnswerOffer?: RepertoireAnswerOffer | undefined;
+    repertoireAnswerBusy?: string | undefined;
+    repertoireAnswerError?: string | undefined;
+    onChooseRepertoireAnswer?: ((repertoireId:string,gapKey:string,moveUci:string,ifMatch:string)=>Promise<void>) | undefined;
   }
 
-  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop, assessment, resistance = [], grade, run, shapes = [], onStory, onFlip, onInspectEvidence, canScheduleReturn = false, scheduleUnavailableReason = "Return scheduling is unavailable.", onScheduleReturn, assignmentOffers = [], onSubmitAssignment }: Props = $props();
+  let { outcome, authoredItems, evidence, canRewind, onRewind, onStop, assessment, resistance = [], grade, run, shapes = [], onStory, onFlip, onInspectEvidence, canScheduleReturn = false, scheduleUnavailableReason = "Return scheduling is unavailable.", onScheduleReturn, assignmentOffers = [], onSubmitAssignment, repertoireAnswerOffer, repertoireAnswerBusy, repertoireAnswerError, onChooseRepertoireAnswer }: Props = $props();
   let heading: HTMLHeadingElement;
   let selectedAssignmentId: string | undefined = $state();
   let submissionBusy = $state(false);
@@ -135,6 +146,20 @@
       </section>
     {/if}
 
+    {#if repertoireAnswerOffer!==undefined&&onChooseRepertoireAnswer!==undefined}
+      <section aria-labelledby="terminal-repertoire-answer-title" class="repertoire-answer">
+        <p class="eyebrow">Repertoire choice</p>
+        <h3 id="terminal-repertoire-answer-title">What will you play next time?</h3>
+        <p>Your distinct first moves from this gap are listed below. Choosing one updates <strong>{repertoireAnswerOffer.repertoireName}</strong>; Tabiya never adopts a move automatically.</p>
+        <div class="primary-actions">
+          {#each repertoireAnswerOffer.gap.firstMoves as move}
+            {#if repertoireAnswerOffer.gap.answer?.moveUci===move.moveUci}<strong>Current repertoire answer: {move.moveSan}</strong>{:else}<button type="button" disabled={repertoireAnswerBusy!==undefined} onclick={()=>void onChooseRepertoireAnswer!(repertoireAnswerOffer!.repertoireId,repertoireAnswerOffer!.gap.key,move.moveUci,repertoireAnswerOffer!.repertoireDigest)}>{repertoireAnswerBusy===`${repertoireAnswerOffer.repertoireId}:${repertoireAnswerOffer.gap.key}:${move.moveUci}`?"Saving…":`Use ${move.moveSan} as my repertoire answer`}</button>{/if}
+          {:else}<p class="honest">Make at least one move from the gap before choosing an answer.</p>{/each}
+        </div>
+        {#if repertoireAnswerError}<p role="alert">{repertoireAnswerError}</p>{/if}
+      </section>
+    {/if}
+
     {#if assignmentOffers.length > 0 && onSubmitAssignment !== undefined}
       <section aria-labelledby="assignment-hand-in-title" class="assignment-hand-in">
         <h3 id="assignment-hand-in-title">Hand in this attempt</h3>
@@ -201,6 +226,7 @@
   ul { margin: 0; padding-left: 1.2rem; }
   li + li { margin-top: 0.35rem; }
   .assignment-hand-in { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+  .repertoire-answer { margin-top: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--paper); }
   .assignment-hand-in article + article { margin-top: 0.75rem; }
   .assignment-hand-in p { margin: 0.35rem 0; }
   .submission-confirm { margin-top: 0.8rem; padding: 0.9rem; border: 2px solid var(--accent); border-radius: 0.8rem; background: var(--panel); }

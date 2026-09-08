@@ -1733,6 +1733,13 @@ and Library render the denominator and Load More; Home requests one newest run e
 single Continue action. With [[D3137]] and [[D3138]], INR-a11 is complete without replacing bounded
 queries with a larger undocumented constant.
 
+The archived repertoire journey is now learner-complete through configured import, honest scan
+states, capability-aware entry/re-entry, explicit post-attempt answer adoption, stale-result rescan
+and deletion ([[D3145]]). Its remaining edit/re-import operation is not ordinary client wiring:
+the published concurrency digest excludes the rating and coverage operands whose edits must stale
+the scan. [[D3146]] is the routed contract-amendment task; it must define one revision identity for
+all mutable scan inputs before PUT can ship without lost updates or false-fresh results.
+
 **1.0 exit:** owned immutable events rebuild idempotent observations/aggregates; metrics show
 occurrence/opportunity, phase/decision class, revision, uncertainty, examples and abstention;
 rating stays isolated from move feedback; style is continuous evidence, not a manufactured type;

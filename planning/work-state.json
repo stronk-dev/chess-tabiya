@@ -25678,6 +25678,23 @@
       "uxItems": [],
       "evidence": "tests/browser/drill.spec.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3145",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:36695a1ff1ff8a84f5eb60180f8935ad990f1a87f843546bd95ff1fe034fa5ef",
+      "uxItems": [],
+      "evidence": "docs/repertoire-gap-finding.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3146",
+      "state": "todo",
+      "sourceGlyph": "🐞",
+      "sourceDigest": "sha256:26e31798ca5cb894dbf086cbfc5f8e347ab8fde21ac506496c24fcc9cbcaad9d",
+      "uxItems": [],
+      "owner": "review-and-return"
     }
   ]
 }

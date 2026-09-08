@@ -18538,3 +18538,23 @@ run plus the current rank-zero answer; the learner must explicitly choose one, a
 refreshes from `addressed` to `answered`. The corpus guard remains visible and no move is selected,
 recommended as best, or written automatically. `make typecheck`, all 1,143 software tests and the
 full mounted-browser gate (63 passed, one optional Maia measurement skipped) pass. D3144 closes.
+
+## 2026-09-08 — The archived repertoire journey is completed, and its edit token is refused
+
+A clause-by-clause audit of implemented `repertoire-gap-finding` found that its server substrate
+had been mistaken for its learner journey. Learn now exposes the learner's rating band and `1 in N`
+bound instead of hard-coding both. Its result renders uncovered mass, lower-bound partiality,
+unreached positions, alternate-line gaps, corpus abstentions and post-answer staleness. A rescan
+waits for a new scan receipt rather than accepting the old ready row. Gap entry prefers available
+human-model resistance, names an explicit Stockfish fallback, explains unavailability, and reopens
+an existing linked run even if the current deployment has no opponent. The linked run's terminal
+sheet lists only first moves actually tried and requires an explicit digest-bound learner choice.
+Deletion has an in-product consequence preview; the HTTP regression proves repertoire rows vanish
+while the linked run remains readable.
+
+One accepted arm was deliberately not implemented. The RFC says settings edits use `If-Match` and
+make old scans stale, but defines the digest over side/root/answers only. Rating-band and coverage
+changes therefore cannot rotate the token or invalidate their own population arithmetic. D3146
+records the required contract amendment; no ad-hoc digest widening or reusable concurrency token
+was shipped. `make typecheck`, 184 software files / 1,146 tests, and the full browser suite (63
+passed, one optional Maia latency measurement skipped) pass. D3145 closes with D3146 live.

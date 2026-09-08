@@ -73,6 +73,7 @@
   import { voteAttribution } from "./lib/live-vote.js";
   import { liveOverlayObjectiveCopy } from "./lib/live-overlay.js";
   import { LIVE_WORKFLOWS, liveBoardControlOptions, liveRunIneligibility, liveWorkflow, liveWorkflowOption, type LiveWorkflow } from "./lib/live-creation.js";
+  import { repertoireEntryDecision } from "./lib/repertoire-entry.js";
   import { markAttribution, relayedMarkShapes } from "./lib/live-marks.js";
   import { clearAccountLocalData, clearRunLocalData } from "./lib/account-local-data.js";
   import { graduationEntries, requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
@@ -248,7 +249,11 @@
   let repertoireSide:"white"|"black"=$state("black");
   let repertoirePgn=$state("");
   let repertoireStudyUrl=$state("");
+  let repertoireTargetElo=$state(1600);
+  let repertoireCoverageDenominator=$state(100);
   let repertoireError:string|undefined=$state();
+  let repertoireMutationBusy=$state(false);
+  let repertoireDeleteIntent:string|undefined=$state();
   let repertoireAnswerBusy:string|undefined=$state();
   let repertoireAnswerErrors:Record<string,string>=$state({});
   let recommendations:readonly ProgressRecommendation[]=$state([]);
@@ -257,6 +262,17 @@
   let runPageBusy=$state(false);
   let runPageError:string|undefined=$state();
   let relatedAttempts: Record<string, { readonly status: "loading" | "loaded" | "error"; readonly items: readonly RelatedProgressAttempt[]; readonly message?: string }> = $state({});
+
+  let activeRepertoireGap = $derived.by(() => {
+    const runId=session.runState?.run.id;
+    if(runId===undefined)return undefined;
+    for(const repertoire of repertoires){
+      const page=repertoirePages[repertoire.id];
+      const gap=page?.scan===null||page?.scan===undefined?undefined:[...page.scan.gaps,...page.scan.alternateGaps].find((candidate)=>candidate.runId===runId);
+      if(gap!==undefined)return {repertoireId:repertoire.id,repertoireName:repertoire.name,repertoireDigest:repertoire.digest,gap};
+    }
+    return undefined;
+  });
 
   const keyboardDispatcher = new ShellKeyboardDispatcher({
     navigate,
@@ -532,6 +548,12 @@
     }
   }
 
+  async function loadRepertoirePages(items:readonly RepertoireSummary[]):Promise<Record<string,RepertoireGapPage>>{
+    if(api.repertoireGaps===undefined)return {};
+    const pages=await Promise.all(items.map(async(item)=>[item.id,await api.repertoireGaps!(item.id)] as const));
+    return Object.fromEntries(pages);
+  }
+
   async function loadRoute(next: AppRoute): Promise<void> {
     const generation = ++loadGeneration;
     routeLoading = true;
@@ -582,13 +604,14 @@
           api.assignments?.() ?? Promise.resolve([]),
           initialRunPage(),
           api.packs(),
+          api.capabilities(),
         ]);
-        [attempts, dueSchedules, milestones, repertoires, assignedPacks, packs] = [loaded[0], loaded[1], loaded[2], loaded[3], loaded[5], loaded[7]];
+        [attempts, dueSchedules, milestones, repertoires, assignedPacks, packs, capabilities] = [loaded[0], loaded[1], loaded[2], loaded[3], loaded[5], loaded[7], loaded[8]];
         runs = loaded[6].runs;
         runSelection = loaded[6].selection;
         recommendations = loaded[4].recommendations;
         recommendationSelection = loaded[4].selection;
-        const pages=await Promise.all(repertoires.map(async(item)=>[item.id,await api.repertoireGaps?.(item.id)] as const));repertoirePages=Object.fromEntries(pages.filter((entry)=>entry[1]!==undefined)) as Record<string,RepertoireGapPage>;
+        repertoirePages=await loadRepertoirePages(repertoires);
       } else if (next.name === "create") {
         [drafts, shapeDrafts, authoringShapes, authoringPrinciples, capabilities] = await Promise.all([
           api.packDrafts?.() ?? Promise.resolve([]),
@@ -610,11 +633,16 @@
         const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";
         await controller.resume(next.runId,{projectionOnly:true,...(matchMode===undefined?{}:{matchMode})});
       } else if (next.name === "run") {
-        const [relatedSessions,nextAssignments]=await Promise.all([
+        const [relatedSessions,nextAssignments,nextRepertoires,nextCapabilities]=await Promise.all([
           api.liveSessions?.()??Promise.resolve([]),
           api.assignments?.()??Promise.resolve([]),
+          api.repertoires?.()??Promise.resolve([]),
+          api.capabilities(),
         ]);
         assignedPacks=nextAssignments;
+        repertoires=nextRepertoires;
+        capabilities=nextCapabilities;
+        repertoirePages=await loadRepertoirePages(repertoires);
         const related=relatedSessions.find((item)=>item.runId===next.runId);
         activeLiveDetail=related===undefined?undefined:await api.liveSession?.(related.id);
         const matchMode=activeLiveDetail?.match===undefined?undefined:activeLiveDetail.match.pausedAt===null?"live":"paused";
@@ -779,10 +807,12 @@
     navigate(routePath({ name: "run", runId: result.run.id }));
   }
 
-  async function createRepertoire():Promise<void>{repertoireError=undefined;try{if(api.createRepertoire===undefined)throw new Error("Repertoire import is unavailable");const created=await api.createRepertoire({name:repertoireName,side:repertoireSide,targetElo:1600,coverageDenominator:100,source:repertoireStudyUrl.trim()?{kind:"lichess_study",url:repertoireStudyUrl}:{kind:"pgn",pgn:repertoirePgn}});repertoires=[created,...repertoires];repertoireName="";repertoirePgn="";repertoireStudyUrl="";}catch(error){repertoireError=error instanceof Error?error.message:String(error);}}
-  async function scanRepertoire(id:string):Promise<void>{await api.scanRepertoire?.(id);for(let index=0;index<50;index++){const page=await api.repertoireGaps?.(id);if(page!==undefined){repertoirePages={...repertoirePages,[id]:page};if(page.status==="ready")break;}await new Promise((resolve)=>setTimeout(resolve,100));}repertoires=await(api.repertoires?.()??Promise.resolve(repertoires));}
-  async function enterRepertoireGap(id:string,gapKey:string):Promise<void>{const result=await api.enterRepertoireGap?.(id,gapKey);if(result===undefined)return;if(result.writerId!==null)WriterSession.claimFor(result.runId,storage,()=>result.writerId!);navigate(routePath({name:"run",runId:result.runId}));}
+  async function createRepertoire():Promise<void>{repertoireError=undefined;try{if(api.createRepertoire===undefined)throw new Error("Repertoire import is unavailable");const created=await api.createRepertoire({name:repertoireName,side:repertoireSide,targetElo:repertoireTargetElo,coverageDenominator:repertoireCoverageDenominator,source:repertoireStudyUrl.trim()?{kind:"lichess_study",url:repertoireStudyUrl}:{kind:"pgn",pgn:repertoirePgn}});repertoires=[created,...repertoires];repertoireName="";repertoirePgn="";repertoireStudyUrl="";}catch(error){repertoireError=error instanceof Error?error.message:String(error);}}
+  async function scanRepertoire(id:string):Promise<void>{const before=repertoirePages[id]?.scan?.scannedAt;await api.scanRepertoire?.(id);for(let index=0;index<50;index++){const page=await api.repertoireGaps?.(id);if(page!==undefined){repertoirePages={...repertoirePages,[id]:page};if(page.status==="ready"&&page.scan!==null&&(before===undefined||page.scan.scannedAt!==before))break;}await new Promise((resolve)=>setTimeout(resolve,100));}repertoires=await(api.repertoires?.()??Promise.resolve(repertoires));}
+  function repertoireEntry(runId:string|null){return repertoireEntryDecision(capabilities?.policyModes??[],runId);}
+  async function enterRepertoireGap(id:string,gapKey:string):Promise<void>{const existing=repertoirePages[id]?.scan!==null&&repertoirePages[id]?.scan!==undefined?[...repertoirePages[id]!.scan!.gaps,...repertoirePages[id]!.scan!.alternateGaps].find((gap)=>gap.key===gapKey)?.runId??null:null;const entry=repertoireEntry(existing);if(!entry.available)return;const result=await api.enterRepertoireGap?.(id,gapKey,entry.resistance);if(result===undefined)return;if(result.writerId!==null)WriterSession.claimFor(result.runId,storage,()=>result.writerId!);navigate(routePath({name:"run",runId:result.runId}));}
   async function chooseRepertoireAnswer(id:string,gapKey:string,moveUci:string,ifMatch:string):Promise<void>{const actionKey=`${id}:${gapKey}:${moveUci}`;repertoireAnswerBusy=actionKey;repertoireAnswerErrors={...repertoireAnswerErrors,[gapKey]:""};try{if(api.chooseRepertoireAnswer===undefined)throw new Error("Choosing a repertoire answer is unavailable");const updated=await api.chooseRepertoireAnswer(id,{positionKey:gapKey,moveUci,ifMatch});repertoires=repertoires.map((item)=>item.id===id?updated:item);const page=await api.repertoireGaps?.(id);if(page!==undefined)repertoirePages={...repertoirePages,[id]:page};}catch(error){repertoireAnswerErrors={...repertoireAnswerErrors,[gapKey]:error instanceof Error?error.message:String(error)};}finally{repertoireAnswerBusy=undefined;}}
+  async function deleteRepertoire(id:string):Promise<void>{if(api.deleteRepertoire===undefined||repertoireMutationBusy)return;repertoireMutationBusy=true;repertoireError=undefined;try{await api.deleteRepertoire(id);repertoires=repertoires.filter((item)=>item.id!==id);const {[id]:_removed,...remaining}=repertoirePages;repertoirePages=remaining;repertoireDeleteIntent=undefined;recommendations=recommendations.filter((item)=>item.kind!=="repertoire_gap"||item.repertoireId!==id);}catch(error){repertoireError=error instanceof Error?error.message:String(error);}finally{repertoireMutationBusy=false;}}
   function recommendationPacks(item:ProgressRecommendation):readonly PackSummary[]{return item.kind==="shape_encounter"?item.packIds.flatMap((packId)=>{const pack=packs.find((candidate)=>candidate.id===packId);return pack===undefined?[]:[pack];}):[];}
   async function distillActiveRun(title: string): Promise<void> {
     const run = session.runState?.run;
@@ -1423,6 +1453,10 @@
         onFirstRehearsalComplete={completeFirstRehearsal}
         assignmentOffers={completedAssignmentOffers}
         onSubmitAssignment={(assignmentId)=>submitAssignedRun(assignmentId,session.runState!.run.id)}
+        repertoireAnswerOffer={activeRepertoireGap}
+        {repertoireAnswerBusy}
+        repertoireAnswerError={activeRepertoireGap===undefined?undefined:repertoireAnswerErrors[activeRepertoireGap.gap.key]}
+        onChooseRepertoireAnswer={chooseRepertoireAnswer}
         registerKeyboardRegion={keyboardDispatcher.registerRegion}
       />
       {#if session.viewer?.role === "spectator"}
@@ -1505,7 +1539,8 @@
       </section>
       {#if recommendations.length>0}
         <section aria-labelledby="recommended-title" aria-describedby={recommendationSelection.shown<recommendationSelection.total?"recommendation-budget":undefined}><h2 id="recommended-title">Recommended next</h2>{#if recommendationSelection.shown<recommendationSelection.total}<p id="recommendation-budget" class="honest">Showing {recommendationSelection.shown} of {recommendationSelection.total} grounded recommendations.</p>{/if}<div class="item-list">
-          {#each recommendations as item}<article><div><p>{item.sentence}</p>{#if item.kind==="shape_encounter"}{@const matchingPacks=recommendationPacks(item)}{#if matchingPacks.length>0}<div class="recommendation-actions">{#each matchingPacks as pack}<button type="button" onclick={()=>void controller.startPack(pack.id)}>{packPhaseCopy(pack.phase)} · Rehearse {pack.title}</button>{/each}</div>{:else}<p class="honest">No matching rehearsal is currently served.</p>{/if}{/if}</div>{#if item.kind==="repertoire_gap"}<button type="button" onclick={()=>void enterRepertoireGap(item.repertoireId,item.gapKey)}>Enter gap</button>{/if}</article>{/each}
+          {#each recommendations as item}<article><div><p>{item.sentence}</p>{#if item.kind==="shape_encounter"}{@const matchingPacks=recommendationPacks(item)}{#if matchingPacks.length>0}<div class="recommendation-actions">{#each matchingPacks as pack}<button type="button" onclick={()=>void controller.startPack(pack.id)}>{packPhaseCopy(pack.phase)} · Rehearse {pack.title}</button>{/each}</div>{:else}<p class="honest">No matching rehearsal is currently served.</p>{/if}{/if}</div>{#if item.kind==="repertoire_gap"}{@const entry=repertoireEntry(null)}<button type="button" disabled={!entry.available} aria-describedby={!entry.available?"recommendation-resistance-unavailable":undefined} onclick={()=>void enterRepertoireGap(item.repertoireId,item.gapKey)}>{entry.label}</button>{/if}</article>{/each}
+          {#if recommendations.some((item)=>item.kind==="repertoire_gap")&&!repertoireEntry(null).available}<p id="recommendation-resistance-unavailable" class="honest">{repertoireEntry(null).reason}</p>{/if}
         </div></section>
       {/if}
       <section aria-labelledby="repertoire-title">
@@ -1513,6 +1548,8 @@
         <form class="repertoire-form" onsubmit={(event)=>{event.preventDefault();void createRepertoire();}}>
           <label>Name <input required bind:value={repertoireName} /></label>
           <label>Your side <select bind:value={repertoireSide}><option value="white">White</option><option value="black">Black</option></select></label>
+          <label>Opponent rating band <input type="number" min="1000" max="2400" step="100" required bind:value={repertoireTargetElo} /></label>
+          <label>Cover replies seen at least once in <input type="number" min="10" max="10000" required bind:value={repertoireCoverageDenominator} /> games</label>
           <label>Public Lichess study URL <input type="url" placeholder="https://lichess.org/study/abcdefgh" bind:value={repertoireStudyUrl} /></label>
           <span>or paste a multi-game, variation-bearing PGN</span>
           <label>Repertoire PGN <textarea rows="5" bind:value={repertoirePgn}></textarea></label>
@@ -1525,12 +1562,16 @@
             {@const page=repertoirePages[repertoire.id]}
             <article class="repertoire-card">
               <div><h3>{repertoire.name}</h3><p>{repertoire.side} · {repertoire.targetElo} band · cover replies seen at least 1 in {repertoire.coverageDenominator} games</p></div>
-              <button type="button" onclick={()=>void scanRepertoire(repertoire.id)}>{page?.status==="ready"?"Rescan":"Scan gaps"}</button>
+              <div class="row-actions"><button type="button" onclick={()=>void scanRepertoire(repertoire.id)}>{page?.status==="ready"?"Rescan":"Scan gaps"}</button><button type="button" onclick={()=>repertoireDeleteIntent=repertoire.id}>Delete repertoire</button></div>
+              {#if repertoireDeleteIntent===repertoire.id}<aside class="consent-card" aria-label={`Delete ${repertoire.name}`}><h4>Delete {repertoire.name}?</h4><p>Its imported moves, scan results, and repertoire links will be removed. Rehearsal runs already created from gaps stay in your saved run history.</p><div class="row-actions"><button type="button" disabled={repertoireMutationBusy} onclick={()=>void deleteRepertoire(repertoire.id)}>{repertoireMutationBusy?"Deleting…":"Confirm deletion"}</button><button type="button" disabled={repertoireMutationBusy} onclick={()=>repertoireDeleteIntent=undefined}>Cancel</button></div></aside>{/if}
               {#if page?.status==="pending"}<p>Scanning…</p>{/if}
               {#if page?.scan}
                 <div class="gap-results" aria-label={`Gaps for ${repertoire.name}`}>
                   <p>{corpusPopulationLabel(page.scan.population)}</p><p class="honest">{page.scan.guard}.</p>
                   {#if page.scan.partiality}<p class="honest">{page.scan.partiality}</p>{/if}
+                  {#if page.stale}<p class="honest">These results predate your latest repertoire change. Answer states remain visible, but coverage and ranking need a rescan.</p>{/if}
+                  <p>{page.scan.truncated?"At least":"About"} {(page.scan.uncoveredMass*100).toFixed(1)}% of games contain replies above your 1-in-{repertoire.coverageDenominator} bound that still need an answer.</p>
+                  {#if page.scan.unreachedKeys>0}<p class="honest">{page.scan.unreachedKeys} repertoire {page.scan.unreachedKeys===1?"position was":"positions were"} not reached within this scan.</p>{/if}
                   {#each page.scan.gaps as gap,index}
                     <div class="gap-row">
                       <div><span>{gap.replySan||"First move"} · {gap.gamesUntilSeen?`about 1 in ${gap.gamesUntilSeen} games`:"frequency unavailable"} · {gap.state}</span>
@@ -1538,11 +1579,15 @@
                         {#if repertoireAnswerBusy!==undefined}<span id={`gap-answer-status-${gap.key}`} class="honest">Finish saving the current repertoire choice first.</span>{/if}
                         {#if repertoireAnswerErrors[gap.key]}<p role="alert">{repertoireAnswerErrors[gap.key]}</p>{/if}
                       </div>
-                      {#if index===0}<button type="button" onclick={()=>void enterRepertoireGap(repertoire.id,gap.key)}>Go to biggest gap</button>{/if}
+                      {#if index===0}{@const entry=repertoireEntry(gap.runId)}<button type="button" disabled={!entry.available} aria-describedby={!entry.available?`gap-resistance-${repertoire.id}`:undefined} onclick={()=>void enterRepertoireGap(repertoire.id,gap.key)}>{entry.label}</button>{/if}
                     </div>
                   {:else}<p>No ranked gaps above this bound.</p>{/each}
+                  {#if page.scan.gaps[0]&&!repertoireEntry(page.scan.gaps[0].runId).available}<p id={`gap-resistance-${repertoire.id}`} class="honest">{repertoireEntry(page.scan.gaps[0].runId).reason}</p>{/if}
+                  {#if page.scan.alternateGaps.length>0}<h4>Behind alternate repertoire answers</h4>{#each page.scan.alternateGaps as gap}<p>{gap.replySan||"First move"} after {gap.line.join(" ")} · frequency deliberately unranked · {gap.state}</p>{/each}{/if}
+                  {#if page.scan.unknown.length>0}<h4>Where the corpus abstained</h4>{#each page.scan.unknown as entry}<p>{entry.line.join(" ")||"Root position"}: {entry.detail}. You reach this position in about 1 in {entry.gamesUntilPosition} games; frequency beyond it is unknown.</p>{/each}{/if}
                 </div>
               {/if}
+              {#if repertoireError&&repertoireDeleteIntent===repertoire.id}<p role="alert">{repertoireError}</p>{/if}
             </article>
           {:else}<p>No repertoire imported yet.</p>{/each}
         </div>

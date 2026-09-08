@@ -66,4 +66,39 @@ describe("terminal assignment hand-in", () => {
     await vi.waitFor(() => expect(onSubmitAssignment).toHaveBeenCalledWith("assignment-one"));
     await unmount(component);
   });
+
+  it("keeps repertoire adoption explicit on the completed attempt", async () => {
+    const onChooseRepertoireAnswer = vi.fn(async () => undefined);
+    const component = mount(TerminalSheet, {
+      target: target(),
+      props: {
+        outcome: "win",
+        authoredItems: [],
+        evidence: [],
+        canRewind: false,
+        onRewind: () => undefined,
+        onStop: () => undefined,
+        run: createRun({
+          id: "gap-run",
+          session: {kind:"position",start:{fen:"8/8/8/8/8/4k3/6P1/4K3 w - - 0 1",side:"white"},feedbackPolicy:"attempt_end",opponentPolicy:{mode:"strong_engine"}},
+          sessionDigest: `sha256:${"2".repeat(64)}`,
+          seed: 2,
+          createdAt: "2026-09-08T12:00:00.000Z",
+          policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+        }),
+        repertoireAnswerOffer: {
+          repertoireId: "rep-one",
+          repertoireName: "My Black repertoire",
+          repertoireDigest: `sha256:${"3".repeat(64)}`,
+          gap: {key:"gap-key",representativeFen:"",replySan:"e4",replyUci:"e2e4",line:["e4"],mass:.5,gamesUntilSeen:2,state:"addressed",runId:"gap-run",firstMoves:[{moveUci:"c7c5",moveSan:"c5"},{moveUci:"e7e5",moveSan:"e5"}],answer:null},
+        },
+        onChooseRepertoireAnswer,
+      },
+    });
+    expect(document.body.textContent).toContain("Tabiya never adopts a move automatically");
+    expect(onChooseRepertoireAnswer).not.toHaveBeenCalled();
+    [...document.querySelectorAll<HTMLButtonElement>("button")].find((button)=>button.textContent==="Use c5 as my repertoire answer")!.click();
+    await vi.waitFor(()=>expect(onChooseRepertoireAnswer).toHaveBeenCalledWith("rep-one","gap-key","c7c5",`sha256:${"3".repeat(64)}`));
+    await unmount(component);
+  });
 });
