@@ -1,6 +1,6 @@
 # RFC: Pack population and provenance — what a pack may say about its own evidence, and what checks it
 
-- **Status:** accepted — 2026-08-23, by claude as register owner on the buildability test, after the **first independent cross-review this draft has had** — ~58 claims re-derived at HEAD six days and ten acceptances after drafting, and **every corpus and prose-field measurement reproduced exactly** (92 packs / 0 published; 68 ledgers / 893 records; `engine_eval` 415, `tablebase_result` 341, `position_legality` 59, `opening_identity` 52, `puzzle_provenance` 26; **0** records of either explorer kind; 24 of 92 with no ledger; 31 packs carrying 60 `corpus_observed` claims of which 15 have no ledger; 20 promising an inline key and 0 carrying one; 1 of 68 ledgers with `claimBindings`; window notes at 337/359/372/394; 7 `unmeasurable` deviations in 6 packs; prose maxima 1657/1029/892/684/579 at n=405). **Two seams are closed by amendment at acceptance** (§8a): the eighth `EVIDENCE_KINDS` member forces `$defs/graduationEntry.clearance.recordKind` into lane 0.29, because `graduation-clearance` reuses the enum *"so that a kind added to `EVIDENCE_KINDS` cannot silently become unexpressible in a clearance"* and *"criterion 13 asserts the two lists are the same list"* (`graduation-clearance.md:646`); and §4's `provenance_note → citable_text` wiring rests on `MACHINE_LABEL_EVIDENCE_KINDS`, the constant draft `claim-semantic-anchors` deletes. *(Prior line for history: draft.)*
+- **Status:** **implementing 2026-09-08.** The production 0.29 mechanism is implemented: typed corpus-state declarations and contradictions, hashed HTTP `citable_text` records, prose-only support, `provenance_note` claim binding, manifest/inspector closure, the 2,000-character timing-note cap, graduation reporting, documentation, and positive/hard-negative fixtures. The measured production corpus is now 50 pack documents rather than the RFC's pre-fixture-separation 92-document population; all 50 intentionally warn on missing corpus state, while D1 remains the owner-authored population wave and blocks archival.
 - **Author:** claude (RFC-5 of `planning/rfc-drafting-queue.md`)
 - **Created:** 2026-08-17
 - **Design refs:** `design/05-in-run-experience.md` §3 (the assistance ladder — rungs 4 and 5, and
@@ -18,8 +18,7 @@
 - **Planning:** `planning/pack-population-provenance/` (once implementing)
 
 ```tabiya-claims
-pack-schema | lane 0.29 | $defs/provenance.corpusEvidence (new, closed union on state); $defs/timingWindow.properties.note maxLength 400 -> 2000; $defs/feedbackClaim.evidenceTypes (+ provenance_note); $defs/graduationEntry.clearance.recordKind (+ citable_text)
-evidence-kinds | members citable_text | EVIDENCE_KINDS (apps/server/src/sourcing/types.ts)
+none
 ```
 
 ---

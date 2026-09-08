@@ -18796,3 +18796,28 @@ schema package and all serving/census consumers call it; the final standalone sc
 fixture carries the same cited `out_of_scope` ruling as the served browser fixtures. The refusal
 coverage census also found six new graduation validation codes with no direct disposition. A
 schema-valid negative matrix now makes every one fire, closing [[D3150]].
+
+## 2026-09-08 — Pack provenance and citable evidence schema 0.29 implemented
+
+The accepted `pack-population-provenance` mechanism is implemented without performing its
+owner-authored content discharge. Pack schema 0.29 adds the closed `corpusEvidence` states, widens
+only timing-window notes to 2,000 characters, adds `provenance_note`, and keeps graduation record
+kinds set-equal with the eight-member evidence registry. Draft omission warns; published omission
+or `unsourced` fails; and the sourcing checker compares a `ledger` declaration to actual Explorer
+records while refusing corpus-labelled claims under `abstained` or `unsourced`.
+
+`citable_text` now has one complete authoring path: exact non-empty title/section/excerpt values,
+a manifest-linked hashed HTTP source, prose-only support, an evidence-manifest projection, an
+inspector-only recorded-reading refusal, and claim-binding admission solely for
+`provenance_note`. It cannot stand in for corpus, engine or tablebase evidence. New opening,
+puzzle-seed and session-distillation emitters explicitly declare `unsourced`; publication tests
+must explicitly abstain or provide a real corpus record.
+
+The historical 92-document census is still the full 50 production + 6 browser-fixture + 36
+candidate population: P1 therefore fires 92 warnings and 0 errors, P2 fires 0 because no pack is
+published, P4 fires 0 after the earlier pointer repair, and P5 fires 0 because no committed citation
+record exists yet. P3 fires 0 before D1 because no existing document has a state to contradict;
+the RFC's projected ≥31 is explicitly conditional on populating the 31 corpus-labelled packs, and
+its positive/hard-negative fixtures prove both runtime arms now. D1 remains owner-authored and
+blocks archival, not continued foundation implementation. This closes [[D123]], [[D124]],
+[[D153]], [[D171]] and [[D268]] at the mechanism layer; [[D157]] remains open until population.

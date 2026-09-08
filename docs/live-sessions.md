@@ -233,6 +233,6 @@ matchmaking, and provider-specific challenge APIs do not ship.
 SQLite migration 9 adds the original live-session tables. Migration 14 rebuilds the
 closed session/journal/token vocabularies and adds `match_states`; it disables foreign
 keys before its transaction and verifies `foreign_key_check` before commit. The run
-schema remains v0.17 and pack schema is v0.28. Migration 24 adds the nullable
+schema remains v0.17 and pack schema is v0.29. Migration 24 adds the nullable
 `classroom_id` association used by scheduled classroom sessions; the service joins its name at
 read time rather than copying it into session storage. See `docs/classrooms.md`.

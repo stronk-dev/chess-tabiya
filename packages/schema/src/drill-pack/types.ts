@@ -174,6 +174,11 @@ export interface FeedbackClaim {
   readonly principles?: readonly string[];
 }
 
+export type CorpusEvidence =
+  | { readonly state: "ledger" }
+  | { readonly state: "abstained"; readonly reason: "out_of_range" | "source_unavailable" | "no_data_at_band" | "licence_withheld"; readonly detail: string }
+  | { readonly state: "unsourced" };
+
 export interface CheckpointDefinition {
   readonly id: string;
   readonly trigger: CheckpointTrigger;
@@ -189,7 +194,7 @@ export interface GraduationContentDeclaration {
 
 export type GraduationClearance =
   | { readonly kind: "assessment_grounded"; readonly subject: "/objective/grading/assessedBy"; readonly instrument: string }
-  | { readonly kind: "ledger_record"; readonly subject: string; readonly recordKind: "opening_identity" | "position_legality" | "explorer_frequency" | "explorer_position_census" | "tablebase_result" | "engine_eval" | "puzzle_provenance"; readonly instrument: string }
+  | { readonly kind: "ledger_record"; readonly subject: string; readonly recordKind: "opening_identity" | "position_legality" | "explorer_frequency" | "explorer_position_census" | "tablebase_result" | "engine_eval" | "puzzle_provenance" | "citable_text"; readonly instrument: string }
   | { readonly kind: "claim_bound" | "shape_firing"; readonly subject: string; readonly instrument: string }
   | { readonly kind: "pointer_authored"; readonly subject: string; readonly placeholder: string; readonly instrument: string }
   | { readonly kind: "unbuilt"; readonly subject: string; readonly blockedBy: string }
@@ -247,6 +252,7 @@ export interface DrillPackDefinition {
     readonly reviewers?: readonly string[];
     readonly attribution?: readonly Readonly<Record<string, unknown>>[];
     readonly graduationBlockers?: readonly (GraduationEntry | string)[];
+    readonly corpusEvidence?: CorpusEvidence;
   };
   readonly timingWindows?: readonly TimingWindowDefinition[];
   readonly guard?: {

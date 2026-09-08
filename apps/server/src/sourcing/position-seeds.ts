@@ -248,7 +248,7 @@ export async function emitPositionSeeds(options: PositionSeedOptions): Promise<r
           ...(options.guardMate === undefined ? {} : { fireOnMate: options.guardMate }),
         },
       }),
-      provenance: { reviewStatus: "draft", sources: [`Lichess puzzle database (${PUZZLE_DUMP_URL}, etag ${String(source.origin.kind === "http" ? source.origin.etag : null)}) — CC0-1.0; database exports may be used for any purpose`], licence: "CC-BY-SA-4.0", graduationBlockers: blockers },
+      provenance: { reviewStatus: "draft", corpusEvidence: { state: "unsourced" }, sources: [`Lichess puzzle database (${PUZZLE_DUMP_URL}, etag ${String(source.origin.kind === "http" ? source.origin.etag : null)}) — CC0-1.0; database exports may be used for any purpose`], licence: "CC-BY-SA-4.0", graduationBlockers: blockers },
     });
     const validation = validatePackDocument(pack);
     if (!validation.valid) throw new SourcingError("EMITTED_PACK_INVALID", validation.issues.map((value) => `${value.path} ${value.code}: ${value.message}`).join("; "));

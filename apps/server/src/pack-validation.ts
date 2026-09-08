@@ -1168,6 +1168,15 @@ function runtimeIssues(
     }
   }
   const reviewStatus = provenance.reviewStatus;
+  const corpusEvidence = provenance.corpusEvidence;
+  if (corpusEvidence === undefined) {
+    issues.push(reviewStatus === "published"
+      ? runtimeIssue("PROVENANCE_CORPUS_STATE_MISSING", "/provenance/corpusEvidence", "published pack does not declare whether corpus evidence is recorded, intentionally unavailable, or unsourced")
+      : runtimeWarning("PROVENANCE_CORPUS_STATE_MISSING", "/provenance/corpusEvidence", "declare whether corpus evidence is recorded, intentionally unavailable, or unsourced"));
+  }
+  if (reviewStatus === "published" && (corpusEvidence === undefined || (corpusEvidence !== null && typeof corpusEvidence === "object" && !Array.isArray(corpusEvidence) && (corpusEvidence as Record<string, unknown>).state === "unsourced"))) {
+    issues.push(runtimeIssue("PROVENANCE_CORPUS_UNSOURCED_ON_PUBLISHED", "/provenance/corpusEvidence", "published packs must either link corpus evidence or record an explicit abstention"));
+  }
   if (reviewStatus === "published") {
     for (const [index, entry] of graduationEntries.entries()) if (graduationEntryIsBlocking(entry)) {
       issues.push(runtimeIssue("GRADUATION_BLOCKING_ON_PUBLISHED", `/provenance/graduationBlockers/${index}`, "published packs cannot carry blocking graduation entries"));

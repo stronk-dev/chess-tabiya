@@ -57,6 +57,7 @@ export const SOURCING_PROJECTION_MAP = Object.freeze({
   tablebase_result: "recorded.tablebase.result",
   engine_eval: "recorded.engine.eval",
   puzzle_provenance: "pack.authored.claim",
+  citable_text: "sourcing.ledger.citable_text",
 } as const);
 
 export const RECORDED_READING_PROJECTION_MAP = Object.freeze({

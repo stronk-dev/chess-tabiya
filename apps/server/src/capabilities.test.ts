@@ -148,6 +148,7 @@ describe("engine capabilities", () => {
           { kind: "tablebase_result", disposition: "admitted", reason: expect.any(String) },
           { kind: "engine_eval", disposition: "admitted", reason: expect.any(String) },
           { kind: "puzzle_provenance", disposition: "refused", reason: expect.any(String) },
+          { kind: "citable_text", disposition: "refused", reason: expect.any(String) },
         ],
         assessmentCategories: ["win", "loss", "draw", "cursed-win", "blessed-loss"],
         objectiveAssessmentSets: { win: ["win"], hold: ["draw", "cursed-win", "blessed-loss"], save: ["loss", "blessed-loss"], resist: ["loss", "blessed-loss"] },

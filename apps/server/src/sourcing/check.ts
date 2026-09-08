@@ -191,7 +191,8 @@ export function evidenceSupports(
       if (record.kind === "puzzle_provenance" && pointer === "/start/fen" && resolved.value !== record.anchor.fen) {
         issues.push(issue("EVIDENCE_VALUES_INVALID", path, "puzzle_provenance replay anchor must equal pack /start/fen"));
       }
-      if (HUMAN_ONLY_POINTERS.some((pattern) => pattern.test(pointer)) || PROSE_POINTERS.some((pattern) => pattern.test(pointer)) || (record.kind === "explorer_frequency" && /^\/spine(?:\/|$)/.test(pointer))) {
+      const prose = PROSE_POINTERS.some((pattern) => pattern.test(pointer));
+      if ((record.kind === "citable_text" && !prose) || (record.kind !== "citable_text" && (HUMAN_ONLY_POINTERS.some((pattern) => pattern.test(pointer)) || prose || (record.kind === "explorer_frequency" && /^\/spine(?:\/|$)/.test(pointer))))) {
         issues.push(issue("EVIDENCE_OVERREACH", path, `B6a has no registered template or grading contract for ${pointer}`));
       }
       if (record.templateId !== undefined && !isExplorerTemplate && !isEngineTemplate) issues.push(issue("EVIDENCE_OVERREACH", `/records/${recordIndex}/templateId`, "template is not registered for this evidence kind"));
@@ -282,6 +283,16 @@ export function evidenceSemantics(ledger: EvidenceLedger, issues: SourcingIssue[
       .map((record) => String(record.values.fen)),
   );
   ledger.records.forEach((record, index) => {
+    if (record.kind === "citable_text") {
+      const values = record.values;
+      if (record.grounds !== "citable_source" || !exactKeys(values as Record<string, unknown>, ["title", "sectionRef", "quotedText"]) || !nonEmpty(values.title) || !nonEmpty(values.sectionRef) || !nonEmpty(values.quotedText)) {
+        issues.push(issue("EVIDENCE_VALUES_INVALID", `/records/${index}/values`, "citable_text requires citable_source grounds and exact non-empty title, sectionRef and quotedText values"));
+      }
+      const entry = manifest?.entries.find((candidate) => candidate.sourceId === record.sourceId && candidate.retrievedAt === record.retrievedAt);
+      if (entry?.origin.kind !== "http" || !nonEmpty(entry.origin.sha256)) {
+        issues.push(issue("CITATION_SOURCE_UNRETRIEVABLE", `/records/${index}`, "citable_text requires a manifest-linked HTTP source with a content sha256"));
+      }
+    }
     if (record.kind === "puzzle_provenance") {
       const values = record.values;
       const required = ["puzzleId", "gameUrl", "rating", "ratingDeviation", "popularity", "nbPlays", "themes", "csvFen", "solutionUci", "solutionSan", "solutionPlies"];
@@ -337,6 +348,18 @@ export function evidenceSemantics(ledger: EvidenceLedger, issues: SourcingIssue[
   }
 }
 
+function corpusEvidenceStateIssues(pack: unknown, ledger: EvidenceLedger | undefined, issues: SourcingIssue[]): void {
+  if (!object(pack) || !object(pack.provenance) || !object(pack.provenance.corpusEvidence)) return;
+  const state = pack.provenance.corpusEvidence.state;
+  const published = pack.provenance.reviewStatus === "published";
+  const severity = published ? "error" : "warning";
+  const hasCorpusRecord = ledger?.records.some((record) => record.kind === "explorer_frequency" || record.kind === "explorer_position_census") === true;
+  const hasCorpusClaim = Array.isArray(pack.feedbackClaims) && pack.feedbackClaims.some((raw) => object(raw) && Array.isArray(raw.evidenceTypes) && raw.evidenceTypes.includes("corpus_observed"));
+  if ((state === "ledger" && !hasCorpusRecord) || ((state === "abstained" || state === "unsourced") && hasCorpusClaim)) {
+    issues.push(issue("PROVENANCE_CORPUS_STATE_CONTRADICTED", "/provenance/corpusEvidence", state === "ledger" ? "pack declares corpus evidence in its ledger, but no explorer record exists" : "pack declares corpus evidence absent while a feedback claim is labelled corpus_observed", severity));
+  }
+}
+
 function licenceObligations(pack: Record<string, unknown>, manifest: SourceManifest, ledger: EvidenceLedger, issues: SourcingIssue[]): void {
   const provenance = object(pack.provenance) ? pack.provenance : {};
   if (provenance.licence !== undefined && provenance.licence !== "CC-BY-SA-4.0") issues.push(issue("LICENCE_MIXED", "/provenance/licence", "emitted candidates use CC-BY-SA-4.0 wholesale"));
@@ -387,6 +410,7 @@ export async function checkSourcingDirectory(directory: string, options: { reado
     } catch (error) { issues.push(issue("PACK_READ_ERROR", "/pack.json", error instanceof Error ? error.message : String(error))); }
   }
   if (manifest && ledger) linkage(manifest, ledger, issues);
+  corpusEvidenceStateIssues(pack, ledger, issues);
   offlineJobProvenance(job, manifest, issues);
   if (manifest && !ledger && await exists(resolve(absolute, "priority.json"))) {
     try {
@@ -456,6 +480,7 @@ export async function checkSourcingFile(file: string, options: { readonly strict
   catch (error) { issues.push(issue("MANIFEST_READ_ERROR", "/sources.json", error instanceof Error ? error.message : String(error))); }
   try { job = await readJson(resolve(directory, `${stem}.job.json`)); } catch { /* job is auxiliary and optional for legacy packs */ }
   if (manifest && ledger) linkage(manifest, ledger, issues);
+  corpusEvidenceStateIssues(pack, ledger, issues);
   offlineJobProvenance(job, manifest, issues);
   if (ledger) evidenceSemantics(ledger, issues, manifest, pack);
   if (pack && !ledger) missingLedgerClaimIssues(pack, issues);

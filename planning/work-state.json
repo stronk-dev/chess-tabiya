@@ -1121,19 +1121,21 @@
     },
     {
       "id": "D123",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:2da618b0b8e4e3b8d806551b8d39d27aec1e4e699dc2d1eaad0589651d758694",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:adea6e88a0718b7f11f1df6ada574888bf403f335f2e381404ef1f4dd83389bb",
       "uxItems": [],
-      "owner": "content-and-theory"
+      "evidence": "rfc/pack-population-provenance.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D124",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:631a3d1c644dbd079bc959e36d0341748279af5576bb3db54c63b6f7a01eac1c",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:c605f5439a17604845523c022f7dbe16c13e0af97cda0444622a1af2cb7cc47b",
       "uxItems": [],
-      "owner": "content-and-theory"
+      "evidence": "rfc/pack-population-provenance.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D125",
@@ -1369,11 +1371,12 @@
     },
     {
       "id": "D153",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:72506baf4ff1603153c276c2caedbd23ce090d91fab0d1d22b78af90653662d6",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8afb237ae3dda78c4731de33898c94646d6ff2bb3fe76a3c83e8bf49ac8600f2",
       "uxItems": [],
-      "owner": "content-and-theory"
+      "evidence": "rfc/pack-population-provenance.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D154",
@@ -1524,11 +1527,12 @@
     },
     {
       "id": "D171",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:3054c7c900eb94086380cacb4216903932432e96d7747fa291e31f57d840ce49",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:33867122a110f9f64d94f66d1e163cbea643e49d4a6860631fa3db604b193cb5",
       "uxItems": [],
-      "owner": "content-and-theory"
+      "evidence": "rfc/pack-population-provenance.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D172",
@@ -2186,11 +2190,12 @@
     },
     {
       "id": "D268",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:75f459ae75897132be4c0352aea3ad846af5cd59ccdbd014679d154790d2a1ee",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:0f5edc57193f0506479c0dce028de54d5e7cc078cb3f83443395cdb2040f90a3",
       "uxItems": [],
-      "owner": "content-and-theory"
+      "evidence": "rfc/pack-population-provenance.md",
+      "evidenceKind": "path"
     },
     {
       "id": "D269",

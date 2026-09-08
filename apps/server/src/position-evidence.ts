@@ -29,6 +29,7 @@ export const RECORDED_READING_DISPOSITIONS: readonly RecordedReadingDisposition[
   { kind: "tablebase_result", disposition: "admitted", reason: "Exact Syzygy category and distance readings are recorded at authored positions" },
   { kind: "engine_eval", disposition: "admitted", reason: "Single-line white-perspective engine readings are recorded at authored positions" },
   { kind: "puzzle_provenance", disposition: "refused", reason: "Puzzle provenance is a citation, not a recorded measurement" },
+  { kind: "citable_text", disposition: "refused", reason: "Citable text grounds authored prose and is not a position measurement" },
 ] as const);
 
 export function assertRecordedReadingDispositions(): void {

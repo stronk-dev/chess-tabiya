@@ -9,6 +9,8 @@ import { describe, expect, it } from "vitest";
 
 import { DECLARED_UNIMPLEMENTED_POLICY_MODES } from "./capabilities.js";
 import { validatePackDocument } from "./pack-validation.js";
+import { MACHINE_LABEL_EVIDENCE_KINDS } from "./sourcing/claim-binding.js";
+import { ABSTENTION_REASONS, EVIDENCE_KINDS } from "./sourcing/types.js";
 
 const source = JSON.parse(readFileSync(
   new URL(resolvePackPath("trajectory-mate-bishop-knight"), import.meta.url),
@@ -32,7 +34,7 @@ describe("format surface 0.25", () => {
     const value = candidate();
     const result = validatePackDocument(value);
     expect(result.valid, JSON.stringify(result.issues)).toBe(true);
-    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.28");
+    expect(DRILL_PACK_SCHEMA_VERSION).toBe("0.29");
   });
 
   it("refuses every inert or unrecordable per-leg form by name", () => {
@@ -102,5 +104,16 @@ describe("format surface 0.25", () => {
 
     const capabilitiesSource = readFileSync(new URL("./capabilities.ts", import.meta.url), "utf8");
     expect(capabilitiesSource).not.toContain("formatDispositions");
+  });
+
+  it("binds the 0.29 provenance and evidence transcriptions to their live registries", () => {
+    const reasonEnum = drillPackSchema.$defs.provenance.properties.corpusEvidence.oneOf[1].properties.reason.enum;
+    const clearanceKinds = drillPackSchema.$defs.graduationClearance.oneOf[1].properties.recordKind.enum;
+    expect(new Set(reasonEnum)).toEqual(new Set(ABSTENTION_REASONS));
+    expect(new Set(clearanceKinds)).toEqual(new Set(EVIDENCE_KINDS));
+    expect(MACHINE_LABEL_EVIDENCE_KINDS.provenance_note).toEqual(["citable_text"]);
+    expect(Object.entries(MACHINE_LABEL_EVIDENCE_KINDS).filter(([, kinds]) => kinds.includes("citable_text" as never)).map(([label]) => label)).toEqual(["provenance_note"]);
+    expect(drillPackSchema.$defs.timingWindow.properties.note.maxLength).toBe(2000);
+    expect(drillPackSchema.$defs.objectiveGrading.properties.assessedBy.oneOf[0].properties.note.maxLength).toBe(400);
   });
 });

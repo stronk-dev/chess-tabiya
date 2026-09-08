@@ -1,7 +1,7 @@
 # Drill pack format
 
 The implemented drill-pack foundation is a living Draft 2020-12 JSON Schema at
-`schemas/drill_pack.schema.json`. It describes format v0.28; a pack's own
+`schemas/drill_pack.schema.json`. It describes format v0.29; a pack's own
 `version` remains semver and is part of its digest.
 
 Trajectory packs may declare `legs`; see `docs/trajectory-drill.md`. The format
@@ -107,6 +107,20 @@ a closed clearance predicate, resolved entries retain that predicate as standing
 entries explain why the condition is unreachable and cite an exact line. Emitter-owned blockers are
 joined to a nine-template registry; the corpus-wide check rejects vacuous blockers and stale
 resolutions. See `rfc/graduation-clearance.md` and run `make graduation-clearance-corpus-check`.
+
+Version 0.29 makes population provenance explicit without duplicating population data into the
+pack. Optional `provenance.corpusEvidence` is a closed declaration: `ledger`, an explicit
+`abstained` reason and detail, or `unsourced`. Omission warns on drafts; publication refuses both
+omission and `unsourced`, while an honest abstention remains publishable. The sourcing checker
+cross-checks `ledger` against actual Explorer records and refuses `corpus_observed` claims when the
+pack declares no corpus evidence.
+
+The same version adds `citable_text` evidence records and the `provenance_note` claim label. A
+citation must name exact non-empty title, section and quoted text values; link to a hashed HTTP
+manifest entry; and support authored prose only. Citations are available to authoring claim binding
+and the advanced evidence inspector, never as position readings or measurements. Timing-window
+notes now allow 2,000 characters and remain printed verbatim by `make graduation-report`; the
+learner-facing authored objective-assessment note retains its 400-character cap.
 
 The schema package exports `FORMAT_DISPOSITIONS`, a versioned register of declarations that
 are reached, refused, retired, unmeasured, or impossible. It is not a deployment capability

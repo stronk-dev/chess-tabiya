@@ -62,6 +62,7 @@ export const EVIDENCE_KINDS = [
   "tablebase_result",
   "engine_eval",
   "puzzle_provenance",
+  "citable_text",
 ] as const;
 export type EvidenceKind = (typeof EVIDENCE_KINDS)[number];
 
@@ -128,6 +129,7 @@ export type SourcingIssueCode =
   | "CANDIDATE_ALREADY_PROMOTED"
   | "CANDIDATE_ALREADY_REVIEWED"
   | "CANDIDATE_IDENTITY_COLLISION"
+  | "CITATION_SOURCE_UNRETRIEVABLE"
   | "CHECKPOINT_PLIES_INVALID"
   | "CLAIM_ASSERTION_UNDECLARED"
   | "CLAIM_ASSERTION_UNRECORDED"
@@ -183,6 +185,7 @@ export type SourcingIssueCode =
   | "PACK_READ_ERROR"
   | "PRIORITY_INVALID"
   | "PRIORITY_READ_ERROR"
+  | "PROVENANCE_CORPUS_STATE_CONTRADICTED"
   | "PUZZLE_MOVE_PARITY_INVALID"
   | "SOURCE_HTTP_ERROR"
   | "SOURCE_DENIED"

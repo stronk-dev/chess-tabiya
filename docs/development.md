@@ -143,7 +143,7 @@ in aggregate. It exits non-zero while any parent or successor remains incomplete
 
 `make graduation-plan` is the read-only D560 migration instrument. It re-derives the accepted
 graduation classifier over drafts, inventories candidate emitter templates, and reports the
-judgment-bearing residue. It does not activate pack schema 0.28 or write packs, sidecars, or
+judgment-bearing residue. It does not activate pack schema 0.29 or write packs, sidecars, or
 clearance transitions. Its exact-population guard is intentionally manual: `make
 graduation-plan-check` belongs to graduation/content-wave planning and cannot fail an unrelated
 software push.

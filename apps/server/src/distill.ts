@@ -125,7 +125,7 @@ export function distillRun(run: DrillRun, source: PackRecord | undefined, input:
     id: input.packId, version: "0.1.0", title: input.title, mode: "outcome",
     phase: source?.document.phase ?? "middlegame",
     difficulty: { minOnlineRapid: 1000, maxOnlineRapid: 2000, label: "Session-distilled draft", ...(length >= 2 && length <= 40 ? { branchLengthTarget: length } : {}) },
-    provenance: { reviewStatus: "draft", sources: ["session_distilled", `run ${run.id}; session identity ${run.sessionDigest}${run.packId === null ? "" : `; source ${run.packId}@${run.packDigest}`}`], graduationBlockers: blockers },
+    provenance: { reviewStatus: "draft", sources: ["session_distilled", `run ${run.id}; session identity ${run.sessionDigest}${run.packId === null ? "" : `; source ${run.packId}@${run.packDigest}`}`], corpusEvidence: { state: "unsourced" }, graduationBlockers: blockers },
     start: run.start,
     objective: { type: "play_until_checkpoint", summary: "Play the recorded consequence to the mechanical checkpoint." },
     feedbackPolicy: run.feedbackPolicy === "attempt_end" ? "delayed_checkpoint" : run.feedbackPolicy,

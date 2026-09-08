@@ -221,6 +221,7 @@ export function declareSourcingRecordEvidence<T extends { readonly kind: string 
   if (payload.kind === "engine_eval") return exactObject("sourcing.ledger", "sourcing.ledger.engine_eval", payload, ["kind", "sourceId", "retrievedAt", "values"]);
   if (payload.kind === "tablebase_result") return exactObject("sourcing.ledger", "sourcing.ledger.tablebase_result", payload, ["kind", "sourceId", "retrievedAt", "values"]);
   if (payload.kind === "explorer_position_census") return exactObject("sourcing.ledger", "sourcing.ledger.explorer_position_census", payload, ["kind", "sourceId", "retrievedAt", "values"]);
+  if (payload.kind === "citable_text") return exactObject("sourcing.ledger", "sourcing.ledger.citable_text", payload, ["kind", "sourceId", "retrievedAt", "values", "supports"]);
   if (payload.kind === "opening_identity") return exactObject("theory.opening_identity", "theory.opening_identity.record", payload, ["kind", "sourceId", "retrievedAt", "values"]);
   return undefined;
 }

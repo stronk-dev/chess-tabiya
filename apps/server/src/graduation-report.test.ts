@@ -131,11 +131,16 @@ describe("pack graduation", () => {
       expect(resolvePackPath("anti-caro-advance", [drafts, packs])).toBe(draftPath);
       const published = JSON.parse(await readFile(draftPath, "utf8"));
       published.provenance.reviewStatus = "published";
+      published.provenance.corpusEvidence = { state: "ledger" };
       published.provenance.graduationBlockers = published.provenance.graduationBlockers.filter((entry: { state: string }) => entry.state !== "blocking");
       await writeFile(draftPath, `${JSON.stringify(published, null, 2)}\n`);
       for (const suffix of ["evidence", "sources"] as const) await copyFile(source.replace(/\.json$/u, `.${suffix}.json`), draftPath.replace(/\.json$/u, `.${suffix}.json`));
       const ledgerPath = draftPath.replace(/\.json$/u, ".evidence.json");
       const ledger = JSON.parse(await readFile(ledgerPath, "utf8"));
+      const manifest = JSON.parse(await readFile(draftPath.replace(/\.json$/u, ".sources.json"), "utf8"));
+      manifest.entries.push({ sourceId: "fixture-corpus", retrievedAt: manifest.entries[0].retrievedAt, origin: { kind: "local-file", path: "fixtures/corpus.json", sha256: "sha256:fixture", bytes: 1 }, licence: { basis: "spdx", spdx: "CC0-1.0", noticeText: null, rationale: null } });
+      ledger.records.push({ kind: "explorer_position_census", anchor: { fen: published.start.fen }, sourceId: "fixture-corpus", retrievedAt: manifest.entries[0].retrievedAt, grounds: "machine_validation", values: { fen: published.start.fen, total: 100, whitePct: 50, drawPct: 20, blackPct: 30, topMoves: [{ san: "e4", uci: "e2e4", playedCount: 100, sharePct: 100 }], ratings: [1400], speeds: ["rapid"], since: "2024-01", until: "2026-07" }, supports: ["/start/fen"] });
+      await writeFile(draftPath.replace(/\.json$/u, ".sources.json"), `${JSON.stringify(manifest)}\n`);
       ledger.packDigest = await digestDrillPack(published);
       await writeFile(ledgerPath, `${JSON.stringify(ledger)}\n`);
       for (const suffix of ["json", "evidence.json", "sources.json"] as const) {
@@ -144,7 +149,8 @@ describe("pack graduation", () => {
       }
       const promotedPath = join(packs, basename(source));
       expect(resolvePackPath("anti-caro-advance", [drafts, packs])).toBe(promotedPath);
-      expect((await checkSourcingFile(promotedPath)).valid).toBe(true);
+      const checked = await checkSourcingFile(promotedPath);
+      expect(checked.valid, JSON.stringify(checked.issues)).toBe(true);
       await copyFile(promotedPath, draftPath);
       expect(() => resolvePackPath("anti-caro-advance", [drafts, packs])).toThrow(/more than one catalogue root/u);
     } finally {

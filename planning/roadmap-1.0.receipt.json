@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:591737ac2fe88a9dcfd62d5e044a336e420078273e36d3da1c36a4acfab1b4f4",
+    "roadmap": "sha256:9d6b62a82eae4201eb49e0b00c1c496dd5db9f1958a6286db1e8a269744f124e",
     "workItems": "sha256:1ba9aa43894e8eef775e68523dd33b16ad27493f082c58566e356c1961afe940",
-    "workState": "sha256:81364ca13256af455611e7d50f6b63fb65f5012c592ecb82f3b3d5e269c9c08b",
-    "rfcRegister": "sha256:589eeaa0bdd34c77590acc554754656f81368fc4287b8d413951d2c7e2198bcf",
+    "workState": "sha256:b93df84e95a6cda2a56a43fd32977112a4aa09652532a117aa98a01872a15d16",
+    "rfcRegister": "sha256:e7fbbbd5affe23a92dee6efcbab75d8fefec79308164ed65a2662dffd5056c68",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
     "application": "sha256:ad0ce88f043cf1270a885b289a85c4b8bb038390e886cb1a214cc68e4ed3d681",
@@ -21,8 +21,8 @@
     "assignedRfcs": 72,
     "activeRfcLifecycle": {
       "draft": 58,
-      "accepted": 1,
-      "implementing": 6,
+      "accepted": 0,
+      "implementing": 7,
       "awaiting": 7,
       "implemented": 0,
       "superseded": 0,
@@ -30,10 +30,10 @@
     },
     "workState": {
       "untriaged": 0,
-      "todo": 626,
+      "todo": 621,
       "doing": 2,
       "blocked": 1217,
-      "done": 945,
+      "done": 950,
       "refused": 109
     },
     "workItems": {
@@ -121,35 +121,25 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Implement the accepted pack-population-provenance schema 0.29 contract and its citable-text evidence semantics now that typed graduation clearance, emitter persistence and the atomic corpus migration are complete.",
+      "nextAction": "Advance the next executable foundation contract while the owner-authored corpusEvidence population remains an explicit content discharge; do not block evidence-to-consumer implementation on that authored wave.",
       "latestCheckpoint": {
         "at": "2026-09-08",
-        "summary": "Pack schema 0.28 and typed graduation clearance now cover all 92 draft and candidate documents. The atomic migration records 354 live blockers, 34 predicate-verified resolutions and 48 prior-ruling acceptances; canonical content verification re-evaluates predicates, rejects stale resolutions and refuses same-commit or uncommitted self-minted rulings. All 436 migration decisions are explicit, with zero author-required or contract-blocked fields remaining.",
+        "summary": "Pack schema 0.29 and the citable-text evidence path are implemented. Corpus state is typed and cross-checked against actual Explorer records, citations require hashed HTTP sources and prose-only support, provenance_note has a real claim-binding reader, and timing-window notes are widened and reported. All 92 committed draft/candidate documents remain valid with intentional missing-state warnings; owner-authored population is retained as an explicit discharge rather than silently inferred.",
         "impact": "advanced",
         "evidence": [
-          "rfc/graduation-clearance.md",
+          "rfc/pack-population-provenance.md",
           "schemas/drill_pack.schema.json",
-          "apps/server/src/graduation-clearance-corpus.ts",
-          "apps/server/src/sourcing/graduation-clear.ts",
-          "tools/graduation-clearance-plan.mjs",
-          "planning/graduation-clearance/author-decisions.json",
+          "apps/server/src/pack-validation.ts",
+          "apps/server/src/sourcing/check.ts",
+          "apps/server/src/sourcing/claim-binding.ts",
+          "packages/runtime/src/evidence-catalog.ts",
           "planning/exploration/log.md"
         ],
         "anchors": [
           {
-            "kind": "work_state",
-            "id": "D3072",
-            "digest": "sha256:f6320339b69e88617ad285675a32ea73ee01e8dda5dd9fecbb523a95b51cc009"
-          },
-          {
-            "kind": "work_state",
-            "id": "D3075",
-            "digest": "sha256:2f755f64513765a53615734c237d422bea4166dca33261fd231a9f11e43c2f82"
-          },
-          {
             "kind": "rfc",
-            "id": "graduation-clearance.md",
-            "digest": "sha256:2cc9c093f1873f0af12880eecde4af4cbd2c48b1dd8a56c6a394ef1964e2fb24"
+            "id": "pack-population-provenance.md",
+            "digest": "sha256:45fa49b6e0cd60a147f83f9ecadad77eebc9fc7100e6c15f06c43ac41444df3a"
           }
         ]
       },

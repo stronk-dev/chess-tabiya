@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:chess-tabiya:schema:drill-pack:0.28",
+  "$id": "urn:chess-tabiya:schema:drill-pack:0.29",
   "title": "Tabiya Drill Pack",
-  "description": "Living v0.28 format for an engine-independent authored drill.",
+  "description": "Living v0.29 format for an engine-independent authored drill.",
   "type": "object",
   "required": [
     "id",
@@ -783,7 +783,7 @@
         "tolerated": { "type": "array", "minItems": 1, "maxItems": 8, "items": { "$ref": "#/$defs/moveCondition" } },
         "luxuryMoveBudget": { "type": "integer", "minimum": 0, "maximum": 20 },
         "gradeOutpaced": { "type": "boolean" },
-        "note": { "type": "string", "minLength": 1, "maxLength": 400 }
+        "note": { "type": "string", "minLength": 1, "maxLength": 2000 }
       },
       "additionalProperties": false
     },
@@ -1080,7 +1080,8 @@
               "corpus_observed",
               "human_model_predicted",
               "derived_feature",
-              "hypothesis"
+              "hypothesis",
+              "provenance_note"
             ]
           },
           "uniqueItems": true
@@ -1097,7 +1098,7 @@
     "graduationClearance": {
       "oneOf": [
         { "type": "object", "required": ["kind", "subject", "instrument"], "properties": { "kind": { "const": "assessment_grounded" }, "subject": { "const": "/objective/grading/assessedBy" }, "instrument": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false },
-        { "type": "object", "required": ["kind", "subject", "recordKind", "instrument"], "properties": { "kind": { "const": "ledger_record" }, "subject": { "type": "string", "pattern": "^/[^/]" }, "recordKind": { "enum": ["opening_identity", "position_legality", "explorer_frequency", "explorer_position_census", "tablebase_result", "engine_eval", "puzzle_provenance"] }, "instrument": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "subject", "recordKind", "instrument"], "properties": { "kind": { "const": "ledger_record" }, "subject": { "type": "string", "pattern": "^/[^/]" }, "recordKind": { "enum": ["opening_identity", "position_legality", "explorer_frequency", "explorer_position_census", "tablebase_result", "engine_eval", "puzzle_provenance", "citable_text"] }, "instrument": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "subject", "instrument"], "properties": { "kind": { "const": "claim_bound" }, "subject": { "type": "string", "pattern": "^/feedbackClaims/[0-9]+/text$" }, "instrument": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "subject", "instrument"], "properties": { "kind": { "const": "shape_firing" }, "subject": { "type": "string", "pattern": "^/(shapes/[0-9]+|planClasses/[0-9]+/shapePlan)$" }, "instrument": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false },
         { "type": "object", "required": ["kind", "subject", "placeholder", "instrument"], "properties": { "kind": { "const": "pointer_authored" }, "subject": { "type": "string", "pattern": "^/[^/]" }, "placeholder": { "type": "string" }, "instrument": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false },
@@ -1174,6 +1175,13 @@
               { "$ref": "#/$defs/nonEmptyString" }
             ]
           }
+        },
+        "corpusEvidence": {
+          "oneOf": [
+            { "type": "object", "required": ["state"], "properties": { "state": { "const": "ledger" } }, "additionalProperties": false },
+            { "type": "object", "required": ["state", "reason", "detail"], "properties": { "state": { "const": "abstained" }, "reason": { "enum": ["out_of_range", "source_unavailable", "no_data_at_band", "licence_withheld"] }, "detail": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false },
+            { "type": "object", "required": ["state"], "properties": { "state": { "const": "unsourced" } }, "additionalProperties": false }
+          ]
         }
       },
       "additionalProperties": false

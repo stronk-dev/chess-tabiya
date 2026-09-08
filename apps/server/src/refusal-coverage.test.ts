@@ -300,6 +300,19 @@ describe("fixed refusal-code coverage", () => {
     ordinaryVerb.provenance.sources = ["The cited article records that this move order transposes."];
     lacks(ordinaryVerb, "PROVENANCE_SOURCE_PROMISES_INLINE");
 
+    const missingCorpusState = clone(example);
+    delete missingCorpusState.provenance.corpusEvidence;
+    has(missingCorpusState, "PROVENANCE_CORPUS_STATE_MISSING");
+    missingCorpusState.provenance.corpusEvidence = { state: "unsourced" };
+    lacks(missingCorpusState, "PROVENANCE_CORPUS_STATE_MISSING");
+
+    const publishedUnsourced = clone(example);
+    publishedUnsourced.provenance.reviewStatus = "published";
+    publishedUnsourced.provenance.corpusEvidence = { state: "unsourced" };
+    has(publishedUnsourced, "PROVENANCE_CORPUS_UNSOURCED_ON_PUBLISHED");
+    publishedUnsourced.provenance.corpusEvidence = { state: "abstained", reason: "no_data_at_band", detail: "No games in the declared population." };
+    lacks(publishedUnsourced, "PROVENANCE_CORPUS_UNSOURCED_ON_PUBLISHED");
+
     const shallow = clone(example);
     shallow.objective.grading = { assessedBy: { kind: "engine", score: { kind: "cp", centipawns: 0 }, perspective: "white", depth: 21, engineId: "sf", engineVersion: "18", sourceId: "sf", retrievedAt: "2026-08-15T00:00:00.000Z" }, resolveAt: { kind: "terminal" } };
     has(shallow, "ENGINE_ASSESSMENT_DEPTH_BELOW_FLOOR");

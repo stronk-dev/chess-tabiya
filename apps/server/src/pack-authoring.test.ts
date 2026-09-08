@@ -478,6 +478,7 @@ describe("pack authoring validation", () => {
       reviewStatus: "published",
       sources: ["Reviewed source"],
       reviewers: ["Named reviewer"],
+      corpusEvidence: { state: "abstained", reason: "source_unavailable", detail: "No corpus source was available for this fixture." },
     };
 
     expect(validatePackDocument(candidate).valid).toBe(true);

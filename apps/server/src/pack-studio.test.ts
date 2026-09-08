@@ -30,7 +30,7 @@ describe("Pack Studio", () => {
     const invalid = structuredClone(fixture);
     invalid.id = "community-pack";
     invalid.version = "1.0.0";
-    invalid.provenance = { reviewStatus: "draft", sources: ["author supplied source"] };
+    invalid.provenance = { reviewStatus: "draft", sources: ["author supplied source"], corpusEvidence: { state: "abstained", reason: "source_unavailable", detail: "No corpus source was available for this authored fixture." } };
     delete invalid.start.side;
     const draft = studio.create(principal, { document: invalid });
     expect(draft.validation.valid).toBe(false);
@@ -61,6 +61,7 @@ describe("Pack Studio", () => {
     const officialCollision = structuredClone(fixture);
     officialCollision.provenance.reviewStatus = "draft";
     officialCollision.provenance.sources = ["source"];
+    officialCollision.provenance.corpusEvidence = { state: "abstained", reason: "source_unavailable", detail: "No corpus source was available for this authored fixture." };
     const draft = studio.create(principal, { document: officialCollision });
     expect(() => studio.register(draft.id, principal)).toThrow(/reserved/);
     expect(registry.required(fixture.id).channel).toBe("official");
@@ -72,7 +73,7 @@ describe("Pack Studio", () => {
     const document = structuredClone(fixture);
     document.id = "restart-pack";
     document.version = "1.0.0";
-    document.provenance = { reviewStatus: "draft", sources: ["source"] };
+    document.provenance = { reviewStatus: "draft", sources: ["source"], corpusEvidence: { state: "abstained", reason: "source_unavailable", detail: "No corpus source was available for this authored fixture." } };
     const registered = studio.register(studio.create(principal, { document }).id, principal);
     const freshRegistry = await PackRegistry.fromDocuments([{ source: "official", value: fixture }]);
     const freshStudio = new PackStudio(storage, freshRegistry, undefined, principles);
@@ -85,7 +86,7 @@ describe("Pack Studio", () => {
     const mutableDocument = structuredClone(fixture);
     mutableDocument.id = "mutable-pack";
     mutableDocument.version = "1.0.0";
-    mutableDocument.provenance = { reviewStatus: "draft", sources: ["mutable source"] };
+    mutableDocument.provenance = { reviewStatus: "draft", sources: ["mutable source"], corpusEvidence: { state: "abstained", reason: "source_unavailable", detail: "No corpus source was available for this authored fixture." } };
     const mutable = studio.create(principal, { document: mutableDocument });
     studio.playtest(mutable.id, principal);
     const publishedDocument = structuredClone(mutableDocument);
@@ -107,7 +108,7 @@ describe("Pack Studio", () => {
     document.id = "graduation-state-pack";
     document.version = "1.0.0";
     const clearance = { kind: "pointer_authored", subject: "/objective/summary", placeholder: fixture.objective.summary, instrument: "pack-studio test" };
-    document.provenance = { reviewStatus: "draft", sources: ["source"], graduationBlockers: [{ id: "grounding", state: "blocking", statement: "Grounding remains.", clearance }] };
+    document.provenance = { reviewStatus: "draft", sources: ["source"], corpusEvidence: { state: "abstained", reason: "source_unavailable", detail: "No corpus source was available for this authored fixture." }, graduationBlockers: [{ id: "grounding", state: "blocking", statement: "Grounding remains.", clearance }] };
     const draft = studio.create(principal, { document });
     expect(() => studio.register(draft.id, principal)).toThrow(/graduation blockers/i);
     document.provenance.graduationBlockers = [{ id: "grounding", state: "resolved", statement: "Grounding was absent.", resolved: { at: "2026-08-16", by: "Evidence is recorded.", clearance } }];

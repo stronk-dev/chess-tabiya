@@ -112,6 +112,7 @@ export async function emitOpeningCandidate(options: OpeningEmitOptions): Promise
     feedbackPolicy: "delayed_checkpoint",
     provenance: {
       reviewStatus: "draft",
+      corpusEvidence: { state: "unsourced" },
       sources: [sourceString],
       licence: "CC-BY-SA-4.0",
       graduationBlockers: [emitterGraduationBlocker("mechanical-objective-placeholder")],

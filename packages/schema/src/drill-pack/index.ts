@@ -38,6 +38,7 @@ export {
   type CheckpointDefinition,
   type CheckpointInteraction,
   type CheckpointTrigger,
+  type CorpusEvidence,
   type Deviation,
   type DeviationCost,
   type DeviationMistake,

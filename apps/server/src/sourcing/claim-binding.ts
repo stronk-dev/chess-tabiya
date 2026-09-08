@@ -162,12 +162,13 @@ function hasRateToken(segment: string): boolean {
   if (NUMERIC_RATE_TOKEN.test(segment)) return true;
   return [...segment.matchAll(WORD_RATE_TOKEN)].some((match) => wordNumber(match[1]!) !== undefined);
 }
-export const MACHINE_LABEL_EVIDENCE_KINDS: Readonly<Record<string, readonly EvidenceRecord["kind"][]>> = Object.freeze({ corpus_observed:["explorer_frequency","explorer_position_census"], engine_validated:["engine_eval"], tablebase_exact:["tablebase_result"] });
+export const MACHINE_LABEL_EVIDENCE_KINDS: Readonly<Record<string, readonly EvidenceRecord["kind"][]>> = Object.freeze({ corpus_observed:["explorer_frequency","explorer_position_census"], engine_validated:["engine_eval"], tablebase_exact:["tablebase_result"], provenance_note:["citable_text"] });
 
 const CLAIM_RECORD_PROJECTION: Partial<Record<EvidenceRecord["kind"], string>> = Object.freeze({
   engine_eval: "sourcing.ledger.engine_eval",
   tablebase_result: "sourcing.ledger.tablebase_result",
   explorer_position_census: "sourcing.ledger.explorer_position_census",
+  citable_text: "sourcing.ledger.citable_text",
   opening_identity: "theory.opening_identity.record",
 });
 
@@ -227,6 +228,7 @@ export function validateClaimBindings(pack: DrillPackDefinition, ledger: Evidenc
     const residue = remainder.match(MACHINE_TOKEN);
     if (residue !== null) issues.push(issue("CLAIM_ASSERTION_UNDECLARED", base, `undeclared machine-shaped token ${residue[0]}`));
     const authorSegments = segments(claim.text).filter((segment) => { const start=claim.text.indexOf(segment), end=start+segment.length; return !instrumentRanges.some((range) => range.start >= start && range.end <= end); });
+    if (ledger.records.some((record) => record.kind === "citable_text" && record.supports.includes(binding.pointer))) kinds.push("citable_text");
     if (authorSegments.length > 0 && !claim.evidenceTypes.includes("author_principle")) issues.push(issue("CLAIM_AUTHOR_LABEL_REQUIRED", `/feedbackClaims/${index}/evidenceTypes`, "this claim contains authored assertion; add author_principle and name the principle it rests on"));
     for (const label of claim.evidenceTypes) if (MACHINE_LABEL_EVIDENCE_KINDS[label] !== undefined && !kinds.some((kind) => MACHINE_LABEL_EVIDENCE_KINDS[label]!.includes(kind))) issues.push(issue("CLAIM_LABEL_UNEARNED", `/feedbackClaims/${index}/evidenceTypes`, `${label} has no instrument-attributed segment`));
     if (authorSegments.some(hasRateToken)) issues.push(issue("CLAIM_READING_UNATTRIBUTED", `/feedbackClaims/${index}/text`, "a rate cannot be routed as authored judgement"));

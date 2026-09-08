@@ -45,10 +45,11 @@ ordered registry-owned pointer/value payload, and declared timestamp under the s
 JSON serializer. Changing any decided input makes the declaration stale. A declaration records
 repository content bytes—it does not authenticate an author or manufacture chess truth.
 
-Pack-schema 0.28 and the atomic corpus migration have not landed. They are authorized foundation
-work under D3033, while the 232 exact author-reviewed predicate decisions, authored chess content,
-claim binding, and official publication remain held. The existence of the evaluator does not imply
-that current blocker prose has acquired those decisions or cleared.
+Pack-schema 0.28 and the atomic blocker migration have landed. Pack-schema 0.29 adds typed corpus
+provenance and citable records, but population declarations remain owner-authored content work.
+The 232 exact author-reviewed predicate decisions, authored chess content, claim binding, and
+official publication remain held. The existence of the evaluator does not imply that current
+blocker prose has acquired those decisions or cleared.
 
 ## Official publication boundary
 

@@ -149,6 +149,62 @@ describe("content sourcing foundation", () => {
     expect(result.issues).toContainEqual(expect.objectContaining({ code: "EVIDENCE_DIGEST_STALE", severity: "warning" }));
   });
 
+  it("checks declared corpus evidence against the sibling ledger", async () => {
+    const missing = await candidate();
+    await mutate(resolve(missing, "pack.json"), (pack) => { pack.provenance.corpusEvidence = { state: "ledger" }; });
+    expect((await checkSourcingDirectory(missing)).issues.map((value) => value.code)).toContain("PROVENANCE_CORPUS_STATE_CONTRADICTED");
+
+    const present = await candidate();
+    await mutate(resolve(present, "pack.json"), (pack) => { pack.provenance.corpusEvidence = { state: "ledger" }; });
+    await mutate(resolve(present, "evidence.json"), (ledger) => { ledger.records[0].kind = "explorer_frequency"; });
+    expect((await checkSourcingDirectory(present)).issues.map((value) => value.code)).not.toContain("PROVENANCE_CORPUS_STATE_CONTRADICTED");
+
+    const contradicted = await candidate();
+    await mutate(resolve(contradicted, "pack.json"), (pack) => {
+      pack.provenance.corpusEvidence = { state: "abstained", reason: "no_data_at_band", detail: "No data." };
+      pack.feedbackClaims = [{ id: "observed", text: "This claim names an observed population.", evidenceTypes: ["corpus_observed"] }];
+    });
+    expect((await checkSourcingDirectory(contradicted)).issues.map((value) => value.code)).toContain("PROVENANCE_CORPUS_STATE_CONTRADICTED");
+  });
+
+  it("admits hashed citable prose and refuses citation overreach or unhashed sources", async () => {
+    const accepted = await candidate();
+    await mutate(resolve(accepted, "evidence.json"), (ledger) => {
+      ledger.records[0] = { ...ledger.records[0], kind: "citable_text", grounds: "citable_source", values: { title: "Fixture source", sectionRef: "§1", quotedText: "A bounded source excerpt." }, supports: ["/objective/summary"] };
+    });
+    const acceptedCodes = (await checkSourcingDirectory(accepted)).issues.map((value) => value.code);
+    expect(acceptedCodes).not.toContain("EVIDENCE_OVERREACH");
+    expect(acceptedCodes).not.toContain("CITATION_SOURCE_UNRETRIEVABLE");
+
+    const overreach = await candidate();
+    await mutate(resolve(overreach, "evidence.json"), (ledger) => {
+      ledger.records[0] = { ...ledger.records[0], kind: "citable_text", grounds: "citable_source", values: { title: "Fixture source", sectionRef: "§1", quotedText: "A bounded source excerpt." }, supports: ["/start/fen"] };
+    });
+    expect((await checkSourcingDirectory(overreach)).issues.map((value) => value.code)).toContain("EVIDENCE_OVERREACH");
+
+    const unhashed = await candidate();
+    await mutate(resolve(unhashed, "evidence.json"), (ledger) => {
+      ledger.records[0] = { ...ledger.records[0], kind: "citable_text", grounds: "citable_source", values: { title: "Fixture source", sectionRef: "§1", quotedText: "A bounded source excerpt." }, supports: ["/objective/summary"] };
+    });
+    await mutate(resolve(unhashed, "sources.json"), (manifest) => { manifest.entries[0].origin.sha256 = null; manifest.entries[0].origin.bytes = null; });
+    expect((await checkSourcingDirectory(unhashed)).issues.map((value) => value.code)).toContain("CITATION_SOURCE_UNRETRIEVABLE");
+  });
+
+  it("uses citable_text only to earn the provenance_note claim label", async () => {
+    const directory = await candidate();
+    const text = "This authored description follows the cited source.";
+    await mutate(resolve(directory, "pack.json"), (pack) => {
+      pack.feedbackClaims = [{ id: "cited-description", text, evidenceTypes: ["author_principle", "provenance_note"], principles: ["activity"] }];
+    });
+    await mutate(resolve(directory, "evidence.json"), (ledger) => {
+      ledger.records[0] = { ...ledger.records[0], kind: "citable_text", grounds: "citable_source", values: { title: "Fixture source", sectionRef: "§1", quotedText: "A bounded source excerpt." }, supports: ["/feedbackClaims/0/text"] };
+      ledger.claimBindings = [{ claimId: "cited-description", pointer: "/feedbackClaims/0/text", textSha256: sha256(text), spans: [{ span: text, authored: true }] }];
+    });
+    const codes = (await checkSourcingDirectory(directory)).issues.map((value) => value.code);
+    expect(codes).not.toContain("EVIDENCE_TYPE_UNBACKED");
+    expect(codes).not.toContain("CLAIM_LABEL_UNEARNED");
+  });
+
   it("refuses an engine-assessed objective without matching engine evidence", async () => {
     const directory = await candidate();
     await mutate(resolve(directory, "pack.json"), (pack) => {
