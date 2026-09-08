@@ -19050,3 +19050,16 @@ and refuses both the sentinel and “drill node” from rendered copy. `make ver
 files / 1,177 tests plus performance, schema, semantic manifests, production builds, and rating
 isolation. `make test-browser` passes all 64 required desktop/mobile journeys with one explicitly
 optional Maia latency measurement skipped.
+
+## 2026-09-08 — Canonical persistent-UX completion ([[D3171]])
+
+The work-state store had a canonical Make transition command, while the parallel persistent-UX
+registry could be completed only by invoking its internal Node CLI. The missing wrapper left
+proven shipped work advertised as queued and encouraged exactly the ad-hoc command pattern the
+verification surface has retired. `make work-item-complete` now requires ids, completion date and
+evidence, uses the pinned Node runtime, and has a recipe-level forwarding contract.
+
+The first use reconciles ATR-a10: commit `3e6fe2e2` removed the on-ramp's false “near your rating”
+claim on 2026-08-16 and its production-emitter fixture has refused `your rating` ever since. `make
+verify-software` passes 188 files / 1,177 tests plus performance, schema, semantic manifests,
+production builds, and rating isolation.

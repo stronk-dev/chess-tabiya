@@ -1502,17 +1502,21 @@
     {
       "id": "ATR-a10",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "review",
       "owner": "review-and-return",
-      "assignment": "capability:review",
+      "assignment": "closed",
       "sourceDocument": "ux-after-the-run.md",
       "sourceSection": "§1.4",
       "sourceHeading": "After the run — `ux-after-the-run.md`",
       "summary": "24 of 31 on-ramp packs claim *\"opponent near your rating\"* over a puzzle-difficulty rating, with no learner rating in that path",
       "legacyRoute": "none",
       "note": "a shipped surface claiming personalisation it does not have",
-      "sourceDigest": "sha256:2b004523d3724cc661c3320c5f55206f0c2248a01d47af707f69c344ae005881"
+      "sourceDigest": "sha256:2b004523d3724cc661c3320c5f55206f0c2248a01d47af707f69c344ae005881",
+      "completion": {
+        "completedOn": "2026-08-16",
+        "evidence": "3e6fe2e2"
+      }
     },
     {
       "id": "ATR-a11",

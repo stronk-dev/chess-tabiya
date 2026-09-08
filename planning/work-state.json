@@ -25938,6 +25938,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/SimulationPreview.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3171",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5bff4f17bf699689fd680fbb9e39da32309deb9541acd72ed257771e0bde816a",
+      "uxItems": [],
+      "evidence": "Makefile",
+      "evidenceKind": "path"
     }
   ]
 }

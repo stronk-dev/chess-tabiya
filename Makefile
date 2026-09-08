@@ -90,13 +90,17 @@ work-state-sync:
 	node tools/work-state.mjs --sync
 	$(MAKE) work-state
 
-.PHONY: work-state-transition
+.PHONY: work-state-transition work-item-complete
 work-state-transition:
 	@test -n "$(IDS)" -a -n "$(STATE)" || (echo "Usage: make work-state-transition IDS=D1,D2 STATE=done [OWNER=lane] [EVIDENCE=path] [EVIDENCE_KIND=path]" >&2; exit 2)
 	$(CI_NODE) tools/work-state.mjs --set="$(IDS)" --state="$(STATE)" $(if $(OWNER),--owner="$(OWNER)",) $(if $(SINCE),--since="$(SINCE)",) $(if $(BLOCKER),--blocker="$(BLOCKER)",) $(if $(QUESTION),--question="$(QUESTION)",) $(if $(EVIDENCE),--evidence="$(EVIDENCE)",) $(if $(EVIDENCE_KIND),--evidence-kind="$(EVIDENCE_KIND)",) $(if $(RULING),--ruling="$(RULING)",) $(if $(RULING_KIND),--ruling-kind="$(RULING_KIND)",)
 
 work-item-sync:
 	node tools/work-item-registry.mjs --sync
+
+work-item-complete:
+	@test -n "$(IDS)" -a -n "$(COMPLETED_ON)" -a -n "$(EVIDENCE)" || (echo "Usage: make work-item-complete IDS=ATR-a1,ATR-a2 COMPLETED_ON=YYYY-MM-DD EVIDENCE=commit-or-path" >&2; exit 2)
+	$(CI_NODE) tools/work-item-registry.mjs --complete="$(IDS)" --completed-on="$(COMPLETED_ON)" --evidence="$(EVIDENCE)"
 
 work-item-check:
 	node --test tools/work-item-registry.test.mjs

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { buildInitialRegistry, completeRegistryItems, parseUxWorkItems, synchronizeRegistry, validateWorkItemRegistry } from "./work-item-registry.mjs";
@@ -78,4 +79,12 @@ test("refuses terminal progress without trace evidence and never reopens source-
   assert(validateWorkItemRegistry(untraced, parseUxWorkItems(index, roadmap), roadmap).errors.includes("ARR-a1: completed live item lacks evidence"));
   const reopened = { ...initial, items: initial.items.map((item) => item.id === "ARR-d1" ? { ...item, state: "queued", assignment: "capability:rehearsal" } : item) };
   assert(validateWorkItemRegistry(reopened, parseUxWorkItems(index, roadmap), roadmap).errors.includes("ARR-d1: execution state queued reopens source-closed completed"));
+});
+
+test("the canonical Make target forwards every required completion field", () => {
+  const makefile = readFileSync(new URL("../Makefile", import.meta.url), "utf8");
+  const recipe = makefile.match(/^work-item-complete:\n([\s\S]*?)(?=^\S[^\n]*:|(?![\s\S]))/mu)?.[1] ?? "";
+  for (const [variable, option] of [["IDS", "complete"], ["COMPLETED_ON", "completed-on"], ["EVIDENCE", "evidence"]]) {
+    assert.match(recipe, new RegExp(`--${option}=[^\\n]*\\$\\(${variable}\\)`, "u"));
+  }
 });
