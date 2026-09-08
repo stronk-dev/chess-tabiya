@@ -7,7 +7,7 @@ import {
 } from "@chess-tabiya/runtime";
 import { describe, expect, it } from "vitest";
 
-import { publicEvents, publicMutationPayload, publicNodes } from "./feedback-policy.js";
+import { publicEvents, publicMutationPayload, publicNodes, publicRunSnapshot } from "./feedback-policy.js";
 
 const at = "2026-08-16T00:00:00.000Z";
 
@@ -28,6 +28,35 @@ function run(): DrillRun {
 }
 
 describe("machine-evidence withholding", () => {
+  it("projects event envelopes and data fields instead of forwarding future internals", () => {
+    const base = run();
+    const event = Object.freeze({
+      seq: base.events.length + 1,
+      type: "checkpoint.reached" as const,
+      at,
+      privateEnvelopeField: "do-not-publish",
+      data: Object.freeze({
+        checkpointId: "checkpoint-1",
+        nodeId: base.activeCursor.nodeId,
+        branchId: base.activeCursor.branchId,
+        privateDataField: "do-not-publish",
+      }),
+    }) as DrillRunEvent & { readonly privateEnvelopeField: string; readonly data: { readonly privateDataField: string } };
+    const recorded = Object.freeze({ ...base, events: Object.freeze([...base.events, event]) });
+
+    const pageEvent = publicEvents(recorded, 0).events.at(-1)! as unknown as Record<string, unknown>;
+    expect(pageEvent).not.toHaveProperty("privateEnvelopeField");
+    expect(pageEvent.data).not.toHaveProperty("privateDataField");
+
+    const snapshotEvent = publicRunSnapshot(recorded).events.at(-1)! as unknown as Record<string, unknown>;
+    expect(snapshotEvent).not.toHaveProperty("privateEnvelopeField");
+    expect(snapshotEvent.data).not.toHaveProperty("privateDataField");
+
+    const mutation = publicMutationPayload({ run: recorded, emitted: [event] });
+    expect(mutation.emitted[0]).not.toHaveProperty("privateEnvelopeField");
+    expect(mutation.emitted[0]?.data).not.toHaveProperty("privateDataField");
+  });
+
   it("withholds tablebase references from nodes and barriers its attachment event", () => {
     const base = run();
     const nodeId = base.activeCursor.nodeId;
@@ -102,5 +131,6 @@ describe("machine-evidence withholding", () => {
     const disclosedSelection = publicEvents(disclosed, 0).events.find((candidate) => candidate.type === "opponent.move_selected");
     if (disclosedSelection?.type !== "opponent.move_selected") throw new Error("disclosed selection event is missing");
     expect(disclosedSelection.data.selection.candidates?.[0]).toMatchObject({ scoreCp: 31, wdl: { win: 401, draw: 500, loss: 99 } });
+    expect(disclosedSelection.data.selection.candidates?.[0]).not.toHaveProperty("futureMeasurement");
   });
 });

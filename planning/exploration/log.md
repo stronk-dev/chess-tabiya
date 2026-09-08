@@ -18603,3 +18603,16 @@ the unchanged `exact` versus `not_applicable` relationship remains deliberately 
 `make typecheck` passes. The first software run was blocked only by the filesystem sandbox refusing
 loopback listeners (`listen EPERM 127.0.0.1`); the same canonical `make test-software` target passed
 outside that restriction with 184 files and 1,147 tests. D1702 closes.
+
+## 2026-09-08 — Run-event egress is field-projected before disclosure
+
+The public run snapshot, mutation and event-page boundaries no longer forward stored event objects
+wholesale after checking only their type. One exhaustive projection now reconstructs all sixteen
+event variants, their immediate data, nodes, branches, reasoning matches and opponent selections
+from explicit fields; the existing feedback-policy redactions run only after that projection.
+Unknown envelope fields, unknown data fields and a future candidate measurement are absent from
+both page and mutation responses in permanent regressions. This makes a future event-field addition
+private by default until the public projection deliberately admits it.
+
+`make typecheck` and the canonical loopback-enabled `make test-software` pass: 184 files and 1,148
+tests. D230 closes.

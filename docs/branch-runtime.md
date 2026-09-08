@@ -284,6 +284,11 @@ it does not reimplement their semantics.
 | `GET /runs/:id/events?sinceSeq=N` | no | `{events, nextSeq}` |
 | `POST /runs/:id/reveal` | yes | `{run, emitted}` |
 
+Public run snapshots, event pages and mutation results reconstruct every event variant from an
+explicit field list before applying feedback-policy redactions. Adding an internal field to a run
+event or opponent-selection record therefore does not publish it implicitly; the public projection
+must opt in to the field deliberately.
+
 Run creation uses a closed `session` union. Pack requests supply `kind: pack`,
 `packId`, and an optional digest staleness check; the server derives start,
 feedback, opponent policy, and stored digest from the registry. Position

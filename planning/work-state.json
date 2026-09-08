@@ -1892,11 +1892,12 @@
     },
     {
       "id": "D230",
-      "state": "todo",
-      "sourceGlyph": "💡",
-      "sourceDigest": "sha256:32fc37246d81f0d65fd647bbb1254f6d8bc452604a9ffb32ab61fe97fa1c3744",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:8787ab2be249283e03cb6bd3b2d3e9bb2ce17b66b86d97d5d953a388723b55f5",
       "uxItems": [],
-      "owner": "evidence-foundation"
+      "evidence": "apps/server/src/feedback-policy.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D231",
