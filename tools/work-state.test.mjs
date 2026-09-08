@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
@@ -137,6 +138,19 @@ test("a persisted post-zero sync can be assigned without manufacturing a negativ
 
 test("the production glyph vocabulary remains an explicit closed set", () => {
   assert.deepEqual(LEDGER_GLYPHS, ["🐞", "✅", "📊", "💡", "🛠", "⚖️", "🔬", "📝", "📜", "🔨", "⛔", "🏗", "⚠️"]);
+});
+
+test("the canonical Make target forwards every supported transition field", () => {
+  const makefile = readFileSync(new URL("../Makefile", import.meta.url), "utf8");
+  const recipe = makefile.match(/^work-state-transition:\n([\s\S]*?)(?=^\S[^\n]*:|(?![\s\S]))/mu)?.[1] ?? "";
+  for (const [variable, option] of [
+    ["OWNER", "owner"], ["SINCE", "since"], ["BLOCKER", "blocker"],
+    ["QUESTION", "question"], ["EVIDENCE", "evidence"],
+    ["EVIDENCE_KIND", "evidence-kind"], ["RULING", "ruling"],
+    ["RULING_KIND", "ruling-kind"],
+  ]) {
+    assert.match(recipe, new RegExp(`\\$\\(${variable}\\).*--${option}=`, "u"));
+  }
 });
 
 test("staged discharges join one active-RFC table to exact live work-state rows", () => {

@@ -18846,3 +18846,18 @@ The RFC and its migration planning are archived. [[D409]] is re-homed to
 `planning/content-era/plan.md`: reducing the 354 honest blockers and graduating official packs is
 content work, not unfinished clearance machinery. Authored chess truth, claim binding and
 publication remain held; no pack was promoted by this closeout.
+
+## 2026-09-08 — Raw guard evidence leaves ordinary Support ([[D3154]], [[D3155]])
+
+The post-commit guard no longer maps evidence-reference sentences directly into the ordinary
+Support card or its live announcement. The learner keeps the three useful actions—play on, rewind,
+or inspect—and Advanced Inspector now owns a dedicated attributed section built from the guard
+event's exact references, so moving the prose does not lose its grounding. The browser journey
+asserts the raw material sentence is absent from Support and present after deliberate inspection;
+the complete browser gate passes 63 tests with one optional Maia test skipped.
+
+Registering the defect also exposed a broken canonical workflow: `make work-state-transition`
+could not pass the mandatory `since` field for a `doing` state. The target now forwards every state
+field supported by `tools/work-state.mjs`, and the work-state governance suite enumerates that
+contract. Software passes 187 files / 1,166 tests and the work-state ratchet remains at zero
+untriaged rows.

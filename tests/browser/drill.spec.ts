@@ -543,7 +543,11 @@ test("immediate guard waits for the consequence, preserves play-on, and rewinds 
   await move(page, "h2", "h3");
   const prompt = page.getByRole("region", { name: "Consequence to review" });
   await expect(prompt).toBeVisible();
-  await expect(prompt).toContainText("The material balance changed on this path.");
+  await expect(prompt).not.toContainText("The material balance changed on this path.");
+  await prompt.getByRole("button", { name: "Inspect recorded grounds" }).click();
+  const guardEvidence = page.getByRole("region", { name: "Post-commit guard evidence" });
+  await expect(guardEvidence).toContainText("The material balance changed on this path.");
+  await page.getByRole("button", { name: "Return to play" }).click();
   await expect(page.getByLabel("Review marker")).toBeVisible();
 
   await prompt.getByRole("button", { name: "Play on" }).click();
@@ -906,7 +910,7 @@ test("terminal outcome reveals authored commentary, a native story, and a revoca
   const terminal = page.getByRole("dialog", { name: "You lost." });
   await expect(terminal.getByText("Engine evidence recorded", { exact: false })).toHaveCount(0);
   await terminal.getByRole("button", { name: /Inspect recorded evidence/ }).click();
-  const terminalEvidence = page.getByRole("region", { name: "Terminal evidence" });
+  const terminalEvidence = page.getByRole("region", { name: "Evidence attached to this position" });
   await expect(terminalEvidence.getByText("Engine evidence recorded", { exact: false })).toBeVisible({ timeout: 5_000 });
   await page.getByRole("button", { name: "Return to play" }).click();
   await expect(page.getByRole("dialog", { name: "You lost." })).toBeVisible();

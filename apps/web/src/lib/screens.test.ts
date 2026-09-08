@@ -815,7 +815,7 @@ describe("Layer 3 screens", () => {
     const inspect = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent?.includes("Inspect recorded evidence"))!;
     inspect.click();
     await tick();
-    expect(document.querySelector('[aria-label="Terminal evidence"]')?.textContent).toContain("Engine evidence recorded");
+    expect(document.querySelector('[aria-label="Evidence attached to this position"]')?.textContent).toContain("Engine evidence recorded");
     [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Return to play")!.click();
     await tick();
     [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Play it again from here")!.click();

@@ -1297,14 +1297,14 @@
             </section>
             {#if guardEvent?.type === "feedback.generated"}
               <section class="guard-prompt" aria-label="Consequence to review">
-                <StatusAnnouncement message={`The consequence exposed something concrete. ${guardGrounds.map((sentence) => sentence.text).join(" ")} Your played line stays preserved.`} />
+                <StatusAnnouncement message="The consequence exposed something concrete. Your played line stays preserved. Play on, rewind, or inspect the recorded grounds." />
                 <div>
                   <strong>The consequence exposed something concrete.</strong>
-                  {#each guardGrounds as sentence}<p>{sentence.text}</p>{/each}
                   <p>Your played line stays preserved.</p>
                 </div>
                 <div class="guard-actions">
                   <button type="button" onclick={() => (dismissedGuardSeq = guardEvent?.seq)}>Play on</button>
+                  {#if guardGrounds.length > 0}<button type="button" onclick={() => (inspectorOpen = true)}>Inspect recorded grounds</button>{/if}
                   <button class="primary" type="button" disabled={snapshot.access === "read_only" || guardRewindNodeId === undefined} onclick={() => guardRewindNodeId === undefined ? undefined : rewindRun({ nodeId: guardRewindNodeId })}>Rewind</button>
                 </div>
               </section>
@@ -1601,9 +1601,17 @@
             {#each banner.sentences as sentence}<p><strong>{sentence.sourceLabel}</strong> · {sentence.text}</p>{/each}
           </section>
         {/if}
+        {#if guardGrounds.length > 0}
+          <section aria-label="Post-commit guard evidence" data-evidence-consumer="inspector.postcommit_guard">
+            <h3>Post-commit guard evidence</h3>
+            {#each guardGrounds as sentence}
+              <p><strong>{sentence.sourceLabel}</strong> · {sentence.text}</p>
+            {/each}
+          </section>
+        {/if}
         {#if terminalEvidence.length > 0}
-          <section aria-label="Terminal evidence" data-evidence-consumer="inspector.terminal_evidence">
-            <h3>Terminal evidence</h3>
+          <section aria-label="Evidence attached to this position" data-evidence-consumer="inspector.position_evidence">
+            <h3>Evidence attached to this position</h3>
             {#each terminalEvidence as sentence}
               <p><strong>{sentence.sourceLabel}</strong> · {sentence.text}</p>
             {/each}

@@ -219,6 +219,12 @@ returns to the still-open attempt sheet. Read-only followers perform the same re
 event poll first observes the outcome. Rewind remains available to the active
 writer and starts the next branch experiment.
 
+The post-commit guard follows the same boundary. Ordinary Support reports that the played
+consequence exposed a grounded fact and offers play-on, rewind, or deliberate inspection; it does
+not print the evidence-reference renderer's raw sentence as if that were a selected coaching hint.
+Inspector retains the guard event's exact references in a dedicated attributed section, separate
+from the active node's general evidence list.
+
 Rules-derived explanations remain visible because they are engine-free facts
 from the objective machine. Evidence references have runtime constructors and
 the v1 grammar `rules:<fact>`, `pack:<checkpointId>`, and `engine:<jobId>`.
@@ -540,7 +546,7 @@ compact companion check opens a real phone drawer, proves the board is inert and
 focus is inside, closes with Escape, and requires focus to return to the exact
 region tab. The same responsive modal boundary is inactive at wider layouts.
 
-Run state, first-rehearsal progress, post-commit guard facts, selected-square
+Run state, first-rehearsal progress, post-commit guard availability, selected-square
 sight, comparison position, and board-input feedback use atomic status
 announcements. The visible guide, guard actions, and comparison boards are not
 live regions; only their changed textual receipt is announced.
