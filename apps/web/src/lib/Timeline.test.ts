@@ -28,6 +28,7 @@ describe("timeline rewind timing", () => {
       previewNodeId: "move-1",
       onPreview: vi.fn(),
       onConfirm,
+      rewindPolicy: "free",
       rewindableNodeIds: new Set(["checkpoint-1"]),
     } });
     await tick();
@@ -46,15 +47,30 @@ describe("timeline rewind timing", () => {
       previewNodeId: "checkpoint-1",
       onPreview: vi.fn(),
       onConfirm,
+      rewindPolicy: "free",
       rewindableNodeIds: new Set(["checkpoint-1"]),
     } });
     await tick();
 
-    expect(document.body.textContent).toContain("Your attempt is kept. Going back makes a second one.");
+    expect(document.body.textContent).toContain("Rewinding here costs nothing. Your attempt is kept. Going back makes a second one.");
     const button = document.querySelector<HTMLButtonElement>('[aria-label="Rewind to preview"]')!;
     expect(button).not.toBeNull();
     button.click();
     expect(onConfirm).toHaveBeenCalledWith("checkpoint-1");
     await unmount(component);
+
+    const earned = mount(Timeline, { target: target(), props: {
+      entries,
+      activeNodeId: "checkpoint-1",
+      previewNodeId: "checkpoint-1",
+      onPreview: vi.fn(),
+      onConfirm: vi.fn(),
+      rewindPolicy: "earned",
+      rewindableNodeIds: new Set(["checkpoint-1"]),
+    } });
+    await tick();
+    expect(document.body.textContent).toContain("This uses one earned rewind. Your attempt is kept.");
+    expect(document.body.textContent).not.toContain("Rewinding here costs nothing");
+    await unmount(earned);
   });
 });

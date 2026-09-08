@@ -1196,6 +1196,7 @@
             {previewNodeId}
             onPreview={preview}
             onConfirm={confirmPreview}
+            rewindPolicy="free"
             canConfirm={canWrite}
             rewindableNodeIds={timelineRewindNodeIds}
             {authoredSpineNodeIds}

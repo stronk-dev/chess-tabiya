@@ -25893,6 +25893,24 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/CompareView.svelte",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3166",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:6727de882eef168e64c181639fec86d1d1a8a3b0116b3f20717a2e72ae0c4bb3",
+      "uxItems": [],
+      "evidence": "docs/drill-client.md",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3167",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:d21ab12761f8b3e46806cb520f0250a58423802355dc9ac7481b44b30a8edcba",
+      "uxItems": [],
+      "evidence": "docs/drill-client.md",
+      "evidenceKind": "path"
     }
   ]
 }

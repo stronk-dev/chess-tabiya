@@ -16,7 +16,7 @@
   } from "./compare-geometry.js";
   import { renderEvidenceRef } from "./evidence-sentences.js";
   import { learnerMoveLabel } from "./learner-move-label.js";
-  import { rehearsalStepLabel, rehearsalTurnCount } from "./chronology-copy.js";
+  import { comparisonStepAnnouncement, comparisonStepLabel, rehearsalStepLabel, rehearsalTurnCount } from "./chronology-copy.js";
   import { resistanceModeLabel, resistanceSentences } from "./outcome-presentation.js";
   import { comparisonNode, evidencePayloads } from "./screen-model.js";
   import { renderStructuralObservation } from "./structural-sentences.js";
@@ -244,7 +244,7 @@
     </p>
   {/if}
 
-  <StatusAnnouncement message={`Comparison consequence step ${step} of ${maxStep}`} />
+  <StatusAnnouncement message={comparisonStepAnnouncement(step, maxStep)} />
   <div
     class="boards"
     data-zoom={zoom}
@@ -277,7 +277,7 @@
     <HonestControl disabled={step === 0} reasonId="compare-previous-unavailable" reason="The comparison is already at its first aligned position.">
       {#snippet children(describedBy)}<button type="button" disabled={step === 0} aria-describedby={describedBy} onclick={() => onStep(step - 1)}>← Previous</button>{/snippet}
     </HonestControl>
-    <span>Consequence step {step} / {maxStep}</span>
+    <span>{comparisonStepLabel(step, maxStep)}</span>
     <HonestControl disabled={step === maxStep} reasonId="compare-next-unavailable" reason="The comparison is already at its last aligned position.">
       {#snippet children(describedBy)}<button type="button" disabled={step === maxStep} aria-describedby={describedBy} onclick={() => onStep(step + 1)}>Next →</button>{/snippet}
     </HonestControl>

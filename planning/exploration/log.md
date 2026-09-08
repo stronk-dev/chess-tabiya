@@ -18994,3 +18994,19 @@ the visible and announced consequence-step language. `make verify-software` pass
 `make test-browser` passes all 64 required desktop/mobile journeys with one explicitly optional
 Maia latency measurement skipped, including the desktop rewind/branch/compare flow and compact
 comparison composition.
+
+## 2026-09-08 — Explicit fork and rewind-cost boundaries ([[D3166]], [[D3167]])
+
+The learner chronology introduced by [[D3165]] still applied a consequence ordinal to the zero
+row, yielding “consequence step 0” at the shared fork. The shared copy authority now names that
+row as the fork with the available consequence count and reserves consequence-step ordinals for
+the recorded rows. Visible and announced forms cover singular and plural counts.
+
+The ordinary Timeline's rewind offer already promised that the attempt survives, but it did not
+state the standard drill's free cost—and adding that sentence as ambient copy would be false in a
+Campaign, where rewinds are an earned resource. `Timeline` now requires every caller to declare a
+free or earned policy. The mounted drill passes `free`; paired component assertions prove the
+earned arm cannot render the free sentence. `make verify-software` passes 188 files / 1,176 tests
+plus performance, schema, semantic manifests, production builds, and rating isolation. `make
+test-browser` passes all 64 required desktop/mobile journeys with one explicitly optional Maia
+latency measurement skipped.

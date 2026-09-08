@@ -378,7 +378,9 @@ rewind it cannot claim a second attempt until `branch.forked` exists. The compar
 two recorded branch ids and retires the client-only guide. A timeline preview that is not a
 checkpoint, guard-return target, or terminal-return target is explicitly preview-only. At a
 recorded consequence boundary the rewind offer states that the current attempt survives before
-confirmation.
+confirmation. The Timeline caller must declare whether that confirmation is free or spends one
+earned rewind; the ordinary drill declares and renders the free policy, while a future Campaign
+composition cannot inherit it implicitly.
 
 The checkpoint sheet takes focus and exposes continue, rewind, compare when
 the authored checkpoint allows it, and stop. Objective transitions are never
@@ -404,11 +406,11 @@ grounding. When `machineFeedback` is withheld, the server removes the machine
 fields and the inspector admits none of the trajectory, sparkline, summary score,
 or machine consumer. Engine arrows, move recommendations, and human-frequency
 overlays remain absent; the fork arrows are only moves the learner already played.
-The grounded path/position summary appears once before the boards. Ordinary
-comparison navigation calls each synchronized row a consequence step; board and
-decision distances use learner-facing turn counts from the rehearsal start or
-shared fork. Internal ply offsets and preview/simulation identity remain
-evidence/runtime detail.
+The grounded path/position summary appears once before the boards. The zero row
+is named as the shared fork; ordinary comparison navigation calls each later
+synchronized row a consequence step. Board and decision distances use
+learner-facing turn counts from the rehearsal start or shared fork. Internal ply
+offsets and preview/simulation identity remain evidence/runtime detail.
 
 Outcome Drill adds a compact context surface above the board and in checkpoint
 or terminal sheets. It keeps four facts separate: a concise root assessment,

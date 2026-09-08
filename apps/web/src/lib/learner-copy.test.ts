@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  comparisonStepAnnouncement,
+  comparisonStepLabel,
   learnerMoveCount,
   opponentMoveCount,
   rehearsalStepLabel,
@@ -52,6 +54,13 @@ describe("learner-facing domain copy", () => {
     expect(storyReentryCopy("white", undefined, 3)).toBe(
       "Pick this game up at move 2 and play the consequence.",
     );
+  });
+
+  it("names the comparison fork separately from consequence rows", () => {
+    expect(comparisonStepLabel(0, 2)).toBe("Shared fork · 2 consequence steps available");
+    expect(comparisonStepAnnouncement(0, 1)).toBe("Comparison at the shared fork; 1 consequence step is available");
+    expect(comparisonStepLabel(2, 2)).toBe("Consequence step 2 / 2");
+    expect(comparisonStepAnnouncement(2, 2)).toBe("Comparison consequence step 2 of 2");
   });
 
   it("translates exact internal half-move counts by their learner-facing role", () => {

@@ -30,9 +30,10 @@ same selection drives branch-selective PGN export. The comparison screen renders
 the current aligned row from `ComparisonRow.groups`: one position cell names all
 attempts occupying that exact recorded node, while an ended branch remains an
 explicit absence cell. It never duplicates a shared-prefix position once per
-branch. The grounded path/position summary is rendered once. Synchronized rows
-are consequence steps, while distance from the rehearsal start or shared fork
-uses learner-facing turn counts rather than raw relative offsets. The evidence
+branch. The grounded path/position summary is rendered once. The zero row is the
+shared fork and later synchronized rows are consequence steps, while distance
+from the rehearsal start or shared fork uses learner-facing turn counts rather
+than raw relative offsets. The evidence
 inspector remains branch-columnar because its records and source attribution
 belong to each attempt. Eight is a readability cap, not a data integrity limit.
 

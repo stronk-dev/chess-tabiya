@@ -9,6 +9,7 @@
     previewNodeId?: string | undefined;
     onPreview: (nodeId: string) => void;
     onConfirm: (nodeId: string) => void | Promise<void>;
+    rewindPolicy: "free" | "earned";
     canConfirm?: boolean;
     rewindableNodeIds?: ReadonlySet<string>;
     authoredSpineNodeIds?: ReadonlySet<string>;
@@ -27,6 +28,7 @@
     previewNodeId,
     onPreview,
     onConfirm,
+    rewindPolicy,
     canConfirm = true,
     rewindableNodeIds = new Set<string>(),
     authoredSpineNodeIds = new Set<string>(),
@@ -98,7 +100,7 @@
   </ol>
   {#if previewNodeId && rewindableNodeIds.has(previewNodeId)}
     <div class="rewind-offer">
-      <span>Your attempt is kept. Going back makes a second one.</span>
+      <span>{rewindPolicy === "free" ? "Rewinding here costs nothing." : "This uses one earned rewind."} Your attempt is kept. Going back makes a second one.</span>
       <HonestControl
         disabled={!canConfirm}
         reasonId="timeline-rewind-readonly"
