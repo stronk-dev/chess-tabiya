@@ -104,11 +104,11 @@ export function sessionErrorMessage(error: unknown): string {
     if (error.status === 401 || error.status === 403) return "Your access to this run has changed. Sign in again or reopen it.";
     if (error.status === 404) return "This rehearsal is no longer available. Return to Play and choose another.";
     if (error.status === 409) return "This run changed before that action finished. Reopen it and try again.";
-    if (error.status >= 500) return "Tabiya could not complete that action right now. Try again; your recorded line is unchanged.";
+    if (error.status >= 500) return "Tabiya could not complete that action right now. Reopen the run to check its latest position, then try again.";
     return "That action could not be completed. Check the current position and try again.";
   }
   if (error instanceof Error && /Run is terminal at node:/u.test(error.message)) return RUN_ERROR_MESSAGES.RUN_TERMINATED!;
-  return "Tabiya could not complete that action. Try again; your recorded line is unchanged.";
+  return "Tabiya could not complete that action. Reopen the run to check its latest position, then try again.";
 }
 
 function browserStorage(): KeyValueStorage {

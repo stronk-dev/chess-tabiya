@@ -26028,6 +26028,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/viewport-support.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3181",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:b0ae5570f0803f9e1c17269599747ba849cd662b4953a48d593284e480966601",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/session-controller.ts",
+      "evidenceKind": "path"
     }
   ]
 }

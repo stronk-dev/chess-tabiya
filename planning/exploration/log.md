@@ -19189,3 +19189,17 @@ production journey requires the plain explanation, absence of a partial board, a
 Return to Play navigation. `make verify-software` passes 188 files / 1,184 tests and production
 builds; `make test-browser` passes all 64 required desktop/mobile journeys with the one explicitly
 optional Maia measurement skipped.
+
+## 2026-09-08 — Generic recovery copy does not guess mutation state ([[D3181]])
+
+The D3179 fallback initially said the recorded line was unchanged. That is false when the learner
+move commits and only the subsequent opponent request fails—the controller deliberately preserves
+that node and returns `true`. Generic recovery now tells the learner to reopen the run and inspect
+its latest position, making no claim about whether a mutation committed. The controller's boolean
+and authoritative run remain the only mutation-state sources.
+
+The pre-commit rejection and post-commit opponent-failure fixtures require the same non-committal
+copy while retaining opposite boolean results and the saved learner node. The malformed-pack
+production journey requires the corresponding server-failure copy. `make verify-software` passes
+188 files / 1,184 tests and production builds; `make test-browser` passes all 64 required
+desktop/mobile journeys with the one explicitly optional Maia measurement skipped.

@@ -490,8 +490,8 @@ describe("DrillSessionController", () => {
     const localInvariant = sessionErrorMessage(new TypeError("Pack run is missing its pack id internal-pack-id"));
 
     expect(conflict).toBe("This run changed before that action finished. Reopen it and try again.");
-    expect(unavailable).toBe("Tabiya could not complete that action right now. Try again; your recorded line is unchanged.");
-    expect(localInvariant).toBe("Tabiya could not complete that action. Try again; your recorded line is unchanged.");
+    expect(unavailable).toBe("Tabiya could not complete that action right now. Reopen the run to check its latest position, then try again.");
+    expect(localInvariant).toBe("Tabiya could not complete that action. Reopen the run to check its latest position, then try again.");
     expect([conflict, unavailable, localInvariant].join(" ")).not.toMatch(/internal-|schema|provider|node id|branch id/ui);
   });
 
@@ -554,7 +554,7 @@ describe("DrillSessionController", () => {
     expect(await environment.controller.move("c1e3")).toBe(false);
     expect(environment.controller.state).toMatchObject({
       busy: false,
-      error: "Tabiya could not complete that action. Try again; your recorded line is unchanged.",
+      error: "Tabiya could not complete that action. Reopen the run to check its latest position, then try again.",
     });
   });
 
@@ -568,7 +568,7 @@ describe("DrillSessionController", () => {
     expect(api.requiredRun().nodes.at(-1)).toMatchObject({ moveUci: "f2f3", actor: "user" });
     expect(environment.controller.state).toMatchObject({
       busy: false,
-      error: "Tabiya could not complete that action. Try again; your recorded line is unchanged.",
+      error: "Tabiya could not complete that action. Reopen the run to check its latest position, then try again.",
       runState: { run: { activeCursor: { nodeId: api.requiredRun().activeCursor.nodeId } } },
     });
   });
