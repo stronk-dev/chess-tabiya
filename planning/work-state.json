@@ -25754,6 +25754,15 @@
       "uxItems": [],
       "evidence": "apps/server/src/graduation-report.test.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3151",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:ba20be9cd1295b90901459dc05236bfa2c50e6847bb4e37414f345a2d45b084b",
+      "uxItems": [],
+      "evidence": "tools/feedback-delivery-harness/config-resolution.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

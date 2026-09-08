@@ -18821,3 +18821,13 @@ the RFC's projected ≥31 is explicitly conditional on populating the 31 corpus-
 its positive/hard-negative fixtures prove both runtime arms now. D1 remains owner-authored and
 blocks archival, not continued foundation implementation. This closes [[D123]], [[D124]],
 [[D153]], [[D171]] and [[D268]] at the mechanism layer; [[D157]] remains open until population.
+
+## 2026-09-08 — Feedback Stage-2 acceptance instrument restored ([[D3151]])
+
+`make feedback-delivery-measurement` was unable to collect two of its three suites because its
+private Vitest alias still mapped `@chess-tabiya/schema/pack-path` to the removed flat source file.
+The shared pack-path authority moved to `packages/schema/src/pack-path/index.ts` under [[D3148]],
+but this commissioned content-wave gate was outside required verification and silently retained the
+old location. The alias now follows the package's public subpath source, and a direct-import fixture
+makes that dependency explicit. The canonical target passes four files and six tests, including the
+Stage-2 per-claim accounting and owner-use tripwire. No content or graduation state changed.
