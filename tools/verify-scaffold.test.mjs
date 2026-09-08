@@ -36,8 +36,9 @@ test("workflow command guard reports every missing tier", () => {
       "make test-browser-smoke",
       "make test-browser-content",
       "make test-browser-matrix",
+      "make test-browser-production",
     ]),
-    ["make test-browser-content", "make test-browser-matrix"],
+    ["make test-browser-content", "make test-browser-matrix", "make test-browser-production"],
   );
 });
 

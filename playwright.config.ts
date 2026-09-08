@@ -4,6 +4,7 @@ const port = Number(process.env.PLAYWRIGHT_PORT ?? 4173);
 
 export default defineConfig({
   testDir: "tests/browser",
+  testIgnore: "production.spec.ts",
   outputDir: "test-results/playwright",
   timeout: 30_000,
   fullyParallel: false,

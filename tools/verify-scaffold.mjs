@@ -210,6 +210,7 @@ const missingBrowserTiers = missingRequiredText(browserWorkflow, [
   "make test-browser-smoke",
   "make test-browser-content",
   "make test-browser-matrix",
+  "make test-browser-production",
 ]);
 if (missingBrowserTiers.length > 0) {
   failures.push(`browser CI workflow: missing named tiers: ${missingBrowserTiers.join(", ")}`);
@@ -229,6 +230,17 @@ const missingPlaywrightEvidence = missingRequiredText(playwrightConfig, [
 ]);
 if (missingPlaywrightEvidence.length > 0) {
   failures.push("Playwright config: the successful browser report must retain explicit matrix attachments");
+}
+const productionPlaywrightConfig = await readText("playwright.production.config.ts");
+if (
+  productionPlaywrightConfig.includes("NODE_ENV=development") ||
+  productionPlaywrightConfig.includes("DRAFT_PACK_FILE=") ||
+  productionPlaywrightConfig.includes("DRAFT_PACK_FILES=") ||
+  !productionPlaywrightConfig.includes("ENGINE_MODE=mock") ||
+  !playwrightConfig.includes('testIgnore: "production.spec.ts"') ||
+  !makefile.includes("test-browser-ci: test-browser-smoke test-browser-content test-browser-matrix test-browser-production")
+) {
+  failures.push("production browser tier: must run the packaged default without development mode or injected pack fixtures");
 }
 
 const lefthook = await readText("lefthook.yml");

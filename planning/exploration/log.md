@@ -18574,3 +18574,18 @@ The checkpoint still owns focus and the learner is told exactly which action res
 mounted screen regression and real keyboard browser journey bind the visible explanation,
 description relationship, read-only state and dialog focus boundary. All 1,146 software tests and
 the 19-test desktop/mobile browser matrix pass. D485 and D1141 close.
+
+## 2026-09-08 — Browser CI gains a packaged-default learner journey
+
+D482's historical diagnosis was partly stale after the disclosed-draft ruling: production now
+serves the fifty committed packs as community content. Its deeper failure remained. Every browser
+job still started `NODE_ENV=development` with an injected fixture list, so no browser gate proved
+what a normal `make up` deployment put in front of a learner.
+
+A separate production Playwright configuration now starts the built application with the packaged
+mock policy, no development switch and no explicit pack path. The journey requires a non-empty
+catalogue, visible community provenance, exclusion of schema and browser fixtures, registration
+from a selected committed pack and arrival at its playable board. The Makefile, local CI parity,
+GitHub browser workflow and scaffold verifier all require the new tier. `make
+test-browser-production` and `make schema-check` pass. D482 closes; fixture-injected browser tests
+remain capability tests rather than being presented as deployment proof.

@@ -27,7 +27,7 @@ directory.
 | `apps/web` | Svelte 5 browser client |
 | `workers` | Isolated data workers and the containerized Maia sidecar |
 | `content/packs` | Reviewed drill packs |
-| `content/drafts` | Versioned author/reviewer workspace; development-only serving |
+| `content/drafts` | Versioned author/reviewer workspace; served as disclosed community content in every environment |
 | `schemas` | Living JSON Schemas |
 
 Internal package names use the private `@chess-tabiya/*` scope; they are not published
@@ -87,8 +87,11 @@ Draft RFCs keep their author models, historical review images and counterexample
 Make targets. Run the relevant target while changing that RFC; `make verify-rfc-evidence` is the
 optional whole-portfolio audit. These review artifacts are not part of `make verify` or required CI,
 because a passing model of an unaccepted document is not release evidence.
-`make test-browser` builds and starts the default mock-backed application and
-runs the full Playwright episode in a separate browser CI job.
+`make test-browser` builds and starts the fixture-injected development application and
+runs the full Playwright episode in a separate browser CI job. `make test-browser-production`
+separately starts the packaged default with no development-mode switch and no injected pack
+paths, then proves that disclosed committed content reaches the catalogue and a learner can
+start a real rehearsal. `make test-browser-ci` runs both tiers.
 
 GitHub Actions pins the GA `ubuntu-24.04` runner instead of following `ubuntu-latest`, but it does
 not use Ubuntu's Stockfish package: that package is version 16, Ubuntu 26.04's preview runner offers

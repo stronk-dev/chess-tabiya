@@ -27,6 +27,8 @@ jobs:
         run: make test-browser-content
       - name: Responsive and accessible interaction matrices
         run: make test-browser-matrix
+      - name: Packaged production-configuration journey
+        run: make test-browser-production
       - name: Upload browser evidence
         if: always()
         uses: actions/upload-artifact@v6

@@ -3776,11 +3776,12 @@
     },
     {
       "id": "D482",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:10f36a3ecc9e762183a10d78ee0ab8342668095b414e7373df4429418136b080",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:902270fa4a2b2e55597ca94e8e8db1659c34f995c08b1782f52f611dca0d4add",
       "uxItems": [],
-      "owner": "client-platform"
+      "evidence": "tests/browser/production.spec.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D483",
