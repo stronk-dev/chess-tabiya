@@ -452,7 +452,7 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   await expect(page.getByRole("dialog", { name: /Review/ })).toHaveCount(0);
 
   await move(page, "d1", "d8");
-  const marker = page.getByRole("button", { name: "Open pivotal marker at ply 1" });
+  const marker = page.getByRole("button", { name: "Open pivotal marker at rehearsal step 1" });
   await expect(marker).toBeVisible();
   await expect(page.getByRole("dialog", { name: /Review/ })).toHaveCount(0);
 
@@ -494,7 +494,7 @@ test("runtime corpus counts stay silent until reveal and render population facts
   await page.getByLabel("Passive pivotal markers").check();
   await page.getByRole("button", { name: "Return to play" }).click();
   await move(page, "e2", "e4");
-  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await expect(page.getByText("Active line 2 turns")).toBeVisible();
   await expect(page.getByText("Thinking…")).toHaveCount(0);
   const runId = page.url().split("/").at(-1)!;
   const writerId = await page.evaluate((id) => localStorage.getItem(`chess-tabiya:run:${id}:writer-id`), runId);
@@ -567,7 +567,7 @@ test("immediate guard waits for the consequence, preserves play-on, and rewinds 
   await page.reload();
   await expect(prompt).toBeVisible();
   await prompt.getByRole("button", { name: "Rewind" }).click();
-  await expect(page.getByText("Active line 0 plies")).toBeVisible();
+  await expect(page.getByText("Active line 0 turns")).toBeVisible();
   await move(page, "h2", "h4");
   await page.getByRole("button", { name: "Branches", exact: true }).click();
   await expect(page.getByRole("button", { name: /Switch to branch 1:/ })).toBeVisible();
@@ -977,7 +977,7 @@ test("Outcome Drill resolves a non-terminal hold and remains playable", async ({
   await expect(page.getByText("Starting assessment from the drill author:", { exact: false })).toBeVisible();
 
   await move(page, "e2", "e4");
-  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await expect(page.getByText("Active line 2 turns")).toBeVisible();
   await move(page, "f2", "f3");
   await expect(page.getByRole("heading", { name: "Authored hold horizon" })).toBeVisible();
   await expect(page.getByText("without conceding the result", { exact: false })).toBeVisible();
@@ -991,7 +991,7 @@ test("Outcome Drill resolves a non-terminal hold and remains playable", async ({
   await expect(page.getByRole("region", { name: "Attempt conditions" })).toContainText("Deterministic mock opponent");
   await page.getByRole("button", { name: "Return to play" }).click();
   await clickMove(page, "f1", "b5");
-  await expect(page.getByText("Active line 6 plies")).toBeVisible();
+  await expect(page.getByText("Active line 6 turns")).toBeVisible();
 });
 
 test("Outcome Drill can grade a terminal loss as successful resistance", async ({ page }) => {
@@ -1284,7 +1284,7 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.getByRole("heading", { name: "Predict the reply" })).toBeVisible();
   await page.getByRole("button", { name: "Continue" }).click();
-  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await expect(page.getByText("Active line 2 turns")).toBeVisible();
 
   await move(page, "f2", "f3");
   await expect(
@@ -1294,7 +1294,7 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
 
   const rewindStart = await page.evaluate(() => performance.now());
   await page.keyboard.press("r");
-  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await expect(page.getByText("Active line 2 turns")).toBeVisible();
   const rewindMs =
     (await page.evaluate(() => performance.now())) - rewindStart;
 
@@ -1303,7 +1303,7 @@ test("@content served Najdorf pack plays, rewinds, branches, compares, and expor
   await page.getByLabel("What are you trying?").fill("Compare a lower-commitment setup");
   await page.getByRole("button", { name: "Create branch" }).click();
   await clickMove(page, "d1", "d2");
-  await expect(page.getByText("Active line 4 plies")).toBeVisible();
+  await expect(page.getByText("Active line 4 turns")).toBeVisible();
 
   const branchStart = await page.evaluate(() => performance.now());
   await page.getByRole("button", { name: /Switch to branch 1: main/ }).click();
@@ -1454,7 +1454,7 @@ test("branch group captures three candidates, rotates, recovers evidence, compar
   await move(page, "c1", "e3");
   await page.getByRole("button", { name: "Continue" }).click();
   await page.getByRole("button", { name: "Continue" }).click();
-  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await expect(page.getByText("Active line 2 turns")).toBeVisible();
 
   await page.getByRole("button", { name: "Actions", exact: true }).click();
   await page.getByRole("button", { name: "Branch group" }).click();
@@ -1524,10 +1524,10 @@ test("@content Pack A withholds its line, grades the boundary, and renders autho
   await card.getByRole("button", { name: /Rehearse this position/ }).click();
 
   await expect(page.getByLabel("Chessboard")).toBeVisible();
-  await expect(page.getByText("Active line 1 plies")).toBeVisible();
+  await expect(page.getByText("Active line 1 turn")).toBeVisible();
   await expect(page.getByText("Authored commentary withheld until checkpoints", { exact: true })).toBeVisible();
   await move(page, "g1", "f3");
-  await expect(page.getByText("Active line 3 plies")).toBeVisible();
+  await expect(page.getByText("Active line 3 turns")).toBeVisible();
   await move(page, "f1", "e2");
 
   await expect(
@@ -1543,7 +1543,7 @@ test("@content Pack A withholds its line, grades the boundary, and renders autho
     page.getByText("Hold the centre and finish developing", { exact: false }),
   ).toHaveCount(0);
   await page.getByRole("button", { name: "Continue" }).click();
-  await expect(page.getByText("Active line 5 plies")).toBeVisible();
+  await expect(page.getByText("Active line 5 turns")).toBeVisible();
   await expect(page.getByRole("heading", { name: "...c5 has landed" })).toBeVisible();
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
@@ -1568,13 +1568,13 @@ test("Line Drill crosses a cap on-line, continues, and renders unknown honestly"
   await expect(page.getByText("No opponent move has been played yet.")).toBeVisible();
 
   await move(page, "c1", "e3");
-  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await expect(page.getByText("Active line 2 turns")).toBeVisible();
   await move(page, "f2", "f3");
   await expect(page.getByRole("heading", { name: "The authored support cap is crossed" })).toBeVisible();
   await expect(page.getByText("Rehearsal step 1, Be3: on the authored line.")).toBeVisible();
   await expect(page.getByText("Rehearsal step 2, e6: on the authored line.")).toBeVisible();
   await page.getByRole("button", { name: "Continue" }).click();
-  await expect(page.getByText("Active line 4 plies")).toBeVisible();
+  await expect(page.getByText("Active line 4 turns")).toBeVisible();
 
   await move(page, "a2", "a3");
   await expect(page.getByRole("heading", { name: "The pack is silent here" })).toBeVisible();
@@ -1619,11 +1619,11 @@ test("a granted spectator follows a run without receiving a write control", asyn
   await expect(spectator.getByRole("button", { name: "Branch group" })).toBeDisabled();
 
   await move(page, "g1", "f3");
-  await expect(page.getByText("Active line 3 plies")).toBeVisible();
-  await expect(spectator.getByText("Active line 3 plies")).toBeVisible({ timeout: 4_000 });
+  await expect(page.getByText("Active line 3 turns")).toBeVisible();
+  await expect(spectator.getByText("Active line 3 turns")).toBeVisible({ timeout: 4_000 });
   await move(page, "f1", "e2");
   await expect(page.getByRole("heading", { name: "Choose your plan before the break lands" })).toBeVisible();
-  await expect(spectator.getByText("Active line 4 plies")).toBeVisible({ timeout: 4_000 });
+  await expect(spectator.getByText("Active line 4 turns")).toBeVisible({ timeout: 4_000 });
   await spectator.getByRole("button", { name: /^Rehearsal step 4:/ }).click();
   await expect(spectator.getByText("Your attempt is kept. Going back makes a second one.")).toBeVisible();
   const rewind = spectator.getByRole("button", { name: /^Rewind to preview/ });
@@ -1792,7 +1792,7 @@ test("selected-square support clears with the visible selection and displayed po
   await expect(selectedSight).toHaveCount(0);
 
   await move(page, "d4", "b5");
-  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await expect(page.getByText("Active line 2 turns")).toBeVisible();
   await expect(selectedSight).toHaveCount(0);
 
   const movedBox = await board.boundingBox();
@@ -1925,13 +1925,13 @@ test("@matrix rewind, fork re-entry, and comparison remain composed at every vie
     await move(page, "c1", "e3");
     await page.getByRole("button", { name: "Continue" }).click();
     await page.getByRole("button", { name: "Continue" }).click();
-    await expect(page.getByText("Active line 2 plies")).toBeVisible();
+    await expect(page.getByText("Active line 2 turns")).toBeVisible();
     await move(page, "f2", "f3");
     await page.getByRole("button", { name: "Continue" }).click();
 
     await page.locator("main.drill").focus();
     await page.keyboard.press("r");
-    await expect(page.getByText("Active line 2 plies")).toBeVisible();
+    await expect(page.getByText("Active line 2 turns")).toBeVisible();
     await page.keyboard.press("b");
     await page.getByLabel("Short name").fill("quiet setup");
     await page.getByLabel("What are you trying?").fill("Compare a lower-commitment setup");
@@ -1968,7 +1968,7 @@ test("branch intent names the saved line and Compare replays the same decision a
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/play");
   const card = schemaPackCard(page);
-  await expect(card).toContainText("Consequence · up to 4 plies");
+  await expect(card).toContainText("Consequence · up to 4 turns");
   await card.getByRole("button", { name: /Rehearse this position/ }).click();
 
   await move(page, "c1", "e3");
@@ -2009,7 +2009,7 @@ test("a committed move updates the stable board instance instead of remounting i
   });
 
   await move(page, "e2", "e4", "white");
-  await expect(page.locator(".timeline")).toContainText("Active line 2 plies");
+  await expect(page.locator(".timeline")).toContainText("Active line 2 turns");
   expect(await board.evaluate((element) =>
     (window as unknown as { __tabiyaBoard?: Element }).__tabiyaBoard === element,
   )).toBe(true);
@@ -2043,7 +2043,7 @@ test("an opponent reply visibly animates on the stable board instance", async ({
   });
 
   await move(page, "e2", "e4", "white");
-  await expect(page.locator(".timeline")).toContainText("Active line 2 plies");
+  await expect(page.locator(".timeline")).toContainText("Active line 2 turns");
   await expect.poll(() => page.evaluate(() =>
     (window as unknown as { __tabiyaSawOpponentAnimation?: boolean }).__tabiyaSawOpponentAnimation,
   )).toBe(true);
@@ -2167,19 +2167,19 @@ test("@matrix @mobile comparison stacks complete branch cards without hidden hor
   await move(page, "c1", "e3");
   await page.getByRole("button", { name: "Continue" }).click();
   await page.getByRole("button", { name: "Continue" }).click();
-  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await expect(page.getByText("Active line 2 turns")).toBeVisible();
   await move(page, "f2", "f3");
   await page.getByRole("button", { name: "Continue" }).click();
 
   await page.locator("main.drill").focus();
   await page.keyboard.press("r");
-  await expect(page.getByText("Active line 2 plies")).toBeVisible();
+  await expect(page.getByText("Active line 2 turns")).toBeVisible();
   await page.keyboard.press("b");
   await page.getByLabel("Short name").fill("quiet setup");
   await page.getByLabel("What are you trying?").fill("Compare a lower-commitment setup");
   await page.getByRole("button", { name: "Create branch" }).click();
   await clickMove(page, "d1", "d2");
-  await expect(page.getByText("Active line 4 plies")).toBeVisible();
+  await expect(page.getByText("Active line 4 turns")).toBeVisible();
 
   await page.locator("main.drill").focus();
   await page.keyboard.press("Alt+C");

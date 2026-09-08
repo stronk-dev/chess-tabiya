@@ -7,6 +7,7 @@ import {
 } from "@chess-tabiya/runtime";
 import { objectiveStateLabel } from "./run-copy.js";
 import { HUMAN_MODEL_RUNG_DISCLAIMER } from "./opponent-copy.js";
+import { opponentMoveCount } from "./chronology-copy.js";
 
 type ProjectedAssessment =
   | { readonly kind: "authored"; readonly note: string }
@@ -136,7 +137,7 @@ export function resistanceSentences(run: DrillRun, nodeId: string, pack?: DrillP
   const lines = [`Requested resistance: ${resistanceModeLabel(requested.mode)}${target} — the pack's request.`];
   for (const leg of resistance.requestedByLeg ?? []) {
     const legTarget = leg.policy.targetElo === undefined ? "" : `, human-model rung ${leg.policy.targetElo}`;
-    lines.push(`Leg ${leg.legId}: requested ${resistanceModeLabel(leg.policy.mode)}${legTarget}; ${leg.plyCount} opponent plies recorded.`);
+    lines.push(`Leg ${leg.legId}: requested ${resistanceModeLabel(leg.policy.mode)}${legTarget}; ${opponentMoveCount(leg.plyCount)} recorded.`);
   }
   if (resistance.engines.length === 0) {
     return [
@@ -154,18 +155,18 @@ export function resistanceSentences(run: DrillRun, nodeId: string, pack?: DrillP
     lines.push(
       resistance.applied.length === 1
         ? `Applied resistance: ${resistanceModeLabel(resistance.applied[0]!.mode)} — recorded per move by the selector.`
-        : `Applied resistance: ${resistance.applied.map((entry) => `${resistanceModeLabel(entry.mode)} for ${entry.plyCount} plies`).join(", ")} — recorded per move by the selector.`,
+        : `Applied resistance: ${resistance.applied.map((entry) => `${resistanceModeLabel(entry.mode)} for ${opponentMoveCount(entry.plyCount)}`).join(", ")} — recorded per move by the selector.`,
     );
     void total;
   }
   if (resistance.unknownPlyCount > 0) {
-    lines.push(`${resistance.unknownPlyCount} of these plies predate policy recording.`);
+    lines.push(`${opponentMoveCount(resistance.unknownPlyCount)} ${resistance.unknownPlyCount === 1 ? "predates" : "predate"} policy recording.`);
   }
   if (resistance.engines.length === 1) {
     lines.push(`Moves played by ${engineName(resistance.engines[0]!.engine)}.`);
   } else {
     for (const entry of resistance.engines) {
-      lines.push(`${engineName(entry.engine)}: ${entry.plyCount} plies.`);
+      lines.push(`${engineName(entry.engine)}: ${opponentMoveCount(entry.plyCount)}.`);
     }
     const identities = new Set(resistance.engines.map((entry) => engineIdentityKey(entry.engine)));
     lines.push(identities.size === 1

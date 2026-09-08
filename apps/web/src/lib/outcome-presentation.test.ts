@@ -127,7 +127,7 @@ describe("outcome presentation honesty", () => {
       engine: { id: "legacy", name: "Legacy engine", version: "unknown", seedHonored: false },
     }, { at }).run;
     const text = resistanceSentences(migrated, migrated.activeCursor.nodeId).join(" ");
-    expect(text).toContain("1 of these plies predate policy recording.");
+    expect(text).toContain("1 opponent move predates policy recording.");
     expect(text).toContain("The run records which engine played, not which policy it applied");
     expect(text).not.toContain("Applied resistance:");
   });
@@ -181,8 +181,8 @@ describe("outcome presentation honesty", () => {
       engine: { id: "maia", name: "Maia", version: "1", seedHonored: false, eloHonored: true, eloApplied: 1500 },
     }, { at }).run;
     const sentences = resistanceSentences(value, value.activeCursor.nodeId);
-    expect(sentences).toContain("Maia (maia v1, band not recorded): 1 plies.");
-    expect(sentences).toContain("Maia (maia v1, band 1500): 1 plies.");
+    expect(sentences).toContain("Maia (maia v1, band not recorded): 1 opponent move.");
+    expect(sentences).toContain("Maia (maia v1, band 1500): 1 opponent move.");
     expect(sentences).toContain("This path faced more than one engine configuration.");
     expect(sentences).not.toContain("This path faced more than one engine.");
   });

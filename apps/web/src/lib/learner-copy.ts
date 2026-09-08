@@ -33,16 +33,6 @@ export function recordedEvaluationTrajectory(beforeCentipawns: number, afterCent
   return `Recorded evaluation from White's side: ${signedPawns(beforeCentipawns)} → ${signedPawns(afterCentipawns)} pawns`;
 }
 
-/** Run-relative chronology for learner surfaces; `ply` remains an internal evidence field. */
-export function rehearsalStepLabel(ply: number): string {
-  return `Rehearsal step ${Math.max(0, ply)}`;
-}
-
-/** Whole-game chronology for Story, matching its existing re-entry convention. */
-export function storyMoveLabel(ply: number): string {
-  return `Move ${Math.max(1, Math.ceil(ply / 2))}`;
-}
-
 type StoryResult = "1-0" | "0-1" | "1/2-1/2" | "*" | "win" | "loss" | "draw";
 type StoryOutcome = {
   readonly kind: "board_terminal" | "recorded_result" | "unfinished";
@@ -58,21 +48,6 @@ export function storyOutcomeLabel(side: "white" | "black", outcome: StoryOutcome
   if (result === "draw" || result === "1/2-1/2") return `Game drawn · ${context}`;
   const learnerWon = result === "win" || (side === "white" ? result === "1-0" : result === "0-1");
   return `${learnerWon ? "You won" : "You lost"} · ${context}`;
-}
-
-export function storyReentryCopy(
-  side: "white" | "black",
-  result: StoryResult | undefined,
-  ply: number,
-): string {
-  const move = storyMoveLabel(ply).slice("Move ".length);
-  const learnerLost = result === "loss" || (side === "white" ? result === "0-1" : result === "1-0");
-  const learnerWon = result === "win" || (side === "white" ? result === "1-0" : result === "0-1");
-  const drawn = result === "draw" || result === "1/2-1/2";
-  if (learnerLost) return `You lost this game. Pick it up at move ${move} and play the consequence another way.`;
-  if (learnerWon) return `You won this game. Pick it up at move ${move} and test another continuation.`;
-  if (drawn) return `This game was drawn. Pick it up at move ${move} and test another continuation.`;
-  return `Pick this game up at move ${move} and play the consequence.`;
 }
 
 function readableSpeed(speed: string): string {

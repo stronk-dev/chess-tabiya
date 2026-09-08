@@ -20,8 +20,8 @@ describe("run copy", () => {
     expect(branchDisplayLabel("alt-3", "Nf5", "keep pressure on e7")).toBe("Nf5 — keep pressure on e7");
     expect(branchDisplayLabel("Kingside try", "Nf5", "keep pressure on e7")).toBe("Kingside try");
     expect(consequenceHorizon()).toBe("Full game · until a rules-terminal result");
-    expect(consequenceHorizon({ authoredBoundary: { plyHorizon: 6 } })).toBe("Consequence · up to 6 plies");
-    expect(consequenceHorizon({ spine: [{ children: [{ children: [] }] }] })).toBe("Consequence · up to 2 plies");
+    expect(consequenceHorizon({ authoredBoundary: { plyHorizon: 6 } })).toBe("Consequence · up to 6 turns");
+    expect(consequenceHorizon({ spine: [{ children: [{ children: [] }] }] })).toBe("Consequence · up to 2 turns");
   });
 
   it("keeps objective-change plumbing out of the learner summary", () => {

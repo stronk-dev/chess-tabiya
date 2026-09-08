@@ -83,7 +83,7 @@ test("two learners alternate a native match, pause to branch, and return to the 
     await expect(black.page.getByLabel("Live session rail")).toContainText("Their move");
 
     await play(white.page, "e2", "e4", "white");
-    await expect(black.page.getByText("Active line 1 plies")).toBeVisible({ timeout: 4_000 });
+    await expect(black.page.getByText("Active line 1 turn")).toBeVisible({ timeout: 4_000 });
     await expect(black.page.getByLabel("Live session rail")).toContainText("Your move", { timeout: 4_000 });
 
     const whiteWriter = await white.page.evaluate((id) => localStorage.getItem(`chess-tabiya:run:${id}:writer-id`), runId);
@@ -104,7 +104,7 @@ test("two learners alternate a native match, pause to branch, and return to the 
     expect(labelledMove.status()).toBe(400);
     expect((await labelledMove.json()).error.code).toBe("INVALID_REQUEST");
     await play(black.page, "e7", "e5", "black");
-    await expect(white.page.getByText("Active line 2 plies")).toBeVisible({ timeout: 4_000 });
+    await expect(white.page.getByText("Active line 2 turns")).toBeVisible({ timeout: 4_000 });
 
     const liveReveal = await white.page.request.post(`/runs/${encodeURIComponent(runId)}/reveal`, {
       headers: { "x-writer-id": whiteWriter! }, data: {},
@@ -140,7 +140,7 @@ test("two learners alternate a native match, pause to branch, and return to the 
     expect(reveal.ok(), await reveal.text()).toBe(true);
 
     await white.page.getByRole("button", { name: "Resume main line" }).click();
-    await expect(white.page.getByText("Active line 2 plies")).toBeVisible();
+    await expect(white.page.getByText("Active line 2 turns")).toBeVisible();
     await expect(white.page.getByLabel("Live session rail")).toContainText("Your move");
 
     await coach.page.goto("/live");
@@ -199,7 +199,7 @@ test("native-match creation explains an ineligible played position before submis
   try {
     await startPosition(coach.page);
     await play(coach.page, "e2", "e4", "white");
-    await expect(coach.page.getByText(/Active line [1-9]\d* plies/u)).toBeVisible();
+    await expect(coach.page.getByText(/Active line [1-9]\d* turns?/u)).toBeVisible();
     await coach.page.goto("/live");
     await coach.page.getByLabel("What do you want to do?").selectOption("native_match");
     const source = coach.page.getByRole("article").filter({ hasText: "Position session" }).first();

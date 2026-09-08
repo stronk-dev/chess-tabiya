@@ -2,6 +2,7 @@
   import type { SimulationResult } from "./api.js";
   import type { StartSide } from "./board-model.js";
   import Chessboard from "./Chessboard.svelte";
+  import { rehearsalTurnCount } from "./chronology-copy.js";
   import { modalBoundary } from "./modal-boundary.js";
 
   interface Props {
@@ -43,7 +44,7 @@
         <article>
           <div class="line-heading">
             <span>{index + 1}</span>
-            <div><h3>{branch.label}</h3><p>{branch.plies} {branch.plies === 1 ? "ply" : "plies"} shown</p></div>
+            <div><h3>{branch.label}</h3><p>{rehearsalTurnCount(branch.plies)} shown</p></div>
           </div>
           <div class="board" aria-label={`Final position after ${branch.label}`}>
             <Chessboard fen={branch.leafFen} {startSide} disabled showDests={false} highlightMoves={false} onMove={() => false} />

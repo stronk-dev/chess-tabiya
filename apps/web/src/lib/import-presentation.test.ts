@@ -8,7 +8,7 @@ describe("import failure presentation", () => {
     ["PGN variations are not accepted", "one played main line"],
     ["Unsupported PGN variant: Chess960", "Only Standard and From Position"],
     ["PGN exceeds the 64 KiB import limit", "64 KiB single-game limit"],
-    ["PGN exceeds 300 plies", "300-ply import limit"],
+    ["PGN exceeds 300 plies", "300-turn import limit"],
     ["PGN must contain at least one move", "headers but no played moves"],
     ["PGN has an invalid starting position", "starting position is invalid"],
     ["Illegal PGN move: Qh9", "(Qh9)"],

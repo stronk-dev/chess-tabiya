@@ -1,14 +1,19 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  learnerMoveCount,
+  opponentMoveCount,
+  rehearsalStepLabel,
+  rehearsalTurnCount,
+  storyMoveLabel,
+  storyReentryCopy,
+} from "./chronology-copy.js";
+import {
   attemptVerdictLabel,
   corpusPopulationLabel,
   publishedBandInterval,
   publishedBandLabel,
   recordedEvaluationTrajectory,
-  rehearsalStepLabel,
-  storyReentryCopy,
-  storyMoveLabel,
   storyMomentLabel,
   storyOutcomeLabel,
 } from "./learner-copy.js";
@@ -43,6 +48,16 @@ describe("learner-facing domain copy", () => {
     expect(storyReentryCopy("white", undefined, 3)).toBe(
       "Pick this game up at move 2 and play the consequence.",
     );
+  });
+
+  it("translates exact internal half-move counts by their learner-facing role", () => {
+    expect(rehearsalTurnCount(0)).toBe("0 turns");
+    expect(rehearsalTurnCount(1)).toBe("1 turn");
+    expect(rehearsalTurnCount(8)).toBe("8 turns");
+    expect(learnerMoveCount(1)).toBe("1 learner move");
+    expect(learnerMoveCount(3)).toBe("3 learner moves");
+    expect(opponentMoveCount(1)).toBe("1 opponent move");
+    expect(opponentMoveCount(3)).toBe("3 opponent moves");
   });
 
   it("renders story outcomes from the learner's side without PGN or runtime tokens", () => {

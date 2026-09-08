@@ -3,6 +3,7 @@
 
   import Chessboard from "./Chessboard.svelte";
   import type { StartSide } from "./board-model.js";
+  import { rehearsalTurnCount } from "./chronology-copy.js";
   import { objectiveStateLabel, runOutcomeLabel } from "./run-copy.js";
 
   type ZoomBand = "far" | "mid" | "near";
@@ -91,7 +92,7 @@
         {#if zoom === "mid" || zoom === "near"}
           <dl>
             <div><dt>Last move</dt><dd>{cell.leaf.moveSan ?? "No move"}</dd></div>
-            <div><dt>Plies</dt><dd>{cell.plyCount}</dd></div>
+            <div><dt>Length</dt><dd>{rehearsalTurnCount(cell.plyCount)}</dd></div>
             <div><dt>Material</dt><dd>{materialBalanceAt(cell.leaf.fen, startSide) >= 0 ? "+" : ""}{materialBalanceAt(cell.leaf.fen, startSide)}</dd></div>
             <div><dt>Checkpoints</dt><dd>{cell.checkpointCount}</dd></div>
           </dl>

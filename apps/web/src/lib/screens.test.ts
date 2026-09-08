@@ -1212,7 +1212,7 @@ describe("Layer 3 screens", () => {
     await tick();
 
     expect(document.body.textContent).toContain("re-converged to the same chess position");
-    expect(document.body.textContent).toContain("The recorded paths are separate at this ply");
+    expect(document.body.textContent).toContain("The recorded paths are separate at this rehearsal step");
     await unmount(component);
   });
 

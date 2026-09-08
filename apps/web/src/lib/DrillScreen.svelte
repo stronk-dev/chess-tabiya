@@ -56,7 +56,7 @@
   import { moveSanFromUci } from "./board-input.js";
   import { checkpointAuthoredItems as selectCheckpointAuthoredItems } from "./checkpoint-authored-items.js";
   import { rehearsalGuideStep } from "./rehearsal-guide.js";
-  import { rehearsalStepLabel } from "./learner-copy.js";
+  import { rehearsalStepLabel } from "./chronology-copy.js";
   import SimulationPreview from "./SimulationPreview.svelte";
 
   type RewindTarget =

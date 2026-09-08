@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { PackSummary } from "./api.js";
+  import { rehearsalTurnCount } from "./chronology-copy.js";
   import {
     filterPacks,
     packDifficultyCopy,
@@ -82,7 +83,7 @@
           </div>
           <h2>{pack.title}</h2>
           <p class="objective">{pack.objectiveSummary}</p>
-          <p class="horizon">{pack.consequenceHorizon === null || pack.consequenceHorizon === undefined ? "Consequence length not recorded" : `Consequence · up to ${pack.consequenceHorizon.plies} ${pack.consequenceHorizon.plies === 1 ? "ply" : "plies"}`}</p>
+          <p class="horizon">{pack.consequenceHorizon === null || pack.consequenceHorizon === undefined ? "Consequence length not recorded" : `Consequence · up to ${rehearsalTurnCount(pack.consequenceHorizon.plies)}`}</p>
           <p class="difficulty">{packDifficultyCopy(pack)}</p>
           <button class="open-pack" type="button" aria-label={`${actionLabel}: ${pack.title}`} onclick={() => onSelect(pack.id)}>{actionLabel} <span aria-hidden="true">→</span></button>
           <p class="provenance">{packPublicationCopy(pack)}</p>

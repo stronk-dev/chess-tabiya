@@ -1,3 +1,5 @@
+import { rehearsalTurnCount } from "./chronology-copy.js";
+
 type ObjectiveState = "active" | "preserved" | "degraded" | "failed" | "achieved" | "transitioned";
 type RunOutcome = "win" | "loss" | "draw";
 type Phase = "opening" | "middlegame" | "endgame" | "unclear";
@@ -68,7 +70,7 @@ export function consequenceHorizon(pack?: ConsequencePack): string {
   const authored = spineDepth(pack.spine ?? []);
   const plies = Number.isSafeInteger(declared) && declared! > 0 ? declared! : Math.max(legTarget, authored);
   if (plies <= 0) return "Consequence horizon not recorded";
-  return `Consequence · up to ${plies} ${plies === 1 ? "ply" : "plies"}`;
+  return `Consequence · up to ${rehearsalTurnCount(plies)}`;
 }
 
 export function objectiveChangeSummaries(evidence: readonly ObjectiveChangeEvidence[]): readonly string[] {

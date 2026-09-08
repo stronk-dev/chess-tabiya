@@ -1,7 +1,7 @@
 import type { DrillRun } from "@chess-tabiya/runtime";
 
 import type { AuthoredFeedbackItem } from "./api.js";
-import { rehearsalStepLabel } from "./learner-copy.js";
+import { rehearsalStepLabel } from "./chronology-copy.js";
 import { learnerMoveLabel } from "./learner-move-label.js";
 
 export const UNKNOWN_THEORY_NOTE =

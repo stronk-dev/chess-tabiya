@@ -25853,9 +25853,18 @@
       "id": "D3161",
       "state": "done",
       "sourceGlyph": "✅",
-      "sourceDigest": "sha256:358d9ac83f4c5722734b909873bcd390e85b0c02f9fda6c3e76ca6a75f4bca62",
+      "sourceDigest": "sha256:03835069e43a6ea80bbc99920e189b345b46d3bb8d058ded8348dbea4ffda45b",
       "uxItems": [],
-      "evidence": "apps/web/src/lib/learner-copy.ts",
+      "evidence": "apps/web/src/lib/chronology-copy.ts",
+      "evidenceKind": "path"
+    },
+    {
+      "id": "D3162",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:5c511e55b5959b24a043a9194e57d279cfe206397d648cb139967e4602d2ae36",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/chronology-copy.ts",
       "evidenceKind": "path"
     }
   ]

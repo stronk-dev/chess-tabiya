@@ -16,7 +16,7 @@
   } from "./compare-geometry.js";
   import { renderEvidenceRef } from "./evidence-sentences.js";
   import { learnerMoveLabel } from "./learner-move-label.js";
-  import { rehearsalStepLabel } from "./learner-copy.js";
+  import { rehearsalStepLabel } from "./chronology-copy.js";
   import { resistanceModeLabel, resistanceSentences } from "./outcome-presentation.js";
   import { comparisonNode, evidencePayloads } from "./screen-model.js";
   import { renderStructuralObservation } from "./structural-sentences.js";
@@ -170,16 +170,16 @@
     if (step === 0) return "All attempts share this fork position.";
     const groups = currentRow?.groups ?? [];
     const shared = groups.filter((group) => group.length > 1);
-    if (shared.length === 0) return "The recorded paths are separate at this ply.";
+    if (shared.length === 0) return "The recorded paths are separate at this rehearsal step.";
     return `${shared.map((group) => group.map(branchLabel).join(" and ")).join("; ")} still share the same recorded continuation.`;
   }
   function positionSentence(): string {
-    if (currentNodes.length < comparison.columns.length) return "At least one branch has already ended at this aligned ply.";
+    if (currentNodes.length < comparison.columns.length) return "At least one branch has already ended at this aligned step.";
     const groups = new Map<string, string[]>();
     for (const { column, node } of currentNodes) groups.set(node.transposeKey, [...(groups.get(node.transposeKey) ?? []), column.label]);
     if (groups.size === 1) return step === 0 ? "Same starting position." : "The branches have re-converged to the same chess position.";
     const shared = [...groups.values()].filter((group) => group.length > 1);
-    return shared.length === 0 ? "The chess positions are different at this ply." : `${shared.map((group) => group.join(" and ")).join("; ")} have re-converged; the other positions differ.`;
+    return shared.length === 0 ? "The chess positions are different at this rehearsal step." : `${shared.map((group) => group.join(" and ")).join("; ")} have re-converged; the other positions differ.`;
   }
   function theorySentence(entry: LineMembershipEntry): string {
     if (entry.verdict === "on_line") return `${rehearsalStepLabel(entry.ply)}: stayed on the authored line${entry.insideBoundary ? "" : " beyond its feedback boundary"}.`;
@@ -265,7 +265,7 @@
               <div><dt>Last move</dt><dd>{group.node.moveSan ?? "No move"}</dd></div>
               <div><dt>Moved by</dt><dd>{actorLabel(group.node.actor)}</dd></div>
               <div><dt>Material</dt><dd>{materialLabel(group.node.fen)}</dd></div>
-              <div><dt>Half-moves played</dt><dd>{group.node.ply}</dd></div>
+              <div><dt>Turns played</dt><dd>{group.node.ply}</dd></div>
               <div><dt>Checkpoints</dt><dd>{group.node.checkpointRefs.length}</dd></div>
             </dl>
           {/if}
@@ -326,7 +326,7 @@
         </section>
         {#if comparison.machineFeedback === "available"}
           <section class="evaluation-axis" aria-label="Recorded engine evaluation" data-evidence-consumer="compare.engine_trajectory">
-            <h4>Recorded engine evaluation on one shared ply axis</h4>
+            <h4>Recorded engine evaluation on one shared rehearsal-step axis</h4>
             <div class="evaluation-table-wrap">
               <table>
                 <thead><tr><th scope="col">Position</th>{#each comparison.columns as column}<th scope="col">{column.label}</th>{/each}</tr></thead>

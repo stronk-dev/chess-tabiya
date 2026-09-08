@@ -18925,3 +18925,23 @@ Advanced Inspector or Create.
 `make verify-software` passes 187 files / 1,169 tests plus performance, schema, manifest and build
 checks. `make test-browser` passes 64 desktop/mobile journeys with one explicitly optional Maia
 latency measurement skipped.
+
+## 2026-09-08 — Chronology closeout corrected after the whole-client census ([[D3161]], [[D3162]])
+
+The preceding chronology closeout was too broad. It removed ordinal `Ply N` copy from five
+renderers, but a post-commit whole-client census found the same internal term in counts and
+relationships across horizons, Timeline, branch groups, simulations, Compare, attempt history,
+live walls, resistance summaries and the import refusal. [[D3161]] now states its narrower shipped
+boundary and [[D3162]] owns the completed family rather than silently rewriting the original claim.
+
+Ordinary counts now say exact turns, learner moves or opponent moves according to what they count;
+run-relative ordinals say rehearsal step and Story retains whole-game move numbers. The shared
+chronology copy was separated from learner-rating presentation after the full gate proved that a
+generic resistance renderer could otherwise reach the isolated rating subsystem through its copy
+import. The graph guard remains strict and green.
+
+`make verify-software` passes 187 files / 1,170 tests, performance, schema, semantic manifests,
+production builds and learner-rating isolation. The first browser run correctly failed all 17
+journeys still asserting the old vocabulary; after their mounted contracts were updated,
+`make test-browser` passes 64 desktop/mobile journeys with one explicitly optional Maia latency
+measurement skipped.

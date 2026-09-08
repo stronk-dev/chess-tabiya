@@ -71,8 +71,11 @@ remain in their owning RFCs.
    pack id and UCI at the real App/API boundary.
 19. Ordinary chronology no longer exposes the runtime's raw ply counter. Timeline,
    checkpoint/terminal theory, Compare and pivotal details use one run-relative rehearsal-step
-   label; Story uses whole-game move numbers. Exact ply remains available only in Advanced
-   Inspector and authoring diagnostics.
+   label; Story uses whole-game move numbers. Counts name exact turns, learner moves or opponent
+   moves according to their actual population across horizons, branch groups, simulations,
+   attempts, live walls and resistance summaries. The copy authority is isolated from learner
+   rating, and exact ply remains available only in internal fields, Advanced Inspector and
+   authoring diagnostics.
 
 ## Remaining before archive
 

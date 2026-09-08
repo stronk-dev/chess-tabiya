@@ -2,7 +2,8 @@
   import { reviewStoryTitle, storyEvidenceSourceLabels, storyMomentSelection } from "@chess-tabiya/runtime";
   import type { GameStory, StoryShare } from "./api.js";
   import Chessboard from "./Chessboard.svelte";
-  import { recordedEvaluationTrajectory, storyMomentLabel, storyMoveLabel, storyOutcomeLabel, storyReentryCopy } from "./learner-copy.js";
+  import { storyMoveLabel, storyReentryCopy } from "./chronology-copy.js";
+  import { recordedEvaluationTrajectory, storyMomentLabel, storyOutcomeLabel } from "./learner-copy.js";
   import { storyCardDocument } from "./story-card.js";
 
   interface Props {

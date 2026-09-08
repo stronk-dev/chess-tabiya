@@ -21,7 +21,7 @@ export function importFailureCopy(value: unknown): string {
     if (/variations are not accepted/iu.test(message)) return "This importer keeps one played main line. Remove analysis variations, or export the completed game rather than the analysis tree.";
     if (/unsupported PGN variant/iu.test(message)) return `${message}. Only Standard and From Position games can be imported.`;
     if (/64 KiB/iu.test(message)) return "That PGN is larger than the 64 KiB single-game limit. Export one game without an attached analysis tree.";
-    if (/300 plies/iu.test(message)) return "That game is longer than the 300-ply import limit.";
+    if (/300 plies/iu.test(message)) return "That game is longer than the 300-turn import limit.";
     if (/at least one move/iu.test(message)) return "The PGN has headers but no played moves.";
     if (/invalid starting position/iu.test(message)) return "The PGN's starting position is invalid or incomplete.";
     if (/illegal PGN move:/iu.test(message)) return `A recorded move is illegal from the PGN's position (${message.replace(/^.*illegal PGN move:\s*/iu, "")}).`;
