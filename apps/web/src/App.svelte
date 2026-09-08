@@ -24,6 +24,8 @@
   import PackProvenanceEditor from "./lib/PackProvenanceEditor.svelte";
   import ShapePlanSignatureEditor from "./lib/ShapePlanSignatureEditor.svelte";
   import PackVocabularyEditor from "./lib/PackVocabularyEditor.svelte";
+  import CreateSeedChooser from "./lib/CreateSeedChooser.svelte";
+  import { clonePackForAuthoring, positionPackScaffold } from "./lib/pack-authoring-seeds.js";
   import { ThemeController } from "./lib/theme/controller.js";
   import { provideTheme } from "./lib/theme/context.js";
   import {
@@ -147,6 +149,8 @@
   let packLintError: string | undefined = $state();
   let packLintGeneration = 0;
   let withdrawConfirmId: string | undefined = $state();
+  let createSeedBusy = $state(false);
+  let createSeedError: string | undefined = $state();
   let shapeDrafts: readonly ShapeDraft[] = $state([]);
   let authoringShapes: readonly ShapeSummary[] = $state([]);
   let authoringPrinciples: readonly PrincipleSummary[] = $state([]);
@@ -672,13 +676,18 @@
         recommendationSelection = loaded[4].selection;
         repertoirePages=await loadRepertoirePages(repertoires);
       } else if (next.name === "create") {
-        [drafts, shapeDrafts, authoringShapes, authoringPrinciples, capabilities] = await Promise.all([
+        const loaded = await Promise.all([
           api.packDrafts?.() ?? Promise.resolve([]),
           api.shapeDrafts?.() ?? Promise.resolve([]),
           api.shapes(),
           api.principles?.() ?? Promise.resolve([]),
           api.capabilities(),
+          api.packs(),
+          initialRunPage(),
         ]);
+        [drafts, shapeDrafts, authoringShapes, authoringPrinciples, capabilities, packs] = loaded;
+        runs = loaded[6].runs;
+        runSelection = loaded[6].selection;
       } else if (next.name === "live") {
         const loaded=await Promise.all([api.liveSessions?.()??Promise.resolve([]),initialRunPage(),api.classrooms?.()??Promise.resolve([]),api.packs()]);
         [liveSessions,classrooms,packs]=[loaded[0],loaded[2],loaded[3]];runs=loaded[1].runs;runSelection=loaded[1].selection;
@@ -1027,6 +1036,64 @@
         studioJson = JSON.stringify(draft.document, null, 2);
       }
     } catch (error) { studioActionError = error instanceof Error ? error.message : String(error); }
+  }
+
+  async function openSeedDraft(action: () => Promise<PackDraft>): Promise<void> {
+    createSeedBusy = true;
+    createSeedError = undefined;
+    try {
+      const draft = await action();
+      drafts = [draft, ...drafts.filter((candidate) => candidate.id !== draft.id)];
+      selectedDraftId = draft.id;
+      studioJson = JSON.stringify(draft.document, null, 2);
+      await tick();
+      document.getElementById("pack-studio-editor")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (error) {
+      createSeedError = error instanceof Error ? error.message : String(error);
+    } finally {
+      createSeedBusy = false;
+    }
+  }
+
+  function seedSuffix(): string { return crypto.randomUUID().slice(0, 8); }
+
+  async function createPositionSeed(input: { readonly title: string; readonly fen: string; readonly side: "white" | "black" }): Promise<void> {
+    await openSeedDraft(async () => {
+      if (api.createPackDraft === undefined) throw new Error("Pack draft creation is unavailable.");
+      return api.createPackDraft(positionPackScaffold({ ...input, suffix: seedSuffix() }));
+    });
+  }
+
+  async function createGameSeed(input: { readonly title: string; readonly side: "white" | "black"; readonly pgn: string; readonly url: string }): Promise<void> {
+    await openSeedDraft(async () => {
+      if (api.importGame === undefined || api.distillRun === undefined) throw new Error("Game import and distillation are unavailable.");
+      const runId = `author-import-${crypto.randomUUID()}`;
+      const writer = WriterSession.claimFor(runId, storage);
+      const imported = await api.importGame({
+        id: runId,
+        side: input.side,
+        opponentPolicy: { mode: "human_common", targetElo: 1800 },
+        policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+        seed: Math.floor(Math.random() * 2_147_483_647),
+        source: input.url === "" ? { kind: "pgn", pgn: input.pgn } : { kind: "lichess", url: input.url },
+      }, writer.writerId);
+      return (await api.distillRun(imported.run.id, { packId: `distilled-${seedSuffix()}`, title: input.title, branchId: imported.run.activeCursor.branchId })).draft;
+    });
+  }
+
+  async function createRunSeed(input: { readonly runId: string; readonly title: string }): Promise<void> {
+    await openSeedDraft(async () => {
+      if (api.distillRun === undefined) throw new Error("Session distillation is unavailable.");
+      return (await api.distillRun(input.runId, { packId: `distilled-${seedSuffix()}`, title: input.title })).draft;
+    });
+  }
+
+  async function createPackSeed(packId: string): Promise<void> {
+    await openSeedDraft(async () => {
+      if (api.exportPack === undefined || api.createPackDraft === undefined) throw new Error("Pack copying is unavailable.");
+      const exported = await api.exportPack(packId);
+      return api.createPackDraft(clonePackForAuthoring(exported.document, seedSuffix()));
+    });
   }
 
   async function persistSelectedDraft(): Promise<PackDraft | undefined> {
@@ -1715,6 +1782,18 @@
     <main class="shell-view studio" aria-labelledby="create-title">
       <p class="eyebrow">Create / Pack Studio</p>
       <h1 id="create-title">Author against the real validator.</h1>
+      <CreateSeedChooser {packs} {runs} busy={createSeedBusy} error={createSeedError} onPosition={createPositionSeed} onGame={createGameSeed} onRun={createRunSeed} onPack={createPackSeed} onClearError={() => createSeedError = undefined} />
+      {#if !selectedDraftId}
+      <aside class="resume-drafts" aria-label="Your drafts">
+        <h2 id="resume-drafts-title">Resume one of your drafts</h2>
+        <div class="row-actions">
+          {#each drafts as draft}<button type="button" onclick={() => { selectedDraftId = draft.id; studioJson = JSON.stringify(draft.document, null, 2); studioActionError = undefined; withdrawConfirmId = undefined; }}>{draft.packId} · {draft.state}</button>{:else}<p>No saved pack drafts yet.</p>{/each}
+        </div>
+      </aside>
+      {/if}
+      {#if selectedDraftId}
+      <section id="pack-studio-editor" aria-labelledby="pack-studio-editor-title">
+      <h2 id="pack-studio-editor-title">Edit selected pack</h2>
       <div class="studio-grid pack-studio-grid">
         <aside aria-label="Your drafts">
           <h2>Your drafts</h2>
@@ -1780,6 +1859,8 @@
       <PackVocabularyEditor documentJson={studioJson} shapes={authoringShapes} principles={authoringPrinciples} onDocumentJson={(documentJson) => studioJson = documentJson} />
       <PackProvenanceEditor documentJson={studioJson} onDocumentJson={(documentJson) => studioJson = documentJson} />
       <p class="honest">Community registration does not make a pack official. Official packs enter through git and the deployment image.</p>
+      </section>
+      {/if}
       <section class="vocabulary-status" aria-labelledby="vocabulary-status-title">
         <p class="eyebrow">Authoring capabilities</p>
         <h2 id="vocabulary-status-title">Vocabulary status</h2>
@@ -2127,6 +2208,9 @@
   .audience-preview { margin-top: 1rem; padding: 0.75rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
   .audience-preview iframe { display: block; width: 100%; min-height: min(38rem, 72vh); border: 0; border-radius: 0.6rem; background: transparent; }
   .studio-grid { display: grid; grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr); gap: 1rem; }
+  .resume-drafts { display: grid; gap: .6rem; margin-block: 1rem; padding-block: 1rem; border-block: 1px solid var(--line); }
+  .resume-drafts h2, #pack-studio-editor > h2 { margin: 0; font: 600 1.25rem var(--display-font); }
+  #pack-studio-editor { scroll-margin-top: 1rem; }
   .pack-studio-grid { grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr) minmax(16rem, 22rem); }
   .studio-grid aside { display: grid; align-content: start; gap: 0.5rem; overflow: auto; }
   .studio-grid section { display: grid; gap: 0.5rem; min-width: 0; }

@@ -5,6 +5,13 @@ same living pack validator as `make pack-check`, saves incomplete drafts, allows
 validation-clean drafts against the real run service, and registers immutable community
 versions.
 
+Create begins with four concrete sources rather than an empty document: an arbitrary position
+entered as FEN or reached by legal moves on the production board, a finished Lichess game or PGN,
+a saved run, or an existing served pack. Position authoring emits the complete ten-field document
+shape with explicit authoring and graduation blockers. Games and runs travel through the existing
+import/distillation boundary, while an existing pack is exported and copied under a fresh id and
+version with an explicit review blocker. None of these mechanical seeds invents chess judgement.
+
 Studio lint, saved-draft validation, playtest admission, and registration all receive the same
 shape, principle, and sibling-pack lookups. Unknown or off-phase principles and unknown or
 unproven `variantOf` relations therefore fail in Studio instead of appearing clean until a later
@@ -79,9 +86,11 @@ startup restores both registered and playtest digest resolution from SQLite.
 
 ## HTTP and client
 
-The first Studio surface supports listing, creating, reading, replacing, linting,
+The Studio surface supports listing, creating, reading, replacing, linting,
 playtesting, registering, withdrawing, and exporting drafts/packs under `/packs/drafts…` and
-`/packs/:id/export`. Draft reads are owner-scoped. `PUT` requires `If-Match`; stale editors get
+`/packs/:id/export`. Authenticated export includes live official and community registry packs, so
+the existing-pack source sees the same documents as Play. Draft reads are owner-scoped. `PUT`
+requires `If-Match`; stale editors get
 `DRAFT_STALE` with the current digest.
 
 `GET /principles` exposes the existing official principle registry as a stable, id-sorted summary
@@ -89,14 +98,16 @@ catalogue, and the typed browser API consumes the same shape. It is public like 
 catalogues. This closes the missing data boundary for later registry-backed authoring controls; it
 does not turn ungrounded principle entries into endorsed chess truth.
 
-`/create` exposes the real JSON document, validation issues with paths, create/save actions,
+`/create` exposes the real JSON document after the author chooses a source or resumes a draft,
+validation issues with paths, create/save actions,
 private playtesting, confirmed withdrawal, and community registration. Save & playtest persists
 the current editor bytes and opens a real run; the server—not the author—chooses its run id, safe
 random seed, and per-run policy configuration. Invalid drafts name their blocking validation
 issues instead of offering an inert action. Withdrawal makes mutable bytes read-only while earlier
-private playtests keep resolving their exact digest. Studio remains an intentionally low-level
-authoring instrument: structured controls edit the same visible JSON rather than hiding or
-replacing the document authority.
+private playtests keep resolving their exact digest. Advanced editing retains the visible JSON as
+the document authority, while ordinary entry and registry-backed fields use guided controls over
+those same bytes. The raw editor is therefore an inspector and escape hatch, not the first thing an
+author must understand.
 
 While a mutable pack is selected, the client debounces the editor buffer for 300 ms and sends those
 unsaved bytes to `POST /packs/drafts/:id/lint`. Superseded responses cannot replace newer results,

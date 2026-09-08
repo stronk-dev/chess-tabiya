@@ -1436,7 +1436,7 @@ describe("application shell", () => {
     };
     const component = mount(App, { target: target(), props: { api: shapeApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
-    await vi.waitFor(() => expect(document.body.textContent).toContain("Paste a v0.27 pack to begin."));
+    await vi.waitFor(() => expect(document.body.textContent).toContain("What are you starting from?"));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your shape drafts'] button")!.click();
     for (const [label, message] of [
       ["Create shape draft", "create shape failed"],
@@ -1447,6 +1447,98 @@ describe("application shell", () => {
       [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === label)!.click();
       await vi.waitFor(() => expect(document.querySelector<HTMLElement>("p[role='alert']")?.textContent).toBe(message));
     }
+    await unmount(component);
+  });
+
+  it("opens Create on four working seed doors instead of a raw pack textarea", async () => {
+    history.replaceState(null, "", "/create");
+    const createdDocuments: unknown[] = [];
+    const draftFor = (document: unknown, index = createdDocuments.length): PackDraft => ({
+      id: `seed-draft-${index}`,
+      packId: String((document as { id?: string }).id ?? `seed-${index}`),
+      document,
+      digest,
+      state: "draft",
+      validation: { valid: false, issues: [] },
+    });
+    const createPackDraft = vi.fn(async (document: unknown) => {
+      createdDocuments.push(document);
+      return draftFor(document);
+    });
+    const distillRun = vi.fn(async (_runId: string, input: { readonly packId: string; readonly title: string }) => ({
+      draft: draftFor({ ...pack, id: input.packId, title: input.title, provenance: { reviewStatus: "draft", graduationBlockers: ["Review"] } }),
+      proposals: [],
+      dropped: [],
+    }));
+    const importGame = vi.fn(async () => ({ run, importRecord: {} as never, evidencePass: { jobs: 0 } }));
+    const exportPack = vi.fn(async () => ({ document: pack, digest }));
+    const studioApi: DrillClientApi = { ...api(), createPackDraft, distillRun, importGame, exportPack };
+    const component = mount(App, { target: target(), props: { api: studioApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
+    const backToDoors = async (): Promise<void> => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Back to four choices")!;
+      await vi.waitFor(() => expect(button.disabled).toBe(false));
+      button.click();
+      await tick();
+    };
+
+    await vi.waitFor(() => expect(document.body.textContent).toContain("What are you starting from?"));
+    for (const label of ["Position", "Finished game", "Run you played", "Existing pack"]) expect(document.body.textContent).toContain(label);
+    expect(document.querySelector("#studio-json")).toBeNull();
+
+    [...document.querySelectorAll<HTMLButtonElement>(".seed-doors button")].find((button) => button.textContent?.includes("Position"))!.click();
+    await tick();
+    const positionForm = document.querySelector<HTMLFormElement>(".seed-chooser form")!;
+    const title = positionForm.querySelector<HTMLInputElement>('input[placeholder="What consequence will this rehearse?"]')!;
+    title.value = "Queenside squeeze";
+    title.dispatchEvent(new Event("input", { bubbles: true }));
+    positionForm.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    await vi.waitFor(() => expect(createPackDraft).toHaveBeenCalledTimes(1));
+    const scaffold = createdDocuments[0] as Record<string, unknown>;
+    expect(Object.keys(scaffold)).toEqual(expect.arrayContaining(["id", "version", "title", "mode", "start", "objective", "checkpoints", "opponentPolicy", "feedbackPolicy", "provenance"]));
+    await vi.waitFor(() => expect(document.querySelector("#studio-json")).not.toBeNull());
+
+    await backToDoors();
+    [...document.querySelectorAll<HTMLButtonElement>(".seed-doors button")].find((button) => button.textContent?.includes("Finished game"))!.click();
+    await tick();
+    const gameForm = document.querySelector<HTMLFormElement>(".seed-chooser form")!;
+    const gameInputs = gameForm.querySelectorAll<HTMLInputElement>("input");
+    gameInputs[0]!.value = "Game lesson";
+    gameInputs[0]!.dispatchEvent(new Event("input", { bubbles: true }));
+    const pgn = gameForm.querySelector<HTMLTextAreaElement>("textarea")!;
+    pgn.value = "1. e4 e5 2. Nf3 Nc6";
+    pgn.dispatchEvent(new Event("input", { bubbles: true }));
+    gameForm.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    await vi.waitFor(() => expect(importGame).toHaveBeenCalledTimes(1));
+    await vi.waitFor(() => expect(distillRun).toHaveBeenCalledWith(run.id, expect.objectContaining({ title: "Game lesson", branchId: run.activeCursor.branchId })));
+
+    await backToDoors();
+    [...document.querySelectorAll<HTMLButtonElement>(".seed-doors button")].find((button) => button.textContent?.includes("Run you played"))!.click();
+    await tick();
+    const runForm = document.querySelector<HTMLFormElement>(".seed-chooser form")!;
+    const runSelect = runForm.querySelector<HTMLSelectElement>("select")!;
+    runSelect.selectedIndex = 1;
+    runSelect.value = run.id;
+    runSelect.dispatchEvent(new Event("input", { bubbles: true }));
+    runSelect.dispatchEvent(new Event("change", { bubbles: true }));
+    await tick();
+    const runName = runForm.querySelector<HTMLInputElement>("input")!;
+    runName.value = "Run lesson";
+    runName.dispatchEvent(new Event("input", { bubbles: true }));
+    runForm.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    await vi.waitFor(() => expect(distillRun).toHaveBeenCalledWith(run.id, expect.objectContaining({ title: "Run lesson" })));
+
+    await backToDoors();
+    [...document.querySelectorAll<HTMLButtonElement>(".seed-doors button")].find((button) => button.textContent?.includes("Existing pack"))!.click();
+    await tick();
+    const packForm = document.querySelector<HTMLFormElement>(".seed-chooser form")!;
+    const packSelect = packForm.querySelector<HTMLSelectElement>("select")!;
+    packSelect.value = pack.id;
+    packSelect.dispatchEvent(new Event("change", { bubbles: true }));
+    await tick();
+    packForm.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true }));
+    await vi.waitFor(() => expect(exportPack).toHaveBeenCalledWith(pack.id));
+    await vi.waitFor(() => expect(createPackDraft).toHaveBeenCalledTimes(2));
+    expect((createdDocuments[1] as DrillPackDefinition).id).toMatch(new RegExp(`^${pack.id}-copy-`, "u"));
     await unmount(component);
   });
 
@@ -1659,8 +1751,12 @@ describe("application shell", () => {
 
     await vi.waitFor(() => expect(document.body.textContent).toContain(`${pack.id} · draft`));
     document.querySelector<HTMLButtonElement>("aside[aria-label='Your drafts'] button")!.click();
-    const withdraw = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Withdraw…")!;
-    await vi.waitFor(() => expect(withdraw.disabled).toBe(false));
+    const withdraw = await vi.waitFor(() => {
+      const button = [...document.querySelectorAll<HTMLButtonElement>("button")].find((candidate) => candidate.textContent === "Withdraw…");
+      expect(button).toBeDefined();
+      expect(button!.disabled).toBe(false);
+      return button!;
+    });
     withdraw.click();
     expect(withdrawPackDraft).not.toHaveBeenCalled();
     await vi.waitFor(() => expect(document.body.textContent).toContain("Existing private playtest runs keep their exact tested bytes."));

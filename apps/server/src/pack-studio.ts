@@ -163,8 +163,10 @@ export class PackStudio {
 
   export(packId: string, principal: Principal) {
     const row = [...this.#storage.registeredPacks()].reverse().find((candidate) => candidate.packId === packId);
-    if (row === undefined) throw new ServerError("PACK_NOT_FOUND", `Unknown community pack: ${packId}`);
-    return Object.freeze({ format: "chess-tabiya-pack", version: 1, document: row.document, digest: row.digest, publisherHandle: row.publisherHandle });
+    if (row !== undefined) return Object.freeze({ format: "chess-tabiya-pack", version: 1, document: row.document, digest: row.digest, publisherHandle: row.publisherHandle });
+    const served = this.#registry.get(packId);
+    if (served === undefined) throw new ServerError("PACK_NOT_FOUND", `Unknown served pack: ${packId}`);
+    return Object.freeze({ format: "chess-tabiya-pack", version: 1, document: served.document, digest: served.digest, ...(served.publisherHandle === undefined ? {} : { publisherHandle: served.publisherHandle }) });
   }
 
   #validationOptions() {

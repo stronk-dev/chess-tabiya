@@ -64,6 +64,7 @@ describe("Pack Studio", () => {
     const draft = studio.create(principal, { document: officialCollision });
     expect(() => studio.register(draft.id, principal)).toThrow(/reserved/);
     expect(registry.required(fixture.id).channel).toBe("official");
+    expect(studio.export(fixture.id, principal)).toMatchObject({ document: { id: fixture.id }, digest: registry.required(fixture.id).digest });
   });
 
   it("hydrates registered versions after restart", async () => {

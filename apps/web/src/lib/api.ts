@@ -895,6 +895,7 @@ export interface DrillClientApi extends RunApi {
   playtestPackDraft?(draftId: string, writerId: string): Promise<{ readonly run: DrillRun; readonly url: string }>;
   registerPackDraft?(draftId: string): Promise<PackSummary>;
   withdrawPackDraft?(draftId: string): Promise<void>;
+  exportPack?(packId: string): Promise<{ readonly document: unknown; readonly digest: string; readonly publisherHandle?: string }>;
   shapeDrafts?(): Promise<readonly ShapeDraft[]>;
   createShapeDraft?(document: unknown): Promise<ShapeDraft>;
   updateShapeDraft?(draftId: string, digest: string, document: unknown): Promise<ShapeDraft>;
@@ -1197,6 +1198,10 @@ export class DrillApi implements DrillClientApi {
 
   async withdrawPackDraft(draftId: string): Promise<void> {
     await this.#json(`/packs/drafts/${encoded(draftId)}/withdraw`, { method: "POST", body: {} });
+  }
+
+  exportPack(packId: string): Promise<{ readonly document: unknown; readonly digest: string; readonly publisherHandle?: string }> {
+    return this.#json(`/packs/${encoded(packId)}/export`);
   }
 
   async shapeDrafts(): Promise<readonly ShapeDraft[]> {

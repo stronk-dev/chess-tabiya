@@ -2935,17 +2935,21 @@
     {
       "id": "AUT-a9",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§3 A1/A2",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "`/create` opens on a four-door chooser (position · game · run · existing pack); the fourth door produces a ten-required-field scaffold with placeholders rather than an empty string",
       "legacyRoute": "none",
       "note": "the first door wants a board (owner decision 4)",
-      "sourceDigest": "sha256:430437d1ccc718ca81c914a2ad66d61a742dad3d3fcaeb9b27eaca5421708b34"
+      "sourceDigest": "sha256:430437d1ccc718ca81c914a2ad66d61a742dad3d3fcaeb9b27eaca5421708b34",
+      "completion": {
+        "completedOn": "2026-09-08",
+        "evidence": "Create supplies four working sources: position seeds use legal board moves and a complete ten-required-field scaffold; finished games and saved runs use the distillation boundary; served packs export and clone under a fresh identity. Raw JSON stays absent until a source or saved draft is chosen."
+      }
     },
     {
       "id": "AUT-b1",

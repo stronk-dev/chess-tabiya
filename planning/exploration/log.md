@@ -18739,3 +18739,17 @@ synthetic Carlsbad witness with the initial position under the official shape, a
 `/create` journey proves that editing
 the recursive trigger schedules a fresh corpus request, renders its 1-of-12 denominator, and opens
 the returned board witness.
+
+## 2026-09-08 — Create begins from four real chess sources
+
+AUT-a9 is complete. `/create` no longer opens on a raw document textarea. It first offers four
+working authoring sources: a position entered as FEN or reached through legal moves on the
+production board, a finished Lichess game or PGN, a saved run, or an existing served pack. The
+position path emits all ten required top-level fields with explicit authoring and graduation
+blockers. Game and run paths use the existing import/distillation boundary. The pack path exports
+from the live registry and gives the copy a fresh id, version, title, and review blocker.
+
+The JSON editor remains the advanced document authority after a source or saved draft is chosen;
+it is no longer the prerequisite for beginning. Pure seed contracts cover document completeness,
+legal movement, and clone immutability. The mounted application contract traverses all four doors
+through their real client boundaries.
