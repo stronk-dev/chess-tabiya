@@ -13,6 +13,7 @@
     canConfirm?: boolean;
     rewindableNodeIds?: ReadonlySet<string>;
     authoredSpineNodeIds?: ReadonlySet<string>;
+    checkpointLabels?: Readonly<Record<string, string>>;
     rootNodeId?: string | undefined;
     shapeMarkers?: readonly { readonly nodeId: string; readonly entryId: string; readonly label: string; readonly channel: "official" | "community" }[];
     onOpenShape?: (entryId: string) => void;
@@ -32,6 +33,7 @@
     canConfirm = true,
     rewindableNodeIds = new Set<string>(),
     authoredSpineNodeIds = new Set<string>(),
+    checkpointLabels = {},
     rootNodeId,
     shapeMarkers = [],
     onOpenShape = () => {},
@@ -48,6 +50,11 @@
   }
   function pivotalAt(nodeId: string): readonly { readonly nodeId: string; readonly label: string }[] {
     return pivotalMarkers.filter((marker) => marker.nodeId === nodeId);
+  }
+  function checkpointAnnouncement(ids: readonly string[]): string {
+    const labels = ids.map((id) => checkpointLabels[id]).filter((label): label is string => label !== undefined);
+    if (labels.length !== ids.length) return ids.length === 1 ? "checkpoint reached" : `${ids.length} checkpoints reached`;
+    return `${ids.length === 1 ? "checkpoint" : "checkpoints"} ${labels.join(" and ")}`;
   }
   function branchesAt(nodeId: string | undefined) {
     if (nodeId === undefined) return [];
@@ -82,7 +89,7 @@
           class:preview={previewNodeId === entry.nodeId}
           aria-current={activeNodeId === entry.nodeId ? "step" : undefined}
           aria-label={`${rehearsalStepLabel(entry.ply)}: ${entry.moveSan}${
-            entry.checkpointIds.length > 0 ? `, checkpoint ${entry.checkpointIds.join(", ")}` : ""
+            entry.checkpointIds.length > 0 ? `, ${checkpointAnnouncement(entry.checkpointIds)}` : ""
           }`}
           onclick={() => onPreview(entry.nodeId)}
         >

@@ -19079,3 +19079,18 @@ companion identity and refuses both storage forms from the document. `make verif
 188 files / 1,179 tests including production builds and semantic manifests; `make test-browser`
 passes all 64 required desktop/mobile journeys with one explicitly optional Maia measurement
 skipped.
+
+## 2026-09-08 — Checkpoint names no longer split visual and accessible runs ([[D3173]])
+
+The timeline's visible marker disclosed only that a checkpoint existed, while its accessible name
+read the literal `checkpointId`; the rewind picker used the same storage id as its missing-label
+fallback. The pack already carries the learner-facing label, so the semantic projection—not the
+visual one—was bypassing the product vocabulary. `DrillScreen` now derives one admitted label map
+and supplies it to both paths. An unresolved historical reference becomes “checkpoint reached” in
+the timeline and “Recorded checkpoint” in the picker rather than claiming an absent name.
+
+The Timeline fixture covers both a resolved `reply-seen` label and the honest-unresolved arm and
+refuses the id. The mounted keyboard rewind-picker path requires the authored “Choose the setup”
+label and refuses `plan-commitment`. `make verify-software` passes 188 files / 1,180 tests including
+production builds and semantic manifests; `make test-browser` passes all 64 required desktop/mobile
+journeys with one explicitly optional Maia measurement skipped.

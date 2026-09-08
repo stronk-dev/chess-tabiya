@@ -383,7 +383,9 @@ checkpoint, guard-return target, or terminal-return target is explicitly preview
 recorded consequence boundary the rewind offer states that the current attempt survives before
 confirmation. The Timeline caller must declare whether that confirmation is free or spends one
 earned rewind; the ordinary drill declares and renders the free policy, while a future Campaign
-composition cannot inherit it implicitly.
+composition cannot inherit it implicitly. Checkpoint markers and the rewind picker resolve the
+pack's authored checkpoint labels; an unresolved historical reference is described neutrally and
+never exposes its storage id through the accessible name.
 
 The checkpoint sheet takes focus and exposes continue, rewind, compare when
 the authored checkpoint allows it, and stop. Objective transitions are never

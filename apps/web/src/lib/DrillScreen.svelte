@@ -371,6 +371,13 @@
       ? "Nothing is authored about this position — Tabiya reads it as you play, and marks the moments worth returning to."
       : packObjective(pack),
   );
+  let checkpointLabels: Readonly<Record<string, string>> = $derived.by(() => Object.freeze(Object.fromEntries(
+    (pack?.checkpoints ?? []).flatMap((item): [string, string][] =>
+      typeof item.label === "string" && item.label.trim() !== "" ? [[item.id, item.label]] : []),
+  )));
+  function checkpointDisplayLabel(checkpointId: string): string {
+    return checkpointLabels[checkpointId] ?? "Recorded checkpoint";
+  }
 
   function changedMarks(shapes: readonly DrawShape[]): void {
     if (onSaveMarks === undefined || previewNodeId !== undefined) return;
@@ -1201,6 +1208,7 @@
             canConfirm={canWrite}
             rewindableNodeIds={timelineRewindNodeIds}
             {authoredSpineNodeIds}
+            {checkpointLabels}
             rootNodeId={run.nodes[0]?.id}
             {shapeMarkers}
             onOpenShape={showShape}
@@ -1679,7 +1687,7 @@
         {#each [...run.events].reverse().filter((event) => event.type === "checkpoint.reached") as event}
           {#if event.type === "checkpoint.reached"}
             <button type="button" onclick={() => { checkpointPickerOpen = false; void rewindRun({ checkpointId: event.data.checkpointId }); }}>
-              {pack?.checkpoints.find((item) => item.id === event.data.checkpointId)?.label ?? event.data.checkpointId}
+              {checkpointDisplayLabel(event.data.checkpointId)}
             </button>
           {/if}
         {:else}<p>No checkpoint reached yet.</p>{/each}

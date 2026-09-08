@@ -1468,6 +1468,8 @@ describe("Layer 3 screens", () => {
     key("R", { shiftKey: true });
     await tick();
     expect(document.body.textContent).toContain("Choose a checkpoint.");
+    expect(document.querySelector(".checkpoint-options")?.textContent).toContain("Choose the setup");
+    expect(document.querySelector(".checkpoint-options")?.textContent).not.toContain("plan-commitment");
     expect(document.activeElement?.id).toBe("picker-title");
     key("Escape");
     await tick();

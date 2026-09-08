@@ -39,6 +39,37 @@ describe("timeline rewind timing", () => {
     await unmount(component);
   });
 
+  it("announces authored checkpoint labels without exposing checkpoint ids", async () => {
+    const component = mount(Timeline, { target: target(), props: {
+      entries,
+      activeNodeId: "checkpoint-1",
+      onPreview: vi.fn(),
+      onConfirm: vi.fn(),
+      rewindPolicy: "free",
+      checkpointLabels: { "reply-seen": "Compare the reply" },
+    } });
+    await tick();
+
+    const checkpoint = document.querySelector<HTMLElement>('[data-timeline-node="checkpoint-1"]')!;
+    expect(checkpoint.getAttribute("aria-label")).toBe("Rehearsal step 2: d5, checkpoint Compare the reply");
+    expect(checkpoint.getAttribute("aria-label")).not.toContain("reply-seen");
+    await unmount(component);
+
+    const unresolved = mount(Timeline, { target: target(), props: {
+      entries,
+      activeNodeId: "checkpoint-1",
+      onPreview: vi.fn(),
+      onConfirm: vi.fn(),
+      rewindPolicy: "free",
+    } });
+    await tick();
+    expect(document.querySelector<HTMLElement>('[data-timeline-node="checkpoint-1"]')?.getAttribute("aria-label")).toBe(
+      "Rehearsal step 2: d5, checkpoint reached",
+    );
+    expect(document.body.textContent).not.toContain("reply-seen");
+    await unmount(unresolved);
+  });
+
   it("keeps arbitrary history inspectable without presenting it as an undo point", async () => {
     const onConfirm = vi.fn();
     const component = mount(Timeline, { target: target(), props: {
