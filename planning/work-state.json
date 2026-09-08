@@ -3674,11 +3674,12 @@
     },
     {
       "id": "D470",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:c085a94293085d9de359ceb30f01a7f9defe95089d23096425fe34cb6d8f5c8b",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:73105c2bcf5bf935f0e405c40cff5e9cd2d5db0516d55a663308b40aeb1b721d",
       "uxItems": [],
-      "owner": "content-and-theory"
+      "evidence": "apps/server/src/refusal-coverage.test.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D471",
@@ -25700,6 +25701,15 @@
       "sourceDigest": "sha256:26e31798ca5cb894dbf086cbfc5f8e347ab8fde21ac506496c24fcc9cbcaad9d",
       "uxItems": [],
       "owner": "review-and-return"
+    },
+    {
+      "id": "D3147",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:76fa1eba0800ddca7eafffbbd03c1cc5ae6a48d4688cb10e92db2b5b6f696958",
+      "uxItems": [],
+      "evidence": "apps/server/src/refusal-coverage.test.ts",
+      "evidenceKind": "path"
     }
   ]
 }

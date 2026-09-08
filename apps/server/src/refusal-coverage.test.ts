@@ -5,7 +5,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 import { describe, expect, it } from "vitest";
 
-import { validatePackDocument } from "./pack-validation.js";
+import { INLINE_EVIDENCE_KEYS, validatePackDocument } from "./pack-validation.js";
 
 function document(path: string): DrillPackDefinition {
   return JSON.parse(readFileSync(new URL(path, import.meta.url), "utf8")) as DrillPackDefinition;
@@ -27,6 +27,10 @@ function codes(value: unknown, options: Parameters<typeof validatePackDocument>[
 
 function has(value: unknown, code: string, options: Parameters<typeof validatePackDocument>[1] = {}): void {
   expect(codes(value, options), code).toContain(code);
+}
+
+function lacks(value: unknown, code: string, options: Parameters<typeof validatePackDocument>[1] = {}): void {
+  expect(codes(value, options), code).not.toContain(code);
 }
 
 function testSources(directory: URL): string[] {
@@ -273,6 +277,28 @@ describe("fixed refusal-code coverage", () => {
     const inline = clone(example);
     inline.provenance.engineValidation = {};
     has(inline, "PROVENANCE_EVIDENCE_INLINE");
+
+    for (const key of INLINE_EVIDENCE_KEYS) {
+      const inline = clone(example);
+      inline.provenance[key] = {};
+      expect(codes(inline).filter((code) => code === "PROVENANCE_EVIDENCE_INLINE"), key).toHaveLength(1);
+
+      const promised = clone(example);
+      promised.provenance.sources = [`Full detail remains in provenance.${key}.`];
+      expect(codes(promised).filter((code) => code === "PROVENANCE_SOURCE_PROMISES_INLINE"), key).toHaveLength(1);
+    }
+
+    const promisedInline = clone(example);
+    promisedInline.provenance.sources = ["Full engine detail remains in provenance.engineValidation."];
+    has(promisedInline, "PROVENANCE_SOURCE_PROMISES_INLINE");
+
+    const siblingSidecar = clone(example);
+    siblingSidecar.provenance.sources = ["Full engine detail is recorded in carlsbad-minority-attack.evidence.json."];
+    lacks(siblingSidecar, "PROVENANCE_SOURCE_PROMISES_INLINE");
+
+    const ordinaryVerb = clone(example);
+    ordinaryVerb.provenance.sources = ["The cited article records that this move order transposes."];
+    lacks(ordinaryVerb, "PROVENANCE_SOURCE_PROMISES_INLINE");
 
     const shallow = clone(example);
     shallow.objective.grading = { assessedBy: { kind: "engine", score: { kind: "cp", centipawns: 0 }, perspective: "white", depth: 21, engineId: "sf", engineVersion: "18", sourceId: "sf", retrievedAt: "2026-08-15T00:00:00.000Z" }, resolveAt: { kind: "terminal" } };

@@ -22,6 +22,7 @@ import { stampDeviationCosts } from "./deviation-cost.js";
 const AUTHOR_PACK_RATIONALE = "the author's own drill pack; its FENs and moves state facts about chess positions";
 const OFFLINE_FIXTURES = resolve("apps/server/src/sourcing/fixtures/verify-draft.json");
 const OFFLINE_ENGINE_FIXTURES = resolve("apps/server/src/sourcing/fixtures/verify-draft-engine.json");
+let offlineEngineAnswers: Promise<Readonly<Record<string, PositionSeedEngineAnswer>>> | undefined;
 
 interface EnumeratedPosition {
   readonly fen: string;
@@ -226,7 +227,8 @@ function scoreText(score: ReturnType<typeof engineScore>): string {
 }
 
 async function offlineEngineEvaluator(fen: string): Promise<PositionSeedEngineAnswer> {
-  const fixture = await readJson(OFFLINE_ENGINE_FIXTURES) as Record<string, PositionSeedEngineAnswer>;
+  offlineEngineAnswers ??= readJson(OFFLINE_ENGINE_FIXTURES) as Promise<Record<string, PositionSeedEngineAnswer>>;
+  const fixture = await offlineEngineAnswers;
   const answer = fixture[fen];
   if (answer === undefined) throw new SourcingError("VERIFY_ENGINE_UNAVAILABLE", `offline fixture missing FEN ${fen}`);
   return answer;
@@ -274,7 +276,7 @@ async function verifyEngineDraft(file: string, options: VerifyDraftOptions): Pro
   const declared = assessedBy.score;
   const agrees = measured.kind === declared.kind && (measured.kind === "cp" ? measured.centipawns === (declared as { centipawns: number }).centipawns : measured.movesToMate === (declared as { movesToMate: number }).movesToMate);
   if (!agrees || root.values.engineId !== assessedBy.engineId || root.values.engineVersion !== assessedBy.engineVersion || root.values.depth !== assessedBy.depth) {
-    throw new SourcingError("VERIFY_ASSESSMENT_CONTRADICTED", `declared ${scoreText(declared)} at depth ${assessedBy.depth} by ${assessedBy.engineId} ${assessedBy.engineVersion}; this run measured ${scoreText(measured)} — re-declare, or re-check the engine build`);
+    throw new SourcingError("VERIFY_ASSESSMENT_CONTRADICTED", `declared ${scoreText(declared)} at depth ${assessedBy.depth} by ${assessedBy.engineId} ${assessedBy.engineVersion}; this run measured ${scoreText(measured)} at depth ${String(root.values.depth)} by ${String(root.values.engineId)} ${String(root.values.engineVersion)} — re-declare, or re-check the engine build`);
   }
 
   const warnings: string[] = [];
@@ -330,18 +332,20 @@ export async function verifyDraft(file: string, options: VerifyDraftOptions = {}
 }
 
 async function main(): Promise<number> {
-  const file = process.argv[2];
-  if (file === undefined) { console.error("Usage: make verify-draft FILE=<path-to-pack.json> [OFFLINE=1]"); return 2; }
-  try {
-    const result = await verifyDraft(file, { offline: process.env.OFFLINE === "1" });
-    for (const warning of result.warnings) console.warn(`WARNING ${warning}`);
-    const grounding = assessmentGrounding({ document: result.pack, documentDigest: await digestDrillPack(result.pack), ledger: result.ledger, manifest: result.manifest });
-    console.log(`Verified ${result.pack.id}: ${grounding}${process.env.OFFLINE === "1" ? " (offline fixture; not promotion evidence)" : ""}`);
-    return 0;
-  } catch (error) {
-    if (error instanceof SourcingError) { console.error(`ERROR [${error.code}] ${error.message}`); return 1; }
-    throw error;
+  const files = process.argv.slice(2);
+  if (files.length === 0) { console.error("Usage: make verify-draft FILE=<path-to-pack.json> [OFFLINE=1] or FILES='<paths...>'"); return 2; }
+  for (const file of files) {
+    try {
+      const result = await verifyDraft(file, { offline: process.env.OFFLINE === "1" });
+      for (const warning of result.warnings) console.warn(`WARNING ${warning}`);
+      const grounding = assessmentGrounding({ document: result.pack, documentDigest: await digestDrillPack(result.pack), ledger: result.ledger, manifest: result.manifest });
+      console.log(`Verified ${result.pack.id}: ${grounding}${process.env.OFFLINE === "1" ? " (offline fixture; not promotion evidence)" : ""}`);
+    } catch (error) {
+      if (error instanceof SourcingError) { console.error(`ERROR [${error.code}] ${error.message}`); return 1; }
+      throw error;
+    }
   }
+  return 0;
 }
 
 if (process.argv[1]?.endsWith("verify-draft.js")) process.exitCode = await main();

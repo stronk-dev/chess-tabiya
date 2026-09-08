@@ -18627,3 +18627,15 @@ the held schema 0.29 migration and authored corpus-population discharges remain 
 
 The canonical `make test-software` gate passes with 184 files and 1,148 tests, and the real
 `make graduation-report` walk completes over all catalogue roots.
+
+## 2026-09-08 — Pack provenance P4 and Job A land together
+
+The pack validator now refuses a source string that promises evidence in any forbidden inline
+provenance key, using the same four-member vocabulary as the schema and runtime inline-key
+refusals. Positive and negative fixtures prove a real sibling sidecar remains legal. The 20
+existing impossible promises and one dangling node citation were repaired mechanically, and all
+affected sidecars were digest-restamped against the explicitly non-promoting Stockfish-18 offline
+fixture. `verify-draft` also accepts a batch and reports both complete engine tuples when identity,
+version, depth, or score disagree. The canonical software gate passes with 184 files and 1,149
+tests. [[D470]] and [[D3147]] close; pack-schema lane 0.29, corpus-population authorship, and
+explorer claim binding remain open.

@@ -95,6 +95,32 @@ describe("verify-draft", () => {
     expect(second.ledger.packDigest).toBe(first.ledger.packDigest);
   });
 
+  it("reports the complete measured engine tuple when an assessment identity differs", async () => {
+    const { file, pack } = await engineFixture();
+    const assessedBy = pack.objective.grading?.assessedBy;
+    expect(assessedBy?.kind).toBe("engine");
+    if (assessedBy?.kind !== "engine") throw new Error("fixture must carry an engine assessment");
+    const measuredValues = assessedBy.score.kind === "cp"
+      ? { centipawns: assessedBy.score.centipawns }
+      : { mate: assessedBy.score.movesToMate };
+
+    await expect(verifyDraft(file, {
+      engineEvaluator: async (fen) => ({
+        source: {} as any,
+        values: {
+          fen,
+          ...measuredValues,
+          depth: assessedBy.depth,
+          engineId: assessedBy.engineId,
+          engineVersion: "19",
+        },
+      }),
+    })).rejects.toMatchObject({
+      code: "VERIFY_ASSESSMENT_CONTRADICTED",
+      message: expect.stringContaining(`this run measured ${assessedBy.score.kind === "cp" ? `${assessedBy.score.centipawns}cp` : `mate ${assessedBy.score.movesToMate}`} at depth ${assessedBy.depth} by ${assessedBy.engineId} 19`),
+    });
+  });
+
   it("records offline tablebase fixtures as local input and does not grant ledger_verified", async () => {
     const { file } = await fixture();
     const result = await verifyDraft(file, {

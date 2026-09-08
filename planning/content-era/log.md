@@ -3865,3 +3865,18 @@ until a second pass measured the pack start positions the sentence actually name
   ([[D2477]]–[[D2480]]).
 - `backedClaims` is expected to remain 1: records do not select or author the seven full-set census
   claims. That human binding residue stays with [[D476]] rather than being manufactured here.
+
+## 2026-09-08 — Job A provenance-promise repair
+
+- Replaced the impossible `provenance.engineValidation` promise in exactly 20 authored drafts
+  with each pack's sibling `<pack>.evidence.json` name. Removed the dangling `bxc5-recoup`
+  citation from `anti-caro-advance-early-c5`; no chess move, assessment, claim, rationale, trigger,
+  condition, or evidence binding changed.
+- Added P4 at the pack boundary: all four forbidden inline-evidence keys come from one exported
+  vocabulary, and both carrying a key and promising it in `provenance.sources` fail permanent
+  positive/negative controls. P4 moved from 20 corpus firings to 0 after the repairs.
+- Re-stamped every affected evidence and source sidecar with `make verify-draft OFFLINE=1`. The
+  command explicitly reports that the pinned Stockfish-18 fixture is not promotion evidence; all
+  packs remain drafts. Batch verification now accepts `FILES=...` and loads that fixture once.
+- This mechanical wave does not author claim bindings: `expression-census` `backedClaims` remains
+  **1**. [[D470]] closes; the authored population and explorer-evidence waves remain open.

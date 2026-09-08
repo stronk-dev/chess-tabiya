@@ -335,14 +335,14 @@
         "dependsOn": ["release-truth"],
         "nextAction": "Run genuinely fresh acceptance checks on repaired pack capability and the bounded shared-resource bootstrap; after acceptance, implement the seven-row register catalogue and rebase its three staged consumers before returning to product RFCs.",
         "latestCheckpoint": {
-          "at": "2026-09-07",
-          "summary": "The generic register bootstrap's second bounded author repair closes three executable seams without widening scope: canonical path/export identity ignores reader-kind aliases, catalogue parsing receives the repository root explicitly, and the extension fixture genuinely exercises a digit-bearing resource id.",
+          "at": "2026-09-08",
+          "summary": "Pack-population provenance P4 and its mechanical content discharge now agree at the production boundary: the four forbidden inline-evidence keys have one vocabulary, active source promises must name sibling sidecars, and all 20 impossible promises plus the dangling node citation are repaired and digest-restamped. This is a partial RFC checkpoint only; pack schema 0.29, authored population states, citable text, and explorer claim bindings remain open.",
           "impact": "advanced",
-          "evidence": ["planning/shared-resource-register-bootstrap/collision-core-second-author-repair-2026-09-07.md", "tools/d3131-shared-resource-bootstrap-collision-core-author-repair/contract.test.mjs"],
+          "evidence": ["rfc/pack-population-provenance.md", "apps/server/src/pack-validation.ts", "apps/server/src/refusal-coverage.test.ts", "planning/content-era/log.md", "docs/content-sourcing.md"],
           "anchors": [
-            {"kind": "work_state", "id": "D3131", "digest": "sha256:5be8891a358a8635b4db9f183173041a9c12354036f734a4022028ec2014d0a3"},
-            {"kind": "work_state", "id": "D3132", "digest": "sha256:003ff2387cbd7d639241d766f0969f437de7557a0f209c545b0085d0124bf19a"},
-            {"kind": "work_state", "id": "D3133", "digest": "sha256:487880545ffd3bcafc3d8f0add35e0ba2b5b795fcdcc3be53da338710cd9188a"}
+            {"kind": "work_state", "id": "D470", "digest": "sha256:73105c2bcf5bf935f0e405c40cff5e9cd2d5db0516d55a663308b40aeb1b721d"},
+            {"kind": "work_state", "id": "D3147", "digest": "sha256:76fa1eba0800ddca7eafffbbd03c1cc5ae6a48d4688cb10e92db2b5b6f696958"},
+            {"kind": "rfc", "id": "pack-population-provenance.md", "digest": "sha256:c564b41225bb3ff871552fc15df6fabc9ce6ecf3a018db0e58cdb757fd606655"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."

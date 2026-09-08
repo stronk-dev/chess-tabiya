@@ -62,6 +62,13 @@ import {
   type TablebaseCategory,
 } from "./tablebase.js";
 
+export const INLINE_EVIDENCE_KEYS = Object.freeze([
+  "engineValidation",
+  "tablebaseValidation",
+  "evidence",
+  "records",
+] as const);
+
 export interface PackValidationIssue {
   readonly severity: "error" | "warning";
   readonly source: "schema" | "lint" | "runtime";
@@ -127,7 +134,7 @@ function schemaIssue(error: ErrorObject): PackValidationIssue {
   if (
     error.keyword === "additionalProperties" &&
     error.instancePath === "/provenance" &&
-    ["engineValidation", "tablebaseValidation", "evidence", "records"].includes(
+    (INLINE_EVIDENCE_KEYS as readonly string[]).includes(
       String(error.params.additionalProperty),
     )
   ) {
@@ -1083,8 +1090,22 @@ function runtimeIssues(
       }
     }
   }
-  for (const key of ["engineValidation", "tablebaseValidation", "evidence", "records"] as const) {
+  for (const key of INLINE_EVIDENCE_KEYS) {
     if (key in provenance) issues.push(runtimeIssue("PROVENANCE_EVIDENCE_INLINE", `/provenance/${key}`, "evidence belongs in the pack's *.evidence.json sidecar; see make verify-draft"));
+  }
+  if (Array.isArray(provenance.sources)) {
+    for (const [index, source] of provenance.sources.entries()) {
+      if (typeof source !== "string") continue;
+      for (const key of INLINE_EVIDENCE_KEYS) {
+        if (source.includes(`provenance.${key}`)) {
+          issues.push(runtimeIssue(
+            "PROVENANCE_SOURCE_PROMISES_INLINE",
+            `/provenance/sources/${index}`,
+            `source promises evidence in forbidden inline key provenance.${key}; name the sibling *.evidence.json sidecar instead`,
+          ));
+        }
+      }
+    }
   }
   const reviewStatus = provenance.reviewStatus;
   if (reviewStatus === "published") {

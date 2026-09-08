@@ -1665,9 +1665,9 @@ graduation-clear:
 	CHECK="$(CHECK)" node apps/server/dist/graduation-clear.js "$(abspath $(FILE))"
 
 verify-draft:
-	@test -n "$(FILE)" || (echo "Usage: make verify-draft FILE=<path-to-pack.json> [OFFLINE=1]" >&2; exit 2)
+	@test -n "$(FILE)$(FILES)" || (echo "Usage: make verify-draft FILE=<path-to-pack.json> [OFFLINE=1] or FILES='<paths...>'" >&2; exit 2)
 	pnpm --filter @chess-tabiya/server exec esbuild src/sourcing/verify-draft.ts --bundle --platform=node --format=esm --outfile=dist/verify-draft.js
-	OFFLINE="$(OFFLINE)" node apps/server/dist/verify-draft.js "$(abspath $(FILE))"
+	OFFLINE="$(OFFLINE)" node apps/server/dist/verify-draft.js $(if $(FILES),$(FILES),"$(abspath $(FILE))")
 
 tablebase-walk:
 	@test -n "$(FILE)$(FENS)" || (echo "Usage: make tablebase-walk FILE=<pack.json> [OUT=<report.json>] [OFFLINE=1] [ENUMERATE=decision|all|none] [MAX_QUERIES=N]" >&2; exit 2)

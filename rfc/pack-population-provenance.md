@@ -701,7 +701,7 @@ name that was not in the tree, so each criterion below names what fails and how.
 | id | the obligation | owner | recorded when discharged | discharged |
 |---|---|---|---|---|
 | `D1` | Populate `provenance.corpusEvidence` across all 92 packs — deciding per pack whether its state is `ledger`, `abstained` (with which `ABSTENTION_REASONS` member and detail) or `unsourced`. This is authored judgement about each pack's evidence situation, not a mechanical edit, and it is what turns P1's 92 warnings into zero. | **`OWNER`** — commissioning a content wave is an owner act | `planning/content-era/log.md` + the ledger flips, in the shipping commit (`CLAUDE.md` content-wave closeout) | |
-| `D2` | Job A — the 21 `provenance.sources` string repairs that turn P4 from 20 firings to 0. Already specified and queued; this RFC neither re-specifies nor performs it. | **`planning/codex-queue.md`** §0-CONTENT | the job A shipping commit | |
+| `D2` | Job A — the 21 `provenance.sources` string repairs that turn P4 from 20 firings to 0. Already specified and queued; this RFC neither re-specifies nor performs it. | **`planning/codex-queue.md`** §0-CONTENT | the job A shipping commit | ✅ 2026-09-08 — [[D470]] and `planning/content-era/log.md` |
 
 Section format per `rfc/archive/rfc-lifecycle-completion.md` §3.1 (implemented). **Neither row
 blocks `accepted`; both block `implemented`** — which is the distinction that section exists to

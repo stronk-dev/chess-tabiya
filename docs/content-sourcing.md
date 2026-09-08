@@ -116,6 +116,14 @@ source, and job artifacts, refuses a contradicted root or learner-category spine
 regression, and requires the existing registry admission function to return
 `ledger_verified`. `OFFLINE=1` uses committed per-FEN fixtures.
 
+For a mechanical wave, `make verify-draft FILES='<pack-a.json> <pack-b.json>'`
+verifies the files sequentially and reuses the same loaded offline fixture. A
+pack's `provenance.sources` may name its sibling `<pack>.evidence.json`; it must
+not promise evidence in `provenance.engineValidation`,
+`provenance.tablebaseValidation`, `provenance.evidence`, or
+`provenance.records`. Those inline keys are forbidden by the format and the
+validator refuses both the key and a source string that promises it.
+
 The same invocation binds deviation costs when it has both the deviation anchor and
 after-move record. Engine runs stamp learner-relative cp/mate cost; tablebase runs stamp
 learner-relative category cost. Only records produced by that invocation are eligible:
