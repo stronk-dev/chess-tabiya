@@ -43,7 +43,7 @@ import DrillScreen from "./DrillScreen.svelte";
 import JustPlayStarter from "./JustPlayStarter.svelte";
 import PackList from "./PackList.svelte";
 import WhyBanner from "./WhyBanner.svelte";
-import type { Capabilities, PackSummary, ShapeEntryView, SimulationResult } from "./api.js";
+import type { Capabilities, PackSummary, ShapeEntryView, SimulationResult, VoicePage } from "./api.js";
 import type {
   RegionKeyboardHandler,
   RegisterKeyboardRegion,
@@ -403,6 +403,53 @@ describe("Layer 3 screens", () => {
     checkbox.click(); await tick();
     expect(document.querySelector(".pivotal-marker")).toBeNull();
     document.querySelector<HTMLButtonElement>(".inspector-surface header button")!.click(); await tick();
+    await unmount(component);
+  });
+
+  it("inspects and revoices current-position endgame evidence without a pivotal marker", async () => {
+    let run = createRun({
+      id: "endgame-without-marker",
+      session: {
+        kind: "position",
+        start: { fen: "4k2r/8/8/8/8/8/RP6/4K3 w - - 0 1", side: "white" },
+        feedbackPolicy: "attempt_end",
+        opponentPolicy: { mode: "human_common" },
+      },
+      sessionDigest: `sha256:${"a".repeat(64)}`,
+      policyConfig: { seedMode: "fixed", locus: { executedAt: "server", engineIds: [], modelIds: [] } },
+      seed: 1,
+      createdAt: at,
+    });
+    run = commitMove(run, "b2b3").run;
+    run = commitMove(run, "h8h7").run;
+    const onVoice = vi.fn(async (_nodeId: string, scope: VoicePage["scope"]) => ({
+      text: "Recorded reading at this position: rook and pawn versus rook.",
+      source: "provider" as const,
+      scope,
+    }));
+    const component = mount(DrillScreen, { target: target(), props: {
+      snapshot: { run, access: "writer", pendingEvidence: 0, withheld: false },
+      capabilities: { providers: { opponent: "mock", judge: "mock", llm: "external", corpus: "none", tts: "none", tablebase: "none" } } as Capabilities,
+      assistanceStorage: { getItem: () => JSON.stringify({ version: 4, markers: "off", guided: "off", humanSplit: "off", corpus: "off", voice: "persona", spoken: "off", boardLighting: "legal", arrows: "off", ambient: "off" }), setItem: vi.fn() },
+      onVoice,
+      onMove: vi.fn(), onRewind: vi.fn(), onFork: vi.fn(), onSwitchBranch: vi.fn(), onCompare: vi.fn(), onCloseCompare: vi.fn(), onContinueCheckpoint: vi.fn(), onExport: vi.fn(), onStop: vi.fn(), registerKeyboardRegion,
+    } });
+    await tick();
+    expect(document.querySelector(".pivotal-marker")).toBeNull();
+    const inspectorButton = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Inspector")!;
+    inspectorButton.click();
+    await tick();
+    const endgameEvidence = document.querySelector('[aria-label="Current-position endgame evidence"]')!;
+    expect(endgameEvidence.textContent).toContain("Rook and pawn versus rook");
+    expect(endgameEvidence.textContent).toContain("Lucena");
+    expect(endgameEvidence.textContent).toContain("Philidor");
+    const revoice = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Revoice current-position evidence")!;
+    revoice.click();
+    await vi.waitFor(() => expect(onVoice).toHaveBeenCalledWith(run.activeCursor.nodeId, "reading"));
+    await vi.waitFor(() => expect(document.querySelector('[aria-label="Current-position evidence rendering"]')?.textContent).toContain("rook and pawn versus rook"));
+    document.querySelector<HTMLButtonElement>('.timeline button[aria-label^="Ply 1:"]')!.click();
+    await tick();
+    expect(document.querySelector('[aria-label="Current-position evidence rendering"]')?.textContent).not.toContain("rook and pawn versus rook");
     await unmount(component);
   });
 

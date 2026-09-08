@@ -476,6 +476,18 @@ test("adaptive guidance keeps a queen-exchange phase change passive and removabl
   await expect(page.getByRole("button", { name: /Open pivotal marker/ })).toHaveCount(0);
 });
 
+test("endgame evidence is inspectable without a pivotal marker", async ({ page }) => {
+  await page.getByRole("button", { name: "Start from a FEN" }).click();
+  await page.getByLabel("Position FEN").fill("4k2r/8/8/8/8/8/RP6/4K3 w - - 0 1");
+  await page.getByRole("button", { name: "Start and keep the game" }).click();
+  await expect(page.getByRole("button", { name: /Open pivotal marker/ })).toHaveCount(0);
+  await page.getByRole("button", { name: "Inspector" }).click();
+  const evidence = page.getByRole("region", { name: "Current-position endgame evidence" });
+  await expect(evidence).toContainText("Rook and pawn versus rook");
+  await expect(evidence).toContainText("Lucena");
+  await expect(evidence).toContainText("Philidor");
+});
+
 test("runtime corpus counts stay silent until reveal and render population facts on request", async ({ page }) => {
   await page.getByRole("button", { name: "Start and keep the game" }).click();
   await openAdvancedSupport(page);
@@ -1096,9 +1108,9 @@ async function liveClickMove(
     origin,
   );
   expect(sourceHitsBoard, `${uci} source must be hit-testable`).toBe(true);
-  const submitted = page.waitForRequest(
-    (request) =>
-      request.method() === "POST" && /\/runs\/[^/]+\/moves$/u.test(new URL(request.url()).pathname),
+  const submitted = page.waitForResponse(
+    (response) =>
+      response.request().method() === "POST" && /\/runs\/[^/]+\/moves$/u.test(new URL(response.url()).pathname),
   );
 
   await page.mouse.click(origin.x, origin.y);
@@ -1113,7 +1125,10 @@ async function liveClickMove(
   const destination = squarePoint(selectedBox, uci.slice(2, 4), orientation);
   await page.mouse.click(destination.x, destination.y);
 
-  expect((await submitted).postDataJSON()).toMatchObject({ uci });
+  const response = await submitted;
+  expect(response.ok()).toBe(true);
+  expect(response.request().postDataJSON()).toMatchObject({ uci });
+  await expect(page.locator(".input-status")).toContainText("Move committed:");
 }
 
 type BoardInputMode = "click" | "drag" | "touch" | "keyboard" | "text";
@@ -1150,8 +1165,8 @@ async function liveInputMove(
   mode: BoardInputMode,
 ): Promise<void> {
   if (mode === "click") return liveClickMove(page, uci, orientation);
-  const submitted = page.waitForRequest(
-    (request) => request.method() === "POST" && /\/runs\/[^/]+\/moves$/u.test(new URL(request.url()).pathname),
+  const submitted = page.waitForResponse(
+    (response) => response.request().method() === "POST" && /\/runs\/[^/]+\/moves$/u.test(new URL(response.url()).pathname),
   );
   if (mode === "text") {
     await page.getByText("Enter a move", { exact: true }).click();
@@ -1214,7 +1229,10 @@ async function liveInputMove(
       await page.touchscreen.tap(destination.x, destination.y);
     }
   }
-  expect((await submitted).postDataJSON()).toMatchObject({ uci });
+  const response = await submitted;
+  expect(response.ok()).toBe(true);
+  expect(response.request().postDataJSON()).toMatchObject({ uci });
+  await expect(page.locator(".input-status")).toContainText("Move committed:");
 }
 
 test("@content served Najdorf pack plays, rewinds, branches, compares, and exports", async ({

@@ -200,6 +200,10 @@ to resume a position run without fetching a pack. The Play route now supplies Ju
 initial position or legal FEN, learner side, and human-common or strong-engine resistance.
 The controller rebuilds opponent requests from persisted run identity, including initial
 opponent turns, and the ordinary board/timeline/branch/compare/export surfaces remain active.
+Its move result describes the learner mutation boundary, not the entire consequence request: if
+the learner move commits and the subsequent opponent request fails, the board keeps the committed
+position while the controller retains the provider error. A failure before the learner mutation
+still reports that no move was committed.
 The pack-less objective region states the same absence as a product promise: nothing is authored
 about the position, so Tabiya reads it as play creates recorded moments worth returning to.
 
@@ -224,6 +228,12 @@ consequence exposed a grounded fact and offers play-on, rewind, or deliberate in
 not print the evidence-reference renderer's raw sentence as if that were a selected coaching hint.
 Inspector retains the guard event's exact references in a dedicated attributed section, separate
 from the active node's general evidence list.
+
+Inspector also exposes current-position endgame reading and provider rendering independently of
+pivotal markers. A position classified as rook-and-pawn versus rook can therefore name its recorded
+Lucena/Philidor/Vancura evidence even when no forward detector produced a timeline moment. Provider
+renderings and speech requests retain the requested `reading` or `marker` scope, and a returned
+rendering is shown only while its source node remains the position displayed on the board.
 
 Rules-derived explanations remain visible because they are engine-free facts
 from the objective machine. Evidence references have runtime constructors and
@@ -531,7 +541,9 @@ the next rendered frame and once again after layout settles. The browser gate
 hit-tests the authored source, remeasures after selection and asserts the exact
 outgoing UCI for every served endgame at desktop, tablet and phone projections;
 resting containment or merely observing some legal move is not accepted as
-interaction correctness.
+interaction correctness. Each input cell waits for both the successful mutation response and the
+visible committed status before navigating to the next run, so late responses cannot make the
+matrix validate the wrong application state.
 
 Selection state is one authoritative Chessboard output: pointer selection and deselection report
 the settled Chessground square, keyboard cancellation reports absence, and commit, preview, rewind

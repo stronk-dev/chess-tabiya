@@ -1809,11 +1809,12 @@
     },
     {
       "id": "D217",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:476ebdef6a522b62d28a22f47c45e7f75eab6f486c28a28f7e88444bcd9bf978",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:1e92466b557b949d342c5c2badacae327e8e25a803591896a7f27d0ce59f874c",
       "uxItems": [],
-      "owner": "core-loop"
+      "evidence": "Closeout evidence is recorded in the corresponding ledger rows and planning/exploration/log.md",
+      "evidenceKind": "closeout-prose"
     },
     {
       "id": "D218",
@@ -2381,11 +2382,12 @@
     },
     {
       "id": "D310",
-      "state": "todo",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:af6cb6783992c105429c16576b8d9760d954dcacf8d5012ab819009f2230caed",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:86160ac9e39535988350d2616fc44a5df7843401ebadaedbf205f0e27eba6488",
       "uxItems": [],
-      "owner": "assistance-and-presentation"
+      "evidence": "Closeout evidence is recorded in the corresponding ledger rows and planning/exploration/log.md",
+      "evidenceKind": "closeout-prose"
     },
     {
       "id": "D311",
@@ -25799,6 +25801,24 @@
       "uxItems": [],
       "evidence": "planning/exploration/log.md",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3156",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:eb2a92e4574186a0950fc6aed7a4cb9951e6d4767b6d757c6073dfb2d998a20b",
+      "uxItems": [],
+      "evidence": "Closeout evidence is recorded in the corresponding ledger rows and planning/exploration/log.md",
+      "evidenceKind": "closeout-prose"
+    },
+    {
+      "id": "D3157",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:e85b08d4c6795b23c409857e4768cf5005174a5e6c06a0a17246eb9f737d3ca5",
+      "uxItems": [],
+      "evidence": "Closeout evidence is recorded in the corresponding ledger rows and planning/exploration/log.md",
+      "evidenceKind": "closeout-prose"
     }
   ]
 }

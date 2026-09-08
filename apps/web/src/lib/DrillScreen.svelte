@@ -216,6 +216,7 @@
   let humanSplit: HumanSplitPage | undefined = $state();
   let corpusPage: CorpusPage | undefined = $state();
   let voicePage: VoicePage | undefined = $state();
+  let voiceNodeId: string | undefined = $state();
   let forkLabel = $state("");
   let forkIntent = $state("");
   let groupOpen = $state(false);
@@ -596,13 +597,20 @@
   }
 
   async function requestVoice(scope: VoicePage["scope"]): Promise<void> {
-    if (onVoice !== undefined) voicePage = await onVoice(displayedNode.id, scope);
+    if (onVoice === undefined) return;
+    const nodeId = displayedNode.id;
+    voicePage = undefined;
+    voiceNodeId = undefined;
+    const page = await onVoice(nodeId, scope);
+    if (displayedNode.id !== nodeId) return;
+    voicePage = page;
+    voiceNodeId = nodeId;
   }
 
-  function speakSentences(sentences: readonly string[]): void {
+  function speakSentences(sentences: readonly string[], scope: VoicePage["scope"] = "reading"): void {
     if (sentences.length === 0 || assistance.spoken === "off") return;
     if (assistance.spoken === "provider" && onSpeech !== undefined) {
-      void onSpeech(displayedNode.id, "marker").then((blob) => {
+      void onSpeech(displayedNode.id, scope).then((blob) => {
         const url = URL.createObjectURL(blob);
         const audio = new Audio(url);
         audio.addEventListener("ended", () => URL.revokeObjectURL(url), { once: true });
@@ -616,7 +624,7 @@
   }
 
   function openPivotalMarker(nodeId: string): void {
-    openPivotalNodeId = nodeId; humanSplit = undefined; voicePage = undefined;
+    openPivotalNodeId = nodeId; humanSplit = undefined; voicePage = undefined; voiceNodeId = undefined;
     pivotalDialogOpen = true;
   }
 
@@ -1563,8 +1571,32 @@
             {#each openPivotal as marker}{#each renderPivotalMarker(marker) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}{/each}
             {#each renderEndgameReading(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
             {#if assistance.voice === "persona" && capabilities?.providers.llm === "external" && onVoice !== undefined}<button type="button" onclick={() => void requestVoice("marker")}>Revoice this evidence</button>{/if}
-            {#if voicePage?.text.includes("Recorded reading at this position:")}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
-            {#if voicePage}<p class="guidance-sentence">{voicePage.text}</p>{/if}
+            {#if voiceNodeId === displayedNode.id && voicePage?.text.includes("Recorded reading at this position:")}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
+            {#if voiceNodeId === displayedNode.id && voicePage?.scope === "marker"}<p class="guidance-sentence">{voicePage.text}</p>{/if}
+          {/if}
+        </section>
+        <section aria-label="Current-position evidence rendering" data-evidence-consumer="inspector.current_position_voice">
+          <h3>Current-position rendering</h3>
+          <p class="honest">Render the evidence attached to the position now on the board. This does not require a pivotal marker.</p>
+          {#if assistance.voice === "persona" && capabilities?.providers.llm === "external" && onVoice !== undefined}
+            <button type="button" onclick={() => void requestVoice("reading")}>Revoice current-position evidence</button>
+          {:else}
+            <p class="honest">External rewording is not enabled for this workflow.</p>
+          {/if}
+          {#if voiceNodeId === displayedNode.id && voicePage?.scope === "reading"}
+            {#if voicePage.text.includes("Recorded reading at this position:")}<p class="guidance-sentence">{RECORDED_READING_GUARD}</p>{/if}
+            <p class="guidance-sentence">{voicePage.text}</p>
+          {/if}
+        </section>
+        <section aria-label="Current-position endgame evidence" data-evidence-consumer="inspector.endgame_reading">
+          <h3>Current-position endgame</h3>
+          {#if endgame === null}
+            <p class="honest">The position is not classified as an endgame.</p>
+          {:else}
+            {#each renderEndgameReading(endgame) as sentence}<p class="guidance-sentence">{sentence}</p>{/each}
+            {#if assistance.spoken !== "off"}
+              <button type="button" onclick={() => speakSentences(renderEndgameReading(endgame), "reading")}>Speak current-position endgame evidence</button>
+            {/if}
           {/if}
         </section>
         <section aria-label="Named structure evidence" data-evidence-consumer="inspector.shape_trigger">

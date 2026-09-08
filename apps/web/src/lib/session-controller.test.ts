@@ -508,6 +508,21 @@ describe("DrillSessionController", () => {
     });
   });
 
+  it("keeps a committed learner move committed when the opponent request then fails", async () => {
+    const api = new FakeApi();
+    const environment = controller(api);
+    await environment.controller.startPack(pack.id);
+    vi.spyOn(api, "selectMove").mockRejectedValueOnce(new Error("opponent unavailable"));
+
+    expect(await environment.controller.move("f2f3")).toBe(true);
+    expect(api.requiredRun().nodes.at(-1)).toMatchObject({ moveUci: "f2f3", actor: "user" });
+    expect(environment.controller.state).toMatchObject({
+      busy: false,
+      error: "opponent unavailable",
+      runState: { run: { activeCursor: { nodeId: api.requiredRun().activeCursor.nodeId } } },
+    });
+  });
+
   it("refreshes authored feedback when a read-only follower polls an outcome", async () => {
     const terminalPack = {
       ...pack,

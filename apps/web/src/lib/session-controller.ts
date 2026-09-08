@@ -345,9 +345,11 @@ export class DrillSessionController {
 
   async move(uci: string): Promise<boolean> {
     const store = this.#requiredStore();
+    let learnerMoveCommitted = false;
     this.#patch({ busy: true, error: undefined });
     try {
       const result = await store.move({ uci });
+      learnerMoveCommitted = true;
       if (this.#captureCheckpoint(result.emitted)) {
         await this.#refreshAuthoredFeedback();
         await this.#refreshReasoning();
@@ -367,7 +369,7 @@ export class DrillSessionController {
       return true;
     } catch (error) {
       this.#fail(error);
-      return false;
+      return learnerMoveCommitted;
     }
   }
 

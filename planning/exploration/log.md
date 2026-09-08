@@ -18861,3 +18861,23 @@ could not pass the mandatory `since` field for a `doing` state. The target now f
 field supported by `tools/work-state.mjs`, and the work-state governance suite enumerates that
 contract. Software passes 187 files / 1,166 tests and the work-state ratchet remains at zero
 untriaged rows.
+
+## 2026-09-08 — Current-position evidence routing and truthful move commits ([[D310]], [[D3156]], [[D3157]])
+
+Endgame reading and provider rendering no longer require an unrelated pivotal marker. Advanced
+Inspector exposes both against the position currently displayed on the board, preserves the
+requested reading/marker scope, and refuses to display a completed provider response after the
+learner navigates to another node. Component and production-browser KRPKR fixtures reach the
+Lucena/Philidor reading with markers disabled and zero pivotal moments.
+
+The exhaustive live-input oracle now waits for the successful `/moves` response and visible
+committed status before advancing to its next run. That stronger boundary exposed a product error:
+the session controller reported a persisted learner move as uncommitted when only the following
+opponent request failed. The controller now distinguishes the learner mutation boundary from later
+consequence orchestration, keeps the committed board state, and retains the provider error.
+
+Canonical verification passes 187 software files / 1,168 tests and the full browser gate passes 64
+journeys with one optional Maia measurement skipped. Its six packs × five viewports × five input
+modes complete all 150 cells in 48.8 seconds on the final run. [[D217]] was reconciled in the same
+closeout: root-relative branch-mark remapping and its PGN regression had already shipped in
+`acebb918a`; only the ledger and work-state row remained stale.
