@@ -236,8 +236,11 @@ research protocol's <250 ms budget.
 for Appearance, Playing, Account, and About. It edits the same per-browser
 assistance records used by the in-run popover for pack, position, and imported
 sessions. Provider and surface status live together under About this deployment
-without pretending environment configuration is an account control; unavailable
-external voice is stated once there and referenced by every affected control.
+without pretending environment configuration is an account control. The default
+view names learner-facing services and app areas with plain availability states;
+exact provider values, policy ids, and the run-format version remain available
+under Technical details. Unavailable external voice is stated once there and
+referenced by every affected control.
 Account deletion uses in-page password re-entry; shared runs are reassigned.
 
 Appearance is a separate global browser preference, documented in

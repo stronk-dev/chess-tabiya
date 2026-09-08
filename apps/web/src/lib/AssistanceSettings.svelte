@@ -26,6 +26,23 @@
   let deletionPreview = $state<DeletionPreview | undefined>();
   let previewLoading = $state(false);
   let previewError = $state<string | undefined>();
+  const providerLabels: Readonly<Record<keyof Capabilities["providers"], string>> = Object.freeze({
+    opponent: "Human-like opponents",
+    judge: "Position calculation",
+    llm: "Optional narrated guidance",
+    corpus: "Human-game statistics",
+    tts: "Spoken guidance",
+    tablebase: "Exact endgame results",
+  });
+  const surfaceLabels: Readonly<Record<keyof Capabilities["surfaces"], string>> = Object.freeze({
+    play: "Rehearsals",
+    review: "Review and import",
+    learn: "Learning plans",
+    live: "Live sessions",
+    create: "Authoring",
+    justPlay: "Just Play",
+    fromPosition: "Start from a position",
+  });
 
   onMount(() => {
     if (learner !== undefined && loadDeletionPreview !== undefined) void previewDeletion();
@@ -78,6 +95,15 @@
   }
   function effectCount(groups: readonly DeletionEffect[]): number { return groups.reduce((total, effect) => total + effect.count, 0); }
   function records(count: number): string { return `${count} ${count === 1 ? "record" : "records"}`; }
+  function providerState(value: Capabilities["providers"][keyof Capabilities["providers"]]): string {
+    if (value === "none") return "Not available";
+    if (value === "mock") return "Test service";
+    return "Available";
+  }
+  function surfaceState(id: keyof Capabilities["surfaces"], value: Capabilities["surfaces"][keyof Capabilities["surfaces"]]): string {
+    if (plannedSurfaceIds.includes(id)) return "Coming later";
+    return value === "available" ? "Available" : "Not available on this server";
+  }
   async function downloadAccount(): Promise<void> {
     exportStatus = undefined;
     if (exportPassword.length === 0) { exportStatus = "Re-enter your password to download your data."; return; }
@@ -151,7 +177,7 @@
     <p>The current data summary above is the deletion preview. Refresh it if your account changed since this page opened.</p>
     <label>Re-enter password <input type="password" autocomplete="current-password" bind:value={password} /></label>
     <button type="submit">Delete account</button>
-    <p class="honest">This browser's Tabiya writer ids and preferences are cleared after deletion. Other devices may retain obsolete device-local preferences, but every server session is invalidated.</p>
+    <p class="honest">This browser's sign-in and play preferences are cleared after deletion. Other devices may keep old display preferences, but you will be signed out everywhere.</p>
     {/if}
     {#if deleteError}<p role="alert">{deleteError}</p>{/if}
   </form>
@@ -161,14 +187,14 @@
 <section id="about-deployment" aria-labelledby="about-deployment-title">
   <h2 id="about-deployment-title">About this deployment</h2>
   {#if capabilities}
-    <h3>Services</h3><dl>{#each Object.entries(capabilities.providers) as [name, value]}<div><dt>{name}</dt><dd>{value}</dd></div>{/each}</dl>
-    <p>Run schema {capabilities.runSchemaVersion}; policies {capabilities.policyModes.join(", ")}.</p>
-    <h3>Surface availability</h3><ul>{#each Object.entries(capabilities.surfaces) as [id, availability]}<li>{id}: {plannedSurfaceIds.includes(id) ? "planned" : availability}</li>{/each}</ul>
+    <h3>Available services</h3><dl>{#each Object.entries(capabilities.providers) as [name, value]}<div><dt>{providerLabels[name as keyof Capabilities["providers"]]}</dt><dd>{providerState(value as Capabilities["providers"][keyof Capabilities["providers"]])}</dd></div>{/each}</dl>
+    <h3>App areas</h3><ul>{#each Object.entries(capabilities.surfaces) as [id, availability]}<li><strong>{surfaceLabels[id as keyof Capabilities["surfaces"]]}</strong>: {surfaceState(id as keyof Capabilities["surfaces"], availability as Capabilities["surfaces"][keyof Capabilities["surfaces"]])}</li>{/each}</ul>
+    <details class="technical-details"><summary>Technical details</summary><p>Run format {capabilities.runSchemaVersion}</p><p>Opponent policies: {capabilities.policyModes.join(", ")}</p><dl>{#each Object.entries(capabilities.providers) as [name, value]}<div><dt>{name}</dt><dd>{value}</dd></div>{/each}</dl></details>
   {:else}<p>Deployment status is unavailable.</p>{/if}
   {#if capabilities?.providers.llm !== "external"}<p class="honest" id="external-voice-unavailable">External voice is unavailable because this deployment has no configured provider.</p>{/if}
-  <p class="honest">These are status facts, not account controls. Change them in the deployment environment.</p>
+  <p class="honest">These are status facts, not account controls. Whoever runs this Tabiya server chooses which optional services are available.</p>
 </section>
 
 <style>
-  section{margin:2rem 0}.data-summary{max-width:44rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}.data-summary h4{margin-bottom:.35rem}.data-summary ul{margin-top:0}.context-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}fieldset{display:grid;gap:.65rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}label{display:grid;gap:.25rem}label:has(> input[type="checkbox"]){display:flex;align-items:center}dl{display:flex;flex-wrap:wrap;gap:.5rem 1rem}dl div{display:grid}.honest{color:var(--muted);font-size:.8rem}form{display:grid;gap:.6rem;max-width:28rem;margin-top:1rem}@media(max-width:719px){.context-grid{grid-template-columns:1fr}}
+  section{margin:2rem 0}.data-summary{max-width:44rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}.data-summary h4{margin-bottom:.35rem}.data-summary ul{margin-top:0}.context-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}fieldset{display:grid;gap:.65rem;padding:1rem;border:1px solid var(--line);border-radius:.8rem;background:var(--panel)}label{display:grid;gap:.25rem}label:has(> input[type="checkbox"]){display:flex;align-items:center}dl{display:flex;flex-wrap:wrap;gap:.5rem 1rem}dl div{display:grid}.technical-details{margin-top:1rem}.technical-details summary{cursor:pointer;font-weight:700}.honest{color:var(--muted);font-size:.8rem}form{display:grid;gap:.6rem;max-width:28rem;margin-top:1rem}@media(max-width:719px){.context-grid{grid-template-columns:1fr}}
 </style>

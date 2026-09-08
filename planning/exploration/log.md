@@ -19147,3 +19147,17 @@ Component assertions cover writer, read-only and withheld states and refuse the 
 terms. Production browser journeys cover the withheld-content and spectator paths. `make
 verify-software` passes 188 files / 1,182 tests and production builds; `make test-browser` passes
 all 64 required desktop/mobile journeys with the one explicitly optional Maia measurement skipped.
+
+## 2026-09-08 — Settings separates status from diagnostics ([[D3178]])
+
+The always-visible deployment summary exposed provider keys and values, policy ids, surface ids,
+and the run-schema version to every learner. Settings now names learner-facing services and app
+areas with plain availability states; exact deployment values remain available under a closed
+Technical details disclosure. Account-deletion copy also explains browser-local effects without
+writer or session-storage vocabulary. This closes only the Settings/provider slice of [[D1434]];
+its unrelated chart and editor findings remain open.
+
+Exhaustive typed label maps make a newly added provider or surface a compile-time obligation, and
+the shell fixture requires both the learner labels and the closed disclosure. `make verify-software`
+passes 188 files / 1,182 tests and production builds; `make test-browser` passes all 64 required
+desktop/mobile journeys with the one explicitly optional Maia measurement skipped.

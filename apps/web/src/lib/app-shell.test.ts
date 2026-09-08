@@ -589,6 +589,11 @@ describe("application shell", () => {
       if (path === "/settings") {
         expect([...document.querySelectorAll(".settings-toc a")].map((link) => link.textContent)).toEqual(["Appearance", "Playing", "Account", "About"]);
         expect(document.querySelector("#about-deployment-title")?.textContent).toBe("About this deployment");
+        expect(document.body.textContent).toContain("Human-like opponents");
+        expect(document.body.textContent).toContain("Exact endgame results");
+        expect(document.body.textContent).toContain("Review and import");
+        expect(document.querySelector<HTMLDetailsElement>(".technical-details")?.open).toBe(false);
+        expect(document.querySelector(".technical-details summary")?.textContent).toBe("Technical details");
         expect(document.querySelectorAll("#external-voice-unavailable")).toHaveLength(1);
       }
     }
