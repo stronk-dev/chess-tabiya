@@ -18945,3 +18945,20 @@ production builds and learner-rating isolation. The first browser run correctly 
 journeys still asserting the old vocabulary; after their mounted contracts were updated,
 `make test-browser` passes 64 desktop/mobile journeys with one explicitly optional Maia latency
 measurement skipped.
+
+## 2026-09-08 — Live move-choice and vocabulary boundary ([[D3163]])
+
+The accepted Live proposal, vote and journal workflow still exposed its transport representation:
+participants and hosts typed UCI move strings, while ordinary session copy printed raw roles,
+states, journal keys, run sequence numbers and Arena branch ids. The session detail projection now
+includes its active FEN; the client derives the exact legal set and presents SAN-labelled choices
+while retaining UCI only as the wire identity. A position change clears unfinished choices, and the
+submission boundary rechecks legality plus vote-option uniqueness.
+
+One shared copy module now renders Live/classroom roles, proposal/vote/invitation states, session
+history and imported-leg state. Unknown future journal kinds fall back to a neutral update instead
+of leaking a new transport token. The first two full browser runs found stale test contracts (a
+broad ARIA label and then an option/list ambiguity); both locators were narrowed at their semantic
+boundaries. `make verify-software` passes 188 files / 1,173 tests, performance, schema, manifests,
+production builds and rating isolation. The final `make test-browser` passes all 64 required
+desktop/mobile journeys with one explicitly optional Maia latency measurement skipped.

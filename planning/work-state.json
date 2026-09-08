@@ -25866,6 +25866,15 @@
       "uxItems": [],
       "evidence": "apps/web/src/lib/chronology-copy.ts",
       "evidenceKind": "path"
+    },
+    {
+      "id": "D3163",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:a681e9249f8769079be904d42a6d377051a4d9a8aabd23795bca0077009fbfc7",
+      "uxItems": [],
+      "evidence": "apps/web/src/lib/live-copy.ts",
+      "evidenceKind": "path"
     }
   ]
 }

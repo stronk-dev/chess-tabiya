@@ -182,7 +182,7 @@ test("a single-use friend link registers a learner without exposing the board", 
     await join.getByLabel("Password").fill(PASSWORD);
     await join.getByRole("button", { name: "Register and join" }).click();
     await expect(join).toHaveURL(/\/live\/session\//u);
-    await expect(join.getByText(`@${guestHandle} — participant`)).toBeVisible();
+    await expect(join.getByText(`@${guestHandle} — Participant`)).toBeVisible();
 
     const second = await browser.newContext();
     const exhausted = await second.newPage();

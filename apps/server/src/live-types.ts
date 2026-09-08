@@ -103,6 +103,7 @@ export interface LiveSessionDetail {
   readonly classroom?: { readonly id: string; readonly name: string };
   readonly role: RunRole;
   readonly activeNodeId: string;
+  readonly activeFen: string;
   readonly leaseHeldBy: { readonly learnerId: string; readonly handle: string };
   readonly voteAdapter?: LeaseIdentity;
   readonly grants: readonly import("./storage.js").RunGrant[];

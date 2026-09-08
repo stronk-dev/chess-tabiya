@@ -33,6 +33,7 @@ import { HistoryRouter } from "./router.js";
 import { WriterSession, type KeyValueStorage } from "./writer-session.js";
 
 const pack = JSON.parse(fixtureJson) as DrillPackDefinition;
+const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const digest = `sha256:${"a".repeat(64)}`;
 const run = createRun({
   id: "route-run",
@@ -675,6 +676,7 @@ describe("application shell", () => {
       session,
       role: "spectator",
       activeNodeId: run.activeCursor.nodeId,
+      activeFen: INITIAL_FEN,
       leaseHeldBy: { learnerId: "learner-coach", handle: "coach" },
       grants: [{ learnerId: "learner-coach", handle: "coach", role: "host", grantedAt: "2026-09-07T12:00:00.000Z" }],
       moveAuthorship: [],
@@ -792,6 +794,7 @@ describe("application shell", () => {
       },
       role: "host",
       activeNodeId: "node-one",
+      activeFen: INITIAL_FEN,
       leaseHeldBy: { learnerId: "learner-host", handle: "coach" },
       grants: [
         { learnerId: "learner-host", handle: "coach", role: "host", grantedAt: "2026-08-27T11:00:00.000Z" },
@@ -867,6 +870,7 @@ describe("application shell", () => {
       classroom: { id: "classroom-one", name: "Endgame club" },
       role: "host",
       activeNodeId: "node-one",
+      activeFen: INITIAL_FEN,
       leaseHeldBy: { learnerId: "learner-guest", handle: "student" },
       grants: [
         { learnerId: "learner-host", handle: "coach", role: "host", grantedAt: "2026-08-27T11:00:00.000Z" },
@@ -916,7 +920,9 @@ describe("application shell", () => {
     expect(document.body.textContent).toContain("Classroom: Endgame club");
     expect(document.body.textContent).toContain("Academy lesson");
     expect(document.body.textContent).toContain("rewind, branch, compare, and return without discarding the original line");
-    expect(document.querySelector("[aria-label='Move proposals']")?.textContent).toContain("e2e4");
+    expect(document.querySelector("[aria-label='Move proposals']")?.textContent).toContain("e4");
+    expect(document.querySelector("[aria-label='Move proposals']")?.textContent).not.toContain("e2e4");
+    expect([...document.querySelectorAll<HTMLSelectElement>(".vote-editor select")][0]?.options).toHaveLength(21);
     const reclaim = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Take back board…")!;
     reclaim.click();
     expect(boardControl).not.toHaveBeenCalled();
@@ -955,7 +961,7 @@ describe("application shell", () => {
     const makeSpectator = [...document.querySelectorAll<HTMLButtonElement>("button")].find((button) => button.textContent === "Make spectator")!;
     makeSpectator.click();
     await vi.waitFor(() => expect(updateGrants).toHaveBeenCalledWith("live-run", { op: "grant", handle: "student", role: "spectator" }, "writer-live"));
-    await vi.waitFor(() => expect(document.querySelector("[aria-label='Session access list']")?.textContent).toContain("@student — spectator"));
+    await vi.waitFor(() => expect(document.querySelector("[aria-label='Session access list']")?.textContent).toContain("@student — Spectator"));
     const applied = [...document.querySelectorAll("label")].find((label) => label.textContent?.includes("Applied option"))!.querySelector("select")!;
     applied.value = "e2e4";
     applied.dispatchEvent(new Event("change", { bubbles: true }));
@@ -994,6 +1000,7 @@ describe("application shell", () => {
       },
       role: "spectator",
       activeNodeId: "node-one",
+      activeFen: INITIAL_FEN,
       leaseHeldBy: { learnerId: "learner-host", handle: "host" },
       grants: [
         { learnerId: "learner-host", handle: "host", role: "host", grantedAt: "2026-08-27T11:00:00.000Z" },

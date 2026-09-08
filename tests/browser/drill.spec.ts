@@ -623,7 +623,7 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
   await expect(page.getByRole("heading", { name: "academy session" })).toBeVisible();
   await expect(page.getByText("Live / Academy lesson", { exact: true })).toBeVisible();
   await expect(page.getByText(/rewind, branch, compare, and return without discarding the original line/)).toBeVisible();
-  await expect(page.getByText("your role: host")).toBeVisible();
+  await expect(page.getByText("your role: Host")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Invitations" })).toBeVisible();
   await expect(page.getByLabel("Tabiya handle")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Audience output" })).toBeVisible();
@@ -641,12 +641,12 @@ test("Live turns a run into a session and exposes a chrome-free overlay", async 
   await expect(voteEditor.getByRole("button", { name: "Add option" })).toBeDisabled();
   await expect(voteEditor.getByRole("button", { name: "Remove" }).first()).toBeEnabled();
   for (let index = 0; index < moves.length; index += 1) {
-    await voteEditor.getByLabel("Move (UCI)").nth(index).fill(moves[index]!);
-    await voteEditor.getByLabel("Label").nth(index).fill(labels[index]!);
+    await voteEditor.getByLabel("Move").nth(index).selectOption(moves[index]!);
+    await voteEditor.getByLabel("Audience label").nth(index).fill(labels[index]!);
   }
   await voteEditor.getByLabel("Duration (seconds)").fill("90");
   await voteEditor.getByRole("button", { name: "Open vote" }).click();
-  await expect(page.getByText("Which plan? · open")).toBeVisible();
+  await expect(page.getByText("Which plan? · Voting open")).toBeVisible();
   await expect(page.getByRole("button", { name: /Vote for Bishop f4/ })).toBeVisible();
   await expect(page.getByText("No votes yet.")).toBeVisible();
   await page.goto("/live");
@@ -673,7 +673,7 @@ test("an academy host can identify and play a participant's proposed move", asyn
   await page.goto("/live");
   await page.getByLabel("Session title").fill("academy session");
   await page.getByRole("button", { name: "Create academy" }).first().click();
-  await expect(page.getByText("your role: host")).toBeVisible();
+  await expect(page.getByText("your role: Host")).toBeVisible();
   const sessionUrl = page.url();
 
   const participantContext = await browser.newContext();
@@ -685,7 +685,7 @@ test("an academy host can identify and play a participant's proposed move", asyn
   await expect(invitations).toContainText(`@${participantHandle}`);
 
   await participant.goto(sessionUrl);
-  await expect(participant.getByText("your role: participant")).toBeVisible();
+  await expect(participant.getByText("your role: Participant")).toBeVisible();
   const members = page.getByRole("heading", { name: "Members" }).locator("..");
   await members.getByLabel("Offer board to handle").fill(participantHandle);
   await members.getByRole("button", { name: "Offer board" }).click();
@@ -702,14 +702,14 @@ test("an academy host can identify and play a participant's proposed move", asyn
   await expect(page.getByText("holds the board.").first()).not.toContainText(`@${participantHandle}`);
   await participant.goto(sessionUrl);
   const proposals = participant.getByRole("heading", { name: "Proposals" }).locator("..");
-  await proposals.getByLabel("Move (UCI)").fill("a1b1");
+  await proposals.getByRole("combobox", { name: "Move" }).selectOption("a1b1");
   await proposals.getByRole("button", { name: "Propose" }).click();
-  await expect(proposals.getByText("a1b1", { exact: true })).toBeVisible();
+  await expect(proposals.getByRole("list", { name: "Move proposals" }).getByText("Rb1", { exact: true })).toBeVisible();
 
   const hostProposals = page.getByRole("heading", { name: "Proposals" }).locator("..");
   await expect(hostProposals).toContainText(`proposed by @${participantHandle}`, { timeout: 5_000 });
   await hostProposals.getByRole("button", { name: "Play proposal" }).click();
-  await expect(hostProposals).toContainText("applied");
+  await expect(hostProposals).toContainText("Played on the board");
   await expect(hostProposals.getByRole("button", { name: "Play proposal" })).toHaveCount(0);
   await participantContext.close();
 });
@@ -735,7 +735,7 @@ test("a classroom assignment shows who submitted and makes sharing explicit", as
   for (const handle of [submittedHandle, waitingHandle]) {
     await classrooms.getByLabel("Invite handle").fill(handle);
     await classrooms.getByRole("button", { name: "Invite", exact: true }).click();
-    await expect(classrooms.getByText(`@${handle} — learner, invited`)).toBeVisible();
+    await expect(classrooms.getByText(`@${handle} — Learner, Invitation waiting`)).toBeVisible();
   }
   for (const learnerPage of [submittedPage, waitingPage]) {
     await learnerPage.goto("/live");

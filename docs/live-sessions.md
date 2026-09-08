@@ -80,10 +80,17 @@ proposals stale. The session studio names the proposing handle. An open proposal
 the host explicit **Play proposal** and **Decline** actions; playing first acquires the
 ordinary run lease and therefore does not bypass board possession.
 
+The session detail projection includes the active FEN so the client derives the exact
+legal moves for that position. Ordinary participants choose SAN-labelled moves; UCI
+remains the API/storage identity and is not an input convention learners must know.
+Changing the active node clears unfinished proposal and vote choices, and the submit
+boundary refuses choices outside the newly derived legal set.
+
 A host may open one 15–600 second vote window over two to eight legal moves. Votes are
 advisory: a tally never moves a piece. The host may separately play or apply a move and
 record what was applied. The browser exposes the complete two-to-eight range, separate
-host-authored labels and prompt, and the full duration range. Every signed-in session viewer can
+host-authored audience labels and prompt, SAN-labelled legal-move choices, duplicate-move
+refusal, and the full duration range. Every signed-in session viewer can
 cast or change a vote while the window is open; the browser sends no caller-authored voter key
 and replaces the displayed tally with the server response. This keeps run replay independent of
 social state.
