@@ -18639,3 +18639,20 @@ fixture. `verify-draft` also accepts a batch and reports both complete engine tu
 version, depth, or score disagree. The canonical software gate passes with 184 files and 1,149
 tests. [[D470]] and [[D3147]] close; pack-schema lane 0.29, corpus-population authorship, and
 explorer claim binding remain open.
+
+## 2026-09-08 — Graduation clearance plans and evaluator enter production
+
+The accepted nine-template clearance contract no longer exists only in the migration planner and
+disposable author model. Each production emitter template now owns its immutable clearance plan;
+the planner imports that registry. The production writer evaluates exact pointer equality, compiled
+outcome grading and repository content declarations whose digest binds pack, entry, template,
+ordered pointer/value payload and declared timestamp through the shared canonical JSON serializer.
+Registered blockers reject omitted, changed or extra caller-selected plan fields before evaluation.
+
+The real-content tier executes every registered plan through false → true → stale-false and retains
+the dangerous controls: `strong_engine` cannot satisfy the exact-tablebase plan, an undeclared
+policy change cannot clear, an unchanged generated objective cannot clear, and empty authored
+collections remain blocking. `make graduation-plan-check`, workspace typecheck, the 1,149-test
+software tier and the 178-test content tier pass. This is foundation implementation only: no pack
+schema, pack content, declaration, claim binding, publication state or authored chess judgement
+changed. Schema 0.28 and the atomic migration remain next.

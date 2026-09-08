@@ -19,6 +19,13 @@
   production RFC-8785 serializer. [[D3090]] is resolved on the narrow process-authority option:
   the receipt is an exact, timestamp-bound repository content declaration, not authentication of a
   person's identity or the truth of the chess judgement.
+  **Production evaluator checkpoint 2026-09-08.** The nine clearance plans now live beside the
+  nine production emitter templates; the migration planner imports that one registry instead of
+  owning a second literal. `clearGraduationEntries` evaluates `pointer_equals`,
+  `objective_graded`, and digest-bound `content_declared`, rejoins every registered id to its exact
+  persisted plan, and refuses added or changed caller operands. A permanent real-content test runs
+  all nine plans false → true → stale-false. Schema 0.28, the atomic 92-document migration and 232
+  author-reviewed predicate decisions remain open; this checkpoint changes no pack document.
   **Accepted 2026-08-17 by the register owner; status token
   reconciled 2026-08-20.**
   **[author round 3, 2026-08-17]** D503 is closed, and it is closed as an

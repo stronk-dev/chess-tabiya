@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  EMITTER_GRADUATION_CLEARANCE_PLANS,
   EMITTER_GRADUATION_BLOCKER_TEMPLATES,
   EMITTER_TEMPLATE_IDS,
   emitterGraduationBlocker,
@@ -20,6 +21,19 @@ describe("emitter graduation blocker templates", () => {
       "mechanical-objective-needs-grounding",
     ]);
     expect(Object.keys(EMITTER_GRADUATION_BLOCKER_TEMPLATES)).toEqual(EMITTER_TEMPLATE_IDS);
+    expect(Object.keys(EMITTER_GRADUATION_CLEARANCE_PLANS)).toEqual(EMITTER_TEMPLATE_IDS);
+    expect(EMITTER_GRADUATION_CLEARANCE_PLANS["tablebase-opponent-not-selected"]).toEqual({
+      kind: "pointer_equals",
+      subject: "/opponentPolicy/mode",
+      expected: "perfect_tablebase",
+      instrument: "make pack-check",
+    });
+    expect(EMITTER_GRADUATION_CLEARANCE_PLANS["authored-teaching-absent"].payloadPointers).toEqual([
+      "/planClasses",
+      "/deviations",
+      "/feedbackClaims",
+    ]);
+    expect(() => (EMITTER_GRADUATION_CLEARANCE_PLANS["authored-teaching-absent"].payloadPointers as string[]).push("/shapes")).toThrow(TypeError);
   });
 
   it("renders fixed and parameterized blockers from the same checked-in templates", () => {

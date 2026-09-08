@@ -37,8 +37,18 @@ performs the evaluation without writing. Its historical non-vacuity exception is
 four measured Syzygy blocker identities, not every blocker in those packs. Any additional
 already-true predicate is refused before the pack, ledger or receipt changes.
 
-The pack-schema 0.28 and corpus migration remain held by Gate F. The existence of the writer does
-not imply that current blocker prose has been classified, supplied with subjects, or cleared.
+The nine emitter ids and their clearance plans have one production registry. The migration planner
+imports that registry, and the writer rejects persisted plan fields that differ from it. Exact-value
+plans compare the registry-owned pointer and expected value; graded-objective plans require a
+compiled outcome objective; content-declaration plans bind the pack id, blocker id, template id,
+ordered registry-owned pointer/value payload, and declared timestamp under the shared canonical
+JSON serializer. Changing any decided input makes the declaration stale. A declaration records
+repository content bytes—it does not authenticate an author or manufacture chess truth.
+
+Pack-schema 0.28 and the atomic corpus migration have not landed. They are authorized foundation
+work under D3033, while the 232 exact author-reviewed predicate decisions, authored chess content,
+claim binding, and official publication remain held. The existence of the evaluator does not imply
+that current blocker prose has acquired those decisions or cleared.
 
 ## Official publication boundary
 

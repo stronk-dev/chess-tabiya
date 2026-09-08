@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
-    "roadmap": "sha256:12287162799359a48aaaf728147b2953b089dcefd714a8c803407e495e888671",
+    "roadmap": "sha256:110bfa5214b68d043a4eaea32f8cf75b84b5e8e347a41c2ebeea81f2cdff0d46",
     "workItems": "sha256:31fd065560bfe2d1cdc97799eb02b1497aea917480fad369b7c918d6dc14cc4f",
     "workState": "sha256:7b4082e9cf02f71fac8b024c8735ac5d8fe4bd847b9c09282501d083d5d66733",
     "rfcRegister": "sha256:9e63ac31caff6559050a19af247f964f2a308d329708d73616bbf5aa7423e1cb",
@@ -121,33 +121,34 @@
       "dependsOn": [
         "release-truth"
       ],
-      "nextAction": "Run genuinely fresh acceptance checks on repaired pack capability and the bounded shared-resource bootstrap; after acceptance, implement the seven-row register catalogue and rebase its three staged consumers before returning to product RFCs.",
+      "nextAction": "Complete the 232 explicit author-reviewed clearance fields, then land pack schema 0.28, emitter plan persistence and the atomic 92-document/sidecar migration; continue independent accepted foundation work while those content decisions are supplied.",
       "latestCheckpoint": {
         "at": "2026-09-08",
-        "summary": "Pack-population provenance P4 and its mechanical content discharge now agree at the production boundary: the four forbidden inline-evidence keys have one vocabulary, active source promises must name sibling sidecars, and all 20 impossible promises plus the dangling node citation are repaired and digest-restamped. This is a partial RFC checkpoint only; pack schema 0.29, authored population states, citable text, and explorer claim bindings remain open.",
+        "summary": "Graduation clearance's accepted nine-template contract now runs in production: emitters and the planner share one immutable plan registry, the writer evaluates exact values, compiled outcome grading and digest-bound content declarations, and every plan passes false-to-true-to-stale-false real-content coverage. This is foundation only; schema 0.28, emitter persistence and the atomic corpus migration remain open behind 232 visible author-reviewed predicate fields.",
         "impact": "advanced",
         "evidence": [
-          "rfc/pack-population-provenance.md",
-          "apps/server/src/pack-validation.ts",
-          "apps/server/src/refusal-coverage.test.ts",
-          "planning/content-era/log.md",
-          "docs/content-sourcing.md"
+          "rfc/graduation-clearance.md",
+          "apps/server/src/graduation-blocker-templates.mjs",
+          "apps/server/src/sourcing/graduation-clear.ts",
+          "apps/server/src/sourcing/graduation-clear.test.ts",
+          "tools/graduation-clearance-plan.mjs",
+          "docs/pack-graduation.md"
         ],
         "anchors": [
           {
             "kind": "work_state",
-            "id": "D470",
-            "digest": "sha256:73105c2bcf5bf935f0e405c40cff5e9cd2d5db0516d55a663308b40aeb1b721d"
+            "id": "D3088",
+            "digest": "sha256:240672f58c7773edc36213a5fc93ba1d49946e928c4abba962fd64b22ab1a059"
           },
           {
             "kind": "work_state",
-            "id": "D3147",
-            "digest": "sha256:76fa1eba0800ddca7eafffbbd03c1cc5ae6a48d4688cb10e92db2b5b6f696958"
+            "id": "D3090",
+            "digest": "sha256:85293970da901020e55c05657c8278799fdd12b7761ba30c7422ce2ac2fe0c2d"
           },
           {
             "kind": "rfc",
-            "id": "pack-population-provenance.md",
-            "digest": "sha256:c564b41225bb3ff871552fc15df6fabc9ce6ecf3a018db0e58cdb757fd606655"
+            "id": "graduation-clearance.md",
+            "digest": "sha256:031888af2dca62d3024e64b59fa83c4c323728d744d8b29b999a840bcd80c8e8"
           }
         ]
       },

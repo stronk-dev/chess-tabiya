@@ -5,8 +5,15 @@ import { basename, join, resolve } from "node:path";
 import { digestDrillPack } from "@chess-tabiya/schema/drill-pack";
 import { describe, expect, it } from "vitest";
 
+import { EMITTER_TEMPLATE_IDS } from "../graduation-blocker-templates.mjs";
 import { graduationReport } from "../graduation-report.js";
-import { clearGraduationEntries, GraduationClearanceError } from "./graduation-clear.js";
+import {
+  clearGraduationEntries,
+  createGraduationContentDeclaration,
+  emitterGraduationClearance,
+  evaluateGraduationClearance,
+  GraduationClearanceError,
+} from "./graduation-clear.js";
 
 const SOURCE = resolve("content/drafts/mate-k-q-technique.json");
 const FIRST_RUN_SOURCES = [
@@ -37,6 +44,141 @@ async function fixture(source = SOURCE): Promise<{ directory: string; file: stri
 }
 
 describe("graduation clearance writer", () => {
+  it("runs every registered emitter plan through false, true, and stale-false in production", async () => {
+    const original = JSON.parse(await readFile(SOURCE, "utf8"));
+    const ledger = JSON.parse(await readFile(SOURCE.replace(/\.json$/u, ".evidence.json"), "utf8"));
+    const manifest = JSON.parse(await readFile(SOURCE.replace(/\.json$/u, ".sources.json"), "utf8"));
+    const emptyLedger = { ...ledger, records: [] };
+    const emptyManifest = { ...manifest, entries: [] };
+    const at = "2026-09-08T12:00:00.000Z";
+    const evaluate = async (pack: any, entryId: string, clearance: ReturnType<typeof emitterGraduationClearance>, grounded = true) =>
+      evaluateGraduationClearance(
+        pack,
+        await digestDrillPack(pack),
+        grounded ? ledger : emptyLedger,
+        grounded ? manifest : emptyManifest,
+        entryId,
+        clearance,
+        { subjects: [] },
+      )?.holds;
+
+    expect(EMITTER_TEMPLATE_IDS).toHaveLength(9);
+    for (const entryId of EMITTER_TEMPLATE_IDS) {
+      const pack = structuredClone(original);
+      if (entryId === "outcome-ungraded") {
+        pack.objective.type = "play_until_checkpoint";
+        delete pack.objective.grading;
+      }
+      if (entryId === "target-elo-authored") pack.opponentPolicy = { mode: "human_common", targetElo: 1600, seedMode: "per_branch" };
+      if (entryId === "authored-teaching-absent") {
+        pack.planClasses = [];
+        pack.deviations = [];
+        pack.feedbackClaims = [];
+      }
+      if (entryId === "tablebase-opponent-not-selected") pack.opponentPolicy = { mode: "strong_engine" };
+      const clearance = emitterGraduationClearance(pack, entryId);
+
+      expect(await evaluate(pack, entryId, clearance, entryId !== "start-assessment-absent"), `${entryId}: emitted`).toBe(false);
+
+      let current = clearance;
+      switch (entryId) {
+        case "mechanical-objective-placeholder":
+          pack.objective.summary = `${pack.objective.summary} Authored consequence.`;
+          current = { ...current, declaration: createGraduationContentDeclaration(pack, entryId, at) };
+          break;
+        case "outcome-ungraded":
+          pack.objective = structuredClone(original.objective);
+          break;
+        case "start-assessment-absent":
+          break;
+        case "authored-teaching-absent":
+          pack.feedbackClaims = [{ id: "author-supplied", text: "Author-supplied fixture.", evidenceTypes: ["author_principle"] }];
+          current = { ...current, declaration: createGraduationContentDeclaration(pack, entryId, at) };
+          break;
+        case "tablebase-opponent-not-selected":
+          pack.opponentPolicy = { mode: "perfect_tablebase" };
+          break;
+        default:
+          current = { ...current, declaration: createGraduationContentDeclaration(pack, entryId, at) };
+      }
+      expect(await evaluate(pack, entryId, current), `${entryId}: true`).toBe(true);
+
+      switch (entryId) {
+        case "outcome-ungraded":
+          delete pack.objective.grading;
+          break;
+        case "start-assessment-absent":
+          break;
+        case "target-elo-authored":
+          pack.opponentPolicy.targetElo += 1;
+          break;
+        case "authored-teaching-absent":
+          pack.feedbackClaims.push({ id: "changed", text: "Changed.", evidenceTypes: ["author_principle"] });
+          break;
+        case "opponent-policy-authored":
+          pack.opponentPolicy = { mode: "strong_engine" };
+          break;
+        case "tablebase-opponent-not-selected":
+          pack.opponentPolicy = { mode: "strong_engine" };
+          break;
+        case "recorded-play-needs-authoring":
+          pack.spine = [...pack.spine, structuredClone(pack.spine[0])];
+          break;
+        default:
+          pack.objective.summary = `${pack.objective.summary} changed`;
+      }
+      expect(await evaluate(pack, entryId, current, entryId !== "start-assessment-absent"), `${entryId}: stale`).toBe(false);
+    }
+  });
+
+  it("evaluates registered exact-value and content-declaration plans without caller-selected operands", async () => {
+    const pack = JSON.parse(await readFile(SOURCE, "utf8"));
+    const ledger = JSON.parse(await readFile(SOURCE.replace(/\.json$/u, ".evidence.json"), "utf8"));
+    const manifest = JSON.parse(await readFile(SOURCE.replace(/\.json$/u, ".sources.json"), "utf8"));
+    const digest = await digestDrillPack(pack);
+    const evaluate = (entryId: string, clearance: ReturnType<typeof emitterGraduationClearance>) =>
+      evaluateGraduationClearance(pack, digest, ledger, manifest, entryId, clearance, { subjects: [] });
+
+    pack.opponentPolicy = { mode: "strong_engine" };
+    const exact = emitterGraduationClearance(pack, "tablebase-opponent-not-selected");
+    expect(evaluate("tablebase-opponent-not-selected", exact)?.holds).toBe(false);
+    pack.opponentPolicy = { mode: "perfect_tablebase" };
+    expect(evaluate("tablebase-opponent-not-selected", exact)?.holds).toBe(true);
+    expect(() => evaluate("tablebase-opponent-not-selected", { ...exact, expected: "strong_engine" })).toThrow(/registered plan field expected/u);
+
+    pack.opponentPolicy = { mode: "human_common", targetElo: 1600, seedMode: "per_branch" };
+    let declared = emitterGraduationClearance(pack, "target-elo-authored");
+    expect(evaluate("target-elo-authored", declared)?.holds).toBe(false);
+    declared = { ...declared, declaration: createGraduationContentDeclaration(pack, "target-elo-authored", "2026-09-08T12:00:00.000Z") };
+    expect(evaluate("target-elo-authored", declared)?.holds).toBe(true);
+    pack.opponentPolicy.targetElo = 1700;
+    expect(evaluate("target-elo-authored", declared)?.holds).toBe(false);
+  });
+
+  it("keeps an unchanged generated objective and empty authored collections blocking", async () => {
+    const pack = JSON.parse(await readFile(SOURCE, "utf8"));
+    const ledger = JSON.parse(await readFile(SOURCE.replace(/\.json$/u, ".evidence.json"), "utf8"));
+    const manifest = JSON.parse(await readFile(SOURCE.replace(/\.json$/u, ".sources.json"), "utf8"));
+    const digest = await digestDrillPack(pack);
+    const evaluate = (entryId: string, clearance: ReturnType<typeof emitterGraduationClearance>) =>
+      evaluateGraduationClearance(pack, digest, ledger, manifest, entryId, clearance, { subjects: [] });
+
+    let placeholder = emitterGraduationClearance(pack, "mechanical-objective-placeholder");
+    placeholder = { ...placeholder, declaration: createGraduationContentDeclaration(pack, "mechanical-objective-placeholder", "2026-09-08T12:00:00.000Z") };
+    expect(evaluate("mechanical-objective-placeholder", placeholder)?.holds).toBe(false);
+    pack.objective.summary = `${pack.objective.summary} Authored consequence.`;
+    placeholder = { ...placeholder, declaration: createGraduationContentDeclaration(pack, "mechanical-objective-placeholder", "2026-09-08T12:01:00.000Z") };
+    expect(evaluate("mechanical-objective-placeholder", placeholder)?.holds).toBe(true);
+
+    pack.planClasses = [];
+    pack.deviations = [];
+    pack.feedbackClaims = [];
+    let teaching = emitterGraduationClearance(pack, "authored-teaching-absent");
+    teaching = { ...teaching, declaration: createGraduationContentDeclaration(pack, "authored-teaching-absent", "2026-09-08T12:02:00.000Z") };
+    expect(evaluate("authored-teaching-absent", teaching)?.holds).toBe(false);
+    expect(() => createGraduationContentDeclaration(pack, "target-elo-authored", "yesterday")).toThrow(/RFC 3339/u);
+  });
+
   it.each(FIRST_RUN_SOURCES)("resolves only the named first-run assessment entry in %s and records the digest transition", async (source) => {
     const { directory, file } = await fixture(source);
     try {

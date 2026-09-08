@@ -4,7 +4,7 @@ import { createHash } from "node:crypto";
 import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { EMITTER_TEMPLATE_IDS } from "../apps/server/src/graduation-blocker-templates.mjs";
+import { EMITTER_GRADUATION_CLEARANCE_PLANS, EMITTER_TEMPLATE_IDS } from "../apps/server/src/graduation-blocker-templates.mjs";
 import { canonicalizeJson } from "../packages/schema/src/drill-pack/digest.ts";
 
 export const CLEARANCE_RULES = Object.freeze([
@@ -70,24 +70,7 @@ export const KNOWN_CANDIDATE_EXCEPTIONS = Object.freeze([
   "immediate-blunder-guard-is-not-selectable-defect-d8-dela",
 ]);
 
-function templatePlan(value) {
-  return Object.freeze({
-    ...value,
-    ...(value.payloadPointers === undefined ? {} : { payloadPointers: Object.freeze([...value.payloadPointers]) }),
-  });
-}
-
-export const TEMPLATE_CLEARANCE_PLANS = Object.freeze({
-  "mechanical-objective-placeholder": templatePlan({ kind: "content_declared", templateId: "mechanical-objective-placeholder", instrument: "repository_content_declaration", payloadPointers: ["/objective/summary"], captureEmittedPayload: true }),
-  "outcome-ungraded": templatePlan({ kind: "objective_graded", subject: "/objective", instrument: "objectiveRules" }),
-  "start-assessment-absent": templatePlan({ kind: "assessment_grounded", subject: "/objective/grading/assessedBy", instrument: "make sourcing-check", deferredSubject: true }),
-  "target-elo-authored": templatePlan({ kind: "content_declared", templateId: "target-elo-authored", instrument: "repository_content_declaration", payloadPointers: ["/opponentPolicy/targetElo"] }),
-  "authored-teaching-absent": templatePlan({ kind: "content_declared", templateId: "authored-teaching-absent", instrument: "repository_content_declaration", payloadPointers: ["/planClasses", "/deviations", "/feedbackClaims"], requireNonEmptyCollection: true }),
-  "opponent-policy-authored": templatePlan({ kind: "content_declared", templateId: "opponent-policy-authored", instrument: "repository_content_declaration", payloadPointers: ["/opponentPolicy"] }),
-  "tablebase-opponent-not-selected": templatePlan({ kind: "pointer_equals", subject: "/opponentPolicy/mode", expected: "perfect_tablebase", instrument: "make pack-check" }),
-  "recorded-play-needs-authoring": templatePlan({ kind: "content_declared", templateId: "recorded-play-needs-authoring", instrument: "repository_content_declaration", payloadPointers: ["/spine"], requireNonEmptyCollection: true }),
-  "mechanical-objective-needs-grounding": templatePlan({ kind: "content_declared", templateId: "mechanical-objective-needs-grounding", instrument: "repository_content_declaration", payloadPointers: ["/objective"] }),
-});
+export const TEMPLATE_CLEARANCE_PLANS = EMITTER_GRADUATION_CLEARANCE_PLANS;
 
 const SIDECAR = /\.(?:evidence|graduation|job|sources)\.json$/u;
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");

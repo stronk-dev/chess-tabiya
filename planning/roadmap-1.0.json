@@ -333,16 +333,16 @@
         "state": "active",
         "capabilities": ["evidence", "support", "review", "theory_content", "bots", "learner_model", "campaign", "social_play", "professional"],
         "dependsOn": ["release-truth"],
-        "nextAction": "Run genuinely fresh acceptance checks on repaired pack capability and the bounded shared-resource bootstrap; after acceptance, implement the seven-row register catalogue and rebase its three staged consumers before returning to product RFCs.",
+        "nextAction": "Complete the 232 explicit author-reviewed clearance fields, then land pack schema 0.28, emitter plan persistence and the atomic 92-document/sidecar migration; continue independent accepted foundation work while those content decisions are supplied.",
         "latestCheckpoint": {
           "at": "2026-09-08",
-          "summary": "Pack-population provenance P4 and its mechanical content discharge now agree at the production boundary: the four forbidden inline-evidence keys have one vocabulary, active source promises must name sibling sidecars, and all 20 impossible promises plus the dangling node citation are repaired and digest-restamped. This is a partial RFC checkpoint only; pack schema 0.29, authored population states, citable text, and explorer claim bindings remain open.",
+          "summary": "Graduation clearance's accepted nine-template contract now runs in production: emitters and the planner share one immutable plan registry, the writer evaluates exact values, compiled outcome grading and digest-bound content declarations, and every plan passes false-to-true-to-stale-false real-content coverage. This is foundation only; schema 0.28, emitter persistence and the atomic corpus migration remain open behind 232 visible author-reviewed predicate fields.",
           "impact": "advanced",
-          "evidence": ["rfc/pack-population-provenance.md", "apps/server/src/pack-validation.ts", "apps/server/src/refusal-coverage.test.ts", "planning/content-era/log.md", "docs/content-sourcing.md"],
+          "evidence": ["rfc/graduation-clearance.md", "apps/server/src/graduation-blocker-templates.mjs", "apps/server/src/sourcing/graduation-clear.ts", "apps/server/src/sourcing/graduation-clear.test.ts", "tools/graduation-clearance-plan.mjs", "docs/pack-graduation.md"],
           "anchors": [
-            {"kind": "work_state", "id": "D470", "digest": "sha256:73105c2bcf5bf935f0e405c40cff5e9cd2d5db0516d55a663308b40aeb1b721d"},
-            {"kind": "work_state", "id": "D3147", "digest": "sha256:76fa1eba0800ddca7eafffbbd03c1cc5ae6a48d4688cb10e92db2b5b6f696958"},
-            {"kind": "rfc", "id": "pack-population-provenance.md", "digest": "sha256:c564b41225bb3ff871552fc15df6fabc9ce6ecf3a018db0e58cdb757fd606655"}
+            {"kind": "work_state", "id": "D3088", "digest": "sha256:240672f58c7773edc36213a5fc93ba1d49946e928c4abba962fd64b22ab1a059"},
+            {"kind": "work_state", "id": "D3090", "digest": "sha256:85293970da901020e55c05657c8278799fdd12b7761ba30c7422ce2ac2fe0c2d"},
+            {"kind": "rfc", "id": "graduation-clearance.md", "digest": "sha256:031888af2dca62d3024e64b59fa83c4c323728d744d8b29b999a840bcd80c8e8"}
           ]
         },
         "exit": "Every shared schema, migration, evidence, module and persistence seam needed by 1.0 has an accepted RFC, an unambiguous register claim, and executable negative criteria."
