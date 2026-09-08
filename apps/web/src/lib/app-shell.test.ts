@@ -1501,7 +1501,16 @@ describe("application shell", () => {
       state: "draft",
       validation: { valid: false, issues: [] },
     };
-    const shapeApi: DrillClientApi = { ...api(), async packDrafts() { return []; }, async shapeDrafts() { return [shapeDraft]; } };
+    const lintShapeDraft = vi.fn(async (): Promise<ShapeDraft["validation"]> => ({
+      valid: true,
+      issues: [],
+      corpusPreview: {
+        fires: 1,
+        of: 12,
+        matches: [{ packId: pack.id, packTitle: String(pack.title), ply: 3, fen: pack.start.fen, startSide: pack.start.side }],
+      },
+    }));
+    const shapeApi: DrillClientApi = { ...api(), async packDrafts() { return []; }, async shapeDrafts() { return [shapeDraft]; }, lintShapeDraft };
     const component = mount(App, { target: target(), props: { api: shapeApi, router: new HistoryRouter(window), storage: new MemoryStorage() } });
 
     await vi.waitFor(() => expect(document.body.textContent).toContain("builder-shape · draft"));
@@ -1523,6 +1532,13 @@ describe("application shell", () => {
     expect(bytes.trigger.of).toHaveLength(2);
     expect(bytes.plans[0].success.signature).toEqual({ kind: "feature", feature: { kind: "named_structure", id: "carlsbad" } });
     expect(document.body.textContent).toContain("The Shape JSON above stays live");
+    await vi.waitFor(() => expect(lintShapeDraft).toHaveBeenCalled());
+    await vi.waitFor(() => expect(document.body.textContent).toContain("1 of 12 authored positions match this trigger."));
+    const match = [...document.querySelectorAll<HTMLButtonElement>(".shape-corpus-results button")].find((button) => button.textContent?.includes(String(pack.title)))!;
+    match.click();
+    await tick();
+    expect(document.querySelector("[aria-label='Selected matching position']")?.textContent).toContain("authored ply 3");
+    expect(document.querySelector(".shape-corpus-board [data-board-theme]")).not.toBeNull();
     await unmount(component);
   });
 

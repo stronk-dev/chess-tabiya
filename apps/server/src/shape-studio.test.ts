@@ -1,11 +1,22 @@
 import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it } from "vitest";
+import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
 
 import { ShapeRegistry } from "./shape-registry.js";
 import { ShapeStudio } from "./shape-studio.js";
 import { SQLiteRunStorage } from "./storage.js";
 
 const official = JSON.parse(readFileSync(new URL("../../../content/shapes/carlsbad.json", import.meta.url), "utf8"));
+const matchingPack = {
+  id: "served-carlsbad",
+  start: { fen: "r1bqr1k1/pp1nbppp/2p2n2/3p2B1/3P4/2NBP3/PPQ1NPPP/R4RK1 b - - 7 10", side: "white" },
+  spine: [],
+} as unknown as DrillPackDefinition;
+const nonmatchingPack = {
+  id: "served-initial",
+  start: { fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", side: "white" },
+  spine: [],
+} as unknown as DrillPackDefinition;
 const principal = { learnerId: "shape-author-id", handle: "shape-author" } as const;
 
 describe("Shape Studio", () => {
@@ -26,6 +37,18 @@ describe("Shape Studio", () => {
     const fresh=await ShapeRegistry.loadDefault();await new ShapeStudio(storage,fresh).hydrate();
     expect(fresh.required("community-shape").digest).toBe(registered.digest);
     expect(registry.required("community-shape").channel).toBe("community");
+  });
+
+  it("previews an unsaved trigger over every served authored position", async () => {
+    const { storage, registry } = await setup();
+    const studio = new ShapeStudio(storage, registry, () => [
+      { document: matchingPack, title: "Carlsbad minority attack" },
+      { document: nonmatchingPack, title: "Initial position" },
+    ]);
+    const result = studio.lint(official);
+    expect(result.corpusPreview).toMatchObject({ fires: 1, of: 2 });
+    expect(result.corpusPreview?.matches[0]).toMatchObject({ packId: matchingPack.id, packTitle: "Carlsbad minority attack", ply: 0, startSide: "white" });
+    expect(result.corpusPreview?.matches.every((match) => match.ply >= 0 && match.fen.split(" ").length === 6)).toBe(true);
   });
 
   it("reserves official ids",async()=>{const {studio}=await setup();const draft=await studio.create(principal,official);await expect(studio.register(draft.id,principal)).rejects.toThrow(/official/);});

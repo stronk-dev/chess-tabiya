@@ -282,8 +282,6 @@ export async function createApplication(
   const storage = new SQLiteRunStorage(databasePath);
   const shapes = await ShapeRegistry.loadDefault();
   const principles = await PrincipleRegistry.loadDefault();
-  const shapeStudio = new ShapeStudio(storage, shapes);
-  await shapeStudio.hydrate();
   const registry = await PackRegistry.loadDefault({
     development: options.development === true,
     shapes,
@@ -295,6 +293,11 @@ export async function createApplication(
       ? {}
       : { draftFiles: options.draftPackFiles }),
   });
+  const shapeStudio = new ShapeStudio(storage, shapes, () => registry.list().map((summary) => ({
+    document: registry.required(summary.id).document,
+    title: summary.title,
+  })));
+  await shapeStudio.hydrate();
   const studio = new PackStudio(storage, registry, shapes, principles);
   studio.hydrate();
   const engineMode = options.engineMode ?? "mock";

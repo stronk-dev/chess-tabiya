@@ -2497,17 +2497,21 @@
     {
       "id": "AUT-a10",
       "sourceState": "queued",
-      "state": "queued",
+      "state": "completed",
       "capability": "theory_content",
       "owner": "content-and-theory",
-      "assignment": "capability:theory_content",
+      "assignment": "closed",
       "sourceDocument": "ux-authoring-and-library.md",
       "sourceSection": "§9 G1",
       "sourceHeading": "Authoring and library — `ux-authoring-and-library.md`",
       "summary": "The one-FEN probe becomes a corpus preview — *fires on N of M authored positions*, each opening a board",
       "legacyRoute": "none",
       "note": "needs a served position corpus",
-      "sourceDigest": "sha256:0e4ba06e132986c9a991fa8dffe08f84ed04482438a2e66061c0e0152c1c9088"
+      "sourceDigest": "sha256:0e4ba06e132986c9a991fa8dffe08f84ed04482438a2e66061c0e0152c1c9088",
+      "completion": {
+        "completedOn": "2026-09-08",
+        "evidence": "Shape Studio automatically evaluates unsaved triggers over every served pack start and authored spine position, reports the firing numerator and denominator, lists exact pack/ply matches, and opens each selected witness on the production board in learner orientation; server and mounted-shell fixtures bind the corpus rather than a one-FEN sample."
+      }
     },
     {
       "id": "AUT-a11",

@@ -1,6 +1,11 @@
 import { randomUUID } from "node:crypto";
 
 import { digestShapeEntry, type ShapeEntryDefinition } from "@chess-tabiya/schema/shape-entry";
+import type { DrillPackDefinition } from "@chess-tabiya/schema/drill-pack";
+import { matchesStructuralExpression } from "@chess-tabiya/runtime";
+import { Chess } from "chessops/chess";
+import { makeFen, parseFen } from "chessops/fen";
+import { parseUci } from "chessops/util";
 
 import type { Principal } from "./authorization.js";
 import { ServerError } from "./errors.js";
@@ -19,8 +24,34 @@ function greater(leftValue: string, rightValue: string): boolean {
 
 export interface ShapeDraftView extends StoredShapeDraft { readonly validation: ShapeValidationResult; }
 
+export interface ShapeStudioPack {
+  readonly document: DrillPackDefinition;
+  readonly title: string;
+}
+
+function authoredPositions(pack: DrillPackDefinition): readonly { readonly ply: number; readonly fen: string }[] {
+  const root = Chess.fromSetup(parseFen(pack.start.fen).unwrap()).unwrap();
+  const result: { ply: number; fen: string }[] = [{ ply: 0, fen: makeFen(root.toSetup()) }];
+  const visit = (nodes: NonNullable<DrillPackDefinition["spine"]>, position: Chess, ply: number): void => {
+    for (const node of nodes) {
+      const next = position.clone();
+      const move = parseUci(node.moveUci);
+      if (move === undefined || !next.isLegal(move)) continue;
+      next.play(move);
+      result.push({ ply: ply + 1, fen: makeFen(next.toSetup()) });
+      visit(node.children, next, ply + 1);
+    }
+  };
+  visit(pack.spine ?? [], root, 0);
+  return Object.freeze(result);
+}
+
 export class ShapeStudio {
-  constructor(readonly storage: SQLiteRunStorage, readonly registry: ShapeRegistry) {}
+  constructor(
+    readonly storage: SQLiteRunStorage,
+    readonly registry: ShapeRegistry,
+    readonly servedPacks: () => readonly ShapeStudioPack[] = () => [],
+  ) {}
 
   async hydrate(): Promise<void> {
     for (const row of this.storage.registeredShapes()) await this.registry.add(row.document as ShapeEntryDefinition,"community",row.publisherHandle,row.digest);
@@ -28,7 +59,15 @@ export class ShapeStudio {
   list(principal: Principal): readonly ShapeDraftView[] { return Object.freeze(this.storage.shapeDrafts(principal.learnerId).map((row)=>this.#view(row))); }
   required(id:string,principal:Principal):ShapeDraftView{const row=this.storage.shapeDraft(id,principal.learnerId);if(row===undefined)throw new ServerError("RUN_NOT_FOUND",`Unknown shape draft: ${id}`);return this.#view(row);}
   async create(principal:Principal,document:unknown,at=new Date().toISOString()):Promise<ShapeDraftView>{const raw=structuredClone(document) as Record<string,unknown>;const row:StoredShapeDraft=Object.freeze({id:randomUUID(),shapeId:String(raw.id??"untitled"),ownerLearnerId:principal.learnerId,document:raw,digest:await digestShapeEntry(raw),state:"draft",createdAt:at,updatedAt:at});this.storage.createShapeDraft(row);return this.#view(row);}
-  lint(document:unknown,probeFen?:string):ShapeValidationResult{return validateShapeEntry(document,{...(probeFen===undefined?{}:{probeFen})});}
+  lint(document:unknown,probeFen?:string):ShapeValidationResult{
+    const validation=validateShapeEntry(document,{...(probeFen===undefined?{}:{probeFen})});
+    if(validation.document===undefined)return validation;
+    const positions=this.servedPacks().flatMap((pack)=>authoredPositions(pack.document).map((position)=>({packId:pack.document.id,packTitle:pack.title,startSide:pack.document.start.side,...position})));
+    let matches: typeof positions;
+    try { matches=positions.filter((position)=>matchesStructuralExpression(position.fen,validation.document!.trigger)); }
+    catch { return validation; }
+    return Object.freeze({...validation,corpusPreview:Object.freeze({fires:matches.length,of:positions.length,matches:Object.freeze(matches)})});
+  }
   async update(id:string,principal:Principal,expectedDigest:string,document:unknown,at=new Date().toISOString()):Promise<ShapeDraftView>{const current=this.required(id,principal);const digest=await digestShapeEntry(document);if(!this.storage.updateShapeDraft(id,principal.learnerId,expectedDigest,document,digest,at))throw new ServerError("DRAFT_STALE","Draft changed in another editor",{details:{digest:current.digest}});return this.required(id,principal);}
   async register(id:string,principal:Principal,at=new Date().toISOString()){const draft=this.required(id,principal);const validation=validateShapeEntry(draft.document);if(!validation.valid||validation.document===undefined)throw new ServerError("PACK_INVALID","Shape draft has validation errors",{details:{issues:validation.issues}});const document=validation.document;if(this.registry.get(document.id)?.channel==="official")throw new ServerError("SHAPE_ID_RESERVED",`Shape id ${document.id} is official`);const rows=this.storage.registeredShapes().filter((row)=>row.shapeId===document.id);if(rows.some((row)=>row.version===document.version))throw new ServerError("SHAPE_VERSION_EXISTS","That shape version already exists");if(rows.some((row)=>row.publisherLearnerId!==principal.learnerId))throw new ServerError("SHAPE_ID_NOT_YOURS","This shape id belongs to another publisher");if(rows.length>0&&!rows.every((row)=>greater(document.version,row.version)))throw new ServerError("SHAPE_VERSION_NOT_INCREASING","A new version must increase");this.storage.registerShapeDraft({shapeId:document.id,version:document.version,digest:draft.digest,document,publisherHandle:principal.handle,publisherLearnerId:principal.learnerId,draftId:id,registeredAt:at});return this.registry.add(document,"community",principal.handle,draft.digest);}
   export(id:string,principal:Principal){const row=[...this.storage.registeredShapes()].reverse().find((candidate)=>candidate.shapeId===id&&candidate.publisherLearnerId===principal.learnerId);if(row===undefined)throw new ServerError("SHAPE_NOT_FOUND",`Unknown community shape: ${id}`);return Object.freeze({format:"chess-tabiya-shape",version:1,document:row.document,digest:row.digest,publisherHandle:row.publisherHandle});}

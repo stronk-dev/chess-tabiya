@@ -16,6 +16,17 @@ export interface ShapeValidationResult {
   readonly issues: readonly PackValidationIssue[];
   readonly document?: ShapeEntryDefinition;
   readonly probeMatches?: boolean;
+  readonly corpusPreview?: {
+    readonly fires: number;
+    readonly of: number;
+    readonly matches: readonly {
+      readonly packId: string;
+      readonly packTitle: string;
+      readonly ply: number;
+      readonly fen: string;
+      readonly startSide: "white" | "black";
+    }[];
+  };
 }
 
 let compiled: ValidateFunction | undefined;

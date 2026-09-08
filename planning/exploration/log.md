@@ -18722,3 +18722,20 @@ probe, save, and registration consume identical bytes. The pure contract test is
 changes a trigger into a two-child conjunction and adds a plan signature without touching the JSON
 textarea. `make typecheck` passes with zero Svelte diagnostics and `make test-software` passes 1,156
 tests across 185 files.
+
+## 2026-09-08 — Shape Studio previews unsaved triggers over the served corpus
+
+AUT-a10 is complete. The one-position probe is no longer the only way an author can see whether a
+reusable trigger reaches reality. After each pause in an unsaved edit, the server evaluates the
+trigger over every start and authored spine position in the live pack registry. The studio reports
+the exact firing numerator and corpus denominator, retains a zero-match result, and lists the pack
+and authored ply for every match. Selecting a row opens that exact FEN on the production board in
+the pack's learner orientation; the board is an inspection surface, not a claim that the trigger is
+useful.
+
+The production corpus is injected into Shape Studio from the same `PackRegistry` that serves Play,
+so preview and deployment cannot silently use different directories. The unit fixture contrasts a
+synthetic Carlsbad witness with the initial position under the official shape, and the mounted
+`/create` journey proves that editing
+the recursive trigger schedules a fresh corpus request, renders its 1-of-12 denominator, and opens
+the returned board witness.

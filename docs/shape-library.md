@@ -79,16 +79,23 @@ not require pack metadata. The objective region states the absence explicitly: n
 loaded and nothing is claimed about the position.
 
 Shape Studio mirrors pack authoring with learner-owned drafts, digest-based optimistic
-updates, lint plus optional probe-FEN matching, immutable community registration, export,
-and account-deletion tombstoning. Migration 10 owns `shape_drafts` and
-`registered_shapes`; run schema stays v0.8 because firings are derived.
+updates, live lint plus optional probe-FEN matching, immutable community registration, export,
+and account-deletion tombstoning. Unsaved trigger edits are also checked, after a short debounce,
+against every authored position served by the running deployment. The editor reports the exact
+firing numerator and corpus denominator, lists every matching pack and authored ply, and opens a
+selected witness on the real board in the pack's learner orientation. A match proves predicate
+reach, not strategic usefulness; zero matches remain visible rather than being repaired with
+generated chess prose. Migration 10 owns `shape_drafts` and `registered_shapes`; run schema stays
+v0.8 because firings are derived.
 
 The editor projects every plan's success-signature state beside the JSON. A structural expression
 is named as checkable; an absent signature is named as unfinished; and `null` is rendered as an
 honest refusal with its required note. Turning an unfinished or structurally checkable plan into a
 null signature requires the author to enter a non-empty reason and press an explicit replacement
-button. Studio never invents an expression when reversing that choice—the structured expression
-builder remains separate work—so missing work and deliberate non-gradability cannot look alike.
+button. Beside the authoritative JSON, the recursive expression builder covers all 18 structural
+feature leaves, logical composition, mirroring, quantified square ranges, piece occupancy, and
+plan-signature references. Missing work and deliberate non-gradability therefore cannot look
+alike, while advanced authors retain the complete serialized representation.
 
 `make expression-census` measures every trigger and non-null success signature over the authored
 position corpus. Coverage labels are diagnostic only. A closed sound-refutation arm rejects a

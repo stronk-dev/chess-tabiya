@@ -79,6 +79,8 @@
   import { graduationEntries, requiredFieldStates, splitValidationIssues } from "./lib/pack-validation-presentation.js";
   import { importFailureCopy } from "./lib/import-presentation.js";
 
+  type ShapeCorpusMatch = NonNullable<ShapeDraft["validation"]["corpusPreview"]>["matches"][number];
+
   interface Props {
     api?: DrillClientApi;
     router?: HistoryRouter;
@@ -152,6 +154,11 @@
   let selectedShapeDraftId: string | undefined = $state();
   let shapeProbeFen = $state("");
   let shapeProbeResult: boolean | undefined = $state();
+  let shapeBufferValidation: ShapeDraft["validation"] | undefined = $state();
+  let shapeLintState: "idle" | "waiting" | "checking" | "ready" | "invalid_json" | "error" | "unavailable" = $state("idle");
+  let shapeLintError: string | undefined = $state();
+  let shapeLintGeneration = 0;
+  let selectedShapeCorpusMatch: ShapeCorpusMatch | undefined = $state();
   let shapeActionError: string | undefined = $state();
   let distillDraftRunId: string | undefined = $state();
   let distillDraftBusy = $state(false);
@@ -364,6 +371,58 @@
     return () => {
       clearTimeout(timer);
       if (generation === packLintGeneration) packLintGeneration += 1;
+    };
+  });
+
+  $effect(() => {
+    const draftId = selectedShapeDraftId;
+    const documentText = shapeStudioJson;
+    const probeFen = shapeProbeFen;
+    if (route.name !== "create" || draftId === undefined) {
+      shapeBufferValidation = undefined;
+      shapeLintError = undefined;
+      shapeLintState = "idle";
+      selectedShapeCorpusMatch = undefined;
+      return;
+    }
+    if (api.lintShapeDraft === undefined) {
+      shapeBufferValidation = undefined;
+      shapeLintError = "Live shape validation is unavailable in this deployment.";
+      shapeLintState = "unavailable";
+      return;
+    }
+    const generation = ++shapeLintGeneration;
+    shapeBufferValidation = undefined;
+    shapeLintError = undefined;
+    shapeLintState = "waiting";
+    const timer = setTimeout(() => void (async () => {
+      let document: unknown;
+      try {
+        document = JSON.parse(documentText);
+      } catch (error) {
+        if (generation !== shapeLintGeneration) return;
+        shapeLintState = "invalid_json";
+        shapeLintError = `JSON is not valid: ${error instanceof Error ? error.message : String(error)}`;
+        return;
+      }
+      shapeLintState = "checking";
+      try {
+        const validation = await api.lintShapeDraft!(draftId, document, probeFen);
+        if (generation !== shapeLintGeneration) return;
+        shapeBufferValidation = validation;
+        shapeProbeResult = validation.probeMatches;
+        const current = selectedShapeCorpusMatch;
+        if (current !== undefined && !validation.corpusPreview?.matches.some((match) => match.packId === current.packId && match.ply === current.ply && match.fen === current.fen)) selectedShapeCorpusMatch = undefined;
+        shapeLintState = "ready";
+      } catch (error) {
+        if (generation !== shapeLintGeneration) return;
+        shapeLintState = "error";
+        shapeLintError = `Shape validation failed: ${error instanceof Error ? error.message : String(error)}`;
+      }
+    })(), 300);
+    return () => {
+      clearTimeout(timer);
+      if (generation === shapeLintGeneration) shapeLintGeneration += 1;
     };
   });
 
@@ -1057,6 +1116,7 @@
       if (api.lintShapeDraft === undefined) throw new Error("Shape validation is unavailable.");
       const validation = await api.lintShapeDraft(draft.id, JSON.parse(shapeStudioJson), shapeProbeFen);
       shapeDrafts = shapeDrafts.map((candidate) => candidate.id === draft.id ? { ...candidate, validation } : candidate);
+      shapeBufferValidation = validation;
       shapeProbeResult = validation.probeMatches;
     } catch (error) { shapeActionError = error instanceof Error ? error.message : String(error); }
   }
@@ -1756,10 +1816,37 @@
             <button type="button" disabled={!selectedShapeDraftId} aria-describedby={!selectedShapeDraftId ? "shape-selection-required" : "shape-publication-retention"} onclick={() => void registerShapeDraft()}>Register community shape</button>
           </div>
           {#if shapeProbeResult !== undefined}<p role="status">Probe trigger: {shapeProbeResult ? "matches" : "does not match"}</p>{/if}
+          <section class="shape-corpus-preview" aria-labelledby="shape-corpus-preview-title">
+            <h3 id="shape-corpus-preview-title">Served-position preview</h3>
+            {#if shapeLintState === "waiting"}<p>Waiting for you to pause typing…</p>
+            {:else if shapeLintState === "checking"}<p>Checking every authored position served by this deployment…</p>
+            {:else if shapeLintError}<p role="alert">{shapeLintError}</p>
+            {:else if shapeBufferValidation?.corpusPreview}
+              <p><strong>{shapeBufferValidation.corpusPreview.fires}</strong> of <strong>{shapeBufferValidation.corpusPreview.of}</strong> authored positions match this trigger.</p>
+              {#if shapeBufferValidation.corpusPreview.matches.length === 0}
+                <p class="honest">This trigger never fires in the served corpus. It may describe a real pattern, but these packs provide no board witness.</p>
+              {:else}
+                <div class="shape-corpus-results">
+                  <ul aria-label="Matching authored positions">
+                    {#each shapeBufferValidation.corpusPreview.matches as match}
+                      <li><button type="button" class:active={selectedShapeCorpusMatch?.packId === match.packId && selectedShapeCorpusMatch?.ply === match.ply && selectedShapeCorpusMatch?.fen === match.fen} onclick={() => selectedShapeCorpusMatch = match}>{match.packTitle} · ply {match.ply}</button></li>
+                    {/each}
+                  </ul>
+                  {#if selectedShapeCorpusMatch}
+                    <article aria-label="Selected matching position">
+                      <h4>{selectedShapeCorpusMatch.packTitle}</h4>
+                      <p><code>{selectedShapeCorpusMatch.packId}</code> · authored ply {selectedShapeCorpusMatch.ply}</p>
+                      <div class="shape-corpus-board"><Chessboard fen={selectedShapeCorpusMatch.fen} startSide={selectedShapeCorpusMatch.startSide} disabled showDests={false} highlightMoves={false} onMove={() => false} /></div>
+                    </article>
+                  {:else}<p class="honest">Open any match to inspect the actual board.</p>{/if}
+                </div>
+              {/if}
+            {:else}<p>Select a draft to check its trigger against served positions.</p>{/if}
+          </section>
           {#if shapeActionError}<p role="alert">{shapeActionError}</p>{/if}
           {#if !selectedShapeDraftId}<p id="shape-selection-required" class="honest">Select or create a shape draft first.</p>{/if}
           {#if selectedShapeDraftId}<p id="shape-publication-retention" class="honest">Registration publishes immutable shape bytes, authored prose, licence, and attribution. They remain available with “deleted account” attribution if you later delete your account.</p>{/if}
-          {#if selectedShapeDraftId}{@const selectedShape=shapeDrafts.find((candidate)=>candidate.id===selectedShapeDraftId)}{#if selectedShape}<ul>{#each selectedShape.validation.issues as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{:else}<li>Validation clean.</li>{/each}</ul>{/if}{/if}
+          {#if selectedShapeDraftId}{@const selectedShape=shapeDrafts.find((candidate)=>candidate.id===selectedShapeDraftId)}{@const displayedShapeValidation=shapeBufferValidation ?? selectedShape?.validation}{#if displayedShapeValidation}<ul>{#each displayedShapeValidation.issues as issue}<li><code>{issue.path}</code> {issue.code}: {issue.message}</li>{:else}<li>Validation clean.</li>{/each}</ul>{/if}{/if}
         </section>
       </div>
       <p class="honest">Shape entries name reusable patterns and plans. They do not prescribe a move in the current position.</p>
@@ -2053,6 +2140,16 @@
   .validation-sections ul { margin: 0; padding-inline-start: 1.2rem; }
   .graduation-column { max-height: min(72dvh, 52rem); padding: 0.8rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
   .graduation-column h2 { margin: 0; font: 600 1.2rem var(--display-font); }
+  .shape-corpus-preview { margin-block: 0.8rem; padding: 0.8rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
+  .shape-corpus-preview h3, .shape-corpus-preview h4, .shape-corpus-preview p { margin-block: 0; }
+  .shape-corpus-results { display: grid; grid-template-columns: minmax(12rem, 1fr) minmax(14rem, 1fr); gap: 0.8rem; align-items: start; }
+  .shape-corpus-results ul { max-height: 22rem; margin: 0; padding: 0; overflow: auto; list-style: none; }
+  .shape-corpus-results li { margin: 0; }
+  .shape-corpus-results li + li { margin-top: 0.35rem; }
+  .shape-corpus-results li button { width: 100%; text-align: left; }
+  .shape-corpus-results li button.active { border-color: var(--accent); background: var(--accent-soft); color: var(--ink); }
+  .shape-corpus-results article { display: grid; gap: 0.45rem; min-width: 0; }
+  .shape-corpus-board { width: min(100%, 24rem); aspect-ratio: 1; }
   .vocabulary-status { margin-block: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--panel); }
   .vocabulary-status > h2, .vocabulary-status h3 { margin: 0; }
   .vocabulary-status-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
@@ -2078,7 +2175,7 @@
     .live-wall article { grid-template-columns: 5rem minmax(0, 1fr); }
     .live-wall article > button { grid-column: 1 / -1; }
     .mini-board { inline-size: 5rem; block-size: 5rem; }
-    .studio-grid, .vocabulary-status-grid, .live-overlay { grid-template-columns: 1fr; }
+    .studio-grid, .vocabulary-status-grid, .live-overlay, .shape-corpus-results { grid-template-columns: 1fr; }
     .assignment-grid article { grid-template-columns: 1fr; }
     .live-overlay :global(.board-shell) { width: calc(100% - 1rem); justify-self: center; }
     .row-actions { flex-wrap: wrap; }

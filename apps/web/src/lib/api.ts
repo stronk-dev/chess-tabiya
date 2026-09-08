@@ -657,7 +657,16 @@ export interface ShapeDraft {
   readonly document: unknown;
   readonly digest: string;
   readonly state: "draft" | "registered" | "withdrawn";
-  readonly validation: { readonly valid: boolean; readonly issues: readonly { readonly severity?: "error" | "warning"; readonly code: string; readonly path: string; readonly message: string }[]; readonly probeMatches?: boolean };
+  readonly validation: {
+    readonly valid: boolean;
+    readonly issues: readonly { readonly severity?: "error" | "warning"; readonly code: string; readonly path: string; readonly message: string }[];
+    readonly probeMatches?: boolean;
+    readonly corpusPreview?: {
+      readonly fires: number;
+      readonly of: number;
+      readonly matches: readonly { readonly packId: string; readonly packTitle: string; readonly ply: number; readonly fen: string; readonly startSide: "white" | "black" }[];
+    };
+  };
 }
 
 export interface SelectMoveRequest {

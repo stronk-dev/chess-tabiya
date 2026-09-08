@@ -3,12 +3,12 @@
   "authority": "planning/roadmap-to-done.md",
   "sourceDigests": {
     "roadmap": "sha256:878cbf133096f16096381f1ac8ce042bc993daa8ff348334021749ac5a92b355",
-    "workItems": "sha256:5a5da0641e7cd0ffee1e0c09fb2525a7c1ea228bc7201a99f9d22515b16a4f19",
+    "workItems": "sha256:28ae6fd17123f7e5f22911fd6c078185ffcaa4db5aff88143489fdd0f6556410",
     "workState": "sha256:7b4082e9cf02f71fac8b024c8735ac5d8fe4bd847b9c09282501d083d5d66733",
     "rfcRegister": "sha256:205bd28f6cc5eba599ec5598522b1df4282d74618ad818d0d9a71f9999267486",
     "uxIndex": "sha256:4c994b698b804c5a1330c4da57f4f808fd8620bec1d7bea46bb4fa500421979f",
     "router": "sha256:85169850d104e0f24b2bd1ea53237e677eab0bb4f4a6af91e53728c45b9517b9",
-    "application": "sha256:b5182b128945143bb187a5483361dfcd36cc530ae5a2e7c2cfb1941797482efb",
+    "application": "sha256:ad0ce88f043cf1270a885b289a85c4b8bb038390e886cb1a214cc68e4ed3d681",
     "rest": "sha256:42af6efbc252a9530d690e011a1ef283ace8309ed890c71a37f986d2d37c4def"
   },
   "summary": {
@@ -37,10 +37,10 @@
       "refused": 109
     },
     "workItems": {
-      "queued": 120,
+      "queued": 119,
       "blocked_owner": 61,
       "blocked_rfc": 120,
-      "completed": 244,
+      "completed": 245,
       "retired": 24
     },
     "dimensionStates": {
@@ -793,10 +793,10 @@
       "owner": "content-and-theory",
       "rfcCount": 6,
       "workItems": {
-        "queued": 16,
+        "queued": 15,
         "blocked_owner": 1,
         "blocked_rfc": 6,
-        "completed": 20,
+        "completed": 21,
         "retired": 1
       },
       "routes": {
