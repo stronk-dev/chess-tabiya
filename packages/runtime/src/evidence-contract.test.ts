@@ -127,6 +127,10 @@ describe("evidence manifest compiler", () => {
     };
     const measured = { ...projection(), exactness: "measured" as const };
     expect(code(declarations(measured, { exactness: "exact" }))).toBe("EVIDENCE_DERIVATION_WIDENS");
+    const reported = { ...projection(), confidence: "reported" as const };
+    expect(code(declarations(reported, { confidence: "exact" }))).toBe("EVIDENCE_DERIVATION_WIDENS");
+    expect(code(declarations(reported, { confidence: "not_applicable" }))).toBe("EVIDENCE_DERIVATION_WIDENS");
+    expect(code(declarations(reported, { confidence: "reported" }))).toBeUndefined();
     expect(code(declarations(projection(), { answerContent: ["move"] }))).toBe("EVIDENCE_DERIVATION_WIDENS");
     const abstaining = { ...projection(), abstention: { possible: true, reasons: ["provider_unavailable"] } };
     expect(code(declarations(abstaining, { abstention: { possible: false, reasons: [] } }))).toBe("EVIDENCE_DERIVATION_WIDENS");

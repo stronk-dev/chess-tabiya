@@ -13291,12 +13291,12 @@
     },
     {
       "id": "D1702",
-      "state": "blocked",
-      "sourceGlyph": "🐞",
-      "sourceDigest": "sha256:b73cd72511efd6082d9c75dbc57caf5b0f0215a57753475f03789153701e2583",
+      "state": "done",
+      "sourceGlyph": "✅",
+      "sourceDigest": "sha256:7ada7eae31e2aa5046bdce1947394f64c6eb5bde6baaaf83852681e4162e2efd",
       "uxItems": [],
-      "owner": "evidence-foundation",
-      "blocker": "rfc:provider-exchange-and-execution.md"
+      "evidence": "packages/runtime/src/evidence-contract.ts",
+      "evidenceKind": "path"
     },
     {
       "id": "D1703",

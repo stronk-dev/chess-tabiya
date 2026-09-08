@@ -18589,3 +18589,17 @@ from a selected committed pack and arrival at its playable board. The Makefile, 
 GitHub browser workflow and scaffold verifier all require the new tier. `make
 test-browser-production` and `make schema-check` pass. D482 closes; fixture-injected browser tests
 remain capability tests rather than being presented as deployment proof.
+
+## 2026-09-08 — Reported provider confidence now survives every derived path
+
+The evidence compiler now refuses each derivation member that consumes a `reported` projection and
+publishes either `exact` or `not_applicable` confidence. The production catalogue was migrated to
+the transitive fixed point: all forty-seven candidate-vector alternatives, Story last-level and
+rank, and the downstream Story title retain `reported` confidence. A catalogue-wide regression
+walks every current `inputs` and `anyOf` member, so later provider-backed derivations cannot discard
+uncertainty by appearing behind a local producer. Both dangerous directions fail independently;
+the unchanged `exact` versus `not_applicable` relationship remains deliberately unspecified.
+
+`make typecheck` passes. The first software run was blocked only by the filesystem sandbox refusing
+loopback listeners (`listen EPERM 127.0.0.1`); the same canonical `make test-software` target passed
+outside that restriction with 184 files and 1,147 tests. D1702 closes.

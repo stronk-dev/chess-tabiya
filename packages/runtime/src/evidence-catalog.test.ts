@@ -57,6 +57,22 @@ describe("primary evidence catalogue", () => {
     expect(manifest.digest).toBe(createHash("sha256").update(canonical({ producers: manifest.producers, projections: manifest.projections, consumers: manifest.consumers, bindings: manifest.bindings, semanticEvents: manifest.semanticEvents, eligibility: manifest.eligibility, reasons: manifest.reasons, selectionPolicies: manifest.selectionPolicies })).digest("hex"));
   });
 
+  it("retains reported confidence through every derivation member", () => {
+    const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
+    const projections = new Map(manifest.projections.map((projection) => [`${projection.id}@${projection.version}`, projection]));
+    for (const output of manifest.projections) {
+      const members = output.derivation === undefined
+        ? []
+        : "inputs" in output.derivation
+          ? [output.derivation.inputs]
+          : output.derivation.anyOf;
+      for (const member of members) {
+        const hasReportedInput = member.some((input) => projections.get(`${input.id}@${input.version}`)?.confidence === "reported");
+        if (hasReportedInput) expect(output.confidence, output.id).toBe("reported");
+      }
+    }
+  });
+
   it("registers all four runtime opening projections as inspector-only exact evidence", () => {
     const manifest = compileEvidenceManifest(EVIDENCE_CONTRACT_DECLARATIONS);
     const ids = ["theory.opening.current_endpoint", "theory.opening.catalogue_membership", "run.record.position", "derived.opening.deepest_reached"];

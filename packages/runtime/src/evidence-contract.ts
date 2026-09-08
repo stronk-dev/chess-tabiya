@@ -532,13 +532,14 @@ export function compileEvidenceManifest(declarations: EvidenceContractDeclaratio
       const inputAnswers = new Set(inputProjections.flatMap((input) => [...input.answerContent]));
       const inputGroundings = new Set(inputProjections.map((input) => input.grounding));
       const exactnessWidens = projection.exactness === "exact" && inputProjections.some((input) => input.exactness !== "exact");
+      const confidenceWidens = inputProjections.some((input) => input.confidence === "reported") && projection.confidence !== "reported";
       const groundingWidens = inputGroundings.size === 1
         ? projection.grounding !== inputProjections[0]!.grounding
         : projection.grounding !== "declared_convention";
       const answersWiden = projection.answerContent.some((answer) => !inputAnswers.has(answer));
       const abstentionWidens = inputProjections.some((input) => input.abstention.possible) && (!projection.abstention.possible || !projection.abstention.reasons.includes("input_abstained"));
-      if (exactnessWidens || groundingWidens || answersWiden || abstentionWidens) {
-        fail("EVIDENCE_DERIVATION_WIDENS", "derived projection exceeds the exactness, grounding, answer content, or abstention of its inputs", [site("projection", projection), ...inputs.map((input) => site("derivation-input", input))]);
+      if (exactnessWidens || confidenceWidens || groundingWidens || answersWiden || abstentionWidens) {
+        fail("EVIDENCE_DERIVATION_WIDENS", "derived projection exceeds the exactness, confidence, grounding, answer content, or abstention of its inputs", [site("projection", projection), ...inputs.map((input) => site("derivation-input", input))]);
       }
     }
   }
